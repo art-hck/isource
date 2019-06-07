@@ -1,0 +1,69 @@
+<ng-container *ngIf="order">
+  <app-order-header
+    contragentLabel = "Поставщик"
+    [contragentFullName] = "order.supplier.fullName"
+    [order]="order"
+    [buttonsProfile]="getButtonsProfile()"
+    (sendOrderClick)="onSendResolution($event)"
+  ></app-order-header>
+
+  <!--Панель с табами-->
+  <div class="clr-row">
+    <div class="clr-col">
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink id="link1">Позиции</button>
+          <clr-tab-content>
+            <div class="clr-row">
+
+              <!--Панель со списком позиций-->
+              <div class="clr-col-lg-8">
+                <app-order-positions
+                  [order]="order"
+                  [supplierResponseReadOnly]="true"
+                ></app-order-positions>
+              </div>
+
+              <!--Боковая панель-->
+              <div class="clr-col-lg-4">
+
+                <!--Финансовая информация-->
+                <div class="clr-row">
+                  <div class="clr-col">
+                    <app-order-finance [order]="order"></app-order-finance>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Общие сведения</button>
+          <clr-tab-content>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Документация</button>
+          <clr-tab-content>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Способы оплаты</button>
+          <clr-tab-content>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Журнал событий</button>
+          <clr-tab-content>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+      </clr-tabs>
+    </div>
+  </div>
+</ng-container>

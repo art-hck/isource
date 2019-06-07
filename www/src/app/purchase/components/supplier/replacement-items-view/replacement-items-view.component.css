@@ -1,0 +1,20 @@
+.replacement-items-view .total-count {
+  text-transform: none;
+}
+
+.replacement-items-view .total-count-container {
+  float: right;
+}
+
+.replacement-items-view .action-buttons {
+  max-width: 100px;
+}
+
+.replacement-items-view .offer-cost {
+  float: left;
+}
+
+.replacement-items-view-status {
+  display: flex;
+  flex-wrap: wrap;
+}

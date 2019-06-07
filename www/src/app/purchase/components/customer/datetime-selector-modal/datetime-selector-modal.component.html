@@ -1,0 +1,34 @@
+<clr-modal [(clrModalOpen)]="opened">
+  <h3 class="modal-title"></h3>
+  <div class="modal-body">
+    <form class="form">
+      <div class="form-block">
+        <label>{{ label }}</label>
+
+        <input type="date" id="date" name="date"
+               [readOnly]="dateReadonly"
+               [(ngModel)]="requestEndDate"
+               [class.invalid]="!validEndDate"
+               (ngModelChange)="validateDateTime()" clrDate>
+
+        <div class="time-container">
+          <input type="number" id="time" name="time" min="00" max="23" step="1" class="hidden-arrows text-right"
+                 style="float: left"
+                 [(ngModel)]="currentHours"
+                 [class.invalid]="!validEndTime"
+                 (ngModelChange)="validateDateTime()">
+          <span class="minutes-block">{{ currentMinutes }}</span>
+        </div>
+
+        <p *ngIf="!validEndDate" class="invalid red-text">Указана неверная дата</p>
+        <p *ngIf="!validEndTime" class="invalid red-text">Указано неверное время</p>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="onCloseClick()">Отмена</button>
+    <button type="button" class="btn btn-primary"
+            (click)="onActionClick()"
+            [disabled]="!validEndDate || !validEndTime">{{ actionButtonLabel }}</button>
+  </div>
+</clr-modal>

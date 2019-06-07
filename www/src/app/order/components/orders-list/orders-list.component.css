@@ -1,0 +1,39 @@
+.orders-list-item {
+  border-bottom: 1px solid #D4D9E2;
+}
+.label-margin {
+    margin: 0 5px 0 0;
+  font-weight: 300;
+}
+.align-right {
+    text-align: right;
+}
+.right-align-button {
+    flex-direction: row-reverse;
+}
+.btn.btn-outline {
+  color: #ff9e00;
+  border-color: #ff9e00;
+  margin-top: 15px;
+}
+.action-buttons button {
+  width: 190px;
+}
+.btn.btn-primary {
+  margin-top: 40px;
+  width: 210px;
+}
+a {
+  font-size: 12px;
+}
+span {
+  padding-right: 5px;
+}
+.clr-row.expanded-block {
+  margin-right: 20px;
+  margin-left: 10px;
+}
+li {
+  list-style-type: none;
+  line-height: 1.5;
+}

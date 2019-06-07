@@ -1,0 +1,18 @@
+<div class="card delivery">
+  <div class="card-block">
+    <h3 class="card-title">Доставка</h3>
+
+    <form clrForm>
+      <input clrInput placeholder="Сумма доставки" name="deliveryCostValue" type="text"
+             [(ngModel)]="order.deliveryCostValue"
+             (ngModelChange)="onDeliveryCostChange()"
+             [ngModelOptions]="{updateOn: 'blur'}"
+      /> ₽
+    </form>
+
+    <clr-checkbox-wrapper>
+      <input id="freeDelivery" type="checkbox" clrCheckbox [ngModel]="order.isFreeDelivery" (ngModelChange)="onFreeDeliveryChange($event)"/>
+      <label>Доставка бесплатно</label>
+    </clr-checkbox-wrapper>
+  </div>
+</div>

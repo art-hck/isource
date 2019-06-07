@@ -1,0 +1,81 @@
+<div class="clr-col">
+  <div class="clr-row clr-justify-content-end acception-block">
+    <p class="clr-col winner-name">
+      <b>Поставщик {{ winnerInfo.place }}</b>
+    </p>
+
+    <div class="clr-break-row"></div>
+
+    <div class="clr-col-7">
+      <p><b><a (click)="onDownloadFile()">{{ winnerInfo.beneficiariesDocuments?.files[0]?.filename }}</a></b></p>
+    </div>
+
+    <div class="clr-col">
+      <div class="clr-row clr-justify-content-end">
+        <div class="clr-col-auto btn-block">
+
+          <ng-container *ngIf="showResolutionButtons(); else documentStateBlock">
+            <button class="btn btn-gray-link" (click)="onDeclineDocument()"><span>Отклонить</span></button>
+            <button class="btn btn-primary" (click)="onAcceptDocument()"><span>Утвердить</span></button>
+          </ng-container>
+
+          <ng-template #documentStateBlock>
+            <p [ngClass]="{'green-text': checkIfDocumentAccepted() }">{{ getDocumentStateLabel() }}</p>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clr-row">
+    <p class="clr-col">
+      <b>Основная информация</b>
+    </p>
+  </div>
+
+  <clr-datagrid class="winner-datagrid">
+    <clr-dg-column></clr-dg-column>
+    <clr-dg-column></clr-dg-column>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.fullName">
+      <clr-dg-cell><span class="gray">Наименование организации</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.fullName }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo?.supplier.contact.fio">
+      <clr-dg-cell><span class="gray">Контактное лицо</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.contact.fio }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.contact.phone">
+      <clr-dg-cell><span class="gray">Телефон</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.contact.phone }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.contact.email">
+      <clr-dg-cell><span class="gray">Электронная почта</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.contact.email }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.addresses.factual">
+      <clr-dg-cell><span class="gray">Местонахождение</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.addresses.factual }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.addresses.post">
+      <clr-dg-cell><span class="gray">Почтовый адрес</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.addresses.post }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.requisites.inn">
+      <clr-dg-cell><span class="gray">ИНН</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.requisites.inn }}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-row *ngIf="winnerInfo.supplier.requisites.kpp">
+      <clr-dg-cell><span class="gray">КПП</span></clr-dg-cell>
+      <clr-dg-cell>{{ winnerInfo.supplier.requisites.kpp }}</clr-dg-cell>
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

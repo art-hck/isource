@@ -1,0 +1,25 @@
+/* todo Данные стили взяты из nav.component.css. В идеале они должны лежать там, но компонент другой */
+
+.nav-icon {
+  color: #1a1a1a;
+  opacity: 0.85;
+}
+
+.nav-icon:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+a[hidden] {
+  display: none;
+}
+a {
+  padding: 16px 10px;
+  display: inline-block;
+}
+
+.cart-widget {
+  position: relative;
+  right: 5px;
+  top: -15px;
+}

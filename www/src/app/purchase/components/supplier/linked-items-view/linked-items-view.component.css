@@ -1,0 +1,39 @@
+.price-input-label {
+  font-size: 12px;
+  color: #999999;
+  padding-left: 8px;
+}
+
+.price-input {
+  display: inline-flex;
+}
+
+.price-input.clr-align-self-center span {
+  align-self: center;
+}
+
+.price-input-field {
+  margin: 5px;
+  height: 30px;
+}
+
+.delete-button {
+  padding-right: 10px;
+  padding-left: 10px;
+  color: #4a4a4a;
+}
+
+.label.label-orange,
+a.label.label-orange {
+  font-size: 12px;
+  font-weight: bold;
+  color: #eb8d00;
+}
+
+.clr-row.linked-items {
+   margin-right: 0;
+ }
+
+.key-item {
+  margin-left: -20px;
+}

@@ -1,0 +1,49 @@
+<div class="clr-row clr-justify-content-center">
+  <div class="clr-col-lg-10">
+    <div class="clr-row">
+      <div class="clr-col-8">
+        <h2 class="purchase-title">
+          {{ store.purchaseInfo.title }}
+        </h2>
+      </div>
+      <div class="clr-col-4 replacement-items-view-status clr-justify-content-end clr-align-items-center">
+        <span class="badge status-badge"></span>
+        <span>Ответ</span>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-6">
+        <h5 class="gray">
+          {{ store.purchaseInfo.type.label || '' }} №{{ store.purchaseInfo.number }} от {{ store.purchaseInfo.creationDate | date:'dd.MM.yyyy' }}
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clr-row clr-justify-content-center replacement-items-view">
+  <div class="clr-col-lg-10">
+    <div class="card">
+      <div class="card-header">
+        <span>Список товаров на замену</span>
+        <div class="total-count-container">
+          <span class="total-count">Всего товаров: 3</span>
+        </div>
+      </div>
+      <div class="card-block" *ngFor="let item of store.requestPositionOfferChanges">
+        <app-purchase-replacement-item-view [requestPositionOfferChange]="item">
+          <div class="clr-col action-buttons">
+            <button class="btn btn-link">Заменить</button>
+          </div>
+        </app-purchase-replacement-item-view>
+      </div>
+      <div class="card-footer text-right">
+        <div class="offer-cost">
+          <span>Суммарная цена потребности: 123 ₽</span>
+        </div>
+        <button class="btn btn-outline">Назад</button>
+        <button class="btn btn-primary">Отправить</button>
+      </div>
+    </div>
+  </div>
+</div>

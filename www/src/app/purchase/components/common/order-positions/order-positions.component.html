@@ -1,0 +1,29 @@
+<clr-datagrid class="items-list"
+              [clrDgLoading]="positionsLoading">
+
+  <clr-dg-column class="clr-col-8">Наименование позиции</clr-dg-column>
+
+  <clr-dg-column class="clr-col-2 text-right">Цена с НДС за ед.</clr-dg-column>
+
+  <clr-dg-column class="clr-col-2 text-center">Количество</clr-dg-column>
+
+
+
+  <clr-dg-row *ngFor="let purchaseItem of positionsPage.entities">
+
+    <clr-dg-cell class="clr-col-8">{{ purchaseItem?.linkedItems[0]?.title }}
+      <span *ngIf="purchaseItem?.mainLinkedItem?.analogue" class="label label-orange">аналог</span>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="clr-col-2 text-right">
+
+        <b>{{ purchaseItem?.linkedItems[0]?.price | currency:'RUB' }}</b>
+
+    </clr-dg-cell>
+
+    <clr-dg-cell class="clr-col-2 text-center"><b>{{ purchaseItem.quantity }}</b></clr-dg-cell>
+
+  </clr-dg-row>
+
+</clr-datagrid>
+

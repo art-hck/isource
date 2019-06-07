@@ -1,0 +1,16 @@
+.form-group.compact {
+    margin-bottom: 0;
+}
+
+.form-group.compact input {
+  font-size: 14px;
+}
+
+.items-list {
+  margin: 0;
+}
+
+.label.label-orange {
+  color: #eb8d00;
+  font-weight: 500;
+}

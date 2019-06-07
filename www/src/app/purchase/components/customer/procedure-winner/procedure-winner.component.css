@@ -1,0 +1,29 @@
+::ng-deep .winner-datagrid .datagrid-header {
+    display: none;
+    border: none;
+}
+
+::ng-deep .winner-datagrid .datagrid-row {
+    border: none !important;
+    line-height: 0.75rem !important;
+}
+
+::ng-deep .winner-datagrid .datagrid-cell {
+    line-height: 0.75rem !important;
+}
+
+::ng-deep .winner-datagrid .datagrid-placeholder {
+    border: none !important;
+}
+
+::ng-deep .winner-datagrid .clr-row {
+    padding: 0 10px;
+}
+
+::ng-deep .acception-block {
+    padding-bottom: 10px;
+}
+
+::ng-deep .btn-block button:last-of-type {
+    margin-right: 0;
+}

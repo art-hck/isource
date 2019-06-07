@@ -1,0 +1,16 @@
+version: '2'
+services:
+  angular:
+    build:
+      context: angular
+      args:
+        uid: ${UID}
+    container_name: ${ANGULAR_CONTAINER_NAME}
+    env_file: .env
+    volumes:
+      - "../www:/home/www"
+      - ${SSH_EXTERNAL_KEYS}:/home/user/.ssh
+    tty: true
+    stdin_open: true
+    ports:
+      - "${ANGULAR_EXTERNAL_PORT}:4200"

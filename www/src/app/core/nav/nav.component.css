@@ -1,0 +1,62 @@
+nav a[hidden] {
+    display: none;
+}
+nav a {
+    padding: 16px 10px;
+    display: inline-block;
+}
+nav a.active {
+    font-weight: bold;
+}
+
+.menu-panel {
+    background-color: white;
+}
+
+.nav-item button {
+  margin-top: 15px;
+}
+
+.nav-item .user-icon {
+    display: inline-block;
+    vertical-align: top;
+}
+.user-info-block {
+    display: inline-block;
+    text-align: left;
+    margin-left: 7px;
+}
+.user-info-block p.user-name {
+    line-height: 1;
+    margin: 0 0 3px 0;
+}
+.user-info-block p.user-role {
+    line-height: 1;
+    margin: 0;
+    font-size: 13px;
+}
+
+
+.sub-nav, .subnav {
+  padding: 0;
+}
+
+.container {
+  display: flex;
+}
+
+.login-block {
+  justify-content: flex-end;
+}
+
+.login-block .nav-item:last-child {
+  margin-right: 0;
+}
+
+.login-block .nav-item .nav-icon{
+  color: #1a1a1a;
+  opacity: 0.85;
+}
+.login-block .nav-item:hover .nav-icon{
+  opacity: 1;
+}

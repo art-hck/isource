@@ -1,0 +1,31 @@
+<div class="cart-block-container">
+  <div class="cart-block-container cart-block-cell cart-col1">
+    <div class="position-image">
+      <clr-icon shape="image" size="72" class="is-highlight"></clr-icon>
+    </div>
+  </div>
+  <div class="cart-block-container cart-block-cell cart-col2">
+    <span class="cart-item-name">{{ item.category_product.title }}</span><br>
+    <span class="gray cart-category-name">{{ item.category_product.short_title }}</span><br>
+    <span class="gray cart-code-label">Код товара: </span><span class="cart-code-value">{{ item.getCode() }}</span>
+  </div>
+  <div class="cart-block-container cart-block-cell cart-col3">
+    <div class="cart-quantity-block">
+      <div class="cart-quantity-block-field">
+        <input type="number" name="quantity" step="1" [value]="item.quantity"
+          (input)="updateItemQuantity(item, $event.target.value)"
+          class="cart-quantity-field"/>
+      </div>
+      <div class="cart-quantity-block-sum">
+        <span class="cart-value">{{ item.getSum() | currency:'RUB':'' }}</span>
+        <span class="cart-currency gray"> ₽</span>
+      </div>
+    </div>
+    <span class="gray">{{ item.price_with_nds | currency:'RUB':'' }} ₽</span>
+  </div>
+  <div class="cart-block-container cart-block-cell cart-col4">
+    <button class="btn btn-link btn-icon cart-delete-button" (click)="onDeleteItem(item)">
+      <clr-icon shape="times"></clr-icon>
+    </button>
+  </div>
+</div>

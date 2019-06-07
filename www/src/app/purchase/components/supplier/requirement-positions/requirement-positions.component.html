@@ -1,0 +1,59 @@
+<clr-datagrid class="clr-row items-list">
+  <clr-dg-column class="clr-col-10">Наименование позиции</clr-dg-column>
+  <clr-dg-column class="clr-col-1">Количество</clr-dg-column>
+  <clr-dg-column class="clr-col-1">Наличие</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let purchaseItem of positions" [clrDgItem]="purchaseItem">
+
+    <clr-dg-cell class="clr-col-10">
+      <div *ngIf="purchaseItem.title; else noTitle">
+        <span>{{ purchaseItem.title }}</span>
+      </div>
+      <ng-template #noTitle>
+        <span>Нет наименования</span>
+      </ng-template>
+    </clr-dg-cell>
+    <clr-dg-cell class="clr-col-1"><b>{{ purchaseItem.quantity }}</b></clr-dg-cell>
+    <clr-dg-cell class="clr-col-1">
+
+      <clr-toggle-wrapper>
+        <input type="checkbox" clrToggle id="{{ getToggleSwitchId(purchaseItem) }}"
+               [checked]="purchaseItem.availability"
+               (change)="onChangeAvailability($event, purchaseItem)"
+               *ngIf="editable; else showUneditableAvailability">
+
+        <ng-template #showUneditableAvailability>
+          <input type="checkbox" clrToggle [checked]="purchaseItem.availability" [disabled]="true">
+        </ng-template>
+
+        <label for="{{ getToggleSwitchId(purchaseItem) }}"></label>
+      </clr-toggle-wrapper>
+
+    </clr-dg-cell>
+
+    <clr-dg-row-detail *clrIfExpanded>
+      <div class="w-100 grid-inner-content">
+
+        <app-purchase-empty-linked-items-view *ngIf="isEmptyLinkedItems(purchaseItem)">
+        </app-purchase-empty-linked-items-view>
+
+        <app-purchase-linked-items-view
+          *ngIf="!isEmptyLinkedItems(purchaseItem)"
+          [linkedItems]="purchaseItem.linkedItems"
+          [canEditPurchase]="editable"
+          (changeValue)="onChangeLinkedItemPriceValue(purchaseItem, $event)"
+          (deleteLinkedItem)="onDeleteLinkedItem(purchaseItem, $event)">
+        </app-purchase-linked-items-view>
+
+        <button *ngIf="editable"
+                (click)="onClickAddLinkedItem(purchaseItem)"
+                type="button"
+                class="btn btn-link add-btn">
+          Добавить позицию
+        </button>
+      </div>
+    </clr-dg-row-detail>
+
+  </clr-dg-row>
+
+</clr-datagrid>

@@ -1,0 +1,22 @@
+/* Панель экшенов в шапке карточки */
+.btn.btn-primary.submit {
+    margin-right: 0;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.sign-panel {
+    justify-content: center;
+    border-top: 1px solid #D4D9E2;
+    padding-top: 10px;
+    margin: 0 3px 0 3px;
+    text-align: center;
+}
+
+.sign-panel p {
+    color: #999999;
+}
+
+.btn.btn-link {
+    font-size: 16px;
+}

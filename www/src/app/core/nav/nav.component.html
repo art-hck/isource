@@ -1,0 +1,52 @@
+<nav class="subnav">
+  <div class="container">
+      <div class="logo-block">
+        <a routerLink="/" title="Перейти на главную">
+          <img src="/assets/images/logo.svg">
+        </a>
+      </div>
+
+      <ul class="nav menu-block">
+        <li class="nav-item" *ngFor="let link of mainMenu">
+          <a class="nav-link" [routerLink]="link.path">{{ link.text }}</a>
+
+          <span *ngIf="link.children.length > 0">
+          (<a *ngFor="let link of link.children">
+            <a [routerLink]="link.path">{{ link.text }}</a>
+          </a>)
+        </span>
+        </li>
+      </ul>
+
+      <ul class="nav login-block">
+        <!-- todo <li *ngIf="gui.isAvailableGui('cart')" class="nav-item">
+          <app-cart-widget class="cart-widget-margin"></app-cart-widget>
+        </li>-->
+        <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
+          <a routerLink="/login" class="nav-icon nav-logout">
+            Вход
+            <clr-icon shape="login" size="32"></clr-icon>
+          </a>
+        </li>
+        <li *ngIf="auth.isAuth()" class="nav-item">
+          <clr-dropdown>
+
+            <button class="nav-icon" clrDropdownTrigger>
+              <clr-icon class="user-icon" shape="user" size="32"></clr-icon>
+
+              <div class="user-info-block">
+                <p class="user-name">{{ user.getShortUserFio() }}</p>
+                <p class="user-role gray">{{ user.getUserRole() }}</p>
+              </div>
+            </button>
+
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+              <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
+              <div class="dropdown-divider"></div>
+              <button (click)="logout()" clrDropdownItem>Выход</button>
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </li>
+      </ul>
+  </div>
+</nav>

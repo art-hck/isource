@@ -1,0 +1,32 @@
+<div class="login-wrapper">
+  <form class="login">
+    <section class="title">
+      <h3 class="welcome">Добро пожаловать в</h3>
+      Торговый портал
+      <h5 class="hint">Используйте ваш логин и пароль, чтобы войти в систему</h5>
+    </section>
+    <div class="login-group">
+
+      <clr-input-container>
+        <input type="text" name="username" clrInput placeholder="Логин / Email адрес" [(ngModel)]="login" />
+      </clr-input-container>
+      <clr-input-container>
+        <input type="password" name="password" clrInput placeholder="Пароль" [(ngModel)]="password" />
+      </clr-input-container>
+
+      <div *ngIf="loginError" class="error active">
+        Неверный пароль или логин
+      </div>
+
+      <button type="submit" class="btn btn-primary"
+              (click)="onLoginClick()"
+              [clrLoading]="loading">
+        Войти
+      </button>
+
+      <div class="signup">
+        Нет аккаунта? <a href="http://hub.gpb.local/#registration" target="_blank">Зарегистрироваться</a>
+      </div>
+    </div>
+  </form>
+</div>

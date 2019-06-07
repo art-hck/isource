@@ -1,0 +1,33 @@
+clr-stack-label {
+  padding: 15px 0;
+}
+
+.position-list .stack-block-label {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.position-list clr-stack-label {
+  display: flex;
+}
+
+.position-list .position-image {
+  width: 100px;
+}
+
+.position-list .position-description {
+  flex-grow: 1;
+}
+
+.position-list .position-description .p2 {
+  margin-top: 0;
+  margin-right: 1em;
+}
+
+.position-list .position-actions {
+  width: 210px;
+}
+
+.position-list .position-actions .position-sum {
+  font-size: 24px;
+}

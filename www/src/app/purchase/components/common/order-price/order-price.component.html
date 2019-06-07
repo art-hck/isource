@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th>Позиций</th>
+    <th>Цена</th>
+    <th>Доставка</th>
+    <th>Цена с доставкой</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <b>{{purchase.offerCount }}</b>
+    </td>
+    <td>
+      <b>{{purchase.offerCost | currency:'RUB' }}</b>
+    </td>
+    <td>
+      {{purchase.deliveryCost | currency:'RUB'}}
+    </td>
+    <td>
+      <b>{{getOfferCostWithoutDelivery() | currency:'RUB' }}</b>
+    </td>
+  </tr>
+  </tbody>
+</table>

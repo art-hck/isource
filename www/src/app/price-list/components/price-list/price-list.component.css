@@ -1,0 +1,81 @@
+.card-block {
+  width: 100%;
+  padding: 0;
+}
+
+.align-right {
+  text-align: end;
+  padding: 0;
+}
+
+input {
+  width: 100%;
+}
+.search {
+  padding: 0 0 15px 0;
+  width: 100%;
+}
+
+.btn.btn-secondary.action {
+  width: 130px;
+}
+
+.searching {
+  width: 50px;
+  text-align: left;
+}
+
+.card-block {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  background: white;
+  margin-top: 15px;
+}
+
+clr-checkbox.datagrid-foot-select.checkbox {
+  display: none;
+}
+form {
+  padding-top: 0;
+}
+
+.btn.btn-link {
+  margin: 0;
+  font-weight: 500;
+}
+.btn.btn-primary {
+  text-transform: uppercase;
+}
+
+.btn.btn-secondary {
+  text-transform: uppercase;
+  color: #0085FF;
+  border-color: #0085FF;
+  width: 130px;
+}
+
+.link-disable {
+  color: #0085FF;
+  opacity: .4;
+}
+
+::ng-deep .datagrid .datagrid-foot-select.checkbox {
+  display: none;
+}
+
+::ng-deep .datagrid .datagrid-row.datagrid-selected,
+::ng-deep .datagrid .datagrid-row:hover {
+  background-color: #e6f3ff;
+}
+
+clr-icon {
+  margin-right: 5px;
+  color: #0085FF;
+}
+.nopadding {
+  padding: 0;
+}
+
+.clr-form-control {
+  margin: 0;
+}

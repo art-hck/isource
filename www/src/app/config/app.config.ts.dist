@@ -1,0 +1,8 @@
+import { MallConfigInterface } from "../core/config/mall-config.interface";
+
+export const AppConfig: GpnmarketConfigInterface = {
+  clientId: 'gpnmarket-front',
+  endpoints: {
+    api: 'api/',
+  }
+};

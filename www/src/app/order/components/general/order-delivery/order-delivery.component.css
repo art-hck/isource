@@ -1,0 +1,13 @@
+.delivery {
+  margin-top: 0;
+}
+
+.delivery input {
+  margin-bottom: 10px;
+  width: 200px;
+  display: inline-block;
+}
+
+.card-title {
+  font-weight: 400;
+}

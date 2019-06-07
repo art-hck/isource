@@ -1,0 +1,56 @@
+import { Component, OnInit } from '@angular/core';
+import { CatalogProductsStoreService } from '../services/catalog-products-store.service';
+import { CatalogProduct } from '../models/catalog-product';
+import {ActivatedRoute} from "@angular/router";
+import {AggregatedResult} from "../../core/models/aggregated-result";
+
+
+@Component({
+  selector: 'app-product-catalog',
+  templateUrl: './product-catalog.component.html',
+  styleUrls: ['./product-catalog.component.css']
+})
+export class ProductCatalogComponent implements OnInit {
+  protected items: CatalogProduct[];
+  private catalogCode: string;
+  private currPage: number;
+  private pageSize: number;
+  private totalCount = 0;
+  private isLoading = false;
+
+  constructor (
+    protected store: CatalogProductsStoreService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.items = [];
+    this.currPage = 0;
+    this.pageSize = 25;
+
+    this.catalogCode = this.route.snapshot.data.catalogCode;
+
+    this.loadProductsPage();
+  }
+
+  protected loadProductsPage() {
+    this.currPage++;
+    this.isLoading = true;
+    this.store.loadPage(this.catalogCode, this.currPage, this.pageSize).subscribe(
+      this.addProducts.bind(this)
+    );
+  }
+
+  protected addProducts(data: AggregatedResult<CatalogProduct>) {
+    this.isLoading = false;
+    this.totalCount = data.totalCount;
+    this.items.push(...data.entries);
+  }
+
+  onSearch(searchStr: string) {
+    this.loadProductsPage();
+  }
+
+  onCategoriesClick() {
+  }
+}

@@ -1,0 +1,202 @@
+<ng-container *ngIf="!purchase" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<ng-container *ngIf="purchase">
+
+  <!-- Шапка -->
+  <app-purchase-view-header [purchase]="purchase">
+    <button class="btn btn-primary submit" (click)="replyOnRequirement()" *ngIf="canEditPurchase()">
+      Отправить
+    </button>
+  </app-purchase-view-header>
+
+  <div class="clr-row">
+    <!-- Левая панель -->
+    <div class="clr-col-lg-7">
+
+      <!-- Грид с позициями -->
+      <div class="card supplier-purchase-items-list">
+        <div class="card-header">
+          <div class="clr-row">
+            <div class="clr-col-6 clr-justify-content-start">Список позиций</div>
+            <div class="clr-col text-right">
+              <span class="gray list-total-header">Всего позиций: {{ purchaseItems.length }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <app-supplier-requirement-positions
+            [positions]="purchaseItems"
+            [editable]="canEditPurchase()"
+            (changeAvailability)="onChangeAvailability($event)"
+            (changeLinkedItemPriceValue)="onChangeLinkedItemPriceValue($event)"
+            (deleteLinkedItem)="onDeleteLinkedItem($event)"
+            (clickAddLinkedItem)="onClickAddLinkedItem($event)">
+          </app-supplier-requirement-positions>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Правая панель -->
+    <div class="clr-col-lg-5">
+      <!-- Панель "Цена предложения" -->
+      <div class="card">
+        <div class="card-header">
+          <div class="clr-row clr-justify-content-between">
+            <div class="clr-col-6 clr-justify-content-start">
+              Цена предложения
+            </div>
+          </div>
+        </div>
+
+        <div class="card-block">
+          <ng-container *ngIf="canEditPurchase()">
+            <div class="clr-row" *ngIf="purchase.offerCost > purchase.lots[0].startMaxCost">
+              <div class="clr-col">
+                <clr-alert [clrAlertType]="'alert-danger'">
+                  <div clr-alert-item class="alert-item">
+                    <span class="alert-text">
+                        Ваша цена предложения превышает НМЦ
+                    </span>
+                  </div>
+                </clr-alert>
+              </div>
+            </div>
+
+            <div class="clr-row" *ngIf="purchase.offerCount < purchaseItems.length">
+              <div class="clr-col">
+                <clr-alert [clrAlertType]="'alert-danger'">
+                  <div clr-alert-item class="alert-item">
+                  <span class="alert-text">
+                      Для участия в процедуре необходимо наличие всех позиций
+                  </span>
+                  </div>
+                </clr-alert>
+              </div>
+            </div>
+          </ng-container>
+
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Позиций в наличии</th>
+              <th>Доставка</th>
+              <th>Цена с НДС</th>
+              <th>НМЦ с НДС</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td [ngClass]="{'green-text': purchase.offerCount === purchaseItems.length,
+                'red-text': purchase.offerCount < purchaseItems.length}">
+                <clr-tooltip>
+                  <div clrTooltipTrigger>
+                    <b>{{purchase.offerCount }}</b>
+                  </div>
+                  <ng-container *ngIf="purchase.offerCount < purchaseItems.length">
+                    <clr-tooltip-content clrPosition="top-left" clrSize="md" *clrIfOpen>
+                      <span>Для участия в процедуре необходимо наличие всех позиций</span>
+                    </clr-tooltip-content>
+                  </ng-container>
+                </clr-tooltip>
+              </td>
+              <td>
+                <input class="price-input-field hidden-arrows text-right" id="delivery_cost"
+                       type="number"
+                       step="0.01"
+                       [value]="deliveryCost"
+                       (change)="onChangeDeliveryCost($event.target.value)"
+                       *ngIf="canEditPurchase(); else showUneditableDeliveryCost">
+                <ng-template #showUneditableDeliveryCost>
+                  <b>{{deliveryCost}}</b>
+                </ng-template>
+                <span>
+                    <b>₽</b>
+                  </span>
+              </td>
+              <td [ngClass]="{'green-text': purchase.offerCost < purchase.lots[0].startMaxCost,
+                'red-text': purchase.offerCost > purchase.lots[0].startMaxCost}">
+                <clr-tooltip>
+                  <div clrTooltipTrigger>
+                    <b>{{purchase.offerCost | currency:'RUB' }}</b>
+                  </div>
+                  <ng-container *ngIf="purchase.offerCost > purchase.lots[0].startMaxCost">
+                    <clr-tooltip-content clrPosition="top-left" clrSize="md" *clrIfOpen>
+                      <span>Цена предложения превышает НМЦ</span>
+                    </clr-tooltip-content>
+                  </ng-container>
+                </clr-tooltip>
+              </td>
+              <td>
+                <b>{{purchase.lots[0].startMaxCost | currency:'RUB' }}</b>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Панель выбора позиции из прайслиста -->
+      <div class="card" *ngIf="showSelectProductComponent">
+        <div class="card-header">
+          Выбор позиции из прайс листа
+        </div>
+        <div class="card-block">
+          <app-select-product
+            [isAnalogAllowed]="purchase.isAnalogAllowed"
+            (analogSelect)="selectItemAsAnalog($event)"
+            (mainSelect)="selectItemAsMain($event)"
+            [selectedPurchaseItem]="selectedPurchaseItem">
+          </app-select-product>
+        </div>
+      </div>
+
+      <!-- Панель документы -->
+      <app-card
+        [title]="'Документы'"
+        [subtitle]="'Всего документов: ' + documentService.attachedFiles.length">
+        <app-purchase-documents-list
+          [documents]="documentService.attachedFiles"
+          [uploader]="documentService.uploader"
+          (fileSelected)="documentService.onFileSelected()"
+          (deleteClick)="documentService.deleteFile($event)"
+          (downloadClick)="documentService.downloadFile($event)"
+          [placeholder]="'Справка о бенефициарах не загружена'"
+          [deleteEnable]="canDeleteDocument()"
+          [uploadEnable]="canUploadDocument()"
+          [downloadEnable]="true">
+        </app-purchase-documents-list>
+      </app-card>
+
+      <!-- Панель адрес доставки -->
+      <div class="card">
+        <div class="card-header">
+          <div class="clr-row clr-justify-content-between">
+            <div class="clr-col-6 clr-justify-content-start">
+              Адрес доставки
+            </div>
+          </div>
+        </div>
+
+        <div class="card-block">
+          <div class="clr-row">
+            <div class="clr-col-12 clr-justify-content-start">
+              <span class="customer-name">{{purchase.customer.name}}</span>
+            </div>
+            <div class="clr-col-12">
+              <div *ngIf="purchase.deliveryAddress; else noAddress">
+                <span class="address">{{purchase.deliveryAddress}}</span>
+              </div>
+              <ng-template #noAddress>
+                <span class="address">Адрес доставки не задан</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+

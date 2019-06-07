@@ -1,0 +1,25 @@
+<div class="d-flex">
+  <button (click)="onCategoriesClick()"
+          type="button"
+          class="btn btn-icon btn-primary btn-categories">
+    <clr-icon shape="view-list"></clr-icon>
+    Категории
+  </button>
+
+  <div class="input-group">
+    <clr-icon shape="search" class="search-icon"></clr-icon>
+    <input [(ngModel)]="searchStr"
+           (keyup.enter)="onSearch()"
+           type="text"
+           class="form-control search-input"
+           placeholder="Начните поиск по товарам">
+    <div class="input-group-append">
+      <button (click)="onSearch()"
+              class="btn btn-primary btn-search"
+              type="button">
+        Найти
+      </button>
+    </div>
+  </div>
+</div>
+

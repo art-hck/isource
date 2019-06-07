@@ -1,0 +1,18 @@
+<div>
+  <span class="replacement-item-view-title">{{ requestPositionOfferChange.position.title }}</span>
+</div>
+
+<div class="replacement-item-view clr-row">
+  <div class="clr-col">
+    <span class="linkeditem-title">{{ requestPositionOfferChange.initialOffer.title }}</span><br>
+    <span class="linkeditem-price">{{ requestPositionOfferChange.initialOffer.price | currency:'RUB' }}</span>
+  </div>
+  <div class="clr-col right-arrow-col">
+    <img src="/assets/images/right-arrow.png"/>
+  </div>
+  <div class="clr-col">
+    <span class="linkeditem-title">{{ requestPositionOfferChange.offerForChange.title }}</span><br>
+    <span class="linkeditem-price">{{ requestPositionOfferChange.offerForChange.price | currency:'RUB' }}</span>
+  </div>
+  <ng-content></ng-content>
+</div>

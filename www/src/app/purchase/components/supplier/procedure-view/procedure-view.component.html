@@ -1,0 +1,93 @@
+<ng-container *ngIf="!store.infoData" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<ng-container *ngIf="store.infoData">
+
+  <!-- Шапка -->
+  <app-purchase-view-header [purchase]="store.infoData"></app-purchase-view-header>
+
+
+  <div class="clr-row">
+
+    <!-- Левая панель -->
+    <div class="clr-col-lg-7">
+      <div class="card">
+        <div class="card-header">
+          <div class="clr-row clr-justify-content-between">
+            <div class="clr-col-6 clr-justify-content-start">
+              Список позиций
+            </div>
+            <div class="clr-col-auto clr-justify-content-end">
+              <span class="gray count-items">Всего позиций: {{ store.positionsData?.totalCount }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <app-supplier-positions
+                  [editablePricesMode]="store.editablePricesMode"
+                  [positionsLoading]="store.positionsLoading"
+                  [positionsPage]="store.positionsData"
+                  (priceChange)="onPositionPriceChange($event)">
+          </app-supplier-positions>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая панель -->
+    <div class="clr-col-lg-5">
+
+      <!-- Блок "Цена закупки" -->
+      <div class="card">
+        <div class="card-header">
+          Цена закупки
+        </div>
+        <div class="card-block">
+          <app-purchase-supplier-procedure-offer-cost
+            [editableMode]="store.editablePricesMode"
+            [purchase]="store.infoData"
+            [deliveryCost]="store.deliveryCost"
+            (deliveryPrice)="onChangeDeliveryPrice($event)"
+            [purchaseItems]="store.positionsData.entities">
+          </app-purchase-supplier-procedure-offer-cost>
+        </div>
+      </div>
+
+      <!-- Блок "Документы" -->
+      <app-card [title]="'Документы'"
+                [subtitle]="'Всего документов: ' + documentService.attachedFiles.length">
+        <app-purchase-documents-list [documents]="documentService.attachedFiles">
+        </app-purchase-documents-list>
+      </app-card>
+
+      <!-- Блок "Извещение" -->
+      <div class="card">
+        <div class="card-header">
+          Извещение
+        </div>
+        <div class="card-block">
+          <app-purchase-notice [notice]="store.noticeData"></app-purchase-notice>
+        </div>
+      </div>
+
+      <!-- Блок "Протоколы" -->
+      <div class="card">
+        <div class="card-header">
+          <div class="clr-row clr-justify-content-between">
+            <div class="clr-col-6 clr-justify-content-start">
+              Протоколы
+            </div>
+            <div class="clr-col-auto clr-justify-content-end">
+              <span class="gray count-items">Всего протоколов: {{ store.protocolsData?.length }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <app-purchase-protocols [protocols]="store.protocolsData"></app-purchase-protocols>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</ng-container>

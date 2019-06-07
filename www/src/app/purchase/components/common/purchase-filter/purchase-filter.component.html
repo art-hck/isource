@@ -1,0 +1,70 @@
+<form  #filterForm="ngForm">
+
+  <!-- todo реализовать отправку данных формы по нажатию на enter в полях ввода -->
+
+  <label>Номер:</label>
+  <input type="text" name="number" placeholder="Введите номер.." [(ngModel)]="purchaseNumber">
+
+  <label>Статус:</label>
+  <div class="select">
+    <select name="status" #status="ngModel" [(ngModel)]="purchaseStatus">
+        <option value="" selected>- Не выбрано -</option>
+        <option *ngFor="let status of purchaseWorkflowStepLabels" value="{{status[0]}}">{{status[1]}}</option>
+    </select>
+  </div>
+
+  <label>Дата создания:</label>
+  <div class="clr-row">
+    <div class="clr-col-6">
+      <input type="text" name="creationStartDate" placeholder="от"
+             [(ngModel)]="purchaseCreationStartDate"
+             [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
+             [class.invalid]="!validPurchaseCreationStartDate"
+             (ngModelChange)="checkDateInputValidity(purchaseCreationStartDate, 'validPurchaseCreationStartDate')"
+             clrDate>
+    </div>
+    <div class="clr-col-6">
+      <input type="text" name="creationEndDate" placeholder="до"
+             [(ngModel)]="purchaseCreationEndDate"
+             [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
+             [class.invalid]="!validPurchaseCreationEndDate"
+             (ngModelChange)="checkDateInputValidity(purchaseCreationEndDate, 'validPurchaseCreationEndDate')"
+             clrDate>
+    </div>
+  </div>
+
+
+  <label>Дата окончания этапа:</label>
+  <div class="clr-row">
+    <div class="clr-col-6">
+      <input type="text" name="startDate" placeholder="от"
+             [(ngModel)]="purchaseStartDate"
+             [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
+             [class.invalid]="!validPurchaseStartDate"
+             (ngModelChange)="checkDateInputValidity(purchaseStartDate, 'validPurchaseStartDate')"
+             clrDate>
+    </div>
+    <div class="clr-col-6">
+      <input type="text" name="endDate" placeholder="до"
+             [(ngModel)]="purchaseEndDate"
+             [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
+             [class.invalid]="!validPurchaseEndDate"
+             (ngModelChange)="checkDateInputValidity(purchaseEndDate, 'validPurchaseEndDate')"
+             clrDate>
+    </div>
+  </div>
+
+</form>
+
+
+<div class="clr-row">
+  <div class="clr-col-6">
+    <button class="btn btn-link" (click)="resetFilter(filterForm)">Сбросить</button>
+  </div>
+  <div class="clr-col-6">
+    <button class="btn btn-primary" (click)="applyFilter()" [disabled]="!validPurchaseEndDate || !validPurchaseStartDate || !validPurchaseCreationEndDate || !validPurchaseCreationStartDate">Применить</button>
+  </div>
+</div>
+
+
+

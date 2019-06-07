@@ -1,0 +1,21 @@
+.replacement-item-view-title {
+  font-size: 14px;
+}
+
+.replacement-item-view.clr-row {
+  padding-left: 25px;
+}
+
+.replacement-item-view .linkeditem-title {
+  font-size: 12px;
+}
+
+.replacement-item-view .linkeditem-price {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.replacement-item-view .right-arrow-col {
+  max-width: 80px;
+  margin-top: 15px;
+}

@@ -1,0 +1,78 @@
+
+  <clr-stack-view>
+    <div class="item-card">
+      <div class="clr-row">
+        <div class="clr-col-2">
+          <div class="product-image">
+            <clr-icon shape="image" size="120" class="is-highlight" title="Изображение отсутствует"></clr-icon>
+          </div>
+        </div>
+        <div class="clr-col-7">
+          <div class="item-name">
+            <span>{{item.title}}
+            </span>
+          </div>
+          <div class="clr-row" *ngFor="let attribute of getAttributesWithValues(item)">
+            <div class="clr-col-5">
+              <ul class="list-unstyled">
+                <li>{{attribute.title}}</li>
+              </ul>
+            </div>
+            <div class="clr-col-7">
+              <ul class="list-unstyled">
+                <li>{{attribute.value}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-3">
+          <div class="price-info">
+            <span>от </span>
+            <span class="item-price">{{item.min_price_with_vat | number:'1.2-2'}} ₽</span>
+            <p>{{item.offers_count | offersCountPresentation}}</p>
+          </div>
+        </div>
+      </div>
+      <clr-stack-block class="choose-supplier-panel" [clrSbExpanded]="false" [clrSbExpandable]="item.offers_count > 0" (clrSbExpandedChange)="loadTopPrices()">
+        <clr-stack-label>
+          <div class="clr-row clr-justify-content-between">
+            <div class="item-code clr-col-2 choose-supplier-code-panel">
+              <span class="item-code-label">Код: </span>
+              <span>{{item.code}}</span>
+            </div>
+          <div class="clr-col-10 choose-supplier-button-panel">
+            <button class="btn choose-supplier" *ngIf="item.offers_count > 0"><span>Выбрать поставщика</span></button>
+          </div>
+          </div>
+        </clr-stack-label>
+        <clr-stack-block>
+          <span *ngIf="!item.topPrices">Загружается...</span>
+           <div *ngFor="let topPrice of item.topPrices">
+            <div class="clr-row supplier-info">
+              <div class="clr-col-6">
+                <a>{{topPrice.supplier_name}}</a>
+              </div>
+              <div class="clr-col-2">
+                <clr-icon shape="star" class="is-solid"></clr-icon>
+                <clr-icon shape="star" class="is-solid"></clr-icon>
+                <clr-icon shape="star" class="is-solid"></clr-icon>
+                <clr-icon shape="star" class="is-solid"></clr-icon>
+                <clr-icon shape="star"></clr-icon>
+              </div>
+              <div class="clr-col-2">
+                {{topPrice.price_with_vat | number:'1.2-2'}} ₽
+              </div>
+              <div class="clr-col-2">
+                <button class="btn btn-warning">В корзину</button>
+              </div>
+            </div> 
+          </div>
+          <div class="all-offers">
+          <a>Посмотреть все предложения</a>
+          </div>
+        </clr-stack-block>
+      </clr-stack-block>
+    </div>
+  </clr-stack-view>
+
+

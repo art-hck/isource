@@ -1,0 +1,78 @@
+<!-- Радиокнопки для фильтрации позиций, ожидающих закупки !-->
+<div class="clr-row">
+  <div class="clr-col-12 text-center">
+<div class="btn-group purchase-type">
+  <div class="radio btn">
+    <input type="radio" name="btn-radio" id="waitingForPurchasePositions" checked>
+    <label (click)="setIsSoonPurchasedFilter(true)" for="waitingForPurchasePositions">Ожидается закупка</label>
+  </div>
+  <div class="radio btn">
+    <input type="radio" name="btn-radio" id="allPositions">
+    <label (click)="setIsSoonPurchasedFilter(false)" for="allPositions">Все позиции</label>
+  </div>
+</div>
+  </div>
+</div>
+
+<!-- Панель действий с позициями справочника!-->
+<clr-dg-action-bar class="dictionary-list-actions">
+  <div class="btn-group">
+    <button type="button" class="btn btn-outline-secondary" [disabled]="!dictionaryItemSelect" (click)="onAddPositionToPriceListClick()"><span>Добавить в прайс-лист</span></button>
+    <button type="button" class="btn btn-outline-secondary" [disabled]="!dictionaryItemSelect || !itemSelect" (click)="onLinkItems()"><span>Связать</span></button>
+  </div>
+</clr-dg-action-bar>
+
+<!--Модальное окно ввода цены добавляемой позиции в прайс-лист-->
+<app-add-position-to-price-list-modal [(opened)]="addPositionToPriceListModalOpen"
+                                      [dictionaryItem]="dictionaryItemSelect"
+                                      (submitAction)="onAddPositionToPriceList($event)">
+</app-add-position-to-price-list-modal>
+
+<div class="clr-row">
+  <div class="clr-col-7">
+    <app-card [title]="'Позиции справочника'"
+              [subtitle]="'Всего позиций: ' + itemsCount">
+
+      <clr-datagrid class="clr-row items-list datagrid-select-hidden"
+                    [(clrDgSingleSelected)]="dictionaryItemSelect"
+                    [clrDgRowSelection]="true"
+                    [clrDgLoading]="loading"
+                    (clrDgRefresh)="refresh($event)">
+
+        <clr-dg-column class="clr-col-8">Нормализированное наименование позиции</clr-dg-column>
+        <clr-dg-column class="clr-col-2">Наименование позиции</clr-dg-column>
+        <clr-dg-column class="clr-col-2">Единицы измерения</clr-dg-column>
+
+
+        <clr-dg-row *ngFor="let dictionaryItem of dictionaryItems" [clrDgItem]="dictionaryItem">
+
+          <clr-dg-cell class="clr-col-8">
+            <span class="item-name">{{dictionaryItem.title}}</span>
+            <span class="item-code gray">код позиции: {{dictionaryItem.code}}</span>
+          </clr-dg-cell>
+          <clr-dg-cell class="clr-col-2">{{dictionaryItem.shortTitle}}</clr-dg-cell>
+          <clr-dg-cell class="clr-col-2">{{dictionaryItem.measureUnits}}</clr-dg-cell>
+
+        </clr-dg-row>
+
+
+        <clr-dg-footer>
+          <clr-dg-pagination [clrDgTotalItems]="itemsCount" [clrDgPageSize]="pageSize"></clr-dg-pagination>
+        </clr-dg-footer>
+
+      </clr-datagrid>
+    </app-card>
+  </div>
+  <div class="clr-col-5">
+
+    <!-- Панель позиций прайс-листа -->
+    <app-card [title]="'Позиции прайс листа'">
+      <app-supplier-price-list-connection
+        (itemSelect)="itemSelected($event)"
+        [linksExist]="itemSelect?.linksExist"
+      >
+      </app-supplier-price-list-connection>
+    </app-card>
+  </div>
+</div>
+

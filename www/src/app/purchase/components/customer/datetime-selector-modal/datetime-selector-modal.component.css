@@ -1,0 +1,79 @@
+.form-block {
+  margin: 0;
+  text-align: left;
+  height: 125px;
+}
+
+::ng-deep .date-container input,
+::ng-deep .time-container input {
+  width: 100%;
+}
+
+.form-block label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.form-block p {
+  display: block;
+  margin: 0;
+  font-size: 12px;
+  clear: both;
+}
+
+.modal-body form {
+  padding: 0;
+}
+
+::ng-deep .date-container,
+::ng-deep .time-container {
+  margin-bottom: 10px;
+  display: inline-block;
+  float: left;
+}
+
+::ng-deep .date-container {
+  margin-right: 20px;
+}
+::ng-deep .date-container input {
+  width: 135px;
+}
+
+::ng-deep .time-container {
+  width: 100px;
+}
+::ng-deep .time-container input {
+  float: left;
+  display: inline-block;
+  width: 40px;
+  padding: 10px 5px;
+}
+::ng-deep .time-container span.minutes-block {
+  line-height: 35px;
+  padding-left: 5px;
+}
+::ng-deep .time-container span.minutes-block::before {
+  content: ':';
+  padding-right: 4px;
+  font-size: 17px;
+}
+
+::ng-deep .readonly-date {
+  float: left;
+  display: inline-block;
+  line-height: 20px;
+  color: #2B2B2B;
+  margin: 10px 20px 10px 0;
+}
+
+::ng-deep .readonly-date p {
+  font-size: 14px !important;
+}
+
+::ng-deep .date-container input[readonly] {
+  pointer-events: none;
+  width: 100px;
+}
+::ng-deep .date-container input[readonly] + button {
+  display: none;
+}

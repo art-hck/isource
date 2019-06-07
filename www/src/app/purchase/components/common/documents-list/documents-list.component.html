@@ -1,0 +1,66 @@
+<div class="documents"
+     (dragenter)="onDragEnter($event)"
+     [ngClass]="{'file-over': isFileOver}">
+
+  <div class="documents-list clr-row clr-justify-content-between">
+    <div class="clr-col">
+      <clr-datagrid class="documents-datagrid">
+        <clr-dg-placeholder>{{ placeholder }}</clr-dg-placeholder>
+        <clr-dg-column></clr-dg-column>
+        <clr-dg-column></clr-dg-column>
+        <clr-dg-row *ngFor="let document of documents">
+          <clr-dg-cell>
+            <ng-container *ngIf="downloadEnable; else noDownloadLink">
+              <clr-icon shape="file" size="18"></clr-icon>
+              <a (click)="onDownloadClick(document)">{{ document.filename }}</a>
+            </ng-container>
+            <ng-template #noDownloadLink>{{document.filename}}</ng-template>
+          </clr-dg-cell>
+          <clr-dg-cell class="text-right">
+            <span class="gray">{{ document.uploadDate | date:'dd.MM.yyyy' }}</span>
+            <clr-icon
+              *ngIf="deleteEnable"
+              (click)="onDeleteClick(document)"
+              shape="times"
+              class="is-error">
+            </clr-icon>
+          </clr-dg-cell>
+        </clr-dg-row>
+      </clr-datagrid>
+    </div>
+  </div>
+
+  <ng-container *ngIf="uploadEnable && uploader">
+    <div ng2FileDrop
+         class="drop-zone"
+         [uploader]="uploader"
+         (onFileDrop)="onFileSelected()"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)">
+      Перетащите сюда документы,<br>чтобы прикрепить их.
+    </div>
+
+    <div class="clr-row">
+      <div class="clr-col">
+        <div class=" btn-panel">
+          <label for="file_upload"><a>Загрузить</a></label>
+          <input #uploadEl
+                 ng2FileSelect
+                 type="file"
+                 id="file_upload"
+                 [uploader]="uploader"
+                 (change)="onFileSelected()">
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="uploader.progress > 0" class="bottom progress flash progress-fade">
+      <progress value="{{ uploader.progress }}" max="100"></progress>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+

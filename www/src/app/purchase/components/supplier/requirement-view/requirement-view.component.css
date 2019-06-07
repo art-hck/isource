@@ -1,0 +1,91 @@
+.customer-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    line-height: 20px;
+}
+.address {
+    display: block;
+    margin-bottom: 5px;
+    line-height: 20px;
+}
+
+input#file_upload {
+    display: none;
+}
+
+.nopadding {
+  padding: 0;
+}
+
+h2, h5 {
+  margin: 5px;
+}
+
+.supplier-purchase-items-list .card-block {
+  padding: 15px;
+}
+
+input#delivery_cost {
+  display: inline-flex;
+  max-width: 80px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+table {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  margin-top: 0;
+}
+
+th {
+  background-color: white;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+td {
+  vertical-align: middle;
+}
+
+.btn.btn-primary.submit {
+  margin-right: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.my-drop-zone {
+    border: dotted 2px transparent;
+    padding: 10px;
+}
+
+/* Default class applied to drop zones on over */
+
+.file-item:not(:first-of-type) {
+    margin-bottom: 5px;
+}
+.file-item .is-error {
+    margin-left: 5px;
+}
+
+.nv-file-over {
+    border: dotted 2px dodgerblue;
+    border-radius: 6px;
+    padding: 10px;
+    background: rgba(30, 144, 255, 0.2);
+}
+
+.nv-file-over .is-info {
+    opacity: 1;
+}
+
+.card-block .progress,
+.card-block .progress-static,
+.card-footer .progress,
+.card-footer .progress-static {
+    margin-top: 0;
+    bottom: 0;
+}
+
+

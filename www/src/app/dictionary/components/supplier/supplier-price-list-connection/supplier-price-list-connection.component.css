@@ -1,0 +1,28 @@
+.text-left {
+  line-height: 20px;
+}
+
+.select-btn {
+  width: 100%;
+}
+
+.search-control {
+  display: inline-flex;
+  width: 100%;
+}
+
+.search-control .btn {
+  width: 80px;
+  padding: 0 10px;
+  margin: 0 0 10px;
+}
+
+.link-disable {
+  color: #0085FF;
+  opacity: .4;
+}
+
+clr-icon {
+  margin-right: 5px;
+  color: #0085FF;
+}

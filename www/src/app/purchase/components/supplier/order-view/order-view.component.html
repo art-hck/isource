@@ -1,0 +1,68 @@
+<ng-container *ngIf="!order" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<ng-container *ngIf="order">
+
+  <!-- Шапка -->
+  <app-purchase-view-header [purchase]="order">
+  </app-purchase-view-header>
+
+  <div class="clr-row">
+
+    <!-- Левая панель -->
+    <div class="clr-col-lg-7">
+      <app-card [title]="'Список позиций'"
+                [subtitle]="'Всего позиций: ' + positionsData.totalCount">
+        <app-order-positions
+          [positionsLoading]="positionsLoading"
+          [positionsPage]="positionsData">
+        </app-order-positions>
+      </app-card>
+    </div>
+
+    <!-- Правая панель -->
+    <div class="clr-col-lg-5">
+      <!-- Блок "Договор" -->
+      <app-card [title]="'Договор'">
+        <app-purchase-documents-list [documents]="order.contracts"
+                                     (downloadClick)="documentService.downloadFile($event)"
+                                     [downloadEnable]="true">
+        </app-purchase-documents-list>
+        <ng-container *ngIf="canSignContract()">
+          <div class="clr-row sign-panel">
+            <button class="btn btn-link" (click)="signContract()">
+              <b>Подписать</b>
+            </button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isSignedContract()">
+          <div class="sign-panel">
+            <p>Договор подписан</p>
+          </div>
+        </ng-container>
+      </app-card>
+      <!-- Блок "Цена заказа" -->
+      <app-card [title]="'Цена заказа'">
+        <app-order-price [purchase]="order"></app-order-price>
+      </app-card>
+      <!-- Блок "Адрес доставки" -->
+      <app-card [title]="'Адрес доставки'">
+        <div class="clr-row">
+          <div class="clr-col-12 clr-justify-content-start">
+            <span class="customer-name">{{order.customer.name}}</span>
+          </div>
+          <div class="clr-col-12">
+            <div *ngIf="order.deliveryAddress; else noAddress">
+              <span class="address">{{order.deliveryAddress}}</span>
+            </div>
+            <ng-template #noAddress>
+              <span class="address">Адрес доставки не задан</span>
+            </ng-template>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</ng-container>
+

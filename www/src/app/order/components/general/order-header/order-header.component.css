@@ -1,0 +1,24 @@
+.float-right {
+  float: right !important;
+}
+
+.header-inline {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.status .badge {
+  height: 8px;
+  min-width: 8px;
+  margin-top: -2px;
+}
+
+.status {
+  display: inline-block;
+  vertical-align: middle;
+  padding-bottom: 10px;
+}
+
+.order-header {
+  margin-bottom: 20px;
+}

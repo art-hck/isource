@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-block">
+    <h3 class="card-title">Финансовая информация</h3>
+    <table class="table table-compact table-noborder finance">
+      <tbody>
+      <tr>
+        <td class="left">Сумма заказа с НДС</td>
+        <td class="text-right"> {{ order.positionsCostWithVat | currency:'RUB'}}</td>
+      </tr>
+      <tr>
+        <td class="left">Доставка</td>
+        <td class="text-right">{{ order.deliveryCostValue | default:0 | currency:'RUB'}}
+        </td>
+      </tr>
+      <tr class="sum">
+        <td class="left">Итоговая сумма</td>
+        <td class="text-right"> {{ order.totalCost | currency:'RUB' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

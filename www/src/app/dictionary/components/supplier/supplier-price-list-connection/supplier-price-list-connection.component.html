@@ -1,0 +1,45 @@
+<div class="clr-row">
+  <div class="clr-col">
+    <div class="search-control">
+      <input clrinput
+             placeholder="Введите строку для поиска"
+             name="searchStr"
+             type="text"
+             (keyup.enter)="onSearch()"
+             [(ngModel)]="searchStr"/>
+      <input clrinput
+             class="btn btn-link"
+             type="submit"
+             (click)="onSearch()"
+             value="Поиск"/>
+    </div>
+  </div>
+</div>
+
+<clr-datagrid class="datagrid-select-hidden price-list-items"
+              [clrDgLoading]="loading"
+              [(clrDgSingleSelected)]="selectedPriceListItem"
+              (clrDgSingleSelectedChange)="itemSelected(selectedPriceListItem)"
+              (clrDgRefresh)="refresh($event)"
+              [clrDgRowSelection]="true">
+  <clr-dg-column class="text-left">Наименование</clr-dg-column>
+  <clr-dg-column class="text-right">Цена с НДС</clr-dg-column>
+  <clr-dg-column class="text-right">Дата обновления</clr-dg-column>
+
+  <clr-dg-row
+    *ngFor="let item of this.priceListItems"
+    [clrDgItem]="item">
+    <!-- Используем innerHtml, чтобы выделялись слова при полнотекстовом поиске-->
+    <clr-dg-cell class="text-left item-name">
+      <clr-icon shape="link" [ngClass]="{'link-disable' : !item.linksExist }" ></clr-icon>
+      <span [innerHtml]="item.itemName"></span>
+    </clr-dg-cell>
+    <clr-dg-cell class="text-right">{{ item.priceWithVat | currency:'RUB' }}</clr-dg-cell>
+    <clr-dg-cell class="text-right">{{ item.lastUpdatedDate | date:'shortDate' }}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    <clr-dg-pagination #pagination [clrDgTotalItems]="total" [clrDgPageSize]="pageSize"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
