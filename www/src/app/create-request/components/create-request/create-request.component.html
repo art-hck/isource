@@ -1,0 +1,84 @@
+<div class="container">
+  <h2 class="newRequest">Новая заявка</h2>
+<div class="card">
+      <div class="card-block">
+        <div class="card-text">
+          <form [formGroup]="requestDataForm" class="form">
+            <div class="form-block">
+              <div class="clr-form-control">
+                <label class="clr-control-label" for="mtrName">Наименование МТР</label>
+                <input type="text" id="mtrName" formControlName="mtrName"  [class.invalid]="isFieldValid('mtrName')">
+                <label class="clr-control-label" for="docs">
+                  Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+                </label>
+                <input type="text" id="docs" formControlName="docs"  [class.invalid]="isFieldValid('docs')">
+                <div class="clr-row w-100">
+                  <div class="clr-col-3">
+                    <label class="clr-control-label" for="count">Количество</label>
+                    <input type="number" id="count" name="count" formControlName="count" min="0"
+                           step="0.01" class="hidden-arrows text-right price"
+                           [class.invalid]="isFieldValid('count')">
+                  </div>
+                  <div class="clr-col-3">
+                    <label class="clr-control-label" for="units">Единицы измерения</label>
+                    <div class="select">
+                      <input type="text" name="units" id="units" formControlName="units" [class.invalid]="isFieldValid('units')">
+                    </div>
+                  </div>
+                  <div class="clr-col-3">
+                      <label class="clr-control-label" for="deliveryDate"> Необходимый срок поставки</label>
+                      <input id="deliveryDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="deliveryDate" [class.invalid]="isFieldValid('deliveryDate')"/>
+                  </div>
+                  <div class="clr-col-3 deliveryAsap">
+                    <clr-checkbox-wrapper>
+                      <input type="checkbox" clrCheckbox name="deliveryAsap" id="deliveryAsap" formControlName="deliveryAsap">
+                      <label>как можно быстрее</label>
+                    </clr-checkbox-wrapper>
+                  </div>
+                </div>
+                <label class="clr-control-label" for="deliveryAddress">Базис поставки (пункт, до которого требуется доставка)</label>
+                <input type="text" id="deliveryAddress" formControlName="deliveryAddress"  [class.invalid]="isFieldValid('deliveryAddress')">
+                <label class="clr-control-label" for="termsOfPayment">Условия оплаты</label>
+                <input type="text" id="termsOfPayment" formControlName="termsOfPayment"  [class.invalid]="isFieldValid('termsOfPayment')">
+                <div class="clr-row w-100">
+                  <div class="clr-col-3">
+                    <label class="clr-control-label" for="nmc">Начальная максимальная цена</label>
+                    <input type="number" id="nmc" name="nmc" formControlName="nmc" min="0.1"
+                           step="0.01" class="hidden-arrows text-right price"
+                           [class.invalid]="isFieldValid('nmc')">
+                  </div>
+                    <div class="clr-col-3">
+                      <label class="clr-control-label" for="currency">Валюта</label>
+                      <div class="select">
+                        <select name="currency" id="currency" formControlName="currency" [class.invalid]="isFieldValid('currency')">
+                          <option [value]="RUB">
+                            RUB
+                          </option>
+                          <option [value]="USD">
+                            USD
+                          </option>
+                          <option [value]="EUR">
+                            EUR
+                          </option>
+                          <option [value]="CHF">
+                            CHF
+                          </option>
+                        </select>
+                    </div>
+                    </div>
+                </div>
+                <label class="clr-control-label nopadding" for="additionalServices">Необходимость сопутствующих услуг (ШМР, ПНР)</label>
+                <input type="text" id="additionalServices" name="additionalServices" formControlName="additionalServices">
+                <label class="clr-control-label" for="comment">Примечания/комментрии</label>
+                <textarea type="textarea" id="comment" name="comment" formControlName="comment"></textarea>
+              </div>
+            </div>
+          </form>
+          <div class="card-footer">
+          <button type="button" class="btn btn-primary" [disabled]="requestDataForm.invalid">Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
