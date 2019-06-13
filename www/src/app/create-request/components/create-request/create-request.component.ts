@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import * as moment from "moment";
+import {RequestItem} from "../../models/request-item";
+import {CreateRequestService} from "../../services/create-request.service";
 
 @Component({
   selector: 'app-create-request',
@@ -10,26 +12,27 @@ import * as moment from "moment";
 export class CreateRequestComponent implements OnInit {
   requestDataForm: FormGroup;
   item: boolean = false;
-  currentDate = moment().format('DD.MM.YYYY');
+  requestItem: RequestItem;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private createRequestService: CreateRequestService) {
+  }
 
   ngOnInit() {
     this.requestDataForm = this.formBuilder.group({
-      mtrName: ['', [Validators.required]],
-      docs: ['', [Validators.required]],
-      count: [null, [Validators.required, Validators.pattern(/^[+]?[1-9]\d*$/)]],
-      units: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      productionDocument: ['', [Validators.required]],
+      quantity: [null, [Validators.required, Validators.pattern(/^[+]?[1-9]\d*$/)]],
+      measureUnit: ['', [Validators.required]],
       deliveryDate: ['', [Validators.required, this.dateMinimum()]],
-      deliveryAsap: [''],
-      deliveryAddress: ['', [Validators.required]],
-      termsOfPayment: ['30 банковских дней по факту поставки', [Validators.required]],
-      nmc: [null, [Validators.min(1)]],
+      isDeliveryAsap: [''],
+      deliveryBasis: ['', [Validators.required]],
+      paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
+      startPrice: [null, [Validators.min(1)]],
       currency: [''],
-      additionalServices: [''],
-      comment: ['']
+      relatedServices: [''],
+      comments: ['']
     });
-    this.requestDataForm.get('deliveryAsap').valueChanges.subscribe(checked => {
+    this.requestDataForm.get('isDeliveryAsap').valueChanges.subscribe(checked => {
       if (checked) {
         this.requestDataForm.get('deliveryDate').disable();
       } else {
@@ -58,4 +61,11 @@ export class CreateRequestComponent implements OnInit {
     };
   }
 
+  onAddRequest() {
+    this.requestItem = this.requestDataForm.value;
+    return this.createRequestService.addRequest(this.requestItem).subscribe(
+      () => {
+      }
+    );
+  }
 }

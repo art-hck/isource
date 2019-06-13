@@ -34,13 +34,13 @@ h2 {
   font-weight: 600;
 }
 
-.deliveryAsap {
+.isDeliveryAsap {
   display: flex;
   align-items: flex-end;
   font-size: 14px;
 }
 
-.deliveryAsap label {
+.isDeliveryAsap label {
   font-size: 14px;
   padding: 0 0 0 25px;
 }

@@ -9,6 +9,7 @@ import { PriceListComponent } from "./price-list/components/price-list/price-lis
 import { AccessGuard } from 'stdlib-ng/dist/core';
 import {CreateRequestComponent} from "./create-request/components/create-request/create-request.component";
 
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {

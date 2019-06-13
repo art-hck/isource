@@ -9,7 +9,6 @@ import {CreateRequestComponent} from "./components/create-request/create-request
   ],
   declarations: [
     CreateRequestComponent
-  ]
-
+  ],
 })
 export class CreateRequestModule { }
