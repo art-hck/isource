@@ -7,6 +7,7 @@ import { NotFoundComponent } from "./pages/not-found/not-found.component";
 import { PageComponent as CartPageComponent } from './cart/page/page.component';
 import { PriceListComponent } from "./price-list/components/price-list/price-list.component";
 import { AccessGuard } from 'stdlib-ng/dist/core';
+import {RegistrationComponent} from "./registration/registration.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'purchases', loadChildren: () => import('./purchase/purchase.module').then(m => m.PurchaseModule) },
   { path: 'products-catalog', loadChildren: () => import('./product-catalog/product-catalog.module').then(m => m.ProductCatalogModule)},
   { path: 'login', component: LoginComponent },
+  { path: 'registration', component: RegistrationComponent },
   { path: 'pricelist', component: PriceListComponent},
   { path: '**', component: NotFoundComponent }
 ];
