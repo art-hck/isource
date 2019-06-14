@@ -3,7 +3,7 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
 import { registerLocaleData } from '@angular/common';
 
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ClarityModule } from '@clr/angular';
@@ -44,7 +44,8 @@ registerLocaleData(localeRu, 'ru');
     FormsModule,
     BrowserAnimationsModule,
     CartModule,
-    PriceListModule
+    PriceListModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
