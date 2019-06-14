@@ -24,7 +24,7 @@ export class CreateRequestComponent implements OnInit {
       quantity: [null, [Validators.required, Validators.pattern(/^[+]?[1-9]\d*$/)]],
       measureUnit: ['', [Validators.required]],
       deliveryDate: ['', [Validators.required, this.dateMinimum()]],
-      isDeliveryAsap: [''],
+      isDeliveryAsap: [false],
       deliveryBasis: ['', [Validators.required]],
       paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
