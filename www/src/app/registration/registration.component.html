@@ -1,30 +1,40 @@
 <h2>Регистрация пользователя</h2>
 <div class="card">
-  <form [formGroup]="registrationForm" class="form">
-    <div class="form-block">
-      <div class="clr-form-control">
-        <label class="clr-control-label" for="login">Логин</label>
-        <input type="text" id="login" formControlName="login"  [class.invalid]="isFieldValid('login')">
-<!--<div class="form-group" [formGroup]="passwords">-->
-        <div class="form-group row" formGroupName="passwords">
-        <label class="clr-control-label" for="password">Пароль</label>
-        <input type="password" id="password" formControlName="password"  [class.invalid]="isFieldValid('password')">
+  <form [formGroup]="userForm" class="form">
+    <!--<div class="form-block">-->
+      <!--<div class="clr-form-control">-->
+        <!--<label class="clr-control-label" for="login">Логин</label>-->
+        <!--<input type="text" id="login" formControlName="login"  [class.invalid]="isFieldValid('login')">-->
+<!--&lt;!&ndash;<div class="form-group" [formGroup]="passwords">&ndash;&gt;-->
+        <!--<div class="form-group row" formGroupName="passwords">-->
+        <!--<label class="clr-control-label" for="password">Пароль</label>-->
+        <!--<input type="password" id="password" formControlName="password"  [class.invalid]="isFieldValid('password')">-->
 
-        <label class="clr-control-label" for="confirmedPassword">Пароль</label>
-        <input type="password" id="confirmedPassword" formControlName="confirmedPassword"  [class.invalid]="isFieldValid('confirmedPassword')">
-</div>
-            <label class="clr-control-label" for="quantity">Email</label>
-            <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"
-                   step="0.01" class="hidden-arrows text-right price"
-                   [class.invalid]="isFieldValid('quantity')">
-
-
-            <label class="clr-control-label" for="fio">ФИО</label>
-            <input id="fio" type="text" formControlName="fio" [class.invalid]="isFieldValid('fio')"/>
+        <!--<label class="clr-control-label" for="confirmedPassword">Пароль</label>-->
+        <!--<input type="password" id="confirmedPassword" formControlName="confirmedPassword"  [class.invalid]="isFieldValid('confirmedPassword')">-->
+<!--</div>-->
+            <!--<label class="clr-control-label" for="quantity">Email</label>-->
+            <!--<input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"-->
+                   <!--step="0.01" class="hidden-arrows text-right price"-->
+                   <!--[class.invalid]="isFieldValid('quantity')">-->
 
 
-        <label class="clr-control-label" for="deliveryBasis">Телефон</label>
-        <input type="text" id="deliveryBasis" formControlName="deliveryBasis"  [class.invalid]="isFieldValid('deliveryBasis')">
+            <!--<label class="clr-control-label" for="fio">ФИО</label>-->
+            <!--<input id="fio" type="text" formControlName="fio" [class.invalid]="isFieldValid('fio')"/>-->
+
+
+        <!--<label class="clr-control-label" for="deliveryBasis">Телефон</label>-->
+        <!--<input type="text" id="deliveryBasis" formControlName="deliveryBasis"  [class.invalid]="isFieldValid('deliveryBasis')">-->
+      <!--</div>-->
+    <!--</div>-->
+    <div class="form-group row" formGroupName="passwords">
+      <div class="form-group">
+        <label for="password" class="control-label">Contraseña:</label>
+        <input type="password" id="password" class="form-control" formControlName="password">
+      </div>
+      <div class="form-group">
+        <label for="confirmedPassword" class="control-label">Confirmar Contraseña:</label>
+        <input type="password" id="confirmedPassword" class="form-control" formControlName="confirmedPassword" [class.invalid]="isFieldValid('confirmedPassword')">
       </div>
     </div>
   </form>
