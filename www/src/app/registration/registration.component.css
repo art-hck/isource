@@ -1,0 +1,54 @@
+.card {
+  width: 1000px;
+  text-align: left;
+  padding: 20px 60px 60px 80px;
+  margin-bottom: 40px;
+}
+
+label {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999999;
+}
+
+.nopadding {
+  padding-top: 0;
+}
+
+.container {
+  text-align: -webkit-center;
+}
+
+.regHeader {
+  text-align: left;
+  width: 1000px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-weight: 800;
+}
+
+.btn {
+  margin-right: 0;
+  padding: 0 25px;
+}
+
+textarea {
+  width: 100%;
+}
+
+h3 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+}
+
+.agreement {
+  padding-top: 20px;
+}
