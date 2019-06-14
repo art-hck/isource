@@ -80,7 +80,7 @@ export class NavComponent implements OnInit {
   protected getUnauthMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Пункт меню для гостя',
+        text: '',
         path: 'test',
         children: []
       }
