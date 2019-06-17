@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-registration',
@@ -7,44 +8,74 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, 
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit {
-  UserRegistrationForm: FormGroup;
-  item: boolean = false;
+  userRegistrationForm: FormGroup;
+  contragentRegistrationForm: FormGroup;
+  nextForm: boolean = false;
 
   constructor(private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-    this.UserRegistrationForm = this.formBuilder.group({
-      login: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
-      passwords: this.formBuilder.group({
-        password: ['', [Validators.required]],
-        confirmedPassword: ['', [Validators.required]],
-      }, {}),
-      quantity: [null, [Validators.required, Validators.pattern(/^[+]?[1-9]\d*$/)]],
-      fio: [''],
-      deliveryBasis: ['', [Validators.required]],
-
+    this.userRegistrationForm = this.formBuilder.group({
+      password: ['', [Validators.required, Validators.pattern('(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}')]],
+      confirmedPassword: ['', [Validators.required, this.passwordConfirming('password')]],
+      lastName: ['', [Validators.required, Validators.pattern('^[а-яА-ЯёЁ\\s]+$')]],
+      firstName: ['', [Validators.required, Validators.pattern('^[а-яА-ЯёЁ\\s]+$')]],
+      secondName: ['' [Validators.pattern('^[а-яА-ЯёЁ\\s]+$')]],
+      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      phone: ['', [Validators.required, Validators.pattern('[0-9]{10,11}')]],
+      agreement: [false, [Validators.required, Validators.requiredTrue]]
     });
-
+    this.contragentRegistrationForm = this.formBuilder.group({
+      fullContragentName: ['', [Validators.required, Validators.pattern('^[?!,".а-яА-ЯёЁ-\\s]+$')]],
+      contragentName: ['', [Validators.required, Validators.pattern('^[?!,".а-яА-ЯёЁ-\\s]+$')]],
+      inn: ['', [Validators.required, Validators.pattern('[0-9]{10}')]],
+      kpp: ['', [Validators.required, Validators.pattern('[0-9]{9}')]],
+      ogrn: ['', [Validators.required, Validators.pattern('[0-9]{13}')]],
+      checkedDate: ['', [Validators.required]],
+      contragentEmail: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      contragentPhone: ['', Validators.pattern('[0-9]{10,11}')],
+      country: ['', [Validators.required, Validators.pattern('^[а-яА-ЯёЁ-\\s]+$')]],
+      area: ['', [Validators.required, Validators.pattern('^[а-яА-ЯёЁ-\\s]+$')]],
+      city: ['', [Validators.required, Validators.pattern('^[а-яА-ЯёЁ-\\s]+$')]],
+      index: ['', [Validators.required, Validators.pattern('[0-9]{6}')]],
+      town: ['', Validators.pattern('^[а-яА-ЯёЁ\\s]+$')],
+      address: ['', [Validators.required, Validators.pattern('^[?!,.а-яА-ЯёЁ-\\s]+$')]],
+      bankAccount: ['', [Validators.required, Validators.pattern('[0-9]{20}')]],
+      bik: ['', [Validators.required, Validators.pattern('[0-9]{9}')]],
+      corrAccount: ['', Validators.required, Validators.pattern('[0-9]{20}')],
+      bankName: ['', Validators.required, Validators.pattern('^[?!,.а-яА-ЯёЁ-\\s]+$')],
+      bankAddress: ['', [Validators.required, Validators.pattern('^[?!,.?!,.а-яА-ЯёЁ-\\s]+$')]],
+    });
   }
 
-  isFieldValid(field: string) {
-    return this.UserRegistrationForm.get(field).errors
-      && (this.UserRegistrationForm.get(field).touched || this.UserRegistrationForm.get(field).dirty);
+  isUserFieldValid(field: string) {
+    return this.userRegistrationForm.get(field).errors
+      && (this.userRegistrationForm.get(field).touched || this.userRegistrationForm.get(field).dirty);
   }
 
-  // passwordConfirming(c: AbstractControl): { invalid: boolean } {
-  //   if (c.get('password').value !== c.get('confirmedPassword').value) {
-  //     return {invalid: true};
-  //   }
-  // }
+  isContragentFieldValid(field: string) {
+    return this.contragentRegistrationForm.get(field).errors
+      && (this.contragentRegistrationForm.get(field).touched || this.contragentRegistrationForm.get(field).dirty);
+  }
 
-//   passwordConfirming(): ValidatorFn {
-//     return (c: AbstractControl): ValidationErrors | null => {
-//     return (c.get('password').value !== c.get('confirmedPassword').value) ? null : {
-//       invalid: true
-//     }
-//   }
-// }
+  passwordConfirming(controlNameToCompare: string): ValidatorFn {
+    return (c: AbstractControl): ValidationErrors | null => {
+    if (c.value === null || c.value.length === 0) {
+      return null;
+    }
+    const controlToCompare = c.root.get(controlNameToCompare);
+    if (controlToCompare) {
+      const subscription: Subscription = controlToCompare.valueChanges.subscribe(()=> {
+        c.updateValueAndValidity();
+        subscription.unsubscribe();
+      });
+    }
+      return controlToCompare && controlToCompare.value !== c.value ? { 'compare': true } : null;
+  }
+}
 
+  onChangeStep() {
+    this.nextForm = !this.nextForm;
+  }
 }
