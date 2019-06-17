@@ -21,10 +21,10 @@ export class CreateRequestComponent implements OnInit {
     this.requestDataForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       productionDocument: ['', [Validators.required]],
-      quantity: [null, [Validators.required, Validators.pattern(/^[+]?[1-9]\d*$/)]],
+      quantity: [null, [Validators.required, Validators.min(1)]],
       measureUnit: ['', [Validators.required]],
       deliveryDate: ['', [Validators.required, this.dateMinimum()]],
-      isDeliveryAsap: [false],
+      isDeliveryDateAsap: [false],
       deliveryBasis: ['', [Validators.required]],
       paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
@@ -32,7 +32,7 @@ export class CreateRequestComponent implements OnInit {
       relatedServices: [''],
       comments: ['']
     });
-    this.requestDataForm.get('isDeliveryAsap').valueChanges.subscribe(checked => {
+    this.requestDataForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
         this.requestDataForm.get('deliveryDate').disable();
       } else {

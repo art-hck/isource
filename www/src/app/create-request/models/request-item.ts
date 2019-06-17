@@ -5,7 +5,7 @@ export class RequestItem {
   measureUnit: string;
   quantity: string;
   deliveryDate: string;
-  isDeliveryAsap: boolean;
+  isDeliveryDateAsap: boolean;
   deliveryBasis: string;
   startPrice?: number;
   currency?: string;

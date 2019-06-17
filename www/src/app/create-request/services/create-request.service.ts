@@ -15,20 +15,9 @@ export class CreateRequestService {
     return this.api.post(
       `requests/customer/add-request`,
       {
-        positions: [{
-          name: requestItem.name,
-          productionDocument: requestItem.productionDocument,
-          measureUnit: requestItem.measureUnit,
-          quantity: requestItem.quantity,
-          deliveryDate: requestItem.deliveryDate,
-          isDeliveryDateAsap: requestItem.isDeliveryAsap,
-          deliveryBasis: requestItem.deliveryBasis,
-          startPrice: requestItem.startPrice,
-          currency: requestItem.currency,
-          paymentTerms: requestItem.paymentTerms,
-          relatedServices: requestItem.relatedServices,
-          comments: requestItem.comments
-        }]
+        positions: [
+          requestItem
+        ]
       })
   }
 }
