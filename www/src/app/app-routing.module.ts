@@ -7,7 +7,7 @@ import { NotFoundComponent } from "./pages/not-found/not-found.component";
 import { PageComponent as CartPageComponent } from './cart/page/page.component';
 import { PriceListComponent } from "./price-list/components/price-list/price-list.component";
 import { AccessGuard } from 'stdlib-ng/dist/core';
-import {RegistrationComponent} from "./registration/registration.component";
+import {RegistrationComponent} from "./registration/components/registration.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

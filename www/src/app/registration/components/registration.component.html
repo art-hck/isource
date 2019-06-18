@@ -52,7 +52,7 @@
           </div>
           <div class="card-footer">
             <button type="button" class="btn btn-primary next"
-                    (click)="onChangeStep()">Далее
+                    (click)="onChangeStep()" [disabled]="userRegistrationForm.invalid">Далее
             </button>
           </div>
         </div>
@@ -93,7 +93,7 @@
             <div class="clr-col-4">
               <label class="clr-control-label" for="checkedDate">Дата поставновки на учет в НО</label>
               <input id="checkedDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="checkedDate"
-                     [class.invalid]="isContragentFieldValid('inn')"/>
+                     [class.invalid]="isContragentFieldValid('checkedDate')"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="contragentEmail">Email</label>
