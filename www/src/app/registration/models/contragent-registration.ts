@@ -1,21 +1,21 @@
 export class ContragentRegistration {
   fullName: string;
   shortName: string;
-  inn: number;
-  kpp: number;
-  ogrn: number;
-  taxAuthorityRegistrationDate: string;
-  email: string;
-  phone: number;
+  inn: string;
+  kpp: string;
+  ogrn: string;
+  checkedDate: string;
+  contragentEmail: string;
+  contragentPhone: string;
   country: string;
-  region: string;
+  area: string;
   city: string;
   address: string;
-  postIndex: number;
-  locality?: string;
-  account: number;
-  correspondentAccount: number;
-  bik: number;
-  name: string;
+  index: number;
+  town?: string;
+  bankAccount: string;
+  corrAccount: string;
+  bik: string;
+  bankName: string;
   bankAddress: string;
 }

@@ -4,25 +4,28 @@ import * as moment from "moment";
 
 export class CustomValidators {
 
+  static kpp(control: FormControl): any {
+    return CustomValidators.nineDigits(control);
+  }
+
+  static bik(control: FormControl): any {
+    return CustomValidators.nineDigits(control);
+  }
+
+  static bankAccount(control: FormControl): any {
+    return CustomValidators.twentyDigits(control);
+  }
+
+  static corrAccount(control: FormControl): any {
+    return CustomValidators.twentyDigits(control);
+  }
+
   // Используется для валидации КПП и БИК
-  static nineDigits(control: FormControl): any {
+  protected static nineDigits(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).match(/^\d{9}$/);
     return valid ? null : {field: true};
 }
-
-  static tenDigits(control: FormControl): any {
-    const value = control.value || '';
-    const valid = String(value).match(/^(\d{10}|\d{12})$/);
-    return valid ? null : {field: true};
-  }
-
-// Используется для валидации почтового индекса
-  static sixDigits(control: FormControl): any {
-    const value = control.value || '';
-    const valid = String(value).match(/^\d{6}$/);
-    return valid ? null : {field: true};
-  }
 
   // Используется для валидации банковского и корреспонденского счета
   static twentyDigits(control: FormControl): any {
@@ -31,10 +34,21 @@ export class CustomValidators {
     return valid ? null : {field: true};
   }
 
-  // Используется для валидации ОГРН
-  static thirtyDigits(control: FormControl): any {
+  static index(control: FormControl): any {
+    const value = control.value || '';
+    const valid = String(value).match(/^\d{6}$/);
+    return valid ? null : {field: true};
+  }
+
+  static ogrn(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).match(/^\d{13}$/);
+    return valid ? null : {field: true};
+  }
+
+  static inn(control: FormControl): any {
+    const value = control.value || '';
+    const valid = String(value).match(/^(\d{10}|\d{12})$/);
     return valid ? null : {field: true};
   }
 
@@ -45,10 +59,10 @@ export class CustomValidators {
     return valid ? null : {field: true};
   }
 
-  // Используется для валидации наименований организаций и адресов, разрешена кириллица, пробелы, тире и знаки припинания
+  // Используется для валидации наименований организаций и адресов, разрешена кириллица, пробелы, тире, цифры и знаки припинания
   static cyrrilic(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^[?!,"-.а-яА-ЯёЁ\s]+$/);
+    const valid = String(value).match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
     return valid ? null : {field: true};
   }
 

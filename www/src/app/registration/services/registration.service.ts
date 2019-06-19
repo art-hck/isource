@@ -12,37 +12,37 @@ export class RegistrationService {
   }
 registration(userRegistration: UserRegistration, contragentRegistration: ContragentRegistration) {
     return this.api.post(
-      `/supplier-price-list`,
+      `registration`,
       {
-        username: userRegistration.username,
+        username: userRegistration.email,
         password: userRegistration.password,
         firstName: userRegistration.firstName,
         lastName: userRegistration.lastName,
-        middleName: userRegistration.middleName,
-        phone: userRegistration.phone,
+        middleName: userRegistration.secondName,
+        phone: userRegistration.phone.toString(),
         contragent: {
           fullName: contragentRegistration.fullName,
           shortName: contragentRegistration.shortName,
-          inn: contragentRegistration.inn,
-          kpp: contragentRegistration.kpp,
-          ogrn: contragentRegistration.ogrn,
-          taxAuthorityRegistrationDate: contragentRegistration.taxAuthorityRegistrationDate,
-          email: contragentRegistration.email,
-          phone: contragentRegistration.phone
+          inn: contragentRegistration.inn.toString(),
+          kpp: contragentRegistration.kpp.toString(),
+          ogrn: contragentRegistration.ogrn.toString(),
+          taxAuthorityRegistrationDate: contragentRegistration.checkedDate,
+          email: contragentRegistration.contragentEmail,
+          phone: contragentRegistration.contragentPhone.toString(),
         },
         contragentAddress: {
           country: contragentRegistration.country,
-          region: contragentRegistration.region,
+          region: contragentRegistration.area,
           city: contragentRegistration.city,
           address: contragentRegistration.address,
-          postIndex: contragentRegistration.postIndex,
-          locality: contragentRegistration.locality
+          postIndex: contragentRegistration.index.toString(),
+          locality: contragentRegistration.town
         },
         contragentBankRequisite: {
-          account: contragentRegistration.account,
-          correspondentAccount: contragentRegistration.correspondentAccount,
-          bik: contragentRegistration.bik,
-          name: contragentRegistration.name,
+          account: contragentRegistration.bankAccount.toString(),
+          correspondentAccount: contragentRegistration.corrAccount.toString(),
+          bik: contragentRegistration.bik.toString(),
+          name: contragentRegistration.bankName,
           address: contragentRegistration.bankAddress
         }
       });

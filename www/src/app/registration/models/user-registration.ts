@@ -1,8 +1,8 @@
 export class UserRegistration {
-  username: string;
+  email: string;
   password: string;
   firstName: string;
   lastName: string;
-  middleName?: string;
-  phone: number;
+  secondName?: string;
+  phone: string;
 }
