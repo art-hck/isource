@@ -51,8 +51,8 @@
             </div>
           </div>
           <div class="card-footer">
-            <button type="button" class="btn btn-primary next"
-                    (click)="onChangeStep()" [disabled]="userRegistrationForm.invalid">Далее
+            <button type="button" class="btn btn-primary next" [disabled]="userRegistrationForm.invalid"
+                    (click)="onChangeStep()">Далее
             </button>
           </div>
         </div>
@@ -170,7 +170,7 @@
       </div>
       <div class="card-footer">
         <button type="button" class="btn btn-link" (click)="onChangeStep()">Назад</button>
-        <button type="button" class="btn btn-primary"  [disabled]="contragentRegistrationForm.invalid">Зарегистрировать</button>
+        <button type="button" class="btn btn-primary"  [disabled]="contragentRegistrationForm.invalid" (click)="onRegistration()">Зарегистрировать</button>
       </div>
     </form>
   </div>

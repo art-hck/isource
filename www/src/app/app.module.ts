@@ -21,6 +21,7 @@ import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { PriceListModule } from "./price-list/price-list.module";
 import { RegistrationComponent } from './registration/components/registration.component';
+import {RegistrationService} from "./registration/services/registration.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -57,6 +58,7 @@ registerLocaleData(localeRu, 'ru');
       multi: true
     },
     AccessGuard,
+    RegistrationService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }
   ],

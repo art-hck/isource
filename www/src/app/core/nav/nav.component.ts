@@ -12,13 +12,23 @@ import { UserInfoService } from "../services/user-info.service";
 export class NavComponent implements OnInit {
 
   mainMenu: Array<MenuModel> = [];
+  url: string;
+  showMenu: boolean;
 
   constructor(
     public auth: AuthService,
     protected gui: AvailableGuiService,
     private router: Router,
     protected user: UserInfoService
-  ) {}
+  ) {
+    router.events.subscribe(() => {
+      if (this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0) {
+        this.showMenu = false;
+      } else {
+        this.showMenu = true;
+      }
+    });
+  }
 
   ngOnInit() {
     this.updateMenu();
@@ -60,8 +70,8 @@ export class NavComponent implements OnInit {
   protected getCustomerMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Регистрация',
-        path: 'registration',
+        text: '',
+        path: '',
         children: []
       }
     ];

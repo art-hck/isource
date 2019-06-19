@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "../../shared/forms/custom.validators";
-import * as moment from "moment";
+import {UserRegistration} from "../models/user-registration";
+import {ContragentRegistration} from "../models/contragent-registration";
+import {RegistrationService} from "../services/registration.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -12,8 +15,11 @@ export class RegistrationComponent implements OnInit {
   userRegistrationForm: FormGroup;
   contragentRegistrationForm: FormGroup;
   nextForm: boolean = false;
+  userRegistration: UserRegistration;
+  contragentRegistration: ContragentRegistration;
 
-  constructor(private formBuilder: FormBuilder) {
+
+  constructor(private formBuilder: FormBuilder, private registrationService: RegistrationService, private router: Router) {
   }
 
   ngOnInit() {
@@ -22,7 +28,7 @@ export class RegistrationComponent implements OnInit {
       confirmedPassword: ['', [Validators.required, CustomValidators.passwordConfirming('password')]],
       lastName: ['', [Validators.required, CustomValidators.cyrrilicName]],
       firstName: ['', [Validators.required, CustomValidators.cyrrilicName]],
-      secondName: ['' [CustomValidators.cyrrilicName]],
+      secondName: [''],
       email: ['', [Validators.required, CustomValidators.email]],
       phone: ['', [Validators.required, CustomValidators.phone]],
       agreement: [false, [Validators.required, Validators.requiredTrue]]
@@ -40,12 +46,12 @@ export class RegistrationComponent implements OnInit {
       area: ['', [Validators.required, CustomValidators.cyrrilic]],
       city: ['', [Validators.required, CustomValidators.cyrrilic]],
       index: ['', [Validators.required, CustomValidators.sixDigits]],
-      town: ['', CustomValidators.cyrrilic],
+      town: [''],
       address: ['', [Validators.required, CustomValidators.cyrrilic]],
       bankAccount: ['', [Validators.required, CustomValidators.twentyDigits]],
       bik: ['', [Validators.required, CustomValidators.nineDigits]],
       corrAccount: ['',[Validators.required, CustomValidators.twentyDigits]],
-      bankName: ['', Validators.required, CustomValidators.cyrrilic],
+      bankName: ['', [Validators.required, CustomValidators.cyrrilic]],
       bankAddress: ['', [Validators.required, CustomValidators.cyrrilic]],
     });
   }
@@ -62,5 +68,15 @@ export class RegistrationComponent implements OnInit {
 
   onChangeStep() {
     this.nextForm = !this.nextForm;
+  }
+
+  onRegistration() {
+    this.userRegistration = this.userRegistrationForm.value;
+    this.contragentRegistration = this.contragentRegistrationForm.value;
+    return this.registrationService.registration(this.userRegistration, this.contragentRegistration).subscribe(
+      () => {
+        this.router.navigateByUrl(`login`);
+      }
+    );
   }
 }
