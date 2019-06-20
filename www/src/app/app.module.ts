@@ -3,7 +3,7 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
 import { registerLocaleData } from '@angular/common';
 
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ClarityModule } from '@clr/angular';
@@ -20,6 +20,8 @@ import { StoreService as CartStoreService } from './cart/services/store.service'
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { PriceListModule } from "./price-list/price-list.module";
+import { CreateRequestComponent } from './create-request/components/create-request/create-request.component';
+import {CreateRequestService} from "./create-request/services/create-request.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -31,7 +33,8 @@ registerLocaleData(localeRu, 'ru');
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    CreateRequestComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ registerLocaleData(localeRu, 'ru');
     FormsModule,
     BrowserAnimationsModule,
     CartModule,
-    PriceListModule
+    PriceListModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
@@ -54,6 +58,7 @@ registerLocaleData(localeRu, 'ru');
       multi: true
     },
     AccessGuard,
+    CreateRequestService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }
   ],
