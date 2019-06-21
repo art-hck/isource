@@ -104,12 +104,14 @@
             </div>
           </div>
         </form>
-
-    <button type="button" class="btn btn-link" (click)="onAddNext()">
-      Добавить
-    </button>
-        <button type="button" class="btn btn-primary" [disabled]="requestDataForm.invalid" (click)="onAddRequest()">
-          Отправить
-        </button>
-
+<div class="addNext">
+  <button type="button" class="btn btn-link" (click)="onAddNext()">
+    Добавить
+  </button>
+</div>
+<div class="submit">
+  <button type="button" class="btn btn-primary" (click)="onAddRequest()">
+    Отправить
+  </button>
+</div>
     </div>

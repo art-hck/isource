@@ -46,7 +46,7 @@ h2 {
 }
 
 .card-footer {
-  padding: 30px 0 0 0;
+  padding: 30px 0 30px 0;
   text-align: right;
 }
 
@@ -61,4 +61,14 @@ h2 {
 
 textarea {
   width: 100%;
+}
+
+.submit {
+  text-align: right;
+  width: 1000px;
+}
+
+.btn-link {
+  color: #999999;
+  font-weight: 600;
 }
