@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import * as moment from "moment";
 import {RequestItem} from "../../models/request-item";
 import {CreateRequestService} from "../../services/create-request.service";
@@ -13,12 +21,36 @@ export class CreateRequestComponent implements OnInit {
   requestDataForm: FormGroup;
   item: boolean = false;
   requestItem: RequestItem;
+  countForm: number;
+  formTitles = [];
+
+  showForm = [];
 
   constructor(private formBuilder: FormBuilder, private createRequestService: CreateRequestService) {
   }
 
   ngOnInit() {
+
     this.requestDataForm = this.formBuilder.group({
+        'itemForm': this.formBuilder.array([
+          this.addItemFormGroup()
+        ])
+    }
+    );
+this.showForm[0] = true;
+
+    // this.requestDataForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
+    //   if (checked) {
+    //     this.requestDataForm.get('deliveryDate').disable();
+    //   } else {
+    //     this.requestDataForm.get('deliveryDate').enable();
+    //   }
+    // });
+
+  }
+
+  addItemFormGroup(): FormGroup {
+    return this.formBuilder.group({
       name: ['', [Validators.required]],
       productionDocument: ['', [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(1)]],
@@ -32,20 +64,12 @@ export class CreateRequestComponent implements OnInit {
       relatedServices: [''],
       comments: ['']
     });
-    this.requestDataForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
-      if (checked) {
-        this.requestDataForm.get('deliveryDate').disable();
-      } else {
-        this.requestDataForm.get('deliveryDate').enable();
-      }
-    });
-
   }
 
-  isFieldValid(field: string) {
-    return this.requestDataForm.get(field).errors
-      && (this.requestDataForm.get(field).touched || this.requestDataForm.get(field).dirty);
-  }
+  // isFieldValid(field: string) {
+  //   return this.requestDataForm.get(field).errors
+  //     && (this.requestDataForm.get(field).touched || this.requestDataForm.get(field).dirty);
+  // }
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -59,6 +83,19 @@ export class CreateRequestComponent implements OnInit {
         }
       };
     };
+  }
+
+  onAddToList(i) {
+    this.showForm[i] = false;
+    this.countForm = i;
+   this.formTitles[i] = this.requestDataForm.controls['itemForm'].get('name').value;
+   console.log(this.requestDataForm.controls['itemForm'].get('name').value);
+  }
+
+  onAddNext() {
+    this.showForm[this.countForm + 1] = true;
+    const control = <FormArray>this.requestDataForm.controls['itemForm'];
+    control.push(this.addItemFormGroup());
   }
 
   onAddRequest() {

@@ -1,10 +1,10 @@
 .card {
-  width: 1200px;
+  width: 1000px;
   text-align: left;
 }
 
 .card-block {
-  padding: 40px 130px 60px 130px;
+  padding: 15px 60px 15px 60px;
 }
 
 label {
@@ -25,7 +25,7 @@ label {
 
 .newRequest {
   text-align: left;
-  width: 1200px;
+  width: 1000px;
 
 }
 
