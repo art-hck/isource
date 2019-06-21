@@ -88,6 +88,7 @@ this.showForm[0] = true;
   onAddToList(i) {
     this.showForm[i] = false;
     this.countForm = i;
+    this.requestItem = this.requestDataForm.value;
    this.formTitles[i] = this.requestDataForm.controls['itemForm'].get('name').value;
    console.log(this.requestDataForm.controls['itemForm'].get('name').value);
   }
