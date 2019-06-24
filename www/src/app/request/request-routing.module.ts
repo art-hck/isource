@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {RequestListComponent} from "./request-list/request-list.component";
+import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
         component: RequestListComponent
       }
     ]
+  },
+  {
+    path: 'create',
+    component: CreateRequestComponent
   }
 ];
 

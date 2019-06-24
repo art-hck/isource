@@ -15,9 +15,7 @@ export class CreateRequestService {
     return this.api.post(
       `requests/customer/add-request`,
       {
-        positions: [
-          requestItem
-        ]
+        positions: requestItem
       })
   }
 }
