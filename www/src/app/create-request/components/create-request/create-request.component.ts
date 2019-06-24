@@ -24,7 +24,7 @@ export class CreateRequestComponent implements OnInit {
   countForm: number;
 
   showForm = [];
-  editForm = [];
+  editForm: boolean = false;
   showAddToList: boolean = true;
 
   get itemForm() {
@@ -101,14 +101,13 @@ export class CreateRequestComponent implements OnInit {
   }
 
   onEditForm(i) {
-    for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] == true) {
-        this.showForm[i] = false;
-      }
-      this.editForm[i] = true;
+    for (let k = 0; k < this.showForm.length; k++) {
+      this.showForm[k] = false;
     }
-    this.showForm[i] = !this.showForm[i];
+    this.showForm[i] = true;
+    this.editForm = true;
     this.showAddToList = false;
+
   }
 
   onAddRequest() {
@@ -120,8 +119,11 @@ export class CreateRequestComponent implements OnInit {
   }
 
   canAddOrSendItems() {
+    if (this.editForm) {
+      return false;
+    }
     for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] == true && this.editForm[i] == false) {
+      if (this.showForm[i] == true) {
         return false;
       }
     }

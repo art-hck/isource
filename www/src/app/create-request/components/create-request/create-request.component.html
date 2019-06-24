@@ -111,12 +111,12 @@
     </div>
   </form>
   <div class="addNext">
-    <button type="button" class="btn btn-link" (click)="onAddNext()" *ngIf="canAddOrSendItems">
+    <button type="button" class="btn btn-link" (click)="onAddNext()" *ngIf="canAddOrSendItems()">
       Добавить
     </button>
   </div>
   <div class="submit">
-    <button type="button" class="btn btn-primary" (click)="onAddRequest()" [disabled]="!canAddOrSendItems">
+    <button type="button" class="btn btn-primary" (click)="onAddRequest()" [disabled]="!canAddOrSendItems()">
       Отправить
     </button>
   </div>

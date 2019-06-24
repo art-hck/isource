@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: 'products-catalog', loadChildren: () => import('./product-catalog/product-catalog.module').then(m => m.ProductCatalogModule)},
   { path: 'login', component: LoginComponent },
   { path: 'pricelist', component: PriceListComponent},
-  { path: 'create-request', component: CreateRequestComponent},
+  { path: 'requests/create', component: CreateRequestComponent},
   { path: '**', component: NotFoundComponent }
 ];
 
