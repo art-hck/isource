@@ -7,7 +7,7 @@ import { NotFoundComponent } from "./pages/not-found/not-found.component";
 import { PageComponent as CartPageComponent } from './cart/page/page.component';
 import { PriceListComponent } from "./price-list/components/price-list/price-list.component";
 import { AccessGuard } from 'stdlib-ng/dist/core';
-import {CreateRequestComponent} from "./create-request/components/create-request/create-request.component";
+import {CreateRequestComponent} from "./request/common/create-request/components/create-request/create-request.component";
 
 
 const routes: Routes = [

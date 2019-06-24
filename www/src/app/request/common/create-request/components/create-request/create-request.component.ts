@@ -118,7 +118,8 @@ export class CreateRequestComponent implements OnInit {
     );
   }
 
-  canAddOrSendItems() {
+  // Отображаем кнопку Добавить только если все формы свернуты или разкрыта форма для редактирования
+  canAddItems() {
     if (this.editForm) {
       return false;
     }
