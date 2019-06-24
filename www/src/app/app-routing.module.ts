@@ -4,13 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from "./pages/not-found/not-found.component";
-import {CreateRequestComponent} from "./create-request/components/create-request/create-request.component";
+import {CreateRequestComponent} from "./request/common/components/create-request/create-request.component";
 
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
-  { path: 'create-request', component: CreateRequestComponent},
   { path: 'login', component: LoginComponent },
   { path: '**', component: NotFoundComponent }
 ];

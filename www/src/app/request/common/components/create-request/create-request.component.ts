@@ -107,7 +107,6 @@ export class CreateRequestComponent implements OnInit {
     this.showForm[i] = true;
     this.editForm = true;
     this.showAddToList = false;
-
   }
 
   onAddRequest() {
