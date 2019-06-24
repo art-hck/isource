@@ -1,4 +1,4 @@
-import { MallConfigInterface } from "../core/config/mall-config.interface";
+import { GpnmarketConfigInterface } from "../core/config/gpnmarket-config.interface";
 
 export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
