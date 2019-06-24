@@ -58,7 +58,7 @@
           "options": {
             "browserTarget": "mall-front:build",
             "disableHostCheck": true,
-            "port": 4202
+            "port": 4201
           },
           "configurations": {
             "production": {
