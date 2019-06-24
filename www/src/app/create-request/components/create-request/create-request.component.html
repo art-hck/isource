@@ -10,7 +10,7 @@
                 <div class="form-block">
                   <div class="clr-row" *ngIf="!showForm[i]" (click)="onEditForm(i)">
                     <div class="clr-col-11 title">
-                      {{formTitles[i]}}
+                      {{item.get('name').value}}
                     </div>
                     <div class="clr-col-1">
                       <button type="button" class="btn btn-link delete" (click)="deleteItem(i)">
@@ -58,7 +58,7 @@
                     <label class="clr-control-label" for="deliveryBasis">Базис поставки (пункт, до которого требуется
                       доставка)</label>
                     <input type="text" id="deliveryBasis" formControlName="deliveryBasis"
-                    >
+                           [class.invalid]="isFieldValid(i, 'deliveryBasis')">
                     <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
                     <input type="text" id="paymentTerms" formControlName="paymentTerms"
                            [class.invalid]="isFieldValid(i, 'paymentTerms')">
@@ -111,12 +111,12 @@
     </div>
   </form>
   <div class="addNext">
-    <button type="button" class="btn btn-link" (click)="onAddNext()" *ngIf="isAllFormsHided()">
+    <button type="button" class="btn btn-link" (click)="onAddNext()" *ngIf="canAddOrSendItems">
       Добавить
     </button>
   </div>
   <div class="submit">
-    <button type="button" class="btn btn-primary" (click)="onAddRequest()" [disabled]="!isAllFormsHided()">
+    <button type="button" class="btn btn-primary" (click)="onAddRequest()" [disabled]="!canAddOrSendItems">
       Отправить
     </button>
   </div>

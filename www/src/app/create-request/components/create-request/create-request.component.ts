@@ -22,9 +22,9 @@ export class CreateRequestComponent implements OnInit {
   item: boolean = false;
   requestItem: RequestItem;
   countForm: number;
-  formTitles = [];
 
   showForm = [];
+  editForm = [];
   showAddToList: boolean = true;
 
   get itemForm() {
@@ -42,24 +42,10 @@ export class CreateRequestComponent implements OnInit {
       }
     );
     this.showForm[0] = true;
-
-
-
-    // const i = 0;
-    //   this.itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
-    //     if (checked) {
-    //       this.itemForm.get('deliveryDate').disable();
-    //     } else {
-    //       this.itemForm.get('deliveryDate').enable();
-    //     }
-    //   });
-      // this.itemForm.get('name').valueChanges.subscribe(data => {
-      //   this.formTitles[i] = data;
-      // });
   }
 
   addItemFormGroup(): FormGroup {
-    return this.formBuilder.group({
+    const itemForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       productionDocument: ['', [Validators.required]],
       quantity: [null, [Validators.required, Validators.min(1)]],
@@ -73,6 +59,15 @@ export class CreateRequestComponent implements OnInit {
       relatedServices: [''],
       comments: ['']
     });
+    itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
+      if (checked) {
+        itemForm.get('deliveryDate').disable();
+      } else {
+        itemForm.get('deliveryDate').enable();
+      }
+    });
+
+    return itemForm;
   }
 
   isFieldValid(i, field: string) {
@@ -97,7 +92,6 @@ export class CreateRequestComponent implements OnInit {
   onAddToList(i) {
     this.showForm[i] = false;
     this.countForm = i;
-    this.formTitles[i] = this.itemForm.at(i).get('name').value;
   }
 
   onAddNext() {
@@ -111,6 +105,7 @@ export class CreateRequestComponent implements OnInit {
       if (this.showForm[i] == true) {
         this.showForm[i] = false;
       }
+      this.editForm[i] = true;
     }
     this.showForm[i] = !this.showForm[i];
     this.showAddToList = false;
@@ -124,9 +119,9 @@ export class CreateRequestComponent implements OnInit {
     );
   }
 
-  isAllFormsHided() {
+  canAddOrSendItems() {
     for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] == true) {
+      if (this.showForm[i] == true && this.editForm[i] == false) {
         return false;
       }
     }
