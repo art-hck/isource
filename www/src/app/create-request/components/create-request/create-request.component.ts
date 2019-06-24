@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -25,28 +25,37 @@ export class CreateRequestComponent implements OnInit {
   formTitles = [];
 
   showForm = [];
+  showAddToList: boolean = true;
+
+  get itemForm() {
+    return this.requestDataForm.get('itemForm') as FormArray;
+  }
 
   constructor(private formBuilder: FormBuilder, private createRequestService: CreateRequestService) {
   }
 
   ngOnInit() {
-
     this.requestDataForm = this.formBuilder.group({
         'itemForm': this.formBuilder.array([
           this.addItemFormGroup()
         ])
-    }
+      }
     );
-this.showForm[0] = true;
+    this.showForm[0] = true;
 
-    // this.requestDataForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
-    //   if (checked) {
-    //     this.requestDataForm.get('deliveryDate').disable();
-    //   } else {
-    //     this.requestDataForm.get('deliveryDate').enable();
-    //   }
-    // });
 
+
+    // const i = 0;
+    //   this.itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
+    //     if (checked) {
+    //       this.itemForm.get('deliveryDate').disable();
+    //     } else {
+    //       this.itemForm.get('deliveryDate').enable();
+    //     }
+    //   });
+      // this.itemForm.get('name').valueChanges.subscribe(data => {
+      //   this.formTitles[i] = data;
+      // });
   }
 
   addItemFormGroup(): FormGroup {
@@ -66,10 +75,10 @@ this.showForm[0] = true;
     });
   }
 
-  // isFieldValid(field: string) {
-  //   return this.requestDataForm.get(field).errors
-  //     && (this.requestDataForm.get(field).touched || this.requestDataForm.get(field).dirty);
-  // }
+  isFieldValid(i, field: string) {
+    return this.itemForm.at(i).get(field).errors
+      && (this.itemForm.at(i).get(field).touched || this.itemForm.at(i).get(field).dirty);
+  }
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -88,22 +97,43 @@ this.showForm[0] = true;
   onAddToList(i) {
     this.showForm[i] = false;
     this.countForm = i;
-    this.requestItem = this.requestDataForm.value;
-   this.formTitles[i] = this.requestDataForm.controls['itemForm'].get('name').value;
-   console.log(this.requestDataForm.controls['itemForm'].get('name').value);
+    this.formTitles[i] = this.itemForm.at(i).get('name').value;
   }
 
   onAddNext() {
     this.showForm[this.countForm + 1] = true;
-    const control = <FormArray>this.requestDataForm.controls['itemForm'];
-    control.push(this.addItemFormGroup());
+    this.showAddToList = true;
+    this.itemForm.push(this.addItemFormGroup());
+  }
+
+  onEditForm(i) {
+    for (let i = 0; i < this.showForm.length; i++) {
+      if (this.showForm[i] == true) {
+        this.showForm[i] = false;
+      }
+    }
+    this.showForm[i] = !this.showForm[i];
+    this.showAddToList = false;
   }
 
   onAddRequest() {
     this.requestItem = this.requestDataForm.value;
-    return this.createRequestService.addRequest(this.requestItem).subscribe(
+    return this.createRequestService.addRequest(this.requestItem['itemForm']).subscribe(
       () => {
       }
     );
+  }
+
+  isAllFormsHided() {
+    for (let i = 0; i < this.showForm.length; i++) {
+      if (this.showForm[i] == true) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  deleteItem(i): void {
+    this.itemForm.removeAt(i);
   }
 }

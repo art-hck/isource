@@ -4,7 +4,7 @@
 }
 
 .card-block {
-  padding: 15px 60px 15px 60px;
+  padding: 0;
 }
 
 label {
@@ -46,7 +46,7 @@ h2 {
 }
 
 .card-footer {
-  padding: 30px 0 30px 0;
+  padding: 30px 0 0 0;
   text-align: right;
 }
 
@@ -71,4 +71,38 @@ textarea {
 .btn-link {
   color: #999999;
   font-weight: 600;
+}
+
+.card {
+  box-shadow: 0 0 0 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.title {
+  padding: 10px 40px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.clr-form-control {
+  padding: 20px 40px 40px 40px;
+}
+
+.btn-link.delete {
+  font-size: 20px;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}
+
+.btn-outline, .btn-outline.btn:disabled {
+  color: #0085FF;
+  border-color: #0085FF;
 }
