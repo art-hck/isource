@@ -22,8 +22,7 @@ export class NavComponent implements OnInit {
     protected user: UserInfoService
   ) {
     router.events.subscribe(() => {
-      this.showMenu = (this.router.url.indexOf('/login') === 0
-        || this.router.url.indexOf('/registration') === 0) ? false : true;
+      this.showMenu = !(this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0);
     });
   }
 
@@ -72,8 +71,6 @@ export class NavComponent implements OnInit {
   protected getCustomerMenu(): Array<MenuModel> {
     return [
       {
-        text: '',
-        path: '',
         text: 'Новая заявка',
         path: 'requests/create',
         children: []
