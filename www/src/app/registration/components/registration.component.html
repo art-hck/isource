@@ -1,0 +1,177 @@
+<div class="container">
+  <h2 class="regHeader" *ngIf="!nextForm">Регистрация пользователя</h2>
+  <h2 class="regHeader" *ngIf="nextForm">Регистрация контрагента</h2>
+  <div class="card">
+    <form [formGroup]="userRegistrationForm" class="form" *ngIf="!nextForm">
+      <div class="form-block">
+        <div class="clr-form-control">
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="email">Email</label>
+              <input id="email" type="text" formControlName="email" [class.invalid]="isUserFieldValid('email')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="password">Пароль</label>
+              <input type="password" id="password" formControlName="password"
+                     [class.invalid]="isUserFieldValid('password')">
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="confirmedPassword">Пподтверждение пароля</label>
+              <input type="password" id="confirmedPassword" formControlName="confirmedPassword"
+                     [class.invalid]="isUserFieldValid('confirmedPassword')">
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="lastName">Фамилия</label>
+              <input id="lastName" type="text" formControlName="lastName"
+                     [class.invalid]="isUserFieldValid('lastName')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="firstName">Имя</label>
+              <input id="firstName" type="text" formControlName="firstName"
+                     [class.invalid]="isUserFieldValid('firstName')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="secondName">Отчество</label>
+              <input id="secondName" type="text" formControlName="secondName"
+                     [class.invalid]="isUserFieldValid('secondName')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="phone">Телефон</label>
+              <input id="phone" type="number" formControlName="phone" [class.invalid]="isUserFieldValid('phone')"/>
+            </div>
+            <div class="clr-col-6 agreement">
+              <clr-checkbox-wrapper>
+                <input type="checkbox" clrCheckbox name="agreement" id="agreement" formControlName="agreement">
+                <label>Согласие на обработку персональных данных</label>
+              </clr-checkbox-wrapper>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary next" [disabled]="userRegistrationForm.invalid"
+                    (click)="onChangeStep()">Далее
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form [formGroup]="contragentRegistrationForm" class="form" *ngIf="nextForm">
+      <div class="form-block">
+        <div class="clr-form-control">
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="inn">ИНН</label>
+              <input id="inn" type="number" formControlName="inn" [class.invalid]="isContragentFieldValid('inn')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="kpp">КПП</label>
+              <input id="kpp" type="number" formControlName="kpp" [class.invalid]="isContragentFieldValid('kpp')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="ogrn">ОГРН/ОГРНИП</label>
+              <input id="ogrn" type="number" formControlName="ogrn" [class.invalid]="isContragentFieldValid('ogrn')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-12">
+              <label class="clr-control-label" for="fullName">Полное наименование</label>
+              <input id="fullName" type="text" formControlName="fullName"
+                     [class.invalid]="isContragentFieldValid('fullName')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-12">
+              <label class="clr-control-label" for="shortName">Краткое наименование</label>
+              <input id="shortName" type="text" formControlName="shortName"
+                     [class.invalid]="isContragentFieldValid('shortName')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="checkedDate">Дата поставновки на учет в НО</label>
+              <input id="checkedDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="checkedDate"
+                     [class.invalid]="isContragentFieldValid('checkedDate')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="contragentEmail">Email</label>
+              <input id="contragentEmail" type="text" formControlName="contragentEmail"
+                     [class.invalid]="isContragentFieldValid('contragentEmail')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="contragentPhone">Телефон</label>
+              <input id="contragentPhone" type="number" formControlName="contragentPhone"
+                     [class.invalid]="isContragentFieldValid('contragentPhone')"/>
+            </div>
+          </div>
+          <h3>Юридический адрес</h3>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="country">Страна</label>
+              <input id="country" type="text" formControlName="country"
+                     [class.invalid]="isContragentFieldValid('country')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="area">Регион/область</label>
+              <input id="area" type="text" formControlName="area" [class.invalid]="isContragentFieldValid('area')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="city">Город/район</label>
+              <input id="city" type="text" formControlName="city" [class.invalid]="isContragentFieldValid('city')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-2">
+              <label class="clr-control-label" for="index">Почтовый индекс</label>
+              <input id="index" type="number" formControlName="index" [class.invalid]="isContragentFieldValid('index')"/>
+            </div>
+            <div class="clr-col-5">
+              <label class="clr-control-label" for="town">Населенный пункт</label>
+              <input id="town" type="text" formControlName="town" [class.invalid]="isContragentFieldValid('town')"/>
+            </div>
+            <div class="clr-col-5">
+              <label class="clr-control-label" for="address">Адрес</label>
+              <input id="address" type="text" formControlName="address"
+                     [class.invalid]="isContragentFieldValid('address')"/>
+            </div>
+          </div>
+          <h3>Банковские реквизиты</h3>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
+              <input id="bankAccount" type="number" formControlName="bankAccount"
+                     [class.invalid]="isContragentFieldValid('bankAccount')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="bik">БИК</label>
+              <input id="bik" type="number" formControlName="bik" [class.invalid]="isContragentFieldValid('bik')"/>
+            </div>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
+              <input id="corrAccount" type="number" formControlName="corrAccount"
+                     [class.invalid]="isContragentFieldValid('corrAccount')"/>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-6">
+              <label class="clr-control-label" for="bankName">Наименование банка</label>
+              <input id="bankName" type="text" formControlName="bankName"
+                     [class.invalid]="isContragentFieldValid('bankName')"/>
+            </div>
+            <div class="clr-col-6">
+              <label class="clr-control-label" for="bankAddress">Адрес банка</label>
+              <input id="bankAddress" type="text" formControlName="bankAddress"
+                     [class.invalid]="isContragentFieldValid('bankAddress')"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-link" (click)="onChangeStep()">Назад</button>
+        <button type="button" class="btn btn-primary"  [disabled]="contragentRegistrationForm.invalid" (click)="onRegistration()">Зарегистрировать</button>
+      </div>
+    </form>
+  </div>
+</div>
