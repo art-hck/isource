@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
@@ -37,7 +37,7 @@ export class RequestViewComponent implements OnInit {
     );
   }
 
-  onExpanded() {
+  onExpanded(): void {
     this.expanded = !this.expanded;
   }
 }
