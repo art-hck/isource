@@ -21,6 +21,7 @@ import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { PriceListModule } from "./price-list/price-list.module";
 import {CreateRequestService} from "./request/common/services/create-request.service";
+import {GetRequestsService} from "./request/common/services/get-requests.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -56,6 +57,7 @@ registerLocaleData(localeRu, 'ru');
     },
     AccessGuard,
     CreateRequestService,
+    GetRequestsService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }
   ],

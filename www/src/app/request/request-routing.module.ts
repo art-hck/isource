@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RequestListComponent} from "./request-list/request-list.component";
+import {RequestListViewComponent as CustomerRequestList } from "./customer/request-list-view/request-list-view.component";
+import {RequestListViewComponent as BackofficeRequestList  } from "./backoffice/request-list-view/request-list-view.component";
 import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
 
 const routes: Routes = [
@@ -9,7 +10,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: CustomerRequestList
       }
     ]
   },
@@ -18,7 +19,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: BackofficeRequestList
       }
     ]
   },

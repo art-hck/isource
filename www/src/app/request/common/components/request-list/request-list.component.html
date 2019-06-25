@@ -1,0 +1,64 @@
+<clr-datagrid class="requests-list-datagrid">
+  <clr-dg-column>№ Заявки</clr-dg-column>
+  <clr-dg-column *ngIf="customerNameColumnShow">Наименование заказчика</clr-dg-column>
+  <clr-dg-column>Статус заявки</clr-dg-column>
+  <clr-dg-column>Состав</clr-dg-column>
+  <clr-dg-column>Сроки поставки</clr-dg-column>
+  <clr-dg-column>Статус</clr-dg-column>
+
+  <clr-dg-row *ngFor="let request of requests" (click)="onRowClick(request)">
+
+
+      <clr-dg-cell class="request-number">{{request.request.number}}</clr-dg-cell>
+
+
+      <clr-dg-cell class="request-number" *ngIf="customerNameColumnShow">
+        {{request.customer.name}}
+      </clr-dg-cell>
+
+
+      <clr-dg-cell class="request-status status-request-{{request.request.status.name}}">
+        {{request.request.status.label}}
+      </clr-dg-cell>
+
+
+      <clr-dg-cell class="request-positions-list">
+        <ng-container *ngFor="let position of request.positions">
+          <div class="position-info">
+            <span class="position-title">{{ position.name }}</span>
+            <span class="position-count">{{ position.quantity }} {{ position.measureUnit }}</span>
+          </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="request.positionsCount > 3">
+
+          <ng-container *ngIf="customerNameColumnShow; else linkForCustomer">
+            <a href="/requests/back-office/{{ request.request.id }}">{{ getMorePositionsLabel(request.positionsCount) }}</a>
+          </ng-container>
+
+          <ng-template #linkForCustomer>
+            <a href="/requests/customer/{{ request.request.id }}">{{ getMorePositionsLabel(request.positionsCount) }}</a>
+          </ng-template>
+
+        </ng-container>
+
+
+      </clr-dg-cell>
+
+      <clr-dg-cell class="request-delivery-dates">{{ getDeliveryDate(request) }}</clr-dg-cell>
+
+      <clr-dg-cell class="request-delivery-dates">
+        <ng-container *ngFor="let position of request.positions">
+          <div class="position-info">
+            <span class="position-status status-position-{{position.status.name}}">
+              {{position.status.label}}
+            </span>
+          </div>
+        </ng-container>
+      </clr-dg-cell>
+
+
+
+  </clr-dg-row>
+</clr-datagrid>

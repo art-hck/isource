@@ -16,6 +16,6 @@ export class CreateRequestService {
       `requests/customer/add-request`,
       {
         positions: requestItem
-      })
+      });
   }
 }
