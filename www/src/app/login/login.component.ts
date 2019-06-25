@@ -52,4 +52,8 @@ export class LoginComponent implements OnInit {
         this.loginError = true;
       });
   }
+
+  onRegistrationClick() {
+      this.router.navigateByUrl(`registration`);
+  }
 }
