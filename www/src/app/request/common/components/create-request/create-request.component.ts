@@ -19,13 +19,13 @@ import {CreateRequestService} from "../../services/create-request.service";
 })
 export class CreateRequestComponent implements OnInit {
   requestDataForm: FormGroup;
-  item: boolean = false;
+  item = false;
   requestItem: RequestItem;
   countForm: number;
 
   showForm = [];
-  editForm: boolean = false;
-  showAddToList: boolean = true;
+  editForm = false;
+  showAddToList = true;
 
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
@@ -55,9 +55,10 @@ export class CreateRequestComponent implements OnInit {
       deliveryBasis: ['', [Validators.required]],
       paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
-      currency: [''],
+      currency: ['RUB'],
       relatedServices: [''],
-      comments: ['']
+      comments: [''],
+      documents: [null]
     });
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
@@ -123,7 +124,7 @@ export class CreateRequestComponent implements OnInit {
       return false;
     }
     for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] == true) {
+      if (this.showForm[i] === true) {
         return false;
       }
     }
@@ -132,5 +133,9 @@ export class CreateRequestComponent implements OnInit {
 
   deleteItem(i): void {
     this.itemForm.removeAt(i);
+  }
+
+  onDocumentSelected(documents: File[], form: FormGroup) {
+    form.get('documents').setValue(documents);
   }
 }
