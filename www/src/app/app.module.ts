@@ -21,6 +21,8 @@ import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { PriceListModule } from "./price-list/price-list.module";
 import {CreateRequestService} from "./request/common/services/create-request.service";
+import { RegistrationComponent } from './registration/components/registration.component';
+import {RegistrationService} from "./registration/services/registration.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -32,7 +34,8 @@ registerLocaleData(localeRu, 'ru');
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     CartModule,
     PriceListModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
@@ -56,6 +60,7 @@ registerLocaleData(localeRu, 'ru');
     },
     AccessGuard,
     CreateRequestService,
+    RegistrationService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }
   ],
