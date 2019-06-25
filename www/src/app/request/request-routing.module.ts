@@ -22,7 +22,7 @@ const routes: Routes = [
         component: RequestListComponent
       },
       {
-        path: 'view',
+        path: ':id/view',
         component: RequestViewComponent
       }
     ]

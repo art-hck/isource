@@ -16,7 +16,7 @@
   </div>
   <div class="clr-col-3">
     <p class="title-info">Статус</p>
-    Новая
+    {{request.statusLabel}}
   </div>
 </div>
   <clr-accordion>
@@ -27,14 +27,12 @@
             <b>{{requestPosition.name}}</b>
           </div>
           <div class="clr-col-3 status">
-            Новая
+         {{requestPosition.statusLabel}}
           </div>
         </div>
 
       </clr-accordion-title>
       <clr-accordion-content *clrIfExpanded>
-
-
               <div class="clr-form-control">
                 <div class="clr-row w-100">
                   <div class="clr-col-7">
@@ -43,13 +41,13 @@
                   </div>
                   <div class="clr-col-5">
                     <label class="clr-control-label">Статус</label>
-                    Новая
+{{requestPosition.statusLabel}}
                   </div>
                 </div>
                 <div class="clr-row w-100">
                   <div class="clr-col-7">
                     <label class="clr-control-label">Количество</label>
-                    {{requestPosition.quantity}}{{requestPosition.measureUnit}}
+                    <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
 
                   </div>
                   <div class="clr-col-5">
@@ -71,7 +69,7 @@
                     {{requestPosition.paymentTerms}}
                   </div>
                 </div>
-                <div class="expanded-block" *ngIf="expanded">
+                <div class="expanded-block w-100" *ngIf="expanded">
                 <div class="clr-row w-100">
                   <div class="clr-col-7">
                     <label class="clr-control-label">
@@ -81,20 +79,27 @@
                   </div>
                   <div class="clr-col-5">
                     <label class="clr-control-label">Начальная максимальная цена</label>
-                    {{requestPosition.startPrice}}{{requestPosition.currency}}
+                    <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
                   </div>
                 </div>
+                  <div class="clr-row w-100">
+                  <div class="clr-col-7">
                 <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+
                   <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
                     (ШМР,
                     ПНР)</label>
                   {{requestPosition.relatedServices}}
                 </div>
+                  </div>
+                  <div class="clr-col-5">
                 <div class="relatedServices" *ngIf="requestPosition.comments">
                 <label class="clr-control-label">Примечания/комментрии</label>
                 {{requestPosition.comments}}
                 </div>
                 </div>
+                </div>
+                  </div>
                 <button class="btn btn-link" (click)="onExpanded()">
                   <p class="btn btn-link" *ngIf="!expanded">Подробнее</p>
                   <p class="btn btn-link" *ngIf="expanded">Свернуть</p>
@@ -111,18 +116,21 @@
                 <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
 
                 <clr-dg-row>
-                  <clr-dg-cell class="clr-col-6"><a>Техническая документация для изготовления пирожков</a></clr-dg-cell>
+                  <clr-dg-cell class="clr-col-6"><a>Техническая документация для изготовления пирожков.pdf</a></clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
                 </clr-dg-row>
                 <clr-dg-row>
-                  <clr-dg-cell class="clr-col-6"><a>Требования и стандарты изготовления пирожков</a></clr-dg-cell>
+                  <clr-dg-cell class="clr-col-6"><a>Требования и стандарты изготовления пирожков.doc</a></clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
                   <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
                 </clr-dg-row>
               </clr-datagrid>
+              <div class="right-align-button">
+                <button class="btn btn-link"><b>Загрузить</b></button>
+              </div>
             </clr-tab-content>
           </clr-tab>
           <clr-tab>

@@ -6,4 +6,5 @@ export class BackofficeRequest {
   createdDate: string;
   number: number;
   status: string;
+  statusLabel: string;
 }

@@ -12,4 +12,5 @@ export class RequestPosition extends RequestItem {
   statusChangedDate: string;
   statusExpectedDate: string;
   type: string;
+  statusLabel: string;
 }

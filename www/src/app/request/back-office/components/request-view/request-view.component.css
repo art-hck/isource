@@ -51,3 +51,11 @@ clr-datagrid {
 .datagrid-cell {
   font-size: 13px;
 }
+
+.quantity {
+  padding-right: 5px;
+}
+
+.right-align-button {
+  text-align: right;
+}

@@ -13,12 +13,12 @@ export class RequestService {
   ) {
   }
   getRequestInfo(id: Uuid) {
-    const url = `requests/backoffice/ab0c7131-3ec0-4a17-8980-6e196cee9249/info`;
+    const url = `requests/backoffice/${id}/info`;
     return this.api.post(url, {});
   }
 
   getRequestPositions(id: Uuid) {
-    const url = `requests/backoffice/ab0c7131-3ec0-4a17-8980-6e196cee9249/positions`;
+    const url = `requests/backoffice/${id}/positions`;
     return this.api.post(url, {});
   }
   }
