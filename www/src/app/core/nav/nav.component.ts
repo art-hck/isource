@@ -22,11 +22,8 @@ export class NavComponent implements OnInit {
     protected user: UserInfoService
   ) {
     router.events.subscribe(() => {
-      if (this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0) {
-        this.showMenu = false;
-      } else {
-        this.showMenu = true;
-      }
+      this.showMenu = (this.router.url.indexOf('/login') === 0
+        || this.router.url.indexOf('/registration') === 0) ? false : true;
     });
   }
 

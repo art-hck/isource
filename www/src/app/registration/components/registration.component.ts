@@ -19,7 +19,11 @@ export class RegistrationComponent implements OnInit {
   contragentRegistration: ContragentRegistration;
 
 
-  constructor(private formBuilder: FormBuilder, private registrationService: RegistrationService, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private registrationService: RegistrationService,
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
