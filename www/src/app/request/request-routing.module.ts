@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {RequestListComponent} from "./request-list/request-list.component";
 import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
+import {RequestViewComponent} from "./back-office/components/request-view/request-view.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: '',
         component: RequestListComponent
+      },
+      {
+        path: 'view',
+        component: RequestViewComponent
       }
     ]
   },

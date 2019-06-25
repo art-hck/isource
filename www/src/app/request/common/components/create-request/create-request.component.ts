@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -18,6 +18,7 @@ import {CreateRequestService} from "../../services/create-request.service";
   styleUrls: ['./create-request.component.css']
 })
 export class CreateRequestComponent implements OnInit {
+
   requestDataForm: FormGroup;
   item: boolean = false;
   requestItem: RequestItem;
