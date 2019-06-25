@@ -60,6 +60,11 @@ export class NavComponent implements OnInit {
         text: 'Пункт меню для поставщика',
         path: 'test',
         children: []
+      },
+      {
+        text: 'Реестр заявок',
+        path: 'requests/back-office',
+        children: []
       }
     ];
   }
@@ -69,6 +74,13 @@ export class NavComponent implements OnInit {
       {
         text: '',
         path: '',
+        text: 'Новая заявка',
+        path: 'requests/create',
+        children: []
+      },
+      {
+        text: 'Реестр заявок',
+        path: 'requests/customer',
         children: []
       }
     ];
@@ -87,7 +99,7 @@ export class NavComponent implements OnInit {
   protected getUnauthMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Пункт меню для гостя',
+        text: '',
         path: 'test',
         children: []
       }

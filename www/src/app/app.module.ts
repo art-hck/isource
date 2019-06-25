@@ -20,6 +20,7 @@ import { StoreService as CartStoreService } from './cart/services/store.service'
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { PriceListModule } from "./price-list/price-list.module";
+import {CreateRequestService} from "./request/common/services/create-request.service";
 import { RegistrationComponent } from './registration/components/registration.component';
 import {RegistrationService} from "./registration/services/registration.service";
 
@@ -58,6 +59,7 @@ registerLocaleData(localeRu, 'ru');
       multi: true
     },
     AccessGuard,
+    CreateRequestService,
     RegistrationService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }

@@ -1,11 +1,11 @@
-# Mall front
+# Gpnmarket front
 
 # Установка
 
-В инструкциях далее используется переменная `$MALL_FRONT` в качестве указания пути к проекту
+В инструкциях далее используется переменная `$GPNMARKET_FRONT` в качестве указания пути к проекту
 
 ```bash
-export MALL_FRONT=~/mall-front
+export GPNMARKET_FRONT=~/gpnmarket-front
 ```
 
 ## Через docker
@@ -13,13 +13,13 @@ export MALL_FRONT=~/mall-front
 Клонирование репозитория:
 
 ```bash
-git clone git@gitlab.etpgpb.loc:newetp/mall-front.git $MALL_FRONT
+git clone git@gitlab.etpgpb.loc:newetp/gpnmarket-front.git $GPNMARKET_FRONT
 ```
 
 Далее надо выполнить настройку окружения:
 
 ```bash
-cd $MALL_FRONT/docker
+cd $GPNMARKET_FRONT/docker
 cp .env.dist .env
 $EDITOR .env
 ```
@@ -27,7 +27,7 @@ $EDITOR .env
 Выполнить настройку конфигурации фронтэнда:  
 
 ```bash
-cd $MALL_FRONT/www
+cd $GPNMARKET_FRONT/www
 cp src/app/config/app.config.ts.dist src/app/config/app.config.ts 
 $EDITOR src/app/config/app.config.ts 
 ```
@@ -35,7 +35,7 @@ $EDITOR src/app/config/app.config.ts
 После настройки можно выполнять сборку и запуск:
 
 ```bash
-cd $MALL_FRONT/docker
+cd $GPNMARKET_FRONT/docker
 docker-compose build
 docker-compose up -d
 ```
@@ -81,13 +81,13 @@ npm install --global @angular/cli
 Клонирование репозитория:
 
 ```bash
-git clone git@gitlab.etpgpb.loc:newetp/mall-front.git $MALL_FRONT
+git clone git@gitlab.etpgpb.loc:newetp/gpnmarket-front.git $GPNMARKET_FRONT
 ```
 
 Выполнить настройку конфигурации фронтэнда:
 
 ```bash
-cd $MALL_FRONT/www
+cd $GPNMARKET_FRONT/www
 cp src/app/config/app.config.ts.dist src/app/config/app.config.ts 
 $EDITOR src/app/config/app.config.ts 
 ```
@@ -95,7 +95,7 @@ $EDITOR src/app/config/app.config.ts
 Сборка и запуск:
 
 ```bash
-cd $MALL_FRONT/www
+cd $GPNMARKET_FRONT/www
 npm install
 ng serve
 ```
@@ -108,30 +108,30 @@ ng serve
 
 Для объединения сервера и фронта на одном домене настраиваем nginx на основной системе.
 
-Сначала выбираем локальный домен, например mall.gpb.local, и заносим в hosts новую запись:
+Сначала выбираем локальный домен, например gpnmarket.gpb.local, и заносим в hosts новую запись:
 
 ```
-127.0.0.1 mall.gpb.local
+127.0.0.1 gpnmarket.gpb.local
 ```
 
 Затем создаём конфиг nginx:
 
 ```
 server {
-    server_name mall.gpb.local;
+    server_name gpnmarket.gpb.local;
     listen 80;
     client_max_body_size       10m;
     client_body_buffer_size    128k;
     location / {
-        proxy_pass http://localhost:4201/; # адрес сервера mall_angular
+        proxy_pass http://localhost:4202/; # адрес сервера gpnmarket_angular
     }
     location /api/ {
-        proxy_pass http://localhost:8090/; # адрес сервера с mall-nginx
+        proxy_pass http://localhost:8092/; # адрес сервера с gpnmarket-nginx
     }
     
     # Проброс websocket-а для перезагрузки angular в процессе разработки:
     location /sockjs-node/ {
-        proxy_pass http://localhost:4201/sockjs-node/;
+        proxy_pass http://localhost:4202/sockjs-node/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
@@ -144,22 +144,22 @@ server {
 Команда для сборки:
 
 ```bash
-cd $MALL_FRONT/www
+cd $GPNMARKET_FRONT/www
 ng build
 ```
 
-Результаты сборки будут доступны в папке `$MALL_FRONT/www/dist`
+Результаты сборки будут доступны в папке `$GPNMARKET_FRONT/www/dist`
 
 # Релизная сборка
 
 Команда для сборки:
 
 ```bash
-cd $MALL_FRONT/www
+cd $GPNMARKET_FRONT/www
 ng build --prod
 ```
 
-Результаты сборки будут доступны в папке `$MALL_FRONT/www/dist`
+Результаты сборки будут доступны в папке `$GPNMARKET_FRONT/www/dist`
 
 Если для настроенных виртуальных серверов с собранными приложениями появялется ошибка 404, то нужно в файл настройки вирутального сервера добавить:
 
