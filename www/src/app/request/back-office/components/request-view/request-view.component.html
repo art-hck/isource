@@ -116,29 +116,7 @@
             <clr-tab>
               <button clrTabLink>Документы</button>
               <clr-tab-content *clrIfActive="true">
-                <clr-datagrid class="clr-row">
-                  <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
-                  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
-                  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
-                  <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
-
-                  <clr-dg-row>
-                    <clr-dg-cell class="clr-col-6"><a>Техническая документация для изготовления пирожков.pdf</a>
-                    </clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
-                  </clr-dg-row>
-                  <clr-dg-row>
-                    <clr-dg-cell class="clr-col-6"><a>Требования и стандарты изготовления пирожков.doc</a></clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
-                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
-                  </clr-dg-row>
-                </clr-datagrid>
-                <div class="right-align-button">
-                  <button class="btn btn-link"><b>Загрузить</b></button>
-                </div>
+                <app-document-list [documents]="requestPosition.documents"></app-document-list>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>

@@ -1,5 +1,6 @@
 import {Uuid} from "../../../cart/models/uuid";
 import {RequestItem} from "../../common/models/request-item";
+import {RequestDocument} from "./request-document";
 
 export class RequestPosition extends RequestItem {
   id: Uuid
@@ -13,4 +14,5 @@ export class RequestPosition extends RequestItem {
   statusExpectedDate: string;
   type: string;
   statusLabel: string;
+  documents: RequestDocument[];
 }

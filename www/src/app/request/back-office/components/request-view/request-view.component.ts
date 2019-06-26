@@ -4,7 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {BackofficeRequest} from "../../models/backoffice-request";
 import {RequestPosition} from "../../models/request-position";
-import {RequestWorkflowSteps} from "../../../common/enum/request-workflow-steps";
 
 @Component({
   selector: 'app-request-view',
@@ -17,8 +16,7 @@ export class RequestViewComponent implements OnInit {
   request: BackofficeRequest;
   requestPositions: RequestPosition[];
 
-  expanded: boolean = false;
-
+  expanded = false;
 
   constructor(private route: ActivatedRoute, private requestService: RequestService) {
   }
@@ -27,12 +25,12 @@ export class RequestViewComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: BackofficeRequest) => {
-        this.request = request
+        this.request = request;
       }
     );
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions
+        this.requestPositions = requestPositions;
       }
     );
   }

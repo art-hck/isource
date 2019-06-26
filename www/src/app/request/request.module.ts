@@ -8,12 +8,14 @@ import {SharedModule} from "../shared/shared.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import { RequestViewComponent } from './back-office/components/request-view/request-view.component';
 import {RequestService} from "./back-office/services/request.service";
+import { DocumentListComponent } from './common/components/document-list/document-list.component';
 
 @NgModule({
   declarations: [
     RequestListComponent,
     CreateRequestComponent,
-    RequestViewComponent
+    RequestViewComponent,
+    DocumentListComponent
   ],
   imports: [
     CommonModule,
