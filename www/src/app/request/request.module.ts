@@ -6,14 +6,18 @@ import { RequestListComponent } from './request-list/request-list.component';
 import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
 import {SharedModule} from "../shared/shared.module";
 import {ReactiveFormsModule} from "@angular/forms";
-import { RequestViewComponent } from './back-office/components/request-view/request-view.component';
-import {RequestService} from "./back-office/services/request.service";
+import { RequestViewComponent as BackofficeRequestViewComponent } from './back-office/components/request-view/request-view.component';
+import { RequestViewComponent as CustomerRequestViewComponent } from './customer/components/request-view/request-view.component';
+import {RequestService as BackofficeRequestService} from "./back-office/services/request.service";
+import {RequestService as CustomerRequestService} from "./customer/services/request.service";
 
 @NgModule({
   declarations: [
     RequestListComponent,
     CreateRequestComponent,
-    RequestViewComponent
+    BackofficeRequestViewComponent,
+    CustomerRequestViewComponent
+
   ],
   imports: [
     CommonModule,
@@ -22,7 +26,9 @@ import {RequestService} from "./back-office/services/request.service";
     ReactiveFormsModule
   ],
   providers: [
-    RequestService
+    BackofficeRequestService,
+    CustomerRequestService
+
   ]
 })
 export class RequestModule { }

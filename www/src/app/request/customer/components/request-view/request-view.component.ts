@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
-import {BackofficeRequest} from "../../models/backoffice-request";
-import {RequestPosition} from "../../models/request-position";
+import {BackofficeRequest} from "../../../back-office/models/backoffice-request";
+import {RequestPosition} from "../../../back-office/models/request-position";
 
 @Component({
   selector: 'app-request-view',
