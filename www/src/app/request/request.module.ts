@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { RequestRoutingModule } from './request-routing.module';
 import { RequestListComponent } from './request-list/request-list.component';
-import { CreateRequestComponent } from "./common/components/create-request/create-request.component";
-import { SharedModule } from "../shared/shared.module";
-import { ReactiveFormsModule } from "@angular/forms";
 import { DocumentUploadListComponent } from './common/components/document-list/document-upload-list.component';
 import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
 import {SharedModule} from "../shared/shared.module";
@@ -19,8 +16,7 @@ import {RequestService as CustomerRequestService} from "./customer/services/requ
   declarations: [
     RequestListComponent,
     CreateRequestComponent,
-    RequestViewComponent,
-    DocumentUploadListComponent
+    DocumentUploadListComponent,
     BackofficeRequestViewComponent,
     CustomerRequestViewComponent
 
