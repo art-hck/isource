@@ -9,7 +9,7 @@ deploy-front:
   tags:
     - gpnmarket-front-ci
   script:
-    - rsync -a $DEPLOY_DIR /var/www/html/gpnmarket_front/www
+    - rsync -a $DEPLOY_DIR /var/www/html/gpnmarket_front
   only:
     variables:
       - $CI_COMMIT_REF_NAME == "master"
