@@ -43,12 +43,11 @@
 
         </ng-container>
 
-
       </clr-dg-cell>
 
       <clr-dg-cell class="request-delivery-dates">{{ getDeliveryDate(request) }}</clr-dg-cell>
 
-      <clr-dg-cell class="request-delivery-dates">
+      <clr-dg-cell class="request-position-statuses">
         <ng-container *ngFor="let position of request.positions">
           <div class="position-info">
             <span class="position-status status-position-{{position.status.name}}">
