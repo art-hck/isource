@@ -6,6 +6,8 @@ variables:
   
 deploy-front:
   stage: deploy
+  tags:
+    - gpnmarket-front-ci
   script:
     - rsync -a $DEPLOY_DIR /var/www/html/gpnmarket_front/www
   only:
