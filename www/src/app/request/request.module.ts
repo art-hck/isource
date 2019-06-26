@@ -14,7 +14,7 @@ import { DocumentUploadListComponent } from './common/components/document-list/d
   declarations: [
     RequestListComponent,
     CreateRequestComponent,
-    RequestViewComponent
+    RequestViewComponent,
     DocumentUploadListComponent
   ],
   imports: [
