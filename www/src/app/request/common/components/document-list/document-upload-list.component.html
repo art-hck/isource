@@ -1,0 +1,17 @@
+<ul class="list-unstyled">
+  <li *ngFor="let document of documents">
+    {{ document.name }}
+
+    <button type="button" class="btn btn-link" (click)="removeDocument(document)">
+      Удалить
+    </button>
+  </li>
+
+  <div class="form-group">
+    <label for="file_upload"><a>Загрузить</a></label>
+    <input type="file"
+           id="file_upload"
+           multiple
+           (change)="addDocument($event.target.files)">
+  </div>
+</ul>
