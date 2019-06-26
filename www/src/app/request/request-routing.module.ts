@@ -15,7 +15,7 @@ const routes: Routes = [
         component: CustomerRequestsList
       },
       {
-        path: ':id/view',
+        path: ':id',
         component: CustomerRequestViewComponent
       }
     ]
@@ -28,7 +28,7 @@ const routes: Routes = [
         component: BackofficeRequestsList
       },
       {
-        path: ':id/view',
+        path: ':id',
         component: BackofficeRequestViewComponent
       }
     ]
