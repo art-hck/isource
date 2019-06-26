@@ -1,0 +1,102 @@
+::ng-deep h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.more-positions {
+    color: gray;
+}
+.position-count {
+    float: right;
+    color: gray;
+}
+
+
+::ng-deep .requests-list-datagrid .datagrid .datagrid-header {
+    padding: 0;
+}
+::ng-deep .requests-list-datagrid .datagrid .datagrid-row:hover {
+    background-color: rgba(247, 247, 252, 1);
+}
+::ng-deep .requests-list-datagrid .datagrid {
+    box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
+}
+::ng-deep .requests-list-datagrid .datagrid .datagrid-column {
+    padding: 0;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
+    color: #5a5a5a;
+    font-size: 13px;
+}
+
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
+    padding: 23px 10px 23px 30px;
+}
+::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {
+    padding: 13px 10px 13px 30px;
+}
+
+
+
+
+
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title,
+::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {
+    font-weight: bold;
+}
+::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {
+    font-size: 13px !important;
+}
+
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-separator {
+    top: -29px;
+}
+
+
+
+.status-request-NEW:before,
+.status-request-PROCESSING:before,
+.status-request-DONE:before,
+
+.status-position-NEW:before,
+.status-position-OFFERS-PREPARING:before,
+.status-position-RESULTS-AGREEMENT:before,
+.status-position-SUPPLIER-SIGNING:before,
+.status-position-CUSTOMER-SIGNING:before
+{
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    vertical-align: middle;
+    margin: -2px 4px 0;
+    border-radius: 50%;
+}
+
+
+.status-request-NEW:before {
+    background: #b9b9b9;
+}
+.status-request-PROCESSING:before {
+    background: #f48f32;
+}
+.status-request-DONE:before {
+    background: #00b75e;
+}
+
+
+.status-position-NEW:before {
+    background: #b9b9b9;
+}
+.status-position-OFFERS-PREPARING:before {
+    background: #28b1ec;
+}
+.status-position-RESULTS-AGREEMENT:before {
+    background: #00b75e;
+}
+.status-position-SUPPLIER-SIGNING:before {
+    background: rgb(255, 71, 90);
+}
+.status-position-CUSTOMER-SIGNING:before {
+    background: rgba(142, 80, 210, 0.97);
+}

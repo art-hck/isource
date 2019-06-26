@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
+import {BackofficeRequest} from "../../models/backoffice-request";
+import {RequestPosition} from "../../models/request-position";
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
 
@@ -16,7 +18,7 @@ export class RequestViewComponent implements OnInit {
   request: Request;
   requestPositions: RequestPosition[];
 
-  expanded: boolean = false;
+  expanded = false;
 
 
   constructor(private route: ActivatedRoute, private requestService: RequestService) {
@@ -25,13 +27,13 @@ export class RequestViewComponent implements OnInit {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request
+      (request: BackofficeRequest) => {
+        this.request = request;
       }
     );
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions
+        this.requestPositions = requestPositions;
       }
     );
   }
