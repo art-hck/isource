@@ -120,7 +120,7 @@
     </button>
   </div>
   <div class="submit">
-    <button type="button" class="btn btn-primary" (click)="onAddRequest()" [disabled]="requestDataForm.invalid">
+    <button type="button" class="btn btn-primary" *ngIf="!requestView" (click)="onAddRequest()" [disabled]="requestDataForm.invalid">
       Отправить
     </button>
   </div>

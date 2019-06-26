@@ -18,6 +18,7 @@ import {CreateRequestService} from "../../services/create-request.service";
   styleUrls: ['./create-request.component.css']
 })
 export class CreateRequestComponent implements OnInit {
+
   requestDataForm: FormGroup;
   item = false;
   requestItem: RequestItem;

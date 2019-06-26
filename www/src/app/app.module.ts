@@ -23,6 +23,8 @@ import { PriceListModule } from "./price-list/price-list.module";
 import {CreateRequestService} from "./request/common/services/create-request.service";
 import { RegistrationComponent } from './registration/components/registration.component';
 import {RegistrationService} from "./registration/services/registration.service";
+import {RequestModule} from "./request/request.module";
+import {RequestService} from "./request/back-office/services/request.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -47,7 +49,8 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     CartModule,
     PriceListModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RequestModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
