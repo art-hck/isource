@@ -56,9 +56,10 @@ export class CreateRequestComponent implements OnInit {
       deliveryBasis: ['', [Validators.required]],
       paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
-      currency: [''],
+      currency: ['RUB'],
       relatedServices: [''],
-      comments: ['']
+      comments: [''],
+      documents: [null]
     });
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
@@ -133,5 +134,9 @@ export class CreateRequestComponent implements OnInit {
 
   deleteItem(i): void {
     this.itemForm.removeAt(i);
+  }
+
+  onDocumentSelected(documents: File[], form: FormGroup) {
+    form.get('documents').setValue(documents);
   }
 }

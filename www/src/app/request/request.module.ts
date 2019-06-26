@@ -10,7 +10,7 @@ import { RequestService } from "./back-office/services/request.service";
 import { ClarityModule } from '@clr/angular';
 import { RequestListViewComponent as CustomerRequestListViewComponent } from './customer/components/request-list-view/request-list-view.component';
 import { RequestListViewComponent as BackofficeRequestListViewComponent } from './back-office/components/request-list-view/request-list-view.component';
-
+import { DocumentUploadListComponent } from './common/components/document-list/document-upload-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,9 @@ import { RequestListViewComponent as BackofficeRequestListViewComponent } from '
     RequestViewComponent,
     CreateRequestComponent,
     CustomerRequestListViewComponent,
-    BackofficeRequestListViewComponent
+    BackofficeRequestListViewComponent,
+    RequestViewComponent,
+    DocumentUploadListComponent
   ],
   imports: [
     CommonModule,
