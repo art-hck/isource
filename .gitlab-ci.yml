@@ -1,0 +1,14 @@
+stages:
+  - deploy
+
+variables:
+  DEPLOY_DIR: ./www
+  
+deploy-front:
+  stage: deploy
+  script:
+    - rsync -a $DEPLOY_DIR /var/www/html/gpnmarket_front/www
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "master"
+  when: manual
