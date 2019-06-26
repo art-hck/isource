@@ -25,6 +25,7 @@ import { RegistrationComponent } from './registration/components/registration.co
 import {RegistrationService} from "./registration/services/registration.service";
 import {RequestModule} from "./request/request.module";
 import {RequestService} from "./request/back-office/services/request.service";
+import {GetRequestsService} from "./request/common/services/get-requests.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -64,6 +65,7 @@ registerLocaleData(localeRu, 'ru');
     AccessGuard,
     CreateRequestService,
     RegistrationService,
+    GetRequestsService,
     CartStoreService,
     { provide: LOCALE_ID, useValue: 'ru' }
   ],

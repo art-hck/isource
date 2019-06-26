@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RequestListComponent} from "./request-list/request-list.component";
+import {RequestListViewComponent as CustomerRequestsList } from "./customer/components/request-list-view/request-list-view.component";
+import {RequestListViewComponent as BackofficeRequestsList } from "./back-office/components/request-list-view/request-list-view.component";
 import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
 import {RequestViewComponent} from "./back-office/components/request-view/request-view.component";
 
@@ -10,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: CustomerRequestsList
       }
     ]
   },
@@ -19,7 +20,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: BackofficeRequestsList
       },
       {
         path: ':id/view',

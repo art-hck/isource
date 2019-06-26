@@ -2,7 +2,7 @@ import {Uuid} from "../../../cart/models/uuid";
 import {RequestItem} from "../../common/models/request-item";
 
 export class RequestPosition extends RequestItem {
-  id: Uuid
+  id: Uuid;
   userId: Uuid;
   contragentId: Uuid;
   createdDate: string;
