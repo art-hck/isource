@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
-import {BackofficeRequest} from "../../models/backoffice-request";
-import {RequestPosition} from "../../models/request-position";
+import {Request} from "../../../common/models/request";
+import {RequestPosition} from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-request-view',
@@ -13,7 +13,7 @@ import {RequestPosition} from "../../models/request-position";
 export class RequestViewComponent implements OnInit {
 
   requestId: Uuid;
-  request: BackofficeRequest;
+  request: Request;
   requestPositions: RequestPosition[];
 
   expanded: boolean = false;
@@ -25,7 +25,7 @@ export class RequestViewComponent implements OnInit {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: BackofficeRequest) => {
+      (request: Request) => {
         this.request = request
       }
     );
