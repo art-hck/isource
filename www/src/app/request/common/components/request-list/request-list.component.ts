@@ -27,7 +27,7 @@ export class RequestListComponent implements OnInit {
    *
    * @param request
    */
-  getDeliveryDate(request: RequestsList) {
+  getDeliveryDate(request: RequestsList): string {
     if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
@@ -46,7 +46,7 @@ export class RequestListComponent implements OnInit {
    *
    * @param count
    */
-  getMorePositionsLabel(count: number) {
+  getMorePositionsLabel(count: number): string {
     const cases = [2, 0, 1, 1, 1, 2];
     const strings = ['позиция', 'позиции', 'позиций'];
     const num = count - 3;
@@ -65,7 +65,7 @@ export class RequestListComponent implements OnInit {
   }
 
 
-  onRowClick(request: RequestsList) {
+  onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
