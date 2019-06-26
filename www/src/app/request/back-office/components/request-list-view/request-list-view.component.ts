@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {RequestsList} from "../../common/models/requests-list";
-import {GetRequestsService} from "../../common/services/get-requests.service";
-import {Router} from "@angular/router";
+import {RequestsList} from "../../../common/models/requests-list/requests-list";
+import {GetRequestsService} from "../../../common/services/get-requests.service";
 
 @Component({
   selector: 'app-request-list-view',
@@ -13,8 +12,7 @@ export class RequestListViewComponent implements OnInit {
   public requests: RequestsList[];
 
   constructor(
-    protected getRequestService: GetRequestsService,
-    protected router: Router
+    protected getRequestService: GetRequestsService
   ) { }
 
   ngOnInit() {
@@ -22,7 +20,7 @@ export class RequestListViewComponent implements OnInit {
   }
 
   getRequestListForBackoffice() {
-    this.getRequestService.getRequestsList('customer').subscribe(
+    this.getRequestService.getRequestsList('backoffice').subscribe(
       (data: RequestsList[]) => {
         this.requests = data;
       });

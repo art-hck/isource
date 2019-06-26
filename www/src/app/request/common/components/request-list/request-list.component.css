@@ -3,7 +3,9 @@
     font-weight: 600;
 }
 
-
+.more-positions {
+    color: gray;
+}
 .position-count {
     float: right;
     color: gray;

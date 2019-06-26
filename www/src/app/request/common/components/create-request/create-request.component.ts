@@ -18,14 +18,15 @@ import {CreateRequestService} from "../../services/create-request.service";
   styleUrls: ['./create-request.component.css']
 })
 export class CreateRequestComponent implements OnInit {
+
   requestDataForm: FormGroup;
-  item: boolean = false;
+  item = false;
   requestItem: RequestItem;
   countForm: number;
 
   showForm = [];
-  editForm: boolean = false;
-  showAddToList: boolean = true;
+  editForm = false;
+  showAddToList = true;
 
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
@@ -123,7 +124,7 @@ export class CreateRequestComponent implements OnInit {
       return false;
     }
     for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] == true) {
+      if (this.showForm[i] === true) {
         return false;
       }
     }

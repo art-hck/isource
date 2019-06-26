@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GetRequestsService } from "../../common/services/get-requests.service";
-import { RequestsList } from "../../common/models/requests-list";
-import {Router} from "@angular/router";
+import { GetRequestsService } from "../../../common/services/get-requests.service";
+import { RequestsList } from "../../../common/models/requests-list/requests-list";
 
 @Component({
   selector: 'app-request-list-view',
@@ -13,8 +12,7 @@ export class RequestListViewComponent implements OnInit {
   public requests: RequestsList[];
 
   constructor(
-    protected getRequestService: GetRequestsService,
-    protected router: Router
+    protected getRequestService: GetRequestsService
   ) { }
 
   ngOnInit() {

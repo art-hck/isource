@@ -34,11 +34,11 @@
         <ng-container *ngIf="request.positionsCount > 3">
 
           <ng-container *ngIf="customerNameColumnShow; else linkForCustomer">
-            <a href="/requests/back-office/{{ request.request.id }}">{{ getMorePositionsLabel(request.positionsCount) }}</a>
+            <span class="more-positions">{{ getMorePositionsLabel(request.positionsCount) }}</span>
           </ng-container>
 
           <ng-template #linkForCustomer>
-            <a href="/requests/customer/{{ request.request.id }}">{{ getMorePositionsLabel(request.positionsCount) }}</a>
+            <span class="more-positions">{{ getMorePositionsLabel(request.positionsCount) }}</span>
           </ng-template>
 
         </ng-container>
@@ -56,7 +56,6 @@
           </div>
         </ng-container>
       </clr-dg-cell>
-
 
 
   </clr-dg-row>

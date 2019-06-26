@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RequestsList} from "../../models/requests-list";
+import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
 
@@ -31,10 +31,10 @@ export class RequestListComponent implements OnInit {
     if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
-      return moment(request.request.delivery.value, moment.ISO_8601).locale('ru').format("D MMMM YYYY");
+      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
     } else if ((request.request.delivery.from) && (request.request.delivery.to)) {
-      const dateFrom = moment(request.request.delivery.from, moment.ISO_8601).locale('ru').format("D MMMM YYYY");
-      const dateTo = moment(request.request.delivery.to, moment.ISO_8601).locale('ru').format("D MMMM YYYY");
+      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
+      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
       return dateFrom + ' — ' + dateTo;
     } else {
       return '—';
@@ -67,6 +67,6 @@ export class RequestListComponent implements OnInit {
 
   onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
-    this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
+    this.router.navigateByUrl(`/requests/${role}/${request.request.id}/view`);
   }
 }
