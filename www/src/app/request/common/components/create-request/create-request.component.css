@@ -106,3 +106,7 @@ textarea {
   color: #0085FF;
   border-color: #0085FF;
 }
+
+.clr-form-control.view {
+  text-align: left;
+}

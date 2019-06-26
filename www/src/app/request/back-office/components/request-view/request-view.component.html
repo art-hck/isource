@@ -1,0 +1,167 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+<ng-container *ngIf="request">
+  <div class="container">
+    <h1>Заявка №{{request.number}}</h1>
+    <div class="clr-row">
+      <div class="clr-col-3">
+        <p class="title-info">Заказчик</p>
+        {{request.contragent.shortName}}
+      </div>
+      <div class="clr-col-2">
+        <p class="title-info">Контактное лицо</p>
+        {{request.user.lastName}}
+      </div>
+      <div class="clr-col-2">
+        <p class="title-info">Email</p>
+        {{request.user.email}}
+      </div>
+      <div class="clr-col-2">
+        <p class="title-info">Дата создания</p>
+        {{request.createdDate | date :'shortDate'}}
+      </div>
+      <div class="clr-col-3">
+        <p class="title-info">Статус</p>
+        {{request.statusLabel}}
+      </div>
+    </div>
+    <clr-accordion>
+      <clr-accordion-panel *ngFor="let requestPosition of requestPositions">
+        <clr-accordion-title>
+          <div class="clr-row w-100">
+            <div class="clr-col-9">
+              <b>{{requestPosition.name}}</b>
+            </div>
+            <div class="clr-col-3 status">
+              {{requestPosition.statusLabel}}
+            </div>
+          </div>
+
+        </clr-accordion-title>
+        <clr-accordion-content *clrIfExpanded>
+          <div class="clr-form-control">
+            <div class="clr-row w-100">
+              <div class="clr-col-7">
+                <label class="clr-control-label">Наименование МТР</label>
+                {{requestPosition.name}}
+              </div>
+              <div class="clr-col-5">
+                <label class="clr-control-label">Статус</label>
+                {{requestPosition.statusLabel}}
+              </div>
+            </div>
+            <div class="clr-row w-100">
+              <div class="clr-col-7">
+                <label class="clr-control-label">Количество</label>
+                <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
+
+              </div>
+              <div class="clr-col-5">
+                <label class="clr-control-label"> Необходимый срок поставки</label>
+                <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
+                  как можно скорее
+                </div>
+                {{requestPosition.deliveryDate}}
+              </div>
+            </div>
+            <div class="clr-row w-100">
+              <div class="clr-col-7">
+                <label class="clr-control-label">Базис поставки (пункт, до которого требуется
+                  доставка)</label>
+                {{requestPosition.deliveryBasis}}
+              </div>
+              <div class="clr-col-5">
+                <label class="clr-control-label">Условия оплаты</label>
+                {{requestPosition.paymentTerms}}
+              </div>
+            </div>
+            <div class="expanded-block w-100" *ngIf="expanded">
+              <div class="clr-row w-100">
+                <div class="clr-col-7">
+                  <label class="clr-control-label">
+                    Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+                  </label>
+                  {{requestPosition.productionDocument}}
+                </div>
+                <div class="clr-col-5">
+                  <label class="clr-control-label">Начальная максимальная цена</label>
+                  <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
+                </div>
+              </div>
+              <div class="clr-row w-100">
+                <div class="clr-col-7">
+                  <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+
+                    <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
+                      (ШМР,
+                      ПНР)</label>
+                    {{requestPosition.relatedServices}}
+                  </div>
+                </div>
+                <div class="clr-col-5">
+                  <div class="relatedServices" *ngIf="requestPosition.comments">
+                    <label class="clr-control-label">Примечания/комментрии</label>
+                    {{requestPosition.comments}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-link" (click)="onExpanded()">
+              <p class="btn btn-link" *ngIf="!expanded">Подробнее</p>
+              <p class="btn btn-link" *ngIf="expanded">Свернуть</p>
+            </button>
+          </div>
+          <clr-tabs>
+            <clr-tab>
+              <button clrTabLink>Документы</button>
+              <clr-tab-content *clrIfActive="true">
+                <clr-datagrid class="clr-row">
+                  <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
+
+                  <clr-dg-row>
+                    <clr-dg-cell class="clr-col-6"><a>Техническая документация для изготовления пирожков.pdf</a>
+                    </clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
+                  </clr-dg-row>
+                  <clr-dg-row>
+                    <clr-dg-cell class="clr-col-6"><a>Требования и стандарты изготовления пирожков.doc</a></clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
+                  </clr-dg-row>
+                </clr-datagrid>
+                <div class="right-align-button">
+                  <button class="btn btn-link"><b>Загрузить</b></button>
+                </div>
+              </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+              <button clrTabLink>Согласование</button>
+              <clr-tab-content *clrIfActive>
+                ...
+              </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+              <button clrTabLink>КП</button>
+              <clr-tab-content *clrIfActive>
+                ...
+              </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+              <button clrTabLink>Договор</button>
+              <clr-tab-content *clrIfActive>
+                ...
+              </clr-tab-content>
+            </clr-tab>
+          </clr-tabs>
+        </clr-accordion-content>
+      </clr-accordion-panel>
+    </clr-accordion>
+  </div>
+</ng-container>
