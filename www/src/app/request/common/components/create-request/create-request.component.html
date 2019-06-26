@@ -73,16 +73,16 @@
                         <label class="clr-control-label" for="currency">Валюта</label>
                         <div class="select">
                           <select name="currency" id="currency" formControlName="currency">
-                            <option (value)="RUB">
+                            <option value="RUB">
                               RUB
                             </option>
-                            <option (value)="USD">
+                            <option value="USD">
                               USD
                             </option>
-                            <option (value)="EUR">
+                            <option value="EUR">
                               EUR
                             </option>
-                            <option (value)="CHF">
+                            <option value="CHF">
                               CHF
                             </option>
                           </select>
@@ -95,6 +95,10 @@
                     <input type="text" id="relatedServices" name="relatedServices" formControlName="relatedServices">
                     <label class="clr-control-label" for="comments">Примечания/комментрии</label>
                     <textarea type="textarea" id="comments" name="comments" formControlName="comments"></textarea>
+
+                    <label class="clr-control-label">Документы</label>
+                    <app-document-upload-list (fileSelected)="onDocumentSelected($event, item)"></app-document-upload-list>
+
                     <div class="card-footer">
                       <button type="button" class="btn btn-outline" (click)="onAddToList(i)" *ngIf="showAddToList"
                               [disabled]="requestDataForm.invalid">
