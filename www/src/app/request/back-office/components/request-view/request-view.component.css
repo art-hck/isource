@@ -59,3 +59,7 @@ clr-datagrid {
 .right-align-button {
   text-align: right;
 }
+
+.select select {
+  margin-bottom: 0;
+}

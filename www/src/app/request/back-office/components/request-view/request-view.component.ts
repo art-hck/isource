@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
-import { ActivatedRoute } from "@angular/router";
-import { RequestService } from "../../services/request.service";
-import { Request } from "../../../common/models/request";
-import { RequestPosition } from "../../../common/models/request-position";
+import {Component, OnInit} from '@angular/core';
+import {Uuid} from "../../../../cart/models/uuid";
+import {ActivatedRoute} from "@angular/router";
+import {RequestService} from "../../services/request.service";
+import {Request} from "../../../common/models/request";
+import {RequestPosition} from "../../../common/models/request-position";
+import {RequestPositionWorkflowStepLabels} from "../../../common/dictionaries/request-position-workflow-step-labels";
 
 @Component({
   selector: 'app-request-view',
@@ -15,9 +16,9 @@ export class RequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
+  requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
   expanded = false;
-
 
   constructor(private route: ActivatedRoute, private requestService: RequestService) {
   }
@@ -38,5 +39,18 @@ export class RequestViewComponent implements OnInit {
 
   onExpanded(): void {
     this.expanded = !this.expanded;
+  }
+
+  onChangeStatus(requestPosition: RequestPosition, newStatus: string) {
+    this.requestService.changeStatus(this.requestId, requestPosition.id, newStatus).subscribe(
+      (data: any) => {
+        if (data.requestStatus !== null) {
+          this.requestService.getRequestInfo(this.requestId).subscribe(
+            (request: Request) => {
+              this.request = request;
+            }
+          )
+        }
+      });
   }
 }
