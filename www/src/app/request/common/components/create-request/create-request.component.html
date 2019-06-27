@@ -155,6 +155,11 @@
         </div>
         <div class="submit">
           <button type="button"
+                  class="btn btn-outline btn-add-from-excel"
+                  (click)="onAddFromExcel()">
+            Добавить из Excel
+          </button>
+          <button type="button"
                   class="btn btn-primary"
                   *ngIf="!requestView"
                   (click)="onAddRequest()"
@@ -168,4 +173,8 @@
 
   </clr-tabs>
 
+  <app-add-from-excel-modal
+    [style.display]="addFromExcelModalVisible ? 'inline' : 'none'"
+    (close)="onCloseAddFromExcelModal()">
+  </app-add-from-excel-modal>
 </div>

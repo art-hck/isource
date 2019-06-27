@@ -15,6 +15,7 @@ import { DocumentUploadListComponent } from "./common/components/document-upload
 import { MessagesComponent } from './common/components/messages/messages.component';
 import { OffersComponent as BackofficeOffersComponent } from './back-office/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
+import { AddFromExcelModalComponent } from './common/components/add-from-excel-modal/add-from-excel-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { OffersService as BackofficeOffersService} from "./back-office/services/
     CustomerRequestViewComponent,
     DocumentListComponent,
     MessagesComponent,
-    BackofficeOffersComponent
+    BackofficeOffersComponent,
+    AddFromExcelModalComponent
   ],
   imports: [
     SharedModule,

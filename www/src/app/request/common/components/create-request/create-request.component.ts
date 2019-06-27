@@ -29,6 +29,8 @@ export class CreateRequestComponent implements OnInit {
   editForm = false;
   showAddToList = true;
 
+  addFromExcelModalVisible = false;
+
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
   }
@@ -144,5 +146,13 @@ export class CreateRequestComponent implements OnInit {
 
   onDocumentSelected(documents: File[], form: FormGroup) {
     form.get('documents').setValue(documents);
+  }
+
+  onAddFromExcel(): void {
+    this.addFromExcelModalVisible = true;
+  }
+
+  onCloseAddFromExcelModal(): void {
+    this.addFromExcelModalVisible = false;
   }
 }
