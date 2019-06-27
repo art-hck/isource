@@ -56,7 +56,25 @@ clr-datagrid {
   padding-right: 5px;
 }
 
+.right-align-button {
+  text-align: right;
+}
 
-.select select {
+h1 {
   margin-bottom: 0;
+}
+
+.header-label {
+  margin-top: 0;
+  color: #999999;
+}
+
+.right-align-status {
+  text-align: right;
+  padding: 40px 0 0 0;
+
+}
+
+.w-100 {
+  margin: 0;
 }

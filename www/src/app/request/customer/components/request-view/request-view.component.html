@@ -3,26 +3,12 @@
 </ng-container>
 <ng-container *ngIf="request">
   <div class="container">
-    <h1>Заявка №{{request.number}}</h1>
-    <div class="clr-row">
-      <div class="clr-col-3">
-        <p class="title-info">Заказчик</p>
-        {{request.contragent.shortName}}
+    <div class="clr-row w-100">
+      <div class="clr-col-9">
+        <h1>Заявка №{{request.number}}</h1>
+        <p class="header-label">от {{request.createdDate | date :'shortDate'}}</p>
       </div>
-      <div class="clr-col-2">
-        <p class="title-info">Контактное лицо</p>
-        {{request.user.lastName}}
-      </div>
-      <div class="clr-col-2">
-        <p class="title-info">Email</p>
-        {{request.user.email}}
-      </div>
-      <div class="clr-col-2">
-        <p class="title-info">Дата создания</p>
-        {{request.createdDate | date :'shortDate'}}
-      </div>
-      <div class="clr-col-3">
-        <p class="title-info">Статус</p>
+      <div class="clr-col-3 right-align-status">
         {{request.statusLabel}}
       </div>
     </div>
@@ -37,7 +23,6 @@
               {{requestPosition.statusLabel}}
             </div>
           </div>
-
         </clr-accordion-title>
         <clr-accordion-content *clrIfExpanded>
           <div class="clr-form-control">
@@ -48,14 +33,7 @@
               </div>
               <div class="clr-col-5">
                 <label class="clr-control-label">Статус</label>
-                <div class="select">
-                  <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
-                          [value]="requestPosition.status">
-                    <option *ngFor="let status of requestPositionWorkflowStepLabels"
-                            [(value)]="status[0]">{{status[1]}}
-                    </option>
-                  </select>
-                </div>
+                {{requestPosition.statusLabel}}
               </div>
             </div>
             <div class="clr-row w-100">
@@ -98,7 +76,6 @@
               <div class="clr-row w-100">
                 <div class="clr-col-7">
                   <div class="relatedServices" *ngIf="requestPosition.relatedServices">
-
                     <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
                       (ШМР,
                       ПНР)</label>
@@ -122,7 +99,28 @@
             <clr-tab>
               <button clrTabLink>Документы</button>
               <clr-tab-content *clrIfActive="true">
-                <app-document-list [documents]="requestPosition.documents"></app-document-list>
+                <clr-datagrid class="clr-row">
+                  <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
+                  <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
+                  <clr-dg-row>
+                    <clr-dg-cell class="clr-col-6"><a>Техническая документация для изготовления пирожков.pdf</a>
+                    </clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
+                  </clr-dg-row>
+                  <clr-dg-row>
+                    <clr-dg-cell class="clr-col-6"><a>Требования и стандарты изготовления пирожков.doc</a></clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Воскресенская Н.И.</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+                    <clr-dg-cell class="clr-col-2">25.05.2019</clr-dg-cell>
+                  </clr-dg-row>
+                </clr-datagrid>
+                <div class="right-align-button">
+                  <button class="btn btn-link"><b>Загрузить</b></button>
+                </div>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>

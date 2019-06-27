@@ -2,7 +2,7 @@ import {Uuid} from "../../../cart/models/uuid";
 import {ContragentRegistration} from "../../../registration/models/contragent-registration";
 import {UserRegistration} from "../../../registration/models/user-registration";
 
-export class BackofficeRequest {
+export class Request {
   contragent: ContragentRegistration;
   id: Uuid;
   contragentId: Uuid;

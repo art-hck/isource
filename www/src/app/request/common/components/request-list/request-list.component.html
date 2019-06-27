@@ -1,33 +1,30 @@
-<clr-datagrid class="requests-list-datagrid" (clrDgRefresh)="refresh($event)">
-  <clr-dg-column>№ Заявки</clr-dg-column>
+<clr-datagrid class="requests-list-datagrid">
+  <clr-dg-column class="request-number">№ Заявки</clr-dg-column>
 
-  <clr-dg-column *ngIf="customerNameColumnShow">Наименование заказчика
+  <clr-dg-column class="customer-name" *ngIf="customerNameColumnShow">Наименование заказчика
     <clr-dg-string-filter [clrDgStringFilter]="customerNameFilter"></clr-dg-string-filter>
   </clr-dg-column>
 
-  <clr-dg-column>Статус заявки
-    <clr-dg-filter [clrDgFilter]="requestStatusFilter">
-      <label><input type="checkbox" value="NEW"> Новая</label>
-      <label><input type="checkbox" value="test"> Другое</label>
-    </clr-dg-filter>
+  <clr-dg-column class="request-status">Статус заявки
+    <clr-dg-string-filter [clrDgStringFilter]="requestStatusFilter"></clr-dg-string-filter>
   </clr-dg-column>
 
-  <clr-dg-column>Состав</clr-dg-column>
+  <clr-dg-column class="request-positions-list">Состав</clr-dg-column>
 
-  <clr-dg-column>Сроки поставки</clr-dg-column>
+  <clr-dg-column class="request-delivery-dates">Сроки поставки</clr-dg-column>
 
-  <clr-dg-column>Статус
+  <clr-dg-column class="request-position-statuses">Статус
     <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>
   </clr-dg-column>
 
-  <clr-dg-row *ngFor="let request of requests" (click)="onRowClick(request)">
+  <clr-dg-row *clrDgItems="let request of requests" (click)="onRowClick(request)">
 
 
       <clr-dg-cell class="request-number">{{request.request.number}}</clr-dg-cell>
 
 
-      <clr-dg-cell class="request-number" *ngIf="customerNameColumnShow">
-        {{request.customer.name}}
+      <clr-dg-cell class="customer-name" *ngIf="customerNameColumnShow">
+        {{request.customer?.name}}
       </clr-dg-cell>
 
 
@@ -39,8 +36,8 @@
       <clr-dg-cell class="request-positions-list">
         <ng-container *ngFor="let position of request.positions">
           <div class="position-info">
-            <span class="position-title">{{ position.name }}</span>
-            <span class="position-count">{{ position.quantity }} {{ position.measureUnit }}</span>
+            <span class="position-title">{{ position?.name }}</span>
+            <span class="position-count">{{ position?.quantity }} {{ position.measureUnit }}</span>
           </div>
         </ng-container>
 

@@ -46,6 +46,7 @@
 }
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {
     font-size: 13px !important;
+    line-height: 1.6;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-flex,
 ::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
@@ -56,16 +57,40 @@
 }
 
 
+::ng-deep .requests-list-datagrid .datagrid-table .request-number.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {
+    max-width: 120px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-status.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-status.datagrid-cell {
+    max-width: 150px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {
+    min-width: 320px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
+    max-width: 160px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-position-statuses.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {
+    max-width: 250px;
+}
+
+::ng-deep .requests-list-datagrid .datagrid .datagrid-cell .position-info {
+    padding-bottom: 10px;
+}
 
 .status-request-NEW:before,
-.status-request-PROCESSING:before,
-.status-request-DONE:before,
+.status-request-IN_PROGRESS:before,
+.status-request-COMPLETED:before,
 
 .status-position-NEW:before,
-.status-position-OFFERS-PREPARING:before,
-.status-position-RESULTS-AGREEMENT:before,
-.status-position-SUPPLIER-SIGNING:before,
-.status-position-CUSTOMER-SIGNING:before
+.status-position-PROPOSALS_PREPARATION:before,
+.status-position-RESULTS_AGREEMENT:before,
+.status-position-CONTRACT_SIGNING_BY_SUPPLIER:before,
+.status-position-CONTRACT_SIGNING_BY_CUSTOMER:before
 {
     content: "";
     display: inline-block;
@@ -80,10 +105,10 @@
 .status-request-NEW:before {
     background: #b9b9b9;
 }
-.status-request-PROCESSING:before {
+.status-request-IN_PROGRESS:before {
     background: #f48f32;
 }
-.status-request-DONE:before {
+.status-request-COMPLETED:before {
     background: #00b75e;
 }
 
@@ -91,15 +116,15 @@
 .status-position-NEW:before {
     background: #b9b9b9;
 }
-.status-position-OFFERS-PREPARING:before {
+.status-position-PROPOSALS_PREPARATION:before {
     background: #28b1ec;
 }
-.status-position-RESULTS-AGREEMENT:before {
+.status-position-RESULTS_AGREEMENT:before {
     background: #00b75e;
 }
-.status-position-SUPPLIER-SIGNING:before {
+.status-position-CONTRACT_SIGNING_BY_SUPPLIER:before {
     background: rgb(255, 71, 90);
 }
-.status-position-CUSTOMER-SIGNING:before {
+.status-position-CONTRACT_SIGNING_BY_CUSTOMER:before {
     background: rgba(142, 80, 210, 0.97);
 }

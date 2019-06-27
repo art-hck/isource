@@ -4,32 +4,61 @@ import * as moment from 'moment';
 import {Router} from "@angular/router";
 import {ClrDatagridFilterInterface, ClrDatagridStateInterface, ClrDatagridStringFilterInterface} from "@clr/angular";
 import {RequestListItem} from "../../models/requests-list/requests-list-item";
-import {Subject} from "rxjs";
 
 
-// class RequestStatusFilter implements ClrDatagridFilterInterface<RequestsList> {
-//   changes = new Subject<any>();
-//   isActive(): boolean { return true; }
-//
-//   accepts(request: RequestsList): boolean {
-//     console.log(request);
-//     return true;
-//   }
-//
-//
-//
-//   // accepts(request: RequestsList, search: string): boolean {
-//   //   return "" + request.request.status.label === search
-//   //     || request.request.status.label.toLowerCase().indexOf(search) >= 0;
-//   // }
-// }
+
+class CustomerNameFilter implements ClrDatagridStringFilterInterface<RequestsList> {
+  accepts(request: RequestsList, search: string): boolean {
+    if (search.length === 0) {
+      return true;
+    }
+    if (!request.positions || request.positions.length === 0) {
+      return false;
+    }
+    const customer = request.customer;
+    return (
+      customer.name === search ||
+      customer.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
+    );
+  }
+}
+
+
+class RequestStatusFilter implements ClrDatagridStringFilterInterface<RequestsList> {
+  accepts(request: RequestsList, search: string): boolean {
+    if (search.length === 0) {
+      return true;
+    }
+    if (!request.positions || request.positions.length === 0) {
+      return false;
+    }
+    const requestItem = request.request;
+    return (
+      requestItem.status.label === search ||
+      requestItem.status.label.toLowerCase().indexOf(search.toLowerCase()) >= 0
+    );
+  }
+}
 
 
 class PositionStatusFilter implements ClrDatagridStringFilterInterface<RequestsList> {
   accepts(request: RequestsList, search: string): boolean {
-    console.log(request);
-    console.log(search);
-    return true;
+    if (search.length === 0) {
+      return true;
+    }
+    if (!request.positions || request.positions.length === 0) {
+      return false;
+    }
+    for (let index = 0; index < request.positions.length; index++) {
+      const position = request.positions[index];
+      if (
+        position.status.label === search ||
+        position.status.label.toLowerCase().indexOf(search.toLowerCase()) >= 0
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -43,7 +72,8 @@ class PositionStatusFilter implements ClrDatagridStringFilterInterface<RequestsL
 
 export class RequestListComponent implements OnInit {
 
-  // private requestStatusFilter = new RequestStatusFilter();
+  private customerNameFilter = new CustomerNameFilter();
+  private requestStatusFilter = new RequestStatusFilter();
   private positionStatusFilter = new PositionStatusFilter();
   statuses: RequestListItem;
 
@@ -63,13 +93,15 @@ export class RequestListComponent implements OnInit {
    * @param request
    */
   getDeliveryDate(request: RequestsList): string {
-    if (request.request.delivery.asap === true) {
+    if (!request.request.delivery) {
+      return '—';
+    } else if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
-      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
+      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
     } else if ((request.request.delivery.from) && (request.request.delivery.to)) {
-      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
-      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
+      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
       return dateFrom + ' — ' + dateTo;
     } else {
       return '—';
@@ -102,28 +134,6 @@ export class RequestListComponent implements OnInit {
 
   onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
-    this.router.navigateByUrl(`/requests/${role}/${request.request.id}/view`);
-  }
-
-
-
-
-
-  refresh(state: ClrDatagridStateInterface) {
-
-    const filters: {[prop: string]: any[]} = {};
-
-    if (state.filters) {
-      for (const filter of state.filters) {
-        const {property, value} = <{property: string, value: string}>filter;
-        filters[property] = [value];
-        console.log(filters[property]);
-      }
-    }
-    this.requests.filter(filters)
-      .then((result: RequestsList[]) => {
-        console.log(result);
-        this.requests = result;
-      });
+    this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
 }

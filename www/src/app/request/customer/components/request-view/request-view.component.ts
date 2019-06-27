@@ -4,7 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../../common/dictionaries/request-position-workflow-step-labels";
 
 @Component({
   selector: 'app-request-view',
@@ -16,9 +15,9 @@ export class RequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
-  requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
-  expanded = false;
+  expanded: boolean = false;
+
 
   constructor(private route: ActivatedRoute, private requestService: RequestService) {
   }
@@ -27,30 +26,17 @@ export class RequestViewComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
-        this.request = request;
+        this.request = request
       }
     );
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions;
+        this.requestPositions = requestPositions
       }
     );
   }
 
   onExpanded(): void {
     this.expanded = !this.expanded;
-  }
-
-  onChangeStatus(requestPosition: RequestPosition, newStatus: string) {
-    this.requestService.changeStatus(this.requestId, requestPosition.id, newStatus).subscribe(
-      (data: any) => {
-        if (data.requestStatus !== null) {
-          this.requestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {
-              this.request = request;
-            }
-          );
-        }
-      });
   }
 }

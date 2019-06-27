@@ -6,5 +6,5 @@ export class RequestListItem {
   id: Uuid;
   number: number;
   status: StatusInfo;
-  delivery: DeliveryInfo;
+  delivery?: DeliveryInfo;
 }
