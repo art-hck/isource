@@ -1,9 +1,6 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { map } from "rxjs/operators";
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
-import {Observable} from "rxjs";
-
 
 @Injectable()
 export class RequestService {
@@ -12,6 +9,7 @@ export class RequestService {
     protected api: HttpClient,
   ) {
   }
+
   getRequestInfo(id: Uuid) {
     const url = `requests/backoffice/${id}/info`;
     return this.api.post(url, {});
@@ -21,4 +19,11 @@ export class RequestService {
     const url = `requests/backoffice/${id}/positions`;
     return this.api.post(url, {});
   }
+
+  changeStatus(id: Uuid, positionId: Uuid, status: string) {
+    const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
+    return this.api.post(url, {
+      status: status
+    });
   }
+}
