@@ -1,6 +1,6 @@
 import {Uuid} from "../../../cart/models/uuid";
 import {RequestItem} from "./request-item";
-import { RequestDocument } from "../../back-office/models/request-document";
+import { RequestDocument } from "./request-document";
 
 export class RequestPosition extends RequestItem {
   id: Uuid;

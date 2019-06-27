@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RequestDocument} from "../../../back-office/models/request-document";
+import { RequestDocument } from "../../models/request-document";
 
 @Component({
   selector: 'app-document-list',
