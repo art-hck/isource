@@ -1,10 +1,10 @@
 <clr-datagrid class="requests-list-datagrid">
-  <clr-dg-column>№ Заявки</clr-dg-column>
-  <clr-dg-column *ngIf="customerNameColumnShow">Наименование заказчика</clr-dg-column>
-  <clr-dg-column>Статус заявки</clr-dg-column>
-  <clr-dg-column>Состав</clr-dg-column>
-  <clr-dg-column>Сроки поставки</clr-dg-column>
-  <clr-dg-column>Статус</clr-dg-column>
+  <clr-dg-column class="request-number">№ Заявки</clr-dg-column>
+  <clr-dg-column class="customer-name" *ngIf="customerNameColumnShow">Наименование заказчика</clr-dg-column>
+  <clr-dg-column class="request-status">Статус заявки</clr-dg-column>
+  <clr-dg-column class="request-positions-list">Состав</clr-dg-column>
+  <clr-dg-column class="request-delivery-dates">Сроки поставки</clr-dg-column>
+  <clr-dg-column class="request-position-statuses">Статус</clr-dg-column>
 
   <clr-dg-row *ngFor="let request of requests" (click)="onRowClick(request)">
 
@@ -12,7 +12,7 @@
       <clr-dg-cell class="request-number">{{request.request.number}}</clr-dg-cell>
 
 
-      <clr-dg-cell class="request-number" *ngIf="customerNameColumnShow">
+      <clr-dg-cell class="customer-name" *ngIf="customerNameColumnShow">
         {{request.customer.name}}
       </clr-dg-cell>
 

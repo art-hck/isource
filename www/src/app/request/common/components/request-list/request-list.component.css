@@ -53,6 +53,28 @@
 }
 
 
+::ng-deep .requests-list-datagrid .datagrid-table .request-number.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {
+    max-width: 120px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-status.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-status.datagrid-cell {
+    max-width: 150px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {
+    min-width: 320px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
+    max-width: 160px;
+}
+::ng-deep .requests-list-datagrid .datagrid-table .request-position-statuses.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {
+    max-width: 250px;
+}
+
+
 
 .status-request-NEW:before,
 .status-request-PROCESSING:before,
