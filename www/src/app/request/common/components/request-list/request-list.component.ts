@@ -28,13 +28,15 @@ export class RequestListComponent implements OnInit {
    * @param request
    */
   getDeliveryDate(request: RequestsList): string {
-    if (request.request.delivery.asap === true) {
+    if (!request.request.delivery) {
+      return '—';
+    } else if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
-      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
+      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
     } else if ((request.request.delivery.from) && (request.request.delivery.to)) {
-      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
-      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D MMMM YYYY");
+      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
       return dateFrom + ' — ' + dateTo;
     } else {
       return '—';
@@ -67,6 +69,6 @@ export class RequestListComponent implements OnInit {
 
   onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
-    this.router.navigateByUrl(`/requests/${role}/${request.request.id}/view`);
+    this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
 }
