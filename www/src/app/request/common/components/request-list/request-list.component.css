@@ -47,9 +47,12 @@
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {
     font-size: 13px !important;
 }
-
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-flex,
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
+    display: inherit;
+}
 ::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-separator {
-    top: -29px;
+    top: 0;
 }
 
 

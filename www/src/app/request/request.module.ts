@@ -11,6 +11,7 @@ import { ClarityModule } from '@clr/angular';
 import { RequestListViewComponent as CustomerRequestListViewComponent } from './customer/components/request-list-view/request-list-view.component';
 import { RequestListViewComponent as BackofficeRequestListViewComponent } from './back-office/components/request-list-view/request-list-view.component';
 import { DocumentUploadListComponent } from './common/components/document-list/document-upload-list.component';
+import { StatusFilterComponent } from './common/components/status-filter/status-filter.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DocumentUploadListComponent } from './common/components/document-list/d
     CustomerRequestListViewComponent,
     BackofficeRequestListViewComponent,
     RequestViewComponent,
-    DocumentUploadListComponent
+    DocumentUploadListComponent,
+    StatusFilterComponent
   ],
   imports: [
     CommonModule,

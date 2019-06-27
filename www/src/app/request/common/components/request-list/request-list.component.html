@@ -1,10 +1,24 @@
-<clr-datagrid class="requests-list-datagrid">
+<clr-datagrid class="requests-list-datagrid" (clrDgRefresh)="refresh($event)">
   <clr-dg-column>№ Заявки</clr-dg-column>
-  <clr-dg-column *ngIf="customerNameColumnShow">Наименование заказчика</clr-dg-column>
-  <clr-dg-column>Статус заявки</clr-dg-column>
+
+  <clr-dg-column *ngIf="customerNameColumnShow">Наименование заказчика
+    <clr-dg-string-filter [clrDgStringFilter]="customerNameFilter"></clr-dg-string-filter>
+  </clr-dg-column>
+
+  <clr-dg-column>Статус заявки
+    <clr-dg-filter [clrDgFilter]="requestStatusFilter">
+      <label><input type="checkbox" value="NEW"> Новая</label>
+      <label><input type="checkbox" value="test"> Другое</label>
+    </clr-dg-filter>
+  </clr-dg-column>
+
   <clr-dg-column>Состав</clr-dg-column>
+
   <clr-dg-column>Сроки поставки</clr-dg-column>
-  <clr-dg-column>Статус</clr-dg-column>
+
+  <clr-dg-column>Статус
+    <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>
+  </clr-dg-column>
 
   <clr-dg-row *ngFor="let request of requests" (click)="onRowClick(request)">
 

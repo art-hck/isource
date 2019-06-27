@@ -2,6 +2,37 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
+import {ClrDatagridFilterInterface, ClrDatagridStateInterface, ClrDatagridStringFilterInterface} from "@clr/angular";
+import {RequestListItem} from "../../models/requests-list/requests-list-item";
+import {Subject} from "rxjs";
+
+
+// class RequestStatusFilter implements ClrDatagridFilterInterface<RequestsList> {
+//   changes = new Subject<any>();
+//   isActive(): boolean { return true; }
+//
+//   accepts(request: RequestsList): boolean {
+//     console.log(request);
+//     return true;
+//   }
+//
+//
+//
+//   // accepts(request: RequestsList, search: string): boolean {
+//   //   return "" + request.request.status.label === search
+//   //     || request.request.status.label.toLowerCase().indexOf(search) >= 0;
+//   // }
+// }
+
+
+class PositionStatusFilter implements ClrDatagridStringFilterInterface<RequestsList> {
+  accepts(request: RequestsList, search: string): boolean {
+    console.log(request);
+    console.log(search);
+    return true;
+  }
+}
+
 
 @Component({
   selector: 'app-request-list',
@@ -11,6 +42,10 @@ import {Router} from "@angular/router";
 
 
 export class RequestListComponent implements OnInit {
+
+  // private requestStatusFilter = new RequestStatusFilter();
+  private positionStatusFilter = new PositionStatusFilter();
+  statuses: RequestListItem;
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
@@ -68,5 +103,27 @@ export class RequestListComponent implements OnInit {
   onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}/view`);
+  }
+
+
+
+
+
+  refresh(state: ClrDatagridStateInterface) {
+
+    const filters: {[prop: string]: any[]} = {};
+
+    if (state.filters) {
+      for (const filter of state.filters) {
+        const {property, value} = <{property: string, value: string}>filter;
+        filters[property] = [value];
+        console.log(filters[property]);
+      }
+    }
+    this.requests.filter(filters)
+      .then((result: RequestsList[]) => {
+        console.log(result);
+        this.requests = result;
+      });
   }
 }
