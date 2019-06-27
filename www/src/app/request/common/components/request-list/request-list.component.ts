@@ -2,65 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
-import {ClrDatagridFilterInterface, ClrDatagridStateInterface, ClrDatagridStringFilterInterface} from "@clr/angular";
-import {RequestListItem} from "../../models/requests-list/requests-list-item";
+import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
+import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
+import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
 
-
-
-class CustomerNameFilter implements ClrDatagridStringFilterInterface<RequestsList> {
-  accepts(request: RequestsList, search: string): boolean {
-    if (search.length === 0) {
-      return true;
-    }
-    if (!request.positions || request.positions.length === 0) {
-      return false;
-    }
-    const customer = request.customer;
-    return (
-      customer.name === search ||
-      customer.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
-    );
-  }
-}
-
-
-class RequestStatusFilter implements ClrDatagridStringFilterInterface<RequestsList> {
-  accepts(request: RequestsList, search: string): boolean {
-    if (search.length === 0) {
-      return true;
-    }
-    if (!request.positions || request.positions.length === 0) {
-      return false;
-    }
-    const requestItem = request.request;
-    return (
-      requestItem.status.label === search ||
-      requestItem.status.label.toLowerCase().indexOf(search.toLowerCase()) >= 0
-    );
-  }
-}
-
-
-class PositionStatusFilter implements ClrDatagridStringFilterInterface<RequestsList> {
-  accepts(request: RequestsList, search: string): boolean {
-    if (search.length === 0) {
-      return true;
-    }
-    if (!request.positions || request.positions.length === 0) {
-      return false;
-    }
-    for (let index = 0; index < request.positions.length; index++) {
-      const position = request.positions[index];
-      if (
-        position.status.label === search ||
-        position.status.label.toLowerCase().indexOf(search.toLowerCase()) >= 0
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
 
 
 @Component({
@@ -75,7 +20,6 @@ export class RequestListComponent implements OnInit {
   private customerNameFilter = new CustomerNameFilter();
   private requestStatusFilter = new RequestStatusFilter();
   private positionStatusFilter = new PositionStatusFilter();
-  statuses: RequestListItem;
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
