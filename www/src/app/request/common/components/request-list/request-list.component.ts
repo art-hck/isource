@@ -28,7 +28,9 @@ export class RequestListComponent implements OnInit {
    * @param request
    */
   getDeliveryDate(request: RequestsList): string {
-    if (request.request.delivery.asap === true) {
+    if (!request.request.delivery) {
+      return '—';
+    } else if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
       return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
