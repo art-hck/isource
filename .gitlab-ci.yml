@@ -1,0 +1,16 @@
+stages:
+  - deploy
+
+variables:
+  DEPLOY_DIR: ./www
+  
+deploy-front:
+  stage: deploy
+  tags:
+    - gpnmarket-front-ci
+  script:
+    - rsync -av --no-perms --no-owner --no-group --omit-dir-times $DEPLOY_DIR /var/www/html/gpnmarket_front
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "master"
+  when: manual

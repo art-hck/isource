@@ -1,8 +1,10 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {RequestListComponent} from "./request-list/request-list.component";
-import {CreateRequestComponent} from "./common/components/create-request/create-request.component";
-import {RequestViewComponent} from "./back-office/components/request-view/request-view.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { RequestListViewComponent as CustomerRequestsList } from "./customer/components/request-list-view/request-list-view.component";
+import { RequestListViewComponent as BackofficeRequestsList } from "./back-office/components/request-list-view/request-list-view.component";
+import { CreateRequestComponent } from "./common/components/create-request/create-request.component";
+import { RequestViewComponent as BackofficeRequestViewComponent } from "./back-office/components/request-view/request-view.component";
+import { RequestViewComponent as CustomerRequestViewComponent } from "./customer/components/request-view/request-view.component";
 
 const routes: Routes = [
   {
@@ -10,7 +12,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: CustomerRequestsList
+      },
+      {
+        path: ':id',
+        component: CustomerRequestViewComponent
       }
     ]
   },
@@ -19,11 +25,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RequestListComponent
+        component: BackofficeRequestsList
       },
       {
-        path: ':id/view',
-        component: RequestViewComponent
+        path: ':id',
+        component: BackofficeRequestViewComponent
       }
     ]
   },
