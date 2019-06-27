@@ -48,14 +48,20 @@
               </div>
               <div class="clr-col-5">
                 <label class="clr-control-label">Статус</label>
-                {{requestPosition.statusLabel}}
+                <div class="select">
+                  <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
+                          [value]="requestPosition.status">
+                    <option *ngFor="let status of requestPositionWorkflowStepLabels"
+                            [(value)]="status[0]">{{status[1]}}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="clr-row w-100">
               <div class="clr-col-7">
                 <label class="clr-control-label">Количество</label>
                 <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
-
               </div>
               <div class="clr-col-5">
                 <label class="clr-control-label"> Необходимый срок поставки</label>
