@@ -78,6 +78,11 @@
     max-width: 250px;
 }
 
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column:last-of-type,
+::ng-deep .requests-list-datagrid .datagrid .datagrid-cell:last-of-type {
+    padding-right: 10px;
+}
+
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-cell .position-info {
     padding-bottom: 10px;
     min-height: 40px;
