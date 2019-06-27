@@ -80,6 +80,7 @@
 
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-cell .position-info {
     padding-bottom: 10px;
+    min-height: 40px;
 }
 
 .status-request-NEW:before,
