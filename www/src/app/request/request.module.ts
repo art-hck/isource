@@ -11,6 +11,7 @@ import { RequestViewComponent as CustomerRequestViewComponent } from './customer
 import { RequestService as BackofficeRequestService } from "./back-office/services/request.service";
 import { RequestService as CustomerRequestService } from "./customer/services/request.service";
 import { RequestListComponent } from "./common/components/request-list/request-list.component";
+import { DocumentListComponent } from './common/components/document-list/document-list.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RequestListComponent } from "./common/components/request-list/request-l
     BackofficeRequestListViewComponent,
     DocumentUploadListComponent,
     BackofficeRequestViewComponent,
-    CustomerRequestViewComponent
+    CustomerRequestViewComponent,
+    DocumentListComponent
   ],
   imports: [
     SharedModule,

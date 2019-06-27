@@ -1,0 +1,18 @@
+<clr-datagrid class="clr-row">
+  <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
+
+  <clr-dg-row *ngFor="let document of documents">
+    <clr-dg-cell class="clr-col-6"><a>{{ document.filename }}</a>
+    </clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">{{ document.user.shortName }}</clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">{{ document.created }}</clr-dg-cell>
+  </clr-dg-row>
+</clr-datagrid>
+
+<div class="right-align-button">
+  <button class="btn btn-link"><b>Загрузить</b></button>
+</div>
