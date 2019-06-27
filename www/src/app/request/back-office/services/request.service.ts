@@ -2,8 +2,8 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {map} from "rxjs/operators";
 import {Uuid} from "../../../cart/models/uuid";
-import {RequestPosition} from "../models/request-position";
 import {Observable} from "rxjs";
+import { RequestPosition } from "../../common/models/request-position";
 
 
 @Injectable()
