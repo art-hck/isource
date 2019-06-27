@@ -56,3 +56,7 @@ clr-datagrid {
   padding-right: 5px;
 }
 
+
+.select select {
+  margin-bottom: 0;
+}

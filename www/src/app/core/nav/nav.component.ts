@@ -86,12 +86,7 @@ export class NavComponent implements OnInit {
   protected getBackOfficeMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Пункт меню для бэк-офиса',
-        path: 'test',
-        children: []
-      },
-      {
-        text: 'Реестр заявок для бэк-офиса',
+        text: 'Реестр заявок',
         path: 'requests/back-office',
         children: []
       }
