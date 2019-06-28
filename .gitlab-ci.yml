@@ -10,7 +10,7 @@ deploy-front:
   tags:
     - gpnmarket-front-ci
   script:
-    - rsync -rlpoDcv --exclude="/www/src/app/config/*.ts" --delete-after $DEPLOY_DIR /var/www/html/gpnmarket_front/www
+    - rsync -rlpoDcv --exclude="/www/src/app/config/*.ts" --delete-after $DEPLOY_DIR /var/www/html/gpnmarket_front
     - exit 0
   only:
     - master
