@@ -1,14 +1,30 @@
 stages:
   - deploy
+  - build
 
 variables:
   DEPLOY_DIR: ./www
-  
+
 deploy-front:
   stage: deploy
+  tags:
+    - gpnmarket-front-ci
   script:
-    - rsync -a $DEPLOY_DIR /var/www/html/gpnmarket_front/www
+    - rsync -rlpoDcv --exclude="/www/src/app/config/*.ts" --delete-after $DEPLOY_DIR /var/www/html/gpnmarket_front/www
+    - exit 0
   only:
-    variables:
-      - $CI_COMMIT_REF_NAME == "master"
-  when: manual
+    - master
+
+build-staging:
+  stage: build
+  tags:
+    - gpnmarket-front-ci
+  script:
+    - cd /var/www/html/gpnmarket_front/www
+    - /usr/bin/npm install --quiet
+    - chown -R www-data:www-data /var/www/html/gpnmarket_front/www/node_modules/
+    - /usr/local/bin/ng build --extract-css --progress=false
+    - chown -R www-data:www-data /var/www/html/gpnmarket_front/www/dist/
+    - exit 0
+  only:
+    - master
