@@ -21,33 +21,7 @@ export class RequestService {
 
   getRequestPositions(id: Uuid): Observable<RequestPosition[]> {
     const url = `requests/backoffice/${id}/positions`;
-    return this.api.post<RequestPosition[]>(url, {}).pipe(
-      map((data: RequestPosition[]) => {
-        // todo временная заглушка пока нет данных с бэка
-        data.forEach(position => {
-          position.documents = [
-            {
-              id: '2342342342',
-              user: {
-                shortName: 'Воскресенская Н.И.'
-              },
-              created: '2019-11-11',
-              filename: 'Техническая документация для изготовления пирожков.pdf'
-            },
-            {
-              id: '2342342342',
-              user: {
-                shortName: 'Воскресенская Н.И.'
-              },
-              created: '2019-11-11',
-              filename: 'Требования и стандарты изготовления пирожков.doc'
-            }
-          ];
-        });
-
-        return data;
-      })
-    );
+    return this.api.post<RequestPosition[]>(url, {});
   }
 
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
