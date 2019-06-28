@@ -3,7 +3,7 @@ import {User} from "./user";
 
 export class RequestDocument {
   id: Uuid;
-  user: User;
+  user?: User;
   created: string;
   filename: string;
 }
