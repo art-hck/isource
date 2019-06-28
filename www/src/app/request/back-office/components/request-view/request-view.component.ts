@@ -49,7 +49,7 @@ export class RequestViewComponent implements OnInit {
             (request: Request) => {
               this.request = request;
             }
-          )
+          );
         }
       });
   }
