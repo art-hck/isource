@@ -11,6 +11,7 @@ import {
 import * as moment from "moment";
 import {RequestItem} from "../../models/request-item";
 import {CreateRequestService} from "../../services/create-request.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-request',
@@ -32,7 +33,9 @@ export class CreateRequestComponent implements OnInit {
     return this.requestDataForm.get('itemForm') as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder, private createRequestService: CreateRequestService) {
+  constructor(private formBuilder: FormBuilder,
+              private createRequestService: CreateRequestService,
+              protected router: Router) {
   }
 
   ngOnInit() {
@@ -114,7 +117,8 @@ export class CreateRequestComponent implements OnInit {
   onAddRequest() {
     this.requestItem = this.requestDataForm.value;
     return this.createRequestService.addRequest(this.requestItem['itemForm']).subscribe(
-      () => {
+      (data: any) => {
+        this.router.navigateByUrl(`requests/customer/${data.id}`);
       }
     );
   }
