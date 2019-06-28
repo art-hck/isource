@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import {Observable} from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
+import { map } from "rxjs/operators";
 
 
 @Injectable()
@@ -47,7 +48,6 @@ export class RequestService {
         return data;
       })
     );
-    return this.api.post(url, {});
   }
 
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
