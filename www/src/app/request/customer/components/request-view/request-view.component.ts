@@ -16,8 +16,7 @@ export class RequestViewComponent implements OnInit {
   request: Request;
   requestPositions: RequestPosition[];
 
-  expanded: boolean = false;
-
+  expanded = false;
 
   constructor(private route: ActivatedRoute, private requestService: RequestService) {
   }
@@ -26,12 +25,12 @@ export class RequestViewComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
-        this.request = request
+        this.request = request;
       }
     );
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions
+        this.requestPositions = requestPositions;
       }
     );
   }
