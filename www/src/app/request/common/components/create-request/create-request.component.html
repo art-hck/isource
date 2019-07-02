@@ -3,8 +3,17 @@
 
 
   <clr-tabs class="new-request-tabs">
+
     <clr-tab>
-      <button clrTabLink>Произвольная форма</button>
+      <button clrTabLink>Загрузить xls-шаблон</button>
+      <clr-tab-content *clrIfActive="true">
+        ...
+      </clr-tab-content>
+    </clr-tab>
+
+
+    <clr-tab>
+      <button clrTabLink>Произвольная заявка</button>
       <clr-tab-content *clrIfActive>
         <app-create-request-free-form></app-create-request-free-form>
       </clr-tab-content>
@@ -12,8 +21,8 @@
 
 
     <clr-tab>
-      <button clrTabLink>Заполнить онлайн</button>
-      <clr-tab-content *clrIfActive="true">
+      <button clrTabLink>Заполнить вручную</button>
+      <clr-tab-content *clrIfActive>
 
         <form [formGroup]="requestDataForm" class="form">
           <div formArrayName="itemForm">
@@ -143,14 +152,6 @@
       </clr-tab-content>
     </clr-tab>
 
-
-
-    <clr-tab>
-      <button clrTabLink>Загрузить xls-шаблон</button>
-      <clr-tab-content *clrIfActive>
-        ...
-      </clr-tab-content>
-    </clr-tab>
   </clr-tabs>
 
 
