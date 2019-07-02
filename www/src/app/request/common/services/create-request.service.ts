@@ -16,6 +16,13 @@ export class CreateRequestService {
       this.convertModelToFormData(requestItem, null, 'positions'));
   }
 
+  addFreeFormRequest(requestItem: Array<any>) {
+    return this.api.post(
+      `requests/customer/add-free-form-request`,
+      this.convertModelToFormData(requestItem, null, 'positions'));
+  }
+
+
   /**
    * Функция для преобразования формы в FormData, при котором можно отправлять файлы
    *

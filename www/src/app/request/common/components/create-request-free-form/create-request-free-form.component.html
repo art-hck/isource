@@ -1,0 +1,52 @@
+<div class="free-form-request-content">
+
+  <form [formGroup]="freeFormRequestDataForm" class="form">
+    <div formArrayName="itemForm">
+      <div *ngFor="let item of freeFormRequestDataForm['controls'].itemForm['controls']; let i=index">
+        <div formGroupName="{{i}}" class="i">
+
+
+            <div class="card">
+              <div class="card-block">
+                <div class="card-text">
+
+                    <span class="gray">
+                      Загрузите сюда опросный лист или другой документ,
+                      который поможет нам понять какое оборудование или услуга вам нужны
+                    </span>
+
+
+                    <div class="form-group">
+                      <app-document-upload-list (fileSelected)="onFreeFormDocumentSelected($event, item)">
+                      </app-document-upload-list>
+                    </div>
+
+
+                    <div class="form-group comment-block">
+                      <label for="comment-block-textarea">
+                        Напишите комментарий в произвольной форме, если вам нужно дополнить опросный лист.
+                      </label>
+                      <textarea id="comment-block-textarea"
+                                rows="5"
+                                placeholder="Комментарий"
+                                formControlName="comments">
+                      </textarea>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="submit">
+    <button type="button"
+            class="btn btn-primary"
+            (click)="onSendFreeFormRequest()"
+            [disabled]="!checkCanSendRequest(freeFormRequestDataForm['controls'].itemForm['controls'])">
+      Отправить
+    </button>
+  </div>
+</div>
