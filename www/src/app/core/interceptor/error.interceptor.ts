@@ -80,8 +80,9 @@ export class ErrorInterceptor implements HttpInterceptor {
       this.router.navigate(['/login'], {
         queryParams: queryParams
       }).then(() => {
-          // перезагружаем страницу, чтобы обновились доступные ресурсы
-          location.reload(true);
+        // перезагружаем страницу, чтобы обновились доступные ресурсы
+        // tslint:disable-next-line
+        location.reload(true);
       });
     }
 

@@ -91,13 +91,13 @@ export class CustomValidators {
       }
       const controlToCompare = c.root.get(controlNameToCompare);
       if (controlToCompare) {
-        const subscription: Subscription = controlToCompare.valueChanges.subscribe(()=> {
+        const subscription: Subscription = controlToCompare.valueChanges.subscribe(() => {
           c.updateValueAndValidity();
           subscription.unsubscribe();
         });
       }
       return controlToCompare && controlToCompare.value !== c.value ? { 'compare': true } : null;
-    }
+    };
   }
 
   static pastDate(): ValidatorFn {
@@ -108,5 +108,4 @@ export class CustomValidators {
       return controlDate.isBefore(validationDate) ? null : { 'field': true };
     };
   }
-
 }
