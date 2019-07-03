@@ -1,5 +1,7 @@
+import { Uuid } from "../../../cart/models/uuid";
 
 export class User {
+  id?: Uuid;
   username?: string;
   firstName?: string;
   lastName?: string;

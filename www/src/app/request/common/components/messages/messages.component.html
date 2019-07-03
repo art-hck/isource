@@ -1,0 +1,36 @@
+<div #messagesList class="messages-list">
+  <div class="message" *ngFor="let message of messages">
+
+    <div class="message-user" *ngIf="!isOwnMessage(message)">
+      {{ message.user.fullName }}
+    </div>
+
+    <div class="message-body"
+         [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
+      {{ message.message }}
+
+      <span class="message-date"> {{ message.createdDate | date:'dd.MM.yyyy' }}</span>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="new-message">
+  <form [formGroup]="sendMessageForm" (ngSubmit)="onCreateClick(sendMessageForm.value)">
+    <button type="submit"
+            class="btn btn-link btn-icon"
+            aria-label="Отправить"
+            title="Отправить"
+            [disabled]="!sendMessageForm.valid">
+      <clr-icon shape="envelope"></clr-icon>
+    </button>
+
+    <div class="input-wrapper">
+      <textarea formControlName="message"
+                placeholder="Введите сообщение"
+                (keydown.control.enter)="onCreateClick(sendMessageForm.value)">
+      </textarea>
+    </div>
+  </form>
+</div>
