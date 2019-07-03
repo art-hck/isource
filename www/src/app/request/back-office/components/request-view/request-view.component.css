@@ -74,6 +74,15 @@ clr-datagrid {
   margin-bottom: 0;
 }
 
+.submit {
+  display: block;
+  text-align: right;
+}
+
+.submit button {
+  margin-right: 20px;
+}
+
 .w-100 {
   margin: 0;
 }

@@ -60,7 +60,9 @@
               <b>{{requestPosition.name}}</b>
             </div>
             <div class="clr-col-3 status">
+              <span class="position-status status-position-{{requestPosition.status}}">
               {{requestPosition.statusLabel}}
+              </span>
             </div>
           </div>
 
@@ -78,7 +80,8 @@
                   <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
                           [value]="requestPosition.status">
                     <option *ngFor="let status of requestPositionWorkflowStepLabels"
-                            [(value)]="status[0]">{{status[1]}}
+                            [(value)]="status[0]">
+                      <span class="position-status status-position-{{requestPosition.status}}">{{status[1]}}</span>
                     </option>
                   </select>
                 </div>
@@ -154,13 +157,19 @@
             <clr-tab>
               <button clrTabLink>Согласование</button>
               <clr-tab-content *clrIfActive>
-                ...
+               ...
               </clr-tab-content>
             </clr-tab>
             <clr-tab>
-              <button clrTabLink>КП</button>
+              <button clrTabLink>Коммерческие предложения</button>
               <clr-tab-content *clrIfActive>
-                ...
+                <app-offers [requestPosition]="requestPosition"></app-offers>
+                <div class="submit">
+                <button class="btn btn-primary"
+                        (click)="onPublishOffers(requestPosition)"
+                        *ngIf="canPublish(requestPosition)"><b>Согласовать</b>
+                </button>
+                </div>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>

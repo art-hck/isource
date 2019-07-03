@@ -5,6 +5,8 @@ import {RequestService} from "../../services/request.service";
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
 import {RequestPositionWorkflowStepLabels} from "../../../common/dictionaries/request-position-workflow-step-labels";
+import {OffersService} from "../../services/offers.service";
+import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-view',
@@ -20,7 +22,11 @@ export class RequestViewComponent implements OnInit {
 
   expanded = false;
 
-  constructor(private route: ActivatedRoute, private requestService: RequestService) {
+  constructor(
+    private route: ActivatedRoute,
+    private requestService: RequestService,
+    private offersService: OffersService
+  ) {
   }
 
   ngOnInit() {
@@ -44,6 +50,8 @@ export class RequestViewComponent implements OnInit {
   onChangeStatus(requestPosition: RequestPosition, newStatus: string) {
     this.requestService.changeStatus(this.requestId, requestPosition.id, newStatus).subscribe(
       (data: any) => {
+        requestPosition.status = data.status;
+        requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
           this.requestService.getRequestInfo(this.requestId).subscribe(
             (request: Request) => {
@@ -52,5 +60,20 @@ export class RequestViewComponent implements OnInit {
           );
         }
       });
+  }
+
+  onPublishOffers(requestPosition: RequestPosition) {
+    this.offersService.publishOffers(this.requestId, requestPosition.id).subscribe(
+      (data: any) => {
+        requestPosition.status = data.status;
+        requestPosition.statusLabel = data.statusLabel;
+      }
+    )
+  }
+
+  canPublish(requestPosition: RequestPosition) {
+    return (requestPosition.linkedOffers || requestPosition.linkedOffers !== null)
+      && (requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+        || requestPosition.status === RequestPositionWorkflowSteps.NEW);
   }
 }

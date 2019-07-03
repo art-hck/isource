@@ -33,9 +33,11 @@ export class CreateRequestComponent implements OnInit {
     return this.requestDataForm.get('itemForm') as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder,
-              private createRequestService: CreateRequestService,
-              protected router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private createRequestService: CreateRequestService,
+    protected router: Router
+  ) {
   }
 
   ngOnInit() {
