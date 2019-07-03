@@ -52,7 +52,11 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.createRequestService.addFreeFormRequest(this.requestItem['itemForm']);
+    return this.createRequestService.addFreeFormRequest(this.requestItem['itemForm']).subscribe(
+      (data: any) => {
+        this.router.navigateByUrl(`requests/customer/${data.id}`);
+      }
+    );
   }
 
 
