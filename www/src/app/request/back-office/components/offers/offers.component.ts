@@ -22,9 +22,9 @@ export class OffersComponent implements OnInit {
   showAddOfferForm = false;
 
   constructor(
-              private offersService: OffersService,
-              private route: ActivatedRoute,
-              private formBuilder: FormBuilder
+    private offersService: OffersService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder
   ) {
   }
 

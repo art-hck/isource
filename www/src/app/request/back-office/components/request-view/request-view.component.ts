@@ -23,9 +23,9 @@ export class RequestViewComponent implements OnInit {
   expanded = false;
 
   constructor(
-              private route: ActivatedRoute,
-              private requestService: RequestService,
-              private offersService: OffersService
+    private route: ActivatedRoute,
+    private requestService: RequestService,
+    private offersService: OffersService
   ) {
   }
 
