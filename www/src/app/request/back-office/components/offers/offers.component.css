@@ -1,3 +1,53 @@
-input {
-  width: -webkit-fill-available;
+.download {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+.btn-link.btn {
+  margin: 0;
+}
+
+.offer {
+  font-size: 13px;
+}
+
+clr-icon {
+  height: 20px;
+  width: 20px;
+  color: #0085FF;
+}
+
+span {
+  padding-left: 5px;
+}
+
+.clr-control-label {
+  font-weight: 400;
+  color: #4A4A4A;
+}
+
+.no-offers p {
+  margin-top: 15px;
+  color: #b9b9b9;
+  text-align: center;
+}
+
+.no-offers {
+  display: block;
+}
+
+.action-bar {
+  text-align: right;
+}
+
+.right-align-button {
+  display: block;
+  text-align: right;
+  padding: 15px 0;
+}
+
+.btn.btn-outline {
+  border-color: #0085FF;
+  color: #0085FF;
 }

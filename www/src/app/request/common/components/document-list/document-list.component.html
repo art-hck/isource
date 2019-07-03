@@ -1,4 +1,4 @@
-<clr-datagrid class="clr-row">
+<clr-datagrid class="clr-row" *ngIf="documents">
   <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
   <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
   <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
@@ -12,6 +12,11 @@
     <clr-dg-cell class="clr-col-2">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
   </clr-dg-row>
 </clr-datagrid>
+<ng-container *ngIf="!documents">
+  <div class="clr-row no-documents">
+    <p>Загруженные документы отсутствуют</p>
+  </div>
+</ng-container>
 
 <div class="right-align-button">
   <button class="btn btn-link"><b>Загрузить</b></button>
