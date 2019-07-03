@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
 export class RegistrationComponent implements OnInit {
   userRegistrationForm: FormGroup;
   contragentRegistrationForm: FormGroup;
-  nextForm: boolean = false;
+  nextForm = false;
   userRegistration: UserRegistration;
   contragentRegistration: ContragentRegistration;
 
@@ -39,7 +39,7 @@ export class RegistrationComponent implements OnInit {
     });
     this.contragentRegistrationForm = this.formBuilder.group({
       fullName: ['', [Validators.required, CustomValidators.cyrrilic]],
-      shortName: ['', [Validators.required,CustomValidators.cyrrilic]],
+      shortName: ['', [Validators.required, CustomValidators.cyrrilic]],
       inn: ['', [Validators.required, CustomValidators.inn]],
       kpp: ['', [Validators.required, CustomValidators.kpp]],
       ogrn: ['', [Validators.required, CustomValidators.ogrn]],
@@ -54,7 +54,7 @@ export class RegistrationComponent implements OnInit {
       address: ['', [Validators.required, CustomValidators.cyrrilic]],
       bankAccount: ['', [Validators.required, CustomValidators.bankAccount]],
       bik: ['', [Validators.required, CustomValidators.kpp]],
-      corrAccount: ['',[Validators.required, CustomValidators.corrAccount]],
+      corrAccount: ['', [Validators.required, CustomValidators.corrAccount]],
       bankName: ['', [Validators.required, CustomValidators.cyrrilic]],
       bankAddress: ['', [Validators.required, CustomValidators.cyrrilic]],
     });

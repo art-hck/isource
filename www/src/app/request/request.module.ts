@@ -13,6 +13,8 @@ import { RequestListComponent } from "./common/components/request-list/request-l
 import { DocumentListComponent } from './common/components/document-list/document-list.component';
 import { DocumentUploadListComponent } from "./common/components/document-upload-list/document-upload-list.component";
 import { CreateRequestFreeFormComponent } from './common/components/create-request-free-form/create-request-free-form.component';
+import { OffersComponent as BackofficeOffersComponent } from './back-office/components/offers/offers.component';
+import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { CreateRequestFreeFormComponent } from './common/components/create-reque
     BackofficeRequestViewComponent,
     CustomerRequestViewComponent,
     DocumentListComponent,
-    CreateRequestFreeFormComponent
+    CreateRequestFreeFormComponent,
+    BackofficeOffersComponent
   ],
   imports: [
     SharedModule,
@@ -33,7 +36,8 @@ import { CreateRequestFreeFormComponent } from './common/components/create-reque
   ],
   providers: [
     BackofficeRequestService,
-    CustomerRequestService
+    CustomerRequestService,
+    BackofficeOffersService
   ]
 })
 export class RequestModule {

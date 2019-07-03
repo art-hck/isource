@@ -1,6 +1,7 @@
 stages:
   - deploy
   - build
+  - codestyle
 
 variables:
   DEPLOY_DIR: ./www
@@ -25,3 +26,15 @@ build-staging:
     - exit 0
   only:
     - master
+
+codestyle-staging:
+  stage: codestyle
+  tags:
+    - gpnmarket-front-ci
+  script:
+    - cd www
+    - npm i tslint --no-optional
+    - npm run tslint
+    - exit 0
+  only:
+    - merge_requests

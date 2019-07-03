@@ -1,5 +1,8 @@
+import {RequestOfferPosition} from "./request-offer-position";
+import {Uuid} from "../../../cart/models/uuid";
 
 export class RequestItem {
+  id: Uuid;
   name: string;
   productionDocument: string;
   measureUnit: string;
@@ -12,4 +15,5 @@ export class RequestItem {
   paymentTerms: string;
   relatedServices?: string;
   comments?: string;
+  linkedOffers: RequestOfferPosition[];
 }
