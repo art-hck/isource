@@ -68,7 +68,7 @@ export class RequestViewComponent implements OnInit {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
       }
-    )
+    );
   }
 
   canPublish(requestPosition: RequestPosition) {
