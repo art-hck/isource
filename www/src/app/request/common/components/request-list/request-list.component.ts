@@ -80,4 +80,9 @@ export class RequestListComponent implements OnInit {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
+
+  checkIfFreeFormRequest(i: number) {
+    return this.requests[i].request.type === 'free-form';
+  }
+
 }

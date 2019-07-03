@@ -2,6 +2,10 @@
   width: 1200px;
 }
 
+h3.request-title {
+  margin: 0 0 5px 0;
+}
+
 .title-info {
   text-transform: uppercase;
   color: #999999;
@@ -71,10 +75,27 @@ h1 {
 
 .right-align-status {
   text-align: right;
-  padding: 40px 0 0 0;
-
+  padding-top: 33px;
 }
 
 .w-100 {
   margin: 0;
+}
+
+.card.free-form-request {
+  margin-top: 10px;
+}
+.request-comment {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+.request-comment-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+.request-comment-body {
+  display: block;
+  max-width: 540px;
 }

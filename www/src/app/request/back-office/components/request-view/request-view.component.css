@@ -2,9 +2,22 @@
   width: 1200px;
 }
 
-.title-info {
+h3.request-title {
+  margin: 0 0 5px 0;
+}
+
+p.title-info {
+  margin: 0;
   text-transform: uppercase;
   color: #999999;
+}
+
+table.request-customer-info {
+  margin: 10px 0;
+}
+
+.table-content td {
+  padding-top: 0 !important;
 }
 
 clr-accordion {
@@ -59,4 +72,26 @@ clr-datagrid {
 
 .select select {
   margin-bottom: 0;
+}
+
+.w-100 {
+  margin: 0;
+}
+
+.card.free-form-request {
+  margin-top: 10px;
+}
+.request-comment {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+.request-comment-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+.request-comment-body {
+  display: block;
+  max-width: 540px;
 }

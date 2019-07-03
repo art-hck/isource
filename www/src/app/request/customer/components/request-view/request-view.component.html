@@ -5,15 +5,20 @@
   <div class="container">
     <div class="clr-row w-100">
       <div class="clr-col-9">
-        <h1>Заявка №{{request.number}}</h1>
+        <h3 class="request-title">Заявка №{{request.number}}</h3>
         <p class="header-label">от {{request.createdDate | date :'shortDate'}}</p>
       </div>
       <div class="clr-col-3 right-align-status">
-        {{request.statusLabel}}
+        <span class="status-request-{{request.status}}">
+          {{request.statusLabel}}
+        </span>
       </div>
     </div>
-    <clr-accordion>
+
+    <clr-accordion *ngIf="request.type !== 'free-form'; else freeFormCardBlock">
+
       <clr-accordion-panel *ngFor="let requestPosition of requestPositions">
+
         <clr-accordion-title>
           <div class="clr-row w-100">
             <div class="clr-col-9">
@@ -24,6 +29,7 @@
             </div>
           </div>
         </clr-accordion-title>
+
         <clr-accordion-content *clrIfExpanded>
           <div class="clr-form-control">
             <div class="clr-row w-100">
@@ -123,6 +129,67 @@
           </clr-tabs>
         </clr-accordion-content>
       </clr-accordion-panel>
+
     </clr-accordion>
+
+
+
+
+
+
+    <ng-template #freeFormCardBlock>
+      <div class="card free-form-request">
+        <div class="card-block">
+          <div class="card-text">
+
+            <div class="clr-row w-100">
+              <div class="clr-col">
+
+                <div class="request-comment">
+                  <span class="request-comment-title">Комментарий к заявке:</span>
+
+                  <span class="request-comment-body">
+                    {{ request.comment }}
+                  </span>
+                </div>
+
+
+                <clr-tabs>
+                  <clr-tab>
+                    <button clrTabLink>Документы</button>
+                    <clr-tab-content *clrIfActive="true">
+                      <app-document-list [documents]="request.documents"></app-document-list>
+                    </clr-tab-content>
+                  </clr-tab>
+                  <clr-tab>
+                    <button clrTabLink>Согласование</button>
+                    <clr-tab-content *clrIfActive>
+                      ...
+                    </clr-tab-content>
+                  </clr-tab>
+                  <clr-tab>
+                    <button clrTabLink>КП</button>
+                    <clr-tab-content *clrIfActive>
+                      ...
+                    </clr-tab-content>
+                  </clr-tab>
+                  <clr-tab>
+                    <button clrTabLink>Договор</button>
+                    <clr-tab-content *clrIfActive>
+                      ...
+                    </clr-tab-content>
+                  </clr-tab>
+                </clr-tabs>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+
   </div>
 </ng-container>

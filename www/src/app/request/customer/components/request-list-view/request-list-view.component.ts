@@ -23,6 +23,7 @@ export class RequestListViewComponent implements OnInit {
     this.getRequestService.getRequestsList('customer').subscribe(
       (data: RequestsList[]) => {
         this.requests = data;
+        this.requests[2].request.type = 'free-form';
       });
   }
 

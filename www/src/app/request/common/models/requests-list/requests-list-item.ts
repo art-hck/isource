@@ -7,4 +7,6 @@ export class RequestListItem {
   number: number;
   status: StatusInfo;
   delivery?: DeliveryInfo;
+  type?: string;
+  comment?: string;
 }
