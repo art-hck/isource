@@ -1,4 +1,4 @@
-import {LinkedOffers} from "./linked-offers";
+import {RequestOfferPosition} from "./request-offer-position";
 import {Uuid} from "../../../cart/models/uuid";
 
 export class RequestItem {
@@ -15,5 +15,5 @@ export class RequestItem {
   paymentTerms: string;
   relatedServices?: string;
   comments?: string;
-  linkedOffers: LinkedOffers[];
+  linkedOffers: RequestOfferPosition[];
 }

@@ -1,6 +1,6 @@
 import {Uuid} from "../../../cart/models/uuid";
 
-export class LinkedOffers {
+export class RequestOfferPosition {
   comments: string;
   createdDate: string;
   customerContragentId: string;

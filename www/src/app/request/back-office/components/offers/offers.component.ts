@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {OffersService} from "../../services/offers.service";
 import {ActivatedRoute} from "@angular/router";
-import {LinkedOffers} from "../../../common/models/linked-offers";
+import {RequestOfferPosition} from "../../../common/models/request-offer-position";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
 import {RequestPosition} from "../../../common/models/request-position";
@@ -16,15 +16,16 @@ export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
 
   requestId: Uuid;
-  offer: LinkedOffers;
+  offer: RequestOfferPosition;
 
   offerForm: FormGroup;
   showAddOfferForm = false;
 
-
-  constructor(private offersService: OffersService,
+  constructor(
+              private offersService: OffersService,
               private route: ActivatedRoute,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder
+  ) {
   }
 
   ngOnInit() {
@@ -49,7 +50,7 @@ export class OffersComponent implements OnInit {
   onAddOffer() {
     this.offer = this.offerForm.value;
     this.offersService.addOffer(this.requestId, this.requestPosition.id, this.offer).subscribe(
-      (data: LinkedOffers) => {
+      (data: RequestOfferPosition) => {
         this.requestPosition.linkedOffers.push(data);
       }
     );

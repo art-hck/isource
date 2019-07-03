@@ -1,7 +1,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
-import {LinkedOffers} from "../../common/models/linked-offers";
+import {RequestOfferPosition} from "../../common/models/request-offer-position";
 
 
 @Injectable()
@@ -12,17 +12,9 @@ export class OffersService {
   ) {
   }
 
-  addOffer(id: Uuid, positionId, offer: LinkedOffers) {
+  addOffer(id: Uuid, positionId, offer: RequestOfferPosition) {
     const url = `requests/backoffice/${id}/positions/${positionId}/add-offer`;
-    return this.api.post(url, {
-      supplierContragentName: offer.supplierContragentName,
-      priceWithVat: offer.priceWithVat,
-      currency: offer.currency,
-      quantity: offer.quantity,
-      measureUnit: offer.measureUnit,
-      deliveryDate: offer.deliveryDate,
-      paymentTerms: offer.paymentTerms
-    });
+    return this.api.post(url, offer);
   }
 
   publishOffers(id: Uuid, positionId) {
