@@ -12,13 +12,13 @@ export class CreateRequestService {
 
   addRequest(requestItem: Array<any>) {
     return this.api.post(
-      `requests/customer/add-request`,
+      `requests/customer/add-request/manual`,
       this.convertModelToFormData(requestItem, null, 'positions'));
   }
 
   addFreeFormRequest(requestItem: Array<any>) {
     return this.api.post(
-      `requests/customer/add-free-form-request`,
+      `requests/customer/add-request/free-form`,
       this.convertModelToFormData(requestItem, null, 'positions'));
   }
 
