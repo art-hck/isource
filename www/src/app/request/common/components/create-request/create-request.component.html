@@ -6,7 +6,8 @@
     <clr-tab>
       <button clrTabLink>Загрузить xls-шаблон</button>
       <clr-tab-content *clrIfActive="true">
-        ...
+        <app-add-from-excel-modal>
+        </app-add-from-excel-modal>
       </clr-tab-content>
     </clr-tab>
 
@@ -172,9 +173,4 @@
     </clr-tab>
 
   </clr-tabs>
-
-  <app-add-from-excel-modal
-    [style.display]="addFromExcelModalVisible ? 'inline' : 'none'"
-    (close)="onCloseAddFromExcelModal()">
-  </app-add-from-excel-modal>
 </div>
