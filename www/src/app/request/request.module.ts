@@ -15,7 +15,7 @@ import { DocumentUploadListComponent } from "./common/components/document-upload
 import { MessagesComponent } from './common/components/messages/messages.component';
 import { OffersComponent as BackofficeOffersComponent } from './back-office/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
-import { AddFromExcelModalComponent } from './common/components/add-from-excel-modal/add-from-excel-modal.component';
+import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { AddFromExcelModalComponent } from './common/components/add-from-excel-m
     DocumentListComponent,
     MessagesComponent,
     BackofficeOffersComponent,
-    AddFromExcelModalComponent
+    AddFromExcelComponent
   ],
   imports: [
     SharedModule,

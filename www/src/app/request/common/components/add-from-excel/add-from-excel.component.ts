@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-add-from-excel-modal',
-  templateUrl: './add-from-excel-modal.component.html',
-  styleUrls: ['./add-from-excel-modal.component.css']
+  selector: 'app-add-from-excel',
+  templateUrl: './add-from-excel.component.html',
+  styleUrls: ['./add-from-excel.component.css']
 })
-export class AddFromExcelModalComponent implements OnInit {
+export class AddFromExcelComponent implements OnInit {
 
   @Output() submit = new EventEmitter<File>();
   @Input() templateUrl: string;

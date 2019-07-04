@@ -6,8 +6,8 @@
     <clr-tab>
       <button clrTabLink>Загрузить xls-шаблон</button>
       <clr-tab-content *clrIfActive="true">
-        <app-add-from-excel-modal>
-        </app-add-from-excel-modal>
+        <app-add-from-excel>
+        </app-add-from-excel>
       </clr-tab-content>
     </clr-tab>
 
@@ -155,11 +155,6 @@
           </button>
         </div>
         <div class="submit">
-          <button type="button"
-                  class="btn btn-outline btn-add-from-excel"
-                  (click)="onAddFromExcel()">
-            Добавить из Excel
-          </button>
           <button type="button"
                   class="btn btn-primary"
                   *ngIf="!requestView"
