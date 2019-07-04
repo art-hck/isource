@@ -139,12 +139,13 @@
             <clr-tab>
               <button clrTabLink>Коммерческие предложения</button>
               <clr-tab-content *clrIfActive>
-                <app-offers [requestPosition]="requestPosition"></app-offers>
+                <app-offers [requestPosition]="requestPosition"
+                            [customerView]="false"></app-offers>
                 <div class="submit">
-                <button class="btn btn-primary"
-                        (click)="onPublishOffers(requestPosition)"
-                        *ngIf="canPublish(requestPosition)"><b>Согласовать</b>
-                </button>
+                  <button class="btn btn-primary"
+                          (click)="onPublishOffers(requestPosition)"
+                          *ngIf="canPublish(requestPosition)"><b>Согласовать</b>
+                  </button>
                 </div>
               </clr-tab-content>
             </clr-tab>
