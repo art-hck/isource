@@ -1,6 +1,5 @@
 <div #messagesList class="messages-list">
   <div class="message" *ngFor="let message of messages">
-
     <div class="message-user" *ngIf="!isOwnMessage(message)">
       {{ message.user.fullName }}
     </div>
@@ -11,7 +10,10 @@
 
       <span class="message-date"> {{ message.createdDate | date:'dd.MM.yyyy' }}</span>
     </div>
+  </div>
 
+  <div class="empty-list" *ngIf="!messages.length">
+    Сообщений нет
   </div>
 </div>
 
