@@ -95,8 +95,8 @@
 .status-position-NEW:before,
 .status-position-PROPOSALS_PREPARATION:before,
 .status-position-RESULTS_AGREEMENT:before,
-.status-position-CONTRACT_SIGNING_BY_SUPPLIER:before,
-.status-position-CONTRACT_SIGNING_BY_CUSTOMER:before
+.status-position-CONTRACT_SIGNING:before,
+.status-position-WINNER_SELECTED:before
 {
     content: "";
     display: inline-block;
@@ -128,9 +128,9 @@
 .status-position-RESULTS_AGREEMENT:before {
     background: #00b75e;
 }
-.status-position-CONTRACT_SIGNING_BY_SUPPLIER:before {
+.status-position-CONTRACT_SIGNING:before {
     background: rgb(255, 71, 90);
 }
-.status-position-CONTRACT_SIGNING_BY_CUSTOMER:before {
+.status-position-WINNER_SELECTED:before {
     background: rgba(142, 80, 210, 0.97);
 }
