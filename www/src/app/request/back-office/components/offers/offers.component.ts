@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {OffersService} from "../../services/offers.service";
 import {ActivatedRoute} from "@angular/router";
@@ -14,9 +14,14 @@ import {RequestPosition} from "../../../common/models/request-position";
 })
 export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
+  @Input() customerView = false;
+
+  @Output() offerWinner = new EventEmitter<Uuid>();
 
   requestId: Uuid;
   offer: RequestOfferPosition;
+  offerWinnerId: Uuid;
+
 
   offerForm: FormGroup;
   showAddOfferForm = false;
@@ -40,6 +45,39 @@ export class OffersComponent implements OnInit {
       deliveryDate: ['', Validators.required],
       paymentTerms: ['', Validators.required]
     });
+
+    const winnerOffer = this.findDefaultOffer();
+    if (winnerOffer) {
+      this.offerWinnerId = winnerOffer.id;
+      this.offerWinner.emit(this.offerWinnerId);
+    }
+  }
+
+  findDefaultOffer() {
+    const winner = this.findWinnerOffer();
+    if (winner) {
+      return winner;
+    }
+    return this.findMinPriceOffer();
+  }
+
+  findMinPriceOffer() {
+    for (let i = 0; i < this.requestPosition.linkedOffers.length; i++) {
+      if (this.requestPosition.linkedOffers[i].isMinPrice === true) {
+        return this.requestPosition.linkedOffers[i];
+      }
+    }
+    return null;
+  }
+
+
+  findWinnerOffer() {
+    for (let i = 0; i < this.requestPosition.linkedOffers.length; i++) {
+      if (this.requestPosition.linkedOffers[i].isWinner === true) {
+        return this.requestPosition.linkedOffers[i];
+      }
+    }
+    return null;
   }
 
   isFieldValid(field: string) {
@@ -63,7 +101,17 @@ export class OffersComponent implements OnInit {
   }
 
   canAddOffer() {
-    return this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW
+    return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.customerView;
+  }
+
+  winnerChoice(linkedOffer: RequestOfferPosition) {
+    this.offerWinnerId = linkedOffer.id;
+    this.offerWinner.emit(this.offerWinnerId);
+  }
+
+  canChoiceWinner() {
+    console.log(this.requestPosition.status);
+    return this.requestPosition.status == RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
 }
