@@ -7,10 +7,10 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class AddFromExcelComponent implements OnInit {
 
-  @Output() submit = new EventEmitter<File>();
+  @Output() submit = new EventEmitter<File[]>();
   @Input() templateUrl: string;
 
-  file: File|null = null;
+  files: File[] = [];
 
   constructor() { }
 
@@ -18,11 +18,11 @@ export class AddFromExcelComponent implements OnInit {
   }
 
   onSendClick(): void {
-    this.submit.emit(this.file);
+    this.submit.emit(this.files);
   }
 
-  protected onChangeUploadField(files: FileList): void {
-    this.file = (files.length === 0) ? null : files[0];
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
   }
 
 }
