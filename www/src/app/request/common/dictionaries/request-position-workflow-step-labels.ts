@@ -7,4 +7,5 @@ RequestPositionWorkflowStepLabels[RequestPositionWorkflowSteps.PROPOSALS_PREPARA
 RequestPositionWorkflowStepLabels[RequestPositionWorkflowSteps.RESULTS_AGREEMENT] = 'Согласование результатов';
 RequestPositionWorkflowStepLabels[RequestPositionWorkflowSteps.CONTRACT_SIGNING]
   = 'Заключение договора';
+RequestPositionWorkflowStepLabels[RequestPositionWorkflowSteps.WINNER_SELECTED] = 'Выбран победитель';
 
