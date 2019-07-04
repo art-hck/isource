@@ -64,6 +64,6 @@ export class OffersComponent implements OnInit {
 
   canAddOffer() {
     return this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW
+      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW;
   }
 }
