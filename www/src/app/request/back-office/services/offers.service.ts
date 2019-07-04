@@ -19,7 +19,7 @@ export class OffersService {
 
   publishOffers(id: Uuid, positionId) {
     const url = `requests/backoffice/${id}/positions/${positionId}/publish-offers`;
-    return this.api.post(url, {})
+    return this.api.post(url, {});
   }
 }
 
