@@ -111,7 +111,6 @@ export class OffersComponent implements OnInit {
   }
 
   canChoiceWinner() {
-    console.log(this.requestPosition.status);
     return this.requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
 }
