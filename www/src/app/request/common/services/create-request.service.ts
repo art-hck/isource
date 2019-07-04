@@ -19,7 +19,7 @@ export class CreateRequestService {
 
   addRequestFromExcel(files: File[]): Observable<any> {
     return this.api.post(
-      `requests/customer/add-request-from-excel`,
+      `requests/customer/add-request/from-excel`,
       this.convertModelToFormData(files, null, 'files')
     );
   }
