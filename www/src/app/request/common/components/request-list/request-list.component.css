@@ -63,7 +63,8 @@
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-status.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-status.datagrid-cell {
-    max-width: 150px;
+    min-width: 150px;
+    max-width: 200px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {
