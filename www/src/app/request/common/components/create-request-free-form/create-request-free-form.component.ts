@@ -53,8 +53,8 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
 
   checkCanSendRequest(form: FormGroup) {
-    if (form[0].get('documents').value) {
-      return !(form[0].get('documents').value.length === 0);
+    if (form.get('documents').value) {
+      return !(form.get('documents').value.length === 0);
     }
     return false;
   }
