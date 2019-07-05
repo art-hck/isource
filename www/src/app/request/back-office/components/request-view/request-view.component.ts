@@ -8,6 +8,7 @@ import {RequestPositionWorkflowStepLabels} from "../../../common/dictionaries/re
 import {OffersService} from "../../services/offers.service";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
 import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
+import {RequestTypes} from "../../../common/enum/request-types";
 
 @Component({
   selector: 'app-request-view',
@@ -77,8 +78,8 @@ export class RequestViewComponent implements OnInit {
         || requestPosition.status === RequestPositionWorkflowSteps.NEW) && (requestPosition.linkedOffers.length !== 0);
   }
 
-  getFreeFormLabel() {
-    return RequestTypesLabels['FREE_FORM'];
+  checkIfFreeForm() {
+    return this.request.type === RequestTypes.FREE_FORM;
   }
 
 }

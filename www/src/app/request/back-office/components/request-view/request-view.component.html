@@ -52,7 +52,7 @@
       </table>
     </div>
 
-    <clr-accordion *ngIf="request.type !== getFreeFormLabel(); else freeFormCardBlock">
+    <clr-accordion *ngIf="!checkIfFreeForm(); else freeFormCardBlock">
       <clr-accordion-panel *ngFor="let requestPosition of requestPositions">
         <clr-accordion-title>
           <div class="clr-row w-100">

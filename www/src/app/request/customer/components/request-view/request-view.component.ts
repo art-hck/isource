@@ -62,7 +62,7 @@ export class RequestViewComponent implements OnInit {
       && (requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT);
   }
 
-  getFreeFormLabel() {
-    return RequestTypesLabels['FREE_FORM'];
+  checkIfFreeForm() {
+    return this.request.type === RequestTypes.FREE_FORM;
   }
 }
