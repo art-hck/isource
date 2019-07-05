@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GetRequestsService } from "../../../common/services/get-requests.service";
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
-import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
-import {RequestTypes} from "../../../common/enum/request-types";
 
 @Component({
   selector: 'app-request-list-view',
