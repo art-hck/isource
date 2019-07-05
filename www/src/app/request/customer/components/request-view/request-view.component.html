@@ -9,7 +9,9 @@
         <p class="header-label">от {{request.createdDate | date :'shortDate'}}</p>
       </div>
       <div class="clr-col-3 right-align-status">
+        <span class="request-status status-request-{{request.status}}">
         {{request.statusLabel}}
+        </span>
       </div>
     </div>
     <clr-accordion>
@@ -20,7 +22,9 @@
               <b>{{requestPosition.name}}</b>
             </div>
             <div class="clr-col-3 status">
+              <span class="position-status status-position-{{requestPosition.status}}">
               {{requestPosition.statusLabel}}
+              </span>
             </div>
           </div>
         </clr-accordion-title>

@@ -78,3 +78,51 @@ h1 {
 .w-100 {
   margin: 0;
 }
+
+
+.status-request-NEW:before,
+.status-request-IN_PROGRESS:before,
+.status-request-COMPLETED:before,
+
+.status-position-NEW:before,
+.status-position-PROPOSALS_PREPARATION:before,
+.status-position-RESULTS_AGREEMENT:before,
+.status-position-CONTRACT_SIGNING:before,
+.status-position-WINNER_SELECTED:before
+{
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  margin: -2px 4px 0;
+  border-radius: 50%;
+}
+
+
+.status-request-NEW:before {
+  background: #b9b9b9;
+}
+.status-request-IN_PROGRESS:before {
+  background: #f48f32;
+}
+.status-request-COMPLETED:before {
+  background: #00b75e;
+}
+
+
+.status-position-NEW:before {
+  background: #b9b9b9;
+}
+.status-position-PROPOSALS_PREPARATION:before {
+  background: #28b1ec;
+}
+.status-position-RESULTS_AGREEMENT:before {
+  background: #00b75e;
+}
+.status-position-CONTRACT_SIGNING:before {
+  background: rgb(255, 71, 90);
+}
+.status-position-WINNER_SELECTED:before {
+  background: rgba(142, 80, 210, 0.97);
+}
