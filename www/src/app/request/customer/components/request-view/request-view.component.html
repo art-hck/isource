@@ -25,7 +25,9 @@
               <b>{{requestPosition.name}}</b>
             </div>
             <div class="clr-col-3 status">
+              <span class="position-status status-position-{{requestPosition.status}}">
               {{requestPosition.statusLabel}}
+              </span>
             </div>
           </div>
         </clr-accordion-title>
@@ -111,13 +113,19 @@
             <clr-tab>
               <button clrTabLink>Согласование</button>
               <clr-tab-content *clrIfActive>
-                ...
+                <app-messages [requestPosition]="requestPosition"></app-messages>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>
               <button clrTabLink>КП</button>
               <clr-tab-content *clrIfActive>
-                ...
+                <app-offers [requestPosition]="requestPosition"
+                            [customerView]="true"
+                            (offerWinner)="getOfferWinner($event)"></app-offers>
+                <button class="btn btn-primary"
+                        (click)="onChoiceWinner(requestPosition)"
+                        *ngIf="canChoice(requestPosition)"><b>Согласовать</b>
+                </button>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>

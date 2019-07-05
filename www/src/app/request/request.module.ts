@@ -12,8 +12,11 @@ import { RequestService as CustomerRequestService } from "./customer/services/re
 import { RequestListComponent } from "./common/components/request-list/request-list.component";
 import { DocumentListComponent } from './common/components/document-list/document-list.component';
 import { DocumentUploadListComponent } from "./common/components/document-upload-list/document-upload-list.component";
+import { MessagesComponent } from './common/components/messages/messages.component';
+import { CreateRequestFreeFormComponent } from './common/components/create-request-free-form/create-request-free-form.component';
 import { OffersComponent as BackofficeOffersComponent } from './back-office/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
+import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,10 @@ import { OffersService as BackofficeOffersService} from "./back-office/services/
     BackofficeRequestViewComponent,
     CustomerRequestViewComponent,
     DocumentListComponent,
+    MessagesComponent,
+    BackofficeOffersComponent,
+    AddFromExcelComponent,
+    CreateRequestFreeFormComponent,
     BackofficeOffersComponent
   ],
   imports: [

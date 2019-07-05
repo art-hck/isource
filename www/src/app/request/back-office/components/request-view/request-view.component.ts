@@ -72,8 +72,7 @@ export class RequestViewComponent implements OnInit {
   }
 
   canPublish(requestPosition: RequestPosition) {
-    return (requestPosition.linkedOffers || requestPosition.linkedOffers !== null)
-      && (requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-        || requestPosition.status === RequestPositionWorkflowSteps.NEW);
+    return (requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+        || requestPosition.status === RequestPositionWorkflowSteps.NEW) && (requestPosition.linkedOffers.length !== 0);
   }
 }

@@ -1,5 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
+import { Observable } from 'rxjs';
 
 
 @Injectable()
@@ -12,8 +13,22 @@ export class CreateRequestService {
 
   addRequest(requestItem: Array<any>) {
     return this.api.post(
-      `requests/customer/add-request`,
+      `requests/customer/add-request/manual`,
       this.convertModelToFormData(requestItem, null, 'positions'));
+  }
+
+  addFreeFormRequest(requestItem: any) {
+    return this.api.post(
+      `requests/customer/add-request/free-form`,
+      this.convertModelToFormData(requestItem, null, 'request'));
+  }
+
+
+  addRequestFromExcel(files: File[]): Observable<any> {
+    return this.api.post(
+      `requests/customer/add-request/from-excel`,
+      this.convertModelToFormData(files, null, 'files')
+    );
   }
 
   /**
@@ -45,7 +60,9 @@ export class CreateRequestService {
           const tempFormKey = `${formKey}[${index}]`;
           this.convertModelToFormData(element, formData, tempFormKey);
         });
-      } else if (typeof model[propertyName] === 'object' && !(model[propertyName] instanceof File)) {
+      } else if (model[propertyName] instanceof File) {
+        formData.append(formKey, model[propertyName]);
+      } else if (typeof model[propertyName] === 'object') {
         this.convertModelToFormData(model[propertyName], formData, formKey);
       } else {
         formData.append(formKey, model[propertyName].toString());

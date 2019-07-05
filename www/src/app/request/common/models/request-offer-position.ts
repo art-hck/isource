@@ -19,4 +19,6 @@ export class RequestOfferPosition {
   supplierContragentName: string;
   userId: Uuid;
   vatPercent: number;
+  isMinPrice: boolean;
+  isWinner: boolean;
 }

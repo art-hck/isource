@@ -28,6 +28,10 @@ label {
   width: 1000px;
 
 }
+.new-request-tabs {
+  display: block;
+  width: 1000px;
+}
 
 h2 {
   margin-bottom: 20px;

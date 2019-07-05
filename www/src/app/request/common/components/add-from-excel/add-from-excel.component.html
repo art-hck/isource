@@ -1,0 +1,22 @@
+<div class="from-excel-request-content">
+  <form class="clr-form-control view">
+    <div class="card">
+      <div class="card-block">
+        <div class="card-text">
+         <span class="gray">
+           Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a>
+         </span>
+
+         <app-document-upload-list (fileSelected)="onChangeFilesList($event)"></app-document-upload-list>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="submit">
+    <button class="btn btn-primary"
+            type="button"
+            (click)="onSendClick()"
+            [disabled]="this.files.length === 0">Отправить</button>
+  </div>
+</div>

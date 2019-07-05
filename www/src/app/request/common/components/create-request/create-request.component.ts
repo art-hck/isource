@@ -145,4 +145,16 @@ export class CreateRequestComponent implements OnInit {
   onDocumentSelected(documents: File[], form: FormGroup) {
     form.get('documents').setValue(documents);
   }
+
+  onSendExcelFile(files: File[]): void {
+    this.createRequestService.addRequestFromExcel(files).subscribe((data: any) => {
+      this.router.navigateByUrl(`requests/customer/${data.id}`);
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
+  }
 }

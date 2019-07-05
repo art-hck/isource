@@ -1,0 +1,58 @@
+:host {
+  text-align: left;
+}
+
+.from-excel-request-content {
+  text-align: left;
+}
+
+.from-excel-request-content span {
+  width: 470px;
+  line-height: 1.5;
+  display: block;
+  padding-bottom: 10px;
+}
+
+.from-excel-request-content .card-block {
+  padding: 0;
+}
+
+.from-excel-request-content .card-text {
+  padding: 35px 40px 40px 40px;
+}
+
+.file-upload-label {
+  padding-top: 20px;
+}
+
+.card {
+  box-shadow: 0 0 0 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+::ng-deep label.file-upload-label  {
+  padding-top: 5px;
+}
+::ng-deep label.file-upload-label a {
+  font-weight: bold;
+}
+
+input#file_upload {
+  display: none;
+}
+
+.submit {
+  text-align: right;
+  width: 1000px;
+}
+
+.btn-primary {
+  margin-top: 20px;
+  margin-right: 0;
+  padding: 0 25px;
+}
