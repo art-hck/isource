@@ -86,7 +86,8 @@
   <clr-dg-column class="clr-col-1">Дата поставки</clr-dg-column>
   <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
   <clr-dg-column class="clr-col-2">КП</clr-dg-column>
-  <clr-dg-column class="clr-col-2">ТП</clr-dg-column>
+  <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
+  <clr-dg-column class="clr-col-1" *ngIf="customerView">Победитель</clr-dg-column>
 
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
     <clr-dg-cell class="clr-col-3 offer">{{linkedOffer.supplierContragentName}}
@@ -97,10 +98,17 @@
     <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2 offer">{{linkedOffer.paymentTerms}}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2">
-      <button class="btn btn-link download">Загрузить</button>
+      <button class="btn btn-link download" *ngIf="!customerView">Загрузить</button>
     </clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">
-      <button class="btn btn-link download">Загрузить</button>
+    <clr-dg-cell class="clr-col-1">
+      <button class="btn btn-link download" *ngIf="!customerView">Загрузить</button>
+    </clr-dg-cell>
+    <clr-dg-cell class="clr-col-1">
+      <input type="radio" clrRadio [(ngModel)]="offerWinnerId"
+             value="{{linkedOffer.id}}"
+             (change)="winnerChoice(linkedOffer)"
+             *ngIf="customerView"
+             [disabled]="!canChoiceWinner()"/>
     </clr-dg-cell>
   </clr-dg-row>
 </clr-datagrid>

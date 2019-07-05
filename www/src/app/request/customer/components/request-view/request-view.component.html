@@ -115,7 +115,13 @@
             <clr-tab>
               <button clrTabLink>КП</button>
               <clr-tab-content *clrIfActive>
-                ...
+                <app-offers [requestPosition]="requestPosition"
+                            [customerView]="true"
+                            (offerWinner)="getOfferWinner($event)"></app-offers>
+                <button class="btn btn-primary"
+                        (click)="onChoiceWinner(requestPosition)"
+                        *ngIf="canChoice(requestPosition)"><b>Согласовать</b>
+                </button>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>
