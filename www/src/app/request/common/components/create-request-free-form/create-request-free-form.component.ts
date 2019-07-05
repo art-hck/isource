@@ -39,7 +39,7 @@ export class CreateRequestFreeFormComponent implements OnInit {
   }
 
   onFreeFormDocumentSelected(documents: File[], form: FormGroup) {
-    form.get('documents').setValue(documents);
+    form['documents'].setValue(documents);
   }
 
   onSendFreeFormRequest() {
@@ -53,8 +53,8 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
 
   checkCanSendRequest(form: FormGroup) {
-    if (form.get('documents').value) {
-      return !(form.get('documents').value.length === 0);
+    if (form['documents'].value) {
+      return !(form['documents'].value.length === 0);
     }
     return false;
   }
