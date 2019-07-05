@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
 import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
 import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
+import {RequestTypes} from "../../enum/request-types";
+import {RequestTypesLabels} from "../../dictionaries/request-types-labels";
 
 
 
@@ -82,7 +84,7 @@ export class RequestListComponent implements OnInit {
   }
 
   checkIfFreeFormRequest(i: number) {
-    return this.requests[i].request.type === 'free-form';
+    return this.requests[i].request.type === RequestTypesLabels['FREE_FORM'];
   }
 
 }
