@@ -1,0 +1,7 @@
+<p>Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a></p>
+<form clrForm class="clr-form-control view">
+  <app-document-upload-list (fileSelected)="onChangeFilesList($event)"></app-document-upload-list>
+</form>
+<div>
+  <button class="btn btn-primary" type="button" (click)="onSendClick()" [disabled]="this.files.length === 0">Отправить</button>
+</div>
