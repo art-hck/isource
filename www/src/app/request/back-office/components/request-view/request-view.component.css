@@ -104,3 +104,19 @@ clr-datagrid {
   display: block;
   max-width: 540px;
 }
+
+.action-bar {
+  height: 50px;
+  border-bottom: 1px solid #d4d9e2;
+}
+
+.request-row {
+  border-bottom: 1px solid #d4d9e2
+}
+.position-row {
+  border-bottom: 1px solid #d4d9e2
+}
+
+.card-content {
+  padding: 0 10px;
+}

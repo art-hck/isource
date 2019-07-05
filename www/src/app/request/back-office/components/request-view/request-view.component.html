@@ -1,13 +1,55 @@
 <ng-container *ngIf="!request" class="load-block">
   <span class="spinner spinner-md"></span>
 </ng-container>
-
-
 <ng-container *ngIf="request">
-
+  <div class="card">
+    <div class="action-bar">
+      <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
+      <clr-icon shape="upload"></clr-icon>
+  </div>
+    <div class="card-content">
+    <div class="request-row">
+      <div class="clr-row">
+        <div class="clr-col-8">
+          <h3 class="request-title">Заявка №{{request.number}}</h3>
+        </div>
+        <div class="clr-col-4">
+           <span class="status-request-{{request.status}}">
+                {{request.statusLabel}}
+              </span>
+        </div>
+      </div>
+    </div>
+    <div class="position-row" *ngFor="let requestPosition of requestPositions">
+      <div class="clr-row w-100">
+        <div class="clr-col-4">
+          <b>{{requestPosition.name}}</b>
+        </div>
+        <div class="clr-col-2">
+          <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
+        </div>
+        <div class="clr-col-2">
+          <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
+            как можно скорее
+          </div>
+          {{requestPosition.deliveryDate | date :'shortDate'}}
+        </div>
+        <div class="clr-col-2">
+          <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
+        </div>
+        <div class="clr-col-2 status">
+              <span class="position-status status-position-{{requestPosition.status}}">
+              {{requestPosition.statusLabel}}
+              </span>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+  <app-request-info [request]="request"></app-request-info>
+  <app-position-info [requestPosition]="requestPosition"></app-position-info>
   <div class="container">
     <h3 class="request-title">Заявка №{{request.number}}</h3>
-
     <div class="clr-row">
       <table class="clr-col table table-noborder request-customer-info">
         <tbody>

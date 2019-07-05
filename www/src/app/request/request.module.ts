@@ -17,6 +17,8 @@ import { CreateRequestFreeFormComponent } from './common/components/create-reque
 import { OffersComponent as BackofficeOffersComponent } from './back-office/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
 import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
+import {RequestInfoComponent} from "./back-office/components/request-info/request-info.component";
+import {PositionInfoComponent} from "./back-office/components/position-info/position-info.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { AddFromExcelComponent } from './common/components/add-from-excel/add-fr
     BackofficeOffersComponent,
     AddFromExcelComponent,
     CreateRequestFreeFormComponent,
-    BackofficeOffersComponent
+    BackofficeOffersComponent,
+    RequestInfoComponent,
+    PositionInfoComponent
   ],
   imports: [
     SharedModule,
