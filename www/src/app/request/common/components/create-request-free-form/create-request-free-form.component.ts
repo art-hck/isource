@@ -30,21 +30,19 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   ngOnInit() {
     this.freeFormRequestDataForm = this.formBuilder.group({
-      'itemForm': this.formBuilder.group({
-          documents: [null],
-          comments: ['', [Validators.required]],
-        })
-      }
-    );
+      documents: [null],
+      comments: [''],
+    });
   }
 
   onFreeFormDocumentSelected(documents: File[], form: FormGroup) {
-    form['documents'].setValue(documents);
+    console.log(form);
+    form['controls'].documents.setValue(documents);
   }
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.createRequestService.addFreeFormRequest(this.requestItem['itemForm']).subscribe(
+    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(
       (data: any) => {
         this.router.navigateByUrl(`requests/customer/${data.id}`);
       }
@@ -52,9 +50,10 @@ export class CreateRequestFreeFormComponent implements OnInit {
   }
 
 
-  checkCanSendRequest(form: FormGroup) {
-    if (form['documents'].value) {
-      return !(form['documents'].value.length === 0);
+  checkCanSendRequest(value: any) {
+    console.log(value);
+    if (value.documents) {
+      return !(value.documents.length === 0);
     }
     return false;
   }

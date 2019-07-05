@@ -1,39 +1,34 @@
 <div class="free-form-request-content">
 
   <form [formGroup]="freeFormRequestDataForm" class="form">
-    <div formGroupName="itemForm">
-      <div class="card">
-        <div class="card-block">
-          <div class="card-text">
+    <div class="card">
+      <div class="card-block">
+        <div class="card-text">
 
-              <span class="gray">
-                Загрузите сюда опросный лист или другой документ,
-                который поможет нам понять какое оборудование или услуга вам нужны
-              </span>
-
-
-              <div class="form-group">
-                <app-document-upload-list
-                  (fileSelected)="onFreeFormDocumentSelected(
-                    $event,
-                    freeFormRequestDataForm['controls'].itemForm['controls']
-                  )">
-                </app-document-upload-list>
-              </div>
+            <span class="gray">
+              Загрузите сюда опросный лист или другой документ,
+              который поможет нам понять какое оборудование или услуга вам нужны
+            </span>
 
 
-              <div class="form-group comment-block">
-                <label for="comment-block-textarea">
-                  Напишите комментарий в произвольной форме, если вам нужно дополнить опросный лист.
-                </label>
-                <textarea id="comment-block-textarea"
-                          rows="5"
-                          placeholder="Комментарий"
-                          formControlName="comments">
-                </textarea>
-              </div>
+            <div class="form-group">
+              <app-document-upload-list
+                (fileSelected)="onFreeFormDocumentSelected($event, freeFormRequestDataForm)">
+              </app-document-upload-list>
+            </div>
 
-          </div>
+
+            <div class="form-group comment-block">
+              <label for="comment-block-textarea">
+                Напишите комментарий в произвольной форме, если вам нужно дополнить опросный лист.
+              </label>
+              <textarea id="comment-block-textarea"
+                        rows="5"
+                        placeholder="Комментарий"
+                        formControlName="comments">
+              </textarea>
+            </div>
+
         </div>
       </div>
     </div>
@@ -43,7 +38,7 @@
     <button type="button"
             class="btn btn-primary"
             (click)="onSendFreeFormRequest()"
-            [disabled]="!checkCanSendRequest(freeFormRequestDataForm['controls'].itemForm['controls'])">
+            [disabled]="!checkCanSendRequest(freeFormRequestDataForm.value)">
       Отправить
     </button>
   </div>
