@@ -40,10 +40,10 @@ export class RequestListComponent implements OnInit {
     } else if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
-      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
     } else if ((request.request.delivery.from) && (request.request.delivery.to)) {
-      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
-      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
+      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
       return dateFrom + ' — ' + dateTo;
     } else {
       return '—';
