@@ -16,8 +16,6 @@ import {ClrDatagridSortOrder} from "@clr/angular";
 
 export class RequestListComponent implements OnInit {
 
-  ascSort = ClrDatagridSortOrder.ASC;
-
   private customerNameFilter = new CustomerNameFilter();
   private requestStatusFilter = new RequestStatusFilter();
   private positionStatusFilter = new PositionStatusFilter();

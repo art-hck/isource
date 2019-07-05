@@ -1,5 +1,5 @@
 <clr-datagrid class="requests-list-datagrid">
-  <clr-dg-column class="request-number" [clrDgField]="'request.number'" [clrDgSortOrder]="ascSort">
+  <clr-dg-column class="request-number" [clrDgField]="'request.number'">
     № Заявки
   </clr-dg-column>
 
@@ -22,7 +22,7 @@
   </clr-dg-column>
 
   <clr-dg-column class="request-position-statuses">
-    Статус
+    Статус позиций
     <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>
   </clr-dg-column>
 
