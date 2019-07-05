@@ -13,9 +13,16 @@ export class CreateRequestService {
 
   addRequest(requestItem: Array<any>) {
     return this.api.post(
-      `requests/customer/add-request`,
+      `requests/customer/add-request/manual`,
       this.convertModelToFormData(requestItem, null, 'positions'));
   }
+
+  addFreeFormRequest(requestItem: any) {
+    return this.api.post(
+      `requests/customer/add-request/free-form`,
+      this.convertModelToFormData(requestItem, null, 'request'));
+  }
+
 
   addRequestFromExcel(files: File[]): Observable<any> {
     return this.api.post(
