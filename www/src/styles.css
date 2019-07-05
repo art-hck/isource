@@ -210,7 +210,8 @@ clr-dg-footer.datagrid-footer {
 .status-position-NEW:before,
 .status-position-PROPOSALS_PREPARATION:before,
 .status-position-RESULTS_AGREEMENT:before,
-.status-position-CONTRACT_SIGNING:before
+.status-position-CONTRACT_SIGNING:before,
+.status-position-WINNER_SELECTED:before
 {
     content: "";
     display: inline-block;
@@ -243,5 +244,8 @@ clr-dg-footer.datagrid-footer {
     background: #00b75e;
 }
 .status-position-CONTRACT_SIGNING:before {
+    background: rgb(159, 56, 255);
+}
+.status-position-WINNER_SELECTED:before {
     background: rgb(255, 71, 90);
 }
