@@ -5,15 +5,13 @@ import {Router} from "@angular/router";
 import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
 import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
 import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
-
-
+import {RequestTypes} from "../../enum/request-types";
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.css']
 })
-
 
 export class RequestListComponent implements OnInit {
 
@@ -42,10 +40,10 @@ export class RequestListComponent implements OnInit {
     } else if (request.request.delivery.asap === true) {
       return "ASAP";
     } else if (request.request.delivery.value) {
-      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      return moment(request.request.delivery.value, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
     } else if ((request.request.delivery.from) && (request.request.delivery.to)) {
-      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
-      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("D.MM.YYYY");
+      const dateFrom = moment(request.request.delivery.from, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
+      const dateTo = moment(request.request.delivery.to, "YYYY-MM-DD").locale('ru').format("DD.MM.YYYY");
       return dateFrom + ' — ' + dateTo;
     } else {
       return '—';
@@ -80,4 +78,9 @@ export class RequestListComponent implements OnInit {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
+
+  checkIfFreeFormRequest(i: number) {
+    return this.requests[i].request.type === RequestTypes.FREE_FORM;
+  }
+
 }

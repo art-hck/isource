@@ -2,9 +2,22 @@
   width: 1200px;
 }
 
-.title-info {
+h3.request-title {
+  margin: 0 0 5px 0;
+}
+
+p.title-info {
+  margin: 0;
   text-transform: uppercase;
   color: #999999;
+}
+
+table.request-customer-info {
+  margin: 10px 0;
+}
+
+.table-content td {
+  padding-top: 0 !important;
 }
 
 clr-accordion {
@@ -70,49 +83,24 @@ clr-datagrid {
   margin-right: 20px;
 }
 
-.status-request-NEW:before,
-.status-request-IN_PROGRESS:before,
-.status-request-COMPLETED:before,
-
-.status-position-NEW:before,
-.status-position-PROPOSALS_PREPARATION:before,
-.status-position-RESULTS_AGREEMENT:before,
-.status-position-CONTRACT_SIGNING:before,
-.status-position-WINNER_SELECTED:before
-{
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  vertical-align: middle;
-  margin: -2px 4px 0;
-  border-radius: 50%;
+.w-100 {
+  margin: 0;
 }
 
-
-.status-request-NEW:before {
-  background: #b9b9b9;
+.card.free-form-request {
+  margin-top: 10px;
 }
-.status-request-IN_PROGRESS:before {
-  background: #f48f32;
+.request-comment {
+  margin-top: 15px;
+  margin-bottom: 30px;
 }
-.status-request-COMPLETED:before {
-  background: #00b75e;
+.request-comment-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
 }
-
-
-.status-position-NEW:before {
-  background: #b9b9b9;
-}
-.status-position-PROPOSALS_PREPARATION:before {
-  background: #28b1ec;
-}
-.status-position-RESULTS_AGREEMENT:before {
-  background: #00b75e;
-}
-.status-position-CONTRACT_SIGNING:before {
-  background: rgb(255, 71, 90);
-}
-.status-position-WINNER_SELECTED:before {
-  background: rgba(142, 80, 210, 0.97);
+.request-comment-body {
+  display: block;
+  max-width: 540px;
 }

@@ -5,6 +5,8 @@ import {RequestService} from "../../services/request.service";
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
+import {RequestTypes} from "../../../common/enum/request-types";
+import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
 
 @Component({
   selector: 'app-request-view',
@@ -58,5 +60,9 @@ export class RequestViewComponent implements OnInit {
   canChoice(requestPosition: RequestPosition) {
     return (requestPosition.linkedOffers || requestPosition.linkedOffers !== null)
       && (requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT);
+  }
+
+  checkIfFreeForm() {
+    return this.request.type === RequestTypes.FREE_FORM;
   }
 }
