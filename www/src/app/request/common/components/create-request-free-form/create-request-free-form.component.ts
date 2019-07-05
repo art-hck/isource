@@ -21,7 +21,6 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   freeFormRequestDataForm: FormGroup;
   requestItem: FreeFormRequestItem;
-  showForm = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,19 +30,12 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   ngOnInit() {
     this.freeFormRequestDataForm = this.formBuilder.group({
-        'itemForm': this.formBuilder.array([
-          this.addItemFormGroup()
-        ])
+      'itemForm': this.formBuilder.group({
+          documents: [null],
+          comments: ['', [Validators.required]],
+        })
       }
     );
-    this.showForm[0] = true;
-  }
-
-  addItemFormGroup(): FormGroup {
-    return this.formBuilder.group({
-      documents: [null],
-      comments: ['', [Validators.required]],
-    });
   }
 
   onFreeFormDocumentSelected(documents: File[], form: FormGroup) {
