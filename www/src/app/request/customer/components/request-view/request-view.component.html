@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <clr-accordion *ngIf="request.type !== 'free-form'; else freeFormCardBlock">
+    <clr-accordion *ngIf="request.type !== getFreeFormLabel(); else freeFormCardBlock">
 
       <clr-accordion-panel *ngFor="let requestPosition of requestPositions">
 

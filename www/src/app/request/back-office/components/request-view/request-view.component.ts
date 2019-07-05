@@ -7,6 +7,7 @@ import {RequestPosition} from "../../../common/models/request-position";
 import {RequestPositionWorkflowStepLabels} from "../../../common/dictionaries/request-position-workflow-step-labels";
 import {OffersService} from "../../services/offers.service";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
+import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
 
 @Component({
   selector: 'app-request-view',
@@ -75,4 +76,9 @@ export class RequestViewComponent implements OnInit {
     return (requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
         || requestPosition.status === RequestPositionWorkflowSteps.NEW) && (requestPosition.linkedOffers.length !== 0);
   }
+
+  getFreeFormLabel() {
+    return RequestTypesLabels['FREE_FORM'];
+  }
+
 }

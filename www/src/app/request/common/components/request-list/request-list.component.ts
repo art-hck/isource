@@ -84,7 +84,7 @@ export class RequestListComponent implements OnInit {
   }
 
   checkIfFreeFormRequest(i: number) {
-    return this.requests[i].request.type === RequestTypesLabels['FREE_FORM'];
+    return this.requests[i].request.type === RequestTypes.FREE_FORM;
   }
 
 }
