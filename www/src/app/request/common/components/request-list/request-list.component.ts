@@ -6,16 +6,12 @@ import {CustomerNameFilter} from "../../services/request-list-filters/customer-n
 import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
 import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
 import {RequestTypes} from "../../enum/request-types";
-import {RequestTypesLabels} from "../../dictionaries/request-types-labels";
-
-
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.css']
 })
-
 
 export class RequestListComponent implements OnInit {
 
