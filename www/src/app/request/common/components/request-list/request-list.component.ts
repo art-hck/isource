@@ -6,7 +6,6 @@ import {CustomerNameFilter} from "../../services/request-list-filters/customer-n
 import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
 import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
 import {RequestTypes} from "../../enum/request-types";
-import {ClrDatagridSortOrder} from "@clr/angular";
 
 @Component({
   selector: 'app-request-list',
