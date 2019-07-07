@@ -2,285 +2,67 @@
   <span class="spinner spinner-md"></span>
 </ng-container>
 <ng-container *ngIf="request">
-  <div class="card">
+  <div class="clr-row w-100" *ngIf="showPositionList">
+  <div class="card" [ngClass]="{'minList' : (showInfo === true) || (showRequestInfo === true)}">
     <div class="action-bar">
-      <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
-      <clr-icon shape="upload"></clr-icon>
+      <button class="btn btn-link"><clr-icon shape="plus-circle"></clr-icon>
+        <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
+      </button>
+      <button class="btn btn-link"><clr-icon shape="upload"></clr-icon>
+        <span *ngIf="!(showInfo || showRequestInfo)">Загрузить из шаблона</span>
+      </button>
+
   </div>
     <div class="card-content">
-    <div class="request-row">
+    <div class="request-row" (click)="onSelectRequest()"
+         [ngClass]="{'selected-row' : showRequestInfo === true && showInfo == false}">
       <div class="clr-row">
         <div class="clr-col-8">
-          <h3 class="request-title">Заявка №{{request.number}}</h3>
+          <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
         </div>
-        <div class="clr-col-4">
+        <div class="clr-col-4 status request">
            <span class="status-request-{{request.status}}">
                 {{request.statusLabel}}
               </span>
+          <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
         </div>
       </div>
     </div>
-    <div class="position-row" *ngFor="let requestPosition of requestPositions">
-      <div class="clr-row w-100">
-        <div class="clr-col-4">
-          <b>{{requestPosition.name}}</b>
+    <div class="position-row clr-row w-100" *ngFor="let requestPosition of requestPositions; let i = index"
+         (click)="onSelectPosition(requestPosition, i)"
+    [ngClass]="{'selected-row' : i == selectedIndex && showRequestInfo == false}">
+        <div class="position-name clr-col-5"
+             [ngClass]="{'clr-col-11' : (showInfo === true) || (showRequestInfo === true)}">
+          {{requestPosition.name}}
         </div>
-        <div class="clr-col-2">
+        <div class="position-quantity clr-col" *ngIf="!(showInfo || showRequestInfo)">
           <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
         </div>
-        <div class="clr-col-2">
+        <div class="delivery-date clr-col" *ngIf="!(showInfo || showRequestInfo)">
           <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
             как можно скорее
           </div>
           {{requestPosition.deliveryDate | date :'shortDate'}}
         </div>
-        <div class="clr-col-2">
+        <div class="position-price clr-col" *ngIf="!(showInfo || showRequestInfo)">
           <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
         </div>
-        <div class="clr-col-2 status">
+        <div class="clr-col status" [ngClass]="{'clr-col-1' : (showInfo === true) || (showRequestInfo === true)}">
               <span class="position-status status-position-{{requestPosition.status}}">
+                <span *ngIf="!(showInfo || showRequestInfo)">
               {{requestPosition.statusLabel}}
-              </span>
-        </div>
-      </div>
-    </div>
-    </div>
-</div>
-  <app-request-info [request]="request"></app-request-info>
-  <app-position-info [requestPosition]="requestPosition"></app-position-info>
-  <div class="container">
-    <h3 class="request-title">Заявка №{{request.number}}</h3>
-    <div class="clr-row">
-      <table class="clr-col table table-noborder request-customer-info">
-        <tbody>
-          <tr class="table-titles">
-            <td class="left">
-              <p class="title-info">Заказчик</p>
-            </td>
-
-            <td class="left">
-              <p class="title-info">Контактное лицо</p>
-            </td>
-
-            <td class="left">
-              <p class="title-info">Email</p>
-            </td>
-
-            <td class="left">
-              <p class="title-info">Дата создания</p>
-            </td>
-
-            <td class="left">
-              <p class="title-info">Статус</p>
-            </td>
-          </tr>
-
-          <tr class="table-content">
-            <td class="left">{{request.contragent.shortName}}</td>
-
-            <td class="left">{{request.user.lastName}}</td>
-
-            <td class="left">{{request.user.email}}</td>
-
-            <td class="left">{{request.createdDate | date :'shortDate'}}</td>
-
-            <td class="left">
-              <span class="status-request-{{request.status}}">
-                {{request.statusLabel}}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <clr-accordion *ngIf="!checkIfFreeForm(); else freeFormCardBlock">
-      <clr-accordion-panel *ngFor="let requestPosition of requestPositions">
-        <clr-accordion-title>
-          <div class="clr-row w-100">
-            <div class="clr-col-9">
-              <b>{{requestPosition.name}}</b>
-            </div>
-            <div class="clr-col-3 status">
-              <span class="position-status status-position-{{requestPosition.status}}">
-              {{requestPosition.statusLabel}}
-              </span>
-            </div>
-          </div>
-
-        </clr-accordion-title>
-        <clr-accordion-content *clrIfExpanded>
-          <div class="clr-form-control">
-            <div class="clr-row w-100">
-              <div class="clr-col-7">
-                <label class="clr-control-label">Наименование МТР</label>
-                {{requestPosition.name}}
-              </div>
-              <div class="clr-col-5">
-                <label class="clr-control-label">Статус</label>
-                <div class="select">
-                  <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
-                          [value]="requestPosition.status">
-                    <option *ngFor="let status of requestPositionWorkflowStepLabels"
-                            [(value)]="status[0]">
-                      <span class="position-status status-position-{{requestPosition.status}}">{{status[1]}}</span>
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="clr-row w-100">
-              <div class="clr-col-7">
-                <label class="clr-control-label">Количество</label>
-                <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
-              </div>
-              <div class="clr-col-5">
-                <label class="clr-control-label"> Необходимый срок поставки</label>
-                <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
-                  как можно скорее
-                </div>
-                {{requestPosition.deliveryDate | date :'shortDate'}}
-              </div>
-            </div>
-            <div class="clr-row w-100">
-              <div class="clr-col-7">
-                <label class="clr-control-label">Базис поставки (пункт, до которого требуется
-                  доставка)</label>
-                {{requestPosition.deliveryBasis}}
-              </div>
-              <div class="clr-col-5">
-                <label class="clr-control-label">Условия оплаты</label>
-                {{requestPosition.paymentTerms}}
-              </div>
-            </div>
-            <div class="expanded-block w-100" *ngIf="expanded">
-              <div class="clr-row w-100">
-                <div class="clr-col-7">
-                  <label class="clr-control-label">
-                    Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
-                  </label>
-                  {{requestPosition.productionDocument}}
-                </div>
-                <div class="clr-col-5">
-                  <label class="clr-control-label">Начальная максимальная цена</label>
-                  <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
-                </div>
-              </div>
-              <div class="clr-row w-100">
-                <div class="clr-col-7">
-                  <div class="relatedServices" *ngIf="requestPosition.relatedServices">
-
-                    <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
-                      (ШМР,
-                      ПНР)</label>
-                    {{requestPosition.relatedServices}}
-                  </div>
-                </div>
-                <div class="clr-col-5">
-                  <div class="relatedServices" *ngIf="requestPosition.comments">
-                    <label class="clr-control-label">Примечания/комментрии</label>
-                    {{requestPosition.comments}}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button class="btn btn-link" (click)="onExpanded()">
-              <p class="btn btn-link" *ngIf="!expanded">Подробнее</p>
-              <p class="btn btn-link" *ngIf="expanded">Свернуть</p>
-            </button>
-          </div>
-          <clr-tabs>
-            <clr-tab>
-              <button clrTabLink>Документы</button>
-              <clr-tab-content *clrIfActive="true">
-                <app-document-list [documents]="requestPosition.documents"></app-document-list>
-              </clr-tab-content>
-            </clr-tab>
-            <clr-tab>
-              <button clrTabLink>Согласование</button>
-              <clr-tab-content *clrIfActive>
-                <app-messages [requestPosition]="requestPosition"></app-messages>
-              </clr-tab-content>
-            </clr-tab>
-            <clr-tab>
-              <button clrTabLink>Коммерческие предложения</button>
-              <clr-tab-content *clrIfActive>
-                <app-offers [requestPosition]="requestPosition"
-                            [customerView]="false"></app-offers>
-                <div class="submit">
-                  <button class="btn btn-primary"
-                          (click)="onPublishOffers(requestPosition)"
-                          *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
-                  </button>
-                </div>
-              </clr-tab-content>
-            </clr-tab>
-            <clr-tab>
-              <button clrTabLink>Договор</button>
-              <clr-tab-content *clrIfActive>
-                ...
-              </clr-tab-content>
-            </clr-tab>
-          </clr-tabs>
-        </clr-accordion-content>
-      </clr-accordion-panel>
-    </clr-accordion>
-
-    <ng-template #freeFormCardBlock>
-      <div class="card free-form-request">
-        <div class="card-block">
-          <div class="card-text">
-
-            <div class="clr-row w-100">
-              <div class="clr-col">
-
-                <div class="request-comment">
-                  <span class="request-comment-title">Комментарий к заявке:</span>
-
-                  <span class="request-comment-body">
-                    {{ request.comment }}
                   </span>
-                </div>
-
-
-                <clr-tabs>
-                  <clr-tab>
-                    <button clrTabLink>Документы</button>
-                    <clr-tab-content *clrIfActive="true">
-                      <app-document-list [documents]="request.documents"></app-document-list>
-                    </clr-tab-content>
-                  </clr-tab>
-
-                  <clr-tab>
-                    <button clrTabLink>Согласование</button>
-                    <clr-tab-content *clrIfActive>
-                      ...
-                    </clr-tab-content>
-                  </clr-tab>
-
-                  <clr-tab>
-                    <button clrTabLink>Коммерческие предложения</button>
-                    <clr-tab-content *clrIfActive>
-                      ...
-                    </clr-tab-content>
-                  </clr-tab>
-
-                  <clr-tab>
-                    <button clrTabLink>Договор</button>
-                    <clr-tab-content *clrIfActive>
-                      ...
-                    </clr-tab-content>
-                  </clr-tab>
-                </clr-tabs>
-
-              </div>
-            </div>
-
-
-          </div>
+              </span>
+          <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
         </div>
       </div>
-    </ng-template>
-  </div>
+    </div>
+    </div>
 
+<div class="info-card">
+  <app-request-info [request]="request" [showRequestInfo]="showRequestInfo" (showPositionList)="showPositionList"></app-request-info>
+  <app-position-info [requestPosition]="selectedRequestPosition"
+  [(showInfo)]="showInfo" [requestId] ="requestId" (showPositionList)="showPositionList"></app-position-info>
+</div>
+  </div>
 </ng-container>

@@ -1,9 +1,13 @@
-.container {
-  width: 1200px;
+.request-view {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  align-content: stretch;
 }
 
 h3.request-title {
-  margin: 0 0 5px 0;
+  margin: 0;
+  padding-left: 10px;
 }
 
 p.title-info {
@@ -111,12 +115,85 @@ clr-datagrid {
 }
 
 .request-row {
-  border-bottom: 1px solid #d4d9e2
+  border-bottom: 1px solid #d4d9e2;
+  padding: 10px 0;
+  cursor: pointer;
 }
+
+.request-row:hover {
+background: aliceblue;
+}
+
 .position-row {
-  border-bottom: 1px solid #d4d9e2
+  border-bottom: 1px solid #d4d9e2;
+  display: flex;
+  flex: auto;
+  justify-content: space-between;
+  padding: 5px ;
+  cursor: pointer;
+}
+
+.position-row:hover {
+  background: aliceblue;
 }
 
 .card-content {
   padding: 0 10px;
+}
+
+.request-view {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.minList {
+  width: 500px;
+  min-width: 500px;
+}
+
+.status {
+  color: #d7d7d7;
+  text-align: right;
+  padding-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status span {
+  font-size: 12px;
+  color: #999999;
+}
+
+.position-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.request {
+  padding-right: 20px;
+}
+
+.action-bar {
+  padding: 10px 20px;
+}
+
+.btn-link {
+  margin-right: 15px;
+}
+
+.btn.btn-link {
+  padding-bottom: 20px;
+}
+
+.selected-row, .selected-row:hover, .selected-row h3, .selected-row span {
+  background: #0085FF;
+  color: white;
+}
+
+.info-card {
+  flex-direction: row;
+  flex-grow: 1;
 }
