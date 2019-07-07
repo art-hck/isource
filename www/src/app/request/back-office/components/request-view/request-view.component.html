@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="request">
   <div class="clr-row w-100" *ngIf="showPositionList">
-  <div class="card" [ngClass]="{'minList' : (showInfo === true) || (showRequestInfo === true)}">
+  <div class="card" [ngClass]="{'clr-col-4' : (showInfo === true) || (showRequestInfo === true)}">
     <div class="action-bar">
       <button class="btn btn-link"><clr-icon shape="plus-circle"></clr-icon>
         <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
@@ -59,7 +59,7 @@
     </div>
     </div>
 
-<div class="info-card">
+<div class="info-card clr-col-8">
   <app-request-info [request]="request" [showRequestInfo]="showRequestInfo" (showPositionList)="showPositionList"></app-request-info>
   <app-position-info [requestPosition]="selectedRequestPosition"
   [(showInfo)]="showInfo" [requestId] ="requestId" (showPositionList)="showPositionList"></app-position-info>

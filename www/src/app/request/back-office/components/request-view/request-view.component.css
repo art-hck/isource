@@ -197,3 +197,7 @@ background: aliceblue;
   flex-direction: row;
   flex-grow: 1;
 }
+
+.card.clr-col-4 {
+  padding: 0;
+}

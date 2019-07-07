@@ -87,7 +87,7 @@
   <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
   <clr-dg-column class="clr-col-2">КП</clr-dg-column>
   <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
-  <clr-dg-column class="clr-col-1" *ngIf="customerView">Победитель</clr-dg-column>
+  <clr-dg-column class="clr-col-1"><span *ngIf="customerView">Победитель</span></clr-dg-column>
 
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
     <clr-dg-cell class="clr-col-3 offer">{{linkedOffer.supplierContragentName}}
