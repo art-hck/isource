@@ -1,8 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import { saveAs } from 'file-saver/src/FileSaver';
 import {Injectable} from "@angular/core";
-import {AttachedFile} from "../models/attached-file";
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +12,8 @@ export class DocumentsService {
   ) {
   }
 
-  downloadFile(file: AttachedFile): void {
-    console.log(file);
+  downloadFile(event: any): void {
+    const file = event;
     const fileName = file.filename;
     const fileId = file.id;
     this.api.post(

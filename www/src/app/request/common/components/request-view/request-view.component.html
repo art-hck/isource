@@ -1,0 +1,86 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+<ng-container *ngIf="request">
+  <div class="clr-row w-100" *ngIf="showPositionList">
+  <div class="card" [ngClass]="{'clr-col-4' : (showInfo === true) || (showRequestInfo === true)}">
+    <div class="action-bar">
+      <button class="btn btn-link"><clr-icon shape="plus-circle"></clr-icon>
+        <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
+      </button>
+      <button class="btn btn-link"><clr-icon shape="upload"></clr-icon>
+        <span *ngIf="!(showInfo || showRequestInfo)">Загрузить из шаблона</span>
+      </button>
+    </div>
+
+    <div class="card-content">
+      <div class="request-row" (click)="onSelectRequest()"
+           [ngClass]="{'selected-row' : showRequestInfo === true && showInfo == false}">
+        <div class="clr-row">
+          <div class="clr-col-8">
+            <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
+          </div>
+
+          <div class="clr-col-4 status request">
+             <span class="status-request-{{request.status}}">
+               {{request.statusLabel}}
+             </span>
+            <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="position-row clr-row w-100"
+           *ngFor="let requestPosition of requestPositions; let i = index"
+           (click)="onSelectPosition(requestPosition, i)"
+           [ngClass]="{'selected-row' : i == selectedIndex && showRequestInfo == false}">
+
+          <div class="position-name clr-col-5"
+               [ngClass]="{'clr-col-11' : (showInfo === true) || (showRequestInfo === true)}">
+            {{requestPosition.name}}
+          </div>
+
+          <div class="position-quantity clr-col" *ngIf="!(showInfo || showRequestInfo)">
+            <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+          </div>
+
+          <div class="delivery-date clr-col" *ngIf="!(showInfo || showRequestInfo)">
+            <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
+              как можно скорее
+            </div>
+            {{requestPosition.deliveryDate | date :'shortDate'}}
+          </div>
+
+          <div class="position-price clr-col" *ngIf="!(showInfo || showRequestInfo)">
+            <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
+          </div>
+
+          <div class="clr-col status" [ngClass]="{'clr-col-1' : (showInfo === true) || (showRequestInfo === true)}">
+                <span class="position-status status-position-{{requestPosition.status}}">
+                  <span *ngIf="!(showInfo || showRequestInfo)">
+                    {{requestPosition.statusLabel}}
+                  </span>
+                </span>
+            <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card clr-col-8" *ngIf="showRequestInfo || showInfo">
+      <app-request-info [request]="request"
+                        [showRequestInfo]="showRequestInfo"
+                        (showPositionList)="showPositionList"
+                        [isCustomerView]="isCustomerView">
+      </app-request-info>
+
+      <app-position-info [requestPosition]="selectedRequestPosition"
+                         [(showInfo)]="showInfo"
+                         [requestId] ="requestId"
+                         (showPositionList)="showPositionList"
+                         [isCustomerView]="isCustomerView">
+      </app-position-info>
+    </div>
+
+  </div>
+</ng-container>

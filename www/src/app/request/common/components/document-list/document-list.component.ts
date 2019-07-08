@@ -21,7 +21,7 @@ export class DocumentListComponent implements OnInit {
 
 
   onDownloadFile() {
-    console.log('emitted');
+    console.log(this.documents);
     this.downloadClick.emit(this.documents[0]);
   }
 
