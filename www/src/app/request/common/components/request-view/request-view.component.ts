@@ -42,6 +42,6 @@ export class RequestViewComponent implements OnInit {
 
   onSelectRequest() {
     this.showRequestInfo = true;
-    this.showInfo = false
+    this.showInfo = false;
   }
 }
