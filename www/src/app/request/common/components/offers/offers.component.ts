@@ -1,20 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../services/offers.service";
+import {OffersService} from "../../../back-office/services/offers.service";
 import {ActivatedRoute} from "@angular/router";
-import {RequestOfferPosition} from "../../../common/models/request-offer-position";
+import {RequestOfferPosition} from "../../models/request-offer-position";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
-import {RequestPosition} from "../../../common/models/request-position";
+import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import {RequestPosition} from "../../models/request-position";
+import {OrderPositionsComponent} from "../../../../order/components/general/order-positions/order-positions.component";
+import {RequestViewComponent} from "../request-view/request-view.component";
+
 
 @Component({
   selector: 'app-offers',
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
-export class OffersComponent implements OnInit {
+export class OffersComponent implements AfterViewInit {
   @Input() requestPosition: RequestPosition;
-  @Input() customerView = false;
+  @Input() customerView: boolean;
 
   @Output() offerWinner = new EventEmitter<Uuid>();
 
@@ -33,7 +36,7 @@ export class OffersComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
     this.offerForm = this.formBuilder.group({

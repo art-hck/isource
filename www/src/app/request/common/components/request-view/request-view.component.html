@@ -59,10 +59,16 @@
     </div>
     </div>
 
-<div class="info-card clr-col-8">
-  <app-request-info [request]="request" [showRequestInfo]="showRequestInfo" (showPositionList)="showPositionList"></app-request-info>
+<div class="info-card clr-col-8" *ngIf="showRequestInfo || showInfo">
+  <app-request-info [request]="request"
+                    [showRequestInfo]="showRequestInfo"
+                    (showPositionList)="showPositionList"
+                    [customerView]="customerView"></app-request-info>
   <app-position-info [requestPosition]="selectedRequestPosition"
-  [(showInfo)]="showInfo" [requestId] ="requestId" (showPositionList)="showPositionList"></app-position-info>
+                     [(showInfo)]="showInfo"
+                     [requestId] ="requestId"
+                     (showPositionList)="showPositionList"
+                      [customerView]="customerView"></app-position-info>
 </div>
   </div>
 </ng-container>

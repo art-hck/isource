@@ -1,0 +1,124 @@
+<div class="position-info" *ngIf="showInfo">
+  <div class="card">
+    <div class="action-bar">
+      <div class="clr-row action-row">
+        <div class="clr-col-10">
+
+        </div>
+        <div class="clr-col-2 grey">
+          <clr-icon shape="collapse-card" size="20" style="transform: rotate(90deg);"></clr-icon>
+          <clr-icon shape="window-close"></clr-icon>
+        </div>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="clr-row select-align">
+        <div class="select" *ngIf="!customerView">
+          <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
+                  [value]="requestPosition.status">
+            <option *ngFor="let status of requestPositionWorkflowStepLabels"
+                    [(value)]="status[0]">{{status[1]}}
+            </option>
+          </select>
+        </div>
+        <div class="status" *ngIf="customerView">
+        {{requestPosition.statusLabel}}
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-10">
+          <h4>{{requestPosition.name}}</h4>
+        </div>
+        <div class="clr-col-2 grey">
+          <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
+        </div>
+      </div>
+
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink>Общая информация</button>
+          <clr-tab-content *clrIfActive="true">
+            <div class="info-content">
+              <div class="clr-row action">
+                <button class="btn btn-link">
+                  <clr-icon shape="pencil"></clr-icon>
+                </button>
+              </div>
+              <label class="clr-control-label"> Необходимый срок поставки</label>
+              <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
+                как можно скорее
+                <p>{{requestPosition.deliveryDate | date :'shortDate'}}</p>
+              </div>
+              <label class="clr-control-label">Базис поставки (пункт, до которого требуется
+                доставка)</label>
+              <p>{{requestPosition.deliveryBasis}}</p>
+
+              <label class="clr-control-label">Условия оплаты</label>
+              <p>{{requestPosition.paymentTerms}}</p>
+              <label class="clr-control-label">Начальная максимальная цена</label>
+              <p><span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}</p>
+
+              <label class="clr-control-label">
+                Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+              </label>
+              <p>{{requestPosition.productionDocument}}</p>
+              <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+
+                <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
+                  (ШМР,
+                  ПНР)</label>
+                <p>{{requestPosition.relatedServices}}</p>
+              </div>
+              <div class="relatedServices" *ngIf="requestPosition.comments">
+                <label class="clr-control-label">Примечания/комментрии</label>
+                <p>{{requestPosition.comments}}</p>
+              </div>
+            </div>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Документы</button>
+          <clr-tab-content *clrIfActive>
+            <app-document-list [documents]="requestPosition.documents"></app-document-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Согласование</button>
+          <clr-tab-content *clrIfActive>
+            <app-messages [requestPosition]="requestPosition"></app-messages>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink (click)="onHiddenList()">Коммерческие предложения</button>
+          <clr-tab-content *clrIfActive>
+            <app-offers [requestPosition]="requestPosition"
+                        [customerView]="customerView"
+                        (offerWinner)="getOfferWinner($event)"></app-offers>
+            <div class="submit">
+              <button class="btn btn-primary"
+                      (click)="onPublishOffers(requestPosition)"
+                      *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
+              </button>
+              <button class="btn btn-primary"
+                      (click)="onChoiceWinner(requestPosition)"
+                      *ngIf="canChoiceWinner(requestPosition)"><b>Согласовать</b>
+              </button>
+            </div>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Договор</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>История</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+      </clr-tabs>
+    </div>
+  </div>
+</div>
