@@ -1,11 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../services/offers.service";
+import {OffersService} from "../../../back-office/services/offers.service";
 import {ActivatedRoute} from "@angular/router";
-import {RequestOfferPosition} from "../../../common/models/request-offer-position";
+import {RequestOfferPosition} from "../../models/request-offer-position";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
-import {RequestPosition} from "../../../common/models/request-position";
+import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import {RequestPosition} from "../../models/request-position";
+import {OrderPositionsComponent} from "../../../../order/components/general/order-positions/order-positions.component";
+import {RequestViewComponent} from "../request-view/request-view.component";
+
 
 @Component({
   selector: 'app-offers',
@@ -14,11 +17,11 @@ import {RequestPosition} from "../../../common/models/request-position";
 })
 export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
-  @Input() customerView = false;
+  @Input() isCustomerView: boolean;
+  @Input() requestId: Uuid;
 
   @Output() offerWinner = new EventEmitter<Uuid>();
 
-  requestId: Uuid;
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
@@ -34,8 +37,6 @@ export class OffersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-
     this.offerForm = this.formBuilder.group({
       supplierContragentName: ['', Validators.required],
       priceWithVat: ['', Validators.required],
@@ -102,7 +103,7 @@ export class OffersComponent implements OnInit {
 
   canAddOffer() {
     return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.customerView;
+      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
   winnerChoice(linkedOffer: RequestOfferPosition) {

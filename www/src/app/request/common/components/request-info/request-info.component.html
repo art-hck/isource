@@ -1,0 +1,72 @@
+<div class="request-info" *ngIf="showRequestInfo">
+  <div class="card">
+    <div class="action-bar">
+      <div class="clr-row action-row">
+        <div class="clr-col-10">
+
+        </div>
+        <div class="clr-col-2 grey">
+          <clr-icon shape="collapse-card" size="20" style="transform: rotate(90deg);"></clr-icon>
+          <clr-icon shape="window-close"></clr-icon>
+        </div>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="clr-row" *ngIf="!isCustomerView">
+        <div class="clr-col-4">
+          <p class="title-info">Заказчик</p>
+          {{request.contragent.shortName}}
+        </div>
+        <div class="clr-col-3">
+          <p class="title-info">Контактное лицо</p>
+          {{request.user.lastName}}
+        </div>
+        <div class="clr-col-3">
+          <p class="title-info">Email</p>
+          {{request.user.email}}
+        </div>
+        <div class="clr-col-2">
+          <p class="title-info">Дата создания</p>
+          {{request.createdDate | date :'shortDate'}}
+        </div>
+      </div>
+      <div class="comment" *ngIf="checkIfFreeForm()">
+        {{request.comment}}
+      </div>
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink>Документы</button>
+          <clr-tab-content *clrIfActive>
+
+            <app-document-list></app-document-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Согласование</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Коммерческие предложения</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>Договор</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink>История</button>
+          <clr-tab-content *clrIfActive>
+            ...
+          </clr-tab-content>
+        </clr-tab>
+      </clr-tabs>
+    </div>
+  </div>
+</div>
+
