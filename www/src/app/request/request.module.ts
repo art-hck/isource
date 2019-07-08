@@ -5,7 +5,6 @@ import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RequestListViewComponent as CustomerRequestListViewComponent } from './customer/components/request-list-view/request-list-view.component';
 import { RequestListViewComponent as BackofficeRequestListViewComponent } from './back-office/components/request-list-view/request-list-view.component';
-// import { RequestViewComponent as CustomerRequestViewComponent } from './customer/components/request-view/request-view.component';
 import { RequestService as BackofficeRequestService } from "./back-office/services/request.service";
 import { RequestService as CustomerRequestService } from "./customer/services/request.service";
 import { RequestListComponent } from "./common/components/request-list/request-list.component";

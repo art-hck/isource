@@ -11,7 +11,7 @@ import {RequestTypes} from "../../enum/request-types";
   styleUrls: ['./request-view.component.css']
 })
 export class RequestViewComponent implements OnInit {
-  @Input() customerView: boolean;
+  @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
@@ -28,9 +28,7 @@ export class RequestViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.request.type === RequestTypes.FREE_FORM) {
-      this.showRequestInfo = true;
-    }
+      this.showRequestInfo = this.request.type === RequestTypes.FREE_FORM;
   }
 
   onSelectPosition(requestPosition: RequestPosition, i: number) {

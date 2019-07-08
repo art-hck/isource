@@ -12,7 +12,7 @@ export class RequestInfoComponent implements OnInit {
 
   @Input() showRequestInfo = false;
   @Input() request: Request;
-  @Input() customerView: boolean;
+  @Input() isCustomerView: boolean;
 
   @Output() showPositionList = new EventEmitter<boolean>();
 

@@ -27,8 +27,9 @@ export class PositionInfoComponent implements OnInit {
 
   @Input() requestPosition: RequestPosition;
   @Input() requestId: Uuid;
-  @Input() customerView: boolean;
+  @Input() isCustomerView: boolean;
 
+  // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
 
@@ -56,11 +57,11 @@ export class PositionInfoComponent implements OnInit {
   canPublish(requestPosition: RequestPosition) {
     return (requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
       || requestPosition.status === RequestPositionWorkflowSteps.NEW) && (requestPosition.linkedOffers.length !== 0)
-      && !this.customerView;
+      && !this.isCustomerView;
   }
 
   canChoiceWinner(requestPosition: RequestPosition) {
-    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT && this.customerView;
+    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT && this.isCustomerView;
   }
 
   getOfferWinner(offerWinner: Uuid) {

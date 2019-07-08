@@ -24,7 +24,6 @@ import { CreateRequestService } from "./request/common/services/create-request.s
 import { RegistrationComponent } from './registration/components/registration.component';
 import { RegistrationService } from "./registration/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
-import {RequestModule} from "./request/request.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();

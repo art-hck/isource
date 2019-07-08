@@ -63,12 +63,12 @@
   <app-request-info [request]="request"
                     [showRequestInfo]="showRequestInfo"
                     (showPositionList)="showPositionList"
-                    [customerView]="customerView"></app-request-info>
+                    [isCustomerView]="isCustomerView"></app-request-info>
   <app-position-info [requestPosition]="selectedRequestPosition"
                      [(showInfo)]="showInfo"
                      [requestId] ="requestId"
                      (showPositionList)="showPositionList"
-                      [customerView]="customerView"></app-position-info>
+                     [isCustomerView]="isCustomerView"></app-position-info>
 </div>
   </div>
 </ng-container>

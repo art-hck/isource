@@ -13,7 +13,7 @@
     </div>
     <div class="card-content">
       <div class="clr-row select-align">
-        <div class="select" *ngIf="!customerView">
+        <div class="select" *ngIf="!isCustomerView">
           <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
                   [value]="requestPosition.status">
             <option *ngFor="let status of requestPositionWorkflowStepLabels"
@@ -21,7 +21,7 @@
             </option>
           </select>
         </div>
-        <div class="status" *ngIf="customerView">
+        <div class="status" *ngIf="isCustomerView">
         {{requestPosition.statusLabel}}
         </div>
       </div>
@@ -92,8 +92,9 @@
           <button clrTabLink (click)="onHiddenList()">Коммерческие предложения</button>
           <clr-tab-content *clrIfActive>
             <app-offers [requestPosition]="requestPosition"
-                        [customerView]="customerView"
-                        (offerWinner)="getOfferWinner($event)"></app-offers>
+                        [isCustomerView]="isCustomerView"
+                        (offerWinner)="getOfferWinner($event)"
+                        [requestId]="requestId"></app-offers>
             <div class="submit">
               <button class="btn btn-primary"
                       (click)="onPublishOffers(requestPosition)"

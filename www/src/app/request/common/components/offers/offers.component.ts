@@ -15,13 +15,13 @@ import {RequestViewComponent} from "../request-view/request-view.component";
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
-export class OffersComponent implements AfterViewInit {
+export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
-  @Input() customerView: boolean;
+  @Input() isCustomerView: boolean;
+  @Input() requestId: Uuid;
 
   @Output() offerWinner = new EventEmitter<Uuid>();
 
-  requestId: Uuid;
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
@@ -36,9 +36,7 @@ export class OffersComponent implements AfterViewInit {
   ) {
   }
 
-  ngAfterViewInit() {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-
+  ngOnInit() {
     this.offerForm = this.formBuilder.group({
       supplierContragentName: ['', Validators.required],
       priceWithVat: ['', Validators.required],
@@ -105,7 +103,7 @@ export class OffersComponent implements AfterViewInit {
 
   canAddOffer() {
     return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.customerView;
+      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
   winnerChoice(linkedOffer: RequestOfferPosition) {
