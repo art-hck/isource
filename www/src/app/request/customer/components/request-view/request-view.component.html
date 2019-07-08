@@ -107,7 +107,9 @@
             <clr-tab>
               <button clrTabLink>Документы</button>
               <clr-tab-content *clrIfActive="true">
-                <app-document-list [documents]="requestPosition.documents"></app-document-list>
+                <app-document-list [documents]="requestPosition.documents"
+                                   (downloadClick)="documentService.downloadFile($event)">
+                </app-document-list>
               </clr-tab-content>
             </clr-tab>
             <clr-tab>
@@ -166,7 +168,9 @@
                   <clr-tab>
                     <button clrTabLink>Документы</button>
                     <clr-tab-content *clrIfActive="true">
-                      <app-document-list [documents]="request.documents"></app-document-list>
+                      <app-document-list [documents]="request.documents"
+                                         (downloadClick)="documentsService.downloadFile($event)">
+                      </app-document-list>
                     </clr-tab-content>
                   </clr-tab>
                   <clr-tab>

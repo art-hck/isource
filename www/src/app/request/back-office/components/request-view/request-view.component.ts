@@ -9,6 +9,7 @@ import {OffersService} from "../../services/offers.service";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
 import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
 import {RequestTypes} from "../../../common/enum/request-types";
+import {DocumentsService} from "../../../common/services/documents.service";
 
 @Component({
   selector: 'app-request-view',
@@ -27,7 +28,8 @@ export class RequestViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private offersService: OffersService
+    private offersService: OffersService,
+    private documentsService: DocumentsService
   ) {
   }
 

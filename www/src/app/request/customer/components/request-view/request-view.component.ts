@@ -7,6 +7,7 @@ import {RequestPosition} from "../../../common/models/request-position";
 import {RequestPositionWorkflowSteps} from "../../../common/enum/request-position-workflow-steps";
 import {RequestTypes} from "../../../common/enum/request-types";
 import {RequestTypesLabels} from "../../../common/dictionaries/request-types-labels";
+import {DocumentsService} from "../../../common/services/documents.service";
 
 @Component({
   selector: 'app-request-view',
@@ -23,7 +24,11 @@ export class RequestViewComponent implements OnInit {
 
   expanded = false;
 
-  constructor(private route: ActivatedRoute, private requestService: RequestService) {
+  constructor(
+    private route: ActivatedRoute,
+    private requestService: RequestService,
+    private documentsService: DocumentsService
+  ) {
   }
 
   ngOnInit() {
