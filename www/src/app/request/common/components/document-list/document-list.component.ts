@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { RequestDocument } from "../../models/request-document";
-import {AttachedFile} from "../../models/attached-file";
 
 @Component({
   selector: 'app-document-list',
@@ -21,7 +20,6 @@ export class DocumentListComponent implements OnInit {
 
 
   onDownloadFile() {
-    console.log(this.documents);
     this.downloadClick.emit(this.documents[0]);
   }
 
