@@ -1,7 +1,7 @@
 <form [formGroup]="contractForm" class="form">
   <app-document-upload-list (fileSelected)="onDocumentSelected($event, contractForm)"
-                            [documents]="documents"></app-document-upload-list>
-  <div class="clr-row" *ngIf="documents.length !== 0">
+                            [documents]="uploadedFiles"></app-document-upload-list>
+  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
     <div class="clr-col-9">
       <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
     </div>

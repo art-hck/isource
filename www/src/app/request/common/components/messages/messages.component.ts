@@ -19,7 +19,7 @@ import { UserInfoService } from "../../../../core/services/user-info.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit, AfterViewChecked, OnChanges {
+export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 
@@ -36,10 +36,6 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnChanges {
     this.sendMessageForm = this.formBuilder.group({
       message: [null, [Validators.required]]
     });
-  }
-
-  ngOnInit() {
-    this.getMessages();
   }
 
   ngOnChanges(changes: SimpleChanges) {

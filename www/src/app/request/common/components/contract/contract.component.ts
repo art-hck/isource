@@ -19,7 +19,7 @@ export class ContractComponent implements OnChanges, OnInit {
   contractForm: FormGroup;
   contractItem: Contract;
   requestContract: RequestContract = null;
-  documents: File[] = [];
+  uploadedFiles: File[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,13 +30,13 @@ export class ContractComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.contractForm = this.formBuilder.group({
       comments: [''],
-      documents: [null]
+      uploadedFiles: [null]
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getCustomerContract();
-    this.documents = [];
+    this.uploadedFiles = [];
   }
 
   getCustomerContract() {
@@ -49,8 +49,8 @@ export class ContractComponent implements OnChanges, OnInit {
     }
   }
 
-  onDocumentSelected(documents: File[], contractForm) {
-    contractForm.get('documents').setValue(documents);
+  onDocumentSelected(uploadedFiles: File[], contractForm) {
+    contractForm.get('uploadedFiles').setValue(uploadedFiles);
   }
 
   onAddContract() {
@@ -58,7 +58,7 @@ export class ContractComponent implements OnChanges, OnInit {
     return this.contractService.addContract(this.requestId, this.requestPosition, this.contractItem).subscribe(
       (data: any) => {
         this.contractForm.reset();
-        this.documents = [];
+        this.uploadedFiles = [];
         this.getCustomerContract();
       }
     );
