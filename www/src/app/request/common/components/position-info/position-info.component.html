@@ -22,7 +22,7 @@
           </select>
         </div>
         <div class="status" *ngIf="isCustomerView">
-        {{requestPosition.statusLabel}}
+          {{requestPosition.statusLabel}}
         </div>
       </div>
       <div class="clr-row">
@@ -107,7 +107,7 @@
             </div>
           </clr-tab-content>
         </clr-tab>
-        <clr-tab>
+        <clr-tab *ngIf="canDownloadContract(requestPosition)">
           <button clrTabLink>Договор</button>
           <clr-tab-content *clrIfActive>
             <app-contract [requestPosition]="requestPosition"

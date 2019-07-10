@@ -22,6 +22,7 @@ export class PositionInfoComponent implements OnInit {
     this._opened = val;
     this.openedChange.emit(val);
   }
+
   get showInfo() {
     return this._opened;
   }
@@ -44,7 +45,8 @@ export class PositionInfoComponent implements OnInit {
     private backofficeRequestService: BackofficeRequestService,
     private customerRequestService: CustomerRequestService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.contractForm = this.formBuilder.group({
@@ -97,6 +99,12 @@ export class PositionInfoComponent implements OnInit {
           );
         }
       });
+  }
+
+  canDownloadContract(requestPosition: RequestPosition) {
+    return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
+      || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING;
+
   }
 
   onClose() {

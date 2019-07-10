@@ -12,7 +12,7 @@ export class DocumentUploadListComponent implements OnInit {
 
   @Output() fileSelected = new EventEmitter<File[]>();
 
-  documents: File[] = [];
+  @Input() documents: File[] = [];
 
   constructor() {
   }
