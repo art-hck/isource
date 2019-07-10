@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
 import { RequestPosition } from "../../models/request-position";
@@ -30,16 +30,23 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.messageService.getList(this.requestPosition)
-      .subscribe((messages: Message[]) => {
-        this.messages = messages;
-      });
+    this.getMessages();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.getMessages();
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
+  getMessages() {
+    this.messageService.getList(this.requestPosition)
+      .subscribe((messages: Message[]) => {
+        this.messages = messages;
+      });
+  }
   scrollToBottom(): void {
     this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
