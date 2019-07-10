@@ -1,4 +1,13 @@
-import {AfterViewChecked, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
 import { RequestPosition } from "../../models/request-position";
@@ -10,7 +19,7 @@ import { UserInfoService } from "../../../../core/services/user-info.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit, AfterViewChecked {
+export class MessagesComponent implements OnInit, AfterViewChecked, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 

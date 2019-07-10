@@ -45,7 +45,7 @@ export class ContractComponent implements OnChanges, OnInit {
         (data: any) => {
           this.requestContract = data;
         }
-      )
+      );
     }
   }
 

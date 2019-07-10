@@ -20,7 +20,7 @@ export class ContractService {
 
   getCustomerContract(id: Uuid, requestPosition: RequestPosition) {
     return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/contract`, {
-    })
+    });
   }
 
   convertModelToFormData(model: any, form: FormData = null, namespace = ''): FormData {
