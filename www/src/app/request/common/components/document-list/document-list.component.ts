@@ -18,7 +18,6 @@ export class DocumentListComponent implements OnInit {
   ngOnInit() {
   }
 
-
   onDownloadFile() {
     this.downloadClick.emit(this.documents[0]);
   }
