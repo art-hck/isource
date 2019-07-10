@@ -30,7 +30,7 @@ export class ContractComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.contractForm = this.formBuilder.group({
       comments: [''],
-      uploadedFiles: [null]
+      documents: [null]
     });
   }
 
@@ -50,7 +50,7 @@ export class ContractComponent implements OnChanges, OnInit {
   }
 
   onDocumentSelected(uploadedFiles: File[], contractForm) {
-    contractForm.get('uploadedFiles').setValue(uploadedFiles);
+    contractForm.get('documents').setValue(uploadedFiles);
   }
 
   onAddContract() {
