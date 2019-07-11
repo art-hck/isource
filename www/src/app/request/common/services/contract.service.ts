@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { RequestPosition } from "../models/request-position";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {RequestPosition} from "../models/request-position";
 import {Contract} from "../models/contract";
 import {Uuid} from "../../../cart/models/uuid";
 
@@ -13,14 +13,22 @@ export class ContractService {
   constructor(protected api: HttpClient) {
   }
 
-  addContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
+  addCustomerContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
     return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/add-contract-documents`,
       this.convertModelToFormData(contractItem));
   }
 
+  addBackofficeContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
+    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/add-contract-documents`,
+      this.convertModelToFormData(contractItem));
+  }
+
   getCustomerContract(id: Uuid, requestPosition: RequestPosition) {
-    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/contract`, {
-    });
+    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/contract`, {});
+  }
+
+  getBackofficeContract(id: Uuid, requestPosition: RequestPosition) {
+    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/contract`, {});
   }
 
   // TODO копипаст, вынести в отдельный сервис
