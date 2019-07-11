@@ -6,4 +6,5 @@ export class RequestDocument {
   user?: User;
   created: string;
   filename: string;
+  comments?: string;
 }

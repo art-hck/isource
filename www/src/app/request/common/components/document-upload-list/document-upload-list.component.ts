@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -12,7 +12,7 @@ export class DocumentUploadListComponent implements OnInit {
 
   @Output() fileSelected = new EventEmitter<File[]>();
 
-  documents: File[] = [];
+  @Input() documents: File[] = [];
 
   constructor() {
   }

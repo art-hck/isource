@@ -1,4 +1,13 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
 import { RequestPosition } from "../../models/request-position";
@@ -10,7 +19,7 @@ import { UserInfoService } from "../../../../core/services/user-info.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit, AfterViewChecked {
+export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 
@@ -29,17 +38,20 @@ export class MessagesComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngOnInit() {
-    this.messageService.getList(this.requestPosition)
-      .subscribe((messages: Message[]) => {
-        this.messages = messages;
-      });
+  ngOnChanges(changes: SimpleChanges) {
+    this.getMessages();
   }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
+  getMessages() {
+    this.messageService.getList(this.requestPosition)
+      .subscribe((messages: Message[]) => {
+        this.messages = messages;
+      });
+  }
   scrollToBottom(): void {
     this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
