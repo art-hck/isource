@@ -13,12 +13,17 @@
       </button>
     </div>
 
-    <app-add-from-excel
-        *ngIf="showUploadPositionsFromExcelForm"
-        (submit)="onSendExcelFile($event)"
-        [templateUrl]="'assets/RequestTemplate.xlsx'"
-    >
-    </app-add-from-excel>
+    <div class="card" *ngIf="showUploadPositionsFromExcelForm">
+      <div class="card-block">
+        <div class="card-text">
+          <app-add-from-excel
+            (submit)="onSendExcelFile($event)"
+            [templateUrl]="'assets/RequestTemplate.xlsx'"
+          >
+          </app-add-from-excel>
+        </div>
+      </div>
+    </div>
 
     <div class="card-content">
       <div class="request-row" (click)="onSelectRequest()"
