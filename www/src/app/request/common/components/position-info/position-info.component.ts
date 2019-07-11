@@ -7,6 +7,7 @@ import {OffersService} from "../../../back-office/services/offers.service";
 import {Request} from "../../models/request";
 import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
 import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import {DocumentsService} from "../../services/documents.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
@@ -44,9 +45,9 @@ export class PositionInfoComponent implements OnInit {
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
     private customerRequestService: CustomerRequestService,
+    private documentsService: DocumentsService,
     private formBuilder: FormBuilder
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
     this.contractForm = this.formBuilder.group({

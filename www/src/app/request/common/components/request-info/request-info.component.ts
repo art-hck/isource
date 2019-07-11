@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Request} from "../../models/request";
 import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
 import {RequestTypes} from "../../enum/request-types";
+import {DocumentsService} from "../../services/documents.service";
 
 @Component({
   selector: 'app-request-info',
@@ -18,7 +19,9 @@ export class RequestInfoComponent implements OnInit {
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
-  constructor() {
+  constructor(
+    private documentsService: DocumentsService
+  ) {
   }
 
   ngOnInit() {
