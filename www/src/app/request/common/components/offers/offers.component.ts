@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
 import {RequestPosition} from "../../models/request-position";
 import { RequestDocument } from "../../models/request-document";
+import { DocumentsService } from "../../services/documents.service";
 
 
 @Component({
@@ -31,7 +32,8 @@ export class OffersComponent implements OnInit {
   constructor(
     protected offersService: OffersService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private documentsService: DocumentsService
   ) {
   }
 
@@ -122,6 +124,7 @@ export class OffersComponent implements OnInit {
       });
   }
 
-  onDocumentShow($event: RequestDocument) {
+  onDocumentShow(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 }
