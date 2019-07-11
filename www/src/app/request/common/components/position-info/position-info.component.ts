@@ -168,6 +168,11 @@ export class PositionInfoComponent implements OnInit, OnChanges {
       (data: any) => {
         this.updatePositionInfoEvent.emit();
         this.positionInfoEditable = false;
+
+        if (this.requestPositionItem.deliveryDate) {
+          this.requestPositionItem.deliveryDate = moment(this.requestPositionItem.deliveryDate, 'DD.MM.YYYY').format();
+        }
+
         this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
       }
     );
