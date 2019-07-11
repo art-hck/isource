@@ -7,6 +7,7 @@ import {OffersService} from "../../../back-office/services/offers.service";
 import {Request} from "../../models/request";
 import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
 import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-position-info',
@@ -21,6 +22,7 @@ export class PositionInfoComponent implements OnInit {
     this._opened = val;
     this.openedChange.emit(val);
   }
+
   get showInfo() {
     return this._opened;
   }
@@ -36,13 +38,21 @@ export class PositionInfoComponent implements OnInit {
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
 
+  contractForm: FormGroup;
+
   constructor(
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
-    private customerRequestService: CustomerRequestService
-  ) { }
+    private customerRequestService: CustomerRequestService,
+    private formBuilder: FormBuilder
+  ) {
+  }
 
   ngOnInit() {
+    this.contractForm = this.formBuilder.group({
+      comments: [''],
+      documents: [null]
+    });
   }
 
   onPublishOffers(requestPosition: RequestPosition) {
@@ -89,6 +99,12 @@ export class PositionInfoComponent implements OnInit {
           );
         }
       });
+  }
+
+  canDownloadContract(requestPosition: RequestPosition) {
+    return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
+      || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING;
+
   }
 
   onClose() {

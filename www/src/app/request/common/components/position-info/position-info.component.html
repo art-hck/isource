@@ -22,7 +22,7 @@
           </select>
         </div>
         <div class="status" *ngIf="isCustomerView">
-        {{requestPosition.statusLabel}}
+          {{requestPosition.statusLabel}}
         </div>
       </div>
       <div class="clr-row">
@@ -89,7 +89,7 @@
           </clr-tab-content>
         </clr-tab>
         <clr-tab>
-          <button clrTabLink (click)="onHiddenList()">Коммерческие предложения</button>
+          <button clrTabLink>Коммерческие предложения</button>
           <clr-tab-content *clrIfActive>
             <app-offers [requestPosition]="requestPosition"
                         [isCustomerView]="isCustomerView"
@@ -107,10 +107,13 @@
             </div>
           </clr-tab-content>
         </clr-tab>
-        <clr-tab>
+        <clr-tab *ngIf="canDownloadContract(requestPosition)">
           <button clrTabLink>Договор</button>
           <clr-tab-content *clrIfActive>
-            ...
+            <app-contract [requestPosition]="requestPosition"
+                          [requestId]="requestId"
+                          [isCustomerView]="isCustomerView"
+            ></app-contract>
           </clr-tab-content>
         </clr-tab>
         <clr-tab>
