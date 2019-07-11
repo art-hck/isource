@@ -16,10 +16,14 @@ export class MessageService {
     return this.api.get<Message[]>(`requests/positions/${requestPosition.id}/messages`);
   }
 
-  addMessage(requestPosition: RequestPosition, message: Message): Observable<Message> {
-    return this.api.post<Message>(`requests/positions/${requestPosition.id}/messages/create`, {
-      positionId: requestPosition.id,
-      message: message.message
+  addMessage(requestPosition: RequestPosition, message: string, files: File[]): Observable<Message> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
     });
+    formData.append('positionId', requestPosition.id);
+    formData.append('message', message);
+
+    return this.api.post<Message>(`requests/positions/${requestPosition.id}/messages/create`, formData);
   }
 }

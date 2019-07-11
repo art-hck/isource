@@ -27,6 +27,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   messages: Message[];
   sendMessageForm: FormGroup;
+  uploadedFiles: File[] = [];
 
   constructor(
     private messageService: MessageService,
@@ -34,7 +35,8 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
     private userInfoService: UserInfoService
   ) {
     this.sendMessageForm = this.formBuilder.group({
-      message: [null, [Validators.required]]
+      message: [null, [Validators.required]],
+      files: [null]
     });
   }
 
@@ -61,14 +63,16 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   }
 
   onCreateClick(customerData) {
-    const message = new Message();
-    message.message = customerData.message;
-
-    this.messageService.addMessage(this.requestPosition, message)
+    this.messageService.addMessage(this.requestPosition, customerData.message, customerData.files)
       .subscribe((newMessage: Message) => {
         this.messages.push(newMessage);
       });
 
     this.sendMessageForm.reset();
+    this.uploadedFiles = [];
+  }
+
+  onFileSelected(files: File[]) {
+    this.sendMessageForm.get('files').setValue(files);
   }
 }

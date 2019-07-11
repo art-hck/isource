@@ -102,7 +102,6 @@
         *ngIf="!isCustomerView"
         [documents]="linkedOffer.documents"
         (selected)="onUploadDocuments($event, linkedOffer)"
-        (show)="onDocumentShow($event)"
       ></app-document-simple-list>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-1">

@@ -8,6 +8,13 @@
          [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
       {{ message.message }}
 
+      <div class="files" *ngIf="message.documents.length > 0">
+        <app-document-simple-list
+          [documents]="message.documents"
+          [enableUpload]="false">
+        </app-document-simple-list>
+      </div>
+
       <span class="message-date"> {{ message.createdDate | date:'dd.MM.yyyy' }}</span>
     </div>
   </div>
@@ -34,5 +41,11 @@
                 (keydown.control.enter)="onCreateClick(sendMessageForm.value)">
       </textarea>
     </div>
+
+    <app-document-upload-list
+      [documents]="uploadedFiles"
+      [uploadLabel]="'Прикрепить документ'"
+      (fileSelected)="onFileSelected($event)"
+    ></app-document-upload-list>
   </form>
 </div>
