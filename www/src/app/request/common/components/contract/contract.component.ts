@@ -1,10 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Contract} from "../../models/contract";
 import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../models/request-position";
 import {ContractService} from "../../services/contract.service";
 import {RequestContract} from "../../models/request-contract";
+import {RequestDocument} from "../../models/request-document";
 
 @Component({
   selector: 'app-contract',
@@ -15,6 +16,8 @@ export class ContractComponent implements OnChanges, OnInit {
   @Input() requestId: Uuid;
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
+
+  @Output() downloadClick = new EventEmitter<File>();
 
   contractForm: FormGroup;
   contractItem: Contract;
@@ -78,6 +81,10 @@ export class ContractComponent implements OnChanges, OnInit {
         }
       );
     }
-
   }
+
+  onDownloadFile() {
+    this.downloadClick.emit(this.requestContract.documents[0]);
+  }
+
 }
