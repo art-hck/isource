@@ -5,7 +5,6 @@ import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../models/request-position";
 import {ContractService} from "../../services/contract.service";
 import {RequestContract} from "../../models/request-contract";
-import {RequestDocument} from "../../models/request-document";
 
 @Component({
   selector: 'app-contract',
