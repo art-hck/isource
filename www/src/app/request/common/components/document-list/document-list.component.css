@@ -1,3 +1,7 @@
+.file-upload {
+  display: none;
+}
+
 .right-align-button {
   text-align: right;
 }

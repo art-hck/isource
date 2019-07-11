@@ -11,6 +11,7 @@ export class DocumentListComponent implements OnInit {
   @Input() documents: RequestDocument[];
 
   @Output() downloadClick = new EventEmitter<RequestDocument>();
+  @Output() fileSelected = new EventEmitter<File[]>();
 
   constructor() {
   }
@@ -22,4 +23,7 @@ export class DocumentListComponent implements OnInit {
     this.downloadClick.emit(this.documents[0]);
   }
 
+  onChangeDocuments(files: File[]) {
+    this.fileSelected.emit(Array.from(files));
+  }
 }

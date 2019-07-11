@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
-import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {Request} from "../../models/request";
-import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
-import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
-import {DocumentsService} from "../../services/documents.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RequestPosition } from "../../models/request-position";
+import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { Uuid } from "../../../../cart/models/uuid";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { Request } from "../../models/request";
+import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
+import { DocumentsService } from "../../services/documents.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { RequestDocument } from "../../models/request-document";
 
 @Component({
   selector: 'app-position-info',
@@ -114,5 +115,12 @@ export class PositionInfoComponent implements OnInit {
 
   onHiddenList() {
     this.showPositionList.emit();
+  }
+
+  onUploadDocuments(files: File[]) {
+    this.customerRequestService.uploadDocuments(this.requestPosition, files)
+      .subscribe((documents: RequestDocument[]) => {
+        documents.forEach(document => this.requestPosition.documents.push(document));
+      });
   }
 }

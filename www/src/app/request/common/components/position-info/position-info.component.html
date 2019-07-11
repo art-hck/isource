@@ -83,6 +83,7 @@
           <button clrTabLink>Документы</button>
           <clr-tab-content *clrIfActive>
             <app-document-list [documents]="requestPosition.documents"
+                               (fileSelected)="onUploadDocuments($event)"
                                (downloadClick)="documentsService.downloadFile($event)">
             </app-document-list>
           </clr-tab-content>
