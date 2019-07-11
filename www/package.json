@@ -27,6 +27,7 @@
     "angular2-text-mask": "^9.0.0",
     "core-js": "^2.6.9",
     "file-saver": "^2.0.2",
+    "guid-typescript": "^1.0.9",
     "moment": "^2.24.0",
     "ng2-file-upload": "^1.3.0",
     "rxjs": "^6.5.2",

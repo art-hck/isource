@@ -1,0 +1,24 @@
+<ul class="list-unstyled">
+  <li class="document" *ngFor="let document of documents">
+    <button *ngIf="enableDelete"
+            (click)="onDeleteDocument(document)"
+            type="button"
+            class="btn btn-link btn-delete"
+            title="Удалить">
+      {{ deleteLabel }}
+    </button>
+
+    <a (click)="onShowDocument(document)" title="{{ document.filename }}">
+      {{ document.filename }}
+    </a>
+  </li>
+
+  <div class="form-group">
+    <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
+    <input type="file"
+           id="{{ uploadInputId }}"
+           class="file_upload"
+           multiple
+           (change)="onChangeDocuments($event.target.files)">
+  </div>
+</ul>
