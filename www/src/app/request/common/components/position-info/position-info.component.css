@@ -41,7 +41,7 @@ clr-icon {
   padding: 15px 25px 25px 25px;
 }
 
-.select select {
+.select.change-status select {
   display: inline-block;
   padding: 0 15px;
   border: 1px solid white;
@@ -64,8 +64,8 @@ clr-icon {
   flex-direction: column;
 }
 
-.info-content {
-  padding: 0 30px 10px 30px;
+.info-content p {
+  margin: 5px 0 15px 0;
 }
 
 .clr-control-label {
@@ -77,12 +77,13 @@ clr-icon {
 }
 
 .action {
-  display: block;
+  display: table;
+  float: right;
   text-align: right;
 }
 
 .action button {
-  margin: 5px 0 0 0;
+  margin: 10px 0 0 0;
   height: 25px;
 }
 
@@ -91,3 +92,20 @@ clr-icon {
   text-align: right;
 }
 
+
+.position-info form.form label {
+  padding-bottom: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999999;
+}
+
+.position-info .form, form {
+  padding-top: 0;
+}
+
+.checkbox-block,
+.checkbox-block .isDeliveryDateAsap {
+  display: flex;
+  align-items: flex-end;
+}

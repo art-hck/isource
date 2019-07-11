@@ -13,6 +13,7 @@ import {RequestService} from "../../services/request.service";
 })
 export class CustomerRequestViewComponent implements OnInit {
 
+
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
@@ -30,6 +31,15 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
+    this.requestService.getRequestPositions(this.requestId).subscribe(
+      (requestPositions: RequestPosition[]) => {
+        this.requestPositions = requestPositions;
+      }
+    );
+  }
+
+
+  updateState() {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
         this.requestPositions = requestPositions;
