@@ -11,7 +11,6 @@ import {EditRequestService} from "../../services/edit-request.service";
 import {Router} from "@angular/router";
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
   FormGroup,
   ValidationErrors,
@@ -19,7 +18,6 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
-import {RequestItem} from "../../models/request-item";
 import {DocumentsService} from "../../services/documents.service";
 
 @Component({
@@ -91,7 +89,6 @@ export class PositionInfoComponent implements OnInit, OnChanges {
 
 
   getDeliveryDate(val: any) {
-    console.log(val);
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
       return moment(val).format('DD.MM.YYYY');
     } else {
@@ -178,7 +175,6 @@ export class PositionInfoComponent implements OnInit, OnChanges {
   }
 
 
-
   onPublishOffers(requestPosition: RequestPosition) {
     this.offersService.publishOffers(this.requestId, requestPosition.id).subscribe(
       (data: any) => {
@@ -227,7 +223,6 @@ export class PositionInfoComponent implements OnInit, OnChanges {
   canDownloadContract(requestPosition: RequestPosition) {
     return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
       || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING;
-
   }
 
 }

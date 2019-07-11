@@ -44,10 +44,6 @@ export class RequestViewComponent implements OnInit {
   }
 
   onUpdateInfo(requestPosition: RequestPosition[]) {
-    console.log(this.selectedRequestPosition);
-    console.log(this.selectedIndex);
-    console.log(requestPosition[this.selectedIndex]);
-
     this.updatePositionInfoEvent.emit();
     this.selectedRequestPosition = requestPosition[this.selectedIndex];
   }
