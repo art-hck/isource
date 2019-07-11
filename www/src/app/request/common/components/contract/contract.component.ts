@@ -35,13 +35,19 @@ export class ContractComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.getCustomerContract();
+    this.getContractList();
     this.uploadedFiles = [];
   }
 
-  getCustomerContract() {
+  getContractList() {
     if (this.isCustomerView) {
       this.contractService.getCustomerContract(this.requestId, this.requestPosition).subscribe(
+        (data: any) => {
+          this.requestContract = data;
+        }
+      );
+    } else {
+      this.contractService.getBackofficeContract(this.requestId, this.requestPosition).subscribe(
         (data: any) => {
           this.requestContract = data;
         }
@@ -55,12 +61,23 @@ export class ContractComponent implements OnChanges, OnInit {
 
   onAddContract() {
     this.contractItem = this.contractForm.value;
-    return this.contractService.addContract(this.requestId, this.requestPosition, this.contractItem).subscribe(
-      (data: any) => {
-        this.contractForm.reset();
-        this.uploadedFiles = [];
-        this.getCustomerContract();
-      }
-    );
+    if (this.isCustomerView) {
+      return this.contractService.addCustomerContract(this.requestId, this.requestPosition, this.contractItem).subscribe(
+        (data: any) => {
+          this.contractForm.reset();
+          this.uploadedFiles = [];
+          this.getContractList();
+        }
+      );
+    } else {
+      return this.contractService.addBackofficeContract(this.requestId, this.requestPosition, this.contractItem).subscribe(
+        (data: any) => {
+          this.contractForm.reset();
+          this.uploadedFiles = [];
+          this.getContractList();
+        }
+      );
+    }
+
   }
 }
