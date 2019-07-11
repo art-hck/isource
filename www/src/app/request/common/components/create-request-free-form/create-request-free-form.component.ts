@@ -36,7 +36,6 @@ export class CreateRequestFreeFormComponent implements OnInit {
   }
 
   onFreeFormDocumentSelected(documents: File[], form: FormGroup) {
-    console.log(form);
     form['controls'].documents.setValue(documents);
   }
 
@@ -51,7 +50,6 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
 
   checkCanSendRequest(value: any) {
-    console.log(value);
     if (value.documents) {
       return !(value.documents.length === 0);
     }

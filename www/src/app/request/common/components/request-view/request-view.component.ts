@@ -28,7 +28,7 @@ export class RequestViewComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
+    this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
   }
 
   onSelectPosition(requestPosition: RequestPosition, i: number) {

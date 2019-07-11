@@ -6,7 +6,7 @@
 
         </div>
         <div class="clr-col-2 grey">
-          <clr-icon shape="collapse-card" size="20" style="transform: rotate(90deg);"></clr-icon>
+          <clr-icon shape="angle-double" size="20" style="transform: rotate(270deg);"></clr-icon>
           <clr-icon shape="window-close"></clr-icon>
         </div>
       </div>
@@ -21,16 +21,19 @@
             </option>
           </select>
         </div>
-        <div class="status" *ngIf="isCustomerView">
-        {{requestPosition.statusLabel}}
+
+        <div class="status status-position-{{requestPosition.status}}" *ngIf="isCustomerView">
+          {{requestPosition.statusLabel}}
         </div>
       </div>
+
       <div class="clr-row">
         <div class="clr-col-10">
           <h4>{{requestPosition.name}}</h4>
         </div>
+
         <div class="clr-col-2 grey">
-          <span class="quantity">{{requestPosition.quantity}}</span>{{requestPosition.measureUnit}}
+          <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
         </div>
       </div>
 
@@ -55,6 +58,7 @@
 
               <label class="clr-control-label">Условия оплаты</label>
               <p>{{requestPosition.paymentTerms}}</p>
+
               <label class="clr-control-label">Начальная максимальная цена</label>
               <p><span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}</p>
 
@@ -62,13 +66,12 @@
                 Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
               </label>
               <p>{{requestPosition.productionDocument}}</p>
-              <div class="relatedServices" *ngIf="requestPosition.relatedServices">
 
-                <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
-                  (ШМР,
-                  ПНР)</label>
+              <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+                <label class="clr-control-label nopadding">Необходимость сопутствующих услуг (ШМР, ПНР)</label>
                 <p>{{requestPosition.relatedServices}}</p>
               </div>
+
               <div class="relatedServices" *ngIf="requestPosition.comments">
                 <label class="clr-control-label">Примечания/комментрии</label>
                 <p>{{requestPosition.comments}}</p>
@@ -79,7 +82,9 @@
         <clr-tab>
           <button clrTabLink>Документы</button>
           <clr-tab-content *clrIfActive>
-            <app-document-list [documents]="requestPosition.documents"></app-document-list>
+            <app-document-list [documents]="requestPosition.documents"
+                               (downloadClick)="documentsService.downloadFile($event)">
+            </app-document-list>
           </clr-tab-content>
         </clr-tab>
         <clr-tab>
@@ -89,7 +94,7 @@
           </clr-tab-content>
         </clr-tab>
         <clr-tab>
-          <button clrTabLink (click)="onHiddenList()">Коммерческие предложения</button>
+          <button clrTabLink>Коммерческие предложения</button>
           <clr-tab-content *clrIfActive>
             <app-offers [requestPosition]="requestPosition"
                         [isCustomerView]="isCustomerView"
@@ -107,10 +112,13 @@
             </div>
           </clr-tab-content>
         </clr-tab>
-        <clr-tab>
+        <clr-tab *ngIf="canDownloadContract(requestPosition)">
           <button clrTabLink>Договор</button>
           <clr-tab-content *clrIfActive>
-            ...
+            <app-contract [requestPosition]="requestPosition"
+                          [requestId]="requestId"
+                          [isCustomerView]="isCustomerView"
+            ></app-contract>
           </clr-tab-content>
         </clr-tab>
         <clr-tab>

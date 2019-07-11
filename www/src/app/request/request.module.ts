@@ -20,6 +20,7 @@ import {PositionInfoComponent} from "./common/components/position-info/position-
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
 import {RequestViewComponent} from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
+import { ContractComponent } from './common/components/contract/contract.component';
 import { DocumentSimpleListComponent } from "./common/components/document-simple-list/document-simple-list.component";
 
 
@@ -41,6 +42,7 @@ import { DocumentSimpleListComponent } from "./common/components/document-simple
     PositionInfoComponent,
     RequestViewComponent,
     CustomerRequestViewComponent,
+    ContractComponent,
     DocumentSimpleListComponent
   ],
   imports: [
