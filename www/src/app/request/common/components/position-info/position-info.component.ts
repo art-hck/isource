@@ -164,12 +164,11 @@ export class PositionInfoComponent implements OnInit, OnChanges {
 
   onSavePositionInfo() {
     this.requestPositionItem = this.positionInfoDataForm.value;
-
     return this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
       (data: any) => {
         this.updatePositionInfoEvent.emit();
         this.positionInfoEditable = false;
-        this.requestPosition = this.requestPositionItem;
+        this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
       }
     );
   }
