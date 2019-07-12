@@ -90,6 +90,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       relatedServices: [this.requestPosition.relatedServices],
       comments: [this.requestPosition.comments]
     });
+
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
         itemForm.get('deliveryDate').disable();
