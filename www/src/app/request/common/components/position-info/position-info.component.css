@@ -41,7 +41,7 @@ clr-icon {
   padding: 15px 25px 25px 25px;
 }
 
-.select select {
+.select.change-status select {
   display: inline-block;
   padding: 0 15px;
   border: 1px solid white;
@@ -64,11 +64,11 @@ clr-icon {
   flex-direction: column;
 }
 
-.info-content {
-  padding: 0 30px 10px 30px;
+.info-content p {
+  margin: 5px 0 15px 0;
 }
 
-.clr-control-label {
+::ng-deep .clr-control-label {
   font-size: 13px;
 }
 
@@ -77,17 +77,17 @@ clr-icon {
 }
 
 .action {
-  display: block;
+  display: table;
+  float: right;
   text-align: right;
 }
 
 .action button {
-  margin: 5px 0 0 0;
+  margin: 10px 0 0 0;
   height: 25px;
 }
 
-.submit {
+::ng-deep .submit {
   display: block;
   text-align: right;
 }
-

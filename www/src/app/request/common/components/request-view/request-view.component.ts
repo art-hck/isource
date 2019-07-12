@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../models/request";
 import {RequestPosition} from "../../models/request-position";
@@ -17,14 +17,14 @@ export class RequestViewComponent implements OnInit {
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
 
+  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+
   selectedRequestPosition: RequestPosition;
   showInfo = false;
   showRequestInfo: boolean;
   showPositionList = true;
   showUploadPositionsFromExcelForm = false;
   selectedIndex: number;
-
-  requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
   constructor(
     private createRequestPositionService: CreateRequestPositionService
@@ -45,6 +45,11 @@ export class RequestViewComponent implements OnInit {
   onSelectRequest() {
     this.showRequestInfo = true;
     this.showInfo = false;
+  }
+
+  onUpdateInfo(requestPosition: RequestPosition[]) {
+    this.updatePositionInfoEvent.emit();
+    this.selectedRequestPosition = requestPosition[this.selectedIndex];
   }
 
   onUploadPositionsFromExcel() {

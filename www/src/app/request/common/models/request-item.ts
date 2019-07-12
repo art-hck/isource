@@ -16,4 +16,5 @@ export class RequestItem {
   relatedServices?: string;
   comments?: string;
   linkedOffers: RequestOfferPosition[];
+  requestId?: Uuid;
 }

@@ -57,10 +57,12 @@
           </div>
 
           <div class="delivery-date clr-col" *ngIf="!(showInfo || showRequestInfo)">
-            <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
+            <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
               как можно скорее
             </div>
-            {{requestPosition.deliveryDate | date :'shortDate'}}
+            <ng-template #notAsap>
+              {{requestPosition.deliveryDate | date :'shortDate'}}
+            </ng-template>
           </div>
 
           <div class="position-price clr-col" *ngIf="!(showInfo || showRequestInfo)">
@@ -90,6 +92,7 @@
                          [(showInfo)]="showInfo"
                          [requestId]="requestId"
                          (showPositionList)="showPositionList"
+                         (updatePositionInfoEvent)="onUpdateInfo(requestPositions)"
                          [isCustomerView]="isCustomerView">
       </app-position-info>
     </div>
