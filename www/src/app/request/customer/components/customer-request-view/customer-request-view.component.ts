@@ -31,11 +31,7 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
-    this.requestService.getRequestPositions(this.requestId).subscribe(
-      (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions;
-      }
-    );
+    this.updateState();
   }
 
 

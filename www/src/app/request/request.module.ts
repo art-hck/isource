@@ -21,6 +21,7 @@ import { BackOfficeRequestViewComponent } from './back-office/components/back-of
 import {RequestViewComponent} from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { ContractComponent } from './common/components/contract/contract.component';
+import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { ContractComponent } from './common/components/contract/contract.compone
     PositionInfoComponent,
     RequestViewComponent,
     CustomerRequestViewComponent,
-    ContractComponent
+    ContractComponent,
+    EditPositionInfoFormComponent
   ],
   imports: [
     SharedModule,
