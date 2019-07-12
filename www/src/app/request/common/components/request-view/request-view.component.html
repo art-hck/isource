@@ -8,9 +8,21 @@
       <button class="btn btn-link"><clr-icon shape="plus-circle"></clr-icon>
         <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
       </button>
-      <button class="btn btn-link"><clr-icon shape="upload"></clr-icon>
+      <button class="btn btn-link" (click)="onUploadPositionsFromExcel()"><clr-icon shape="upload"></clr-icon>
         <span *ngIf="!(showInfo || showRequestInfo)">Загрузить из шаблона</span>
       </button>
+    </div>
+
+    <div class="card" *ngIf="showUploadPositionsFromExcelForm">
+      <div class="card-block">
+        <div class="card-text">
+          <app-add-from-excel
+            (submit)="onSendExcelFile($event)"
+            [templateUrl]="'assets/RequestTemplate.xlsx'"
+          >
+          </app-add-from-excel>
+        </div>
+      </div>
     </div>
 
     <div class="card-content">

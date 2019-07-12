@@ -6,8 +6,8 @@ import {RequestOfferPosition} from "../../models/request-offer-position";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
 import {RequestPosition} from "../../models/request-position";
-import {OrderPositionsComponent} from "../../../../order/components/general/order-positions/order-positions.component";
-import {RequestViewComponent} from "../request-view/request-view.component";
+import { RequestDocument } from "../../models/request-document";
+import { DocumentsService } from "../../services/documents.service";
 
 
 @Component({
@@ -30,7 +30,7 @@ export class OffersComponent implements OnInit {
   showAddOfferForm = false;
 
   constructor(
-    private offersService: OffersService,
+    protected offersService: OffersService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder
   ) {
@@ -113,5 +113,13 @@ export class OffersComponent implements OnInit {
 
   canChoiceWinner() {
     return this.requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
+  }
+
+  onUploadDocuments(files: File[], offer: RequestOfferPosition) {
+    this.offersService.uploadDocuments(offer, files)
+      .subscribe((documents: RequestDocument[]) => {
+        console.log(documents);
+        documents.forEach(document => offer.documents.push(document));
+      });
   }
 }

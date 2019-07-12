@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
+ *
+ * Используется для отображения списка еще НЕ загруженных файлов!
  */
 @Component({
   selector: 'app-document-upload-list',
@@ -10,12 +12,11 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class DocumentUploadListComponent implements OnInit {
 
-  @Output() fileSelected = new EventEmitter<File[]>();
-
   @Input() documents: File[] = [];
 
-  constructor() {
-  }
+  @Input() uploadLabel = 'Выбрать документ';
+
+  @Output() fileSelected = new EventEmitter<File[]>();
 
   ngOnInit() {
   }

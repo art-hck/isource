@@ -1,6 +1,7 @@
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { saveAs } from 'file-saver/src/FileSaver';
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
+import { RequestDocument } from "../models/request-document";
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,14 @@ export class DocumentsService {
   ) {
   }
 
-  downloadFile(event: any): void {
+  downloadFile(event: RequestDocument): void {
     const file = event;
     const fileName = file.filename;
     const fileId = file.id;
     this.api.post(
       `requests/documents/${fileId}/download`,
       {},
-      { responseType: 'blob' })
+      {responseType: 'blob'})
       .subscribe(data => {
         saveAs(data, fileName);
       });

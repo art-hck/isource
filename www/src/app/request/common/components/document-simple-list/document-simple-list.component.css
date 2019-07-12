@@ -1,0 +1,15 @@
+.file_upload {
+  display: none;
+}
+
+.btn-delete {
+  color: #888;
+  padding: 0 5px;
+  margin: 0;
+}
+
+.document {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

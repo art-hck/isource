@@ -22,6 +22,7 @@ import {RequestViewComponent} from "./common/components/request-view/request-vie
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { ContractComponent } from './common/components/contract/contract.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
+import { DocumentSimpleListComponent } from "./common/components/document-simple-list/document-simple-list.component";
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { EditPositionInfoFormComponent } from './common/components/edit-position
     RequestViewComponent,
     CustomerRequestViewComponent,
     ContractComponent,
+    DocumentSimpleListComponent,
     EditPositionInfoFormComponent
   ],
   imports: [
