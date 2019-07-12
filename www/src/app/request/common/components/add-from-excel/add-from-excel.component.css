@@ -7,7 +7,6 @@
 }
 
 .from-excel-request-content span {
-  width: 470px;
   line-height: 1.5;
   display: block;
   padding-bottom: 10px;
@@ -48,7 +47,6 @@ input#file_upload {
 
 .submit {
   text-align: right;
-  width: 1000px;
 }
 
 .btn-primary {
