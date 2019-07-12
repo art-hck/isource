@@ -42,6 +42,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getMessages();
+    this.formReset();
   }
 
   ngAfterViewChecked() {
@@ -54,6 +55,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
         this.messages = messages;
       });
   }
+
   scrollToBottom(): void {
     this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
@@ -68,11 +70,15 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
         this.messages.push(newMessage);
       });
 
-    this.sendMessageForm.reset();
-    this.uploadedFiles = [];
+    this.formReset();
   }
 
   onFileSelected(files: File[]) {
     this.sendMessageForm.get('files').setValue(files);
+  }
+
+  formReset() {
+    this.sendMessageForm.reset();
+    this.uploadedFiles = [];
   }
 }

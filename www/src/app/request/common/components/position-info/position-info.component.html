@@ -119,6 +119,7 @@
             <app-contract [requestPosition]="requestPosition"
                           [requestId]="requestId"
                           [isCustomerView]="isCustomerView"
+                          (downloadClick)="documentsService.downloadFile($event)"
             ></app-contract>
           </clr-tab-content>
         </clr-tab>
