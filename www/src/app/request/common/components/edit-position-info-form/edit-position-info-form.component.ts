@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RequestPosition} from "../../models/request-position";
 import {OffersService} from "../../../back-office/services/offers.service";
 import {EditRequestService} from "../../services/edit-request.service";
@@ -18,11 +18,10 @@ import * as moment from "moment";
   templateUrl: './edit-position-info-form.component.html',
   styleUrls: ['./edit-position-info-form.component.css']
 })
-export class EditPositionInfoFormComponent implements OnInit, OnChanges {
+export class EditPositionInfoFormComponent implements OnInit {
 
   positionInfoDataForm: FormGroup;
   requestPositionItem: RequestPosition;
-
 
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
@@ -39,15 +38,9 @@ export class EditPositionInfoFormComponent implements OnInit, OnChanges {
   ) { }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.positionInfoDataForm = this.addItemFormGroup();
-  }
-
   ngOnInit() {
     this.positionInfoDataForm = this.addItemFormGroup();
   }
-
-
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -63,11 +56,9 @@ export class EditPositionInfoFormComponent implements OnInit, OnChanges {
     };
   }
 
-
   checkIfSelected(val) {
     return (val === this.requestPosition.currency);
   }
-
 
   changeDeliveryDate(val: any) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
@@ -80,8 +71,6 @@ export class EditPositionInfoFormComponent implements OnInit, OnChanges {
   get dateObject() {
     return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
   }
-
-
 
   addItemFormGroup(): FormGroup {
     const itemForm = this.formBuilder.group({
@@ -109,20 +98,13 @@ export class EditPositionInfoFormComponent implements OnInit, OnChanges {
       }
     });
 
-    itemForm.updateValueAndValidity();
-    itemForm.markAllAsTouched();
-
     return itemForm;
   }
-
-
 
   isFieldValid(field: string) {
     return this.positionInfoDataForm.get(field).errors
       && (this.positionInfoDataForm.get(field).touched || this.positionInfoDataForm.get(field).dirty);
   }
-
-
 
   onSavePositionInfo() {
     this.requestPositionItem = this.positionInfoDataForm.value;

@@ -10,12 +10,8 @@ import {RequestService as CustomerRequestService} from "../../../customer/servic
 import {EditRequestService} from "../../services/edit-request.service";
 import {Router} from "@angular/router";
 import {
-  AbstractControl,
   FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
+  FormGroup
 } from "@angular/forms";
 import * as moment from "moment";
 import {DocumentsService} from "../../services/documents.service";
@@ -60,7 +56,6 @@ export class PositionInfoComponent implements OnInit {
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
     private customerRequestService: CustomerRequestService,
-    protected router: Router,
     private documentsService: DocumentsService
   ) { }
 
