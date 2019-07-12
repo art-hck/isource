@@ -6,7 +6,7 @@
 
   <clr-dg-row *ngFor="let document of documents">
     <clr-dg-cell class="clr-col-6">
-      <a (click)="onDownloadFile()">{{ document.filename }}</a>
+      <a (click)="onDownloadFile(document)">{{ document.filename }}</a>
     </clr-dg-cell>
 
     <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
@@ -23,5 +23,10 @@
 </ng-container>
 
 <div class="right-align-button">
-  <button class="btn btn-link"><b>Загрузить</b></button>
+  <label for="document-list-upload" class="file-upload-label"><a>Загрузить</a></label>
+  <input type="file"
+         id="document-list-upload"
+         class="file-upload"
+         multiple
+         (change)="onChangeDocuments($event.target.files)">
 </div>

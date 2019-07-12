@@ -1,20 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
-import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {Request} from "../../models/request";
-import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
-import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RequestPosition } from "../../models/request-position";
+import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { Uuid } from "../../../../cart/models/uuid";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { Request } from "../../models/request";
+import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { RequestDocument } from "../../models/request-document";
 import {EditRequestService} from "../../services/edit-request.service";
-import {Router} from "@angular/router";
-import {
-  FormBuilder,
-  FormGroup
-} from "@angular/forms";
 import * as moment from "moment";
-import {DocumentsService} from "../../services/documents.service";
 
 @Component({
   selector: 'app-position-info',
@@ -55,8 +51,7 @@ export class PositionInfoComponent implements OnInit {
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
-    private customerRequestService: CustomerRequestService,
-    private documentsService: DocumentsService
+    private customerRequestService: CustomerRequestService
   ) { }
 
 
@@ -138,4 +133,10 @@ export class PositionInfoComponent implements OnInit {
     this.requestPosition = requestPosition;
   }
 
+  onUploadDocuments(files: File[]) {
+    this.customerRequestService.uploadDocuments(this.requestPosition, files)
+      .subscribe((documents: RequestDocument[]) => {
+        documents.forEach(document => this.requestPosition.documents.push(document));
+      });
+  }
 }
