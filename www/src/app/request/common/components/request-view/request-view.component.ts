@@ -4,6 +4,7 @@ import {Request} from "../../models/request";
 import {RequestPosition} from "../../models/request-position";
 import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
 import {RequestTypes} from "../../enum/request-types";
+import {CreateRequestPositionService} from "../../services/create-request-position.service";
 
 @Component({
   selector: 'app-request-view',
@@ -20,11 +21,14 @@ export class RequestViewComponent implements OnInit {
   showInfo = false;
   showRequestInfo: boolean;
   showPositionList = true;
+  showUploadPositionsFromExcelForm = false;
   selectedIndex: number;
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
-  constructor() {
+  constructor(
+    private createRequestPositionService: CreateRequestPositionService
+  ) {
   }
 
   ngOnInit() {
@@ -41,5 +45,39 @@ export class RequestViewComponent implements OnInit {
   onSelectRequest() {
     this.showRequestInfo = true;
     this.showInfo = false;
+  }
+
+  onUploadPositionsFromExcel() {
+    this.showUploadPositionsFromExcelForm = !this.showUploadPositionsFromExcelForm;
+  }
+
+  onSendExcelFile(files: File[]): void {
+    if (this.isCustomerView) {
+      this.createRequestPositionService
+        .addCustomerRequestPositionsFromExcel(this.request, files)
+        .subscribe((data: any) => {
+          // TODO перезагружать позиции
+          window.location.href = window.location.href;
+        }, (error: any) => {
+          let msg = 'Ошибка в шаблоне';
+          if (error && error.error && error.error.detail) {
+            msg = `${msg}: ${error.error.detail}`;
+          }
+          alert(msg);
+        });
+    } else {
+      this.createRequestPositionService
+        .addCustomerRequestPositionsFromExcel(this.request, files)
+        .subscribe((data: any) => {
+          // TODO перезагружать позиции
+          window.location.href = window.location.href;
+        }, (error: any) => {
+          let msg = 'Ошибка в шаблоне';
+          if (error && error.error && error.error.detail) {
+            msg = `${msg}: ${error.error.detail}`;
+          }
+          alert(msg);
+        });
+    }
   }
 }
