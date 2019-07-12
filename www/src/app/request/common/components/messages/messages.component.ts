@@ -27,6 +27,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   messages: Message[];
   sendMessageForm: FormGroup;
+  uploadedFiles: File[] = [];
 
   constructor(
     private messageService: MessageService,
@@ -34,12 +35,14 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
     private userInfoService: UserInfoService
   ) {
     this.sendMessageForm = this.formBuilder.group({
-      message: [null, [Validators.required]]
+      message: [null, [Validators.required]],
+      files: [null]
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getMessages();
+    this.formReset();
   }
 
   ngAfterViewChecked() {
@@ -52,6 +55,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
         this.messages = messages;
       });
   }
+
   scrollToBottom(): void {
     this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
@@ -61,14 +65,20 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   }
 
   onCreateClick(customerData) {
-    const message = new Message();
-    message.message = customerData.message;
-
-    this.messageService.addMessage(this.requestPosition, message)
+    this.messageService.addMessage(this.requestPosition, customerData.message, customerData.files)
       .subscribe((newMessage: Message) => {
         this.messages.push(newMessage);
       });
 
+    this.formReset();
+  }
+
+  onFileSelected(files: File[]) {
+    this.sendMessageForm.get('files').setValue(files);
+  }
+
+  formReset() {
     this.sendMessageForm.reset();
+    this.uploadedFiles = [];
   }
 }

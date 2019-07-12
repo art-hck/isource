@@ -32,8 +32,7 @@ export class OffersComponent implements OnInit {
   constructor(
     protected offersService: OffersService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private documentsService: DocumentsService
+    private formBuilder: FormBuilder
   ) {
   }
 
@@ -122,9 +121,5 @@ export class OffersComponent implements OnInit {
         console.log(documents);
         documents.forEach(document => offer.documents.push(document));
       });
-  }
-
-  onDocumentShow(document: RequestDocument) {
-    this.documentsService.downloadFile(document);
   }
 }

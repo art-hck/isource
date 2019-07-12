@@ -1,7 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestDocument } from "../../models/request-document";
 import { Guid } from "guid-typescript";
+import { DocumentsService } from "../../services/documents.service";
 
+/**
+ * Компонент для отображение списка документов и загрузки новых документов в этот список
+ *
+ * Используется для отображения списка уже загруженных документов!
+ */
 @Component({
   selector: 'app-document-simple-list',
   templateUrl: './document-simple-list.component.html',
@@ -19,11 +25,12 @@ export class DocumentSimpleListComponent implements OnInit {
 
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
-  @Output() show = new EventEmitter<RequestDocument>();
 
   protected uploadInputId;
 
-  constructor() {
+  constructor(
+    private documentsService: DocumentsService
+  ) {
     this.uploadInputId = Guid.create();
   }
 
@@ -34,8 +41,8 @@ export class DocumentSimpleListComponent implements OnInit {
     this.delete.emit(document);
   }
 
-  onShowDocument(document: RequestDocument) {
-    this.show.emit(document);
+  onDownloadDocument(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 
   onChangeDocuments(files: FileList) {

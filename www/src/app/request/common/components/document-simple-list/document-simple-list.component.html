@@ -8,12 +8,12 @@
       {{ deleteLabel }}
     </button>
 
-    <a (click)="onShowDocument(document)" title="{{ document.filename }}">
+    <a (click)="onDownloadDocument(document)" title="{{ document.filename }}">
       {{ document.filename }}
     </a>
   </li>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="enableUpload">
     <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
     <input type="file"
            id="{{ uploadInputId }}"
