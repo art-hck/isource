@@ -18,7 +18,7 @@
   <clr-dg-column class="clr-col-2">Комментарии</clr-dg-column>
 
   <clr-dg-row *ngFor="let document of requestContract?.documents">
-    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile()">{{ document.filename }}</a>
+    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2">{{requestPosition.statusLabel}}</clr-dg-cell>

@@ -83,8 +83,7 @@
           <button clrTabLink>Документы</button>
           <clr-tab-content *clrIfActive>
             <app-document-list [documents]="requestPosition.documents"
-                               (fileSelected)="onUploadDocuments($event)"
-                               (downloadClick)="documentsService.downloadFile($event)">
+                               (fileSelected)="onUploadDocuments($event)">
             </app-document-list>
           </clr-tab-content>
         </clr-tab>
@@ -119,7 +118,6 @@
             <app-contract [requestPosition]="requestPosition"
                           [requestId]="requestId"
                           [isCustomerView]="isCustomerView"
-                          (downloadClick)="documentsService.downloadFile($event)"
             ></app-contract>
           </clr-tab-content>
         </clr-tab>

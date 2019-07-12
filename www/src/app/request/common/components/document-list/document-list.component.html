@@ -6,7 +6,7 @@
 
   <clr-dg-row *ngFor="let document of documents">
     <clr-dg-cell class="clr-col-6">
-      <a (click)="onDownloadFile()">{{ document.filename }}</a>
+      <a (click)="onDownloadFile(document)">{{ document.filename }}</a>
     </clr-dg-cell>
 
     <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>

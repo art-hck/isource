@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { RequestDocument } from "../../models/request-document";
+import { DocumentsService } from "../../services/documents.service";
 
 @Component({
   selector: 'app-document-list',
@@ -10,17 +11,18 @@ export class DocumentListComponent implements OnInit {
 
   @Input() documents: RequestDocument[];
 
-  @Output() downloadClick = new EventEmitter<RequestDocument>();
   @Output() fileSelected = new EventEmitter<File[]>();
 
-  constructor() {
+  constructor(
+    private documentsService: DocumentsService
+  ) {
   }
 
   ngOnInit() {
   }
 
-  onDownloadFile() {
-    this.downloadClick.emit(this.documents[0]);
+  onDownloadFile(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 
   onChangeDocuments(files: File[]) {

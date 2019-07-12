@@ -1,7 +1,7 @@
-import {Contract} from "./contract";
 import {Uuid} from "../../../cart/models/uuid";
+import { RequestDocument } from "./request-document";
 
-export class RequestContract extends Contract {
+export class RequestContract {
   createdDate: string;
   customerContragentId: Uuid;
   id: Uuid;
@@ -11,4 +11,6 @@ export class RequestContract extends Contract {
   requestOfferPositionWinnerId: Uuid;
   requestPositionId: Uuid;
   supplierContragentId: Uuid;
+  comments?: string;
+  documents?: RequestDocument[];
 }
