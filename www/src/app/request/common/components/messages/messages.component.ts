@@ -42,7 +42,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getMessages();
-    this.clearFileList();
+    this.formReset();
   }
 
   ngAfterViewChecked() {
@@ -70,15 +70,15 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
         this.messages.push(newMessage);
       });
 
-    this.sendMessageForm.reset();
-    this.clearFileList();
+    this.formReset();
   }
 
   onFileSelected(files: File[]) {
     this.sendMessageForm.get('files').setValue(files);
   }
 
-  clearFileList() {
+  formReset() {
+    this.sendMessageForm.reset();
     this.uploadedFiles = [];
   }
 }
