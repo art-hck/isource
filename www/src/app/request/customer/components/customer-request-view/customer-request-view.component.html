@@ -1,6 +1,7 @@
 <app-request-view [isCustomerView]="true"
                   [request]="request"
                   [requestPositions]="requestPositions"
-                  [requestId]="requestId">
+                  [requestId]="requestId"
+                  (updatePositionInfoEvent)="updateState()">
 
 </app-request-view>

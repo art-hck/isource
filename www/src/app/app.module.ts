@@ -24,6 +24,7 @@ import { CreateRequestService } from "./request/common/services/create-request.s
 import { RegistrationComponent } from './registration/components/registration.component';
 import { RegistrationService } from "./registration/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
+import {EditRequestService} from "./request/common/services/edit-request.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -61,6 +62,7 @@ registerLocaleData(localeRu, 'ru');
     },
     AccessGuard,
     CreateRequestService,
+    EditRequestService,
     RegistrationService,
     GetRequestsService,
     CartStoreService,

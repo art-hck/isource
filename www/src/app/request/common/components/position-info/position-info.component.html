@@ -3,18 +3,20 @@
     <div class="action-bar">
       <div class="clr-row action-row">
         <div class="clr-col-10">
-
         </div>
+
         <div class="clr-col-2 grey">
           <clr-icon shape="angle-double" size="20" style="transform: rotate(270deg);"></clr-icon>
           <clr-icon shape="window-close"></clr-icon>
         </div>
       </div>
     </div>
+
     <div class="card-content">
       <div class="clr-row select-align">
-        <div class="select" *ngIf="!isCustomerView">
-          <select name="status" (change)="onChangeStatus(requestPosition, $event.target.value)"
+        <div class="clr-col select change-status" *ngIf="!isCustomerView">
+          <select name="status"
+                  (change)="onChangeStatus(requestPosition, $event.target.value)"
                   [value]="requestPosition.status">
             <option *ngFor="let status of requestPositionWorkflowStepLabels"
                     [(value)]="status[0]">{{status[1]}}
@@ -33,7 +35,7 @@
         </div>
 
         <div class="clr-col-2 grey">
-          <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+          <span class="quantity">{{requestPosition.quantity}}</span> {{requestPosition.measureUnit}}
         </div>
       </div>
 
@@ -41,26 +43,32 @@
         <clr-tab>
           <button clrTabLink>Общая информация</button>
           <clr-tab-content *clrIfActive="true">
-            <div class="info-content">
-              <div class="clr-row action">
-                <button class="btn btn-link">
-                  <clr-icon shape="pencil"></clr-icon>
+            <div class="clr-row info-content">
+              <div class="clr-col-12 action">
+                <button class="btn btn-link position-info-edit-btn"
+                        (click)="positionInfoEditable = !positionInfoEditable">
+                  <clr-icon size="16" shape="pencil" [class.is-solid]="positionInfoEditable"></clr-icon>
+                  <span> Редактировать</span>
                 </button>
               </div>
-              <label class="clr-control-label"> Необходимый срок поставки</label>
-              <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap">
-                как можно скорее
-                <p>{{requestPosition.deliveryDate | date :'shortDate'}}</p>
-              </div>
-              <label class="clr-control-label">Базис поставки (пункт, до которого требуется
-                доставка)</label>
-              <p>{{requestPosition.deliveryBasis}}</p>
+
+              <div class="clr-col-12" *ngIf="!positionInfoEditable; else positionInfoEditForm">
+                <label class="clr-control-label">Наименование МТР</label>
+                <p>{{requestPosition.name}}</p>
+
+                <label class="clr-control-label">Необходимый срок поставки</label>
+                <div class="deliveryDate"
+                     *ngIf="requestPosition.isDeliveryDateAsap; else notAsapDate">как можно скорее</div>
+                <ng-template #notAsapDate><p>{{ getDeliveryDate(requestPosition.deliveryDate) }}</p></ng-template>
+
+                <label class="clr-control-label">Базис поставки (пункт, до которого требуется доставка)</label>
+                <p>{{requestPosition.deliveryBasis}}</p>
 
               <label class="clr-control-label">Условия оплаты</label>
               <p>{{requestPosition.paymentTerms}}</p>
 
               <label class="clr-control-label">Начальная максимальная цена</label>
-              <p><span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}</p>
+              <p><span class="quantity">{{requestPosition.startPrice}}</span> {{requestPosition.currency}}</p>
 
               <label class="clr-control-label">
                 Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
@@ -75,10 +83,24 @@
               <div class="relatedServices" *ngIf="requestPosition.comments">
                 <label class="clr-control-label">Примечания/комментрии</label>
                 <p>{{requestPosition.comments}}</p>
-              </div>
+              </div></div>
+
+
+
+              <ng-template #positionInfoEditForm>
+                <div class="clr-col-12">
+                  <app-edit-position-info-form [requestPosition]="requestPosition"
+                                               (updatedRequestPositionItem)="getUpdatedRequestPositionInfo($event)"
+                                               (positionInfoEditable)="onChangeEditableFormState($event)"
+                                               (updatePositionInfoEvent)="onUpdateInfo()">
+                  </app-edit-position-info-form>
+                </div>
+
+              </ng-template>
             </div>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
           <button clrTabLink>Документы</button>
           <clr-tab-content *clrIfActive>
@@ -87,24 +109,29 @@
             </app-document-list>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
           <button clrTabLink>Согласование</button>
           <clr-tab-content *clrIfActive>
             <app-messages [requestPosition]="requestPosition"></app-messages>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
           <button clrTabLink>Коммерческие предложения</button>
           <clr-tab-content *clrIfActive>
             <app-offers [requestPosition]="requestPosition"
                         [isCustomerView]="isCustomerView"
                         (offerWinner)="getOfferWinner($event)"
-                        [requestId]="requestId"></app-offers>
+                        [requestId]="requestId">
+            </app-offers>
+
             <div class="submit">
               <button class="btn btn-primary"
                       (click)="onPublishOffers(requestPosition)"
                       *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
               </button>
+
               <button class="btn btn-primary"
                       (click)="onChoiceWinner(requestPosition)"
                       *ngIf="canChoiceWinner(requestPosition)"><b>Согласовать</b>
@@ -121,6 +148,7 @@
             ></app-contract>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
           <button clrTabLink>История</button>
           <clr-tab-content *clrIfActive>

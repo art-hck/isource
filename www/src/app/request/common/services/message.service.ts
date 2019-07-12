@@ -18,9 +18,11 @@ export class MessageService {
 
   addMessage(requestPosition: RequestPosition, message: string, files: File[]): Observable<Message> {
     const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files[]', file, file.name);
-    });
+    if (files) {
+      files.forEach(file => {
+        formData.append('files[]', file, file.name);
+      });
+    }
     formData.append('positionId', requestPosition.id);
     formData.append('message', message);
 

@@ -9,6 +9,12 @@ import { RequestService as BackofficeRequestService } from "../../../back-office
 import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestDocument } from "../../models/request-document";
+import {EditRequestService} from "../../services/edit-request.service";
+import {
+  FormBuilder,
+  FormGroup
+} from "@angular/forms";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-position-info',
@@ -28,6 +34,7 @@ export class PositionInfoComponent implements OnInit {
     return this._opened;
   }
 
+  @Input() positionInfoEditable: boolean;
   @Input() requestPosition: RequestPosition;
   @Input() requestId: Uuid;
   @Input() isCustomerView: boolean;
@@ -35,24 +42,38 @@ export class PositionInfoComponent implements OnInit {
   // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
+  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
-
   contractForm: FormGroup;
 
+
   constructor(
+    private formBuilder: FormBuilder,
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
+    private editRequestService: EditRequestService,
     private customerRequestService: CustomerRequestService,
-    private formBuilder: FormBuilder
+    private documentsService: DocumentsService
   ) { }
+
 
   ngOnInit() {
     this.contractForm = this.formBuilder.group({
       comments: [''],
       documents: [null]
     });
+  }
+
+
+  getDeliveryDate(val: any) {
+    if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
+      return moment(val).format('DD.MM.YYYY');
+    } else {
+      return val;
+    }
   }
 
   onPublishOffers(requestPosition: RequestPosition) {
@@ -94,8 +115,7 @@ export class PositionInfoComponent implements OnInit {
         requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
           this.backofficeRequestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {
-            }
+            (request: Request) => {}
           );
         }
       });
@@ -104,15 +124,19 @@ export class PositionInfoComponent implements OnInit {
   canDownloadContract(requestPosition: RequestPosition) {
     return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
       || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING;
-
   }
 
-  onClose() {
-    this.showInfo = false;
+  onUpdateInfo() {
+    this.updatePositionInfoEvent.emit();
   }
 
-  onHiddenList() {
-    this.showPositionList.emit();
+  onChangeEditableFormState(state) {
+    this.positionInfoEditable = state;
+  }
+
+  getUpdatedRequestPositionInfo(requestPosition: any) {
+    console.log('triggered');
+    this.requestPosition = requestPosition;
   }
 
   onUploadDocuments(files: File[]) {
