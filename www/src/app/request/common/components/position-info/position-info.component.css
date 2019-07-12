@@ -68,7 +68,7 @@ clr-icon {
   margin: 5px 0 15px 0;
 }
 
-.clr-control-label {
+::ng-deep .clr-control-label {
   font-size: 13px;
 }
 
@@ -87,25 +87,7 @@ clr-icon {
   height: 25px;
 }
 
-.submit {
+::ng-deep .submit {
   display: block;
   text-align: right;
-}
-
-
-.position-info form.form label {
-  padding-bottom: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #999999;
-}
-
-.position-info .form, form {
-  padding-top: 0;
-}
-
-.checkbox-block,
-.checkbox-block .isDeliveryDateAsap {
-  display: flex;
-  align-items: flex-end;
 }
