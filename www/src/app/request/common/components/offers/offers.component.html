@@ -99,7 +99,7 @@
     <clr-dg-cell class="clr-col-2 offer">{{linkedOffer.paymentTerms}}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2">
       <app-document-simple-list
-        *ngIf="!isCustomerView"
+        [enableUpload]="!isCustomerView"
         [documents]="linkedOffer.documents"
         (selected)="onUploadDocuments($event, linkedOffer)"
       ></app-document-simple-list>
