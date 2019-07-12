@@ -20,7 +20,7 @@ export class ContractComponent implements OnChanges, OnInit {
 
   contractForm: FormGroup;
   contractItem: Contract;
-  requestContract: RequestContract = null;
+  requestContract: RequestContract;
   uploadedFiles: File[] = [];
 
   constructor(
@@ -45,11 +45,11 @@ export class ContractComponent implements OnChanges, OnInit {
   getContractList() {
     if (this.isCustomerView) {
       this.contractService.getCustomerContract(this.requestId, this.requestPosition).subscribe(
-        this.afterGetContract
+        (data: any) => this.afterGetContract(data)
       );
     } else {
       this.contractService.getBackofficeContract(this.requestId, this.requestPosition).subscribe(
-        this.afterGetContract
+        (data: any) => this.afterGetContract(data)
       );
     }
   }
@@ -62,9 +62,9 @@ export class ContractComponent implements OnChanges, OnInit {
     this.contractItem = this.contractForm.value;
     return this.isCustomerView ?
       this.contractService.addCustomerContract(this.requestId, this.requestPosition, this.contractItem)
-        .subscribe(this.afterAddContract) :
+        .subscribe(() => this.afterAddContract()) :
       this.contractService.addBackofficeContract(this.requestId, this.requestPosition, this.contractItem)
-        .subscribe(this.afterAddContract);
+        .subscribe(() => this.afterAddContract());
   }
 
   onDownloadFile(document: RequestDocument) {
