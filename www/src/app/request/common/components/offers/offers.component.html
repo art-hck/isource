@@ -98,7 +98,12 @@
     <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2 offer">{{linkedOffer.paymentTerms}}</clr-dg-cell>
     <clr-dg-cell class="clr-col-2">
-      <button class="btn btn-link download" *ngIf="!isCustomerView">Загрузить</button>
+      <app-document-simple-list
+        *ngIf="!isCustomerView"
+        [documents]="linkedOffer.documents"
+        (selected)="onUploadDocuments($event, linkedOffer)"
+        (show)="onDocumentShow($event)"
+      ></app-document-simple-list>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-1">
       <button class="btn btn-link download" *ngIf="!isCustomerView">Загрузить</button>

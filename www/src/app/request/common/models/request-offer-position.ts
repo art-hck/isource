@@ -1,4 +1,5 @@
 import {Uuid} from "../../../cart/models/uuid";
+import { RequestDocument } from "./request-document";
 
 export class RequestOfferPosition {
   comments: string;
@@ -21,4 +22,5 @@ export class RequestOfferPosition {
   vatPercent: number;
   isMinPrice: boolean;
   isWinner: boolean;
+  documents: RequestDocument[];
 }
