@@ -10,10 +10,6 @@ import { RequestService as CustomerRequestService } from "../../../customer/serv
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestDocument } from "../../models/request-document";
 import {EditRequestService} from "../../services/edit-request.service";
-import {
-  FormBuilder,
-  FormGroup
-} from "@angular/forms";
 import * as moment from "moment";
 
 @Component({
@@ -55,8 +51,7 @@ export class PositionInfoComponent implements OnInit {
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
-    private customerRequestService: CustomerRequestService,
-    private documentsService: DocumentsService
+    private customerRequestService: CustomerRequestService
   ) { }
 
 
