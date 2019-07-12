@@ -23,7 +23,8 @@
                placeholder="ДД.ММ.ГГГГ"
                type="text"
                formControlName="deliveryDate"
-               [class.invalid]="isFieldValid('deliveryDate')"/>
+               [class.invalid]="isFieldValid('deliveryDate')"
+               [attr.disabled]="requestPosition.isDeliveryDateAsap || null" />
       </div>
     </div>
 

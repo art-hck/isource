@@ -135,7 +135,6 @@ export class PositionInfoComponent implements OnInit {
   }
 
   getUpdatedRequestPositionInfo(requestPosition: any) {
-    console.log('triggered');
     this.requestPosition = requestPosition;
   }
 
