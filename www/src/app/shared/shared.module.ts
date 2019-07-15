@@ -20,7 +20,6 @@ import { CustomComponentsModule } from 'stdlib-ng/dist/custom-components';
     FormsModule,
     ClarityModule,
     CustomComponentsModule,
-
     CardComponent
   ]
 })
