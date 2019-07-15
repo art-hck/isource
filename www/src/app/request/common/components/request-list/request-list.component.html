@@ -43,7 +43,7 @@
 
 
       <clr-dg-cell class="request-positions-list">
-        <ng-container *ngIf="!checkIfFreeFormRequest(i); else freeFormRequestLabel">
+        <ng-container *ngIf="!checkIfFreeFormRequest(request.request.type); else freeFormRequestLabel">
           <div class="position-info" *ngFor="let position of request.positions">
             <span class="position-title">{{ position?.name }}</span>
             <span class="position-count">{{ position?.quantity }} {{ position.measureUnit }}</span>
@@ -64,11 +64,11 @@
       </clr-dg-cell>
 
       <clr-dg-cell class="request-delivery-dates">
-        {{ checkIfFreeFormRequest(i) ? '—' : getDeliveryDate(request) }}
+        {{ checkIfFreeFormRequest(request.request.type) ? '—' : getDeliveryDate(request) }}
       </clr-dg-cell>
 
       <clr-dg-cell class="request-position-statuses">
-        <ng-container *ngIf="!checkIfFreeFormRequest(i)">
+        <ng-container *ngIf="!checkIfFreeFormRequest(request.request.type)">
           <div class="position-info" *ngFor="let position of request.positions">
             <span class="position-status status-position-{{position.status.name}}">
               {{position.status.label}}

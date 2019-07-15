@@ -79,8 +79,8 @@ export class RequestListComponent implements OnInit {
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
 
-  checkIfFreeFormRequest(i: number) {
-    return this.requests[i].request.type === RequestTypes.FREE_FORM;
+  checkIfFreeFormRequest(type: string) {
+    return type === RequestTypes.FREE_FORM;
   }
 
 }
