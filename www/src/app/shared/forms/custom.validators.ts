@@ -108,7 +108,7 @@ export class CustomValidators {
     };
   }
 
-  static featureDate(): ValidatorFn {
+  static futureDate(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');

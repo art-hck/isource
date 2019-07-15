@@ -42,7 +42,7 @@ export class OffersComponent implements OnInit {
       currency: ['', Validators.required],
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
-      deliveryDate: ['', [Validators.required, CustomValidators.featureDate()]],
+      deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: ['', Validators.required]
     });
 
