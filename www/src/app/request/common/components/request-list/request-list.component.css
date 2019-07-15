@@ -72,8 +72,13 @@
 
 ::ng-deep .requests-list-datagrid .datagrid-table .request-number.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {
-    max-width: 120px;
     min-width: 110px;
+    max-width: 120px;
+}
+.requests-list-datagrid .datagrid-table .customer-name.datagrid-column,
+.requests-list-datagrid .datagrid .customer-name.datagrid-cell {
+    min-width: 170px;
+    max-width: 190px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-status.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-status.datagrid-cell {
@@ -87,13 +92,13 @@
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
-    max-width: 160px;
     min-width: 140px;
+    max-width: 160px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-position-statuses.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {
-    max-width: 210px;
     min-width: 180px;
+    max-width: 210px;
 }
 
 ::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column:last-of-type,
