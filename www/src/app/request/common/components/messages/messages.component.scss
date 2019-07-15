@@ -21,7 +21,7 @@
         content: "";
         position: absolute;
         bottom: -2px;
-        height: 20px;
+        height: 25px;
       }
     }
 
@@ -59,6 +59,7 @@
       &:before {
         left: -7px;
         border-left: 20px solid #efefef;
+        color: #efefef;
         border-bottom-right-radius: 16px 14px;
         transform: translate(0, -2px);
       }
