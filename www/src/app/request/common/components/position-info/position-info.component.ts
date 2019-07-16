@@ -39,6 +39,7 @@ export class PositionInfoComponent implements OnInit {
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
   @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() updateRequestInfoEvent = new EventEmitter<boolean>();
 
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
@@ -110,7 +111,9 @@ export class PositionInfoComponent implements OnInit {
         requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
           this.backofficeRequestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {}
+            (request: Request) => {
+              this.updateRequestInfoEvent.emit();
+            }
           );
         }
       });
