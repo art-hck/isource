@@ -48,8 +48,9 @@ export class RequestViewComponent implements OnInit {
   }
 
   onUpdateInfo(requestPosition: RequestPosition[]) {
+    const index = requestPosition.map(el => el.id).indexOf(this.selectedRequestPosition.id);
+    this.selectedRequestPosition = requestPosition[index];
     this.updatePositionInfoEvent.emit();
-    this.selectedRequestPosition = requestPosition[this.selectedIndex];
   }
 
   onUploadPositionsFromExcel() {

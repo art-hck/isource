@@ -39,6 +39,11 @@ export class EditPositionInfoFormComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(moment(new Date()).format('DD.MM.YYYY'));
+    if (!this.requestPosition.deliveryDate) {
+      this.requestPosition.deliveryDate = moment(new Date()).format('DD.MM.YYYY');
+    }
+
     this.positionInfoDataForm = this.addItemFormGroup();
   }
 
@@ -69,7 +74,11 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   get dateObject() {
-    return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
+    if (this.requestPosition.deliveryDate) {
+      return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
+    } else {
+      return moment(new Date()).format('DD.MM.YYYY');
+    }
   }
 
   addItemFormGroup(): FormGroup {
@@ -78,10 +87,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       productionDocument: [this.requestPosition.productionDocument, [Validators.required]],
       quantity: [this.requestPosition.quantity, [Validators.required, Validators.min(1)]],
       measureUnit: [this.requestPosition.measureUnit, [Validators.required]],
-      deliveryDate: [this.requestPosition.deliveryDate ?
-        this.requestPosition.deliveryDate :
-        ''
-        , [Validators.required, this.dateMinimum()]],
+      deliveryDate: [this.requestPosition.deliveryDate, [Validators.required, this.dateMinimum()]],
       isDeliveryDateAsap: [false],
       deliveryBasis: [this.requestPosition.deliveryBasis, [Validators.required]],
       paymentTerms: [this.requestPosition.paymentTerms, [Validators.required]],
@@ -90,6 +96,8 @@ export class EditPositionInfoFormComponent implements OnInit {
       relatedServices: [this.requestPosition.relatedServices],
       comments: [this.requestPosition.comments]
     });
+
+    console.log(itemForm.get('isDeliveryDateAsap').value);
 
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
@@ -120,6 +128,7 @@ export class EditPositionInfoFormComponent implements OnInit {
 
         this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
         this.updatedRequestPositionItem.emit(this.requestPosition);
+        console.log(this.requestPosition);
       }
     );
   }
