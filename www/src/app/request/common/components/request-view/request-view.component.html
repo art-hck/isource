@@ -92,7 +92,8 @@
                          [(showInfo)]="showInfo"
                          [requestId]="requestId"
                          (showPositionList)="showPositionList"
-                         (updatePositionInfoEvent)="onUpdateInfo(requestPositions)"
+                         (changePositionInfo)="onUpdatePositionInfo(requestPositions)"
+                         (changeRequestInfo)="onUpdateRequestInfo()"
                          [isCustomerView]="isCustomerView"
                          [positionInfoEditable]="positionInfoEditable"
                          (createdNewPosition)="onCreatedNewPosition($event)">

@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../models/request";
 import {RequestPosition} from "../../models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
 import {RequestTypes} from "../../enum/request-types";
 import {CreateRequestPositionService} from "../../services/create-request-position.service";
 
@@ -17,7 +16,8 @@ export class RequestViewComponent implements OnInit {
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
 
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Output() changeRequestInfo = new EventEmitter<boolean>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
 
   selectedRequestPosition: RequestPosition|null;
@@ -49,9 +49,13 @@ export class RequestViewComponent implements OnInit {
     this.showInfo = false;
   }
 
-  onUpdateInfo(requestPosition: RequestPosition[]) {
-    this.updatePositionInfoEvent.emit();
+  onUpdatePositionInfo(requestPosition: RequestPosition[]) {
+    this.changePositionInfo.emit();
     this.selectedRequestPosition = requestPosition[this.selectedIndex];
+  }
+
+  onUpdateRequestInfo() {
+    this.changeRequestInfo.emit();
   }
 
   onUploadPositionsFromExcel() {

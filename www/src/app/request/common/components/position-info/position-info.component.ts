@@ -4,7 +4,6 @@ import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-po
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { OffersService } from "../../../back-office/services/offers.service";
-import { Request } from "../../models/request";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
 import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -38,14 +37,14 @@ export class PositionInfoComponent implements OnInit {
   // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Output() changeRequestInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
   contractForm: FormGroup;
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -110,9 +109,7 @@ export class PositionInfoComponent implements OnInit {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
-          this.backofficeRequestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {}
-          );
+          this.changeRequestInfo.emit();
         }
       });
   }
@@ -125,8 +122,8 @@ export class PositionInfoComponent implements OnInit {
     );
   }
 
-  onUpdateInfo() {
-    this.updatePositionInfoEvent.emit();
+  onUpdatePositionInfo() {
+    this.changePositionInfo.emit();
   }
 
   onChangeEditableFormState(state) {
