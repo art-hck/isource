@@ -35,7 +35,7 @@ export class RequestListComponent implements OnInit {
    * @param request
    */
   getDeliveryDate(request: RequestsList): string {
-    if (!request.request.delivery) {
+    if ((!request.request.delivery) || (request.request.type === RequestTypes.FREE_FORM)) {
       return '—';
     } else if (request.request.delivery.asap === true) {
       return "ASAP";
@@ -79,8 +79,8 @@ export class RequestListComponent implements OnInit {
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
 
-  checkIfFreeFormRequest(i: number) {
-    return this.requests[i].request.type === RequestTypes.FREE_FORM;
+  checkIfFreeFormRequest(type: string) {
+    return type === RequestTypes.FREE_FORM;
   }
 
 }
