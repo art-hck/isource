@@ -79,7 +79,11 @@ export class RegistrationComponent implements OnInit {
     this.contragentRegistration = this.contragentRegistrationForm.value;
     return this.registrationService.registration(this.userRegistration, this.contragentRegistration).subscribe(
       () => {
+        alert('Регистрация прошла успешно!');
         this.router.navigateByUrl(`login`);
+      },
+      (msg: any) => {
+        alert('Ошибка регистрации! ' + msg.error.detail);
       }
     );
   }

@@ -104,8 +104,15 @@ export class CustomValidators {
     return (control: AbstractControl): ValidationErrors | null => {
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
-
       return controlDate.isBefore(validationDate) ? null : { 'field': true };
+    };
+  }
+
+  static futureDate(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const controlDate = moment(control.value, 'DD.MM.YYYY');
+      const validationDate = moment(new Date(), 'DD.MM.YYYY');
+      return controlDate.isAfter(validationDate) ? null : { 'field': true };
     };
   }
 }

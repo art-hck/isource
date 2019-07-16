@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -18,6 +18,8 @@ export class DocumentUploadListComponent implements OnInit {
 
   @Output() fileSelected = new EventEmitter<File[]>();
 
+  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+
   ngOnInit() {
   }
 
@@ -26,6 +28,9 @@ export class DocumentUploadListComponent implements OnInit {
       this.documents.push(file);
     });
     this.onChangeDocuments();
+
+    // очищаем, чтобы можно было снова загрузить тот же файл
+    this.uploadElRef.nativeElement.value = '';
   }
 
   removeDocument(document: File) {

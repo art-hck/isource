@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {OffersService} from "../../../back-office/services/offers.service";
 import {ActivatedRoute} from "@angular/router";
@@ -7,8 +7,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
 import {RequestPosition} from "../../models/request-position";
 import { RequestDocument } from "../../models/request-document";
-import { DocumentsService } from "../../services/documents.service";
-
+import {CustomValidators} from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-offers',
@@ -39,11 +38,11 @@ export class OffersComponent implements OnInit {
   ngOnInit() {
     this.offerForm = this.formBuilder.group({
       supplierContragentName: ['', Validators.required],
-      priceWithVat: ['', Validators.required],
+      priceWithVat: ['', [Validators.required, Validators.min(1)]],
       currency: ['', Validators.required],
-      quantity: ['', Validators.required],
-      measureUnit: [''],
-      deliveryDate: ['', Validators.required],
+      quantity: ['', [Validators.required, Validators.min(1)]],
+      measureUnit: ['', Validators.required],
+      deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: ['', Validators.required]
     });
 
@@ -70,7 +69,6 @@ export class OffersComponent implements OnInit {
     }
     return null;
   }
-
 
   findWinnerOffer() {
     for (let i = 0; i < this.requestPosition.linkedOffers.length; i++) {

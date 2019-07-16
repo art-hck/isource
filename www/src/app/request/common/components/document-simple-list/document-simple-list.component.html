@@ -15,7 +15,8 @@
 
   <div class="form-group" *ngIf="enableUpload">
     <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
-    <input type="file"
+    <input #uploadEl
+           type="file"
            id="{{ uploadInputId }}"
            class="file-upload"
            multiple

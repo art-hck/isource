@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestDocument } from "../../models/request-document";
 import { Guid } from "guid-typescript";
 import { DocumentsService } from "../../services/documents.service";
@@ -26,6 +26,8 @@ export class DocumentSimpleListComponent implements OnInit {
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
 
+  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+
   protected uploadInputId;
 
   constructor(
@@ -47,5 +49,8 @@ export class DocumentSimpleListComponent implements OnInit {
 
   onChangeDocuments(files: FileList) {
     this.selected.emit(Array.from(files));
+
+    // очищаем, чтобы можно было снова загрузить тот же файл
+    this.uploadElRef.nativeElement.value = '';
   }
 }
