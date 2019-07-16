@@ -16,9 +16,9 @@ export class RequestViewComponent implements OnInit {
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
 
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Output() changeRequestInfo = new EventEmitter<boolean>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
-  @Output() updateRequestInfoEvent = new EventEmitter<boolean>();
 
   selectedRequestPosition: RequestPosition|null;
   showInfo = false;
@@ -49,13 +49,13 @@ export class RequestViewComponent implements OnInit {
     this.showInfo = false;
   }
 
-  onUpdateInfo(requestPosition: RequestPosition[]) {
-    this.updatePositionInfoEvent.emit();
+  onUpdatePositionInfo(requestPosition: RequestPosition[]) {
+    this.changePositionInfo.emit();
     this.selectedRequestPosition = requestPosition[this.selectedIndex];
   }
 
   onUpdateRequestInfo() {
-    this.updateRequestInfoEvent.emit();
+    this.changeRequestInfo.emit();
   }
 
   onUploadPositionsFromExcel() {
