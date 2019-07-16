@@ -41,7 +41,7 @@
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
-              <input id="phone" type="number" formControlName="phone" [class.invalid]="isUserFieldValid('phone')"/>
+              <input id="phone" type="text" formControlName="phone" [class.invalid]="isUserFieldValid('phone')"/>
             </div>
             <div class="clr-col-6 agreement">
               <clr-checkbox-wrapper>
@@ -64,15 +64,15 @@
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="inn">ИНН</label>
-              <input id="inn" type="number" formControlName="inn" [class.invalid]="isContragentFieldValid('inn')"/>
+              <input id="inn" type="text" formControlName="inn" [class.invalid]="isContragentFieldValid('inn')"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="kpp">КПП</label>
-              <input id="kpp" type="number" formControlName="kpp" [class.invalid]="isContragentFieldValid('kpp')"/>
+              <input id="kpp" type="text" formControlName="kpp" [class.invalid]="isContragentFieldValid('kpp')"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="ogrn">ОГРН/ОГРНИП</label>
-              <input id="ogrn" type="number" formControlName="ogrn" [class.invalid]="isContragentFieldValid('ogrn')"/>
+              <input id="ogrn" type="text" formControlName="ogrn" [class.invalid]="isContragentFieldValid('ogrn')"/>
             </div>
           </div>
           <div class="clr-row w-100">
@@ -141,12 +141,12 @@
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
-              <input id="bankAccount" type="number" formControlName="bankAccount"
+              <input id="bankAccount" type="text" formControlName="bankAccount"
                      [class.invalid]="isContragentFieldValid('bankAccount')"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="bik">БИК</label>
-              <input id="bik" type="number" formControlName="bik" [class.invalid]="isContragentFieldValid('bik')"/>
+              <input id="bik" type="text" formControlName="bik" [class.invalid]="isContragentFieldValid('bik')"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
