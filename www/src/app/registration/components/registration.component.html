@@ -125,7 +125,8 @@
           <div class="clr-row w-100">
             <div class="clr-col-2">
               <label class="clr-control-label" for="index">Почтовый индекс</label>
-              <input id="index" type="number" formControlName="index" [class.invalid]="isContragentFieldValid('index')"/>
+              <input id="index" type="number" formControlName="index"
+                     [class.invalid]="isContragentFieldValid('index')"/>
             </div>
             <div class="clr-col-5">
               <label class="clr-control-label" for="town">Населенный пункт</label>
@@ -150,7 +151,7 @@
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
-              <input id="corrAccount" type="number" formControlName="corrAccount"
+              <input id="corrAccount" type="text" formControlName="corrAccount"
                      [class.invalid]="isContragentFieldValid('corrAccount')"/>
             </div>
           </div>
@@ -170,7 +171,9 @@
       </div>
       <div class="card-footer">
         <button type="button" class="btn btn-link" (click)="onChangeStep()">Назад</button>
-        <button type="button" class="btn btn-primary"  [disabled]="contragentRegistrationForm.invalid" (click)="onRegistration()">Зарегистрировать</button>
+        <button type="button" class="btn btn-primary"
+                [disabled]="contragentRegistrationForm.invalid"
+                (click)="onRegistration()">Зарегистрировать</button>
       </div>
     </form>
   </div>
