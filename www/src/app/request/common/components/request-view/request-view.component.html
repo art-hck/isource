@@ -5,7 +5,7 @@
   <div class="clr-row w-100" *ngIf="showPositionList">
   <div class="card" [ngClass]="{'clr-col-4' : (showInfo === true) || (showRequestInfo === true)}">
     <div class="action-bar">
-      <button class="btn btn-link"><clr-icon shape="plus-circle"></clr-icon>
+      <button class="btn btn-link" (click)="addNewPosition()"><clr-icon shape="plus-circle"></clr-icon>
         <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
       </button>
       <button class="btn btn-link" (click)="onUploadPositionsFromExcel()"><clr-icon shape="upload"></clr-icon>
@@ -94,7 +94,9 @@
                          (showPositionList)="showPositionList"
                          (updatePositionInfoEvent)="onUpdateInfo(requestPositions)"
                          (updateRequestInfoEvent)="onUpdateRequestInfo()"
-                         [isCustomerView]="isCustomerView">
+                         [isCustomerView]="isCustomerView"
+                         [positionInfoEditable]="positionInfoEditable"
+                         (createdNewPosition)="onCreatedNewPosition($event)">
       </app-position-info>
     </div>
   </div>

@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {Uuid} from "../../../../cart/models/uuid";
+import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 
 @Component({
   selector: 'app-back-office-request-view',
@@ -14,6 +15,9 @@ export class BackOfficeRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
+
+  @ViewChild(RequestViewComponent, {static: false})
+  requestView: RequestViewComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,9 +32,17 @@ export class BackOfficeRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
+    this.updatePositionsList();
+  }
+
+  updatePositionsList(callback?: (positions: RequestPosition[]) => void): void {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
         this.requestPositions = requestPositions;
+        this.requestView.requestPositions = requestPositions;
+        if (callback) {
+          callback(requestPositions);
+        }
       }
     );
   }
@@ -43,4 +55,10 @@ export class BackOfficeRequestViewComponent implements OnInit {
     );
   }
 
+
+  onCreatedNewPosition(positionId: Uuid): void {
+    this.updatePositionsList(() => {
+      this.requestView.selectPosition(positionId);
+    });
+  }
 }

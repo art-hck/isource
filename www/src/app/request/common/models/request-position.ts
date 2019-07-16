@@ -3,7 +3,10 @@ import {RequestItem} from "./request-item";
 import { RequestDocument } from "./request-document";
 
 export class RequestPosition extends RequestItem {
-  id: Uuid;
+  /**
+   * Значение null допустимо для позиций не сохранённых в базе данных
+   */
+  id: Uuid|null;
   userId: Uuid;
   contragentId: Uuid;
   createdDate: string;

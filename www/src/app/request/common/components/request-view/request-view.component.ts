@@ -17,14 +17,16 @@ export class RequestViewComponent implements OnInit {
   @Input() requestPositions: RequestPosition[];
 
   @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() createdNewPosition = new EventEmitter<Uuid>();
   @Output() updateRequestInfoEvent = new EventEmitter<boolean>();
 
-  selectedRequestPosition: RequestPosition;
+  selectedRequestPosition: RequestPosition|null;
   showInfo = false;
   showRequestInfo: boolean;
   showPositionList = true;
   showUploadPositionsFromExcelForm = false;
-  selectedIndex: number;
+  selectedIndex: number|null;
+  positionInfoEditable = false;
 
   constructor(
     private createRequestPositionService: CreateRequestPositionService
@@ -88,5 +90,40 @@ export class RequestViewComponent implements OnInit {
           alert(msg);
         });
     }
+  }
+
+  addNewPosition(): void {
+    const requestPosition = new RequestPosition();
+    requestPosition.id = null;
+    requestPosition.requestId = this.requestId;
+    this.showInfo = true;
+    this.positionInfoEditable = true;
+    this.selectedRequestPosition = requestPosition;
+  }
+
+  onCreatedNewPosition(positionId: Uuid): void {
+    this.selectedRequestPosition = null;
+    this.showInfo = false;
+    this.selectedIndex = null;
+    this.positionInfoEditable = false;
+    this.createdNewPosition.emit(positionId);
+  }
+
+  selectPosition(positionId: Uuid): void {
+    const {position, index} = this.getPositionById(positionId);
+    if (!position) {
+      return;
+    }
+    this.onSelectPosition(position, index);
+  }
+
+  protected getPositionById(positionId: Uuid): {position: RequestPosition|null, index: number|null} {
+    for (let i = 0; i < this.requestPositions.length; i++) {
+      const requestPosition = this.requestPositions[i];
+      if (requestPosition.id === positionId) {
+        return {position: requestPosition, index: i};
+      }
+    }
+    return {position: null, index: null};
   }
 }

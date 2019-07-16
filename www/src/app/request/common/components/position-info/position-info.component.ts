@@ -38,6 +38,8 @@ export class PositionInfoComponent implements OnInit {
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
   @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
+  @Output() createdNewPosition = new EventEmitter<Uuid>();
   @Output() updateRequestInfoEvent = new EventEmitter<boolean>();
 
 
@@ -115,8 +117,11 @@ export class PositionInfoComponent implements OnInit {
   }
 
   canDownloadContract(requestPosition: RequestPosition) {
-    return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
-      || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING;
+    return (
+      requestPosition &&
+      (requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
+        || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING)
+    );
   }
 
   onUpdateInfo() {
@@ -129,6 +134,7 @@ export class PositionInfoComponent implements OnInit {
 
   getUpdatedRequestPositionInfo(requestPosition: any) {
     this.requestPosition = requestPosition;
+    this.updatedRequestPositionItem.emit(requestPosition);
   }
 
   onUploadDocuments(files: File[]) {
@@ -136,5 +142,9 @@ export class PositionInfoComponent implements OnInit {
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => this.requestPosition.documents.push(document));
       });
+  }
+
+  onCreatedNewPosition(updatedPositionId: Uuid): void {
+    this.createdNewPosition.emit(updatedPositionId);
   }
 }

@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../../common/models/request";
 import {RequestPosition} from "../../../common/models/request-position";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
+import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 
 
 @Component({
@@ -18,6 +19,9 @@ export class CustomerRequestViewComponent implements OnInit {
   request: Request;
   requestPositions: RequestPosition[];
 
+  @ViewChild(RequestViewComponent, {static: false})
+  requestView: RequestViewComponent;
+
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService
@@ -31,15 +35,24 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
-    this.updatePositionInfo();
+    this.updatePositionsList();
   }
 
-  updatePositionInfo() {
+
+  updatePositionsList(callback?: (requestPositions: RequestPosition[]) => void) {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
         this.requestPositions = requestPositions;
+        if (callback) {
+          callback(requestPositions);
+        }
       }
     );
   }
 
+  onCreatedNewPosition(positionId: Uuid): void {
+    this.updatePositionsList(() => {
+      this.requestView.selectPosition(positionId);
+    });
+  }
 }
