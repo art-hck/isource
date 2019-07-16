@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -9,9 +9,9 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
-import {RequestItem} from "../../models/request-item";
-import {CreateRequestService} from "../../services/create-request.service";
-import {Router} from "@angular/router";
+import { RequestItem } from "../../models/request-item";
+import { CreateRequestService } from "../../services/create-request.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-create-request',
@@ -23,11 +23,6 @@ export class CreateRequestComponent implements OnInit {
   requestDataForm: FormGroup;
   item = false;
   requestItem: RequestItem;
-  countForm: number;
-
-  showForm = [];
-  editForm = false;
-  showAddToList = true;
 
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
@@ -47,7 +42,6 @@ export class CreateRequestComponent implements OnInit {
         ])
       }
     );
-    this.showForm[0] = true;
   }
 
   addItemFormGroup(): FormGroup {
@@ -77,9 +71,26 @@ export class CreateRequestComponent implements OnInit {
     return itemForm;
   }
 
-  isFieldValid(i, field: string) {
+  /**
+   * Возвращает валидно ли поле в форме
+   * @param form
+   */
+  isFieldInvalid(i, field: string) {
     return this.itemForm.at(i).get(field).errors
       && (this.itemForm.at(i).get(field).touched || this.itemForm.at(i).get(field).dirty);
+  }
+
+  /**
+   * Возвращает валидны ли поля в форме, которые уже заполнялись пользователем
+   * @param form
+   */
+  isInvalidForm(form) {
+    let isInvalid = false;
+    Object.keys(form.controls).forEach(key => {
+      isInvalid = isInvalid
+        || (form.get(key).invalid && (form.get(key).touched || form.get(key).dirty));
+    });
+    return isInvalid;
   }
 
   dateMinimum(): ValidatorFn {
@@ -96,24 +107,12 @@ export class CreateRequestComponent implements OnInit {
     };
   }
 
-  onAddToList(i) {
-    this.showForm[i] = false;
-    this.countForm = i;
-  }
-
   onAddNext() {
-    this.showForm[this.countForm + 1] = true;
-    this.showAddToList = true;
     this.itemForm.push(this.addItemFormGroup());
   }
 
-  onEditForm(i) {
-    for (let k = 0; k < this.showForm.length; k++) {
-      this.showForm[k] = false;
-    }
-    this.showForm[i] = true;
-    this.editForm = true;
-    this.showAddToList = false;
+  deleteItem(i): void {
+    this.itemForm.removeAt(i);
   }
 
   onAddRequest() {
@@ -123,23 +122,6 @@ export class CreateRequestComponent implements OnInit {
         this.router.navigateByUrl(`requests/customer/${data.id}`);
       }
     );
-  }
-
-  // Отображаем кнопку Добавить только если все формы свернуты или раскрыта форма для редактирования
-  canAddItems() {
-    if (this.editForm) {
-      return false;
-    }
-    for (let i = 0; i < this.showForm.length; i++) {
-      if (this.showForm[i] === true) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  deleteItem(i): void {
-    this.itemForm.removeAt(i);
   }
 
   onDocumentSelected(documents: File[], form: FormGroup) {
