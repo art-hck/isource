@@ -34,4 +34,13 @@ export class BackOfficeRequestViewComponent implements OnInit {
       }
     );
   }
+
+  onUpdateRequestInfo() {
+    this.requestService.getRequestInfo(this.requestId).subscribe(
+      (request: Request) => {
+        this.request = request;
+      }
+    );
+  }
+
 }

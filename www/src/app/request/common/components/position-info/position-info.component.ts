@@ -4,7 +4,6 @@ import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-po
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { OffersService } from "../../../back-office/services/offers.service";
-import { Request } from "../../models/request";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
 import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -110,11 +109,7 @@ export class PositionInfoComponent implements OnInit {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
-          this.backofficeRequestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {
-              this.updateRequestInfoEvent.emit();
-            }
-          );
+          this.updateRequestInfoEvent.emit();
         }
       });
   }

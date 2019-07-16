@@ -31,11 +31,10 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
-    this.updateState();
+    this.updatePositionInfo();
   }
 
-
-  updateState() {
+  updatePositionInfo() {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
         this.requestPositions = requestPositions;
@@ -43,11 +42,4 @@ export class CustomerRequestViewComponent implements OnInit {
     );
   }
 
-  onUpdateRequestInfo() {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
-      }
-    );
-  }
 }
