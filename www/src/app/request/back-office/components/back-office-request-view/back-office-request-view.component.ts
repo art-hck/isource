@@ -55,7 +55,6 @@ export class BackOfficeRequestViewComponent implements OnInit {
     );
   }
 
-
   onCreatedNewPosition(positionId: Uuid): void {
     this.updatePositionsList(() => {
       this.requestView.selectPosition(positionId);
