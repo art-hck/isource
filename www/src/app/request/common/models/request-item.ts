@@ -2,7 +2,7 @@ import {RequestOfferPosition} from "./request-offer-position";
 import {Uuid} from "../../../cart/models/uuid";
 
 export class RequestItem {
-  id: Uuid;
+  id: Uuid|null;
   name: string;
   productionDocument: string;
   measureUnit: string;
