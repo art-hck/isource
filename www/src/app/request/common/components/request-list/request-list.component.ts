@@ -35,7 +35,7 @@ export class RequestListComponent implements OnInit {
    * @param request
    */
   getDeliveryDate(request: RequestsList): string {
-    if (!request.request.delivery) {
+    if ((!request.request.delivery) || (request.request.type === RequestTypes.FREE_FORM)) {
       return '—';
     } else if (request.request.delivery.asap === true) {
       return "ASAP";

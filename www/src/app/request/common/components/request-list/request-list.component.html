@@ -64,7 +64,7 @@
       </clr-dg-cell>
 
       <clr-dg-cell class="request-delivery-dates">
-        {{ checkIfFreeFormRequest(request.request.type) ? '—' : getDeliveryDate(request) }}
+        {{ getDeliveryDate(request) }}
       </clr-dg-cell>
 
       <clr-dg-cell class="request-position-statuses">
