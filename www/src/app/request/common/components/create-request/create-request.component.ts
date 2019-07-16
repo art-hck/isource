@@ -58,7 +58,7 @@ export class CreateRequestComponent implements OnInit {
       currency: ['RUB'],
       relatedServices: [''],
       comments: [''],
-      documents: [null]
+      documents: [[]]
     });
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
