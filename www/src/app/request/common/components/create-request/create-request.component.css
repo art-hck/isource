@@ -1,29 +1,4 @@
-label {
-  padding-top: 15px;
-  padding-bottom: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #999999;
-}
 
-.label-gray {
-  color: #999999;
-}
-
-.invalid {
-  color: #FF2519;
-}
-
-.btn-delete {
-  height: 24px;
-  margin: 0;
-  padding: 0 10px;
-  float: right;
-}
-
-.nopadding {
-  padding-top: 0;
-}
 
 .container {
   text-align: -webkit-center;
@@ -44,59 +19,3 @@ h2 {
   font-weight: 600;
 }
 
-.isDeliveryAsap {
-  display: flex;
-  align-items: flex-end;
-  font-size: 14px;
-}
-
-.isDeliveryAsap label {
-  font-size: 14px;
-  padding: 0 0 0 25px;
-}
-
-.btn {
-  margin-right: 0;
-  padding: 0 25px;
-}
-
-.clr-validate-icon {
-  color: white;
-}
-
-textarea {
-  width: 100%;
-}
-
-.submit {
-  text-align: right;
-  width: 1000px;
-}
-
-.btn-link {
-  color: #999999;
-  font-weight: 600;
-}
-
-.title {
-  padding: 10px 40px;
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
-}
-
-.clr-form-control {
-  padding: 20px 40px 40px 40px;
-}
-
-.btn-send {
-  margin-top: 20px;
-}
-
-clr-accordion-content {
-  text-align: left;
-}
-
-.clr-accordion-title {
-  max-width: inherit;
-}
