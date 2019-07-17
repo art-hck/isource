@@ -12,6 +12,7 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
+import {CustomValidators} from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -39,30 +40,25 @@ export class EditPositionInfoFormComponent implements OnInit {
 
 
   ngOnInit() {
-    // console.log(moment(new Date()).format('DD.MM.YYYY'));
-    // if (!this.requestPosition.deliveryDate) {
-    //   this.requestPosition.deliveryDate = moment(new Date()).format('DD.MM.YYYY');
-    // }
-
     this.positionInfoDataForm = this.addItemFormGroup();
   }
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      console.log('control.value: ', control.value);
+
+      if (control.value === '') {
+        return null;
+      }
+
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
 
-      // console.log('validationDate', validationDate);
-
-      const validate = controlDate.isAfter(validationDate) ? null : {
+      return controlDate.isAfter(validationDate) ? null : {
         'date-minimum': {
           'date-minimum': validationDate.format('DD.MM.YYYY'),
           'actual': controlDate.format('DD.MM.YYYY')
         }
       };
-      console.log(validate);
-      return validate;
     };
   }
 
@@ -72,19 +68,15 @@ export class EditPositionInfoFormComponent implements OnInit {
 
   get dateObject() {
     if (this.requestPosition.deliveryDate) {
-      console.log('1');
       return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
     } else {
-      console.log('2');
       return moment(new Date()).format('DD.MM.YYYY');
     }
   }
   set dateObject(val) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
-      console.log('3');
       this.requestPosition.deliveryDate = val;
     } else {
-      console.log('4');
       this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
     }
   }
@@ -96,7 +88,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       quantity: [this.requestPosition.quantity, [Validators.required, Validators.min(1)]],
       measureUnit: [this.requestPosition.measureUnit, [Validators.required]],
       deliveryDate: [this.requestPosition.deliveryDate, [Validators.required, this.dateMinimum()]],
-      isDeliveryDateAsap: [false],
+      isDeliveryDateAsap: [this.requestPosition.isDeliveryDateAsap],
       deliveryBasis: [this.requestPosition.deliveryBasis, [Validators.required]],
       paymentTerms: [this.requestPosition.paymentTerms, [Validators.required]],
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
@@ -104,6 +96,10 @@ export class EditPositionInfoFormComponent implements OnInit {
       relatedServices: [this.requestPosition.relatedServices],
       comments: [this.requestPosition.comments]
     });
+
+    if (!!itemForm.get('isDeliveryDateAsap').value) {
+      itemForm.get('deliveryDate').disable();
+    }
 
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
