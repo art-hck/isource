@@ -17,8 +17,7 @@
       <label class="clr-control-label">Необходимый срок поставки</label>
       <div class="deliveryDate">
         <input clrDate
-               [ngModel]="dateObject"
-               (ngModelChange)="changeDeliveryDate($event)"
+               [(ngModel)]="dateObject"
                id="deliveryDate"
                placeholder="ДД.ММ.ГГГГ"
                type="text"

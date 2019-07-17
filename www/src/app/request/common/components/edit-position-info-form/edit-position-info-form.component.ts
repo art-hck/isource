@@ -39,25 +39,30 @@ export class EditPositionInfoFormComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log(moment(new Date()).format('DD.MM.YYYY'));
-    if (!this.requestPosition.deliveryDate) {
-      this.requestPosition.deliveryDate = moment(new Date()).format('DD.MM.YYYY');
-    }
+    // console.log(moment(new Date()).format('DD.MM.YYYY'));
+    // if (!this.requestPosition.deliveryDate) {
+    //   this.requestPosition.deliveryDate = moment(new Date()).format('DD.MM.YYYY');
+    // }
 
     this.positionInfoDataForm = this.addItemFormGroup();
   }
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
+      console.log('control.value: ', control.value);
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
 
-      return controlDate.isAfter(validationDate) ? null : {
+      // console.log('validationDate', validationDate);
+
+      const validate = controlDate.isAfter(validationDate) ? null : {
         'date-minimum': {
-          'date-minimum': validationDate,
+          'date-minimum': validationDate.format('DD.MM.YYYY'),
           'actual': controlDate.format('DD.MM.YYYY')
         }
       };
+      console.log(validate);
+      return validate;
     };
   }
 
@@ -65,19 +70,22 @@ export class EditPositionInfoFormComponent implements OnInit {
     return (val === this.requestPosition.currency);
   }
 
-  changeDeliveryDate(val: any) {
-    if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
-      this.requestPosition.deliveryDate = val;
-    } else {
-      this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
-    }
-  }
-
   get dateObject() {
     if (this.requestPosition.deliveryDate) {
+      console.log('1');
       return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
     } else {
+      console.log('2');
       return moment(new Date()).format('DD.MM.YYYY');
+    }
+  }
+  set dateObject(val) {
+    if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
+      console.log('3');
+      this.requestPosition.deliveryDate = val;
+    } else {
+      console.log('4');
+      this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
     }
   }
 
@@ -96,8 +104,6 @@ export class EditPositionInfoFormComponent implements OnInit {
       relatedServices: [this.requestPosition.relatedServices],
       comments: [this.requestPosition.comments]
     });
-
-    console.log(itemForm.get('isDeliveryDateAsap').value);
 
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
@@ -128,7 +134,6 @@ export class EditPositionInfoFormComponent implements OnInit {
 
         this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
         this.updatedRequestPositionItem.emit(this.requestPosition);
-        console.log(this.requestPosition);
       }
     );
   }
