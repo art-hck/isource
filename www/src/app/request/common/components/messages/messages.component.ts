@@ -6,7 +6,8 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
@@ -19,7 +20,7 @@ import { UserInfoService } from "../../../../core/services/user-info.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements AfterViewChecked, OnChanges {
+export class MessagesComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
 
   @Input() requestPosition: RequestPosition;
 
@@ -28,6 +29,8 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   messages: Message[];
   sendMessageForm: FormGroup;
   uploadedFiles: File[] = [];
+  updateInterval = 15 * 1000;
+  updateTask: number|null = null;
 
   constructor(
     private messageService: MessageService,
@@ -47,6 +50,14 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+
+  ngOnInit() {
+    this.startUpdateMessages();
+  }
+
+  ngOnDestroy() {
+    this.stopUpdateMessages();
   }
 
   getMessages() {
@@ -80,5 +91,31 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   formReset() {
     this.sendMessageForm.reset();
     this.uploadedFiles = [];
+  }
+
+  startUpdateMessages(): void {
+    if (this.updateTask) {
+      return;
+    }
+    this.updateMessages();
+  }
+
+  stopUpdateMessages(): void {
+    if (this.updateTask) {
+      window.clearTimeout(this.updateTask);
+      this.updateTask = null;
+    }
+  }
+
+  updateMessages(): void {
+    this.updateTask = window.setTimeout(() => {
+      this.messageService.getList(this.requestPosition)
+        .subscribe((messages: Message[]) => {
+          if (messages.length > this.messages.length) {
+            this.messages = messages;
+          }
+          this.updateMessages();
+        });
+    }, this.updateInterval);
   }
 }
