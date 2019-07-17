@@ -70,7 +70,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.tabLinks.changes.subscribe(tabChange => {
 
-      // Проверяем, есть ли среди табов неактивная
+      // Проверяем, есть ли среди табов неактивный
       const noActiveTab = tabChange._results.every(function(tab) {
         return tab.active === false;
       });
