@@ -68,21 +68,19 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.tabLinks.changes.subscribe(tabChange => {
-        console.log(tabChange._results);
+    this.tabLinks.changes.subscribe(tabChange => {
 
-        const noActiveTab = tabChange._results.every(function (tab) {
-          return tab.active === false;
-        });
-
-        console.log('No active tab: ', noActiveTab);
-
-        if (noActiveTab) {
-          console.log('Activating the first tab');
-          this.tabLinks.first.activate();
-        }
+      // Проверяем, есть ли среди табов неактивная
+      const noActiveTab = tabChange._results.every(function (tab) {
+        return tab.active === false;
       });
+
+      // Если есть, делаем активной самый первый таб с общей информацией
+      if (noActiveTab) {
+        setTimeout(() => {
+          this.tabLinks.first.activate();
+        });
+      }
     });
   }
 
@@ -91,11 +89,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       comments: [''],
       documents: [null]
     });
-  }
-
-
-  activateFirstTab() {
-    this.tabLinks.first.activate();
   }
 
   getDeliveryDate(val: any) {
