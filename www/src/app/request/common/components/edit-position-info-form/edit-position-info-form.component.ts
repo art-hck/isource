@@ -111,6 +111,7 @@ export class EditPositionInfoFormComponent implements OnInit {
         itemForm.get('deliveryDate').disable();
       } else {
         itemForm.get('deliveryDate').enable();
+        itemForm.markAllAsTouched();
       }
     });
 
