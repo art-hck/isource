@@ -1,7 +1,7 @@
 <form [formGroup]="positionInfoDataForm" class="form">
   <div class="clr-row">
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <label class="clr-control-label">Наименование МТР</label>
       <input type="text"
              name="name"
@@ -13,7 +13,7 @@
 
     <div class="clr-break-row"></div>
 
-    <div class="clr-col-3">
+    <div class="clr-col-4">
       <label class="clr-control-label">Необходимый срок поставки</label>
       <div class="deliveryDate">
         <input clrDate
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="clr-col-3 checkbox-block">
+    <div class="clr-col-4 checkbox-block">
       <div class="isDeliveryDateAsap">
         <input clrCheckbox
                type="checkbox"
@@ -46,7 +46,7 @@
 
 
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <label class="clr-control-label">Базис поставки <br>
         (пункт, до которого требуется доставка)</label>
       <input type="text" id="deliveryBasis"
@@ -59,7 +59,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <label class="clr-control-label">Условия оплаты</label>
       <input type="text" id="paymentTerms"
              formControlName="paymentTerms"
@@ -71,7 +71,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-3">
+    <div class="clr-col-4">
       <label class="clr-control-label">Количество</label>
       <input type="number"
              id="quantity"
@@ -84,7 +84,7 @@
     </div>
 
 
-    <div class="clr-col-3">
+    <div class="clr-col-4">
       <label class="clr-control-label">Ед. измерения</label>
       <input type="text"
              id="measureUnit"
@@ -98,7 +98,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-3">
+    <div class="clr-col-4">
       <label class="clr-control-label">Начальная максимальная цена</label>
       <input type="number"
              id="startPrice"
@@ -110,7 +110,7 @@
              [class.invalid]="isFieldValid('startPrice')">
     </div>
 
-    <div class="clr-col-3">
+    <div class="clr-col-4">
       <label class="clr-control-label" for="currency">Валюта</label>
       <div class="select">
         <select name="currency" id="currency" formControlName="currency">
@@ -126,7 +126,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <label class="clr-control-label">
         Документ, в соответствии с которым необходимо изготовление <br>
         (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
@@ -142,7 +142,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <div class="relatedServices">
         <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
           (ШМР, ПНР)</label>
@@ -157,7 +157,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-6">
+    <div class="clr-col-8">
       <div class="relatedServices">
         <label class="clr-control-label">Примечания/комментрии</label>
         <textarea style="width: 100%"
@@ -174,7 +174,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="submit clr-col-6">
+    <div class="submit clr-col-8">
       <button type="button"
               class="btn btn-primary"
               (click)="onSavePositionInfo()"
