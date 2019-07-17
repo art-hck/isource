@@ -1,0 +1,157 @@
+<form [formGroup]="requestDataForm" class="form">
+  <div formArrayName="itemForm">
+    <clr-accordion>
+      <ng-container *ngFor="let item of itemForm.controls; let i=index">
+        <clr-accordion-panel [(clrAccordionPanelOpen)]="formShow[i]" formGroupName="{{i}}">
+          <clr-accordion-title>
+            <clr-icon shape="success-standard" size="24" class="label-success" *ngIf="item.valid"></clr-icon>
+
+            <span class="label-gray" *ngIf="!item.get('name').value">
+              Новая позиция
+            </span>
+            <span *ngIf="item.get('name').value">
+              {{ item.get('name').value }}
+            </span>
+
+            <clr-tooltip *ngIf="isInvalidForm(itemForm.at(i))">
+              <clr-icon clrTooltipTrigger shape="error-standard" size="16" class="invalid"></clr-icon>
+              <clr-tooltip-content clrPosition="top-right" clrSize="md" *clrIfOpen>
+                <span>В форме имеются ошибки</span>
+              </clr-tooltip-content>
+            </clr-tooltip>
+
+            <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
+                    title="Удалить из списка">
+              <clr-icon shape="times" size="24"></clr-icon>
+            </button>
+          </clr-accordion-title>
+
+          <clr-accordion-content *clrIfExpanded>
+            <div class="clr-row">
+              <div class="clr-col">
+                <label class="clr-control-label" for="name">Наименование МТР</label>
+                <input type="text" id="name" formControlName="name"
+                       [class.invalid]="isFieldInvalid(i, 'name')">
+                <label class="clr-control-label" for="productionDocument">
+                  Документ, в соответствии с которым необходимо изготовление
+                  (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+                </label>
+                <input type="text" id="productionDocument" formControlName="productionDocument"
+                       [class.invalid]="isFieldInvalid(i, 'productionDocument')">
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col-3">
+                <label class="clr-control-label" for="quantity">Количество</label>
+                <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"
+                       step="0.01" class="hidden-arrows text-right price"
+                       [class.invalid]="isFieldInvalid(i, 'quantity')">
+              </div>
+              <div class="clr-col-3">
+                <label class="clr-control-label" for="measureUnit">Единицы измерения</label>
+                <div class="select">
+                  <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
+                         [class.invalid]="isFieldInvalid(i, 'measureUnit')">
+                </div>
+              </div>
+              <div class="clr-col-3">
+                <label class="clr-control-label" for="deliveryDate"> Необходимый срок поставки</label>
+                <input id="deliveryDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
+                       formControlName="deliveryDate"
+                       [class.invalid]="isFieldInvalid(i, 'deliveryDate')"/>
+              </div>
+              <div class="clr-col-3 isDeliveryAsap">
+                <clr-checkbox-wrapper>
+                  <input type="checkbox" clrCheckbox name="isDeliveryDateAsap" id="isDeliveryDateAsap"
+                         formControlName="isDeliveryDateAsap"
+                         [class.invalid]="isFieldInvalid(i, 'isDeliveryDateAsap')">
+                  <label>как можно быстрее</label>
+                </clr-checkbox-wrapper>
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <label class="clr-control-label" for="deliveryBasis">Базис поставки
+                  (пункт, до которого требуется доставка)
+                </label>
+                <input type="text" id="deliveryBasis" formControlName="deliveryBasis"
+                       [class.invalid]="isFieldInvalid(i, 'deliveryBasis')">
+                <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
+                <input type="text" id="paymentTerms" formControlName="paymentTerms"
+                       [class.invalid]="isFieldInvalid(i, 'paymentTerms')">
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col-3">
+                <label class="clr-control-label" for="startPrice">Начальная максимальная цена</label>
+                <input type="number"
+                       id="startPrice"
+                       name="startPrice"
+                       formControlName="startPrice"
+                       min="0.1"
+                       step="0.01" class="hidden-arrows text-right price"
+                       [class.invalid]="isFieldInvalid(i, 'startPrice')">
+              </div>
+              <div class="clr-col-3">
+                <label class="clr-control-label" for="currency">Валюта</label>
+                <div class="select">
+                  <select name="currency" id="currency" formControlName="currency">
+                    <option value="RUB">
+                      RUB
+                    </option>
+                    <option value="USD">
+                      USD
+                    </option>
+                    <option value="EUR">
+                      EUR
+                    </option>
+                    <option value="CHF">
+                      CHF
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="clr-row">
+              <div class="clr-col">
+                <label class="clr-control-label nopadding" for="relatedServices">
+                  Необходимость сопутствующих услуг (ШМР, ПНР)
+                </label>
+                <input type="text"
+                       id="relatedServices"
+                       name="relatedServices"
+                       formControlName="relatedServices">
+
+                <label class="clr-control-label" for="comments">Примечания/комментрии</label>
+                <textarea type="textarea" id="comments" name="comments" formControlName="comments">
+                    </textarea>
+
+                <label class="clr-control-label">Документы</label>
+                <app-document-upload-list (fileSelected)="onDocumentSelected($event, item)"
+                                          [documents]="item.get('documents').value">
+                </app-document-upload-list>
+              </div>
+            </div>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+      </ng-container>
+    </clr-accordion>
+  </div>
+</form>
+
+<div class="addNext">
+  <button class="btn btn-info-outline" (click)="onAddNext()">
+    <clr-icon shape="plus"></clr-icon>
+    Добавить
+  </button>
+</div>
+
+<div class="submit">
+  <button type="button"
+          class="btn btn-primary btn-send"
+          (click)="onSubmit()"
+          [disabled]="requestDataForm.invalid || (itemForm.controls.length === 0)">
+    Отправить
+  </button>
+</div>
