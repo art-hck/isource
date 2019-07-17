@@ -21,7 +21,7 @@ export class CustomValidators {
   }
 
   static cyrrilicNotRequired(control: FormControl): any {
-    if (control.value == '') {
+    if (control.value === '') {
       return null;
     }
     return CustomValidators.cyrrilic(control);
