@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
@@ -10,6 +19,7 @@ import { RequestService as CustomerRequestService } from "../../../customer/serv
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestDocument } from "../../models/request-document";
 import {EditRequestService} from "../../services/edit-request.service";
+import {ClrTabLink} from '@clr/angular';
 import * as moment from "moment";
 
 @Component({
@@ -17,7 +27,7 @@ import * as moment from "moment";
   templateUrl: './position-info.component.html',
   styleUrls: ['./position-info.component.css']
 })
-export class PositionInfoComponent implements OnInit {
+export class PositionInfoComponent implements OnInit, AfterViewInit {
   protected _opened = false;
 
   @Input()
@@ -29,6 +39,8 @@ export class PositionInfoComponent implements OnInit {
   get showInfo() {
     return this._opened;
   }
+
+  @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
   @Input() positionInfoEditable: boolean;
   @Input() requestPosition: RequestPosition;
@@ -46,7 +58,6 @@ export class PositionInfoComponent implements OnInit {
   offerWinner: Uuid;
   contractForm: FormGroup;
 
-
   constructor(
     private formBuilder: FormBuilder,
     private offersService: OffersService,
@@ -56,6 +67,25 @@ export class PositionInfoComponent implements OnInit {
   ) { }
 
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.tabLinks.changes.subscribe(tabChange => {
+        console.log(tabChange._results);
+
+        const noActiveTab = tabChange._results.every(function (tab) {
+          return tab.active === false;
+        });
+
+        console.log('No active tab: ', noActiveTab);
+
+        if (noActiveTab) {
+          console.log('Activating the first tab');
+          this.tabLinks.first.activate();
+        }
+      });
+    });
+  }
+
   ngOnInit() {
     this.contractForm = this.formBuilder.group({
       comments: [''],
@@ -63,6 +93,10 @@ export class PositionInfoComponent implements OnInit {
     });
   }
 
+
+  activateFirstTab() {
+    this.tabLinks.first.activate();
+  }
 
   getDeliveryDate(val: any) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
