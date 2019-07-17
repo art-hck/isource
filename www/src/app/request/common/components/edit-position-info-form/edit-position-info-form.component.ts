@@ -52,12 +52,17 @@ export class EditPositionInfoFormComponent implements OnInit {
 
   dateMinimum(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
+
+      if (control.value === '') {
+        return null;
+      }
+
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
 
       return controlDate.isAfter(validationDate) ? null : {
         'date-minimum': {
-          'date-minimum': validationDate,
+          'date-minimum': validationDate.format('DD.MM.YYYY'),
           'actual': controlDate.format('DD.MM.YYYY')
         }
       };
@@ -68,16 +73,17 @@ export class EditPositionInfoFormComponent implements OnInit {
     return (val === this.requestPosition.currency);
   }
 
-  changeDeliveryDate(val: any) {
+  get dateObject() {
+    return this.requestPosition.deliveryDate ?
+      moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY') :
+      moment(new Date()).format('DD.MM.YYYY');
+  }
+  set dateObject(val) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
       this.requestPosition.deliveryDate = val;
     } else {
       this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
     }
-  }
-
-  get dateObject() {
-    return moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
   }
 
   addItemFormGroup(): FormGroup {
@@ -86,11 +92,8 @@ export class EditPositionInfoFormComponent implements OnInit {
       productionDocument: [this.requestPosition.productionDocument, [Validators.required]],
       quantity: [this.requestPosition.quantity, [Validators.required, Validators.min(1)]],
       measureUnit: [this.requestPosition.measureUnit, [Validators.required]],
-      deliveryDate: [this.requestPosition.deliveryDate ?
-        this.requestPosition.deliveryDate :
-        ''
-        , [Validators.required, this.dateMinimum()]],
-      isDeliveryDateAsap: [false],
+      deliveryDate: [this.requestPosition.deliveryDate, [Validators.required, this.dateMinimum()]],
+      isDeliveryDateAsap: [this.requestPosition.isDeliveryDateAsap],
       deliveryBasis: [this.requestPosition.deliveryBasis, [Validators.required]],
       paymentTerms: [this.requestPosition.paymentTerms, [Validators.required]],
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
@@ -98,6 +101,10 @@ export class EditPositionInfoFormComponent implements OnInit {
       relatedServices: [this.requestPosition.relatedServices],
       comments: [this.requestPosition.comments]
     });
+
+    if (!!itemForm.get('isDeliveryDateAsap').value) {
+      itemForm.get('deliveryDate').disable();
+    }
 
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
