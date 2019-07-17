@@ -20,67 +20,74 @@ export class CustomValidators {
     return CustomValidators.twentyDigits(control);
   }
 
+  static cyrrilicNotRequired(control: FormControl): any {
+    if (control.value === '') {
+      return null;
+    }
+    return CustomValidators.cyrrilic(control);
+  }
+
   // Используется для валидации КПП и БИК
   protected static nineDigits(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^\d{9}$/);
+    const valid = String(value).trim().match(/^\d{9}$/);
     return valid ? null : {field: true};
 }
 
   // Используется для валидации банковского и корреспонденского счета
   static twentyDigits(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^\d{20}$/);
+    const valid = String(value).trim().match(/^\d{20}$/);
     return valid ? null : {field: true};
   }
 
   static index(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^\d{6}$/);
+    const valid = String(value).trim().match(/^\d{6}$/);
     return valid ? null : {field: true};
   }
 
   static ogrn(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^\d{13}$/);
+    const valid = String(value).trim().match(/^\d{13}$/);
     return valid ? null : {field: true};
   }
 
   static inn(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^(\d{10}|\d{12})$/);
+    const valid = String(value).trim().match(/^(\d{10}|\d{12})$/);
     return valid ? null : {field: true};
   }
 
   // Используется для валидации ФИО, разрешена киррилица, пробелы и тире
   static cyrrilicName(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^[а-яА-ЯёЁ\s]+$/);
+    const valid = String(value).trim().match(/^[а-яА-ЯёЁ\s]+$/);
     return valid ? null : {field: true};
   }
 
   // Используется для валидации наименований организаций и адресов, разрешена кириллица, пробелы, тире, цифры и знаки припинания
   static cyrrilic(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
+    const valid = String(value).trim().match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
     return valid ? null : {field: true};
   }
 
   static email(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/);
+    const valid = String(value).trim().match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/);
     return valid ? null : {field: true};
   }
 
   static phone(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/^\d{10,11}$/);
+    const valid = String(value).trim().match(/^\d{10,11}$/);
     return valid ? null : {field: true};
   }
 
   static password(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).match(/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/);
+    const valid = String(value).trim().match(/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/);
     return valid ? null : {field: true};
   }
 

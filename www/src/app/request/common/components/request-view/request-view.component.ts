@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../models/request";
 import {RequestPosition} from "../../models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
 import {RequestTypes} from "../../enum/request-types";
 import {CreateRequestPositionService} from "../../services/create-request-position.service";
 
@@ -17,14 +16,17 @@ export class RequestViewComponent implements OnInit {
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
 
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Output() changeRequestInfo = new EventEmitter<boolean>();
+  @Output() createdNewPosition = new EventEmitter<Uuid>();
 
-  selectedRequestPosition: RequestPosition;
+  selectedRequestPosition: RequestPosition|null;
   showInfo = false;
   showRequestInfo: boolean;
   showPositionList = true;
   showUploadPositionsFromExcelForm = false;
-  selectedIndex: number;
+  selectedIndex: number|null;
+  positionInfoEditable = false;
 
   constructor(
     private createRequestPositionService: CreateRequestPositionService
@@ -47,10 +49,13 @@ export class RequestViewComponent implements OnInit {
     this.showInfo = false;
   }
 
-  onUpdateInfo(requestPosition: RequestPosition[]) {
-    const index = requestPosition.map(el => el.id).indexOf(this.selectedRequestPosition.id);
-    this.selectedRequestPosition = requestPosition[index];
-    this.updatePositionInfoEvent.emit();
+  onUpdatePositionInfo(requestPosition: RequestPosition[]) {
+    this.changePositionInfo.emit();
+    this.selectedRequestPosition = requestPosition[this.selectedIndex];
+  }
+
+  onUpdateRequestInfo() {
+    this.changeRequestInfo.emit();
   }
 
   onUploadPositionsFromExcel() {
@@ -85,5 +90,40 @@ export class RequestViewComponent implements OnInit {
           alert(msg);
         });
     }
+  }
+
+  addNewPosition(): void {
+    const requestPosition = new RequestPosition();
+    requestPosition.id = null;
+    requestPosition.requestId = this.requestId;
+    this.showInfo = true;
+    this.positionInfoEditable = true;
+    this.selectedRequestPosition = requestPosition;
+  }
+
+  onCreatedNewPosition(positionId: Uuid): void {
+    this.selectedRequestPosition = null;
+    this.showInfo = false;
+    this.selectedIndex = null;
+    this.positionInfoEditable = false;
+    this.createdNewPosition.emit(positionId);
+  }
+
+  selectPosition(positionId: Uuid): void {
+    const {position, index} = this.getPositionById(positionId);
+    if (!position) {
+      return;
+    }
+    this.onSelectPosition(position, index);
+  }
+
+  protected getPositionById(positionId: Uuid): {position: RequestPosition|null, index: number|null} {
+    for (let i = 0; i < this.requestPositions.length; i++) {
+      const requestPosition = this.requestPositions[i];
+      if (requestPosition.id === positionId) {
+        return {position: requestPosition, index: i};
+      }
+    }
+    return {position: null, index: null};
   }
 }

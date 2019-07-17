@@ -1,5 +1,7 @@
 <app-request-view [isCustomerView]="false"
                   [request]="request"
                   [requestPositions]="requestPositions"
-                  [requestId]="requestId">
+                  [requestId]="requestId"
+                  (createdNewPosition)="onCreatedNewPosition($event)"
+                  (changeRequestInfo)="onUpdateRequestInfo()">
 </app-request-view>

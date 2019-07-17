@@ -92,7 +92,8 @@
                   <app-edit-position-info-form [requestPosition]="requestPosition"
                                                (updatedRequestPositionItem)="getUpdatedRequestPositionInfo($event)"
                                                (positionInfoEditable)="onChangeEditableFormState($event)"
-                                               (updatePositionInfoEvent)="onUpdateInfo()">
+                                               (changePositionInfo)="onUpdatePositionInfo()"
+                                               (createdNewPosition)="onCreatedNewPosition($event)">
                   </app-edit-position-info-form>
                 </div>
 

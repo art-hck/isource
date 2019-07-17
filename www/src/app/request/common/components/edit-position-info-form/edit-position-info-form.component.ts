@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RequestPosition} from "../../models/request-position";
 import {OffersService} from "../../../back-office/services/offers.service";
 import {EditRequestService} from "../../services/edit-request.service";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {
   AbstractControl,
   FormBuilder,
@@ -12,7 +12,9 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
-import {CustomValidators} from "../../../../shared/forms/custom.validators";
+import { CreateRequestService } from '../../services/create-request.service';
+import { Uuid } from 'src/app/cart/models/uuid';
+import { RequestSavingType } from '../../enum/request-saving-type';
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -23,24 +25,29 @@ export class EditPositionInfoFormComponent implements OnInit {
 
   positionInfoDataForm: FormGroup;
   requestPositionItem: RequestPosition;
+  requestId: Uuid;
 
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
 
   @Output() positionInfoEditable = new EventEmitter<boolean>();
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
+  @Output() createdNewPosition = new EventEmitter<Uuid>();
 
   constructor(
     private formBuilder: FormBuilder,
     private offersService: OffersService,
     private editRequestService: EditRequestService,
-    protected router: Router
+    protected router: Router,
+    protected createRequestService: CreateRequestService,
+    protected route: ActivatedRoute
   ) { }
 
 
   ngOnInit() {
     this.positionInfoDataForm = this.addItemFormGroup();
+    this.requestId = this.route.snapshot.paramMap.get('id');
   }
 
   dateMinimum(): ValidatorFn {
@@ -118,20 +125,63 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   onSavePositionInfo() {
+    if (typeof this.requestPosition.id !== 'string') {
+      this.saveNewPosition();
+      return;
+    }
+    this.saveExistsPosition();
+  }
+
+  protected saveExistsPosition(): void {
     this.requestPositionItem = this.positionInfoDataForm.value;
-    return this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
-      (data: any) => {
-        this.updatePositionInfoEvent.emit();
-        this.positionInfoEditable.emit(false);
-
-        if (this.requestPositionItem.deliveryDate) {
-          this.requestPositionItem.deliveryDate = moment(this.requestPositionItem.deliveryDate, 'DD.MM.YYYY').format();
-        }
-
-        this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
-        this.updatedRequestPositionItem.emit(this.requestPosition);
+    this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
+      () => {
+        this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
       }
     );
+  }
+
+  protected saveNewPosition(): void {
+    this.requestPositionItem = this.positionInfoDataForm.value;
+    const dataForm = this.formBuilder.group({
+      'itemForm': this.formBuilder.array([
+        this.positionInfoDataForm
+      ])
+    });
+    const requestItem = dataForm.value;
+    this.createRequestService.addRequestPosition(this.requestId, requestItem['itemForm']).subscribe(
+      (ids) => {
+        if (!(ids && ids.length > 0 && ids[0].id)) {
+          alert('Ошибка сохранения новой позиции');
+          return;
+        }
+        const id = ids[0].id;
+        this.afterSavePosition(RequestSavingType.NEW, id);
+      },
+      () => {
+        alert('Ошибка сохранения новой позиции');
+      }
+    );
+  }
+
+  /**
+   * @param type
+   * @param updatedPositionId Идентификатор позиции
+   */
+  protected afterSavePosition(type: RequestSavingType, updatedPositionId: Uuid): void {
+    this.changePositionInfo.emit();
+    this.positionInfoEditable.emit(false);
+
+    if (this.requestPositionItem.deliveryDate) {
+      this.requestPositionItem.deliveryDate = moment(this.requestPositionItem.deliveryDate, 'DD.MM.YYYY').format();
+    }
+
+    this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
+    this.updatedRequestPositionItem.emit(this.requestPosition);
+
+    if (type === RequestSavingType.NEW) {
+      this.createdNewPosition.emit(updatedPositionId);
+    }
   }
 
 }
