@@ -32,7 +32,7 @@ export class RegistrationComponent implements OnInit {
       confirmedPassword: ['', [Validators.required, CustomValidators.passwordConfirming('password')]],
       lastName: ['', [Validators.required, CustomValidators.cyrrilicName]],
       firstName: ['', [Validators.required, CustomValidators.cyrrilicName]],
-      secondName: [''],
+      secondName: ['', CustomValidators.cyrrilicNotRequired],
       email: ['', [Validators.required, CustomValidators.email]],
       phone: ['', [Validators.required, CustomValidators.phone]],
       agreement: [false, [Validators.required, Validators.requiredTrue]]
@@ -50,7 +50,7 @@ export class RegistrationComponent implements OnInit {
       area: ['', [Validators.required, CustomValidators.cyrrilic]],
       city: ['', [Validators.required, CustomValidators.cyrrilic]],
       index: ['', [Validators.required, CustomValidators.index]],
-      town: ['', CustomValidators.cyrrilic],
+      town: ['', CustomValidators.cyrrilicNotRequired],
       address: ['', [Validators.required, CustomValidators.cyrrilic]],
       bankAccount: ['', [Validators.required, CustomValidators.bankAccount]],
       bik: ['', [Validators.required, CustomValidators.kpp]],

@@ -20,6 +20,13 @@ export class CustomValidators {
     return CustomValidators.twentyDigits(control);
   }
 
+  static cyrrilicNotRequired(control: FormControl): any {
+    if (control.value === '') {
+      return null;
+    }
+    return CustomValidators.cyrrilic(control);
+  }
+
   // Используется для валидации КПП и БИК
   protected static nineDigits(control: FormControl): any {
     const value = control.value || '';
