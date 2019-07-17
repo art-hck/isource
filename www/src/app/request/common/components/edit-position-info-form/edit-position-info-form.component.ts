@@ -31,7 +31,7 @@ export class EditPositionInfoFormComponent implements OnInit {
   @Input() isCustomerView: boolean;
 
   @Output() positionInfoEditable = new EventEmitter<boolean>();
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
 
@@ -160,7 +160,7 @@ export class EditPositionInfoFormComponent implements OnInit {
    * @param updatedPositionId Идентификатор позиции
    */
   protected afterSavePosition(type: RequestSavingType, updatedPositionId: Uuid): void {
-    this.updatePositionInfoEvent.emit();
+    this.changePositionInfo.emit();
     this.positionInfoEditable.emit(false);
 
     if (this.requestPositionItem.deliveryDate) {

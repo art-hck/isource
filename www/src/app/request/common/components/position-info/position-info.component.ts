@@ -13,7 +13,6 @@ import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-po
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { OffersService } from "../../../back-office/services/offers.service";
-import { Request } from "../../models/request";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
 import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -50,7 +49,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
   @Output() showPositionList = new EventEmitter<boolean>();
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() updatePositionInfoEvent = new EventEmitter<boolean>();
+  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Output() changeRequestInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
 
@@ -137,9 +137,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
         if (data.requestStatus !== null) {
-          this.backofficeRequestService.getRequestInfo(this.requestId).subscribe(
-            (request: Request) => {}
-          );
+          this.changeRequestInfo.emit();
         }
       });
   }
@@ -152,8 +150,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  onUpdateInfo() {
-    this.updatePositionInfoEvent.emit();
+  onUpdatePositionInfo() {
+    this.changePositionInfo.emit();
   }
 
   onChangeEditableFormState(state) {
