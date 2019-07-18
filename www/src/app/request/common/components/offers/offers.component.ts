@@ -116,7 +116,13 @@ export class OffersComponent implements OnInit {
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
-        console.log(documents);
+        documents.forEach(document => offer.documents.push(document));
+      });
+  }
+
+  onUploadTechnicalProposals(files: File[], offer: RequestOfferPosition) {
+    this.offersService.uploadTechnicalProposals(offer, files)
+      .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
       });
   }
