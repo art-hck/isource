@@ -92,6 +92,7 @@
                          [(showInfo)]="showInfo"
                          [requestId]="requestId"
                          (showPositionList)="showPositionList"
+                         (updatedRequestPositionItem)="onUpdatedRequestPositionItem($event)"
                          (changePositionInfo)="onUpdatePositionInfo(requestPositions)"
                          (changeRequestInfo)="onUpdateRequestInfo()"
                          [isCustomerView]="isCustomerView"

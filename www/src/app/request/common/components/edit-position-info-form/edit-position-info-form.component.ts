@@ -134,8 +134,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   protected saveExistsPosition(): void {
     this.requestPositionItem = this.positionInfoDataForm.value;
     this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
-      () => {
-        this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
+      (response) => {
+        Object.assign(this.requestPositionItem, response);
+        this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem);
       }
     );
   }
@@ -148,14 +149,15 @@ export class EditPositionInfoFormComponent implements OnInit {
       ])
     });
     const requestItem = dataForm.value;
+
     this.createRequestService.addRequestPosition(this.requestId, requestItem['itemForm']).subscribe(
       (ids) => {
         if (!(ids && ids.length > 0 && ids[0].id)) {
           alert('Ошибка сохранения новой позиции');
           return;
         }
-        const id = ids[0].id;
-        this.afterSavePosition(RequestSavingType.NEW, id);
+        this.requestPosition.id = ids[0].id;
+        this.afterSavePosition(RequestSavingType.NEW, this.requestPosition);
       },
       () => {
         alert('Ошибка сохранения новой позиции');
@@ -165,17 +167,22 @@ export class EditPositionInfoFormComponent implements OnInit {
 
   /**
    * @param type
-   * @param updatedPositionId Идентификатор позиции
+   * @param updatedPosition Позиция
    */
-  protected afterSavePosition(type: RequestSavingType, updatedPositionId: Uuid): void {
+  protected afterSavePosition(type: RequestSavingType, updatedPosition: RequestPosition): void {
+    const updatedPositionId = updatedPosition.id;
+
     this.changePositionInfo.emit();
     this.positionInfoEditable.emit(false);
 
-    if (this.requestPositionItem.deliveryDate) {
-      this.requestPositionItem.deliveryDate = moment(this.requestPositionItem.deliveryDate, 'DD.MM.YYYY').format();
+    if (updatedPosition.deliveryDate) {
+      updatedPosition.deliveryDate = moment(updatedPosition.deliveryDate, 'DD.MM.YYYY').format();
     }
 
-    this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
+
+    this.requestPosition = updatedPosition;
+
+
     this.updatedRequestPositionItem.emit(this.requestPosition);
 
     if (type === RequestSavingType.NEW) {
