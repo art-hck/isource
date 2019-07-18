@@ -13,10 +13,10 @@ export class OrderComponent implements OnInit {
 
   @Input() supplier: Supplier|null = null;
 
-  protected dateDeliveryInvalid = false;
-  protected addressInvalid = false;
-  protected dateResponseInvalid = false;
-  protected data: OrderFormInfo;
+  dateDeliveryInvalid = false;
+  addressInvalid = false;
+  dateResponseInvalid = false;
+  data: OrderFormInfo;
 
   constructor(
     protected store: StoreService,
@@ -55,7 +55,7 @@ export class OrderComponent implements OnInit {
     return this.data.address;
   }
 
-  protected async onOrderButtonClick() {
+  async onOrderButtonClick() {
     this.updateDateFieldInvalidState();
     this.updateAddressInvalidState();
     if (this.dateDeliveryInvalid || this.dateResponseInvalid || this.addressInvalid) {
@@ -67,7 +67,7 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  protected updateDateFieldInvalidState() {
+  updateDateFieldInvalidState() {
     const todayDate = new Date(); // Получаем текущую дату (включая время)
     todayDate.setHours(0, 0, 0, 0); // Сбрасываем часы, минуты и секунды до 00:00:00 для корректного сравнения дат
 
@@ -85,7 +85,7 @@ export class OrderComponent implements OnInit {
   }
 
 
-  protected updateAddressInvalidState() {
+  updateAddressInvalidState() {
     this.addressInvalid = Boolean(this.data.address.length === 0);
   }
 

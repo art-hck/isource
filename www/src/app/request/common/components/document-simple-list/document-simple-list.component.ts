@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { RequestDocument } from "../../models/request-document";
 import { Guid } from "guid-typescript";
 import { DocumentsService } from "../../services/documents.service";
+import { Uuid } from "../../../../cart/models/uuid";
 
 /**
  * Компонент для отображение списка документов и загрузки новых документов в этот список
@@ -28,7 +29,7 @@ export class DocumentSimpleListComponent implements OnInit {
 
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
 
-  protected uploadInputId;
+  uploadInputId: Guid;
 
   constructor(
     private documentsService: DocumentsService

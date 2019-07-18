@@ -12,9 +12,8 @@ export class SupplierComponent implements OnInit {
 
   @Input() supplier: Supplier;
 
-  protected orderDisplay = 'none';
-
-  protected sumBlockDisplay = 'block';
+  orderDisplay = 'none';
+  sumBlockDisplay = 'block';
 
   constructor(
     protected store: StoreService,
