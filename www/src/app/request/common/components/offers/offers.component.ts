@@ -123,7 +123,7 @@ export class OffersComponent implements OnInit {
   onUploadTechnicalProposals(files: File[], offer: RequestOfferPosition) {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
-        documents.forEach(document => offer.documents.push(document));
+        documents.forEach(document => offer.technicalProposals.push(document));
       });
   }
 }
