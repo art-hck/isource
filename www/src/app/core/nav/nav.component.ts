@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AvailableGuiService } from 'stdlib-ng/dist/core';
+import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../services/user-info.service";

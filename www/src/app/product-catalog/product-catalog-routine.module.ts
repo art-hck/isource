@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { AccessGuard } from 'stdlib-ng/dist/core';
+import { AccessGuard } from '@stdlib-ng/core';
 import { ProductCatalogComponent } from "./page/product-catalog.component";
 
 const routes: Routes = [
