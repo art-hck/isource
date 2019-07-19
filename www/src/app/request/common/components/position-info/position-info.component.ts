@@ -153,7 +153,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   }
 
   onUpdatePositionInfo() {
-    console.log('onUpdatePositionInfo');
     this.changePositionInfo.emit();
   }
 
@@ -162,7 +161,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   }
 
   getUpdatedRequestPositionInfo(requestPosition: any) {
-    console.log('triggered', requestPosition);
     this.requestPosition = requestPosition;
     this.updatedRequestPositionItem.emit(requestPosition);
   }

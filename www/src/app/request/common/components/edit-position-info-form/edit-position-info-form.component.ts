@@ -179,9 +179,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       updatedPosition.deliveryDate = moment(updatedPosition.deliveryDate, 'DD.MM.YYYY').format();
     }
 
-
     this.requestPosition = updatedPosition;
-
 
     this.updatedRequestPositionItem.emit(this.requestPosition);
 

@@ -53,7 +53,6 @@ export class CustomerRequestViewComponent implements OnInit {
 
   onCreatedNewPosition(positionId: Uuid): void {
     this.updatePositionsList((requestPositions) => {
-      console.log('##########', requestPositions);
       this.requestPositions = requestPositions;
       this.requestView.selectPosition(positionId);
     });
