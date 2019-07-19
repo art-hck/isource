@@ -71,6 +71,11 @@ export class NavComponent implements OnInit {
   protected getCustomerMenu(): Array<MenuModel> {
     return [
       {
+        text: 'Каталог',
+        path: 'catalog',
+        children: []
+      },
+      {
         text: 'Новая заявка',
         path: 'requests/create',
         children: []

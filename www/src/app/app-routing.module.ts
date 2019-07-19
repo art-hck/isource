@@ -12,6 +12,7 @@ import {RegistrationComponent} from "./registration/components/registration.comp
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
+  { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'pricelist', component: PriceListComponent},
