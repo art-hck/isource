@@ -36,19 +36,20 @@ export class RequestListStatusesFilterComponent implements ClrDatagridFilterInte
   accepts(requests: RequestsList) {
     const that = this;
 
-    if (requests.positions) {
-      requests.positions.some(function(item) {
-        // console.log('accepts: ' + !!(that.statuses.indexOf(item.status.name) > -1));
+    if (requests.positions.length > 0) {
+      requests.positions.some((item) => {
         if (!!(that.statuses.indexOf(item.status.name) > -1)) {
           that.flag = true;
-          console.log('accepts: ' + that.flag);
-          return that.flag;
+          console.log('accepts true: ' + that.flag);
+        } else {
+          that.flag = false;
+          console.log('accepts false: ' + that.flag);
         }
       });
+    } else {
+      that.flag = false;
     }
 
-    this.flag = false;
-    console.log('accepts: ' + this.flag);
     return this.flag;
   }
 
