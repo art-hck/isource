@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import {Router} from "@angular/router";
 import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
 import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
-import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
+// import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
 import {RequestTypes} from "../../enum/request-types";
 
 @Component({
@@ -17,7 +17,7 @@ export class RequestListComponent implements OnInit {
 
   private customerNameFilter = new CustomerNameFilter();
   private requestStatusFilter = new RequestStatusFilter();
-  private positionStatusFilter = new PositionStatusFilter();
+  // private positionStatusFilter = new PositionStatusFilter();
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];

@@ -23,7 +23,11 @@
 
   <clr-dg-column class="request-position-statuses">
     Статус позиций
-    <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>
+<!--    <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>-->
+    <clr-dg-filter>
+      <app-request-list-statuses-filter [requests]="requests">
+      </app-request-list-statuses-filter>
+    </clr-dg-filter>
   </clr-dg-column>
 
   <clr-dg-row *clrDgItems="let request of requests; let i = index" (click)="onRowClick(request)">
