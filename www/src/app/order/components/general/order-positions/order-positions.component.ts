@@ -63,7 +63,7 @@ export class OrderPositionsComponent implements AfterViewInit, OnInit {
     this.positions.entities.length = 0;
   }
 
-  protected onChangePage() {
+  onChangePage() {
     this.loadOrderPositions();
   }
 }

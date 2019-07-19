@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AvailableGuiService } from 'stdlib-ng/dist/core';
+import { AvailableGuiService } from '@stdlib-ng/core';
 import { UserInfo } from "../models/user-info";
 import { Contragent } from "../models/contragent";
 

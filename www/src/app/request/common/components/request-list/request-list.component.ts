@@ -15,12 +15,12 @@ import {RequestTypes} from "../../enum/request-types";
 
 export class RequestListComponent implements OnInit {
 
-  private customerNameFilter = new CustomerNameFilter();
-  private requestStatusFilter = new RequestStatusFilter();
-  private positionStatusFilter = new PositionStatusFilter();
-
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
+
+  customerNameFilter = new CustomerNameFilter();
+  requestStatusFilter = new RequestStatusFilter();
+  positionStatusFilter = new PositionStatusFilter();
 
   constructor(
     protected router: Router

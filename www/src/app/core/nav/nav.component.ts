@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AvailableGuiService } from 'stdlib-ng/dist/core';
+import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../services/user-info.service";
@@ -19,7 +19,7 @@ export class NavComponent implements OnInit {
     public auth: AuthService,
     protected gui: AvailableGuiService,
     private router: Router,
-    protected user: UserInfoService
+    public user: UserInfoService
   ) {
     router.events.subscribe(() => {
       this.showMenu = !(this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0);
