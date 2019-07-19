@@ -23,4 +23,5 @@ export class RequestOfferPosition {
   isMinPrice: boolean;
   isWinner: boolean;
   documents: RequestDocument[];
+  technicalProposals: RequestDocument[];
 }

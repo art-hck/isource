@@ -33,4 +33,14 @@ export class OffersService {
     const url = `requests/backoffice/offers/${offer.id}/documents/upload`;
     return this.api.post<RequestDocument[]>(url, formData);
   }
+
+  uploadTechnicalProposals(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
+    });
+
+    const url = `requests/backoffice/offers/${offer.id}/technical-proposals/upload`;
+    return this.api.post<RequestDocument[]>(url, formData);
+  }
 }
