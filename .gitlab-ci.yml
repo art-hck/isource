@@ -10,7 +10,7 @@ build-front:
   script:
     - pwd | xargs /bin/bash /var/agent/front/01.sync.sh
     - /bin/bash /var/agent/front/02.npm_install.sh
-    - /bin/bash /var/agent/front/03.ng_build.sh
+    - /bin/bash /var/agent/front/03.ng_build_prod.sh
     - exit 0
   only:
     - master
