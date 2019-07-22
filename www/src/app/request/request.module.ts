@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RequestRoutingModule } from './request-routing.module';
+import { TextMaskModule } from 'angular2-text-mask';
 import { CreateRequestComponent } from "./common/components/create-request/create-request.component";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -52,7 +53,8 @@ import { CreateRequestFormComponent } from './common/components/create-request-f
   imports: [
     SharedModule,
     RequestRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TextMaskModule
   ],
   providers: [
     BackofficeRequestService,

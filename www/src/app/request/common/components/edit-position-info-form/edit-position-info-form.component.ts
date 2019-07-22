@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {RequestPosition} from "../../models/request-position";
 import {OffersService} from "../../../back-office/services/offers.service";
 import {EditRequestService} from "../../services/edit-request.service";
+import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
 import {Router, ActivatedRoute} from "@angular/router";
 import {
   AbstractControl,
@@ -34,6 +35,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
+
+  autoCorrectedDatePipe: any = createAutoCorrectedDatePipe('dd.mm.yyyy');
+  public dateMask = [/\d/, /\d/, '.', /\d/, /\d/, '.', /[1-3]/, /\d/, /\d/, /\d/];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,15 +78,22 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   get dateObject() {
-    return this.requestPosition.deliveryDate ?
-      moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY') :
-      moment(new Date()).format('DD.MM.YYYY');
+    if (this.requestPosition.deliveryDate)  {
+      if (moment(this.requestPosition.deliveryDate, 'DD.MM.YYYY', true).isValid()) {
+        return this.requestPosition.deliveryDate;
+      } else {
+        return this.requestPosition.deliveryDate = moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
+      }
+    }
+    return moment(new Date()).format('DD.MM.YYYY');
   }
   set dateObject(val) {
-    if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
-      this.requestPosition.deliveryDate = val;
-    } else {
-      this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
+    if (val) {
+      if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
+        this.requestPosition.deliveryDate = val;
+      } else {
+        this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
+      }
     }
   }
 
@@ -152,10 +163,6 @@ export class EditPositionInfoFormComponent implements OnInit {
 
     this.createRequestService.addRequestPosition(this.requestId, requestItem['itemForm']).subscribe(
       (ids) => {
-        if (!(ids && ids.length > 0 && ids[0].id)) {
-          alert('Ошибка сохранения новой позиции');
-          return;
-        }
         this.requestPosition.id = ids[0].id;
         this.afterSavePosition(RequestSavingType.NEW, this.requestPosition);
       },
@@ -175,17 +182,15 @@ export class EditPositionInfoFormComponent implements OnInit {
     this.changePositionInfo.emit();
     this.positionInfoEditable.emit(false);
 
-    if (updatedPosition.deliveryDate) {
-      updatedPosition.deliveryDate = moment(updatedPosition.deliveryDate, 'DD.MM.YYYY').format();
-    }
-
     this.requestPosition = updatedPosition;
 
-    this.updatedRequestPositionItem.emit(this.requestPosition);
-
-    if (type === RequestSavingType.NEW) {
-      this.createdNewPosition.emit(updatedPositionId);
+    switch (type) {
+      case RequestSavingType.EXISTS:
+        this.updatedRequestPositionItem.emit(this.requestPosition);
+        break;
+      case RequestSavingType.NEW:
+        this.createdNewPosition.emit(updatedPositionId);
+        break;
     }
   }
-
 }

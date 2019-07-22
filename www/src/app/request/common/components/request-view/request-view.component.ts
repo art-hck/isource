@@ -56,11 +56,12 @@ export class RequestViewComponent implements OnInit {
   }
 
   onUpdatedRequestPositionItem(updatedPosition: RequestPosition): void {
-    this.requestPositions.forEach((position: RequestPosition) => {
-      if (position.id === updatedPosition.id) {
-        Object.assign(position, updatedPosition);
+    const requestPosition = this.requestPositions.find(function(position) {
+        return position.id === updatedPosition.id;
       }
-    });
+    );
+
+    Object.assign(requestPosition, updatedPosition);
   }
 
 
