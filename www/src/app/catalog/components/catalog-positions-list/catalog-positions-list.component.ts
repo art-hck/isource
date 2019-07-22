@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {CatalogService} from "../../services/catalog.service";
-import {CatalogPosition} from "../../models/catalog-position";
+import { CatalogService } from "../../services/catalog.service";
+import { CatalogPosition } from "../../models/catalog-position";
 
 @Component({
   selector: 'catalog-positions-list',
