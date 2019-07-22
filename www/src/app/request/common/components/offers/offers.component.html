@@ -83,7 +83,8 @@
   <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
   <clr-dg-column class="clr-col-2">КП</clr-dg-column>
   <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
-  <clr-dg-column class="clr-col-1" *ngIf="isCustomerView">Победитель</clr-dg-column>
+  <clr-dg-column class="clr-col-1" *ngIf="showWinnerSelectionColumn()">Победитель</clr-dg-column>
+  <clr-dg-column class="clr-col-1" *ngIf="showWinnerStateColumn"></clr-dg-column>
 
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
     <clr-dg-cell class="clr-col-3 offer">
@@ -108,12 +109,15 @@
         (selected)="onUploadTechnicalProposals($event, linkedOffer)"
       ></app-document-simple-list>
     </clr-dg-cell>
-    <clr-dg-cell class="clr-col-1" *ngIf="isCustomerView">
+    <clr-dg-cell class="clr-col-1" *ngIf="showWinnerSelectionColumn()">
       <input type="radio" clrRadio [(ngModel)]="offerWinnerId"
              value="{{linkedOffer.id}}"
              (change)="winnerChoice(linkedOffer)"
              *ngIf="isCustomerView"
              [disabled]="!canChoiceWinner()"/>
+    </clr-dg-cell>
+    <clr-dg-cell class="clr-col-1" *ngIf="showWinnerStateColumn">
+      <span class="label label-success" *ngIf="linkedOffer.isWinner">Победитель</span>
     </clr-dg-cell>
   </clr-dg-row>
 </clr-datagrid>

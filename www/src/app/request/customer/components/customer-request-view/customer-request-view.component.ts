@@ -5,7 +5,7 @@ import {RequestPosition} from "../../../common/models/request-position";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-
+import { LinkedOffersSortService } from 'src/app/request/common/services/linked-offers-sort-service';
 
 @Component({
   selector: 'app-customer-request-view',
@@ -18,6 +18,8 @@ export class CustomerRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
+
+  protected linkedOffersSorter = new LinkedOffersSortService();
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -44,6 +46,8 @@ export class CustomerRequestViewComponent implements OnInit {
   updatePositionsList(callback?: (requestPositions: RequestPosition[]) => void) {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
+        this.linkedOffersSorter.sort(requestPositions);
+        this.requestPositions = requestPositions;
         if (callback) {
           callback(requestPositions);
         }

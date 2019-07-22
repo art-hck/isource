@@ -19,6 +19,7 @@ export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
+  @Input() showWinnerStateColumn = false;
 
   @Output() offerWinner = new EventEmitter<Uuid>();
 
@@ -129,5 +130,15 @@ export class OffersComponent implements OnInit {
         documents.forEach(document => offer.technicalProposals.push(document));
         this.notificationService.toast('Документ загружен');
       });
+  }
+
+  showWinnerSelectionColumn(): boolean {
+    if (!this.isCustomerView) {
+      return false;
+    }
+    if (this.showWinnerStateColumn) {
+      return false;
+    }
+    return true;
   }
 }

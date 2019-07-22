@@ -6,7 +6,8 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  OnChanges
 } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
@@ -23,13 +24,14 @@ import * as moment from "moment";
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
+import { LinkedOffersSortService } from '../../services/linked-offers-sort-service';
 
 @Component({
   selector: 'app-position-info',
   templateUrl: './position-info.component.html',
   styleUrls: ['./position-info.component.css']
 })
-export class PositionInfoComponent implements OnInit, AfterViewInit {
+export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   protected _opened = false;
 
   @Input()
@@ -48,6 +50,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   @Input() requestPosition: RequestPosition;
   @Input() requestId: Uuid;
   @Input() isCustomerView: boolean;
+  @Input() showWinnerStateColumn = false;
 
   // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
   @Output() showPositionList = new EventEmitter<boolean>();
@@ -60,6 +63,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
   contractForm: FormGroup;
+
+  protected linkedOfferSorter = new LinkedOffersSortService();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -96,6 +101,10 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       comments: [''],
       documents: [null]
     });
+  }
+
+  ngOnChanges() {
+    this.updateShowWinnerColumn();
   }
 
   getDeliveryDate(val: any) {
@@ -159,6 +168,14 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        const offerWinner = requestPosition.linkedOffers.find((linkedOffer) => {
+          return (linkedOffer.id === this.offerWinner);
+        });
+        if (offerWinner) {
+          offerWinner.isWinner = true;
+        }
+        this.linkedOfferSorter.sortLinkedOffers(requestPosition.linkedOffers);
+        this.updateShowWinnerColumn();
         this.notificationService.toast('Победитель выбран');
       }
     );
@@ -223,5 +240,13 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING &&
       !this.isCustomerView
     );
+  }
+
+  updateShowWinnerColumn(): void {
+    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(this.requestPosition.status);
+    const winnerSelectedIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
+    );
+    this.showWinnerStateColumn = currentStateIndex >= winnerSelectedIndex;
   }
 }
