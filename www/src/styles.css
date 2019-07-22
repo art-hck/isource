@@ -1,206 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
-body {
-    background-color: #f3f7fa;
-}
-
-h2 {
-    font-weight: 400;
-    line-height: 1;
-    margin-bottom: 13px;
-}
-
-h5 {
-    font-family: Roboto, sans-serif;
-    font-weight: 300;
-    margin-bottom: 25px;
-}
-
-
-/* Улучшение отступов для контента */
-.main-container .content-container .content-area {
-    padding: 30px 10px 30px 10px;
-    overflow-x: hidden;
-    overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
-}
-
-
-/* Стили элемента статуса */
-.status-label {
-    font-weight: 400;
-    color: #4A4A4A;
-}
-.status-badge {
-    height: 8px;
-    min-width: 8px;
-    margin-right: 10px;
-}
-
-
-/* Белый фон в хедере гридов */
-.datagrid .datagrid-header {
-    background-color: white;
-    border-bottom: 0;
-}
-
-
-/* Увеличенный шрифт лейблов полей ввода */
-.form-group label {
-    font-size: 14px;
-}
-
-
-/* Стили элемента stack-view */
-.stack-view .stack-children .stack-block-label {
-    flex: 0 0 0;
-}
-
-.stack-view .stack-block-content {
-    padding: 0;
-}
-.stack-view .stack-children {
-    padding: 0;
-}
-
-.stack-view .stack-children clr-stack-block .stack-block-label {
-    padding-left: 0;
-}
-
-
-/* Стили элемента alert */
-.alert-items {
-    padding: 5px 10px 5px 10px;
-    line-height: 25px;
-    font-size: 13px;
-}
-
-
-/* Центрирование контента в ячейках грида в финансовом блоке */
-.offer-price .datagrid .datagrid-column .datagrid-column-title,
-.offer-price .datagrid .data-head .datagrid-row-actions .datagrid-column-title,
-.offer-price .datagrid .datagrid-cell,
-.offer-price .datagrid .datagrid-column,
-.offer-price .datagrid .datagrid-header .datagrid-row-actions {
-    text-align: center !important;
-}
-
-.datagrid .datagrid-column .datagrid-column-title,
-.datagrid .datagrid-column .datagrid-column-flex,
-.datagrid .datagrid-header .datagrid-row-actions .datagrid-column-flex{
-  align-self: center;
-  align-items: center;
-}
-
-.datagrid-select .clr-control-label {
-    min-height: 1rem;
-    margin-top: 3px;
-}
-
-
-/* Разделительная линия между элементами */
-.right-separator {
-    border-right: 1px solid #D4D9E2;
-}
-
-
-/* Скрытие стрелочек внутри инпута */
-input[type=number].hidden-arrows::-webkit-inner-spin-button,
-input[type=number].hidden-arrows::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-input[type=number].hidden-arrows {
-    -moz-appearance:textfield;
-}
-
-
-/* Стили для реестров */
-.registry-item-value {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-span.registry-purchase-title {
-  font-size: 16px;
-}
-
-
-/* Стили для элементов Card */
-.card {
-  margin: 0 0 24px 0;
-}
-
-.card-link {
-  cursor: pointer;
-}
-
-.card-header {
-  font-weight: 600;
-  font-size: 14px;
-  padding: 10px 15px;
-}
-
-.count-items,
-.header-status {
-  text-transform: initial;
-  font-weight: 400;
-  color: #9fa8b0;
-}
-
-/* Cтили из бутстрапа для группировки кнопки и инпута. todo вынести потом в stdlib-ng */
-.input-group {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  width: 100%;
-}
-.input-group>.custom-file, .input-group>.custom-select, .input-group>.form-control {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  width: 1%;
-  margin-bottom: 0;
-}
-.input-group-append, .input-group-prepend {
-  display: -ms-flexbox;
-  display: flex;
-}
-.input-group>.input-group-append>.btn, .input-group>.input-group-append>.input-group-text, .input-group>.input-group-prepend:first-child>.btn:not(:first-child), .input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child), .input-group>.input-group-prepend:not(:first-child)>.btn, .input-group>.input-group-prepend:not(:first-child)>.input-group-text {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-/** Плейсхолдер датагрида */
-.datagrid-placeholder {
-  border-top: none;
-}
-
-
-
-clr-dg-footer.datagrid-footer {
-    background-color: #fff;
-    border: none;
-    font-size: 14px;
-    border-top: 1px solid #D4D9E2;
-}
-
-.clr-toggle-wrapper {
-    height: initial;
-    display: inline-block;
-    margin-right: 0;
-    margin-left: 7px;
-}
-
-
-
-
-
 /* Цветовые индикаторы к лейблам статусов */
 
 .status-request-NEW:before,
@@ -210,8 +7,16 @@ clr-dg-footer.datagrid-footer {
 .status-position-NEW:before,
 .status-position-PROPOSALS_PREPARATION:before,
 .status-position-RESULTS_AGREEMENT:before,
+.status-position-WINNER_SELECTED:before,
+.status-position-CONTRACT_AGREEMENT:before,
 .status-position-CONTRACT_SIGNING:before,
-.status-position-WINNER_SELECTED:before
+.status-position-CONTRACTED:before,
+.status-position-RKD_AGREEMENT:before,
+.status-position-MANUFACTURING:before,
+.status-position-DELIVERY:before,
+.status-position-DELIVERED:before,
+.status-position-PAID:before,
+.status-position-COMPLETED:before
 {
     content: "";
     display: inline-block;
@@ -243,9 +48,33 @@ clr-dg-footer.datagrid-footer {
 .status-position-RESULTS_AGREEMENT:before {
     background: #00b75e;
 }
+.status-position-WINNER_SELECTED:before {
+    background: rgb(255, 71, 90);
+}
+.status-position-CONTRACT_AGREEMENT:before {
+    background: rgb(97, 77, 255);
+}
 .status-position-CONTRACT_SIGNING:before {
     background: rgb(159, 56, 255);
 }
-.status-position-WINNER_SELECTED:before {
-    background: rgb(255, 71, 90);
+.status-position-CONTRACTED:before {
+    background: rgb(150, 183, 57);
+}
+.status-position-RKD_AGREEMENT:before {
+    background: rgb(142, 46, 90);
+}
+.status-position-MANUFACTURING:before {
+    background: rgb(149, 65, 25);
+}
+.status-position-DELIVERY:before {
+    background: rgb(84, 199, 171);
+}
+.status-position-DELIVERED:before {
+    background: rgb(100, 142, 255);
+}
+.status-position-PAID:before {
+    background: rgb(231, 200, 35);
+}
+.status-position-COMPLETED:before {
+    background: rgb(255, 127, 127);
 }
