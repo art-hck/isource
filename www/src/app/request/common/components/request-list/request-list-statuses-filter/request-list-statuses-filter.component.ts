@@ -3,7 +3,6 @@ import {RequestPositionWorkflowStepLabels} from "../../../dictionaries/request-p
 import {RequestsList} from "../../../models/requests-list/requests-list";
 import {Subject} from "rxjs";
 import {ClrDatagridFilter, ClrDatagridFilterInterface} from "@clr/angular";
-import {PositionsListItem} from "../../../models/requests-list/positions-list-item";
 
 @Component({
   selector: 'app-request-list-statuses-filter',
@@ -11,10 +10,6 @@ import {PositionsListItem} from "../../../models/requests-list/positions-list-it
   styleUrls: ['./request-list-statuses-filter.component.css']
 })
 export class RequestListStatusesFilterComponent implements ClrDatagridFilterInterface<RequestsList> {
-  // toggleStatus(value) {
-  //   this.positionStatusFilter.toggleStatus(value);
-  // }
-
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
 
@@ -78,8 +73,6 @@ export class RequestListStatusesFilterComponent implements ClrDatagridFilterInte
 
     console.log(this.statuses);
 
-    // console.log(param);
-    // console.log(this.statuses.indexOf(param));
     this.changes.next();
   }
 }
