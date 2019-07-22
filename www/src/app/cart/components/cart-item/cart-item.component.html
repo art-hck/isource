@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="clr-row">
+    <div class="clr-col-2 image">
+      <p>Изображение отсутствует</p>
+    </div>
+    <div class="clr-col-7">
+      <p class="position-name">{{ item.catalogPosition.name }}</p>
+      <p class="description">{{ item.catalogPosition.description }}</p>
+      <p>Срок поставки: {{ item.catalogPosition.productionTime }} дней</p>
+    </div>
+    <div class="clr-col-3 right-align">
+      <button class="btn btn-link btn-icon cart-delete-button" (click)="onDeleteItem(item)">
+        <clr-icon shape="times"></clr-icon>
+      </button>
+
+      <p class="supplier-name">{{ item.catalogPosition.supplierContragentName }}</p>
+      <p class="price">{{ item.catalogPosition.price }} {{ item.catalogPosition.currency }} / {{ item.catalogPosition.measureUnit }}</p>
+
+      <div class="cart-quantity-block">
+        <div class="cart-quantity-block-field">
+          <input type="number" name="quantity" step="1" [value]="item.quantity"
+                 (input)="updateItemQuantity(item, $event.target.value)"
+                 class="cart-quantity-field"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

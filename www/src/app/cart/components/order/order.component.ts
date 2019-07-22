@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Supplier } from '../../models/supplier';
-import { StoreService } from '../../services/store.service';
+import { CartStoreService } from '../../services/cart-store.service';
 import { OrderFormInfo } from '../../models/order-form-info';
 import { Router } from '@angular/router';
 
@@ -11,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class OrderComponent implements OnInit {
 
-  @Input() supplier: Supplier|null = null;
+  @Input() supplier: null = null;
 
   protected dateDeliveryInvalid = false;
   protected addressInvalid = false;
@@ -19,7 +18,7 @@ export class OrderComponent implements OnInit {
   protected data: OrderFormInfo;
 
   constructor(
-    protected store: StoreService,
+    protected store: CartStoreService,
     protected router: Router
   ) {
     this.data = new OrderFormInfo({});
