@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {PositionsList} from "../../models/positions-list";
 import {CatalogService} from "../../services/catalog.service";
+import {CatalogPosition} from "../../models/catalog-position";
 
 @Component({
   selector: 'catalog-positions-list',
@@ -8,7 +8,7 @@ import {CatalogService} from "../../services/catalog.service";
   styleUrls: ['./catalog-positions-list.component.css']
 })
 export class CatalogPositionsListComponent implements OnInit {
-  positions: PositionsList[];
+  positions: CatalogPosition[];
 
   constructor(
     private catalogService: CatalogService
@@ -16,7 +16,7 @@ export class CatalogPositionsListComponent implements OnInit {
 
   ngOnInit() {
     this.catalogService.getPositionsList().subscribe(
-      (positions: PositionsList[]) => {
+      (positions: CatalogPosition[]) => {
         this.positions = positions;
       }
     );
