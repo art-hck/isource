@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="item-card" *ngFor="let position of positions">
+    <div class="clr-row">
+      <div class="clr-col-2 image">
+        <p>Изображение отсутствует</p>
+      </div>
+      <div class="clr-col-7">
+        <p class="position-name">{{position.name}}</p>
+        <p class="description">{{position.description}}</p>
+        <p>Срок поставки: {{position.productionTime}} дней</p>
+      </div>
+      <div class="clr-col-3 right-align">
+        <span class="supplier-name">{{position.supplierContragentName}}</span>
+        <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
+        <button class="btn btn-primary">В корзину</button>
+      </div>
+    </div>
+  </div>
+</div>
