@@ -4,6 +4,7 @@ import { Response } from '../../core/models/response.model';
 import { OrderFormInfo } from '../models/order-form-info';
 import { dateToString } from '../../core/utils/date-to-string';
 import { CartItem } from "../models/cart-item";
+import { CatalogPosition } from "../../catalog/models/catalog-position";
 
 @Injectable({
   providedIn: 'root'
@@ -19,20 +20,58 @@ export class CartStoreService {
   }
 
   async load(): Promise<CartItem[]> {
-    if (this.cartItems.length === 0) {
-      const url = 'catalog/cart/list';
-      const resp = await this.api.get<CartItem[]>(url, {responseType: 'json'}).toPromise();
-      this.cartItems = resp;
-    }
+    const url = 'catalog/cart/list';
+    const resp = await this.api.get<CartItem[]>(url).toPromise();
+    this.cartItems = CartStoreService.createItems(resp);
     return this.cartItems;
   }
 
-  getCartItems(): CartItem[] {
+  getItems(): CartItem[] {
     return this.cartItems;
   }
 
   getCount(): number {
-    return 0; // TODO
+    return this.cartItems.length;
+  }
+
+  getSum(): number {
+    let sum = 0;
+
+    for (const item of this.cartItems) {
+      sum += item.getSum();
+    }
+
+    return sum;
+  }
+
+  isCatalogPositionInCart(position: CatalogPosition): boolean {
+    for (const cartItem of this.cartItems) {
+      if (cartItem.catalogPosition === position) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Добавление позиции в корзину
+   *
+   * @param position Позиция
+   * @param quantity Количество
+   */
+  async addItem(position: CatalogPosition, quantity: number = 1): Promise<boolean> {
+    const url = 'catalog/cart/add-item';
+    const params = {
+      catalogPositionId: position.id,
+      quantity: quantity
+    };
+    const resp = await this.api.post<Response<Object>>(url, params).toPromise();
+    if (!resp) {
+      return false;
+    }
+    this.cartItems.push(new CartItem({catalogPosition: position, quantity: quantity}));
+    return true;
   }
 
   /**
@@ -76,49 +115,27 @@ export class CartStoreService {
   }
 
   /**
-   * Отправка заказа
-   *
-   * @param supplier Поставщик и выбранные позиции
-   * @param orderFormInfo Значения из формы оформления заказа в корзине
+   * Очистка корзины
    */
-  async sendOrder(supplier: any, orderFormInfo: OrderFormInfo): Promise<boolean> {
-    return true;
-    /*if (!orderFormInfo.checkFill()) {
-      return false;
-    }
-    const url = 'order/publish-direct-order';
-    const params = {
-      supplierContragentId: supplier.id,
-      supplierResponseDate: dateToString(orderFormInfo.dateResponse),
-      deliveryAddress: orderFormInfo.address,
-      deliveryDate: dateToString(orderFormInfo.dateDelivery),
-      additionalInformation: orderFormInfo.comment
-    };
-    const resp = await this.api.post<Response<Object>>(url, params).toPromise();
+  async clear(): Promise<boolean> {
+    const url = 'catalog/cart/clear';
+    const resp = await this.api.post<Response<Object>>(url, {}).toPromise();
     if (!resp) {
       return false;
     }
-    return this.deleteSupplierLocal(supplier);*/
+    this.cartItems = [];
+    return true;
   }
 
-  protected findItem(item: CartItem): {supplier: number|null, item: number|null} {
-    return null;
-    /*let itemIndex = -1;
-    let supplierIndex = -1;
-
-    const supplier = this.suppliers.find((s: Supplier) => {
-      itemIndex = s.items.indexOf(item);
-      return Boolean(itemIndex >= 0);
-    });
-
-    if (supplier) {
-      supplierIndex = this.suppliers.indexOf(supplier);
+  protected static createItems(rawData: any): CartItem[] {
+    const res = [];
+    if (!rawData) {
+      return res;
     }
-
-    return {
-      supplier: (supplierIndex < 0 ? null : supplierIndex),
-      item: (itemIndex < 0 ? null : itemIndex)
-    };*/
+    for (const rawItem of rawData) {
+      res.push(new CartItem(rawItem));
+    }
+    return res;
   }
 
 }

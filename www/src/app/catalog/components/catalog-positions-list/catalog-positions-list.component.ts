@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CatalogService } from "../../services/catalog.service";
 import { CatalogPosition } from "../../models/catalog-position";
+import { CartStoreService } from "../../../cart/services/cart-store.service";
 
 @Component({
   selector: 'catalog-positions-list',
@@ -11,7 +12,8 @@ export class CatalogPositionsListComponent implements OnInit {
   positions: CatalogPosition[];
 
   constructor(
-    private catalogService: CatalogService
+    private catalogService: CatalogService,
+    private cartStoreService: CartStoreService
   ) { }
 
   ngOnInit() {
@@ -20,5 +22,13 @@ export class CatalogPositionsListComponent implements OnInit {
         this.positions = positions;
       }
     );
+  }
+
+  onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
+    return this.cartStoreService.addItem(position);
+  }
+
+  isPositionInCart(position: CatalogPosition): boolean {
+    return this.cartStoreService.isCatalogPositionInCart(position);
   }
 }

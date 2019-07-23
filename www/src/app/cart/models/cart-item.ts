@@ -1,4 +1,3 @@
-import { Uuid } from './uuid';
 import { CatalogPosition } from "../../catalog/models/catalog-position";
 
 export class CartItem {

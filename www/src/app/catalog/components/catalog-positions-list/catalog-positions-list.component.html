@@ -12,7 +12,7 @@
       <div class="clr-col-3 right-align">
         <span class="supplier-name">{{position.supplierContragentName}}</span>
         <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
-        <button class="btn btn-primary">В корзину</button>
+        <button *ngIf="!isPositionInCart(position)" class="btn btn-primary" (click)="onAddPositionToCart(position)">В корзину</button>
       </div>
     </div>
   </div>

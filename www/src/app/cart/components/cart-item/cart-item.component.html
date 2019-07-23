@@ -22,6 +22,10 @@
                  (input)="updateItemQuantity(item, $event.target.value)"
                  class="cart-quantity-field"/>
         </div>
+        <div class="cart-quantity-block-sum">
+          <span class="cart-value">{{ item.getSum() }}</span>
+          <span class="cart-currency gray"> {{ item.catalogPosition.currency }}</span>
+        </div>
       </div>
     </div>
   </div>

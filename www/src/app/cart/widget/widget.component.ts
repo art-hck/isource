@@ -3,7 +3,7 @@ import { CartStoreService } from "../services/cart-store.service";
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-cart-widget',
+  selector: 'cart-widget',
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.css']
 })

@@ -1,28 +1,9 @@
+h3 {
+  margin-top: 30px;
+}
+
 .order-form {
-  display: table;
   width: 100%;
-}
-
-.order-form-row {
-  display: table-row;
-}
-
-.order-form-cell {
-  display: table-cell;
-}
-
-.order-form .column1 {
-  width: 30%;
-}
-
-.order-form .column2 {
-  padding-left: 20px;
-  padding-right: 20px;
-  width: auto;
-}
-
-.order-form .column3 {
-  width: 30%;
 }
 
 .order-additional-information-block {
@@ -31,4 +12,19 @@
 
 .order-supplier-sum-block {
   text-align: right;
+}
+
+.is-delivery-date-asap {
+  display: flex;
+  align-items: flex-end;
+  font-size: 14px;
+}
+
+.is-delivery-date-asap label {
+  font-size: 14px;
+  padding: 0 0 0 25px;
+}
+
+button {
+  margin-bottom: 150px;
 }

@@ -4,9 +4,15 @@
 
     <h2>Корзина</h2>
 
-    <div *ngFor="let cartItem of getCartItems()">
-      <cart-item [item]="cartItem"></cart-item>
-    </div>
+    <ng-container *ngIf="getCartItems().length">
+      <div *ngFor="let cartItem of getCartItems()">
+        <cart-item [item]="cartItem"></cart-item>
+      </div>
+
+      <cart-sum></cart-sum>
+
+      <cart-order></cart-order>
+    </ng-container>
 
     <ng-container *ngIf="getCartItems().length === 0">
       <div class="alert alert-info" role="alert">
