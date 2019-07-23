@@ -19,6 +19,17 @@ export class CartStoreService {
     this.load();
   }
 
+  protected static createItems(rawData: any): CartItem[] {
+    const res = [];
+    if (!rawData) {
+      return res;
+    }
+    for (const rawItem of rawData) {
+      res.push(new CartItem(rawItem));
+    }
+    return res;
+  }
+
   async load(): Promise<CartItem[]> {
     const url = 'catalog/cart/list';
     const resp = await this.api.get<CartItem[]>(url).toPromise();
@@ -126,16 +137,4 @@ export class CartStoreService {
     this.cartItems = [];
     return true;
   }
-
-  protected static createItems(rawData: any): CartItem[] {
-    const res = [];
-    if (!rawData) {
-      return res;
-    }
-    for (const rawItem of rawData) {
-      res.push(new CartItem(rawItem));
-    }
-    return res;
-  }
-
 }

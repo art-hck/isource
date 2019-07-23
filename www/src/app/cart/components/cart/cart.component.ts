@@ -23,5 +23,4 @@ export class CartComponent implements OnInit {
   getCartItems(): CartItem[] {
     return this.cartStore.getItems();
   }
-
 }
