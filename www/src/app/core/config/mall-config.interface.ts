@@ -1,4 +1,4 @@
-import { AppConfigInterface } from 'stdlib-ng/dist/core';
+import { AppConfigInterface } from '@stdlib-ng/core';
 
 /**
  * Интерфейс главного конфига приложения

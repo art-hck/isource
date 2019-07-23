@@ -6,7 +6,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { CartModule } from '../cart/cart.module';
-import { AccessGuard, AuthInterceptor, BaseUrlInterceptor } from 'stdlib-ng/dist/core';
+import { AccessGuard, AuthInterceptor, BaseUrlInterceptor } from '@stdlib-ng/core';
 import { DataInterceptor } from "./interceptor/data.interceptor";
 import { ErrorInterceptor } from "./interceptor/error.interceptor";
 import { ClarityModule } from '@clr/angular';

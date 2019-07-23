@@ -1,4 +1,21 @@
-<div class="card">
+<div class="clr-row">
+  <div class="clr-col-10 w-100 input-search">
+    <input placeholder="Введите наименование позиции для поиска" name="searchName"
+           [(ngModel)]="searchName"
+           (keyup.enter)="onSearch(searchName)"
+    />
+    <button class="btn btn-link reset" (click)="getPositionList(); searchName=''" *ngIf="searchName">
+      <clr-icon shape="times" size="22">
+      </clr-icon>
+    </button>
+  </div>
+  <div class="clr-col-2">
+    <button class="btn btn-link search" (click)="onSearch(searchName)">Поиск</button>
+  </div>
+</div>
+<a (click)="createRequest()">Не нашли, что искали?</a>
+
+<div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
     <div class="clr-row">
       <div class="clr-col-2 image">
@@ -17,3 +34,8 @@
     </div>
   </div>
 </div>
+<ng-template #noPositions>
+  <div class="no-positions">
+    Позиций не найдено
+  </div>
+</ng-template>

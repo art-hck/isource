@@ -11,12 +11,12 @@ import {AggregatedResult} from "../../core/models/aggregated-result";
   styleUrls: ['./product-catalog.component.css']
 })
 export class ProductCatalogComponent implements OnInit {
-  protected items: CatalogProduct[];
+  items: CatalogProduct[];
   private catalogCode: string;
-  private currPage: number;
-  private pageSize: number;
-  private totalCount = 0;
-  private isLoading = false;
+  currPage: number;
+  pageSize: number;
+  totalCount = 0;
+  isLoading = false;
 
   constructor (
     protected store: CatalogProductsStoreService,
@@ -33,7 +33,7 @@ export class ProductCatalogComponent implements OnInit {
     this.loadProductsPage();
   }
 
-  protected loadProductsPage() {
+  loadProductsPage() {
     this.currPage++;
     this.isLoading = true;
     this.store.loadPage(this.catalogCode, this.currPage, this.pageSize).subscribe(

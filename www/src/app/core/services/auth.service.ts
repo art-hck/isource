@@ -1,11 +1,11 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
+import {Observable} from 'rxjs';
 import {tap} from 'rxjs/internal/operators';
-import { TokenService } from 'stdlib-ng/dist/core';
+import { TokenService } from '@stdlib-ng/core';
 import { UserInfoService } from "./user-info.service";
-import { APP_CONFIG } from 'stdlib-ng/dist/core';
-import { GpnmarketConfigInterface } from '../../core/config/gpnmarket-config.interface';
+import { APP_CONFIG } from '@stdlib-ng/core';
+import { GpnmarketConfigInterface } from '../config/gpnmarket-config.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -4,12 +4,17 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
+  "include": [
+    "**/*.ts"
+  ],
   "exclude": [
-    "src/test.ts",
     "**/*.spec.ts"
   ],
+  // Эти пути важны, т.к stdlib-ng подлючается не через npm
   "paths": {
-    "@angular/*": ["../node_modules/@angular/*"],
-    "stdlib-ng": ["../node_modules/stdlib-ng/*"]
+    "@stdlib-ng/core": ["node_modules/stdlib-ng/dist/core"],
+    "@stdlib-ng/core/*": ["node_modules/stdlib-ng/dist/core/*"],
+    "@stdlib-ng/custom-components": ["node_modules/stdlib-ng/dist/custom-components"],
+    "@stdlib-ng/custom-components/*": ["node_modules/stdlib-ng/dist/custom-components/*"]
   }
 }

@@ -105,7 +105,11 @@
       ></app-document-simple-list>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-1">
-      <button class="btn btn-link download" *ngIf="!isCustomerView">Загрузить</button>
+      <app-document-simple-list
+        [enableUpload]="!isCustomerView"
+        [documents]="linkedOffer.technicalProposals"
+        (selected)="onUploadTechnicalProposals($event, linkedOffer)"
+      ></app-document-simple-list>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-1" *ngIf="isCustomerView">
       <input type="radio" clrRadio [(ngModel)]="offerWinnerId"
