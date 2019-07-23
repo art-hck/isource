@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {CatalogService} from "../../services/catalog.service";
-import {CatalogPosition} from "../../models/catalog-position";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { CatalogService } from "../../services/catalog.service";
+import { CatalogPosition } from "../../models/catalog-position";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'catalog-positions-list',
@@ -31,7 +31,7 @@ export class CatalogPositionsListComponent implements OnInit {
   }
 
   onSearch(searchName: string) {
-    this.catalogService.searchPositionName(searchName).subscribe(
+    this.catalogService.searchPositionsByName(searchName).subscribe(
       (positions: CatalogPosition[]) => {
         this.positions = positions;
       }

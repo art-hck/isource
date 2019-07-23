@@ -15,7 +15,7 @@ export class CatalogService {
     return this.api.post<CatalogPosition[]>(`catalog/list`, {});
   }
 
-  searchPositionName(searchName: string): Observable<CatalogPosition[]> {
+  searchPositionsByName(searchName: string): Observable<CatalogPosition[]> {
     return this.api.post<CatalogPosition[]>(`catalog/find`, {
       name: searchName
     });
