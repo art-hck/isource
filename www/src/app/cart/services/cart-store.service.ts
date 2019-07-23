@@ -46,7 +46,7 @@ export class CartStoreService {
 
   isCatalogPositionInCart(position: CatalogPosition): boolean {
     for (const cartItem of this.cartItems) {
-      if (cartItem.catalogPosition === position) {
+      if (cartItem.catalogPosition.id === position.id) {
         return true;
       }
     }
