@@ -10,7 +10,10 @@
 
   <clr-dg-column class="request-status">
     Статус заявки
-    <clr-dg-string-filter [clrDgStringFilter]="requestStatusFilter"></clr-dg-string-filter>
+    <clr-dg-filter>
+      <app-request-list-statuses-filter [requests]="requests">
+      </app-request-list-statuses-filter>
+    </clr-dg-filter>
   </clr-dg-column>
 
   <clr-dg-column class="request-positions-list">
@@ -23,10 +26,9 @@
 
   <clr-dg-column class="request-position-statuses">
     Статус позиций
-<!--    <clr-dg-string-filter [clrDgStringFilter]="positionStatusFilter"></clr-dg-string-filter>-->
     <clr-dg-filter>
-      <app-request-list-statuses-filter [requests]="requests">
-      </app-request-list-statuses-filter>
+      <app-request-list-position-statuses-filter [requests]="requests">
+      </app-request-list-position-statuses-filter>
     </clr-dg-filter>
   </clr-dg-column>
 

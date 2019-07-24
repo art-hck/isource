@@ -11,6 +11,14 @@
     color: gray;
 }
 
+::ng-deep .clear-filter {
+    position: absolute;
+    top: 17px;
+}
+
+::ng-deep .request-number .datagrid-filter {
+    width: 160px;
+}
 
 ::ng-deep .requests-list-datagrid .datagrid {
     overflow: visible;

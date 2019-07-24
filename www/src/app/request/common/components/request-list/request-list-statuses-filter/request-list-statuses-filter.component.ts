@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import {RequestPositionWorkflowStepLabels} from "../../../dictionaries/request-position-workflow-step-labels";
 import {RequestsList} from "../../../models/requests-list/requests-list";
 import {Subject} from "rxjs";
 import {ClrDatagridFilter, ClrDatagridFilterInterface} from "@clr/angular";
+import { RequestWorkflowStepLabels } from "../../../dictionaries/request-workflow-step-labels";
 
 @Component({
   selector: 'app-request-list-statuses-filter',
@@ -11,68 +12,51 @@ import {ClrDatagridFilter, ClrDatagridFilterInterface} from "@clr/angular";
 })
 export class RequestListStatusesFilterComponent implements ClrDatagridFilterInterface<RequestsList> {
 
-  requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
-
-
+  requestWorkflowStepLabels = Object.entries(RequestWorkflowStepLabels);
   changes = new Subject<any>();
-
-  flag = true;
-
-  public statuses = [];
+  statuses = [];
 
   @Input() requests: RequestsList[];
+  @ViewChild('checkboxesListEl', { static: false }) checkboxesListElRef: ElementRef;
 
   constructor(private filterContainer: ClrDatagridFilter) {
     filterContainer.setFilter(this);
   }
 
-
-
-  accepts(requests: RequestsList) {
-    const that = this;
-
-    if (requests.positions.length > 0) {
-      requests.positions.some((item) => {
-        if (!!(that.statuses.indexOf(item.status.name) > -1)) {
-          that.flag = true;
-          console.log('accepts true: ' + that.flag);
-        } else {
-          that.flag = false;
-          console.log('accepts false: ' + that.flag);
-        }
-      });
-    } else {
-      that.flag = false;
+  accepts(request: RequestsList) {
+    if (request) {
+      return (!!(this.statuses.indexOf(request.request.status.name) > -1));
     }
-
-    return this.flag;
+    return false;
   }
-
-
 
   isActive(): boolean {
     return this.statuses.length !== 0;
   }
 
-
   toggleStatus(event: any) {
     const param = event.target.value;
 
-    console.log('Есть статус «' + param + '» в массиве? — ', (this.statuses.indexOf(param) > -1));
     if (this.statuses.indexOf(param) > -1) {
-      console.log('Этот статус уже есть, удаляю его из массива:');
       for (let i = 0; i < this.statuses.length; i++) {
         if (this.statuses[i] === param) {
           this.statuses.splice(i, 1);
         }
       }
     } else {
-      console.log('Этого статуса, как оказалось, нет, поэтому добавляю:');
       this.statuses.push(param);
     }
 
-    console.log(this.statuses);
+    this.changes.next();
+  }
 
+  clearAllCheckboxes() {
+    this.statuses = [];
+    this.checkboxesListElRef.nativeElement.childNodes.forEach(el => {
+      if (el.firstChild) {
+        el.firstChild.firstChild.checked = false;
+      }
+    });
     this.changes.next();
   }
 }

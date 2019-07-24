@@ -3,12 +3,12 @@
    (click)="clearAllCheckboxes()">Очистить фильтр</a>
 
 <div #checkboxesListEl>
-  <div *ngFor="let status of requestWorkflowStepLabels">
+  <div *ngFor="let status of requestPositionWorkflowStepLabels">
     <input type="checkbox"
            clrCheckbox
            id="input-{{ status[0] }}"
            value="{{ status[0] }}"
            (change)="toggleStatus($event)">
-    <label for="input-{{ status[0] }}" class="input-label status-request-{{status[0]}}">{{ status[1] }}</label>
+    <label for="input-{{ status[0] }}" class="input-label status-position-{{status[0]}}">{{ status[1] }}</label>
   </div>
 </div>
