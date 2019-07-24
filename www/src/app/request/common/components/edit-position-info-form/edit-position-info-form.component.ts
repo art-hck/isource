@@ -78,14 +78,14 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   get dateObject() {
-    if (this.requestPosition.deliveryDate)  {
-      if (moment(this.requestPosition.deliveryDate, 'DD.MM.YYYY', true).isValid()) {
-        return this.requestPosition.deliveryDate;
-      } else {
-        return this.requestPosition.deliveryDate = moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
-      }
+    if (!this.requestPosition.deliveryDate)  {
+      return moment(new Date()).format('DD.MM.YYYY');
     }
-    return moment(new Date()).format('DD.MM.YYYY');
+
+    if (!moment(this.requestPosition.deliveryDate, 'DD.MM.YYYY', true).isValid()) {
+      this.requestPosition.deliveryDate = moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
+    }
+    return this.requestPosition.deliveryDate;
   }
   set dateObject(val) {
     if (val) {
