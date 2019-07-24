@@ -8,7 +8,7 @@ import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow
 import {RequestPosition} from "../../models/request-position";
 import {RequestDocument} from "../../models/request-document";
 import {CustomValidators} from "../../../../shared/forms/custom.validators";
-import Swal from "sweetalert2";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-offers',
@@ -32,7 +32,8 @@ export class OffersComponent implements OnInit {
   constructor(
     protected offersService: OffersService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -118,7 +119,7 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
-        this.showAlert('Документ загружен');
+        this.notificationService.toast('Документ загружен', 'success', 3000);
       });
   }
 
@@ -126,18 +127,7 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.technicalProposals.push(document));
-        this.showAlert('Документ загружен');
+        this.notificationService.toast('Документ загружен', 'success', 3000);
       });
-  }
-
-  showAlert(message) {
-    Swal.fire({
-      toast: true,
-      position: 'top',
-      type: 'success',
-      html: '<p class="text-alert">' + message + '</p>',
-      showConfirmButton: false,
-      timer: 3000
-    });
   }
 }

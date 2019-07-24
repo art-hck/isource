@@ -21,6 +21,7 @@ import {EditRequestService} from "../../services/edit-request.service";
 import {ClrTabLink} from '@clr/angular';
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-position-info',
@@ -64,7 +65,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
-    private customerRequestService: CustomerRequestService
+    private customerRequestService: CustomerRequestService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -130,7 +132,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
-        this.showAlert('Отправлено на согласование');
+        this.notificationService.toast('Отправлено на согласование', 'success', 3000);
       }
     );
   }
@@ -154,7 +156,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
-        this.showAlert('Победитель выбран');
+        this.notificationService.toast('Победитель выбран', 'success', 3000);
       }
     );
   }
@@ -195,19 +197,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     this.customerRequestService.uploadDocuments(this.requestPosition, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => this.requestPosition.documents.push(document));
-        this.showAlert('Документ загружен');
+        this.notificationService.toast('Документ загружен', 'success', 3000);
       });
-  }
-
-  showAlert(message) {
-    Swal.fire({
-      toast: true,
-      position: 'top',
-      type: 'success',
-      html: '<p class="text-alert">' + message + '</p>',
-      showConfirmButton: false,
-      timer: 2700
-    });
   }
 
   onCreatedNewPosition(updatedPositionId: Uuid): void {

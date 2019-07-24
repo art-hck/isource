@@ -16,6 +16,7 @@ import {CreateRequestService} from '../../services/create-request.service';
 import {Uuid} from 'src/app/cart/models/uuid';
 import {RequestSavingType} from '../../enum/request-saving-type';
 import Swal from "sweetalert2";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -42,7 +43,8 @@ export class EditPositionInfoFormComponent implements OnInit {
     private editRequestService: EditRequestService,
     protected router: Router,
     protected createRequestService: CreateRequestService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -159,7 +161,7 @@ export class EditPositionInfoFormComponent implements OnInit {
     this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
       () => {
         this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
-        this.showAlert('Изменения сохранены');
+        this.notificationService.toast('Изменения сохранены', 'success', 3000);
       }
     );
   }
@@ -180,7 +182,7 @@ export class EditPositionInfoFormComponent implements OnInit {
         }
         const id = ids[0].id;
         this.afterSavePosition(RequestSavingType.NEW, id);
-        this.showAlert('Позиция создана');
+        this.notificationService.toast('Позиция создана', 'success', 3000);
       },
       () => {
         alert('Ошибка сохранения новой позиции');
@@ -206,16 +208,5 @@ export class EditPositionInfoFormComponent implements OnInit {
     if (type === RequestSavingType.NEW) {
       this.createdNewPosition.emit(updatedPositionId);
     }
-  }
-
-  showAlert(message) {
-    Swal.fire({
-      toast: true,
-      position: 'top',
-      type: 'success',
-      html: '<p class="text-alert">' + message + '</p>',
-      showConfirmButton: false,
-      timer: 2700
-    });
   }
 }

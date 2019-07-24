@@ -7,7 +7,7 @@ import {ContractService} from "../../services/contract.service";
 import {RequestContract} from "../../models/request-contract";
 import {DocumentsService} from "../../services/documents.service";
 import {RequestDocument} from "../../models/request-document";
-import Swal from "sweetalert2";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-contract',
@@ -27,7 +27,8 @@ export class ContractComponent implements OnChanges, OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private contractService: ContractService,
-    private documentsService: DocumentsService
+    private documentsService: DocumentsService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -76,21 +77,10 @@ export class ContractComponent implements OnChanges, OnInit {
     this.contractForm.reset();
     this.uploadedFiles = [];
     this.getContractList();
-    this.showAlert('Договор загружен');
+    this.notificationService.toast('Договор загружен', 'success', 3000);
   }
 
   afterGetContract(data: any) {
     this.requestContract = data;
-  }
-
-  showAlert(message) {
-    Swal.fire({
-      toast: true,
-      position: 'top',
-      type: 'success',
-      html: '<p class="text-alert">' + message + '</p>',
-      showConfirmButton: false,
-      timer: 3000
-    });
   }
 }
