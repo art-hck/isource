@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class WidgetComponent implements OnInit {
 
   constructor(
-    protected loader: CartStoreService,
+    public loader: CartStoreService,
     protected router: Router
   ) { }
 

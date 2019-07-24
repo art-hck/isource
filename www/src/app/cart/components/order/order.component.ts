@@ -11,9 +11,9 @@ import { CartService } from "../../services/cart.service";
 })
 export class OrderComponent implements OnInit {
 
-  protected deliveryDateInvalid = false;
-  protected deliveryBasisInvalid = false;
-  protected paymentTermsInvalid = false;
+  public deliveryDateInvalid = false;
+  public deliveryBasisInvalid = false;
+  public paymentTermsInvalid = false;
   protected data: OrderFormInfo;
 
   constructor(
