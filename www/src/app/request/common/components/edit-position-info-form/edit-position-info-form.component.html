@@ -18,6 +18,7 @@
       <div class="deliveryDate">
         <input clrDate
                [(ngModel)]="dateObject"
+               [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
                id="deliveryDate"
                placeholder="ДД.ММ.ГГГГ"
                type="text"

@@ -15,6 +15,7 @@ export class RequestViewComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() request: Request;
   @Input() requestPositions: RequestPosition[];
+  @Input() updatedPosition: RequestPosition;
 
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
@@ -53,6 +54,16 @@ export class RequestViewComponent implements OnInit {
     this.changePositionInfo.emit();
     this.selectedRequestPosition = requestPosition[this.selectedIndex];
   }
+
+  onUpdatedRequestPositionItem(updatedPosition: RequestPosition): void {
+    const requestPosition = this.requestPositions.find(function(position) {
+        return position.id === updatedPosition.id;
+      }
+    );
+
+    Object.assign(requestPosition, updatedPosition);
+  }
+
 
   onUpdateRequestInfo() {
     this.changeRequestInfo.emit();
