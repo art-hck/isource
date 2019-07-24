@@ -1,18 +1,10 @@
 export class OrderFormInfo {
-  dateDelivery: Date|null = null;
-  address = '';
-  dateResponse: Date|null = null;
-  comment = '';
+  deliveryDate: Date|null = null;
+  isDeliveryDateAsap = false;
+  deliveryBasis = '';
+  paymentTerms = '30 банковских дней по факту поставки';
 
   constructor(params: Partial<OrderFormInfo>) {
     Object.assign(this, params);
-  }
-
-  checkFill(): boolean {
-    return Boolean(
-      isFinite(Number(this.dateDelivery)) &&
-      this.address.length > 0 &&
-      isFinite(Number(this.dateResponse))
-    );
   }
 }

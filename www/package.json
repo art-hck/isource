@@ -31,7 +31,7 @@
     "moment": "^2.24.0",
     "ng2-file-upload": "^1.3.0",
     "rxjs": "^6.5.2",
-    "stdlib-ng": "git+ssh://git@gitlab.etpgpb.loc:newetp-stdlib/stdlib-ng.git#newetpkim-1195",
+    "stdlib-ng": "git+ssh://git@gitlab.etpgpb.loc:newetp-stdlib/stdlib-ng.git#gpn_market-173",
     "text-mask-addons": "^3.8.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "0.800.3",
     "@angular/cli": "8.0.3",
-    "@angular/compiler-cli": "^8.0.2",
+    "@angular/compiler-cli": "^8.0.3",
     "@angular/language-service": "^8.0.2",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",

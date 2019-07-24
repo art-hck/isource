@@ -37,11 +37,11 @@ export class SupplierOrdersListComponent implements AfterViewInit, OnInit {
     this.orders = this.ordersStore.getOrders();
   }
 
-  protected onChangePage() {
+  onChangePage() {
     this.loadOrders();
   }
 
-  protected onResponseButtonClick(order: Order) {
+  onResponseButtonClick(order: Order) {
     this.router.navigateByUrl(`orders/supplier/${order.id}/confirmation`);
   }
 }

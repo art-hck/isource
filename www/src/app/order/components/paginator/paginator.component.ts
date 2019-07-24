@@ -24,16 +24,16 @@ export class PaginatorComponent implements OnInit {
     return Math.ceil(this.totalCount / this.pageSize);
   }
 
-  protected setCurrentPage(pageNumber: number) {
+  setCurrentPage(pageNumber: number) {
     this.page = pageNumber;
     this.changePage.emit(pageNumber);
   }
 
-  protected showNextPage() {
+  showNextPage() {
     this.setCurrentPage(this.page + 1);
   }
 
-  protected showPrevPage() {
+  showPrevPage() {
     this.setCurrentPage(this.page - 1);
   }
 

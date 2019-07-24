@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { AccessGuard } from 'stdlib-ng/dist/core';
+import { AccessGuard } from '@stdlib-ng/core';
 import { OrdersListComponent } from "./components/orders-list/orders-list.component";
 import { SupplierOrdersListComponent } from "./components/supplier-orders-list/supplier-orders-list.component";
 import { SupplierOrderConfirmationComponent } from "./components/supplier/supplier-order-confirmation/supplier-order-confirmation.component";

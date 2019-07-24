@@ -3,7 +3,7 @@
   <!--Шапка с общей информацией о заказе-->
   <app-order-header
     contragentLabel="Покупатель"
-    [contragentFullName]="order.customer.fullName"
+    [contragentFullName]="order.customer.name"
     [order]="order"
     [buttonsProfile]="getButtonsProfile()"
     (sendOrderClick)="onSendOrder()"
