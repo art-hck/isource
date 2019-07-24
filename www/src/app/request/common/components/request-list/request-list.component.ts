@@ -3,8 +3,6 @@ import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
 import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
-import {RequestStatusFilter} from "../../services/request-list-filters/request-status-filter.service";
-import {PositionStatusFilter} from "../../services/request-list-filters/position-status-filter.service";
 import {RequestTypes} from "../../enum/request-types";
 
 @Component({
@@ -15,12 +13,10 @@ import {RequestTypes} from "../../enum/request-types";
 
 export class RequestListComponent implements OnInit {
 
+  customerNameFilter = new CustomerNameFilter();
+
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
-
-  customerNameFilter = new CustomerNameFilter();
-  requestStatusFilter = new RequestStatusFilter();
-  positionStatusFilter = new PositionStatusFilter();
 
   constructor(
     protected router: Router
@@ -72,7 +68,6 @@ export class RequestListComponent implements OnInit {
 
     return 'ещё ' + num + ' ' + positionsString + ' внутри';
   }
-
 
   onRowClick(request: RequestsList): void {
     const role = this.customerNameColumnShow ? 'back-office' : 'customer';
