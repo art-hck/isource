@@ -26,6 +26,7 @@ import { DocumentSimpleListComponent } from "./common/components/document-simple
 import { CreateRequestFormComponent } from './common/components/create-request-form/create-request-form.component';
 import { RequestListStatusesFilterComponent } from "./common/components/request-list/request-list-statuses-filter/request-list-statuses-filter.component";
 import { RequestListPositionStatusesFilterComponent } from "./common/components/request-list/request-list-position-statuses-filter/request-list-position-statuses-filter.component";
+import { CustomerListNamesFilterComponent } from "./common/components/request-list/customer-list-names-filter/customer-list-names-filter.component";
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { RequestListPositionStatusesFilterComponent } from "./common/components/
     DocumentSimpleListComponent,
     EditPositionInfoFormComponent,
     CreateRequestFormComponent,
+    CustomerListNamesFilterComponent,
     RequestListStatusesFilterComponent,
     RequestListPositionStatusesFilterComponent,
   ],
