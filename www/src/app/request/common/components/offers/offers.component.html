@@ -1,16 +1,12 @@
 <div class="action-bar">
-  <clr-tooltip>
-    <button class="btn btn-link" clrTooltipTrigger
-            (click)="onShowAddOfferForm()"
-            role="tooltip"
-            aria-haspopup="true"
-            *ngIf="canAddOffer()">
-      <clr-icon shape="add-text"></clr-icon>
-    </button>
-    <clr-tooltip-content clrPosition="top-right" clrSize="lg" *clrIfOpen>
-      <span>Добавить коммерческое предложение</span>
-    </clr-tooltip-content>
-  </clr-tooltip>
+  <button class="btn btn-link" clrTooltipTrigger
+          (click)="onShowAddOfferForm()"
+          role="tooltip"
+          aria-haspopup="true"
+          *ngIf="canAddOffer()">
+    <clr-icon shape="add-text"></clr-icon>
+    Добавить
+  </button>
 </div>
 <form [formGroup]="offerForm" class="form" *ngIf="showAddOfferForm">
   <div class="form-block">
@@ -92,7 +88,7 @@
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
     <clr-dg-cell class="clr-col-3 offer">{{linkedOffer.supplierContragentName}}
     </clr-dg-cell>
-    <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.priceWithVat}}<span>{{linkedOffer.currency}}</span>
+    <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.priceWithVat | number}}<span>{{linkedOffer.currency}}</span>
     </clr-dg-cell>
     <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.quantity}}<span>{{linkedOffer.measureUnit}}</span></clr-dg-cell>
     <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>

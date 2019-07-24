@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "../../shared/forms/custom.validators";
 import {UserRegistration} from "../models/user-registration";
 import {ContragentRegistration} from "../models/contragent-registration";
 import {RegistrationService} from "../services/registration.service";
 import {Router} from "@angular/router";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-registration',
@@ -79,8 +80,23 @@ export class RegistrationComponent implements OnInit {
     this.contragentRegistration = this.contragentRegistrationForm.value;
     return this.registrationService.registration(this.userRegistration, this.contragentRegistration).subscribe(
       () => {
-        alert('Регистрация прошла успешно!');
-        this.router.navigateByUrl(`login`);
+        Swal.fire({
+          width: 500,
+          html: '<p class="text-alert">' + 'Регистрация прошла успешно</br></br>' + '</p>' +
+            '<button id="submit" class="btn btn-primary">' +
+            'ОК' + '</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              this.router.navigateByUrl(`login`);
+              Swal.close();
+            });
+          }
+        });
       },
       (msg: any) => {
         alert('Ошибка регистрации! ' + msg.error.detail);

@@ -249,3 +249,8 @@ clr-dg-footer.datagrid-footer {
 .status-position-WINNER_SELECTED:before {
     background: rgb(255, 71, 90);
 }
+
+.text-alert {
+  font-size: 16px;
+  margin-left: 20px;
+}

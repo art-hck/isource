@@ -1,12 +1,13 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Contract } from "../../models/contract";
-import { Uuid } from "../../../../cart/models/uuid";
-import { RequestPosition } from "../../models/request-position";
-import { ContractService } from "../../services/contract.service";
-import { RequestContract } from "../../models/request-contract";
-import { DocumentsService } from "../../services/documents.service";
-import { RequestDocument } from "../../models/request-document";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Contract} from "../../models/contract";
+import {Uuid} from "../../../../cart/models/uuid";
+import {RequestPosition} from "../../models/request-position";
+import {ContractService} from "../../services/contract.service";
+import {RequestContract} from "../../models/request-contract";
+import {DocumentsService} from "../../services/documents.service";
+import {RequestDocument} from "../../models/request-document";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-contract',
@@ -75,9 +76,21 @@ export class ContractComponent implements OnChanges, OnInit {
     this.contractForm.reset();
     this.uploadedFiles = [];
     this.getContractList();
+    this.showAlert('Договор загружен');
   }
 
   afterGetContract(data: any) {
     this.requestContract = data;
+  }
+
+  showAlert(message) {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      html: '<p class="text-alert">' + message + '</p>',
+      showConfirmButton: false,
+      timer: 3000
+    });
   }
 }

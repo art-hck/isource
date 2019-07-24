@@ -12,9 +12,10 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
-import { CreateRequestService } from '../../services/create-request.service';
-import { Uuid } from 'src/app/cart/models/uuid';
-import { RequestSavingType } from '../../enum/request-saving-type';
+import {CreateRequestService} from '../../services/create-request.service';
+import {Uuid} from 'src/app/cart/models/uuid';
+import {RequestSavingType} from '../../enum/request-saving-type';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -42,7 +43,8 @@ export class EditPositionInfoFormComponent implements OnInit {
     protected router: Router,
     protected createRequestService: CreateRequestService,
     protected route: ActivatedRoute
-  ) { }
+  ) {
+  }
 
 
   ngOnInit() {
@@ -78,6 +80,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY') :
       moment(new Date()).format('DD.MM.YYYY');
   }
+
   set dateObject(val) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
       this.requestPosition.deliveryDate = val;
@@ -128,7 +131,27 @@ export class EditPositionInfoFormComponent implements OnInit {
       this.saveNewPosition();
       return;
     }
-    this.saveExistsPosition();
+    Swal.fire({
+      width: 400,
+      html: '<p class="text-alert">' + 'Сохранить изменения?</br></br>' + '</p>' +
+        '<button id="submit" class="btn btn-primary">' +
+        'Да' + '</button>' + '<button id="cancel" class="btn btn-link">' +
+        'Нет' + '</button>',
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+        submit.addEventListener('click', () => {
+          this.saveExistsPosition();
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
   }
 
   protected saveExistsPosition(): void {
@@ -136,6 +159,7 @@ export class EditPositionInfoFormComponent implements OnInit {
     this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
       () => {
         this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
+        this.showAlert('Изменения сохранены');
       }
     );
   }
@@ -156,6 +180,7 @@ export class EditPositionInfoFormComponent implements OnInit {
         }
         const id = ids[0].id;
         this.afterSavePosition(RequestSavingType.NEW, id);
+        this.showAlert('Позиция создана');
       },
       () => {
         alert('Ошибка сохранения новой позиции');
@@ -183,4 +208,14 @@ export class EditPositionInfoFormComponent implements OnInit {
     }
   }
 
+  showAlert(message) {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      html: '<p class="text-alert">' + message + '</p>',
+      showConfirmButton: false,
+      timer: 2700
+    });
+  }
 }

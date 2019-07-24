@@ -8,18 +8,19 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { RequestPosition } from "../../models/request-position";
-import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
-import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { Uuid } from "../../../../cart/models/uuid";
-import { OffersService } from "../../../back-office/services/offers.service";
-import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
-import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { RequestDocument } from "../../models/request-document";
+import {RequestPosition} from "../../models/request-position";
+import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
+import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import {Uuid} from "../../../../cart/models/uuid";
+import {OffersService} from "../../../back-office/services/offers.service";
+import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
+import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {RequestDocument} from "../../models/request-document";
 import {EditRequestService} from "../../services/edit-request.service";
 import {ClrTabLink} from '@clr/angular';
 import * as moment from "moment";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-position-info',
@@ -64,14 +65,15 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
     private customerRequestService: CustomerRequestService
-  ) { }
+  ) {
+  }
 
 
   ngAfterViewInit() {
     this.tabLinks.changes.subscribe(tabChange => {
 
       // Проверяем, есть ли среди табов неактивный
-      const noActiveTab = tabChange._results.every(function(tab) {
+      const noActiveTab = tabChange._results.every(function (tab) {
         return tab.active === false;
       });
 
@@ -99,11 +101,36 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onConfirmPublishOffers(requestPosition: RequestPosition) {
+    Swal.fire({
+      width: 520,
+      html: '<p class="text-alert">' + 'Отправить коммерческие предложения на согласование?</br></br>' + '</p>' +
+        '<button id="submit" class="btn btn-primary">' +
+        'Да' + '</button>' + '<button id="cancel" class="btn btn-link">' +
+        'Нет' + '</button>',
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+        submit.addEventListener('click', () => {
+          this.onPublishOffers(requestPosition);
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
+  }
+
   onPublishOffers(requestPosition: RequestPosition) {
     this.offersService.publishOffers(this.requestId, requestPosition.id).subscribe(
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        this.showAlert('Отправлено на согласование');
       }
     );
   }
@@ -127,6 +154,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        this.showAlert('Победитель выбран');
       }
     );
   }
@@ -167,7 +195,19 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     this.customerRequestService.uploadDocuments(this.requestPosition, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => this.requestPosition.documents.push(document));
+        this.showAlert('Документ загружен');
       });
+  }
+
+  showAlert(message) {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      html: '<p class="text-alert">' + message + '</p>',
+      showConfirmButton: false,
+      timer: 2700
+    });
   }
 
   onCreatedNewPosition(updatedPositionId: Uuid): void {

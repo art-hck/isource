@@ -6,8 +6,9 @@ import {RequestOfferPosition} from "../../models/request-offer-position";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
 import {RequestPosition} from "../../models/request-position";
-import { RequestDocument } from "../../models/request-document";
+import {RequestDocument} from "../../models/request-document";
 import {CustomValidators} from "../../../../shared/forms/custom.validators";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-offers',
@@ -117,6 +118,7 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
+        this.showAlert('Документ загружен');
       });
   }
 
@@ -124,6 +126,18 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.technicalProposals.push(document));
+        this.showAlert('Документ загружен');
       });
+  }
+
+  showAlert(message) {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      type: 'success',
+      html: '<p class="text-alert">' + message + '</p>',
+      showConfirmButton: false,
+      timer: 3000
+    });
   }
 }
