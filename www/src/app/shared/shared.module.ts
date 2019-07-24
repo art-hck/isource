@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CardComponent } from "./components/card/card.component";
 import { FormsModule } from "@angular/forms";
 import { ClarityModule } from '@clr/angular';
-import { CustomComponentsModule } from 'stdlib-ng/dist/custom-components';
+import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 
 @NgModule({
   imports: [

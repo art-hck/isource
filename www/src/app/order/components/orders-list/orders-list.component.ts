@@ -37,7 +37,7 @@ export class OrdersListComponent implements AfterViewInit, OnInit {
     this.orders = this.ordersStore.getOrders();
   }
 
-  protected onChangePage() {
+  onChangePage() {
     this.loadOrders();
   }
 

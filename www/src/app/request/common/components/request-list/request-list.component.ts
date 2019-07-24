@@ -13,7 +13,7 @@ import {RequestTypes} from "../../enum/request-types";
 
 export class RequestListComponent implements OnInit {
 
-  private customerNameFilter = new CustomerNameFilter();
+  customerNameFilter = new CustomerNameFilter();
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];

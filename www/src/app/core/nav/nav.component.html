@@ -16,9 +16,9 @@
       </ul>
 
       <ul class="nav login-block">
-        <!-- todo <li *ngIf="gui.isAvailableGui('cart')" class="nav-item">
-          <app-cart-widget class="cart-widget-margin"></app-cart-widget>
-        </li>-->
+        <li *ngIf="user.isCustomer()" class="nav-item">
+          <cart-widget class="cart-widget-margin"></cart-widget>
+        </li>
         <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
           <a routerLink="/login" class="nav-icon nav-logout">
             Вход
