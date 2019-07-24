@@ -1,6 +1,10 @@
 <clr-datagrid class="requests-list-datagrid">
   <clr-dg-column class="request-number" [clrDgField]="'request.number'">
     № Заявки
+    <clr-dg-filter>
+      <app-request-list-number-filter [requests]="requests">
+      </app-request-list-number-filter>
+    </clr-dg-filter>
   </clr-dg-column>
 
   <clr-dg-column class="customer-name" *ngIf="customerNameColumnShow">
