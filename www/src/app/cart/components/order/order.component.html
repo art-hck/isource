@@ -1,28 +1,29 @@
 <h3>Оформление заказа</h3>
 <div class="order-form">
   <div class="order-form-row">
-    <div class="form-group order-form-cell column1">
-      <label>До какого числа вы хотите получить ответ?</label>
-      <input type="date" clrDate placeholder="Выберите дату" [(clrDate)]="dateResponse" [class.invalid]="dateResponseInvalid" (input)="updateDateFieldInvalidState()">
+    <div class="form-group">
+      <label>Необходимый срок поставки</label>
+      <div class="clr-row">
+        <div class="clr-col-3">
+          <input type="date" clrDate placeholder="Выберите дату" [(clrDate)]="deliveryDate" [class.invalid]="deliveryDateInvalid" (input)="updateDateFieldInvalidState()">
+        </div>
+        <div class="clr-col-3">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox (change)="isDeliveryDateAsap = $event.target.checked" />
+            <label>как можно быстрее</label>
+          </clr-checkbox-wrapper>
+        </div>
+      </div>
     </div>
-    <div class="form-group order-form-cell column2">
-      <label>По какому адресу вы хотите получить заказ?</label>
-      <input type="text" (input)="address = $event.target.value" [class.invalid]="addressInvalid">
+    <div class="form-group">
+      <label>Базис поставки (пункт, до которого требуется доставка)</label>
+      <input type="text" (input)="deliveryBasis = $event.target.value" [class.invalid]="deliveryBasisInvalid">
     </div>
-    <div class="form-group order-form-cell column3">
-      <label>Когда вам нужен заказ?</label>
-      <input type="date" clrDate placeholder="Выберите дату" [(clrDate)]="dateDelivery" [class.invalid]="dateDeliveryInvalid" (input)="updateDateFieldInvalidState()">
+    <div class="form-group">
+      <label>Условия оплаты</label>
+      <input type="text" value="30 банковских дней по факту поставки" (input)="paymentTerms = $event.target.value" [class.invalid]="paymentTermsInvalid">
     </div>
   </div>
 </div>
-<div class="form-group order-additional-information-block">
-  <label>Укажите дополнительную информацию к заказу</label>
-  <textarea rows="5" (input)="data.comment = $event.target.value"></textarea>
-</div>
-<div class="order-supplier-sum-block">
-  <app-cart-supplier-sum
-    [sum]="supplier.getSum()"
-    [buttonText]="'Сделать заказ'"
-    (buttonClick)="onOrderButtonClick()">
-  </app-cart-supplier-sum>
-</div>
+
+<button class="btn btn-bg btn-primary" (click)="onSubmitOrder()">Сделать заказ</button>

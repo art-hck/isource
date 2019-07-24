@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { StoreService } from "../services/store.service";
+import { CartStoreService } from "../services/cart-store.service";
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-cart-widget',
+  selector: 'cart-widget',
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.css']
 })
 export class WidgetComponent implements OnInit {
 
   constructor(
-    public loader: StoreService,
+    protected loader: CartStoreService,
     protected router: Router
   ) { }
 

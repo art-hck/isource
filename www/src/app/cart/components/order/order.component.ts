@@ -1,25 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Supplier } from '../../models/supplier';
-import { StoreService } from '../../services/store.service';
+import { CartStoreService } from '../../services/cart-store.service';
 import { OrderFormInfo } from '../../models/order-form-info';
 import { Router } from '@angular/router';
+import { CartService } from "../../services/cart.service";
 
 @Component({
-  selector: 'app-cart-order',
+  selector: 'cart-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
 
-  @Input() supplier: Supplier|null = null;
-
-  dateDeliveryInvalid = false;
-  addressInvalid = false;
-  dateResponseInvalid = false;
-  data: OrderFormInfo;
+  protected deliveryDateInvalid = false;
+  protected deliveryBasisInvalid = false;
+  protected paymentTermsInvalid = false;
+  protected data: OrderFormInfo;
 
   constructor(
-    protected store: StoreService,
+    protected cartStore: CartStoreService,
+    protected cart: CartService,
     protected router: Router
   ) {
     this.data = new OrderFormInfo({});
@@ -28,65 +27,77 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
   }
 
-  set dateResponse(value: Date|null) {
-    this.data.dateResponse = value;
+  set deliveryDate(value: Date|null) {
+    this.data.deliveryDate = value;
     this.updateDateFieldInvalidState();
   }
 
-  get dateResponse(): Date|null {
-    return this.data.dateResponse;
+  get deliveryDate(): Date|null {
+    return this.data.deliveryDate;
   }
 
-  set dateDelivery(value: Date|null) {
-    this.data.dateDelivery = value;
+  set isDeliveryDateAsap(value: boolean) {
+    this.data.isDeliveryDateAsap = value;
     this.updateDateFieldInvalidState();
   }
 
-  get dateDelivery(): Date|null {
-    return this.data.dateDelivery;
+  get isDeliveryDateAsap(): boolean {
+    return this.data.isDeliveryDateAsap;
   }
 
-  set address(value: string) {
-    this.data.address = value;
-    this.updateAddressInvalidState();
+  set deliveryBasis(value: string) {
+    this.data.deliveryBasis = value;
+    this.updateDeliveryBasisInvalidState();
   }
 
-  get address(): string {
-    return this.data.address;
+  get deliveryBasis(): string {
+    return this.data.deliveryBasis;
   }
 
-  async onOrderButtonClick() {
+  set paymentTerms(value: string) {
+    this.data.paymentTerms = value;
+    this.updatePaymentTermsInvalidState();
+  }
+
+  get paymentTerms(): string {
+    return this.data.paymentTerms;
+  }
+
+  onSubmitOrder() {
     this.updateDateFieldInvalidState();
-    this.updateAddressInvalidState();
-    if (this.dateDeliveryInvalid || this.dateResponseInvalid || this.addressInvalid) {
+    this.updateDeliveryBasisInvalidState();
+    this.updatePaymentTermsInvalidState();
+    if (this.deliveryDateInvalid || this.deliveryBasisInvalid || this.paymentTermsInvalid) {
       return;
     }
-    const orderRes = await this.store.sendOrder(this.supplier, this.data);
-    if (orderRes) {
-      this.router.navigateByUrl('orders/my-orders');
-    }
+
+    this.cart.sendOrder(this.data).subscribe((data: any) => {
+      this.cartStore.clear();
+      this.router.navigateByUrl(`requests/customer/${data.id}`);
+    });
   }
 
-  updateDateFieldInvalidState() {
+  protected updateDateFieldInvalidState() {
     const todayDate = new Date(); // Получаем текущую дату (включая время)
     todayDate.setHours(0, 0, 0, 0); // Сбрасываем часы, минуты и секунды до 00:00:00 для корректного сравнения дат
 
-    this.dateResponseInvalid = Boolean(
-      (this.data.dateResponse === null)
-      || (new Date(this.data.dateResponse) < todayDate)
-      || ((new Date(this.data.dateResponse) > new Date(this.data.dateDelivery)) && (this.data.dateDelivery !== null))
-    );
+    let isInvalid = false;
+    if (!this.data.isDeliveryDateAsap) {
+      if (this.data.deliveryDate === null) {
+        isInvalid = true;
+      } else if ((new Date(this.data.deliveryDate)) < todayDate) {
+        isInvalid = true;
+      }
+    }
 
-    this.dateDeliveryInvalid = Boolean(
-      (this.data.dateDelivery === null)
-      || (new Date(this.data.dateDelivery) < todayDate)
-      || ((new Date(this.data.dateDelivery) < new Date(this.data.dateResponse)) && (this.data.dateResponse !== null))
-    );
+    this.deliveryDateInvalid = isInvalid;
   }
 
-
-  updateAddressInvalidState() {
-    this.addressInvalid = Boolean(this.data.address.length === 0);
+  protected updateDeliveryBasisInvalidState() {
+    this.deliveryBasisInvalid = Boolean(this.data.deliveryBasis.length === 0);
   }
 
+  protected updatePaymentTermsInvalidState() {
+    this.paymentTermsInvalid = Boolean(this.data.paymentTerms.length === 0);
+  }
 }
