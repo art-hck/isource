@@ -14,7 +14,7 @@ import { RequestViewComponent } from 'src/app/request/common/components/request-
 })
 export class CustomerRequestViewComponent implements OnInit {
 
-
+  updatedPosition: RequestPosition;
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
@@ -35,14 +35,15 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
-    this.updatePositionsList();
+    this.updatePositionsList((requestPositions) => {
+      this.requestPositions = requestPositions;
+    });
   }
 
 
   updatePositionsList(callback?: (requestPositions: RequestPosition[]) => void) {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.requestPositions = requestPositions;
         if (callback) {
           callback(requestPositions);
         }
@@ -51,7 +52,8 @@ export class CustomerRequestViewComponent implements OnInit {
   }
 
   onCreatedNewPosition(positionId: Uuid): void {
-    this.updatePositionsList(() => {
+    this.updatePositionsList((requestPositions) => {
+      this.requestPositions = requestPositions;
       this.requestView.selectPosition(positionId);
     });
   }

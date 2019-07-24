@@ -78,7 +78,9 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       // Если есть, делаем активным самый первый таб с общей информацией
       if (noActiveTab) {
         setTimeout(() => {
-          this.tabLinks.first.activate();
+          if (this.tabLinks.first) {
+            this.tabLinks.first.activate();
+          }
         });
       }
     });

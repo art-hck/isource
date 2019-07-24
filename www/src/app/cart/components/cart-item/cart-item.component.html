@@ -1,7 +1,10 @@
 <div class="card">
   <div class="clr-row">
     <div class="clr-col-2 image">
-      <p>Изображение отсутствует</p>
+      <img *ngIf="item.catalogPosition.image; else noImage" src="{{ item.catalogPosition.image }}" />
+      <ng-template #noImage>
+        <p>Изображение отсутствует</p>
+      </ng-template>
     </div>
     <div class="clr-col-7">
       <p class="position-name">{{ item.catalogPosition.name }}</p>
