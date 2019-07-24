@@ -100,5 +100,4 @@ export class OrderComponent implements OnInit {
   protected updatePaymentTermsInvalidState() {
     this.paymentTermsInvalid = Boolean(this.data.paymentTerms.length === 0);
   }
-
 }

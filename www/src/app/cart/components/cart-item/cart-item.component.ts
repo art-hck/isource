@@ -25,5 +25,4 @@ export class CartItemComponent implements OnInit {
   async updateItemQuantity(item: CartItem, quantity: number): Promise<boolean> {
     return this.store.updateQuantity(item, quantity);
   }
-
 }

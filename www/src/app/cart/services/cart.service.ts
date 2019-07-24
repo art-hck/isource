@@ -23,5 +23,4 @@ export class CartService {
     const url = 'catalog/add-request-from-cart';
     return this.api.post<Response<Object>>(url, orderFormInfo);
   }
-
 }
