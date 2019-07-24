@@ -1,0 +1,28 @@
+<form [formGroup]="manufacturingForm" class="form" *ngIf="!isCustomerView">
+  <app-document-upload-list (fileSelected)="onDocumentSelected($event)"
+                            [documents]="uploadedFiles"></app-document-upload-list>
+  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
+    <div class="clr-col-9">
+      <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
+    </div>
+    <div class="clr-col-3">
+      <button class="btn btn-link" (click)="onAddManufacturingDocument()">Загрузить</button>
+    </div>
+  </div>
+</form>
+<clr-datagrid class="clr-row" *ngIf="requestPosition?.manufacturingDocuments">
+  <clr-dg-column class="clr-col-5">Наименование документа</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
+  <clr-dg-column class="clr-col-1">Дата загрузки</clr-dg-column>
+  <clr-dg-column class="clr-col-2">Комментарии</clr-dg-column>
+
+  <clr-dg-row *ngFor="let document of requestPosition?.manufacturingDocuments">
+    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>
+    </clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">{{requestPosition.statusLabel}}</clr-dg-cell>
+    <clr-dg-cell class="clr-col-1">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
+    <clr-dg-cell class="clr-col-2">{{document.comments}}</clr-dg-cell>
+  </clr-dg-row>
+</clr-datagrid>

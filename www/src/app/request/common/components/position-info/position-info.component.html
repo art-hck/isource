@@ -153,6 +153,16 @@
           </clr-tab-content>
         </clr-tab>
 
+        <clr-tab *ngIf="canViewManufacturing(requestPosition)">
+          <button clrTabLink>Изготовление</button>
+          <clr-tab-content *clrIfActive>
+            <app-manufacturing [requestPosition]="requestPosition"
+                               [requestId]="requestId"
+                               [isCustomerView]="isCustomerView">
+            </app-manufacturing>
+          </clr-tab-content>
+        </clr-tab>
+
       </clr-tabs>
     </div>
   </div>
