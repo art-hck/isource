@@ -16,34 +16,38 @@
       </ul>
 
       <ul class="nav login-block">
-        <li *ngIf="user.isCustomer()" class="nav-item">
-          <cart-widget class="cart-widget-margin"></cart-widget>
-        </li>
+
         <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
           <a routerLink="/login" class="nav-icon nav-logout">
             Вход
             <clr-icon shape="login" size="32"></clr-icon>
           </a>
         </li>
-        <li *ngIf="auth.isAuth()" class="nav-item">
-          <clr-dropdown>
 
-            <button class="nav-icon" clrDropdownTrigger>
-              <clr-icon class="user-icon" shape="user" size="32"></clr-icon>
+        <ng-container *ngIf="auth.isAuth()">
+          <li *ngIf="user.isCustomer()" class="nav-item">
+            <cart-widget class="cart-widget-margin"></cart-widget>
+          </li>
 
-              <div class="user-info-block">
-                <p class="user-name">{{ user.getShortUserFio() }}</p>
-                <p class="user-role gray">{{ user.getUserRole() }}</p>
-              </div>
-            </button>
+          <li class="nav-item">
+            <clr-dropdown>
+              <button class="nav-icon" clrDropdownTrigger>
+                <clr-icon class="user-icon" shape="user" size="32"></clr-icon>
 
-            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-              <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
-              <div class="dropdown-divider"></div>
-              <button (click)="logout()" clrDropdownItem>Выход</button>
-            </clr-dropdown-menu>
-          </clr-dropdown>
-        </li>
+                <div class="user-info-block">
+                  <p class="user-name">{{ user.getShortUserFio() }}</p>
+                  <p class="user-role gray">{{ user.getUserRole() }}</p>
+                </div>
+              </button>
+
+              <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
+                <div class="dropdown-divider"></div>
+                <button (click)="logout()" clrDropdownItem>Выход</button>
+              </clr-dropdown-menu>
+            </clr-dropdown>
+          </li>
+        </ng-container>
       </ul>
   </div>
 </nav>
