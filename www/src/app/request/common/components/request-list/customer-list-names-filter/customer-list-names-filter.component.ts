@@ -27,7 +27,7 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
       return false;
     }
     if (request) {
-      const customerNameSearchQuery = this.customerNameSearchQuery.toLowerCase();
+      const customerNameSearchQuery = this.customerNameSearchQuery.toLowerCase().trim();
       const customerFullName = request.customer.name.toLowerCase();
       const customerShortName = request.customer.shortName.toLowerCase();
 
@@ -46,7 +46,7 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
   }
 
   inputChange(text: any) {
-    this.customerNameSearchQuery = text.replace(/^\s+|\s+$/gm, '');
+    this.customerNameSearchQuery = text;
     this.changes.next();
   }
 

@@ -27,7 +27,7 @@ export class RequestListNumberFilterComponent implements ClrDatagridFilterInterf
       return false;
     }
     if (request) {
-      const requestNumberSearchQuery = this.requestNumberSearchQuery.toLowerCase();
+      const requestNumberSearchQuery = this.requestNumberSearchQuery.toLowerCase().trim();
       const requestNumber = request.request.number.toString();
 
       return (
@@ -43,7 +43,7 @@ export class RequestListNumberFilterComponent implements ClrDatagridFilterInterf
   }
 
   inputChange(text: any) {
-    this.requestNumberSearchQuery = text.replace(/^\s+|\s+$/gm, '');
+    this.requestNumberSearchQuery = text;
     this.changes.next();
   }
 
