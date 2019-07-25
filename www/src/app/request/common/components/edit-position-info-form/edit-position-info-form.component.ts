@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {EditRequestService} from "../../services/edit-request.service";
-import {Router, ActivatedRoute} from "@angular/router";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RequestPosition } from "../../models/request-position";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { EditRequestService } from "../../services/edit-request.service";
+import { Router, ActivatedRoute } from "@angular/router";
 import {
   AbstractControl,
   FormBuilder,
@@ -12,11 +12,11 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
-import {CreateRequestService} from '../../services/create-request.service';
-import {Uuid} from 'src/app/cart/models/uuid';
-import {RequestSavingType} from '../../enum/request-saving-type';
+import { CreateRequestService } from '../../services/create-request.service';
+import { Uuid } from 'src/app/cart/models/uuid';
+import { RequestSavingType } from '../../enum/request-saving-type';
 import Swal from "sweetalert2";
-import {NotificationService} from "../../../../shared/services/notification.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -161,7 +161,7 @@ export class EditPositionInfoFormComponent implements OnInit {
     this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
       () => {
         this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
-        this.notificationService.toast('Изменения сохранены', 'success', 3000);
+        this.notificationService.toast('Изменения сохранены');
       }
     );
   }
@@ -182,7 +182,7 @@ export class EditPositionInfoFormComponent implements OnInit {
         }
         const id = ids[0].id;
         this.afterSavePosition(RequestSavingType.NEW, id);
-        this.notificationService.toast('Позиция создана', 'success', 3000);
+        this.notificationService.toast('Позиция создана');
       },
       () => {
         alert('Ошибка сохранения новой позиции');

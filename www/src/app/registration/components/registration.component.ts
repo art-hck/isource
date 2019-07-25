@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidators} from "../../shared/forms/custom.validators";
-import {UserRegistration} from "../models/user-registration";
-import {ContragentRegistration} from "../models/contragent-registration";
-import {RegistrationService} from "../services/registration.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CustomValidators } from "../../shared/forms/custom.validators";
+import { UserRegistration } from "../models/user-registration";
+import { ContragentRegistration } from "../models/contragent-registration";
+import { RegistrationService } from "../services/registration.service";
+import { Router } from "@angular/router";
 import Swal from "sweetalert2";
 
 @Component({

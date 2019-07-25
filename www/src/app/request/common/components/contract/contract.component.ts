@@ -1,13 +1,13 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Contract} from "../../models/contract";
-import {Uuid} from "../../../../cart/models/uuid";
-import {RequestPosition} from "../../models/request-position";
-import {ContractService} from "../../services/contract.service";
-import {RequestContract} from "../../models/request-contract";
-import {DocumentsService} from "../../services/documents.service";
-import {RequestDocument} from "../../models/request-document";
-import {NotificationService} from "../../../../shared/services/notification.service";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Contract } from "../../models/contract";
+import { Uuid } from "../../../../cart/models/uuid";
+import { RequestPosition } from "../../models/request-position";
+import { ContractService } from "../../services/contract.service";
+import { RequestContract } from "../../models/request-contract";
+import { DocumentsService } from "../../services/documents.service";
+import { RequestDocument } from "../../models/request-document";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-contract',
@@ -77,7 +77,7 @@ export class ContractComponent implements OnChanges, OnInit {
     this.contractForm.reset();
     this.uploadedFiles = [];
     this.getContractList();
-    this.notificationService.toast('Договор загружен', 'success', 3000);
+    this.notificationService.toast('Договор загружен');
   }
 
   afterGetContract(data: any) {

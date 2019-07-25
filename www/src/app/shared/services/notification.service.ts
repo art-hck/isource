@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import Swal from "sweetalert2";
+import { Injectable } from '@angular/core';
+import Swal, { SweetAlertType } from "sweetalert2";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class NotificationService {
   constructor() {
   }
 
-  toast(message, type, timer) {
+  toast(message, type: SweetAlertType = 'success', timer = 3000) {
     Swal.fire({
       toast: true,
       position: 'top',

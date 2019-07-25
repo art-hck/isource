@@ -8,20 +8,20 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {RequestPositionWorkflowStepLabels} from "../../dictionaries/request-position-workflow-step-labels";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
-import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {RequestService as BackofficeRequestService} from "../../../back-office/services/request.service";
-import {RequestService as CustomerRequestService} from "../../../customer/services/request.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {RequestDocument} from "../../models/request-document";
-import {EditRequestService} from "../../services/edit-request.service";
-import {ClrTabLink} from '@clr/angular';
+import { RequestPosition } from "../../models/request-position";
+import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { Uuid } from "../../../../cart/models/uuid";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { RequestDocument } from "../../models/request-document";
+import { EditRequestService } from "../../services/edit-request.service";
+import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
 import Swal from "sweetalert2";
-import {NotificationService} from "../../../../shared/services/notification.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-position-info',
@@ -132,7 +132,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
-        this.notificationService.toast('Отправлено на согласование', 'success', 3000);
+        this.notificationService.toast('Отправлено на согласование');
       }
     );
   }
@@ -156,7 +156,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
-        this.notificationService.toast('Победитель выбран', 'success', 3000);
+        this.notificationService.toast('Победитель выбран');
       }
     );
   }
@@ -197,7 +197,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     this.customerRequestService.uploadDocuments(this.requestPosition, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => this.requestPosition.documents.push(document));
-        this.notificationService.toast('Документ загружен', 'success', 3000);
+        this.notificationService.toast('Документ загружен');
       });
   }
 
