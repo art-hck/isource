@@ -1,11 +1,18 @@
 <clr-datagrid class="requests-list-datagrid">
   <clr-dg-column class="request-number" [clrDgField]="'request.number'">
     № Заявки
+    <clr-dg-filter>
+      <app-request-list-number-filter [requests]="requests">
+      </app-request-list-number-filter>
+    </clr-dg-filter>
   </clr-dg-column>
 
   <clr-dg-column class="customer-name" *ngIf="customerNameColumnShow">
     Наименование заказчика
-    <clr-dg-string-filter [clrDgStringFilter]="customerNameFilter"></clr-dg-string-filter>
+    <clr-dg-filter>
+      <app-customer-list-names-filter [requests]="requests">
+      </app-customer-list-names-filter>
+    </clr-dg-filter>
   </clr-dg-column>
 
   <clr-dg-column class="request-status">
