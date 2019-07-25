@@ -43,7 +43,7 @@ export class RequestListNumberFilterComponent implements ClrDatagridFilterInterf
   }
 
   inputChange(text: any) {
-    this.requestNumberSearchQuery = text;
+    this.requestNumberSearchQuery = text.replace(/^\s+|\s+$/gm, '');
     this.changes.next();
   }
 

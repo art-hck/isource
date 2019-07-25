@@ -46,7 +46,8 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
   }
 
   inputChange(text: any) {
-    this.customerNameSearchQuery = text;
+    this.customerNameSearchQuery = text.replace(/^\s+|\s+$/gm, '');
+    console.log(this.customerNameSearchQuery);
     this.changes.next();
   }
 
