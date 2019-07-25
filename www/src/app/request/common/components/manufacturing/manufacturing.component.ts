@@ -13,7 +13,7 @@ import { Manufacturing } from '../../models/manufacturing';
   templateUrl: './manufacturing.component.html',
   styleUrls: ['./manufacturing.component.scss']
 })
-export class ManufacturingComponent implements OnInit {
+export class ManufacturingComponent implements OnInit, OnChanges {
   @Input() requestId: Uuid;
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
