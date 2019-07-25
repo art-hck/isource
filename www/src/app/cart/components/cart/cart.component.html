@@ -4,11 +4,17 @@
 
     <h2>Корзина</h2>
 
-    <div *ngFor="let supplier of getSuppliers()">
-      <app-cart-supplier [supplier]="supplier"></app-cart-supplier>
-    </div>
+    <ng-container *ngIf="getCartItems().length">
+      <div *ngFor="let cartItem of getCartItems()">
+        <cart-item [item]="cartItem"></cart-item>
+      </div>
 
-    <ng-container *ngIf="getSuppliers().length === 0">
+      <cart-sum></cart-sum>
+
+      <cart-order></cart-order>
+    </ng-container>
+
+    <ng-container *ngIf="getCartItems().length === 0">
       <div class="alert alert-info" role="alert">
         <div class="alert-items">
           <div class="alert-item static">

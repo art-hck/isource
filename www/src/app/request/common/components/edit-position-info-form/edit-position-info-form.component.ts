@@ -3,6 +3,12 @@ import { RequestPosition } from "../../models/request-position";
 import { OffersService } from "../../../back-office/services/offers.service";
 import { EditRequestService } from "../../services/edit-request.service";
 import { Router, ActivatedRoute } from "@angular/router";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {RequestPosition} from "../../models/request-position";
+import {OffersService} from "../../../back-office/services/offers.service";
+import {EditRequestService} from "../../services/edit-request.service";
+import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
+import {Router, ActivatedRoute} from "@angular/router";
 import {
   AbstractControl,
   FormBuilder,
@@ -36,6 +42,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
   @Output() createdNewPosition = new EventEmitter<Uuid>();
+
+  autoCorrectedDatePipe: any = createAutoCorrectedDatePipe('dd.mm.yyyy');
+  public dateMask = [/\d/, /\d/, '.', /\d/, /\d/, '.', /[1-3]/, /\d/, /\d/, /\d/];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,16 +87,20 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   get dateObject() {
-    return this.requestPosition.deliveryDate ?
-      moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY') :
-      moment(new Date()).format('DD.MM.YYYY');
-  }
+    if (!this.requestPosition.deliveryDate)  {
+      return moment(new Date()).format('DD.MM.YYYY');
+    }
 
+    if (!moment(this.requestPosition.deliveryDate, 'DD.MM.YYYY', true).isValid()) {
+      this.requestPosition.deliveryDate = moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY');
+    }
+    return this.requestPosition.deliveryDate;
+  }
   set dateObject(val) {
-    if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
-      this.requestPosition.deliveryDate = val;
-    } else {
-      this.requestPosition.deliveryDate = moment(val, 'DD.MM.YYYY').format();
+    if (val) {
+      this.requestPosition.deliveryDate = (!moment(val, 'DD.MM.YYYY', true).isValid()) ?
+        val :
+        moment(val, 'DD.MM.YYYY').format();
     }
   }
 
@@ -159,8 +172,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   protected saveExistsPosition(): void {
     this.requestPositionItem = this.positionInfoDataForm.value;
     this.editRequestService.saveRequest(this.requestPosition.id, this.requestPositionItem).subscribe(
-      () => {
-        this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem.id);
+      (response) => {
+        Object.assign(this.requestPositionItem, response);
+        this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem);
         this.notificationService.toast('Изменения сохранены');
       }
     );
@@ -174,14 +188,11 @@ export class EditPositionInfoFormComponent implements OnInit {
       ])
     });
     const requestItem = dataForm.value;
+
     this.createRequestService.addRequestPosition(this.requestId, requestItem['itemForm']).subscribe(
       (ids) => {
-        if (!(ids && ids.length > 0 && ids[0].id)) {
-          alert('Ошибка сохранения новой позиции');
-          return;
-        }
-        const id = ids[0].id;
-        this.afterSavePosition(RequestSavingType.NEW, id);
+        this.requestPosition.id = ids[0].id;
+        this.afterSavePosition(RequestSavingType.NEW, this.requestPosition);
         this.notificationService.toast('Позиция создана');
       },
       () => {
@@ -192,21 +203,23 @@ export class EditPositionInfoFormComponent implements OnInit {
 
   /**
    * @param type
-   * @param updatedPositionId Идентификатор позиции
+   * @param updatedPosition Позиция
    */
-  protected afterSavePosition(type: RequestSavingType, updatedPositionId: Uuid): void {
+  protected afterSavePosition(type: RequestSavingType, updatedPosition: RequestPosition): void {
+    const updatedPositionId = updatedPosition.id;
+
     this.changePositionInfo.emit();
     this.positionInfoEditable.emit(false);
 
-    if (this.requestPositionItem.deliveryDate) {
-      this.requestPositionItem.deliveryDate = moment(this.requestPositionItem.deliveryDate, 'DD.MM.YYYY').format();
-    }
+    this.requestPosition = updatedPosition;
 
-    this.requestPosition = Object.assign({}, this.requestPosition, this.requestPositionItem);
-    this.updatedRequestPositionItem.emit(this.requestPosition);
-
-    if (type === RequestSavingType.NEW) {
-      this.createdNewPosition.emit(updatedPositionId);
+    switch (type) {
+      case RequestSavingType.EXISTS:
+        this.updatedRequestPositionItem.emit(this.requestPosition);
+        break;
+      case RequestSavingType.NEW:
+        this.createdNewPosition.emit(updatedPositionId);
+        break;
     }
   }
 }

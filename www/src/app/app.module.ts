@@ -16,7 +16,7 @@ import { CoreModule } from "./core/core.module";
 import { AccessGuard, APP_CONFIG, AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { PagesModule } from "./pages/pages.module";
 import { StartupService } from "./startup.service";
-import { StoreService as CartStoreService } from './cart/services/store.service';
+import { CartStoreService as CartStoreService } from './cart/services/cart-store.service';
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { CreateRequestService } from "./request/common/services/create-request.service";

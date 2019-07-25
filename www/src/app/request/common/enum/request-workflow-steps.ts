@@ -1,6 +1,6 @@
 export enum RequestWorkflowSteps {
-  NEW = 'Новая',
-  IN_PROGRESS = 'В обработке',
-  COMPLETED = 'Выполнена'
+  NEW = 'NEW',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED'
 
 }

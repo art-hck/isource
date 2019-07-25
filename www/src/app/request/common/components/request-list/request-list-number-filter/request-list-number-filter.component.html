@@ -1,0 +1,7 @@
+<a *ngIf="requestNumberSearchQuery !== ''"
+   class="clear-filter"
+   (click)="clearFilter()">Очистить фильтр</a>
+
+<input type="text"
+       [(ngModel)]="requestNumberSearchQuery"
+       (ngModelChange)="inputChange($event)">

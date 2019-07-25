@@ -1,6 +1,5 @@
 .card {
   padding: 10px;
-  margin-top: 20px;
 }
 
 .item-card {
@@ -13,7 +12,7 @@
   text-align: right;
 }
 
-.btn.btn-primary {
+.btn {
   margin-right: 0;
   margin-top: 40px;
 }
@@ -60,38 +59,11 @@
   padding: 0;
 }
 
-.btn.btn-link.search {
-  margin: 0;
+.cart-quantity-field {
+  width: 90px;
+  display: inline-block;
 }
 
-input {
-  width: 100%;
-  padding: 5px;
-  margin-bottom: 5px;
-  position: relative;
-}
-
-a {
-  font-size: 12px;
-}
-
-.reset {
-  position: absolute;
-  color: #dddddd;
-}
-
-.input-search {
-  position: relative;
-}
-
-.input-search button {
-  right: 0;
-  margin-top: 0;
-}
-
-.no-positions {
-  display: block;
-  text-align: center;
-  color: #b9b9b9;
-  padding-top: 20px;
+.cart-delete-button {
+  margin: 0px !important;
 }

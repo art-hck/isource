@@ -19,7 +19,10 @@
   <div class="item-card" *ngFor="let position of positions">
     <div class="clr-row">
       <div class="clr-col-2 image">
+        <img *ngIf="position.image; else noImage" src="{{ position.image }}" />
+        <ng-template #noImage>
         <p>Изображение отсутствует</p>
+        </ng-template>
       </div>
       <div class="clr-col-7">
         <p class="position-name">{{position.name}}</p>
@@ -29,7 +32,7 @@
       <div class="clr-col-3 right-align">
         <span class="supplier-name">{{position.supplierContragentName}}</span>
         <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
-        <button class="btn btn-primary">В корзину</button>
+        <button *ngIf="!isPositionInCart(position)" class="btn btn-primary" (click)="onAddPositionToCart(position)">В корзину</button>
       </div>
     </div>
   </div>
