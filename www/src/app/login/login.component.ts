@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
+import { UserInfoService } from "../core/services/user-info.service";
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private user: UserInfoService
   ) {
   }
 
@@ -44,13 +46,24 @@ export class LoginComponent implements OnInit {
 
             // самый безопасный способ обновить с нуля страницу
             // todo потом желательно переделать на авторизацию без перезагрузки
-            window.location.href = returnUrl ? decodeURI(returnUrl) : "/";
+            window.location.href = returnUrl ? decodeURI(returnUrl) : this.getStartPageUrlByRole();
           });
       }, () => {
         // если ошибка, то считаем что логин/пароль не подошли
         this.loading = false;
         this.loginError = true;
       });
+  }
+
+  // Определяем стартовую страницу после авторизации для каждой роли
+  getStartPageUrlByRole() {
+    if (this.user.isCustomer()) {
+      return "/requests/customer";
+    } else if (this.user.isBackOffice()) {
+      return "/requests/backoffice";
+    } else {
+      return "/";
+    }
   }
 
   onRegistrationClick() {
