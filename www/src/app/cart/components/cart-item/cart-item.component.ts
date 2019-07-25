@@ -23,6 +23,11 @@ export class CartItemComponent implements OnInit {
   }
 
   async updateItemQuantity(item: CartItem, quantity: number): Promise<boolean> {
+    quantity = Math.abs(quantity);
     return this.store.updateQuantity(item, quantity);
+  }
+
+  filterEnteredText(event) {
+    return (event.key >= 0 && event.key <= 9) ? null : false;
   }
 }
