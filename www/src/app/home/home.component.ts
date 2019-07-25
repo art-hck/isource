@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
     if (this.authService.isAuth() && this.user.isCustomer()) {
       this.router.navigateByUrl("/requests/customer");
     } else if (this.authService.isAuth() && this.user.isBackOffice()) {
-      this.router.navigateByUrl("/requests/backoffice");
+      this.router.navigateByUrl("/requests/back-office");
     } else {
       return;
     }
