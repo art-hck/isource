@@ -2,13 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { OffersService } from "../../../back-office/services/offers.service";
 import { EditRequestService } from "../../services/edit-request.service";
-import { Router, ActivatedRoute } from "@angular/router";
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {EditRequestService} from "../../services/edit-request.service";
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
-import {Router, ActivatedRoute} from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import {
   AbstractControl,
   FormBuilder,
