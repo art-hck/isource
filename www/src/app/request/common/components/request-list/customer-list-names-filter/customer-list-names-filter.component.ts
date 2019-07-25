@@ -27,7 +27,7 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
       return false;
     }
     if (request) {
-      const customerNameSearchQuery = this.customerNameSearchQuery.toLowerCase();
+      const customerNameSearchQuery = this.customerNameSearchQuery.toLowerCase().trim();
       const customerFullName = request.customer.name.toLowerCase();
       const customerShortName = request.customer.shortName.toLowerCase();
 
