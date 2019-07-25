@@ -17,9 +17,11 @@ import { RequestService as BackofficeRequestService } from "../../../back-office
 import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestDocument } from "../../models/request-document";
-import {EditRequestService} from "../../services/edit-request.service";
-import {ClrTabLink} from '@clr/angular';
+import { EditRequestService } from "../../services/edit-request.service";
+import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
+import Swal from "sweetalert2";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-position-info',
@@ -63,15 +65,17 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
-    private customerRequestService: CustomerRequestService
-  ) { }
+    private customerRequestService: CustomerRequestService,
+    private notificationService: NotificationService
+  ) {
+  }
 
 
   ngAfterViewInit() {
     this.tabLinks.changes.subscribe(tabChange => {
 
       // Проверяем, есть ли среди табов неактивный
-      const noActiveTab = tabChange._results.every(function(tab) {
+      const noActiveTab = tabChange._results.every(function (tab) {
         return tab.active === false;
       });
 
@@ -101,11 +105,36 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onConfirmPublishOffers(requestPosition: RequestPosition) {
+    Swal.fire({
+      width: 520,
+      html: '<p class="text-alert">' + 'Отправить коммерческие предложения на согласование?</br></br>' + '</p>' +
+        '<button id="submit" class="btn btn-primary">' +
+        'Да' + '</button>' + '<button id="cancel" class="btn btn-link">' +
+        'Нет' + '</button>',
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+        submit.addEventListener('click', () => {
+          this.onPublishOffers(requestPosition);
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
+  }
+
   onPublishOffers(requestPosition: RequestPosition) {
     this.offersService.publishOffers(this.requestId, requestPosition.id).subscribe(
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        this.notificationService.toast('Отправлено на согласование');
       }
     );
   }
@@ -129,6 +158,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        this.notificationService.toast('Победитель выбран');
       }
     );
   }
@@ -169,6 +199,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     this.customerRequestService.uploadDocuments(this.requestPosition, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => this.requestPosition.documents.push(document));
+        this.notificationService.toast('Документ загружен');
       });
   }
 

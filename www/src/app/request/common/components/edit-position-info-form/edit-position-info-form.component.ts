@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RequestPosition} from "../../models/request-position";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {EditRequestService} from "../../services/edit-request.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RequestPosition } from "../../models/request-position";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { EditRequestService } from "../../services/edit-request.service";
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
-import {Router, ActivatedRoute} from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import {
   AbstractControl,
   FormBuilder,
@@ -16,6 +16,8 @@ import * as moment from "moment";
 import { CreateRequestService } from '../../services/create-request.service';
 import { Uuid } from 'src/app/cart/models/uuid';
 import { RequestSavingType } from '../../enum/request-saving-type';
+import Swal from "sweetalert2";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -45,8 +47,10 @@ export class EditPositionInfoFormComponent implements OnInit {
     private editRequestService: EditRequestService,
     protected router: Router,
     protected createRequestService: CreateRequestService,
-    protected route: ActivatedRoute
-  ) { }
+    protected route: ActivatedRoute,
+    private notificationService: NotificationService
+  ) {
+  }
 
 
   ngOnInit() {
@@ -137,7 +141,27 @@ export class EditPositionInfoFormComponent implements OnInit {
       this.saveNewPosition();
       return;
     }
-    this.saveExistsPosition();
+    Swal.fire({
+      width: 400,
+      html: '<p class="text-alert">' + 'Сохранить изменения?</br></br>' + '</p>' +
+        '<button id="submit" class="btn btn-primary">' +
+        'Да' + '</button>' + '<button id="cancel" class="btn btn-link">' +
+        'Нет' + '</button>',
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+        submit.addEventListener('click', () => {
+          this.saveExistsPosition();
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
   }
 
   protected saveExistsPosition(): void {
@@ -146,6 +170,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       (response) => {
         Object.assign(this.requestPositionItem, response);
         this.afterSavePosition(RequestSavingType.EXISTS, this.requestPositionItem);
+        this.notificationService.toast('Изменения сохранены');
       }
     );
   }
@@ -163,6 +188,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       (ids) => {
         this.requestPosition.id = ids[0].id;
         this.afterSavePosition(RequestSavingType.NEW, this.requestPosition);
+        this.notificationService.toast('Позиция создана');
       },
       () => {
         alert('Ошибка сохранения новой позиции');

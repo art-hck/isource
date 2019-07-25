@@ -7,6 +7,7 @@ import { ContractService } from "../../services/contract.service";
 import { RequestContract } from "../../models/request-contract";
 import { DocumentsService } from "../../services/documents.service";
 import { RequestDocument } from "../../models/request-document";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-contract',
@@ -26,7 +27,8 @@ export class ContractComponent implements OnChanges, OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private contractService: ContractService,
-    private documentsService: DocumentsService
+    private documentsService: DocumentsService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -75,6 +77,7 @@ export class ContractComponent implements OnChanges, OnInit {
     this.contractForm.reset();
     this.uploadedFiles = [];
     this.getContractList();
+    this.notificationService.toast('Договор загружен');
   }
 
   afterGetContract(data: any) {

@@ -3,49 +3,51 @@
 </ng-container>
 <ng-container *ngIf="request">
   <div class="clr-row w-100" *ngIf="showPositionList">
-  <div class="card" [ngClass]="{'clr-col-4' : (showInfo === true) || (showRequestInfo === true)}">
-    <div class="action-bar">
-      <button class="btn btn-link" (click)="addNewPosition()"><clr-icon shape="plus-circle"></clr-icon>
-        <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
-      </button>
-      <button class="btn btn-link" (click)="onUploadPositionsFromExcel()"><clr-icon shape="upload"></clr-icon>
-        <span *ngIf="!(showInfo || showRequestInfo)">Загрузить из шаблона</span>
-      </button>
-    </div>
+    <div class="card" [ngClass]="{'clr-col-4' : (showInfo === true) || (showRequestInfo === true)}">
+      <div class="action-bar">
+        <button class="btn btn-link" (click)="addNewPosition()">
+          <clr-icon shape="plus-circle"></clr-icon>
+          <span *ngIf="!(showInfo || showRequestInfo)">Добавить позицию</span>
+        </button>
+        <button class="btn btn-link" (click)="onUploadPositionsFromExcel()">
+          <clr-icon shape="upload"></clr-icon>
+          <span *ngIf="!(showInfo || showRequestInfo)">Загрузить из шаблона</span>
+        </button>
+      </div>
 
-    <div class="card" *ngIf="showUploadPositionsFromExcelForm">
-      <div class="card-block">
-        <div class="card-text">
-          <app-add-from-excel
-            (submit)="onSendExcelFile($event)"
-            [templateUrl]="'assets/RequestTemplate.xlsx'"
-          >
-          </app-add-from-excel>
+      <div class="card" *ngIf="showUploadPositionsFromExcelForm">
+        <div class="card-block">
+          <div class="card-text">
+            <app-add-from-excel
+              (submit)="onSendExcelFile($event)"
+              [templateUrl]="'assets/RequestTemplate.xlsx'"
+            >
+            </app-add-from-excel>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="card-content">
-      <div class="request-row" (click)="onSelectRequest()"
-           [ngClass]="{'selected-row' : showRequestInfo === true && showInfo == false}">
-        <div class="clr-row">
-          <div class="clr-col-8">
-            <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
-          </div>
+      <div class="card-content">
+        <div class="request-row" (click)="onSelectRequest()"
+             [ngClass]="{'selected-row' : showRequestInfo === true && showInfo == false}">
+          <div class="clr-row">
+            <div class="clr-col-8">
+              <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
+            </div>
 
-          <div class="clr-col-4 status request">
+            <div class="clr-col-4 status request">
              <span class="status-request-{{request.status}}">
                {{request.statusLabel}}
              </span>
-            <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+              <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="position-row clr-row w-100"
-           *ngFor="let requestPosition of requestPositions; let i = index"
-           (click)="onSelectPosition(requestPosition, i)"
-           [ngClass]="{'selected-row' : i == selectedIndex && showRequestInfo == false}">
+        <div class="position-row clr-row w-100"
+             *ngFor="let requestPosition of requestPositions; let i = index"
+             (click)="onSelectPosition(requestPosition, i)"
+             [ngClass]="{'selected-row' : i == selectedIndex && showRequestInfo == false}">
 
           <div class="position-name clr-col-5"
                [ngClass]="{'clr-col-11' : (showInfo === true) || (showRequestInfo === true)}">
@@ -66,7 +68,8 @@
           </div>
 
           <div class="position-price clr-col" *ngIf="!(showInfo || showRequestInfo)">
-            <span class="quantity">{{requestPosition.startPrice}}</span>{{requestPosition.currency}}
+            <span class="quantity">{{requestPosition.startPrice | number}}</span>
+            <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
           </div>
 
           <div class="clr-col status" [ngClass]="{'clr-col-1' : (showInfo === true) || (showRequestInfo === true)}">

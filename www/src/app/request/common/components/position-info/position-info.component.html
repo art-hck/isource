@@ -58,33 +58,36 @@
 
                 <label class="clr-control-label">Необходимый срок поставки</label>
                 <div class="deliveryDate"
-                     *ngIf="requestPosition.isDeliveryDateAsap; else notAsapDate">как можно скорее</div>
+                     *ngIf="requestPosition.isDeliveryDateAsap; else notAsapDate">как можно скорее
+                </div>
                 <ng-template #notAsapDate><p>{{ getDeliveryDate(requestPosition.deliveryDate) }}</p></ng-template>
 
                 <label class="clr-control-label">Базис поставки (пункт, до которого требуется доставка)</label>
                 <p>{{requestPosition.deliveryBasis}}</p>
 
-              <label class="clr-control-label">Условия оплаты</label>
-              <p>{{requestPosition.paymentTerms}}</p>
+                <label class="clr-control-label">Условия оплаты</label>
+                <p>{{requestPosition.paymentTerms}}</p>
 
-              <label class="clr-control-label">Начальная максимальная цена</label>
-              <p><span class="quantity">{{requestPosition.startPrice}}</span> {{requestPosition.currency}}</p>
+                <div class="startPrice" *ngIf="requestPosition.startPrice">
+                  <label class="clr-control-label">Начальная максимальная цена</label>
+                  <p><span class="quantity">{{requestPosition.startPrice | number}}</span> {{requestPosition.currency}}
+                  </p>
+                </div>
+                <label class="clr-control-label">
+                  Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+                </label>
+                <p>{{requestPosition.productionDocument}}</p>
 
-              <label class="clr-control-label">
-                Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
-              </label>
-              <p>{{requestPosition.productionDocument}}</p>
+                <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+                  <label class="clr-control-label nopadding">Необходимость сопутствующих услуг (ШМР, ПНР)</label>
+                  <p>{{requestPosition.relatedServices}}</p>
+                </div>
 
-              <div class="relatedServices" *ngIf="requestPosition.relatedServices">
-                <label class="clr-control-label nopadding">Необходимость сопутствующих услуг (ШМР, ПНР)</label>
-                <p>{{requestPosition.relatedServices}}</p>
+                <div class="relatedServices" *ngIf="requestPosition.comments">
+                  <label class="clr-control-label">Примечания/комментрии</label>
+                  <p>{{requestPosition.comments}}</p>
+                </div>
               </div>
-
-              <div class="relatedServices" *ngIf="requestPosition.comments">
-                <label class="clr-control-label">Примечания/комментрии</label>
-                <p>{{requestPosition.comments}}</p>
-              </div></div>
-
 
 
               <ng-template #positionInfoEditForm>
@@ -129,7 +132,7 @@
 
             <div class="submit">
               <button class="btn btn-primary"
-                      (click)="onPublishOffers(requestPosition)"
+                      (click)="onConfirmPublishOffers(requestPosition)"
                       *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
               </button>
 
@@ -150,12 +153,6 @@
           </clr-tab-content>
         </clr-tab>
 
-        <clr-tab>
-          <button clrTabLink>История</button>
-          <clr-tab-content *clrIfActive>
-            ...
-          </clr-tab-content>
-        </clr-tab>
       </clr-tabs>
     </div>
   </div>

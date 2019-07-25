@@ -281,3 +281,7 @@ clr-dg-footer.datagrid-footer {
 .status-position-COMPLETED:before {
     background: rgb(255, 127, 127);
 }
+
+.text-alert {
+  font-size: 16px;
+}

@@ -1,13 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Uuid} from "../../../../cart/models/uuid";
-import {OffersService} from "../../../back-office/services/offers.service";
-import {ActivatedRoute} from "@angular/router";
-import {RequestOfferPosition} from "../../models/request-offer-position";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
-import {RequestPosition} from "../../models/request-position";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Uuid } from "../../../../cart/models/uuid";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { ActivatedRoute } from "@angular/router";
+import { RequestOfferPosition } from "../../models/request-offer-position";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { RequestPosition } from "../../models/request-position";
 import { RequestDocument } from "../../models/request-document";
-import {CustomValidators} from "../../../../shared/forms/custom.validators";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-offers',
@@ -31,7 +32,8 @@ export class OffersComponent implements OnInit {
   constructor(
     protected offersService: OffersService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -117,6 +119,7 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
+        this.notificationService.toast('Документ загружен');
       });
   }
 
@@ -124,6 +127,7 @@ export class OffersComponent implements OnInit {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.technicalProposals.push(document));
+        this.notificationService.toast('Документ загружен');
       });
   }
 }
