@@ -67,6 +67,6 @@ export class ManufacturingComponent implements OnInit, OnChanges {
 
   canSendFiles(): boolean {
     const comments: string = this.manufacturingForm.get('comments').value;
-    return comments.trim().length > 0
+    return comments.trim().length > 0;
   }
 }
