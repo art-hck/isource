@@ -22,6 +22,7 @@ import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 
 @Component({
   selector: 'app-position-info',
@@ -208,6 +209,19 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   }
 
   canViewManufacturing(requrestPosition: RequestPosition): boolean {
-    return (requrestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING);
+    const manufacturingIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.MANUFACTURING.valueOf()
+    );
+    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      requrestPosition.status
+    );
+    return currentStatusIndex >= manufacturingIndex;
+  }
+
+  canUploadManufacturing(requestPosition: RequestPosition): boolean {
+    return (
+      requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING &&
+      !this.isCustomerView
+    );
   }
 }

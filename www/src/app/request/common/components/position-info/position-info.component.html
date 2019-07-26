@@ -158,7 +158,7 @@
           <clr-tab-content *clrIfActive>
             <app-manufacturing [requestPosition]="requestPosition"
                                [requestId]="requestId"
-                               [isCustomerView]="isCustomerView">
+                               [canUpload]="canUploadManufacturing(requestPosition)">
             </app-manufacturing>
           </clr-tab-content>
         </clr-tab>

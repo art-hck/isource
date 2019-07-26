@@ -16,7 +16,7 @@ import { Manufacturing } from '../../models/manufacturing';
 export class ManufacturingComponent implements OnInit, OnChanges {
   @Input() requestId: Uuid;
   @Input() requestPosition: RequestPosition;
-  @Input() isCustomerView: boolean;
+  @Input() canUpload: boolean;
 
   manufacturingForm: FormGroup;
   uploadedFiles: File[] = [];
@@ -44,9 +44,6 @@ export class ManufacturingComponent implements OnInit, OnChanges {
   }
 
   onAddManufacturingDocument(): void {
-    if (this.isCustomerView) {
-      return;
-    }
     const manufacturingItem: Manufacturing = this.manufacturingForm.value;
     this.manufacturingService.addBackofficeDocument(
       this.requestId,
@@ -66,5 +63,10 @@ export class ManufacturingComponent implements OnInit, OnChanges {
 
   onDownloadFile(document: RequestDocument) {
     this.documentsService.downloadFile(document);
+  }
+
+  canSendFiles(): boolean {
+    const comments: string = this.manufacturingForm.get('comments').value;
+    return comments.trim().length > 0
   }
 }
