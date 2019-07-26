@@ -206,4 +206,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   onCreatedNewPosition(updatedPositionId: Uuid): void {
     this.createdNewPosition.emit(updatedPositionId);
   }
+
+  canViewManufacturing(requrestPosition: RequestPosition): boolean {
+    return (requrestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING);
+  }
 }

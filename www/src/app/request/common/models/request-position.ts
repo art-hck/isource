@@ -1,6 +1,7 @@
 import {Uuid} from "../../../cart/models/uuid";
 import {RequestItem} from "./request-item";
 import { RequestDocument } from "./request-document";
+import { ManufacturingDocument } from './manufacturing-document';
 
 export class RequestPosition extends RequestItem {
   /**
@@ -18,4 +19,5 @@ export class RequestPosition extends RequestItem {
   type: string;
   statusLabel: string;
   documents: RequestDocument[];
+  manufacturingDocuments: ManufacturingDocument[];
 }
