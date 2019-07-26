@@ -20,7 +20,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.redirectToRequestsList();
+    if (!this.authService.isAuth()) {
+      this.router.navigateByUrl("/login");
+    } else {
+      this.redirectToRequestsList();
+    }
   }
 
   /**
@@ -38,9 +42,9 @@ export class HomeComponent implements OnInit {
 
   // todo Убрать этот редирект с домашней страницы после появления дашбордов
   redirectToRequestsList() {
-    if (this.authService.isAuth() && this.user.isCustomer()) {
+    if (this.user.isCustomer()) {
       this.router.navigateByUrl("/requests/customer");
-    } else if (this.authService.isAuth() && this.user.isBackOffice()) {
+    } else if (this.user.isBackOffice()) {
       this.router.navigateByUrl("/requests/back-office");
     } else {
       return;
