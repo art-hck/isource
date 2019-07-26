@@ -1,4 +1,4 @@
-<form [formGroup]="manufacturingForm" class="form" *ngIf="!isCustomerView">
+<form [formGroup]="manufacturingForm" class="form" *ngIf="canUpload">
   <app-document-upload-list (fileSelected)="onDocumentSelected($event)"
                             [documents]="uploadedFiles"></app-document-upload-list>
   <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
@@ -6,7 +6,9 @@
       <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
     </div>
     <div class="clr-col-3">
-      <button class="btn btn-link" (click)="onAddManufacturingDocument()">Загрузить</button>
+      <button class="btn btn-link" (click)="onAddManufacturingDocument()" [disabled]="!canSendFiles()">
+        Загрузить
+      </button>
     </div>
   </div>
 </form>
