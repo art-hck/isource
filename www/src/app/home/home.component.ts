@@ -42,8 +42,10 @@ export class HomeComponent implements OnInit {
 
   // todo Убрать этот редирект с домашней страницы после появления дашбордов
   redirectToRequestsList() {
-    const userRole = this.user.isCustomer() ? "customer" : "back-office";
-    this.router.navigateByUrl("/requests/" + userRole);
+    if (this.user.isCustomer()) {
+      this.router.navigateByUrl("/requests/customer");
+    } else if (this.user.isBackOffice()) {
+      this.router.navigateByUrl("/requests/back-office");
+    }
   }
-
 }
