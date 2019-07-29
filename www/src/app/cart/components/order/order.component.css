@@ -28,3 +28,14 @@ h3 {
 button {
   margin-bottom: 150px;
 }
+
+
+.asap-checkbox {
+  display: block;
+  padding-top: 8px;
+}
+.asap-checkbox label {
+  margin: 0;
+  line-height: 100%;
+  display: table !important;
+}
