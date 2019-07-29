@@ -174,7 +174,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
         if (offerWinner) {
           offerWinner.isWinner = true;
         }
-        this.linkedOfferSorter.sortLinkedOffers(requestPosition.linkedOffers);
         this.updateShowWinnerColumn();
         this.notificationService.toast('Победитель выбран');
       }
@@ -248,5 +247,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
       RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
     );
     this.showWinnerStateColumn = currentStateIndex >= winnerSelectedIndex;
+    if (this.showWinnerStateColumn) {
+      this.linkedOfferSorter.sortLinkedOffers(this.requestPosition.linkedOffers);
+    }
   }
 }

@@ -5,7 +5,6 @@ import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import {Uuid} from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { LinkedOffersSortService } from 'src/app/request/common/services/linked-offers-sort-service';
 
 @Component({
   selector: 'app-back-office-request-view',
@@ -16,8 +15,6 @@ export class BackOfficeRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
-
-  protected linkedOffersSorter = new LinkedOffersSortService();
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -41,7 +38,6 @@ export class BackOfficeRequestViewComponent implements OnInit {
   updatePositionsList(callback?: (positions: RequestPosition[]) => void): void {
     this.requestService.getRequestPositions(this.requestId).subscribe(
       (requestPositions: RequestPosition[]) => {
-        this.linkedOffersSorter.sort(requestPositions);
         this.requestPositions = requestPositions;
         this.requestView.requestPositions = requestPositions;
         if (callback) {
