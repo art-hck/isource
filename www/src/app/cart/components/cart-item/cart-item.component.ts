@@ -28,6 +28,7 @@ export class CartItemComponent implements OnInit {
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {
-    return (event.key >= '0' && event.key <= '9');
+    const key = Number(event.key);
+    return (key >= 0 && key <= 9);
   }
 }
