@@ -104,7 +104,7 @@ export class OrderComponent implements OnInit {
     this.paymentTermsValid = Boolean(this.data.paymentTerms.trim().length !== 0);
   }
 
-  checkOrderButtonEnabled() {
+  checkOrderButtonEnabled(): boolean {
     return this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid;
   }
 }
