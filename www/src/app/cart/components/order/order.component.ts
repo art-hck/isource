@@ -80,7 +80,7 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  protected updateDateFieldInvalidState() {
+  protected updateDateFieldInvalidState(): void {
     const todayDate = new Date(); // Получаем текущую дату (включая время)
     todayDate.setHours(0, 0, 0, 0); // Сбрасываем часы, минуты и секунды до 00:00:00 для корректного сравнения дат
 
@@ -96,11 +96,11 @@ export class OrderComponent implements OnInit {
     this.deliveryDateValid = isValid;
   }
 
-  protected updateDeliveryBasisInvalidState() {
+  protected updateDeliveryBasisInvalidState(): void {
     this.deliveryBasisValid = Boolean(this.data.deliveryBasis.trim().length !== 0);
   }
 
-  protected updatePaymentTermsInvalidState() {
+  protected updatePaymentTermsInvalidState(): void {
     this.paymentTermsValid = Boolean(this.data.paymentTerms.trim().length !== 0);
   }
 
