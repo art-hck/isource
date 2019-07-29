@@ -3,7 +3,7 @@ import { RequestOfferPosition } from '../models/request-offer-position';
 
 export class LinkedOffersSortService {
 
-  sortLinkedOffers(linkedOffers: RequestOfferPosition[]) {
+  sortLinkedOffers(linkedOffers: RequestOfferPosition[]): void {
     const winner = linkedOffers.find((lo) => {
       return lo.isWinner;
     });

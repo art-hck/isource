@@ -133,12 +133,6 @@ export class OffersComponent implements OnInit {
   }
 
   showWinnerSelectionColumn(): boolean {
-    if (!this.isCustomerView) {
-      return false;
-    }
-    if (this.showWinnerStateColumn) {
-      return false;
-    }
-    return true;
+    return (this.isCustomerView && !this.showWinnerStateColumn);
   }
 }
