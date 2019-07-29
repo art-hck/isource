@@ -56,7 +56,7 @@ export class AuthService {
       params = {
         'client_id': this.appConfig.clientId,
         'grant_type': 'password',
-        'username': login,
+        'username': login.toLowerCase(),
         'password': password
       };
     return this.http.post<any>('oauth', params, options)
