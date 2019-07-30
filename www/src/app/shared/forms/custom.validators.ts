@@ -66,7 +66,8 @@ export class CustomValidators {
     return valid ? null : {field: true};
   }
 
-  // Используется для валидации наименований организаций и адресов, разрешена кириллица, пробелы, тире, цифры и знаки припинания
+  // Используется для валидации наименований организаций и адресов,
+  // разрешена кириллица, пробелы, тире, цифры и знаки припинания
   static cyrrilic(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
@@ -75,7 +76,7 @@ export class CustomValidators {
 
   static email(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/);
+    const valid = String(value).trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
     return valid ? null : {field: true};
   }
 
