@@ -49,7 +49,7 @@ export class CustomValidators {
 
   static ogrn(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\d{13}$/);
+    const valid = String(value).trim().match(/^(\d{13}|\d{15})$/);
     return valid ? null : {field: true};
   }
 

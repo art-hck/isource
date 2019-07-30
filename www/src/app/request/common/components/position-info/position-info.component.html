@@ -140,8 +140,9 @@
               <app-offers [requestPosition]="requestPosition"
                           [isCustomerView]="isCustomerView"
                           (offerWinner)="getOfferWinner($event)"
-                          [requestId]="requestId">
-              </app-offers>
+                          [requestId]="requestId"
+                          [showWinnerStateColumn]="showWinnerStateColumn">
+            </app-offers>
 
               <div class="submit">
                 <button class="btn btn-primary"
@@ -172,7 +173,7 @@
             <clr-tab-content *clrIfActive>
               <app-manufacturing [requestPosition]="requestPosition"
                                  [requestId]="requestId"
-                                 [isCustomerView]="isCustomerView">
+                                 [canUpload]="canUploadManufacturing(requestPosition)">
               </app-manufacturing>
             </clr-tab-content>
           </clr-tab>

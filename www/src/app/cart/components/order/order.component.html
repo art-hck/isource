@@ -4,12 +4,17 @@
     <div class="form-group">
       <label>Необходимый срок поставки</label>
       <div class="clr-row">
-        <div class="clr-col-3">
-          <input type="date" clrDate placeholder="Выберите дату" [(clrDate)]="deliveryDate" [class.invalid]="deliveryDateInvalid">
+        <div class="clr-col-2">
+          <input type="text" clrDate
+                 placeholder="Выберите дату"
+                 [(clrDate)]="deliveryDate"
+                 [class.invalid]="!deliveryDateValid"
+                 [disabled]="isDeliveryDateAsap">
         </div>
         <div class="clr-col-3">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox (change)="isDeliveryDateAsap = $event.target.checked" />
+          <clr-checkbox-wrapper class="asap-checkbox">
+            <input type="checkbox" clrCheckbox
+                   (change)="isDeliveryDateAsap = $event.target.checked" />
             <label>как можно быстрее</label>
           </clr-checkbox-wrapper>
         </div>
@@ -17,13 +22,19 @@
     </div>
     <div class="form-group">
       <label>Базис поставки (пункт, до которого требуется доставка)</label>
-      <input type="text" (input)="deliveryBasis = $event.target.value" [class.invalid]="deliveryBasisInvalid">
+      <input type="text"
+             (input)="deliveryBasis = $event.target.value"
+             [class.invalid]="!deliveryBasisValid">
     </div>
     <div class="form-group">
       <label>Условия оплаты</label>
-      <input type="text" value="30 банковских дней по факту поставки" (input)="paymentTerms = $event.target.value" [class.invalid]="paymentTermsInvalid">
+      <input type="text" value="30 банковских дней по факту поставки"
+             (input)="paymentTerms = $event.target.value"
+             [class.invalid]="!paymentTermsValid">
     </div>
   </div>
 </div>
 
-<button class="btn btn-bg btn-primary" (click)="onSubmitOrder()">Сделать заказ</button>
+<button class="btn btn-bg btn-primary"
+        [disabled]="!checkOrderButtonEnabled()"
+        (click)="onSubmitOrder()">Сделать заказ</button>

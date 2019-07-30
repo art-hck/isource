@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CartStoreService } from '../../services/cart-store.service';
 import { OrderFormInfo } from '../../models/order-form-info';
 import { Router } from '@angular/router';
@@ -11,9 +11,9 @@ import { CartService } from "../../services/cart.service";
 })
 export class OrderComponent implements OnInit {
 
-  public deliveryDateInvalid = false;
-  public deliveryBasisInvalid = false;
-  public paymentTermsInvalid = false;
+  public deliveryDateValid: boolean;
+  public deliveryBasisValid: boolean;
+  public paymentTermsValid: boolean;
   protected data: OrderFormInfo;
 
   constructor(
@@ -25,6 +25,9 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateDateFieldInvalidState();
+    this.updateDeliveryBasisInvalidState();
+    this.updatePaymentTermsInvalidState();
   }
 
   set deliveryDate(value: Date|null) {
@@ -67,7 +70,7 @@ export class OrderComponent implements OnInit {
     this.updateDateFieldInvalidState();
     this.updateDeliveryBasisInvalidState();
     this.updatePaymentTermsInvalidState();
-    if (this.deliveryDateInvalid || this.deliveryBasisInvalid || this.paymentTermsInvalid) {
+    if (!(this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid)) {
       return;
     }
 
@@ -77,27 +80,31 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  protected updateDateFieldInvalidState() {
+  protected updateDateFieldInvalidState(): void {
     const todayDate = new Date(); // Получаем текущую дату (включая время)
     todayDate.setHours(0, 0, 0, 0); // Сбрасываем часы, минуты и секунды до 00:00:00 для корректного сравнения дат
 
-    let isInvalid = false;
+    let isValid = true;
     if (!this.data.isDeliveryDateAsap) {
       if (this.data.deliveryDate === null) {
-        isInvalid = true;
+        isValid = false;
       } else if ((new Date(this.data.deliveryDate)) < todayDate) {
-        isInvalid = true;
+        isValid = false;
       }
     }
 
-    this.deliveryDateInvalid = isInvalid;
+    this.deliveryDateValid = isValid;
   }
 
-  protected updateDeliveryBasisInvalidState() {
-    this.deliveryBasisInvalid = Boolean(this.data.deliveryBasis.length === 0);
+  protected updateDeliveryBasisInvalidState(): void {
+    this.deliveryBasisValid = Boolean(this.data.deliveryBasis.trim().length !== 0);
   }
 
-  protected updatePaymentTermsInvalidState() {
-    this.paymentTermsInvalid = Boolean(this.data.paymentTerms.length === 0);
+  protected updatePaymentTermsInvalidState(): void {
+    this.paymentTermsValid = Boolean(this.data.paymentTerms.trim().length !== 0);
+  }
+
+  checkOrderButtonEnabled(): boolean {
+    return this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid;
   }
 }

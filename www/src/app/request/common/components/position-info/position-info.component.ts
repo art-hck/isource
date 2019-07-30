@@ -6,7 +6,8 @@ import {
   OnInit,
   Output,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  OnChanges
 } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
@@ -22,13 +23,15 @@ import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
+import { LinkedOffersSortService } from '../../services/linked-offers-sort-service';
 
 @Component({
   selector: 'app-position-info',
   templateUrl: './position-info.component.html',
   styleUrls: ['./position-info.component.css']
 })
-export class PositionInfoComponent implements OnInit, AfterViewInit {
+export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
@@ -43,6 +46,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
 
   @Input() requestId: Uuid;
   @Input() isCustomerView: boolean;
+  @Input() showWinnerStateColumn = false;
 
   @Input() fullScreen = false;
   @Output() fullScreenChange = new EventEmitter<boolean>();
@@ -52,6 +56,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
   contractForm: FormGroup;
+
+  protected linkedOfferSorter = new LinkedOffersSortService();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,6 +94,10 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       comments: [''],
       documents: [null]
     });
+  }
+
+  ngOnChanges() {
+    this.updateShowWinnerColumn();
   }
 
   getDeliveryDate(val: any) {
@@ -151,6 +161,13 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
+        const offerWinner = requestPosition.linkedOffers.find((linkedOffer) => {
+          return (linkedOffer.id === this.offerWinner);
+        });
+        if (offerWinner) {
+          offerWinner.isWinner = true;
+        }
+        this.updateShowWinnerColumn();
         this.notificationService.toast('Победитель выбран');
       }
     );
@@ -215,5 +232,33 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
 
   isNewPosition() {
     return !this.requestPosition.id;
+  }
+
+  canViewManufacturing(requrestPosition: RequestPosition): boolean {
+    const manufacturingIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.MANUFACTURING.valueOf()
+    );
+    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      requrestPosition.status
+    );
+    return currentStatusIndex >= manufacturingIndex;
+  }
+
+  canUploadManufacturing(requestPosition: RequestPosition): boolean {
+    return (
+      requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING &&
+      !this.isCustomerView
+    );
+  }
+
+  updateShowWinnerColumn(): void {
+    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(this.requestPosition.status);
+    const winnerSelectedIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
+    );
+    this.showWinnerStateColumn = currentStateIndex >= winnerSelectedIndex;
+    if (this.showWinnerStateColumn) {
+      this.linkedOfferSorter.sortLinkedOffers(this.requestPosition.linkedOffers);
+    }
   }
 }
