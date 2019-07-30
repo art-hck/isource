@@ -198,6 +198,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
     this.positionInfoEditable = false;
     this.requestPosition = requestPosition;
     this.requestPositionChanged.emit(requestPosition);
+    // todo тут этот эмит не к месту, наверное следует перенсти в сеттер
+    this.positionInfoEditableChange.emit(this.positionInfoEditable);
   }
 
   onUploadDocuments(files: File[]) {
