@@ -29,32 +29,25 @@ import { NotificationService } from "../../../../shared/services/notification.se
   styleUrls: ['./position-info.component.css']
 })
 export class PositionInfoComponent implements OnInit, AfterViewInit {
-  protected _opened = false;
-
-  @Input()
-  set showInfo(val) {
-    this._opened = val;
-    this.openedChange.emit(val);
-  }
-
-  get showInfo() {
-    return this._opened;
-  }
 
   @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
-  @Input() positionInfoEditable: boolean;
+  @Input() opened: boolean;
+  @Output() openedChange = new EventEmitter<boolean>();
+
   @Input() requestPosition: RequestPosition;
+  @Output() requestPositionChanged = new EventEmitter<RequestPosition>();
+
+  @Input() positionInfoEditable: boolean;
+  @Output() positionInfoEditableChange = new EventEmitter<boolean>();
+
   @Input() requestId: Uuid;
   @Input() isCustomerView: boolean;
 
-  // TODO оживить кнопку Закрыть карточку и Закрыть список позиций
-  @Output() showPositionList = new EventEmitter<boolean>();
-  @Output() openedChange = new EventEmitter<boolean>();
-  @Output() changePositionInfo = new EventEmitter<boolean>();
+  @Input() fullScreen = false;
+  @Output() fullScreenChange = new EventEmitter<boolean>();
+
   @Output() changeRequestInfo = new EventEmitter<boolean>();
-  @Output() updatedRequestPositionItem = new EventEmitter<RequestPosition>();
-  @Output() createdNewPosition = new EventEmitter<Uuid>();
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   offerWinner: Uuid;
@@ -182,17 +175,10 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     );
   }
 
-  onUpdatePositionInfo() {
-    this.changePositionInfo.emit();
-  }
-
-  onChangeEditableFormState(state) {
-    this.positionInfoEditable = state;
-  }
-
-  getUpdatedRequestPositionInfo(requestPosition: any) {
+  onRequestPositionChanged(requestPosition: any) {
+    this.positionInfoEditable = false;
     this.requestPosition = requestPosition;
-    this.updatedRequestPositionItem.emit(requestPosition);
+    this.requestPositionChanged.emit(requestPosition);
   }
 
   onUploadDocuments(files: File[]) {
@@ -203,11 +189,31 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onCreatedNewPosition(updatedPositionId: Uuid): void {
-    this.createdNewPosition.emit(updatedPositionId);
+  canViewManufacturing(requestPosition: RequestPosition): boolean {
+    return (requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING);
   }
 
-  canViewManufacturing(requrestPosition: RequestPosition): boolean {
-    return (requrestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING);
+  onPositionInfoEditableToggle() {
+    this.positionInfoEditable = !this.positionInfoEditable;
+    this.positionInfoEditableChange.emit(this.positionInfoEditable);
+  }
+
+  onWindowClose() {
+    this.opened = false;
+    this.openedChange.emit(this.opened);
+  }
+
+  onWindowFull() {
+    this.fullScreen = true;
+    this.fullScreenChange.emit(this.fullScreen);
+  }
+
+  onWindowFullClose() {
+    this.fullScreen = false;
+    this.fullScreenChange.emit(this.fullScreen);
+  }
+
+  isNewPosition() {
+    return !this.requestPosition.id;
   }
 }

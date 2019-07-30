@@ -17,14 +17,12 @@
       <label class="clr-control-label">Необходимый срок поставки</label>
       <div class="deliveryDate">
         <input clrDate
-               [(ngModel)]="dateObject"
                [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
                id="deliveryDate"
                placeholder="ДД.ММ.ГГГГ"
                type="text"
                formControlName="deliveryDate"
-               [class.invalid]="isFieldValid('deliveryDate')"
-               [attr.disabled]="requestPosition.isDeliveryDateAsap || null" />
+               [class.invalid]="isFieldValid('deliveryDate')" />
       </div>
     </div>
 
@@ -35,8 +33,7 @@
                name="isDeliveryDateAsap"
                id="isDeliveryDateAsap"
                formControlName="isDeliveryDateAsap"
-               [class.invalid]="isFieldValid('isDeliveryDateAsap')"
-               [checked]="requestPosition.isDeliveryDateAsap">
+               [class.invalid]="isFieldValid('isDeliveryDateAsap')">
         <label for="isDeliveryDateAsap">как можно скорее</label>
       </div>
     </div>
@@ -160,7 +157,7 @@
 
     <div class="clr-col-8">
       <div class="relatedServices">
-        <label class="clr-control-label">Примечания/комментрии</label>
+        <label class="clr-control-label">Примечания/комментарии</label>
         <textarea style="width: 100%"
                   type="textarea"
                   id="comments"
@@ -175,12 +172,12 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="submit clr-col-8">
+    <div class="clr-col-8">
       <button type="button"
               class="btn btn-primary"
               (click)="onSavePositionInfo()"
               [disabled]="positionInfoDataForm.invalid">
-        Сохранить
+        {{ requestPosition.id ? 'Сохранить' : 'Создать' }}
       </button>
     </div>
   </div>

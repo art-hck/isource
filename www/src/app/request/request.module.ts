@@ -30,6 +30,7 @@ import { RequestListPositionStatusesFilterComponent } from "./common/components/
 import { CustomerListNamesFilterComponent } from "./common/components/request-list/customer-list-names-filter/customer-list-names-filter.component";
 import { RequestListNumberFilterComponent } from "./common/components/request-list/request-list-number-filter/request-list-number-filter.component";
 import { ManufacturingComponent } from './common/components/manufacturing/manufacturing.component';
+import { RequestPositionListComponent } from './common/components/request-position-list/request-position-list.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { ManufacturingComponent } from './common/components/manufacturing/manufa
     CustomerListNamesFilterComponent,
     RequestListStatusesFilterComponent,
     RequestListPositionStatusesFilterComponent,
-    ManufacturingComponent
+    ManufacturingComponent,
+    RequestPositionListComponent
   ],
   imports: [
     SharedModule,

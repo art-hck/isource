@@ -19,15 +19,17 @@ export class RequestViewComponent implements OnInit {
 
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
-  @Output() createdNewPosition = new EventEmitter<Uuid>();
 
   selectedRequestPosition: RequestPosition|null;
-  showInfo = false;
-  showRequestInfo: boolean;
+
+  showPositionInfo = false;
+  showRequestInfo = false;
+
   showPositionList = true;
   showUploadPositionsFromExcelForm = false;
-  selectedIndex: number|null;
   positionInfoEditable = false;
+
+  protected newPositionName = 'Новая позиция';
 
   constructor(
     private createRequestPositionService: CreateRequestPositionService
@@ -38,32 +40,21 @@ export class RequestViewComponent implements OnInit {
     this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
   }
 
-  onSelectPosition(requestPosition: RequestPosition, i: number) {
-    this.selectedRequestPosition = requestPosition;
-    this.showInfo = true;
-    this.showRequestInfo = false;
-    this.selectedIndex = i;
+  onSelectPosition(requestPosition: RequestPosition) {
+    this.selectPosition(requestPosition);
+    this.positionInfoEditable = false;
   }
 
-  onSelectRequest() {
-    this.showRequestInfo = true;
-    this.showInfo = false;
+  onSelectRequest($event) {
+    this.selectPosition(null);
+    this.showPositionInfo = false;
+    this.showRequestInfo = $event;
   }
 
-  onUpdatePositionInfo(requestPosition: RequestPosition[]) {
-    this.changePositionInfo.emit();
-    this.selectedRequestPosition = requestPosition[this.selectedIndex];
+  onRequestPositionChanged(updatedPosition: RequestPosition): void {
+    // делаем assign, чтобы не изменилась ссылка на объект и выделение позиции в гриде
+    Object.assign(this.selectedRequestPosition, updatedPosition);
   }
-
-  onUpdatedRequestPositionItem(updatedPosition: RequestPosition): void {
-    const requestPosition = this.requestPositions.find(function(position) {
-        return position.id === updatedPosition.id;
-      }
-    );
-
-    Object.assign(requestPosition, updatedPosition);
-  }
-
 
   onUpdateRequestInfo() {
     this.changeRequestInfo.emit();
@@ -106,35 +97,40 @@ export class RequestViewComponent implements OnInit {
   addNewPosition(): void {
     const requestPosition = new RequestPosition();
     requestPosition.id = null;
+    requestPosition.name = this.newPositionName;
     requestPosition.requestId = this.requestId;
-    this.showInfo = true;
+
+    this.requestPositions.unshift(requestPosition);
+
+    this.onSelectPosition(requestPosition);
     this.positionInfoEditable = true;
-    this.selectedRequestPosition = requestPosition;
   }
 
-  onCreatedNewPosition(positionId: Uuid): void {
+  onClosePositionInfo() {
+    this.showPositionInfo = false;
     this.selectedRequestPosition = null;
-    this.showInfo = false;
-    this.selectedIndex = null;
-    this.positionInfoEditable = false;
-    this.createdNewPosition.emit(positionId);
+    this.showPositionList = true;
   }
 
-  selectPosition(positionId: Uuid): void {
-    const {position, index} = this.getPositionById(positionId);
-    if (!position) {
-      return;
-    }
-    this.onSelectPosition(position, index);
+  onCloseRequestInfo() {
+    this.showRequestInfo = false;
+    this.showPositionList = true;
   }
 
-  protected getPositionById(positionId: Uuid): {position: RequestPosition|null, index: number|null} {
-    for (let i = 0; i < this.requestPositions.length; i++) {
-      const requestPosition = this.requestPositions[i];
-      if (requestPosition.id === positionId) {
-        return {position: requestPosition, index: i};
-      }
-    }
-    return {position: null, index: null};
+  selectedIsNewPosition(): boolean {
+    return this.selectedRequestPosition && !this.selectedRequestPosition.id;
   }
+
+  protected selectPosition(requestPosition: RequestPosition|null) {
+    // если добавляли позицию, но не сохранили, то удаляем ее
+    if (this.selectedRequestPosition && !this.selectedRequestPosition.id) {
+      this.requestPositions.shift();
+    }
+
+    this.selectedRequestPosition = requestPosition;
+    this.showPositionInfo = true;
+    this.showRequestInfo = false;
+  }
+
+
 }

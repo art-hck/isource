@@ -4,17 +4,19 @@
 
 label {
   font-size: 12px;
-  font-weight: 400;
   color: #999999;
   margin-top: 10px;
 }
 
 h4 {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .grey {
   color: #999999;
+}
+
+.right {
   text-align: right;
 }
 
@@ -24,12 +26,6 @@ h4 {
 
 .position-row {
   padding: 0 25px;
-}
-
-clr-icon {
-  margin: 13px 10px;
-  height: 20px;
-  width: 20px;
 }
 
 .action-row {
@@ -51,11 +47,6 @@ clr-icon {
   margin-bottom: 10px;
 }
 
-.select-align {
-  text-align: right;
-  display: inherit;
-}
-
 .position-info {
   flex: 0 1 1200px;
   min-width: 700px;
@@ -72,10 +63,6 @@ clr-icon {
   font-size: 13px;
 }
 
-.action clr-icon {
-  margin: 0;
-}
-
 .action {
   display: table;
   float: right;
@@ -90,4 +77,12 @@ clr-icon {
 ::ng-deep .submit {
   display: block;
   text-align: right;
+}
+
+.btn-close {
+  margin-left: 10px;
+}
+
+.btn-edit {
+  min-width: 150px;
 }

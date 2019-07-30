@@ -10,17 +10,14 @@ import {RequestTypes} from "../../enum/request-types";
 })
 export class RequestInfoComponent implements OnInit {
 
-  @Input() showRequestInfo = false;
+  @Input() opened = false;
+  @Output() openedChange = new EventEmitter<boolean>();
+
   @Input() request: Request;
   @Input() isCustomerView: boolean;
 
-  @Output() showPositionList = new EventEmitter<boolean>();
-
-  requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
-
-  constructor(
-  ) {
-  }
+  @Input() fullScreen = false;
+  @Output() fullScreenChange = new EventEmitter<boolean>();
 
   ngOnInit() {
 
@@ -30,12 +27,18 @@ export class RequestInfoComponent implements OnInit {
     return this.request.type === RequestTypes.FREE_FORM;
   }
 
-  onClose() {
-    this.showRequestInfo = false;
+  onWindowClose() {
+    this.opened = false;
+    this.openedChange.emit(this.opened);
   }
 
-  onHiddenList() {
-    this.showPositionList.emit();
+  onWindowFull() {
+    this.fullScreen = true;
+    this.fullScreenChange.emit(this.fullScreen);
   }
 
+  onWindowFullClose() {
+    this.fullScreen = false;
+    this.fullScreenChange.emit(this.fullScreen);
+  }
 }

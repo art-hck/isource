@@ -5,6 +5,7 @@ import {RequestPosition} from "../../../common/models/request-position";
 import {ActivatedRoute} from "@angular/router";
 import {RequestService} from "../../services/request.service";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
+import { Observable } from "rxjs";
 
 
 @Component({
@@ -35,26 +36,12 @@ export class CustomerRequestViewComponent implements OnInit {
         this.request = request;
       }
     );
-    this.updatePositionsList((requestPositions) => {
+    this.updatePositionsList().subscribe((requestPositions) => {
       this.requestPositions = requestPositions;
     });
   }
 
-
-  updatePositionsList(callback?: (requestPositions: RequestPosition[]) => void) {
-    this.requestService.getRequestPositions(this.requestId).subscribe(
-      (requestPositions: RequestPosition[]) => {
-        if (callback) {
-          callback(requestPositions);
-        }
-      }
-    );
-  }
-
-  onCreatedNewPosition(positionId: Uuid): void {
-    this.updatePositionsList((requestPositions) => {
-      this.requestPositions = requestPositions;
-      this.requestView.selectPosition(positionId);
-    });
+  protected updatePositionsList(): Observable<RequestPosition[]> {
+    return this.requestService.getRequestPositions(this.requestId);
   }
 }

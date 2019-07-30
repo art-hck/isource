@@ -5,7 +5,6 @@ import { RequestPosition } from "../../common/models/request-position";
 import { Observable } from "rxjs";
 import { RequestDocument } from "../../common/models/request-document";
 
-
 @Injectable()
 export class RequestService {
 
@@ -19,9 +18,9 @@ export class RequestService {
     return this.api.post(url, {});
   }
 
-  getRequestPositions(id: Uuid) {
+  getRequestPositions(id: Uuid): Observable<RequestPosition[]> {
     const url = `requests/customer/${id}/positions`;
-    return this.api.post(url, {});
+    return this.api.post<RequestPosition[]>(url, {});
   }
 
   choiceWinner(offerWinnerId: Uuid, positionId: Uuid, id: Uuid) {
