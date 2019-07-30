@@ -12,6 +12,10 @@
   font-size: 13px;
 }
 
+.offer-price {
+  word-break: break-all;
+}
+
 clr-icon {
   height: 20px;
   width: 20px;
@@ -50,4 +54,16 @@ span {
 .btn.btn-outline {
   border-color: #0085FF;
   color: #0085FF;
+}
+
+::ng-deep .offers-datagrid .label.label-success,
+::ng-deep .offers-datagrid a.label.label-success {
+  background: #F1F8E9;
+  color: #388e3c;
+  border: 1px solid #388e3c;
+  padding: 10px;
+  font-weight: bold;
+}
+::ng-deep .offers-datagrid .datagrid .datagrid-cell {
+  line-height: 1.6;
 }

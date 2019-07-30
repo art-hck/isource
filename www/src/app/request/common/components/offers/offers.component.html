@@ -57,7 +57,7 @@
                  [class.invalid]="isFieldValid('measureUnit')">
         </div>
         <div class="clr-col-2">
-          <label class="clr-control-label" for="deliveryDate">Cрок поставки</label>
+          <label class="clr-control-label" for="deliveryDate">Срок поставки</label>
           <input id="deliveryDate" placeholder="дд.мм.гггг" type="date" clrDate
                  formControlName="deliveryDate"
                  [class.invalid]="isFieldValid('deliveryDate')"/>
@@ -75,11 +75,11 @@
   </div>
 </form>
 
-<clr-datagrid class="clr-row" *ngIf="requestPosition.linkedOffers.length !== 0">
-  <clr-dg-column class="clr-col-3">Наименование к/а</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Цена</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Количество</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Дата поставки</clr-dg-column>
+<clr-datagrid class="clr-row offers-datagrid" *ngIf="requestPosition.linkedOffers.length !== 0">
+  <clr-dg-column class="clr-col-2">Наименование к/а</clr-dg-column>
+  <clr-dg-column class="clr-col-1 text-right">Цена</clr-dg-column>
+  <clr-dg-column class="clr-col-1 text-right">Количество</clr-dg-column>
+  <clr-dg-column class="clr-col-1 text-right">Дата поставки</clr-dg-column>
   <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
   <clr-dg-column class="clr-col-2">КП</clr-dg-column>
   <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
@@ -87,14 +87,20 @@
   <clr-dg-column class="clr-col-1" *ngIf="showWinnerStateColumn"></clr-dg-column>
 
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
-    <clr-dg-cell class="clr-col-3 offer">
+    <clr-dg-cell class="clr-col-2 offer">
       <a [href]="'assets/ContragentReport.pdf'" [target]="'_blank'">{{linkedOffer.supplierContragentName}}</a>
     </clr-dg-cell>
-    <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.priceWithVat | number}}<span>{{linkedOffer.currency}}</span>
+
+    <clr-dg-cell class="clr-col-1 offer text-right offer-price">
+      {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
     </clr-dg-cell>
-    <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.quantity}}<span>{{linkedOffer.measureUnit}}</span></clr-dg-cell>
-    <clr-dg-cell class="clr-col-1 offer">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
+
+    <clr-dg-cell class="clr-col-1 offer text-right">{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</clr-dg-cell>
+
+    <clr-dg-cell class="clr-col-1 offer text-right">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
+
     <clr-dg-cell class="clr-col-2 offer">{{linkedOffer.paymentTerms}}</clr-dg-cell>
+
     <clr-dg-cell class="clr-col-2">
       <app-document-simple-list
         [enableUpload]="!isCustomerView"
@@ -102,6 +108,7 @@
         (selected)="onUploadDocuments($event, linkedOffer)"
       ></app-document-simple-list>
     </clr-dg-cell>
+
     <clr-dg-cell class="clr-col-1">
       <app-document-simple-list
         [enableUpload]="!isCustomerView"
@@ -109,6 +116,7 @@
         (selected)="onUploadTechnicalProposals($event, linkedOffer)"
       ></app-document-simple-list>
     </clr-dg-cell>
+
     <clr-dg-cell class="clr-col-1" *ngIf="showWinnerSelectionColumn()">
       <input type="radio" clrRadio [(ngModel)]="offerWinnerId"
              value="{{linkedOffer.id}}"
