@@ -70,7 +70,7 @@ export class OrderComponent implements OnInit {
     this.updateDateFieldInvalidState();
     this.updateDeliveryBasisInvalidState();
     this.updatePaymentTermsInvalidState();
-    if (this.deliveryDateValid || this.deliveryBasisValid || this.paymentTermsValid) {
+    if (!(this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid)) {
       return;
     }
 
