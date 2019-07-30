@@ -33,7 +33,7 @@ export class CatalogPositionsListComponent implements OnInit {
     this.getPositionList();
   }
 
-  getCategoryInfo() {
+  getCategoryInfo(): void {
     this.catalogService.getCategoryInfo(this.categoryId).subscribe(
       (category: CatalogCategory) => {
         this.category = category;
@@ -41,7 +41,7 @@ export class CatalogPositionsListComponent implements OnInit {
     );
   }
 
-  getPositionList() {
+  getPositionList(): void {
     this.catalogService.getPositionsList(this.categoryId).subscribe(
       (positions: CatalogPosition[]) => {
         this.positions = positions;
@@ -49,7 +49,7 @@ export class CatalogPositionsListComponent implements OnInit {
     );
   }
 
-  onSearch(searchName: string) {
+  onSearch(searchName: string): void {
     this.catalogService.searchPositionsByName(searchName).subscribe(
       (positions: CatalogPosition[]) => {
         this.positions = positions;
@@ -57,7 +57,7 @@ export class CatalogPositionsListComponent implements OnInit {
     );
   }
 
-  createRequest() {
+  createRequest(): void {
     this.router.navigateByUrl(`requests/create`);
   }
 

@@ -32,7 +32,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
     this.getCategoriesTree();
   }
 
-  getCategoryInfo() {
+  getCategoryInfo(): void {
     if (!this.categoryId) {
       return;
     }
@@ -43,7 +43,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
     );
   }
 
-  getCategoriesTree() {
+  getCategoriesTree(): void {
     this.catalogService.getCategoriesTree(this.categoryId).subscribe(
       (categories: CatalogCategory[]) => {
         this.categories = categories;
@@ -51,7 +51,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
     );
   }
 
-  getTitle() {
+  getTitle(): string {
     if (this.category) {
       return this.category.name;
     }
@@ -59,7 +59,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
     return 'Все категории';
   }
 
-  onCategoryClick(category: CatalogCategory) {
+  onCategoryClick(category: CatalogCategory): void {
     let url = `catalog/${category.id}`;
     if (category.positionsCount) {
       url = `catalog/${category.id}/positions`;
