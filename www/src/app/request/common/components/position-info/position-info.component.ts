@@ -206,10 +206,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
-  canViewManufacturing(requestPosition: RequestPosition): boolean {
-    return (requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING);
-  }
-
   onPositionInfoEditableToggle() {
     this.positionInfoEditable = !this.positionInfoEditable;
     this.positionInfoEditableChange.emit(this.positionInfoEditable);
