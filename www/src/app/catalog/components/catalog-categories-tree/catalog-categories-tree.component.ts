@@ -65,7 +65,8 @@ export class CatalogCategoriesTreeComponent implements OnInit {
       url = `catalog/${category.id}/positions`;
     }
 
-    document.location.href = url;
+    // Баг https://stackoverflow.com/questions/48323894/angular-router-navigatebyurl-doesnt-work-after-using-location-go
     //this.router.navigateByUrl(url);
+    document.location.href = url;
   }
 }

@@ -14,7 +14,8 @@ export class CatalogService {
   }
 
   getPositionsList(categoryId: Uuid): Observable<CatalogPosition[]> {
-    return this.api.post<CatalogPosition[]>(`catalog/list`, {});
+    const body = {categoryId};
+    return this.api.post<CatalogPosition[]>(`catalog/list`, body);
   }
 
   searchPositionsByName(searchName: string): Observable<CatalogPosition[]> {
