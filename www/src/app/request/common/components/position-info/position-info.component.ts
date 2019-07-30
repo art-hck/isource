@@ -216,13 +216,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
     this.openedChange.emit(this.opened);
   }
 
-  onWindowFull() {
-    this.fullScreen = true;
-    this.fullScreenChange.emit(this.fullScreen);
-  }
-
-  onWindowFullClose() {
-    this.fullScreen = false;
+  onWindowFull(flag: boolean) {
+    this.fullScreen = flag;
     this.fullScreenChange.emit(this.fullScreen);
   }
 

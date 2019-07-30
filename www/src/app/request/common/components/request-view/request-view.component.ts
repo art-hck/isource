@@ -131,6 +131,4 @@ export class RequestViewComponent implements OnInit {
     this.showPositionInfo = true;
     this.showRequestInfo = false;
   }
-
-
 }

@@ -32,13 +32,8 @@ export class RequestInfoComponent implements OnInit {
     this.openedChange.emit(this.opened);
   }
 
-  onWindowFull() {
-    this.fullScreen = true;
-    this.fullScreenChange.emit(this.fullScreen);
-  }
-
-  onWindowFullClose() {
-    this.fullScreen = false;
+  onWindowFull(flag: boolean) {
+    this.fullScreen = flag;
     this.fullScreenChange.emit(this.fullScreen);
   }
 }
