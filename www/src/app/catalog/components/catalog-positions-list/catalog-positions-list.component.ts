@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CatalogService } from "../../services/catalog.service";
 import { CatalogPosition } from "../../models/catalog-position";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Uuid } from "../../../cart/models/uuid";
+import { CatalogCategory } from "../../models/catalog-category";
 
 @Component({
   selector: 'catalog-positions-list',
@@ -10,29 +12,44 @@ import { Router } from "@angular/router";
   styleUrls: ['./catalog-positions-list.component.css']
 })
 export class CatalogPositionsListComponent implements OnInit {
+  categoryId: Uuid;
+  category: CatalogCategory;
   positions: CatalogPosition[];
   searchName: string;
 
   constructor(
     private catalogService: CatalogService,
     private cartStoreService: CartStoreService,
-    protected router: Router
+    protected router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit() {
+    this.categoryId = this.route.snapshot.paramMap.get('categoryId');
+
+    this.getCategoryInfo();
+
     this.getPositionList();
   }
 
-  getPositionList() {
-    this.catalogService.getPositionsList().subscribe(
+  getCategoryInfo(): void {
+    this.catalogService.getCategoryInfo(this.categoryId).subscribe(
+      (category: CatalogCategory) => {
+        this.category = category;
+      }
+    );
+  }
+
+  getPositionList(): void {
+    this.catalogService.getPositionsList(this.categoryId).subscribe(
       (positions: CatalogPosition[]) => {
         this.positions = positions;
       }
     );
   }
 
-  onSearch(searchName: string) {
+  onSearch(searchName: string): void {
     this.catalogService.searchPositionsByName(searchName).subscribe(
       (positions: CatalogPosition[]) => {
         this.positions = positions;
@@ -40,7 +57,7 @@ export class CatalogPositionsListComponent implements OnInit {
     );
   }
 
-  createRequest() {
+  createRequest(): void {
     this.router.navigateByUrl(`requests/create`);
   }
 
