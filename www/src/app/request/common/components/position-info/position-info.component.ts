@@ -97,7 +97,9 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.updateShowWinnerColumn();
+    if (this.requestPosition) {
+      this.updateShowWinnerColumn();
+    }
   }
 
   getDeliveryDate(val: any) {
