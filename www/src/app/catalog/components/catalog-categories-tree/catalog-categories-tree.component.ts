@@ -53,7 +53,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
 
   getTitle() {
     if (this.category) {
-      return this.category.name
+      return this.category.name;
     }
 
     return 'Все категории';
@@ -66,7 +66,7 @@ export class CatalogCategoriesTreeComponent implements OnInit {
     }
 
     // Баг https://stackoverflow.com/questions/48323894/angular-router-navigatebyurl-doesnt-work-after-using-location-go
-    //this.router.navigateByUrl(url);
+    // this.router.navigateByUrl(url);
     document.location.href = url;
   }
 }
