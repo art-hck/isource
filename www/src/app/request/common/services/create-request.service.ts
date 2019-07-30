@@ -2,7 +2,7 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import { Observable } from 'rxjs';
 import { Uuid } from 'src/app/cart/models/uuid';
-import { map } from 'rxjs/operators';
+import { RequestPosition } from "../models/request-position";
 
 
 @Injectable()
@@ -19,17 +19,11 @@ export class CreateRequestService {
       this.convertModelToFormData(requestItem, null, 'positions'));
   }
 
-  addRequestPosition(requestId: Uuid, requestItem: Array<any>): Observable<Array<{id: Uuid}>> {
-    return this.api.post(
+  addRequestPosition(requestId: Uuid, requestItem: Array<any>):  Observable<Array<RequestPosition>> {
+    return this.api.post<Array<RequestPosition>>(
       `requests/${requestId}/add-positions/manual`,
       this.convertModelToFormData(requestItem, null, 'positions')
-    ).pipe(map((ids: Array<any>) => {
-      const res = [];
-      for (const item of ids) {
-        res.push({id: item['id']});
-      }
-      return res;
-    }));
+    );
   }
 
   addFreeFormRequest(requestItem: any) {

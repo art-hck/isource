@@ -23,12 +23,6 @@ h6 {
   padding: 0 25px;
 }
 
-clr-icon {
-  margin: 13px 10px;
-  height: 20px;
-  width: 20px;
-}
-
 .action-row {
   padding: 0 20px;
 }
@@ -38,8 +32,7 @@ clr-icon {
 }
 
 .grey {
-  color: #b9b9b9;
-  text-align: right;
+  color: #999999;
 }
 
 .request-info {
@@ -48,4 +41,12 @@ clr-icon {
   margin-left: 15px;
   display: flex;
   flex-direction: column;
+}
+
+.btn-close {
+  margin-left: 10px;
+}
+
+.right {
+  text-align: right;
 }

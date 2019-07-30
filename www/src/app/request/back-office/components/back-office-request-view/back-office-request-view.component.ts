@@ -27,11 +27,7 @@ export class BackOfficeRequestViewComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
-      }
-    );
+    this.updateRequestInfo();
     this.updatePositionsList();
   }
 
@@ -48,16 +44,14 @@ export class BackOfficeRequestViewComponent implements OnInit {
   }
 
   onUpdateRequestInfo() {
+    this.updateRequestInfo();
+  }
+
+  protected updateRequestInfo() {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
       }
     );
-  }
-
-  onCreatedNewPosition(positionId: Uuid): void {
-    this.updatePositionsList(() => {
-      this.requestView.selectPosition(positionId);
-    });
   }
 }

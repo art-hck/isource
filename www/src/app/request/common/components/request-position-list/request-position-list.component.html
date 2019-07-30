@@ -1,0 +1,55 @@
+<div class="request-row" (click)="onSelectRequest()"
+     [ngClass]="{'selected-row' : requestIsSelected}">
+  <div class="clr-row">
+    <div class="clr-col-8">
+      <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
+    </div>
+
+    <div class="clr-col-4 status request">
+      <span class="status-request-{{request.status}}">
+       {{request.statusLabel}}
+      </span>
+      <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+    </div>
+  </div>
+</div>
+
+<div class="position-row clr-row w-100"
+     *ngFor="let requestPosition of requestPositions"
+     (click)="onSelectPosition(requestPosition)"
+     [ngClass]="{'selected-row' : requestPosition === selectedRequestPosition}">
+
+  <div class="position-name clr-col-5"
+       [ngClass]="{'clr-col-11' : rowIsSelected()}">
+    {{requestPosition.name}}
+  </div>
+
+  <ng-container *ngIf="!rowIsSelected()">
+    <div class="position-quantity clr-col">
+      <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+    </div>
+
+    <div class="delivery-date clr-col">
+      <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
+        как можно скорее
+      </div>
+      <ng-template #notAsap>
+        {{requestPosition.deliveryDate | date :'shortDate'}}
+      </ng-template>
+    </div>
+
+    <div class="position-price clr-col">
+      <span class="quantity">{{requestPosition.startPrice | number}}</span>
+      <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
+    </div>
+  </ng-container>
+
+  <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
+    <span class="position-status status-position-{{requestPosition.status}}">
+      <span *ngIf="!rowIsSelected()">
+        {{requestPosition.statusLabel}}
+      </span>
+    </span>
+    <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+  </div>
+</div>
