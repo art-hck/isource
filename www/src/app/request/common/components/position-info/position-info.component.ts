@@ -187,10 +187,13 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   canDownloadContract(requestPosition: RequestPosition) {
+    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(requestPosition.status);
+    const winnerSelectedIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
+    );
     return (
       requestPosition &&
-      (requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED
-        || requestPosition.status === RequestPositionWorkflowSteps.CONTRACT_SIGNING)
+      currentStateIndex >= winnerSelectedIndex
     );
   }
 
