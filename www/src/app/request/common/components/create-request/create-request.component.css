@@ -1,15 +1,13 @@
-
-
 .container {
   text-align: -webkit-center;
 }
 
-.newRequest {
+.individual-request {
   text-align: left;
   width: 1000px;
 
 }
-.new-request-tabs {
+.individual-request-tabs {
   display: block;
   width: 1000px;
 }
@@ -18,4 +16,3 @@ h2 {
   margin-bottom: 20px;
   font-weight: 600;
 }
-

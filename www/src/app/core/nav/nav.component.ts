@@ -76,7 +76,7 @@ export class NavComponent implements OnInit {
         children: []
       },
       {
-        text: 'Новая заявка',
+        text: 'Индивидуальная заявка',
         path: 'requests/create',
         children: []
       },
