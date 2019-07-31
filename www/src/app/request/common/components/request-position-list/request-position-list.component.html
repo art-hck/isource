@@ -1,11 +1,11 @@
 <div class="request-row" (click)="onSelectRequest()"
      [ngClass]="{'selected-row' : requestIsSelected}">
   <div class="clr-row">
-    <div class="clr-col-8">
+    <div class="clr-col-7">
       <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
     </div>
 
-    <div class="clr-col-4 status request">
+    <div class="clr-col-5 status request">
       <span class="status-request-{{request.status}}">
        {{request.statusLabel}}
       </span>
@@ -19,8 +19,8 @@
      (click)="onSelectPosition(requestPosition)"
      [ngClass]="{'selected-row' : requestPosition === selectedRequestPosition}">
 
-  <div class="position-name clr-col-5"
-       [ngClass]="{'clr-col-11' : rowIsSelected()}">
+  <div class="position-name"
+       [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
     {{requestPosition.name}}
   </div>
 
@@ -44,7 +44,7 @@
     </div>
   </ng-container>
 
-  <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
+  <div class="clr-col status" [ngClass]="{'clr-col-2' : rowIsSelected()}">
     <span class="position-status status-position-{{requestPosition.status}}">
       <span *ngIf="!rowIsSelected()">
         {{requestPosition.statusLabel}}

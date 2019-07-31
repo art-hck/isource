@@ -30,15 +30,16 @@
     <div class="card-content">
       <div class="clr-row">
         <div class="clr-col-8">
-          <h4>{{requestPosition.name}}</h4>
+          <h4 class="position-title">{{requestPosition.name}}</h4>
           <span class="quantity grey">{{requestPosition.quantity}} {{requestPosition.measureUnit}}</span>
         </div>
 
         <div class="clr-col-4 right">
-          <div class="select change-status" *ngIf="!isCustomerView">
+          <div class="select change-status status status-position-{{requestPosition.status}}" *ngIf="!isCustomerView">
             <select name="status"
                     (change)="onChangeStatus(requestPosition, $event.target.value)"
-                    [value]="requestPosition.status">
+                    [value]="requestPosition.status"
+                    [hidden]="!requestPosition.status">
               <option *ngFor="let status of requestPositionWorkflowStepLabels"
                       [value]="status[0]">{{status[1]}}
               </option>
