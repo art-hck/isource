@@ -32,7 +32,9 @@
         <p>Срок поставки: {{position.productionTime}} дней</p>
       </div>
       <div class="clr-col-3 right-align">
-        <span class="supplier-name">{{position.supplierContragentName}}</span>
+        <span class="supplier-name">
+          <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{position.supplierContragentName}}</a>
+        </span>
         <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
         <button *ngIf="!isPositionInCart(position)" class="btn btn-primary" (click)="onAddPositionToCart(position)">В заявку</button>
       </div>
