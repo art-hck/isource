@@ -13,7 +13,7 @@ import { CatalogCategory } from "../../models/catalog-category";
 })
 export class CatalogPositionsListComponent implements OnInit {
   categoryId: Uuid;
-  category: CatalogCategory;
+  //category: CatalogCategory;
   positions: CatalogPosition[];
   searchName: string;
 
@@ -26,20 +26,20 @@ export class CatalogPositionsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categoryId = this.route.snapshot.paramMap.get('categoryId');
+    //this.categoryId = this.route.snapshot.paramMap.get('categoryId');
 
-    this.getCategoryInfo();
+    //this.getCategoryInfo();
 
     this.getPositionList();
   }
 
-  getCategoryInfo(): void {
+  /*getCategoryInfo(): void {
     this.catalogService.getCategoryInfo(this.categoryId).subscribe(
       (category: CatalogCategory) => {
         this.category = category;
       }
     );
-  }
+  }*/
 
   getPositionList(): void {
     this.catalogService.getPositionsList(this.categoryId).subscribe(
