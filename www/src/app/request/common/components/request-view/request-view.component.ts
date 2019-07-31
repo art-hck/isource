@@ -108,8 +108,9 @@ export class RequestViewComponent implements OnInit {
 
   onClosePositionInfo() {
     this.showPositionInfo = false;
-    this.selectedRequestPosition = null;
     this.showPositionList = true;
+
+    this.selectPosition(null);
   }
 
   onCloseRequestInfo() {
@@ -128,7 +129,7 @@ export class RequestViewComponent implements OnInit {
     }
 
     this.selectedRequestPosition = requestPosition;
-    this.showPositionInfo = true;
+    this.showPositionInfo = !!requestPosition;
     this.showRequestInfo = false;
   }
 }
