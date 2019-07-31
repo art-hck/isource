@@ -19,8 +19,8 @@
      (click)="onSelectPosition(requestPosition)"
      [ngClass]="{'selected-row' : requestPosition === selectedRequestPosition}">
 
-  <div class="position-name clr-col-5"
-       [ngClass]="{'clr-col-10' : rowIsSelected()}">
+  <div class="position-name"
+       [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
     {{requestPosition.name}}
   </div>
 
