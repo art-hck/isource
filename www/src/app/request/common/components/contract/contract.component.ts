@@ -83,4 +83,14 @@ export class ContractComponent implements OnChanges, OnInit {
   afterGetContract(data: any) {
     this.requestContract = data;
   }
+
+  isCommentsColumnShown(): boolean {
+    for (const document of this.requestContract.documents) {
+      if (document.comments) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
