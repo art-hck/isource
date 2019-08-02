@@ -17,7 +17,7 @@
       </button>
 
       <p class="supplier-name">{{ item.catalogPosition.supplierContragentName }}</p>
-      <p class="price">{{ item.catalogPosition.price }} {{ item.catalogPosition.currency }} / {{ item.catalogPosition.measureUnit }}</p>
+      <p class="price">{{ item.catalogPosition.price | currency : item.catalogPosition.currency }} / {{ item.catalogPosition.measureUnit }}</p>
 
       <div class="cart-quantity-block">
         <div class="cart-quantity-block-field">
@@ -31,8 +31,7 @@
                  class="hidden-arrows text-right price cart-quantity-field"/>
         </div>
         <div class="cart-quantity-block-sum">
-          <span class="cart-value">{{ item.getSum() }}</span>
-          <span class="cart-currency gray"> {{ item.catalogPosition.currency }}</span>
+          <span class="cart-value">{{ item.getSum() | currency : item.catalogPosition.currency }}</span>
         </div>
       </div>
     </div>
