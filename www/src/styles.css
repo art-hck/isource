@@ -285,3 +285,65 @@ clr-dg-footer.datagrid-footer {
 .text-alert {
   font-size: 16px;
 }
+
+/*
+  Стили для всплывающих уведомлений
+  Везде ставится important, т.к. стили компонентом внедрядряются автоматически и после этого файла
+*/
+
+.alert-header {
+  padding: 0 0 1rem !important;
+  align-items: normal !important;
+}
+
+.alert-title {
+  color: #000 !important;
+  font-size: .916667rem !important;
+  font-family: Metropolis,"Avenir Next","Helvetica Neue",Arial,sans-serif !important;
+  font-weight: 400 !important;
+  line-height: 1rem !important;
+  letter-spacing: normal !important;
+  margin: 0 !important;
+}
+
+.alert-popup {
+  border-radius: .125rem !important;
+  padding: 1rem !important;
+  box-shadow: 0 1px 2px 2px rgba(0,0,0,.2) !important;
+}
+
+.alert-content {
+  align-items: normal !important;
+  text-align: left !important;
+  color: #565656 !important;
+  font-weight: 400 !important;
+  font-size: .583333rem !important;
+  letter-spacing: normal !important;
+}
+
+.alert-content .swal2-content {
+  align-items: normal !important;
+}
+
+.alert-actions {
+  margin: 1rem 0 0 !important;
+  justify-content: flex-end !important;
+}
+
+.alert-actions .btn{
+  margin: 0 0 0 .5rem !important;
+}
+
+.alert-close-button {
+  top: 0.6rem !important;
+  right: 0.5rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  color: #737373 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: 200 !important;
+}
+
+/* end Стили для всплывающих уведомлений */
