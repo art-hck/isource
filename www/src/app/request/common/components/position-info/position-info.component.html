@@ -149,9 +149,15 @@
 
               <div class="submit">
                 <button class="btn btn-primary"
-                        (click)="onConfirmPublishOffers(requestPosition)"
+                        [swal]="publishOffersDialog"
                         *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
                 </button>
+                <swal
+                  #publishOffersDialog
+                  text="Отправить коммерческие предложения на согласование?"
+                  [showCancelButton]="true"
+                  (confirm)="onConfirmPublishOffers(requestPosition)">
+                </swal>
 
                 <button class="btn btn-primary"
                         (click)="onChoiceWinner(requestPosition)"

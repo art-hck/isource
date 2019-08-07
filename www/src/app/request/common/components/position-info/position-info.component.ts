@@ -21,7 +21,6 @@ import { RequestDocument } from "../../models/request-document";
 import { EditRequestService } from "../../services/edit-request.service";
 import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
-import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 import { LinkedOffersSortService } from '../../services/linked-offers-sort-service';
@@ -111,27 +110,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onConfirmPublishOffers(requestPosition: RequestPosition) {
-    Swal.fire({
-      width: 520,
-      html: '<p class="text-alert">' + 'Отправить коммерческие предложения на согласование?</br></br>' + '</p>' +
-        '<button id="submit" class="btn btn-primary">' +
-        'Да' + '</button>' + '<button id="cancel" class="btn btn-link">' +
-        'Нет' + '</button>',
-      showConfirmButton: false,
-      onBeforeOpen: () => {
-        const content = Swal.getContent();
-        const $ = content.querySelector.bind(content);
-
-        const submit = $('#submit');
-        const cancel = $('#cancel');
-        submit.addEventListener('click', () => {
-          this.onPublishOffers(requestPosition);
-        });
-        cancel.addEventListener('click', () => {
-          Swal.close();
-        });
-      }
-    });
+    this.onPublishOffers(requestPosition);
   }
 
   onPublishOffers(requestPosition: RequestPosition) {

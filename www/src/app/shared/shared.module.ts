@@ -12,7 +12,23 @@ import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
     FormsModule,
     ClarityModule,
     CustomComponentsModule,
-    SweetAlert2Module
+    SweetAlert2Module.forRoot({
+      buttonsStyling: false,
+      customClass: {
+        popup: 'alert-popup',
+        header: 'alert-header',
+        title: 'alert-title',
+        closeButton: 'alert-close-button',
+        content: 'alert-content',
+        actions: 'alert-actions',
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn'
+      },
+      confirmButtonText: 'Да',
+      cancelButtonText: 'Отмена',
+      width: '16rem',
+      reverseButtons: true
+    })
   ],
   declarations: [
     CardComponent
@@ -22,7 +38,8 @@ import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
     FormsModule,
     ClarityModule,
     CustomComponentsModule,
-    CardComponent
+    CardComponent,
+    SweetAlert2Module
   ]
 })
 export class SharedModule {
