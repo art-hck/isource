@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../shared/forms/custom.validators";
 import { UserRegistration } from "../models/user-registration";
 import { ContragentRegistration } from "../models/contragent-registration";
@@ -69,7 +69,7 @@ export class RegistrationComponent implements OnInit {
       bankAccount: ['', [Validators.required, CustomValidators.bankAccount]],
       bik: ['', [Validators.required, CustomValidators.bik]],
       corrAccount: ['', [Validators.required, CustomValidators.corrAccount]],
-      bankName: ['', [Validators.required, CustomValidators.cyrillic]],
+      bankName: ['', [Validators.required]],
       bankAddress: ['', [Validators.required, CustomValidators.cyrillic]],
     });
   }
@@ -94,34 +94,40 @@ export class RegistrationComponent implements OnInit {
     this.autofillAlertShown = true;
     const registrationDate = moment(new Date(event.data.state.registration_date)).format('DD.MM.YYYY');
 
-    this.contragentRegistrationForm.setControl('fullName', new FormControl(event.data.name.full_with_opf));
-    this.contragentRegistrationForm.setControl('shortName', new FormControl(event.data.name.short_with_opf));
-    this.contragentRegistrationForm.setControl('inn', new FormControl(event.data.inn));
-    this.contragentRegistrationForm.setControl('kpp', new FormControl(event.data.kpp));
-    this.contragentRegistrationForm.setControl('ogrn', new FormControl(event.data.ogrn));
-    this.contragentRegistrationForm.setControl('checkedDate', new FormControl(registrationDate));
-    this.contragentRegistrationForm.setControl('country', new FormControl(event.data.address.data.country));
-    this.contragentRegistrationForm.setControl('area', new FormControl(event.data.address.data.region));
-    this.contragentRegistrationForm.setControl('city', new FormControl(event.data.address.data.city));
-    this.contragentRegistrationForm.setControl('index', new FormControl(event.data.address.data.postal_code));
-    this.contragentRegistrationForm.setControl('town', new FormControl(event.data.address.data.settlement));
-    this.contragentRegistrationForm.setControl('address', new FormControl(event.data.address.value));
+    const partyFormInfo = {
+      fullName: event.data.name.full_with_opf,
+      shortName: event.data.name.short_with_opf,
+      inn: event.data.inn,
+      kpp: event.data.kpp,
+      ogrn: event.data.ogrn,
+      checkedDate: registrationDate,
+      country: event.data.address.data.country,
+      area: event.data.address.data.region,
+      city: event.data.address.data.city,
+      index: event.data.address.data.postal_code,
+      town: event.data.address.data.settlement,
+      address: event.data.address.value,
+    };
+
+    this.contragentRegistrationForm.patchValue(partyFormInfo);
 
     this.contragentRegistrationForm.markAllAsTouched();
   }
-
 
   onBankSuggestionSelected(event): void {
     this.autofillAlertShown = true;
 
-    this.contragentRegistrationForm.setControl('bik', new FormControl(event.data.bic));
-    this.contragentRegistrationForm.setControl('corrAccount', new FormControl(event.data.correspondent_account));
-    this.contragentRegistrationForm.setControl('bankName', new FormControl(event.data.name.payment));
-    this.contragentRegistrationForm.setControl('bankAddress', new FormControl(event.data.address.value));
+    const bankFormInfo = {
+      bik: event.data.bic,
+      corrAccount: event.data.correspondent_account,
+      bankName: event.data.name.payment,
+      bankAddress: event.data.address.value,
+    };
+
+    this.contragentRegistrationForm.patchValue(bankFormInfo);
 
     this.contragentRegistrationForm.markAllAsTouched();
   }
-
 
   onRegistration() {
     this.userRegistration = this.userRegistrationForm.value;
