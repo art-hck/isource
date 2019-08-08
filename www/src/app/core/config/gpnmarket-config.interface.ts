@@ -4,6 +4,8 @@
 export interface GpnmarketConfigInterface {
   clientId: string;
   endpoints: {
-    api: string
+    api: string,
+    // адрес WebSocket сервера
+    ws: string
   };
 }

@@ -1,26 +1,32 @@
 <div #messagesList class="messages-list">
-  <div class="message" *ngFor="let message of messages">
-    <div class="message-user" *ngIf="!isOwnMessage(message)">
-      {{ message.user.fullName }}
-    </div>
-
-    <div class="message-body"
-         [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
-      {{ message.message }}
-
-      <div class="files" *ngIf="message.documents.length > 0">
-        <app-document-simple-list
-          [documents]="message.documents"
-          [enableUpload]="false">
-        </app-document-simple-list>
+  <ng-container *ngIf="!loading">
+    <div class="message" *ngFor="let message of messages">
+      <div class="message-user" *ngIf="!isOwnMessage(message)">
+        {{ message.user.fullName }}
       </div>
 
-      <span class="message-date"> {{ message.createdDate | date:'dd.MM.yyyy' }}</span>
+      <div class="message-body"
+           [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
+        {{ message.message }}
+
+        <div class="files" *ngIf="message.documents.length > 0">
+          <app-document-simple-list
+            [documents]="message.documents"
+            [enableUpload]="false">
+          </app-document-simple-list>
+        </div>
+
+        <span class="message-date"> {{ message.createdDate | date:'dd.MM.yyyy' }}</span>
+      </div>
     </div>
+  </ng-container>
+
+  <div class="empty-list" *ngIf="!loading && messages && !messages.length">
+    Сообщений нет
   </div>
 
-  <div class="empty-list" *ngIf="messages && !messages.length">
-    Сообщений нет
+  <div class="loading" *ngIf="loading">
+    <span class="spinner spinner-md"></span>
   </div>
 </div>
 
@@ -38,7 +44,7 @@
     <div class="input-wrapper">
       <textarea formControlName="message"
                 placeholder="Введите сообщение"
-                (keydown.control.enter)="onCreateClick(sendMessageForm.value)">
+                (keyup.control.enter)="onCreateClick(sendMessageForm.value)">
       </textarea>
     </div>
 

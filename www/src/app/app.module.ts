@@ -23,7 +23,8 @@ import { CreateRequestService } from "./request/common/services/create-request.s
 import { RegistrationComponent } from './registration/components/registration.component';
 import { RegistrationService } from "./registration/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
-import {EditRequestService} from "./request/common/services/edit-request.service";
+import { EditRequestService } from "./request/common/services/edit-request.service";
+import { WebsocketModule } from "./websocket/websocket.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -47,7 +48,10 @@ registerLocaleData(localeRu, 'ru');
     FormsModule,
     BrowserAnimationsModule,
     CartModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    WebsocketModule.config({
+      url: AppConfig.endpoints.ws
+    })
   ],
   providers: [
     {provide: APP_CONFIG, useValue: AppConfig},
