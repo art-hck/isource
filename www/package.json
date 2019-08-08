@@ -23,6 +23,7 @@
     "@clr/angular": "^2.0.0",
     "@clr/icons": "^2.0.0",
     "@clr/ui": "^2.0.0",
+    "@kolkov/ngx-dadata": "^0.4.2",
     "@sweetalert2/ngx-sweetalert2": "^5.1.0",
     "@webcomponents/custom-elements": "^1.2.4",
     "angular2-text-mask": "^9.0.0",

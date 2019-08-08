@@ -23,7 +23,9 @@ import { CreateRequestService } from "./request/common/services/create-request.s
 import { RegistrationComponent } from './registration/components/registration.component';
 import { RegistrationService } from "./registration/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
-import {EditRequestService} from "./request/common/services/edit-request.service";
+import { EditRequestService } from "./request/common/services/edit-request.service";
+import { HttpClientModule } from "@angular/common/http";
+import { NgxDadataModule } from "@kolkov/ngx-dadata";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -47,7 +49,9 @@ registerLocaleData(localeRu, 'ru');
     FormsModule,
     BrowserAnimationsModule,
     CartModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    NgxDadataModule
   ],
   providers: [
     {provide: APP_CONFIG, useValue: AppConfig},

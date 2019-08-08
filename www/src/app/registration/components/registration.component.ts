@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../shared/forms/custom.validators";
 import { UserRegistration } from "../models/user-registration";
 import { ContragentRegistration } from "../models/contragent-registration";
 import { RegistrationService } from "../services/registration.service";
 import { Router } from "@angular/router";
+import { DadataConfig, DadataType } from '@kolkov/ngx-dadata';
 import Swal from "sweetalert2";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-registration',
@@ -19,6 +21,17 @@ export class RegistrationComponent implements OnInit {
   userRegistration: UserRegistration;
   contragentRegistration: ContragentRegistration;
 
+  autofillAlertShown = false;
+
+  configParty: DadataConfig = {
+    apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
+    type: DadataType.party
+  };
+
+  configBank: DadataConfig = {
+    apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
+    type: DadataType.bank
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,33 +44,33 @@ export class RegistrationComponent implements OnInit {
     this.userRegistrationForm = this.formBuilder.group({
       password: ['', [Validators.required, CustomValidators.password]],
       confirmedPassword: ['', [Validators.required, CustomValidators.passwordConfirming('password')]],
-      lastName: ['', [Validators.required, CustomValidators.cyrrilicName]],
-      firstName: ['', [Validators.required, CustomValidators.cyrrilicName]],
-      secondName: ['', CustomValidators.cyrrilicNotRequired],
+      lastName: ['', [Validators.required, CustomValidators.cyrillicName]],
+      firstName: ['', [Validators.required, CustomValidators.cyrillicName]],
+      secondName: ['', CustomValidators.cyrillicNotRequired],
       email: ['', [Validators.required, CustomValidators.email]],
       phone: ['', [Validators.required, CustomValidators.phone]],
       agreement: [false, [Validators.required, Validators.requiredTrue]]
     });
     this.contragentRegistrationForm = this.formBuilder.group({
-      fullName: ['', [Validators.required, CustomValidators.cyrrilic]],
-      shortName: ['', [Validators.required, CustomValidators.cyrrilic]],
+      fullName: ['', [Validators.required, CustomValidators.cyrillic]],
+      shortName: ['', [Validators.required, CustomValidators.cyrillic]],
       inn: ['', [Validators.required, CustomValidators.inn]],
       kpp: ['', [Validators.required, CustomValidators.kpp]],
       ogrn: ['', [Validators.required, CustomValidators.ogrn]],
       checkedDate: ['', [Validators.required, CustomValidators.pastDate()]],
       contragentEmail: ['', [Validators.required, CustomValidators.email]],
       contragentPhone: ['', [Validators.required, CustomValidators.phone]],
-      country: ['', [Validators.required, CustomValidators.cyrrilic]],
-      area: ['', [Validators.required, CustomValidators.cyrrilic]],
-      city: ['', [Validators.required, CustomValidators.cyrrilic]],
+      country: ['', [Validators.required, CustomValidators.cyrillic]],
+      area: ['', [Validators.required, CustomValidators.cyrillic]],
+      city: ['', [Validators.required, CustomValidators.cyrillic]],
       index: ['', [Validators.required, CustomValidators.index]],
-      town: ['', CustomValidators.cyrrilicNotRequired],
-      address: ['', [Validators.required, CustomValidators.cyrrilic]],
+      town: ['', CustomValidators.cyrillicNotRequired],
+      address: ['', [Validators.required, CustomValidators.cyrillic]],
       bankAccount: ['', [Validators.required, CustomValidators.bankAccount]],
-      bik: ['', [Validators.required, CustomValidators.kpp]],
+      bik: ['', [Validators.required, CustomValidators.bik]],
       corrAccount: ['', [Validators.required, CustomValidators.corrAccount]],
-      bankName: ['', [Validators.required, CustomValidators.cyrrilic]],
-      bankAddress: ['', [Validators.required, CustomValidators.cyrrilic]],
+      bankName: ['', [Validators.required, CustomValidators.cyrillic]],
+      bankAddress: ['', [Validators.required, CustomValidators.cyrillic]],
     });
   }
 
@@ -67,13 +80,48 @@ export class RegistrationComponent implements OnInit {
   }
 
   isContragentFieldValid(field: string) {
-    return this.contragentRegistrationForm.get(field).errors
-      && (this.contragentRegistrationForm.get(field).touched || this.contragentRegistrationForm.get(field).dirty);
+    if (this.contragentRegistrationForm.get(field)) {
+      return this.contragentRegistrationForm.get(field).errors
+        && (this.contragentRegistrationForm.get(field).touched || this.contragentRegistrationForm.get(field).dirty);
+    }
   }
 
   onChangeStep() {
     this.nextForm = !this.nextForm;
   }
+
+  onPartySuggestionSelected(event): void {
+    this.autofillAlertShown = true;
+    const registrationDate = moment(new Date(event.data.state.registration_date)).format('DD.MM.YYYY');
+
+    this.contragentRegistrationForm.setControl('fullName', new FormControl(event.data.name.full_with_opf));
+    this.contragentRegistrationForm.setControl('shortName', new FormControl(event.data.name.short_with_opf));
+    this.contragentRegistrationForm.setControl('inn', new FormControl(event.data.inn));
+    this.contragentRegistrationForm.setControl('kpp', new FormControl(event.data.kpp));
+    this.contragentRegistrationForm.setControl('ogrn', new FormControl(event.data.ogrn));
+    this.contragentRegistrationForm.setControl('checkedDate', new FormControl(registrationDate));
+    this.contragentRegistrationForm.setControl('country', new FormControl(event.data.address.data.country));
+    this.contragentRegistrationForm.setControl('area', new FormControl(event.data.address.data.region));
+    this.contragentRegistrationForm.setControl('city', new FormControl(event.data.address.data.city));
+    this.contragentRegistrationForm.setControl('index', new FormControl(event.data.address.data.postal_code));
+    this.contragentRegistrationForm.setControl('town', new FormControl(event.data.address.data.settlement));
+    this.contragentRegistrationForm.setControl('address', new FormControl(event.data.address.value));
+
+    this.contragentRegistrationForm.markAllAsTouched();
+  }
+
+
+  onBankSuggestionSelected(event): void {
+    this.autofillAlertShown = true;
+
+    this.contragentRegistrationForm.setControl('bik', new FormControl(event.data.bic));
+    this.contragentRegistrationForm.setControl('corrAccount', new FormControl(event.data.correspondent_account));
+    this.contragentRegistrationForm.setControl('bankName', new FormControl(event.data.name.payment));
+    this.contragentRegistrationForm.setControl('bankAddress', new FormControl(event.data.address.value));
+
+    this.contragentRegistrationForm.markAllAsTouched();
+  }
+
 
   onRegistration() {
     this.userRegistration = this.userRegistrationForm.value;
