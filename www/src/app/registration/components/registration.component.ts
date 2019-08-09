@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../shared/forms/custom.validators";
 import { UserRegistration } from "../models/user-registration";
@@ -8,7 +8,8 @@ import { Router } from "@angular/router";
 import { DadataConfig, DadataType } from '@kolkov/ngx-dadata';
 import Swal from "sweetalert2";
 import * as moment from "moment";
-import { AppConfig } from "../../config/app.config";
+import { GpnmarketConfigInterface } from "../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
 
 @Component({
   selector: 'app-registration',
@@ -22,23 +23,29 @@ export class RegistrationComponent implements OnInit {
   contragentRegistration: ContragentRegistration;
   nextForm = false;
   autofillAlertShown = false;
-  dadataApiKey = AppConfig.dadata.apiKey;
 
-  configParty: DadataConfig = {
-    apiKey: this.dadataApiKey,
-    type: DadataType.party
-  };
+  appConfig: GpnmarketConfigInterface;
 
-  configBank: DadataConfig = {
-    apiKey: this.dadataApiKey,
-    type: DadataType.bank
-  };
+  configParty: DadataConfig;
+  configBank: DadataConfig;
 
   constructor(
     private formBuilder: FormBuilder,
     private registrationService: RegistrationService,
-    private router: Router
+    private router: Router,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
+    this.appConfig = appConfig;
+
+    this.configParty = {
+      apiKey: this.appConfig.dadata.apiKey,
+      type: DadataType.party
+    };
+
+    this.configBank = {
+      apiKey: this.appConfig.dadata.apiKey,
+      type: DadataType.bank
+    };
   }
 
   ngOnInit() {
@@ -71,7 +78,7 @@ export class RegistrationComponent implements OnInit {
       bik: ['', [Validators.required, CustomValidators.bik]],
       corrAccount: ['', [Validators.required, CustomValidators.corrAccount]],
       bankName: ['', [Validators.required]],
-      bankAddress: ['', [Validators.required, CustomValidators.cyrillic]],
+      bankAddress: ['', [Validators.required]],
     });
   }
 
