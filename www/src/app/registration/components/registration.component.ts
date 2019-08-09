@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { DadataConfig, DadataType } from '@kolkov/ngx-dadata';
 import Swal from "sweetalert2";
 import * as moment from "moment";
+import { AppConfig } from "../../config/app.config";
 
 @Component({
   selector: 'app-registration',
@@ -17,19 +18,19 @@ import * as moment from "moment";
 export class RegistrationComponent implements OnInit {
   userRegistrationForm: FormGroup;
   contragentRegistrationForm: FormGroup;
-  nextForm = false;
   userRegistration: UserRegistration;
   contragentRegistration: ContragentRegistration;
-
+  nextForm = false;
   autofillAlertShown = false;
+  dadataApiKey = AppConfig.dadata.apiKey;
 
   configParty: DadataConfig = {
-    apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
+    apiKey: this.dadataApiKey,
     type: DadataType.party
   };
 
   configBank: DadataConfig = {
-    apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
+    apiKey: this.dadataApiKey,
     type: DadataType.bank
   };
 

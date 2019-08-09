@@ -6,4 +6,7 @@ export interface GpnmarketConfigInterface {
   endpoints: {
     api: string
   };
+  dadata: {
+    apiKey: string
+  };
 }
