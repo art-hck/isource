@@ -75,3 +75,15 @@ h3 {
 .next.btn {
   padding: 0 50px;
 }
+
+.alert.autofill-alert {
+  padding: 5px 10px;
+  border-radius: 3px;
+  width: calc(100% - 20px);
+}
+
+::ng-deep input#address_input {
+  background-color: white;
+  padding: 10px 15px;
+  border: 1px solid #D4D9E2;
+}

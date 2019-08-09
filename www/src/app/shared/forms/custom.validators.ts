@@ -20,11 +20,11 @@ export class CustomValidators {
     return CustomValidators.twentyDigits(control);
   }
 
-  static cyrrilicNotRequired(control: FormControl): any {
+  static cyrillicNotRequired(control: FormControl): any {
     if (control.value === '') {
       return null;
     }
-    return CustomValidators.cyrrilic(control);
+    return CustomValidators.cyrillic(control);
   }
 
   // Используется для валидации КПП и БИК
@@ -60,7 +60,7 @@ export class CustomValidators {
   }
 
   // Используется для валидации ФИО, разрешена киррилица, пробелы и тире
-  static cyrrilicName(control: FormControl): any {
+  static cyrillicName(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[а-яА-ЯёЁ\s]+$/);
     return valid ? null : {field: true};
@@ -68,7 +68,7 @@ export class CustomValidators {
 
   // Используется для валидации наименований организаций и адресов,
   // разрешена кириллица, пробелы, тире, цифры и знаки припинания
-  static cyrrilic(control: FormControl): any {
+  static cyrillic(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
     return valid ? null : {field: true};

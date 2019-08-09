@@ -2,6 +2,26 @@
   <h2 class="regHeader" *ngIf="!nextForm">Регистрация пользователя</h2>
   <h2 class="regHeader" *ngIf="nextForm">Регистрация контрагента</h2>
   <div class="card">
+
+    <div class="alert alert-info autofill-alert" *ngIf="autofillAlertShown">
+      <div class="alert-items">
+        <div class="alert-item static">
+            <div class="alert-icon-wrapper">
+              <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+            </div>
+            <span class="alert-text">
+                <span>
+                  Пожалуйста, проверьте и дополните введённую информацию перед завершением регистрации.
+                </span>
+            </span>
+        </div>
+      </div>
+
+      <button type="button" class="close" aria-label="Close" (click)="autofillAlertShown = false">
+        <clr-icon aria-hidden="true" shape="close"></clr-icon>
+      </button>
+    </div>
+
     <form [formGroup]="userRegistrationForm" class="form" *ngIf="!nextForm">
       <div class="form-block">
         <div class="clr-form-control">
@@ -58,14 +78,42 @@
         </div>
       </div>
     </form>
+
     <form [formGroup]="contragentRegistrationForm" class="form" *ngIf="nextForm">
       <div class="form-block">
         <div class="clr-form-control">
+
+          <div class="clr-row w-100">
+            <div class="clr-col-12">
+              <label class="clr-control-label" for="fullName">Краткое наименование</label>
+              <ngx-dadata
+                      [config]="configParty"
+                      (selected)="onPartySuggestionSelected($event)"
+                      id="shortName"
+                      formControlName="shortName"
+                      [class.invalid]="isContragentFieldValid('shortName')"></ngx-dadata>
+            </div>
+          </div>
+
+          <div class="clr-row w-100">
+            <div class="clr-col-12">
+              <label class="clr-control-label" for="shortName">Полное наименование</label>
+              <input id="fullName" type="text" formControlName="fullName"
+                     [class.invalid]="isContragentFieldValid('fullName')"/>
+            </div>
+          </div>
+
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="inn">ИНН</label>
-              <input id="inn" type="text" formControlName="inn" [class.invalid]="isContragentFieldValid('inn')"/>
+              <ngx-dadata
+                      [config]="configParty"
+                      (selected)="onPartySuggestionSelected($event)"
+                      id="inn"
+                      formControlName="inn"
+                      [class.invalid]="isContragentFieldValid('inn')"></ngx-dadata>
             </div>
+
             <div class="clr-col-4">
               <label class="clr-control-label" for="kpp">КПП</label>
               <input id="kpp" type="text" formControlName="kpp" [class.invalid]="isContragentFieldValid('kpp')"/>
@@ -75,23 +123,10 @@
               <input id="ogrn" type="text" formControlName="ogrn" [class.invalid]="isContragentFieldValid('ogrn')"/>
             </div>
           </div>
-          <div class="clr-row w-100">
-            <div class="clr-col-12">
-              <label class="clr-control-label" for="fullName">Полное наименование</label>
-              <input id="fullName" type="text" formControlName="fullName"
-                     [class.invalid]="isContragentFieldValid('fullName')"/>
-            </div>
-          </div>
-          <div class="clr-row w-100">
-            <div class="clr-col-12">
-              <label class="clr-control-label" for="shortName">Краткое наименование</label>
-              <input id="shortName" type="text" formControlName="shortName"
-                     [class.invalid]="isContragentFieldValid('shortName')"/>
-            </div>
-          </div>
+
           <div class="clr-row w-100">
             <div class="clr-col-4">
-              <label class="clr-control-label" for="checkedDate">Дата поставновки на учет в НО</label>
+              <label class="clr-control-label" for="checkedDate">Дата регистрации в нал. органе</label>
               <input id="checkedDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="checkedDate"
                      [class.invalid]="isContragentFieldValid('checkedDate')"/>
             </div>
@@ -140,15 +175,23 @@
           </div>
           <h3>Банковские реквизиты</h3>
           <div class="clr-row w-100">
+
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="bik">БИК</label>
+              <ngx-dadata
+                      [config]="configBank"
+                      (selected)="onBankSuggestionSelected($event)"
+                      id="bik"
+                      formControlName="bik"
+                      [class.invalid]="isContragentFieldValid('bik')"></ngx-dadata>
+            </div>
+
             <div class="clr-col-4">
               <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
               <input id="bankAccount" type="text" formControlName="bankAccount"
                      [class.invalid]="isContragentFieldValid('bankAccount')"/>
             </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="bik">БИК</label>
-              <input id="bik" type="text" formControlName="bik" [class.invalid]="isContragentFieldValid('bik')"/>
-            </div>
+
             <div class="clr-col-4">
               <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
               <input id="corrAccount" type="text" formControlName="corrAccount"
