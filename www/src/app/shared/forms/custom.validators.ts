@@ -66,16 +66,16 @@ export class CustomValidators {
     return valid ? null : {field: true};
   }
 
-  // Используется для валидации наименований организаций и адресов,
-  // разрешена кириллица, латиница, пробелы, тире, цифры и знаки припинания
+  // Используется для валидации наименований организаций,
+  // разрешена кириллица, латиница, пробелы, тире, цифры и знаки препинания
   static simpleText(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[?!,№`"-.а-яА-ЯёЁa-zA-Z0-9\s]+$/);
     return valid ? null : {field: true};
   }
 
-  // Используется для валидации наименований организаций и адресов,
-  // разрешена кириллица, пробелы, тире, цифры и знаки припинания
+  // Используется для валидации адресов,
+  // разрешена кириллица, пробелы, тире, цифры и знаки препинания
   static cyrillic(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
