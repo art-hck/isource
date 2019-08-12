@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../shared/forms/custom.validators";
 import { UserRegistration } from "../models/user-registration";
 import { ContragentRegistration } from "../models/contragent-registration";
 import { RegistrationService } from "../services/registration.service";
 import { Router } from "@angular/router";
-import { DadataConfig, DadataType } from '@kolkov/ngx-dadata';
+import { DadataConfig, DadataType, NgxDadataComponent } from '@kolkov/ngx-dadata';
 import Swal from "sweetalert2";
 import * as moment from "moment";
 import { GpnmarketConfigInterface } from "../../core/config/gpnmarket-config.interface";
@@ -28,6 +28,10 @@ export class RegistrationComponent implements OnInit {
 
   configParty: DadataConfig;
   configBank: DadataConfig;
+
+  @ViewChild('shortNameInputElRef', { static: false }) shortNameInputElRef: NgxDadataComponent;
+  @ViewChild('innInputElRef', { static: false }) innInputElRef: NgxDadataComponent;
+  @ViewChild('bikInputElRef', { static: false }) bikInputElRef: NgxDadataComponent;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,8 +64,8 @@ export class RegistrationComponent implements OnInit {
       agreement: [false, [Validators.required, Validators.requiredTrue]]
     });
     this.contragentRegistrationForm = this.formBuilder.group({
-      fullName: ['', [Validators.required, CustomValidators.cyrillic]],
-      shortName: ['', [Validators.required, CustomValidators.cyrillic]],
+      fullName: ['', [Validators.required, CustomValidators.simpleText]],
+      shortName: ['', [Validators.required, CustomValidators.simpleText]],
       inn: ['', [Validators.required, CustomValidators.inn]],
       kpp: ['', [Validators.required, CustomValidators.kpp]],
       ogrn: ['', [Validators.required, CustomValidators.ogrn]],
@@ -73,7 +77,7 @@ export class RegistrationComponent implements OnInit {
       city: ['', [Validators.required, CustomValidators.cyrillic]],
       index: ['', [Validators.required, CustomValidators.index]],
       town: ['', CustomValidators.cyrillicNotRequired],
-      address: ['', [Validators.required, CustomValidators.cyrillic]],
+      address: ['', [Validators.required, CustomValidators.simpleText]],
       bankAccount: ['', [Validators.required, CustomValidators.bankAccount]],
       bik: ['', [Validators.required, CustomValidators.bik]],
       corrAccount: ['', [Validators.required, CustomValidators.corrAccount]],
@@ -100,24 +104,29 @@ export class RegistrationComponent implements OnInit {
 
   onPartySuggestionSelected(event): void {
     this.autofillAlertShown = true;
-    const registrationDate = moment(new Date(event.data.state.registration_date)).format('DD.MM.YYYY');
+    const registrationDate = event.data.state.registration_date ?
+      moment(new Date(event.data.state.registration_date)).format('DD.MM.YYYY') :
+      '';
 
     const partyFormInfo = {
-      fullName: event.data.name.full_with_opf,
-      shortName: event.data.name.short_with_opf,
-      inn: event.data.inn,
-      kpp: event.data.kpp,
-      ogrn: event.data.ogrn,
+      fullName: event.data.name.full_with_opf || '',
+      shortName: event.data.name.short_with_opf || '',
+      inn: event.data.inn || '',
+      kpp: event.data.kpp || '',
+      ogrn: event.data.ogrn || '',
       checkedDate: registrationDate,
-      country: event.data.address.data.country,
-      area: event.data.address.data.region,
-      city: event.data.address.data.city,
-      index: event.data.address.data.postal_code,
-      town: event.data.address.data.settlement,
-      address: event.data.address.value,
+      country: event.data.address.data.country || '',
+      area: event.data.address.data.region || '',
+      city: event.data.address.data.city || '',
+      index: event.data.address.data.postal_code || '',
+      town: event.data.address.data.settlement || '',
+      address: event.data.address.value || '',
     };
 
     this.contragentRegistrationForm.patchValue(partyFormInfo);
+
+    this.shortNameInputElRef.inputValue.nativeElement.value = event.data.name.short_with_opf || '';
+    this.innInputElRef.inputValue.nativeElement.value = event.data.inn || '';
 
     this.contragentRegistrationForm.markAllAsTouched();
   }
@@ -126,13 +135,15 @@ export class RegistrationComponent implements OnInit {
     this.autofillAlertShown = true;
 
     const bankFormInfo = {
-      bik: event.data.bic,
-      corrAccount: event.data.correspondent_account,
-      bankName: event.data.name.payment,
-      bankAddress: event.data.address.value,
+      bik: event.data.bic || '',
+      corrAccount: event.data.correspondent_account || '',
+      bankName: event.data.name.payment || '',
+      bankAddress: event.data.address.value || '',
     };
 
     this.contragentRegistrationForm.patchValue(bankFormInfo);
+
+    this.bikInputElRef.inputValue.nativeElement.value = event.data.bic || '';
 
     this.contragentRegistrationForm.markAllAsTouched();
   }

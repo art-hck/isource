@@ -71,7 +71,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <button type="button" class="btn btn-primary next" [disabled]="userRegistrationForm.invalid"
+            <button type="button" class="btn btn-primary next" [disabled]="!userRegistrationForm.invalid"
                     (click)="onChangeStep()">Далее
             </button>
           </div>
@@ -86,7 +86,7 @@
           <div class="clr-row w-100">
             <div class="clr-col-12">
               <label class="clr-control-label" for="fullName">Краткое наименование</label>
-              <ngx-dadata
+              <ngx-dadata #shortNameInputElRef
                       [config]="configParty"
                       (selected)="onPartySuggestionSelected($event)"
                       id="shortName"
@@ -106,7 +106,7 @@
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="inn">ИНН</label>
-              <ngx-dadata
+              <ngx-dadata #innInputElRef
                       [config]="configParty"
                       (selected)="onPartySuggestionSelected($event)"
                       id="inn"
@@ -137,7 +137,7 @@
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="contragentPhone">Телефон</label>
-              <input id="contragentPhone" type="number" formControlName="contragentPhone"
+              <input id="contragentPhone" type="text" formControlName="contragentPhone"
                      [class.invalid]="isContragentFieldValid('contragentPhone')"/>
             </div>
           </div>
@@ -160,7 +160,7 @@
           <div class="clr-row w-100">
             <div class="clr-col-2">
               <label class="clr-control-label" for="index">Почтовый индекс</label>
-              <input id="index" type="number" formControlName="index"
+              <input id="index" type="text" formControlName="index"
                      [class.invalid]="isContragentFieldValid('index')"/>
             </div>
             <div class="clr-col-5">
@@ -178,7 +178,7 @@
 
             <div class="clr-col-4">
               <label class="clr-control-label" for="bik">БИК</label>
-              <ngx-dadata
+              <ngx-dadata #bikInputElRef
                       [config]="configBank"
                       (selected)="onBankSuggestionSelected($event)"
                       id="bik"

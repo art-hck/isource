@@ -87,3 +87,7 @@ h3 {
   padding: 10px 15px;
   border: 1px solid #D4D9E2;
 }
+
+::ng-deep ngx-dadata.invalid input {
+  border: 1px solid red !important;
+}
