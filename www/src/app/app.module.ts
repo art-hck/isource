@@ -24,6 +24,8 @@ import { RegistrationComponent } from './registration/components/registration.co
 import { RegistrationService } from "./registration/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
 import { EditRequestService } from "./request/common/services/edit-request.service";
+import { HttpClientModule } from "@angular/common/http";
+import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
@@ -49,6 +51,8 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     CartModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    NgxDadataModule,
     WebsocketModule.config({
       url: AppConfig.endpoints.ws
     })

@@ -8,4 +8,7 @@ export interface GpnmarketConfigInterface {
     // адрес WebSocket сервера
     ws: string
   };
+  dadata: {
+    apiKey: string
+  };
 }
