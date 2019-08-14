@@ -50,12 +50,20 @@ export class BackOfficeRequestViewComponent implements OnInit {
   }
 
   canPublish(): boolean {
-    if (this.request.status == RequestWorkflowSteps.DRAFT) {
+    if (!this.request) {
+      return false;
+    }
+
+    if (!this.requestPositions) {
+      return false;
+    }
+
+    if (this.request.status === RequestWorkflowSteps.DRAFT) {
       return true;
     }
 
     for (const position of this.requestPositions) {
-      if (position.status == RequestPositionWorkflowSteps.DRAFT) {
+      if (position.status === RequestPositionWorkflowSteps.DRAFT) {
         return true;
       }
     }

@@ -59,12 +59,12 @@ export class CustomerRequestViewComponent implements OnInit {
       return false;
     }
 
-    if (this.request.status == RequestWorkflowSteps.DRAFT) {
+    if (this.request.status === RequestWorkflowSteps.DRAFT) {
       return true;
     }
 
     for (const position of this.requestPositions) {
-      if (position.status == RequestPositionWorkflowSteps.DRAFT) {
+      if (position.status === RequestPositionWorkflowSteps.DRAFT) {
         return true;
       }
     }
