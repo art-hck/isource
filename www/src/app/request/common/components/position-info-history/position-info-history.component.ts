@@ -3,6 +3,7 @@ import { RequestPosition } from "../../models/request-position";
 import { History } from "../../models/history";
 import { RequestPositionHistoryService } from "../../services/request-position-history.service";
 import * as moment from "moment";
+import { PositionHistoryTypes } from "../../enum/position-history-types";
 
 @Component({
   selector: 'app-position-info-history',
@@ -32,19 +33,18 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     this.historyService.getHistory(this.requestPosition)
       .subscribe((history: History[]) => {
         this.history = history;
-        console.log(this.history);
       });
   }
 
   isDocumentUploadAction(activityItem: History): boolean {
     return (
       [
-        'DOC_POSITION',
-        'DOC_OFFER',
-        'DOC_TECHPROPOSALS',
-        'DOC_MESSAGE',
-        'DOC_CONTRACT',
-        'DOC_MANUFACTURING'
+        PositionHistoryTypes.DOC_POSITION.valueOf(),
+        PositionHistoryTypes.DOC_OFFER.valueOf(),
+        PositionHistoryTypes.DOC_TECHPROPOSALS.valueOf(),
+        PositionHistoryTypes.DOC_MESSAGE.valueOf(),
+        PositionHistoryTypes.DOC_CONTRACT.valueOf(),
+        PositionHistoryTypes.DOC_MANUFACTURING.valueOf(),
       ].indexOf(activityItem.type) !== -1
     );
   }
@@ -54,7 +54,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
   }
 
   isPositionEditAction(activityItem: History): boolean {
-    return activityItem.type === 'POSITION_EDITED';
+    return activityItem.type === PositionHistoryTypes.POSITION_EDITED.valueOf();
   }
 
   /**
@@ -64,8 +64,8 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
   isStatusChangeAction(activityItem: History): boolean {
     return (
       [
-      'POSITION_STATUS',
-      'POSITION_ADDED'
+        PositionHistoryTypes.POSITION_STATUS.valueOf(),
+        PositionHistoryTypes.POSITION_ADDED.valueOf()
       ].indexOf(activityItem.type) !== -1
     );
   }
