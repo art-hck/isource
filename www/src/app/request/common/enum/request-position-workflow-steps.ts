@@ -1,4 +1,5 @@
 export enum RequestPositionWorkflowSteps {
+  DRAFT = 'DRAFT',                                 // Черновик
   NEW = 'NEW',                                     // Новая
   PROPOSALS_PREPARATION = 'PROPOSALS_PREPARATION', // Подготовка предложения
   RESULTS_AGREEMENT = 'RESULTS_AGREEMENT',         // Согласование результатов

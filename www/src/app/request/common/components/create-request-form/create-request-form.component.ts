@@ -3,9 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   OnInit,
-  Output
 } from '@angular/core';
 import {
   AbstractControl,
@@ -17,6 +15,9 @@ import {
   Validators
 } from "@angular/forms";
 import * as moment from "moment";
+import Swal from "sweetalert2";
+import { CreateRequestService } from "../../services/create-request.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-create-request-form',
@@ -24,22 +25,20 @@ import * as moment from "moment";
   styleUrls: ['./create-request-form.component.css']
 })
 export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
-
   requestDataForm: FormGroup;
   // тут храним список открытых форм
   formShow = [];
-
-  @Output() submit = new EventEmitter<any>();
 
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
   }
 
   constructor(
+    private createRequestService: CreateRequestService,
     private formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    protected router: Router
   ) {
-    this.formShow[0] = false;
     this.requestDataForm = this.formBuilder.group({
         'itemForm': this.formBuilder.array([
           this.addItemFormGroup()
@@ -150,7 +149,27 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
   }
 
   onSubmit() {
-    this.submit.emit(this.requestDataForm.value);
+    return this.createRequestService.addRequest(this.requestDataForm.value['itemForm']).subscribe(
+      (data: any) => {
+        Swal.fire({
+          width: 400,
+          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
+            '<button id="submit" class="btn btn-primary">' +
+            'ОК' + '</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              this.router.navigateByUrl(`requests/customer/${data.id}`);
+              Swal.close();
+            });
+          }
+        });
+      }
+    );
   }
 
   onDocumentSelected(documents: File[], form) {

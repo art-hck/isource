@@ -23,6 +23,11 @@ export class RequestService {
     return this.api.post<RequestPosition[]>(url, {});
   }
 
+  publishRequest(id: Uuid) {
+    const url = `requests/customer/${id}/publish`;
+    return this.api.post(url, {});
+  }
+
   choiceWinner(offerWinnerId: Uuid, positionId: Uuid, id: Uuid) {
     const url = `requests/customer/${id}/positions/${positionId}/choose-winner`;
     return this.api.post(url, {

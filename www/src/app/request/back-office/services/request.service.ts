@@ -24,6 +24,11 @@ export class RequestService {
     return this.api.post<RequestPosition[]>(url, {});
   }
 
+  publishRequest(id: Uuid) {
+    const url = `requests/backoffice/${id}/publish`;
+    return this.api.post(url, {});
+  }
+
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
     const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
     return this.api.post(url, {

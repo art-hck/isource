@@ -4,3 +4,10 @@
                   [updatedPosition]="updatedPosition"
                   [requestId]="requestId">
 </app-request-view>
+
+<div class="submit">
+  <button class="btn btn-primary"
+          (click)="onPublish()"
+          *ngIf="canPublish()"><b>Опубликовать заявку</b>
+  </button>
+</div>
