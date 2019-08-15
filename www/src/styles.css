@@ -243,13 +243,13 @@ clr-dg-footer.datagrid-footer {
 
 
 .status-position-NEW:before {
-    background: #b9b9b9;
+    background: rgb(185, 185, 185);
 }
 .status-position-PROPOSALS_PREPARATION:before {
-    background: #28b1ec;
+    background: rgb(40, 177, 236);
 }
 .status-position-RESULTS_AGREEMENT:before {
-    background: #00b75e;
+    background: rgb(0, 183, 94);
 }
 .status-position-WINNER_SELECTED:before {
     background: rgb(255, 71, 90);

@@ -1,0 +1,184 @@
+$status-color-NEW: rgb(185, 185, 185);
+$status-color-PROPOSALS_PREPARATION: rgb(40, 177, 236);
+$status-color-RESULTS_AGREEMENT: rgb(0, 183, 94);
+$status-color-WINNER_SELECTED: rgb(255, 71, 90);
+$status-color-CONTRACT_AGREEMENT: rgb(97, 77, 255);
+$status-color-CONTRACT_SIGNING: rgb(159, 56, 255);
+$status-color-CONTRACTED: rgb(150, 183, 57);
+$status-color-RKD_AGREEMENT: rgb(142, 46, 90);
+$status-color-MANUFACTURING: rgb(149, 65, 25);
+$status-color-DELIVERY: rgb(84, 199, 171);
+$status-color-DELIVERED: rgb(100, 142, 255);
+$status-color-PAID: rgb(231, 200, 35);
+$status-color-COMPLETED: rgb(255, 127, 127);
+
+.activity-feed {
+  margin-top: 20px;
+  max-height: 600px;
+  overflow: hidden auto;
+  padding: 0 10px 0 35px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  float: left;
+  margin-left: -40px;
+
+  &.status-change:before {
+    content: '';
+    border: 5px solid;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    display: block;
+    margin-left: -50%;
+    margin-top: -50%;
+  }
+}
+
+
+.activity-block  {
+  border-left: 2px solid lightgrey;
+  padding: 0 0 25px 34px;
+
+  &:last-of-type {
+    border-left: 2px solid transparent;
+  }
+
+  & span.activity-type,
+  & span.status-name,
+  & a.document-item {
+    display: block;
+  }
+
+  & div.position-status-change,
+  & a.document-item,
+  & div.position-edit-item {
+    padding-top: 5px;
+    display: table;
+  }
+
+  & span.activity-type {
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  & span.user-name {
+    padding-right: 7px;
+    font-size: 13px;
+  }
+
+  & span.activity-date {
+    font-size: 13px;
+  }
+
+  & div.position-status-change .arrow {
+    padding: 0 10px 0 5px;
+  }
+
+  & div.position-edit-item {
+    font-size: 13px;
+
+    & .edit-info-item {
+      line-height: 19px;
+
+      & .arrow {
+        padding: 0 5px;
+      }
+    }
+
+    & .edit-info-label {
+      padding-right: 10px;
+    }
+  }
+}
+
+
+
+
+
+
+
+// todo в будущем перенести в корневой style.css, переделать его в scss
+
+.position-history-status-NEW {
+  background: $status-color-NEW;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-NEW, 0.7);
+  }
+}
+.position-history-status-PROPOSALS_PREPARATION {
+  background: $status-color-PROPOSALS_PREPARATION;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-PROPOSALS_PREPARATION, 0.7);
+  }
+}
+.position-history-status-RESULTS_AGREEMENT {
+  background: $status-color-RESULTS_AGREEMENT;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-RESULTS_AGREEMENT, 0.7);
+  }
+}
+.position-history-status-WINNER_SELECTED {
+  background: $status-color-WINNER_SELECTED;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-WINNER_SELECTED, 0.7);
+  }
+}
+.position-history-status-CONTRACT_AGREEMENT {
+  background: $status-color-CONTRACT_AGREEMENT;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-CONTRACT_AGREEMENT, 0.7);
+  }
+}
+.position-history-status-CONTRACT_SIGNING {
+  background: $status-color-CONTRACT_SIGNING;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-CONTRACT_SIGNING, 0.7);
+  }
+}
+.position-history-status-CONTRACTED {
+  background: $status-color-CONTRACTED;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-CONTRACTED, 0.7);
+  }
+}
+.position-history-status-RKD_AGREEMENT {
+  background: $status-color-RKD_AGREEMENT;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-RKD_AGREEMENT, 0.7);
+  }
+}
+.position-history-status-MANUFACTURING {
+  background: $status-color-MANUFACTURING;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-MANUFACTURING, 0.7);
+  }
+}
+.position-history-status-DELIVERY {
+  background: $status-color-DELIVERY;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-DELIVERY, 0.7);
+  }
+}
+.position-history-status-DELIVERED {
+  background: $status-color-DELIVERED;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-DELIVERED, 0.7);
+  }
+}
+.position-history-status-PAID {
+  background: $status-color-PAID;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-PAID, 0.7);
+  }
+}
+.position-history-status-COMPLETED {
+  background: $status-color-COMPLETED;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-COMPLETED, 0.7);
+  }
+}
+
