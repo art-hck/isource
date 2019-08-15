@@ -49,7 +49,6 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     );
   }
 
-
   downloadDocument(documentId, documentName) {
     this.historyService.downloadFileFromHistory(documentId, documentName);
   }
@@ -126,7 +125,6 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
     return positionEditInfo;
   }
-
 
   getEditedFieldLabel(field) {
     switch (field) {
