@@ -26,6 +26,7 @@ import { GetRequestsService } from "./request/common/services/get-requests.servi
 import { EditRequestService } from "./request/common/services/edit-request.service";
 import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
+import { WebsocketModule } from "./websocket/websocket.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -51,7 +52,10 @@ registerLocaleData(localeRu, 'ru');
     CartModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxDadataModule
+    NgxDadataModule,
+    WebsocketModule.config({
+      url: AppConfig.endpoints.ws
+    })
   ],
   providers: [
     {provide: APP_CONFIG, useValue: AppConfig},

@@ -1,23 +1,35 @@
 import {Uuid} from "../../../cart/models/uuid";
-import {RequestItem} from "./request-item";
 import { RequestDocument } from "./request-document";
 import { ManufacturingDocument } from './manufacturing-document';
+import {RequestPositionList} from "./request-position-list";
+import {RequestOfferPosition} from "./request-offer-position";
 
-export class RequestPosition extends RequestItem {
+export class RequestPosition extends RequestPositionList {
   /**
    * Значение null допустимо для позиций не сохранённых в базе данных
    */
-  id: Uuid|null;
+
+  number: number;
+  type: string;
+  groupId: Uuid;
   userId: Uuid;
   contragentId: Uuid;
-  createdDate: string;
-  number: number;
+  productionDocument: string;
+  measureUnit: string;
+  quantity: number;
+  deliveryDate: string;
+  isDeliveryDateAsap: boolean;
+  deliveryBasis: string;
+  startPrice: number;
+  currency: string;
+  paymentTerms: string;
+  relatedServices: string;
+  comments: string;
   status: string;
-  requestId: Uuid;
+  statusLabel: string;
   statusChangedDate: string;
   statusExpectedDate: string;
-  type: string;
-  statusLabel: string;
   documents: RequestDocument[];
   manufacturingDocuments: ManufacturingDocument[];
+  linkedOffers: RequestOfferPosition[];
 }

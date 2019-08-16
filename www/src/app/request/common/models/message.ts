@@ -8,4 +8,5 @@ export class Message {
   createdDate?: string;
   message: string;
   documents?: RequestDocument[];
+  requestPositionId?: Uuid;
 }

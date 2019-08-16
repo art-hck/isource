@@ -4,23 +4,22 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
-  ViewChild,
-  OnDestroy
+  ViewChild
 } from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
 import { RequestPosition } from "../../models/request-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserInfoService } from "../../../../core/services/user-info.service";
+import { WebsocketService } from "../../../../websocket/websocket.service";
 
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements AfterViewChecked, OnChanges, OnInit, OnDestroy {
+export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 
@@ -29,18 +28,28 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnInit, O
   messages: Message[];
   sendMessageForm: FormGroup;
   uploadedFiles: File[] = [];
-  updateInterval = 15 * 1000;
-  updateTask: number|null = null;
+  loading: boolean;
 
   constructor(
     private messageService: MessageService,
     private formBuilder: FormBuilder,
-    private userInfoService: UserInfoService
+    private userInfoService: UserInfoService,
+    private wsService: WebsocketService
   ) {
     this.sendMessageForm = this.formBuilder.group({
       message: [null, [Validators.required]],
       files: [null]
     });
+
+    this.wsService.on<any>('message.new')
+      .subscribe((message: Message) => {
+        console.log(message);
+        if (message.user.id !== userInfoService.getUserInfo().id
+          && message.requestPositionId === this.requestPosition.id
+        ) {
+          this.messages.push(message);
+        }
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,18 +61,12 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnInit, O
     this.scrollToBottom();
   }
 
-  ngOnInit() {
-    this.startUpdateMessages();
-  }
-
-  ngOnDestroy() {
-    this.stopUpdateMessages();
-  }
-
   getMessages() {
+    this.loading = true;
     this.messageService.getList(this.requestPosition)
       .subscribe((messages: Message[]) => {
         this.messages = messages;
+        this.loading = false;
       });
   }
 
@@ -91,31 +94,5 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnInit, O
   formReset() {
     this.sendMessageForm.reset();
     this.uploadedFiles = [];
-  }
-
-  startUpdateMessages(): void {
-    if (this.updateTask) {
-      return;
-    }
-    this.updateMessages();
-  }
-
-  stopUpdateMessages(): void {
-    if (this.updateTask) {
-      window.clearTimeout(this.updateTask);
-      this.updateTask = null;
-    }
-  }
-
-  updateMessages(): void {
-    this.updateTask = window.setTimeout(() => {
-      this.messageService.getList(this.requestPosition)
-        .subscribe((messages: Message[]) => {
-          if (messages.length > this.messages.length) {
-            this.messages = messages;
-          }
-          this.updateMessages();
-        });
-    }, this.updateInterval);
   }
 }
