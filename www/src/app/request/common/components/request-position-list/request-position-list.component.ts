@@ -59,4 +59,9 @@ export class RequestPositionListComponent implements OnInit {
       || (this.selectedRequestGroup !== null && this.selectedRequestGroup !== undefined)
       || this.requestIsSelected;
   }
+
+  isSelectedListItem(requestPosition: RequestPositionList): boolean {
+    return (requestPosition === this.selectedRequestPosition
+    || requestPosition === this.selectedRequestGroup)&& !this.requestIsSelected;
+  }
 }
