@@ -62,6 +62,6 @@ export class RequestPositionListComponent implements OnInit {
 
   isSelectedListItem(requestPosition: RequestPositionList): boolean {
     return (requestPosition === this.selectedRequestPosition
-    || requestPosition === this.selectedRequestGroup)&& !this.requestIsSelected;
+    || requestPosition === this.selectedRequestGroup) && !this.requestIsSelected;
   }
 }
