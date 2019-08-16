@@ -4,6 +4,7 @@ import { distinctUntilChanged, filter, map, share, takeWhile, tap } from 'rxjs/o
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { IWebsocketService, IWsMessage, WebSocketConfig } from './websocket.interfaces';
 import { config } from './websocket.config';
+import { TokenService } from '@stdlib-ng/core';
 
 
 @Injectable({
@@ -29,7 +30,10 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
 
   public status: Observable<boolean>;
 
-  constructor(@Inject(config) private wsConfig: WebSocketConfig) {
+  constructor(
+    @Inject(config) private wsConfig: WebSocketConfig,
+    private token: TokenService
+  ) {
     this.wsMessages$ = new Subject<IWsMessage<any>>();
 
     this.reconnectInterval = wsConfig.reconnectInterval || 5000;
@@ -38,9 +42,10 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
     console.log(wsConfig);
 
     this.config = {
-      url: wsConfig.url,
+      url: wsConfig.url + '?access_token=' + token.getToken(),
       closeObserver: {
         next: (event: CloseEvent) => {
+          console.log('WebSocket disconnected!');
           this.websocket$ = null;
           this.connection$.next(false);
         }

@@ -4,6 +4,7 @@ export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
   endpoints: {
     api: 'api/',
+    ws: 'ws://localhost:3000'
   },
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
