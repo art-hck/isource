@@ -145,7 +145,7 @@
                           (offerWinner)="getOfferWinner($event)"
                           [requestId]="requestId"
                           [showWinnerStateColumn]="showWinnerStateColumn">
-            </app-offers>
+              </app-offers>
 
               <div class="submit">
                 <button class="btn btn-primary"
@@ -184,6 +184,16 @@
                                  [requestId]="requestId"
                                  [canUpload]="canUploadManufacturing(requestPosition)">
               </app-manufacturing>
+            </clr-tab-content>
+          </clr-tab>
+
+
+          <clr-tab>
+            <button clrTabLink>История</button>
+            <clr-tab-content *clrIfActive>
+              <app-position-info-history
+                      [requestPosition]="requestPosition">
+              </app-position-info-history>
             </clr-tab-content>
           </clr-tab>
         </ng-container>

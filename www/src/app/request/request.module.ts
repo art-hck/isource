@@ -16,10 +16,10 @@ import { CreateRequestFreeFormComponent } from './common/components/create-reque
 import { OffersComponent as BackofficeOffersComponent } from './common/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
 import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
-import {RequestInfoComponent} from "./common/components/request-info/request-info.component";
-import {PositionInfoComponent} from "./common/components/position-info/position-info.component";
+import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
+import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
-import {RequestViewComponent} from "./common/components/request-view/request-view.component";
+import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { ContractComponent } from './common/components/contract/contract.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
@@ -31,8 +31,9 @@ import { CustomerListNamesFilterComponent } from "./common/components/request-li
 import { RequestListNumberFilterComponent } from "./common/components/request-list/request-list-number-filter/request-list-number-filter.component";
 import { ManufacturingComponent } from './common/components/manufacturing/manufacturing.component';
 import { RequestPositionListComponent } from './common/components/request-position-list/request-position-list.component';
+import { PositionInfoHistoryComponent } from './common/components/position-info-history/position-info-history.component';
 import { GroupInfoComponent } from './common/components/group-info/group-info.component';
-import {GroupService} from "./common/services/group.service";
+import { GroupService } from "./common/services/group.service";
 
 
 @NgModule({
@@ -63,6 +64,7 @@ import {GroupService} from "./common/services/group.service";
     RequestListPositionStatusesFilterComponent,
     ManufacturingComponent,
     RequestPositionListComponent,
+    PositionInfoHistoryComponent,
     GroupInfoComponent
   ],
   imports: [
