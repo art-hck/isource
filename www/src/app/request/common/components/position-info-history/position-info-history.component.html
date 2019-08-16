@@ -1,7 +1,7 @@
 <div class="activity-feed">
 
-  <div class="empty-history" *ngIf="history.length <= 0; else historyList">
-    <span>История позиции пуста</span>
+  <div class="empty-history gray" *ngIf="history.length <= 0; else historyList">
+    История позиции пуста
   </div>
 
   <ng-template #historyList>
