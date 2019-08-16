@@ -20,8 +20,9 @@ $status-color-COMPLETED: rgb(255, 127, 127);
 }
 
 .empty-history {
+  margin-top: 15px;
+  color: #b9b9b9;
   text-align: center;
-  padding: 50px 0;
 }
 
 .status-dot {
