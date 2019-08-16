@@ -31,6 +31,8 @@ import { CustomerListNamesFilterComponent } from "./common/components/request-li
 import { RequestListNumberFilterComponent } from "./common/components/request-list/request-list-number-filter/request-list-number-filter.component";
 import { ManufacturingComponent } from './common/components/manufacturing/manufacturing.component';
 import { RequestPositionListComponent } from './common/components/request-position-list/request-position-list.component';
+import { GroupInfoComponent } from './common/components/group-info/group-info.component';
+import {GroupService} from "./common/services/group.service";
 
 
 @NgModule({
@@ -60,7 +62,8 @@ import { RequestPositionListComponent } from './common/components/request-positi
     RequestListStatusesFilterComponent,
     RequestListPositionStatusesFilterComponent,
     ManufacturingComponent,
-    RequestPositionListComponent
+    RequestPositionListComponent,
+    GroupInfoComponent
   ],
   imports: [
     SharedModule,
@@ -71,7 +74,8 @@ import { RequestPositionListComponent } from './common/components/request-positi
   providers: [
     BackofficeRequestService,
     CustomerRequestService,
-    BackofficeOffersService
+    BackofficeOffersService,
+    GroupService
   ]
 })
 export class RequestModule {
