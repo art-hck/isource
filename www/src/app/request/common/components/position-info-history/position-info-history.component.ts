@@ -5,7 +5,6 @@ import { RequestPositionHistoryService } from "../../services/request-position-h
 import * as moment from "moment";
 import { PositionHistoryTypes } from "../../enum/position-history-types";
 import { Uuid } from "../../../../cart/models/uuid";
-import { ActivityData } from "../../models/history-activity-data";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 
 @Component({
@@ -16,7 +15,6 @@ import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-field
 export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   @Input() requestPosition: RequestPosition;
-  positionInfoFields = Object.entries(PositionInfoFieldsLabels);
   history: History[];
 
   constructor(
@@ -130,6 +128,6 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
   }
 
   getEditedFieldLabel(field: string): string {
-    return this.positionInfoFields.find(el => el[0] === field)[1];
+    return PositionInfoFieldsLabels.hasOwnProperty(field) ? PositionInfoFieldsLabels[field] : '';
   }
 }
