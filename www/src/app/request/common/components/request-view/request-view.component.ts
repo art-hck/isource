@@ -47,19 +47,19 @@ export class RequestViewComponent implements OnInit {
   }
 
   onSelectPosition(requestPosition: RequestPositionList) {
-    this.selectItem();
+    this.resetSelectedItem();
     this.selectPosition(requestPosition);
     this.showPositionInfo = true;
   }
 
   onSelectRequest($event) {
-    this.selectItem();
+    this.resetSelectedItem();
     this.selectPosition(null);
     this.showRequestInfo = $event;
   }
 
   onSelectGroup(requestListItem: RequestPositionList) {
-    this.selectItem();
+    this.resetSelectedItem();
     this.showGroupInfo = true;
     this.selectedRequestGroup = requestListItem;
   }
@@ -145,7 +145,7 @@ export class RequestViewComponent implements OnInit {
     this.showGroupInfo = !!requestGroup;
   }
 
-  selectItem() {
+  resetSelectedItem() {
     // если добавляли группу, но не сохранили, то удаляем ее
     if (this.selectedRequestGroup && !this.selectedRequestGroup.id) {
       this.requestPositions.shift();
@@ -167,14 +167,14 @@ export class RequestViewComponent implements OnInit {
     this.showPositionInfo = false;
     this.showPositionList = true;
 
-    this.selectPosition(null);
+    this.resetSelectedItem();
   }
 
   onCloseGroupInfo() {
     this.showGroupInfo = false;
     this.showPositionList = true;
 
-    this.selectGroup(null);
+    this.resetSelectedItem();
   }
 
   onCloseRequestInfo() {
