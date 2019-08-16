@@ -6,7 +6,7 @@ export class History {
   createdDate: Date;
   type: string;
   typeLabel: string;
-  data?: ActivityData;
+  data: ActivityData;
   documentId?: string;
   id: Uuid;
   requestContractId?: Uuid;

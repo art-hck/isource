@@ -1,53 +1,59 @@
 <div class="activity-feed">
 
-  <div class="activity-block" *ngFor="let activityItem of history">
-    <div class="{{ getActivityTypeStatusClass(activityItem) }}"></div>
-
-    <span class="activity-type gray">{{ activityItem.typeLabel }}</span>
-
-    <ng-container *ngIf="isDocumentUploadAction(activityItem); else restActivityData">
-      <a class="document-item" (click)="downloadDocument(activityItem.documentId, activityItem.data.filename)">
-        {{ activityItem.data.filename }}
-      </a>
-    </ng-container>
-
-
-    <ng-template #restActivityData>
-
-      <ng-container *ngIf="isPositionEditAction(activityItem)">
-        <div class="position-edit-item">
-          <div class="edit-info-item" *ngFor="let item of getPositionEditInfoList(activityItem.data)">
-            <span class="edit-info-label gray">{{ item.label }}:</span>
-
-            <span class="edit-info-value">{{ item.oldValue }}</span>
-              <span class="arrow">→</span>
-            <span class="edit-info-value">{{ item.newValue }}</span>
-          </div>
-        </div>
-      </ng-container>
-
-
-      <ng-container *ngIf="isStatusChangeAction(activityItem)">
-        <div class="position-status-change">
-          <span class="status-name">
-            <span class="position-status status-position-{{ activityItem.data.oldStatus }}">
-              {{ activityItem.data.oldStatusLabel }}
-            </span>
-              <span class="arrow">→</span>
-            <span class="position-status status-position-{{ activityItem.data.newStatus }}">
-              {{ activityItem.data.newStatusLabel }}
-            </span>
-          </span>
-        </div>
-      </ng-container>
-
-    </ng-template>
-
-
-    <div class="author-block">
-      <span class="user-name gray"><b>{{ getUserName(activityItem) }}</b></span>
-      <span class="activity-date  gray">{{ activityItem.createdDate | date:'dd.MM.yyyy HH:ss' }}</span>
-    </div>
+  <div class="empty-history" *ngIf="history.length <= 0; else historyList">
+    <span>История позиции пуста</span>
   </div>
+
+  <ng-template #historyList>
+    <div class="activity-block" *ngFor="let activityItem of history">
+      <div class="{{ getActivityTypeStatusClass(activityItem) }}"></div>
+
+      <span class="activity-type gray">{{ activityItem.typeLabel }}</span>
+
+      <ng-container *ngIf="isDocumentUploadAction(activityItem); else restActivityData">
+        <a class="document-item" (click)="downloadDocument(activityItem.documentId, activityItem.data.filename)">
+          {{ activityItem.data.filename }}
+        </a>
+      </ng-container>
+
+
+      <ng-template #restActivityData>
+
+        <ng-container *ngIf="isPositionEditAction(activityItem)">
+          <div class="position-edit-item">
+            <div class="edit-info-item" *ngFor="let item of getPositionEditInfoList(activityItem.data)">
+              <span class="edit-info-label gray">{{ item.label }}:</span>
+
+              <span class="edit-info-value">{{ item.oldValue }}</span>
+                <span class="arrow">→</span>
+              <span class="edit-info-value">{{ item.newValue }}</span>
+            </div>
+          </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="isStatusChangeAction(activityItem)">
+          <div class="position-status-change">
+            <span class="status-name">
+              <span class="position-status status-position-{{ activityItem.data.oldStatus }}">
+                {{ activityItem.data.oldStatusLabel }}
+              </span>
+                <span class="arrow">→</span>
+              <span class="position-status status-position-{{ activityItem.data.newStatus }}">
+                {{ activityItem.data.newStatusLabel }}
+              </span>
+            </span>
+          </div>
+        </ng-container>
+
+      </ng-template>
+
+
+      <div class="author-block">
+        <span class="user-name gray"><b>{{ getUserName(activityItem) }}</b></span>
+        <span class="activity-date  gray">{{ activityItem.createdDate | date:'dd.MM.yyyy HH:ss' }}</span>
+      </div>
+    </div>
+  </ng-template>
 
 </div>

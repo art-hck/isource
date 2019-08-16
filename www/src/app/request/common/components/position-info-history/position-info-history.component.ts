@@ -4,6 +4,9 @@ import { History } from "../../models/history";
 import { RequestPositionHistoryService } from "../../services/request-position-history.service";
 import * as moment from "moment";
 import { PositionHistoryTypes } from "../../enum/position-history-types";
+import { Uuid } from "../../../../cart/models/uuid";
+import { ActivityData } from "../../models/history-activity-data";
+import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 
 @Component({
   selector: 'app-position-info-history',
@@ -13,7 +16,7 @@ import { PositionHistoryTypes } from "../../enum/position-history-types";
 export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   @Input() requestPosition: RequestPosition;
-
+  positionInfoFields = Object.entries(PositionInfoFieldsLabels);
   history: History[];
 
   constructor(
@@ -49,7 +52,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     );
   }
 
-  downloadDocument(documentId, documentName) {
+  downloadDocument(documentId: Uuid, documentName: string): void {
     this.historyService.downloadFileFromHistory(documentId, documentName);
   }
 
@@ -98,7 +101,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
    * Функция приводит возвращаемые данные редактирования позиции в более удобный для фронта вид
    * @param data
    */
-  getPositionEditInfoList(data): Array<any> {
+  getPositionEditInfoList(data): Array<{label: string, oldValue: any, newValue: any}> {
     const positionEditInfo = [];
 
     Object.entries(data.oldValues).forEach(([key, value]) => {
@@ -126,28 +129,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     return positionEditInfo;
   }
 
-  getEditedFieldLabel(field) {
-    switch (field) {
-      case 'currency':
-        return 'Валюта';
-      case 'deliveryBasis':
-        return 'Базис поставки';
-      case 'deliveryDate':
-        return 'Дата поставки';
-      case 'isDeliveryDateAsap':
-        return 'Срочная поставка';
-      case 'measureUnit':
-        return 'Единица измерения';
-      case 'name':
-        return 'Наименование позиции';
-      case 'productionDocument':
-        return 'Документ изготовления';
-      case 'quantity':
-        return 'Количество';
-      case 'startPrice':
-        return 'Начальная максимальная цена';
-      default:
-        return '';
-    }
+  getEditedFieldLabel(field: string): string {
+    return this.positionInfoFields.find(el => el[0] === field)[1];
   }
 }
