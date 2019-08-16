@@ -16,8 +16,10 @@
 
 <div class="position-row clr-row w-100"
      *ngFor="let requestPosition of requestPositions"
-     (click)="onSelectPosition(requestPosition)"
-     [ngClass]="{'selected-row' : requestPosition === selectedRequestPosition}">
+     (click)="onSelectItem(requestPosition)"
+     [ngClass]="{'selected-row' : (requestPosition === selectedRequestPosition
+     || requestPosition === selectedRequestGroup)&& !requestIsSelected,
+     'group-item' : requestPosition.entityType == 'GROUP'}">
 
   <div class="position-name"
        [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">

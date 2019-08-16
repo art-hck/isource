@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Request } from "../../models/request";
-import { RequestPosition } from "../../models/request-position";
+import { RequestPositionList } from "../../models/request-position-list";
 
 @Component({
   selector: 'app-request-position-list',
@@ -10,12 +10,15 @@ import { RequestPosition } from "../../models/request-position";
 export class RequestPositionListComponent implements OnInit {
 
   @Input() request: Request;
-  @Input() requestPositions: RequestPosition[];
+  @Input() requestPositions: RequestPositionList[];
 
-  @Input() selectedRequestPosition: RequestPosition | null;
-  @Output() selectedRequestPositionChange = new EventEmitter<RequestPosition>();
+  @Input() selectedRequestPosition: RequestPositionList | null;
+  @Input() selectedRequestGroup: RequestPositionList | null;
+  @Output() selectedRequestPositionChange = new EventEmitter<RequestPositionList>();
+  @Output() selectedRequestGroupChange = new EventEmitter<RequestPositionList>();
 
   @Input() requestIsSelected: boolean;
+  @Input() groupIsSelected: boolean;
   @Output() requestIsSelectedChange = new EventEmitter<boolean>();
 
   constructor() {
@@ -24,10 +27,26 @@ export class RequestPositionListComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSelectPosition(requestPosition: RequestPosition) {
+  onSelectItem(requestPosition: RequestPositionList) {
+    if (requestPosition.entityType == 'POSITION') {
+      this.onSelectPosition(requestPosition);
+    } else {
+      this.onSelectGroup(requestPosition);
+    }
+  }
+
+  onSelectPosition(requestPosition: RequestPositionList) {
     this.requestIsSelected = false;
+    this.selectedRequestGroup = null;
     this.selectedRequestPosition = requestPosition;
     this.selectedRequestPositionChange.emit(requestPosition);
+  }
+
+  onSelectGroup(requestGroup: RequestPositionList) {
+    this.requestIsSelected = false;
+    this.selectedRequestPosition = null;
+    this.selectedRequestGroup = requestGroup;
+    this.selectedRequestGroupChange.emit(requestGroup);
   }
 
   onSelectRequest() {
@@ -37,6 +56,7 @@ export class RequestPositionListComponent implements OnInit {
 
   rowIsSelected(): boolean {
     return (this.selectedRequestPosition !== null && this.selectedRequestPosition !== undefined)
+      || (this.selectedRequestGroup !== null && this.selectedRequestGroup !== undefined)
       || this.requestIsSelected;
   }
 }

@@ -4,16 +4,21 @@
 <ng-container *ngIf="request">
   <div class="clr-row">
     <div class="card"
-         [ngClass]="{'clr-col-4' : (showPositionInfo || showRequestInfo)}"
+         [ngClass]="{'clr-col-4' : (showPositionInfo || showRequestInfo || showGroupInfo)}"
          *ngIf="showPositionList">
       <div class="action-bar">
         <button class="btn btn-link" (click)="addNewPosition()" [disabled]="selectedIsNewPosition()">
           <clr-icon shape="plus-circle"></clr-icon>
-          <span *ngIf="!(showPositionInfo || showRequestInfo)">Добавить позицию</span>
+          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить позицию</span>
         </button>
         <button class="btn btn-link" (click)="onUploadPositionsFromExcel()">
           <clr-icon shape="upload"></clr-icon>
-          <span *ngIf="!(showPositionInfo || showRequestInfo)">Загрузить из шаблона</span>
+          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Загрузить из шаблона</span>
+        </button>
+        <button class="btn btn-link" *ngIf="!isCustomerView" (click)="addNewGroup()"
+                [disabled]="selectedIsNewPosition()">
+          <clr-icon shape="file-group"></clr-icon>
+          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить группу</span>
         </button>
       </div>
 
@@ -36,13 +41,16 @@
           (selectedRequestPositionChange)="onSelectPosition($event)"
           [requestIsSelected]="showRequestInfo"
           (requestIsSelectedChange)="onSelectRequest($event)"
+          [groupIsSelected]="showGroupInfo"
+          [selectedRequestGroup]="selectedRequestGroup"
+          (selectedRequestGroupChange)="onSelectGroup($event)"
         ></app-request-position-list>
       </div>
     </div>
 
     <div class="info-card"
-      [ngClass]="{'clr-col-8' : showPositionList, 'clr-col' : !showPositionList}"
-      *ngIf="showRequestInfo || showPositionInfo">
+         [ngClass]="{'clr-col-8' : showPositionList, 'clr-col' : !showPositionList}"
+         *ngIf="showRequestInfo || showPositionInfo || showGroupInfo">
       <app-request-info [request]="request"
                         [opened]="showRequestInfo"
                         (openedChange)="onCloseRequestInfo()"
@@ -60,6 +68,17 @@
                          [isCustomerView]="isCustomerView"
                          [(positionInfoEditable)]="positionInfoEditable">
       </app-position-info>
+
+      <app-group-info [requestGroup]="selectedRequestGroup"
+                      (requestGroupChanged)="onRequestGroupChanged($event)"
+                      [opened]="showGroupInfo"
+                      (openedChange)="onCloseGroupInfo()"
+                      [requestId]="requestId"
+                      (fullScreenChange)="showPositionList = !$event"
+                      (changeRequestInfo)="onUpdateRequestInfo()"
+                      [isCustomerView]="isCustomerView"
+                      [(groupInfoEditable)]="groupInfoEditable"
+      ></app-group-info>
     </div>
   </div>
 </ng-container>
