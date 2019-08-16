@@ -1,6 +1,6 @@
 <div class="activity-feed">
 
-  <div class="empty-history gray" *ngIf="history.length <= 0; else historyList">
+  <div class="empty-history gray" *ngIf="history && history.length <= 0; else historyList">
     История позиции пуста
   </div>
 
