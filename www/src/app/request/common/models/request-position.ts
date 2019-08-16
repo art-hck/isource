@@ -24,7 +24,7 @@ export class RequestPosition extends RequestPositionList {
   currency: string;
   paymentTerms: string;
   relatedServices: string;
-  comments: string
+  comments: string;
   status: string;
   statusLabel: string;
   statusChangedDate: string;

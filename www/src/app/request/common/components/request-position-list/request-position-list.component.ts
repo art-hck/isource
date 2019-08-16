@@ -28,7 +28,7 @@ export class RequestPositionListComponent implements OnInit {
   }
 
   onSelectItem(requestPosition: RequestPositionList) {
-    if (requestPosition.entityType == 'POSITION') {
+    if (requestPosition.entityType === 'POSITION') {
       this.onSelectPosition(requestPosition);
     } else {
       this.onSelectGroup(requestPosition);
