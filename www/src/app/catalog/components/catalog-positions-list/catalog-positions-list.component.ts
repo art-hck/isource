@@ -13,7 +13,7 @@ import { CatalogCategory } from "../../models/catalog-category";
 })
 export class CatalogPositionsListComponent implements OnInit {
   categoryId: Uuid;
-  category: CatalogCategory;
+  // category: CatalogCategory;
   positions: CatalogPosition[];
   searchName: string;
 
