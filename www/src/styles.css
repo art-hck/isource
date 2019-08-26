@@ -207,8 +207,9 @@ clr-dg-footer.datagrid-footer {
 .status-request-IN_PROGRESS:before,
 .status-request-COMPLETED:before,
 
-.status-position-NEW:before,
 .status-position-DRAFT:before,
+.status-position-ON_CUSTOMER_APPROVAL:before,
+.status-position-NEW:before,
 .status-position-PROPOSALS_PREPARATION:before,
 .status-position-RESULTS_AGREEMENT:before,
 .status-position-WINNER_SELECTED:before,
@@ -242,12 +243,14 @@ clr-dg-footer.datagrid-footer {
     background: #00b75e;
 }
 
-
+.status-position-DRAFT:before {
+  background: rgb(173, 147, 185);
+}
+.status-position-ON_CUSTOMER_APPROVAL:before {
+  background: rgb(95, 112, 167);
+}
 .status-position-NEW:before {
     background: rgb(185, 185, 185);
-}
-.status-position-DRAFT:before {
-    background: rgb(173, 147, 185);
 }
 .status-position-PROPOSALS_PREPARATION:before {
     background: rgb(40, 177, 236);
