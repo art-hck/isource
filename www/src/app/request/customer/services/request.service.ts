@@ -35,13 +35,13 @@ export class RequestService {
     });
   }
 
-  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
+  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestPosition> {
     const formData = new FormData();
     files.forEach(file => {
       formData.append('files[]', file, file.name);
     });
 
-    return this.api.post<RequestDocument[]>(
+    return this.api.post<RequestPosition>(
       `requests/customer/${requestPosition.requestId}/positions/${requestPosition.id}/documents/upload`,
       formData
     );
