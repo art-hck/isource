@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CatalogComponent } from "./components/catalog/catalog.component";
-import { CatalogCategoriesTreeComponent } from "./components/catalog-categories-tree/catalog-categories-tree.component";
-import { CatalogPositionsListComponent } from "./components/catalog-positions-list/catalog-positions-list.component";
+import { CategoryViewComponent } from "./components/category-view/category-view.component";
+import { SearchViewComponent } from "./components/search-view/search-view.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: CatalogComponent
+    redirectTo: 'search',
+  },
+  {
+    path: 'search',
+    component: SearchViewComponent
   },
   {
     path: ':categoryId',
-    component: CatalogCategoriesTreeComponent
-  },
-  {
-    path: ':categoryId/positions',
-    component: CatalogPositionsListComponent
+    component: CategoryViewComponent
   }
 ];
 
