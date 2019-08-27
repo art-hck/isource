@@ -6,6 +6,11 @@
 </app-request-view>
 
 <div class="submit">
+  <button class="btn btn-success"
+          (click)="onApprove()"
+          *ngIf="canApprove()"><b>Согласовать все позиции</b>
+  </button>
+
   <button class="btn btn-primary"
           (click)="onPublish()"
           *ngIf="canPublish()"><b>Опубликовать все позиции</b>

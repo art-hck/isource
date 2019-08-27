@@ -81,4 +81,36 @@ export class CustomerRequestViewComponent implements OnInit {
       }
     );
   }
+
+  canApprove(): boolean {
+    if (!this.request) {
+      return false;
+    }
+
+    if (!this.requestPositions) {
+      return false;
+    }
+
+    if (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+      return true;
+    }
+
+    for (const position of this.requestPositions) {
+      if (position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  onApprove(): void {
+    this.requestService.approveRequest(this.requestId).subscribe(
+      (data: any) => {
+        this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
 }
