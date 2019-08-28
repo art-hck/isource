@@ -6,7 +6,7 @@ import { CategoryViewComponent } from './components/category-view/category-view.
 import { SearchPanelComponent } from "./components/search-panel/search-panel.component";
 import { SearchViewComponent } from "./components/search-view/search-view.component";
 import { PositionsListComponent } from "./components/positions-list/positions-list.component";
-import { CategoriesTreeComponent } from "./components/categories-tree/categories-tree.component";
+import { CategoriesComponent } from './components/categories/categories.component';
 
 @NgModule({
   declarations: [
@@ -14,8 +14,8 @@ import { CategoriesTreeComponent } from "./components/categories-tree/categories
     CategoryViewComponent,
 
     PositionsListComponent,
-    CategoriesTreeComponent,
-    SearchPanelComponent
+    SearchPanelComponent,
+    CategoriesComponent
   ],
   imports: [
     SharedModule,
