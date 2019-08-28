@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
 import {RequestTypes} from "../../enum/request-types";
 import { ClrDatagridStateInterface } from "@clr/angular";
+import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
 
 @Component({
   selector: 'app-request-list',
@@ -13,6 +15,8 @@ import { ClrDatagridStateInterface } from "@clr/angular";
 
 export class RequestListComponent implements OnInit {
 
+  appConfig: GpnmarketConfigInterface;
+
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
   @Input() totalItems: number;
@@ -20,11 +24,15 @@ export class RequestListComponent implements OnInit {
   @Output() datagridState = new EventEmitter<any>();
 
   datagridLoader = false;
-  pageSize = 5;
+  pageSize: number;
 
   constructor(
-    protected router: Router
-  ) { }
+    protected router: Router,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
+  ) {
+    this.appConfig = appConfig;
+    this.pageSize = this.appConfig.paginator.pageSize;
+  }
 
   ngOnInit() {
   }
