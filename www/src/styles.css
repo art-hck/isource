@@ -204,6 +204,7 @@ clr-dg-footer.datagrid-footer {
 /* Цветовые индикаторы к лейблам статусов */
 
 .status-request-NEW:before,
+.status-request-DRAFT:before,
 .status-request-IN_PROGRESS:before,
 .status-request-COMPLETED:before,
 
@@ -234,6 +235,9 @@ clr-dg-footer.datagrid-footer {
 
 .status-request-NEW:before {
     background: #b9b9b9;
+}
+.status-request-DRAFT:before {
+    background: rgb(173, 147, 185);
 }
 .status-request-IN_PROGRESS:before {
     background: #f48f32;

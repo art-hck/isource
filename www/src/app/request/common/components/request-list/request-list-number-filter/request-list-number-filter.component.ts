@@ -12,6 +12,7 @@ export class RequestListNumberFilterComponent implements ClrDatagridFilterInterf
 
   requestNumberSearchQuery = '';
   changes = new Subject<any>();
+  filterType = 'RequestListNumberFilter';
 
   @Input() requests: RequestsList[];
 
@@ -20,22 +21,11 @@ export class RequestListNumberFilterComponent implements ClrDatagridFilterInterf
   }
 
   accepts(request: RequestsList) {
-    if (this.requestNumberSearchQuery.length === 0) {
-      return true;
-    }
-    if (!request) {
-      return false;
-    }
-    if (request) {
-      const requestNumberSearchQuery = this.requestNumberSearchQuery.toLowerCase().trim();
-      const requestNumber = request.request.number.toString();
+    return true;
+  }
 
-      return (
-        requestNumberSearchQuery === '' ||
-        requestNumber === requestNumberSearchQuery ||
-        requestNumber.includes(requestNumberSearchQuery)
-      );
-    }
+  getValue(): string {
+    return this.requestNumberSearchQuery;
   }
 
   isActive(): boolean {

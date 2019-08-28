@@ -12,6 +12,7 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
 
   customerNameSearchQuery = '';
   changes = new Subject<any>();
+  filterType = 'CustomerListNamesFilter';
 
   @Input() requests: RequestsList[];
 
@@ -19,26 +20,13 @@ export class CustomerListNamesFilterComponent implements ClrDatagridFilterInterf
     filterContainer.setFilter(this);
   }
 
-  accepts(request: RequestsList) {
-    if (this.customerNameSearchQuery.length === 0) {
-      return true;
-    }
-    if (!request) {
-      return false;
-    }
-    if (request) {
-      const customerNameSearchQuery = this.customerNameSearchQuery.toLowerCase().trim();
-      const customerFullName = request.customer.name.toLowerCase();
-      const customerShortName = request.customer.shortName.toLowerCase();
 
-      return (
-        customerNameSearchQuery === '' ||
-        customerFullName === customerNameSearchQuery ||
-        customerShortName === customerNameSearchQuery ||
-        customerFullName.includes(customerNameSearchQuery) ||
-        customerShortName.includes(customerNameSearchQuery)
-      );
-    }
+  accepts(request: RequestsList) {
+    return true;
+  }
+
+  getValue(): string {
+    return this.customerNameSearchQuery;
   }
 
   isActive(): boolean {
