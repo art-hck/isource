@@ -19,6 +19,8 @@ export class CustomerRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
+  rejectionMessageModalOpen = false;
+  rejectionMessage: string;
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -82,7 +84,7 @@ export class CustomerRequestViewComponent implements OnInit {
     );
   }
 
-  canApprove(): boolean {
+  canApproveOrReject(): boolean {
     if (!this.request) {
       return false;
     }
@@ -112,5 +114,27 @@ export class CustomerRequestViewComponent implements OnInit {
         this.getRequestPositions();
       }
     );
+  }
+
+  onShowDeclineMessageModal(): void {
+    this.rejectionMessageModalOpen = true;
+  }
+
+  onDecline(): void {
+    this.requestService.rejectRequest(this.requestId, this.rejectionMessage).subscribe(
+      (data: any) => {
+        this.rejectionMessageModalOpen = false;
+        this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
+
+  checkDeclineButtonEnabled(): boolean {
+    if (this.rejectionMessage && this.rejectionMessage.length) {
+      return true;
+    }
+    return false;
   }
 }
