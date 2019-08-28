@@ -1,33 +1,70 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import { Request } from "../../models/request";
 import { RequestPositionList } from "../../models/request-position-list";
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {RequestGroup} from "../../models/request-group";
+import {RequestPosition} from "../../models/request-position";
 
 @Component({
   selector: 'app-request-position-list',
   templateUrl: './request-position-list.component.html',
   styleUrls: ['./request-position-list.component.scss']
 })
-export class RequestPositionListComponent implements OnInit {
+export class RequestPositionListComponent implements OnChanges {
 
   @Input() request: Request;
-  @Input() requestPositions: RequestPositionList[];
+  @Input() requestPositions: RequestGroup[];
 
   @Input() selectedRequestPosition: RequestPositionList | null;
-  @Input() selectedRequestGroup: RequestPositionList | null;
+  @Input() selectedRequestGroup: RequestGroup | null;
+
   @Output() selectedRequestPositionChange = new EventEmitter<RequestPositionList>();
-  @Output() selectedRequestGroupChange = new EventEmitter<RequestPositionList>();
+  @Output() selectedRequestGroupChange = new EventEmitter<RequestGroup>();
+  @Output() selectedPositionChange = new EventEmitter<RequestPositionList[]>();
 
   @Input() requestIsSelected: boolean;
   @Input() groupIsSelected: boolean;
   @Output() requestIsSelectedChange = new EventEmitter<boolean>();
 
-  constructor() {
+  positionList: FormGroup;
+  selectedPositions: RequestPositionList[] = [];
+
+  constructor(private formBuilder: FormBuilder) {
+
   }
 
-  ngOnInit() {
+  ngOnChanges() {
+    console.log(this.requestPositions);
+    if(this.requestPositions) {
+      this.positionList = this.formBuilder.group({
+        reqPositions: this.formBuilder.array(this.requestPositions.map(element => {
+          return this.formBuilder.control(false);
+        }))
+      });
+    }
   }
 
-  onSelectItem(requestPosition: RequestPositionList) {
+  get positionsArray() {
+    if(this.positionList) {
+      return <FormArray>this.positionList.get('reqPositions');
+    }
+  }
+
+  deletePosition(deleteIndex: number) {
+    (<FormArray>this.positionList.get('reqPosition')).removeAt(deleteIndex);
+  }
+
+  getSelectedPositions() {
+    this.selectedPositions = [];
+    this.positionsArray.controls.forEach((control, i) => {
+      if(control.value) {
+        this.selectedPositions.push(this.requestPositions[i]);
+      }
+    });
+    this.selectedPositionChange.emit(this.selectedPositions);
+  }
+
+  onSelectItem(requestPosition: RequestGroup) {
     if (requestPosition.entityType === 'POSITION') {
       this.onSelectPosition(requestPosition);
     } else {
@@ -42,7 +79,7 @@ export class RequestPositionListComponent implements OnInit {
     this.selectedRequestPositionChange.emit(requestPosition);
   }
 
-  onSelectGroup(requestGroup: RequestPositionList) {
+  onSelectGroup(requestGroup: RequestGroup) {
     this.requestIsSelected = false;
     this.selectedRequestPosition = null;
     this.selectedRequestGroup = requestGroup;

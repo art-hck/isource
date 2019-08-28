@@ -13,44 +13,96 @@
     </div>
   </div>
 </div>
-
-<div class="position-row clr-row w-100"
-     *ngFor="let requestPosition of requestPositions"
-     (click)="onSelectItem(requestPosition)"
-     [ngClass]="{'selected-row' : isSelectedListItem(requestPosition),
-     'group-item' : requestPosition.entityType == 'GROUP'}">
-
-  <div class="position-name"
+<ng-container *ngFor="let control of positionsArray.controls; let i = index">
+  <div class="position-row clr-row w-100"
+     [ngClass]="{'selected-row' : isSelectedListItem(requestPositions[i]),
+     'group-item' : requestPositions[i].entityType == 'GROUP'}">
+  <clr-checkbox-wrapper>
+    <input class="checkbox" clrCheckbox type="checkbox"
+           *ngIf="requestPositions[i].entityType !== 'GROUP'"
+           [formControl]="control"
+           (change)="getSelectedPositions()">
+  </clr-checkbox-wrapper>
+  <div class="position-name" (click)="onSelectItem(requestPositions[i])"
        [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
-    {{requestPosition.name}}
+    <div class="selectedPosition">
+      {{requestPositions[i].name}}
+    </div>
   </div>
-
   <ng-container *ngIf="!rowIsSelected()">
     <div class="position-quantity clr-col">
-      <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+      <span class="quantity">{{requestPositions[i].quantity}} </span>{{requestPositions[i].measureUnit}}
     </div>
 
     <div class="delivery-date clr-col">
-      <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
+      <div class="deliveryDate" *ngIf="requestPositions[i].isDeliveryDateAsap; else notAsap">
         как можно скорее
       </div>
       <ng-template #notAsap>
-        {{requestPosition.deliveryDate | date :'shortDate'}}
+        {{requestPositions[i].deliveryDate | date :'shortDate'}}
       </ng-template>
     </div>
 
     <div class="position-price clr-col">
-      <span class="quantity">{{requestPosition.startPrice | number}}</span>
-      <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
+      <span class="quantity">{{requestPositions[i].startPrice | number}}</span>
+      <span *ngIf="control.startPrice">{{requestPosition[i].currency}}</span>
     </div>
   </ng-container>
 
-  <div class="clr-col status" [ngClass]="{'clr-col-2' : rowIsSelected()}">
-    <span class="position-status status-position-{{requestPosition.status}}">
+  <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
+    <span class="position-status status-position-{{requestPositions[i].status}}">
       <span *ngIf="!rowIsSelected()">
-        {{requestPosition.statusLabel}}
+        {{requestPositions[i].statusLabel}}
       </span>
     </span>
     <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
   </div>
 </div>
+
+
+
+
+  <div class="group-position-row clr-row w-100" *ngFor="let requestPosition of requestPositions[i].positions"
+       [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
+
+    <div class="position-name"
+         (click)="onSelectItem(requestPosition)"
+         [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
+      <div class="selectedPositionGroup">
+        {{requestPosition.name}}
+      </div>
+    </div>
+    <ng-container *ngIf="!rowIsSelected()">
+      <div class="position-quantity clr-col">
+        <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+      </div>
+
+      <div class="delivery-date clr-col">
+        <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
+          как можно скорее
+        </div>
+        <ng-template #notAsap>
+          {{requestPosition.deliveryDate | date :'shortDate'}}
+        </ng-template>
+      </div>
+
+      <div class="position-price clr-col">
+        <span class="quantity">{{requestPosition.startPrice | number}}</span>
+        <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
+      </div>
+    </ng-container>
+
+    <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
+    <span class="position-status status-position-{{requestPosition.status}}">
+      <span *ngIf="!rowIsSelected()">
+        {{requestPosition.statusLabel}}
+      </span>
+    </span>
+      <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+    </div>
+  </div>
+
+</ng-container>
+
+
+
