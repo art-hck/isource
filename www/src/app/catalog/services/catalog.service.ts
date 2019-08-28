@@ -1,12 +1,15 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { CatalogPosition } from "../models/catalog-position";
 import { CatalogCategory } from "../models/catalog-category";
 import { Uuid } from "../../cart/models/uuid";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class CatalogService {
+
+  protected categoryForMenu: CatalogCategory[];
 
   constructor(
     protected api: HttpClient
@@ -28,13 +31,16 @@ export class CatalogService {
     return this.api.get<CatalogCategory>(`catalog/categories/${categoryId}/info`);
   }
 
-  getCategoriesTree(categoryId: Uuid = null): Observable<CatalogCategory[]> {
-    let body = {};
-    if (categoryId) {
-      body = {
-        parentId: categoryId
-      };
+  getCategoriesTree(): Observable<CatalogCategory[]> {
+    // кешируем список категорий
+    if (this.categoryForMenu) {
+      return of(this.categoryForMenu);
     }
-    return this.api.post<CatalogCategory[]>(`catalog/categories/childs`, body);
+
+    return this.api.post<CatalogCategory[]>(`catalog/categories/menu`, {}).pipe(
+      tap((categories: CatalogCategory[]) => {
+        this.categoryForMenu = categories;
+      })
+    );
   }
 }

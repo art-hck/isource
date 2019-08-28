@@ -1,15 +1,34 @@
+<app-catalog-categories *ngIf="categoriesOpened" [(opened)]="categoriesOpened" [@enterAnimation]></app-catalog-categories>
+
 <div class="clr-row">
   <div class="clr-col">
-    <button class="btn btn-link btn-search" (click)="onSearch()" [disabled]="!search">Поиск</button>
+
+    <button class="btn btn-icon btn-categories"
+            [ngClass]="{'btn-primary': !categoriesOpened}"
+            aria-label="Каталог"
+            title="Каталог"
+            (click)="onToggleCategories()">
+      <clr-icon *ngIf="!categoriesOpened" shape="bars"></clr-icon>
+      <clr-icon *ngIf="categoriesOpened" shape="times"></clr-icon>
+      Каталог
+    </button>
+
+    <button class="btn btn-primary btn-icon btn-search"
+            aria-label="Поиск"
+            title="Поиск"
+            (click)="onSearch()" [disabled]="!searchText">
+      <clr-icon shape="search"></clr-icon>
+    </button>
+
     <div class="search-wrap">
       <input placeholder="Введите наименование позиции для поиска"
              type="text"
              name="searchName"
              class="input-search"
-             [(ngModel)]="search"
+             [(ngModel)]="searchText"
              (keyup.enter)="onSearch()"/>
 
-      <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="search">
+      <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
         <clr-icon shape="times" size="22">
         </clr-icon>
       </button>

@@ -29,8 +29,11 @@ export class CategoryViewComponent implements OnInit {
   ngOnInit() {
     this.categoryId = this.route.snapshot.paramMap.get('categoryId');
 
-    this.getCategoryInfo();
-    this.getPositionList();
+    this.route.params.subscribe(routeParams => {
+      this.categoryId = routeParams.categoryId;
+      this.getCategoryInfo();
+      this.getPositionList();
+    });
   }
 
   getCategoryInfo(): void {
