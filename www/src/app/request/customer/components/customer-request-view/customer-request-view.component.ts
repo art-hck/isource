@@ -19,6 +19,8 @@ export class CustomerRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[];
+  rejectionMessageModalOpen = false;
+  rejectionMessage: string;
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -80,5 +82,55 @@ export class CustomerRequestViewComponent implements OnInit {
         this.getRequestPositions();
       }
     );
+  }
+
+  canApproveOrReject(): boolean {
+    if (!this.request || !this.requestPositions) {
+      return false;
+    }
+
+    if (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+      return true;
+    }
+
+    for (const position of this.requestPositions) {
+      if (position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  onApprove(): void {
+    this.requestService.approveRequest(this.requestId).subscribe(
+      (data: any) => {
+        this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
+
+  onShowDeclineMessageModal(): void {
+    this.rejectionMessageModalOpen = true;
+  }
+
+  onDecline(): void {
+    this.requestService.rejectRequest(this.requestId, this.rejectionMessage).subscribe(
+      (data: any) => {
+        this.rejectionMessageModalOpen = false;
+        this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
+
+  checkDeclineButtonEnabled(): boolean {
+    if (this.rejectionMessage && this.rejectionMessage.length) {
+      return true;
+    }
+    return false;
   }
 }

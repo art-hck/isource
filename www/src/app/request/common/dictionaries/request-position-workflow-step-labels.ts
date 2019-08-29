@@ -3,6 +3,7 @@ import {RequestPositionWorkflowSteps} from "../enum/request-position-workflow-st
 const labels: {[key: string]: string} = {};
 
 labels[RequestPositionWorkflowSteps.DRAFT] = 'Черновик';
+labels[RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL] = 'На согласовании заказчика';
 labels[RequestPositionWorkflowSteps.NEW] = 'Новая';
 labels[RequestPositionWorkflowSteps.PROPOSALS_PREPARATION] = 'Подготовка предложений';
 labels[RequestPositionWorkflowSteps.RESULTS_AGREEMENT] = 'Согласование результатов';

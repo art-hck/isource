@@ -1,0 +1,61 @@
+.btn-reset {
+  position: absolute;
+  color: #aaa;
+}
+
+.input-search {
+  width: 100%;
+  border-radius: 18px 0 0 18px;
+  padding: 10px 20px;
+}
+
+.btn-reset {
+  right: 0;
+  top: 0;
+  margin: 0;
+}
+
+.btn-search {
+  margin: 0;
+  padding: 0 40px;
+  float: right;
+  border-radius: 0 18px 18px 0;
+
+  clr-icon {
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.btn-categories {
+  padding: 0 20px;
+  float: left;
+  margin: 0 1.5em 0 0;
+}
+
+aa {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 125px;
+  z-index: 10;
+  max-height: 100%;
+  -webkit-animation-duration: .1s;
+  animation-duration: .1s;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-name: _1zmupv6PqS;
+  animation-name: _1zmupv6PqS;
+}
+
+.new-request {
+  font-size: 12px;
+  margin-left: 150px;
+}
+
+.search-wrap {
+  overflow: hidden;
+  position: relative;
+}

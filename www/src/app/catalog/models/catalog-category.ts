@@ -7,5 +7,5 @@ export class CatalogCategory {
   name: string;
   createdDate: string;
   positionsCount: number;
-  childs?: CatalogCategory[];
+  child?: CatalogCategory[];
 }
