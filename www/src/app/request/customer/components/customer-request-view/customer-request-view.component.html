@@ -6,8 +6,31 @@
 </app-request-view>
 
 <div class="submit">
+  <button class="btn btn-success"
+          (click)="onApprove()"
+          *ngIf="canApproveOrReject()"><b>Согласовать все позиции</b>
+  </button>
+
+  <button class="btn btn-warning"
+          (click)="onShowDeclineMessageModal()"
+          *ngIf="canApproveOrReject()"><b>Отклонить все позиции</b>
+  </button>
+
   <button class="btn btn-primary"
           (click)="onPublish()"
           *ngIf="canPublish()"><b>Опубликовать все позиции</b>
   </button>
 </div>
+
+<clr-modal [(clrModalOpen)]="rejectionMessageModalOpen">
+  <h3 class="modal-title">Укажите причину отклонения</h3>
+  <div class="modal-body">
+    <textarea (input)="rejectionMessage = $event.target.value"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary"
+            (click)="onDecline()"
+            [disabled]="!checkDeclineButtonEnabled()"><b>Отклонить</b>
+    </button>
+  </div>
+</clr-modal>
