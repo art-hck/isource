@@ -6,6 +6,7 @@ import {RequestGroup} from "../../models/request-group";
 import {RequestPosition} from "../../models/request-position";
 import {GroupService} from "../../services/group.service";
 import {Uuid} from "../../../../cart/models/uuid";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-request-position-list',
@@ -17,6 +18,7 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() request: Request;
   @Input() requestPositions: RequestGroup[];
   @Input() requestId: Uuid;
+  @Input() isCustomerView: boolean;
 
   @Input() selectedRequestPosition: RequestPositionList | null;
   @Input() selectedRequestGroup: RequestGroup | null;
@@ -28,40 +30,35 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() groupIsSelected: boolean;
   @Output() requestIsSelectedChange = new EventEmitter<boolean>();
 
-  positionList: FormGroup;
+  positionListForm: FormGroup;
   selectedPositions: RequestPositionList[] = [];
   requestGroups: RequestGroup[];
 
   constructor(
     private formBuilder: FormBuilder,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private notificationService: NotificationService
     ) {
 
   }
 
   ngOnChanges() {
-    console.log(this.requestPositions);
-    if (this.requestPositions) {
-      this.positionList = this.formBuilder.group({
-        reqPositions: this.formBuilder.array(this.requestPositions.map(element => {
+    // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
+      this.positionListForm = this.formBuilder.group({
+        positions: this.formBuilder.array(this.requestPositions.map(element => {
           return this.formBuilder.control(false);
         }))
       });
-    }
     this.getGroupList();
   }
 
   getGroupList() {
-    if (this.requestPositions) {
       this.requestGroups = this.requestPositions.filter(
         (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP');
-    }
   }
 
   get positionsArray() {
-    if (this.positionList) {
-      return <FormArray>this.positionList.get('reqPositions');
-    }
+      return <FormArray>this.positionListForm.get('positions');
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
@@ -75,12 +72,18 @@ export class RequestPositionListComponent implements OnChanges {
           const deleteIndex = this.requestPositions.indexOf(selectedPosition);
           this.deletePosition(deleteIndex);
         });
+        if (this.selectedPositions.length === 1) {
+          this.notificationService.toast('Позиция добавлена в группу');
+        } else {
+          this.notificationService.toast('Позиции добавлены в группу');
+        }
       }
     );
   }
 
   deletePosition(deleteIndex: number) {
-    (<FormArray>this.positionList.get('reqPositions')).removeAt(deleteIndex);
+    (<FormArray>this.positionListForm.get('positions')).removeAt(deleteIndex);
+    this.requestPositions.splice(deleteIndex, 1);
   }
 
   getSelectedPositions() {

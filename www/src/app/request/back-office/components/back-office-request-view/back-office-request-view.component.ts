@@ -16,7 +16,7 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 export class BackOfficeRequestViewComponent implements OnInit {
   requestId: Uuid;
   request: Request;
-  requestPositions: RequestPosition[];
+  requestPositions: RequestPosition[] = [];
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;

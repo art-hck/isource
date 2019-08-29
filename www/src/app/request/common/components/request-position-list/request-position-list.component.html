@@ -4,7 +4,6 @@
     <div class="clr-col-7">
       <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
     </div>
-
     <div class="clr-col-5 status request">
       <span class="status-request-{{request.status}}">
        {{request.statusLabel}}
@@ -17,7 +16,7 @@
   <div class="position-row clr-row w-100"
      [ngClass]="{'selected-row' : isSelectedListItem(requestPositions[i]),
      'group-item' : requestPositions[i].entityType == 'GROUP'}">
-  <clr-checkbox-wrapper>
+  <clr-checkbox-wrapper *ngIf="!isCustomerView">
     <input class="checkbox" clrCheckbox type="checkbox"
            *ngIf="requestPositions[i].entityType !== 'GROUP'"
            [formControl]="control"
@@ -59,9 +58,7 @@
   </div>
 </div>
 
-
-
-
+  <!-- список позиций внутри группы -->
   <div class="group-position-row clr-row w-100" *ngFor="let requestPosition of requestPositions[i].positions"
        [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
 
@@ -101,7 +98,6 @@
       <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
     </div>
   </div>
-
 </ng-container>
 
 <div class="action-footer" *ngIf="selectedPositions && selectedPositions.length !== 0">
