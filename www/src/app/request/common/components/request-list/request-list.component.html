@@ -1,5 +1,5 @@
 <clr-datagrid class="requests-list-datagrid" (clrDgRefresh)="refresh($event)" [clrDgLoading]="datagridLoader">
-  <clr-dg-column class="request-number" [clrDgField]="'request.number'">
+  <clr-dg-column class="request-number" [clrDgField]="'requestNumber'">
     № Заявки
     <clr-dg-filter>
       <app-request-list-number-filter [requests]="requests">
