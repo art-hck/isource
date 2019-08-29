@@ -6,9 +6,10 @@
   <div *ngFor="let status of requestWorkflowStepLabels">
     <input type="checkbox"
            clrCheckbox
-           id="input-{{ status[0] }}"
+           id="request-status-input-{{ status[0] }}"
            value="{{ status[0] }}"
            (change)="toggleStatus($event)">
-    <label for="input-{{ status[0] }}" class="input-label status-request-{{status[0]}}">{{ status[1] }}</label>
+    <label for="request-status-input-{{ status[0] }}"
+           class="input-label status-request-{{status[0]}}">{{ status[1] }}</label>
   </div>
 </div>

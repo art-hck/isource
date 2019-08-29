@@ -118,3 +118,16 @@
     padding-bottom: 10px;
     min-height: 40px;
 }
+
+
+::ng-deep clr-dg-footer.datagrid-footer {
+    background-color: transparent;
+}
+
+::ng-deep clr-datagrid.requests-list-datagrid.datagrid-host {
+    height: auto !important;
+}
+
+::ng-deep .pagination-list .pagination-current:focus {
+    background-color: white;
+}

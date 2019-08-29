@@ -4,4 +4,4 @@
 
 <input type="text"
        [(ngModel)]="requestNumberSearchQuery"
-       (ngModelChange)="inputChange($event)">
+       (keyup.enter)="inputChange($event.target.value)">

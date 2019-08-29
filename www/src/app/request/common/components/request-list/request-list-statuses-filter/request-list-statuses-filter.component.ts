@@ -1,5 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import {RequestPositionWorkflowStepLabels} from "../../../dictionaries/request-position-workflow-step-labels";
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import {RequestsList} from "../../../models/requests-list/requests-list";
 import {Subject} from "rxjs";
 import {ClrDatagridFilter, ClrDatagridFilterInterface} from "@clr/angular";
@@ -15,6 +14,7 @@ export class RequestListStatusesFilterComponent implements ClrDatagridFilterInte
   requestWorkflowStepLabels = Object.entries(RequestWorkflowStepLabels);
   changes = new Subject<any>();
   statuses = [];
+  filterType = 'RequestListStatusesFilter';
 
   @Input() requests: RequestsList[];
   @ViewChild('checkboxesListEl', { static: false }) checkboxesListElRef: ElementRef;
@@ -24,10 +24,11 @@ export class RequestListStatusesFilterComponent implements ClrDatagridFilterInte
   }
 
   accepts(request: RequestsList) {
-    if (request) {
-      return (!!(this.statuses.indexOf(request.request.status.name) > -1));
-    }
-    return false;
+    return true;
+  }
+
+  getValue(): object {
+    return this.statuses;
   }
 
   isActive(): boolean {
