@@ -85,11 +85,7 @@ export class CustomerRequestViewComponent implements OnInit {
   }
 
   canApproveOrReject(): boolean {
-    if (!this.request) {
-      return false;
-    }
-
-    if (!this.requestPositions) {
+    if (!this.request || !this.requestPositions) {
       return false;
     }
 
