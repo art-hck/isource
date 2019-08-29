@@ -51,14 +51,6 @@ export class RequestViewComponent implements OnChanges {
 
   ngOnChanges() {
     this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
-    this.getGroupList();
-  }
-
-  getGroupList() {
-    if(this.requestPositions) {
-      this.requestGroups = this.requestPositions.filter(
-        (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP');
-    }
   }
 
   onSelectPosition(requestPosition: RequestPositionList) {

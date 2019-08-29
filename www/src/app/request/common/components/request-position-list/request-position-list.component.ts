@@ -4,6 +4,8 @@ import { RequestPositionList } from "../../models/request-position-list";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {RequestGroup} from "../../models/request-group";
 import {RequestPosition} from "../../models/request-position";
+import {GroupService} from "../../services/group.service";
+import {Uuid} from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-request-position-list',
@@ -14,13 +16,13 @@ export class RequestPositionListComponent implements OnChanges {
 
   @Input() request: Request;
   @Input() requestPositions: RequestGroup[];
+  @Input() requestId: Uuid;
 
   @Input() selectedRequestPosition: RequestPositionList | null;
   @Input() selectedRequestGroup: RequestGroup | null;
 
   @Output() selectedRequestPositionChange = new EventEmitter<RequestPositionList>();
   @Output() selectedRequestGroupChange = new EventEmitter<RequestGroup>();
-  @Output() selectedPositionChange = new EventEmitter<RequestPositionList[]>();
 
   @Input() requestIsSelected: boolean;
   @Input() groupIsSelected: boolean;
@@ -28,8 +30,12 @@ export class RequestPositionListComponent implements OnChanges {
 
   positionList: FormGroup;
   selectedPositions: RequestPositionList[] = [];
+  requestGroups: RequestGroup[];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private groupService: GroupService
+    ) {
 
   }
 
@@ -42,6 +48,14 @@ export class RequestPositionListComponent implements OnChanges {
         }))
       });
     }
+    this.getGroupList();
+  }
+
+  getGroupList() {
+    if(this.requestPositions) {
+      this.requestGroups = this.requestPositions.filter(
+        (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP');
+    }
   }
 
   get positionsArray() {
@@ -50,8 +64,23 @@ export class RequestPositionListComponent implements OnChanges {
     }
   }
 
+  onAddPositionsInGroup(requestGroup: RequestGroup) {
+    this.groupService.addPositionsInGroup(this.requestId, requestGroup.id, this.selectedPositions).subscribe(
+      () => {
+        this.selectedPositions.forEach((selectedPosition: RequestPosition, i) => {
+          selectedPosition.groupId = requestGroup.id;
+          requestGroup.positions.push(selectedPosition);
+        });
+        this.selectedPositions.forEach((selectedPosition: RequestGroup, i) => {
+          const deleteIndex = this.requestPositions.indexOf(selectedPosition);
+          this.deletePosition(deleteIndex);
+        });
+      }
+    );
+  }
+
   deletePosition(deleteIndex: number) {
-    (<FormArray>this.positionList.get('reqPosition')).removeAt(deleteIndex);
+    (<FormArray>this.positionList.get('reqPositions')).removeAt(deleteIndex);
   }
 
   getSelectedPositions() {
@@ -61,7 +90,6 @@ export class RequestPositionListComponent implements OnChanges {
         this.selectedPositions.push(this.requestPositions[i]);
       }
     });
-    this.selectedPositionChange.emit(this.selectedPositions);
   }
 
   onSelectItem(requestPosition: RequestGroup) {

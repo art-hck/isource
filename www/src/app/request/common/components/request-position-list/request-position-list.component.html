@@ -104,5 +104,20 @@
 
 </ng-container>
 
+<div class="action-footer" *ngIf="selectedPositions && selectedPositions.length !== 0">
+  <clr-dropdown>
+    <button type="button" class="btn btn-link add-in-group" clrDropdownTrigger>
+      Добавить в группу
+      <clr-icon shape="caret down"></clr-icon>
+    </button>
+    <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+      <div class="group-name" *ngFor="let requestGroup of requestGroups">
+        <button type="button" clrDropdownItem (click)="onAddPositionsInGroup(requestGroup)">
+          {{requestGroup.name}}
+        </button>
+      </div>
+    </clr-dropdown-menu>
+  </clr-dropdown>
 
+</div>
 
