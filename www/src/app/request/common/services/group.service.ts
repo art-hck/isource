@@ -26,6 +26,6 @@ export class GroupService {
     return this.api.post(`requests/${id}/groups/add-positions`, {
       groupId: groupId,
       positions: ids
-    })
+    });
   }
 }

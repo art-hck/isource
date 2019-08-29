@@ -71,24 +71,9 @@ export class RequestViewComponent implements OnChanges {
     this.selectedRequestGroup = requestListItem;
   }
 
-  //операции с позициями с помощью чекбоксов
+  // операции с позициями с помощью чекбоксов
   onSelectedPosition($event) {
     this.selectedPositions = $event;
-  }
-
-  onAddPositionsInGroup(requestGroup: RequestGroup) {
-    this.groupService.addPositionsInGroup(this.requestId, requestGroup.id, this.selectedPositions).subscribe(
-      () => {
-        this.selectedPositions.forEach((selectedPosition: RequestPosition, i) => {
-          selectedPosition.groupId = requestGroup.id;
-          requestGroup.positions.push(selectedPosition);
-        });
-        this.selectedPositions.forEach((selectedPosition: RequestPosition, i) => {
-          const deleteIndex = this.requestPositions.indexOf(selectedPosition);
-          this.requestPositionList.deletePosition(deleteIndex);
-        });
-      }
-    );
   }
 
   onRequestPositionChanged(updatedPosition: RequestPosition): void {

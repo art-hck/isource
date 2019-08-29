@@ -41,7 +41,7 @@ export class RequestPositionListComponent implements OnChanges {
 
   ngOnChanges() {
     console.log(this.requestPositions);
-    if(this.requestPositions) {
+    if (this.requestPositions) {
       this.positionList = this.formBuilder.group({
         reqPositions: this.formBuilder.array(this.requestPositions.map(element => {
           return this.formBuilder.control(false);
@@ -52,14 +52,14 @@ export class RequestPositionListComponent implements OnChanges {
   }
 
   getGroupList() {
-    if(this.requestPositions) {
+    if (this.requestPositions) {
       this.requestGroups = this.requestPositions.filter(
         (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP');
     }
   }
 
   get positionsArray() {
-    if(this.positionList) {
+    if (this.positionList) {
       return <FormArray>this.positionList.get('reqPositions');
     }
   }
@@ -86,7 +86,7 @@ export class RequestPositionListComponent implements OnChanges {
   getSelectedPositions() {
     this.selectedPositions = [];
     this.positionsArray.controls.forEach((control, i) => {
-      if(control.value) {
+      if (control.value) {
         this.selectedPositions.push(this.requestPositions[i]);
       }
     });
