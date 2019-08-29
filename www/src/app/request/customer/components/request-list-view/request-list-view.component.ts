@@ -3,6 +3,7 @@ import { GetRequestsService } from "../../../common/services/get-requests.servic
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { Page } from "../../../../core/models/page";
 import { ClrDatagridStateInterface } from "@clr/angular";
+import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 
 @Component({
   selector: 'app-request-list-view',
@@ -22,7 +23,7 @@ export class RequestListViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  onDatagridStateChange(state): void {
+  onDatagridStateChange(state: DatagridStateAndFilter): void {
     this.getRequestListForCustomer(state.startFrom, state.pageSize, state.filters);
   }
 

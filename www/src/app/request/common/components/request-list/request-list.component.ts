@@ -6,6 +6,7 @@ import {RequestTypes} from "../../enum/request-types";
 import { ClrDatagridStateInterface } from "@clr/angular";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
+import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
 
 @Component({
   selector: 'app-request-list',
@@ -21,7 +22,7 @@ export class RequestListComponent implements OnInit {
   @Input() requests: RequestsList[];
   @Input() totalItems: number;
 
-  @Output() datagridState = new EventEmitter<any>();
+  @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
 
   datagridLoader = false;
   pageSize: number;
@@ -99,7 +100,7 @@ export class RequestListComponent implements OnInit {
       }
     }
 
-    const datagridState = {
+    const datagridState: DatagridStateAndFilter = {
       startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
       pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,
       filters: filters
