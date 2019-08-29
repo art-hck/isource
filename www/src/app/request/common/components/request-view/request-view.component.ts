@@ -28,8 +28,8 @@ export class RequestViewComponent implements OnChanges {
 
   selectedRequestPosition: RequestPositionList|null;
   selectedRequestGroup: RequestPositionList|null;
-  requestGroups: RequestPositionList[] = [];
-  selectedPositions: RequestPositionList[];
+  // requestGroups: RequestPositionList[] = [];
+  // selectedPositions: RequestPositionList[];
 
   showPositionInfo = false;
   showRequestInfo = false;
@@ -45,7 +45,6 @@ export class RequestViewComponent implements OnChanges {
 
   constructor(
     private createRequestPositionService: CreateRequestPositionService,
-    private groupService: GroupService
   ) {
   }
 
@@ -71,10 +70,10 @@ export class RequestViewComponent implements OnChanges {
     this.selectedRequestGroup = requestListItem;
   }
 
-  // операции с позициями с помощью чекбоксов
-  onSelectedPosition($event) {
-    this.selectedPositions = $event;
-  }
+  // // операции с позициями с помощью чекбоксов
+  // onSelectedPosition($event) {
+  //   this.selectedPositions = $event;
+  // }
 
   onRequestPositionChanged(updatedPosition: RequestPosition): void {
     // делаем assign, чтобы не изменилась ссылка на объект и выделение позиции в гриде
@@ -144,7 +143,7 @@ export class RequestViewComponent implements OnChanges {
     requestGroup.requestId = this.requestId;
 
     this.requestPositions.unshift(requestGroup);
-    this.requestGroups.unshift(requestGroup);
+    // this.requestGroups.unshift(requestGroup);
 
     this.onSelectGroup(requestGroup);
     this.groupInfoEditable = true;

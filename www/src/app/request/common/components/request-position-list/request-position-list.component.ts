@@ -16,8 +16,7 @@ import {NotificationService} from "../../../../shared/services/notification.serv
 export class RequestPositionListComponent implements OnChanges {
 
   @Input() request: Request;
-  @Input() requestPositions: RequestGroup[];
-  @Input() requestId: Uuid;
+  @Input() requestPositions: RequestPositionList[];
   @Input() isCustomerView: boolean;
 
   @Input() selectedRequestPosition: RequestPositionList | null;
@@ -54,7 +53,7 @@ export class RequestPositionListComponent implements OnChanges {
 
   getGroupList() {
       this.requestGroups = this.requestPositions.filter(
-        (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP');
+        (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
   }
 
   get positionsArray() {
@@ -62,21 +61,20 @@ export class RequestPositionListComponent implements OnChanges {
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
-    this.groupService.addPositionsInGroup(this.requestId, requestGroup.id, this.selectedPositions).subscribe(
+    this.groupService.addPositionsInGroup(this.request.id, requestGroup.id, this.selectedPositions).subscribe(
       () => {
         this.selectedPositions.forEach((selectedPosition: RequestPosition, i) => {
           selectedPosition.groupId = requestGroup.id;
           requestGroup.positions.push(selectedPosition);
         });
-        this.selectedPositions.forEach((selectedPosition: RequestGroup, i) => {
+        this.selectedPositions.forEach((selectedPosition: RequestPositionList, i) => {
           const deleteIndex = this.requestPositions.indexOf(selectedPosition);
           this.deletePosition(deleteIndex);
         });
-        if (this.selectedPositions.length === 1) {
-          this.notificationService.toast('Позиция добавлена в группу');
-        } else {
-          this.notificationService.toast('Позиции добавлены в группу');
-        }
+        const toastText = this.selectedPositions.length === 1 ?
+          'Позиция добавлена в группу' :
+          'Позиции добавлены в группу';
+        this.notificationService.toast(toastText);
       }
     );
   }
