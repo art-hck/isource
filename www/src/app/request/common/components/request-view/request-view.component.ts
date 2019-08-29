@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../models/request";
 import { RequestPosition } from "../../models/request-position";
@@ -6,17 +6,21 @@ import { RequestTypes } from "../../enum/request-types";
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
+import {GroupService} from "../../services/group.service";
+import {RequestPositionListComponent} from "../request-position-list/request-position-list.component";
 
 @Component({
   selector: 'app-request-view',
   templateUrl: './request-view.component.html',
   styleUrls: ['./request-view.component.css']
 })
-export class RequestViewComponent implements OnInit {
+export class RequestViewComponent implements OnChanges {
+  @ViewChild (RequestPositionList, {static: false}) requestPositionList: RequestPositionListComponent;
+
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
   @Input() request: Request;
-  @Input() requestPositions: RequestPositionList[];
+  @Input() requestPositions: RequestPositionList[] = [];
   @Input() updatedPosition: RequestPosition;
 
   @Output() changePositionInfo = new EventEmitter<boolean>();
@@ -24,6 +28,8 @@ export class RequestViewComponent implements OnInit {
 
   selectedRequestPosition: RequestPositionList|null;
   selectedRequestGroup: RequestPositionList|null;
+  // requestGroups: RequestPositionList[] = [];
+  // selectedPositions: RequestPositionList[];
 
   showPositionInfo = false;
   showRequestInfo = false;
@@ -38,11 +44,11 @@ export class RequestViewComponent implements OnInit {
   protected newGroupName = 'Новая группа';
 
   constructor(
-    private createRequestPositionService: CreateRequestPositionService
+    private createRequestPositionService: CreateRequestPositionService,
   ) {
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
   }
 
@@ -63,6 +69,11 @@ export class RequestViewComponent implements OnInit {
     this.showGroupInfo = true;
     this.selectedRequestGroup = requestListItem;
   }
+
+  // // операции с позициями с помощью чекбоксов
+  // onSelectedPosition($event) {
+  //   this.selectedPositions = $event;
+  // }
 
   onRequestPositionChanged(updatedPosition: RequestPosition): void {
     // делаем assign, чтобы не изменилась ссылка на объект и выделение позиции в гриде
@@ -132,6 +143,7 @@ export class RequestViewComponent implements OnInit {
     requestGroup.requestId = this.requestId;
 
     this.requestPositions.unshift(requestGroup);
+    // this.requestGroups.unshift(requestGroup);
 
     this.onSelectGroup(requestGroup);
     this.groupInfoEditable = true;

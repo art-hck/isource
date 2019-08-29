@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="request">
   <div class="clr-row">
-    <div class="card"
+    <div class="card list"
          [ngClass]="{'clr-col-4' : (showPositionInfo || showRequestInfo || showGroupInfo)}"
          *ngIf="showPositionList">
       <div class="action-bar">
@@ -44,8 +44,11 @@
           [groupIsSelected]="showGroupInfo"
           [selectedRequestGroup]="selectedRequestGroup"
           (selectedRequestGroupChange)="onSelectGroup($event)"
+          (selectedPositionChange)="onSelectedPosition($event)"
+          [isCustomerView]="isCustomerView"
         ></app-request-position-list>
       </div>
+
     </div>
 
     <div class="info-card"

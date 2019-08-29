@@ -188,4 +188,21 @@ background: aliceblue;
 
 .card.clr-col-4 {
   padding: 0;
+
+}
+
+.add-in-group {
+  padding: 0;
+}
+
+.btn.btn-link.add-in-group {
+  padding: 0;
+}
+
+::ng-deep .dropdown .dropdown-toggle clr-icon[shape^=caret] {
+  display: none;
+}
+
+.card.list {
+  padding-bottom: 50px;
 }
