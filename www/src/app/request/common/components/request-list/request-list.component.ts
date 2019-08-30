@@ -92,20 +92,14 @@ export class RequestListComponent implements OnInit {
   }
 
   refresh(state: ClrDatagridStateInterface): void {
-    console.log(state);
 
     const filters: {[prop: string]: any[]} = {};
-    const sort: {[prop: string]: any[]} = {};
-
+    const sort = state.sort ? state.sort : {};
 
     if (state.filters) {
       for (const filter of state.filters) {
         filters[filter['filterType']] = filter.getValue();
       }
-    }
-
-    if (state.sort) {
-        console.log(state.sort);
     }
 
     const datagridState: DatagridStateAndFilter = {
