@@ -19,7 +19,7 @@ export class ContragentListViewComponent implements OnInit {
     this.getContragentList();
   }
 
-  getContragentList() {
+  getContragentList(): void {
     this.getContragentService.getContragentList().subscribe(
       (data: ContragentList[]) => {
         this.contragents = data;
