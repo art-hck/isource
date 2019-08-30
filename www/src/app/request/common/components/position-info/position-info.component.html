@@ -58,13 +58,16 @@
           <clr-tab-content *clrIfActive="true">
             <div class="clr-row info-content">
               <div class="clr-col-12 action">
-                <button class="btn btn-info-outline btn-edit"
-                        [class.btn-primary]="positionInfoEditable"
-                        *ngIf="!isNewPosition()"
-                        (click)="onPositionInfoEditableToggle()">
-                  <clr-icon size="16" shape="pencil" ></clr-icon>
-                  <span> {{ positionInfoEditable ? 'Отменить' : 'Редактировать' }} </span>
-                </button>
+                <div *ngIf="!requestPosition.isEditingByAnotherUser; else isEditingByAnotherUserLabel">
+                  <button class="btn btn-info-outline btn-edit"
+                          [class.btn-primary]="positionInfoEditable"
+                          *ngIf="!isNewPosition()"
+                          (click)="onPositionInfoEditableToggle()">
+                    <clr-icon size="16" shape="pencil" ></clr-icon>
+                    <span> {{ positionInfoEditable ? 'Отменить' : 'Редактировать' }} </span>
+                  </button>
+                </div>
+                <ng-template #isEditingByAnotherUserLabel><small>Позиция редактируется другим пользователем</small></ng-template>
               </div>
 
               <div class="clr-col-12" *ngIf="!positionInfoEditable; else positionInfoEditForm">

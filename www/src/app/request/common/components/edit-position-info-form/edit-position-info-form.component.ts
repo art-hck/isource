@@ -142,6 +142,8 @@ export class EditPositionInfoFormComponent implements OnInit {
         this.requestPosition = updatedPosition;
         this.afterSavePosition();
         this.notificationService.toast('Изменения сохранены');
+      }, () => {
+        Swal.close();
       }
     );
   }
