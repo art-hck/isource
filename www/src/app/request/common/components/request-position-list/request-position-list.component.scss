@@ -1,6 +1,6 @@
 h3.request-title {
   margin: 0;
-  padding-left: 10px;
+  padding-left: 35px;
 }
 
 
@@ -140,7 +140,7 @@ clr-datagrid {
 }
 
 .card-content {
-  padding: 15px;
+  padding: 0;
 }
 
 .request-view {
@@ -206,7 +206,6 @@ clr-datagrid {
 
 .group-item {
   font-weight: 800;
-  border-bottom: 2px solid #9fa8b0;
 }
 
 .selectedPosition {
@@ -232,4 +231,8 @@ clr-datagrid {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+.select-checkbox:before {
+  height: 23px !important;
 }

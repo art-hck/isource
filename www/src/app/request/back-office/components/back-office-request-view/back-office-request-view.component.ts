@@ -1,9 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Request} from "../../../common/models/request";
-import {RequestPosition} from "../../../common/models/request-position";
-import {ActivatedRoute} from "@angular/router";
-import {RequestService} from "../../services/request.service";
-import {Uuid} from "../../../../cart/models/uuid";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Request } from "../../../common/models/request";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ActivatedRoute } from "@angular/router";
+import { RequestService } from "../../services/request.service";
+import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
@@ -14,12 +14,13 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
   styleUrls: ['./back-office-request-view.component.css']
 })
 export class BackOfficeRequestViewComponent implements OnInit {
-  requestId: Uuid;
+
+  @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
+
   request: Request;
   requestPositions: RequestPosition[] = [];
 
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
+  protected requestId: Uuid;
 
   constructor(
     private route: ActivatedRoute,

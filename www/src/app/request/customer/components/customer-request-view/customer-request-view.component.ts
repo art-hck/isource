@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {RequestPosition} from "../../../common/models/request-position";
-import {ActivatedRoute} from "@angular/router";
-import {RequestService} from "../../services/request.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../common/models/request";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ActivatedRoute } from "@angular/router";
+import { RequestService } from "../../services/request.service";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { Observable } from "rxjs";
-import { RequestWorkflowSteps} from "../../../common/enum/request-workflow-steps";
+import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 
 @Component({
@@ -15,13 +14,13 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
   styleUrls: ['./customer-request-view.component.css']
 })
 export class CustomerRequestViewComponent implements OnInit {
-  updatedPosition: RequestPosition;
-  requestId: Uuid;
+  @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
+
   request: Request;
+  updatedPosition: RequestPosition;
   requestPositions: RequestPosition[];
 
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
+  protected requestId: Uuid;
 
   constructor(
     private route: ActivatedRoute,

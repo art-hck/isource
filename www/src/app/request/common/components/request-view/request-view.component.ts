@@ -1,13 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { Request } from "../../models/request";
 import { RequestPosition } from "../../models/request-position";
 import { RequestTypes } from "../../enum/request-types";
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
-import {GroupService} from "../../services/group.service";
-import {RequestPositionListComponent} from "../request-position-list/request-position-list.component";
+import { RequestPositionListComponent } from "../request-position-list/request-position-list.component";
 
 @Component({
   selector: 'app-request-view',
@@ -15,10 +13,9 @@ import {RequestPositionListComponent} from "../request-position-list/request-pos
   styleUrls: ['./request-view.component.css']
 })
 export class RequestViewComponent implements OnChanges {
-  @ViewChild (RequestPositionList, {static: false}) requestPositionList: RequestPositionListComponent;
+  @ViewChild(RequestPositionList, {static: false}) requestPositionList: RequestPositionListComponent;
 
   @Input() isCustomerView: boolean;
-  @Input() requestId: Uuid;
   @Input() request: Request;
   @Input() requestPositions: RequestPositionList[] = [];
   @Input() updatedPosition: RequestPosition;
@@ -26,10 +23,8 @@ export class RequestViewComponent implements OnChanges {
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
 
-  selectedRequestPosition: RequestPositionList|null;
-  selectedRequestGroup: RequestPositionList|null;
-  // requestGroups: RequestPositionList[] = [];
-  // selectedPositions: RequestPositionList[];
+  selectedRequestPosition: RequestPosition | null;
+  selectedRequestGroup: RequestGroup | null;
 
   showPositionInfo = false;
   showRequestInfo = false;
@@ -52,7 +47,7 @@ export class RequestViewComponent implements OnChanges {
     this.showRequestInfo = this.request && this.request.type === RequestTypes.FREE_FORM;
   }
 
-  onSelectPosition(requestPosition: RequestPositionList) {
+  onSelectPosition(requestPosition: RequestPosition) {
     this.resetSelectedItem();
     this.selectPosition(requestPosition);
     this.showPositionInfo = true;
@@ -64,16 +59,11 @@ export class RequestViewComponent implements OnChanges {
     this.showRequestInfo = $event;
   }
 
-  onSelectGroup(requestListItem: RequestPositionList) {
+  onSelectGroup(requestListItem: RequestGroup) {
     this.resetSelectedItem();
     this.showGroupInfo = true;
     this.selectedRequestGroup = requestListItem;
   }
-
-  // // операции с позициями с помощью чекбоксов
-  // onSelectedPosition($event) {
-  //   this.selectedPositions = $event;
-  // }
 
   onRequestPositionChanged(updatedPosition: RequestPosition): void {
     // делаем assign, чтобы не изменилась ссылка на объект и выделение позиции в гриде
@@ -123,10 +113,11 @@ export class RequestViewComponent implements OnChanges {
   }
 
   addNewPosition(): void {
-    const requestPosition = new RequestPosition();
-    requestPosition.id = null;
-    requestPosition.name = this.newPositionName;
-    requestPosition.requestId = this.requestId;
+    const requestPosition = new RequestPosition({
+      id: null,
+      name: this.newPositionName,
+      requestId: this.request.id
+    });
 
     this.requestPositions.unshift(requestPosition);
 
@@ -137,24 +128,16 @@ export class RequestViewComponent implements OnChanges {
   }
 
   addNewGroup(): void {
-    const requestGroup = new RequestGroup();
-    requestGroup.id = null;
-    requestGroup.name = this.newGroupName;
-    requestGroup.requestId = this.requestId;
+    const requestGroup = new RequestGroup({
+      id: null,
+      name: this.newGroupName,
+      requestId: this.request.id
+    });
 
     this.requestPositions.unshift(requestGroup);
-    // this.requestGroups.unshift(requestGroup);
 
     this.onSelectGroup(requestGroup);
     this.groupInfoEditable = true;
-  }
-
-  protected selectGroup(requestGroup: RequestGroup|null) {
-
-
-    this.showRequestInfo = false;
-    this.showPositionInfo = false;
-    this.showGroupInfo = !!requestGroup;
   }
 
   resetSelectedItem() {
@@ -199,7 +182,7 @@ export class RequestViewComponent implements OnChanges {
       || this.selectedRequestGroup && !this.selectedRequestGroup.id;
   }
 
-  protected selectPosition(requestPosition: RequestPositionList|null) {
+  protected selectPosition(requestPosition: RequestPosition | null) {
     this.selectedRequestPosition = requestPosition;
     this.showPositionInfo = !!requestPosition;
     this.showRequestInfo = false;

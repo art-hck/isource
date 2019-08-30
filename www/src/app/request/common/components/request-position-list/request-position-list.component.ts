@@ -1,12 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Request } from "../../models/request";
 import { RequestPositionList } from "../../models/request-position-list";
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {RequestGroup} from "../../models/request-group";
-import {RequestPosition} from "../../models/request-position";
-import {GroupService} from "../../services/group.service";
-import {Uuid} from "../../../../cart/models/uuid";
-import {NotificationService} from "../../../../shared/services/notification.service";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { RequestGroup } from "../../models/request-group";
+import { RequestPosition } from "../../models/request-position";
+import { GroupService } from "../../services/group.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-request-position-list',
@@ -19,10 +18,10 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() requestPositions: RequestPositionList[];
   @Input() isCustomerView: boolean;
 
-  @Input() selectedRequestPosition: RequestPositionList | null;
+  @Input() selectedRequestPosition: RequestPosition | null;
   @Input() selectedRequestGroup: RequestGroup | null;
 
-  @Output() selectedRequestPositionChange = new EventEmitter<RequestPositionList>();
+  @Output() selectedRequestPositionChange = new EventEmitter<RequestPosition>();
   @Output() selectedRequestGroupChange = new EventEmitter<RequestGroup>();
 
   @Input() requestIsSelected: boolean;
@@ -37,27 +36,30 @@ export class RequestPositionListComponent implements OnChanges {
     private formBuilder: FormBuilder,
     private groupService: GroupService,
     private notificationService: NotificationService
-    ) {
+  ) {
 
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+
+    console.log(changes);
+
     // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
-      this.positionListForm = this.formBuilder.group({
-        positions: this.formBuilder.array(this.requestPositions.map(element => {
-          return this.formBuilder.control(false);
-        }))
-      });
+    this.positionListForm = this.formBuilder.group({
+      positions: this.formBuilder.array(this.requestPositions.map(element => {
+        return this.formBuilder.control(false);
+      }))
+    });
     this.getGroupList();
   }
 
   getGroupList() {
-      this.requestGroups = this.requestPositions.filter(
-        (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
+    this.requestGroups = this.requestPositions.filter(
+      (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
   }
 
   get positionsArray() {
-      return <FormArray>this.positionListForm.get('positions');
+    return <FormArray>this.positionListForm.get('positions');
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
@@ -93,15 +95,18 @@ export class RequestPositionListComponent implements OnChanges {
     });
   }
 
-  onSelectItem(requestPosition: RequestGroup) {
-    if (requestPosition.entityType === 'POSITION') {
-      this.onSelectPosition(requestPosition);
-    } else {
-      this.onSelectGroup(requestPosition);
+  onSelectItem(requestPosition: RequestPositionList) {
+    switch (requestPosition.entityType) {
+      case 'POSITION':
+        this.onSelectPosition(requestPosition as RequestPosition);
+        break;
+      case 'GROUP':
+        this.onSelectGroup(requestPosition as RequestGroup);
+        break;
     }
   }
 
-  onSelectPosition(requestPosition: RequestPositionList) {
+  onSelectPosition(requestPosition: RequestPosition) {
     this.requestIsSelected = false;
     this.selectedRequestGroup = null;
     this.selectedRequestPosition = requestPosition;
@@ -128,6 +133,6 @@ export class RequestPositionListComponent implements OnChanges {
 
   isSelectedListItem(requestPosition: RequestPositionList): boolean {
     return (requestPosition === this.selectedRequestPosition
-    || requestPosition === this.selectedRequestGroup) && !this.requestIsSelected;
+      || requestPosition === this.selectedRequestGroup) && !this.requestIsSelected;
   }
 }

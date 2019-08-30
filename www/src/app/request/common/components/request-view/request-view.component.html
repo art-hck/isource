@@ -44,7 +44,6 @@
           [groupIsSelected]="showGroupInfo"
           [selectedRequestGroup]="selectedRequestGroup"
           (selectedRequestGroupChange)="onSelectGroup($event)"
-          (selectedPositionChange)="onSelectedPosition($event)"
           [isCustomerView]="isCustomerView"
         ></app-request-position-list>
       </div>
@@ -65,7 +64,7 @@
                          (requestPositionChanged)="onRequestPositionChanged($event)"
                          [opened]="showPositionInfo"
                          (openedChange)="onClosePositionInfo()"
-                         [requestId]="requestId"
+                         [requestId]="request.id"
                          (fullScreenChange)="showPositionList = !$event"
                          (changeRequestInfo)="onUpdateRequestInfo()"
                          [isCustomerView]="isCustomerView"
@@ -76,7 +75,7 @@
                       (requestGroupChanged)="onRequestGroupChanged($event)"
                       [opened]="showGroupInfo"
                       (openedChange)="onCloseGroupInfo()"
-                      [requestId]="requestId"
+                      [requestId]="request.id"
                       (fullScreenChange)="showPositionList = !$event"
                       (changeRequestInfo)="onUpdateRequestInfo()"
                       [isCustomerView]="isCustomerView"

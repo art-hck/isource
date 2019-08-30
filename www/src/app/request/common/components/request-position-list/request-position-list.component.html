@@ -12,51 +12,56 @@
     </div>
   </div>
 </div>
+
 <ng-container *ngFor="let control of positionsArray.controls; let i = index">
   <div class="position-row clr-row w-100"
-     [ngClass]="{'selected-row' : isSelectedListItem(requestPositions[i]),
-     'group-item' : requestPositions[i].entityType == 'GROUP'}">
-  <clr-checkbox-wrapper *ngIf="!isCustomerView">
-    <input class="checkbox" clrCheckbox type="checkbox"
-           *ngIf="requestPositions[i].entityType !== 'GROUP'"
-           [formControl]="control"
-           (change)="getSelectedPositions()">
-  </clr-checkbox-wrapper>
-  <div class="position-name" (click)="onSelectItem(requestPositions[i])"
-       [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
-    <div class="selectedPosition">
-      {{requestPositions[i].name}}
-    </div>
-  </div>
-  <ng-container *ngIf="!rowIsSelected()">
-    <div class="position-quantity clr-col">
-      <span class="quantity">{{requestPositions[i].quantity}} </span>{{requestPositions[i].measureUnit}}
-    </div>
+       [ngClass]="{'selected-row' : isSelectedListItem(requestPositions[i]),
+        'group-item' : requestPositions[i].entityType == 'GROUP'}">
 
-    <div class="delivery-date clr-col">
-      <div class="deliveryDate" *ngIf="requestPositions[i].isDeliveryDateAsap; else notAsap">
-        как можно скорее
+    <clr-checkbox-wrapper *ngIf="!isCustomerView">
+      <input class="checkbox" clrCheckbox type="checkbox"
+             *ngIf="requestPositions[i].entityType !== 'GROUP'"
+             [formControl]="control"
+             (change)="getSelectedPositions()">
+      <label class="select-checkbox"></label>
+    </clr-checkbox-wrapper>
+
+    <div class="position-name" (click)="onSelectItem(requestPositions[i])"
+         [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
+      <div class="selectedPosition">
+        {{requestPositions[i].name}}
       </div>
-      <ng-template #notAsap>
-        {{requestPositions[i].deliveryDate | date :'shortDate'}}
-      </ng-template>
     </div>
 
-    <div class="position-price clr-col">
-      <span class="quantity">{{requestPositions[i].startPrice | number}}</span>
-      <span *ngIf="control.startPrice">{{requestPosition[i].currency}}</span>
-    </div>
-  </ng-container>
+    <ng-container *ngIf="!rowIsSelected()">
+      <div class="position-quantity clr-col">
+        <span class="quantity">{{requestPositions[i].quantity}} </span>{{requestPositions[i].measureUnit}}
+      </div>
 
-  <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
-    <span class="position-status status-position-{{requestPositions[i].status}}">
-      <span *ngIf="!rowIsSelected()">
-        {{requestPositions[i].statusLabel}}
+      <div class="delivery-date clr-col">
+        <div class="deliveryDate" *ngIf="requestPositions[i].isDeliveryDateAsap; else notAsap">
+          как можно скорее
+        </div>
+        <ng-template #notAsap>
+          {{requestPositions[i].deliveryDate | date :'shortDate'}}
+        </ng-template>
+      </div>
+
+      <div class="position-price clr-col">
+        <span class="quantity">{{requestPositions[i].startPrice | number}}</span>
+        <span *ngIf="control.startPrice">{{requestPosition[i].currency}}</span>
+      </div>
+    </ng-container>
+
+    <div class="clr-col status" [ngClass]="{'clr-col-1' : rowIsSelected()}">
+      <span class="position-status status-position-{{requestPositions[i].status}}">
+        <span *ngIf="!rowIsSelected()">
+          {{requestPositions[i].statusLabel}}
+        </span>
       </span>
-    </span>
-    <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+      <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+    </div>
   </div>
-</div>
 
   <!-- список позиций внутри группы -->
   <div class="group-position-row clr-row w-100" *ngFor="let requestPosition of requestPositions[i].positions"
