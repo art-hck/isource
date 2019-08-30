@@ -1,0 +1,30 @@
+<clr-datagrid class="contragent-list-datagrid">
+  <clr-dg-column class="contragent-name">
+    Наименование контрагента
+  </clr-dg-column>
+
+  <clr-dg-column class="contragent-inn">
+    ИНН
+  </clr-dg-column>
+
+  <clr-dg-column class="contragent-kpp">
+    КПП
+  </clr-dg-column>
+
+
+  <clr-dg-row *clrDgItems="let contragent of contragents">
+
+    <clr-dg-cell class="contragent-name">
+      {{contragent.shortName}}
+    </clr-dg-cell>
+
+    <clr-dg-cell class="contragent-inn">
+      {{contragent.inn}}
+    </clr-dg-cell>
+
+    <clr-dg-cell class="contragent-kpp">
+      {{contragent.kpp}}
+    </clr-dg-cell>
+
+  </clr-dg-row>
+</clr-datagrid>

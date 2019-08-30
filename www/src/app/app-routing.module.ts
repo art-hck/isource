@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
+  { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: '**', component: NotFoundComponent }

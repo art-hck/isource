@@ -84,6 +84,11 @@ export class NavComponent implements OnInit {
         text: 'Реестр заявок',
         path: 'requests/customer',
         children: []
+      },
+      {
+        text: 'Реестр контрагентов',
+        path: 'contragents',
+        children: []
       }
     ];
   }
@@ -93,6 +98,11 @@ export class NavComponent implements OnInit {
       {
         text: 'Реестр заявок',
         path: 'requests/back-office',
+        children: []
+      },
+      {
+        text: 'Реестр контрагентов',
+        path: 'contragents',
         children: []
       }
     ];
