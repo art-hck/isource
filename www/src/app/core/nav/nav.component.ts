@@ -61,7 +61,7 @@ export class NavComponent implements OnInit {
         children: []
       },
       {
-        text: 'Реестр заявок',
+        text: 'Заявки',
         path: 'requests/back-office',
         children: []
       }
@@ -81,12 +81,12 @@ export class NavComponent implements OnInit {
         children: []
       },
       {
-        text: 'Реестр заявок',
+        text: 'Заявки',
         path: 'requests/customer',
         children: []
       },
       {
-        text: 'Реестр контрагентов',
+        text: 'Контрагенты',
         path: 'contragents',
         children: []
       }
@@ -96,12 +96,12 @@ export class NavComponent implements OnInit {
   protected getBackOfficeMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Реестр заявок',
+        text: 'Заявки',
         path: 'requests/back-office',
         children: []
       },
       {
-        text: 'Реестр контрагентов',
+        text: 'Контрагенты',
         path: 'contragents',
         children: []
       }
