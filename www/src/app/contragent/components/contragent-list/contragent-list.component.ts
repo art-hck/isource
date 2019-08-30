@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ContragentList } from "../../models/contragent-list";
 
 @Component({
   selector: 'app-contragent-list',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contragent-list.component.scss']
 })
 export class ContragentListComponent implements OnInit {
+
+  @Input() contragents: ContragentList[];
 
   constructor() { }
 
