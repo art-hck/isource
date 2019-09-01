@@ -17,8 +17,7 @@ export class GroupInfoComponent implements OnInit {
 
   @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
-  @Input() opened: boolean;
-  @Output() openedChange = new EventEmitter<boolean>();
+  @Output() close = new EventEmitter();
 
   @Input() requestGroup: RequestPositionList;
   @Input() groupInfoEditable: boolean;
@@ -59,8 +58,7 @@ export class GroupInfoComponent implements OnInit {
   }
 
   onWindowClose() {
-    this.opened = false;
-    this.openedChange.emit(this.opened);
+    this.close.emit();
   }
 
   onWindowFull(flag: boolean) {

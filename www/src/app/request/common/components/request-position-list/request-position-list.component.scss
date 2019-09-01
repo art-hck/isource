@@ -30,14 +30,6 @@ clr-accordion {
   padding-top: 20px;
 }
 
-label {
-  padding-top: 10px;
-  padding-bottom: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #999999;
-}
-
 .clr-form-control {
   padding: 0;
 }
@@ -114,8 +106,12 @@ clr-datagrid {
 .action-bar {
   height: 50px;
   border-bottom: 1px solid #d4d9e2;
-}
+  padding: 8px 20px;
 
+  .btn {
+    margin: 0 20px 0 0;
+  }
+}
 .request-row {
   border-bottom: 1px solid #d4d9e2;
   padding: 10px 0;
@@ -131,8 +127,11 @@ clr-datagrid {
   display: flex;
   flex: auto;
   justify-content: space-between;
-  padding: 5px ;
   cursor: pointer;
+}
+
+.cell {
+  padding: 10px;
 }
 
 .position-row:hover {
@@ -178,16 +177,9 @@ clr-datagrid {
   padding-right: 20px;
 }
 
-.action-bar {
-  padding: 10px 20px;
-}
-
 .btn-link {
   margin-right: 15px;
-}
-
-.btn.btn-link {
-  padding-bottom: 20px;
+  ma: 0;
 }
 
 .selected-row, .selected-row:hover, .selected-row h3, .selected-row span {
@@ -208,14 +200,6 @@ clr-datagrid {
   font-weight: 800;
 }
 
-.selectedPosition {
-  display: flex;
-}
-
-.selectedPositionGroup {
-  margin-left: 35px;
-}
-
 .group-position-row {
   border-bottom: 1px solid #d4d9e2;
   display: flex;
@@ -233,6 +217,26 @@ clr-datagrid {
   width: 100%;
 }
 
-.select-checkbox:before {
-  height: 23px !important;
+
+.select-checkbox {
+  label:before {
+    margin-top: 3px;
+  }
+}
+
+
+.sub-list-item .position-name {
+  padding-left: 70px;
+}
+
+.btn clr-icon {
+  vertical-align: middle;
+}
+
+
+.add-in-group {
+  float: right;
+  .btn {
+    padding: 0;
+  }
 }

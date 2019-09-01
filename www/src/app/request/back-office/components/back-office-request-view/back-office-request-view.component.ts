@@ -75,7 +75,6 @@ export class BackOfficeRequestViewComponent implements OnInit {
   onPublish(): void {
     this.requestService.publishRequest(this.requestId).subscribe(
       (data: any) => {
-        this.requestView.showPositionInfo = null;
         this.updateRequestInfo();
         this.updatePositionsList();
       }

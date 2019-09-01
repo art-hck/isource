@@ -10,8 +10,7 @@ import {RequestTypes} from "../../enum/request-types";
 })
 export class RequestInfoComponent implements OnInit {
 
-  @Input() opened = false;
-  @Output() openedChange = new EventEmitter<boolean>();
+  @Output() close = new EventEmitter();
 
   @Input() request: Request;
   @Input() isCustomerView: boolean;
@@ -28,8 +27,7 @@ export class RequestInfoComponent implements OnInit {
   }
 
   onWindowClose() {
-    this.opened = false;
-    this.openedChange.emit(this.opened);
+    this.close.emit();
   }
 
   onWindowFull(flag: boolean) {
