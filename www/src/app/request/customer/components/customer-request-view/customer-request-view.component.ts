@@ -7,6 +7,7 @@ import { RequestService } from "../../services/request.service";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import { RequestPositionList } from "../../../common/models/request-position-list";
 
 @Component({
   selector: 'app-customer-request-view',
@@ -18,7 +19,7 @@ export class CustomerRequestViewComponent implements OnInit {
 
   request: Request;
   updatedPosition: RequestPosition;
-  requestPositions: RequestPosition[];
+  requestPositions: RequestPositionList[];
 
   protected requestId: Uuid;
 
@@ -63,7 +64,7 @@ export class CustomerRequestViewComponent implements OnInit {
     }
 
     for (const position of this.requestPositions) {
-      if (position.status === RequestPositionWorkflowSteps.DRAFT) {
+      if ((position as RequestPosition).status === RequestPositionWorkflowSteps.DRAFT) {
         return true;
       }
     }
@@ -74,7 +75,6 @@ export class CustomerRequestViewComponent implements OnInit {
   onPublish(): void {
     this.requestService.publishRequest(this.requestId).subscribe(
       (data: any) => {
-        this.requestView.showPositionInfo = null;
         this.getRequest();
         this.getRequestPositions();
       }
