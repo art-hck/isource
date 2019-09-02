@@ -46,6 +46,16 @@ export class RequestService {
     return this.api.post(url, {});
   }
 
+  approveRequest(id: Uuid) {
+    const url = `requests/customer/${id}/approve`;
+    return this.api.post(url, {});
+  }
+
+  rejectRequest(id: Uuid, rejectionMessage: string) {
+    const url = `requests/customer/${id}/reject`;
+    return this.api.post(url, {rejectionMessage});
+  }
+
   choiceWinner(offerWinnerId: Uuid, positionId: Uuid, id: Uuid) {
     const url = `requests/customer/${id}/positions/${positionId}/choose-winner`;
     return this.api.post(url, {

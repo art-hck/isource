@@ -11,4 +11,7 @@ export interface GpnmarketConfigInterface {
   dadata: {
     apiKey: string
   };
+  paginator: {
+    pageSize: number
+  };
 }

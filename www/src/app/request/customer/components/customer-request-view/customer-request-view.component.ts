@@ -8,6 +8,7 @@ import { RequestViewComponent } from 'src/app/request/common/components/request-
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestPositionList } from "../../../common/models/request-position-list";
+import { RequestGroup } from 'src/app/request/common/models/request-group';
 
 @Component({
   selector: 'app-customer-request-view',
@@ -20,6 +21,8 @@ export class CustomerRequestViewComponent implements OnInit {
   request: Request;
   updatedPosition: RequestPosition;
   requestPositions: RequestPositionList[];
+  rejectionMessageModalOpen = false;
+  rejectionMessage: string;
 
   protected requestId: Uuid;
 
@@ -79,5 +82,77 @@ export class CustomerRequestViewComponent implements OnInit {
         this.getRequestPositions();
       }
     );
+  }
+
+  canApproveOrReject(): boolean {
+    if (!this.request || !this.requestPositions) {
+      return false;
+    }
+
+    if (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+      return true;
+    }
+
+    return this.hasApprovedStatus(this.requestPositions);
+  }
+
+  onApprove(): void {
+    this.requestService.approveRequest(this.requestId).subscribe(
+      (data: any) => {
+        // this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
+
+  onShowDeclineMessageModal(): void {
+    this.rejectionMessageModalOpen = true;
+  }
+
+  onDecline(): void {
+    this.requestService.rejectRequest(this.requestId, this.rejectionMessage).subscribe(
+      (data: any) => {
+        this.rejectionMessageModalOpen = false;
+        // this.requestView.showPositionInfo = null;
+        this.getRequest();
+        this.getRequestPositions();
+      }
+    );
+  }
+
+  checkDeclineButtonEnabled(): boolean {
+    if (this.rejectionMessage && this.rejectionMessage.length) {
+      return true;
+    }
+    return false;
+  }
+
+  protected hasApprovedStatus(items: RequestPositionList[]): boolean {
+    for (const item of items) {
+      const position = this.getPosition(item);
+      if (position && position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+        return true;
+      }
+      const group = this.getGroup(item);
+      if (group && this.hasApprovedStatus(group.positions)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  protected getPosition(item: RequestPositionList): RequestPosition|null {
+    if (item.entityType === 'POSITION') {
+      return item as RequestPosition;
+    }
+    return null;
+  }
+
+  protected getGroup(item: RequestPositionList): RequestGroup|null {
+    if (item.entityType === 'GROUP') {
+      return item as RequestGroup;
+    }
+    return null;
   }
 }

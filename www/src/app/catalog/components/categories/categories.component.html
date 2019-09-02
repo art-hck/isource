@@ -1,0 +1,38 @@
+<div class="categories-wrap">
+  <div class="c2">
+    <div class="c3">
+
+      <!-- Левая панель с первым уровнем меню -->
+      <ul class="main-categories">
+        <li *ngFor="let category of categories" (mouseenter)="onMainCategorySelect(category)">
+          <div class="main-category-item" [ngClass]="{'main-category-item-selected': category === selectedMainCategory}">
+            <a (click)="onCategoryRefClick(category)" title="{{ category.name }}">
+              <span>{{ category.name }}</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Правая панель с 2-мя подуровнями -->
+      <div class="child-categories">
+        <div class="child-categories-container">
+          <div class="child-categories-wrap">
+            <div class="child-category-item" *ngFor="let subCategory of selectedMainCategory?.child">
+              <a (click)="onCategoryRefClick(subCategory)"
+                 title="{{ subCategory.name }}">
+                <span class="child-category-header">{{ subCategory.name }}</span>
+              </a>
+              <div class="subitem" *ngFor="let subSubCategory of subCategory?.child">
+                <a (click)="onCategoryRefClick(subSubCategory)"
+                   title="{{ subSubCategory.name }}">
+                  <span class="subitem-text">{{ subSubCategory.name }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

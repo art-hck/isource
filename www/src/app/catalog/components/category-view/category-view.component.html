@@ -1,0 +1,5 @@
+<app-catalog-search-panel [searchText]="searchName" (searchTextChange)="onSearch($event)"></app-catalog-search-panel>
+
+<h2>{{ category?.name }}</h2>
+
+<app-catalog-positions-list [positions]="positions"></app-catalog-positions-list>

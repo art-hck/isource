@@ -9,4 +9,7 @@ export const AppConfig: GpnmarketConfigInterface = {
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
   }
+  paginator: {
+    pageSize: 10,
+  }
 };

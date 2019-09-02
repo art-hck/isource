@@ -1,0 +1,105 @@
+:host {
+  z-index: 10000;
+}
+
+.categories-wrap {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 130px;
+  z-index: 10000;
+  max-height: 100%;
+  min-height: 70%;
+  -webkit-animation-duration: .1s;
+  animation-duration: .1s;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-name: bbb;
+  animation-name: bbb;
+
+  .c2 {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 5px 15px 0 rgba(0,0,0,.12), 0 9px 46px 0 rgba(0,0,0,.06);
+
+    .c3 {
+      display: flex;
+      justify-content: center;
+      min-width: 960px;
+      min-height: 500px;
+      background: linear-gradient(90deg,#f7f7f7 50%,#fff 0);
+
+      .main-categories {
+        list-style: none;
+        position: relative;
+        min-width: 220px;
+        padding: 24px 0;
+        background: #f7f7f7;
+
+        .main-category-item {
+          padding: 8px 24px 8px 16px;
+          cursor: pointer;
+        }
+
+        .main-category-item-selected {
+          background-color: #fff;
+          height: 100%;
+        }
+      }
+
+      .child-categories {
+        width: 724px;
+
+        .child-categories-container {
+          background-color: #fff;
+          height: 100%;
+          padding: 8px 24px 8px 16px;
+          cursor: pointer;
+
+          .child-categories-wrap {
+            width: 724px;
+            height: 100%;
+            padding: 27px 50px 15px;
+            background: #fff;
+            -webkit-column-count: 2;
+            column-count: 2;
+
+            .child-category-item {
+              padding: 0 24px 12px 0;
+              -webkit-column-break-inside: avoid;
+              break-inside: avoid;
+
+              .child-category-header {
+                font-size: 16px;
+                line-height: 22px;
+                font-weight: 500;
+                color: #222;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                display: block;
+                padding-bottom: 10px;
+              }
+
+              .subitem {
+                padding: 4px 0;
+              }
+
+              .subitem-text {
+                font-size: 14px;
+                line-height: 18px;
+                color: #222;
+                display: block;
+                opacity: .7;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

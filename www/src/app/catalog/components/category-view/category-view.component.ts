@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CatalogService } from "../../services/catalog.service";
 import { CatalogPosition } from "../../models/catalog-position";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../cart/models/uuid";
 import { CatalogCategory } from "../../models/catalog-category";
 
 @Component({
-  selector: 'catalog-positions-list',
-  templateUrl: './catalog-positions-list.component.html',
-  styleUrls: ['./catalog-positions-list.component.css']
+  selector: 'app-category-view',
+  templateUrl: './category-view.component.html',
+  styleUrls: ['./category-view.component.scss']
 })
-export class CatalogPositionsListComponent implements OnInit {
+export class CategoryViewComponent implements OnInit {
   categoryId: Uuid;
   category: CatalogCategory;
   positions: CatalogPosition[];
@@ -23,23 +23,26 @@ export class CatalogPositionsListComponent implements OnInit {
     protected router: Router,
     private route: ActivatedRoute
   ) {
+
   }
 
   ngOnInit() {
-    // this.categoryId = this.route.snapshot.paramMap.get('categoryId');
+    this.categoryId = this.route.snapshot.paramMap.get('categoryId');
 
-    // this.getCategoryInfo();
-
-    this.getPositionList();
+    this.route.params.subscribe(routeParams => {
+      this.categoryId = routeParams.categoryId;
+      this.getCategoryInfo();
+      this.getPositionList();
+    });
   }
 
-  /*getCategoryInfo(): void {
+  getCategoryInfo(): void {
     this.catalogService.getCategoryInfo(this.categoryId).subscribe(
       (category: CatalogCategory) => {
         this.category = category;
       }
     );
-  }*/
+  }
 
   getPositionList(): void {
     this.catalogService.getPositionsList(this.categoryId).subscribe(
@@ -49,23 +52,8 @@ export class CatalogPositionsListComponent implements OnInit {
     );
   }
 
-  onSearch(searchName: string): void {
-    this.catalogService.searchPositionsByName(searchName).subscribe(
-      (positions: CatalogPosition[]) => {
-        this.positions = positions;
-      }
-    );
-  }
-
-  createRequest(): void {
-    this.router.navigateByUrl(`requests/create`);
-  }
-
-  onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
-    return this.cartStoreService.addItem(position);
-  }
-
-  isPositionInCart(position: CatalogPosition): boolean {
-    return this.cartStoreService.isCatalogPositionInCart(position);
+  onSearch(searchStr: string): void {
+    // если пользуемся общим поиском, то ищем по всем позициям
+    this.router.navigate(['catalog/search'], {queryParams: {q: searchStr}});
   }
 }

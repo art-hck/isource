@@ -1,9 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import * as moment from 'moment';
 import {Router} from "@angular/router";
-import {CustomerNameFilter} from "../../services/request-list-filters/customer-name-filter.service";
 import {RequestTypes} from "../../enum/request-types";
+import { ClrDatagridStateInterface } from "@clr/angular";
+import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
+import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
 
 @Component({
   selector: 'app-request-list',
@@ -13,14 +16,24 @@ import {RequestTypes} from "../../enum/request-types";
 
 export class RequestListComponent implements OnInit {
 
-  customerNameFilter = new CustomerNameFilter();
+  appConfig: GpnmarketConfigInterface;
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
+  @Input() totalItems: number;
+
+  @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
+
+  datagridLoader = false;
+  pageSize: number;
 
   constructor(
-    protected router: Router
-  ) { }
+    protected router: Router,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
+  ) {
+    this.appConfig = appConfig;
+    this.pageSize = this.appConfig.paginator.pageSize;
+  }
 
   ngOnInit() {
   }
@@ -78,4 +91,21 @@ export class RequestListComponent implements OnInit {
     return type === RequestTypes.FREE_FORM;
   }
 
+  refresh(state: ClrDatagridStateInterface): void {
+    const filters: {[prop: string]: any[]} = {};
+
+    if (state.filters) {
+      for (const filter of state.filters) {
+        filters[filter['filterType']] = filter.getValue();
+      }
+    }
+
+    const datagridState: DatagridStateAndFilter = {
+      startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
+      pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,
+      filters: filters
+    };
+
+    this.datagridState.emit(datagridState);
+  }
 }

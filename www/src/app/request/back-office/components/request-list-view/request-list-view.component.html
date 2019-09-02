@@ -1,8 +1,10 @@
 <div class="container">
-  <h2 class="newRequest">Реестр заявок</h2>
+  <h2 class="newRequest">Заявки</h2>
 
   <app-request-list
+        (datagridState)="onDatagridStateChange($event)"
         [requests]="requests"
+        [totalItems]="totalItems"
         [customerNameColumnShow]="true">
   </app-request-list>
 

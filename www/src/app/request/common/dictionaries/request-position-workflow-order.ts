@@ -2,6 +2,7 @@ import { RequestPositionWorkflowSteps } from '../enum/request-position-workflow-
 
 const statuses = [
   RequestPositionWorkflowSteps.DRAFT.valueOf(),
+  RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL.valueOf(),
   RequestPositionWorkflowSteps.NEW.valueOf(),
   RequestPositionWorkflowSteps.PROPOSALS_PREPARATION.valueOf(),
   RequestPositionWorkflowSteps.RESULTS_AGREEMENT.valueOf(),

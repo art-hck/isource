@@ -13,9 +13,8 @@ export class RequestListPositionStatusesFilterComponent implements ClrDatagridFi
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
   changes = new Subject<any>();
-  acceptionFlag = true;
   statuses = [];
-  requestPositions: any;
+  filterType = 'RequestListPositionStatusesFilter';
 
   @Input() requests: RequestsList[];
   @ViewChild('checkboxesListEl', { static: false }) checkboxesListElRef: ElementRef;
@@ -26,17 +25,13 @@ export class RequestListPositionStatusesFilterComponent implements ClrDatagridFi
     filterContainer.setFilter(this);
   }
 
-  accepts(requests: RequestsList) {
-    const that = this;
 
-    if (requests.positions.length > 0) {
-      requests.positions.some((item) => {
-        return that.acceptionFlag = (!!(that.statuses.indexOf(item.status.name) > -1));
-      });
-    } else {
-      that.acceptionFlag = false;
-    }
-    return this.acceptionFlag;
+  accepts(request: RequestsList) {
+    return true;
+  }
+
+  getValue(): object {
+    return this.statuses;
   }
 
   isActive(): boolean {

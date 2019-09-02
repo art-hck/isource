@@ -1,16 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CatalogRoutingModule } from './catalog-routing.module';
 import { SharedModule } from "../shared/shared.module";
-import { CatalogComponent } from "./components/catalog/catalog.component";
-import { CatalogPositionsListComponent } from "./components/catalog-positions-list/catalog-positions-list.component";
-import { CatalogCategoriesTreeComponent } from "./components/catalog-categories-tree/catalog-categories-tree.component";
 import { CatalogService } from "./services/catalog.service";
+import { CategoryViewComponent } from './components/category-view/category-view.component';
+import { SearchPanelComponent } from "./components/search-panel/search-panel.component";
+import { SearchViewComponent } from "./components/search-view/search-view.component";
+import { PositionsListComponent } from "./components/positions-list/positions-list.component";
+import { CategoriesComponent } from './components/categories/categories.component';
 
 @NgModule({
   declarations: [
-    CatalogComponent,
-    CatalogPositionsListComponent,
-    CatalogCategoriesTreeComponent
+    SearchViewComponent,
+    CategoryViewComponent,
+
+    PositionsListComponent,
+    SearchPanelComponent,
+    CategoriesComponent
   ],
   imports: [
     SharedModule,
