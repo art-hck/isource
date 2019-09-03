@@ -1,0 +1,101 @@
+<div class="dashboard-block">
+  <div class="clr-row">
+    <div class="clr-col-8">
+      <div class="request-positions-stats clr-col">
+        <div class="clr-row">
+          <div class="clr-col positions-stats-item" (click)="filterPositionsByDraft">
+            <span class="stats-items-title">На согласовании черновиков</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ draftAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(draftAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col positions-stats-item">
+            <span class="stats-items-title">На согласовании ТП</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ tpAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(tpAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col positions-stats-item">
+            <span class="stats-items-title">На согласовании КП</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ kpAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(kpAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col positions-stats-item">
+            <span class="stats-items-title">На согласовании РКД</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ rkdAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(rkdAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col positions-stats-item">
+            <span class="stats-items-title">На рассмотрениии договора</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">15</span>
+              <span class="items-count-label gray">позиций</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="clr-col-4">
+      <div class="request-info-items clr-col">
+        <div class="clr-row">
+          <div class="clr-col info-stats-item">
+            <span class="stats-items-title">Новых сообщений</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">15</span>
+            </div>
+          </div>
+
+          <div class="clr-col info-stats-item">
+            <span class="stats-items-title">Новых событий</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">15</span>
+            </div>
+          </div>
+
+          <div class="clr-col info-stats-item" (click)="requestDocumentsModalOpened = true">
+            <span class="stats-items-title">Документы заявки</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="requestDocumentsModalOpened">
+  <h3 class="modal-title">Документы заявки</h3>
+
+  <div class="modal-body">
+    <app-document-list [documents]="request.documents">
+    </app-document-list>
+  </div>
+</clr-modal>
