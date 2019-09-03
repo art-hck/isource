@@ -17,6 +17,9 @@ import {RequestPositionListComponent} from "../request-position-list/request-pos
 export class RequestViewComponent implements OnChanges {
   @ViewChild (RequestPositionList, {static: false}) requestPositionList: RequestPositionListComponent;
 
+
+  @Input() filteredByDrafts: boolean;
+
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
   @Input() request: Request;
@@ -204,5 +207,10 @@ export class RequestViewComponent implements OnChanges {
     this.showPositionInfo = !!requestPosition;
     this.showRequestInfo = false;
     this.showGroupInfo = false;
+  }
+
+  onDraftClick(): void {
+    this.filteredByDrafts = !this.filteredByDrafts;
+    console.log('Черновики включены: ' + this.filteredByDrafts);
   }
 }

@@ -12,6 +12,8 @@
 .info-stats-item {
   padding: 15px;
   border-bottom: 2px solid transparent;
+  align-content: space-between;
+  display: grid;
 }
 
 .positions-stats-item:hover,
@@ -21,10 +23,23 @@
   border-bottom: 2px solid #3788ff;
 }
 
+.positions-stats-item.active {
+  border-bottom: 2px solid #3788ff;
+  background: #3788ff;
+  color: white;
+
+  & .items-count,
+  & .items-count-label {
+    color: white !important;
+  }
+}
+
+
 .stats-items-title {
   line-height: 140%;
   display: block;
   padding-bottom: 10px;
+  font-size: 13px;
 }
 
 .stats-items-content {
@@ -36,4 +51,8 @@
   font-weight: bold;
   color: #3788ff;
   padding-right: 5px;
+}
+
+.modal-body:focus {
+  outline: 0;
 }

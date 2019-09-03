@@ -2,53 +2,55 @@
   <div class="clr-row">
     <div class="clr-col-8">
       <div class="request-positions-stats clr-col">
-        <div class="clr-row">
-          <div class="clr-col positions-stats-item" (click)="filterPositionsByDraft">
+        <div class="clr-row clr-justify-content-around">
+          <div class="clr-col-auto positions-stats-item"
+               [ngClass]="{'active' : filteredByDraftStatus }"
+               (click)="onDraftClick()">
             <span class="stats-items-title">На согласовании черновиков</span>
 
             <div class="stats-items-content">
-              <span class="items-count">{{ draftAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(draftAgreementCount) }}</span>
+              <span class="items-count">{{ draftsOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(draftsOnAgreementCount) }}</span>
             </div>
           </div>
 
 
-          <div class="clr-col positions-stats-item">
+          <div class="clr-col-auto positions-stats-item">
             <span class="stats-items-title">На согласовании ТП</span>
 
             <div class="stats-items-content">
-              <span class="items-count">{{ tpAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(tpAgreementCount) }}</span>
+              <span class="items-count">{{ tpOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(tpOnAgreementCount) }}</span>
             </div>
           </div>
 
 
-          <div class="clr-col positions-stats-item">
+          <div class="clr-col-auto positions-stats-item">
             <span class="stats-items-title">На согласовании КП</span>
 
             <div class="stats-items-content">
-              <span class="items-count">{{ kpAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(kpAgreementCount) }}</span>
+              <span class="items-count">{{ kpOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(kpOnAgreementCount) }}</span>
             </div>
           </div>
 
 
-          <div class="clr-col positions-stats-item">
+          <div class="clr-col-auto positions-stats-item">
             <span class="stats-items-title">На согласовании РКД</span>
 
             <div class="stats-items-content">
-              <span class="items-count">{{ rkdAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(rkdAgreementCount) }}</span>
+              <span class="items-count">{{ rkdOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(rkdOnAgreementCount) }}</span>
             </div>
           </div>
 
 
-          <div class="clr-col positions-stats-item">
+          <div class="clr-col-auto positions-stats-item">
             <span class="stats-items-title">На рассмотрениии договора</span>
 
             <div class="stats-items-content">
-              <span class="items-count">15</span>
-              <span class="items-count-label gray">позиций</span>
+              <span class="items-count">{{ onAgreementReviewCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(onAgreementReviewCount) }}</span>
             </div>
           </div>
         </div>
@@ -59,28 +61,28 @@
 
     <div class="clr-col-4">
       <div class="request-info-items clr-col">
-        <div class="clr-row">
-          <div class="clr-col info-stats-item">
+        <div class="clr-row clr-justify-content-around">
+          <div class="clr-col-auto info-stats-item">
             <span class="stats-items-title">Новых сообщений</span>
 
             <div class="stats-items-content">
-              <span class="items-count">15</span>
+              <span class="items-count">{{ newMessagesCount }}</span>
             </div>
           </div>
 
-          <div class="clr-col info-stats-item">
+          <div class="clr-col-auto info-stats-item">
             <span class="stats-items-title">Новых событий</span>
 
             <div class="stats-items-content">
-              <span class="items-count">15</span>
+              <span class="items-count">{{ newActivitiesCount }}</span>
             </div>
           </div>
 
-          <div class="clr-col info-stats-item" (click)="requestDocumentsModalOpened = true">
+          <div class="clr-col-auto info-stats-item" (click)="requestDocumentsModalOpened = true">
             <span class="stats-items-title">Документы заявки</span>
 
             <div class="stats-items-content">
-              <span class="items-count">15</span>
+              <span class="items-count">{{ requestDocumentsCount }}</span>
             </div>
           </div>
         </div>

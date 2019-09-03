@@ -56,7 +56,6 @@ h4.position-title {
 .position-info {
   flex: 0 1 1200px;
   min-width: 700px;
-  margin-left: 15px;
   display: flex;
   flex-direction: column;
 }

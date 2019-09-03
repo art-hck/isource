@@ -1,6 +1,5 @@
-export class DatagridStateAndFilter {
-  draftAgreementCount: number;
-  tpAgreementCount: number;
-  kpAgreementCount: number;
-  rkdAgreementCount: number;
+export class DashboardInfo {
+  tp: number;
+  kp: number;
+  contractAgreement: number;
 }

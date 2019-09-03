@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Request } from "../../models/request";
 
 @Component({
@@ -8,32 +8,45 @@ import { Request } from "../../models/request";
 })
 export class RequestDashboardComponent implements OnInit {
 
-
   @Input() request: Request;
+  @Output() draftClick = new EventEmitter<void>();
 
-  filteredByDraftStatus = false;
+  @Input() filteredByDraftStatus = false;
   requestDocumentsModalOpened = false;
 
-  draftAgreementCount: number;
-  tpAgreementCount: number;
-  kpAgreementCount: number;
-  rkdAgreementCount: number;
+  draftsOnAgreementCount: number;
+  tpOnAgreementCount: number;
+  kpOnAgreementCount: number;
+  rkdOnAgreementCount: number;
+  onAgreementReviewCount: number;
 
+  newMessagesCount: number;
+  newActivitiesCount: number;
+  requestDocumentsCount: number;
 
   constructor() { }
 
   ngOnInit() {
-    this.draftAgreementCount = 3;
-    this.tpAgreementCount = 22;
-    this.kpAgreementCount = 15;
-    this.rkdAgreementCount = 61;
+    this.getRequestDashboardCounters();
   }
 
 
-  filterPositionsByDraft() {
-    this.filteredByDraftStatus = true;
+  onDraftClick() {
+      this.draftClick.emit();
   }
 
+
+  getRequestDashboardCounters() {
+    this.draftsOnAgreementCount = 15;
+    this.tpOnAgreementCount = this.request.dashboard.tp;
+    this.kpOnAgreementCount = this.request.dashboard.kp;
+    this.rkdOnAgreementCount = 61;
+    this.onAgreementReviewCount = this.request.dashboard.contractAgreement;
+
+    this.newMessagesCount = 13;
+    this.newActivitiesCount = 41;
+    this.requestDocumentsCount = this.request.documents.length;
+  }
 
 
   /**

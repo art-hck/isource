@@ -29,6 +29,8 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() groupIsSelected: boolean;
   @Output() requestIsSelectedChange = new EventEmitter<boolean>();
 
+  @Input() filteredByDrafts: boolean;
+
   positionListForm: FormGroup;
   selectedPositions: RequestPositionList[] = [];
   requestGroups: RequestGroup[];
@@ -129,5 +131,13 @@ export class RequestPositionListComponent implements OnChanges {
   isSelectedListItem(requestPosition: RequestPositionList): boolean {
     return (requestPosition === this.selectedRequestPosition
     || requestPosition === this.selectedRequestGroup) && !this.requestIsSelected;
+  }
+
+  isDraftPositionShown(positionStatus) {
+    if (this.filteredByDrafts === true) {
+      return positionStatus === 'DRAFT';
+    } else {
+      return true;
+    }
   }
 }
