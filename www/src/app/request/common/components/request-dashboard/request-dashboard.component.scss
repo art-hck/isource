@@ -14,6 +14,10 @@
   border-bottom: 2px solid transparent;
   align-content: space-between;
   display: grid;
+
+  &.not-clickable:hover {
+    cursor: not-allowed;
+  }
 }
 
 .positions-stats-item:hover,
@@ -40,10 +44,6 @@
   display: block;
   padding-bottom: 10px;
   font-size: 13px;
-}
-
-.stats-items-content {
-
 }
 
 .items-count {

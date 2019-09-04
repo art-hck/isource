@@ -8,13 +8,12 @@ import { Request } from "../../models/request";
 })
 export class RequestDashboardComponent implements OnInit {
 
-  @Input() request: Request;
   @Output() draftClick = new EventEmitter<void>();
 
+  @Input() request: Request;
   @Input() filteredByDraftStatus = false;
-  requestDocumentsModalOpened = false;
 
-  draftsOnAgreementCount: number;
+  @Input() draftPositionsCount: number;
   tpOnAgreementCount: number;
   kpOnAgreementCount: number;
   rkdOnAgreementCount: number;
@@ -24,20 +23,19 @@ export class RequestDashboardComponent implements OnInit {
   newActivitiesCount: number;
   requestDocumentsCount: number;
 
+  requestDocumentsModalOpened = false;
+
   constructor() { }
 
   ngOnInit() {
     this.getRequestDashboardCounters();
   }
 
-
   onDraftClick() {
       this.draftClick.emit();
   }
 
-
   getRequestDashboardCounters() {
-    this.draftsOnAgreementCount = 15;
     this.tpOnAgreementCount = this.request.dashboard.tp;
     this.kpOnAgreementCount = this.request.dashboard.kp;
     this.rkdOnAgreementCount = 61;

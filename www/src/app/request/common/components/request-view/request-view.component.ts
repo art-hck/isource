@@ -8,6 +8,7 @@ import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
 import {GroupService} from "../../services/group.service";
 import {RequestPositionListComponent} from "../request-position-list/request-position-list.component";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-view',
@@ -29,6 +30,7 @@ export class RequestViewComponent implements OnChanges {
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
 
+
   selectedRequestPosition: RequestPositionList|null;
   selectedRequestGroup: RequestPositionList|null;
   // requestGroups: RequestPositionList[] = [];
@@ -42,6 +44,8 @@ export class RequestViewComponent implements OnChanges {
   showUploadPositionsFromExcelForm = false;
   positionInfoEditable = false;
   groupInfoEditable = false;
+
+  draftPositionsCount: number;
 
   protected newPositionName = 'Новая позиция';
   protected newGroupName = 'Новая группа';
@@ -211,6 +215,32 @@ export class RequestViewComponent implements OnChanges {
 
   onDraftClick(): void {
     this.filteredByDrafts = !this.filteredByDrafts;
-    console.log('Черновики включены: ' + this.filteredByDrafts);
+  }
+
+
+  countDraftPositions(list?: RequestPositionList[]): number {
+    let result = 0;
+
+    if (!this.requestPositions || this.requestPositions.length === 0) {
+      return 0;
+    }
+
+    if (!list) {
+      list = this.requestPositions;
+    }
+
+    for (const item of list) {
+      if (item.entityType === "GROUP") {
+        const group = item as RequestGroup;
+        result = result + this.countDraftPositions(group.positions);
+      } else {
+        const position = item as RequestPosition;
+        if (position.status === RequestPositionWorkflowSteps.DRAFT) {
+          result++;
+        }
+      }
+    }
+
+    return result;
   }
 }

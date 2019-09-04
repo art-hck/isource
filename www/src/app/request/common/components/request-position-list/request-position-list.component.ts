@@ -7,6 +7,7 @@ import {RequestPosition} from "../../models/request-position";
 import {GroupService} from "../../services/group.service";
 import {Uuid} from "../../../../cart/models/uuid";
 import {NotificationService} from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-position-list',
@@ -134,14 +135,16 @@ export class RequestPositionListComponent implements OnChanges {
   }
 
   isDraftPositionShown(position) {
-    if ((position.entityType === 'GROUP') && (position.positions.length > 0)) {
+    if (
+      position.entityType === "GROUP" &&
+      position.positions.length > 0 &&
+      position.positions.some(pos => pos.status === RequestPositionWorkflowSteps.DRAFT)
+    ) {
       return true;
     }
 
     if (this.filteredByDrafts === true) {
-      console.log(position.name + ' ' + position.status);
-      console.log('Shown: ' + (position.status === 'DRAFT'));
-      return (position.status === 'DRAFT');
+      return (position.status === RequestPositionWorkflowSteps.DRAFT);
     } else {
       return true;
     }
