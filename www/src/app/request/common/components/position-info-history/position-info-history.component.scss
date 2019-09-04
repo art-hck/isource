@@ -1,5 +1,6 @@
 $status-color-NEW: rgb(185, 185, 185);
 $status-color-DRAFT: rgb(173, 147, 185);
+$status-color-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
 $status-color-PROPOSALS_PREPARATION: rgb(40, 177, 236);
 $status-color-RESULTS_AGREEMENT: rgb(0, 183, 94);
 $status-color-WINNER_SELECTED: rgb(255, 71, 90);
@@ -120,6 +121,12 @@ $status-color-COMPLETED: rgb(255, 127, 127);
   background: $status-color-DRAFT;
   &.status-change.status-dot:before {
     border-color: transparentize($status-color-DRAFT, 0.7);
+  }
+}
+.position-history-status-ON_CUSTOMER_APPROVAL {
+  background: $status-color-ON_CUSTOMER_APPROVAL;
+  &.status-change.status-dot:before {
+    border-color: transparentize($status-color-ON_CUSTOMER_APPROVAL, 0.7);
   }
 }
 .position-history-status-PROPOSALS_PREPARATION {
