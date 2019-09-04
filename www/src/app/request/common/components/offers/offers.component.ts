@@ -9,6 +9,7 @@ import { RequestPosition } from "../../models/request-position";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 
 @Component({
   selector: 'app-offers',
@@ -134,5 +135,24 @@ export class OffersComponent implements OnInit {
 
   showWinnerSelectionColumn(): boolean {
     return (this.isCustomerView && !this.showWinnerStateColumn);
+  }
+
+  canUploadTp(): boolean {
+    if (this.isCustomerView) {
+      return false;
+    }
+    const currentStatus = this.requestPosition.status;
+    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(currentStatus);
+    if (currentStatusIndex < 0) {
+      return false;
+    }
+    const resultsAgreementIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.RESULTS_AGREEMENT
+    );
+    return currentStatusIndex <= resultsAgreementIndex;
+  }
+
+  canUploadKp(): boolean {
+    return this.canUploadTp();
   }
 }
