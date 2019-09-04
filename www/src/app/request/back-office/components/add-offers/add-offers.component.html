@@ -1,0 +1,217 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+<ng-container *ngIf="request">
+  <div class="clr-row">
+    <div class="info-card clr-col">
+      <div class="request-info">
+        <div class="card">
+          <div class="action-bar">
+            <div class="clr-row action-row">
+
+            </div>
+          </div>
+
+          <div class="card-content">
+            <h3>Заявка {{ request.number }}</h3>
+            <div class="clr-row">
+              <div class="clr-col-4">
+                <p class="title-info">Заказчик</p>
+                {{request.contragent.shortName}}
+              </div>
+              <div class="clr-col-3">
+                <p class="title-info">Контактное лицо</p>
+                {{request.user.lastName}}
+              </div>
+              <div class="clr-col-3">
+                <p class="title-info">Email</p>
+                {{request.user.email}}
+              </div>
+              <div class="clr-col-2">
+                <p class="title-info">Дата создания</p>
+                {{request.createdDate | date :'shortDate'}}
+              </div>
+            </div>
+            <div class="comment">
+              {{request.comment}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-content">
+
+        <button class="btn btn-primary"
+                (click)="onShowAddContragentModal()"
+                ><b>Добавить контрагента</b>
+        </button>
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Наименование позиции</th>
+            <th *ngFor="let supplier of suppliers">{{ supplier }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let requestPosition of requestPositions">
+            <td>{{ requestPosition.name }}</td>
+            <td *ngFor="let supplier of suppliers">
+              <ng-container
+                *ngIf="getSupplierLinkedOffers(
+                  requestPosition.linkedOffers,
+                  supplier
+                ).length; else addLinkedOfferButton">
+                <ng-container
+                  *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
+                  <p>
+                    <a (click)="onShowOfferModal(linkedOffer)">
+                      {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
+                    </a>
+                  </p>
+                </ng-container>
+              </ng-container>
+              <ng-template #addLinkedOfferButton>
+                <a (click)="onShowAddOfferModal(requestPosition, supplier)">+</a>
+              </ng-template>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
+
+<clr-modal [(clrModalOpen)]="showAddContragentModal">
+  <h3 class="modal-title">Введите наименование к/а</h3>
+  <div class="modal-body">
+    <input type="text" (input)="contragentName = $event.target.value" />
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary"
+            (click)="onAddContragent()"
+            [disabled]="!checkAddContragentButtonEnabled()"><b>Добавить</b>
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="showAddOfferModal">
+  <h3 class="modal-title">Добавьте КП</h3>
+  <div class="modal-body">
+    <form [formGroup]="offerForm" class="form">
+      <div class="form-block">
+        <div class="clr-form-control">
+          <div class="clr-row w-100">
+            <div class="clr-col-2">
+              <label class="clr-control-label" for="priceWithVat">Цена</label>
+              <input type="number" id="priceWithVat" name="priceWithVat" formControlName="priceWithVat" min="0.1"
+                     step="0.01" class="hidden-arrows text-right price"
+                     [class.invalid]="isFieldValid('priceWithVat')">
+            </div>
+            <div class="clr-col-2">
+              <label class="clr-control-label" for="currency">Валюта</label>
+              <div class="select">
+                <select name="currency" id="currency" formControlName="currency"
+                        [class.invalid]="isFieldValid('currency')">
+                  <option value="RUB">
+                    RUB
+                  </option>
+                  <option value="USD">
+                    USD
+                  </option>
+                  <option value="EUR">
+                    EUR
+                  </option>
+                  <option value="CHF">
+                    CHF
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-2">
+              <label class="clr-control-label" for="quantity">Количество</label>
+              <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"
+                     step="0.01" class="hidden-arrows text-right price"
+                     [class.invalid]="isFieldValid('quantity')">
+            </div>
+            <div class="clr-col-3">
+              <label class="clr-control-label" for="measureUnit">Единицы измерения</label>
+              <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
+                     [class.invalid]="isFieldValid('measureUnit')">
+            </div>
+            <div class="clr-col-2">
+              <label class="clr-control-label" for="deliveryDate">Срок поставки</label>
+              <input id="deliveryDate" placeholder="дд.мм.гггг" type="date" clrDate
+                     formControlName="deliveryDate"
+                     [class.invalid]="isFieldValid('deliveryDate')"/>
+            </div>
+            <div class="clr-col-5">
+              <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
+              <input type="text" id="paymentTerms" formControlName="paymentTerms"
+                     [class.invalid]="isFieldValid('paymentTerms')">
+            </div>
+          </div>
+          <div class="clr-row w-100 right-align-button">
+            <button class="btn btn-outline" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="showOfferModal" clrModalSize="lg">
+  <h3 class="modal-title">Предложение поставщика</h3>
+  <div class="modal-body">
+    <clr-datagrid class="clr-row offers-datagrid" *ngIf="selectedOffer">
+      <clr-dg-column class="clr-col-2">Наименование к/а</clr-dg-column>
+      <clr-dg-column class="clr-col-1 text-right">Цена</clr-dg-column>
+      <clr-dg-column class="clr-col-1 text-right">Количество</clr-dg-column>
+      <clr-dg-column class="clr-col-1 text-right">Дата поставки</clr-dg-column>
+      <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
+      <clr-dg-column class="clr-col-2">КП</clr-dg-column>
+      <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
+
+      <clr-dg-row>
+        <clr-dg-cell class="clr-col-2 offer">
+          <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{selectedOffer.supplierContragentName}}</a>
+        </clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-1 offer text-right offer-price">
+          {{ selectedOffer.priceWithVat | currency : selectedOffer.currency }}
+        </clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-1 offer text-right">{{selectedOffer.quantity}} {{selectedOffer.measureUnit}}</clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-1 offer text-right">{{selectedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-2 offer">{{selectedOffer.paymentTerms}}</clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-2">
+          <app-document-simple-list
+            [enableUpload]="true"
+            [documents]="selectedOffer.documents"
+            (selected)="onUploadDocuments($event, selectedOffer)"
+          ></app-document-simple-list>
+        </clr-dg-cell>
+
+        <clr-dg-cell class="clr-col-1">
+          <app-document-simple-list
+            [enableUpload]="true"
+            [documents]="selectedOffer.technicalProposals"
+            (selected)="onUploadTechnicalProposals($event, selectedOffer)"
+          ></app-document-simple-list>
+        </clr-dg-cell>
+
+
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
+</clr-modal>

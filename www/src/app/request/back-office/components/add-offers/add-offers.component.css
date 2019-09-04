@@ -1,0 +1,48 @@
+h6 {
+  margin: 0;
+}
+
+.title-info {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 0;
+}
+
+.action-bar {
+  border-bottom: 1px solid #d7d7d7;
+}
+.card-content {
+  padding: 25px;
+}
+
+.position-row {
+  padding: 0 25px;
+}
+
+.action-row {
+  padding: 0 20px;
+}
+
+.blue {
+  color: #0085FF;
+}
+
+.grey {
+  color: #999999;
+}
+
+.request-info {
+  flex: 0 1 1200px;
+  min-width: 700px;
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-close {
+  margin-left: 10px;
+}
+
+.right {
+  text-align: right;
+}

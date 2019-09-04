@@ -26,7 +26,6 @@ export class OffersComponent implements OnInit {
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
-
   offerForm: FormGroup;
   showAddOfferForm = false;
 
