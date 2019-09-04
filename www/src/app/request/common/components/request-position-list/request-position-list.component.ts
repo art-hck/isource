@@ -133,9 +133,15 @@ export class RequestPositionListComponent implements OnChanges {
     || requestPosition === this.selectedRequestGroup) && !this.requestIsSelected;
   }
 
-  isDraftPositionShown(positionStatus) {
+  isDraftPositionShown(position) {
+    if ((position.entityType === 'GROUP') && (position.positions.length > 0)) {
+      return true;
+    }
+
     if (this.filteredByDrafts === true) {
-      return positionStatus === 'DRAFT';
+      console.log(position.name + ' ' + position.status);
+      console.log('Shown: ' + (position.status === 'DRAFT'));
+      return (position.status === 'DRAFT');
     } else {
       return true;
     }
