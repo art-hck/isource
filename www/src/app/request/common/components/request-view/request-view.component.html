@@ -2,51 +2,66 @@
   <span class="spinner spinner-md"></span>
 </ng-container>
 <ng-container *ngIf="request">
-  <div class="clr-row">
-    <div class="card list"
-         [ngClass]="{'clr-col-4' : (showPositionInfo || showRequestInfo || showGroupInfo)}"
-         *ngIf="showPositionList">
-      <div class="action-bar">
-        <button class="btn btn-link" (click)="addNewPosition()" [disabled]="selectedIsNewPosition()">
-          <clr-icon shape="plus-circle"></clr-icon>
-          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить позицию</span>
-        </button>
-        <button class="btn btn-link" (click)="onUploadPositionsFromExcel()">
-          <clr-icon shape="upload"></clr-icon>
-          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Загрузить из шаблона</span>
-        </button>
-        <button class="btn btn-link" *ngIf="!isCustomerView" (click)="addNewGroup()"
-                [disabled]="selectedIsNewPosition()">
-          <clr-icon shape="file-group"></clr-icon>
-          <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить группу</span>
-        </button>
-      </div>
 
-      <div class="card" *ngIf="showUploadPositionsFromExcelForm">
-        <div class="card-block">
-          <div class="card-text">
-            <app-add-from-excel
-              (submit)="onSendExcelFile($event)"
-              [templateUrl]="'assets/RequestTemplate.xlsx'">
-            </app-add-from-excel>
+
+  <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
+
+  <app-request-dashboard
+    (draftClick)="onDraftClick()"
+    [filteredByDraftStatus]="filteredByDrafts"
+    [request]="request"
+    [draftPositionsCount]="countDraftPositions()"
+  ></app-request-dashboard>
+
+  <div class="clr-row">
+    <div [ngClass]="{
+    'clr-col-4' : (showPositionInfo || showRequestInfo || showGroupInfo),
+    'clr-col-12' : !(showPositionInfo || showRequestInfo || showGroupInfo)
+    }">
+      <div class="card list" *ngIf="showPositionList">
+        <div class="action-bar">
+          <button class="btn btn-link" (click)="addNewPosition()" [disabled]="selectedIsNewPosition()">
+            <clr-icon shape="plus-circle"></clr-icon>
+            <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить позицию</span>
+          </button>
+          <button class="btn btn-link" (click)="onUploadPositionsFromExcel()">
+            <clr-icon shape="upload"></clr-icon>
+            <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Загрузить из шаблона</span>
+          </button>
+          <button class="btn btn-link" *ngIf="!isCustomerView" (click)="addNewGroup()"
+                  [disabled]="selectedIsNewPosition()">
+            <clr-icon shape="file-group"></clr-icon>
+            <span *ngIf="!(showPositionInfo || showRequestInfo || showGroupInfo)">Добавить группу</span>
+          </button>
+        </div>
+
+        <div class="card" *ngIf="showUploadPositionsFromExcelForm">
+          <div class="card-block">
+            <div class="card-text">
+              <app-add-from-excel
+                (submit)="onSendExcelFile($event)"
+                [templateUrl]="'assets/RequestTemplate.xlsx'">
+              </app-add-from-excel>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="card-content">
-        <app-request-position-list
-          [request]="request"
-          [requestPositions]="requestPositions"
-          [selectedRequestPosition]="selectedRequestPosition"
-          (selectedRequestPositionChange)="onSelectPosition($event)"
-          [requestIsSelected]="showRequestInfo"
-          (requestIsSelectedChange)="onSelectRequest($event)"
-          [groupIsSelected]="showGroupInfo"
-          [selectedRequestGroup]="selectedRequestGroup"
-          (selectedRequestGroupChange)="onSelectGroup($event)"
-          (selectedPositionChange)="onSelectedPosition($event)"
-          [isCustomerView]="isCustomerView"
-        ></app-request-position-list>
+        <div class="card-content">
+          <app-request-position-list
+            [filteredByDrafts]="filteredByDrafts"
+            [request]="request"
+            [requestPositions]="requestPositions"
+            [selectedRequestPosition]="selectedRequestPosition"
+            (selectedRequestPositionChange)="onSelectPosition($event)"
+            [requestIsSelected]="showRequestInfo"
+            (requestIsSelectedChange)="onSelectRequest($event)"
+            [groupIsSelected]="showGroupInfo"
+            [selectedRequestGroup]="selectedRequestGroup"
+            (selectedRequestGroupChange)="onSelectGroup($event)"
+            (selectedPositionChange)="onSelectedPosition($event)"
+            [isCustomerView]="isCustomerView"
+          ></app-request-position-list>
+        </div>
       </div>
 
     </div>

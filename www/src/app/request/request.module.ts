@@ -35,6 +35,7 @@ import { PositionInfoHistoryComponent } from './common/components/position-info-
 import { GroupInfoComponent } from './common/components/group-info/group-info.component';
 import { GroupService } from "./common/services/group.service";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
+import { RequestDashboardComponent } from './common/components/request-dashboard/request-dashboard.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { AddOffersComponent } from "./back-office/components/add-offers/add-offe
     RequestPositionListComponent,
     PositionInfoHistoryComponent,
     GroupInfoComponent,
-    AddOffersComponent
+    AddOffersComponent,
+    RequestDashboardComponent
   ],
   imports: [
     SharedModule,

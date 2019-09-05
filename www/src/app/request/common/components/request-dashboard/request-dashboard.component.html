@@ -1,0 +1,104 @@
+<div class="dashboard-block">
+  <div class="clr-row">
+    <div class="clr-col-8">
+      <div class="request-positions-stats clr-col">
+        <div class="clr-row clr-justify-content-between">
+          <div class="clr-col-auto positions-stats-item"
+               *ngIf="this.user.isCustomer()"
+               [ngClass]="{'active' : filteredByDraftStatus, 'not-clickable' : draftPositionsCount === 0 }"
+               (click)="draftPositionsCount > 0 ? onDraftClick() : false">
+            <span class="stats-items-title">На согласовании черновиков</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ draftPositionsCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(draftPositionsCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col-auto positions-stats-item">
+            <span class="stats-items-title">На согласовании ТП</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ tpOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(tpOnAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col-auto positions-stats-item" (click)="openAddOffersPage()">
+            <span class="stats-items-title">На согласовании КП</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ kpOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(kpOnAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col-auto positions-stats-item">
+            <span class="stats-items-title">На согласовании РКД</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ rkdOnAgreementCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(rkdOnAgreementCount) }}</span>
+            </div>
+          </div>
+
+
+          <div class="clr-col-auto positions-stats-item">
+            <span class="stats-items-title">На рассмотрениии договора</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ onAgreementReviewCount }}</span>
+              <span class="items-count-label gray">{{ getPositionsCountLabel(onAgreementReviewCount) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="clr-col-4">
+      <div class="request-info-items clr-col">
+        <div class="clr-row clr-justify-content-between">
+          <div class="clr-col-auto info-stats-item">
+            <span class="stats-items-title">Новых сообщений</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ newMessagesCount }}</span>
+            </div>
+          </div>
+
+          <div class="clr-col-auto info-stats-item">
+            <span class="stats-items-title">Новых событий</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ newActivitiesCount }}</span>
+            </div>
+          </div>
+
+          <div class="clr-col-auto info-stats-item" (click)="requestDocumentsModalOpened = true">
+            <span class="stats-items-title">Документы заявки</span>
+
+            <div class="stats-items-content">
+              <span class="items-count">{{ requestDocumentsCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="requestDocumentsModalOpened">
+  <h3 class="modal-title">Документы заявки</h3>
+
+  <div class="modal-body">
+    <app-document-list [documents]="request.documents">
+    </app-document-list>
+  </div>
+</clr-modal>
