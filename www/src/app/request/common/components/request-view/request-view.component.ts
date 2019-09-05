@@ -8,6 +8,7 @@ import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
 import {GroupService} from "../../services/group.service";
 import {RequestPositionListComponent} from "../request-position-list/request-position-list.component";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-view',
@@ -17,6 +18,9 @@ import {RequestPositionListComponent} from "../request-position-list/request-pos
 export class RequestViewComponent implements OnChanges {
   @ViewChild (RequestPositionList, {static: false}) requestPositionList: RequestPositionListComponent;
 
+
+  @Input() filteredByDrafts: boolean;
+
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
   @Input() request: Request;
@@ -25,6 +29,7 @@ export class RequestViewComponent implements OnChanges {
 
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
+
 
   selectedRequestPosition: RequestPositionList|null;
   selectedRequestGroup: RequestPositionList|null;
@@ -39,6 +44,8 @@ export class RequestViewComponent implements OnChanges {
   showUploadPositionsFromExcelForm = false;
   positionInfoEditable = false;
   groupInfoEditable = false;
+
+  draftPositionsCount: number;
 
   protected newPositionName = 'Новая позиция';
   protected newGroupName = 'Новая группа';
@@ -204,5 +211,36 @@ export class RequestViewComponent implements OnChanges {
     this.showPositionInfo = !!requestPosition;
     this.showRequestInfo = false;
     this.showGroupInfo = false;
+  }
+
+  onDraftClick(): void {
+    this.filteredByDrafts = !this.filteredByDrafts;
+  }
+
+
+  countDraftPositions(list?: RequestPositionList[]): number {
+    let result = 0;
+
+    if (!this.requestPositions || this.requestPositions.length === 0) {
+      return 0;
+    }
+
+    if (!list) {
+      list = this.requestPositions;
+    }
+
+    for (const item of list) {
+      if (item.entityType === "GROUP") {
+        const group = item as RequestGroup;
+        result = result + this.countDraftPositions(group.positions);
+      } else {
+        const position = item as RequestPosition;
+        if (position.status === RequestPositionWorkflowSteps.DRAFT) {
+          result++;
+        }
+      }
+    }
+
+    return result;
   }
 }
