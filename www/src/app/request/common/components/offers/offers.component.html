@@ -103,7 +103,7 @@
 
     <clr-dg-cell class="clr-col-2">
       <app-document-simple-list
-        [enableUpload]="!isCustomerView"
+        [enableUpload]="canUploadKp()"
         [documents]="linkedOffer.documents"
         (selected)="onUploadDocuments($event, linkedOffer)"
       ></app-document-simple-list>
@@ -111,7 +111,7 @@
 
     <clr-dg-cell class="clr-col-1">
       <app-document-simple-list
-        [enableUpload]="!isCustomerView"
+        [enableUpload]="canUploadTp()"
         [documents]="linkedOffer.technicalProposals"
         (selected)="onUploadTechnicalProposals($event, linkedOffer)"
       ></app-document-simple-list>

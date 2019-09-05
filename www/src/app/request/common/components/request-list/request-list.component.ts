@@ -92,6 +92,7 @@ export class RequestListComponent implements OnInit {
   }
 
   refresh(state: ClrDatagridStateInterface): void {
+
     const filters: {[prop: string]: any[]} = {};
 
     if (state.filters) {
@@ -103,7 +104,8 @@ export class RequestListComponent implements OnInit {
     const datagridState: DatagridStateAndFilter = {
       startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
       pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,
-      filters: filters
+      filters: filters,
+      sort: state.sort
     };
 
     this.datagridState.emit(datagridState);
