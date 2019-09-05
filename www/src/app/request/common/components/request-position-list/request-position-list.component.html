@@ -51,10 +51,10 @@
   <!-- список позиций внутри группы -->
   <ng-container *ngFor="let requestPosition of requestPositions[i].positions">
     <div class="group-position-row clr-row w-100"
+         (click)="onSelectItem(requestPosition)"
          *ngIf="isDraftPositionShown(requestPosition)"
          [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
         <div class="position-name"
-             (click)="onSelectItem(requestPosition)"
              [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
           <div class="selectedPositionGroup">
             {{requestPosition.name}}
