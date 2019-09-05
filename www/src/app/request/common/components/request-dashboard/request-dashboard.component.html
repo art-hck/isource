@@ -4,6 +4,7 @@
       <div class="request-positions-stats clr-col">
         <div class="clr-row clr-justify-content-between">
           <div class="clr-col-auto positions-stats-item"
+               *ngIf="this.user.isCustomer()"
                [ngClass]="{'active' : filteredByDraftStatus, 'not-clickable' : draftPositionsCount === 0 }"
                (click)="draftPositionsCount > 0 ? onDraftClick() : false">
             <span class="stats-items-title">На согласовании черновиков</span>
