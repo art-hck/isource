@@ -29,7 +29,7 @@ export class RequestDashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private user: UserInfoService
+    public user: UserInfoService
   ) { }
 
   ngOnInit() {
