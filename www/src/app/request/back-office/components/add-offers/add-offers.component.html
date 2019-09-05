@@ -6,7 +6,7 @@
     <div class="info-card clr-col">
       <div class="request-info">
         <div class="breadcrumps">
-          <a>Заявки</a>/<a>Заявка №{{request.number}}</a>
+          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
         <h2>Коммерческие предолжения</h2>
         <div class="clr-row w-100">
@@ -21,7 +21,8 @@
           </div>
           <div class="clr-col-2 import">
             <button class="btn btn-outline add-contragent"
-            >Импорт позиций
+                    (click)="onDownloadOffersTemplate()">
+              Скачать шаблон для импорта
             </button>
           </div>
         </div>
@@ -66,7 +67,7 @@
 <clr-modal [(clrModalOpen)]="showAddContragentModal">
   <h3 class="modal-title">Введите наименование к/а</h3>
   <div class="modal-body">
-    <input type="text" (input)="contragentName = $event.target.value" />
+    <input type="text" (input)="contragentName = $event.target.value" [value]="contragentName" />
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary"

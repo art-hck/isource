@@ -4,7 +4,8 @@ import {Uuid} from "../../../cart/models/uuid";
 import {RequestOfferPosition} from "../../common/models/request-offer-position";
 import { Observable } from "rxjs";
 import { RequestDocument } from "../../common/models/request-document";
-
+import { Request } from "../../common/models/request";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable()
 export class OffersService {
@@ -42,5 +43,15 @@ export class OffersService {
 
     const url = `requests/backoffice/offers/${offer.id}/technical-proposals/upload`;
     return this.api.post<RequestDocument[]>(url, formData);
+  }
+
+  downloadOffersTemplate(request: Request): void {
+    this.api.post(
+      `requests/backoffice/${request.id}/download-offers-template`,
+      {},
+      {responseType: 'blob'})
+      .subscribe(data => {
+        saveAs(data, `Request${request.number}OffersTemplate.xlsx`);
+      });
   }
 }

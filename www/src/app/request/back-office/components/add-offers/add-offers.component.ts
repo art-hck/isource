@@ -1,9 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Request} from "../../../common/models/request";
-import {RequestPosition} from "../../../common/models/request-position";
-import {ActivatedRoute} from "@angular/router";
-import {RequestService} from "../../services/request.service";
-import {Uuid} from "../../../../cart/models/uuid";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Request } from "../../../common/models/request";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ActivatedRoute, Router } from "@angular/router";
+import { RequestService } from "../../services/request.service";
+import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
@@ -11,7 +11,7 @@ import { RequestOfferPosition } from "../../../common/models/request-offer-posit
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
-import {RequestDocument} from "../../../common/models/request-document";
+import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({
   selector: 'app-add-offers',
@@ -25,7 +25,7 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  contragentName: string;
+  contragentName: string = '';
 
   showAddOfferModal = false;
   offerForm: FormGroup;
@@ -43,7 +43,8 @@ export class AddOffersComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private formBuilder: FormBuilder,
-    protected offersService: OffersService
+    protected offersService: OffersService,
+    protected router: Router
   ) {
   }
 
@@ -79,6 +80,7 @@ export class AddOffersComponent implements OnInit {
     this.suppliers.sort();
 
     this.showAddContragentModal = false;
+    this.contragentName = '';
   }
 
   checkAddContragentButtonEnabled() {
@@ -133,6 +135,18 @@ export class AddOffersComponent implements OnInit {
         documents.forEach(document => offer.technicalProposals.push(document));
         //this.notificationService.toast('Документ загружен');
       });
+  }
+
+  onRequestsClick() {
+    this.router.navigateByUrl(`requests/back-office`);
+  }
+
+  onRequestClick() {
+    this.router.navigateByUrl(`requests/back-office/${this.request.id}`);
+  }
+
+  onDownloadOffersTemplate() {
+    this.offersService.downloadOffersTemplate(this.request);
   }
 
   protected updatePositionsAndSuppliers(): void {
