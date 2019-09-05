@@ -25,7 +25,7 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  contragentName: string = '';
+  contragentName = '';
 
   showAddOfferModal = false;
   offerForm: FormGroup;
@@ -103,7 +103,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   onAddOffer() {
-    let formValue = this.offerForm.value;
+    const formValue = this.offerForm.value;
     formValue.supplierContragentName = this.selectedSupplier;
 
     this.offersService.addOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
@@ -125,7 +125,6 @@ export class AddOffersComponent implements OnInit {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
-        //this.notificationService.toast('Документ загружен');
       });
   }
 
@@ -133,7 +132,6 @@ export class AddOffersComponent implements OnInit {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.technicalProposals.push(document));
-        //this.notificationService.toast('Документ загружен');
       });
   }
 
