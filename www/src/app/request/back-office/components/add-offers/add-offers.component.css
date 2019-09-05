@@ -46,3 +46,81 @@ h6 {
 .right {
   text-align: right;
 }
+
+th {
+  text-align: inherit;
+  background-color: #f3f7fa;
+}
+
+td {
+  text-align: inherit;
+}
+
+th .position-name {
+  width: 400px;
+  min-width: 400px;
+}
+
+td .position-name {
+  width: 400px;
+  min-width: 400px;
+}
+
+.table {
+  border: 0;
+  background-color: #f3f7fa;
+}
+
+.contragent-name {
+  font-size: 18px;
+  font-weight: 400;
+  width: 250px;
+  line-height: 1.3;
+}
+
+table {
+  width: auto;
+}
+
+.offer {
+  background-color: white;
+  height: 70px;
+  border-radius: 4px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.offer:hover {
+  border-bottom: 3px solid #0085FF;
+}
+
+.add-offer {
+  padding: 5px 15px;
+  cursor: pointer;
+  height: 70px;
+}
+
+.add-offer:hover {
+  background-color: white;
+  border-radius: 4px;
+}
+
+.delivery-date {
+  color: #999999;
+  font-size: 12px;
+}
+
+.clr-control-label {
+  padding-top: 15px;
+  font-weight: 100;
+}
+
+.import {
+  text-align: end;
+}
+
+.btn.btn-outline {
+  color: #0085FF;
+  border-color: #0085FF;
+}
+

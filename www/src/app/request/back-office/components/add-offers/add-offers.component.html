@@ -5,58 +5,37 @@
   <div class="clr-row">
     <div class="info-card clr-col">
       <div class="request-info">
-        <div class="card">
-          <div class="action-bar">
-            <div class="clr-row action-row">
-
-            </div>
-          </div>
-
-          <div class="card-content">
-            <h3>Заявка {{ request.number }}</h3>
-            <div class="clr-row">
-              <div class="clr-col-4">
-                <p class="title-info">Заказчик</p>
-                {{request.contragent.shortName}}
-              </div>
-              <div class="clr-col-3">
-                <p class="title-info">Контактное лицо</p>
-                {{request.user.lastName}}
-              </div>
-              <div class="clr-col-3">
-                <p class="title-info">Email</p>
-                {{request.user.email}}
-              </div>
-              <div class="clr-col-2">
-                <p class="title-info">Дата создания</p>
-                {{request.createdDate | date :'shortDate'}}
-              </div>
-            </div>
-            <div class="comment">
-              {{request.comment}}
-            </div>
-          </div>
+        <div class="breadcrumps">
+          <a>Заявки</a>/<a>Заявка №{{request.number}}</a>
         </div>
-      </div>
-
-      <div class="card-content">
-
-        <button class="btn btn-primary"
+        <h2>Коммерческие предолжения</h2>
+        <div class="clr-row w-100">
+          <div class="clr-col-2">
+        <button class="btn btn-primary add-contragent"
                 (click)="onShowAddContragentModal()"
                 ><b>Добавить контрагента</b>
         </button>
+          </div>
+          <div class="clr-col-8">
 
+          </div>
+          <div class="clr-col-2 import">
+            <button class="btn btn-outline add-contragent"
+            >Импорт позиций
+            </button>
+          </div>
+        </div>
         <table class="table">
           <thead>
           <tr>
-            <th>Наименование позиции</th>
-            <th *ngFor="let supplier of suppliers">{{ supplier }}</th>
+            <th class="position-name"></th>
+            <th class="contragent-name" *ngFor="let supplier of suppliers">{{ supplier }}</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let requestPosition of requestPositions">
-            <td>{{ requestPosition.name }}</td>
-            <td *ngFor="let supplier of suppliers">
+            <td class="position-name">{{ requestPosition.name }}</td>
+            <td class="contragent-name" *ngFor="let supplier of suppliers">
               <ng-container
                 *ngIf="getSupplierLinkedOffers(
                   requestPosition.linkedOffers,
@@ -64,15 +43,16 @@
                 ).length; else addLinkedOfferButton">
                 <ng-container
                   *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <p>
-                    <a (click)="onShowOfferModal(linkedOffer)">
+                  <div class="offer" (click)="onShowOfferModal(linkedOffer)">
                       {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
-                    </a>
-                  </p>
+                    <p class="delivery-date">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>
+                  </div>
                 </ng-container>
               </ng-container>
               <ng-template #addLinkedOfferButton>
-                <a (click)="onShowAddOfferModal(requestPosition, supplier)">+</a>
+                <div class="add-offer" (click)="onShowAddOfferModal(requestPosition, supplier)">
+                  <clr-icon shape="plus"></clr-icon>
+                </div>
               </ng-template>
             </td>
           </tr>
@@ -82,7 +62,6 @@
 
     </div>
   </div>
-</ng-container>
 
 <clr-modal [(clrModalOpen)]="showAddContragentModal">
   <h3 class="modal-title">Введите наименование к/а</h3>
@@ -104,13 +83,13 @@
       <div class="form-block">
         <div class="clr-form-control">
           <div class="clr-row w-100">
-            <div class="clr-col-2">
+            <div class="clr-col-3">
               <label class="clr-control-label" for="priceWithVat">Цена</label>
               <input type="number" id="priceWithVat" name="priceWithVat" formControlName="priceWithVat" min="0.1"
                      step="0.01" class="hidden-arrows text-right price"
                      [class.invalid]="isFieldValid('priceWithVat')">
             </div>
-            <div class="clr-col-2">
+            <div class="clr-col-3">
               <label class="clr-control-label" for="currency">Валюта</label>
               <div class="select">
                 <select name="currency" id="currency" formControlName="currency"
@@ -132,38 +111,43 @@
             </div>
           </div>
           <div class="clr-row w-100">
-            <div class="clr-col-2">
+            <div class="clr-col-4">
               <label class="clr-control-label" for="quantity">Количество</label>
               <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"
                      step="0.01" class="hidden-arrows text-right price"
                      [class.invalid]="isFieldValid('quantity')">
             </div>
-            <div class="clr-col-3">
+            <div class="clr-col-8">
               <label class="clr-control-label" for="measureUnit">Единицы измерения</label>
               <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
                      [class.invalid]="isFieldValid('measureUnit')">
             </div>
-            <div class="clr-col-2">
+          </div>
+          <div class="clr-row w-100">
+            <div class="clr-col-4">
               <label class="clr-control-label" for="deliveryDate">Срок поставки</label>
               <input id="deliveryDate" placeholder="дд.мм.гггг" type="date" clrDate
                      formControlName="deliveryDate"
                      [class.invalid]="isFieldValid('deliveryDate')"/>
             </div>
-            <div class="clr-col-5">
+            <div class="clr-col-8">
               <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
               <input type="text" id="paymentTerms" formControlName="paymentTerms"
                      [class.invalid]="isFieldValid('paymentTerms')">
             </div>
-          </div>
-          <div class="clr-row w-100 right-align-button">
-            <button class="btn btn-outline" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-
+    <div class="clr-row w-100">
+      <div class="clr-col-9">
+      </div>
+      <div class="clr-col-3">
+        <button class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+      </div>
+    </div>
   </div>
 </clr-modal>
 
