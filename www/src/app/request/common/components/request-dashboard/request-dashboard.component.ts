@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Request } from "../../models/request";
+import { UserInfoService } from "../../../../core/services/user-info.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-request-dashboard',
@@ -25,7 +27,10 @@ export class RequestDashboardComponent implements OnInit {
 
   requestDocumentsModalOpened = false;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private user: UserInfoService
+  ) { }
 
   ngOnInit() {
     this.getRequestDashboardCounters();
@@ -36,19 +41,19 @@ export class RequestDashboardComponent implements OnInit {
   }
 
   getRequestDashboardCounters() {
-    this.tpOnAgreementCount = this.request.dashboard.tp;
-    this.kpOnAgreementCount = this.request.dashboard.kp;
-    this.rkdOnAgreementCount = 61;
-    this.onAgreementReviewCount = this.request.dashboard.contractAgreement;
+    this.tpOnAgreementCount = this.request.dashboard.tp || 0;
+    this.kpOnAgreementCount = this.request.dashboard.kp || 0;
+    this.rkdOnAgreementCount = 5;
+    this.onAgreementReviewCount = this.request.dashboard.contractAgreement || 0;
 
-    this.newMessagesCount = 13;
-    this.newActivitiesCount = 41;
-    this.requestDocumentsCount = this.request.documents.length;
+    this.newMessagesCount = 3;
+    this.newActivitiesCount = 6;
+    this.requestDocumentsCount = this.request.documents.length || 0;
   }
 
 
   /**
-   * Функция возвращает
+   * Функция возвращает правильный лейбл для указанного количества позиций
    *
    * @param count
    */
@@ -67,6 +72,19 @@ export class RequestDashboardComponent implements OnInit {
       ];
 
     return positionsString;
+  }
+
+
+  openAddOffersPage() {
+    if (this.user.isCustomer()) {
+      // todo Раскомментировать, когда будет готов роут для кастомера
+      // this.router.navigateByUrl(`/requests/customer/${this.request.id}/add-offers`).then(r => {});
+      return false;
+    } else if (this.user.isBackOffice()) {
+      this.router.navigateByUrl(`/requests/back-office/${this.request.id}/add-offers`).then(r => {});
+    } else {
+      return false;
+    }
   }
 
 }
