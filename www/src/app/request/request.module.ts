@@ -34,6 +34,7 @@ import { RequestPositionListComponent } from './common/components/request-positi
 import { PositionInfoHistoryComponent } from './common/components/position-info-history/position-info-history.component';
 import { GroupInfoComponent } from './common/components/group-info/group-info.component';
 import { GroupService } from "./common/services/group.service";
+import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { RequestDashboardComponent } from './common/components/request-dashboard/request-dashboard.component';
 
 
@@ -67,6 +68,7 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
     RequestPositionListComponent,
     PositionInfoHistoryComponent,
     GroupInfoComponent,
+    AddOffersComponent,
     RequestDashboardComponent
   ],
   imports: [
