@@ -1,6 +1,6 @@
 <ng-container *ngFor="let control of positionsArray.controls; let i = index">
   <div
-     class="position-row clr-row w-100" (click)="onSelectItem(requestPositions[i])"
+     class="position-row clr-row w-100"
      *ngIf="isDraftPositionShown(requestPositions[i])"
      [ngClass]="{'selected-row' : isSelectedListItem(requestPositions[i]),
                   'group-item' : requestPositions[i].entityType === 'GROUP'}">
@@ -12,7 +12,9 @@
              (change)="getSelectedPositions()">
     </clr-checkbox-wrapper>
 
-    <div class="position-name" [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
+    <div class="position-name"
+         (click)="onSelectItem(requestPositions[i])"
+         [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
       <div class="selectedPosition">
         {{requestPositions[i].name}}
       </div>
@@ -51,10 +53,10 @@
   <!-- список позиций внутри группы -->
   <ng-container *ngFor="let requestPosition of requestPositions[i].positions">
     <div class="group-position-row clr-row w-100"
-         (click)="onSelectItem(requestPosition)"
          *ngIf="isDraftPositionShown(requestPosition)"
          [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
         <div class="position-name"
+             (click)="onSelectItem(requestPosition)"
              [ngClass]="{ 'clr-col-10' : rowIsSelected(), 'clr-col-5' : !rowIsSelected() }">
           <div class="selectedPositionGroup">
             {{requestPosition.name}}
