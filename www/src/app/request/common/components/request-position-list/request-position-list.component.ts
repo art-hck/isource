@@ -7,6 +7,7 @@ import { RequestPosition } from "../../models/request-position";
 import { GroupService } from "../../services/group.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-position-list',
@@ -21,6 +22,8 @@ export class RequestPositionListComponent implements OnChanges {
 
   @Input() selectItem: Request | RequestGroup | RequestPosition;
   @Output() selectItemChange = new EventEmitter<Request | RequestGroup | RequestPosition>();
+
+  @Input() filteredByDrafts: boolean;
 
   positionListForm: FormGroup;
   requestGroups: RequestGroup[];
@@ -177,5 +180,21 @@ export class RequestPositionListComponent implements OnChanges {
 
   onUploadPositionsFromExcel() {
     this.showUploadPositionsFromExcelForm = !this.showUploadPositionsFromExcelForm;
+  }
+
+  isDraftPositionShown(position) {
+    if (
+      position.entityType === "GROUP" &&
+      position.positions.length > 0 &&
+      position.positions.some(pos => pos.status === RequestPositionWorkflowSteps.DRAFT)
+    ) {
+      return true;
+    }
+
+    if (this.filteredByDrafts === true) {
+      return (position.status === RequestPositionWorkflowSteps.DRAFT);
+    } else {
+      return true;
+    }
   }
 }

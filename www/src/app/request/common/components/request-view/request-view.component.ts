@@ -3,6 +3,7 @@ import { Request } from "../../models/request";
 import { RequestPosition } from "../../models/request-position";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-request-view',
@@ -10,6 +11,8 @@ import { RequestPositionList } from "../../models/request-position-list";
   styleUrls: ['./request-view.component.scss']
 })
 export class RequestViewComponent implements OnChanges {
+  @Input() filteredByDrafts: boolean;
+
   @Input() isCustomerView: boolean;
   @Input() request: Request;
   @Input() requestPositions: RequestPositionList[] = [];
@@ -56,5 +59,36 @@ export class RequestViewComponent implements OnChanges {
 
   isNewRequestItem(selectPositionListItem: any) {
     return selectPositionListItem && !selectPositionListItem.id;
+  }
+
+  onDraftClick(): void {
+    this.filteredByDrafts = !this.filteredByDrafts;
+  }
+
+
+  countDraftPositions(list?: RequestPositionList[]): number {
+    let result = 0;
+
+    if (!this.requestPositions || this.requestPositions.length === 0) {
+      return 0;
+    }
+
+    if (!list) {
+      list = this.requestPositions;
+    }
+
+    for (const item of list) {
+      if (item.entityType === "GROUP") {
+        const group = item as RequestGroup;
+        result = result + this.countDraftPositions(group.positions);
+      } else {
+        const position = item as RequestPosition;
+        if (position.status === RequestPositionWorkflowSteps.DRAFT) {
+          result++;
+        }
+      }
+    }
+
+    return result;
   }
 }

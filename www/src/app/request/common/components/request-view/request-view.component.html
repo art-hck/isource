@@ -2,9 +2,21 @@
   <span class="spinner spinner-md"></span>
 </ng-container>
 <ng-container *ngIf="request">
+
+
+  <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
+
+  <app-request-dashboard
+    (draftClick)="onDraftClick()"
+    [filteredByDraftStatus]="filteredByDrafts"
+    [request]="request"
+    [draftPositionsCount]="countDraftPositions()"
+  ></app-request-dashboard>
+
   <div class="clr-row">
     <div [ngClass]="{'clr-col-4' : (selectPositionListItem), 'clr-col' : (!selectPositionListItem)}" *ngIf="showPositionList">
       <app-request-position-list
+        [filteredByDrafts]="filteredByDrafts"
         [request]="request"
         [requestItems]="requestPositions"
         [(selectItem)]="selectPositionListItem"

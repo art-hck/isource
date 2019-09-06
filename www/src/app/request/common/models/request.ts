@@ -3,6 +3,7 @@ import {ContragentRegistration} from "../../../registration/models/contragent-re
 import {UserRegistration} from "../../../registration/models/user-registration";
 import {RequestDocument} from "./request-document";
 import { BaseModel } from "../../../core/models/base-model";
+import { DashboardInfo } from "./dashboard-info";
 
 export class Request extends BaseModel {
   contragent: ContragentRegistration;
@@ -16,4 +17,5 @@ export class Request extends BaseModel {
   documents?: RequestDocument[];
   comment?: string;
   type?: string;
+  dashboard: DashboardInfo;
 }

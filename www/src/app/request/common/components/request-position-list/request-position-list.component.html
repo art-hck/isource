@@ -72,6 +72,7 @@
     <ng-container *ngFor="let control of positionsArray.controls; let i = index">
 
       <div class="clr-row w-100 position-row"
+           *ngIf="isDraftPositionShown(requestItems[i])"
            [ngClass]="{'selected-row' : isSelectedListItem(requestItems[i]),
         'group-item' : requestItems[i].entityType == 'GROUP'}">
 
@@ -131,57 +132,59 @@
 
           </div>
         </div>
-
       </div>
 
       <!-- список позиций внутри группы -->
-      <div class="position-row clr-row w-100 sub-list-item"
-           *ngFor="let requestPosition of requestItems[i].positions"
-           [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
+      <ng-container *ngFor="let requestPosition of requestItems[i].positions">
 
-        <!-- Колонка 1: Название позиции -->
-        <div class="cell position-name clr-col"
-             (click)="onSelectItem(requestPosition)"
-             [ngClass]="{ 'clr-col' : selectItem, 'clr-col' : !selectItem }">
-          {{requestPosition.name}}
-        </div>
+        <div class="position-row clr-row w-100 sub-list-item"
+             [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
 
-        <ng-container *ngIf="!selectItem">
-
-          <!-- Колонка 2: Кол-во -->
-          <div class="clr-col-2 cell position-quantity">
-            <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
+          <!-- Колонка 1: Название позиции -->
+          <div class="cell position-name clr-col"
+               (click)="onSelectItem(requestPosition)"
+               [ngClass]="{ 'clr-col' : selectItem, 'clr-col' : !selectItem }">
+            {{requestPosition.name}}
           </div>
 
-          <!-- Колонка 3: Срок доставки -->
-          <div class="clr-col-2 cell delivery-date">
-            <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
-              как можно скорее
+          <ng-container *ngIf="!selectItem">
+
+            <!-- Колонка 2: Кол-во -->
+            <div class="clr-col-2 cell position-quantity">
+              <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
             </div>
-            <ng-template #notAsap>
-              {{requestPosition.deliveryDate | date :'shortDate'}}
-            </ng-template>
-          </div>
 
-          <!-- Колонка 4: Цена -->
-          <div class="clr-col-1 cell position-price">
-            <span class="quantity">{{requestPosition.startPrice | number}}</span>
-            <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
-          </div>
+            <!-- Колонка 3: Срок доставки -->
+            <div class="clr-col-2 cell delivery-date">
+              <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
+                как можно скорее
+              </div>
+              <ng-template #notAsap>
+                {{requestPosition.deliveryDate | date :'shortDate'}}
+              </ng-template>
+            </div>
 
-        </ng-container>
+            <!-- Колонка 4: Цена -->
+            <div class="clr-col-1 cell position-price">
+              <span class="quantity">{{requestPosition.startPrice | number}}</span>
+              <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
+            </div>
 
-        <!-- Колонка 5: Статус -->
-        <div class="clr-col-3 cell status">
-          <span class="position-status status-position-{{requestPosition.status}}">
-            <span *ngIf="!selectItem">
-              {{requestPosition.statusLabel}}
+          </ng-container>
+
+          <!-- Колонка 5: Статус -->
+          <div class="clr-col-3 cell status">
+            <span class="position-status status-position-{{requestPosition.status}}">
+              <span *ngIf="!selectItem">
+                {{requestPosition.statusLabel}}
+              </span>
             </span>
-          </span>
-          <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+            <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
+          </div>
+
         </div>
 
-      </div>
+      </ng-container>
 
     </ng-container>
 
