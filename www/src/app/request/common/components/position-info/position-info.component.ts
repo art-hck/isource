@@ -158,9 +158,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
       (data: any) => {
         requestPosition.status = data.status;
         requestPosition.statusLabel = data.statusLabel;
-        if (data.requestStatus !== null) {
-          this.changeRequestInfo.emit();
-        }
+
+        this.changeRequestInfo.emit();
       });
   }
 
