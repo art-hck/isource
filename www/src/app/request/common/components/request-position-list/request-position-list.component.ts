@@ -158,6 +158,7 @@ export class RequestPositionListComponent implements OnChanges {
       name: this.newGroupName,
       requestId: this.request.id,
       entityType: 'GROUP',
+      positions: [],
     });
 
     this.requestItems.unshift(requestGroup);

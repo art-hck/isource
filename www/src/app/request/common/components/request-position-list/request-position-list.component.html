@@ -26,7 +26,7 @@
       <span *ngIf="!selectItem">Загрузить из шаблона</span>
     </button>
 
-    <clr-dropdown *ngIf="selectedPositions.length" class="add-in-group">
+    <clr-dropdown *ngIf="selectedPositions.length && requestGroups && requestGroups.length > 0" class="add-in-group">
       <button type="button" class="btn btn-link" clrDropdownTrigger>
         Добавить в группу
         <clr-icon shape="angle" style="transform: rotate(180deg);"></clr-icon>
