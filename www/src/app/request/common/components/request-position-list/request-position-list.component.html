@@ -54,6 +54,7 @@
   </div>
 
   <div class="card-content">
+
     <div class="clr-row w-100 request-row"
          (click)="onSelectItem(request)"
          [ngClass]="{'selected-row' : isSelectedListItem(request)}">
@@ -61,19 +62,20 @@
         <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
       </div>
       <div class="clr-col-auto cell status request">
-    <span class="status-request-{{request.status}}">
-     {{request.statusLabel}}
-    </span>
+        <span class="status-request-{{request.status}}">
+         {{request.statusLabel}}
+        </span>
         <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
       </div>
     </div>
 
     <ng-container *ngFor="let control of positionsArray.controls; let i = index">
+
       <div class="clr-row w-100 position-row"
            [ngClass]="{'selected-row' : isSelectedListItem(requestItems[i]),
         'group-item' : requestItems[i].entityType == 'GROUP'}">
 
-        <div class="clr-col-auto cell">
+        <div class="clr-col-auto cell"> <!-- Колонка с чекбоксом -->
           <clr-checkbox-wrapper class="select-checkbox" *ngIf="!isCustomerView">
             <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
                    *ngIf="requestItems[i].entityType !== 'GROUP'"
@@ -85,16 +87,21 @@
 
         <div class="clr-col">
           <div class="clr-row" (click)="onSelectItem(requestItems[i])">
+
+            <!-- Колонка 1: Название позиции -->
             <div class="cell position-name clr-col">
               {{requestItems[i].name}}
             </div>
 
             <!-- Дополнительные колонки, котороые отображаются в раскрытом списке -->
             <ng-container *ngIf="!selectItem">
+
+              <!-- Колонка 2: Кол-во -->
               <div class="clr-col-2 cell position-quantity">
                 <span class="quantity">{{requestItems[i].quantity}} </span>{{requestItems[i].measureUnit}}
               </div>
 
+              <!-- Колонка 3: Срок доставки -->
               <div class="clr-col-2 cell delivery-date">
                 <div class="deliveryDate" *ngIf="requestItems[i].isDeliveryDateAsap; else notAsap">
                   как можно скорее
@@ -104,41 +111,50 @@
                 </ng-template>
               </div>
 
-              <div class="clr-col-2 cell position-price">
+              <!-- Колонка 4: Цена -->
+              <div class="clr-col-1 cell position-price">
                 <span class="quantity">{{requestItems[i].startPrice | number}}</span>
-                <span *ngIf="control.startPrice">{{requestItems[i].currency}}</span>
+                <span *ngIf="requestItems[i].startPrice">{{requestItems[i].currency}}</span>
               </div>
+
             </ng-container>
 
-            <div class="clr-col-auto cell status">
-        <span class="position-status status-position-{{requestItems[i].status}}">
-          <span *ngIf="!selectItem">
-            {{requestItems[i].statusLabel}}
-          </span>
-        </span>
+            <!-- Колонка 5: Статус -->
+            <div class="clr-col-3 cell status">
+              <span class="position-status status-position-{{requestItems[i].status}}">
+                <span *ngIf="!selectItem">
+                  {{requestItems[i].statusLabel}}
+                </span>
+              </span>
               <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
             </div>
+
           </div>
         </div>
 
       </div>
 
       <!-- список позиций внутри группы -->
-      <div class="position-row clr-row w-100 sub-list-item" *ngFor="let requestPosition of requestItems[i].positions"
+      <div class="position-row clr-row w-100 sub-list-item"
+           *ngFor="let requestPosition of requestItems[i].positions"
            [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
 
-        <div class="cell position-name "
+        <!-- Колонка 1: Название позиции -->
+        <div class="cell position-name clr-col"
              (click)="onSelectItem(requestPosition)"
-             [ngClass]="{ 'clr-col' : selectItem, 'clr-col-5' : !selectItem }">
+             [ngClass]="{ 'clr-col' : selectItem, 'clr-col' : !selectItem }">
           {{requestPosition.name}}
         </div>
 
         <ng-container *ngIf="!selectItem">
-          <div class="clr-col cell position-quantity">
+
+          <!-- Колонка 2: Кол-во -->
+          <div class="clr-col-2 cell position-quantity">
             <span class="quantity">{{requestPosition.quantity}} </span>{{requestPosition.measureUnit}}
           </div>
 
-          <div class="clr-col cell delivery-date">
+          <!-- Колонка 3: Срок доставки -->
+          <div class="clr-col-2 cell delivery-date">
             <div class="deliveryDate" *ngIf="requestPosition.isDeliveryDateAsap; else notAsap">
               как можно скорее
             </div>
@@ -147,13 +163,16 @@
             </ng-template>
           </div>
 
-          <div class="clr-col cell position-price">
+          <!-- Колонка 4: Цена -->
+          <div class="clr-col-1 cell position-price">
             <span class="quantity">{{requestPosition.startPrice | number}}</span>
             <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
           </div>
+
         </ng-container>
 
-        <div class="clr-col-auto cell status" [ngClass]="{'clr-col-1' : selectItem}">
+        <!-- Колонка 5: Статус -->
+        <div class="clr-col-3 cell status">
           <span class="position-status status-position-{{requestPosition.status}}">
             <span *ngIf="!selectItem">
               {{requestPosition.statusLabel}}
@@ -161,8 +180,11 @@
           </span>
           <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
         </div>
+
       </div>
+
     </ng-container>
+
   </div>
 
 </div>

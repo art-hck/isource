@@ -42,16 +42,16 @@ export class RequestViewComponent implements OnChanges {
     Object.assign(this.selectPositionListItem, updatedPosition);
   }
 
-  isRequest(item: any) {
+  isRequest(item: any): boolean {
     return item instanceof Request;
   }
 
-  isPosition(item: any) {
-    return item instanceof RequestPosition;
+  isPosition(item: any): boolean {
+    return (item && item.entityType === 'POSITION');
   }
 
-  isGroup(item: any) {
-    return item instanceof RequestGroup;
+  isGroup(item: any): boolean {
+    return (item && item.entityType === 'GROUP');
   }
 
   isNewRequestItem(selectPositionListItem: any) {

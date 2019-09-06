@@ -139,7 +139,8 @@ export class RequestPositionListComponent implements OnChanges {
     const requestPosition = new RequestPosition({
       id: null,
       name: this.newPositionName,
-      requestId: this.request.id
+      requestId: this.request.id,
+      entityType: 'POSITION',
     });
 
     this.requestItems.unshift(requestPosition);
@@ -152,7 +153,8 @@ export class RequestPositionListComponent implements OnChanges {
     const requestGroup = new RequestGroup({
       id: null,
       name: this.newGroupName,
-      requestId: this.request.id
+      requestId: this.request.id,
+      entityType: 'GROUP',
     });
 
     this.requestItems.unshift(requestGroup);
