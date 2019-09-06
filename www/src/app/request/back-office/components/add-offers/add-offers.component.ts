@@ -108,7 +108,7 @@ export class AddOffersComponent implements OnInit {
 
     this.offersService.addOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
       (data: RequestOfferPosition) => {
-        this.updatePositionsAndSuppliers();
+        this.selectedRequestPosition.linkedOffers.push(data);
       }
     );
     this.showAddOfferModal = false;
