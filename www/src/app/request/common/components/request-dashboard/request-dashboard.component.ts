@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Request } from "../../models/request";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { Router } from "@angular/router";
@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
   templateUrl: './request-dashboard.component.html',
   styleUrls: ['./request-dashboard.component.scss']
 })
-export class RequestDashboardComponent implements OnInit {
+export class RequestDashboardComponent implements OnChanges {
 
   @Output() draftClick = new EventEmitter<void>();
 
@@ -32,7 +32,7 @@ export class RequestDashboardComponent implements OnInit {
     public user: UserInfoService
   ) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.getRequestDashboardCounters();
   }
 
