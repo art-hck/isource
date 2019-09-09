@@ -1,6 +1,7 @@
 import {Uuid} from "../../../cart/models/uuid";
+import { BaseModel } from "../../../core/models/base-model";
 
-export class RequestPositionList {
+export class RequestPositionList extends BaseModel {
   /**
    * Значение null допустимо для позиций не сохранённых в базе данных
    */

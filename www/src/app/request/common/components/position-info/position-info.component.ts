@@ -34,8 +34,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
-  @Input() opened: boolean;
-  @Output() openedChange = new EventEmitter<boolean>();
+  @Output() close = new EventEmitter();
 
   @Input() requestPosition: RequestPosition;
   @Output() requestPositionChanged = new EventEmitter<RequestPosition>();
@@ -198,8 +197,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onWindowClose() {
-    this.opened = false;
-    this.openedChange.emit(this.opened);
+    this.close.emit();
   }
 
   onWindowFull(flag: boolean) {

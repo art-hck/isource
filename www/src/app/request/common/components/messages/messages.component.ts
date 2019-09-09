@@ -43,7 +43,6 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
     this.wsService.on<any>('message.new')
       .subscribe((message: Message) => {
-        console.log(message);
         if (message.user.id !== userInfoService.getUserInfo().id
           && message.requestPositionId === this.requestPosition.id
         ) {

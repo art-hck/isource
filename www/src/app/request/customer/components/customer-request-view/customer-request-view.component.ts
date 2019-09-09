@@ -1,13 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {RequestPosition} from "../../../common/models/request-position";
-import {ActivatedRoute} from "@angular/router";
-import {RequestService} from "../../services/request.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../common/models/request";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ActivatedRoute } from "@angular/router";
+import { RequestService } from "../../services/request.service";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { Observable } from "rxjs";
-import { RequestWorkflowSteps} from "../../../common/enum/request-workflow-steps";
+import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import { RequestPositionList } from "../../../common/models/request-position-list";
+import { RequestGroup } from 'src/app/request/common/models/request-group';
 
 @Component({
   selector: 'app-customer-request-view',
@@ -15,15 +16,15 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
   styleUrls: ['./customer-request-view.component.css']
 })
 export class CustomerRequestViewComponent implements OnInit {
-  updatedPosition: RequestPosition;
-  requestId: Uuid;
+  @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
+
   request: Request;
-  requestPositions: RequestPosition[];
+  updatedPosition: RequestPosition;
+  requestPositions: RequestPositionList[];
   rejectionMessageModalOpen = false;
   rejectionMessage: string;
 
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
+  protected requestId: Uuid;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,7 +67,7 @@ export class CustomerRequestViewComponent implements OnInit {
     }
 
     for (const position of this.requestPositions) {
-      if (position.status === RequestPositionWorkflowSteps.DRAFT) {
+      if ((position as RequestPosition).status === RequestPositionWorkflowSteps.DRAFT) {
         return true;
       }
     }
@@ -77,7 +78,6 @@ export class CustomerRequestViewComponent implements OnInit {
   onPublish(): void {
     this.requestService.publishRequest(this.requestId).subscribe(
       (data: any) => {
-        this.requestView.showPositionInfo = null;
         this.getRequest();
         this.getRequestPositions();
       }
@@ -93,19 +93,13 @@ export class CustomerRequestViewComponent implements OnInit {
       return true;
     }
 
-    for (const position of this.requestPositions) {
-      if (position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.hasApprovedStatus(this.requestPositions);
   }
 
   onApprove(): void {
     this.requestService.approveRequest(this.requestId).subscribe(
       (data: any) => {
-        this.requestView.showPositionInfo = null;
+        // this.requestView.showPositionInfo = null;
         this.getRequest();
         this.getRequestPositions();
       }
@@ -120,7 +114,7 @@ export class CustomerRequestViewComponent implements OnInit {
     this.requestService.rejectRequest(this.requestId, this.rejectionMessage).subscribe(
       (data: any) => {
         this.rejectionMessageModalOpen = false;
-        this.requestView.showPositionInfo = null;
+        // this.requestView.showPositionInfo = null;
         this.getRequest();
         this.getRequestPositions();
       }
@@ -132,5 +126,33 @@ export class CustomerRequestViewComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  protected hasApprovedStatus(items: RequestPositionList[]): boolean {
+    for (const item of items) {
+      const position = this.getPosition(item);
+      if (position && position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL) {
+        return true;
+      }
+      const group = this.getGroup(item);
+      if (group && this.hasApprovedStatus(group.positions)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  protected getPosition(item: RequestPositionList): RequestPosition|null {
+    if (item.entityType === 'POSITION') {
+      return item as RequestPosition;
+    }
+    return null;
+  }
+
+  protected getGroup(item: RequestPositionList): RequestGroup|null {
+    if (item.entityType === 'GROUP') {
+      return item as RequestGroup;
+    }
+    return null;
   }
 }

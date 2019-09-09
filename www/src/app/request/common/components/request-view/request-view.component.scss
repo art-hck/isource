@@ -107,6 +107,11 @@ clr-datagrid {
 .action-bar {
   height: 50px;
   border-bottom: 1px solid #d4d9e2;
+  padding: 8px 20px;
+
+  .btn {
+    margin: 0 20px 0 0;
+  }
 }
 
 .request-row {
@@ -133,7 +138,7 @@ background: aliceblue;
 }
 
 .card-content {
-  padding: 15px;
+  padding: 0;
 }
 
 .request-view {
@@ -164,16 +169,8 @@ background: aliceblue;
   padding-right: 20px;
 }
 
-.action-bar {
-  padding: 10px 20px;
-}
-
 .btn-link {
   margin-right: 15px;
-}
-
-.btn.btn-link {
-  padding-bottom: 20px;
 }
 
 .selected-row, .selected-row:hover, .selected-row h3, .selected-row span {
@@ -191,14 +188,6 @@ background: aliceblue;
 
 }
 
-.add-in-group {
-  padding: 0;
-}
-
-.btn.btn-link.add-in-group {
-  padding: 0;
-}
-
 ::ng-deep .dropdown .dropdown-toggle clr-icon[shape^=caret] {
   display: none;
 }
@@ -206,3 +195,4 @@ background: aliceblue;
 .card.list {
   padding-bottom: 50px;
 }
+
