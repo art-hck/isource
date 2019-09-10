@@ -6,6 +6,8 @@ import { Observable } from "rxjs";
 import { RequestDocument } from "../../common/models/request-document";
 import { Request } from "../../common/models/request";
 import { saveAs } from 'file-saver/src/FileSaver';
+import {RequestPosition} from "../../common/models/request-position";
+import {RequestPositionList} from "../../common/models/request-position-list";
 
 @Injectable()
 export class OffersService {
@@ -23,6 +25,17 @@ export class OffersService {
   publishOffers(id: Uuid, positionId) {
     const url = `requests/backoffice/${id}/positions/${positionId}/publish-offers`;
     return this.api.post(url, {});
+  }
+
+  publishRequestOffers(id: Uuid, requestPositions: RequestPosition[]) {
+    const url = `requests/backoffice/${id}/publish-offers`;
+      const ids = [];
+      for (const requestPosition of requestPositions) {
+        ids.push(requestPosition.id);
+      }
+    return this.api.post(url, {
+      positionIds: ids
+    });
   }
 
   uploadDocuments(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {

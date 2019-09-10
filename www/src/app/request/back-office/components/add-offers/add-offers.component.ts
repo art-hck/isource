@@ -36,6 +36,9 @@ export class AddOffersComponent implements OnInit {
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
 
+  selectedRequestPositions: RequestPosition[] = [];
+  requestPosition: RequestPosition;
+
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
 
@@ -81,6 +84,14 @@ export class AddOffersComponent implements OnInit {
 
     this.showAddContragentModal = false;
     this.contragentName = '';
+  }
+
+  onPublishOffers() {
+    this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
+      () => {
+        this.updatePositionsAndSuppliers();
+      }
+    );
   }
 
   checkAddContragentButtonEnabled() {
@@ -145,6 +156,16 @@ export class AddOffersComponent implements OnInit {
 
   onDownloadOffersTemplate() {
     this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onSelectPosition(requestPosition: RequestPosition) {
+    let index = this.selectedRequestPositions.indexOf(requestPosition);
+
+    if (index === -1) {
+      this.selectedRequestPositions.push(requestPosition);
+    } else {
+      this.selectedRequestPositions.splice(index, 1);
+    }
   }
 
   protected updatePositionsAndSuppliers(): void {
