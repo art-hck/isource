@@ -159,7 +159,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   onSelectPosition(requestPosition: RequestPosition) {
-    let index = this.selectedRequestPositions.indexOf(requestPosition);
+    const index = this.selectedRequestPositions.indexOf(requestPosition);
 
     if (index === -1) {
       this.selectedRequestPositions.push(requestPosition);
