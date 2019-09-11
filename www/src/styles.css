@@ -24,6 +24,11 @@ h5 {
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }
 
+span.spinner {
+    margin: 0 auto;
+    display: block;
+}
+
 
 /* Стили элемента статуса */
 .status-label {
