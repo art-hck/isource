@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-add-offers',
@@ -29,12 +30,15 @@ export class AddOffersComponent implements OnInit {
   offerForm: FormGroup;
 
   showOfferModal = false;
+  showImportOffersExcel = false;
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
 
   selectedRequestPositions: RequestPosition[] = [];
+
+  files: File[] = [];
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -168,6 +172,44 @@ export class AddOffersComponent implements OnInit {
     } else {
       this.selectedRequestPositions.splice(index, 1);
     }
+  }
+
+  onShowImportOffersExcel(): void {
+    this.showImportOffersExcel = true;
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendOffersTemplateFilesClick(): void {
+    this.offersService.addOffersFromExcel(this.request, this.files).subscribe((data: any) => {
+      Swal.fire({
+        width: 400,
+        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
+          '<button id="submit" class="btn btn-primary">' +
+          'ОК' + '</button>',
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          const content = Swal.getContent();
+          const $ = content.querySelector.bind(content);
+
+          const submit = $('#submit');
+          submit.addEventListener('click', () => {
+            this.updatePositionsAndSuppliers();
+            this.files = [];
+            this.showImportOffersExcel = false;
+            Swal.close();
+          });
+        }
+      });
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 
   protected updatePositionsAndSuppliers(): void {

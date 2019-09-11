@@ -26,9 +26,10 @@
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
               <button class="btn btn-outline import-export"
                       (click)="onDownloadOffersTemplate()">
-                Импорт шаблона
+                Экспортировать шаблон
               </button>
-              <button class="btn import-export">Экспорт КП</button>
+              <button class="btn import-export"
+              (click)="onShowImportOffersExcel()">Импортировать КП</button>
             </div>
 
           </div>
@@ -236,3 +237,35 @@
       </clr-datagrid>
     </div>
   </clr-modal>
+
+  <clr-modal [(clrModalOpen)]="showImportOffersExcel">
+    <h3 class="modal-title">Выберите файл для импорта</h3>
+    <div class="modal-body">
+      <form class="clr-form-control view">
+        <div class="card">
+          <div class="card-block">
+            <div class="card-text">
+              <span class="gray">
+                Вы можете загрузить необходимый список предложений, скачав шаблон по нажатию кнопки
+                Экспортировать шаблон и заполнив его
+              </span>
+
+              <app-document-upload-list
+                [documents]="files"
+                (fileSelected)="onChangeFilesList($event)">
+              </app-document-upload-list>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary"
+              type="button"
+              (click)="onSendOffersTemplateFilesClick()"
+              [disabled]="this.files.length === 0">
+        Отправить
+      </button>
+    </div>
+  </clr-modal>
+</ng-container>
