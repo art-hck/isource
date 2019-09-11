@@ -87,6 +87,7 @@ export class AddOffersComponent implements OnInit {
     this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
       () => {
         this.updatePositionsAndSuppliers();
+        this.selectedRequestPositions = [];
       }
     );
   }
@@ -103,6 +104,10 @@ export class AddOffersComponent implements OnInit {
     this.selectedSupplier = supplier;
 
     this.showAddOfferModal = true;
+    this.offerForm.get('quantity').setValue(requestPosition.quantity);
+    this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
+    this.offerForm.get('deliveryDate').setValue(requestPosition.deliveryDate);
+    this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
   }
 
   isFieldValid(field: string) {
