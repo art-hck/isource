@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
-import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -37,7 +35,6 @@ export class AddOffersComponent implements OnInit {
   selectedOffer: RequestOfferPosition;
 
   selectedRequestPositions: RequestPosition[] = [];
-  requestPosition: RequestPosition;
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
