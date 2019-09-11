@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
-import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -35,6 +33,8 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
+
+  selectedRequestPositions: RequestPosition[] = [];
 
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
@@ -81,6 +81,14 @@ export class AddOffersComponent implements OnInit {
 
     this.showAddContragentModal = false;
     this.contragentName = '';
+  }
+
+  onPublishOffers() {
+    this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
+      () => {
+        this.updatePositionsAndSuppliers();
+      }
+    );
   }
 
   checkAddContragentButtonEnabled() {
@@ -145,6 +153,16 @@ export class AddOffersComponent implements OnInit {
 
   onDownloadOffersTemplate() {
     this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onSelectPosition(requestPosition: RequestPosition) {
+    const index = this.selectedRequestPositions.indexOf(requestPosition);
+
+    if (index === -1) {
+      this.selectedRequestPositions.push(requestPosition);
+    } else {
+      this.selectedRequestPositions.splice(index, 1);
+    }
   }
 
   protected updatePositionsAndSuppliers(): void {
