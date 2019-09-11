@@ -16,7 +16,7 @@
   display: grid;
 
   &.not-clickable:hover {
-    cursor: not-allowed;
+    cursor: auto;
   }
 }
 
@@ -55,4 +55,12 @@
 
 .modal-body:focus {
   outline: 0;
+}
+
+.not-clickable {
+  .stats-items-content {
+    span {
+      color: #9fa8b0;
+    }
+  }
 }
