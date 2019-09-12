@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
-import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -124,7 +123,14 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  updateTpPositionManufacturingName(tpPosition, tpId: Uuid, value) {
+  /**
+   * Обновление заводского наименования позиции в карточке ТП
+   *
+   * @param tpPosition
+   * @param tpId
+   * @param value
+   */
+  updateTpPositionManufacturingName(tpPosition, tpId: Uuid, value: string): void {
     const tpPositionInfo = {
       position: {
         id: tpPosition.position.id
