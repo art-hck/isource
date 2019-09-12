@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -6,10 +6,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { RequestGroup } from "../../../common/models/request-group";
-import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
