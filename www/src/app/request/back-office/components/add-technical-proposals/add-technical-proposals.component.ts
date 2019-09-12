@@ -6,6 +6,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { RequestGroup } from "../../../common/models/request-group";
+import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -21,10 +25,14 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
+  tpSupplierName: string;
+
   selectedTechnicalProposalPositions = [];
   searchStr: string;
 
   showAddTechnicalProposalModal = false;
+
+  files: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -50,31 +58,30 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
 
 
-  // onShowAddTechnicalProposalModal() {
-  //   this.selectedTechnicalProposalPositions = [];
-  //   this.searchStr = '';
-  //
-  //   const technicalProposal = new TechnicalProposal();
-  //   technicalProposal.id = null;
-  //   this.technicalProposal = technicalProposal;
-  //
-  //   this.getPositionsListForTp();
-  //
-  //   this.showAddTechnicalProposalModal = true;
-  // }
+  onShowAddTechnicalProposalModal() {
+    this.selectedTechnicalProposalPositions = [];
+    this.searchStr = '';
 
-  // onShowEditTechnicalProposalModal(technicalProposal) {
-  //   this.selectedTechnicalProposalPositions = [];
-  //   this.searchStr = '';
-  //
-  //   this.getPositionsListForTp();
-  //
-  //   // todo Получить список отмеченных позиций для этого техпредложения
-  //
-  //   this.technicalProposal = technicalProposal;
-  //
-  //   this.showAddTechnicalProposalModal = true;
-  // }
+    const technicalProposal = new TechnicalProposal();
+    technicalProposal.id = null;
+    this.technicalProposal = technicalProposal;
+
+    this.getPositionsListForTp();
+
+    this.showAddTechnicalProposalModal = true;
+  }
+
+  onShowEditTechnicalProposalModal(technicalProposal) {
+    this.technicalProposalsPositions = [];
+    this.getPositionsListForTp();
+
+    this.selectedTechnicalProposalPositions = [];
+    this.searchStr = '';
+
+    this.technicalProposal = technicalProposal;
+
+    this.showAddTechnicalProposalModal = true;
+  }
 
 
 
@@ -86,15 +93,15 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
 
-  // onSendForApproval() {
-  //   console.log('Отправлено на согласование заказчику');
-  //   // this.technicalProposalsService.sendToAgreement().subscribe(
-  //   //   (data: TechnicalProposal) => {
-  //   //     console.log(data);
-  //   //     this.technicalProposals = data;
-  //   //   }
-  //   // );
-  // }
+  onSendForApproval() {
+    console.log('Отправлено на согласование заказчику');
+    // this.technicalProposalsService.sendToAgreement().subscribe(
+    //   (data: TechnicalProposal) => {
+    //     console.log(data);
+    //     this.technicalProposals = data;
+    //   }
+    // );
+  }
 
   protected updateRequestInfo() {
     this.requestService.getRequestInfo(this.requestId).subscribe(
@@ -113,129 +120,106 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
 
-  // updateTpPositionManufacturingName(tpPosition, value) {
-  //   const tpPositionInfo = {
-  //     position: {
-  //       id: tpPosition.id
-  //     },
-  //     manufacturingName: value
-  //   };
-  //
-  //   this.technicalProposalsService.updateTpPositionManufacturingName(
-  //     this.requestId,
-  //     tpPosition.id,
-  //     tpPositionInfo
-  //   ).subscribe(() => {});
-  // }
+  updateTpPositionManufacturingName(tpPosition, value) {
+    const tpPositionInfo = {
+      position: {
+        id: tpPosition.id
+      },
+      manufacturingName: value
+    };
+
+    this.technicalProposalsService.updateTpPositionManufacturingName(
+      this.requestId,
+      tpPosition.id,
+      tpPositionInfo
+    ).subscribe(() => {});
+  }
+
+  /**
+   * Создание технического предложения
+   */
+  onAddTechnicalProposal(): void {
+    const selectedPositionsArray = [];
+    this.selectedTechnicalProposalPositions.map(pos => {
+      selectedPositionsArray.push(pos.id);
+    });
+
+    const technicalProposal = {
+      name: this.tpSupplierName,
+      positions: selectedPositionsArray,
+    };
+
+    this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
+      this.getTechnicalProposals();
+    });
+    this.showAddTechnicalProposalModal = false;
+    this.tpSupplierName = "";
+  }
+
+  /**
+   * Редактирование Технического предложения
+   */
+  onSaveTechnicalProposal(): void {
+    const technicalProposal = {
+      name: this.technicalProposal.name,
+      positions: this.selectedTechnicalProposalPositions,
+    };
+
+    console.log(technicalProposal);
+    this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
+      this.getTechnicalProposals();
+    });
+    this.showAddTechnicalProposalModal = false;
+  }
 
 
-  // onAddTechnicalProposal() {
-  //   // this.technicalProposalsService.addTechnicalProposal();
-  // }
-  //
-  // onSaveTechnicalProposal() {
-  //   console.log(this.technicalProposalsPositions);
-  // }
+  onSearch() {
+    console.log(this.searchStr);
+    this.technicalProposalsPositions.splice(this.technicalProposalsPositions.findIndex(e => e.name !== this.searchStr), 1);
+  }
 
 
-  // onSearch() {
-  //   console.log(this.searchStr);
-  //   this.technicalProposalsPositions.splice(this.technicalProposalsPositions.findIndex(e => e.name !== this.searchStr), 1);
-  // }
+  getPositionsListForTp() {
+    this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId).subscribe(
+      (positions: RequestPositionList[]) => {
+        this.technicalProposalsPositions = positions;
+      }
+    );
+  }
+
+  onTechnicalProposalPositionSelected(position) {
+    if (this.selectedTechnicalProposalPositions.indexOf(position) > -1) {
+      for (let i = 0; i < this.selectedTechnicalProposalPositions.length; i++) {
+        if (this.selectedTechnicalProposalPositions[i] === position) {
+          this.selectedTechnicalProposalPositions.splice(i, 1);
+        }
+      }
+    } else {
+      this.selectedTechnicalProposalPositions.push(position);
+    }
+  }
+
+  checkIfPositionIsChecked() {
+    this.technicalProposalsPositions.map(pos => {
+      if (this.selectedTechnicalProposalPositions.indexOf(pos) > -1) {
+        console.log('есть');
+        return true;
+      } else {
+        console.log('нет');
+        return false;
+      }
+    });
+  }
 
 
-  // getPositionsListForTp() {
-  //   this.technicalProposalsPositions = [
-  //     {
-  //       id: '1',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Сапог'
-  //     },
-  //     {
-  //       id: '2',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ручка'
-  //     },
-  //     {
-  //       id: '3',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ёжик'
-  //     },
-  //     {
-  //       id: '4',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Сапог'
-  //     },
-  //     {
-  //       id: '5',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ручка'
-  //     },
-  //     {
-  //       id: '6',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ёжик'
-  //     },
-  //     {
-  //       id: '7',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Сапог'
-  //     },
-  //     {
-  //       id: '8',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ручка'
-  //     },
-  //     {
-  //       id: '9',
-  //       entityType: 'POSITION',
-  //       createdDate: '22.05.1993 00:00:00',
-  //       requestId: '9',
-  //       name: 'Ёжик'
-  //     },
-  //   ];
-  //
-  //   // this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId).subscribe(
-  //   //   (positions: RequestPositionList[]) => {
-  //   //     this.technicalProposalsPositions = positions;
-  //   //   }
-  //   // );
-  // }
-
-  // onTechnicalProposalPositionSelected(position) {
-  //   if (this.selectedTechnicalProposalPositions.indexOf(position) > -1) {
-  //     for (let i = 0; i < this.selectedTechnicalProposalPositions.length; i++) {
-  //       if (this.selectedTechnicalProposalPositions[i] === position) {
-  //         this.selectedTechnicalProposalPositions.splice(i, 1);
-  //       }
-  //     }
-  //   } else {
-  //     this.selectedTechnicalProposalPositions.push(position);
-  //   }
-  //
-  //   // this.selectedTechnicalProposalPositions.push(positionId);
-  //   console.log(this.selectedTechnicalProposalPositions);
-  // }
 
 
-  // tpModalInEditMode(technicalProposal) {
-  //   return technicalProposal.id !== null;
-  // }
+  /**
+   * Функция проверяет, находится ли модальное окно в режиме редактирования или в режиме создания нового ТП
+   * @param technicalProposal
+   */
+  tpModalInEditMode(technicalProposal): boolean {
+    return technicalProposal.id !== null;
+  }
 
 }

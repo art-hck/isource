@@ -13,7 +13,7 @@
 
         <div class="clr-row w-100">
           <div class="clr-col-2">
-            <span class="add-technical-proposal">
+            <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
               + Добавить ТП
             </span>
           </div>
@@ -69,5 +69,95 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="lg">
+
+    <h3 class="modal-title">{{
+        tpModalInEditMode(technicalProposal) ?
+        "Редактирование технического предложения" :
+        "Новое техническое предложение"
+      }}</h3>
+
+    <div class="modal-body">
+
+      <div class="clr-row w-100">
+        <div class="clr-col-12" style="padding-bottom: 15px;">
+          <label for="supplierName"><p>Наименование поставщика</p></label>
+          <input type="text"
+                 id="supplierName"
+                 name="supplierName"
+                 [(ngModel)]="tpSupplierName"
+                 value="{{ technicalProposal.name }}">
+        </div>
+
+<!--        <div *ngIf="technicalProposal.documents" class="clr-col-12">-->
+<!--          <app-document-simple-list [documents]="technicalProposal.documents"></app-document-simple-list>-->
+<!--        </div>-->
+      </div>
+
+      <div class="clr-row w-100 clr-align-items-center">
+        <div class="clr-col-12">
+          <p>Позиции технического предложения</p>
+        </div>
+
+<!--        <div class="clr-col-10 search">-->
+<!--          <input clrinput-->
+<!--                 placeholder="Введите строку для поиска"-->
+<!--                 name="searchStr" type="text" (keyup.enter)="onSearch()" [(ngModel)]="searchStr">-->
+<!--        </div>-->
+
+<!--        <div class="clr-col-2">-->
+<!--          <input clrinput class="btn btn-link" type="submit" (click)="onSearch()" value="Поиск">-->
+<!--        </div>-->
+
+        <div class="clr-col-12">
+          <div class="card-block" style="padding: 15px 0">
+
+            <ng-container *ngIf="!technicalProposalsPositions" class="load-block">
+              <span class="spinner spinner-md"></span>
+            </ng-container>
+
+            <ng-container *ngFor="let technicalProposalPosition of technicalProposalsPositions">
+              <clr-checkbox-wrapper>
+                <input type="checkbox"
+                       clrCheckbox
+                       value="{{ technicalProposalPosition.id }}"
+                       [checked]="checkIfPositionIsChecked()"
+                       (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)" />
+                <label>{{ technicalProposalPosition.name }}</label>
+              </clr-checkbox-wrapper>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <div class="clr-row w-100">
+        <div class="clr-col-12 text-right">
+          <button class="btn btn-link" (click)="showAddTechnicalProposalModal = false">Отмена</button>
+
+          <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
+            <button class="btn btn-primary"
+                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    (click)="onAddTechnicalProposal()">Добавить</button>
+          </ng-container>
+
+          <ng-template #saveBtn>
+            <button class="btn btn-primary"
+                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    (click)="onSaveTechnicalProposal()">Сохранить</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </clr-modal>
+
 
 </ng-container>
