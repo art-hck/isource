@@ -5,13 +5,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
-import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
-import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
+import {ContragentList} from "../../../../contragent/models/contragent-list";
+import {ContragentService} from "../../../../contragent/services/contragent.service";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-add-offers',
@@ -25,7 +26,7 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  contragentName = '';
+  showContragentList = false;
 
   showAddOfferModal = false;
   offerForm: FormGroup;
@@ -36,6 +37,13 @@ export class AddOffersComponent implements OnInit {
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
 
+  selectedRequestPositions: RequestPosition[] = [];
+
+  contragents: ContragentList[];
+  contragentForm: FormGroup;
+  showContragentInfo = false;
+  selectedContragent: ContragentList;
+
   @ViewChild(RequestViewComponent, {static: false})
   requestView: RequestViewComponent;
 
@@ -44,7 +52,8 @@ export class AddOffersComponent implements OnInit {
     private requestService: RequestService,
     private formBuilder: FormBuilder,
     protected offersService: OffersService,
-    protected router: Router
+    protected router: Router,
+    private getContragentService: ContragentService
   ) {
   }
 
@@ -60,8 +69,13 @@ export class AddOffersComponent implements OnInit {
       paymentTerms: ['', Validators.required]
     });
 
+    this.contragentForm = this.formBuilder.group({
+      searchContragent: [null, Validators.required]
+    });
+
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
+    this.getContragentList();
   }
 
   getSupplierLinkedOffers(
@@ -71,30 +85,65 @@ export class AddOffersComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
+  getContragentList(): void {
+    this.getContragentService.getContragentList().subscribe(
+      (data: ContragentList[]) => {
+        this.contragents = data;
+      });
+  }
+
+  // Модальное окно выбора контрагента
+  onShowContragentList() {
+      this.showContragentList = !this.showContragentList;
+  }
+
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
+    this.getContragentList();
+    this.contragentForm.valueChanges.subscribe(data => {
+      this.showContragentInfo = false;
+    });
+  }
+
+  onCloseAddContragentModal() {
+    this.showAddContragentModal = false;
+    this.contragentForm.reset();
+    this.showContragentInfo = false;
   }
 
   onAddContragent() {
-    this.suppliers.push(this.contragentName);
+    this.suppliers.push(this.selectedContragent.shortName);
     this.suppliers.sort();
-
-    this.showAddContragentModal = false;
-    this.contragentName = '';
+    this.onCloseAddContragentModal();
   }
 
-  checkAddContragentButtonEnabled() {
-    if (this.contragentName && this.contragentName.length) {
-      return true;
-    }
-    return false;
+  selectContragent(contragent: ContragentList) {
+    this.contragentForm.patchValue({"searchContragent": contragent.shortName});
+    this.showContragentList = false;
+    this.selectedContragent = contragent;
+    this.showContragentInfo = true;
   }
 
+  getSearchValue() {
+    return this.contragentForm.value.searchContragent;
+  }
+
+  // Модальное окно создание КП
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
 
     this.showAddOfferModal = true;
+
+    this.offerForm.get('quantity').setValue(requestPosition.quantity);
+    this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
+    if (requestPosition.deliveryDate !== null) {
+      const deliveryDate = requestPosition.deliveryDate ?
+        moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
+        requestPosition.deliveryDate;
+      this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+    }
   }
 
   isFieldValid(field: string) {
@@ -111,10 +160,15 @@ export class AddOffersComponent implements OnInit {
         this.selectedRequestPosition.linkedOffers.push(data);
       }
     );
+    this.onCloseAddOfferModal();
+  }
+
+  onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
   }
 
+  // Модальное окно просмотра КП
   onShowOfferModal(offer: RequestOfferPosition) {
     this.selectedOffer = offer;
 
@@ -145,6 +199,25 @@ export class AddOffersComponent implements OnInit {
 
   onDownloadOffersTemplate() {
     this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onSelectPosition(requestPosition: RequestPosition) {
+    const index = this.selectedRequestPositions.indexOf(requestPosition);
+
+    if (index === -1) {
+      this.selectedRequestPositions.push(requestPosition);
+    } else {
+      this.selectedRequestPositions.splice(index, 1);
+    }
+  }
+
+  onPublishOffers() {
+    this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
+      () => {
+        this.updatePositionsAndSuppliers();
+        this.selectedRequestPositions = [];
+      }
+    );
   }
 
   protected updatePositionsAndSuppliers(): void {

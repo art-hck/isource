@@ -37,9 +37,9 @@ import { GroupInfoComponent } from './common/components/group-info/group-info.co
 import { GroupService } from "./common/services/group.service";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { RequestDashboardComponent } from './common/components/request-dashboard/request-dashboard.component';
+import { ContragentService } from "../contragent/services/contragent.service";
+import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
-import { TechnicalProposalModalComponent } from './back-office/components/add-technical-proposals/technical-proposal-modal/technical-proposal-modal.component';
-
 
 @NgModule({
   declarations: [
@@ -72,9 +72,9 @@ import { TechnicalProposalModalComponent } from './back-office/components/add-te
     PositionInfoHistoryComponent,
     GroupInfoComponent,
     AddOffersComponent,
-    RequestDashboardComponent,
     AddTechnicalProposalsComponent,
-    TechnicalProposalModalComponent
+    RequestDashboardComponent,
+    SearchFilterPipe
   ],
   imports: [
     SharedModule,
@@ -87,7 +87,8 @@ import { TechnicalProposalModalComponent } from './back-office/components/add-te
     CustomerRequestService,
     BackofficeOffersService,
     BackofficeTechnicalProposalsService,
-    GroupService
+    GroupService,
+    ContragentService
   ]
 })
 export class RequestModule {
