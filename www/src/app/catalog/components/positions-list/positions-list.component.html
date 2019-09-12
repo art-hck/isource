@@ -1,6 +1,6 @@
 <div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
-    <div class="clr-row">
+    <div class="clr-row position-list">
       <div class="clr-col-2 image">
         <img *ngIf="position.image; else noImage" src="{{ position.image }}" />
         <ng-template #noImage>
