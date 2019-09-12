@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
+import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -52,20 +53,29 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.router.navigateByUrl(`requests/back-office/${this.request.id}`).then(r => {});
   }
 
-  onShowAddTechnicalProposalModal() {
+  /**
+   * Подготовка модального окна для добавления ТП
+   */
+  onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
     this.searchStr = '';
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
+    this.tpSupplierName = this.technicalProposal.name;
 
     this.getPositionsListForTp();
 
     this.showAddTechnicalProposalModal = true;
   }
 
-  onShowEditTechnicalProposalModal(technicalProposal) {
+  /**
+   * Подготовка модального окна для редактирования ТП
+   *
+   * @param technicalProposal
+   */
+  onShowEditTechnicalProposalModal(technicalProposal): void {
     this.selectedTechnicalProposalPositionsIds = [];
     this.technicalProposalsPositions = [];
     this.getPositionsListForTp();
@@ -183,7 +193,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  onTechnicalProposalPositionSelected(position) {
+  /**
+   * Действие при отмечании чекбокса позиции в списке
+   * @param position
+   */
+  onTechnicalProposalPositionSelected(position: RequestPosition): void {
     if (this.selectedTechnicalProposalPositionsIds.indexOf(position.id) > -1) {
       for (let i = 0; i < this.selectedTechnicalProposalPositionsIds.length; i++) {
         if (this.selectedTechnicalProposalPositionsIds[i] === position.id) {
@@ -195,21 +209,19 @@ export class AddTechnicalProposalsComponent implements OnInit {
     }
   }
 
-  checkIfPositionIsChecked(technicalProposalPosition) {
-    console.log(technicalProposalPosition.id);
-    console.log(this.selectedTechnicalProposalPositionsIds);
-
-    if (this.selectedTechnicalProposalPositionsIds.indexOf(technicalProposalPosition.id) > -1) {
-      return true;
-    }
-    return false;
+  /**
+   * Функция проверяет, должна ли быть отмечена позиция в списке в модальном окне
+   * @param technicalProposalPosition
+   */
+  checkIfPositionIsChecked(technicalProposalPosition: RequestPosition): boolean {
+    return (this.selectedTechnicalProposalPositionsIds.indexOf(technicalProposalPosition.id) > -1);
   }
 
   /**
    * Функция проверяет, находится ли модальное окно в режиме редактирования или в режиме создания нового ТП
    * @param technicalProposal
    */
-  tpModalInEditMode(technicalProposal): boolean {
+  tpModalInEditMode(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.id !== null;
   }
 }
