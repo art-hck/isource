@@ -87,4 +87,17 @@ export class RequestDashboardComponent implements OnChanges {
     }
   }
 
+
+  openAddTechnicalProposalsPage() {
+    if (this.user.isCustomer()) {
+      // todo Раскомментировать, когда будет готов роут для кастомера
+      // this.router.navigateByUrl(`/requests/customer/${this.request.id}/add-technical-proposals`).then(r => {});
+      return false;
+    } else if (this.user.isBackOffice()) {
+      this.router.navigateByUrl(`/requests/back-office/${this.request.id}/add-technical-proposals`).then(r => {});
+    } else {
+      return false;
+    }
+  }
+
 }

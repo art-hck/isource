@@ -15,6 +15,7 @@ import { MessagesComponent } from './common/components/messages/messages.compone
 import { CreateRequestFreeFormComponent } from './common/components/create-request-free-form/create-request-free-form.component';
 import { OffersComponent as BackofficeOffersComponent } from './common/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
+import { TechnicalProposalsService as BackofficeTechnicalProposalsService} from "./back-office/services/technical-proposals.service";
 import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
@@ -36,9 +37,9 @@ import { GroupInfoComponent } from './common/components/group-info/group-info.co
 import { GroupService } from "./common/services/group.service";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { RequestDashboardComponent } from './common/components/request-dashboard/request-dashboard.component';
-import {ContragentService} from "../contragent/services/contragent.service";
-import {SearchFilterPipe} from "../shared/pipes/filter-pipe";
-
+import { ContragentService } from "../contragent/services/contragent.service";
+import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
+import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import {SearchFilterPipe} from "../shared/pipes/filter-pipe";
     PositionInfoHistoryComponent,
     GroupInfoComponent,
     AddOffersComponent,
+    AddTechnicalProposalsComponent,
     RequestDashboardComponent,
     SearchFilterPipe
   ],
@@ -84,6 +86,7 @@ import {SearchFilterPipe} from "../shared/pipes/filter-pipe";
     BackofficeRequestService,
     CustomerRequestService,
     BackofficeOffersService,
+    BackofficeTechnicalProposalsService,
     GroupService,
     ContragentService
   ]

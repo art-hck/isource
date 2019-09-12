@@ -6,6 +6,7 @@ import { CreateRequestComponent } from "./common/components/create-request/creat
 import { BackOfficeRequestViewComponent } from "./back-office/components/back-office-request-view/back-office-request-view.component";
 import { CustomerRequestViewComponent } from "./customer/components/customer-request-view/customer-request-view.component";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
+import { AddTechnicalProposalsComponent } from "./back-office/components/add-technical-proposals/add-technical-proposals.component";
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
       {
         path: ':id/add-offers',
         component: AddOffersComponent
+      },
+      {
+        path: ':id/add-technical-proposals',
+        component: AddTechnicalProposalsComponent
       }
     ]
   },
