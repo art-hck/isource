@@ -81,6 +81,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.getPositionsListForTp();
 
     this.technicalProposal = technicalProposal;
+    this.tpSupplierName = this.technicalProposal.name;
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
@@ -197,7 +198,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * Действие при отмечании чекбокса позиции в списке
    * @param position
    */
-  onTechnicalProposalPositionSelected(position: RequestPosition): void {
+  onTechnicalProposalPositionSelected(position: RequestPositionList): void {
     if (this.selectedTechnicalProposalPositionsIds.indexOf(position.id) > -1) {
       for (let i = 0; i < this.selectedTechnicalProposalPositionsIds.length; i++) {
         if (this.selectedTechnicalProposalPositionsIds[i] === position.id) {
@@ -213,7 +214,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * Функция проверяет, должна ли быть отмечена позиция в списке в модальном окне
    * @param technicalProposalPosition
    */
-  checkIfPositionIsChecked(technicalProposalPosition: RequestPosition): boolean {
+  checkIfPositionIsChecked(technicalProposalPosition: RequestPositionList): boolean {
     return (this.selectedTechnicalProposalPositionsIds.indexOf(technicalProposalPosition.id) > -1);
   }
 
