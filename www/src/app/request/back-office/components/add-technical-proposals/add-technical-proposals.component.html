@@ -99,20 +99,10 @@
           <p>Позиции технического предложения</p>
         </div>
 
-<!--        <div class="clr-col-10 search">-->
-<!--          <input clrinput-->
-<!--                 placeholder="Введите строку для поиска"-->
-<!--                 name="searchStr" type="text" (keyup.enter)="onSearch()" [(ngModel)]="searchStr">-->
-<!--        </div>-->
-
-<!--        <div class="clr-col-2">-->
-<!--          <input clrinput class="btn btn-link" type="submit" (click)="onSearch()" value="Поиск">-->
-<!--        </div>-->
-
         <div class="clr-col-12">
           <div class="card-block" style="padding: 15px 0">
 
-            <ng-container *ngIf="!technicalProposalsPositions" class="load-block">
+            <ng-container *ngIf="!(technicalProposalsPositions.length > 0)" class="load-block">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
@@ -121,7 +111,7 @@
                 <input type="checkbox"
                        clrCheckbox
                        value="{{ technicalProposalPosition.id }}"
-                       [attr.checked]="checkIfPositionIsChecked() ? 'checked' : null"
+                       [attr.checked]="checkIfPositionIsChecked(technicalProposalPosition) ? 'checked' : null"
                        (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)" />
                 <label>{{ technicalProposalPosition.name }}</label>
               </clr-checkbox-wrapper>
@@ -140,13 +130,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

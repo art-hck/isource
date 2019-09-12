@@ -27,7 +27,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   tpSupplierName: string;
 
-  selectedTechnicalProposalPositions = [];
+  selectedTechnicalProposalPositionsIds = [];
   searchStr: string;
 
   showAddTechnicalProposalModal = false;
@@ -57,7 +57,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onShowAddTechnicalProposalModal() {
-    this.selectedTechnicalProposalPositions = [];
+    this.selectedTechnicalProposalPositionsIds = [];
     this.searchStr = '';
 
     const technicalProposal = new TechnicalProposal();
@@ -70,14 +70,17 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onShowEditTechnicalProposalModal(technicalProposal) {
-    console.log(technicalProposal);
+    this.selectedTechnicalProposalPositionsIds = [];
     this.technicalProposalsPositions = [];
     this.getPositionsListForTp();
 
-    this.selectedTechnicalProposalPositions = [];
-    this.searchStr = '';
-
     this.technicalProposal = technicalProposal;
+
+    this.technicalProposal.positions.map(e => {
+      this.selectedTechnicalProposalPositionsIds.push(e.position.id);
+    });
+
+    this.searchStr = '';
 
     this.showAddTechnicalProposalModal = true;
   }
@@ -134,8 +137,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const selectedPositionsArray = [];
-    this.selectedTechnicalProposalPositions.map(pos => {
-      selectedPositionsArray.push(pos.id);
+    this.selectedTechnicalProposalPositionsIds.map(posId => {
+      selectedPositionsArray.push(posId);
     });
 
     const technicalProposal = {
@@ -155,8 +158,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onSaveTechnicalProposal(): void {
     const selectedPositionsArray = [];
-    this.selectedTechnicalProposalPositions.map(pos => {
-      selectedPositionsArray.push(pos.id);
+    this.selectedTechnicalProposalPositionsIds.map(posId => {
+      selectedPositionsArray.push(posId);
     });
 
     const technicalProposal = {
@@ -185,27 +188,25 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onTechnicalProposalPositionSelected(position) {
-    if (this.selectedTechnicalProposalPositions.indexOf(position) > -1) {
-      for (let i = 0; i < this.selectedTechnicalProposalPositions.length; i++) {
-        if (this.selectedTechnicalProposalPositions[i] === position) {
-          this.selectedTechnicalProposalPositions.splice(i, 1);
+    if (this.selectedTechnicalProposalPositionsIds.indexOf(position.id) > -1) {
+      for (let i = 0; i < this.selectedTechnicalProposalPositionsIds.length; i++) {
+        if (this.selectedTechnicalProposalPositionsIds[i] === position.id) {
+          this.selectedTechnicalProposalPositionsIds.splice(i, 1);
         }
       }
     } else {
-      this.selectedTechnicalProposalPositions.push(position);
+      this.selectedTechnicalProposalPositionsIds.push(position.id);
     }
   }
 
-  checkIfPositionIsChecked() {
-    console.log(this.technicalProposal.positions);
-    console.log(this.technicalProposalsPositions);
+  checkIfPositionIsChecked(technicalProposalPosition) {
+    console.log(technicalProposalPosition.id);
+    console.log(this.selectedTechnicalProposalPositionsIds);
 
-    this.technicalProposalsPositions.map(pos => {
-      console.log(pos);
-      return this.technicalProposal.positions.map(el => {
-        return el.id === pos.id;
-      });
-    });
+    if (this.selectedTechnicalProposalPositionsIds.indexOf(technicalProposalPosition.id) > -1) {
+      return true;
+    }
+    return false;
   }
 
   /**
