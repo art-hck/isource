@@ -1,5 +1,5 @@
 import {Uuid} from "../../../cart/models/uuid";
-import { TechnicalProposalPositions } from "./technical-proposal-positions";
+import { TechnicalProposalPosition } from "./technical-proposal-position";
 
 export class TechnicalProposal {
   id: Uuid;
@@ -8,6 +8,6 @@ export class TechnicalProposal {
   createdDate: Date;
   updatedDate: Date;
   documents: object;
-  positions: TechnicalProposalPositions[];
+  positions: TechnicalProposalPosition[];
   status: string;
 }

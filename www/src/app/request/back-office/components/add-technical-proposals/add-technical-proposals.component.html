@@ -19,20 +19,19 @@
           </div>
         </div>
 
-
-
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals">
           <div class="clr-row clr-align-items-center">
             <span class="supplier-name clr-col">
               <span>{{ technicalProposal.name }}</span>
-              <div class="edit-btn">
+              <div class="edit-btn" (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                 <clr-icon shape="pencil"></clr-icon>
               </div>
             </span>
 
             <div class="clr-col send-for-approval">
               <button class="btn btn-primary"
-                      [disabled]="!isReadyToSendForApproval(technicalProposal)">
+                      [disabled]="!isReadyToSendForApproval(technicalProposal)"
+                      (click)="onSendForApproval()">
                 <b>Отправить на согласование</b>
               </button>
             </div>
@@ -59,6 +58,7 @@
                   <div class="form-group compact">
                     <input type="text"
                            placeholder="Наименование не заполнено.."
+                           (change)="updateTpPositionManufacturingName(technicalProposal, $event.target.value)"
                            value="{{ technicalProposalPosition.manufacturingName }}" />
                   </div>
                 </td>
@@ -70,12 +70,7 @@
     </div>
   </div>
 
-
-
-
-
   <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="lg">
-
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -126,7 +121,7 @@
                 <input type="checkbox"
                        clrCheckbox
                        value="{{ technicalProposalPosition.id }}"
-                       [checked]="checkIfPositionIsChecked()"
+                       [attr.checked]="checkIfPositionIsChecked() ? 'checked' : null"
                        (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)" />
                 <label>{{ technicalProposalPosition.name }}</label>
               </clr-checkbox-wrapper>
