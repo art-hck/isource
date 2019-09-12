@@ -98,20 +98,47 @@
     </div>
   </div>
 
-  <clr-modal [(clrModalOpen)]="showAddContragentModal">
-    <h3 class="modal-title">Введите наименование к/а</h3>
+  <!-- Модальное окно добавление контрагента -->
+  <clr-modal [(clrModalOpen)]="showAddContragentModal"
+             [clrModalClosable]="false">
+    <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
-      <input type="text" (input)="contragentName = $event.target.value" [value]="contragentName"/>
+      <form [formGroup]="contragentForm" novalidate>
+        <input class="searchContragent" id="searchContragent" placeholder="Введите наименование или ИНН контрагента"
+               (click)="onShowContragentList()"
+               formControlName="searchContragent"
+               autocomplete="off">
+      </form>
+      <div class="container-dropdown" *ngIf="showContragentList">
+        <div class="contragent-list"
+             *ngFor="let contragent of contragents | searchFilter: getSearchValue()"
+             (click)="selectContragent(contragent)">
+          {{contragent.shortName}}
+        </div>
+      </div>
+      <div class="contragent-info" *ngIf="showContragentInfo">
+        <p class="label-contragent">Наименование контрагента:</p>
+        {{selectedContragent.shortName}}
+        <p class="label-contragent">ИНН:</p>
+        {{selectedContragent.inn}}
+        <p class="label-contragent">КПП:</p>
+        {{selectedContragent.kpp}}
+        <p class="label-contragent">Email:</p>
+        {{selectedContragent.email}}
+      </div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-link" (click)="onCloseAddContragentModal()">Отмена</button>
       <button class="btn btn-primary"
               (click)="onAddContragent()"
-              [disabled]="!checkAddContragentButtonEnabled()"><b>Добавить</b>
+              [disabled]="!selectedContragent"><b>Добавить</b>
       </button>
     </div>
   </clr-modal>
 
-  <clr-modal [(clrModalOpen)]="showAddOfferModal">
+  <!-- Модальное окно добавления КП -->
+  <clr-modal [(clrModalOpen)]="showAddOfferModal"
+             [clrModalClosable]="false">
     <h3 class="modal-title">Добавьте КП</h3>
     <div class="modal-body">
       <form [formGroup]="offerForm" class="form">
@@ -177,15 +204,17 @@
     </div>
     <div class="modal-footer">
       <div class="clr-row w-100">
-        <div class="clr-col-9">
+        <div class="clr-col-6">
         </div>
-        <div class="clr-col-3">
+        <div class="clr-col-6">
+          <button class="btn btn-link" (click)="onCloseAddOfferModal()">Отмена</button>
           <button class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
         </div>
       </div>
     </div>
   </clr-modal>
 
+  <!-- Модальное окно просмотра КП -->
   <clr-modal [(clrModalOpen)]="showOfferModal" clrModalSize="lg">
     <h3 class="modal-title">Предложение поставщика</h3>
     <div class="modal-body">
@@ -199,21 +228,21 @@
         <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
 
         <clr-dg-row>
-          <clr-dg-cell class="clr-col-2 offer">
+          <clr-dg-cell class="clr-col-2">
             <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{selectedOffer.supplierContragentName}}</a>
           </clr-dg-cell>
 
-          <clr-dg-cell class="clr-col-1 offer text-right offer-price">
+          <clr-dg-cell class="clr-col-1 text-right offer-price">
             {{ selectedOffer.priceWithVat | currency : selectedOffer.currency }}
           </clr-dg-cell>
 
-          <clr-dg-cell class="clr-col-1 offer text-right">{{selectedOffer.quantity}} {{selectedOffer.measureUnit}}
+          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.quantity}} {{selectedOffer.measureUnit}}
           </clr-dg-cell>
 
-          <clr-dg-cell class="clr-col-1 offer text-right">{{selectedOffer.deliveryDate | date :'shortDate'}}
+          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.deliveryDate | date :'shortDate'}}
           </clr-dg-cell>
 
-          <clr-dg-cell class="clr-col-2 offer">{{selectedOffer.paymentTerms}}</clr-dg-cell>
+          <clr-dg-cell class="clr-col-2">{{selectedOffer.paymentTerms}}</clr-dg-cell>
 
           <clr-dg-cell class="clr-col-2">
             <app-document-simple-list
@@ -230,8 +259,6 @@
               (selected)="onUploadTechnicalProposals($event, selectedOffer)"
             ></app-document-simple-list>
           </clr-dg-cell>
-
-
         </clr-dg-row>
       </clr-datagrid>
     </div>

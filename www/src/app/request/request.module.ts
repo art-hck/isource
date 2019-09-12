@@ -36,6 +36,8 @@ import { GroupInfoComponent } from './common/components/group-info/group-info.co
 import { GroupService } from "./common/services/group.service";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { RequestDashboardComponent } from './common/components/request-dashboard/request-dashboard.component';
+import {ContragentService} from "../contragent/services/contragent.service";
+import {SearchFilterPipe} from "../shared/pipes/filter-pipe";
 
 
 @NgModule({
@@ -69,7 +71,8 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
     PositionInfoHistoryComponent,
     GroupInfoComponent,
     AddOffersComponent,
-    RequestDashboardComponent
+    RequestDashboardComponent,
+    SearchFilterPipe
   ],
   imports: [
     SharedModule,
@@ -81,7 +84,8 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
     BackofficeRequestService,
     CustomerRequestService,
     BackofficeOffersService,
-    GroupService
+    GroupService,
+    ContragentService
   ]
 })
 export class RequestModule {
