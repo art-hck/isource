@@ -41,7 +41,7 @@ export class AddOffersComponent implements OnInit {
 
   contragents: ContragentList[];
   contragentForm: FormGroup;
-  showContragentInfo: boolean = false;
+  showContragentInfo = false;
   selectedContragent: ContragentList;
 
   @ViewChild(RequestViewComponent, {static: false})
@@ -168,7 +168,7 @@ export class AddOffersComponent implements OnInit {
     this.offerForm.reset();
   }
 
-  //Модальное окно просмотра КП
+  // Модальное окно просмотра КП
   onShowOfferModal(offer: RequestOfferPosition) {
     this.selectedOffer = offer;
 
