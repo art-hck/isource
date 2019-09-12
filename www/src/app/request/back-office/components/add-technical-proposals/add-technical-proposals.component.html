@@ -58,7 +58,7 @@
                   <div class="form-group compact">
                     <input type="text"
                            placeholder="Наименование не заполнено.."
-                           (change)="updateTpPositionManufacturingName(technicalProposal, $event.target.value)"
+                           (change)="updateTpPositionManufacturingName(technicalProposalPosition, technicalProposal.id, $event.target.value)"
                            value="{{ technicalProposalPosition.manufacturingName }}" />
                   </div>
                 </td>

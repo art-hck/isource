@@ -123,17 +123,17 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  updateTpPositionManufacturingName(tpPosition, value) {
+  updateTpPositionManufacturingName(tpPosition, tpId: Uuid, value) {
     const tpPositionInfo = {
       position: {
-        id: tpPosition.id
+        id: tpPosition.position.id
       },
       manufacturingName: value
     };
 
     this.technicalProposalsService.updateTpPositionManufacturingName(
       this.requestId,
-      tpPosition.id,
+      tpId,
       tpPositionInfo
     ).subscribe(() => {});
   }
