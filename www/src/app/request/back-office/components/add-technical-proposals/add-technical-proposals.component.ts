@@ -38,6 +38,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.updateRequestInfo();
     this.getTechnicalProposals();
+    this.getPositionsListForTp();
   }
 
   onRequestsClick() {
@@ -53,8 +54,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
-    this.technicalProposalsPositions = [];
-    this.getPositionsListForTp();
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -71,8 +70,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
     this.selectedTechnicalProposalPositionsIds = [];
-    this.technicalProposalsPositions = [];
-    this.getPositionsListForTp();
 
     this.technicalProposal = technicalProposal;
     this.tpSupplierName = this.technicalProposal.name;
