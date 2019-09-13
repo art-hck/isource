@@ -170,14 +170,13 @@ h2 {
 }
 
 .modal-body {
-  position: relative;
   height: 300px;
 }
 
 .container-dropdown {
   position: absolute;
   z-index: 100;
-  width: 100%;
+  width: 516px; /* todo временное решение */
   height: auto;
   max-height: 250px;
   overflow-y: auto;
