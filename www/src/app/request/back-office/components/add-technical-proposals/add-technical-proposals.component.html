@@ -37,12 +37,6 @@
             </div>
           </div>
 
-          <app-document-simple-list
-                  [enableUpload]="false"
-                  [documents]="technicalProposal.documents">
-          </app-document-simple-list>
-
-
           <table class="positions-list table table-noborder">
             <thead>
               <tr>
@@ -88,10 +82,6 @@
                  [(ngModel)]="tpSupplierName"
                  value="{{ technicalProposal.name }}">
         </div>
-
-<!--        <div *ngIf="technicalProposal.documents" class="clr-col-12">-->
-<!--          <app-document-simple-list [documents]="technicalProposal.documents"></app-document-simple-list>-->
-<!--        </div>-->
       </div>
 
       <div class="clr-row w-100 clr-align-items-center">
@@ -102,12 +92,12 @@
         <div class="clr-col-12">
           <div class="card-block" style="padding: 15px 0">
 
-            <ng-container *ngIf="!(technicalProposalsPositions.length > 0)" class="load-block">
+            <ng-container *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)" class="load-block">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
             <ng-container *ngFor="let technicalProposalPosition of technicalProposalsPositions">
-              <clr-checkbox-wrapper>
+              <clr-checkbox-wrapper class="tp-positions-list">
                 <input type="checkbox"
                        clrCheckbox
                        value="{{ technicalProposalPosition.id }}"
