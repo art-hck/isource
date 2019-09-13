@@ -19,20 +19,19 @@
           </div>
         </div>
 
-
-
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals">
           <div class="clr-row clr-align-items-center">
             <span class="supplier-name clr-col">
               <span>{{ technicalProposal.name }}</span>
-              <div class="edit-btn">
+              <div class="edit-btn" (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                 <clr-icon shape="pencil"></clr-icon>
               </div>
             </span>
 
             <div class="clr-col send-for-approval">
               <button class="btn btn-primary"
-                      [disabled]="!isReadyToSendForApproval(technicalProposal)">
+                      [disabled]="!isReadyToSendForApproval(technicalProposal)"
+                      (click)="onSendForApproval()">
                 <b>Отправить на согласование</b>
               </button>
             </div>
@@ -59,6 +58,7 @@
                   <div class="form-group compact">
                     <input type="text"
                            placeholder="Наименование не заполнено.."
+                           (change)="updateTpPositionManufacturingName(technicalProposalPosition, technicalProposal.id, $event.target.value)"
                            value="{{ technicalProposalPosition.manufacturingName }}" />
                   </div>
                 </td>
@@ -70,12 +70,7 @@
     </div>
   </div>
 
-
-
-
-
   <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="lg">
-
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -104,20 +99,10 @@
           <p>Позиции технического предложения</p>
         </div>
 
-<!--        <div class="clr-col-10 search">-->
-<!--          <input clrinput-->
-<!--                 placeholder="Введите строку для поиска"-->
-<!--                 name="searchStr" type="text" (keyup.enter)="onSearch()" [(ngModel)]="searchStr">-->
-<!--        </div>-->
-
-<!--        <div class="clr-col-2">-->
-<!--          <input clrinput class="btn btn-link" type="submit" (click)="onSearch()" value="Поиск">-->
-<!--        </div>-->
-
         <div class="clr-col-12">
           <div class="card-block" style="padding: 15px 0">
 
-            <ng-container *ngIf="!technicalProposalsPositions" class="load-block">
+            <ng-container *ngIf="!(technicalProposalsPositions.length > 0)" class="load-block">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
@@ -126,7 +111,7 @@
                 <input type="checkbox"
                        clrCheckbox
                        value="{{ technicalProposalPosition.id }}"
-                       [checked]="checkIfPositionIsChecked()"
+                       [attr.checked]="checkIfPositionIsChecked(technicalProposalPosition) ? 'checked' : null"
                        (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)" />
                 <label>{{ technicalProposalPosition.name }}</label>
               </clr-checkbox-wrapper>
@@ -145,13 +130,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositions.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

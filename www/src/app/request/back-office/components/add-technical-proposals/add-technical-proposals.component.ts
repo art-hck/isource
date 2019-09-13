@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -6,10 +6,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { RequestGroup } from "../../../common/models/request-group";
-import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -27,7 +23,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   tpSupplierName: string;
 
-  selectedTechnicalProposalPositions = [];
+  selectedTechnicalProposalPositionsIds = [];
   searchStr: string;
 
   showAddTechnicalProposalModal = false;
@@ -56,42 +52,50 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.router.navigateByUrl(`requests/back-office/${this.request.id}`).then(r => {});
   }
 
-
-
-  onShowAddTechnicalProposalModal() {
-    this.selectedTechnicalProposalPositions = [];
+  /**
+   * Подготовка модального окна для добавления ТП
+   */
+  onShowAddTechnicalProposalModal(): void {
+    this.selectedTechnicalProposalPositionsIds = [];
     this.searchStr = '';
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
+    this.tpSupplierName = this.technicalProposal.name;
 
     this.getPositionsListForTp();
 
     this.showAddTechnicalProposalModal = true;
   }
 
-  onShowEditTechnicalProposalModal(technicalProposal) {
+  /**
+   * Подготовка модального окна для редактирования ТП
+   *
+   * @param technicalProposal
+   */
+  onShowEditTechnicalProposalModal(technicalProposal): void {
+    this.selectedTechnicalProposalPositionsIds = [];
     this.technicalProposalsPositions = [];
     this.getPositionsListForTp();
 
-    this.selectedTechnicalProposalPositions = [];
-    this.searchStr = '';
-
     this.technicalProposal = technicalProposal;
+    this.tpSupplierName = this.technicalProposal.name;
+
+    this.technicalProposal.positions.map(e => {
+      this.selectedTechnicalProposalPositionsIds.push(e.position.id);
+    });
+
+    this.searchStr = '';
 
     this.showAddTechnicalProposalModal = true;
   }
-
-
-
 
   isReadyToSendForApproval(technicalProposal) {
     if (technicalProposal) {
       return (technicalProposal.documents.length > 0);
     }
   }
-
 
   onSendForApproval() {
     console.log('Отправлено на согласование заказчику');
@@ -119,18 +123,24 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-
-  updateTpPositionManufacturingName(tpPosition, value) {
+  /**
+   * Обновление заводского наименования позиции в карточке ТП
+   *
+   * @param tpPosition
+   * @param tpId
+   * @param value
+   */
+  updateTpPositionManufacturingName(tpPosition, tpId: Uuid, value: string): void {
     const tpPositionInfo = {
       position: {
-        id: tpPosition.id
+        id: tpPosition.position.id
       },
       manufacturingName: value
     };
 
     this.technicalProposalsService.updateTpPositionManufacturingName(
       this.requestId,
-      tpPosition.id,
+      tpId,
       tpPositionInfo
     ).subscribe(() => {});
   }
@@ -140,8 +150,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const selectedPositionsArray = [];
-    this.selectedTechnicalProposalPositions.map(pos => {
-      selectedPositionsArray.push(pos.id);
+    this.selectedTechnicalProposalPositionsIds.map(posId => {
+      selectedPositionsArray.push(posId);
     });
 
     const technicalProposal = {
@@ -160,24 +170,27 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * Редактирование Технического предложения
    */
   onSaveTechnicalProposal(): void {
+    const selectedPositionsArray = [];
+    this.selectedTechnicalProposalPositionsIds.map(posId => {
+      selectedPositionsArray.push(posId);
+    });
+
     const technicalProposal = {
-      name: this.technicalProposal.name,
-      positions: this.selectedTechnicalProposalPositions,
+      id: this.technicalProposal.id,
+      name: this.tpSupplierName,
+      positions: selectedPositionsArray,
     };
 
-    console.log(technicalProposal);
     this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
       this.getTechnicalProposals();
     });
     this.showAddTechnicalProposalModal = false;
   }
 
-
-  onSearch() {
-    console.log(this.searchStr);
-    this.technicalProposalsPositions.splice(this.technicalProposalsPositions.findIndex(e => e.name !== this.searchStr), 1);
-  }
-
+  // onSearch() {
+  //   console.log(this.searchStr);
+  //   this.technicalProposalsPositions.splice(this.technicalProposalsPositions.findIndex(e => e.name !== this.searchStr), 1);
+  // }
 
   getPositionsListForTp() {
     this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId).subscribe(
@@ -187,39 +200,35 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  onTechnicalProposalPositionSelected(position) {
-    if (this.selectedTechnicalProposalPositions.indexOf(position) > -1) {
-      for (let i = 0; i < this.selectedTechnicalProposalPositions.length; i++) {
-        if (this.selectedTechnicalProposalPositions[i] === position) {
-          this.selectedTechnicalProposalPositions.splice(i, 1);
+  /**
+   * Действие при отмечании чекбокса позиции в списке
+   * @param position
+   */
+  onTechnicalProposalPositionSelected(position: RequestPositionList): void {
+    if (this.selectedTechnicalProposalPositionsIds.indexOf(position.id) > -1) {
+      for (let i = 0; i < this.selectedTechnicalProposalPositionsIds.length; i++) {
+        if (this.selectedTechnicalProposalPositionsIds[i] === position.id) {
+          this.selectedTechnicalProposalPositionsIds.splice(i, 1);
         }
       }
     } else {
-      this.selectedTechnicalProposalPositions.push(position);
+      this.selectedTechnicalProposalPositionsIds.push(position.id);
     }
   }
 
-  checkIfPositionIsChecked() {
-    this.technicalProposalsPositions.map(pos => {
-      if (this.selectedTechnicalProposalPositions.indexOf(pos) > -1) {
-        console.log('есть');
-        return true;
-      } else {
-        console.log('нет');
-        return false;
-      }
-    });
+  /**
+   * Функция проверяет, должна ли быть отмечена позиция в списке в модальном окне
+   * @param technicalProposalPosition
+   */
+  checkIfPositionIsChecked(technicalProposalPosition: RequestPositionList): boolean {
+    return (this.selectedTechnicalProposalPositionsIds.indexOf(technicalProposalPosition.id) > -1);
   }
-
-
-
 
   /**
    * Функция проверяет, находится ли модальное окно в режиме редактирования или в режиме создания нового ТП
    * @param technicalProposal
    */
-  tpModalInEditMode(technicalProposal): boolean {
+  tpModalInEditMode(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.id !== null;
   }
-
 }
