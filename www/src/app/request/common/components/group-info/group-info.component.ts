@@ -7,6 +7,7 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { FormControl, Validators } from "@angular/forms";
 import { GroupService } from "../../services/group.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import {CustomValidators} from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-group-info',
@@ -34,7 +35,7 @@ export class GroupInfoComponent implements OnInit {
 
   @Output() changeRequestInfo = new EventEmitter<boolean>();
 
-  groupName = new FormControl('', Validators.required);
+  groupName = new FormControl('', [Validators.required, CustomValidators.simpleText]);
 
 
   constructor(
