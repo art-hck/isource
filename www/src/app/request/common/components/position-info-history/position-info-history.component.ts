@@ -108,8 +108,8 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
       let newValue = data.newValues[key];
 
       if (key === 'deliveryDate') {
-        oldValue = value ? moment(value).format('DD.MM.YYYY') : 'нет даты';
-        newValue = newValue ? moment(newValue).format('DD.MM.YYYY') : 'нет даты';
+        oldValue = value ? moment(value).format('DD.MM.YYYY') : 'как можно скорее';
+        newValue = newValue ? moment(newValue).format('DD.MM.YYYY') : 'как можно скорее';
       }
 
       if (key === 'isDeliveryDateAsap') {
