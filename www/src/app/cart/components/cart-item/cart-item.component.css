@@ -67,3 +67,8 @@
 .cart-delete-button {
   margin: 0px !important;
 }
+
+.position-list {
+  flex-wrap: unset;
+  padding-right: 30px;
+}

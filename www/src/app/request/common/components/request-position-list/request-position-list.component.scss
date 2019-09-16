@@ -226,13 +226,16 @@ clr-datagrid {
 
 
 .sub-list-item .position-name {
-  padding-left: 70px;
+  padding-left: 40px;
 }
 
 .btn clr-icon {
   vertical-align: middle;
 }
 
+.sub-list-item {
+  flex-wrap: unset;
+}
 
 .add-in-group {
   float: right;
