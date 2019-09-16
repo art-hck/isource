@@ -101,3 +101,7 @@
 .tp-positions-list {
   display: block;
 }
+
+::ng-deep .tp-documents-list button.btn.btn-link {
+  height: 100%;
+}

@@ -78,13 +78,33 @@
     <div class="modal-body">
 
       <div class="clr-row w-100">
-        <div class="clr-col-12" style="padding-bottom: 15px;">
+        <div class="clr-col-12">
           <label for="supplierName"><p>Наименование поставщика</p></label>
           <input type="text"
                  id="supplierName"
                  name="supplierName"
                  [(ngModel)]="tpSupplierName"
                  value="{{ technicalProposal.name }}">
+        </div>
+
+        <div class="clr-col-12">
+          <div *ngIf="!tpModalInEditMode(technicalProposal); else uploadBlock">
+            <form [formGroup]="documentsForm" class="form tp-documents-list">
+              <app-document-upload-list
+                  (fileSelected)="onDocumentSelected($event, documentsForm)"
+                  [documents]="uploadedFiles"
+              ></app-document-upload-list>
+            </form>
+          </div>
+
+          <ng-template #uploadBlock>
+            <form [formGroup]="documentsForm" class="form tp-documents-list">
+              <app-document-simple-list
+                      [documents]="technicalProposal.documents"
+                      (selected)="onDocumentSelected($event, documentsForm)"
+              ></app-document-simple-list>
+            </form>
+          </ng-template>
         </div>
       </div>
 

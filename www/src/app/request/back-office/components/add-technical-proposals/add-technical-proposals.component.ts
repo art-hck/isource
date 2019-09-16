@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -17,7 +19,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   technicalProposals: TechnicalProposal[];
-
+  documentsForm: FormGroup;
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
@@ -25,15 +27,22 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
+  uploadedFiles: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService
   ) { }
 
   ngOnInit() {
+    this.documentsForm = this.formBuilder.group({
+      documents: [null]
+    });
+
     this.requestId = this.route.snapshot.paramMap.get('id');
 
     this.updateRequestInfo();
@@ -144,9 +153,27 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
-    this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
-      this.getTechnicalProposals();
-    });
+    this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
+      (tpData: TechnicalProposal) => {
+        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+          this.documentsForm.value,
+          null,
+          'files'
+        );
+
+        this.technicalProposalsService.uploadSelectedDocuments(
+          this.requestId,
+          tpData.id,
+          filesToUpload
+        ).subscribe(() => {
+            this.getTechnicalProposals();
+          }
+        );
+      },
+      () => {
+        this.notificationService.toast('Отправлено на согласование');
+      }
+    );
     this.showAddTechnicalProposalModal = false;
     this.tpSupplierName = "";
   }
@@ -171,6 +198,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
     });
     this.showAddTechnicalProposalModal = false;
   }
+
+  onDocumentSelected(uploadedFiles, documentsForm) {
+    documentsForm.get('documents').setValue(uploadedFiles);
+  }
+
 
   /**
    * Получение списка позиций для ТП
