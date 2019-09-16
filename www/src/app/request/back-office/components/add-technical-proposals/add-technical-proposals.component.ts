@@ -24,11 +24,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   tpSupplierName: string;
 
   selectedTechnicalProposalPositionsIds = [];
-  searchStr: string;
-
   showAddTechnicalProposalModal = false;
-
-  files: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +38,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.updateRequestInfo();
     this.getTechnicalProposals();
+    this.getPositionsListForTp();
   }
 
   onRequestsClick() {
@@ -57,14 +54,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
-    this.searchStr = '';
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
     this.tpSupplierName = this.technicalProposal.name;
-
-    this.getPositionsListForTp();
 
     this.showAddTechnicalProposalModal = true;
   }
@@ -76,8 +70,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
     this.selectedTechnicalProposalPositionsIds = [];
-    this.technicalProposalsPositions = [];
-    this.getPositionsListForTp();
 
     this.technicalProposal = technicalProposal;
     this.tpSupplierName = this.technicalProposal.name;
@@ -85,8 +77,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
     });
-
-    this.searchStr = '';
 
     this.showAddTechnicalProposalModal = true;
   }
@@ -149,14 +139,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * Создание технического предложения
    */
   onAddTechnicalProposal(): void {
-    const selectedPositionsArray = [];
-    this.selectedTechnicalProposalPositionsIds.map(posId => {
-      selectedPositionsArray.push(posId);
-    });
-
     const technicalProposal = {
       name: this.tpSupplierName,
-      positions: selectedPositionsArray,
+      positions: this.selectedTechnicalProposalPositionsIds,
     };
 
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
@@ -187,12 +172,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = false;
   }
 
-  // onSearch() {
-  //   console.log(this.searchStr);
-  //   this.technicalProposalsPositions.splice(this.technicalProposalsPositions.findIndex(e => e.name !== this.searchStr), 1);
-  // }
-
-  getPositionsListForTp() {
+  /**
+   * Получение списка позиций для ТП
+   */
+  getPositionsListForTp(): void {
     this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId).subscribe(
       (positions: RequestPositionList[]) => {
         this.technicalProposalsPositions = positions;

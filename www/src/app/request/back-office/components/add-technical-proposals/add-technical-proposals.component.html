@@ -37,12 +37,6 @@
             </div>
           </div>
 
-          <app-document-simple-list
-                  [enableUpload]="false"
-                  [documents]="technicalProposal.documents">
-          </app-document-simple-list>
-
-
           <table class="positions-list table table-noborder">
             <thead>
               <tr>
@@ -58,7 +52,11 @@
                   <div class="form-group compact">
                     <input type="text"
                            placeholder="Наименование не заполнено.."
-                           (change)="updateTpPositionManufacturingName(technicalProposalPosition, technicalProposal.id, $event.target.value)"
+                           (change)="updateTpPositionManufacturingName(
+                             technicalProposalPosition,
+                             technicalProposal.id,
+                             $event.target.value
+                           )"
                            value="{{ technicalProposalPosition.manufacturingName }}" />
                   </div>
                 </td>
@@ -70,7 +68,7 @@
     </div>
   </div>
 
-  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="lg">
+  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="">
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -88,10 +86,6 @@
                  [(ngModel)]="tpSupplierName"
                  value="{{ technicalProposal.name }}">
         </div>
-
-<!--        <div *ngIf="technicalProposal.documents" class="clr-col-12">-->
-<!--          <app-document-simple-list [documents]="technicalProposal.documents"></app-document-simple-list>-->
-<!--        </div>-->
       </div>
 
       <div class="clr-row w-100 clr-align-items-center">
@@ -102,7 +96,7 @@
         <div class="clr-col-12">
           <div class="card-block" style="padding: 15px 0">
 
-            <ng-container *ngIf="!(technicalProposalsPositions.length > 0)" class="load-block">
+            <ng-container *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)" class="load-block">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
@@ -111,8 +105,8 @@
                 <input type="checkbox"
                        clrCheckbox
                        value="{{ technicalProposalPosition.id }}"
-                       [attr.checked]="checkIfPositionIsChecked(technicalProposalPosition) ? 'checked' : null"
-                       (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)" />
+                       (change)="onTechnicalProposalPositionSelected(technicalProposalPosition)"
+                       [checked]="checkIfPositionIsChecked(technicalProposalPosition)" />
                 <label>{{ technicalProposalPosition.name }}</label>
               </clr-checkbox-wrapper>
             </ng-container>
@@ -130,13 +124,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>
