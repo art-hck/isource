@@ -28,6 +28,8 @@
               </div>
             </span>
 
+
+
             <div class="clr-col send-for-approval">
               <button class="btn btn-primary"
                       [disabled]="!isReadyToSendForApproval(technicalProposal)"
@@ -35,6 +37,13 @@
                 <b>Отправить на согласование</b>
               </button>
             </div>
+          </div>
+
+          <div>
+            <app-document-simple-list
+                    [documents]="technicalProposal.documents"
+                    [enableUpload]="false"
+            ></app-document-simple-list>
           </div>
 
           <table class="positions-list table table-noborder">
@@ -50,14 +59,14 @@
                 <td class="left">{{ technicalProposalPosition.position.name }}</td>
                 <td class="left">
                   <div class="form-group compact">
-                    <input type="text"
-                           placeholder="Наименование не заполнено.."
-                           (change)="updateTpPositionManufacturingName(
-                             technicalProposalPosition,
-                             technicalProposal.id,
-                             $event.target.value
-                           )"
-                           value="{{ technicalProposalPosition.manufacturingName }}" />
+                      <input type="text"
+                             placeholder="Наименование не заполнено.."
+                             (change)="updateTpPositionManufacturingName(
+                               technicalProposalPosition,
+                               technicalProposal.id,
+                               $event.target.value
+                             )"
+                             value="{{ technicalProposalPosition.manufacturingName }}" />
                   </div>
                 </td>
               </tr>
@@ -68,7 +77,7 @@
     </div>
   </div>
 
-  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" clrModalSize="">
+  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal">
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -79,7 +88,9 @@
 
       <div class="clr-row w-100">
         <div class="clr-col-12">
-          <label for="supplierName"><p>Наименование поставщика</p></label>
+          <label for="supplierName">
+            <span class="supplier-name-label">Наименование поставщика</span>
+          </label>
           <input type="text"
                  id="supplierName"
                  name="supplierName"
@@ -88,7 +99,7 @@
         </div>
 
         <div class="clr-col-12">
-          <div *ngIf="!tpModalInEditMode(technicalProposal); else uploadBlock">
+          <div *ngIf="!tpModalInEditMode(technicalProposal); else editUploadedDocsBlock">
             <form [formGroup]="documentsForm" class="form tp-documents-list">
               <app-document-upload-list
                   (fileSelected)="onDocumentSelected($event, documentsForm)"
@@ -97,12 +108,17 @@
             </form>
           </div>
 
-          <ng-template #uploadBlock>
+          <ng-template #editUploadedDocsBlock>
             <form [formGroup]="documentsForm" class="form tp-documents-list">
               <app-document-simple-list
-                      [documents]="technicalProposal.documents"
-                      (selected)="onDocumentSelected($event, documentsForm)"
+                  [documents]="technicalProposal.documents"
+                  [enableUpload]="false"
               ></app-document-simple-list>
+
+              <app-document-upload-list
+                      (fileSelected)="onDocumentSelected($event, documentsForm)"
+                      [documents]="uploadedFiles"
+              ></app-document-upload-list>
             </form>
           </ng-template>
         </div>
@@ -110,11 +126,11 @@
 
       <div class="clr-row w-100 clr-align-items-center">
         <div class="clr-col-12">
-          <p>Позиции технического предложения</p>
+          <span class="positions-list-label">Позиции технического предложения:</span>
         </div>
 
         <div class="clr-col-12">
-          <div class="card-block" style="padding: 15px 0">
+          <div class="card-block" style="padding: 10px 0 15px 0">
 
             <ng-container *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)" class="load-block">
               <span class="spinner spinner-md"></span>
@@ -132,7 +148,6 @@
             </ng-container>
           </div>
         </div>
-
       </div>
 
     </div>

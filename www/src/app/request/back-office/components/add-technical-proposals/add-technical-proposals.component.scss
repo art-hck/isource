@@ -36,9 +36,15 @@
   }
 }
 
-.supplier-name {
+span.supplier-name {
   font-size: 17px;
   line-height: 100%;
+}
+
+span.supplier-name-label, span.positions-list-label {
+  padding-bottom: 5px;
+  display: block;
+  color: gray;
 }
 
 .send-for-approval {
@@ -75,10 +81,6 @@
 
 .positions-list td .form-group.compact {
   margin-bottom: 0;
-}
-
-.positions-list tbody tr td:first-of-type {
-  padding-left: 0 !important;
 }
 
 .positions-list tbody tr td {

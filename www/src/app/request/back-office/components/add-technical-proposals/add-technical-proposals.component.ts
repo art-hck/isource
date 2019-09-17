@@ -63,6 +63,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
+    this.uploadedFiles = [];
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -155,25 +156,33 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
-        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
-          this.documentsForm.value,
-          null,
-          'files'
-        );
+        if (this.uploadedFiles.length) {
+          const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+            this.documentsForm.value,
+            null,
+            'files'
+          );
 
-        this.technicalProposalsService.uploadSelectedDocuments(
-          this.requestId,
-          tpData.id,
-          filesToUpload
-        ).subscribe(() => {
-            this.getTechnicalProposals();
-          }
-        );
+          this.technicalProposalsService.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload).subscribe(
+            () => {
+              this.getTechnicalProposals();
+            },
+            () => {
+              this.notificationService.toast(
+                'Не удалось создать техническое предложение (ошибка загрузки документов)',
+                'error'
+              );
+            }
+          );
+        } else {
+          this.getTechnicalProposals();
+        }
       },
       () => {
-        this.notificationService.toast('Отправлено на согласование');
+        this.notificationService.toast('Не удалось создать техническое предложение');
       }
     );
+
     this.showAddTechnicalProposalModal = false;
     this.tpSupplierName = "";
   }
@@ -193,13 +202,40 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: selectedPositionsArray,
     };
 
-    this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
-      this.getTechnicalProposals();
-    });
+    this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(
+      (tpData: TechnicalProposal) => {
+        if (this.uploadedFiles.length) {
+          const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+            this.documentsForm.value,
+            null,
+            'files'
+          );
+
+          this.technicalProposalsService.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload).subscribe(
+            () => {
+              this.getTechnicalProposals();
+            },
+            () => {
+              this.notificationService.toast(
+                'Не удалось сохранить техническое предложение (ошибка загрузки документов)',
+                'error'
+              );
+            }
+          );
+        } else {
+          this.getTechnicalProposals();
+        }
+      },
+      () => {
+        this.notificationService.toast('Не удалось сохранить техническое предложение');
+      }
+    );
+
     this.showAddTechnicalProposalModal = false;
   }
 
   onDocumentSelected(uploadedFiles, documentsForm) {
+    console.log(uploadedFiles, documentsForm);
     documentsForm.get('documents').setValue(uploadedFiles);
   }
 
