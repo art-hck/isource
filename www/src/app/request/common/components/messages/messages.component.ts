@@ -13,6 +13,7 @@ import { RequestPosition } from "../../models/request-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { WebsocketService } from "../../../../websocket/websocket.service";
+import { EventTypes } from "../../../../websocket/event-types";
 
 @Component({
   selector: 'app-messages',
@@ -40,20 +41,19 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
       message: [null, [Validators.required]],
       files: [null]
     });
-
-    this.wsService.on<any>('message.new')
-      .subscribe((message: Message) => {
-        if (message.user.id !== userInfoService.getUserInfo().id
-          && message.requestPositionId === this.requestPosition.id
-        ) {
-          this.messages.push(message);
-        }
-      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getMessages();
     this.formReset();
+
+    this.wsService.on<any>(EventTypes.REQUEST_POSITION_MESSAGE_NEW.valueOf() + '.' + this.requestPosition.id)
+      .subscribe((message: Message) => {
+        console.log(message);
+        if (message.user.id !== this.userInfoService.getUserInfo().id) {
+          this.messages.push(message);
+        }
+      });
   }
 
   ngAfterViewChecked() {
