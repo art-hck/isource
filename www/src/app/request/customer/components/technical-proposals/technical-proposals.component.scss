@@ -1,0 +1,71 @@
+.modal-body:focus {
+  outline: 0;
+}
+
+::ng-deep .file-upload-label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.technical-proposal-card {
+  background: white;
+  padding: 20px 35px;
+  margin-top: 30px;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.13);
+}
+
+.edit-btn {
+  display: inline-block;
+  padding: 0 10px;
+
+  &:hover {
+    cursor: pointer;
+    color: #0085FF;
+  }
+}
+
+.supplier-name {
+  font-size: 17px;
+  line-height: 100%;
+}
+
+.send-for-approval {
+  text-align: right;
+
+  & button.btn.btn-primary {
+    margin-right: 0;
+  }
+}
+
+.positions-list th {
+  width: 50%;
+  color: gray;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.positions-list th:nth-of-type(2) {
+  padding-left: 20px;
+}
+
+.positions-list td .form-group.compact {
+  margin-bottom: 0;
+  display: block;
+}
+
+.positions-list td .form-group.compact {
+  margin-bottom: 0;
+}
+
+.positions-list tbody tr td:first-of-type {
+  padding-left: 0 !important;
+}
+
+.positions-list tbody tr td {
+  line-height: 30px;
+  padding: 5px 10px;
+}
+
+.tp-positions-list {
+  display: block;
+}

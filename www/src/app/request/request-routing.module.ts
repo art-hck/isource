@@ -7,6 +7,7 @@ import { BackOfficeRequestViewComponent } from "./back-office/components/back-of
 import { CustomerRequestViewComponent } from "./customer/components/customer-request-view/customer-request-view.component";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { AddTechnicalProposalsComponent } from "./back-office/components/add-technical-proposals/add-technical-proposals.component";
+import {TechnicalProposalsComponent} from "./customer/components/technical-proposals/technical-proposals.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: ':id',
         component: CustomerRequestViewComponent
+      },
+      {
+        path: ':id/technical-proposals',
+        component: TechnicalProposalsComponent
       }
     ]
   },
