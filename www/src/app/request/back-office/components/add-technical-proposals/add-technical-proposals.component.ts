@@ -8,6 +8,7 @@ import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -281,4 +282,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
   tpModalInEditMode(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.id !== null;
   }
+
+  tpIsSentToReview(technicalProposal: TechnicalProposal) {
+    return technicalProposal.status !== TechnicalProposalsStatuses.NEW;
+  }
+
 }

@@ -116,3 +116,7 @@ span.supplier-name-label, span.positions-list-label {
 ::ng-deep .tp-documents-list button.btn.btn-link {
   height: 100%;
 }
+
+.not-clickable {
+  pointer-events: none;
+}
