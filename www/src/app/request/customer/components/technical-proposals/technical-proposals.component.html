@@ -10,7 +10,6 @@
           <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
         <h2>Технические предложения</h2>
-
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
           <div class="clr-row clr-align-items-center">
             <span class="supplier-name clr-col">
@@ -28,6 +27,7 @@
                 Согласовать
               </button>
             </div>
+          </div>
           <table class="positions-list table table-noborder">
             <thead>
             <tr>
@@ -38,13 +38,18 @@
             <tbody>
             <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
               <td class="left">
-                <clr-checkbox-wrapper class="select-checkbox">
+                <clr-checkbox-wrapper *ngIf="technicalProposalPosition.status === 'NEW'" class="select-checkbox">
                   <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
                          value="{{i}}"
                          [(ngModel)]="technicalProposalPosition.checked"
                          (change)="onSelectPosition(i, technicalProposalPosition)">
                   <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
                 </clr-checkbox-wrapper>
+                <div *ngIf="technicalProposalPosition.status !== 'NEW'">
+                  <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'" shape="check"></clr-icon>
+                  <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'" shape="times"></clr-icon>
+                  <span class="position-name">{{technicalProposalPosition.position.name}}</span>
+                </div>
               </td>
               <td class="left">
                 <div class="form-group compact">
@@ -54,7 +59,6 @@
             </tr>
             </tbody>
           </table>
-        </div>
         </div>
       </div>
     </div>

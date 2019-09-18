@@ -27,13 +27,17 @@
 .supplier-name {
   font-size: 17px;
   line-height: 100%;
+  margin: 15px 0;
 }
 
 .send-for-approval {
   text-align: right;
 
   & button.btn.btn-primary {
-    margin-right: 0;
+    margin: 0 0 0 20px;
+  }
+  & button.btn.btn-link {
+    margin: 0;
   }
 }
 
@@ -68,4 +72,28 @@
 
 .tp-positions-list {
   display: block;
+}
+
+.accepted {
+  color: green;
+  margin: 0 4px 3px 0;
+}
+
+.declined {
+  color: red;
+  margin: 0 4px 3px 0;
+}
+
+.position-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #2b2b2b;
+}
+
+table {
+  margin-top: 0;
+}
+
+.positions-list tbody tr:hover {
+  background: #e1f1f6;
 }

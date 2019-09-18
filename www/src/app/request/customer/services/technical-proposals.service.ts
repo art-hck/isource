@@ -12,7 +12,7 @@ export class TechnicalProposalsService {
   }
 
   getTechnicalProposalsList(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-proposals`;
+    const url = `requests/customer/${requestId}/technical-proposals`;
     return this.api.get(url);
   }
 
@@ -22,7 +22,9 @@ export class TechnicalProposalsService {
     for (const technicalProposalsPosition of technicalProposalsPositions) {
       ids.push(technicalProposalsPosition.id);
     }
-    return this.api.post(url, ids);
+    return this.api.post(url, {
+      positions: ids
+    });
   }
 
   declineTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
@@ -31,6 +33,8 @@ export class TechnicalProposalsService {
     for (const technicalProposalsPosition of technicalProposalsPositions) {
       ids.push(technicalProposalsPosition.id);
     }
-    return this.api.post(url, ids);
+    return this.api.post(url, {
+      positions: ids
+    });
   }
 }

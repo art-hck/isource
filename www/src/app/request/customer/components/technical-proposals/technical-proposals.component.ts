@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../../common/models/request";
 import {TechnicalProposal} from "../../../common/models/technical-proposal";
-import {RequestPositionList} from "../../../common/models/request-position-list";
 import {ActivatedRoute, Router} from "@angular/router";
 import {RequestService} from "../../../back-office/services/request.service";
 import {TechnicalProposalsService} from "../../../customer/services/technical-proposals.service";
-import {RequestPosition} from "../../../common/models/request-position";
 import {TechnicalProposalPosition} from "../../../common/models/technical-proposal-position";
+import {NotificationService} from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -24,7 +23,8 @@ export class TechnicalProposalsComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router,
     private requestService: RequestService,
-    private technicalProposalsService: TechnicalProposalsService
+    private technicalProposalsService: TechnicalProposalsService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
@@ -62,27 +62,36 @@ export class TechnicalProposalsComponent implements OnInit {
   }
 
   onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition) {
-    console.log(technicalProposalPosition);
     const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
 
     if (index === -1) {
       this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
-      console.log(this.selectedTechnicalProposalsPositions);
     } else {
       this.selectedTechnicalProposalsPositions[i].splice(index, 1);
-      console.log(this.selectedTechnicalProposalsPositions);
     }
   }
 
   toAcceptTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
     this.technicalProposalsService.acceptTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
       () => {
+        this.getTechnicalProposals();
+        const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
+          'Технические предложения для позиций согласованы' :
+          'Техническое предложение для позиции согласовано';
+        this.notificationService.toast(toastText);
+        this.selectedTechnicalProposalsPositions = [];
       }
     );
   }
   toDeclineTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
     this.technicalProposalsService.declineTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
       () => {
+        this.getTechnicalProposals();
+        const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
+          'Технические предложения для позиций отклонены' :
+          'Техническое предложение для позиции отклонено';
+        this.notificationService.toast(toastText, 'error');
+        this.selectedTechnicalProposalsPositions = [];
       }
     );
   }
