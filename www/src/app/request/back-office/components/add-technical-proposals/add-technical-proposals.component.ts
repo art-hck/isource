@@ -96,19 +96,18 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
     if (technicalProposal) {
-      return technicalProposal.positions.every(position => position.manufacturingName !== "") ||
-             technicalProposal.documents.length > 0;
+      return (technicalProposal.positions.length > 0 &&
+              technicalProposal.positions.every(position => position.manufacturingName !== "")) ||
+              technicalProposal.documents.length > 0;
     }
   }
 
-  onSendForApproval() {
-    console.log('Отправлено на согласование заказчику');
-    // this.technicalProposalsService.sendToAgreement().subscribe(
-    //   (data: TechnicalProposal) => {
-    //     console.log(data);
-    //     this.technicalProposals = data;
-    //   }
-    // );
+  onSendForApproval(technicalProposal: TechnicalProposal): void {
+    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal).subscribe(
+      (data) => {
+        this.getTechnicalProposals();
+      }
+    );
   }
 
   protected updateRequestInfo(): void {

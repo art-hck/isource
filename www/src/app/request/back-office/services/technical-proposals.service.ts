@@ -31,7 +31,6 @@ export class TechnicalProposalsService {
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData) {
-    console.log('formData: ', formData);
     const url = `requests/backoffice/${requestId}/technical-proposals/${tpId}/upload-documents`;
     return this.api.post(url, formData);
   }

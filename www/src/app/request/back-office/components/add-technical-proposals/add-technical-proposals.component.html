@@ -32,11 +32,20 @@
 
 
               <div class="clr-col send-for-approval">
-                <button class="btn btn-primary"
-                        [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
-                        (click)="onSendForApproval()">
-                  <b>Отправить на согласование</b>
-                </button>
+                <div *ngIf="technicalProposal.status === 'false'; else sentForReview">
+                  <button class="btn btn-primary"
+                          [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
+                          (click)="onSendForApproval(technicalProposal)">
+                    <b>Отправить на согласование</b>
+                  </button>
+
+                  <p>{{ technicalProposal.status }}</p>
+                </div>
+
+                <ng-template #sentForReview>
+                  <p class="sent-label">Отправлено на согласование</p>
+                  <p>{{ technicalProposal.status }}</p>
+                </ng-template>
               </div>
             </div>
 

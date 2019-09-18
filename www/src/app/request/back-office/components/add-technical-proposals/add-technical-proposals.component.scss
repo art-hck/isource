@@ -57,6 +57,11 @@ span.supplier-name-label, span.positions-list-label {
       pointer-events: none;
     }
   }
+
+  & p.sent-label {
+    font-weight: bold;
+    color: #388E3C;
+  }
 }
 
 .positions-list th {
