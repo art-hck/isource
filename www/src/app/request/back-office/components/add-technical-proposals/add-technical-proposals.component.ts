@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -28,6 +28,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
+
+  @ViewChild('technicalProposalListElement', { static: false }) technicalProposalListElement: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +82,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
     this.selectedTechnicalProposalPositionsIds = [];
+    this.uploadedFiles = [];
 
     this.technicalProposal = technicalProposal;
     this.tpSupplierName = this.technicalProposal.name;
@@ -91,9 +94,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = true;
   }
 
-  isReadyToSendForApproval(technicalProposal) {
+  isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
     if (technicalProposal) {
-      return (technicalProposal.documents.length > 0);
+      return technicalProposal.positions.every(position => position.manufacturingName !== "") ||
+             technicalProposal.documents.length > 0;
     }
   }
 
@@ -107,7 +111,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     // );
   }
 
-  protected updateRequestInfo() {
+  protected updateRequestInfo(): void {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
@@ -115,7 +119,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  protected getTechnicalProposals() {
+  protected getTechnicalProposals(): void {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
@@ -142,7 +146,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
       this.requestId,
       tpId,
       tpPositionInfo
-    ).subscribe(() => {});
+    ).subscribe(() => {
+      this.getTechnicalProposals();
+    });
   }
 
   /**
@@ -156,27 +162,18 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
-        if (this.uploadedFiles.length) {
-          const filesToUpload = this.technicalProposalsService.convertModelToFormData(
-            this.documentsForm.value,
-            null,
-            'files'
-          );
-
-          this.technicalProposalsService.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload).subscribe(
-            () => {
-              this.getTechnicalProposals();
-            },
-            () => {
-              this.notificationService.toast(
-                'Не удалось создать техническое предложение (ошибка загрузки документов)',
-                'error'
-              );
-            }
-          );
-        } else {
+        if (!this.uploadedFiles.length) {
           this.getTechnicalProposals();
+          return;
         }
+
+        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+          this.documentsForm.value,
+          null,
+          'files'
+        );
+
+        this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
       },
       () => {
         this.notificationService.toast('Не удалось создать техническое предложение');
@@ -185,6 +182,19 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.showAddTechnicalProposalModal = false;
     this.tpSupplierName = "";
+  }
+
+  uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
+    this.technicalProposalsService.uploadSelectedDocuments(requestId, tpId, formData).subscribe(
+      () => {
+        this.getTechnicalProposals();
+      }, () => {
+        this.notificationService.toast(
+          'Не удалось создать техническое предложение (ошибка загрузки документов)',
+          'error'
+        );
+      }
+    );
   }
 
   /**
@@ -204,27 +214,18 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
-        if (this.uploadedFiles.length) {
-          const filesToUpload = this.technicalProposalsService.convertModelToFormData(
-            this.documentsForm.value,
-            null,
-            'files'
-          );
-
-          this.technicalProposalsService.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload).subscribe(
-            () => {
-              this.getTechnicalProposals();
-            },
-            () => {
-              this.notificationService.toast(
-                'Не удалось сохранить техническое предложение (ошибка загрузки документов)',
-                'error'
-              );
-            }
-          );
-        } else {
+        if (!this.uploadedFiles.length) {
           this.getTechnicalProposals();
+          return;
         }
+
+        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+          this.documentsForm.value,
+          null,
+          'files'
+        );
+
+        this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
       },
       () => {
         this.notificationService.toast('Не удалось сохранить техническое предложение');
@@ -234,8 +235,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = false;
   }
 
-  onDocumentSelected(uploadedFiles, documentsForm) {
-    console.log(uploadedFiles, documentsForm);
+  onDocumentSelected(uploadedFiles, documentsForm): void {
     documentsForm.get('documents').setValue(uploadedFiles);
   }
 

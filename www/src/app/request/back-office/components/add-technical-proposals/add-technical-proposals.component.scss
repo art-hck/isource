@@ -52,6 +52,10 @@ span.supplier-name-label, span.positions-list-label {
 
   & button.btn.btn-primary {
     margin-right: 0;
+
+    &.disabled {
+      pointer-events: none;
+    }
   }
 }
 
