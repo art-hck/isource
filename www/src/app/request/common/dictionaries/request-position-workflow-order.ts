@@ -4,6 +4,8 @@ const statuses = [
   RequestPositionWorkflowSteps.DRAFT.valueOf(),
   RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL.valueOf(),
   RequestPositionWorkflowSteps.NEW.valueOf(),
+  RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION.valueOf(),
+  RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT.valueOf(),
   RequestPositionWorkflowSteps.PROPOSALS_PREPARATION.valueOf(),
   RequestPositionWorkflowSteps.RESULTS_AGREEMENT.valueOf(),
   RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf(),
