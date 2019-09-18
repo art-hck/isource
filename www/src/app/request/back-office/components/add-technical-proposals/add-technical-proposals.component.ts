@@ -283,7 +283,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
     return technicalProposal.id !== null;
   }
 
-  tpIsSentToReview(technicalProposal: TechnicalProposal) {
+  /**
+   * Функция проверяет, находится ли техническое предложение в статусе Отправлено на рассмотрение
+   * @param technicalProposal
+   */
+  tpIsSentToReview(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.status !== TechnicalProposalsStatuses.NEW;
   }
 
