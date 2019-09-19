@@ -1,0 +1,66 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<ng-container *ngIf="request">
+  <div class="clr-row">
+    <div class="info-card clr-col">
+      <div class="request-info">
+        <div class="breadcrumbs">
+          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+        </div>
+        <h2>Технические предложения</h2>
+        <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
+          <div class="clr-row clr-align-items-center">
+            <span class="supplier-name clr-col">
+              <span>{{ technicalProposal.name }}</span>
+            </span>
+            <div class="clr-col send-for-approval">
+              <button class="btn btn-link"
+                      (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                      *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+                Отклонить
+              </button>
+              <button class="btn btn-primary"
+                      (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                      *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+                Согласовать
+              </button>
+            </div>
+          </div>
+          <table class="positions-list table table-noborder">
+            <thead>
+            <tr>
+              <th class="left">Наименование позиции</th>
+              <th class="left">Заводское наименование</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
+              <td class="left">
+                <clr-checkbox-wrapper *ngIf="technicalProposalPosition.status === 'NEW'" class="select-checkbox">
+                  <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                         value="{{i}}"
+                         [(ngModel)]="technicalProposalPosition.checked"
+                         (change)="onSelectPosition(i, technicalProposalPosition)">
+                  <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
+                </clr-checkbox-wrapper>
+                <div *ngIf="technicalProposalPosition.status !== 'NEW'">
+                  <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'" shape="check"></clr-icon>
+                  <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'" shape="times"></clr-icon>
+                  <span class="position-name">{{technicalProposalPosition.position.name}}</span>
+                </div>
+              </td>
+              <td class="left">
+                <div class="form-group compact">
+                  {{ technicalProposalPosition.manufacturingName }}
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

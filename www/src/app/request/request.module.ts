@@ -16,6 +16,7 @@ import { CreateRequestFreeFormComponent } from './common/components/create-reque
 import { OffersComponent as BackofficeOffersComponent } from './common/components/offers/offers.component';
 import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
 import { TechnicalProposalsService as BackofficeTechnicalProposalsService} from "./back-office/services/technical-proposals.service";
+import { TechnicalProposalsService as CustomerTechnicalProposalsService} from "./customer/services/technical-proposals.service";
 import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
@@ -40,6 +41,7 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
 import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
+import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,8 @@ import { AddTechnicalProposalsComponent } from './back-office/components/add-tec
     AddOffersComponent,
     AddTechnicalProposalsComponent,
     RequestDashboardComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    TechnicalProposalsComponent
   ],
   imports: [
     SharedModule,
@@ -87,6 +90,7 @@ import { AddTechnicalProposalsComponent } from './back-office/components/add-tec
     CustomerRequestService,
     BackofficeOffersService,
     BackofficeTechnicalProposalsService,
+    CustomerTechnicalProposalsService,
     GroupService,
     ContragentService
   ]
