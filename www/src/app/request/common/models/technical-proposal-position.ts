@@ -7,4 +7,5 @@ export class TechnicalProposalPosition {
   position: RequestPosition;
   positionId: Uuid;
   technicalProposalId: Uuid;
+  status: string;
 }
