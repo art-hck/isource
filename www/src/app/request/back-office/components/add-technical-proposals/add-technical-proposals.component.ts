@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { RequestPositionList } from "../../../common/models/request-position-list";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -17,7 +20,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   technicalProposals: TechnicalProposal[];
-
+  documentsForm: FormGroup;
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
@@ -25,15 +28,24 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
+  uploadedFiles: File[] = [];
+
+  @ViewChild('technicalProposalListElement', { static: false }) technicalProposalListElement: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService
   ) { }
 
   ngOnInit() {
+    this.documentsForm = this.formBuilder.group({
+      documents: [null]
+    });
+
     this.requestId = this.route.snapshot.paramMap.get('id');
 
     this.updateRequestInfo();
@@ -54,6 +66,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
+    this.uploadedFiles = [];
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -70,6 +83,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
     this.selectedTechnicalProposalPositionsIds = [];
+    this.uploadedFiles = [];
 
     this.technicalProposal = technicalProposal;
     this.tpSupplierName = this.technicalProposal.name;
@@ -81,23 +95,23 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = true;
   }
 
-  isReadyToSendForApproval(technicalProposal) {
+  isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
     if (technicalProposal) {
-      return (technicalProposal.documents.length > 0);
+      return (technicalProposal.positions.length > 0 &&
+              technicalProposal.positions.every(position => position.manufacturingName !== "")) ||
+              technicalProposal.documents.length > 0;
     }
   }
 
-  onSendForApproval() {
-    console.log('Отправлено на согласование заказчику');
-    // this.technicalProposalsService.sendToAgreement().subscribe(
-    //   (data: TechnicalProposal) => {
-    //     console.log(data);
-    //     this.technicalProposals = data;
-    //   }
-    // );
+  onSendForApproval(technicalProposal: TechnicalProposal): void {
+    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal).subscribe(
+      (data) => {
+        this.getTechnicalProposals();
+      }
+    );
   }
 
-  protected updateRequestInfo() {
+  protected updateRequestInfo(): void {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
@@ -105,7 +119,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  protected getTechnicalProposals() {
+  protected getTechnicalProposals(): void {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
@@ -132,7 +146,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
       this.requestId,
       tpId,
       tpPositionInfo
-    ).subscribe(() => {});
+    ).subscribe(() => {
+      this.getTechnicalProposals();
+    });
   }
 
   /**
@@ -144,11 +160,41 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
-    this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
-      this.getTechnicalProposals();
-    });
+    this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
+      (tpData: TechnicalProposal) => {
+        if (!this.uploadedFiles.length) {
+          this.getTechnicalProposals();
+          return;
+        }
+
+        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+          this.documentsForm.value,
+          null,
+          'files'
+        );
+
+        this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
+      },
+      () => {
+        this.notificationService.toast('Не удалось создать техническое предложение');
+      }
+    );
+
     this.showAddTechnicalProposalModal = false;
     this.tpSupplierName = "";
+  }
+
+  uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
+    this.technicalProposalsService.uploadSelectedDocuments(requestId, tpId, formData).subscribe(
+      () => {
+        this.getTechnicalProposals();
+      }, () => {
+        this.notificationService.toast(
+          'Не удалось создать техническое предложение (ошибка загрузки документов)',
+          'error'
+        );
+      }
+    );
   }
 
   /**
@@ -166,11 +212,33 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: selectedPositionsArray,
     };
 
-    this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(() => {
-      this.getTechnicalProposals();
-    });
+    this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(
+      (tpData: TechnicalProposal) => {
+        if (!this.uploadedFiles.length) {
+          this.getTechnicalProposals();
+          return;
+        }
+
+        const filesToUpload = this.technicalProposalsService.convertModelToFormData(
+          this.documentsForm.value,
+          null,
+          'files'
+        );
+
+        this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
+      },
+      () => {
+        this.notificationService.toast('Не удалось сохранить техническое предложение');
+      }
+    );
+
     this.showAddTechnicalProposalModal = false;
   }
+
+  onDocumentSelected(uploadedFiles, documentsForm): void {
+    documentsForm.get('documents').setValue(uploadedFiles);
+  }
+
 
   /**
    * Получение списка позиций для ТП
@@ -214,4 +282,13 @@ export class AddTechnicalProposalsComponent implements OnInit {
   tpModalInEditMode(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.id !== null;
   }
+
+  /**
+   * Функция проверяет, находится ли техническое предложение в статусе Отправлено на рассмотрение
+   * @param technicalProposal
+   */
+  tpIsSentToReview(technicalProposal: TechnicalProposal): boolean {
+    return technicalProposal.status !== TechnicalProposalsStatuses.NEW;
+  }
+
 }

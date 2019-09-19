@@ -36,9 +36,15 @@
   }
 }
 
-.supplier-name {
+span.supplier-name {
   font-size: 17px;
   line-height: 100%;
+}
+
+span.supplier-name-label, span.positions-list-label {
+  padding-bottom: 5px;
+  display: block;
+  color: gray;
 }
 
 .send-for-approval {
@@ -46,6 +52,15 @@
 
   & button.btn.btn-primary {
     margin-right: 0;
+
+    &.disabled {
+      pointer-events: none;
+    }
+  }
+
+  & p.sent-label {
+    font-weight: bold;
+    color: #388E3C;
   }
 }
 
@@ -77,10 +92,6 @@
   margin-bottom: 0;
 }
 
-.positions-list tbody tr td:first-of-type {
-  padding-left: 0 !important;
-}
-
 .positions-list tbody tr td {
   line-height: 30px;
   padding: 5px 10px;
@@ -100,4 +111,12 @@
 
 .tp-positions-list {
   display: block;
+}
+
+::ng-deep .tp-documents-list button.btn.btn-link {
+  height: 100%;
+}
+
+.not-clickable {
+  pointer-events: none;
 }
