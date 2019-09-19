@@ -54,7 +54,7 @@ export class TechnicalProposalsComponent implements OnInit {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
-        for (let i: number = 0; i < this.technicalProposals.length; i++) {
+        for (let i = 0; i < this.technicalProposals.length; i++) {
           this.selectedTechnicalProposalsPositions[i] = [];
         }
       }
