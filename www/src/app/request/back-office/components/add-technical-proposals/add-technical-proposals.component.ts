@@ -322,6 +322,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     if (technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
       return "Отправлено на согласование";
     }
+
+    return "";
   }
 
 }
