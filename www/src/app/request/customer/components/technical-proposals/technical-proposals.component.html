@@ -15,6 +15,13 @@
             <span class="supplier-name clr-col">
               <span>{{ technicalProposal.name }}</span>
             </span>
+          </div>
+            <div class="document">
+              <app-document-simple-list
+                [enableUpload]="false"
+                [documents]="technicalProposal.documents"
+              ></app-document-simple-list>
+            </div>
             <div class="clr-col send-for-approval">
               <button class="btn btn-link"
                       (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
@@ -27,7 +34,6 @@
                 Согласовать
               </button>
             </div>
-          </div>
           <table class="positions-list table table-noborder">
             <thead>
             <tr>
