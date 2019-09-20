@@ -124,3 +124,23 @@ span.supplier-name-label, span.positions-list-label {
 .history {
   width: 250px;
 }
+
+
+p.readonly-supplier-name {
+  margin: 0;
+}
+
+.accepted {
+  color: green;
+  margin: 0 4px 3px 0;
+}
+
+.declined {
+  color: red;
+  margin: 0 4px 3px 0;
+}
+
+.unknown-status {
+  color: #e7a20b;
+  margin: 0 4px 3px 0;
+}

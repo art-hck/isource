@@ -8,4 +8,5 @@ export class TechnicalProposalPosition {
   history: History;
   positionId: Uuid;
   technicalProposalId: Uuid;
+  status: string;
 }
