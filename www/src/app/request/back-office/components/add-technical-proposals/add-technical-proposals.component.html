@@ -100,14 +100,16 @@
 
       <div class="clr-row w-100">
         <div class="clr-col-12">
-          <label for="supplierName">
-            <span class="supplier-name-label">Наименование поставщика</span>
-          </label>
-          <input type="text"
-                 id="supplierName"
-                 name="supplierName"
-                 [(ngModel)]="tpSupplierName"
-                 value="{{ technicalProposal.name }}">
+          <!--<label for="supplierName">-->
+            <!--<span class="supplier-name-label">Наименование поставщика</span>-->
+          <!--</label>-->
+          <!--<input type="text"-->
+                 <!--id="supplierName"-->
+                 <!--name="supplierName"-->
+                 <!--[(ngModel)]="tpSupplierName"-->
+                 <!--value="{{ technicalProposal.name }}">-->
+          <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
+          </app-supplier-select>
         </div>
 
         <div class="clr-col-12">
@@ -171,13 +173,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

@@ -104,19 +104,9 @@
              [clrModalClosable]="false">
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
-      <form [formGroup]="contragentForm" novalidate>
-        <input class="searchContragent" id="searchContragent" placeholder="Введите наименование или ИНН контрагента"
-               (click)="onShowContragentList()"
-               formControlName="searchContragent"
-               autocomplete="off">
-      </form>
-      <div class="container-dropdown" *ngIf="showContragentList">
-        <div class="contragent-list"
-             *ngFor="let contragent of contragents | searchFilter: getSearchValue()"
-             (click)="selectContragent(contragent)">
-          {{contragent.shortName}}
-        </div>
-      </div>
+    <app-supplier-select (selectedContragent)="onSelectedContragent($event)"
+                        (showContragentInfo)="onShowContragentInfo($event)">
+    </app-supplier-select>
       <div class="contragent-info" *ngIf="showContragentInfo">
         <p class="label-contragent">Наименование контрагента:</p>
         {{selectedContragent.shortName}}

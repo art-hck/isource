@@ -42,6 +42,7 @@ import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
+import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { TechnicalProposalsComponent } from './customer/components/technical-pro
     AddTechnicalProposalsComponent,
     RequestDashboardComponent,
     SearchFilterPipe,
-    TechnicalProposalsComponent
+    TechnicalProposalsComponent,
+    SupplierSelectComponent
   ],
   imports: [
     SharedModule,

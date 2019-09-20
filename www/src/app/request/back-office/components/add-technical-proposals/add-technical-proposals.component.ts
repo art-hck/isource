@@ -9,6 +9,7 @@ import { RequestPositionList } from "../../../common/models/request-position-lis
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
+import {ContragentList} from "../../../../contragent/models/contragent-list";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -24,7 +25,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
-  tpSupplierName: string;
+  selectedContragent: ContragentList;
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
@@ -71,9 +72,13 @@ export class AddTechnicalProposalsComponent implements OnInit {
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
-    this.tpSupplierName = this.technicalProposal.name;
+    //this.tpSupplierName.shortName = this.technicalProposal.name;
 
     this.showAddTechnicalProposalModal = true;
+  }
+
+  onSelectedContragent(contragent: ContragentList) {
+    this.selectedContragent = contragent;
   }
 
   /**
@@ -86,7 +91,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.uploadedFiles = [];
 
     this.technicalProposal = technicalProposal;
-    this.tpSupplierName = this.technicalProposal.name;
+    this.selectedContragent.shortName = this.technicalProposal.name;
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
@@ -156,7 +161,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const technicalProposal = {
-      name: this.tpSupplierName,
+      name: this.selectedContragent.shortName,
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
@@ -181,7 +186,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
 
     this.showAddTechnicalProposalModal = false;
-    this.tpSupplierName = "";
+    this.selectedContragent.shortName = "";
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
@@ -208,7 +213,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     const technicalProposal = {
       id: this.technicalProposal.id,
-      name: this.tpSupplierName,
+      name: this.selectedContragent.shortName,
       positions: selectedPositionsArray,
     };
 

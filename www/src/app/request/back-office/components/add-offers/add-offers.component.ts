@@ -11,7 +11,6 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
-import {ContragentService} from "../../../../contragent/services/contragent.service";
 import * as moment from "moment";
 import Swal from "sweetalert2";
 
@@ -27,7 +26,7 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  showContragentList = false;
+  resetContragentForm = false;
 
   showAddOfferModal = false;
   offerForm: FormGroup;
@@ -56,8 +55,7 @@ export class AddOffersComponent implements OnInit {
     private requestService: RequestService,
     private formBuilder: FormBuilder,
     protected offersService: OffersService,
-    protected router: Router,
-    private getContragentService: ContragentService
+    protected router: Router
   ) {
   }
 
@@ -73,13 +71,8 @@ export class AddOffersComponent implements OnInit {
       paymentTerms: ['', Validators.required]
     });
 
-    this.contragentForm = this.formBuilder.group({
-      searchContragent: [null, Validators.required]
-    });
-
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
-    this.getContragentList();
   }
 
   getSupplierLinkedOffers(
@@ -89,21 +82,18 @@ export class AddOffersComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
-  getContragentList(): void {
-    this.getContragentService.getContragentList().subscribe(
-      (data: ContragentList[]) => {
-        this.contragents = data;
-      });
+  onSelectedContragent(contragent: ContragentList) {
+    this.selectedContragent = contragent;
+  }
+
+  onShowContragentInfo($event) {
+    this.showContragentInfo = $event;
   }
 
   // Модальное окно выбора контрагента
-  onShowContragentList() {
-      this.showContragentList = !this.showContragentList;
-  }
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
-    this.getContragentList();
     this.contragentForm.valueChanges.subscribe(data => {
       this.showContragentInfo = false;
     });
@@ -111,7 +101,7 @@ export class AddOffersComponent implements OnInit {
 
   onCloseAddContragentModal() {
     this.showAddContragentModal = false;
-    this.contragentForm.reset();
+    this.resetContragentForm = true;
     this.showContragentInfo = false;
   }
 
@@ -119,17 +109,6 @@ export class AddOffersComponent implements OnInit {
     this.suppliers.push(this.selectedContragent.shortName);
     this.suppliers.sort();
     this.onCloseAddContragentModal();
-  }
-
-  selectContragent(contragent: ContragentList) {
-    this.contragentForm.patchValue({"searchContragent": contragent.shortName});
-    this.showContragentList = false;
-    this.selectedContragent = contragent;
-    this.showContragentInfo = true;
-  }
-
-  getSearchValue() {
-    return this.contragentForm.value.searchContragent;
   }
 
   // Модальное окно создание КП
