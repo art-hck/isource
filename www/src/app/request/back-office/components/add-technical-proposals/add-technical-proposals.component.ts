@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -26,6 +26,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposalsPositions: RequestPositionList[];
 
   selectedContragent: ContragentList;
+  tpSupplierName: string;
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
@@ -72,7 +73,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
-    //this.tpSupplierName.shortName = this.technicalProposal.name;
+    // this.tpSupplierName.shortName = this.technicalProposal.name;
+    this.selectedContragent = null;
 
     this.showAddTechnicalProposalModal = true;
   }
@@ -289,11 +291,46 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   /**
-   * Функция проверяет, находится ли техническое предложение в статусе Отправлено на рассмотрение
+   * Функция проверяет, является ли техническое предложение свежесозданным
    * @param technicalProposal
    */
-  tpIsSentToReview(technicalProposal: TechnicalProposal): boolean {
-    return technicalProposal.status !== TechnicalProposalsStatuses.NEW;
+  tpIsNew(technicalProposal: TechnicalProposal): boolean {
+    return technicalProposal.status === TechnicalProposalsStatuses.NEW;
+  }
+
+  /**
+   * Функция проверяет, приступил ли заказчик к обработке ТП (принято решение хотя бы по одной позиции)
+   * @param technicalProposal
+   */
+  tpIsOnReview(technicalProposal: TechnicalProposal): boolean {
+    return technicalProposal.status !== TechnicalProposalsStatuses.NEW &&
+           technicalProposal.positions.some(position => position.status !== "NEW");
+  }
+
+  /**
+   * Функция проверяет, отклонил ли заказчик хотя бы одну позицию
+   * @param technicalProposal
+   */
+  tpHasDeclinedPosition(technicalProposal: TechnicalProposal) {
+    return technicalProposal.positions.some(position => position.status === "DECLINED");
+  }
+
+
+  tpStatusLabel(technicalProposal: TechnicalProposal): string {
+    if (technicalProposal.positions.some(position => position.status !== "NEW") &&
+        technicalProposal.positions.some(position => position.status === "NEW")) {
+      return "Начато согласование заказчиком";
+    }
+
+    if (technicalProposal.positions.every(position => position.status !== "NEW")) {
+      return "Завершено согласование заказчиком";
+    }
+
+    if (technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
+      return "Отправлено на согласование";
+    }
+
+    return "";
   }
 
 }

@@ -65,7 +65,7 @@ span.supplier-name-label, span.positions-list-label {
 }
 
 .positions-list th {
-  width: 50%;
+  width: 40%;
   color: gray;
   font-size: 12px;
   font-weight: 400;
@@ -119,4 +119,28 @@ span.supplier-name-label, span.positions-list-label {
 
 .not-clickable {
   pointer-events: none;
+}
+
+.history {
+  width: 250px;
+}
+
+
+p.readonly-supplier-name {
+  margin: 0;
+}
+
+.accepted {
+  color: green;
+  margin: 0 4px 3px 0;
+}
+
+.declined {
+  color: red;
+  margin: 0 4px 3px 0;
+}
+
+.unknown-status {
+  color: #e7a20b;
+  margin: 0 4px 3px 0;
 }

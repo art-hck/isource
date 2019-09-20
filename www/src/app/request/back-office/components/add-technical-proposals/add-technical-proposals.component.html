@@ -27,16 +27,15 @@
                 <span>{{ technicalProposal.name }}</span>
 
                 <div class="edit-btn"
-                     *ngIf="!tpIsSentToReview(technicalProposal)"
+                     *ngIf="tpIsNew(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
                      (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                   <clr-icon shape="pencil"></clr-icon>
                 </div>
               </span>
 
 
-
               <div class="clr-col send-for-approval">
-                <div *ngIf="!tpIsSentToReview(technicalProposal); else sentForReview">
+                <div *ngIf="tpIsNew(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
                           (click)="onSendForApproval(technicalProposal)">
@@ -45,7 +44,7 @@
                 </div>
 
                 <ng-template #sentForReview>
-                  <p class="sent-label">Отправлено на согласование</p>
+                  <p class="sent-label">{{ tpStatusLabel(technicalProposal) }}</p>
                 </ng-template>
               </div>
             </div>
@@ -62,12 +61,32 @@
                 <tr>
                   <th class="left">Наименование позиции</th>
                   <th class="left">Заводское наименование</th>
+                  <th class="left">Решение принято</th>
                 </tr>
               </thead>
 
-              <tbody [class.not-clickable]="tpIsSentToReview(technicalProposal)">
-                <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
-                  <td class="left">{{ technicalProposalPosition.position.name }}</td>
+              <tbody>
+                <tr *ngFor="let technicalProposalPosition of technicalProposal.positions"
+                    [class.not-clickable]="
+                      !tpIsNew(technicalProposal) &&
+                      technicalProposalPosition.status !== 'DECLINED'">
+
+                  <td class="left">
+                    <clr-icon class="accepted"
+                              shape="check"
+                              *ngIf="technicalProposalPosition.status === 'ACCEPTED'"></clr-icon>
+                    <clr-icon class="declined"
+                              shape="times"
+                              *ngIf="technicalProposalPosition.status === 'DECLINED'" ></clr-icon>
+                    <clr-icon class="unknown-status"
+                              shape="unknown-status"
+                              *ngIf="!tpIsNew(technicalProposal) &&
+                                     technicalProposalPosition.status !== 'DECLINED' &&
+                                     technicalProposalPosition.status !== 'ACCEPTED'"></clr-icon>
+
+                    {{ technicalProposalPosition.position.name }}
+                  </td>
+
                   <td class="left">
                     <div class="form-group compact">
                       <input type="text"
@@ -80,6 +99,8 @@
                              value="{{ technicalProposalPosition.manufacturingName }}" />
                     </div>
                   </td>
+                  <td class="left history"><b>{{ technicalProposalPosition.history?.user.shortName }}</b>
+                    {{technicalProposalPosition.history?.createdDate | date :'shortDate'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -88,6 +109,9 @@
       </div>
     </div>
   </div>
+
+
+  <!--  Модальное окно добавления и редактирования ТП-->
 
   <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal">
     <h3 class="modal-title">{{
@@ -100,15 +124,22 @@
 
       <div class="clr-row w-100">
         <div class="clr-col-12">
-          <!--<label for="supplierName">-->
-            <!--<span class="supplier-name-label">Наименование поставщика</span>-->
-          <!--</label>-->
-          <!--<input type="text"-->
-                 <!--id="supplierName"-->
-                 <!--name="supplierName"-->
-                 <!--[(ngModel)]="tpSupplierName"-->
-                 <!--value="{{ technicalProposal.name }}">-->
-          <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
+          <label for="supplierName">
+            <span class="supplier-name-label">Наименование поставщика</span>
+          </label>
+          <input type="text"
+                 id="supplierName"
+                 name="supplierName"
+                 *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
+                 [(ngModel)]="tpSupplierName"
+                 value="{{ technicalProposal.name }}">
+
+          <ng-template #readonly>
+            <p class="readonly-supplier-name">{{ technicalProposal.name }}</p>
+          </ng-template>
+
+          <app-supplier-select
+                  (selectedContragent)="onSelectedContragent($event)">
           </app-supplier-select>
         </div>
 
@@ -138,7 +169,8 @@
         </div>
       </div>
 
-      <div class="clr-row w-100 clr-align-items-center">
+      <div class="clr-row w-100 clr-align-items-center"
+           *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)) || technicalProposal.id === null">
         <div class="clr-col-12">
           <span class="positions-list-label">Позиции технического предложения:</span>
         </div>
