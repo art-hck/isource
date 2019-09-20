@@ -61,6 +61,7 @@
                 <tr>
                   <th class="left">Наименование позиции</th>
                   <th class="left">Заводское наименование</th>
+                  <th class="left">Решение принято</th>
                 </tr>
               </thead>
 
@@ -98,6 +99,8 @@
                              value="{{ technicalProposalPosition.manufacturingName }}" />
                     </div>
                   </td>
+                  <td class="left history"><b>{{ technicalProposalPosition.history?.user.shortName }}</b>
+                    {{technicalProposalPosition.history?.createdDate | date :'shortDate'}}</td>
                 </tr>
               </tbody>
             </table>

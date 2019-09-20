@@ -16,24 +16,24 @@
               <span>{{ technicalProposal.name }}</span>
             </span>
           </div>
-            <div class="document">
-              <app-document-simple-list
-                [enableUpload]="false"
-                [documents]="technicalProposal.documents"
-              ></app-document-simple-list>
-            </div>
-            <div class="clr-col send-for-approval">
-              <button class="btn btn-link"
-                      (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                      *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
-                Отклонить
-              </button>
-              <button class="btn btn-primary"
-                      (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                      *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
-                Согласовать
-              </button>
-            </div>
+          <div class="document">
+            <app-document-simple-list
+              [enableUpload]="false"
+              [documents]="technicalProposal.documents"
+            ></app-document-simple-list>
+          </div>
+          <div class="clr-col send-for-approval">
+            <button class="btn btn-link"
+                    (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                    *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+              Отклонить
+            </button>
+            <button class="btn btn-primary"
+                    (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                    *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+              Согласовать
+            </button>
+          </div>
           <table class="positions-list table table-noborder">
             <thead>
             <tr>
@@ -52,8 +52,10 @@
                   <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
                 </clr-checkbox-wrapper>
                 <div *ngIf="technicalProposalPosition.status !== 'NEW'">
-                  <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'" shape="check"></clr-icon>
-                  <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'" shape="times"></clr-icon>
+                  <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
+                            shape="check"></clr-icon>
+                  <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"
+                            shape="times"></clr-icon>
                   <span class="position-name">{{technicalProposalPosition.position.name}}</span>
                 </div>
               </td>
