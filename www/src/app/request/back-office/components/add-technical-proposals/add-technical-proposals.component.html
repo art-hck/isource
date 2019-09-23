@@ -127,20 +127,27 @@
           <label for="supplierName">
             <span class="supplier-name-label">Наименование поставщика</span>
           </label>
-          <input type="text"
-                 id="supplierName"
-                 name="supplierName"
-                 *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
-                 [(ngModel)]="tpSupplierName"
-                 value="{{ technicalProposal.name }}">
+<!--          <input type="text"-->
+<!--                 id="supplierName"-->
+<!--                 name="supplierName"-->
+<!--                 *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"-->
+<!--                 [(ngModel)]="tpSupplierName"-->
+<!--                 value="{{ technicalProposal.name }}">-->
+
+<!--          <ng-template #readonly>-->
+<!--            <p class="readonly-supplier-name">{{ technicalProposal.name }}</p>-->
+<!--          </ng-template>-->
+
+          <app-supplier-select
+                  *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
+                  [contragentName]="tpModalInEditMode(technicalProposal) ? technicalProposal.name : selectedContragent?.shortName"
+                  (selectedContragent)="onSelectedContragent($event)">
+          </app-supplier-select>
 
           <ng-template #readonly>
             <p class="readonly-supplier-name">{{ technicalProposal.name }}</p>
           </ng-template>
 
-          <app-supplier-select
-                  (selectedContragent)="onSelectedContragent($event)">
-          </app-supplier-select>
         </div>
 
         <div class="clr-col-12">
@@ -205,13 +212,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent?.shortName.length > 0"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent"
+                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !selectedContragent?.shortName.length > 0"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

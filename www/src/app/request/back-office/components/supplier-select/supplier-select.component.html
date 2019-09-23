@@ -2,7 +2,10 @@
   <input class="searchContragent" id="searchContragent" placeholder="Введите наименование или ИНН контрагента"
          (click)="onShowContragentList()"
          formControlName="searchContragent"
-         autocomplete="off">
+         autocomplete="off"
+         type="text"
+         [value]="contragentName"
+         (change)="onContragentInputChange($event.target.value)" />
 </form>
 <div class="container-dropdown" *ngIf="showContragentList">
   <div class="contragent-list"

@@ -26,7 +26,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposalsPositions: RequestPositionList[];
 
   selectedContragent: ContragentList;
-  tpSupplierName: string;
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
@@ -73,13 +72,14 @@ export class AddTechnicalProposalsComponent implements OnInit {
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
-    // this.tpSupplierName.shortName = this.technicalProposal.name;
+
     this.selectedContragent = null;
 
     this.showAddTechnicalProposalModal = true;
   }
 
   onSelectedContragent(contragent: ContragentList) {
+    console.log(contragent);
     this.selectedContragent = contragent;
   }
 

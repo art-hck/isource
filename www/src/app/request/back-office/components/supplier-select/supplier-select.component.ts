@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {ContragentService} from "../../../../contragent/services/contragent.service";
@@ -12,6 +12,8 @@ export class SupplierSelectComponent implements OnInit {
   contragentForm: FormGroup;
   contragents: ContragentList[];
   showContragentList = false;
+
+  @Input() contragentName = "";
 
   @Output() selectedContragent = new EventEmitter<ContragentList>();
   @Output() showContragentInfo = new EventEmitter<boolean>();
@@ -42,6 +44,11 @@ export class SupplierSelectComponent implements OnInit {
 
   onShowContragentList() {
     this.showContragentList = !this.showContragentList;
+  }
+
+  onContragentInputChange(value) {
+    // this.contragentForm.get('searchContragent').setValue(value);
+    this.contragentName = value;
   }
 
   selectContragent(contragent: ContragentList) {
