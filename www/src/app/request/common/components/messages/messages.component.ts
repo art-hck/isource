@@ -1,12 +1,4 @@
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
 import { RequestPosition } from "../../models/request-position";
@@ -14,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { EventTypes } from "../../../../websocket/event-types";
+import { MessageContextTypes } from "../../enum/message-context-types";
 
 @Component({
   selector: 'app-messages',
@@ -62,7 +55,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
 
   getMessages() {
     this.loading = true;
-    this.messageService.getList(this.requestPosition)
+    this.messageService.getList(MessageContextTypes.REQUEST_POSITION, this.requestPosition.id)
       .subscribe((messages: Message[]) => {
         this.messages = messages;
         this.loading = false;
@@ -78,10 +71,14 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   }
 
   onCreateClick(customerData) {
-    this.messageService.addMessage(this.requestPosition, customerData.message, customerData.files)
-      .subscribe((newMessage: Message) => {
-        this.messages.push(newMessage);
-      });
+    this.messageService.addMessage(
+      customerData.message,
+      MessageContextTypes.REQUEST_POSITION,
+      this.requestPosition.id,
+      customerData.files
+    ).subscribe((newMessage: Message) => {
+      this.messages.push(newMessage);
+    });
 
     this.formReset();
   }
