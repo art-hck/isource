@@ -11,6 +11,6 @@
   <div class="contragent-list"
        *ngFor="let contragent of contragents | searchFilter: getSearchValue()"
        (click)="selectContragent(contragent)">
-    {{contragent.shortName}}
+       {{ contragent.shortName }}
   </div>
 </div>

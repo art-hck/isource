@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
+import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -27,6 +28,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   selectedContragent: ContragentList;
 
+  contragentInputFieldValue = "";
+
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
@@ -39,7 +42,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private requestService: RequestService,
-    private technicalProposalsService: TechnicalProposalsService
+    private technicalProposalsService: TechnicalProposalsService,
+    private supplierSelectComponent: SupplierSelectComponent
   ) { }
 
   ngOnInit() {
@@ -66,8 +70,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * Подготовка модального окна для добавления ТП
    */
   onShowAddTechnicalProposalModal(): void {
+    this.resetSearchFilter();
+
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
+
+    this.contragentInputFieldValue = "";
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -78,9 +86,17 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = true;
   }
 
+  onInputFieldChange(value) {
+    this.contragentInputFieldValue = value;
+  }
+
+  resetSearchFilter() {
+    this.supplierSelectComponent.resetSearchFilter();
+  }
+
   onSelectedContragent(contragent: ContragentList) {
-    console.log(contragent);
     this.selectedContragent = contragent;
+    this.contragentInputFieldValue = contragent.shortName;
   }
 
   /**
@@ -89,11 +105,13 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * @param technicalProposal
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
-    this.selectedTechnicalProposalPositionsIds = [];
-    this.uploadedFiles = [];
+    this.resetSearchFilter();
 
     this.technicalProposal = technicalProposal;
-    this.selectedContragent.shortName = this.technicalProposal.name;
+
+    this.selectedTechnicalProposalPositionsIds = [];
+    this.uploadedFiles = [];
+    this.contragentInputFieldValue = technicalProposal.name;
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
@@ -245,7 +263,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   onDocumentSelected(uploadedFiles, documentsForm): void {
     documentsForm.get('documents').setValue(uploadedFiles);
   }
-
 
   /**
    * Получение списка позиций для ТП

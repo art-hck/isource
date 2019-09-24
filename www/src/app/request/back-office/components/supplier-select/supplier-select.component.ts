@@ -15,6 +15,7 @@ export class SupplierSelectComponent implements OnInit {
 
   @Input() contragentName = "";
 
+  @Output() inputFieldValue = new EventEmitter<string>();
   @Output() selectedContragent = new EventEmitter<ContragentList>();
   @Output() showContragentInfo = new EventEmitter<boolean>();
 
@@ -31,6 +32,7 @@ export class SupplierSelectComponent implements OnInit {
     this.getContragentList();
   }
 
+
   getContragentList(): void {
     this.getContragentService.getContragentList().subscribe(
       (data: ContragentList[]) => {
@@ -39,7 +41,7 @@ export class SupplierSelectComponent implements OnInit {
   }
 
   getSearchValue() {
-    return this.contragentForm.value.searchContragent;
+    return this.contragentName;
   }
 
   onShowContragentList() {
@@ -47,14 +49,26 @@ export class SupplierSelectComponent implements OnInit {
   }
 
   onContragentInputChange(value) {
-    // this.contragentForm.get('searchContragent').setValue(value);
+    this.contragentForm.patchValue({"searchContragent": value});
+    this.contragentForm.get('searchContragent').setValue(value);
+    this.inputFieldValue.emit(value);
     this.contragentName = value;
   }
 
   selectContragent(contragent: ContragentList) {
-    this.contragentForm.patchValue({"searchContragent": contragent.shortName});
+    this.contragentForm.patchValue({'searchContragent': contragent.shortName});
+
+    this.inputFieldValue.emit(contragent.shortName);
+    this.contragentName = contragent.shortName;
+
     this.showContragentList = false;
     this.selectedContragent.emit(contragent);
     this.showContragentInfo.emit(true);
+  }
+
+  resetSearchFilter() {
+    this.contragentForm = this.formBuilder.group({
+      searchContragent: [null, Validators.required]
+    });
   }
 }

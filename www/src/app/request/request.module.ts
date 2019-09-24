@@ -94,7 +94,8 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
     BackofficeTechnicalProposalsService,
     CustomerTechnicalProposalsService,
     GroupService,
-    ContragentService
+    ContragentService,
+    SupplierSelectComponent
   ]
 })
 export class RequestModule {
