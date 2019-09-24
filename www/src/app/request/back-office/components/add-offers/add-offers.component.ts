@@ -133,12 +133,14 @@ export class AddOffersComponent implements OnInit {
   }
 
   // Модальное окно создание КП
-  onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
+  onShowAddOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer?: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
 
     this.showAddOfferModal = true;
-
+    if(linkedOffer) {
+      this.setOfferValues(linkedOffer);
+    } else {
     this.offerForm.get('quantity').setValue(requestPosition.quantity);
     this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
     this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
@@ -148,6 +150,19 @@ export class AddOffersComponent implements OnInit {
         requestPosition.deliveryDate;
       this.offerForm.get('deliveryDate').patchValue(deliveryDate);
     }
+    }
+  }
+
+  setOfferValues(linkedOffer: RequestOfferPosition) {
+    this.offerForm.get('priceWithVat').setValue(linkedOffer.priceWithoutVat);
+    this.offerForm.get('currency').setValue(linkedOffer.currency);
+    this.offerForm.get('quantity').setValue(linkedOffer.quantity);
+    this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
+    const deliveryDate = linkedOffer.deliveryDate ?
+      moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
+      linkedOffer.deliveryDate;
+    this.offerForm.get('deliveryDate').patchValue(deliveryDate);
   }
 
   isFieldValid(field: string) {
