@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="clr-row w-100">
-          <div class="clr-col-10">
+          <div class="clr-col-8">
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
               <button class="btn btn-outline import-export"
                       (click)="onDownloadOffersTemplate()">
@@ -32,6 +32,115 @@
               (click)="onShowImportOffersExcel()">Импортировать КП</button>
             </div>
 
+          </div>
+          <div class="clr-col-2 send-offers">
+            <button class="btn btn-primary send-offers"
+                    (click)="wizard.open()"
+            ><b>Создать процедуру</b>
+            </button>
+            <clr-wizard #wizard [(clrWizardOpen)]="lgOpen" clrWizardSize="lg">
+              <clr-wizard-title><b>Новая процедура</b></clr-wizard-title>
+
+              <clr-wizard-button [type]="'cancel'">Отмена</clr-wizard-button>
+              <clr-wizard-button [type]="'previous'">Назад</clr-wizard-button>
+              <clr-wizard-button [type]="'next'">Далее</clr-wizard-button>
+              <clr-wizard-button [type]="'finish'">Опубликовать</clr-wizard-button>
+
+              <clr-wizard-page [clrWizardPageNextDisabled]="commonDataForm.invalid">
+                <ng-template clrPageTitle>Общие сведения</ng-template>
+                <form [formGroup]="commonDataForm" class="form">
+                  <div class="form-block">
+                    <div class="clr-form-control">
+                      <div class="clr-row w-100">
+                          <label class="clr-control-label" for="procedureName">Наименование закупки</label>
+                          <input id="procedureName" type="text" formControlName="procedureName" [class.invalid]="isDataFieldValid('procedureName')"/>
+                      </div>
+                      <div class="clr-row w-100">
+                          <clr-checkbox-wrapper>
+                            <input type="checkbox" clrCheckbox name="badSupplierDetection" id="badSupplierDetection" formControlName="badSupplierDetection">
+                            <label class="clr-control-label nopadding">Требование к отсутствию участников закупки в реестре недобросовестных поставщиков ФАС</label>
+                          </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <div class="clr-col-6 dates">
+                          <label class="clr-control-label left" for="startDate">Прием заявок до:</label>
+                          <input id="startDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="startDate"
+                                 [class.invalid]="isDataFieldValid('startDate')"/>
+                        </div>
+                        <div class="clr-col-6 dates">
+                          <label class="clr-control-label left" for="endDate">Подведение итогов:</label>
+                          <input id="endDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="endDate"
+                                 [class.invalid]="isDataFieldValid('endDate')"/>
+                        </div>
+                  </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="position-list" *ngFor="let requestPosition of requestPositions">
+                  <div class="clr-row w-100">
+                    <label class="clr-control-label">Позиции, участвующие в процедуре:</label>
+                  </div>
+                  <div class="clr-row w-100">
+                    <clr-checkbox-wrapper class="select-checkbox">
+                      <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                             value="{{requestPosition}}"
+                             [(ngModel)]="requestPosition.checked">
+                      <label class="position-label">{{ requestPosition.name }}
+                      </label>
+                    </clr-checkbox-wrapper>
+                </div>
+                      </div>
+              </clr-wizard-page>
+
+              <clr-wizard-page>
+                <ng-template clrPageTitle>Свойства процедуры</ng-template>
+                <form [formGroup]="procedurePropertiesForm" class="form">
+                  <div class="form-block">
+                    <div class="clr-form-control">
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="one" id="one" formControlName="one">
+                          <label class="clr-control-label nopadding">Досрочное завершение приема заявок на участие</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row">
+                        <label class="clr-control-label" for="two">Продление времени приема заявок на участие (минут)</label>
+                        <input id="two" type="text" formControlName="two"/>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="three" id="three" formControlName="three">
+                          <label class="clr-control-label nopadding">Обязательная подача предложений на все позиции</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="four" id="four" formControlName="four">
+                          <label class="clr-control-label nopadding">Разрешается прием аналогов</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="five" id="five" formControlName="five">
+                          <label class="clr-control-label nopadding">Возможность подачи аналогов без основного предложения</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="six" id="six" formControlName="six">
+                          <label class="clr-control-label nopadding">Заявка подается на весь закупаемый объем</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </clr-wizard-page>
+
+              <clr-wizard-page>
+                <ng-template clrPageTitle>Документы</ng-template>
+                ...
+              </clr-wizard-page>
+            </clr-wizard>
           </div>
           <div class="clr-col-2 send-offers">
             <button class="btn btn-primary send-offers"

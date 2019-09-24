@@ -206,3 +206,40 @@ h2 {
   color: #999999;
   margin-bottom: 0;
 }
+
+.nopadding {
+  padding-top: 0;
+  text-align: left;
+}
+
+::ng-deep .clr-wizard-title {
+  text-align: left;
+}
+
+::ng-deep .modal-title-text{
+  text-align: left;
+}
+
+::ng-deep .modal-header {
+  padding: 0!important;
+}
+
+::ng-deep .clr-wizard-page {
+  padding: 0 0 0 20px!important;
+}
+
+::ng-deep .modal-nav {
+  width: 200px!important;
+}
+
+.left {
+  text-align: left;
+}
+
+.dates {
+  padding: 0;
+}
+
+::ng-deep .clr-input-group-icon-action {
+  margin-right: 20px!important;
+}

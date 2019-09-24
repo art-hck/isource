@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,6 +14,8 @@ import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {ContragentService} from "../../../../contragent/services/contragent.service";
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import {ClrWizard} from "@clr/angular";
+import {isBoolean} from "util";
 
 @Component({
   selector: 'app-add-offers',
@@ -21,6 +23,13 @@ import Swal from "sweetalert2";
   styleUrls: ['./add-offers.component.css']
 })
 export class AddOffersComponent implements OnInit {
+  @ViewChild("wizard") wizard: ClrWizard;
+  _open: boolean = false;
+
+  open() {
+    this._open = !this.open;
+  }
+
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -43,6 +52,8 @@ export class AddOffersComponent implements OnInit {
 
   contragents: ContragentList[];
   contragentForm: FormGroup;
+  commonDataForm: any;
+  procedurePropertiesForm: any;
   showContragentInfo = false;
   selectedContragent: ContragentList;
 
@@ -77,9 +88,39 @@ export class AddOffersComponent implements OnInit {
       searchContragent: [null, Validators.required]
     });
 
+    this.commonDataForm = this.formBuilder.group({
+      procedureName: ['', Validators.required],
+      badSupplierDetection: [false],
+      startDate: ['', [Validators.required, CustomValidators.futureDate]],
+      endDate: ['', [Validators.required, CustomValidators.customDate('startDate')]]
+    });
+    this.commonDataForm.get('endDate').disable();
+
+    this.procedurePropertiesForm = this.formBuilder.group({
+      one: [false],
+      two: [''],
+      three: [false],
+      four: [false],
+      five: [false],
+      six: [false]
+    });
+
+    this.commonDataForm.get('startDate').valueChanges.subscribe(value => {
+      if (value) {
+        this.commonDataForm.get('endDate').enable();
+      } else {
+        this.commonDataForm.get('endDate').disable();
+      }
+    });
+
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
     this.getContragentList();
+  }
+
+  isDataFieldValid(field: string) {
+    return this.commonDataForm.get(field).errors
+      && (this.commonDataForm.get(field).touched || this.commonDataForm.get(field).dirty);
   }
 
   getSupplierLinkedOffers(
