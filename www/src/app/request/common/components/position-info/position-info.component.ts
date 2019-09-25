@@ -184,10 +184,9 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
 
   onUploadDocuments(files: File[]) {
     this.customerRequestService.uploadDocuments(this.requestPosition, files)
-      .subscribe((requestPosition: RequestPosition) => {
+      .subscribe((documents: RequestDocument[]) => {
         this.notificationService.toast('Документ загружен');
-        this.requestPosition = requestPosition;
-        this.requestPositionChanged.emit(requestPosition);
+        documents.forEach(document => this.requestPosition.documents.push(document));
       });
   }
 
