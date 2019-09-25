@@ -88,14 +88,7 @@ export class AddOffersComponent implements OnInit {
     linkedOffers: RequestOfferPosition[],
     supplier: string
   ): RequestOfferPosition[] {
-    // return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
-    let supplierLinkedOffers = [];
-    for (const linkedOffer of linkedOffers) {
-      if (linkedOffer.supplierContragentName === supplier) {
-        supplierLinkedOffers.push(linkedOffer);
-      }
-    }
-    return supplierLinkedOffers;
+    return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
   getContragentList(): void {
@@ -107,7 +100,7 @@ export class AddOffersComponent implements OnInit {
 
   // Модальное окно выбора контрагента
   onShowContragentList() {
-      this.showContragentList = !this.showContragentList;
+    this.showContragentList = !this.showContragentList;
   }
 
   onShowAddContragentModal() {
@@ -145,7 +138,7 @@ export class AddOffersComponent implements OnInit {
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer?: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-    this.selectedOffer = linkedOffer;
+    // this.selectedOffer = linkedOffer;
 
     this.showAddOfferModal = true;
     if(linkedOffer) {
@@ -204,7 +197,7 @@ export class AddOffersComponent implements OnInit {
 
     this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
       (data: RequestOfferPosition) => {
-        this.selectedOffer = data;
+        this.updatePositions();
       }
     );
     this.onCloseAddOfferModal();
@@ -311,6 +304,14 @@ export class AddOffersComponent implements OnInit {
       (data: any) => {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
+      }
+    );
+  }
+
+  protected updatePositions(): void {
+    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+      (data: any) => {
+        this.requestPositions = data.positions;
       }
     );
   }
