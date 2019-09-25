@@ -74,7 +74,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
-
     this.contragentInputFieldValue = "";
 
     const technicalProposal = new TechnicalProposal();
@@ -348,6 +347,26 @@ export class AddTechnicalProposalsComponent implements OnInit {
     }
 
     return "";
+  }
+
+
+  checkIfCreatingIsEnabled() {
+    return (
+      this.selectedTechnicalProposalPositionsIds.length > 0 &&
+      this.contragentInputFieldValue.length > 0
+    );
+  }
+
+  checkIfSavingIsEnabled(technicalProposal) {
+    // Если ТП уже в процессе рассмотрения, проверяем только
+    // наличие выбранных документов для загрузки
+    if (this.tpIsOnReview(technicalProposal)) {
+      return this.uploadedFiles.length > 0;
+    } else {
+      // Если ТП ещё не рассматривалось заказчиком,
+      // проверяем, выбраны ли позиции или заполнено ли поле наименования
+      return (this.selectedTechnicalProposalPositionsIds.length > 0 && this.contragentInputFieldValue.length > 0);
+    }
   }
 
 }

@@ -130,7 +130,9 @@
 
           <app-supplier-select
                   *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
-                  [contragentName]="tpModalInEditMode(technicalProposal) ? contragentInputFieldValue : selectedContragent?.shortName"
+                  [contragentName]="tpModalInEditMode(technicalProposal) ?
+                                    contragentInputFieldValue :
+                                    selectedContragent?.shortName"
                   (inputFieldValue)="onInputFieldChange($event)"
                   (selectedContragent)="onSelectedContragent($event)">
           </app-supplier-select>
@@ -176,7 +178,8 @@
         <div class="clr-col-12">
           <div class="card-block" style="padding: 10px 0 15px 0">
 
-            <ng-container *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)" class="load-block">
+            <ng-container class="load-block"
+                          *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
@@ -203,13 +206,13 @@
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !contragentInputFieldValue.length > 0"
+                    [disabled]="!checkIfCreatingIsEnabled()"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !contragentInputFieldValue.length > 0"
+                    [disabled]="!checkIfSavingIsEnabled(technicalProposal)"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

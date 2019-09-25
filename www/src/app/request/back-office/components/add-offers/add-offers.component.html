@@ -53,7 +53,7 @@
           <tr *ngFor="let requestPosition of requestPositions">
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
-                <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                <input clrCheckbox type="checkbox"
                        value="{{requestPosition}}"
                        [(ngModel)]="requestPosition.checked"
                        (change)="onSelectPosition(requestPosition)"
