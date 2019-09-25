@@ -13,6 +13,7 @@ import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 
 @Component({
   selector: 'app-add-offers',
@@ -26,7 +27,6 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  resetContragentForm = false;
 
   showAddOfferModal = false;
   offerForm: FormGroup;
@@ -47,8 +47,8 @@ export class AddOffersComponent implements OnInit {
 
   files: File[] = [];
 
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
+  // @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
+  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -94,6 +94,8 @@ export class AddOffersComponent implements OnInit {
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
+    this.supplierSelectComponent.resetSearchFilter();
+
     if (this.contragentForm) {
       this.contragentForm.valueChanges.subscribe(data => {
         this.showContragentInfo = false;
@@ -103,7 +105,7 @@ export class AddOffersComponent implements OnInit {
 
   onCloseAddContragentModal() {
     this.showAddContragentModal = false;
-    this.resetContragentForm = true;
+    this.supplierSelectComponent.resetSearchFilter();
     this.showContragentInfo = false;
   }
 

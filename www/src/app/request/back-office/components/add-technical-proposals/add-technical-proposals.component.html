@@ -113,7 +113,7 @@
 
   <!--  Модальное окно добавления и редактирования ТП-->
 
-  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal">
+  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" [clrModalClosable]="false">
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -130,10 +130,7 @@
 
           <app-supplier-select
                   *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
-                  [contragentName]="tpModalInEditMode(technicalProposal) ?
-                                    contragentInputFieldValue :
-                                    selectedContragent?.shortName"
-                  (inputFieldValue)="onInputFieldChange($event)"
+                  [(contragentName)]="contragentInputFieldValue"
                   (selectedContragent)="onSelectedContragent($event)">
           </app-supplier-select>
 
@@ -202,7 +199,7 @@
     <div class="modal-footer">
       <div class="clr-row w-100">
         <div class="clr-col-12 text-right">
-          <button class="btn btn-link" (click)="showAddTechnicalProposalModal = false">Отмена</button>
+          <button class="btn btn-link" (click)="onCloseModal(technicalProposal)">Отмена</button>
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"

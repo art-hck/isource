@@ -5,7 +5,7 @@
          autocomplete="off"
          type="text"
          [value]="contragentName"
-         (change)="onContragentInputChange($event.target.value)" />
+         (input)="onContragentInputChange($event.target.value)" />
 </form>
 <div class="container-dropdown" *ngIf="showContragentList">
   <div class="contragent-list"
