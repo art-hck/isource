@@ -24,6 +24,7 @@ import * as moment from "moment";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 import { LinkedOffersSortService } from '../../services/linked-offers-sort-service';
+import { RequestPositionDraftService } from "../../services/request-position-draft.service";
 
 @Component({
   selector: 'app-position-info',
@@ -63,10 +64,10 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
     private backofficeRequestService: BackofficeRequestService,
     private editRequestService: EditRequestService,
     private customerRequestService: CustomerRequestService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private requestPositionDraftService: RequestPositionDraftService
   ) {
   }
-
 
   ngAfterViewInit() {
     this.tabLinks.changes.subscribe(tabChange => {
@@ -235,5 +236,14 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.showWinnerStateColumn) {
       this.linkedOfferSorter.sortLinkedOffers(this.requestPosition.linkedOffers);
     }
+  }
+
+  onDeleteDraft(): void {
+    this.requestPositionDraftService.deleteRequestPositionDraft(this.requestPosition.id)
+      .subscribe((requestPosition: RequestPosition) => {
+        this.notificationService.toast('Черновик удален');
+        this.requestPosition = requestPosition;
+        this.requestPositionChanged.emit(requestPosition);
+      });
   }
 }

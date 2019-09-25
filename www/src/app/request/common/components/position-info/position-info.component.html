@@ -50,6 +50,13 @@
             {{requestPosition.statusLabel}}
           </div>
         </div>
+
+        <div class="clr-col-12">
+          <button class="btn btn-primary"
+                  (click)="onDeleteDraft()"
+                  *ngIf="requestPosition.isDraftEntity"><b>Удалить черновик</b>
+          </button>
+        </div>
       </div>
 
       <clr-tabs>
