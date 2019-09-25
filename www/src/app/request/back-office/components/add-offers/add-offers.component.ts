@@ -138,7 +138,7 @@ export class AddOffersComponent implements OnInit {
     this.selectedSupplier = supplier;
 
     this.showAddOfferModal = true;
-    if(linkedOffer) {
+    if (linkedOffer) {
       this.setOfferValues(linkedOffer);
       this.editMode = true;
     } else {
