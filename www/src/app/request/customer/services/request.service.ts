@@ -7,6 +7,7 @@ import { map } from "rxjs/operators";
 import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
+import { RequestDocument } from "../../common/models/request-document";
 
 @Injectable()
 export class RequestService {
@@ -63,13 +64,13 @@ export class RequestService {
     });
   }
 
-  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestPosition> {
+  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
     const formData = new FormData();
     files.forEach(file => {
       formData.append('files[]', file, file.name);
     });
 
-    return this.api.post<RequestPosition>(
+    return this.api.post<RequestDocument[]>(
       `requests/customer/${requestPosition.requestId}/positions/${requestPosition.id}/documents/upload`,
       formData
     );
