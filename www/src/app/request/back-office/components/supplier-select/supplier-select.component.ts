@@ -65,10 +65,9 @@ export class SupplierSelectComponent implements OnInit {
   }
 
   resetSearchFilter() {
-    // this.contragentName = "";
+    this.contragentName = "";
     this.contragentForm = this.formBuilder.group({
       searchContragent: [null, Validators.required]
     });
-    // this.contragentForm.get('searchContragent').setValue('');
   }
 }
