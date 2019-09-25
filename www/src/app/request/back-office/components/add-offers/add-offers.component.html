@@ -79,7 +79,7 @@
                 ).length; else addLinkedOfferButton">
                 <ng-container
                   *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <div class="offer" (click)="onShowAddOfferModal(requestPosition, supplier, linkedOffer)">
+                  <div class="offer" (click)="onShowEditOfferModal(requestPosition, supplier, linkedOffer)">
                     {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
                     <p>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</p>
                     <p class="delivery">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>

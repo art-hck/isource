@@ -133,17 +133,19 @@ export class AddOffersComponent implements OnInit {
   }
 
   // Модальное окно создание КП
-  onShowAddOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer?: RequestOfferPosition) {
+  onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-
     this.showAddOfferModal = true;
-    if (linkedOffer) {
-      this.setOfferValues(linkedOffer);
-      this.editMode = true;
-    } else {
       this.addOfferValues(requestPosition);
-    }
+  }
+
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
+    this.selectedRequestPosition = requestPosition;
+    this.selectedSupplier = supplier;
+    this.showAddOfferModal = true;
+    this.editMode = true;
+    this.setOfferValues(linkedOffer);
   }
 
   setOfferValues(linkedOffer: RequestOfferPosition) {
@@ -205,13 +207,6 @@ export class AddOffersComponent implements OnInit {
     this.offerForm.reset();
     this.editMode = false;
   }
-
-  // // Модальное окно просмотра КП
-  // onShowOfferModal(offer: RequestOfferPosition) {
-  //   this.selectedOffer = offer;
-  //
-  //   this.showOfferModal = true;
-  // }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
     this.offersService.uploadDocuments(offer, files)
