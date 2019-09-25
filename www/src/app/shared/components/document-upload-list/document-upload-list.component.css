@@ -1,3 +1,7 @@
 input#file_upload {
   display: none;
 }
+
+.form-group {
+  margin: 0;
+}

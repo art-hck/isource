@@ -42,11 +42,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onRequestsClick() {
-    this.router.navigateByUrl(`requests/back-office`).then(r => {});
+    this.router.navigateByUrl(`requests/backoffice`).then(r => {});
   }
 
   onRequestClick() {
-    this.router.navigateByUrl(`requests/back-office/${this.request.id}`).then(r => {});
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`).then(r => {});
   }
 
   /**

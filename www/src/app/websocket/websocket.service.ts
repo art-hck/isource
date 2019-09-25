@@ -39,8 +39,6 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
     this.reconnectInterval = wsConfig.reconnectInterval || 5000;
     this.reconnectAttempts = wsConfig.reconnectAttempts || 10;
 
-    console.log(wsConfig);
-
     this.config = {
       url: wsConfig.url + '?access_token=' + token.getToken(),
       closeObserver: {
@@ -126,11 +124,11 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   * on message event
   * */
   public on<T>(event: string): Observable<T> {
-    console.log(event);
+    console.log('[WS] Subscribe on: ' + event);
     if (event) {
       return this.wsMessages$.pipe(
         tap((message) => {
-          console.log(message);
+          console.log('[WS] New message: ' + message);
         }),
         filter((message: IWsMessage<T>) => message.event === event),
         map((message: IWsMessage<T>) => message.data)

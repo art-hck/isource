@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     if (this.user.isCustomer()) {
       return "/requests/customer";
     } else if (this.user.isBackOffice()) {
-      return "/requests/back-office";
+      return "/requests/backoffice";
     } else {
       return "/";
     }

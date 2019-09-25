@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
     if (this.user.isCustomer()) {
       this.router.navigateByUrl("/requests/customer");
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl("/requests/back-office");
+      this.router.navigateByUrl("/requests/backoffice");
     }
   }
 }

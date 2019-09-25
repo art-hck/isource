@@ -81,7 +81,7 @@ export class RequestDashboardComponent implements OnChanges {
       // this.router.navigateByUrl(`/requests/customer/${this.request.id}/add-offers`).then(r => {});
       return false;
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/back-office/${this.request.id}/add-offers`).then(r => {});
+      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-offers`).then(r => {});
     } else {
       return false;
     }
@@ -94,7 +94,7 @@ export class RequestDashboardComponent implements OnChanges {
       // this.router.navigateByUrl(`/requests/customer/${this.request.id}/add-technical-proposals`).then(r => {});
       return false;
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/back-office/${this.request.id}/add-technical-proposals`).then(r => {});
+      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-technical-proposals`).then(r => {});
     } else {
       return false;
     }
