@@ -30,14 +30,13 @@ export class AddOffersComponent implements OnInit {
   showContragentList = false;
 
   showAddOfferModal = false;
+  editMode = false;
   offerForm: FormGroup;
 
-  showOfferModal = false;
   showImportOffersExcel = false;
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
-  selectedOffer: RequestOfferPosition;
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -70,7 +69,8 @@ export class AddOffersComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: ['', Validators.required]
+      paymentTerms: ['', Validators.required],
+      id: ['']
     });
 
     this.contragentForm = this.formBuilder.group({
@@ -98,7 +98,7 @@ export class AddOffersComponent implements OnInit {
 
   // Модальное окно выбора контрагента
   onShowContragentList() {
-      this.showContragentList = !this.showContragentList;
+    this.showContragentList = !this.showContragentList;
   }
 
   onShowAddContragentModal() {
@@ -136,9 +136,32 @@ export class AddOffersComponent implements OnInit {
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-
     this.showAddOfferModal = true;
+      this.addOfferValues(requestPosition);
+  }
 
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
+    this.selectedRequestPosition = requestPosition;
+    this.selectedSupplier = supplier;
+    this.showAddOfferModal = true;
+    this.editMode = true;
+    this.setOfferValues(linkedOffer);
+  }
+
+  setOfferValues(linkedOffer: RequestOfferPosition) {
+    this.offerForm.get('priceWithVat').setValue(linkedOffer.priceWithoutVat);
+    this.offerForm.get('currency').setValue(linkedOffer.currency);
+    this.offerForm.get('quantity').setValue(linkedOffer.quantity);
+    this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
+    this.offerForm.get('id').setValue(linkedOffer.id);
+    const deliveryDate = linkedOffer.deliveryDate ?
+      moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
+      linkedOffer.deliveryDate;
+    this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+  }
+
+  addOfferValues(requestPosition) {
     this.offerForm.get('quantity').setValue(requestPosition.quantity);
     this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
     this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
@@ -167,16 +190,22 @@ export class AddOffersComponent implements OnInit {
     this.onCloseAddOfferModal();
   }
 
+  onEditOffer() {
+    const formValue = this.offerForm.value;
+    formValue.supplierContragentName = this.selectedSupplier;
+
+    this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
+      (data: RequestOfferPosition) => {
+        this.updatePositions();
+      }
+    );
+    this.onCloseAddOfferModal();
+  }
+
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
-  }
-
-  // Модальное окно просмотра КП
-  onShowOfferModal(offer: RequestOfferPosition) {
-    this.selectedOffer = offer;
-
-    this.showOfferModal = true;
+    this.editMode = false;
   }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
@@ -267,6 +296,14 @@ export class AddOffersComponent implements OnInit {
       (data: any) => {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
+      }
+    );
+  }
+
+  protected updatePositions(): void {
+    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+      (data: any) => {
+        this.requestPositions = data.positions;
       }
     );
   }

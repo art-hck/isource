@@ -21,6 +21,11 @@ export class OffersService {
     return this.api.post(url, offer);
   }
 
+  editOffer(id: Uuid, positionId, editedOffer: RequestOfferPosition) {
+    const url = `requests/backoffice/${id}/positions/${positionId}/edit-offer`;
+    return this.api.post(url, editedOffer);
+  }
+
   publishOffers(id: Uuid, positionId) {
     const url = `requests/backoffice/${id}/positions/${positionId}/publish-offers`;
     return this.api.post(url, {});
