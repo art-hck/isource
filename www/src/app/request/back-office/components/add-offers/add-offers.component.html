@@ -137,7 +137,7 @@
     </div>
   </clr-modal>
 
-  <!-- Модальное окно добавления КП -->
+  <!-- Модальное окно добавления/редактирования КП -->
   <clr-modal [(clrModalOpen)]="showAddOfferModal"
              [clrModalClosable]="false">
     <h3 class="modal-title">Добавление КП</h3>
@@ -209,7 +209,8 @@
         </div>
         <div class="clr-col-6">
           <button class="btn btn-link" (click)="onCloseAddOfferModal()">Отмена</button>
-          <button class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+          <button *ngIf="!editMode" class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+          <button *ngIf="editMode" class="btn btn-primary" (click)="onEditOffer()" [disabled]="offerForm.invalid">Сохранить</button>
         </div>
       </div>
     </div>

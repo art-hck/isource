@@ -30,6 +30,7 @@ export class AddOffersComponent implements OnInit {
   showContragentList = false;
 
   showAddOfferModal = false;
+  editMode = false;
   offerForm: FormGroup;
 
   showOfferModal = false;
@@ -70,7 +71,8 @@ export class AddOffersComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: ['', Validators.required]
+      paymentTerms: ['', Validators.required],
+      id: ['']
     });
 
     this.contragentForm = this.formBuilder.group({
@@ -86,7 +88,14 @@ export class AddOffersComponent implements OnInit {
     linkedOffers: RequestOfferPosition[],
     supplier: string
   ): RequestOfferPosition[] {
-    return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
+    // return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
+    let supplierLinkedOffers = [];
+    for (const linkedOffer of linkedOffers) {
+      if (linkedOffer.supplierContragentName === supplier) {
+        supplierLinkedOffers.push(linkedOffer);
+      }
+    }
+    return supplierLinkedOffers;
   }
 
   getContragentList(): void {
@@ -136,20 +145,14 @@ export class AddOffersComponent implements OnInit {
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer?: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
+    this.selectedOffer = linkedOffer;
 
     this.showAddOfferModal = true;
     if(linkedOffer) {
       this.setOfferValues(linkedOffer);
+      this.editMode = true;
     } else {
-    this.offerForm.get('quantity').setValue(requestPosition.quantity);
-    this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
-    this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
-    if (requestPosition.deliveryDate !== null) {
-      const deliveryDate = requestPosition.deliveryDate ?
-        moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
-        requestPosition.deliveryDate;
-      this.offerForm.get('deliveryDate').patchValue(deliveryDate);
-    }
+      this.addOfferValues(requestPosition);
     }
   }
 
@@ -159,10 +162,23 @@ export class AddOffersComponent implements OnInit {
     this.offerForm.get('quantity').setValue(linkedOffer.quantity);
     this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
     this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
+    this.offerForm.get('id').setValue(linkedOffer.id);
     const deliveryDate = linkedOffer.deliveryDate ?
       moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
       linkedOffer.deliveryDate;
     this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+  }
+
+  addOfferValues(requestPosition) {
+    this.offerForm.get('quantity').setValue(requestPosition.quantity);
+    this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
+    if (requestPosition.deliveryDate !== null) {
+      const deliveryDate = requestPosition.deliveryDate ?
+        moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
+        requestPosition.deliveryDate;
+      this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+    }
   }
 
   isFieldValid(field: string) {
@@ -182,17 +198,30 @@ export class AddOffersComponent implements OnInit {
     this.onCloseAddOfferModal();
   }
 
+  onEditOffer() {
+    const formValue = this.offerForm.value;
+    formValue.supplierContragentName = this.selectedSupplier;
+
+    this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
+      (data: RequestOfferPosition) => {
+        this.selectedOffer = data;
+      }
+    );
+    this.onCloseAddOfferModal();
+  }
+
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
+    this.editMode = false;
   }
 
-  // Модальное окно просмотра КП
-  onShowOfferModal(offer: RequestOfferPosition) {
-    this.selectedOffer = offer;
-
-    this.showOfferModal = true;
-  }
+  // // Модальное окно просмотра КП
+  // onShowOfferModal(offer: RequestOfferPosition) {
+  //   this.selectedOffer = offer;
+  //
+  //   this.showOfferModal = true;
+  // }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
     this.offersService.uploadDocuments(offer, files)
