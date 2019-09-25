@@ -23,12 +23,12 @@ import {isBoolean} from "util";
   styleUrls: ['./add-offers.component.css']
 })
 export class AddOffersComponent implements OnInit {
-  @ViewChild("wizard") wizard: ClrWizard;
-  _open: boolean = false;
-
-  open() {
-    this._open = !this.open;
-  }
+  // @ViewChild("wizard") wizard: ClrWizard;
+  // _open: boolean = false;
+  //
+  // open() {
+  //   this._open = !this.open;
+  // }
 
   requestId: Uuid;
   request: Request;

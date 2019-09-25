@@ -97,15 +97,11 @@
                 <form [formGroup]="procedurePropertiesForm" class="form">
                   <div class="form-block">
                     <div class="clr-form-control">
-                      <div class="clr-row w-100">
+                      <div class="clr-row w-100 padding-top">
                         <clr-checkbox-wrapper>
                           <input type="checkbox" clrCheckbox name="one" id="one" formControlName="one">
                           <label class="clr-control-label nopadding">Досрочное завершение приема заявок на участие</label>
                         </clr-checkbox-wrapper>
-                      </div>
-                      <div class="clr-row">
-                        <label class="clr-control-label" for="two">Продление времени приема заявок на участие (минут)</label>
-                        <input id="two" type="text" formControlName="two"/>
                       </div>
                       <div class="clr-row w-100">
                         <clr-checkbox-wrapper>
@@ -131,8 +127,64 @@
                           <label class="clr-control-label nopadding">Заявка подается на весь закупаемый объем</label>
                         </clr-checkbox-wrapper>
                       </div>
+                      <div class="clr-row">
+                        <label class="clr-control-label" for="two">Продление времени приема заявок на участие (минут)</label>
+                        <input class="input-time" id="two" type="text" formControlName="two"/>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Отображение наименований участников в таблице</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options" value="option1"/>
+                            <label class="clr-control-label nopadding">Участники и их наименования отображаются в таблице</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options" value="option2"/>
+                            <label class="clr-control-label nopadding">Участники отображаются в таблице, но их наименования скрыты</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options" value="option2"/>
+                            <label class="clr-control-label nopadding">Участники не отображаются в таблице</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Ограничение на подачу цен участниками</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options1" value="option1"/>
+                            <label class="clr-control-label nopadding">Участники подают цены ниже начальной цены</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options1" value="option2"/>
+                            <label class="clr-control-label nopadding">Нет ограничений на цены участников</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Отображение цен участников в таблице</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options2" required value="option1"/>
+                            <label class="clr-control-label nopadding">Видны и цены, и рейтинг участников</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options2" value="option2"/>
+                            <label class="clr-control-label nopadding">Видны только цены, подаваемые участниками</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options2" value="option2"/>
+                            <label class="clr-control-label nopadding">Виден только рейтинг цен</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="options2" value="option2"/>
+                            <label class="clr-control-label nopadding">Цены и рейтинг скрыты</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+
+                      </div>
                     </div>
-                  </div>
                 </form>
               </clr-wizard-page>
 

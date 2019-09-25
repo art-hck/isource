@@ -116,7 +116,7 @@ table {
 }
 
 .clr-control-label {
-  padding-top: 15px;
+  padding-top: 10px;
   font-weight: 100;
 }
 
@@ -210,6 +210,7 @@ h2 {
 .nopadding {
   padding-top: 0;
   text-align: left;
+  font-size: 13px;
 }
 
 ::ng-deep .clr-wizard-title {
@@ -242,4 +243,22 @@ h2 {
 
 ::ng-deep .clr-input-group-icon-action {
   margin-right: 20px!important;
+}
+
+clr-checkbox-wrapper {
+  padding-top: 0;
+}
+
+.input-time {
+  width: 70px;
+  height: 32px;
+  margin-left: 15px;
+}
+
+.padding-top {
+  padding-top: 15px;
+}
+
+.radio-label {
+  padding-bottom: 10px;
 }
