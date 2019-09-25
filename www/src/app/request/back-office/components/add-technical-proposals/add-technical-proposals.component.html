@@ -199,7 +199,7 @@
     <div class="modal-footer">
       <div class="clr-row w-100">
         <div class="clr-col-12 text-right">
-          <button class="btn btn-link" (click)="onCloseModal(technicalProposal)">Отмена</button>
+          <button class="btn btn-link" (click)="onCloseModal()">Отмена</button>
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"

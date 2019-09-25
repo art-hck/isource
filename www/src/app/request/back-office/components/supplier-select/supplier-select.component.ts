@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {ContragentService} from "../../../../contragent/services/contragent.service";
@@ -8,7 +8,7 @@ import {ContragentService} from "../../../../contragent/services/contragent.serv
   templateUrl: './supplier-select.component.html',
   styleUrls: ['./supplier-select.component.scss']
 })
-export class SupplierSelectComponent implements OnInit, OnChanges {
+export class SupplierSelectComponent implements OnInit {
   contragentForm: FormGroup;
   contragents: ContragentList[];
   showContragentList = false;
@@ -32,11 +32,6 @@ export class SupplierSelectComponent implements OnInit, OnChanges {
     this.getContragentList();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-  }
-
-
   getContragentList(): void {
     this.getContragentService.getContragentList().subscribe(
       (data: ContragentList[]) => {
@@ -53,7 +48,6 @@ export class SupplierSelectComponent implements OnInit, OnChanges {
   }
 
   onContragentInputChange(value) {
-    // this.contragentForm.patchValue({"searchContragent": value});
     this.contragentForm.get('searchContragent').setValue(value);
     this.contragentNameChange.emit(value);
     this.contragentName = value;
@@ -71,11 +65,10 @@ export class SupplierSelectComponent implements OnInit, OnChanges {
   }
 
   resetSearchFilter() {
-    this.contragentName = "";
+    // this.contragentName = "";
     this.contragentForm = this.formBuilder.group({
       searchContragent: [null, Validators.required]
     });
-
-    // this.contragentForm.patchValue({"searchContragent": ''});
+    // this.contragentForm.get('searchContragent').setValue('');
   }
 }

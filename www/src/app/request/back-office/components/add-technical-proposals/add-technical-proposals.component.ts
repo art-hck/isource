@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -34,7 +34,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
 
-  // @ViewChild('technicalProposalListElement', { static: false }) technicalProposalListElement: ElementRef; // todo не используется?
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
 
   constructor(
@@ -83,12 +82,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = true;
   }
 
-  // onInputFieldChange(value) {
-  //   this.contragentInputFieldValue = value;
-  // }
-
-
-  onSelectedContragent(contragent: ContragentList) {
+  onSelectedContragent(contragent: ContragentList): void {
     this.selectedContragent = contragent;
     this.contragentInputFieldValue = contragent.shortName;
   }
@@ -99,8 +93,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * @param technicalProposal
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
-    console.log(technicalProposal.name);
-
     this.technicalProposal = technicalProposal;
 
     this.selectedTechnicalProposalPositionsIds = [];
@@ -111,21 +103,14 @@ export class AddTechnicalProposalsComponent implements OnInit {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
     });
 
-    // this.selectedContragent.shortName = technicalProposal.name;
-
     this.showAddTechnicalProposalModal = true;
 
     console.log(this.contragentInputFieldValue);
   }
 
-  onCloseModal(technicalProposal) {
-    // if (!(technicalProposal.positions && this.tpIsOnReview(technicalProposal))) {
-    // }
+  onCloseModal() {
     this.showAddTechnicalProposalModal = false;
   }
-
-
-
 
   isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
     if (technicalProposal) {
@@ -188,7 +173,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const technicalProposal = {
-      name: this.selectedContragent.shortName,
+      name: this.contragentInputFieldValue,
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
@@ -212,9 +197,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       }
     );
 
-    // this.supplierSelectComponent.resetSearchFilter();
     this.showAddTechnicalProposalModal = false;
-    this.selectedContragent.shortName = ""; // todo нужно ли?
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
