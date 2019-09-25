@@ -94,9 +94,11 @@ export class AddOffersComponent implements OnInit {
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
-    this.contragentForm.valueChanges.subscribe(data => {
-      this.showContragentInfo = false;
-    });
+    if (this.contragentForm) {
+      this.contragentForm.valueChanges.subscribe(data => {
+        this.showContragentInfo = false;
+      });
+    }
   }
 
   onCloseAddContragentModal() {
