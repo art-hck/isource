@@ -33,12 +33,10 @@ export class AddOffersComponent implements OnInit {
   editMode = false;
   offerForm: FormGroup;
 
-  showOfferModal = false;
   showImportOffersExcel = false;
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
-  selectedOffer: RequestOfferPosition;
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -138,7 +136,6 @@ export class AddOffersComponent implements OnInit {
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer?: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-    // this.selectedOffer = linkedOffer;
 
     this.showAddOfferModal = true;
     if(linkedOffer) {
