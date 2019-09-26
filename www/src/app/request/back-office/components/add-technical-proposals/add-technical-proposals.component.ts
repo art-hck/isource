@@ -333,13 +333,13 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
     if (technicalProposal.positions.some((position) => {
-      return position.status === TechnicalProposalPositionStatuses.REVIEW.valueOf()
+      return position.status === TechnicalProposalPositionStatuses.REVIEW.valueOf();
     })) {
       return "Согласование заказчиком";
     }
 
     if (technicalProposal.positions.every((position) => {
-      return this.completedStatuses.indexOf(position.status) >= 0
+      return this.completedStatuses.indexOf(position.status) >= 0;
     })) {
       return "Завершено согласование заказчиком";
     }

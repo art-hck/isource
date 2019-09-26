@@ -64,7 +64,7 @@ export class RequestPositionListComponent implements OnChanges {
     if (!this.positionListForm || !this.positionListForm.get('positions')) {
       positions = [];
     } else {
-      positions = this.positionListForm.get('positions')
+      positions = this.positionListForm.get('positions');
     }
     return <FormArray>positions;
   }

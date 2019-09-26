@@ -4,4 +4,4 @@ export enum TechnicalProposalPositionStatuses {
   REVIEW   = 'REVIEW',
   ACCEPTED = 'ACCEPTED',
   DECLINED = 'DECLINED'
-};
+}
