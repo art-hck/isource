@@ -54,3 +54,10 @@ input#file_upload {
   margin-right: 0;
   padding: 0 25px;
 }
+
+.request-name-input {
+  margin: 10px 0 15px 0;
+}
+.request-name-input.ng-touched.required {
+  border-color: #FF2519;
+}

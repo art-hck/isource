@@ -3,11 +3,26 @@
     <div class="card">
       <div class="card-block">
         <div class="card-text">
-         <span class="gray">
-           Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a>
-         </span>
 
-         <app-document-upload-list (fileSelected)="onChangeFilesList($event)"></app-document-upload-list>
+          <label for="request-name">
+            Введите наименование заявки:
+          </label>
+
+          <input [(ngModel)]="requestName"
+                 [ngModelOptions]="{ standalone: true }"
+                 type="text"
+                 class="request-name-input"
+                 [class.required]="!requestName.length"
+                 id="request-name"
+                 value="{{ requestName }}"
+                 (input)="onRequestNameChange($event.target.value)"
+                 placeholder="Наименование заявки.." />
+
+          <span class="gray">
+            Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a>
+          </span>
+
+          <app-document-upload-list (fileSelected)="onChangeFilesList($event)"></app-document-upload-list>
         </div>
       </div>
     </div>
@@ -17,6 +32,6 @@
     <button class="btn btn-primary"
             type="button"
             (click)="onSendClick()"
-            [disabled]="this.files.length === 0">Отправить</button>
+            [disabled]="files.length === 0 || requestName.trim().length === 0">Отправить</button>
   </div>
 </div>

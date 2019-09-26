@@ -13,10 +13,15 @@ export class CreateRequestService {
   ) {
   }
 
-  addRequest(requestItem: Array<any>) {
-    return this.api.post(
-      `requests/customer/add-request/manual`,
-      this.convertModelToFormData(requestItem, null, 'positions'));
+  addRequest(requestName: string, requestItem: Array<any>) {
+    const data = {
+      name: requestName,
+      positions: requestItem,
+    };
+
+    const requestData = this.convertModelToFormData(data, null, '');
+
+    return this.api.post(`requests/customer/add-request/manual`, requestData);
   }
 
   addRequestPosition(requestId: Uuid, requestItem: Array<any>):  Observable<Array<RequestPosition>> {
@@ -33,11 +38,15 @@ export class CreateRequestService {
   }
 
 
-  addRequestFromExcel(files: File[]): Observable<any> {
-    return this.api.post(
-      `requests/customer/add-request/from-excel`,
-      this.convertModelToFormData(files, null, 'files')
-    );
+  addRequestFromExcel(files: File[], requestName: string): Observable<any> {
+    const data = {
+      files: files,
+      name: requestName
+    };
+
+    const requestData = this.convertModelToFormData(data, null, '');
+
+    return this.api.post(`requests/customer/add-request/from-excel`, requestData);
   }
 
   /**

@@ -11,6 +11,14 @@ p.title-info {
   color: #999999;
 }
 
+h4.request-number,
+h3.request-name {
+  padding-bottom: 10px;
+}
+h3.request-name {
+  max-width: 670px;
+}
+
 table.request-customer-info {
   margin: 10px 0;
 }
@@ -185,7 +193,6 @@ background: aliceblue;
 
 .card.clr-col-4 {
   padding: 0;
-
 }
 
 ::ng-deep .dropdown .dropdown-toggle clr-icon[shape^=caret] {

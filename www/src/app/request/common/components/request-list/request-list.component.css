@@ -109,6 +109,13 @@
     max-width: 210px;
 }
 
+::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
+    padding-top: 45px;
+}
+::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {
+    padding-top: 45px;
+}
+
 ::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column:last-of-type,
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-cell:last-of-type {
     padding-right: 10px;
@@ -130,4 +137,14 @@
 
 ::ng-deep .pagination-list .pagination-current:focus {
     background-color: white;
+}
+
+span.request-name {
+    font-weight: bold;
+    font-size: 13px;
+    padding-bottom: 12px;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

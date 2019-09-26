@@ -14,6 +14,7 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   freeFormRequestDataForm: FormGroup;
   requestItem: FreeFormRequestItem;
+  requestName = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,9 +24,14 @@ export class CreateRequestFreeFormComponent implements OnInit {
 
   ngOnInit() {
     this.freeFormRequestDataForm = this.formBuilder.group({
+      name: [''],
       documents: [null],
       comments: [''],
     });
+  }
+
+  onRequestNameChange(value) {
+    this.requestName = value.trim();
   }
 
   onFreeFormDocumentSelected(documents: File[], form: FormGroup) {
@@ -57,9 +63,9 @@ export class CreateRequestFreeFormComponent implements OnInit {
     );
   }
 
-  checkCanSendRequest(value: any) {
-    if (value.documents) {
-      return !(value.documents.length === 0);
+  checkCanSendRequest(value: any): boolean {
+    if (value.documents && value.name) {
+      return !((value.documents.length === 0) || value.name.trim().length === 0);
     }
     return false;
   }
