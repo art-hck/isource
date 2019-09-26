@@ -169,10 +169,6 @@ h2 {
   width: auto;
 }
 
-.modal-body {
-  height: 300px;
-}
-
 .container-dropdown {
   position: absolute;
   z-index: 100;
@@ -205,4 +201,8 @@ h2 {
   font-size: 12px;
   color: #999999;
   margin-bottom: 0;
+}
+
+.document-list {
+  padding-top: 15px;
 }

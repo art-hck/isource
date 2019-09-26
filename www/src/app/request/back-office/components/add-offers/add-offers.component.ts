@@ -14,6 +14,7 @@ import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {ContragentService} from "../../../../contragent/services/contragent.service";
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import {DocumentsService} from "../../../common/services/documents.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -37,6 +38,7 @@ export class AddOffersComponent implements OnInit {
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
+  selectedOffer: RequestOfferPosition;
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -56,7 +58,8 @@ export class AddOffersComponent implements OnInit {
     private formBuilder: FormBuilder,
     protected offersService: OffersService,
     protected router: Router,
-    private getContragentService: ContragentService
+    private getContragentService: ContragentService,
+    private documentsService: DocumentsService
   ) {
   }
 
@@ -70,7 +73,8 @@ export class AddOffersComponent implements OnInit {
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: ['', Validators.required],
-      id: ['']
+      id: [''],
+      documents: [[]]
     });
 
     this.contragentForm = this.formBuilder.group({
@@ -137,12 +141,14 @@ export class AddOffersComponent implements OnInit {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
     this.showAddOfferModal = true;
-      this.addOfferValues(requestPosition);
+    this.files = [];
+    this.addOfferValues(requestPosition);
   }
 
   onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
+    this.selectedOffer = linkedOffer;
     this.showAddOfferModal = true;
     this.editMode = true;
     this.setOfferValues(linkedOffer);
@@ -159,6 +165,7 @@ export class AddOffersComponent implements OnInit {
       moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
       linkedOffer.deliveryDate;
     this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+    this.offerForm.get('documents').setValue(linkedOffer.documents);
   }
 
   addOfferValues(requestPosition) {
@@ -170,6 +177,7 @@ export class AddOffersComponent implements OnInit {
         moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
         requestPosition.deliveryDate;
       this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+      this.offerForm.get('documents').setValue(requestPosition.documents);
     }
   }
 
@@ -188,6 +196,7 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
+    this.files = [];
   }
 
   onEditOffer() {
@@ -200,12 +209,17 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
+    this.files = [];
   }
 
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
     this.editMode = false;
+  }
+
+  onDownloadFile(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
@@ -215,11 +229,8 @@ export class AddOffersComponent implements OnInit {
       });
   }
 
-  onUploadTechnicalProposals(files: File[], offer: RequestOfferPosition) {
-    this.offersService.uploadTechnicalProposals(offer, files)
-      .subscribe((documents: RequestDocument[]) => {
-        documents.forEach(document => offer.technicalProposals.push(document));
-      });
+  onDocumentSelected(documents: File[], form) {
+    form.get('documents').setValue(documents);
   }
 
   onRequestsClick() {

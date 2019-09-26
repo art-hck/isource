@@ -120,7 +120,7 @@
       </div>
       <div class="contragent-info" *ngIf="showContragentInfo">
         <p class="label-contragent">Наименование контрагента:</p>
-        {{selectedContragent.shortName}}
+        {{selectedContragent.shortName}}0
         <p class="label-contragent">ИНН:</p>
         {{selectedContragent.inn}}
         <p class="label-contragent">КПП:</p>
@@ -200,6 +200,14 @@
               </div>
             </div>
           </div>
+          <div class="document-list" *ngIf="editMode">
+            <div class="document" *ngFor="let document of selectedOffer?.documents">
+              <a (click)="onDownloadFile(document)">{{document.filename}}</a>
+            </div>
+          </div>
+          <app-document-upload-list (fileSelected)="onDocumentSelected($event, offerForm)"
+                                    [documents]="files">
+          </app-document-upload-list>
         </div>
       </form>
     </div>
