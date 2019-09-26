@@ -303,7 +303,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     return technicalProposal.status === TechnicalProposalsStatuses.NEW;
   }
 
-  tpHasEditablePositions(tp: TechnicalProposal): boolean {
+  isTpHasEditablePositions(tp: TechnicalProposal): boolean {
     return tp.positions.some((position) => {
       return this.isEditablePosition(position);
     });
