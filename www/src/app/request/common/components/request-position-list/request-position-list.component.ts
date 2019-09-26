@@ -43,7 +43,7 @@ export class RequestPositionListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     // обновляем только если пришли новые позиции
-    if (changes.requestItems) {
+    if (changes.requestItems && this.requestItems && this.requestItems.length > 0) {
       // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
       this.positionListForm = this.formBuilder.group({
         positions: this.formBuilder.array(this.requestItems.map(element => {
@@ -54,13 +54,19 @@ export class RequestPositionListComponent implements OnChanges {
     }
   }
 
-  getGroupList() {
+  getGroupList(): void {
     this.requestGroups = this.requestItems.filter(
       (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
   }
 
-  get positionsArray() {
-    return <FormArray>this.positionListForm.get('positions');
+  get positionsArray(): FormArray {
+    let positions;
+    if (!this.positionListForm || !this.positionListForm.get('positions')) {
+      positions = [];
+    } else {
+      positions = this.positionListForm.get('positions')
+    }
+    return <FormArray>positions;
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
