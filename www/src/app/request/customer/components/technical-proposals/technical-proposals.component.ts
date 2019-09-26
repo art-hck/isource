@@ -7,6 +7,7 @@ import {RequestService} from "../../../back-office/services/request.service";
 import {TechnicalProposalsService} from "../../../customer/services/technical-proposals.service";
 import {TechnicalProposalPosition} from "../../../common/models/technical-proposal-position";
 import {NotificationService} from "../../../../shared/services/notification.service";
+import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 
 @Component({
   selector: 'app-technical-proposals',
@@ -93,6 +94,25 @@ export class TechnicalProposalsComponent implements OnInit {
         this.notificationService.toast(toastText, 'error');
         this.selectedTechnicalProposalsPositions = [];
       }
+    );
+  }
+
+  isPositionSelectorAvailable(tpPosition: TechnicalProposalPosition): boolean {
+    const selectorAvailableStatues = [
+      TechnicalProposalPositionStatuses.REVIEW.valueOf()
+    ];
+    return selectorAvailableStatues.indexOf(tpPosition.status) >= 0;
+  }
+
+  isPositionStatusIndicatorAvailable(tpPosition: TechnicalProposalPosition): boolean {
+    return !this.isPositionSelectorAvailable(tpPosition);
+  }
+
+  isResolutionButtonsAvailable(i: number): boolean {
+    return (
+      this.selectedTechnicalProposalsPositions &&
+      this.selectedTechnicalProposalsPositions[i] &&
+      this.selectedTechnicalProposalsPositions[i].length > 0
     );
   }
 }
