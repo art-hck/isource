@@ -200,6 +200,14 @@
               </div>
             </div>
           </div>
+          <div class="document-list" *ngIf="editMode">
+            <div class="document" *ngFor="let document of selectedOffer?.documents">
+              <a (click)="onDownloadFile(document)">{{document.filename}}</a>
+            </div>
+          </div>
+          <app-document-upload-list (fileSelected)="onDocumentSelected($event, offerForm)"
+                                    [documents]="offerFiles">
+          </app-document-upload-list>
         </div>
       </form>
     </div>

@@ -24,4 +24,5 @@ export class RequestOfferPosition {
   isWinner: boolean;
   documents: RequestDocument[];
   technicalProposals: RequestDocument[];
+  status: string;
 }
