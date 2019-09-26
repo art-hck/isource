@@ -39,6 +39,7 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
+  offerFiles: File[] = [];
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -141,7 +142,7 @@ export class AddOffersComponent implements OnInit {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
     this.showAddOfferModal = true;
-    this.files = [];
+    this.offerFiles = [];
     this.addOfferValues(requestPosition);
   }
 
@@ -165,7 +166,6 @@ export class AddOffersComponent implements OnInit {
       moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
       linkedOffer.deliveryDate;
     this.offerForm.get('deliveryDate').patchValue(deliveryDate);
-    this.offerForm.get('documents').setValue(linkedOffer.documents);
   }
 
   addOfferValues(requestPosition) {
@@ -177,7 +177,6 @@ export class AddOffersComponent implements OnInit {
         moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
         requestPosition.deliveryDate;
       this.offerForm.get('deliveryDate').patchValue(deliveryDate);
-      this.offerForm.get('documents').setValue(requestPosition.documents);
     }
   }
 
@@ -196,7 +195,7 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
-    this.files = [];
+    this.offerFiles = [];
   }
 
   onEditOffer() {
@@ -209,7 +208,7 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
-    this.files = [];
+    this.offerFiles = [];
   }
 
   onCloseAddOfferModal() {
