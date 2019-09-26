@@ -104,11 +104,9 @@
              [clrModalClosable]="false">
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
-    <app-supplier-select
-            (selectedContragent)="onSelectedContragent($event)"
-            (showContragentInfo)="onShowContragentInfo($event)">
+    <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
     </app-supplier-select>
-      <div class="contragent-info" *ngIf="showContragentInfo">
+      <div class="contragent-info" *ngIf="selectedContragent">
         <p class="label-contragent">Наименование контрагента:</p>
         {{selectedContragent.shortName}}
         <p class="label-contragent">ИНН:</p>

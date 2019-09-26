@@ -104,8 +104,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
     });
 
     this.showAddTechnicalProposalModal = true;
-
-    console.log(this.contragentInputFieldValue);
   }
 
   onCloseModal() {

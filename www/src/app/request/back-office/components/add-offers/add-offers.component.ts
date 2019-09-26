@@ -4,7 +4,6 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
-import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -41,13 +40,10 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPositions: RequestPosition[] = [];
 
   contragents: ContragentList[];
-  contragentForm: FormGroup;
-  showContragentInfo = false;
   selectedContragent: ContragentList;
 
   files: File[] = [];
 
-  // @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
 
   constructor(
@@ -86,27 +82,17 @@ export class AddOffersComponent implements OnInit {
     this.selectedContragent = contragent;
   }
 
-  onShowContragentInfo($event) {
-    this.showContragentInfo = $event;
-  }
-
   // Модальное окно выбора контрагента
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
     this.supplierSelectComponent.resetSearchFilter();
-
-    if (this.contragentForm) {
-      this.contragentForm.valueChanges.subscribe(data => {
-        this.showContragentInfo = false;
-      });
-    }
   }
 
   onCloseAddContragentModal() {
     this.showAddContragentModal = false;
     this.supplierSelectComponent.resetSearchFilter();
-    this.showContragentInfo = false;
+    this.selectedContragent = null;
   }
 
   onAddContragent() {

@@ -17,8 +17,6 @@ export class SupplierSelectComponent implements OnInit {
   @Output() contragentNameChange = new EventEmitter<string>();
 
   @Output() selectedContragent = new EventEmitter<ContragentList>();
-  @Output() showContragentInfo = new EventEmitter<boolean>();
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,13 +59,10 @@ export class SupplierSelectComponent implements OnInit {
 
     this.showContragentList = false;
     this.selectedContragent.emit(contragent);
-    this.showContragentInfo.emit(true);
   }
 
   resetSearchFilter() {
     this.contragentName = "";
-    this.contragentForm = this.formBuilder.group({
-      searchContragent: [null, Validators.required]
-    });
+    this.contragentForm.patchValue({'searchContragent': null});
   }
 }
