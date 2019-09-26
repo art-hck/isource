@@ -41,4 +41,11 @@ export class DocumentUploadListComponent implements OnInit {
   onChangeDocuments() {
     this.fileSelected.emit(this.documents);
   }
+
+  /**
+   * Открывает окно для выбора файлов
+   */
+  open() {
+    this.uploadElRef.nativeElement.click();
+  }
 }

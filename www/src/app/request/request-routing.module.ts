@@ -28,7 +28,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'back-office',
+    path: 'backoffice',
     children: [
       {
         path: '',

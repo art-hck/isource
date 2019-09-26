@@ -5,3 +5,7 @@ input#file_upload {
 .btn.btn-link {
   margin: 0;
 }
+
+.form-group {
+  margin: 0;
+}

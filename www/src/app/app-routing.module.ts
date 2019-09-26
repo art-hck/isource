@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
+  { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: '**', component: NotFoundComponent }
