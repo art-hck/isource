@@ -223,11 +223,11 @@ export class AddOffersComponent implements OnInit {
   }
 
   onRequestsClick() {
-    this.router.navigateByUrl(`requests/back-office`);
+    this.router.navigateByUrl(`requests/backoffice`);
   }
 
   onRequestClick() {
-    this.router.navigateByUrl(`requests/back-office/${this.request.id}`);
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   onDownloadOffersTemplate() {

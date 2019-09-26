@@ -83,7 +83,7 @@ export class RequestListComponent implements OnInit {
   }
 
   onRowClick(request: RequestsList): void {
-    const role = this.customerNameColumnShow ? 'back-office' : 'customer';
+    const role = this.customerNameColumnShow ? 'backoffice' : 'customer';
     this.router.navigateByUrl(`/requests/${role}/${request.request.id}`);
   }
 

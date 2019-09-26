@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { RequestDocument } from "../../models/request-document";
+import { RequestDocument } from "../../../request/common/models/request-document";
 import { Guid } from "guid-typescript";
-import { DocumentsService } from "../../services/documents.service";
-import { Uuid } from "../../../../cart/models/uuid";
+import { DocumentsService } from "../../../request/common/services/documents.service";
+import { Uuid } from "../../../cart/models/uuid";
 
 /**
  * Компонент для отображение списка документов и загрузки новых документов в этот список
