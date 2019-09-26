@@ -54,7 +54,7 @@
           <tr *ngFor="let requestPosition of requestPositions">
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
-                <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                <input clrCheckbox type="checkbox"
                        value="{{requestPosition}}"
                        [(ngModel)]="requestPosition.checked"
                        (change)="onSelectPosition(requestPosition)"
@@ -105,20 +105,9 @@
              [clrModalClosable]="false">
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
-      <form [formGroup]="contragentForm" novalidate>
-        <input class="searchContragent" id="searchContragent" placeholder="Введите наименование или ИНН контрагента"
-               (click)="onShowContragentList()"
-               formControlName="searchContragent"
-               autocomplete="off">
-      </form>
-      <div class="container-dropdown" *ngIf="showContragentList">
-        <div class="contragent-list"
-             *ngFor="let contragent of contragents | searchFilter: getSearchValue()"
-             (click)="selectContragent(contragent)">
-          {{contragent.shortName}}
-        </div>
-      </div>
-      <div class="contragent-info" *ngIf="showContragentInfo">
+    <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
+    </app-supplier-select>
+      <div class="contragent-info" *ngIf="selectedContragent">
         <p class="label-contragent">Наименование контрагента:</p>
         {{selectedContragent.shortName}}
         <p class="label-contragent">ИНН:</p>

@@ -4,17 +4,17 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
-import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
-import {ContragentService} from "../../../../contragent/services/contragent.service";
 import * as moment from "moment";
 import Swal from "sweetalert2";
 import {DocumentsService} from "../../../common/services/documents.service";
+import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -28,7 +28,6 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  showContragentList = false;
 
   showAddOfferModal = false;
   editMode = false;
@@ -44,14 +43,11 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPositions: RequestPosition[] = [];
 
   contragents: ContragentList[];
-  contragentForm: FormGroup;
-  showContragentInfo = false;
   selectedContragent: ContragentList;
 
   files: File[] = [];
 
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
+  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,13 +74,8 @@ export class AddOffersComponent implements OnInit {
       documents: [[]]
     });
 
-    this.contragentForm = this.formBuilder.group({
-      searchContragent: [null, Validators.required]
-    });
-
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
-    this.getContragentList();
   }
 
   getSupplierLinkedOffers(
@@ -94,47 +85,27 @@ export class AddOffersComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
-  getContragentList(): void {
-    this.getContragentService.getContragentList().subscribe(
-      (data: ContragentList[]) => {
-        this.contragents = data;
-      });
+  onSelectedContragent(contragent: ContragentList) {
+    this.selectedContragent = contragent;
   }
 
   // Модальное окно выбора контрагента
-  onShowContragentList() {
-    this.showContragentList = !this.showContragentList;
-  }
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
-    this.getContragentList();
-    this.contragentForm.valueChanges.subscribe(data => {
-      this.showContragentInfo = false;
-    });
+    this.supplierSelectComponent.resetSearchFilter();
   }
 
   onCloseAddContragentModal() {
     this.showAddContragentModal = false;
-    this.contragentForm.reset();
-    this.showContragentInfo = false;
+    this.supplierSelectComponent.resetSearchFilter();
+    this.selectedContragent = null;
   }
 
   onAddContragent() {
     this.suppliers.push(this.selectedContragent.shortName);
     this.suppliers.sort();
     this.onCloseAddContragentModal();
-  }
-
-  selectContragent(contragent: ContragentList) {
-    this.contragentForm.patchValue({"searchContragent": contragent.shortName});
-    this.showContragentList = false;
-    this.selectedContragent = contragent;
-    this.showContragentInfo = true;
-  }
-
-  getSearchValue() {
-    return this.contragentForm.value.searchContragent;
   }
 
   // Модальное окно создание КП

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -9,6 +9,8 @@ import { RequestPositionList } from "../../../common/models/request-position-lis
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
+import {ContragentList} from "../../../../contragent/models/contragent-list";
+import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
 
@@ -26,11 +28,15 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
-  tpSupplierName: string;
+  selectedContragent: ContragentList;
+
+  contragentInputFieldValue = "";
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
+
+  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
 
   protected editableStatuses = [
     TechnicalProposalPositionStatuses.NEW.valueOf(),
@@ -41,8 +47,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
     TechnicalProposalPositionStatuses.ACCEPTED.valueOf(),
     TechnicalProposalPositionStatuses.DECLINED.valueOf()
   ];
-
-  @ViewChild('technicalProposalListElement', { static: false }) technicalProposalListElement: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,13 +83,20 @@ export class AddTechnicalProposalsComponent implements OnInit {
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
+    this.contragentInputFieldValue = "";
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
     this.technicalProposal = technicalProposal;
-    this.tpSupplierName = this.technicalProposal.name;
+
+    this.selectedContragent = null;
 
     this.showAddTechnicalProposalModal = true;
+  }
+
+  onSelectedContragent(contragent: ContragentList): void {
+    this.selectedContragent = contragent;
+    this.contragentInputFieldValue = contragent.shortName;
   }
 
   /**
@@ -94,17 +105,21 @@ export class AddTechnicalProposalsComponent implements OnInit {
    * @param technicalProposal
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
+    this.technicalProposal = technicalProposal;
+
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
-
-    this.technicalProposal = technicalProposal;
-    this.tpSupplierName = this.technicalProposal.name;
+    this.contragentInputFieldValue = technicalProposal.name;
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
     });
 
     this.showAddTechnicalProposalModal = true;
+  }
+
+  onCloseModal() {
+    this.showAddTechnicalProposalModal = false;
   }
 
   isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
@@ -168,7 +183,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const technicalProposal = {
-      name: this.tpSupplierName,
+      name: this.contragentInputFieldValue,
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
@@ -193,7 +208,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
 
     this.showAddTechnicalProposalModal = false;
-    this.tpSupplierName = "";
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
@@ -220,7 +234,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     const technicalProposal = {
       id: this.technicalProposal.id,
-      name: this.tpSupplierName,
+      name: this.contragentInputFieldValue,
       positions: selectedPositionsArray,
     };
 
@@ -250,7 +264,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   onDocumentSelected(uploadedFiles, documentsForm): void {
     documentsForm.get('documents').setValue(uploadedFiles);
   }
-
 
   /**
    * Получение списка позиций для ТП
@@ -345,6 +358,25 @@ export class AddTechnicalProposalsComponent implements OnInit {
     }
 
     return "";
+  }
+
+  checkIfCreatingIsEnabled(): boolean {
+    return (
+      this.selectedTechnicalProposalPositionsIds.length > 0 &&
+      this.contragentInputFieldValue.length > 0
+    );
+  }
+
+  checkIfSavingIsEnabled(technicalProposal): boolean {
+    // Если ТП уже в процессе рассмотрения, проверяем только
+    // наличие выбранных документов для загрузки
+    if (this.tpIsOnReview(technicalProposal)) {
+      return this.uploadedFiles.length > 0;
+    } else {
+      // Если ТП ещё не рассматривалось заказчиком,
+      // проверяем, выбраны ли позиции или заполнено ли поле наименования
+      return (this.selectedTechnicalProposalPositionsIds.length > 0 && this.contragentInputFieldValue.length > 0);
+    }
   }
 
 }
