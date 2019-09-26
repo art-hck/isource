@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CreateRequestService } from "../../services/create-request.service";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2";
-import {Uuid} from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-create-request',
@@ -20,8 +19,11 @@ export class CreateRequestComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSendExcelFile(files: File[]): void {
-    this.createRequestService.addRequestFromExcel(files).subscribe((data: any) => {
+  onSendExcelFile(requestData): void {
+    const files = requestData['files'];
+    const requestName = requestData['requestName'];
+
+    this.createRequestService.addRequestFromExcel(files, requestName).subscribe((data: any) => {
       Swal.fire({
         width: 400,
         html: '<p class="text-alert">' + 'Заявка отправлена</br></br>' + '</p>' +
