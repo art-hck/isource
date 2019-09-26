@@ -27,7 +27,7 @@
                 <span>{{ technicalProposal.name }}</span>
 
                 <div class="edit-btn"
-                     *ngIf="tpIsNew(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
+                     *ngIf="isTpHasEditablePositions(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
                      (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                   <clr-icon shape="pencil"></clr-icon>
                 </div>
@@ -35,7 +35,7 @@
 
 
               <div class="clr-col send-for-approval">
-                <div *ngIf="tpIsNew(technicalProposal); else sentForReview">
+                <div *ngIf="isTpHasEditablePositions(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
                           (click)="onSendForApproval(technicalProposal)">
@@ -68,7 +68,7 @@
               <tbody>
                 <tr *ngFor="let technicalProposalPosition of technicalProposal.positions"
                     [class.not-clickable]="
-                      !tpIsNew(technicalProposal) &&
+                      !isEditablePosition(technicalProposalPosition) &&
                       technicalProposalPosition.status !== 'DECLINED'">
 
                   <td class="left">
@@ -80,7 +80,7 @@
                               *ngIf="technicalProposalPosition.status === 'DECLINED'" ></clr-icon>
                     <clr-icon class="unknown-status"
                               shape="unknown-status"
-                              *ngIf="!tpIsNew(technicalProposal) &&
+                              *ngIf="!isEditablePosition(technicalProposalPosition) &&
                                      technicalProposalPosition.status !== 'DECLINED' &&
                                      technicalProposalPosition.status !== 'ACCEPTED'"></clr-icon>
 
