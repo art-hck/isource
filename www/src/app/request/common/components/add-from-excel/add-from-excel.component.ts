@@ -7,7 +7,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class AddFromExcelComponent implements OnInit {
 
-  @Output() submit = new EventEmitter<object>();
+  @Output() submit = new EventEmitter<{ files: File[], requestName: string }>();
   @Input() templateUrl: string;
 
   requestName = "";
