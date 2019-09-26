@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-contragent-list',
@@ -8,7 +9,7 @@ import { ContragentList } from "../../models/contragent-list";
 })
 export class ContragentListComponent implements OnInit {
 
-  @Input() contragents: ContragentList[];
+  @Input() contragents$: Observable<ContragentList[]>;
 
   constructor() { }
 

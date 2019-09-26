@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentList } from "../../models/contragent-list";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-contragent-list-view',
@@ -9,7 +10,7 @@ import { ContragentList } from "../../models/contragent-list";
 })
 export class ContragentListViewComponent implements OnInit {
 
-  public contragents: ContragentList[];
+  contragents$: Observable<ContragentList[]>;
 
   constructor(
     protected getContragentService: ContragentService
@@ -20,10 +21,7 @@ export class ContragentListViewComponent implements OnInit {
   }
 
   getContragentList(): void {
-    this.getContragentService.getContragentList().subscribe(
-      (data: ContragentList[]) => {
-        this.contragents = data;
-      });
+    this.contragents$ = this.getContragentService.getContragentList();
   }
 
 }
