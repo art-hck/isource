@@ -25,12 +25,12 @@
           <div class="clr-col send-for-approval">
             <button class="btn btn-link"
                     (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                    *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+                    *ngIf="isResolutionButtonsAvailable(i)">
               Отклонить
             </button>
             <button class="btn btn-primary"
                     (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                    *ngIf="selectedTechnicalProposalsPositions[i].length !== 0">
+                    *ngIf="isResolutionButtonsAvailable(i)">
               Согласовать
             </button>
           </div>
@@ -44,14 +44,14 @@
             <tbody>
             <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
               <td class="left">
-                <clr-checkbox-wrapper *ngIf="technicalProposalPosition.status === 'NEW'" class="select-checkbox">
+                <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
                   <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
                          value="{{i}}"
                          [(ngModel)]="technicalProposalPosition.checked"
                          (change)="onSelectPosition(i, technicalProposalPosition)">
                   <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
                 </clr-checkbox-wrapper>
-                <div *ngIf="technicalProposalPosition.status !== 'NEW'">
+                <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
                   <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
                             shape="check"></clr-icon>
                   <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"

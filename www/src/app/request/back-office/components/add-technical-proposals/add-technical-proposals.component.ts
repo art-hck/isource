@@ -11,6 +11,8 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
+import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
+import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -35,6 +37,16 @@ export class AddTechnicalProposalsComponent implements OnInit {
   uploadedFiles: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+
+  protected editableStatuses = [
+    TechnicalProposalPositionStatuses.NEW.valueOf(),
+    TechnicalProposalPositionStatuses.EDITED.valueOf()
+  ];
+
+  protected completedStatuses = [
+    TechnicalProposalPositionStatuses.ACCEPTED.valueOf(),
+    TechnicalProposalPositionStatuses.DECLINED.valueOf()
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -304,6 +316,16 @@ export class AddTechnicalProposalsComponent implements OnInit {
     return technicalProposal.status === TechnicalProposalsStatuses.NEW;
   }
 
+  isTpHasEditablePositions(tp: TechnicalProposal): boolean {
+    return tp.positions.some((position) => {
+      return this.isEditablePosition(position);
+    });
+  }
+
+  isEditablePosition(position: TechnicalProposalPosition): boolean {
+    return this.editableStatuses.indexOf(position.status) >= 0;
+  }
+
   /**
    * Функция проверяет, приступил ли заказчик к обработке ТП (принято решение хотя бы по одной позиции)
    * @param technicalProposal
@@ -323,17 +345,16 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
-    if (technicalProposal.positions.some(position => position.status !== "NEW") &&
-        technicalProposal.positions.some(position => position.status === "NEW")) {
-      return "Начато согласование заказчиком";
+    if (technicalProposal.positions.some((position) => {
+      return position.status === TechnicalProposalPositionStatuses.REVIEW.valueOf();
+    })) {
+      return "Согласование заказчиком";
     }
 
-    if (technicalProposal.positions.every(position => position.status !== "NEW")) {
+    if (technicalProposal.positions.every((position) => {
+      return this.completedStatuses.indexOf(position.status) >= 0;
+    })) {
       return "Завершено согласование заказчиком";
-    }
-
-    if (technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
-      return "Отправлено на согласование";
     }
 
     return "";
