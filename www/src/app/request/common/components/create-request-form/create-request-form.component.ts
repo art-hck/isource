@@ -28,6 +28,7 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
   requestDataForm: FormGroup;
   // тут храним список открытых форм
   formShow = [];
+  requestName = "";
 
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
@@ -40,6 +41,7 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
     protected router: Router
   ) {
     this.requestDataForm = this.formBuilder.group({
+        'name': [''],
         'itemForm': this.formBuilder.array([
           this.addItemFormGroup()
         ])
@@ -57,6 +59,10 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
 
   ngAfterViewInit(): void {
     this.expandForm(0);
+  }
+
+  onRequestNameChange(value) {
+    this.requestName = value.trim();
   }
 
   expandForm(i): void {
@@ -149,7 +155,10 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
   }
 
   onSubmit() {
-    return this.createRequestService.addRequest(this.requestDataForm.value['itemForm']).subscribe(
+    return this.createRequestService.addRequest(
+      this.requestDataForm.value['name'],
+      this.requestDataForm.value['itemForm']
+    ).subscribe(
       (data: any) => {
         Swal.fire({
           width: 400,

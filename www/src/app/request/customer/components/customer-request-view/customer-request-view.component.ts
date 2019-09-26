@@ -99,7 +99,7 @@ export class CustomerRequestViewComponent implements OnInit {
   onApprove(): void {
     this.requestService.approveRequest(this.requestId).subscribe(
       (data: any) => {
-        // this.requestView.showPositionInfo = null;
+        this.requestView.selectPositionListItem = null;
         this.getRequest();
         this.getRequestPositions();
       }
@@ -114,7 +114,7 @@ export class CustomerRequestViewComponent implements OnInit {
     this.requestService.rejectRequest(this.requestId, this.rejectionMessage).subscribe(
       (data: any) => {
         this.rejectionMessageModalOpen = false;
-        // this.requestView.showPositionInfo = null;
+        this.requestView.selectPositionListItem = null;
         this.getRequest();
         this.getRequestPositions();
       }

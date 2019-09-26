@@ -10,7 +10,6 @@ import { RequestService as BackofficeRequestService } from "./back-office/servic
 import { RequestService as CustomerRequestService } from "./customer/services/request.service";
 import { RequestListComponent } from "./common/components/request-list/request-list.component";
 import { DocumentListComponent } from './common/components/document-list/document-list.component';
-import { DocumentUploadListComponent } from "./common/components/document-upload-list/document-upload-list.component";
 import { MessagesComponent } from './common/components/messages/messages.component';
 import { CreateRequestFreeFormComponent } from './common/components/create-request-free-form/create-request-free-form.component';
 import { OffersComponent as BackofficeOffersComponent } from './common/components/offers/offers.component';
@@ -25,7 +24,6 @@ import { RequestViewComponent } from "./common/components/request-view/request-v
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { ContractComponent } from './common/components/contract/contract.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
-import { DocumentSimpleListComponent } from "./common/components/document-simple-list/document-simple-list.component";
 import { CreateRequestFormComponent } from './common/components/create-request-form/create-request-form.component';
 import { RequestListStatusesFilterComponent } from "./common/components/request-list/request-list-statuses-filter/request-list-statuses-filter.component";
 import { RequestListPositionStatusesFilterComponent } from "./common/components/request-list/request-list-position-statuses-filter/request-list-position-statuses-filter.component";
@@ -50,7 +48,6 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
     CreateRequestComponent,
     CustomerRequestListViewComponent,
     BackofficeRequestListViewComponent,
-    DocumentUploadListComponent,
     BackOfficeRequestViewComponent,
     DocumentListComponent,
     MessagesComponent,
@@ -63,7 +60,6 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
     RequestViewComponent,
     CustomerRequestViewComponent,
     ContractComponent,
-    DocumentSimpleListComponent,
     EditPositionInfoFormComponent,
     CreateRequestFormComponent,
     RequestListNumberFilterComponent,

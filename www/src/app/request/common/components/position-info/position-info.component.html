@@ -50,6 +50,13 @@
             {{requestPosition.statusLabel}}
           </div>
         </div>
+
+        <div class="clr-col-12">
+          <button class="btn btn-primary"
+                  (click)="onDeleteDraft()"
+                  *ngIf="requestPosition.isDraftEntity"><b>Вернуть исходную позицию</b>
+          </button>
+        </div>
       </div>
 
       <clr-tabs>

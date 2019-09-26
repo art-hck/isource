@@ -5,6 +5,8 @@ import { FormsModule } from "@angular/forms";
 import { ClarityModule } from '@clr/angular';
 import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
+import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
+import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
 
 @NgModule({
   imports: [
@@ -31,15 +33,20 @@ import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
     })
   ],
   declarations: [
-    CardComponent
+    CardComponent,
+    DocumentSimpleListComponent,
+    DocumentUploadListComponent
   ],
   exports: [
     CommonModule,
     FormsModule,
     ClarityModule,
     CustomComponentsModule,
+    SweetAlert2Module,
+
     CardComponent,
-    SweetAlert2Module
+    DocumentSimpleListComponent,
+    DocumentUploadListComponent
   ]
 })
 export class SharedModule {

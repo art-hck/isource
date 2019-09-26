@@ -29,7 +29,8 @@
                 Экспортировать шаблон
               </button>
               <button class="btn import-export"
-              (click)="onShowImportOffersExcel()">Импортировать КП</button>
+                      (click)="onShowImportOffersExcel()">Импортировать КП
+              </button>
             </div>
 
           </div>
@@ -78,7 +79,7 @@
                 ).length; else addLinkedOfferButton">
                 <ng-container
                   *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <div class="offer" (click)="onShowOfferModal(linkedOffer)">
+                  <div class="offer" (click)="onShowEditOfferModal(requestPosition, supplier, linkedOffer)">
                     {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
                     <p>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</p>
                     <p class="delivery">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>
@@ -126,10 +127,9 @@
     </div>
   </clr-modal>
 
-  <!-- Модальное окно добавления КП -->
+  <!-- Модальное окно добавления/редактирования КП -->
   <clr-modal [(clrModalOpen)]="showAddOfferModal"
              [clrModalClosable]="false">
-    <h3 class="modal-title">Добавьте КП</h3>
     <div class="modal-body">
       <form [formGroup]="offerForm" class="form">
         <div class="form-block">
@@ -189,6 +189,14 @@
               </div>
             </div>
           </div>
+          <div class="document-list" *ngIf="editMode">
+            <div class="document" *ngFor="let document of selectedOffer?.documents">
+              <a (click)="onDownloadFile(document)">{{document.filename}}</a>
+            </div>
+          </div>
+          <app-document-upload-list (fileSelected)="onDocumentSelected($event, offerForm)"
+                                    [documents]="offerFiles">
+          </app-document-upload-list>
         </div>
       </form>
     </div>
@@ -198,59 +206,14 @@
         </div>
         <div class="clr-col-6">
           <button class="btn btn-link" (click)="onCloseAddOfferModal()">Отмена</button>
-          <button class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+          <button *ngIf="!editMode" class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">
+            Добавить
+          </button>
+          <button *ngIf="editMode" class="btn btn-primary" (click)="onEditOffer()" [disabled]="offerForm.invalid">
+            Сохранить
+          </button>
         </div>
       </div>
-    </div>
-  </clr-modal>
-
-  <!-- Модальное окно просмотра КП -->
-  <clr-modal [(clrModalOpen)]="showOfferModal" clrModalSize="lg">
-    <h3 class="modal-title">Предложение поставщика</h3>
-    <div class="modal-body">
-      <clr-datagrid class="clr-row offers-datagrid" *ngIf="selectedOffer">
-        <clr-dg-column class="clr-col-2">Наименование к/а</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Цена</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Количество</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Дата поставки</clr-dg-column>
-        <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
-        <clr-dg-column class="clr-col-2">КП</clr-dg-column>
-        <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
-
-        <clr-dg-row>
-          <clr-dg-cell class="clr-col-2">
-            <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{selectedOffer.supplierContragentName}}</a>
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right offer-price">
-            {{ selectedOffer.priceWithVat | currency : selectedOffer.currency }}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.quantity}} {{selectedOffer.measureUnit}}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.deliveryDate | date :'shortDate'}}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-2">{{selectedOffer.paymentTerms}}</clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-2">
-            <app-document-simple-list
-              [enableUpload]="true"
-              [documents]="selectedOffer.documents"
-              (selected)="onUploadDocuments($event, selectedOffer)"
-            ></app-document-simple-list>
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1">
-            <app-document-simple-list
-              [enableUpload]="true"
-              [documents]="selectedOffer.technicalProposals"
-              (selected)="onUploadTechnicalProposals($event, selectedOffer)"
-            ></app-document-simple-list>
-          </clr-dg-cell>
-        </clr-dg-row>
-      </clr-datagrid>
     </div>
   </clr-modal>
 

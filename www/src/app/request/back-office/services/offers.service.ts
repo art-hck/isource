@@ -18,7 +18,12 @@ export class OffersService {
 
   addOffer(id: Uuid, positionId, offer: RequestOfferPosition) {
     const url = `requests/backoffice/${id}/positions/${positionId}/add-offer`;
-    return this.api.post(url, offer);
+    return this.api.post(url, this.convertModelToFormData(offer));
+  }
+
+  editOffer(id: Uuid, positionId, editedOffer: RequestOfferPosition) {
+    const url = `requests/backoffice/${id}/positions/${positionId}/edit-offer`;
+    return this.api.post(url, this.convertModelToFormData(editedOffer));
   }
 
   publishOffers(id: Uuid, positionId) {

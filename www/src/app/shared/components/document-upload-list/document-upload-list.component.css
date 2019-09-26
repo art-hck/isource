@@ -1,0 +1,11 @@
+input#file_upload {
+  display: none;
+}
+
+.btn.btn-link {
+  margin: 0;
+}
+
+.form-group {
+  margin: 0;
+}

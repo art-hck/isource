@@ -12,7 +12,9 @@ import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import {DocumentsService} from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -28,14 +30,15 @@ export class AddOffersComponent implements OnInit {
   showAddContragentModal = false;
 
   showAddOfferModal = false;
+  editMode = false;
   offerForm: FormGroup;
 
-  showOfferModal = false;
   showImportOffersExcel = false;
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
+  offerFiles: File[] = [];
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -51,7 +54,9 @@ export class AddOffersComponent implements OnInit {
     private requestService: RequestService,
     private formBuilder: FormBuilder,
     protected offersService: OffersService,
-    protected router: Router
+    protected router: Router,
+    private getContragentService: ContragentService,
+    private documentsService: DocumentsService
   ) {
   }
 
@@ -64,7 +69,9 @@ export class AddOffersComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: ['', Validators.required]
+      paymentTerms: ['', Validators.required],
+      id: [''],
+      documents: [[]]
     });
 
     this.updateRequestInfo();
@@ -105,9 +112,34 @@ export class AddOffersComponent implements OnInit {
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-
     this.showAddOfferModal = true;
+    this.offerFiles = [];
+    this.addOfferValues(requestPosition);
+  }
 
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
+    this.selectedRequestPosition = requestPosition;
+    this.selectedSupplier = supplier;
+    this.selectedOffer = linkedOffer;
+    this.showAddOfferModal = true;
+    this.editMode = true;
+    this.setOfferValues(linkedOffer);
+  }
+
+  setOfferValues(linkedOffer: RequestOfferPosition) {
+    this.offerForm.get('priceWithVat').setValue(linkedOffer.priceWithoutVat);
+    this.offerForm.get('currency').setValue(linkedOffer.currency);
+    this.offerForm.get('quantity').setValue(linkedOffer.quantity);
+    this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
+    this.offerForm.get('id').setValue(linkedOffer.id);
+    const deliveryDate = linkedOffer.deliveryDate ?
+      moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
+      linkedOffer.deliveryDate;
+    this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+  }
+
+  addOfferValues(requestPosition) {
     this.offerForm.get('quantity').setValue(requestPosition.quantity);
     this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
     this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
@@ -134,18 +166,30 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
+    this.offerFiles = [];
+  }
+
+  onEditOffer() {
+    const formValue = this.offerForm.value;
+    formValue.supplierContragentName = this.selectedSupplier;
+
+    this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
+      (data: RequestOfferPosition) => {
+        this.updatePositions();
+      }
+    );
+    this.onCloseAddOfferModal();
+    this.offerFiles = [];
   }
 
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
+    this.editMode = false;
   }
 
-  // Модальное окно просмотра КП
-  onShowOfferModal(offer: RequestOfferPosition) {
-    this.selectedOffer = offer;
-
-    this.showOfferModal = true;
+  onDownloadFile(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
@@ -155,19 +199,16 @@ export class AddOffersComponent implements OnInit {
       });
   }
 
-  onUploadTechnicalProposals(files: File[], offer: RequestOfferPosition) {
-    this.offersService.uploadTechnicalProposals(offer, files)
-      .subscribe((documents: RequestDocument[]) => {
-        documents.forEach(document => offer.technicalProposals.push(document));
-      });
+  onDocumentSelected(documents: File[], form) {
+    form.get('documents').setValue(documents);
   }
 
   onRequestsClick() {
-    this.router.navigateByUrl(`requests/back-office`);
+    this.router.navigateByUrl(`requests/backoffice`);
   }
 
   onRequestClick() {
-    this.router.navigateByUrl(`requests/back-office/${this.request.id}`);
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   onDownloadOffersTemplate() {
@@ -236,6 +277,14 @@ export class AddOffersComponent implements OnInit {
       (data: any) => {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
+      }
+    );
+  }
+
+  protected updatePositions(): void {
+    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+      (data: any) => {
+        this.requestPositions = data.positions;
       }
     );
   }

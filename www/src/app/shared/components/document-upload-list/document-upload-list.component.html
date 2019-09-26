@@ -3,12 +3,12 @@
     {{ document.name }}
 
     <button type="button" class="btn btn-link" (click)="removeDocument(document)">
-      Удалить
+      <clr-icon shape="times"></clr-icon>
     </button>
   </li>
 
   <div class="form-group">
-    <label for="file_upload" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
+    <label *ngIf="uploadLabel" for="file_upload" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
     <input type="file"
            #uploadEl
            id="file_upload"

@@ -1,0 +1,68 @@
+<div class="wrapper">
+  <div #messagesList class="messages-list">
+    <ng-container *ngIf="!loading">
+      <div class="message" *ngFor="let message of messages">
+
+
+        <div class="message-body"
+             [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
+          <div class="message-user" *ngIf="!isOwnMessage(message)">
+            {{ message.user.fullName }}
+          </div>
+          {{ message.message }}
+
+          <div class="files" *ngIf="message.documents.length > 0">
+            <app-document-simple-list
+              [documents]="message.documents"
+              [enableUpload]="false">
+            </app-document-simple-list>
+          </div>
+
+          <div class="message-date"> {{ getMessageDate(message.createdDate) }} </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="text-center" *ngIf="!loading && messages && !messages.length">
+      Сообщений нет
+    </div>
+
+    <div class="text-center" *ngIf="loading">
+      <span class="spinner spinner-md"></span>
+    </div>
+  </div>
+
+
+  <div class="new-message">
+    <button (click)="onUploadFileClick()" type="button" class="btn btn-link btn-add-file text-muted">
+      <clr-icon shape="paperclip" size="32"></clr-icon>
+    </button>
+
+    <form [formGroup]="sendMessageForm" (ngSubmit)="onCreateClick(sendMessageForm.value)">
+      <button type="submit"
+              class="btn btn-link btn-icon btn-send"
+              aria-label="Отправить"
+              title="Отправить"
+              [disabled]="!sendMessageForm.valid">
+        <clr-icon shape="envelope" size="32"></clr-icon>
+        Отправить
+      </button>
+
+      <div class="input-wrapper">
+      <textarea formControlName="message"
+                placeholder="Написать сообщение"
+                (keyup.control.enter)="onCreateClick(sendMessageForm.value)">
+      </textarea>
+      </div>
+
+      <div class="document-upload-list-wrap">
+        <app-document-upload-list
+          #documentUploadList
+          [documents]="uploadedFiles"
+          [uploadLabel]="''"
+          (fileSelected)="onFileSelected($event)"
+        ></app-document-upload-list>
+      </div>
+    </form>
+  </div>
+</div>

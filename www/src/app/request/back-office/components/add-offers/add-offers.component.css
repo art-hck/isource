@@ -165,8 +165,32 @@ h2 {
   width: auto;
 }
 
+.container-dropdown {
+  position: absolute;
+  z-index: 100;
+  width: 516px; /* todo временное решение */
+  height: auto;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #d7d7d7;
+  background: white;
+}
+
+.contragent-list {
+  padding: 0 15px;
+}
+
+.contragent-list:hover {
+  background-color: #D4D9E2;
+}
+
 .contragent-info {
   padding-top: 20px;
+}
+
+.searchContragent {
+  width: 100%;
+  padding-left: 10px;
 }
 
 .label-contragent {
@@ -181,4 +205,8 @@ h2 {
 
 .modal-body {
   height: 300px;
+}
+
+.document-list {
+  padding-top: 15px;
 }

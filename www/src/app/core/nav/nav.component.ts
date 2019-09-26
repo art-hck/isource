@@ -7,7 +7,7 @@ import { UserInfoService } from "../services/user-info.service";
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
 
@@ -56,13 +56,8 @@ export class NavComponent implements OnInit {
   protected getSupplierMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Пункт меню для поставщика',
-        path: 'test',
-        children: []
-      },
-      {
         text: 'Заявки',
-        path: 'requests/back-office',
+        path: 'requests/backoffice',
         children: []
       }
     ];
@@ -71,8 +66,8 @@ export class NavComponent implements OnInit {
   protected getCustomerMenu(): Array<MenuModel> {
     return [
       {
-        text: 'Каталог',
-        path: 'catalog',
+        text: 'Заявки',
+        path: 'requests/customer',
         children: []
       },
       {
@@ -81,8 +76,8 @@ export class NavComponent implements OnInit {
         children: []
       },
       {
-        text: 'Заявки',
-        path: 'requests/customer',
+        text: 'Каталог',
+        path: 'catalog',
         children: []
       },
       {
@@ -97,7 +92,7 @@ export class NavComponent implements OnInit {
     return [
       {
         text: 'Заявки',
-        path: 'requests/back-office',
+        path: 'requests/backoffice',
         children: []
       },
       {

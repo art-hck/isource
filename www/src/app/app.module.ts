@@ -27,6 +27,7 @@ import { EditRequestService } from "./request/common/services/edit-request.servi
 import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
+import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -72,6 +73,7 @@ registerLocaleData(localeRu, 'ru');
     RegistrationService,
     GetRequestsService,
     CartStoreService,
+    RequestPositionDraftService,
     {provide: LOCALE_ID, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]

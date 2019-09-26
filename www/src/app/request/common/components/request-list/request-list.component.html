@@ -24,7 +24,7 @@
   </clr-dg-column>
 
   <clr-dg-column class="request-positions-list">
-    Состав
+    Наименование и состав
   </clr-dg-column>
 
   <clr-dg-column class="request-delivery-dates">
@@ -56,6 +56,11 @@
 
 
       <clr-dg-cell class="request-positions-list">
+
+        <span class="request-name" title="{{ request.request.name }}">
+          {{ request.request.name }}
+        </span>
+
         <ng-container *ngIf="!checkIfFreeFormRequest(request.request.type); else freeFormRequestLabel">
           <div class="position-info" *ngFor="let position of request.positions">
             <span class="position-title">{{ position?.name }}</span>
