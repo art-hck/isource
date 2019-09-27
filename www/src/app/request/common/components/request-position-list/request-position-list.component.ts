@@ -8,6 +8,7 @@ import { GroupService } from "../../services/group.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-position-list',
@@ -114,34 +115,21 @@ export class RequestPositionListComponent implements OnChanges {
     return item === this.selectItem;
   }
 
-  onSendExcelFile(files: File[]): void {
-    if (this.isCustomerView) {
-      this.createRequestPositionService
-        .addCustomerRequestPositionsFromExcel(this.request, files)
-        .subscribe((data: any) => {
-          // TODO перезагружать позиции
-          window.location.href = window.location.href;
-        }, (error: any) => {
-          let msg = 'Ошибка в шаблоне';
-          if (error && error.error && error.error.detail) {
-            msg = `${msg}: ${error.error.detail}`;
-          }
-          alert(msg);
-        });
-    } else {
-      this.createRequestPositionService
-        .addCustomerRequestPositionsFromExcel(this.request, files)
-        .subscribe((data: any) => {
-          // TODO перезагружать позиции
-          window.location.href = window.location.href;
-        }, (error: any) => {
-          let msg = 'Ошибка в шаблоне';
-          if (error && error.error && error.error.detail) {
-            msg = `${msg}: ${error.error.detail}`;
-          }
-          alert(msg);
-        });
-    }
+  onSendExcelFile(requestData: { files: File[], requestName: string }): void {
+    const addPositionObservable: Observable<any> = this.isCustomerView ?
+      this.createRequestPositionService.addCustomerRequestPositionsFromExcel(this.request, requestData.files) :
+      this.createRequestPositionService.addBackofficeRequestPositionsFromExcel(this.request, requestData.files);
+
+    addPositionObservable.subscribe((data: any) => {
+      // TODO реализовать без перезагрузки страницы
+      window.location.reload();
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 
   addNewPosition(): void {

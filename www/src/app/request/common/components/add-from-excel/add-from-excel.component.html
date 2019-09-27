@@ -4,19 +4,21 @@
       <div class="card-block">
         <div class="card-text">
 
-          <label for="request-name">
-            Введите наименование заявки:
-          </label>
+          <ng-container *ngIf="showRequestName">
+            <label for="request-name">
+              Введите наименование заявки:
+            </label>
 
-          <input [(ngModel)]="requestName"
-                 [ngModelOptions]="{ standalone: true }"
-                 type="text"
-                 class="request-name-input"
-                 [class.required]="!requestName.length"
-                 id="request-name"
-                 value="{{ requestName }}"
-                 (input)="onRequestNameChange($event.target.value)"
-                 placeholder="Наименование заявки.." />
+            <input [(ngModel)]="requestName"
+                   [ngModelOptions]="{ standalone: true }"
+                   type="text"
+                   class="request-name-input"
+                   [class.required]="!requestName.length"
+                   id="request-name"
+                   value="{{ requestName }}"
+                   (input)="onRequestNameChange($event.target.value)"
+                   placeholder="Наименование заявки.."/>
+          </ng-container>
 
           <span class="gray">
             Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a>
@@ -32,6 +34,7 @@
     <button class="btn btn-primary"
             type="button"
             (click)="onSendClick()"
-            [disabled]="files.length === 0 || requestName.trim().length === 0">Отправить</button>
+            [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">Отправить
+    </button>
   </div>
 </div>
