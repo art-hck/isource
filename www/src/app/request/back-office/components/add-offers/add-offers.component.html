@@ -108,6 +108,9 @@
     <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
     </app-supplier-select>
       <div class="contragent-info" *ngIf="selectedContragent">
+        <div class="error-message" *ngIf="isSupplierOfferExist()">
+          Коммерческое предложение от выбранного поставщика уже добавлено
+        </div>
         <p class="label-contragent">Наименование контрагента:</p>
         {{selectedContragent.shortName}}
         <p class="label-contragent">ИНН:</p>
@@ -122,7 +125,7 @@
       <button class="btn btn-link" (click)="onCloseAddContragentModal()">Отмена</button>
       <button class="btn btn-primary"
               (click)="onAddContragent()"
-              [disabled]="!selectedContragent"><b>Добавить</b>
+              [disabled]="!selectedContragent || isSupplierOfferExist()"><b>Добавить</b>
       </button>
     </div>
   </clr-modal>
