@@ -1,4 +1,12 @@
-.submit {
-  display: block;
-  text-align: right;
+::ng-deep .main-container .alert.alert-app-level {
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+
+.alert-actions {
+  margin: 0!important;
+}
+
+::ng-deep .alert-app-level .alert-icon-wrapper {
+  margin: 0!important;
 }
