@@ -87,8 +87,12 @@ export class AddOffersComponent implements OnInit {
 
   onSelectedContragent(contragent: ContragentList) {
     this.selectedContragent = contragent;
+    this.isSupplierOfferExist();
   }
 
+  isSupplierOfferExist() {
+    return this.suppliers.indexOf(this.selectedContragent.shortName) != -1;
+  }
   // Модальное окно выбора контрагента
 
   onShowAddContragentModal() {

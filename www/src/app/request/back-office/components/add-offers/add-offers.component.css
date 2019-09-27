@@ -184,10 +184,6 @@ h2 {
   background-color: #D4D9E2;
 }
 
-.contragent-info {
-  padding-top: 20px;
-}
-
 .searchContragent {
   width: 100%;
   padding-left: 10px;
@@ -209,4 +205,9 @@ h2 {
 
 .document-list {
   padding-top: 15px;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
 }
