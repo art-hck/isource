@@ -91,7 +91,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   isSupplierOfferExist() {
-    return this.suppliers.indexOf(this.selectedContragent.shortName) != -1;
+    return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
   // Модальное окно выбора контрагента
 
