@@ -16,7 +16,8 @@
           </div>
 
 
-          <div class="clr-col-auto positions-stats-item" (click)="openAddTechnicalProposalsPage()"
+          <div class="clr-col-auto positions-stats-item"
+               (click)="tpOnAgreementCount > 0 ? openAddTechnicalProposalsPage() : false"
                [ngClass]="{'not-clickable' : tpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании ТП</span>
 
@@ -28,7 +29,7 @@
 
 
           <div class="clr-col-auto positions-stats-item"
-               (click)="openAddOffersPage()"
+               (click)="kpOnAgreementCount > 0 ? openAddOffersPage() : false"
                [ngClass]="{'not-clickable' : kpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании КП</span>
 

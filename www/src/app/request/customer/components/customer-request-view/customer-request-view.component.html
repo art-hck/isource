@@ -1,25 +1,31 @@
+<!-- Алерт, когда созданы новые позиции или отредактированы, но изменения не опубликованы -->
+<clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" *ngIf="canPublish()">
+  <clr-alert-item>
+        <span class="alert-text">
+             В заявке присутсвуют неопубликованные позиции в статусе Черновик
+        </span>
+    <div class="alert-actions">
+      <button class="btn alert-action" (click)="onPublish()">Опубликовать все позиции</button>
+    </div>
+  </clr-alert-item>
+</clr-alert>
+<!-- Алерт, когда созданы новые позиции или отредактированы бэкофисом и отправлены на согласование заказчику -->
+<clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" *ngIf="canApproveOrReject()">
+  <clr-alert-item>
+        <span class="alert-text">
+             В заявке присутсвуют позиции, требующие согласования
+        </span>
+    <div class="alert-actions">
+      <button class="btn alert-action" (click)="onApprove()">Согласовать все позиции</button>
+      <button class="btn alert-action decline" (click)="onShowDeclineMessageModal()">Отклонить все позиции</button>
+    </div>
+  </clr-alert-item>
+</clr-alert>
 <app-request-view [isCustomerView]="true"
                   [request]="request"
                   [requestPositions]="requestPositions"
                   [updatedPosition]="updatedPosition">
 </app-request-view>
-
-<div class="submit">
-  <button class="btn btn-success"
-          (click)="onApprove()"
-          *ngIf="canApproveOrReject()"><b>Согласовать все позиции</b>
-  </button>
-
-  <button class="btn btn-warning"
-          (click)="onShowDeclineMessageModal()"
-          *ngIf="canApproveOrReject()"><b>Отклонить все позиции</b>
-  </button>
-
-  <button class="btn btn-primary"
-          (click)="onPublish()"
-          *ngIf="canPublish()"><b>Опубликовать все позиции</b>
-  </button>
-</div>
 
 <clr-modal [(clrModalOpen)]="rejectionMessageModalOpen">
   <h3 class="modal-title">Укажите причину отклонения</h3>

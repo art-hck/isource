@@ -1,12 +1,16 @@
+<!-- Алерт, когда созданы новые позиции или отредактированы, но изменения не опубликованы -->
+<clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" *ngIf="canPublish()">
+  <clr-alert-item>
+        <span class="alert-text">
+            В заявке присутсвуют несогласованные позиции в статусе Черновик
+        </span>
+    <div class="alert-actions">
+      <button class="btn alert-action" (click)="onPublish()">Отправить на согласование все позиции</button>
+    </div>
+  </clr-alert-item>
+</clr-alert>
 <app-request-view [isCustomerView]="false"
                   [request]="request"
                   [requestPositions]="requestPositions"
                   (changeRequestInfo)="onUpdateRequestInfo()">
 </app-request-view>
-
-<div class="submit">
-  <button class="btn btn-primary"
-          (click)="onPublish()"
-          *ngIf="canPublish()"><b>Отправить на согласование все позиции</b>
-  </button>
-</div>

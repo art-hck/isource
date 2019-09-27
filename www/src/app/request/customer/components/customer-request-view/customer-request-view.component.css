@@ -1,8 +1,21 @@
-.submit {
-  display: block;
-  text-align: right;
-}
-
 .modal-body textarea {
   width: 100%;
+}
+
+.alert-actions {
+  margin: 0!important;
+}
+
+::ng-deep .alert-app-level .alert-icon-wrapper {
+  margin: 0!important;
+}
+
+.decline {
+  border: 0;
+  font-weight: 100!important;
+}
+
+::ng-deep .main-container .alert.alert-app-level {
+  margin-top: -20px;
+  margin-bottom: 20px;
 }
