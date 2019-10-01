@@ -27,7 +27,6 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() filteredByDrafts: boolean;
 
   positionListForm: FormGroup;
-  requestGroups: RequestGroup[];
   selectedPositions: RequestPositionList[] = [];
   showUploadPositionsFromExcelForm = false;
 
@@ -51,12 +50,11 @@ export class RequestPositionListComponent implements OnChanges {
           return this.formBuilder.control(false);
         }))
       });
-      this.getGroupList();
     }
   }
 
-  getGroupList(): void {
-    this.requestGroups = this.requestItems.filter(
+  get requestGroups(): RequestGroup[] {
+    return this.requestItems.filter(
       (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
   }
 
