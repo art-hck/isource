@@ -4,6 +4,7 @@ import { RequestPosition } from "../../models/request-position";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPositionList } from "../../models/request-position-list";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import {RequestPositionListComponent} from "../request-position-list/request-position-list.component";
 
 @Component({
   selector: 'app-request-view',
@@ -20,6 +21,7 @@ export class RequestViewComponent implements OnChanges {
 
   @Output() changePositionInfo = new EventEmitter<boolean>();
   @Output() changeRequestInfo = new EventEmitter<boolean>();
+  @ViewChild(RequestPositionListComponent, {static: false}) requestPositionListComponent: RequestPositionListComponent;
 
   selectPositionListItem: any;
   showPositionList = true;
@@ -38,6 +40,7 @@ export class RequestViewComponent implements OnChanges {
   onCloseInfoPanel() {
     this.selectPositionListItem = null;
     this.showPositionList = true;
+    this.requestPositionListComponent.resetSelectedItem();
   }
 
   onRequestPositionChanged(updatedPosition: RequestPosition | RequestGroup): void {
