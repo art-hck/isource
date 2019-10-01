@@ -26,6 +26,9 @@ import {NotificationService} from "../../../../shared/services/notification.serv
   styleUrls: ['./add-offers.component.css']
 })
 export class AddOffersComponent implements OnInit {
+  @ViewChild(RequestViewComponent, {static: false})
+  requestView: RequestViewComponent;
+
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -60,14 +63,11 @@ export class AddOffersComponent implements OnInit {
   files: File[] = [];
 
   @ViewChild("wizard", { static: false }) wizard: ClrWizard;
-  _open: boolean = false;
+  _open = false;
 
   open() {
     this._open = !this.open;
   }
-
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
 
   constructor(
     private route: ActivatedRoute,
