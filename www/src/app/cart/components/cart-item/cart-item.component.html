@@ -27,6 +27,7 @@
                  min="0"
                  [value]="item.quantity"
                  (change)="updateItemQuantity(item, $event.target.value)"
+                 [class.invalid]="item.quantity <= 0"
                  (keypress)="filterEnteredText($event)"
                  class="hidden-arrows text-right price cart-quantity-field"/>
         </div>
