@@ -41,6 +41,7 @@ import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
+import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
     RequestDashboardComponent,
     SearchFilterPipe,
     TechnicalProposalsComponent,
-    SupplierSelectComponent
+    SupplierSelectComponent,
+    CommercialProposalsComponent
   ],
   imports: [
     SharedModule,

@@ -1,0 +1,102 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<ng-container *ngIf="request">
+  <div class="clr-row">
+    <div class="info-card clr-col">
+      <div class="request-info">
+        <div class="breadcrumbs">
+          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+        </div>
+
+        <div class="clr-row w-100">
+          <div class="clr-col-5">
+            <h2>Коммерческие предложения</h2>
+          </div>
+          <div class="clr-col-7 price-auto-select" style="display: none">
+            <button class="btn btn-link" (click)="onShowAddContragentModal()">Автовыбор по цене</button>
+          </div>
+        </div>
+
+
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="position-name"></th>
+              <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
+                <div class="contragent-info">
+                  <span class="name">{{ supplier }}</span>
+
+                  <div class="clr-row clr-align-items-center">
+                    <div class="clr-col">
+                      <span class="total-sum">{{ getTotalSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}</span>
+                    </div>
+
+                    <div class="clr-col-auto">
+                      <a class="select-all" (click)="onSelectAll()">Выбрать все ↓</a>
+                    </div>
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let requestPosition of requestPositions"
+                [ngClass]="{ 'has-selected-offer' : hasSelectedOffer(requestPosition) }">
+              <td class="position-name">
+                <span class="position-label">{{ requestPosition.name }}</span>
+
+                <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
+                  <span *ngIf="requestPosition.deliveryDate; else ASAP">к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b></span>
+                  <ng-template #ASAP>
+                    <b>как можно быстрее</b>
+                  </ng-template>
+                </span>
+              </td>
+
+              <td *ngFor="let supplier of suppliers">
+                <ng-container *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
+                  <div class="offer"
+                         (click)="onSelectOffer(requestPosition, supplier, linkedOffer)"
+                         [ngClass]="{ 'selected' : isSelected(requestPosition, supplier) }">
+                    <div class="counted-price-block">
+                      <span class="counted-offer-price">
+                        {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
+                      </span>
+                      <span class="offer-quantity">за {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</span>
+                    </div>
+
+                    <div class="per-unit-price-block">
+                      <span class="price-per-unit">
+                        {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
+                      </span>
+                    </div>
+
+                    <span class="delivery">Срок поставки: <b>{{linkedOffer.deliveryDate | date :'shortDate'}}</b></span>
+
+                    <a *ngIf="linkedOffer.documents.length > 0"
+                       class="offer-documents">Документы ({{ linkedOffer.documents.length }})
+                    </a>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <div class="clr-row clr-align-items-center footer-total-sum">
+          <span class="clr-col-5">Итого: {{ getTotalSum() | currency: 'RUB' }}</span>
+
+          <div class="clr-col-7 send-for-agreement-btn">
+            <button class="btn btn-primary" (click)="sendForAgreement()">Согласовать</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-container>

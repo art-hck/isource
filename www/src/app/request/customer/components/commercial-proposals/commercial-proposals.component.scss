@@ -1,0 +1,158 @@
+.price-auto-select {
+  text-align: right;
+}
+
+table {
+  border: 0;
+  background-color: transparent;
+  text-align: left;
+}
+
+tbody tr {
+  transition: 0.1s all ease-in;
+}
+tbody tr:hover {
+  background: #e1eff9;
+}
+
+.table th {
+  background-color: transparent;
+  border-bottom: none;
+  text-align: left;
+}
+
+.table td {
+  padding: initial;
+  border: 0;
+  text-align: left;
+}
+
+
+th.contragent-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #2b2b2b;
+  text-align: left;
+  border-bottom: 2px solid #90CAF9;
+  padding: 0 0 20px 0;
+}
+
+.contragent-info span.name {
+  display: block;
+  margin-bottom: 17px;
+}
+
+.contragent-info a.select-all {
+  text-align: right;
+  text-decoration: dashed;
+}
+
+
+div.offer {
+  padding: 20px;
+  text-align: left;
+  transition: 0.07s all ease-in;
+  background: white;
+  border-radius: 5px;
+  margin: 20px;
+  border: 2px solid transparent;
+  height: 130px;
+}
+div.offer:hover {
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.03s all ease-in;
+  border: 2px solid rgba(33, 150, 243, 0.5);
+}
+
+div.offer.selected {
+  border: 2px solid rgba(33, 150, 243, 1);
+  position: relative;
+}
+div.offer.not-selected {
+  opacity: 0.5;
+}
+//div.offer.selected:after {
+//  content: "Выбрано";
+//  opacity: 1;
+//  padding: 2px 8px 5px 8px;
+//  position: absolute;
+//  right: 0;
+//  top: 0;
+//  font-family: Roboto, sans-serif;
+//  font-weight: bold;
+//  font-size: 13px;
+//  color: white;
+//  background: #03A9F4;
+//  border-radius: 0 2px 0 4px;
+//}
+
+tr.has-selected-offer .offer:not(.selected) {
+  opacity: 0.5;
+}
+
+span.position-label {
+  font-size: 15px;
+  padding-bottom: 10px;
+  display: block;
+}
+
+.table td.position-name {
+  padding: 20px !important;
+}
+
+span.total-sum {
+  display: block;
+  font-size: 20px;
+}
+
+div.counted-price-block {
+  margin-bottom: 7px;
+}
+div.per-unit-price-block {
+  margin-bottom: 10px;
+}
+a.offer-documents {
+  margin-top: 10px;
+}
+
+
+span.counted-offer-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2b2b2b;
+  padding-right: 2px;
+}
+
+span.offer-quantity {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9FA8B0;
+}
+
+a.offer-documents {
+  display: block;
+}
+
+th .contragent-info {
+  margin: 0 20px;
+  padding: 20px 0;
+  border-bottom: 2px solid #BBDEFB;
+}
+
+.footer-total-sum {
+  background: white;
+  height: 80px;
+  margin: 30px 20px;
+  padding: 0 0 0 20px;
+}
+
+.footer-total-sum span {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.footer-total-sum .send-for-agreement-btn {
+  text-align: right;
+}
