@@ -53,7 +53,7 @@ export class AddDesignDocumentationComponent implements OnInit {
       (data: DesignDocumentationList[]) => {
         this.designDocumentations = data;
       }
-    )
+    );
   }
 
   isRkdAgreementStatus(designDoc: DesignDocumentationList): boolean {
