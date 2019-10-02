@@ -303,14 +303,33 @@ export class AddOffersComponent implements OnInit {
     this.procedureProperties = this.procedurePropertiesForm.value;
     this.procedureService.publishProcedure(this.requestId,
       this.procedureInfo, this.procedureProperties, this.selectedProcedurePositions).subscribe(
-      () => {
-        this.resetWizardForm();
-        this.notificationService.toast('Процедура успешно создана');
+      (data: any) => {
+        //this.resetWizardForm();
+        Swal.fire({
+          width: 400,
+          html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
+            data.procedureId + '</a> успешно создана</br></br></p>' +
+            '<button id="submit" class="btn btn-primary">ОК</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              Swal.close();
+            });
+          }
+        });
+      },
+      (error: any) => {
+        let msg = 'Ошибка при создании процедуры';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
       }
     );
-    this.wizard.reset();
-    this.procedureBasicDataForm.reset();
-    this.procedurePropertiesForm.reset();
   }
 
   resetWizardForm() {

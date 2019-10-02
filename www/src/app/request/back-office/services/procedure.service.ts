@@ -22,6 +22,7 @@ export class ProcedureService {
     return this.api.post(url, {
       procedureTitle: procedureInfo.procedureTitle,
       dateEndRegistration: procedureInfo.dateEndRegistration,
+      summingupDate: procedureInfo.summingupDate,
       dishonestSuppliersForbidden: procedureInfo.dishonestSuppliersForbidden,
       positions: ids,
       manualEndRegistration: procedureProperties.manualEndRegistration,

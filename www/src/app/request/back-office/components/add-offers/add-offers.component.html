@@ -39,7 +39,7 @@
                     (click)="wizard.open()"
             ><b>Создать процедуру</b>
             </button>
-            <clr-wizard #wizard [(clrWizardOpen)]="lgOpen" clrWizardSize="lg">
+            <clr-wizard #wizard clrWizardSize="lg">
               <clr-wizard-title><b>Новая процедура</b></clr-wizard-title>
 
               <clr-wizard-button [type]="'cancel'">Отмена</clr-wizard-button>
@@ -48,7 +48,7 @@
               <clr-wizard-button [type]="'finish'">Опубликовать</clr-wizard-button>
 
               <clr-wizard-page
-                [clrWizardPageNextDisabled]="procedureBasicDataForm.invalid && selectedProcedurePositions.length === 0"
+                [clrWizardPageNextDisabled]="procedureBasicDataForm.invalid || selectedProcedurePositions.length === 0"
                 (clrWizardPageOnCancel)="resetWizardForm()">
                 <ng-template clrPageTitle>Общие сведения</ng-template>
                 <form [formGroup]="procedureBasicDataForm" class="form">
