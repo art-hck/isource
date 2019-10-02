@@ -27,9 +27,6 @@ import { ContragentService } from "../../../../contragent/services/contragent.se
   styleUrls: ['./add-offers.component.css']
 })
 export class AddOffersComponent implements OnInit {
-  @ViewChild(RequestViewComponent, {static: false})
-  requestView: RequestViewComponent;
-
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -51,10 +48,8 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPositions: RequestPosition[] = [];
 
   contragents: ContragentList[];
-  contragentForm: FormGroup;
   procedureBasicDataForm: any;
   procedurePropertiesForm: any;
-  showContragentInfo = false;
   selectedContragent: ContragentList;
 
   procedureInfo: any;
