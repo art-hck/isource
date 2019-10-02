@@ -42,6 +42,11 @@ export class RequestService {
     );
   }
 
+  getRequestPositionsWithOffers(id: Uuid): Observable<any> {
+    const url = `requests/customer/${id}/positions-with-offers`;
+    return this.api.get<any>(url);
+  }
+
   publishRequest(id: Uuid) {
     const url = `requests/customer/${id}/publish`;
     return this.api.post(url, {});

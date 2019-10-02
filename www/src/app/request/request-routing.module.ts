@@ -8,6 +8,7 @@ import { CustomerRequestViewComponent } from "./customer/components/customer-req
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { AddTechnicalProposalsComponent } from "./back-office/components/add-technical-proposals/add-technical-proposals.component";
 import {TechnicalProposalsComponent} from "./customer/components/technical-proposals/technical-proposals.component";
+import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
       {
         path: ':id/technical-proposals',
         component: TechnicalProposalsComponent
+      },
+      {
+        path: ':id/commercial-proposals',
+        component: CommercialProposalsComponent
       }
     ]
   },
