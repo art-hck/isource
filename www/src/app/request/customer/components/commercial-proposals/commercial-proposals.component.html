@@ -14,11 +14,11 @@
           <div class="clr-col-5">
             <h2>Коммерческие предложения</h2>
           </div>
+
           <div class="clr-col-7 price-auto-select" style="display: none">
-            <button class="btn btn-link" (click)="onShowAddContragentModal()">Автовыбор по цене</button>
+            <button class="btn btn-link" (click)="onAutoselectByPrice()">Автовыбор по цене</button>
           </div>
         </div>
-
 
 
         <table class="table">
@@ -31,11 +31,13 @@
 
                   <div class="clr-row clr-align-items-center">
                     <div class="clr-col">
-                      <span class="total-sum">{{ getTotalSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}</span>
+                      <span class="total-sum">
+                        {{ getTotalSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}
+                      </span>
                     </div>
 
                     <div class="clr-col-auto">
-                      <a class="select-all" (click)="onSelectAll()">Выбрать все ↓</a>
+                      <a class="select-all" (click)="onSelectAll(requestPositions, supplier)">Выбрать все ↓</a>
                     </div>
                   </div>
                 </div>
@@ -50,7 +52,9 @@
                 <span class="position-label">{{ requestPosition.name }}</span>
 
                 <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
-                  <span *ngIf="requestPosition.deliveryDate; else ASAP">к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b></span>
+                  <span *ngIf="requestPosition.deliveryDate; else ASAP">
+                    к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b>
+                  </span>
                   <ng-template #ASAP>
                     <b>как можно быстрее</b>
                   </ng-template>
@@ -66,7 +70,11 @@
                       <span class="counted-offer-price">
                         {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
                       </span>
-                      <span class="offer-quantity">за {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</span>
+                      <span class="offer-quantity">за
+                        <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
+                          {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}
+                        </span>
+                      </span>
                     </div>
 
                     <div class="per-unit-price-block">
@@ -75,24 +83,31 @@
                       </span>
                     </div>
 
-                    <span class="delivery">Срок поставки: <b>{{linkedOffer.deliveryDate | date :'shortDate'}}</b></span>
+                    <div class="delivery">Срок поставки:
+                      <span [class.warning-text]="incorrectDeliveryDate(linkedOffer.deliveryDate, requestPosition.deliveryDate)">
+                        {{ linkedOffer.deliveryDate | date :'shortDate' }}
+                      </span>
+                    </div>
 
                     <a *ngIf="linkedOffer.documents.length > 0"
-                       class="offer-documents">Документы ({{ linkedOffer.documents.length }})
+                       (click)="onShowDocumentsModal($event, linkedOffer.documents)"
+                       class="offer-documents">{{ getDocumentCountLabel(linkedOffer.documents.length) }}
                     </a>
                   </div>
+
                 </ng-container>
               </td>
             </tr>
           </tbody>
         </table>
 
-
         <div class="clr-row clr-align-items-center footer-total-sum">
           <span class="clr-col-5">Итого: {{ getTotalSum() | currency: 'RUB' }}</span>
 
           <div class="clr-col-7 send-for-agreement-btn">
-            <button class="btn btn-primary" (click)="sendForAgreement()">Согласовать</button>
+            <button class="btn btn-primary"
+                    [disabled]="!isSendButtonEnabled()"
+                    (click)="sendForAgreement()">Согласовать</button>
           </div>
         </div>
 
@@ -100,3 +115,16 @@
     </div>
   </div>
 </ng-container>
+
+
+
+<clr-modal [(clrModalOpen)]="commercialProposalsDocumentsModalOpened">
+  <h3 class="modal-title">Документы</h3>
+
+  <div class="modal-body">
+    <app-document-simple-list
+            [documents]="linkedOfferDocuments"
+            [enableUpload]="false">
+    </app-document-simple-list>
+  </div>
+</clr-modal>

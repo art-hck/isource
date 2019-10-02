@@ -1,5 +1,18 @@
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.offer .warning-text {
+  color: #ff4455;
+}
+
 .price-auto-select {
   text-align: right;
+}
+
+.modal-body:focus {
+  outline: 0;
 }
 
 table {
@@ -27,7 +40,6 @@ tbody tr:hover {
   text-align: left;
 }
 
-
 th.contragent-name {
   font-weight: 600;
   font-size: 16px;
@@ -46,7 +58,6 @@ th.contragent-name {
   text-align: right;
   text-decoration: dashed;
 }
-
 
 div.offer {
   padding: 20px;
@@ -73,6 +84,8 @@ div.offer.selected {
 div.offer.not-selected {
   opacity: 0.5;
 }
+
+// todo это мне понадобится, пускай останется
 //div.offer.selected:after {
 //  content: "Выбрано";
 //  opacity: 1;
@@ -117,7 +130,6 @@ a.offer-documents {
   margin-top: 10px;
 }
 
-
 span.counted-offer-price {
   font-size: 16px;
   font-weight: bold;
@@ -132,7 +144,7 @@ span.offer-quantity {
 }
 
 a.offer-documents {
-  display: block;
+  display: table;
 }
 
 th .contragent-info {
