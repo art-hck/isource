@@ -24,8 +24,6 @@ export class CommercialProposalsComponent implements OnInit {
 
   selectedOffers = {};
 
-
-
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
@@ -46,7 +44,6 @@ export class CommercialProposalsComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
-
   onRequestsClick() {
     this.router.navigateByUrl(`requests/customer`).then(r => {});
   }
@@ -60,7 +57,9 @@ export class CommercialProposalsComponent implements OnInit {
 
     requestPositions.forEach(pos => {
       const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
-      sum = sum + (supplierLinkedOffer[0].priceWithVat * supplierLinkedOffer[0].quantity);
+      if (supplierLinkedOffer[0]) {
+        sum = sum + (supplierLinkedOffer[0].priceWithVat * supplierLinkedOffer[0].quantity);
+      }
     });
 
     return sum;
@@ -120,7 +119,6 @@ export class CommercialProposalsComponent implements OnInit {
     this.linkedOfferDocuments = linkedOfferDocuments;
     this.commercialProposalsDocumentsModalOpened = true;
   }
-
 
   getTotalSum(): number {
     let totalSum = 0;
