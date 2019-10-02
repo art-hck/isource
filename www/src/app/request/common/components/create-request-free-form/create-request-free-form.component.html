@@ -5,6 +5,19 @@
       <div class="card-block">
         <div class="card-text">
 
+            <label for="request-name">
+              Введите наименование заявки:
+            </label>
+
+            <input type="text"
+                   class="request-name-input"
+                   [class.required]="!requestName.length"
+                   id="request-name"
+                   value="{{ requestName }}"
+                   formControlName="name"
+                   (input)="onRequestNameChange($event.target.value)"
+                   placeholder="Наименование заявки.." />
+
             <span class="gray">
               Загрузите сюда опросный лист или другой документ,
               который поможет нам понять какое оборудование или услуга вам нужны

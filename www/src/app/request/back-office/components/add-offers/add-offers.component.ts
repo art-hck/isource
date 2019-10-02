@@ -4,14 +4,12 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
-import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
-import {ContragentService} from "../../../../contragent/services/contragent.service";
 import * as moment from "moment";
 import Swal from "sweetalert2";
 import {ClrWizard} from "@clr/angular";
@@ -19,6 +17,9 @@ import {isBoolean} from "util";
 import {PaginatorComponent} from "../../../../order/components/paginator/paginator.component";
 import {ProcedureService} from "../../services/procedure.service";
 import {NotificationService} from "../../../../shared/services/notification.service";
+import {DocumentsService} from "../../../common/services/documents.service";
+import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -35,17 +36,17 @@ export class AddOffersComponent implements OnInit {
   suppliers: string[] = [];
 
   showAddContragentModal = false;
-  showContragentList = false;
 
   showAddOfferModal = false;
+  editMode = false;
   offerForm: FormGroup;
 
-  showOfferModal = false;
   showImportOffersExcel = false;
 
   selectedRequestPosition: RequestPosition;
   selectedSupplier: string;
   selectedOffer: RequestOfferPosition;
+  offerFiles: File[] = [];
 
   selectedRequestPositions: RequestPosition[] = [];
 
@@ -62,6 +63,7 @@ export class AddOffersComponent implements OnInit {
 
   files: File[] = [];
 
+  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild("wizard", { static: false }) wizard: ClrWizard;
   _open = false;
 
@@ -76,6 +78,7 @@ export class AddOffersComponent implements OnInit {
     protected offersService: OffersService,
     protected router: Router,
     private getContragentService: ContragentService,
+    private documentsService: DocumentsService,
     private procedureService: ProcedureService,
     private notificationService: NotificationService
   ) {
@@ -90,11 +93,9 @@ export class AddOffersComponent implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: ['', Validators.required]
-    });
-
-    this.contragentForm = this.formBuilder.group({
-      searchContragent: [null, Validators.required]
+      paymentTerms: ['', Validators.required],
+      id: [''],
+      documents: [[]]
     });
 
     this.procedurePropertiesForm = this.formBuilder.group({
@@ -113,7 +114,6 @@ export class AddOffersComponent implements OnInit {
 
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
-    this.getContragentList();
   }
 
   initProcedureBasicDataForm() {
@@ -163,30 +163,24 @@ export class AddOffersComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
-  getContragentList(): void {
-    this.getContragentService.getContragentList().subscribe(
-      (data: ContragentList[]) => {
-        this.contragents = data;
-      });
+  onSelectedContragent(contragent: ContragentList) {
+    this.selectedContragent = contragent;
+    this.isSupplierOfferExist();
   }
 
-  // Модальное окно выбора контрагента
-  onShowContragentList() {
-      this.showContragentList = !this.showContragentList;
+  isSupplierOfferExist() {
+    return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
-    this.getContragentList();
-    this.contragentForm.valueChanges.subscribe(data => {
-      this.showContragentInfo = false;
-    });
+    this.supplierSelectComponent.resetSearchFilter();
   }
 
   onCloseAddContragentModal() {
     this.showAddContragentModal = false;
-    this.contragentForm.reset();
-    this.showContragentInfo = false;
+    this.supplierSelectComponent.resetSearchFilter();
+    this.selectedContragent = null;
   }
 
   onAddContragent() {
@@ -195,24 +189,38 @@ export class AddOffersComponent implements OnInit {
     this.onCloseAddContragentModal();
   }
 
-  selectContragent(contragent: ContragentList) {
-    this.contragentForm.patchValue({"searchContragent": contragent.shortName});
-    this.showContragentList = false;
-    this.selectedContragent = contragent;
-    this.showContragentInfo = true;
-  }
-
-  getSearchValue() {
-    return this.contragentForm.value.searchContragent;
-  }
-
   // Модальное окно создание КП
   onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplier = supplier;
-
     this.showAddOfferModal = true;
+    this.offerFiles = [];
+    this.addOfferValues(requestPosition);
+  }
 
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
+    this.selectedRequestPosition = requestPosition;
+    this.selectedSupplier = supplier;
+    this.selectedOffer = linkedOffer;
+    this.showAddOfferModal = true;
+    this.editMode = true;
+    this.setOfferValues(linkedOffer);
+  }
+
+  setOfferValues(linkedOffer: RequestOfferPosition) {
+    this.offerForm.get('priceWithVat').setValue(linkedOffer.priceWithoutVat);
+    this.offerForm.get('currency').setValue(linkedOffer.currency);
+    this.offerForm.get('quantity').setValue(linkedOffer.quantity);
+    this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
+    this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
+    this.offerForm.get('id').setValue(linkedOffer.id);
+    const deliveryDate = linkedOffer.deliveryDate ?
+      moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
+      linkedOffer.deliveryDate;
+    this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+  }
+
+  addOfferValues(requestPosition) {
     this.offerForm.get('quantity').setValue(requestPosition.quantity);
     this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
     this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
@@ -239,18 +247,30 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.onCloseAddOfferModal();
+    this.offerFiles = [];
+  }
+
+  onEditOffer() {
+    const formValue = this.offerForm.value;
+    formValue.supplierContragentName = this.selectedSupplier;
+
+    this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
+      (data: RequestOfferPosition) => {
+        this.updatePositions();
+      }
+    );
+    this.onCloseAddOfferModal();
+    this.offerFiles = [];
   }
 
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
     this.offerForm.reset();
+    this.editMode = false;
   }
 
-  // Модальное окно просмотра КП
-  onShowOfferModal(offer: RequestOfferPosition) {
-    this.selectedOffer = offer;
-
-    this.showOfferModal = true;
+  onDownloadFile(document: RequestDocument) {
+    this.documentsService.downloadFile(document);
   }
 
   onUploadDocuments(files: File[], offer: RequestOfferPosition) {
@@ -260,19 +280,16 @@ export class AddOffersComponent implements OnInit {
       });
   }
 
-  onUploadTechnicalProposals(files: File[], offer: RequestOfferPosition) {
-    this.offersService.uploadTechnicalProposals(offer, files)
-      .subscribe((documents: RequestDocument[]) => {
-        documents.forEach(document => offer.technicalProposals.push(document));
-      });
+  onDocumentSelected(documents: File[], form) {
+    form.get('documents').setValue(documents);
   }
 
   onRequestsClick() {
-    this.router.navigateByUrl(`requests/back-office`);
+    this.router.navigateByUrl(`requests/backoffice`);
   }
 
   onRequestClick() {
-    this.router.navigateByUrl(`requests/back-office/${this.request.id}`);
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   onDownloadOffersTemplate() {
@@ -382,6 +399,14 @@ export class AddOffersComponent implements OnInit {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
         this.initProcedureBasicDataForm();
+      }
+    );
+  }
+
+  protected updatePositions(): void {
+    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+      (data: any) => {
+        this.requestPositions = data.positions;
       }
     );
   }

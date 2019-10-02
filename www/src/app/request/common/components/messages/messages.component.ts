@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { EventTypes } from "../../../../websocket/event-types";
-import { MessageContextTypes } from "../../enum/message-context-types";
+import { MessageContextTypes } from "../../../../message/message-context-types";
 
 @Component({
   selector: 'app-messages',

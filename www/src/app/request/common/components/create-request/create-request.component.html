@@ -6,7 +6,10 @@
     <clr-tab>
       <button clrTabLink>Загрузить xls-шаблон</button>
       <clr-tab-content *clrIfActive="true">
-        <app-add-from-excel (submit)="onSendExcelFile($event)" [templateUrl]="'assets/RequestTemplate.xlsx'">
+        <app-add-from-excel
+          (submit)="onSendExcelFile($event)"
+          [templateUrl]="'assets/RequestTemplate.xlsx'"
+          [showRequestName]="true">
         </app-add-from-excel>
       </clr-tab-content>
     </clr-tab>

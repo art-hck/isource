@@ -8,6 +8,7 @@ import { DashboardInfo } from "./dashboard-info";
 export class Request extends BaseModel {
   contragent: ContragentRegistration;
   id: Uuid;
+  name?: string;
   contragentId: Uuid;
   createdDate: string;
   number: number;

@@ -66,11 +66,15 @@ export class OrderComponent implements OnInit {
     return this.data.paymentTerms;
   }
 
+  get cardItemsQuantityValid() {
+    return this.cartStore.getItems().filter(item => item.quantity <= 0).length === 0;
+  }
+
   onSubmitOrder() {
     this.updateDateFieldInvalidState();
     this.updateDeliveryBasisInvalidState();
     this.updatePaymentTermsInvalidState();
-    if (!(this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid)) {
+    if (!(this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid && this.cardItemsQuantityValid)) {
       return;
     }
 
@@ -105,6 +109,6 @@ export class OrderComponent implements OnInit {
   }
 
   checkOrderButtonEnabled(): boolean {
-    return this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid;
+    return this.deliveryDateValid && this.deliveryBasisValid && this.paymentTermsValid && this.cardItemsQuantityValid;
   }
 }

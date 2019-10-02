@@ -1,4 +1,18 @@
 <form [formGroup]="requestDataForm" class="form">
+
+  <label class="request-name-label" for="request-name">
+    Введите наименование заявки:
+  </label>
+
+  <input type="text"
+         class="request-name-input"
+         [class.required]="!requestName.length"
+         id="request-name"
+         formControlName="name"
+         value="{{ requestName }}"
+         (input)="onRequestNameChange($event.target.value)"
+         placeholder="Наименование заявки.." />
+
   <div formArrayName="itemForm">
     <clr-accordion>
       <ng-container *ngFor="let item of itemForm.controls; let i=index">
@@ -151,7 +165,7 @@
   <button type="button"
           class="btn btn-primary btn-send"
           (click)="onSubmit()"
-          [disabled]="requestDataForm.invalid || (itemForm.controls.length === 0)">
+          [disabled]="!requestName.trim().length || requestDataForm.invalid || (itemForm.controls.length === 0)">
     Отправить
   </button>
 </div>

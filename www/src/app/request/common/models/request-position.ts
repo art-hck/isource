@@ -32,5 +32,6 @@ export class RequestPosition extends RequestPositionList {
   documents: RequestDocument[];
   manufacturingDocuments: ManufacturingDocument[];
   linkedOffers: RequestOfferPosition[];
+  isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
 }

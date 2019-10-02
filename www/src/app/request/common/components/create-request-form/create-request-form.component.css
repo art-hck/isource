@@ -86,3 +86,19 @@ textarea {
 .label-success {
   color: #62a420;
 }
+
+label.request-name-label {
+  display: block;
+  text-align: left;
+  font-weight: 400;
+  color: #2b2b2b;
+  font-size: 14px;
+  padding-bottom: 0;
+}
+
+.request-name-input {
+  margin: 10px 0 25px 0;
+}
+.request-name-input.ng-touched.required {
+  border-color: #FF2519;
+}

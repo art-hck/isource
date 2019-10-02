@@ -1,0 +1,66 @@
+<div class="wrapper">
+  <div class="request-list">
+    <ul class="list-unstyled">
+      <li *ngFor="let request of (requests$ | async)?.entities"
+          (click)="onRequestClick(request)"
+          [ngClass]="{'selected': request.request.id === selectedRequest?.id}">
+        {{ request.request.number }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="request-items">
+    <ng-container *ngIf="selectedRequest">
+      <div class="request-items-header">
+        <button class="btn btn-link btn-description"
+                [routerLink]="getRequestUrl()">
+          <clr-icon shape="align-left-text"></clr-icon>
+          Описание
+        </button>
+
+        Заявка №{{ selectedRequest?.number }}
+        <div class="request-items-header-sub">
+          {{ selectedRequest.contragent.shortName }}
+        </div>
+      </div>
+
+      <div class="request-items-list">
+        <ul class="list-unstyled">
+          <li *ngFor="let item of (requestsItems$ | async)"
+              (click)="onRequestItemClick(item)"
+              class="{{ getRequestItemClass(item) }}"
+              [ngClass]="{'selected': item.id === selectedRequestsItem?.id}">
+            {{ item.name }}
+
+            <span class="badge badge-orange" *ngIf="isGroup(item)">Группа</span>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="messages-list">
+    <div class="messages-list-header">
+      <div> {{ getMessageHeader() }} <span class="text-muted">{{ getMessageHeaderExt() }}</span> </div>
+      <div>
+
+        <!-- Статус для позиции или группы -->
+        <span *ngIf="getRequestItemStatus(selectedRequestsItem)"
+              class="position-status status-position-{{ getRequestItemStatus(selectedRequestsItem).name }}">
+          {{ getRequestItemStatus(selectedRequestsItem).label }}
+        </span>
+
+        <!-- Статус для заявки -->
+        <span *ngIf="selectedRequest && !selectedRequestsItem" class="request-status status-request-{{ selectedRequest.status.name }}">
+          {{ selectedRequest.status.label }}
+        </span>
+
+      </div>
+    </div>
+    <div class="messages-list-content">
+      <app-message-messages [contextId]="contextId"
+                            [contextType]="contextType">
+      </app-message-messages>
+    </div>
+  </div>
+</div>

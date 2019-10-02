@@ -7,9 +7,12 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class AddFromExcelComponent implements OnInit {
 
-  @Output() submit = new EventEmitter<File[]>();
   @Input() templateUrl: string;
+  @Input() showRequestName = false;
 
+  @Output() submit = new EventEmitter<{ files: File[], requestName: string }>();
+
+  requestName = "";
   files: File[] = [];
 
   constructor() { }
@@ -17,8 +20,17 @@ export class AddFromExcelComponent implements OnInit {
   ngOnInit() {
   }
 
+  onRequestNameChange(value) {
+    this.requestName = value.trim();
+  }
+
   onSendClick(): void {
-    this.submit.emit(this.files);
+    const requestData = {
+      files: this.files,
+      requestName: this.requestName
+    };
+
+    this.submit.emit(requestData);
   }
 
   onChangeFilesList(files: File[]): void {

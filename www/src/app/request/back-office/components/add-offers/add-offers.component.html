@@ -249,7 +249,7 @@
           <tr *ngFor="let requestPosition of requestPositions">
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
-                <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                <input clrCheckbox type="checkbox"
                        value="{{requestPosition}}"
                        [(ngModel)]="requestPosition.checked"
                        (change)="onSelectPosition(requestPosition)"
@@ -274,7 +274,7 @@
                 ).length; else addLinkedOfferButton">
                 <ng-container
                   *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <div class="offer" (click)="onShowOfferModal(linkedOffer)">
+                  <div class="offer" (click)="onShowEditOfferModal(requestPosition, supplier, linkedOffer)">
                     {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
                     <p>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</p>
                     <p class="delivery">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>
@@ -300,20 +300,12 @@
              [clrModalClosable]="false">
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
-      <form [formGroup]="contragentForm" novalidate>
-        <input class="searchContragent" id="searchContragent" placeholder="Введите наименование или ИНН контрагента"
-               (click)="onShowContragentList()"
-               formControlName="searchContragent"
-               autocomplete="off">
-      </form>
-      <div class="container-dropdown" *ngIf="showContragentList">
-        <div class="contragent-list"
-             *ngFor="let contragent of contragents | searchFilter: getSearchValue()"
-             (click)="selectContragent(contragent)">
-          {{contragent.shortName}}
+    <app-supplier-select (selectedContragent)="onSelectedContragent($event)">
+    </app-supplier-select>
+      <div class="contragent-info" *ngIf="selectedContragent">
+        <div class="error-message" *ngIf="isSupplierOfferExist()">
+          Коммерческое предложение от выбранного поставщика уже добавлено
         </div>
-      </div>
-      <div class="contragent-info" *ngIf="showContragentInfo">
         <p class="label-contragent">Наименование контрагента:</p>
         {{selectedContragent.shortName}}
         <p class="label-contragent">ИНН:</p>
@@ -328,15 +320,14 @@
       <button class="btn btn-link" (click)="onCloseAddContragentModal()">Отмена</button>
       <button class="btn btn-primary"
               (click)="onAddContragent()"
-              [disabled]="!selectedContragent"><b>Добавить</b>
+              [disabled]="!selectedContragent || isSupplierOfferExist()"><b>Добавить</b>
       </button>
     </div>
   </clr-modal>
 
-  <!-- Модальное окно добавления КП -->
+  <!-- Модальное окно добавления/редактирования КП -->
   <clr-modal [(clrModalOpen)]="showAddOfferModal"
              [clrModalClosable]="false">
-    <h3 class="modal-title">Добавьте КП</h3>
     <div class="modal-body">
       <form [formGroup]="offerForm" class="form">
         <div class="form-block">
@@ -396,6 +387,14 @@
               </div>
             </div>
           </div>
+          <div class="document-list" *ngIf="editMode">
+            <div class="document" *ngFor="let document of selectedOffer?.documents">
+              <a (click)="onDownloadFile(document)">{{document.filename}}</a>
+            </div>
+          </div>
+          <app-document-upload-list (fileSelected)="onDocumentSelected($event, offerForm)"
+                                    [documents]="offerFiles">
+          </app-document-upload-list>
         </div>
       </form>
     </div>
@@ -405,59 +404,14 @@
         </div>
         <div class="clr-col-6">
           <button class="btn btn-link" (click)="onCloseAddOfferModal()">Отмена</button>
-          <button class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">Добавить</button>
+          <button *ngIf="!editMode" class="btn btn-primary" (click)="onAddOffer()" [disabled]="offerForm.invalid">
+            Добавить
+          </button>
+          <button *ngIf="editMode" class="btn btn-primary" (click)="onEditOffer()" [disabled]="offerForm.invalid">
+            Сохранить
+          </button>
         </div>
       </div>
-    </div>
-  </clr-modal>
-
-  <!-- Модальное окно просмотра КП -->
-  <clr-modal [(clrModalOpen)]="showOfferModal" clrModalSize="lg">
-    <h3 class="modal-title">Предложение поставщика</h3>
-    <div class="modal-body">
-      <clr-datagrid class="clr-row offers-datagrid" *ngIf="selectedOffer">
-        <clr-dg-column class="clr-col-2">Наименование к/а</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Цена</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Количество</clr-dg-column>
-        <clr-dg-column class="clr-col-1 text-right">Дата поставки</clr-dg-column>
-        <clr-dg-column class="clr-col-2">Условия оплаты</clr-dg-column>
-        <clr-dg-column class="clr-col-2">КП</clr-dg-column>
-        <clr-dg-column class="clr-col-1">ТП</clr-dg-column>
-
-        <clr-dg-row>
-          <clr-dg-cell class="clr-col-2">
-            <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{selectedOffer.supplierContragentName}}</a>
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right offer-price">
-            {{ selectedOffer.priceWithVat | currency : selectedOffer.currency }}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.quantity}} {{selectedOffer.measureUnit}}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1 text-right">{{selectedOffer.deliveryDate | date :'shortDate'}}
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-2">{{selectedOffer.paymentTerms}}</clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-2">
-            <app-document-simple-list
-              [enableUpload]="true"
-              [documents]="selectedOffer.documents"
-              (selected)="onUploadDocuments($event, selectedOffer)"
-            ></app-document-simple-list>
-          </clr-dg-cell>
-
-          <clr-dg-cell class="clr-col-1">
-            <app-document-simple-list
-              [enableUpload]="true"
-              [documents]="selectedOffer.technicalProposals"
-              (selected)="onUploadTechnicalProposals($event, selectedOffer)"
-            ></app-document-simple-list>
-          </clr-dg-cell>
-        </clr-dg-row>
-      </clr-datagrid>
     </div>
   </clr-modal>
 

@@ -8,6 +8,7 @@ import { GroupService } from "../../services/group.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-position-list',
@@ -26,7 +27,6 @@ export class RequestPositionListComponent implements OnChanges {
   @Input() filteredByDrafts: boolean;
 
   positionListForm: FormGroup;
-  requestGroups: RequestGroup[];
   selectedPositions: RequestPositionList[] = [];
   showUploadPositionsFromExcelForm = false;
 
@@ -43,24 +43,29 @@ export class RequestPositionListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     // обновляем только если пришли новые позиции
-    if (changes.requestItems) {
+    if (changes.requestItems && this.requestItems && this.requestItems.length > 0) {
       // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
       this.positionListForm = this.formBuilder.group({
         positions: this.formBuilder.array(this.requestItems.map(element => {
           return this.formBuilder.control(false);
         }))
       });
-      this.getGroupList();
     }
   }
 
-  getGroupList() {
-    this.requestGroups = this.requestItems.filter(
+  get requestGroups(): RequestGroup[] {
+    return this.requestItems.filter(
       (requestPosition: RequestPositionList) => requestPosition.entityType === 'GROUP') as RequestGroup[];
   }
 
-  get positionsArray() {
-    return <FormArray>this.positionListForm.get('positions');
+  get positionsArray(): FormArray {
+    let positions;
+    if (!this.positionListForm || !this.positionListForm.get('positions')) {
+      positions = [];
+    } else {
+      positions = this.positionListForm.get('positions');
+    }
+    return <FormArray>positions;
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
@@ -108,34 +113,21 @@ export class RequestPositionListComponent implements OnChanges {
     return item === this.selectItem;
   }
 
-  onSendExcelFile(files: File[]): void {
-    if (this.isCustomerView) {
-      this.createRequestPositionService
-        .addCustomerRequestPositionsFromExcel(this.request, files)
-        .subscribe((data: any) => {
-          // TODO перезагружать позиции
-          window.location.href = window.location.href;
-        }, (error: any) => {
-          let msg = 'Ошибка в шаблоне';
-          if (error && error.error && error.error.detail) {
-            msg = `${msg}: ${error.error.detail}`;
-          }
-          alert(msg);
-        });
-    } else {
-      this.createRequestPositionService
-        .addCustomerRequestPositionsFromExcel(this.request, files)
-        .subscribe((data: any) => {
-          // TODO перезагружать позиции
-          window.location.href = window.location.href;
-        }, (error: any) => {
-          let msg = 'Ошибка в шаблоне';
-          if (error && error.error && error.error.detail) {
-            msg = `${msg}: ${error.error.detail}`;
-          }
-          alert(msg);
-        });
-    }
+  onSendExcelFile(requestData: { files: File[], requestName: string }): void {
+    const addPositionObservable: Observable<any> = this.isCustomerView ?
+      this.createRequestPositionService.addCustomerRequestPositionsFromExcel(this.request, requestData.files) :
+      this.createRequestPositionService.addBackofficeRequestPositionsFromExcel(this.request, requestData.files);
+
+    addPositionObservable.subscribe((data: any) => {
+      // TODO реализовать без перезагрузки страницы
+      window.location.reload();
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 
   addNewPosition(): void {

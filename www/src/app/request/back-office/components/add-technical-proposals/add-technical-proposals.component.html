@@ -27,7 +27,7 @@
                 <span>{{ technicalProposal.name }}</span>
 
                 <div class="edit-btn"
-                     *ngIf="tpIsNew(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
+                     *ngIf="isTpHasEditablePositions(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
                      (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                   <clr-icon shape="pencil"></clr-icon>
                 </div>
@@ -35,7 +35,7 @@
 
 
               <div class="clr-col send-for-approval">
-                <div *ngIf="tpIsNew(technicalProposal); else sentForReview">
+                <div *ngIf="isTpHasEditablePositions(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
                           (click)="onSendForApproval(technicalProposal)">
@@ -68,7 +68,7 @@
               <tbody>
                 <tr *ngFor="let technicalProposalPosition of technicalProposal.positions"
                     [class.not-clickable]="
-                      !tpIsNew(technicalProposal) &&
+                      !isEditablePosition(technicalProposalPosition) &&
                       technicalProposalPosition.status !== 'DECLINED'">
 
                   <td class="left">
@@ -80,7 +80,7 @@
                               *ngIf="technicalProposalPosition.status === 'DECLINED'" ></clr-icon>
                     <clr-icon class="unknown-status"
                               shape="unknown-status"
-                              *ngIf="!tpIsNew(technicalProposal) &&
+                              *ngIf="!isEditablePosition(technicalProposalPosition) &&
                                      technicalProposalPosition.status !== 'DECLINED' &&
                                      technicalProposalPosition.status !== 'ACCEPTED'"></clr-icon>
 
@@ -113,7 +113,7 @@
 
   <!--  Модальное окно добавления и редактирования ТП-->
 
-  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal">
+  <clr-modal *ngIf="technicalProposal" [(clrModalOpen)]="showAddTechnicalProposalModal" [clrModalClosable]="false">
     <h3 class="modal-title">{{
         tpModalInEditMode(technicalProposal) ?
         "Редактирование технического предложения" :
@@ -122,21 +122,22 @@
 
     <div class="modal-body">
 
-      <div class="clr-row w-100">
+      <div class="clr-row">
         <div class="clr-col-12">
           <label for="supplierName">
             <span class="supplier-name-label">Наименование поставщика</span>
           </label>
-          <input type="text"
-                 id="supplierName"
-                 name="supplierName"
-                 *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
-                 [(ngModel)]="tpSupplierName"
-                 value="{{ technicalProposal.name }}">
+
+          <app-supplier-select
+                  *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
+                  [(contragentName)]="contragentInputFieldValue"
+                  (selectedContragent)="onSelectedContragent($event)">
+          </app-supplier-select>
 
           <ng-template #readonly>
             <p class="readonly-supplier-name">{{ technicalProposal.name }}</p>
           </ng-template>
+
         </div>
 
         <div class="clr-col-12">
@@ -165,7 +166,7 @@
         </div>
       </div>
 
-      <div class="clr-row w-100 clr-align-items-center"
+      <div class="clr-row clr-align-items-center"
            *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)) || technicalProposal.id === null">
         <div class="clr-col-12">
           <span class="positions-list-label">Позиции технического предложения:</span>
@@ -174,7 +175,8 @@
         <div class="clr-col-12">
           <div class="card-block" style="padding: 10px 0 15px 0">
 
-            <ng-container *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)" class="load-block">
+            <ng-container class="load-block"
+                          *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)">
               <span class="spinner spinner-md"></span>
             </ng-container>
 
@@ -197,17 +199,17 @@
     <div class="modal-footer">
       <div class="clr-row w-100">
         <div class="clr-col-12 text-right">
-          <button class="btn btn-link" (click)="showAddTechnicalProposalModal = false">Отмена</button>
+          <button class="btn btn-link" (click)="onCloseModal()">Отмена</button>
 
           <ng-container *ngIf="!tpModalInEditMode(technicalProposal); else saveBtn">
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
+                    [disabled]="!checkIfCreatingIsEnabled()"
                     (click)="onAddTechnicalProposal()">Добавить</button>
           </ng-container>
 
           <ng-template #saveBtn>
             <button class="btn btn-primary"
-                    [disabled]="!selectedTechnicalProposalPositionsIds.length > 0 || !tpSupplierName?.trim()"
+                    [disabled]="!checkIfSavingIsEnabled(technicalProposal)"
                     (click)="onSaveTechnicalProposal()">Сохранить</button>
           </ng-template>
         </div>

@@ -67,7 +67,11 @@ export class UserInfoService {
   }
 
   public getUserRole(): string {
-    return '';
+    return this.isCustomer() ? 'customer' : 'backoffice';
+  }
+
+  public getUserRoleName(): string {
+    return this.isCustomer() ? 'Заказчик' : 'Бэк-офис';
   }
 
   private getStorage() {
