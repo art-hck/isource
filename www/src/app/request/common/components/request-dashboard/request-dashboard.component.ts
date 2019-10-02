@@ -43,7 +43,7 @@ export class RequestDashboardComponent implements OnChanges {
   getRequestDashboardCounters() {
     this.tpOnAgreementCount = this.request.dashboard.tp || 0;
     this.kpOnAgreementCount = this.request.dashboard.kp || 0;
-    this.rkdOnAgreementCount = 5;
+    this.rkdOnAgreementCount = 0;
     this.onAgreementReviewCount = this.request.dashboard.contractAgreement || 0;
 
     this.newMessagesCount = 3;
@@ -94,6 +94,16 @@ export class RequestDashboardComponent implements OnChanges {
       return false;
     } else if (this.user.isBackOffice()) {
       this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-technical-proposals`).then(r => {});
+    } else {
+      return false;
+    }
+  }
+
+  openAddDesignDocumentationPage() {
+    if (this.user.isCustomer()) {
+      return false;
+    } else if (this.user.isBackOffice()) {
+      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-design-documentation`).then(r => {});
     } else {
       return false;
     }

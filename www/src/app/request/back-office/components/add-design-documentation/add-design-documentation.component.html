@@ -1,0 +1,69 @@
+<ng-container *ngIf="!request" class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+<ng-container *ngIf="request">
+  <div class="clr-row">
+    <div class="info-card clr-col">
+      <div class="request-info">
+        <div class="breadcrumbs">
+          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+        </div>
+        <h2><b>Рабочая конструкторская документация</b></h2>
+        <div class="clr-row w-100">
+          <div class="clr-col-2">
+            <span class="add-design-documentation">
+              + Добавить перечень документов
+            </span>
+          </div>
+        </div>
+        <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
+          <div class="design-documentation-card">
+            <div class="clr-row clr-align-items-center">
+              <span class="position-name clr-col">
+                <span>{{designDocumentation.position.name}}</span>
+                <div class="edit-btn">
+                  <clr-icon shape="pencil"></clr-icon>
+                </div>
+              </span>
+              <table class="document-list table table-noborder"
+                     *ngFor="let designDoc of designDocumentation.designDocs">
+                <thead>
+                <tr class="clr-row">
+                  <th class="left clr-col-3">Наименование документа</th>
+                  <th class="left clr-col-3"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Документ</p></th>
+                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата
+                    предоставления</p></th>
+                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата рассмотрения</p>
+                  </th>
+                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата корректировки</p>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="clr-row">
+                  <td class="left clr-col-3" [ngClass]="{'clr-col-12' : !isRkdAgreementStatus(designDocumentation)}">
+                    {{designDoc.name}}
+                  </td>
+                  <td class="left clr-col-3" *ngIf="isRkdAgreementStatus(designDocumentation)">
+                    <div class="form-group compact">
+                      <a>Загрузить</a>
+                    </div>
+                  </td>
+                  <td class="left date clr-col-2" *ngIf="isRkdAgreementStatus(designDocumentation)">
+                    {{designDoc.receivingDate | date :'shortDate'}}
+                  </td>
+                  <td class="left date clr-col-2" *ngIf="isRkdAgreementStatus(designDocumentation)">
+                    {{designDoc.reviewDate | date :'shortDate'}}
+                  </td>
+                  <td class="left date clr-col-2" *ngIf="isRkdAgreementStatus(designDocumentation)">
+                    {{designDoc.adjustmentDate | date :'shortDate'}}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
