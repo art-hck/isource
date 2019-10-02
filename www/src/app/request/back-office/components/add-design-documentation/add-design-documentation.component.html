@@ -29,19 +29,20 @@
                      *ngFor="let designDoc of designDocumentation.designDocs">
                 <thead>
                 <tr class="clr-row">
-                  <th class="left clr-col-3">Наименование документа</th>
-                  <th class="left clr-col-3"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Документ</p></th>
-                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата
-                    предоставления</p></th>
-                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата рассмотрения</p>
+                  <th class="left clr-col-3" [class.clr-col-12]="!isRkdAgreementStatus(designDocumentation)">
+                    Наименование документа
                   </th>
-                  <th class="left clr-col-2"><p *ngIf="isRkdAgreementStatus(designDocumentation)">Дата корректировки</p>
-                  </th>
+                  <ng-container *ngIf="isRkdAgreementStatus(designDocumentation)">
+                  <th class="left clr-col-3">Документ</th>
+                  <th class="left clr-col-2">Дата предоставления</th>
+                  <th class="left clr-col-2">Дата рассмотрения</th>
+                  <th class="left clr-col-2">Дата корректировки</th>
+                  </ng-container>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="clr-row">
-                  <td class="left clr-col-3" [ngClass]="{'clr-col-12' : !isRkdAgreementStatus(designDocumentation)}">
+                  <td class="left clr-col-3" [class.clr-col-12]="!isRkdAgreementStatus(designDocumentation)">
                     {{designDoc.name}}
                   </td>
                   <td class="left clr-col-3" *ngIf="isRkdAgreementStatus(designDocumentation)">

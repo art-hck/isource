@@ -20,12 +20,13 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: CustomerRequestViewComponent
+        component: CustomerRequestViewComponent, children: [
+          {
+            path: ':technical-proposals',
+            component: TechnicalProposalsComponent
+          }
+        ]
       },
-      {
-        path: ':id/technical-proposals',
-        component: TechnicalProposalsComponent
-      }
     ]
   },
   {
@@ -37,20 +38,21 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: BackOfficeRequestViewComponent
+        component: BackOfficeRequestViewComponent, children: [
+          {
+            path: ':add-offers',
+            component: AddOffersComponent
+          },
+          {
+            path: ':add-technical-proposals',
+            component: AddTechnicalProposalsComponent
+          },
+          {
+            path: ':add-design-documentation',
+            component: AddDesignDocumentationComponent
+          }
+        ]
       },
-      {
-        path: ':id/add-offers',
-        component: AddOffersComponent
-      },
-      {
-        path: ':id/add-technical-proposals',
-        component: AddTechnicalProposalsComponent
-      },
-      {
-        path: ':id/add-design-documentation',
-        component: AddDesignDocumentationComponent
-      }
     ]
   },
   {

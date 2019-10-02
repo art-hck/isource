@@ -19,7 +19,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   designDocumentations: DesignDocumentationList[];
 
   constructor(
-    protected router: Router,
+    private router: Router,
     private route: ActivatedRoute,
     private requestService: RequestService,
     private designDocumentationService: DesignDocumentationService
