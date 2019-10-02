@@ -103,7 +103,7 @@ export class AddOffersComponent implements OnInit {
       positionsEntireVolume: [false],
       positionsAnalogs: [false],
       positionsAllowAnalogsOnly: [false],
-      prolongateEndRegistration: [null, Validators.min(1)],
+      prolongateEndRegistration: [10, Validators.min(1)],
       positionsSuppliersVisibility: ['NameHidden'],
       positionsBestPriceType: ['LowerStartPrice'],
       positionsApplicsVisibility: ['PriceAndRating']
@@ -304,7 +304,7 @@ export class AddOffersComponent implements OnInit {
     this.procedureService.publishProcedure(this.requestId,
       this.procedureInfo, this.procedureProperties, this.selectedProcedurePositions).subscribe(
       (data: any) => {
-        //this.resetWizardForm();
+        this.resetWizardForm();
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +

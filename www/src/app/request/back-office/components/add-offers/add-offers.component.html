@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="clr-row w-100">
-          <div class="clr-col-8">
+          <div class="clr-col-10">
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
               <button class="btn btn-outline import-export"
                       (click)="onDownloadOffersTemplate()">
@@ -87,15 +87,17 @@
                         <label class="clr-control-label">Позиции, участвующие в процедуре:</label>
                       </div>
                       <div class="position-list">
-                        <div class="clr-row w-100">
-                          <ng-container *ngFor="let control of positionsArray.controls; let i = index">
-                            <clr-checkbox-wrapper class="select-checkbox">
+                        <div class="clr-row">
+                          <clr-checkbox-container>
+                            <clr-checkbox-wrapper
+                              class="select-checkbox"
+                              *ngFor="let control of positionsArray.controls; let i = index">
                               <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
                                      [formControl]="control"
                                      (change)="getSelectedPositions()">
                               <label class="nopadding">{{requestPositions[i].name}}</label>
                             </clr-checkbox-wrapper>
-                          </ng-container>
+                          </clr-checkbox-container>
                         </div>
                       </div>
                     </div>
