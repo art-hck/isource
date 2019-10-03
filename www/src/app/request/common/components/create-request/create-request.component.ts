@@ -21,7 +21,7 @@ export class CreateRequestComponent {
       .subscribe((data: any) => {
         Swal.fire({
           width: 400,
-          html: '<p class="text-alert">' + 'Заявка отправлена</br></br>' + '</p>' +
+          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
             '<button id="submit" class="btn btn-primary">' +
             'ОК' + '</button>',
           showConfirmButton: false,
