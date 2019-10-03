@@ -6,5 +6,5 @@ export class RequestGroup extends RequestPositionList {
    * Значение null допустимо для позиций не сохранённых в базе данных
    */
   name: string;
-  positions: RequestPosition[];
+  positions: (RequestPosition | RequestGroup)[];
 }
