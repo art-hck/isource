@@ -80,4 +80,9 @@ export class RequestService {
       formData
     );
   }
+
+  sendForAgreement(requestId, selectedOffers) {
+    const url = `requests/customer/${requestId}/commercial-proposals/accept`;
+    return this.api.post(url, selectedOffers);
+  }
 }

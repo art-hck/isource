@@ -10,6 +10,9 @@ h2 {
 .price-auto-select {
   text-align: right;
 }
+.price-auto-select button {
+  margin: 0;
+}
 
 .modal-body:focus {
   outline: 0;
@@ -21,11 +24,69 @@ table {
   text-align: left;
 }
 
-tbody tr {
-  transition: 0.1s all ease-in;
+.table-wrapper {
+  position: relative;
+  margin-bottom: 150px
 }
-tbody tr:hover {
-  background: #e1eff9;
+
+.table-wrapper:before {
+  content: "";
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: linear-gradient(-90deg, rgb(243, 247, 250), rgba(243, 247, 250, 0));
+  z-index: 10;
+}
+
+table.table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: block;
+  width: calc(100% - 315px);
+  margin-left: auto;
+}
+.offer, th div.contragent-info {
+  min-width: 315px;
+}
+
+th.position-name,
+td.position-name {
+  position: absolute;
+  left: 0;
+  background: #f3f7fa !important;
+  height: 170px;
+  min-width: 315px;
+  display: block;
+  z-index: 10;
+}
+
+th.position-name:after,
+td.position-name:after {
+  content: "";
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  right: -20px;
+  top: 0;
+  background: linear-gradient(90deg, rgb(243, 247, 250), rgba(243, 247, 250, 0));
+}
+
+table.table tbody,
+table.table thead {
+  display: table;
+}
+table.table tbody {
+  padding-bottom: 15px;
+}
+
+tbody tr:hover,
+tbody tr:hover td.position-name {
+  background: #e1eff9 !important;
+}
+tbody tr:hover td.position-name:after {
+  background: linear-gradient(90deg, #e1eff9, rgba(225, 239, 249, 0));
 }
 
 .table th {
@@ -60,6 +121,7 @@ th.contragent-name {
 }
 
 div.offer {
+  position: relative;
   padding: 20px;
   text-align: left;
   transition: 0.07s all ease-in;
@@ -69,7 +131,7 @@ div.offer {
   border: 2px solid transparent;
   height: 130px;
 }
-div.offer:hover {
+tr:not(.has-winner) div.offer:hover {
   background: white;
   border-radius: 5px;
   cursor: pointer;
@@ -79,27 +141,15 @@ div.offer:hover {
 
 div.offer.selected {
   border: 2px solid rgba(33, 150, 243, 1);
-  position: relative;
 }
 div.offer.not-selected {
   opacity: 0.5;
 }
 
-// todo это мне понадобится, пускай останется
-//div.offer.selected:after {
-//  content: "Выбрано";
-//  opacity: 1;
-//  padding: 2px 8px 5px 8px;
-//  position: absolute;
-//  right: 0;
-//  top: 0;
-//  font-family: Roboto, sans-serif;
-//  font-weight: bold;
-//  font-size: 13px;
-//  color: white;
-//  background: #03A9F4;
-//  border-radius: 0 2px 0 4px;
-//}
+.lock-icon {
+  fill: #9E9E9E;
+  margin-top: -5px;
+}
 
 tr.has-selected-offer .offer:not(.selected) {
   opacity: 0.5;
@@ -112,7 +162,7 @@ span.position-label {
 }
 
 .table td.position-name {
-  padding: 20px !important;
+  padding: 40px 20px !important;
 }
 
 span.total-sum {
@@ -153,11 +203,19 @@ th .contragent-info {
   border-bottom: 2px solid #BBDEFB;
 }
 
+.footer-wrapper {
+  position: fixed;
+  bottom: 0;
+  z-index: 20;
+}
+
 .footer-total-sum {
   background: white;
   height: 80px;
-  margin: 30px 20px;
   padding: 0 0 0 20px;
+  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .footer-total-sum span {

@@ -7,6 +7,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { RequestDocument } from "../../../common/models/request-document";
 import * as moment from "moment";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-commercial-proposals',
@@ -28,6 +29,7 @@ export class CommercialProposalsComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router,
     private requestService: RequestService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
@@ -44,11 +46,11 @@ export class CommercialProposalsComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
   }
 
-  onRequestsClick() {
+  onRequestsClick(): void {
     this.router.navigateByUrl(`requests/customer`).then(r => {});
   }
 
-  onRequestClick() {
+  onRequestClick(): void {
     this.router.navigateByUrl(`requests/customer/${this.request.id}`).then(r => {});
   }
 
@@ -65,7 +67,7 @@ export class CommercialProposalsComponent implements OnInit {
     return sum;
   }
 
-  incorrectDeliveryDate(linkedOfferDeliveryDate, requestPositionDeliveryDate): boolean {
+  incorrectDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
     if (!requestPositionDeliveryDate) {
       return false;
     }
@@ -93,7 +95,11 @@ export class CommercialProposalsComponent implements OnInit {
     );
   }
 
-  onSelectOffer(requestPosition: RequestPosition, supplier: string, linkedOffer): void {
+  onSelectOffer(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition): void | boolean {
+    if (this.positionHasWinner(requestPosition)) {
+      return false;
+    }
+
     if (this.selectedOffers[requestPosition.id] !== linkedOffer.id) {
       this.selectedOffers[requestPosition.id] = linkedOffer.id;
     } else {
@@ -113,7 +119,43 @@ export class CommercialProposalsComponent implements OnInit {
     });
   }
 
-  onShowDocumentsModal(event: any, linkedOfferDocuments: RequestDocument[]): void {
+  /**
+   * Функция сохраняет список наиболее выгодных по стоимости предложений
+   */
+  onAutoselectOfferByMinPrice(): void {
+    this.selectedOffers = {};
+
+    this.requestPositions.forEach(position => {
+      if (!this.positionHasWinner(position)) {
+        const offerWithMinPrice = this.findOfferByMinPrice(position.linkedOffers);
+        this.selectedOffers[position.id] = offerWithMinPrice.id;
+      }
+    });
+  }
+
+  /**
+   * Функция находит среди предложений по позиции наиболее выгодную
+   * @param positionOffers
+   */
+  findOfferByMinPrice(positionOffers: RequestOfferPosition[]): RequestOfferPosition {
+    positionOffers = positionOffers.sort((offer1, offer2) => {
+      const offer1price = offer1.priceWithVat * offer1.quantity;
+      const offer2price = offer2.priceWithVat * offer2.quantity;
+
+      const delta = offer1price - offer2price;
+
+      if (delta < 0) {
+        return -1;
+      } else if (delta === 0) {
+        return 0;
+      }
+      return 1;
+    });
+
+    return positionOffers[0];
+  }
+
+  onShowDocumentsModal(event: MouseEvent, linkedOfferDocuments: RequestDocument[]): void {
     event.stopPropagation();
 
     this.linkedOfferDocuments = linkedOfferDocuments;
@@ -126,7 +168,7 @@ export class CommercialProposalsComponent implements OnInit {
 
     this.requestPositions.forEach(pos => {
       pos.linkedOffers.forEach(offer => {
-        if (Object.values(selectedOffers).indexOf(offer.id) > -1) {
+        if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {
           totalSum += offer.priceWithVat * offer.quantity;
         }
       });
@@ -135,7 +177,7 @@ export class CommercialProposalsComponent implements OnInit {
     return totalSum;
   }
 
-  isSelected(requestPosition: RequestPosition, supplier: string): boolean {
+  offerIsSelected(requestPosition: RequestPosition, supplier: string): boolean {
     const positionOffer = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
 
     return positionOffer.some(offer => {
@@ -143,20 +185,35 @@ export class CommercialProposalsComponent implements OnInit {
     });
   }
 
-  hasSelectedOffer(requestPosition: RequestPosition): boolean {
+  offerIsWinner(linkedOffer: RequestOfferPosition): boolean {
+    return linkedOffer.isWinner;
+  }
+
+  positionHasSelectedOffer(requestPosition: RequestPosition): boolean {
     return this.selectedOffers && this.selectedOffers[requestPosition.id] !== undefined;
   }
 
+  positionHasWinner(requestPosition: RequestPosition): boolean {
+    return requestPosition.linkedOffers.some(linkedOffer => linkedOffer.isWinner === true);
+  }
+
   sendForAgreement(): void {
-    // todo Здесь будет запрос отправки выбранных предложений
-    console.log(this.selectedOffers);
+    this.requestService.sendForAgreement(this.requestId, this.selectedOffers).subscribe(
+      () => {
+        this.notificationService.toast('Успешно согласовано');
+        this.updatePositionsAndSuppliers();
+      },
+      () => {
+        this.notificationService.toast('Не удалось согласовать предложения', 'error');
+      }
+    );
   }
 
   /**
-   * Функция возвращает надпись-ссылку с количеством неперечисленных в заявке позиций
-   *
-   * @param count
-   */
+  * Функция возвращает надпись-ссылку с количеством неперечисленных в заявке позиций
+  *
+  * @param count
+  */
   getDocumentCountLabel(count: number): string {
     const cases = [2, 0, 1, 1, 1, 2];
     const strings = ['документ', 'документа', 'документов'];

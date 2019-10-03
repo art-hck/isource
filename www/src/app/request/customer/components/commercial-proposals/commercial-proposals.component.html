@@ -10,103 +10,116 @@
           <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
 
-        <div class="clr-row w-100">
+        <div class="clr-row">
           <div class="clr-col-5">
             <h2>Коммерческие предложения</h2>
           </div>
 
-          <div class="clr-col-7 price-auto-select" style="display: none">
-            <button class="btn btn-link" (click)="onAutoselectByPrice()">Автовыбор по цене</button>
+          <div class="clr-col-7 price-auto-select">
+            <button class="btn btn-outline" (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
           </div>
         </div>
 
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="position-name"></th>
-              <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
-                <div class="contragent-info">
-                  <span class="name">{{ supplier }}</span>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="position-name"></th>
+                <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
+                  <div class="contragent-info">
+                    <span class="name">{{ supplier }}</span>
 
-                  <div class="clr-row clr-align-items-center">
-                    <div class="clr-col">
-                      <span class="total-sum">
-                        {{ getTotalSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}
-                      </span>
-                    </div>
-
-                    <div class="clr-col-auto">
-                      <a class="select-all" (click)="onSelectAll(requestPositions, supplier)">Выбрать все ↓</a>
-                    </div>
-                  </div>
-                </div>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let requestPosition of requestPositions"
-                [ngClass]="{ 'has-selected-offer' : hasSelectedOffer(requestPosition) }">
-              <td class="position-name">
-                <span class="position-label">{{ requestPosition.name }}</span>
-
-                <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
-                  <span *ngIf="requestPosition.deliveryDate; else ASAP">
-                    к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b>
-                  </span>
-                  <ng-template #ASAP>
-                    <b>как можно быстрее</b>
-                  </ng-template>
-                </span>
-              </td>
-
-              <td *ngFor="let supplier of suppliers">
-                <ng-container *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <div class="offer"
-                         (click)="onSelectOffer(requestPosition, supplier, linkedOffer)"
-                         [ngClass]="{ 'selected' : isSelected(requestPosition, supplier) }">
-                    <div class="counted-price-block">
-                      <span class="counted-offer-price">
-                        {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
-                      </span>
-                      <span class="offer-quantity">за
-                        <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
-                          {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}
+                    <div class="clr-row clr-align-items-center">
+                      <div class="clr-col">
+                        <span class="total-sum">
+                          {{ getTotalSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}
                         </span>
-                      </span>
-                    </div>
+                      </div>
 
-                    <div class="per-unit-price-block">
-                      <span class="price-per-unit">
-                        {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
-                      </span>
+                      <div class="clr-col-auto">
+                        <a class="select-all" (click)="onSelectAll(requestPositions, supplier)">Выбрать все ↓</a>
+                      </div>
                     </div>
-
-                    <div class="delivery">Срок поставки:
-                      <span [class.warning-text]="incorrectDeliveryDate(linkedOffer.deliveryDate, requestPosition.deliveryDate)">
-                        {{ linkedOffer.deliveryDate | date :'shortDate' }}
-                      </span>
-                    </div>
-
-                    <a *ngIf="linkedOffer.documents.length > 0"
-                       (click)="onShowDocumentsModal($event, linkedOffer.documents)"
-                       class="offer-documents">{{ getDocumentCountLabel(linkedOffer.documents.length) }}
-                    </a>
                   </div>
+                </th>
+              </tr>
+            </thead>
 
-                </ng-container>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr *ngFor="let requestPosition of requestPositions"
+                  [ngClass]="{ 'has-selected-offer' : positionHasSelectedOffer(requestPosition),
+                               'has-winner' : positionHasWinner(requestPosition) }">
+                <td class="position-name">
+                  <span class="position-label">{{ requestPosition.name }}</span>
 
-        <div class="clr-row clr-align-items-center footer-total-sum">
-          <span class="clr-col-5">Итого: {{ getTotalSum() | currency: 'RUB' }}</span>
+                  <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
+                    <span *ngIf="requestPosition.deliveryDate; else ASAP">
+                      к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b>
+                    </span>
+                    <ng-template #ASAP>
+                      <b>как можно быстрее</b>
+                    </ng-template>
+                  </span>
+                </td>
 
-          <div class="clr-col-7 send-for-agreement-btn">
-            <button class="btn btn-primary"
-                    [disabled]="!isSendButtonEnabled()"
-                    (click)="sendForAgreement()">Согласовать</button>
+                <td *ngFor="let supplier of suppliers">
+                  <ng-container *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
+                    <div class="offer"
+                           (click)="onSelectOffer(requestPosition, supplier, linkedOffer)"
+                           [ngClass]="{ 'selected' : offerIsSelected(requestPosition, supplier) || offerIsWinner(linkedOffer) }">
+                      <div class="counted-price-block">
+                        <div class="clr-row clr-justify-content-between">
+                          <div class="clr-col-auto">
+                            <span class="counted-offer-price">
+                              {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
+                            </span>
+                            <span class="offer-quantity">за
+                              <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
+                                {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}
+                              </span>
+                            </span>
+                          </div>
+
+                          <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto clr-align-self-start">
+                            <clr-icon shape="lock" class="lock-icon is-solid" size="14"></clr-icon>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="per-unit-price-block">
+                        <span class="price-per-unit">
+                          {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
+                        </span>
+                      </div>
+
+                      <div class="delivery">Срок поставки:
+                        <span [class.warning-text]="incorrectDeliveryDate(linkedOffer.deliveryDate, requestPosition.deliveryDate)">
+                          {{ linkedOffer.deliveryDate | date :'shortDate' }}
+                        </span>
+                      </div>
+
+                      <a *ngIf="linkedOffer.documents.length > 0"
+                         (click)="onShowDocumentsModal($event, linkedOffer.documents)"
+                         class="offer-documents">{{ getDocumentCountLabel(linkedOffer.documents.length) }}
+                      </a>
+                    </div>
+
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="container footer-wrapper">
+          <div class="clr-row clr-align-items-center footer-total-sum">
+            <span class="clr-col-5">Итого: {{ getTotalSum() | currency: 'RUB' }}</span>
+
+            <div class="clr-col-7 send-for-agreement-btn">
+              <button class="btn btn-primary"
+                      [disabled]="!isSendButtonEnabled()"
+                      (click)="sendForAgreement()">Согласовать</button>
+            </div>
           </div>
         </div>
 
