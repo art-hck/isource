@@ -7,6 +7,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { RequestViewComponent } from 'src/app/request/common/components/request-view/request-view.component';
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import {RequestGroup} from "../../../common/models/request-group";
 
 @Component({
   selector: 'app-back-office-request-view',
@@ -18,7 +19,7 @@ export class BackOfficeRequestViewComponent implements OnInit {
   @ViewChild(RequestViewComponent, {static: false}) requestView: RequestViewComponent;
 
   request: Request;
-  requestPositions: RequestPosition[] = [];
+  requestPositions: (RequestPosition | RequestGroup)[] = [];
 
   protected requestId: Uuid;
 
@@ -63,13 +64,20 @@ export class BackOfficeRequestViewComponent implements OnInit {
       return true;
     }
 
-    for (const position of this.requestPositions) {
-      if (position.status === RequestPositionWorkflowSteps.DRAFT) {
-        return true;
-      }
+    if (this.hasDrafts) {
+      return true;
     }
 
     return false;
+  }
+
+  get hasDrafts(): boolean {
+    return this.requestPositions.filter(function getDraftRecursive(position) {
+      const isDraft: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.DRAFT;
+      const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getDraftRecursive).length > 0;
+
+      return isDraft || isGroupHasDrafts;
+    }).length > 0;
   }
 
   onPublish(): void {
