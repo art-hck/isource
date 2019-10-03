@@ -8,6 +8,7 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { RequestDocument } from "../../common/models/request-document";
+import { RequestOfferPosition } from "../../common/models/request-offer-position";
 
 @Injectable()
 export class RequestService {
@@ -81,7 +82,7 @@ export class RequestService {
     );
   }
 
-  sendForAgreement(requestId, selectedOffers) {
+  sendForAgreement(requestId: Uuid, selectedOffers: object) {
     const url = `requests/customer/${requestId}/commercial-proposals/accept`;
     return this.api.post(url, selectedOffers);
   }

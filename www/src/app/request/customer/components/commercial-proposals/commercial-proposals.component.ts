@@ -95,9 +95,9 @@ export class CommercialProposalsComponent implements OnInit {
     );
   }
 
-  onSelectOffer(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition): void | boolean {
+  onSelectOffer(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition): void {
     if (this.positionHasWinner(requestPosition)) {
-      return false;
+      return;
     }
 
     if (this.selectedOffers[requestPosition.id] !== linkedOffer.id) {
