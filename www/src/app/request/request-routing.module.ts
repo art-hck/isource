@@ -20,9 +20,13 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: CustomerRequestViewComponent, children: [
+        children: [
           {
-            path: ':technical-proposals',
+            path: '',
+            component: CustomerRequestViewComponent
+          },
+          {
+            path: 'technical-proposals',
             component: TechnicalProposalsComponent
           }
         ]
@@ -38,19 +42,24 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: BackOfficeRequestViewComponent, children: [
+        children: [
           {
-            path: ':add-offers',
+            path: '',
+            component: BackOfficeRequestViewComponent
+          },
+          {
+            path: 'add-offers',
             component: AddOffersComponent
           },
           {
-            path: ':add-technical-proposals',
+            path: 'add-technical-proposals',
             component: AddTechnicalProposalsComponent
           },
           {
-            path: ':add-design-documentation',
+            path: 'add-design-documentation',
             component: AddDesignDocumentationComponent
-          }
+          },
+
         ]
       },
     ]
