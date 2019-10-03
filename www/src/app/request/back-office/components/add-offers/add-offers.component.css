@@ -271,3 +271,7 @@ clr-checkbox-wrapper {
 .position-list {
   padding-top: 0px;
 }
+
+.send-offers button {
+  margin-left: 10px;
+}
