@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
   templateUrl: './document-upload-list.component.html',
   styleUrls: ['./document-upload-list.component.css']
 })
-export class DocumentUploadListComponent implements OnInit {
+export class DocumentUploadListComponent {
 
   @Input() documents: File[] = [];
 
@@ -19,9 +19,6 @@ export class DocumentUploadListComponent implements OnInit {
   @Output() fileSelected = new EventEmitter<File[]>();
 
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
-
-  ngOnInit() {
-  }
 
   addDocument(files: FileList) {
     Array.from(files).forEach(file => {
@@ -34,7 +31,7 @@ export class DocumentUploadListComponent implements OnInit {
   }
 
   removeDocument(document: File) {
-    this.documents = this.documents.filter((item) => item.name !== document.name);
+    this.documents = this.documents.filter((item) => item !== document);
     this.onChangeDocuments();
   }
 
