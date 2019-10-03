@@ -16,9 +16,6 @@ h5 {
     margin-bottom: 25px;
 }
 
-::ng-deep .swal2-content {
-    padding-left: 20px;
-}
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
@@ -315,6 +312,7 @@ clr-dg-footer.datagrid-footer {
 
 .text-alert {
   font-size: 16px;
+  padding: 0 20px;
 }
 
 /*
