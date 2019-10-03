@@ -9,6 +9,7 @@ import { AddOffersComponent } from "./back-office/components/add-offers/add-offe
 import { AddTechnicalProposalsComponent } from "./back-office/components/add-technical-proposals/add-technical-proposals.component";
 import {TechnicalProposalsComponent} from "./customer/components/technical-proposals/technical-proposals.component";
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
+import {AddDesignDocumentationComponent} from "./back-office/components/add-design-documentation/add-design-documentation.component";
 
 const routes: Routes = [
   {
@@ -20,16 +21,21 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: CustomerRequestViewComponent
+        children: [
+          {
+            path: '',
+            component: CustomerRequestViewComponent
+          },
+          {
+            path: 'technical-proposals',
+            component: TechnicalProposalsComponent
+          },
+          {
+            path: 'commercial-proposals',
+            component: CommercialProposalsComponent
+          }
+        ]
       },
-      {
-        path: ':id/technical-proposals',
-        component: TechnicalProposalsComponent
-      },
-      {
-        path: ':id/commercial-proposals',
-        component: CommercialProposalsComponent
-      }
     ]
   },
   {
@@ -41,16 +47,25 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: BackOfficeRequestViewComponent
+        children: [
+          {
+            path: '',
+            component: BackOfficeRequestViewComponent
+          },
+          {
+            path: 'add-offers',
+            component: AddOffersComponent
+          },
+          {
+            path: 'add-technical-proposals',
+            component: AddTechnicalProposalsComponent
+          },
+          {
+            path: 'add-design-documentation',
+            component: AddDesignDocumentationComponent
+          },
+        ]
       },
-      {
-        path: ':id/add-offers',
-        component: AddOffersComponent
-      },
-      {
-        path: ':id/add-technical-proposals',
-        component: AddTechnicalProposalsComponent
-      }
     ]
   },
   {

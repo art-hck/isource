@@ -43,6 +43,8 @@ import { TechnicalProposalsComponent } from './customer/components/technical-pro
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
 import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
 import { ProcedureService } from "./back-office/services/procedure.service";
+import { AddDesignDocumentationComponent } from './back-office/components/add-design-documentation/add-design-documentation.component';
+import {DesignDocumentationService} from "./back-office/services/design-documentation.service";
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { ProcedureService } from "./back-office/services/procedure.service";
     SearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
+    AddDesignDocumentationComponent,
+    SupplierSelectComponent,
     CommercialProposalsComponent
   ],
   imports: [
@@ -95,7 +99,9 @@ import { ProcedureService } from "./back-office/services/procedure.service";
     GroupService,
     ContragentService,
     SupplierSelectComponent,
-    ProcedureService
+    ProcedureService,
+    SupplierSelectComponent,
+    DesignDocumentationService
   ]
 })
 export class RequestModule {
