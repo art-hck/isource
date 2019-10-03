@@ -80,7 +80,7 @@ import {DesignDocumentationService} from "./back-office/services/design-document
     SearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
-    AddDesignDocumentationComponent
+    AddDesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent
   ],
@@ -99,7 +99,7 @@ import {DesignDocumentationService} from "./back-office/services/design-document
     GroupService,
     ContragentService,
     SupplierSelectComponent,
-    ProcedureService
+    ProcedureService,
     SupplierSelectComponent,
     DesignDocumentationService
   ]
