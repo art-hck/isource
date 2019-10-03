@@ -42,6 +42,7 @@ import { AddTechnicalProposalsComponent } from './back-office/components/add-tec
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
 import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
+import { ProcedureService } from "./back-office/services/procedure.service";
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { CommercialProposalsComponent } from './customer/components/commercial-p
     CustomerTechnicalProposalsService,
     GroupService,
     ContragentService,
-    SupplierSelectComponent
+    SupplierSelectComponent,
+    ProcedureService
   ]
 })
 export class RequestModule {

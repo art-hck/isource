@@ -116,6 +116,24 @@ export class CustomValidators {
     };
   }
 
+  static customDate(startDate: string): ValidatorFn {
+    return (endDate: AbstractControl): ValidationErrors | null => {
+      if (endDate.value === null || endDate.value.length === 0) {
+        return null;
+      }
+      const controlToCompare = endDate.root.get(startDate);
+      if (controlToCompare) {
+        const subscription: Subscription = controlToCompare.valueChanges.subscribe(() => {
+          endDate.updateValueAndValidity();
+          subscription.unsubscribe();
+        });
+      }
+      const controlDate = moment(endDate.value, 'DD.MM.YYYY');
+      const validationDate = moment(controlToCompare.value, 'DD.MM.YYYY');
+      return controlDate.isAfter(validationDate) ? null : { 'field': true };
+    };
+  }
+
   static pastDate(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const controlDate = moment(control.value, 'DD.MM.YYYY');
