@@ -77,9 +77,7 @@ export class RequestDashboardComponent implements OnChanges {
 
   openAddOffersPage() {
     if (this.user.isCustomer()) {
-      // todo Раскомментировать, когда будет готов роут для кастомера
-      // this.router.navigateByUrl(`/requests/customer/${this.request.id}/add-offers`).then(r => {});
-      return false;
+      this.router.navigateByUrl(`/requests/customer/${this.request.id}/commercial-proposals`).then(r => {});
     } else if (this.user.isBackOffice()) {
       this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-offers`).then(r => {});
     } else {

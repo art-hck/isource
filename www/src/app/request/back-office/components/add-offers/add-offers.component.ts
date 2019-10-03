@@ -1,17 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
+import {ClrWizard} from "@clr/angular";
+import {isBoolean} from "util";
+import {PaginatorComponent} from "../../../../order/components/paginator/paginator.component";
+import {ProcedureService} from "../../services/procedure.service";
+import {NotificationService} from "../../../../shared/services/notification.service";
 import {DocumentsService} from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
@@ -43,11 +48,23 @@ export class AddOffersComponent implements OnInit {
   selectedRequestPositions: RequestPosition[] = [];
 
   contragents: ContragentList[];
+  procedureBasicDataForm: any;
+  procedurePropertiesForm: any;
   selectedContragent: ContragentList;
+
+  procedureInfo: any;
+  procedureProperties: any;
+  selectedProcedurePositions: RequestPosition[] = [];
 
   files: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+  @ViewChild("wizard", { static: false }) wizard: ClrWizard;
+  _open = false;
+
+  open() {
+    this._open = !this.open;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -56,7 +73,9 @@ export class AddOffersComponent implements OnInit {
     protected offersService: OffersService,
     protected router: Router,
     private getContragentService: ContragentService,
-    private documentsService: DocumentsService
+    private documentsService: DocumentsService,
+    private procedureService: ProcedureService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -74,8 +93,62 @@ export class AddOffersComponent implements OnInit {
       documents: [[]]
     });
 
+    this.procedurePropertiesForm = this.formBuilder.group({
+      manualEndRegistration: [false],
+      positionsRequiredAll: [false],
+      positionsEntireVolume: [false],
+      positionsAnalogs: [false],
+      positionsAllowAnalogsOnly: [false],
+      prolongateEndRegistration: [10, Validators.min(1)],
+      positionsSuppliersVisibility: ['NameHidden'],
+      positionsBestPriceType: ['LowerStartPrice'],
+      positionsApplicsVisibility: ['PriceAndRating']
+    });
+
+    this.initProcedureBasicDataForm();
+
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
+  }
+
+  initProcedureBasicDataForm() {
+    this.procedureBasicDataForm = this.formBuilder.group({
+      procedureTitle: ['', Validators.required],
+      dishonestSuppliersForbidden: [false],
+      dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
+      summingupDate: ['', [Validators.required, CustomValidators.customDate('dateEndRegistration')]],
+      positions: this.formBuilder.array(this.requestPositions.map(element => {
+        return this.formBuilder.control(false);
+      }))
+    });
+
+    this.procedureBasicDataForm.get('summingupDate').disable();
+    this.procedureBasicDataForm.get('dateEndRegistration').valueChanges.subscribe(value => {
+      if (value) {
+        this.procedureBasicDataForm.get('summingupDate').enable();
+      } else {
+        this.procedureBasicDataForm.get('summingupDate').disable();
+      }
+    });
+  }
+
+  get positionsArray() {
+    return <FormArray>this.procedureBasicDataForm.get('positions');
+  }
+
+  getSelectedPositions() {
+    this.selectedProcedurePositions = [];
+    this.positionsArray.controls.forEach((control, i) => {
+      if (control.value) {
+        this.selectedProcedurePositions.push(this.requestPositions[i]);
+      }
+    });
+  }
+
+  isDataFieldValid(field: string) {
+    return this.procedureBasicDataForm.get(field).errors
+      && (this.procedureBasicDataForm.get(field).touched
+        || this.procedureBasicDataForm.get(field).dirty);
   }
 
   getSupplierLinkedOffers(
@@ -93,7 +166,6 @@ export class AddOffersComponent implements OnInit {
   isSupplierOfferExist() {
     return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
-  // Модальное окно выбора контрагента
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
@@ -238,6 +310,46 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
+  onPublishProcedure() {
+    this.procedureInfo = this.procedureBasicDataForm.value;
+    this.procedureProperties = this.procedurePropertiesForm.value;
+    this.procedureService.publishProcedure(this.requestId,
+      this.procedureInfo, this.procedureProperties, this.selectedProcedurePositions).subscribe(
+      (data: any) => {
+        this.resetWizardForm();
+        Swal.fire({
+          width: 400,
+          html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
+            data.procedureId + '</a> успешно создана</br></br></p>' +
+            '<button id="submit" class="btn btn-primary">ОК</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              Swal.close();
+            });
+          }
+        });
+      },
+      (error: any) => {
+        let msg = 'Ошибка при создании процедуры';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
+      }
+    );
+  }
+
+  resetWizardForm() {
+    this.wizard.reset();
+    this.procedureBasicDataForm.reset();
+    this.procedurePropertiesForm.reset();
+  }
+
   onShowImportOffersExcel(): void {
     this.showImportOffersExcel = true;
   }
@@ -281,6 +393,7 @@ export class AddOffersComponent implements OnInit {
       (data: any) => {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
+        this.initProcedureBasicDataForm();
       }
     );
   }

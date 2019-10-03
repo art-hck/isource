@@ -30,16 +30,24 @@ export class RequestService {
     const url = `requests/customer/${id}/positions`;
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
       map((data: RequestPositionList[]) => {
-        return data.map((item: RequestPositionList) => {
+        return data.map(function recursiveMapPositionList(item: RequestPositionList) {
           switch (item.entityType) {
             case 'GROUP':
-              return new RequestGroup(item);
+              const group = new RequestGroup(item);
+              group.positions = group.positions.map(recursiveMapPositionList);
+
+              return group;
             case 'POSITION':
               return new RequestPosition(item);
           }
         });
       })
     );
+  }
+
+  getRequestPositionsWithOffers(id: Uuid): Observable<any> {
+    const url = `requests/customer/${id}/positions-with-offers`;
+    return this.api.get<any>(url);
   }
 
   publishRequest(id: Uuid) {

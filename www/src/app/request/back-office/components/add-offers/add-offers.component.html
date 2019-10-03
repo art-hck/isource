@@ -21,6 +21,7 @@
             </button>
           </div>
         </div>
+
         <div class="clr-row w-100">
           <div class="clr-col-10">
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
@@ -33,6 +34,201 @@
               </button>
             </div>
 
+          </div>
+          <div class="clr-col-2 send-offers">
+            <button class="btn btn-primary send-offers"
+                    (click)="wizard.open()"
+            ><b>Создать процедуру</b>
+            </button>
+            <clr-wizard #wizard clrWizardSize="lg">
+              <clr-wizard-title><b>Новая процедура</b></clr-wizard-title>
+
+              <clr-wizard-button [type]="'cancel'">Отмена</clr-wizard-button>
+              <clr-wizard-button [type]="'previous'">Назад</clr-wizard-button>
+              <clr-wizard-button [type]="'next'">Далее</clr-wizard-button>
+              <clr-wizard-button [type]="'finish'">Опубликовать</clr-wizard-button>
+
+              <clr-wizard-page
+                [clrWizardPageNextDisabled]="procedureBasicDataForm.invalid || selectedProcedurePositions.length === 0"
+                (clrWizardPageOnCancel)="resetWizardForm()">
+                <ng-template clrPageTitle>Общие сведения</ng-template>
+                <form [formGroup]="procedureBasicDataForm" class="form">
+                  <div class="form-block">
+                    <div class="clr-form-control">
+                      <div class="clr-row w-100">
+                        <label class="clr-control-label" for="procedureTitle">Наименование закупки</label>
+                        <input id="procedureTitle" type="text" formControlName="procedureTitle"
+                               [class.invalid]="isDataFieldValid('procedureTitle')"/>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="dishonestSuppliersForbidden"
+                                 id="dishonestSuppliersForbidden"
+                                 formControlName="dishonestSuppliersForbidden">
+                          <label class="clr-control-label nopadding">Требование к отсутствию участников закупки в
+                            реестре недобросовестных поставщиков ФАС</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <div class="clr-col-6 dates">
+                          <label class="clr-control-label left" for="dateEndRegistration">Прием заявок до:</label>
+                          <input id="dateEndRegistration" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
+                                 formControlName="dateEndRegistration"
+                                 [class.invalid]="isDataFieldValid('dateEndRegistration')"/>
+                        </div>
+                        <div class="clr-col-6 dates">
+                          <label class="clr-control-label left" for="summingupDate">Подведение итогов:</label>
+                          <input id="summingupDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
+                                 formControlName="summingupDate"
+                                 [class.invalid]="isDataFieldValid('summingupDate')"/>
+                        </div>
+                      </div>
+
+                      <div class="clr-row w-100">
+                        <label class="clr-control-label">Позиции, участвующие в процедуре:</label>
+                      </div>
+                      <div class="position-list">
+                        <div class="clr-row">
+                          <clr-checkbox-container>
+                            <clr-checkbox-wrapper
+                              class="select-checkbox"
+                              *ngFor="let control of positionsArray.controls; let i = index">
+                              <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                                     [formControl]="control"
+                                     (change)="getSelectedPositions()">
+                              <label class="nopadding">{{requestPositions[i].name}}</label>
+                            </clr-checkbox-wrapper>
+                          </clr-checkbox-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </clr-wizard-page>
+
+              <clr-wizard-page (clrWizardPageOnCancel)="resetWizardForm()">
+                <ng-template clrPageTitle>Свойства процедуры</ng-template>
+                <form [formGroup]="procedurePropertiesForm" class="form">
+                  <div class="form-block">
+                    <div class="clr-form-control">
+                      <div class="clr-row w-100 padding-top">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="manualEndRegistration" id="manualEndRegistration"
+                                 formControlName="manualEndRegistration">
+                          <label class="clr-control-label nopadding">Досрочное завершение приема заявок на
+                            участие</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="positionsRequiredAll" id="positionsRequiredAll"
+                                 formControlName="positionsRequiredAll">
+                          <label class="clr-control-label nopadding">Обязательная подача предложений на все
+                            позиции</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="positionsAnalogs" id="positionsAnalogs"
+                                 formControlName="positionsAnalogs">
+                          <label class="clr-control-label nopadding">Разрешается прием аналогов</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="positionsAllowAnalogsOnly"
+                                 id="positionsAllowAnalogsOnly" formControlName="positionsAllowAnalogsOnly">
+                          <label class="clr-control-label nopadding">Возможность подачи аналогов без основного
+                            предложения</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row w-100">
+                        <clr-checkbox-wrapper>
+                          <input type="checkbox" clrCheckbox name="positionsEntireVolume" id="positionsEntireVolume"
+                                 formControlName="positionsEntireVolume">
+                          <label class="clr-control-label nopadding">Заявка подается на весь закупаемый объем</label>
+                        </clr-checkbox-wrapper>
+                      </div>
+                      <div class="clr-row">
+                        <label class="clr-control-label" for="prolongateEndRegistration">Продление времени приема заявок
+                          на участие
+                          (минут)</label>
+                        <input class="input-time" id="prolongateEndRegistration" type="number"
+                               formControlName="prolongateEndRegistration"/>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Отображение наименований участников
+                            в таблице</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsSuppliersVisibility" value="Name"/>
+                            <label class="clr-control-label nopadding">Участники и их наименования отображаются в
+                              таблице</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsSuppliersVisibility"
+                                   value="NameHidden"/>
+                            <label class="clr-control-label nopadding">Участники отображаются в таблице, но их
+                              наименования скрыты</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsSuppliersVisibility" value="None"/>
+                            <label class="clr-control-label nopadding">Участники не отображаются в таблице</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Ограничение на подачу цен
+                            участниками</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="positionsBestPriceType"
+                                   formControlName="positionsBestPriceType" value="LowerStartPrice"/>
+                            <label class="clr-control-label nopadding">Участники подают цены ниже начальной цены</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio name="positionsBestPriceType"
+                                   formControlName="positionsBestPriceType" value="LowerPriceBest"/>
+                            <label class="clr-control-label nopadding">Нет ограничений на цены участников</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+                      <div class="clr-row w-100 padding-top">
+                        <clr-radio-container>
+                          <label class="clr-control-label nopadding radio-label"><b>Отображение цен участников в
+                            таблице</b></label>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsApplicsVisibility"
+                                   value="PriceAndRating"/>
+                            <label class="clr-control-label nopadding">Видны и цены, и рейтинг участников</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsApplicsVisibility"
+                                   value="OnlyPrice"/>
+                            <label class="clr-control-label nopadding">Видны только цены, подаваемые участниками</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsApplicsVisibility"
+                                   value="OnlyRating"/>
+                            <label class="clr-control-label nopadding">Виден только рейтинг цен</label>
+                          </clr-radio-wrapper>
+                          <clr-radio-wrapper>
+                            <input type="radio" clrRadio formControlName="positionsApplicsVisibility" value="None"/>
+                            <label class="clr-control-label nopadding">Цены и рейтинг скрыты</label>
+                          </clr-radio-wrapper>
+                        </clr-radio-container>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </clr-wizard-page>
+
+              <clr-wizard-page (clrWizardPageOnCommit)="onPublishProcedure()"
+                               (clrWizardPageOnCancel)="resetWizardForm()">
+                <ng-template clrPageTitle>Документы</ng-template>
+                ...
+              </clr-wizard-page>
+            </clr-wizard>
           </div>
           <div class="clr-col-2 send-offers">
             <button class="btn btn-primary send-offers"

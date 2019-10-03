@@ -41,6 +41,8 @@ import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
+import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
+import { ProcedureService } from "./back-office/services/procedure.service";
 import { AddDesignDocumentationComponent } from './back-office/components/add-design-documentation/add-design-documentation.component';
 import {DesignDocumentationService} from "./back-office/services/design-documentation.service";
 
@@ -79,6 +81,8 @@ import {DesignDocumentationService} from "./back-office/services/design-document
     TechnicalProposalsComponent,
     SupplierSelectComponent,
     AddDesignDocumentationComponent
+    SupplierSelectComponent,
+    CommercialProposalsComponent
   ],
   imports: [
     SharedModule,
@@ -94,6 +98,8 @@ import {DesignDocumentationService} from "./back-office/services/design-document
     CustomerTechnicalProposalsService,
     GroupService,
     ContragentService,
+    SupplierSelectComponent,
+    ProcedureService
     SupplierSelectComponent,
     DesignDocumentationService
   ]
