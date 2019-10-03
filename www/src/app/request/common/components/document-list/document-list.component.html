@@ -1,7 +1,6 @@
 <clr-datagrid *ngIf="documents">
   <clr-dg-column class="clr-col-6">Наименование документа</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
+  <clr-dg-column class="clr-col-4">Сотрудник</clr-dg-column>
   <clr-dg-column class="clr-col-2">Дата загрузки</clr-dg-column>
 
   <clr-dg-row *ngFor="let document of documents">
@@ -9,9 +8,7 @@
       <a (click)="onDownloadFile(document)">{{ document.filename }}</a>
     </clr-dg-cell>
 
-    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
-
-    <clr-dg-cell class="clr-col-2">Новая</clr-dg-cell>
+    <clr-dg-cell class="clr-col-4">{{ document?.user?.shortName }}</clr-dg-cell>
 
     <clr-dg-cell class="clr-col-2">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
   </clr-dg-row>
