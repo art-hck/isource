@@ -59,7 +59,6 @@ const routes: Routes = [
             path: 'add-design-documentation',
             component: AddDesignDocumentationComponent
           },
-
         ]
       },
     ]
