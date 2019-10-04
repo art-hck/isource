@@ -156,3 +156,47 @@ p {
   letter-spacing: .03em;
   margin: 0;
 }
+
+.clr-control-label {
+  padding-top: 15px;
+}
+
+::ng-deep .modal-header {
+  padding: 0;
+}
+
+.nopadding {
+  padding: 0 0 0 30px;
+}
+
+input {
+  margin-bottom: 10px;
+}
+
+.btn.btn-link {
+  margin: 0;
+}
+
+label {
+  font-weight: 100;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.table.table-noborder td {
+  border-top: 1px solid #d7d7d7;
+}
+
+span {
+  padding-bottom: 15px;
+}
+
+.position-list {
+  margin-bottom: 20px;
+}
+
+.position-choice {
+  margin-bottom: 15px;
+}

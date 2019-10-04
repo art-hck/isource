@@ -11,11 +11,89 @@
         <h2><b>Рабочая конструкторская документация</b></h2>
         <div class="clr-row w-100">
           <div class="clr-col-2">
-            <span class="add-design-documentation">
-              + Добавить перечень документов
+            <span class="add-design-documentation" (click)="onShowDesignDocumentationListModal()">
+              + Добавить перечень РКД
             </span>
           </div>
         </div>
+
+        <!-- Модальное окно добавление перечня ркд -->
+        <clr-modal [(clrModalOpen)]="showDesignDocumentationListModal"
+                   [clrModalClosable]="false"
+                   [clrModalSize]="'xl'">
+          <h3 class="modal-title">Новый перечень РКД</h3>
+          <div class="modal-body">
+            <form [formGroup]="addDocumentationForm" class="form">
+              <div formArrayName="addDocumentationListForm">
+                <div class="clr-row w-100">
+                  <div class="clr-col-5">
+                    <label>Наименование документа</label>
+                  </div>
+                  <div class="clr-col-3">
+                    <label>Срок предоставления (календ. дней)</label>
+                  </div>
+                  <div class="clr-col-3">
+                    <label>Срок корректировки (календ. дней)</label>
+                  </div>
+                </div>
+                <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
+                  <div class="form-block">
+                    <div class="clr-form-control">
+                      <div class="clr-row w-100" formGroupName="{{i}}">
+                        <div class="clr-col-5">
+                          <input id="name" type="text" formControlName="name"
+                                 [class.invalid]="isFieldInvalid(i, 'name')"/>
+                        </div>
+                        <div class="clr-col-3">
+                          <input id="adjustmentLimit" type="number" formControlName="adjustmentLimit"
+                                 [class.invalid]="isFieldInvalid(i, 'adjustmentLimit')"/>
+                        </div>
+                        <div class="clr-col-3">
+                          <input id="receivingLimit" type="number" formControlName="receivingLimit"
+                                 [class.invalid]="isFieldInvalid(i, 'receivingLimit')"/>
+                        </div>
+                        <div class="clr-col-1">
+                          <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
+                                  title="Удалить из списка" *ngIf="i > 0">
+                            <clr-icon shape="times" size="18"></clr-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <button class="btn btn-link" (click)="onAddNext()" *ngIf="!addDocumentationForm.invalid">
+                  Добавить документ
+                </button>
+              </div>
+            </form>
+            <div class="position-list">
+              <div class="position-choice">
+                <b>Выберите позиции:</b>
+              </div>
+              <div class="clr-row w-100" *ngFor="let position of getPositions()">
+                <div class="clr-col-12">
+                  <clr-checkbox-wrapper class="select-checkbox">
+                    <input clrCheckbox type="checkbox"
+                           value="{{ position }}"
+                           [(ngModel)]="position.checked"
+                           (change)="onSelectPosition(position)">
+                    <label class="position-label nopadding">{{ position.name }}
+                    </label>
+                  </clr-checkbox-wrapper>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-link" (click)="onCloseAddDesignDocumentationModal()">Отмена</button>
+            <button class="btn btn-primary" (click)="onAddDesignDocumentationList()"
+                    [disabled]="addDocumentationForm.invalid || selectedPositions.length === 0">
+              Добавить
+            </button>
+          </div>
+        </clr-modal>
+
         <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
           <div class="design-documentation-card">
             <div class="clr-row clr-align-items-center">
@@ -25,8 +103,7 @@
                   <clr-icon shape="pencil"></clr-icon>
                 </div>
               </span>
-              <table class="document-list table table-noborder"
-                     *ngFor="let designDoc of designDocumentation.designDocs">
+              <table class="document-list table table-noborder">
                 <thead>
                 <tr class="clr-row">
                   <th class="left clr-col-3" [class.clr-col-12]="!isRkdAgreementStatus(designDocumentation)">
@@ -41,7 +118,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="clr-row">
+                <tr class="clr-row" *ngFor="let designDoc of designDocumentation.designDocs">
                   <td class="left clr-col-3" [class.clr-col-12]="!isRkdAgreementStatus(designDocumentation)">
                     {{designDoc.name}}
                   </td>
@@ -70,3 +147,4 @@
       </div>
     </div>
   </div>
+</ng-container>
