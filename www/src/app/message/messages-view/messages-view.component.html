@@ -2,7 +2,7 @@
   <div class="request-list">
     <ul class="list-unstyled">
       <li *ngFor="let request of (requests$ | async)?.entities"
-          (click)="onRequestClick(request)"
+          (click)="onRequestClick(request.request)"
           [ngClass]="{'selected': request.request.id === selectedRequest?.id}">
         {{ request.request.number }}
       </li>
@@ -26,14 +26,27 @@
 
       <div class="request-items-list">
         <ul class="list-unstyled">
-          <li *ngFor="let item of (requestsItems$ | async)"
-              (click)="onRequestItemClick(item)"
-              class="{{ getRequestItemClass(item) }}"
-              [ngClass]="{'selected': item.id === selectedRequestsItem?.id}">
-            {{ item.name }}
-
-            <span class="badge badge-orange" *ngIf="isGroup(item)">Группа</span>
+          <li (click)="onRequestContextClick()"
+              class="status-position-default"
+              [class.selected]="!selectedRequestsItem">
+            Обсуждение заказа
           </li>
+
+          <ng-container *ngFor="let item of (requestsItems$ | async)">
+            <li (click)="onRequestItemClick(item)"
+                class="{{ getRequestItemClass(item) }}"
+                [ngClass]="{'selected': item.id === selectedRequestsItem?.id}">
+              {{ item.name }}
+            </li>
+
+            <li *ngFor="let subItem of item?.positions"
+                (click)="onRequestItemClick(subItem)"
+                class="sub-item {{ getRequestItemClass(subItem) }}"
+                [ngClass]="{'selected': subItem.id === selectedRequestsItem?.id}">
+              {{ subItem.name }}
+            </li>
+          </ng-container>
+
         </ul>
       </div>
     </ng-container>

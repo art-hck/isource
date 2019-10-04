@@ -52,7 +52,7 @@ export class MessageService {
     });
   }
 
-  getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
+  getRequestItems(id: Uuid): Observable<RequestPositionList[]> {
     const url = `requests/customer/${id}/positions`;
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
       map((data: RequestPositionList[]) => {

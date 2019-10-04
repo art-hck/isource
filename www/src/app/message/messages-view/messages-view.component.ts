@@ -9,7 +9,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { UserInfoService } from "../../core/services/user-info.service";
 
 @Component({
@@ -40,20 +40,19 @@ export class MessagesViewComponent implements OnInit {
       .pipe(
         tap((page: Page<RequestsList>) => {
           if (page.entities.length > 0) {
-            this.onRequestClick(page.entities[0]);
+            this.onRequestClick(page.entities[0].request);
           }
         })
       );
   }
 
-  onRequestClick(request: RequestsList) {
-    this.selectedRequest = request.request;
+  onRequestClick(request: RequestListItem) {
+    this.selectedRequest = request;
     this.selectedRequestsItem = null;
 
-    this.requestsItems$ = this.messageService.getRequestPositions(this.selectedRequest.id);
+    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id);
 
-    this.contextType = MessageContextTypes.REQUEST;
-    this.contextId = request.request.id;
+    this.onRequestContextClick();
   }
 
   onRequestItemClick(item: RequestPositionList) {
@@ -61,6 +60,13 @@ export class MessagesViewComponent implements OnInit {
 
     this.contextType = this.getContextType(item);
     this.contextId = item.id;
+  }
+
+  onRequestContextClick() {
+    this.selectedRequestsItem = null;
+
+    this.contextType = MessageContextTypes.REQUEST;
+    this.contextId = this.selectedRequest.id;
   }
 
   getContextType(item: RequestPositionList) {
@@ -116,6 +122,6 @@ export class MessagesViewComponent implements OnInit {
   getRequestItemClass(item: RequestPositionList) {
     return item instanceof RequestPosition ?
       'status-position-' + item.status :
-      '';
+      'status-position-default';
   }
 }
