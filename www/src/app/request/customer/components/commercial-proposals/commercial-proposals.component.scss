@@ -24,12 +24,27 @@ table {
   text-align: left;
 }
 
-.table-wrapper {
+.table-header-wrapper,
+.table-body-wrapper {
   position: relative;
-  margin-bottom: 150px
+}
+.table-header-wrapper {
+  position: sticky;
+  top: -30px;
+  z-index: 50;
+  background: #f3f7fa;
+}
+.table-body-wrapper {
+  margin-bottom: 150px;
 }
 
-.table-wrapper:before {
+.table-body-wrapper table.table {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.table-header-wrapper:before,
+.table-body-wrapper:before {
   content: "";
   width: 20px;
   height: 100%;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -16,6 +16,8 @@ import { NotificationService } from "../../../../shared/services/notification.se
 })
 
 export class CommercialProposalsComponent implements OnInit {
+
+  @ViewChild('tableBody', { static: false }) tableBody: ElementRef;
 
   requestId: Uuid;
   request: Request;
@@ -254,5 +256,12 @@ export class CommercialProposalsComponent implements OnInit {
    */
   isSendButtonEnabled(): boolean {
     return Object.keys(this.selectedOffers).length > 0;
+  }
+
+
+  onSupplierListScroll(event) {
+    const offsetX = Math.round(event.target.scrollLeft);
+    this.tableBody.nativeElement.scrollTo(offsetX, 0);
+    console.log(offsetX);
   }
 }
