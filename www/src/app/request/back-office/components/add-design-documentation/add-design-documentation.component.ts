@@ -7,9 +7,7 @@ import {DesignDocumentationService} from "../../services/design-documentation.se
 import {DesignDocumentationList} from "../../../common/models/design-documentationList";
 import {RequestPosition} from "../../../common/models/request-position";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidators} from "../../../../shared/forms/custom.validators";
 import {DesignDocumentation} from "../../../common/models/design-documentation";
-import {element} from "protractor";
 
 @Component({
   selector: 'app-add-design-documentation',
@@ -46,7 +44,7 @@ export class AddDesignDocumentationComponent implements OnInit {
       'addDocumentationListForm': this.formBuilder.array([
         this.addDocumentationListFormGroup()
       ])
-    })
+    });
   }
 
   ngOnInit() {
@@ -113,7 +111,7 @@ export class AddDesignDocumentationComponent implements OnInit {
       (positions: RequestPosition[]) => {
         this.positions = positions;
       }
-    )
+    );
   }
 
   getPositions() {
@@ -152,7 +150,7 @@ export class AddDesignDocumentationComponent implements OnInit {
         this.designDocumentations = [...this.designDocumentations, ...data];
         this.getPositions();
       }
-    )
+    );
   }
 
   onCloseAddDesignDocumentationModal() {
