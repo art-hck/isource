@@ -9,7 +9,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { map, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { UserInfoService } from "../../core/services/user-info.service";
 
 @Component({
@@ -20,7 +20,7 @@ import { UserInfoService } from "../../core/services/user-info.service";
 export class MessagesViewComponent implements OnInit {
 
   requests$: Observable<Page<RequestsList>>;
-  requestsItems$: Observable<RequestPositionList[]>;
+  requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
 
   selectedRequest: RequestListItem;
   selectedRequestsItem: RequestPositionList;
@@ -99,10 +99,6 @@ export class MessagesViewComponent implements OnInit {
     }
 
     return '';
-  }
-
-  isGroup(item: RequestPositionList) {
-    return item instanceof RequestGroup;
   }
 
   getRequestUrl() {
