@@ -159,10 +159,17 @@ span.position-label {
   font-size: 15px;
   padding-bottom: 10px;
   display: block;
+  line-height: 1.4;
 }
 
+.table th.position-name {
+  display: block;
+  max-height: 113px;
+  padding: 0 0 20px 0;
+}
 .table td.position-name {
-  padding: 40px 20px !important;
+  padding: 40px 10px 40px 20px;
+  max-width: 315px;
 }
 
 span.total-sum {
