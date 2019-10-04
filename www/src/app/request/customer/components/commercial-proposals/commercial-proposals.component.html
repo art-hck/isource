@@ -40,6 +40,16 @@
                         <a class="select-all" (click)="onSelectAll(requestPositions, supplier)">Выбрать все ↓</a>
                       </div>
                     </div>
+
+                    <hr class="divider">
+
+                    <div class="clr-row clr-align-items-center">
+                      <div class="clr-col">
+                        <span class="selected-sum">
+                          Выбрано на сумму: {{ getSelectedSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </th>
               </tr>
