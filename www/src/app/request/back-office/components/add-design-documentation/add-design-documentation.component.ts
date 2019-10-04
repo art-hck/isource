@@ -82,12 +82,11 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   addDocumentationListFormGroup(): FormGroup {
-    const addDocumentationListForm = this.formBuilder.group({
+    return this.formBuilder.group({
       name: ['', Validators.required],
       adjustmentLimit: [10, Validators.required],
       receivingLimit: [10, Validators.required]
     });
-    return addDocumentationListForm;
   }
 
   onSelectPosition(position: RequestPosition) {

@@ -47,23 +47,6 @@ span.position-name-label, span.positions-list-label {
   color: gray;
 }
 
-.send-for-approval {
-  text-align: right;
-
-  & button.btn.btn-primary {
-    margin-right: 0;
-
-    &.disabled {
-      pointer-events: none;
-    }
-  }
-
-  & p.sent-label {
-    font-weight: bold;
-    color: #388E3C;
-  }
-}
-
 .documentation-list th {
   width: 40%;
   color: gray;
@@ -125,11 +108,6 @@ span.position-name-label, span.positions-list-label {
   width: 250px;
 }
 
-
-p.readonly-supplier-name {
-  margin: 0;
-}
-
 .accepted {
   color: green;
   margin: 0 4px 3px 0;
@@ -159,10 +137,6 @@ p {
 
 .clr-control-label {
   padding-top: 15px;
-}
-
-::ng-deep .modal-header {
-  padding: 0;
 }
 
 .nopadding {
