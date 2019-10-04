@@ -176,6 +176,17 @@ span.total-sum {
   display: block;
   font-size: 20px;
 }
+span.selected-sum {
+    display: block;
+    font-size: 15px;
+    padding-top: 14px;
+}
+
+hr.divider {
+  border: 1px solid #bbdefb;
+  margin-top: 20px;
+  margin-bottom: 2px;
+}
 
 div.counted-price-block {
   margin-bottom: 7px;

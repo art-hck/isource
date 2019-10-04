@@ -21,7 +21,7 @@
         </div>
 
         <div class="table-wrapper">
-          <table class="table">
+          <table class="table" id="table-scroll" #tableScroll>
             <thead>
               <tr>
                 <th class="position-name"></th>
@@ -38,6 +38,16 @@
 
                       <div class="clr-col-auto">
                         <a class="select-all" (click)="onSelectAll(requestPositions, supplier)">Выбрать все ↓</a>
+                      </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="clr-row clr-align-items-center">
+                      <div class="clr-col">
+                        <span class="selected-sum">
+                          Выбрано на сумму: {{ getSelectedSumBySupplier(requestPositions, supplier) | currency : 'RUB' }}
+                        </span>
                       </div>
                     </div>
                   </div>

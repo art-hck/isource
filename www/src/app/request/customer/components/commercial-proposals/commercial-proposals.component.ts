@@ -14,6 +14,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
   templateUrl: './commercial-proposals.component.html',
   styleUrls: ['./commercial-proposals.component.scss']
 })
+
 export class CommercialProposalsComponent implements OnInit {
 
   requestId: Uuid;
@@ -65,6 +66,23 @@ export class CommercialProposalsComponent implements OnInit {
     });
 
     return sum;
+  }
+
+  getSelectedSumBySupplier(requestPositions: RequestPosition[], supplier: string): number {
+    let selectedSum = 0;
+    const selectedOffers = this.selectedOffers;
+
+    requestPositions.forEach(pos => {
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
+
+      supplierLinkedOffers.forEach(offer => {
+        if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {
+          selectedSum += offer.priceWithVat * offer.quantity;
+        }
+      });
+    });
+
+    return selectedSum;
   }
 
   incorrectDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
@@ -237,5 +255,4 @@ export class CommercialProposalsComponent implements OnInit {
   isSendButtonEnabled(): boolean {
     return Object.keys(this.selectedOffers).length > 0;
   }
-
 }
