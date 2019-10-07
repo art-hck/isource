@@ -173,7 +173,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   isDocumentsExists(positions: RequestPosition[]): boolean {
-    for (let position of positions) {
+    for (const position of positions) {
       if (position.documents.length) {
         return true;
       }
