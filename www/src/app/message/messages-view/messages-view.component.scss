@@ -105,6 +105,9 @@
         position: relative;
         height: 42px;
         background: #FFFFFF;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         &:before {
           position: absolute;
