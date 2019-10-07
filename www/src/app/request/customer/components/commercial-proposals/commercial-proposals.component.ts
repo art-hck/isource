@@ -220,6 +220,7 @@ export class CommercialProposalsComponent implements OnInit {
       () => {
         this.notificationService.toast('Успешно согласовано');
         this.updatePositionsAndSuppliers();
+        this.selectedOffers = {};
       },
       () => {
         this.notificationService.toast('Не удалось согласовать предложения', 'error');
