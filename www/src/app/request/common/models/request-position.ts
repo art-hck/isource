@@ -34,4 +34,5 @@ export class RequestPosition extends RequestPositionList {
   linkedOffers: RequestOfferPosition[];
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
+  checked: boolean;
 }

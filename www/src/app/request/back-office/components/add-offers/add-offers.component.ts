@@ -332,6 +332,32 @@ export class AddOffersComponent implements OnInit {
     }
   }
 
+  onSelectAllPositions(event, requestPositions: RequestPosition[]): void {
+    if (event.target.checked === true) {
+      this.selectedRequestPositions = [];
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = true;
+          this.selectedRequestPositions.push(requestPosition);
+        }
+      });
+    } else {
+      this.selectedRequestPositions = [];
+
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = null;
+        }
+      });
+    }
+  }
+
+  areAllPositionsChecked(requestPositions: RequestPosition[]): boolean {
+    return !requestPositions.some(
+      requestPosition => requestPosition.linkedOffers.length !== 0 && requestPosition.checked !== true
+    );
+  }
+
   onPublishOffers() {
     this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
       () => {
