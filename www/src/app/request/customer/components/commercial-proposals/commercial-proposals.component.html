@@ -3,11 +3,11 @@
 </ng-container>
 
 <ng-container *ngIf="request">
-  <div class="clr-row">
+  <div class="clr-row commercial-proposals">
     <div class="info-card clr-col">
       <div class="request-info">
         <div class="breadcrumbs">
-          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+          <a (click)="onRequestsClick()">Заявки</a> → <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
 
         <div class="clr-row">
@@ -41,8 +41,6 @@
                     </div>
                   </div>
 
-                  <hr class="divider">
-
                   <div class="clr-row clr-align-items-center">
                     <div class="clr-col">
                         <span class="selected-sum">
@@ -69,10 +67,10 @@
 
                   <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
                     <span *ngIf="requestPosition.deliveryDate; else ASAP">
-                      к <b>{{requestPosition.deliveryDate | date :'shortDate'}}</b>
+                      к {{requestPosition.deliveryDate | date :'shortDate'}}
                     </span>
                     <ng-template #ASAP>
-                      <b>как можно быстрее</b>
+                      как можно быстрее
                     </ng-template>
                   </span>
                 </td>
@@ -87,10 +85,11 @@
                           <div class="clr-col-auto">
                             <span class="counted-offer-price">
                               {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
-                            </span>
-                            <span class="offer-quantity">за
-                              <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
-                                {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}
+
+                              <span class="offer-quantity">за
+                                <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
+                                  {{linkedOffer.quantity}} {{linkedOffer.measureUnit}}
+                                </span>
                               </span>
                             </span>
                           </div>
@@ -102,9 +101,7 @@
                       </div>
 
                       <div class="per-unit-price-block">
-                        <span class="price-per-unit">
-                          {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
-                        </span>
+                        {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
                       </div>
 
                       <div class="delivery">Срок поставки:
