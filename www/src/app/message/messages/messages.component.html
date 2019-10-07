@@ -51,7 +51,8 @@
       <div class="input-wrapper">
       <textarea formControlName="message"
                 placeholder="Написать сообщение"
-                (keyup.control.enter)="onCreateClick(sendMessageForm.value)">
+                (keydown.enter)="onCreateClick(sendMessageForm.value)"
+                (keyup.enter)="onCreateClickKeyup()">
       </textarea>
       </div>
 

@@ -241,73 +241,149 @@ clr-dg-footer.datagrid-footer {
     border-radius: 50%;
 }
 
+$status-request-NEW: #b9b9b9;
+$status-request-DRAFT: rgb(173, 147, 185);
+$status-request-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
+$status-request-IN_PROGRESS: #f48f32;
+$status-request-COMPLETED: #00b75e;
+
+$status-position-DRAFT: rgb(173, 147, 185);
+$status-position-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
+$status-position-NEW: rgb(185, 185, 185);
+$status-position-TECHNICAL_PROPOSALS_PREPARATION: rgb(91, 154, 185);
+$status-position-TECHNICAL_PROPOSALS_AGREEMENT: rgb(99, 185, 154);
+$status-position-PROPOSALS_PREPARATION: rgb(40, 177, 236);
+$status-position-RESULTS_AGREEMENT: rgb(0, 183, 94);
+$status-position-WINNER_SELECTED: rgb(255, 71, 90);
+$status-position-CONTRACT_AGREEMENT: rgb(97, 77, 255);
+$status-position-CONTRACT_SIGNING: rgb(159, 56, 255);
+$status-position-CONTRACTED: rgb(150, 183, 57);
+$status-position-RKD_AGREEMENT: rgb(142, 46, 90);
+$status-position-MANUFACTURING: rgb(149, 65, 25);
+$status-position-DELIVERY: rgb(84, 199, 171);
+$status-position-DELIVERED: rgb(100, 142, 255);
+$status-position-PAID: rgb(231, 200, 35);
+$status-position-COMPLETED: rgb(255, 127, 127);
 
 .status-request-NEW:before {
-    background: #b9b9b9;
+    background: $status-request-NEW;
 }
 .status-request-DRAFT:before {
-    background: rgb(173, 147, 185);
+    background: $status-request-DRAFT;
 }
 .status-request-ON_CUSTOMER_APPROVAL:before {
-    background: rgb(95, 112, 167);
+    background: $status-request-ON_CUSTOMER_APPROVAL;
 }
 .status-request-IN_PROGRESS:before {
-    background: #f48f32;
+    background: $status-request-IN_PROGRESS;
 }
 .status-request-COMPLETED:before {
-    background: #00b75e;
+    background: $status-request-COMPLETED;
 }
 
 .status-position-DRAFT:before {
-  background: rgb(173, 147, 185);
+  background: $status-position-DRAFT;
 }
 .status-position-ON_CUSTOMER_APPROVAL:before {
-  background: rgb(95, 112, 167);
+  background: $status-position-ON_CUSTOMER_APPROVAL;
 }
 .status-position-NEW:before {
-  background: rgb(185, 185, 185);
+  background: $status-position-NEW;
 }
 .status-position-TECHNICAL_PROPOSALS_PREPARATION:before {
-  background: rgb(91, 154, 185);
+  background: $status-position-TECHNICAL_PROPOSALS_PREPARATION;
 }
 .status-position-TECHNICAL_PROPOSALS_AGREEMENT:before {
-  background: rgb(99, 185, 154);
+  background: $status-position-TECHNICAL_PROPOSALS_AGREEMENT;
 }
 .status-position-PROPOSALS_PREPARATION:before {
-    background: rgb(40, 177, 236);
+    background: $status-position-PROPOSALS_PREPARATION;
 }
 .status-position-RESULTS_AGREEMENT:before {
-    background: rgb(0, 183, 94);
+    background: $status-position-RESULTS_AGREEMENT;
 }
 .status-position-WINNER_SELECTED:before {
-    background: rgb(255, 71, 90);
+    background: $status-position-WINNER_SELECTED;
 }
 .status-position-CONTRACT_AGREEMENT:before {
-    background: rgb(97, 77, 255);
+    background: $status-position-CONTRACT_AGREEMENT;
 }
 .status-position-CONTRACT_SIGNING:before {
-    background: rgb(159, 56, 255);
+    background: $status-position-CONTRACT_SIGNING;
 }
 .status-position-CONTRACTED:before {
-    background: rgb(150, 183, 57);
+    background: $status-position-CONTRACTED;
 }
 .status-position-RKD_AGREEMENT:before {
-    background: rgb(142, 46, 90);
+    background: $status-position-RKD_AGREEMENT;
 }
 .status-position-MANUFACTURING:before {
-    background: rgb(149, 65, 25);
+    background: $status-position-MANUFACTURING;
 }
 .status-position-DELIVERY:before {
-    background: rgb(84, 199, 171);
+    background: $status-position-DELIVERY;
 }
 .status-position-DELIVERED:before {
-    background: rgb(100, 142, 255);
+    background: $status-position-DELIVERED;
 }
 .status-position-PAID:before {
-    background: rgb(231, 200, 35);
+    background: $status-position-PAID;
 }
 .status-position-COMPLETED:before {
-    background: rgb(255, 127, 127);
+    background: $status-position-COMPLETED;
+}
+
+
+.status-position-DRAFT.selected {
+  background: $status-position-DRAFT !important;
+}
+.status-position-ON_CUSTOMER_APPROVAL.selected {
+  background: $status-position-ON_CUSTOMER_APPROVAL !important;
+}
+.status-position-NEW.selected {
+  background: $status-position-NEW !important;
+}
+.status-position-TECHNICAL_PROPOSALS_PREPARATION.selected {
+  background: $status-position-TECHNICAL_PROPOSALS_PREPARATION !important;
+}
+.status-position-TECHNICAL_PROPOSALS_AGREEMENT.selected {
+  background: $status-position-TECHNICAL_PROPOSALS_AGREEMENT !important;
+}
+.status-position-PROPOSALS_PREPARATION.selected {
+  background: $status-position-PROPOSALS_PREPARATION !important;
+}
+.status-position-RESULTS_AGREEMENT.selected {
+  background: $status-position-RESULTS_AGREEMENT !important;
+}
+.status-position-WINNER_SELECTED.selected {
+  background: $status-position-WINNER_SELECTED !important;
+}
+.status-position-CONTRACT_AGREEMENT.selected {
+  background: $status-position-CONTRACT_AGREEMENT !important;
+}
+.status-position-CONTRACT_SIGNING.selected {
+  background: $status-position-CONTRACT_SIGNING !important;
+}
+.status-position-CONTRACTED.selected {
+  background: $status-position-CONTRACTED !important;
+}
+.status-position-RKD_AGREEMENT.selected {
+  background: $status-position-RKD_AGREEMENT !important;
+}
+.status-position-MANUFACTURING.selected {
+  background: $status-position-MANUFACTURING !important;
+}
+.status-position-DELIVERY.selected {
+  background: $status-position-DELIVERY !important;
+}
+.status-position-DELIVERED.selected {
+  background: $status-position-DELIVERED !important;
+}
+.status-position-PAID.selected {
+  background: $status-position-PAID !important;
+}
+.status-position-COMPLETED.selected {
+  background: $status-position-COMPLETED !important;
 }
 
 .text-alert {
