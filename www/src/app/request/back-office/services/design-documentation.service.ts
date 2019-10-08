@@ -3,6 +3,8 @@ import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import {RequestPosition} from "../../common/models/request-position";
 import {DesignDocumentation} from "../../common/models/design-documentation";
+import {RequestDocument} from "../../common/models/request-document";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class DesignDocumentationService {
@@ -32,5 +34,13 @@ export class DesignDocumentationService {
       positions: ids,
       designDocs: designDocs
     });
+  }
+
+  uploadDocuments(id: Uuid, designDocId: Uuid, files: File[]): Observable<RequestDocument[]> {
+    const url = `/requests/${id}/designs/docs/${designDocId}/upload`;
+    const formData = new FormData();
+    files.forEach(file => formData.append('files[]', file, file.name));
+
+    return this.api.post<RequestDocument[]>(url, formData);
   }
 }
