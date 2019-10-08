@@ -170,18 +170,7 @@ export class AddDesignDocumentationComponent implements OnInit {
     const subscription = this.designDocumentationService
       .uploadDocuments(this.request.id, designDoc.id, files)
       .pipe(
-        finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc)),
-        catchError(err => {
-          return of(files.map(file => ({
-              id: null,
-              created: file.lastModified.toString(),
-              filename: file.name,
-              extension: "",
-              mime: file.type,
-              size: file.size
-            })
-          ));
-        })
+        finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc))
       )
       .subscribe(documents => {
         designDoc.documents = [...designDoc.documents, ...documents];

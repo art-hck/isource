@@ -37,7 +37,7 @@ export class DesignDocumentationService {
   }
 
   uploadDocuments(id: Uuid, designDocId: Uuid, files: File[]): Observable<RequestDocument[]> {
-    const url = `/requests/${id}/designs/docs/${designDocId}/upload`;
+    const url = `requests/${id}/designs/docs/${designDocId}/upload`;
     const formData = new FormData();
     files.forEach(file => formData.append('files[]', file, file.name));
 
