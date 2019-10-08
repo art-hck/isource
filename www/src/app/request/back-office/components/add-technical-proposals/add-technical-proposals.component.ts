@@ -30,8 +30,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   selectedContragent: ContragentList;
 
-  contragentInputFieldValue = "";
-
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
@@ -83,7 +81,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
-    this.contragentInputFieldValue = "";
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -96,7 +93,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   onSelectedContragent(contragent: ContragentList): void {
     this.selectedContragent = contragent;
-    this.contragentInputFieldValue = contragent.shortName;
   }
 
   /**
@@ -109,7 +105,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
-    this.contragentInputFieldValue = technicalProposal.name;
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
@@ -183,7 +178,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onAddTechnicalProposal(): void {
     const technicalProposal = {
-      name: this.contragentInputFieldValue,
+      contragentId: this.selectedContragent.id,
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
@@ -234,7 +229,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     const technicalProposal = {
       id: this.technicalProposal.id,
-      name: this.contragentInputFieldValue,
+      contragentId: this.selectedContragent.id,
       positions: selectedPositionsArray,
     };
 
@@ -363,7 +358,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   checkIfCreatingIsEnabled(): boolean {
     return (
       this.selectedTechnicalProposalPositionsIds.length > 0 &&
-      this.contragentInputFieldValue.length > 0
+      this.selectedContragent !== null
     );
   }
 
@@ -375,7 +370,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     } else {
       // Если ТП ещё не рассматривалось заказчиком,
       // проверяем, выбраны ли позиции или заполнено ли поле наименования
-      return (this.selectedTechnicalProposalPositionsIds.length > 0 && this.contragentInputFieldValue.length > 0);
+      return (this.selectedTechnicalProposalPositionsIds.length > 0 && this.selectedContragent !== null);
     }
   }
 

@@ -1,5 +1,6 @@
-import {Uuid} from "../../../cart/models/uuid";
+import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "./request-position";
+import { History } from "./history";
 
 export class TechnicalProposalPosition {
   id: Uuid;
