@@ -8,6 +8,8 @@ import {DesignDocumentationList} from "../../../common/models/design-documentati
 import {RequestPosition} from "../../../common/models/request-position";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DesignDocumentation} from "../../../common/models/design-documentation";
+import {catchError, finalize} from "rxjs/operators";
+import {of} from "rxjs";
 
 @Component({
   selector: 'app-add-design-documentation',
@@ -28,6 +30,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   selectedPositions: RequestPosition[] = [];
   existingPositions: RequestPosition[] = [];
   pos: RequestPosition[] = [];
+  private loadingDesignDocs: DesignDocumentation[] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -156,5 +159,23 @@ export class AddDesignDocumentationComponent implements OnInit {
     this.addDocumentationForm.reset();
     this.selectedPositions = [];
     this.showDesignDocumentationListModal = false;
+  }
+
+  isLoadingDesignDoc(designDoc: DesignDocumentation): boolean {
+    return this.loadingDesignDocs.filter(doc => doc === designDoc).length > 0;
+  }
+
+  onSelectDocument(files: File[], designDoc: DesignDocumentation) {
+    this.loadingDesignDocs.push(designDoc);
+    const subscription = this.designDocumentationService
+      .uploadDocuments(this.request.id, designDoc.id, files)
+      .pipe(
+        finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc))
+      )
+      .subscribe(documents => {
+        designDoc.documents = [...designDoc.documents, ...documents];
+        subscription.unsubscribe();
+      })
+    ;
   }
 }
