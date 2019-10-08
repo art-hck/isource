@@ -18,6 +18,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
 export class CommercialProposalsComponent implements OnInit {
 
   @ViewChild('tableBody', { static: false }) tableBody: ElementRef;
+  @ViewChild('tableHeader', { static: false }) tableHeader: ElementRef;
 
   requestId: Uuid;
   request: Request;
@@ -262,6 +263,46 @@ export class CommercialProposalsComponent implements OnInit {
   onSupplierListScroll(event) {
     const offsetX = Math.round(event.target.scrollLeft);
     this.tableBody.nativeElement.scrollTo(offsetX, 0);
-    console.log(offsetX);
+    this.tableHeader.nativeElement.scrollTo(offsetX, 0);
   }
+
+
+  makeReadableDate(date) {
+    return moment(date).locale("ru").format('LL');
+  }
+
+
+  positionsCountValidationLabel(requestPositions: RequestPosition[], supplier: string) {
+    let label = 'Не все позиции в нужном количестве';
+
+    requestPositions.forEach(requestPosition => {
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers.every(offer => offer.quantity === requestPosition.quantity)) {
+        label = 'Все позиции в нужном количестве';
+      }
+    });
+
+    return label;
+  }
+
+  positionsDeliveryDateValidationLabel(requestPositions, supplier) {
+    let label = 'Сроки поставки не укладываются в заданные';
+
+    requestPositions.forEach(requestPosition => {
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers.every(
+        offer => {
+          const controlDate = moment(offer.deliveryDate);
+          const validationDate = moment(requestPosition.deliveryDate);
+
+          return controlDate.isBefore(validationDate);
+        })
+      ) {
+        label = 'Сроки поставки укладываются в заданные';
+      }
+    });
+
+    return label;
+  }
+
 }

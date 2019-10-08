@@ -1,6 +1,18 @@
 $bckg-color: #fbfcfe;
 // $bckg-color: gray;
 
+//::ng-deep .content-area {
+//  height: calc(100% - 80px) !important;
+//}
+
+.request-info {
+  height: 100%;
+}
+
+tr.has-winner {
+  display: none;
+}
+
 .commercial-proposals {
   font-family: PT Root UI, Roboto, sans-serif;
 }
@@ -64,16 +76,25 @@ table {
   background: $bckg-color;
 }
 .table-body-wrapper {
-  margin-bottom: 150px;
+  height: 100%;
+}
+.table-footer-wrapper {
+  position: sticky;
+  bottom: -30px;
+  z-index: 50;
+  background: $bckg-color;
 }
 
+
+.table-header-wrapper table.table,
 .table-body-wrapper table.table {
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
 .table-header-wrapper:before,
-.table-body-wrapper:before {
+.table-body-wrapper:before,
+.table-footer-wrapper:before {
   content: "";
   width: 20px;
   height: 100%;
@@ -82,6 +103,10 @@ table {
   top: 0;
   background: linear-gradient(-90deg, $bckg-color, transparentize($bckg-color, 1));
   z-index: 10;
+}
+
+.table-footer-wrapper table.table {
+  background-color: #f1f5fa;
 }
 
 table.table {
@@ -206,7 +231,6 @@ span.position-label {
 
 .table th.position-name {
   display: block;
-  max-height: 113px;
   padding: 0;
   width: 250px;
 }
@@ -219,12 +243,14 @@ span.position-label {
 
 span.total-sum {
   display: block;
-  font-size: 20px;
+  font-size: 22px;
+  padding-bottom: 14px;
+  line-height: 1;
 }
 span.selected-sum {
     display: block;
     font-size: 15px;
-    padding-top: 14px;
+    padding-bottom: 14px;
 }
 
 hr.divider {
@@ -265,11 +291,43 @@ a.offer-documents {
   display: table;
 }
 
-th .contragent-info {
-  padding: 15px 0;
-  margin: 10px 24px;
+
+.table-header-wrapper th .contragent-info {
   border-bottom: 1px solid #B2D0FF;
+  padding: 15px 0;
+  margin: 10px 24px 0 24px;
 }
+.table-footer-wrapper th .contragent-info {
+  padding: 0;
+  margin: 15px 24px;
+}
+.table-footer-wrapper th.position-name {
+  height: 100%;
+}
+
+.hover-switch-block {
+  height: 75px;
+}
+
+.table-footer-wrapper th.contragent-name:hover .alert-labels {
+  display: none;
+}
+.table-footer-wrapper th.contragent-name:hover .select-all-button {
+  display: block !important;
+}
+
+
+
+
+
+.table-footer-wrapper button.btn {
+  margin-right: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 2px 9px rgba(0, 72, 113, 0.2);
+}
+
 
 .footer-wrapper {
   position: fixed;
@@ -279,18 +337,21 @@ th .contragent-info {
 
 .footer-total-sum {
   background: white;
-  height: 80px;
-  *padding: 0 0 0 20px;
+  height: 100%;
+  padding: 20px 0 20px 0;
   width: 100%;
   left: 0;
   right: 0;
+  border-top: 1px solid #B2D0FF;
 }
 
 .footer-total-sum span {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 21px;
+  display: block;
+  line-height: 1;
 }
 
 .footer-total-sum .send-for-agreement-btn {
-  text-align: right;
+  text-align: left;
 }
