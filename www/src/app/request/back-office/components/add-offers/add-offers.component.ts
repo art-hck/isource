@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
+import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
@@ -197,6 +198,18 @@ export class AddOffersComponent implements OnInit {
   isSupplierOfferExist() {
     return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
+
+  positionCanBeSelected(requestPosition) {
+    return (
+      requestPosition.linkedOffers.length !== 0 &&
+      !this.positionIsSentForAgreement(requestPosition)
+    );
+  }
+
+  positionIsSentForAgreement(requestPosition) {
+    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
+  }
+
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
