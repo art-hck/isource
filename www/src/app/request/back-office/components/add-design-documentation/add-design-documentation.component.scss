@@ -175,10 +175,19 @@ span {
   margin-bottom: 15px;
 }
 
-.document-loading {
+.document-loading label {
   font-size: 14px;
   margin-bottom: 9px;
   margin-top: 10px;
   line-height: 20px;
   font-weight: bold;
+}
+
+.document-status .btn-label {
+  cursor: default;
+}
+
+::ng-deep span.spinner {
+  margin: 0;
+  display: inline-block;
 }
