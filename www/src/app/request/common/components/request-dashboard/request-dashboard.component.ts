@@ -99,6 +99,7 @@ export class RequestDashboardComponent implements OnChanges {
 
   openAddDesignDocumentationPage() {
     if (this.user.isCustomer()) {
+      this.router.navigateByUrl(`/requests/customer/${this.request.id}/design-documentation`).then(r => {});
       return false;
     } else if (this.user.isBackOffice()) {
       this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-design-documentation`).then(r => {});

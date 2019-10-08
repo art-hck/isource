@@ -45,6 +45,7 @@ import { CommercialProposalsComponent } from './customer/components/commercial-p
 import { ProcedureService } from "./back-office/services/procedure.service";
 import { AddDesignDocumentationComponent } from './back-office/components/add-design-documentation/add-design-documentation.component';
 import {DesignDocumentationService} from "./back-office/services/design-documentation.service";
+import {DesignDocumentationComponent} from "./customer/components/design-documentation/design-documentation.component";
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import {DesignDocumentationService} from "./back-office/services/design-document
     SupplierSelectComponent,
     AddDesignDocumentationComponent,
     SupplierSelectComponent,
-    CommercialProposalsComponent
+    CommercialProposalsComponent,
+    DesignDocumentationComponent
   ],
   imports: [
     SharedModule,
