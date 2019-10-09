@@ -280,6 +280,11 @@ export class AddOffersComponent implements OnInit {
       && (this.offerForm.get(field).touched || this.offerForm.get(field).dirty);
   }
 
+  isOfferClickable(requestPosition: RequestPosition): boolean {
+    return !(this.positionIsSentForAgreement(requestPosition) || this.positionHasProcedure(requestPosition));
+  }
+
+
   onAddOffer() {
     const formValue = this.offerForm.value;
     formValue.supplierContragentName = this.selectedSupplier;
