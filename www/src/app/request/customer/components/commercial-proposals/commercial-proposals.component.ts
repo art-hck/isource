@@ -272,37 +272,35 @@ export class CommercialProposalsComponent implements OnInit {
   }
 
   validPositionsCount(requestPositions: RequestPosition[], supplier: string): boolean {
-    let flag = true;
-
-    requestPositions.forEach(requestPosition => {
+    for (const requestPosition of requestPositions) {
       if (this.positionHasWinner(requestPosition)) {
-        return;
+        continue;
       }
 
-      if (flag) {
-        const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
-        flag = supplierLinkedOffers[0].quantity >= requestPosition.quantity;
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers[0] && supplierLinkedOffers[0].quantity < requestPosition.quantity) {
+        return false;
       }
-    });
+    }
 
-    return flag;
+    return true;
   }
 
   validPositionsDeliveryDate(requestPositions: RequestPosition[], supplier: string): boolean {
-    let flag = true;
-
-    requestPositions.forEach(requestPosition => {
+    for (const requestPosition of requestPositions) {
       if (this.positionHasWinner(requestPosition)) {
-        return;
+        continue;
       }
 
-      if (flag) {
-        const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
-        flag = this.correctDeliveryDate(supplierLinkedOffers[0].deliveryDate, requestPosition.deliveryDate);
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers[0] &&
+          !this.correctDeliveryDate(supplierLinkedOffers[0].deliveryDate, requestPosition.deliveryDate)
+      ) {
+        return false;
       }
-    });
+    }
 
-    return flag;
+    return true;
   }
 
 }
