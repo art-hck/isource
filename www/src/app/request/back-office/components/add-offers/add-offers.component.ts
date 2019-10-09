@@ -210,6 +210,10 @@ export class AddOffersComponent implements OnInit {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
 
+  positionHasProcedure(requestPosition) {
+    return requestPosition.hasProcedure === true;
+  }
+
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;

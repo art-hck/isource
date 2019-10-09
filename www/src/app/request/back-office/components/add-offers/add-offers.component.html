@@ -64,7 +64,8 @@
 
 
             <td class="position-name">
-              <p *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</p>
+              <span class="sent-for-agreement-label" *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
+              <span class="has-procedure-label" *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
 
               <clr-checkbox-wrapper class="select-checkbox">
                 <input clrCheckbox type="checkbox"

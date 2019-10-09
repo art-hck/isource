@@ -138,6 +138,16 @@ clr-checkbox-wrapper {
   padding-top: 10px;
 }
 
+.sent-for-agreement-label {
+  margin: 0 20px 10px 20px;
+  display: block;
+}
+.has-procedure-label {
+  margin: 0 20px 10px 20px;
+  display: block;
+}
+
+
 .grey {
   color: #999999;
 }
