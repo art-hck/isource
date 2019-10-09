@@ -1,0 +1,190 @@
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
+
+<ng-container *ngIf="(request$ | async) as request; else loading">
+  <div class="clr-row">
+    <div class="info-card clr-col">
+      <div class="request-info">
+        <div class="breadcrumbs">
+          <a [routerLink]="'../..'">Заявки</a> / <a [routerLink]="'..'">Заявка №{{request.number}}</a>
+        </div>
+        <h2><b>Рабочая конструкторская документация</b></h2>
+
+        <ng-container *ngIf="routeData?.isBackoffice">
+          <div class="clr-row w-100">
+            <div class="clr-col-2">
+              <button class="btn btn-primary-outline" (click)="onShowDesignDocumentationListModal()">
+                <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
+                <span> Добавить перечень РКД</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Модальное окно добавление перечня ркд -->
+          <clr-modal [(clrModalOpen)]="showDesignDocumentationListModal"
+                     [clrModalClosable]="false"
+                     [clrModalSize]="'xl'">
+            <h3 class="modal-title">Новый перечень РКД</h3>
+            <div class="modal-body">
+              <form [formGroup]="addDocumentationForm" class="form">
+                <div formArrayName="addDocumentationListForm">
+                  <div class="clr-row w-100">
+                    <div class="clr-col-5">
+                      <label>Наименование документа</label>
+                    </div>
+                    <div class="clr-col-3">
+                      <label>Срок предоставления (календ. дней)</label>
+                    </div>
+                    <div class="clr-col-3">
+                      <label>Срок корректировки (календ. дней)</label>
+                    </div>
+                  </div>
+                  <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
+                    <div class="form-block">
+                      <div class="clr-form-control">
+                        <div class="clr-row w-100" formGroupName="{{i}}">
+                          <div class="clr-col-5">
+                            <input id="name" type="text" formControlName="name"
+                                   [class.invalid]="isFieldInvalid(i, 'name')"/>
+                          </div>
+                          <div class="clr-col-3">
+                            <input id="adjustmentLimit" type="number" formControlName="adjustmentLimit"
+                                   [class.invalid]="isFieldInvalid(i, 'adjustmentLimit')"/>
+                          </div>
+                          <div class="clr-col-3">
+                            <input id="receivingLimit" type="number" formControlName="receivingLimit"
+                                   [class.invalid]="isFieldInvalid(i, 'receivingLimit')"/>
+                          </div>
+                          <div class="clr-col-1">
+                            <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
+                                    title="Удалить из списка" *ngIf="i > 0">
+                              <clr-icon shape="times" size="18"></clr-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <button class="btn btn-link" (click)="onAddNext()" *ngIf="!addDocumentationForm.invalid">
+                    Добавить документ
+                  </button>
+                </div>
+              </form>
+              <div class="position-list">
+                <div class="position-choice">
+                  <b>Выберите позиции:</b>
+                </div>
+                <div class="clr-row w-100" *ngFor="let position of getPositions()">
+                  <div class="clr-col-12">
+                    <clr-checkbox-wrapper class="select-checkbox">
+                      <input clrCheckbox type="checkbox"
+                             value="{{ position }}"
+                             [(ngModel)]="position.checked"
+                             (change)="onSelectPosition(position)">
+                      <label class="position-label nopadding">{{ position.name }}
+                      </label>
+                    </clr-checkbox-wrapper>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-link" (click)="onCloseAddDesignDocumentationModal()">Отмена</button>
+              <button class="btn btn-primary" (click)="onAddDesignDocumentationList()"
+                      [disabled]="addDocumentationForm.invalid || selectedPositions.length === 0">
+                Добавить
+              </button>
+            </div>
+          </clr-modal>
+        </ng-container>
+
+        <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
+          <div class="design-documentation-card">
+            <div class="clr-row clr-align-items-center">
+              <span class="position-name clr-col">
+                <span>{{designDocumentation.position.name}}</span>
+              </span>
+              <span class="design-actions clr-col">
+                <ng-container [ngSwitch]="designDocumentation.status" *ngIf="routeData?.isCustomer">
+                  <clr-dropdown *ngSwitchCase="designDocStatus.ON_APPROVAL" class="bottom-right">
+                    <button class="btn btn-primary btn-dropdown" clrDropdownTrigger>
+                      <div>Принять решение</div><clr-icon shape="caret down"></clr-icon>
+                    </button>
+                    <clr-dropdown-menu>
+                      <div clrDropdownItem (click)="approval(designDocumentation)">
+                        <clr-icon shape="check"></clr-icon><span> Согласовать</span>
+                      </div>
+                      <label clrDropdownItem>
+                          <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+                          <span> Приложить замечания</span>
+                          <input type="file" (change)="reject(designDocumentation, $event.target.files[0])">
+                      </label>
+
+                    </clr-dropdown-menu>
+                  </clr-dropdown>
+                  <button *ngSwitchCase="designDocStatus.NEW" class="btn btn-info-outline btn-label" disabled="">
+                    <span>Новый</span>
+                  </button>
+                  <button *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-success-outline btn-label">
+                    <clr-icon shape="check"></clr-icon><span>Согласовано</span>
+                  </button>
+                  <button *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-warning-outline btn-label">
+                    <clr-icon shape="warning-standard" class="is-solid"></clr-icon><span>На доработке</span>
+                  </button>
+                </ng-container>
+
+                <ng-container [ngSwitch]="designDocumentation.status" *ngIf="routeData?.isBackoffice">
+                  <button class="btn" *ngIf="designDocumentation.status as status"
+                          [ngSwitch]="status"
+                          [ngClass]='{
+                              "btn-primary": status === designDocStatus.NEW && !this.isSendingForApproval(designDocumentation),
+                              "btn-info-outline": status === designDocStatus.ON_APPROVAL || this.isSendingForApproval(designDocumentation),
+                              "btn-success-outline": status === designDocStatus.APPROVAL,
+                              "btn-danger-outline": status === designDocStatus.REJECTED,
+                              "btn-label": status !== designDocStatus.NEW
+                            }'
+                          [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
+                          [disabled]="!isApprovable(designDocumentation) || status === designDocStatus.ON_APPROVAL"
+                          (click)="sendForApproval(designDocumentation)">
+                    <span *ngSwitchCase="designDocStatus.NEW">Согласовать</span>
+                    <span *ngSwitchCase="designDocStatus.ON_APPROVAL">На согласовании</span>
+                    <span *ngSwitchCase="designDocStatus.APPROVAL">Согласовано</span>
+                    <span *ngSwitchCase="designDocStatus.REJECTED">Отклонено</span>
+                  </button>
+                </ng-container>
+              </span>
+
+              <table class="document-list table table-noborder">
+                <thead>
+                <tr class="clr-row">
+                  <th class="left clr-col-4">Наименование документа</th>
+                  <th class="left clr-col-8">Документ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="clr-row" *ngFor="let designDoc of designDocumentation.designDocs">
+                  <td class="left clr-col-4">
+                    {{designDoc.name}}
+                  </td>
+                  <td class="left clr-col-8">
+                    <div class="form-group compact">
+                      <app-document-simple-list
+                        [documents]="designDoc.documents"
+                        [enableUpload]="routeData?.isBackoffice && !isLoadingDesignDoc(designDoc) && !this.isSendingForApproval(designDocumentation) && designDocumentation.status === designDocStatus.NEW"
+                        [limit]="5"
+                        (selected)="onSelectDocument($event, designDoc)"
+                      ></app-document-simple-list>
+                      <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

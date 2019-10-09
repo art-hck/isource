@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {RequestService} from "../../services/request.service";
-import {DesignDocumentationService} from "../../services/design-documentation.service";
-import {DesignDocumentationList} from "../../../common/models/design-documentationList";
-import {RequestPosition} from "../../../common/models/request-position";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DesignDocumentation} from "../../../common/models/design-documentation";
-import {finalize} from "rxjs/operators";
-import {DesignDocumentationStatus} from "../../../common/enum/design-documentation-status";
-import {ClrLoadingState} from "@clr/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../models/request";
+import { RequestService } from "../../../back-office/services/request.service";
+import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
+import { DesignDocumentationList } from "../../models/design-documentationList";
+import { RequestPosition } from "../../models/request-position";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DesignDocumentation } from "../../models/design-documentation";
+import { catchError, finalize } from "rxjs/operators";
+import { DesignDocumentationStatus } from "../../enum/design-documentation-status";
+import { ClrLoadingState } from "@clr/angular";
+import { Observable, of } from "rxjs";
 
 @Component({
-  selector: 'app-add-design-documentation',
-  templateUrl: './add-design-documentation.component.html',
-  styleUrls: ['./add-design-documentation.component.scss']
+  selector: 'app-design-documentation',
+  templateUrl: './design-documentation.component.html',
+  styleUrls: ['./design-documentation.component.scss']
 })
-export class AddDesignDocumentationComponent implements OnInit {
+export class DesignDocumentationComponent implements OnInit {
 
   requestId: Uuid;
-  request: Request;
+  request$: Observable<Request>;
   positions: RequestPosition[] = [];
+  routeData: {
+    isBackoffice?: boolean,
+    isCustomer?: boolean
+  } = {};
 
   designDocumentations: DesignDocumentationList[] = [];
   documentationList: DesignDocumentation[];
@@ -36,6 +41,8 @@ export class AddDesignDocumentationComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
+  private approving: DesignDocumentationList[] = [];
+  private rejecting: DesignDocumentationList[] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -57,9 +64,10 @@ export class AddDesignDocumentationComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
+    this.routeData = this.route.snapshot.data;
+    this.request$ = this.requestService.getRequestInfo(this.requestId);
 
     this.getPositionList();
-    this.updateRequestInfo();
     this.getDesignDocumentationList();
 
     this.addDocumentationListFormGroup();
@@ -70,15 +78,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`).then(r => {});
-  }
-
-  protected updateRequestInfo(): void {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
-      }
-    );
+    this.router.navigateByUrl(`requests/backoffice/${this.requestId}`).then(r => {});
   }
 
   onAddNext() {
@@ -177,7 +177,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
     this.loadingDesignDocs.push(designDoc);
     const subscription = this.designDocumentationService
-      .uploadDocuments(this.request.id, designDoc.id, files)
+      .uploadDocuments(this.requestId, designDoc.id, files)
       .pipe(
         finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc))
       )
@@ -195,7 +195,7 @@ export class AddDesignDocumentationComponent implements OnInit {
 
     this.sendingForApproval.push(designDocumentationList);
 
-    const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id).pipe(
+    const subscription = this.designDocumentationService.sendForApproval(this.requestId, designDocumentationList.id).pipe(
       finalize(() => this.sendingForApproval = this.sendingForApproval.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList))
     ).subscribe((_designDocumentationList: DesignDocumentationList) => {
       const index = this.designDocumentations.indexOf(designDocumentationList);
@@ -206,6 +206,47 @@ export class AddDesignDocumentationComponent implements OnInit {
 
       subscription.unsubscribe();
     });
+  }
+
+  approval(designDocumentationList: DesignDocumentationList) {
+    this.approving.push(designDocumentationList);
+
+    const subscription = this.designDocumentationService.approval(this.requestId, designDocumentationList.id).pipe(
+      finalize(() => this.approving = this.approving.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList)),
+      catchError(err => {
+        designDocumentationList.status = DesignDocumentationStatus.APPROVAL;
+        return of(designDocumentationList);
+      })
+    ).subscribe((_designDocumentationList: DesignDocumentationList) => {
+      const index = this.designDocumentations.indexOf(designDocumentationList);
+
+      if (index !== -1) {
+        this.designDocumentations[index] = _designDocumentationList;
+      }
+
+      subscription.unsubscribe();
+    });
+  }
+
+  reject(designDocumentationList: any, file?: File) {
+    this.rejecting.push(designDocumentationList);
+    const subscription = this.designDocumentationService.reject(this.requestId, designDocumentationList.id, file).pipe(
+      finalize(() => this.rejecting = this.rejecting.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList)),
+      catchError(err => {
+        designDocumentationList.status = DesignDocumentationStatus.REJECTED;
+        return of(designDocumentationList);
+      })
+    ).subscribe((_designDocumentationList: DesignDocumentationList) => {
+      const index = this.designDocumentations.indexOf(designDocumentationList);
+
+      if (index !== -1) {
+        this.designDocumentations[index] = _designDocumentationList;
+      }
+
+      subscription.unsubscribe();
+    });
+
+    designDocumentationList.status = DesignDocumentationStatus.REJECTED;
   }
 
   isApprovable(designDocumentationList: DesignDocumentationList) {
