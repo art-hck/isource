@@ -64,9 +64,6 @@
 
 
             <td class="position-name">
-              <span class="sent-for-agreement-label" *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
-              <span class="has-procedure-label" *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
-
               <clr-checkbox-wrapper class="select-checkbox">
                 <input clrCheckbox type="checkbox"
                        value="{{requestPosition}}"
@@ -84,6 +81,10 @@
                   <b>как можно быстрее</b>
                 </ng-template>
               </p>
+
+              <span class="sent-for-agreement-label" *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
+              <span class="has-procedure-label" *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
+
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">
               <ng-container
