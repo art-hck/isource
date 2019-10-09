@@ -88,15 +88,15 @@ export class CommercialProposalsComponent implements OnInit {
     return selectedSum;
   }
 
-  incorrectDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
+  correctDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
     if (!requestPositionDeliveryDate) {
-      return false;
+      return true;
     }
 
     const controlDate = moment(linkedOfferDeliveryDate);
     const validationDate = moment(requestPositionDeliveryDate);
 
-    return controlDate.isBefore(validationDate);
+    return controlDate.isSameOrBefore(validationDate);
   }
 
   protected updatePositionsAndSuppliers(): void {
@@ -259,7 +259,6 @@ export class CommercialProposalsComponent implements OnInit {
     return Object.keys(this.selectedOffers).length > 0;
   }
 
-
   onSupplierListScroll(event) {
     const offsetX = Math.round(event.target.scrollLeft);
     this.tableBody.nativeElement.scrollTo(offsetX, 0);
@@ -267,42 +266,42 @@ export class CommercialProposalsComponent implements OnInit {
   }
 
 
-  makeReadableDate(date) {
+  makeReadableDate(date): string {
     return moment(date).locale("ru").format('LL');
   }
 
-
-  positionsCountValidationLabel(requestPositions: RequestPosition[], supplier: string) {
-    let label = 'Не все позиции в нужном количестве';
+  validPositionsCount(requestPositions: RequestPosition[], supplier: string): boolean {
+    let flag = true;
 
     requestPositions.forEach(requestPosition => {
-      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
-      if (supplierLinkedOffers.every(offer => offer.quantity === requestPosition.quantity)) {
-        label = 'Все позиции в нужном количестве';
+      if (this.positionHasWinner(requestPosition)) {
+        return;
+      }
+
+      if (flag) {
+        const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+        flag = supplierLinkedOffers[0].quantity >= requestPosition.quantity;
       }
     });
 
-    return label;
+    return flag;
   }
 
-  positionsDeliveryDateValidationLabel(requestPositions, supplier) {
-    let label = 'Сроки поставки не укладываются в заданные';
+  validPositionsDeliveryDate(requestPositions: RequestPosition[], supplier: string): boolean {
+    let flag = true;
 
     requestPositions.forEach(requestPosition => {
-      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
-      if (supplierLinkedOffers.every(
-        offer => {
-          const controlDate = moment(offer.deliveryDate);
-          const validationDate = moment(requestPosition.deliveryDate);
+      if (this.positionHasWinner(requestPosition)) {
+        return;
+      }
 
-          return controlDate.isBefore(validationDate);
-        })
-      ) {
-        label = 'Сроки поставки укладываются в заданные';
+      if (flag) {
+        const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+        flag = this.correctDeliveryDate(supplierLinkedOffers[0].deliveryDate, requestPosition.deliveryDate);
       }
     });
 
-    return label;
+    return flag;
   }
 
 }

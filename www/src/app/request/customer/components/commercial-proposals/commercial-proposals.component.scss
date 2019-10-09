@@ -306,7 +306,7 @@ a.offer-documents {
 }
 
 .hover-switch-block {
-  height: 75px;
+  height: 40px;
 }
 
 .table-footer-wrapper th.contragent-name:hover .alert-labels {
@@ -316,9 +316,19 @@ a.offer-documents {
   display: block !important;
 }
 
-
-
-
+.alert-labels span {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px 0;
+  display: block;
+}
+.alert-labels span.green-label {
+  color: #69C57F;
+}
+.alert-labels span.red-label {
+  color: #EB5757;
+}
 
 .table-footer-wrapper button.btn {
   margin-right: 0;
@@ -327,7 +337,6 @@ a.offer-documents {
   border-radius: 4px;
   box-shadow: 0 2px 9px rgba(0, 72, 113, 0.2);
 }
-
 
 .footer-wrapper {
   position: fixed;
@@ -346,6 +355,7 @@ a.offer-documents {
 }
 
 .footer-total-sum span {
+  color: #2b2b2b;
   font-weight: bold;
   font-size: 21px;
   display: block;
