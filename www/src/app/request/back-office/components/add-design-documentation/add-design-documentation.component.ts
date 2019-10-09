@@ -173,7 +173,7 @@ export class AddDesignDocumentationComponent implements OnInit {
         finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc))
       )
       .subscribe(documents => {
-        designDoc.documents = [...designDoc.documents, ...documents];
+        designDoc.documents = documents;
         subscription.unsubscribe();
       })
     ;
