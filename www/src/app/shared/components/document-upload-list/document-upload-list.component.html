@@ -1,7 +1,7 @@
 <ul class="list-unstyled">
   <li *ngFor="let document of documents">
-    {{ document.name }}
-
+    <document-icon [name]="document.name" [size]="documentIconSize.small"></document-icon>
+    <div>{{ document.name }}</div>
     <button type="button" class="btn btn-link" (click)="removeDocument(document)">
       <clr-icon shape="times"></clr-icon>
     </button>

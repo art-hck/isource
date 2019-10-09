@@ -272,6 +272,14 @@ clr-checkbox-wrapper {
   padding-top: 0px;
 }
 
+.document-list {
+  padding-top: 0px;
+}
+
+.document-list clr-checkbox-container {
+  margin-right: 10px;
+}
+
 .send-offers button {
   margin-left: 10px;
 }

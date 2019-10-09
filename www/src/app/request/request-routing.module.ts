@@ -10,6 +10,7 @@ import { AddTechnicalProposalsComponent } from "./back-office/components/add-tec
 import {TechnicalProposalsComponent} from "./customer/components/technical-proposals/technical-proposals.component";
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
 import {AddDesignDocumentationComponent} from "./back-office/components/add-design-documentation/add-design-documentation.component";
+import {DesignDocumentationComponent} from "./customer/components/design-documentation/design-documentation.component";
 
 const routes: Routes = [
   {
@@ -17,7 +18,10 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: CustomerRequestsList
+        component: CustomerRequestsList,
+        data: {
+          title: "Заявки"
+        }
       },
       {
         path: ':id',
@@ -33,6 +37,10 @@ const routes: Routes = [
           {
             path: 'commercial-proposals',
             component: CommercialProposalsComponent
+          },
+          {
+            path: 'design-documentation',
+            component: DesignDocumentationComponent
           }
         ]
       },

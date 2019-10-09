@@ -89,6 +89,13 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
     this.formReset();
   }
 
+  /**
+   * Прописываем это событие, чтобы в textarea после отправки не оставалось перевода строки
+   */
+  onCreateClickKeyup() {
+    this.formReset();
+  }
+
   onFileSelected(files: File[]) {
     this.sendMessageForm.get('files').setValue(files);
   }

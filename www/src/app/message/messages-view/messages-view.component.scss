@@ -28,6 +28,7 @@
 
     background: #FFFFFF;
     padding: 24px 16px;
+    max-width: 120px;
 
     ul {
       width: 100%;
@@ -36,24 +37,34 @@
     li {
       background: #F3F3F3;
       border-radius: 8px;
-
       width: 100%;
-
       cursor: pointer;
-
       font-size: 14px;
       line-height: 18px;
-
       display: flex;
       align-items: center;
       margin-bottom: 12px;
       padding: 8px 10px;
       min-width: 50px;
-    }
+      position: relative;
+      justify-content: center;
 
-    li.selected {
-      background: #2585F5;
-      color: #FFFFFF;
+      &.selected {
+        background: #2585F5;
+        color: #FFFFFF;
+
+        &:before {
+          position: absolute;
+          height: 24px;
+          width: 4px;
+          left: -16px;
+          top: 5px;
+          content: '';
+          background: #2585F5;
+          border-radius: 0 4px 4px 0;
+          margin: 0;
+        }
+      }
     }
   }
 
@@ -86,7 +97,6 @@
       margin: 4px 8px;
 
       li {
-        border: 1px solid #E3EEFF;
         box-sizing: border-box;
         border-radius: 4px;
         padding: 8px 12px;
@@ -94,23 +104,35 @@
         cursor: pointer;
         position: relative;
         height: 42px;
-      }
-
-      li:before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        content: '';
-        width: 4px;
-        height: 40px;
-        border-radius: 4px 0 0 4px;
-        margin: 0;
-      }
-
-      li.selected {
         background: #FFFFFF;
-        color: #000000;
-        opacity: 0.6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          content: '';
+          width: 4px;
+          height: 42px;
+          border-radius: 4px 0 0 4px;
+          margin: 0;
+        }
+
+        &.selected {
+          //background: #FFFFFF;
+          color: #ffffff;
+          //opacity: 0.6;
+        }
+
+        &.selected.status-position-default {
+          background: #568BF2;
+        }
+
+        &.sub-item {
+          margin-left: 12px;
+        }
       }
     }
   }
@@ -127,10 +149,6 @@
       position: relative;
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
       color: #000000;
-
-      .messages-list-header-sub {
-
-      }
     }
 
     .messages-list-content {

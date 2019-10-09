@@ -20,7 +20,7 @@ import { UserInfoService } from "../../core/services/user-info.service";
 export class MessagesViewComponent implements OnInit {
 
   requests$: Observable<Page<RequestsList>>;
-  requestsItems$: Observable<RequestPositionList[]>;
+  requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
 
   selectedRequest: RequestListItem;
   selectedRequestsItem: RequestPositionList;
@@ -40,20 +40,19 @@ export class MessagesViewComponent implements OnInit {
       .pipe(
         tap((page: Page<RequestsList>) => {
           if (page.entities.length > 0) {
-            this.onRequestClick(page.entities[0]);
+            this.onRequestClick(page.entities[0].request);
           }
         })
       );
   }
 
-  onRequestClick(request: RequestsList) {
-    this.selectedRequest = request.request;
+  onRequestClick(request: RequestListItem) {
+    this.selectedRequest = request;
     this.selectedRequestsItem = null;
 
-    this.requestsItems$ = this.messageService.getRequestPositions(this.selectedRequest.id);
+    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id);
 
-    this.contextType = MessageContextTypes.REQUEST;
-    this.contextId = request.request.id;
+    this.onRequestContextClick();
   }
 
   onRequestItemClick(item: RequestPositionList) {
@@ -61,6 +60,13 @@ export class MessagesViewComponent implements OnInit {
 
     this.contextType = this.getContextType(item);
     this.contextId = item.id;
+  }
+
+  onRequestContextClick() {
+    this.selectedRequestsItem = null;
+
+    this.contextType = MessageContextTypes.REQUEST;
+    this.contextId = this.selectedRequest.id;
   }
 
   getContextType(item: RequestPositionList) {
@@ -95,10 +101,6 @@ export class MessagesViewComponent implements OnInit {
     return '';
   }
 
-  isGroup(item: RequestPositionList) {
-    return item instanceof RequestGroup;
-  }
-
   getRequestUrl() {
     const userRole = this.user.getUserRole();
 
@@ -116,6 +118,6 @@ export class MessagesViewComponent implements OnInit {
   getRequestItemClass(item: RequestPositionList) {
     return item instanceof RequestPosition ?
       'status-position-' + item.status :
-      '';
+      'status-position-default';
   }
 }

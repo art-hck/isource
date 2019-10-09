@@ -9,3 +9,12 @@ input#file_upload {
 .form-group {
   margin: 0;
 }
+
+li {
+  display: flex;
+  align-items: center;
+
+  div {
+    margin: 5px 10px;
+  }
+}

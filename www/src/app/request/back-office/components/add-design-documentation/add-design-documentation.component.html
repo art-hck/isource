@@ -125,7 +125,13 @@
                   <ng-container *ngIf="isRkdAgreementStatus(designDocumentation)">
                     <td class="left clr-col-3">
                       <div class="form-group compact">
-                        <a>Загрузить</a>
+                        <app-document-simple-list
+                          [documents]="designDoc.documents"
+                          [enableUpload]="!isLoadingDesignDoc(designDoc)"
+                          [limit]="5"
+                          (selected)="onSelectDocument($event, designDoc)"
+                        ></app-document-simple-list>
+                        <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                       </div>
                     </td>
                     <td class="left date clr-col-2">
