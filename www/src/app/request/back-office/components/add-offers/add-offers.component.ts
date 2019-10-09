@@ -202,7 +202,8 @@ export class AddOffersComponent implements OnInit {
   positionCanBeSelected(requestPosition) {
     return (
       requestPosition.linkedOffers.length !== 0 &&
-      !this.positionIsSentForAgreement(requestPosition)
+      !this.positionIsSentForAgreement(requestPosition) &&
+      !this.positionHasProcedure(requestPosition)
     );
   }
 
