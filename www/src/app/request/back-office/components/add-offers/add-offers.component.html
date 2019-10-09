@@ -105,7 +105,10 @@
                 </ng-container>
               </ng-container>
               <ng-template #addLinkedOfferButton>
-                <div class="add-offer" (click)="onShowAddOfferModal(requestPosition, supplier)">
+                <div class="add-offer"
+                     [class.disabled]="!isOfferClickable(requestPosition)"
+                     (click)="isOfferClickable(requestPosition) ?
+                     onShowAddOfferModal(requestPosition, supplier) : false">
                   <clr-icon shape="plus"></clr-icon>
                 </div>
               </ng-template>
