@@ -1,0 +1,56 @@
+.file-upload {
+  display: none;
+}
+
+.btn-delete {
+  color: #888;
+  padding: 0 5px;
+  margin: 0;
+}
+
+.document {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+
+  & > div {
+    margin: 8px;
+    line-height: 1.4em;
+
+    .title {
+      font-size: 1.2em;
+    }
+
+    .description {
+      color: #999;
+
+      span:first-child {
+        margin-right: 5px;
+      }
+    }
+
+  }
+}
+
+.more {
+  color: #666;
+  font-size: 1.2em;
+  margin: 10px 0;
+  cursor: pointer;
+
+  &::before {
+    border-style: solid;
+    border-width: 0.15em 0.15em 0 0;
+    content: "";
+    display: inline-block;
+    height: 0.50em;
+    left: 0.15em;
+    position: relative;
+    width: 0.50em;
+    top: -2px;
+    transform: rotate(135deg);
+    margin-right: 0.5em;
+  }
+}
