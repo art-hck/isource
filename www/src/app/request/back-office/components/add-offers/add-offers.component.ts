@@ -58,6 +58,9 @@ export class AddOffersComponent implements OnInit {
   selectedProcedureDocuments: RequestDocument[] = [];
   selectedProcedureLotDocuments: RequestDocument[] = [];
 
+  showPrivateAccessContragents = false;
+  contragentsWithTp: ContragentList[] = [];
+
   files: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
@@ -427,6 +430,19 @@ export class AddOffersComponent implements OnInit {
       }
       alert(msg);
     });
+  }
+
+  onHidePrivateAccessContragents(): void {
+    this.showPrivateAccessContragents = false;
+  }
+
+  onShowPrivateAccessContragents(): void {
+    this.offersService.getContragentsWithTp(this.request, this.selectedProcedurePositions).subscribe(
+      (contragents: ContragentList[]) => {
+        this.contragentsWithTp = contragents;
+      }
+    );
+    this.showPrivateAccessContragents = true;
   }
 
   protected updatePositionsAndSuppliers(): void {

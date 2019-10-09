@@ -437,6 +437,36 @@
                 </clr-radio-wrapper>
               </clr-radio-container>
             </div>
+            <div class="clr-row w-100 padding-top">
+              <clr-radio-container>
+                <label class="clr-control-label nopadding radio-label"><b>Доступ к процедуре</b></label>
+                <clr-radio-wrapper>
+                  <input type="radio"
+                         clrRadio
+                         name="isPrivateAccess"
+                         value="false"
+                         (change)="onHidePrivateAccessContragents()"
+                         checked/>
+                  <label class="clr-control-label nopadding">Открытая процедура</label>
+                </clr-radio-wrapper>
+                <clr-radio-wrapper>
+                  <input type="radio"
+                         clrRadio
+                         name="isPrivateAccess"
+                         value="true"
+                         (change)="onShowPrivateAccessContragents()"/>
+                  <label class="clr-control-label nopadding">Для ограниченного круга участников</label>
+                </clr-radio-wrapper>
+              </clr-radio-container>
+              <clr-checkbox-container class="w-100" *ngIf="showPrivateAccessContragents">
+                <label class="clr-control-label nopadding radio-label">Выберите участников:</label>
+                <clr-checkbox-wrapper
+                  class="select-checkbox">
+                  <input class="checkbox select-checkbox" clrCheckbox type="checkbox">
+                  <label class="nopadding">123312</label>
+                </clr-checkbox-wrapper>
+              </clr-checkbox-container>
+            </div>
           </div>
         </div>
       </form>
