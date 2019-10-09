@@ -199,7 +199,7 @@ export class AddOffersComponent implements OnInit {
     return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
 
-  positionCanBeSelected(requestPosition) {
+  positionCanBeSelected(requestPosition: RequestPosition): boolean {
     return (
       requestPosition.linkedOffers.length !== 0 &&
       !this.positionIsSentForAgreement(requestPosition) &&
@@ -207,11 +207,11 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
-  positionIsSentForAgreement(requestPosition) {
+  positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
 
-  positionHasProcedure(requestPosition) {
+  positionHasProcedure(requestPosition: RequestPosition): boolean {
     return requestPosition.hasProcedure === true;
   }
 
