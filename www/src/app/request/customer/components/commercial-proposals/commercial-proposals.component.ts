@@ -128,6 +128,18 @@ export class CommercialProposalsComponent implements OnInit {
     }
   }
 
+  canSelectOffersBySupplier(requestPositions: RequestPosition[], supplier: string): boolean {
+    for (const requestPosition of requestPositions) {
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+
+      if (supplierLinkedOffers[0] && !this.positionHasWinner(requestPosition)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   onSelectAll(requestPositions: RequestPosition[], supplier: string): void {
     this.selectedOffers = {};
 
@@ -302,5 +314,6 @@ export class CommercialProposalsComponent implements OnInit {
 
     return true;
   }
+
 
 }

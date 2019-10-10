@@ -55,7 +55,7 @@
           <tr>
             <th class="position-name">
               <div class="clr-row">
-                <clr-checkbox-container>
+                <clr-checkbox-container *ngIf="positionHasSelectableOffers(requestPositions)">
                   <clr-checkbox-wrapper class="select-checkbox">
                     <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
                            (change)="onSelectAllPositions($event, requestPositions)"
@@ -117,9 +117,8 @@
               </ng-container>
               <ng-template #addLinkedOfferButton>
                 <div class="add-offer"
-                     [class.disabled]="!isOfferClickable(requestPosition)"
-                     (click)="isOfferClickable(requestPosition) ?
-                     onShowAddOfferModal(requestPosition, supplier) : false">
+                     *ngIf="isOfferClickable(requestPosition)"
+                     (click)="onShowAddOfferModal(requestPosition, supplier)">
                   <clr-icon shape="plus"></clr-icon>
                 </div>
               </ng-template>
