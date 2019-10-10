@@ -137,7 +137,9 @@
                     </div>
 
                     <div class="clr-row">
-                      <div class="clr-col hover-switch-block">
+                      <div class="clr-col"
+                           [class.hover-switch-block]="canSelectOffersBySupplier(requestPositions, supplier)">
+
                         <div class="alert-labels">
                           <div *ngIf="validPositionsCount(requestPositions, supplier); else invalidCount">
                             <span class="green-label">
@@ -167,6 +169,7 @@
 
                         <div class="select-all-button" style="display: none">
                           <button class="btn btn-primary"
+                                *ngIf="canSelectOffersBySupplier(requestPositions, supplier)"
                                 (click)="onSelectAll(requestPositions, supplier)">Выбрать всё</button>
                         </div>
                       </div>
