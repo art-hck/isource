@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,10 +14,7 @@ import {ContragentList} from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
 import {ClrWizard} from "@clr/angular";
-import {isBoolean} from "util";
-import {PaginatorComponent} from "../../../../order/components/paginator/paginator.component";
 import {ProcedureService} from "../../services/procedure.service";
-import {NotificationService} from "../../../../shared/services/notification.service";
 import {DocumentsService} from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
@@ -67,11 +64,6 @@ export class AddOffersComponent implements OnInit {
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild("wizard", { static: false }) wizard: ClrWizard;
-  _open = false;
-
-  open() {
-    this._open = !this.open;
-  }
 
   constructor(
     private route: ActivatedRoute,
@@ -90,7 +82,7 @@ export class AddOffersComponent implements OnInit {
 
     this.offerForm = this.formBuilder.group({
       priceWithVat: ['', [Validators.required, Validators.min(1)]],
-      currency: ['', Validators.required],
+      currency: ['USD', Validators.required],
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
@@ -123,7 +115,7 @@ export class AddOffersComponent implements OnInit {
       dishonestSuppliersForbidden: [false],
       dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
       summingupDate: ['', [Validators.required, CustomValidators.customDate('dateEndRegistration')]],
-      positions: this.formBuilder.array(this.requestPositions.map(element => {
+      positions: this.formBuilder.array(this.requestPositions.map(() => {
         return this.formBuilder.control(false);
       }))
     });
@@ -252,22 +244,30 @@ export class AddOffersComponent implements OnInit {
   }
 
   setOfferValues(linkedOffer: RequestOfferPosition) {
-    this.offerForm.get('priceWithVat').setValue(linkedOffer.priceWithoutVat);
-    this.offerForm.get('currency').setValue(linkedOffer.currency);
-    this.offerForm.get('quantity').setValue(linkedOffer.quantity);
-    this.offerForm.get('measureUnit').setValue(linkedOffer.measureUnit);
-    this.offerForm.get('paymentTerms').setValue(linkedOffer.paymentTerms);
-    this.offerForm.get('id').setValue(linkedOffer.id);
     const deliveryDate = linkedOffer.deliveryDate ?
       moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
       linkedOffer.deliveryDate;
-    this.offerForm.get('deliveryDate').patchValue(deliveryDate);
+
+    this.offerForm.reset();
+    this.offerForm.patchValue({
+      'id': linkedOffer.id,
+      'priceWithVat': linkedOffer.priceWithoutVat,
+      'currency': linkedOffer.currency,
+      'quantity': linkedOffer.quantity,
+      'measureUnit': linkedOffer.measureUnit,
+      'paymentTerms': linkedOffer.paymentTerms,
+      'deliveryDate': deliveryDate,
+    });
   }
 
-  addOfferValues(requestPosition) {
-    this.offerForm.get('quantity').setValue(requestPosition.quantity);
-    this.offerForm.get('measureUnit').setValue(requestPosition.measureUnit);
-    this.offerForm.get('paymentTerms').setValue(requestPosition.paymentTerms);
+  addOfferValues(requestPosition: RequestPosition) {
+    this.offerForm.reset();
+    this.offerForm.patchValue({
+      'currency': requestPosition.currency,
+      'quantity': requestPosition.quantity,
+      'measureUnit': requestPosition.measureUnit,
+      'paymentTerms': requestPosition.paymentTerms,
+    });
     if (requestPosition.deliveryDate !== null) {
       const deliveryDate = requestPosition.deliveryDate ?
         moment(new Date(requestPosition.deliveryDate)).format('DD.MM.YYYY') :
@@ -304,7 +304,7 @@ export class AddOffersComponent implements OnInit {
     formValue.supplierContragentName = this.selectedSupplier;
 
     this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
-      (data: RequestOfferPosition) => {
+      () => {
         this.updatePositions();
       }
     );
@@ -314,7 +314,6 @@ export class AddOffersComponent implements OnInit {
 
   onCloseAddOfferModal() {
     this.showAddOfferModal = false;
-    this.offerForm.reset();
     this.editMode = false;
   }
 
