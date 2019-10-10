@@ -33,10 +33,7 @@ export class OffersService {
 
   publishRequestOffers(id: Uuid, requestPositions: RequestPosition[]) {
     const url = `requests/backoffice/${id}/publish-offers`;
-    const ids = [];
-    for (const requestPosition of requestPositions) {
-      ids.push(requestPosition.id);
-    }
+    const ids = requestPositions.map(item => item.id);
     return this.api.post(url, {
       positionIds: ids
     });
