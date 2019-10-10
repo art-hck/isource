@@ -176,8 +176,9 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
-    // Если загрузка еще не началась и не отправляем на согласование и статус новый
-    return !this.isLoadingDesignDoc(designDoc)
+    // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и статус новый
+    return this.routeData.isBackoffice
+      && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
       && designDocumentationList.status === DesignDocumentationStatus.NEW
     ;
