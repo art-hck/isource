@@ -315,5 +315,4 @@ export class CommercialProposalsComponent implements OnInit {
     return true;
   }
 
-
 }
