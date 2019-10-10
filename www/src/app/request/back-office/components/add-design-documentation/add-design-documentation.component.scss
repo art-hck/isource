@@ -182,3 +182,12 @@ span {
   line-height: 20px;
   font-weight: bold;
 }
+
+.document-status .btn-label {
+  cursor: default;
+}
+
+::ng-deep span.spinner {
+  margin: 0;
+  display: inline-block;
+}

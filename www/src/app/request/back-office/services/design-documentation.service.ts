@@ -5,6 +5,7 @@ import {RequestPosition} from "../../common/models/request-position";
 import {DesignDocumentation} from "../../common/models/design-documentation";
 import {RequestDocument} from "../../common/models/request-document";
 import {Observable} from "rxjs";
+import {DesignDocumentationList} from "../../common/models/design-documentationList";
 
 @Injectable()
 export class DesignDocumentationService {
@@ -42,5 +43,11 @@ export class DesignDocumentationService {
     files.forEach(file => formData.append('files[]', file, file.name));
 
     return this.api.post<RequestDocument[]>(url, formData);
+  }
+
+  sendForApproval(id: Uuid, designDocId: Uuid): Observable<DesignDocumentationList> {
+    const url = `requests/${id}/designs/${designDocId}/on-approval`;
+
+    return this.api.post<DesignDocumentationList>(url, null);
   }
 }

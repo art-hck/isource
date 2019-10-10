@@ -99,9 +99,6 @@
             <div class="clr-row clr-align-items-center">
               <span class="position-name clr-col">
                 <span>{{designDocumentation.position.name}}</span>
-                <div class="edit-btn">
-                  <clr-icon shape="pencil"></clr-icon>
-                </div>
               </span>
               <table class="document-list table table-noborder">
                 <thead>
@@ -127,7 +124,7 @@
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
-                          [enableUpload]="!isLoadingDesignDoc(designDoc)"
+                          [enableUpload]="canUploadDocuments(designDoc, designDocumentation)"
                           [limit]="5"
                           (selected)="onSelectDocument($event, designDoc)"
                         ></app-document-simple-list>
@@ -147,6 +144,25 @@
                 </tr>
                 </tbody>
               </table>
+              <div class="document-status">
+                <button class="btn" *ngIf="designDocumentation.status as status"
+                        [ngSwitch]="status"
+                        [ngClass]='{
+                            "btn-primary": status === designDocStatus.NEW && !this.isSendingForApproval(designDocumentation),
+                            "btn-info-outline": status === designDocStatus.ON_APPROVAL || this.isSendingForApproval(designDocumentation),
+                            "btn-success-outline": status === designDocStatus.APPROVAL,
+                            "btn-danger-outline": status === designDocStatus.REJECTED,
+                            "btn-label": status !== designDocStatus.NEW
+                          }'
+                        [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
+                        [disabled]="!isApprovable(designDocumentation)"
+                        (click)="sendForApproval(designDocumentation)">
+                  <span *ngSwitchCase="designDocStatus.NEW">Согласовать</span>
+                  <span *ngSwitchCase="designDocStatus.ON_APPROVAL">На согласовании</span>
+                  <span *ngSwitchCase="designDocStatus.APPROVAL">Согласовано</span>
+                  <span *ngSwitchCase="designDocStatus.REJECTED">Отклонено</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

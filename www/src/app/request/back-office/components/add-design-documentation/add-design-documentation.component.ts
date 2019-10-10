@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {RequestService} from "../../services/request.service";
-import {DesignDocumentationService} from "../../services/design-documentation.service";
-import {DesignDocumentationList} from "../../../common/models/design-documentationList";
-import {RequestPosition} from "../../../common/models/request-position";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DesignDocumentation} from "../../../common/models/design-documentation";
-import {catchError, finalize} from "rxjs/operators";
-import {of} from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../common/models/request";
+import { RequestService } from "../../services/request.service";
+import { DesignDocumentationService } from "../../services/design-documentation.service";
+import { DesignDocumentationList } from "../../../common/models/design-documentationList";
+import { RequestPosition } from "../../../common/models/request-position";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DesignDocumentation } from "../../../common/models/design-documentation";
+import { finalize } from "rxjs/operators";
+import { DesignDocumentationStatus } from "../../../common/enum/design-documentation-status";
+import { ClrLoadingState } from "@clr/angular";
 
 @Component({
   selector: 'app-add-design-documentation',
@@ -30,7 +31,11 @@ export class AddDesignDocumentationComponent implements OnInit {
   selectedPositions: RequestPosition[] = [];
   existingPositions: RequestPosition[] = [];
   pos: RequestPosition[] = [];
+  designDocStatus = DesignDocumentationStatus;
+  clrLoadingState = ClrLoadingState;
+
   private loadingDesignDocs: DesignDocumentation[] = [];
+  private sendingForApproval: DesignDocumentationList[] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -165,6 +170,19 @@ export class AddDesignDocumentationComponent implements OnInit {
     return this.loadingDesignDocs.filter(doc => doc === designDoc).length > 0;
   }
 
+  isSendingForApproval(designDocumentationList: DesignDocumentationList): boolean {
+    return this.sendingForApproval
+      .filter(_designDocumentationList => designDocumentationList === _designDocumentationList).length > 0;
+  }
+
+  canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
+    // Если загрузка еще не началась и не отправляем на согласование и статус новый
+    return !this.isLoadingDesignDoc(designDoc)
+      && !this.isSendingForApproval(designDocumentationList)
+      && designDocumentationList.status === DesignDocumentationStatus.NEW
+    ;
+  }
+
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
     this.loadingDesignDocs.push(designDoc);
     const subscription = this.designDocumentationService
@@ -177,5 +195,42 @@ export class AddDesignDocumentationComponent implements OnInit {
         subscription.unsubscribe();
       })
     ;
+  }
+
+  sendForApproval(designDocumentationList: DesignDocumentationList) {
+    if (this.isSendingForApproval(designDocumentationList)) {
+      return;
+    }
+
+    if (designDocumentationList.status !== DesignDocumentationStatus.NEW) {
+      return;
+    }
+
+    // По добавляем перечень из массив отправленных на согласование
+    this.sendingForApproval.push(designDocumentationList);
+
+    const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id)
+      .pipe(
+        finalize(() => {
+          // По окончанию убираем перечень из массива отправленных на согласование
+          this.sendingForApproval = this.sendingForApproval.filter(
+            _designDocumentationList => designDocumentationList !== _designDocumentationList
+          );
+        })
+      ).subscribe((_designDocumentationList: DesignDocumentationList) => {
+        const index = this.designDocumentations.indexOf(designDocumentationList);
+
+        if (index !== -1) {
+          this.designDocumentations[index] = _designDocumentationList;
+        }
+
+        subscription.unsubscribe();
+      })
+    ;
+  }
+
+  isApprovable(designDocumentationList: DesignDocumentationList) {
+    return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0
+      && status !== DesignDocumentationStatus.ON_APPROVAL;
   }
 }
