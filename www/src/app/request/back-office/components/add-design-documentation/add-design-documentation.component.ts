@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {RequestService} from "../../services/request.service";
-import {DesignDocumentationService} from "../../services/design-documentation.service";
-import {DesignDocumentationList} from "../../../common/models/design-documentationList";
-import {RequestPosition} from "../../../common/models/request-position";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DesignDocumentation} from "../../../common/models/design-documentation";
-import {finalize} from "rxjs/operators";
-import {DesignDocumentationStatus} from "../../../common/enum/design-documentation-status";
-import {ClrLoadingState} from "@clr/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../common/models/request";
+import { RequestService } from "../../services/request.service";
+import { DesignDocumentationService } from "../../services/design-documentation.service";
+import { DesignDocumentationList } from "../../../common/models/design-documentationList";
+import { RequestPosition } from "../../../common/models/request-position";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DesignDocumentation } from "../../../common/models/design-documentation";
+import { finalize } from "rxjs/operators";
+import { DesignDocumentationStatus } from "../../../common/enum/design-documentation-status";
+import { ClrLoadingState } from "@clr/angular";
 
 @Component({
   selector: 'app-add-design-documentation',
@@ -176,7 +176,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
-    // Если загрузка еще не началась, не отправляем на согласование и статус новый
+    // Если загрузка еще не началась и не отправляем на согласование и статус новый
     return !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
       && designDocumentationList.status === DesignDocumentationStatus.NEW
@@ -212,7 +212,7 @@ export class AddDesignDocumentationComponent implements OnInit {
     const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id)
       .pipe(
         finalize(() => {
-          // По окончанию перечень из массива отправленных на согласование
+          // По окончанию убираем перечень из массива отправленных на согласование
           this.sendingForApproval = this.sendingForApproval.filter(
             _designDocumentationList => designDocumentationList !== _designDocumentationList
           );
@@ -230,6 +230,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   isApprovable(designDocumentationList: DesignDocumentationList) {
-    return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0;
+    return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0
+      && status !== DesignDocumentationStatus.ON_APPROVAL;
   }
 }

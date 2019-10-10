@@ -155,7 +155,7 @@
                             "btn-label": status !== designDocStatus.NEW
                           }'
                         [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
-                        [disabled]="!isApprovable(designDocumentation) || status === designDocStatus.ON_APPROVAL"
+                        [disabled]="!isApprovable(designDocumentation)"
                         (click)="sendForApproval(designDocumentation)">
                   <span *ngSwitchCase="designDocStatus.NEW">Согласовать</span>
                   <span *ngSwitchCase="designDocStatus.ON_APPROVAL">На согласовании</span>
