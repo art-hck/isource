@@ -33,10 +33,8 @@ export class OffersService {
 
   publishRequestOffers(id: Uuid, requestPositions: RequestPosition[]) {
     const url = `requests/backoffice/${id}/publish-offers`;
-      const ids = [];
-      for (const requestPosition of requestPositions) {
-        ids.push(requestPosition.id);
-      }
+    const ids = requestPositions.map(item => item.id);
+
     return this.api.post(url, {
       positionIds: ids
     });
@@ -76,6 +74,15 @@ export class OffersService {
     return this.api.post(
       `requests/backoffice/${request.id}/add-offers-from-excel`,
       this.convertModelToFormData(files, null, 'files')
+    );
+  }
+
+  getContragentsWithTp(request: Request, requestPositions: RequestPosition[]): Observable<any> {
+    const ids = requestPositions.map(item => item.id);
+
+    return this.api.post(
+      `requests/backoffice/${request.id}/contragents-with-tp`,
+      {positions: ids}
     );
   }
 

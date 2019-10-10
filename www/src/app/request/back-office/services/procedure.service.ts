@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import {RequestPosition} from "../../common/models/request-position";
-import {ProcedureInfo} from "../models/procedure-info";
-import {ProcedureProperties} from "../models/procedure-properties";
-import {RequestDocument} from "../../common/models/request-document";
+import { RequestPosition } from "../../common/models/request-position";
+import { ProcedureInfo } from "../models/procedure-info";
+import { ProcedureProperties } from "../models/procedure-properties";
+import { RequestDocument } from "../../common/models/request-document";
+import { ContragentList } from "../../../contragent/models/contragent-list";
 
 @Injectable()
 export class ProcedureService {
@@ -20,13 +21,15 @@ export class ProcedureService {
     procedureProperties: ProcedureProperties,
     requestPositions: RequestPosition[],
     procedureDocuments: RequestDocument[],
-    procedureLotDocuments: RequestDocument[]
+    procedureLotDocuments: RequestDocument[],
+    procedurePrivateAccessContragents: ContragentList[]
   ) {
     const url = `requests/backoffice/${id}/create-procedure`;
 
     const positionIds = requestPositions.map(item => item.id);
     const procedureDocumentIds = procedureDocuments.map(item => item.id);
     const procedureLotDocumentIds = procedureLotDocuments.map(item => item.id);
+    const procedurePrivateAccessContragentIds = procedurePrivateAccessContragents.map(item => item.id);
 
     return this.api.post(url, {
       procedureTitle: procedureInfo.procedureTitle,
@@ -44,7 +47,8 @@ export class ProcedureService {
       positionsSuppliersVisibility: procedureProperties.positionsSuppliersVisibility,
       prolongateEndRegistration: procedureProperties.prolongateEndRegistration,
       procedureDocuments: procedureDocumentIds,
-      procedureLotDocuments: procedureLotDocumentIds
+      procedureLotDocuments: procedureLotDocumentIds,
+      privateAccessContragents: procedurePrivateAccessContragentIds
     });
   }
 
