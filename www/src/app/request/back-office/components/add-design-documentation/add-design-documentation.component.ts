@@ -171,7 +171,16 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   isSendingForApproval(designDocumentationList: DesignDocumentationList): boolean {
-    return this.sendingForApproval.filter(_designDocumentationList => designDocumentationList === _designDocumentationList).length > 0;
+    return this.sendingForApproval
+      .filter(_designDocumentationList => designDocumentationList === _designDocumentationList).length > 0;
+  }
+
+  canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
+    // Если загрузка еще не началась, не отправляем на согласование и статус новый
+    return !this.isLoadingDesignDoc(designDoc)
+      && !this.isSendingForApproval(designDocumentationList)
+      && designDocumentationList.status === DesignDocumentationStatus.NEW
+    ;
   }
 
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
@@ -189,23 +198,35 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   sendForApproval(designDocumentationList: DesignDocumentationList) {
-    if (this.isSendingForApproval(designDocumentationList) || designDocumentationList.status !== DesignDocumentationStatus.NEW) {
+    if (this.isSendingForApproval(designDocumentationList)) {
       return;
     }
 
+    if (designDocumentationList.status !== DesignDocumentationStatus.NEW) {
+      return;
+    }
+
+    // По добавляем перечень из массив отправленных на согласование
     this.sendingForApproval.push(designDocumentationList);
 
-    const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id).pipe(
-      finalize(() => this.sendingForApproval = this.sendingForApproval.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList))
-    ).subscribe((_designDocumentationList: DesignDocumentationList) => {
-      const index = this.designDocumentations.indexOf(designDocumentationList);
+    const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id)
+      .pipe(
+        finalize(() => {
+          // По окончанию перечень из массива отправленных на согласование
+          this.sendingForApproval = this.sendingForApproval.filter(
+            _designDocumentationList => designDocumentationList !== _designDocumentationList
+          );
+        })
+      ).subscribe((_designDocumentationList: DesignDocumentationList) => {
+        const index = this.designDocumentations.indexOf(designDocumentationList);
 
-      if (index !== -1) {
-        this.designDocumentations[index] = _designDocumentationList;
-      }
+        if (index !== -1) {
+          this.designDocumentations[index] = _designDocumentationList;
+        }
 
-      subscription.unsubscribe();
-    });
+        subscription.unsubscribe();
+      })
+    ;
   }
 
   isApprovable(designDocumentationList: DesignDocumentationList) {

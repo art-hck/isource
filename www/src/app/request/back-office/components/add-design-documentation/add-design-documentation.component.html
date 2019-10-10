@@ -124,7 +124,7 @@
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
-                          [enableUpload]="!isLoadingDesignDoc(designDoc) && !this.isSendingForApproval(designDocumentation) && designDocumentation.status === designDocStatus.NEW"
+                          [enableUpload]="canUploadDocuments(designDoc, designDocumentation)"
                           [limit]="5"
                           (selected)="onSelectDocument($event, designDoc)"
                         ></app-document-simple-list>
