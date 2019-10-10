@@ -82,7 +82,7 @@ export class AddOffersComponent implements OnInit {
 
     this.offerForm = this.formBuilder.group({
       priceWithVat: ['', [Validators.required, Validators.min(1)]],
-      currency: ['USD', Validators.required],
+      currency: ['', Validators.required],
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
