@@ -54,19 +54,33 @@
           <thead>
           <tr>
             <th class="position-name">
+              <div class="clr-row">
+                <clr-checkbox-container>
+                  <clr-checkbox-wrapper class="select-checkbox">
+                    <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                           (change)="onSelectAllPositions($event, requestPositions)"
+                           [checked]="areAllPositionsChecked(requestPositions)"
+                    />
+                    <label class="nopadding">Выбрать все позиции</label>
+                  </clr-checkbox-wrapper>
+                </clr-checkbox-container>
+              </div>
             </th>
             <th class="contragent-name" *ngFor="let supplier of suppliers">{{ supplier }}</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let requestPosition of requestPositions">
+
+
+
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
                 <input clrCheckbox type="checkbox"
                        value="{{requestPosition}}"
                        [(ngModel)]="requestPosition.checked"
                        (change)="onSelectPosition(requestPosition)"
-                       *ngIf="requestPosition.linkedOffers.length !== 0">
+                       *ngIf="positionCanBeSelected(requestPosition)">
                 <label class="position-label">{{ requestPosition.name }}
                   <span class="grey">{{requestPosition.quantity}} {{requestPosition.measureUnit}}</span>
                 </label>
@@ -78,6 +92,10 @@
                   <b>как можно быстрее</b>
                 </ng-template>
               </p>
+
+              <span class="sent-for-agreement-label" *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
+              <span class="has-procedure-label" *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
+
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">
               <ng-container
@@ -87,7 +105,10 @@
                 ).length; else addLinkedOfferButton">
                 <ng-container
                   *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier)">
-                  <div class="offer" (click)="onShowEditOfferModal(requestPosition, supplier, linkedOffer)">
+                  <div class="offer"
+                       [class.disabled]="!isOfferClickable(requestPosition)"
+                       (click)="isOfferClickable(requestPosition) ?
+                       onShowEditOfferModal(requestPosition, supplier, linkedOffer) : false">
                     {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
                     <p>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</p>
                     <p class="delivery">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>
@@ -95,7 +116,10 @@
                 </ng-container>
               </ng-container>
               <ng-template #addLinkedOfferButton>
-                <div class="add-offer" (click)="onShowAddOfferModal(requestPosition, supplier)">
+                <div class="add-offer"
+                     [class.disabled]="!isOfferClickable(requestPosition)"
+                     (click)="isOfferClickable(requestPosition) ?
+                     onShowAddOfferModal(requestPosition, supplier) : false">
                   <clr-icon shape="plus"></clr-icon>
                 </div>
               </ng-template>
@@ -445,7 +469,42 @@
     <clr-wizard-page (clrWizardPageOnCommit)="onPublishProcedure()"
                      (clrWizardPageOnCancel)="resetWizardForm()">
       <ng-template clrPageTitle>Документы</ng-template>
-      ...
+      <div class="w-100" *ngIf="request.documents.length">
+        <div class="clr-row">
+          <label class="clr-control-label">Документы процедуры:</label>
+        </div>
+        <div class="clr-row document-list">
+          <clr-checkbox-container>
+            <clr-checkbox-wrapper
+              class="select-checkbox"
+              *ngFor="let document of request.documents">
+              <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                     (change)="onSelectProcedureDocument(document)">
+              <label class="nopadding">{{ document.filename }}</label>
+            </clr-checkbox-wrapper>
+          </clr-checkbox-container>
+        </div>
+      </div>
+
+      <div class="w-100" *ngIf="isDocumentsExists(selectedProcedurePositions)">
+        <div class="clr-row">
+          <label class="clr-control-label">Документы лота:</label>
+        </div>
+        <div class="clr-row document-list">
+          <div *ngFor="let position of selectedProcedurePositions">
+            <clr-checkbox-container class="w-100" *ngIf="position.documents.length">
+              <label class="clr-control-label">{{ position.name }}:</label>
+              <clr-checkbox-wrapper
+                class="select-checkbox"
+                *ngFor="let document of position.documents">
+                <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                       (change)="onSelectProcedureLotDocument(document)">
+                <label class="nopadding">{{ document.filename }}</label>
+              </clr-checkbox-wrapper>
+            </clr-checkbox-container>
+          </div>
+        </div>
+      </div>
     </clr-wizard-page>
   </clr-wizard>
 </ng-container>

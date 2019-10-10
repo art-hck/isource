@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
+import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
@@ -55,6 +56,8 @@ export class AddOffersComponent implements OnInit {
   procedureInfo: any;
   procedureProperties: any;
   selectedProcedurePositions: RequestPosition[] = [];
+  selectedProcedureDocuments: RequestDocument[] = [];
+  selectedProcedureLotDocuments: RequestDocument[] = [];
 
   files: File[] = [];
 
@@ -74,8 +77,7 @@ export class AddOffersComponent implements OnInit {
     protected router: Router,
     private getContragentService: ContragentService,
     private documentsService: DocumentsService,
-    private procedureService: ProcedureService,
-    private notificationService: NotificationService
+    private procedureService: ProcedureService
   ) {
   }
 
@@ -145,10 +147,40 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
+  onSelectProcedureDocument(document: RequestDocument) {
+    const index = this.selectedProcedureDocuments.indexOf(document);
+
+    if (index === -1) {
+      this.selectedProcedureDocuments.push(document);
+    } else {
+      this.selectedProcedureDocuments.splice(index, 1);
+    }
+  }
+
+  onSelectProcedureLotDocument(document: RequestDocument) {
+    const index = this.selectedProcedureLotDocuments.indexOf(document);
+
+    if (index === -1) {
+      this.selectedProcedureLotDocuments.push(document);
+    } else {
+      this.selectedProcedureLotDocuments.splice(index, 1);
+    }
+  }
+
   isDataFieldValid(field: string) {
     return this.procedureBasicDataForm.get(field).errors
       && (this.procedureBasicDataForm.get(field).touched
         || this.procedureBasicDataForm.get(field).dirty);
+  }
+
+  isDocumentsExists(positions: RequestPosition[]): boolean {
+    for (const position of positions) {
+      if (position.documents.length) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getSupplierLinkedOffers(
@@ -166,6 +198,22 @@ export class AddOffersComponent implements OnInit {
   isSupplierOfferExist() {
     return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
+
+  positionCanBeSelected(requestPosition: RequestPosition): boolean {
+    return (
+      requestPosition.linkedOffers.length !== 0 &&
+      !this.positionIsSentForAgreement(requestPosition)
+    );
+  }
+
+  positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
+    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
+  }
+
+  positionHasProcedure(requestPosition: RequestPosition): boolean {
+    return requestPosition.hasProcedure === true;
+  }
+
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
@@ -231,6 +279,11 @@ export class AddOffersComponent implements OnInit {
     return this.offerForm.get(field).errors
       && (this.offerForm.get(field).touched || this.offerForm.get(field).dirty);
   }
+
+  isOfferClickable(requestPosition: RequestPosition): boolean {
+    return !(this.positionIsSentForAgreement(requestPosition) || this.positionHasProcedure(requestPosition));
+  }
+
 
   onAddOffer() {
     const formValue = this.offerForm.value;
@@ -301,6 +354,32 @@ export class AddOffersComponent implements OnInit {
     }
   }
 
+  onSelectAllPositions(event, requestPositions: RequestPosition[]): void {
+    if (event.target.checked === true) {
+      this.selectedRequestPositions = [];
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = true;
+          this.selectedRequestPositions.push(requestPosition);
+        }
+      });
+    } else {
+      this.selectedRequestPositions = [];
+
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = null;
+        }
+      });
+    }
+  }
+
+  areAllPositionsChecked(requestPositions: RequestPosition[]): boolean {
+    return !requestPositions.some(
+      requestPosition => requestPosition.linkedOffers.length !== 0 && requestPosition.checked !== true
+    );
+  }
+
   onPublishOffers() {
     this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
       () => {
@@ -313,8 +392,14 @@ export class AddOffersComponent implements OnInit {
   onPublishProcedure() {
     this.procedureInfo = this.procedureBasicDataForm.value;
     this.procedureProperties = this.procedurePropertiesForm.value;
-    this.procedureService.publishProcedure(this.requestId,
-      this.procedureInfo, this.procedureProperties, this.selectedProcedurePositions).subscribe(
+    this.procedureService.publishProcedure(
+      this.requestId,
+      this.procedureInfo,
+      this.procedureProperties,
+      this.selectedProcedurePositions,
+      this.selectedProcedureDocuments,
+      this.selectedProcedureLotDocuments
+    ).subscribe(
       (data: any) => {
         this.resetWizardForm();
         Swal.fire({
@@ -348,6 +433,10 @@ export class AddOffersComponent implements OnInit {
     this.wizard.reset();
     this.procedureBasicDataForm.reset();
     this.procedurePropertiesForm.reset();
+
+    this.selectedProcedurePositions = [];
+    this.selectedProcedureDocuments = [];
+    this.selectedProcedureLotDocuments = [];
   }
 
   onShowImportOffersExcel(): void {
