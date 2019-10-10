@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
+import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
@@ -198,6 +199,22 @@ export class AddOffersComponent implements OnInit {
     return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
   }
 
+  positionCanBeSelected(requestPosition: RequestPosition): boolean {
+    return (
+      requestPosition.linkedOffers.length !== 0 &&
+      !this.positionIsSentForAgreement(requestPosition)
+    );
+  }
+
+  positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
+    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
+  }
+
+  positionHasProcedure(requestPosition: RequestPosition): boolean {
+    return requestPosition.hasProcedure === true;
+  }
+
+
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
     this.supplierSelectComponent.resetSearchFilter();
@@ -262,6 +279,11 @@ export class AddOffersComponent implements OnInit {
     return this.offerForm.get(field).errors
       && (this.offerForm.get(field).touched || this.offerForm.get(field).dirty);
   }
+
+  isOfferClickable(requestPosition: RequestPosition): boolean {
+    return !(this.positionIsSentForAgreement(requestPosition) || this.positionHasProcedure(requestPosition));
+  }
+
 
   onAddOffer() {
     const formValue = this.offerForm.value;
