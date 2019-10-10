@@ -204,10 +204,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   positionCanBeSelected(requestPosition: RequestPosition): boolean {
-    return (
-      requestPosition.linkedOffers.length !== 0 &&
-      !this.positionIsSentForAgreement(requestPosition)
-    );
+    return (requestPosition.linkedOffers.length !== 0 && !this.positionIsSentForAgreement(requestPosition));
   }
 
   positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
@@ -382,6 +379,10 @@ export class AddOffersComponent implements OnInit {
     return !requestPositions.some(
       requestPosition => requestPosition.linkedOffers.length !== 0 && requestPosition.checked !== true
     );
+  }
+
+  positionHasSelectableOffers(requestPositions: RequestPosition[]): boolean {
+    return requestPositions.some(requestPosition => this.positionCanBeSelected(requestPosition));
   }
 
   onPublishOffers() {

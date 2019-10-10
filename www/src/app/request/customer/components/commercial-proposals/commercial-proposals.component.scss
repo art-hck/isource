@@ -67,7 +67,7 @@ table {
   background: $bckg-color;
 }
 .table-body-wrapper {
-  height: calc(100% - 300px);
+  height: 100%;
 }
 .table-footer-wrapper {
   position: sticky;
@@ -300,10 +300,10 @@ a.offer-documents {
   height: 40px;
 }
 
-.table-footer-wrapper th.contragent-name:hover .alert-labels {
+.table-footer-wrapper th.contragent-name:hover .hover-switch-block .alert-labels {
   display: none;
 }
-.table-footer-wrapper th.contragent-name:hover .select-all-button {
+.table-footer-wrapper th.contragent-name:hover .hover-switch-block .select-all-button {
   display: block !important;
 }
 
