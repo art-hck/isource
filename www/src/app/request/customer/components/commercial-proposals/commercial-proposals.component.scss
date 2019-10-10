@@ -4,10 +4,6 @@ $bckg-color: #fbfcfe;
   height: 100%;
 }
 
-tr.has-winner {
-  display: none;
-}
-
 .commercial-proposals {
   font-family: PT Root UI, Roboto, sans-serif;
 }
@@ -71,7 +67,7 @@ table {
   background: $bckg-color;
 }
 .table-body-wrapper {
-  height: 100%;
+  height: calc(100% - 300px);
 }
 .table-footer-wrapper {
   position: sticky;
