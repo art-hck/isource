@@ -13,7 +13,7 @@ import { ContragentService } from "../../services/contragent.service";
 export class ContragentInfoViewComponent implements OnInit {
 
   contragentId: Uuid;
-  contragent: Observable<ContragentInfo>;
+  contragent$: Observable<ContragentInfo>;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +26,7 @@ export class ContragentInfoViewComponent implements OnInit {
   }
 
   getContragentInfo(contragentId: Uuid): void {
-    this.contragent = this.getContragentService.getContragentInfo(contragentId);
+    this.contragent$ = this.getContragentService.getContragentInfo(contragentId);
   }
 
 }

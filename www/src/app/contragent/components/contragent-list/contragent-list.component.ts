@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 })
 export class ContragentListComponent implements OnInit {
 
-  @Input() contragents$: Observable<ContragentList[]>;
+  @Input() contragents: ContragentList[];
 
   constructor(
     protected router: Router,

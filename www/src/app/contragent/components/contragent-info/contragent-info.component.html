@@ -1,120 +1,130 @@
 <div class="contragent-info-content">
+
   <div class="basic-info">
     <div class="info-field clr-row">
       <div class="clr-col-12">
         <label class="clr-control-label" for="shortName">Краткое наименование</label>
-        <span>contragent.shortName {{ contragent.shortName }}</span>
+        <span>{{ contragent.shortName || '—' }}</span>
       </div>
     </div>
 
     <div class="info-field clr-row">
       <div class="clr-col-12">
         <label class="clr-control-label" for="fullName">Полное наименование</label>
-        <span>contragent.fullName {{ contragent.fullName }}</span>
+        <span>{{ contragent.fullName || '—' }}</span>
       </div>
     </div>
 
     <div class="info-field clr-row">
       <div class="clr-col-4">
         <label class="clr-control-label" for="inn">ИНН</label>
-        <span>contragent.inn {{ contragent.inn }}</span>
+        <span>{{ contragent.inn }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="kpp">КПП</label>
-        <span>contragent.kpp {{ contragent.kpp }}</span>
+        <span>{{ contragent.kpp || '—' }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="ogrn">ОГРН/ОГРНИП</label>
-        <span>contragent.ogrn {{ contragent.ogrn }}</span>
+        <span>{{ contragent.ogrn || '—' }}</span>
       </div>
     </div>
 
     <div class="info-field clr-row">
       <div class="clr-col-4">
         <label class="clr-control-label" for="checkedDate">Дата регистрации</label>
-        <span>contragent.checkedDate {{ contragent.checkedDate }}</span>
+        <span>{{ contragent.taxAuthorityRegistrationDate | date : 'shortDate' }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="contragentEmail">Email</label>
-        <span>contragent.contragentEmail {{ contragent.contragentEmail }}</span>
+        <span>{{ contragent.email || '—' }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="contragentPhone">Телефон</label>
-        <span>contragent.contragentPhone {{ contragent.contragentPhone }}</span>
+        <span>{{ contragent.phone || '—' }}</span>
       </div>
     </div>
   </div>
 
-  <div class=""
-  <h3>Юридический адрес</h3>
 
-  <div class="info-field clr-row">
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="country">Страна</label>
-      <span>contragent.country {{ contragent.country }}</span>
+
+
+  <div class="legal-info">
+    <h3>Юридический адрес</h3>
+
+    <div class="info-field clr-row">
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="country">Страна</label>
+        <span>{{ contragent.addresses[0]?.country || '—' }}</span>
+      </div>
+
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="area">Регион/область</label>
+        <span>{{ contragent.addresses[0]?.region || '—' }}</span>
+      </div>
+
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="city">Город/район</label>
+        <span>{{ contragent.addresses[0]?.city || '—' }}</span>
+      </div>
     </div>
 
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="area">Регион/область</label>
-      <span>contragent.area {{ contragent.area }}</span>
-    </div>
+    <div class="info-field clr-row">
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="index">Почтовый индекс</label>
+        <span>{{ contragent.addresses[0]?.postIndex || '—' }}</span>
+      </div>
 
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="city">Город/район</label>
-      <span>contragent.city {{ contragent.city }}</span>
-    </div>
-  </div>
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="town">Населенный пункт</label>
+        <span>{{ contragent.addresses[0]?.locality || '—' }}</span>
+      </div>
 
-  <div class="info-field clr-row">
-    <div class="clr-col-2">
-      <label class="clr-control-label" for="index">Почтовый индекс</label>
-      <span>contragent.index {{ contragent.index }}</span>
-    </div>
-
-    <div class="clr-col-5">
-      <label class="clr-control-label" for="town">Населенный пункт</label>
-      <span>contragent.town {{ contragent.town }}</span>
-    </div>
-
-    <div class="clr-col-5">
-      <label class="clr-control-label" for="address">Адрес</label>
-      <span>contragent.address {{ contragent.address }}</span>
-    </div>
-  </div>
-
-
-  <h3>Банковские реквизиты</h3>
-
-  <div class="info-field clr-row">
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="bik">БИК</label>
-      <span>contragent.bik {{ contragent.bik }}</span>
-    </div>
-
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
-      <span>contragent.bankAccount {{ contragent.bankAccount }}</span>
-    </div>
-
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
-      <span>contragent.corrAccount {{ contragent.corrAccount }}</span>
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="address">Адрес</label>
+        <span>{{ contragent.addresses[0]?.address || '—' }}</span>
+      </div>
     </div>
   </div>
 
-  <div class="info-field clr-row">
-    <div class="clr-col-6">
-      <label class="clr-control-label" for="bankName">Наименование банка</label>
-      <span>contragent.bankName {{ contragent.bankName }}</span>
+
+
+
+  <div class="bank-info">
+    <h3>Банковские реквизиты</h3>
+
+    <div class="info-field clr-row">
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="bik">БИК</label>
+        <span>{{ contragent.bankRequisites[0]?.bik || '—' }}</span>
+      </div>
+
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
+        <span>{{ contragent.bankRequisites[0]?.account || '—' }}</span>
+      </div>
+
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
+        <span>{{ contragent.bankRequisites[0]?.correspondentAccount || '—' }}</span>
+      </div>
     </div>
 
-    <div class="clr-col-6">
-      <label class="clr-control-label" for="bankAddress">Адрес банка</label>
-      <span>contragent.bankAddress {{ contragent.bankAddress }}</span>
+    <div class="info-field clr-row">
+      <div class="clr-col-4">
+        <label class="clr-control-label" for="bankName">Наименование банка</label>
+        <span>{{ contragent.bankRequisites[0]?.name || '—' }}</span>
+      </div>
+
+      <div class="clr-col-auto">
+        <label class="clr-control-label" for="bankAddress">Адрес банка</label>
+        <span>{{ contragent.bankRequisites[0]?.address || '—' }}</span>
+      </div>
     </div>
   </div>
+
 </div>

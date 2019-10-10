@@ -18,6 +18,6 @@ export class ContragentService {
   }
 
   getContragentInfo(id: Uuid): Observable<ContragentInfo> {
-    return this.api.post<ContragentInfo>(`/contragents/${id}/info`, {});
+    return this.api.get<ContragentInfo>(`contragents/${id}/info`);
   }
 }
