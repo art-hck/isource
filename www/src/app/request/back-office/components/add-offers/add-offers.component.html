@@ -54,6 +54,17 @@
           <thead>
           <tr>
             <th class="position-name">
+              <div class="clr-row">
+                <clr-checkbox-container *ngIf="positionHasSelectableOffers(requestPositions)">
+                  <clr-checkbox-wrapper class="select-checkbox">
+                    <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                           (change)="onSelectAllPositions($event, requestPositions)"
+                           [checked]="areAllPositionsChecked(requestPositions)"
+                    />
+                    <label class="nopadding">Выбрать все позиции</label>
+                  </clr-checkbox-wrapper>
+                </clr-checkbox-container>
+              </div>
             </th>
             <th class="contragent-name" *ngFor="let supplier of suppliers">{{ supplier }}</th>
           </tr>
@@ -106,9 +117,8 @@
               </ng-container>
               <ng-template #addLinkedOfferButton>
                 <div class="add-offer"
-                     [class.disabled]="!isOfferClickable(requestPosition)"
-                     (click)="isOfferClickable(requestPosition) ?
-                     onShowAddOfferModal(requestPosition, supplier) : false">
+                     *ngIf="isOfferClickable(requestPosition)"
+                     (click)="onShowAddOfferModal(requestPosition, supplier)">
                   <clr-icon shape="plus"></clr-icon>
                 </div>
               </ng-template>
@@ -338,7 +348,9 @@
       </form>
     </clr-wizard-page>
 
-    <clr-wizard-page (clrWizardPageOnCancel)="resetWizardForm()">
+    <clr-wizard-page
+      [clrWizardPageNextDisabled]="showPrivateAccessContragents && selectedPrivateAccessContragents.length < 2"
+      (clrWizardPageOnCancel)="resetWizardForm()">
       <ng-template clrPageTitle>Свойства процедуры</ng-template>
       <form [formGroup]="procedurePropertiesForm" class="form">
         <div class="form-block">
@@ -449,6 +461,41 @@
                   <label class="clr-control-label nopadding">Цены и рейтинг скрыты</label>
                 </clr-radio-wrapper>
               </clr-radio-container>
+            </div>
+            <div class="clr-row w-100 padding-top">
+              <clr-radio-container>
+                <label class="clr-control-label nopadding radio-label"><b>Доступ к процедуре</b></label>
+                <clr-radio-wrapper>
+                  <input type="radio"
+                         clrRadio
+                         name="isPrivateAccess"
+                         value="false"
+                         (change)="onHidePrivateAccessContragents()"
+                         checked/>
+                  <label class="clr-control-label nopadding">Открытая процедура</label>
+                </clr-radio-wrapper>
+                <clr-radio-wrapper>
+                  <input type="radio"
+                         clrRadio
+                         name="isPrivateAccess"
+                         value="true"
+                         (change)="onShowPrivateAccessContragents()"/>
+                  <label class="clr-control-label nopadding">Для ограниченного круга участников</label>
+                </clr-radio-wrapper>
+              </clr-radio-container>
+              <clr-checkbox-container class="w-100" *ngIf="showPrivateAccessContragents">
+                <label class="clr-control-label nopadding radio-label">Выберите мин. 2х участников:</label>
+                <clr-checkbox-wrapper class="select-checkbox" *ngFor="let contragent of contragentsWithTp">
+                  <input class="checkbox select-checkbox"
+                         clrCheckbox
+                         type="checkbox"
+                         (change)="onSelectPrivateAccessContragent(contragent)">
+                  <label class="nopadding">
+                    {{ contragent.shortName }}
+                    (ИНН {{ contragent.inn }}, КПП {{ contragent.kpp }}, Email {{ contragent.email }})
+                  </label>
+                </clr-checkbox-wrapper>
+              </clr-checkbox-container>
             </div>
           </div>
         </div>

@@ -7,6 +7,9 @@ import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
+import {DocumentIconComponent} from "./components/document-icon/document-icon.component";
+import {PluralizePipe} from "./pipes/pluralize-pipe";
+import {BytesToSizePipe} from "./pipes/bytes-to-size-pipe";
 
 @NgModule({
   imports: [
@@ -35,7 +38,10 @@ import { DocumentUploadListComponent } from "./components/document-upload-list/d
   declarations: [
     CardComponent,
     DocumentSimpleListComponent,
-    DocumentUploadListComponent
+    DocumentUploadListComponent,
+    DocumentIconComponent,
+    PluralizePipe,
+    BytesToSizePipe
   ],
   exports: [
     CommonModule,
@@ -46,7 +52,10 @@ import { DocumentUploadListComponent } from "./components/document-upload-list/d
 
     CardComponent,
     DocumentSimpleListComponent,
-    DocumentUploadListComponent
+    DocumentUploadListComponent,
+    DocumentIconComponent,
+    PluralizePipe,
+    BytesToSizePipe
   ]
 })
 export class SharedModule {

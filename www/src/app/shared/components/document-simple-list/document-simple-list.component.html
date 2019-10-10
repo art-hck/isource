@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
-  <li class="document" *ngFor="let document of documents">
+  <li class="document" *ngFor="let document of documents.slice(0, showAll ? documents.length : (limit || documents.length))">
     <button *ngIf="enableDelete"
             (click)="onDeleteDocument(document)"
             type="button"
@@ -8,10 +8,20 @@
       {{ deleteLabel }}
     </button>
 
-    <a (click)="onDownloadDocument(document)" title="{{ document.filename }}">
-      {{ document.filename }}
-    </a>
+    <document-icon [name]="document.filename" [size]="documentIconSize.medium"></document-icon>
+    <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
+      <div class="title">{{ document.filename }}</div>
+      <div class="description">
+        <span>{{document.size | bytesToSize : 2}}</span>
+        <span>{{document.created  | date :' d MMMM y '}}</span>
+      </div>
+
+    </div>
   </li>
+
+  <div class="more" *ngIf="!showAll && limit > 0 && limit < documents.length" (click)="showAll = true">
+    Еще {{ documents.length - limit | pluralize: "документ" : "документа" : "документов"}}
+  </div>
 
   <div class="form-group" *ngIf="enableUpload">
     <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>

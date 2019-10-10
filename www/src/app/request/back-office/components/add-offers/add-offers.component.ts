@@ -59,6 +59,10 @@ export class AddOffersComponent implements OnInit {
   selectedProcedureDocuments: RequestDocument[] = [];
   selectedProcedureLotDocuments: RequestDocument[] = [];
 
+  showPrivateAccessContragents = false;
+  contragentsWithTp: ContragentList[] = [];
+  selectedPrivateAccessContragents: ContragentList[] = [];
+
   files: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
@@ -200,10 +204,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   positionCanBeSelected(requestPosition: RequestPosition): boolean {
-    return (
-      requestPosition.linkedOffers.length !== 0 &&
-      !this.positionIsSentForAgreement(requestPosition)
-    );
+    return (requestPosition.linkedOffers.length !== 0 && !this.positionIsSentForAgreement(requestPosition));
   }
 
   positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
@@ -354,6 +355,36 @@ export class AddOffersComponent implements OnInit {
     }
   }
 
+  onSelectAllPositions(event, requestPositions: RequestPosition[]): void {
+    if (event.target.checked === true) {
+      this.selectedRequestPositions = [];
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = true;
+          this.selectedRequestPositions.push(requestPosition);
+        }
+      });
+    } else {
+      this.selectedRequestPositions = [];
+
+      requestPositions.forEach(requestPosition => {
+        if (requestPosition.linkedOffers.length !== 0) {
+          requestPosition.checked = null;
+        }
+      });
+    }
+  }
+
+  areAllPositionsChecked(requestPositions: RequestPosition[]): boolean {
+    return !requestPositions.some(
+      requestPosition => requestPosition.linkedOffers.length !== 0 && requestPosition.checked !== true
+    );
+  }
+
+  positionHasSelectableOffers(requestPositions: RequestPosition[]): boolean {
+    return requestPositions.some(requestPosition => this.positionCanBeSelected(requestPosition));
+  }
+
   onPublishOffers() {
     this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
       () => {
@@ -372,7 +403,8 @@ export class AddOffersComponent implements OnInit {
       this.procedureProperties,
       this.selectedProcedurePositions,
       this.selectedProcedureDocuments,
-      this.selectedProcedureLotDocuments
+      this.selectedProcedureLotDocuments,
+      this.selectedPrivateAccessContragents
     ).subscribe(
       (data: any) => {
         this.resetWizardForm();
@@ -449,6 +481,29 @@ export class AddOffersComponent implements OnInit {
       }
       alert(msg);
     });
+  }
+
+  onHidePrivateAccessContragents(): void {
+    this.showPrivateAccessContragents = false;
+  }
+
+  onShowPrivateAccessContragents(): void {
+    this.offersService.getContragentsWithTp(this.request, this.selectedProcedurePositions).subscribe(
+      (contragents: ContragentList[]) => {
+        this.contragentsWithTp = contragents;
+      }
+    );
+    this.showPrivateAccessContragents = true;
+  }
+
+  onSelectPrivateAccessContragent(contragent: ContragentList): void {
+    const index = this.selectedPrivateAccessContragents.indexOf(contragent);
+
+    if (index === -1) {
+      this.selectedPrivateAccessContragents.push(contragent);
+    } else {
+      this.selectedPrivateAccessContragents.splice(index, 1);
+    }
   }
 
   protected updatePositionsAndSuppliers(): void {

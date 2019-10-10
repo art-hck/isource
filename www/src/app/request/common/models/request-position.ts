@@ -35,4 +35,5 @@ export class RequestPosition extends RequestPositionList {
   hasProcedure: boolean;
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
+  checked: boolean;
 }

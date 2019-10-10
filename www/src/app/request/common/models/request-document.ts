@@ -6,5 +6,8 @@ export class RequestDocument {
   user?: User;
   created: string;
   filename: string;
+  extension: string;
+  mime: string;
+  size: number;
   comments?: string;
 }
