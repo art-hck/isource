@@ -17,7 +17,10 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: CustomerRequestsList
+        component: CustomerRequestsList,
+        data: {
+          title: "Заявки"
+        }
       },
       {
         path: ':id',

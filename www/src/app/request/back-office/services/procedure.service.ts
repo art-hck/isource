@@ -1,9 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import {RequestPosition} from "../../common/models/request-position";
-import {ProcedureInfo} from "../models/procedure-info";
-import {ProcedureProperties} from "../models/procedure-properties";
+import { RequestPosition } from "../../common/models/request-position";
+import { ProcedureInfo } from "../models/procedure-info";
+import { ProcedureProperties } from "../models/procedure-properties";
+import { RequestDocument } from "../../common/models/request-document";
+import { ContragentList } from "../../../contragent/models/contragent-list";
 
 @Injectable()
 export class ProcedureService {
@@ -13,18 +15,28 @@ export class ProcedureService {
   ) {
   }
 
-  publishProcedure(id: Uuid, procedureInfo: ProcedureInfo, procedureProperties: ProcedureProperties, requestPositions: RequestPosition[]) {
+  publishProcedure(
+    id: Uuid,
+    procedureInfo: ProcedureInfo,
+    procedureProperties: ProcedureProperties,
+    requestPositions: RequestPosition[],
+    procedureDocuments: RequestDocument[],
+    procedureLotDocuments: RequestDocument[],
+    procedurePrivateAccessContragents: ContragentList[]
+  ) {
     const url = `requests/backoffice/${id}/create-procedure`;
-    const ids = [];
-    for (const requestPosition of requestPositions) {
-      ids.push(requestPosition.id);
-    }
+
+    const positionIds = requestPositions.map(item => item.id);
+    const procedureDocumentIds = procedureDocuments.map(item => item.id);
+    const procedureLotDocumentIds = procedureLotDocuments.map(item => item.id);
+    const procedurePrivateAccessContragentIds = procedurePrivateAccessContragents.map(item => item.id);
+
     return this.api.post(url, {
       procedureTitle: procedureInfo.procedureTitle,
       dateEndRegistration: procedureInfo.dateEndRegistration,
       summingupDate: procedureInfo.summingupDate,
       dishonestSuppliersForbidden: procedureInfo.dishonestSuppliersForbidden,
-      positions: ids,
+      positions: positionIds,
       manualEndRegistration: procedureProperties.manualEndRegistration,
       positionsAllowAnalogsOnly: procedureProperties.positionsAllowAnalogsOnly,
       positionsAnalogs: procedureProperties.positionsAnalogs,
@@ -33,7 +45,10 @@ export class ProcedureService {
       positionsEntireVolume: procedureProperties.positionsEntireVolume,
       positionsRequiredAll: procedureProperties.positionsRequiredAll,
       positionsSuppliersVisibility: procedureProperties.positionsSuppliersVisibility,
-      prolongateEndRegistration: procedureProperties.prolongateEndRegistration
+      prolongateEndRegistration: procedureProperties.prolongateEndRegistration,
+      procedureDocuments: procedureDocumentIds,
+      procedureLotDocuments: procedureLotDocumentIds,
+      privateAccessContragents: procedurePrivateAccessContragentIds
     });
   }
 

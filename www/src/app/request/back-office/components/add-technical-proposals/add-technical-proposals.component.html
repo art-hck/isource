@@ -130,7 +130,7 @@
 
           <app-supplier-select
                   *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
-                  [(contragentName)]="contragentInputFieldValue"
+                  [contragentName]="technicalProposal.name"
                   (selectedContragent)="onSelectedContragent($event)">
           </app-supplier-select>
 

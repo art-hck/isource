@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -16,6 +16,9 @@ import { NotificationService } from "../../../../shared/services/notification.se
 })
 
 export class CommercialProposalsComponent implements OnInit {
+
+  @ViewChild('tableBody', { static: false }) tableBody: ElementRef;
+  @ViewChild('tableHeader', { static: false }) tableHeader: ElementRef;
 
   requestId: Uuid;
   request: Request;
@@ -85,15 +88,15 @@ export class CommercialProposalsComponent implements OnInit {
     return selectedSum;
   }
 
-  incorrectDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
+  correctDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
     if (!requestPositionDeliveryDate) {
-      return false;
+      return true;
     }
 
     const controlDate = moment(linkedOfferDeliveryDate);
     const validationDate = moment(requestPositionDeliveryDate);
 
-    return controlDate.isBefore(validationDate);
+    return controlDate.isSameOrBefore(validationDate);
   }
 
   protected updatePositionsAndSuppliers(): void {
@@ -220,6 +223,7 @@ export class CommercialProposalsComponent implements OnInit {
       () => {
         this.notificationService.toast('Успешно согласовано');
         this.updatePositionsAndSuppliers();
+        this.selectedOffers = {};
       },
       () => {
         this.notificationService.toast('Не удалось согласовать предложения', 'error');
@@ -255,4 +259,48 @@ export class CommercialProposalsComponent implements OnInit {
   isSendButtonEnabled(): boolean {
     return Object.keys(this.selectedOffers).length > 0;
   }
+
+  onSupplierListScroll(event) {
+    const offsetX = Math.round(event.target.scrollLeft);
+    this.tableBody.nativeElement.scrollTo(offsetX, 0);
+    this.tableHeader.nativeElement.scrollTo(offsetX, 0);
+  }
+
+
+  makeReadableDate(date): string {
+    return moment(date).locale("ru").format('LL');
+  }
+
+  validPositionsCount(requestPositions: RequestPosition[], supplier: string): boolean {
+    for (const requestPosition of requestPositions) {
+      if (this.positionHasWinner(requestPosition)) {
+        continue;
+      }
+
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers[0] && supplierLinkedOffers[0].quantity < requestPosition.quantity) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  validPositionsDeliveryDate(requestPositions: RequestPosition[], supplier: string): boolean {
+    for (const requestPosition of requestPositions) {
+      if (this.positionHasWinner(requestPosition)) {
+        continue;
+      }
+
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
+      if (supplierLinkedOffers[0] &&
+          !this.correctDeliveryDate(supplierLinkedOffers[0].deliveryDate, requestPosition.deliveryDate)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
 }
