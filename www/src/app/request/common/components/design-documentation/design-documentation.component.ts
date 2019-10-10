@@ -41,8 +41,6 @@ export class DesignDocumentationComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
-  private approving: DesignDocumentationList[] = [];
-  private rejecting: DesignDocumentationList[] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -219,60 +217,40 @@ export class DesignDocumentationComponent implements OnInit {
           );
         })
       ).subscribe((_designDocumentationList: DesignDocumentationList) => {
-        const index = this.designDocumentations.indexOf(designDocumentationList);
-
-        if (index !== -1) {
-          this.designDocumentations[index] = _designDocumentationList;
-        }
-
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
         subscription.unsubscribe();
       })
     ;
   }
 
   approval(designDocumentationList: DesignDocumentationList) {
-    this.approving.push(designDocumentationList);
-
-    const subscription = this.designDocumentationService.approval(this.requestId, designDocumentationList.id).pipe(
-      finalize(() => this.approving = this.approving.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList)),
-      catchError(err => {
-        designDocumentationList.status = DesignDocumentationStatus.APPROVAL;
-        return of(designDocumentationList);
-      })
-    ).subscribe((_designDocumentationList: DesignDocumentationList) => {
-      const index = this.designDocumentations.indexOf(designDocumentationList);
-
-      if (index !== -1) {
-        this.designDocumentations[index] = _designDocumentationList;
-      }
-
-      subscription.unsubscribe();
-    });
+    const subscription = this.designDocumentationService
+      .approval(this.requestId, designDocumentationList.id)
+      .subscribe((_designDocumentationList: DesignDocumentationList) => {
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
+        subscription.unsubscribe();
+      });
   }
 
   reject(designDocumentationList: any, file?: File) {
-    this.rejecting.push(designDocumentationList);
-    const subscription = this.designDocumentationService.reject(this.requestId, designDocumentationList.id, file).pipe(
-      finalize(() => this.rejecting = this.rejecting.filter(_designDocumentationList => designDocumentationList !== _designDocumentationList)),
-      catchError(err => {
-        designDocumentationList.status = DesignDocumentationStatus.REJECTED;
-        return of(designDocumentationList);
-      })
-    ).subscribe((_designDocumentationList: DesignDocumentationList) => {
-      const index = this.designDocumentations.indexOf(designDocumentationList);
-
-      if (index !== -1) {
-        this.designDocumentations[index] = _designDocumentationList;
-      }
-
-      subscription.unsubscribe();
-    });
-
-    designDocumentationList.status = DesignDocumentationStatus.REJECTED;
+    const subscription = this.designDocumentationService
+      .reject(this.requestId, designDocumentationList.id, file)
+      .subscribe((_designDocumentationList: DesignDocumentationList) => {
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
+        subscription.unsubscribe();
+      });
   }
 
   isApprovable(designDocumentationList: DesignDocumentationList) {
     return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0
       && status !== DesignDocumentationStatus.ON_APPROVAL;
+  }
+
+  updateDesignDoc(oldDoc: DesignDocumentationList, newDoc: DesignDocumentationList) {
+    const i = this.designDocumentations.indexOf(oldDoc);
+
+    if (i !== -1) {
+      this.designDocumentations[i] = newDoc;
+    }
   }
 }
