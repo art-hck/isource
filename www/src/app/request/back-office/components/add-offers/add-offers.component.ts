@@ -60,6 +60,7 @@ export class AddOffersComponent implements OnInit {
 
   showPrivateAccessContragents = false;
   contragentsWithTp: ContragentList[] = [];
+  selectedPrivateAccessContragents: ContragentList[] = [];
 
   files: File[] = [];
 
@@ -379,7 +380,8 @@ export class AddOffersComponent implements OnInit {
       this.procedureProperties,
       this.selectedProcedurePositions,
       this.selectedProcedureDocuments,
-      this.selectedProcedureLotDocuments
+      this.selectedProcedureLotDocuments,
+      this.selectedPrivateAccessContragents
     ).subscribe(
       (data: any) => {
         this.resetWizardForm();
@@ -469,6 +471,16 @@ export class AddOffersComponent implements OnInit {
       }
     );
     this.showPrivateAccessContragents = true;
+  }
+
+  onSelectPrivateAccessContragent(contragent: ContragentList): void {
+    const index = this.selectedPrivateAccessContragents.indexOf(contragent);
+
+    if (index === -1) {
+      this.selectedPrivateAccessContragents.push(contragent);
+    } else {
+      this.selectedPrivateAccessContragents.splice(index, 1);
+    }
   }
 
   protected updatePositionsAndSuppliers(): void {

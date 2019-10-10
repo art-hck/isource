@@ -336,7 +336,9 @@
       </form>
     </clr-wizard-page>
 
-    <clr-wizard-page (clrWizardPageOnCancel)="resetWizardForm()">
+    <clr-wizard-page
+      [clrWizardPageNextDisabled]="showPrivateAccessContragents && selectedPrivateAccessContragents.length < 2"
+      (clrWizardPageOnCancel)="resetWizardForm()">
       <ng-template clrPageTitle>Свойства процедуры</ng-template>
       <form [formGroup]="procedurePropertiesForm" class="form">
         <div class="form-block">
@@ -470,11 +472,16 @@
                 </clr-radio-wrapper>
               </clr-radio-container>
               <clr-checkbox-container class="w-100" *ngIf="showPrivateAccessContragents">
-                <label class="clr-control-label nopadding radio-label">Выберите участников:</label>
-                <clr-checkbox-wrapper
-                  class="select-checkbox">
-                  <input class="checkbox select-checkbox" clrCheckbox type="checkbox">
-                  <label class="nopadding">123312</label>
+                <label class="clr-control-label nopadding radio-label">Выберите мин. 2х участников:</label>
+                <clr-checkbox-wrapper class="select-checkbox" *ngFor="let contragent of contragentsWithTp">
+                  <input class="checkbox select-checkbox"
+                         clrCheckbox
+                         type="checkbox"
+                         (change)="onSelectPrivateAccessContragent(contragent)">
+                  <label class="nopadding">
+                    {{ contragent.shortName }}
+                    (ИНН {{ contragent.inn }}, КПП {{ contragent.kpp }}, Email {{ contragent.email }})
+                  </label>
                 </clr-checkbox-wrapper>
               </clr-checkbox-container>
             </div>
