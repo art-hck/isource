@@ -8,10 +8,11 @@ import { DesignDocumentationList } from "../../models/design-documentationList";
 import { RequestPosition } from "../../models/request-position";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DesignDocumentation } from "../../models/design-documentation";
-import { catchError, finalize } from "rxjs/operators";
+import { finalize } from "rxjs/operators";
 import { DesignDocumentationStatus } from "../../enum/design-documentation-status";
 import { ClrLoadingState } from "@clr/angular";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
+import { DesignDocumentationType } from "../../enum/design-documentation-type";
 
 @Component({
   selector: 'app-design-documentation',
@@ -174,12 +175,16 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
-    // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и статус новый
+    // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и можем отправить на согласование
     return this.routeData.isBackoffice
       && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
-      && designDocumentationList.status === DesignDocumentationStatus.NEW
+      && this.canSendOnApprove(designDocumentationList)
     ;
+  }
+
+  canSendOnApprove(designDoc: DesignDocumentationList) {
+    [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
   }
 
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
@@ -201,7 +206,7 @@ export class DesignDocumentationComponent implements OnInit {
       return;
     }
 
-    if (designDocumentationList.status !== DesignDocumentationStatus.NEW) {
+    if (![DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDocumentationList.status)) {
       return;
     }
 
@@ -232,7 +237,7 @@ export class DesignDocumentationComponent implements OnInit {
       });
   }
 
-  reject(designDocumentationList: any, file?: File) {
+  reject(designDocumentationList: DesignDocumentationList, file?: File) {
     const subscription = this.designDocumentationService
       .reject(this.requestId, designDocumentationList.id, file)
       .subscribe((_designDocumentationList: DesignDocumentationList) => {
@@ -252,5 +257,9 @@ export class DesignDocumentationComponent implements OnInit {
     if (i !== -1) {
       this.designDocumentations[i] = newDoc;
     }
+  }
+
+  getRemark(designDocumentation: DesignDocumentationList) {
+    return designDocumentation.designDocs.filter(designDoc => designDoc.type === DesignDocumentationType.REMARK);
   }
 }

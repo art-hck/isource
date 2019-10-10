@@ -1,5 +1,6 @@
 import {Uuid} from "../../../cart/models/uuid";
 import {RequestDocument} from "./request-document";
+import { DesignDocumentationType } from "../enum/design-documentation-type";
 
 export class DesignDocumentation {
   id: Uuid;
@@ -9,5 +10,6 @@ export class DesignDocumentation {
   receivingDate: Date;
   reviewDate: Date;
   comment: string;
+  type: DesignDocumentationType;
   documents: RequestDocument[];
 }
