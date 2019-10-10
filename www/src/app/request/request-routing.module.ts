@@ -7,10 +7,9 @@ import { BackOfficeRequestViewComponent } from "./back-office/components/back-of
 import { CustomerRequestViewComponent } from "./customer/components/customer-request-view/customer-request-view.component";
 import { AddOffersComponent } from "./back-office/components/add-offers/add-offers.component";
 import { AddTechnicalProposalsComponent } from "./back-office/components/add-technical-proposals/add-technical-proposals.component";
-import {TechnicalProposalsComponent} from "./customer/components/technical-proposals/technical-proposals.component";
+import { TechnicalProposalsComponent } from "./customer/components/technical-proposals/technical-proposals.component";
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
-import {AddDesignDocumentationComponent} from "./back-office/components/add-design-documentation/add-design-documentation.component";
-import {DesignDocumentationComponent} from "./customer/components/design-documentation/design-documentation.component";
+import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 
 const routes: Routes = [
   {
@@ -40,7 +39,10 @@ const routes: Routes = [
           },
           {
             path: 'design-documentation',
-            component: DesignDocumentationComponent
+            component: DesignDocumentationComponent,
+            data: {
+              isCustomer : true
+            }
           }
         ]
       },
@@ -70,7 +72,10 @@ const routes: Routes = [
           },
           {
             path: 'add-design-documentation',
-            component: AddDesignDocumentationComponent
+            component: DesignDocumentationComponent,
+            data: {
+              isBackoffice : true
+            }
           },
         ]
       },

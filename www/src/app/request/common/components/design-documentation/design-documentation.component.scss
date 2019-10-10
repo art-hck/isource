@@ -1,5 +1,9 @@
-.modal-body:focus {
+:focus {
   outline: 0;
+}
+
+input[type=file] {
+  display: none;
 }
 
 ::ng-deep .file-upload-label {
@@ -183,11 +187,31 @@ span {
   font-weight: bold;
 }
 
-.document-status .btn-label {
+.design-actions .btn-label {
   cursor: default;
 }
 
 ::ng-deep span.spinner {
   margin: 0;
   display: inline-block;
+}
+
+.btn-dropdown div {
+  border-right: 1px solid;
+  display: inline-block;
+  height: 1em;
+  padding-right: 9px;
+  margin-right: 9px;
+}
+
+clr-dropdown-menu  {
+  margin-top: 10px;
+
+  & > * {
+    padding: 10px 15px;
+  }
+}
+
+.design-actions {
+  text-align: right;
 }

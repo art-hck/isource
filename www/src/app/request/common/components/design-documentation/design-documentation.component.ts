@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
-import { Request } from "../../../common/models/request";
-import { RequestService } from "../../services/request.service";
-import { DesignDocumentationService } from "../../services/design-documentation.service";
-import { DesignDocumentationList } from "../../../common/models/design-documentationList";
-import { RequestPosition } from "../../../common/models/request-position";
+import { Request } from "../../models/request";
+import { RequestService } from "../../../back-office/services/request.service";
+import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
+import { DesignDocumentationList } from "../../models/design-documentationList";
+import { RequestPosition } from "../../models/request-position";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DesignDocumentation } from "../../../common/models/design-documentation";
-import { finalize } from "rxjs/operators";
-import { DesignDocumentationStatus } from "../../../common/enum/design-documentation-status";
+import { DesignDocumentation } from "../../models/design-documentation";
+import { catchError, finalize } from "rxjs/operators";
+import { DesignDocumentationStatus } from "../../enum/design-documentation-status";
 import { ClrLoadingState } from "@clr/angular";
+import { Observable, of } from "rxjs";
 
 @Component({
-  selector: 'app-add-design-documentation',
-  templateUrl: './add-design-documentation.component.html',
-  styleUrls: ['./add-design-documentation.component.scss']
+  selector: 'app-design-documentation',
+  templateUrl: './design-documentation.component.html',
+  styleUrls: ['./design-documentation.component.scss']
 })
-export class AddDesignDocumentationComponent implements OnInit {
+export class DesignDocumentationComponent implements OnInit {
 
   requestId: Uuid;
-  request: Request;
+  request$: Observable<Request>;
   positions: RequestPosition[] = [];
+  routeData: {
+    isBackoffice?: boolean,
+    isCustomer?: boolean
+  } = {};
 
   designDocumentations: DesignDocumentationList[] = [];
   documentationList: DesignDocumentation[];
@@ -57,9 +62,10 @@ export class AddDesignDocumentationComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
+    this.routeData = this.route.snapshot.data;
+    this.request$ = this.requestService.getRequestInfo(this.requestId);
 
     this.getPositionList();
-    this.updateRequestInfo();
     this.getDesignDocumentationList();
 
     this.addDocumentationListFormGroup();
@@ -70,15 +76,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`).then(r => {});
-  }
-
-  protected updateRequestInfo(): void {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
-      }
-    );
+    this.router.navigateByUrl(`requests/backoffice/${this.requestId}`).then(r => {});
   }
 
   onAddNext() {
@@ -176,8 +174,9 @@ export class AddDesignDocumentationComponent implements OnInit {
   }
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
-    // Если загрузка еще не началась и не отправляем на согласование и статус новый
-    return !this.isLoadingDesignDoc(designDoc)
+    // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и статус новый
+    return this.routeData.isBackoffice
+      && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
       && designDocumentationList.status === DesignDocumentationStatus.NEW
     ;
@@ -186,7 +185,7 @@ export class AddDesignDocumentationComponent implements OnInit {
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
     this.loadingDesignDocs.push(designDoc);
     const subscription = this.designDocumentationService
-      .uploadDocuments(this.request.id, designDoc.id, files)
+      .uploadDocuments(this.requestId, designDoc.id, files)
       .pipe(
         finalize(() => this.loadingDesignDocs = this.loadingDesignDocs.filter(doc => doc !== designDoc))
       )
@@ -209,7 +208,7 @@ export class AddDesignDocumentationComponent implements OnInit {
     // По добавляем перечень из массив отправленных на согласование
     this.sendingForApproval.push(designDocumentationList);
 
-    const subscription = this.designDocumentationService.sendForApproval(this.request.id, designDocumentationList.id)
+    const subscription = this.designDocumentationService.sendForApproval(this.requestId, designDocumentationList.id)
       .pipe(
         finalize(() => {
           // По окончанию убираем перечень из массива отправленных на согласование
@@ -218,19 +217,40 @@ export class AddDesignDocumentationComponent implements OnInit {
           );
         })
       ).subscribe((_designDocumentationList: DesignDocumentationList) => {
-        const index = this.designDocumentations.indexOf(designDocumentationList);
-
-        if (index !== -1) {
-          this.designDocumentations[index] = _designDocumentationList;
-        }
-
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
         subscription.unsubscribe();
       })
     ;
   }
 
+  approval(designDocumentationList: DesignDocumentationList) {
+    const subscription = this.designDocumentationService
+      .approval(this.requestId, designDocumentationList.id)
+      .subscribe((_designDocumentationList: DesignDocumentationList) => {
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
+        subscription.unsubscribe();
+      });
+  }
+
+  reject(designDocumentationList: any, file?: File) {
+    const subscription = this.designDocumentationService
+      .reject(this.requestId, designDocumentationList.id, file)
+      .subscribe((_designDocumentationList: DesignDocumentationList) => {
+        this.updateDesignDoc(designDocumentationList, _designDocumentationList);
+        subscription.unsubscribe();
+      });
+  }
+
   isApprovable(designDocumentationList: DesignDocumentationList) {
     return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0
       && status !== DesignDocumentationStatus.ON_APPROVAL;
+  }
+
+  updateDesignDoc(oldDoc: DesignDocumentationList, newDoc: DesignDocumentationList) {
+    const i = this.designDocumentations.indexOf(oldDoc);
+
+    if (i !== -1) {
+      this.designDocumentations[i] = newDoc;
+    }
   }
 }

@@ -50,4 +50,18 @@ export class DesignDocumentationService {
 
     return this.api.post<DesignDocumentationList>(url, null);
   }
+
+  approval(id: Uuid, designDocId: Uuid): Observable<DesignDocumentationList> {
+    const url = `requests/${id}/designs/${designDocId}/approval`;
+
+    return this.api.post<DesignDocumentationList>(url, null);
+  }
+
+  reject(id: Uuid, designDocId: Uuid, file: File): Observable<DesignDocumentationList> {
+    const url = `requests/${id}/designs/${designDocId}/reject`;
+    const formData = new FormData();
+    formData.append('remarksFile', file, file.name);
+
+    return this.api.post<DesignDocumentationList>(url, formData);
+  }
 }
