@@ -5,6 +5,8 @@ import { ContragentListComponent } from './components/contragent-list/contragent
 import { SharedModule } from "../shared/shared.module";
 import { ContragentListViewComponent } from "./components/contragent-list-view/contragent-list-view.component";
 import { ContragentService } from "./services/contragent.service";
+import { ContragentInfoComponent } from './components/contragent-info/contragent-info.component';
+import { ContragentInfoViewComponent } from './components/contragent-info-view/contragent-info-view.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,8 @@ import { ContragentService } from "./services/contragent.service";
   declarations: [
     ContragentListViewComponent,
     ContragentListComponent,
+    ContragentInfoComponent,
+    ContragentInfoViewComponent,
   ],
   providers: [
     ContragentService,

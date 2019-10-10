@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-contragent-list-view',

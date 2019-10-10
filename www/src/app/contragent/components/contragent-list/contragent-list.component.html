@@ -12,7 +12,9 @@
   </clr-dg-column>
 
 
-  <clr-dg-row *clrDgItems="let contragent of contragents$ | async">
+  <clr-dg-row
+          *clrDgItems="let contragent of contragents$ | async"
+          (click)="showContragentInfo(contragent.id)">
 
     <clr-dg-cell class="contragent-name">
       {{contragent.shortName}}
