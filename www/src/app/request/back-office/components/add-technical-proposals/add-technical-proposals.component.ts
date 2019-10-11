@@ -374,4 +374,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
     }
   }
 
+  getCurrentTpContragentName(): string {
+    let name = '';
+    if (this.technicalProposal.id) {
+      name = this.technicalProposal.name;
+    }
+    return name;
+  }
+
 }
