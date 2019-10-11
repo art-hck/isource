@@ -168,10 +168,6 @@ label {
   border-top: 1px solid #d7d7d7;
 }
 
-span {
-  padding-bottom: 15px;
-}
-
 .position-list {
   margin-bottom: 20px;
 }
@@ -215,4 +211,57 @@ clr-dropdown-menu  {
 
 .design-actions {
   text-align: right;
+  & > * {
+    text-align: left;
+  }
+
+  th {
+    font-size: 17px;
+    color: #97a4ad;
+    background: none;
+    border: none;
+  }
+}
+
+.designDocumentationHead {
+  margin: 0;
+  background: none;
+  border: none;
+  padding: 1rem 1rem 0.2rem;
+}
+
+.designDocumentationBody {
+  margin: 0;
+  border-radius: 10px;
+  border-color: #e3eeff;
+
+  .title {
+    font-size: 1.2em;
+  }
+
+  .clr-row {
+    padding: 1rem;
+    margin: 0;
+    border-top: 1px #e3eeff solid;
+
+    &:first-child {
+      border: none;
+    }
+  }
+}
+
+.status {
+  color: #aeaeae;
+  border-color: #aeaeae;
+  font-size: 1.2em;
+}
+
+.status-success {
+  color: #2e8500;
+  border-color: #2e8500;
+}
+
+.status-warning {
+  color: #fac400;
+  border-color: #fac400;
 }

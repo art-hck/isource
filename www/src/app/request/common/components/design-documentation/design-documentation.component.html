@@ -12,7 +12,7 @@
         <h2><b>Рабочая конструкторская документация</b></h2>
 
         <ng-container *ngIf="routeData?.isBackoffice">
-          <div class="clr-row w-100">
+          <div class="clr-row w-100" *ngIf="getPositions().length > 0">
             <div class="clr-col-2">
               <button class="btn btn-primary-outline" (click)="onShowDesignDocumentationListModal()">
                 <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
@@ -97,90 +97,121 @@
               </button>
             </div>
           </clr-modal>
+
+          <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
+            <div class="design-documentation-card">
+              <div class="clr-row clr-align-items-center">
+                <span class="position-name clr-col">
+                  <span>{{designDocumentation.position.name}}</span>
+                </span>
+                <span class="design-actions clr-col">
+                  <ng-container *ngIf="designDocumentation.status as status">
+                    <ng-container [ngSwitch]="status">
+                      <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-info-outline btn-label">На согласовании</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-info-outline btn-label status-success">Согласовано</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
+                    </ng-container>
+                    <button *ngIf="canSendOnApprove(designDocumentation)" class="btn btn-primary"
+                            [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
+                            (click)="sendForApproval(designDocumentation)">Согласовать</button>
+                  </ng-container>
+                </span>
+
+                <table class="document-list table table-noborder">
+                  <thead>
+                  <tr class="clr-row">
+                    <th class="left clr-col-4">Наименование документа</th>
+                    <th class="left clr-col-8">Документ</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr class="clr-row" *ngFor="let designDoc of designDocumentation.designDocs">
+                    <td class="left clr-col-4">
+                      {{designDoc.name}}
+                    </td>
+                    <td class="left clr-col-8">
+                      <div class="form-group compact">
+                        <app-document-simple-list
+                          [documents]="designDoc.documents"
+                          [enableUpload]="canUploadDocuments(designDoc, designDocumentation)"
+                          [limit]="5"
+                          (selected)="onSelectDocument($event, designDoc)"
+                        ></app-document-simple-list>
+                        <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </ng-container>
 
-        <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
-          <div class="design-documentation-card">
-            <div class="clr-row clr-align-items-center">
-              <span class="position-name clr-col">
-                <span>{{designDocumentation.position.name}}</span>
-              </span>
-              <span class="design-actions clr-col">
-                <ng-container [ngSwitch]="designDocumentation.status" *ngIf="routeData?.isCustomer">
+        <div class="designDocumentation" *ngIf="routeData?.isCustomer">
+          <div class="table designDocumentationHead">
+            <div class="clr-row">
+              <div class="left clr-col-4">ПОЗИЦИЯ</div>
+              <div class="left clr-col-6">ДОКУМЕНТЫ</div>
+              <div class="left clr-col-2"></div>
+            </div>
+          </div>
+
+          <div class="table designDocumentationBody">
+            <div class="clr-row" *ngFor="let designDocumentation of designDocumentations">
+              <div class="left clr-col-4 title">{{designDocumentation.position.name}}</div>
+              <div class="left clr-col-6">
+
+                <ng-container *ngFor="let designDoc of designDocumentation.designDocs">
+                  <app-document-simple-list
+                    [documents]="designDoc.documents"
+                    [enableUpload]="false"
+                    [limit]="5"
+                    (selected)="onSelectDocument($event, designDoc)"
+                  ></app-document-simple-list>
+                  <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
+                </ng-container>
+
+
+              </div>
+              <div class="design-actions clr-col-2">
+                <ng-container [ngSwitch]="designDocumentation.status">
                   <clr-dropdown *ngSwitchCase="designDocStatus.ON_APPROVAL" class="bottom-right">
                     <button class="btn btn-primary btn-dropdown" clrDropdownTrigger>
-                      <div>Принять решение</div><clr-icon shape="caret down"></clr-icon>
+                      <div>Принять решение</div>
+                      <clr-icon shape="caret down"></clr-icon>
                     </button>
                     <clr-dropdown-menu>
                       <div clrDropdownItem (click)="approval(designDocumentation)">
-                        <clr-icon shape="check"></clr-icon><span> Согласовать</span>
+                        <clr-icon shape="check"></clr-icon>
+                        <span> Согласовать</span>
                       </div>
                       <label clrDropdownItem>
-                          <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
-                          <span> Приложить замечания</span>
-                          <input type="file" (change)="reject(designDocumentation, $event.target.files[0])">
+                        <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+                        <span> Приложить замечания</span>
+                        <input type="file" (change)="reject(designDocumentation, $event.target.files[0])">
                       </label>
 
                     </clr-dropdown-menu>
                   </clr-dropdown>
-                  <button *ngSwitchCase="designDocStatus.NEW" class="btn btn-info-outline btn-label" disabled="">
+                  <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
-                  </button>
-                  <button *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-success-outline btn-label">
-                    <clr-icon shape="check"></clr-icon><span>Согласовано</span>
-                  </button>
-                  <button *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-warning-outline btn-label">
-                    <clr-icon shape="warning-standard" class="is-solid"></clr-icon><span>На доработке</span>
-                  </button>
+                  </span>
+                  <span *ngSwitchCase="designDocStatus.APPROVAL" class="status status-success">
+                    <clr-icon shape="check"></clr-icon>
+                    <span> Согласовано</span>
+                  </span>
+                  <span *ngSwitchCase="designDocStatus.REJECTED" class="status status-warning">
+                    <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+                    <span> На доработке</span>
+                  </span>
                 </ng-container>
-
-                <ng-container [ngSwitch]="designDocumentation.status" *ngIf="routeData?.isBackoffice">
-                  <button class="btn" *ngIf="designDocumentation.status as status"
-                          [ngSwitch]="status"
-                          [ngClass]='{
-                              "btn-primary": status === designDocStatus.NEW && !this.isSendingForApproval(designDocumentation),
-                              "btn-info-outline": status === designDocStatus.ON_APPROVAL || this.isSendingForApproval(designDocumentation),
-                              "btn-success-outline": status === designDocStatus.APPROVAL,
-                              "btn-danger-outline": status === designDocStatus.REJECTED,
-                              "btn-label": status !== designDocStatus.NEW
-                            }'
-                          [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
-                          [disabled]="!isApprovable(designDocumentation)"
-                          (click)="sendForApproval(designDocumentation)">
-                    <span *ngSwitchCase="designDocStatus.NEW">Согласовать</span>
-                    <span *ngSwitchCase="designDocStatus.ON_APPROVAL">На согласовании</span>
-                    <span *ngSwitchCase="designDocStatus.APPROVAL">Согласовано</span>
-                    <span *ngSwitchCase="designDocStatus.REJECTED">Отклонено</span>
-                  </button>
-                </ng-container>
-              </span>
-
-              <table class="document-list table table-noborder">
-                <thead>
-                <tr class="clr-row">
-                  <th class="left clr-col-4">Наименование документа</th>
-                  <th class="left clr-col-8">Документ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="clr-row" *ngFor="let designDoc of designDocumentation.designDocs">
-                  <td class="left clr-col-4">
-                    {{designDoc.name}}
-                  </td>
-                  <td class="left clr-col-8">
-                    <div class="form-group compact">
-                      <app-document-simple-list
-                        [documents]="designDoc.documents"
-                        [enableUpload]="canUploadDocuments(designDoc, designDocumentation)"
-                        [limit]="5"
-                        (selected)="onSelectDocument($event, designDoc)"
-                      ></app-document-simple-list>
-                      <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
-                    </div>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+                <br/><br/>
+                <app-document-simple-list
+                  [documents]="getRemark(designDocumentation)[0].documents"
+                  [enableUpload]="false"
+                ></app-document-simple-list>
+              </div>
             </div>
           </div>
         </div>
