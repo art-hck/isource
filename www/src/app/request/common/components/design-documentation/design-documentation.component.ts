@@ -187,6 +187,10 @@ export class DesignDocumentationComponent implements OnInit {
     return [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
   }
 
+  isSendOnApproveActive(designDocList: DesignDocumentationList) {
+    return designDocList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0;
+  }
+
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {
     this.loadingDesignDocs.push(designDoc);
     const subscription = this.designDocumentationService
