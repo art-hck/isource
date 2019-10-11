@@ -219,7 +219,6 @@ export class AddOffersComponent implements OnInit {
     return requestPosition.hasProcedure === true;
   }
 
-
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
     this.supplierSelectComponent.resetSearchFilter();
