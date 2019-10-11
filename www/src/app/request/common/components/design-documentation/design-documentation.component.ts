@@ -206,10 +206,6 @@ export class DesignDocumentationComponent implements OnInit {
       return;
     }
 
-    if (![DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDocumentationList.status)) {
-      return;
-    }
-
     // По добавляем перечень из массив отправленных на согласование
     this.sendingForApproval.push(designDocumentationList);
 
