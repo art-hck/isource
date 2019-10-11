@@ -107,11 +107,9 @@
                 <span class="design-actions clr-col">
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
-                      <button *ngSwitchCase="designDocStatus.NEW" class="btn btn-label btn-info-outline">Новый</button>
-                      <button *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-label btn-info-outline"
-                              disabled="">На согласовании</button>
-                      <button *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-label btn-success-outline">Согласовано</button>
-                      <button *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-label btn-danger-outline">Отклонено</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-info-outline btn-label">На согласовании</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-info-outline btn-label status-success">Согласовано</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
                     </ng-container>
                     <button *ngIf="canSendOnApprove(designDocumentation)" class="btn btn-primary"
                             [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
@@ -196,18 +194,19 @@
 
                     </clr-dropdown-menu>
                   </clr-dropdown>
-                  <button *ngSwitchCase="designDocStatus.NEW" class="btn btn-info-outline btn-label" disabled="">
+                  <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
-                  </button>
-                  <button *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-success-outline btn-label">
+                  </span>
+                  <span *ngSwitchCase="designDocStatus.APPROVAL" class="status status-success">
                     <clr-icon shape="check"></clr-icon>
-                    <span>Согласовано</span>
-                  </button>
-                  <button *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-warning-outline btn-label">
+                    <span> Согласовано</span>
+                  </span>
+                  <span *ngSwitchCase="designDocStatus.REJECTED" class="status status-warning">
                     <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
-                    <span>На доработке</span>
-                  </button>
+                    <span> На доработке</span>
+                  </span>
                 </ng-container>
+                <br/><br/>
                 <app-document-simple-list
                   [documents]="getRemark(designDocumentation)[0].documents"
                   [enableUpload]="false"

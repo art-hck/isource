@@ -184,7 +184,7 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   canSendOnApprove(designDoc: DesignDocumentationList) {
-    [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
+    return [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
   }
 
   onSelectDocument(files: File[], designDoc: DesignDocumentation) {

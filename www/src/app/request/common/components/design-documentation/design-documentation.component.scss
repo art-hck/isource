@@ -167,10 +167,6 @@ label {
   border-top: 1px solid #d7d7d7;
 }
 
-span {
-  padding-bottom: 15px;
-}
-
 .position-list {
   margin-bottom: 20px;
 }
@@ -251,4 +247,20 @@ clr-dropdown-menu  {
       border: none;
     }
   }
+}
+
+.status {
+  color: #aeaeae;
+  border-color: #aeaeae;
+  font-size: 1.2em;
+}
+
+.status-success {
+  color: #2e8500;
+  border-color: #2e8500;
+}
+
+.status-warning {
+  color: #fac400;
+  border-color: #fac400;
 }
