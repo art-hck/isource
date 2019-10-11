@@ -287,11 +287,15 @@ clr-checkbox-wrapper {
 }
 
 .position-list {
-  padding-top: 0px;
+  padding-top: 0;
+}
+
+.position-list clr-checkbox-wrapper {
+  display: block;
 }
 
 .document-list {
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 .document-list clr-checkbox-container {

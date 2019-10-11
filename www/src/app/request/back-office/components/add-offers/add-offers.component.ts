@@ -283,9 +283,8 @@ export class AddOffersComponent implements OnInit {
   }
 
   isOfferClickable(requestPosition: RequestPosition): boolean {
-    return !(this.positionIsSentForAgreement(requestPosition) || this.positionHasProcedure(requestPosition));
+    return !this.positionIsSentForAgreement(requestPosition);
   }
-
 
   onAddOffer() {
     const formValue = this.offerForm.value;
