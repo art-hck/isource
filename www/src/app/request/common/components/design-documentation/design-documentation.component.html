@@ -59,14 +59,15 @@
                           <div class="clr-col-1">
                             <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
                                     title="Удалить из списка" *ngIf="i > 0">
-                              <clr-icon shape="times" size="18"></clr-icon>
+                              <clr-icon shape="times" size="24"></clr-icon>
                             </button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </ng-container>
-                  <button class="btn btn-link" (click)="onAddNext()" *ngIf="!addDocumentationForm.invalid">
+                  <button class="btn btn-outline-primary" (click)="onAddNext()">
+                    <clr-icon shape="plus"></clr-icon>
                     Добавить документ
                   </button>
                 </div>
@@ -86,6 +87,9 @@
                       </label>
                     </clr-checkbox-wrapper>
                   </div>
+                </div>
+                <div class="text-muted" *ngIf="getPositions().length === 0" >
+                  Нет доступных позиций
                 </div>
               </div>
             </div>

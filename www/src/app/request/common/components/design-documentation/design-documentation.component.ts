@@ -36,7 +36,6 @@ export class DesignDocumentationComponent implements OnInit {
   addDocumentationForm: FormGroup;
   selectedPositions: RequestPosition[] = [];
   existingPositions: RequestPosition[] = [];
-  pos: RequestPosition[] = [];
   designDocStatus = DesignDocumentationStatus;
   clrLoadingState = ClrLoadingState;
 
@@ -55,9 +54,7 @@ export class DesignDocumentationComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.addDocumentationForm = this.formBuilder.group({
-      'addDocumentationListForm': this.formBuilder.array([
-        this.addDocumentationListFormGroup()
-      ])
+      'addDocumentationListForm': this.formBuilder.array([])
     });
   }
 
@@ -68,16 +65,10 @@ export class DesignDocumentationComponent implements OnInit {
 
     this.getPositionList();
     this.getDesignDocumentationList();
-
-    this.addDocumentationListFormGroup();
-  }
-
-  onRequestsClick(): void {
-    this.router.navigateByUrl(`requests/backoffice`).then(r => {});
   }
 
   onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.requestId}`).then(r => {});
+    this.router.navigateByUrl(`requests/backoffice/${this.requestId}`).then(() => {});
   }
 
   onAddNext() {
@@ -91,8 +82,8 @@ export class DesignDocumentationComponent implements OnInit {
   addDocumentationListFormGroup(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
-      adjustmentLimit: [10, Validators.required],
-      receivingLimit: [10, Validators.required]
+      adjustmentLimit: ['15', Validators.required],
+      receivingLimit: ['5', Validators.required]
     });
   }
 
@@ -139,11 +130,9 @@ export class DesignDocumentationComponent implements OnInit {
     );
   }
 
-  isRkdAgreementStatus(designDoc: DesignDocumentationList): boolean {
-    return designDoc.position.status === 'RKD_AGREEMENT';
-  }
-
   onShowDesignDocumentationListModal() {
+    this.addDocumentationListForm.clear();
+    this.addDocumentationListForm.push(this.addDocumentationListFormGroup());
     this.showDesignDocumentationListModal = true;
   }
 
@@ -160,7 +149,6 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   onCloseAddDesignDocumentationModal() {
-    this.addDocumentationForm.reset();
     this.selectedPositions = [];
     this.showDesignDocumentationListModal = false;
   }
@@ -240,11 +228,6 @@ export class DesignDocumentationComponent implements OnInit {
         this.updateDesignDoc(designDocumentationList, _designDocumentationList);
         subscription.unsubscribe();
       });
-  }
-
-  isApprovable(designDocumentationList: DesignDocumentationList) {
-    return designDocumentationList.designDocs.filter(designDoc => designDoc.documents.length > 0).length > 0
-      && status !== DesignDocumentationStatus.ON_APPROVAL;
   }
 
   updateDesignDoc(oldDoc: DesignDocumentationList, newDoc: DesignDocumentationList) {
