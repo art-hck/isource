@@ -12,10 +12,13 @@
         <h2><b>Рабочая конструкторская документация</b></h2>
 
         <ng-container *ngIf="routeData?.isBackoffice">
-          <div class="clr-row w-100" *ngIf="getPositions().length > 0">
+          <div class="clr-row w-100">
             <div class="clr-col-2">
-              <button class="btn btn-primary-outline" (click)="onShowDesignDocumentationListModal()">
-                <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
+              <button class="btn btn-primary-outline"
+                      [disabled]="getPositions().length === 0"
+                      title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
+                      (click)="onShowDesignDocumentationListModal()">
+                <clr-icon shape="plus" class="is-solid"></clr-icon>
                 <span> Добавить перечень РКД</span>
               </button>
             </div>
@@ -59,14 +62,15 @@
                           <div class="clr-col-1">
                             <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
                                     title="Удалить из списка" *ngIf="i > 0">
-                              <clr-icon shape="times" size="18"></clr-icon>
+                              <clr-icon shape="times" size="24"></clr-icon>
                             </button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </ng-container>
-                  <button class="btn btn-link" (click)="onAddNext()" *ngIf="!addDocumentationForm.invalid">
+                  <button class="btn btn-outline-primary" (click)="onAddNext()">
+                    <clr-icon shape="plus"></clr-icon>
                     Добавить документ
                   </button>
                 </div>
