@@ -1,4 +1,4 @@
-<clr-datagrid class="contragent-list-datagrid" [clrDgLoading]="!(contragents$ | async)">
+<clr-datagrid class="contragent-list-datagrid" [clrDgLoading]="!contragents">
   <clr-dg-column class="contragent-name">
     Наименование контрагента
   </clr-dg-column>
@@ -12,7 +12,9 @@
   </clr-dg-column>
 
 
-  <clr-dg-row *clrDgItems="let contragent of contragents$ | async">
+  <clr-dg-row
+          *clrDgItems="let contragent of contragents"
+          (click)="showContragentInfo(contragent.id)">
 
     <clr-dg-cell class="contragent-name">
       {{contragent.shortName}}

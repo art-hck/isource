@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-contragent-list',
@@ -9,11 +10,17 @@ import { Observable } from "rxjs";
 })
 export class ContragentListComponent implements OnInit {
 
-  @Input() contragents$: Observable<ContragentList[]>;
+  @Input() contragents: ContragentList[];
 
-  constructor() { }
+  constructor(
+    protected router: Router,
+  ) { }
 
   ngOnInit() {
+  }
+
+  showContragentInfo(id) {
+    this.router.navigateByUrl(`/contragents/${id}/info`).then(r => {});
   }
 
 }

@@ -1,8 +1,8 @@
 <div class="container">
-  <h2 class="newRequest">Контрагенты</h2>
+  <h2>Контрагенты</h2>
 
   <app-contragent-list
-          [contragents$]="contragents$">
+          [contragents]="(contragents$ | async)">
   </app-contragent-list>
 
 </div>
