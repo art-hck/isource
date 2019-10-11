@@ -117,6 +117,7 @@
                     </ng-container>
                     <button *ngIf="canSendOnApprove(designDocumentation)" class="btn btn-primary"
                             [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
+                            [disabled]="!isSendOnApproveActive(designDocumentation)"
                             (click)="sendForApproval(designDocumentation)">Согласовать</button>
                   </ng-container>
                 </span>
