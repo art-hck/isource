@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -6,16 +6,17 @@ import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
-import {ContragentList} from "../../../../contragent/models/contragent-list";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
-import {ClrWizard} from "@clr/angular";
-import {ProcedureService} from "../../services/procedure.service";
-import {DocumentsService} from "../../../common/services/documents.service";
+import { ClrWizard } from "@clr/angular";
+import { ProcedureService } from "../../services/procedure.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 
@@ -73,7 +74,8 @@ export class AddOffersComponent implements OnInit {
     protected router: Router,
     private getContragentService: ContragentService,
     private documentsService: DocumentsService,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -206,7 +208,6 @@ export class AddOffersComponent implements OnInit {
   positionHasProcedure(requestPosition: RequestPosition): boolean {
     return requestPosition.hasProcedure === true;
   }
-
 
   onShowAddContragentModal() {
     this.showAddContragentModal = true;
@@ -503,6 +504,25 @@ export class AddOffersComponent implements OnInit {
     } else {
       this.selectedPrivateAccessContragents.splice(index, 1);
     }
+  }
+
+  onImportOffersFromProcedure(): void {
+    this.procedureService.importOffersFromProcedure(this.request).subscribe(
+      (offers: RequestOfferPosition[]) => {
+        if (offers.length) {
+          this.updatePositionsAndSuppliers();
+          this.notificationService.toast('КП загружены');
+        } else {
+          this.notificationService.toast('Нет новых КП');
+        }
+      }, (error: any) => {
+        let msg = 'Ошибка';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
+      }
+    );
   }
 
   protected updatePositionsAndSuppliers(): void {
