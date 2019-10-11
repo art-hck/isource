@@ -23,7 +23,7 @@
         </div>
 
         <div class="clr-row w-100">
-          <div class="clr-col-8">
+          <div class="clr-col-6">
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
               <button class="btn btn-outline import-export"
                       (click)="onDownloadOffersTemplate()">
@@ -35,7 +35,7 @@
             </div>
 
           </div>
-          <div class="clr-col-4 send-offers">
+          <div class="clr-col-6 send-offers">
             <button class="btn btn-primary send-offers"
                     *ngIf="selectedRequestPositions.length !== 0"
                     (click)="onPublishOffers()"
@@ -47,6 +47,12 @@
                     (click)="wizard.open()"
             >
               <b>Создать процедуру</b>
+            </button>
+
+            <button class="btn btn-primary"
+                    (click)="onImportOffersFromProcedure()"
+            >
+              <b>Получить КП из процедуры</b>
             </button>
           </div>
         </div>

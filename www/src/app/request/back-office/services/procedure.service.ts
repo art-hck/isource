@@ -6,6 +6,9 @@ import { ProcedureInfo } from "../models/procedure-info";
 import { ProcedureProperties } from "../models/procedure-properties";
 import { RequestDocument } from "../../common/models/request-document";
 import { ContragentList } from "../../../contragent/models/contragent-list";
+import { RequestOfferPosition } from "../../common/models/request-offer-position";
+import { Observable } from "rxjs";
+import { Request } from "../../common/models/request";
 
 @Injectable()
 export class ProcedureService {
@@ -52,6 +55,9 @@ export class ProcedureService {
     });
   }
 
+  importOffersFromProcedure(request: Request): Observable<RequestOfferPosition[]> {
+    return this.api.get<RequestOfferPosition[]>(`requests/backoffice/${request.id}/procedure-offers`);
+  }
 
   /**
    * Функция для преобразования формы в FormData, при котором можно отправлять файлы
