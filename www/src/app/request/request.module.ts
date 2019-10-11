@@ -13,9 +13,9 @@ import { DocumentListComponent } from './common/components/document-list/documen
 import { MessagesComponent } from './common/components/messages/messages.component';
 import { CreateRequestFreeFormComponent } from './common/components/create-request-free-form/create-request-free-form.component';
 import { OffersComponent as BackofficeOffersComponent } from './common/components/offers/offers.component';
-import { OffersService as BackofficeOffersService} from "./back-office/services/offers.service";
-import { TechnicalProposalsService as BackofficeTechnicalProposalsService} from "./back-office/services/technical-proposals.service";
-import { TechnicalProposalsService as CustomerTechnicalProposalsService} from "./customer/services/technical-proposals.service";
+import { OffersService as BackofficeOffersService } from "./back-office/services/offers.service";
+import { TechnicalProposalsService as BackofficeTechnicalProposalsService } from "./back-office/services/technical-proposals.service";
+import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "./customer/services/technical-proposals.service";
 import { AddFromExcelComponent } from './common/components/add-from-excel/add-from-excel.component';
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
@@ -43,9 +43,8 @@ import { TechnicalProposalsComponent } from './customer/components/technical-pro
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
 import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
 import { ProcedureService } from "./back-office/services/procedure.service";
-import { AddDesignDocumentationComponent } from './back-office/components/add-design-documentation/add-design-documentation.component';
-import {DesignDocumentationService} from "./back-office/services/design-documentation.service";
-import {DesignDocumentationComponent} from "./customer/components/design-documentation/design-documentation.component";
+import { DesignDocumentationService } from "./back-office/services/design-documentation.service";
+import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 
 @NgModule({
   declarations: [
@@ -81,7 +80,7 @@ import {DesignDocumentationComponent} from "./customer/components/design-documen
     SearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
-    AddDesignDocumentationComponent,
+    DesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent,
     DesignDocumentationComponent

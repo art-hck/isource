@@ -2,7 +2,7 @@
 <clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" *ngIf="canPublish()">
   <clr-alert-item>
         <span class="alert-text">
-             В заявке присутсвуют неопубликованные позиции в статусе Черновик
+             В заявке присутствуют неопубликованные позиции в статусе Черновик
         </span>
     <div class="alert-actions">
       <button class="btn alert-action" (click)="onPublish()">Опубликовать все позиции</button>
@@ -13,7 +13,7 @@
 <clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" *ngIf="canApproveOrReject()">
   <clr-alert-item>
         <span class="alert-text">
-             В заявке присутсвуют позиции, требующие согласования
+             В заявке присутствуют позиции, требующие согласования
         </span>
     <div class="alert-actions">
       <button class="btn alert-action" (click)="onApprove()">Согласовать все позиции</button>
