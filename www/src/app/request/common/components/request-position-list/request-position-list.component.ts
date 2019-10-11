@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Request } from "../../models/request";
 import { RequestPositionList } from "../../models/request-position-list";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
@@ -15,7 +15,7 @@ import { Observable } from "rxjs";
   templateUrl: './request-position-list.component.html',
   styleUrls: ['./request-position-list.component.scss']
 })
-export class RequestPositionListComponent implements OnChanges {
+export class RequestPositionListComponent implements OnChanges, OnInit {
 
   @Input() request: Request;
   @Input() requestItems: RequestPositionList[] ;
@@ -41,6 +41,12 @@ export class RequestPositionListComponent implements OnChanges {
   ) {
   }
 
+  ngOnInit() {
+    this.positionListForm = this.formBuilder.group({
+      positions: this.formBuilder.array([])
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     // обновляем только если пришли новые позиции
     if (changes.requestItems && this.requestItems && this.requestItems.length > 0) {
@@ -59,13 +65,7 @@ export class RequestPositionListComponent implements OnChanges {
   }
 
   get positionsArray(): FormArray {
-    let positions;
-    if (!this.positionListForm || !this.positionListForm.get('positions')) {
-      positions = [];
-    } else {
-      positions = this.positionListForm.get('positions');
-    }
-    return <FormArray>positions;
+    return <FormArray>this.positionListForm.get('positions');
   }
 
   onAddPositionsInGroup(requestGroup: RequestGroup) {
