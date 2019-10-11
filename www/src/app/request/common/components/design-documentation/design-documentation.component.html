@@ -12,10 +12,13 @@
         <h2><b>Рабочая конструкторская документация</b></h2>
 
         <ng-container *ngIf="routeData?.isBackoffice">
-          <div class="clr-row w-100" *ngIf="getPositions().length > 0">
+          <div class="clr-row w-100">
             <div class="clr-col-2">
-              <button class="btn btn-primary-outline" (click)="onShowDesignDocumentationListModal()">
-                <clr-icon shape="plus-circle" class="is-solid"></clr-icon>
+              <button class="btn btn-primary-outline"
+                      [disabled]="getPositions().length === 0"
+                      title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
+                      (click)="onShowDesignDocumentationListModal()">
+                <clr-icon shape="plus" class="is-solid"></clr-icon>
                 <span> Добавить перечень РКД</span>
               </button>
             </div>
@@ -87,9 +90,6 @@
                       </label>
                     </clr-checkbox-wrapper>
                   </div>
-                </div>
-                <div class="text-muted" *ngIf="getPositions().length === 0" >
-                  Нет доступных позиций
                 </div>
               </div>
             </div>
