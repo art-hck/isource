@@ -105,10 +105,10 @@
           <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations">
             <div class="design-documentation-card">
               <div class="clr-row clr-align-items-center">
-                <span class="position-name clr-col">
+                <span class="position-name">
                   <span>{{designDocumentation.position.name}}</span>
                 </span>
-                <span class="design-actions clr-col">
+                <span class="design-actions">
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
                       <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-info-outline btn-label">На согласовании</button>
@@ -126,7 +126,9 @@
                   <thead>
                   <tr class="clr-row">
                     <th class="left clr-col-4">Наименование документа</th>
-                    <th class="left clr-col-8">Документ</th>
+                    <th class="left clr-col-4">Документ</th>
+                    <th class="left clr-col-2">Срок предоставления</th>
+                    <th class="left clr-col-2">Срок корректировки</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -134,7 +136,7 @@
                     <td class="left clr-col-4">
                       {{designDoc.name}}
                     </td>
-                    <td class="left clr-col-8">
+                    <td class="left clr-col-4">
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
@@ -145,6 +147,8 @@
                         <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                       </div>
                     </td>
+                    <td class="left clr-col-2">{{designDoc.adjustmentDate}}</td>
+                    <td class="left clr-col-2">{{designDoc.receivingDate}}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -169,12 +173,11 @@
 
                 <ng-container *ngFor="let designDoc of designDocumentation.designDocs">
                   <app-document-simple-list
-                    [documents]="designDoc.documents"
+                    *ngIf="designDoc.type !== designDocumentationType.REMARK"
+                    [documents]="designDoc.documents.length > 0 ? designDoc.documents : [getAwaitingDoc(designDoc)]"
                     [enableUpload]="false"
                     [limit]="5"
-                    (selected)="onSelectDocument($event, designDoc)"
                   ></app-document-simple-list>
-                  <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                 </ng-container>
 
 

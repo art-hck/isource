@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
-  <li class="document" *ngFor="let document of documents.slice(0, showAll ? documents.length : (limit || documents.length))">
+  <li class="document" [class.awaiting]="document.id === null" *ngFor="let document of getDocuments()">
     <button *ngIf="enableDelete"
             (click)="onDeleteDocument(document)"
             type="button"
@@ -12,16 +12,24 @@
     <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
       <div class="title">{{ document.filename }}</div>
       <div class="description">
-        <span>{{document.size | bytesToSize : 2}}</span>
-        <span>{{document.created  | date :' d MMMM y '}}</span>
+        <span *ngIf="document.size > 0">{{document.size | bytesToSize : 2}}</span>
+        <span *ngIf="document.created">
+          <ng-container *ngIf="document.id === null">будет скорректирован до</ng-container>
+          {{document.created  | date :' d MMMM y '}}
+        </span>
       </div>
 
     </div>
   </li>
 
-  <div class="more" *ngIf="!showAll && limit > 0 && limit < documents.length" (click)="showAll = true">
-    Еще {{ documents.length - limit | pluralize: "документ" : "документа" : "документов"}}
-  </div>
+  <ng-container *ngIf="limit > 0 && limit < documents.length">
+    <div class="more" (click)="showAll = !showAll">
+      <clr-icon shape="angle" [dir]="showAll ? 'up' : 'down'"></clr-icon>
+      <span *ngIf="!showAll"> Еще {{ documents.length - limit | pluralize: "документ" : "документа" : "документов"}}</span>
+      <span *ngIf="showAll"> Скрыть</span>
+
+    </div>
+  </ng-container>
 
   <div class="form-group" *ngIf="enableUpload">
     <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
