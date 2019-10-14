@@ -43,6 +43,7 @@ input[type=file] {
 span.position-name {
   font-size: 17px;
   line-height: 100%;
+  flex-grow: 1;
 }
 
 span.position-name-label, span.positions-list-label {
@@ -211,11 +212,6 @@ clr-dropdown-menu  {
 }
 
 .design-actions {
-  text-align: right;
-  & > * {
-    text-align: left;
-  }
-
   th {
     font-size: 17px;
     color: #97a4ad;
