@@ -22,7 +22,7 @@ import { PositionInfoComponent } from "./common/components/position-info/positio
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
 import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
-import { ContractComponent } from './common/components/contract/contract.component';
+import { PositionInfoContractComponent } from './common/components/position-info-contract/position-info-contract.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
 import { CreateRequestFormComponent } from './common/components/create-request-form/create-request-form.component';
 import { RequestListStatusesFilterComponent } from "./common/components/request-list/request-list-statuses-filter/request-list-statuses-filter.component";
@@ -63,7 +63,7 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
     PositionInfoComponent,
     RequestViewComponent,
     CustomerRequestViewComponent,
-    ContractComponent,
+    PositionInfoContractComponent,
     EditPositionInfoFormComponent,
     CreateRequestFormComponent,
     RequestListNumberFilterComponent,

@@ -10,11 +10,11 @@ import { RequestDocument } from "../../models/request-document";
 import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
-  selector: 'app-contract',
-  templateUrl: './contract.component.html',
-  styleUrls: ['./contract.component.css']
+  selector: 'app-position-info-contract',
+  templateUrl: './position-info-contract.component.html',
+  styleUrls: ['./position-info-contract.component.css']
 })
-export class ContractComponent implements OnChanges, OnInit {
+export class PositionInfoContractComponent implements OnChanges, OnInit {
   @Input() requestId: Uuid;
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;

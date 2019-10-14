@@ -180,10 +180,10 @@
           <clr-tab *ngIf="canDownloadContract(requestPosition)">
             <button clrTabLink>Договор</button>
             <clr-tab-content *clrIfActive>
-              <app-contract [requestPosition]="requestPosition"
-                            [requestId]="requestId"
-                            [isCustomerView]="isCustomerView"
-              ></app-contract>
+              <app-position-info-contract [requestPosition]="requestPosition"
+                                          [requestId]="requestId"
+                                          [isCustomerView]="isCustomerView"
+              ></app-position-info-contract>
             </clr-tab-content>
           </clr-tab>
 
