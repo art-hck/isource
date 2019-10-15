@@ -10,6 +10,8 @@ import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-offers',
@@ -24,6 +26,9 @@ export class OffersComponent implements OnInit {
 
   @Output() offerWinner = new EventEmitter<Uuid>();
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
@@ -34,7 +39,8 @@ export class OffersComponent implements OnInit {
     protected offersService: OffersService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    protected getContragentService: ContragentService,
   ) {
   }
 
@@ -135,6 +141,26 @@ export class OffersComponent implements OnInit {
   showWinnerSelectionColumn(): boolean {
     return (this.isCustomerView && !this.showWinnerStateColumn);
   }
+
+
+  showContragentInfo(contragentId: Uuid): void {
+    console.log(contragentId);
+
+    if (this.contragent && this.contragent.id === contragentId) {
+      this.contragentInfoModalOpened = true;
+    } else {
+      this.contragent = null;
+      this.contragentInfoModalOpened = true;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
+  }
+
 
   canUploadTp(): boolean {
     if (this.isCustomerView) {
