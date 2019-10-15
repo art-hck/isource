@@ -102,6 +102,14 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Функция определяет относится ли активность к типу удаления победителя
+   * @param activityItem
+   */
+  isPositionWinnerRemovedAction(activityItem: History): boolean {
+    return activityItem.type === PositionHistoryTypes.WINNER_REMOVED.valueOf();
+  }
+
+  /**
    * Функция возвращает список классов для html-элемента в зависимости от типа активности
    * @param activityItem
    */

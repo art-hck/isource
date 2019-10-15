@@ -31,7 +31,6 @@
           </div>
         </ng-container>
 
-
         <ng-container *ngIf="isStatusChangeAction(activityItem)">
           <div class="position-status-change">
             <span class="status-name">
@@ -46,23 +45,51 @@
           </div>
         </ng-container>
 
-
         <ng-container *ngIf="isPositionWinnerSelectedAction(activityItem)">
           <div class="position-winner-selected-item">
             <div class="position-winner-name">
-              <clr-icon shape="star" size="10" class="is-solid gray"></clr-icon>
-              <a (click)="showContragentInfo(activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+              <clr-icon shape="thumbs-up" size="12" class="is-solid gray"></clr-icon>
+
+              <span *ngIf="!activityItem.data.supplierId; else clickableWinnerLink">
+                {{ activityItem.data.supplierName || 'Без имени' }}
+              </span>
+
+              <ng-template #clickableWinnerLink>
+                <a (click)="showContragentInfo(activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+              </ng-template>
             </div>
 
             <div class="position-winner-offer">
-              {{ activityItem.data.offerPrice | currency : activityItem.data.offerCurrency }}
+              {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
+                currency : activityItem.data.offerCurrency }}
+              <span class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isPositionWinnerRemovedAction(activityItem)">
+          <div class="position-winner-selected-item">
+            <div class="position-winner-name">
+              <clr-icon shape="thumbs-down" size="12" class="is-solid gray"></clr-icon>
+
+              <span *ngIf="!activityItem.data.supplierId; else clickableRemovedWinnerLink">
+                {{ activityItem.data.supplierName || 'Без имени' }}
+              </span>
+
+              <ng-template #clickableRemovedWinnerLink>
+                <a (click)="showContragentInfo(activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+              </ng-template>
+            </div>
+
+            <div class="position-winner-offer">
+              {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
+                currency : activityItem.data.offerCurrency }}
               <span class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
             </div>
           </div>
         </ng-container>
 
       </ng-template>
-
 
       <div class="author-block">
         <span class="user-name gray"><b>{{ getUserName(activityItem) }}</b></span>

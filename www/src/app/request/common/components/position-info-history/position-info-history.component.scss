@@ -75,9 +75,11 @@ $status-color-COMPLETED: rgb(255, 127, 127);
     font-size: 13px;
     line-height: 1.6;
 
-    & clr-icon[shape=star] {
+    & clr-icon[shape=thumbs-up],
+    & clr-icon[shape=thumbs-down] {
       vertical-align: initial;
-      margin-right: 5px;
+      margin-right: 2px;
+      margin-bottom: -1px;
     }
   }
 

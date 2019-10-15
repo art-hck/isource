@@ -8,8 +8,9 @@ export class ActivityData {
   newValues?: Object;
   oldValues?: Object;
   filename?: string;
+  directorFullName?: string;
   positionName?: string;
-  supplierId: Uuid;
+  supplierId?: Uuid;
   supplierName?: string;
   offerQuantity?: number;
   offerMeasureUnit?: string;
