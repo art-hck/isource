@@ -213,10 +213,6 @@ h2 {
   margin-bottom: 0;
 }
 
-.modal-body:focus {
-  outline: 0;
-}
-
 .modal-body {
   height: 300px;
 }

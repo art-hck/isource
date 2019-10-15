@@ -1,4 +1,8 @@
-<div class="contragent-info-content">
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
+
+<div class="contragent-info-content" *ngIf="contragent; else loading">
 
   <div class="basic-info">
     <div class="info-field clr-row">

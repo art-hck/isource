@@ -20,7 +20,7 @@ $status-color-COMPLETED: rgb(255, 127, 127);
   margin-top: 20px;
   max-height: 600px;
   overflow: hidden auto;
-  padding: 0 10px 0 35px;
+  padding: 5px 10px 0 35px;
 }
 
 .empty-history p {
@@ -65,9 +65,26 @@ $status-color-COMPLETED: rgb(255, 127, 127);
 
   & div.position-status-change,
   & a.document-item,
-  & div.position-edit-item {
+  & div.position-edit-item,
+  & div.position-winner-selected-item {
     padding-top: 5px;
     display: table;
+  }
+
+  & div.position-winner-name {
+    font-size: 13px;
+    line-height: 1.6;
+
+    & clr-icon[shape=star] {
+      vertical-align: initial;
+      margin-right: 5px;
+    }
+  }
+
+  & div.position-winner-offer {
+    font-size: 13px;
+    line-height: 1.6;
+    padding-bottom: 3px;
   }
 
   & span.activity-type {
