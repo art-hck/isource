@@ -225,6 +225,11 @@ h2 {
   padding-top: 15px;
 }
 
+::ng-deep p.text-alert.warning-msg {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
 .error-message {
   font-size: 12px;
   color: red;
