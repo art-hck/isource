@@ -35,12 +35,12 @@
         <ng-container *ngIf="isStatusChangeAction(activityItem)">
           <div class="position-status-change">
             <span class="status-name">
-              <span class="position-status status-position-{{ activityItem.data.positionName }}">
-                {{ activityItem.data.positionName }}
+              <span class="position-status status-position-{{ activityItem.data.oldStatus }}">
+                {{ activityItem.data.oldStatusLabel }}
               </span>
                 <span class="arrow">→</span>
-              <span class="position-status status-position-{{ activityItem.data.positionName }}">
-                {{ activityItem.data.positionName }}
+              <span class="position-status status-position-{{ activityItem.data.newStatus }}">
+                {{ activityItem.data.newStatusLabel }}
               </span>
             </span>
           </div>
