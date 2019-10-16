@@ -48,6 +48,7 @@ import { ContractService } from "./common/services/contract.service";
 import { ContractCreateComponent } from "./common/components/contract-create-modal/contract-create.component";
 import { ContractUploadDocumentComponent } from "./common/components/contract-upload-document/contract-upload-document.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
+import { ContractComponent } from "./common/components/contract/contract.component";
 
 @NgModule({
   declarations: [
