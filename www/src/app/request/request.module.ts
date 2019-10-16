@@ -46,6 +46,7 @@ import { ProcedureService } from "./back-office/services/procedure.service";
 import { DesignDocumentationService } from "./back-office/services/design-documentation.service";
 import { ContractService } from "./common/services/contract.service";
 import { ContractCreateComponent } from "./common/components/contract-create-modal/contract-create.component";
+import { ContractUploadDocumentComponent } from "./common/components/contract-upload-document/contract-upload-document.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 
 @NgModule({
