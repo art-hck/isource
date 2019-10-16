@@ -2,23 +2,23 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RequestPosition} from "../models/request-position";
-import {Contract} from "../models/contract";
+import {PositionInfoContract} from "../models/positionInfoContract";
 import {Uuid} from "../../../cart/models/uuid";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContractService {
+export class PositionInfoContractService {
 
   constructor(protected api: HttpClient) {
   }
 
-  addCustomerContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
+  addCustomerContract(id: Uuid, requestPosition: RequestPosition, contractItem: PositionInfoContract) {
     return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/add-contract-documents`,
       this.convertModelToFormData(contractItem));
   }
 
-  addBackofficeContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
+  addBackofficeContract(id: Uuid, requestPosition: RequestPosition, contractItem: PositionInfoContract) {
     return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/add-contract-documents`,
       this.convertModelToFormData(contractItem));
   }

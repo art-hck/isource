@@ -4,7 +4,7 @@ export class ContragentList {
   id: Uuid|null;
   type: string;
   legalForm?: string;
-  fullName: string;
+  name: string;
   shortName: string;
   inn: string;
   kpp: string;
@@ -14,4 +14,8 @@ export class ContragentList {
   directorFullName: string;
   phone: string;
   createdDate: Date;
+
+  constructor(params?: Partial<ContragentList>) {
+    Object.assign(this, params);
+  }
 }

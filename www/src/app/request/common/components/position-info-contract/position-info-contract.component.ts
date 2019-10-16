@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { Contract } from "../../models/contract";
+import { PositionInfoContract } from "../../models/positionInfoContract";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../models/request-position";
 import { ContractService } from "../../services/contract.service";
@@ -20,7 +20,7 @@ export class PositionInfoContractComponent implements OnChanges, OnInit {
   @Input() isCustomerView: boolean;
 
   contractForm: FormGroup;
-  contractItem: Contract;
+  contractItem: PositionInfoContract;
   requestContract: RequestContract;
   uploadedFiles: File[] = [];
 
