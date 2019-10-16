@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { PositionInfoContract } from "../../models/positionInfoContract";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../models/request-position";
-import { ContractService } from "../../services/contract.service";
+import { PositionInfoContractService } from "../../services/position-info-contract.service";
 import { RequestContract } from "../../models/request-contract";
 import { DocumentsService } from "../../services/documents.service";
 import { RequestDocument } from "../../models/request-document";
@@ -26,7 +26,7 @@ export class PositionInfoContractComponent implements OnChanges, OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private contractService: ContractService,
+    private contractService: PositionInfoContractService,
     private documentsService: DocumentsService,
     private notificationService: NotificationService
   ) {

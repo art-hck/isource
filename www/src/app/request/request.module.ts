@@ -44,6 +44,8 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
 import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
 import { ProcedureService } from "./back-office/services/procedure.service";
 import { DesignDocumentationService } from "./back-office/services/design-documentation.service";
+import { ContractService } from "./common/services/contract.service";
+import { ContractCreateComponent } from "./common/components/contract-create-modal/contract-create.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 
 @NgModule({
@@ -83,7 +85,10 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
     DesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent,
-    DesignDocumentationComponent
+    ContractComponent,
+    DesignDocumentationComponent,
+    ContractCreateComponent,
+    ContractUploadDocumentComponent
   ],
   imports: [
     SharedModule,
@@ -102,7 +107,8 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
     SupplierSelectComponent,
     ProcedureService,
     SupplierSelectComponent,
-    DesignDocumentationService
+    DesignDocumentationService,
+    ContractService
   ]
 })
 export class RequestModule {

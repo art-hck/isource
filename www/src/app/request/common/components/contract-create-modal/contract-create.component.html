@@ -1,0 +1,41 @@
+<form class="modal" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="modal-dialog" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button aria-label="Close" class="close" type="button" (click)="close.emit()">
+          <clr-icon aria-hidden="true" shape="close"></clr-icon>
+        </button>
+        <h3 class="modal-title">Новый договор</h3>
+      </div>
+      <div class="modal-body">
+        <h5>Выберите поставщика</h5>
+        <div [class.clr-error]="formContragentInvalid">
+          <div class="clr-select-wrapper">
+            <select class="clr-select" formControlName="contragent" [compareWith]="compareContragentByID">
+              <option *ngFor="let contragent of contragents" [ngValue]="getContragentList(contragent)">
+                {{contragent.shortName}}
+              </option>
+            </select>
+            <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
+          </div>
+          <span *ngIf="formContragentInvalid" class="clr-subtext">Поле не может быть пустым</span>
+        </div>
+        <br/>
+
+        <ng-container *ngIf="form.get('contragent').valid">
+          <h5>Выберите позиции</h5>
+
+          <clr-checkbox-wrapper formArrayName="positions" *ngFor="let position of formPositions.controls; index as i">
+            <input type="checkbox" clrCheckbox [formControlName]="i.toString()"/>
+            <label>{{ getContragentPositions(form.get('contragent').value)[i].name }}</label>
+          </clr-checkbox-wrapper>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" (click)="close.emit()">Отмена</button>
+        <button class="btn btn-primary" [disabled]="form.invalid">Добавить</button>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="modal-backdrop" aria-hidden="true"></div>
