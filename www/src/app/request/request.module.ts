@@ -45,6 +45,7 @@ import { CommercialProposalsComponent } from './customer/components/commercial-p
 import { ProcedureService } from "./back-office/services/procedure.service";
 import { DesignDocumentationService } from "./back-office/services/design-documentation.service";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
+import { ContragentModule } from "../contragent/contragent.module";
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
     SharedModule,
     RequestRoutingModule,
     ReactiveFormsModule,
-    TextMaskModule
+    TextMaskModule,
+    ContragentModule
   ],
   providers: [
     BackofficeRequestService,
