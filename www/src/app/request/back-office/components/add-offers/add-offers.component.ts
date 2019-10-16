@@ -419,6 +419,7 @@ export class AddOffersComponent implements OnInit {
               this.selectedRequestPositions = [];
             }
           );
+          Swal.close();
         });
         cancel.addEventListener('click', () => {
           Swal.close();
