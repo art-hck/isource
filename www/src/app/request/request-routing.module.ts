@@ -31,6 +31,10 @@ const routes: Routes = [
             component: CustomerRequestViewComponent
           },
           {
+            path: 'contract',
+            component: ContractComponent,
+          },
+          {
             path: 'technical-proposals',
             component: TechnicalProposalsComponent
           },

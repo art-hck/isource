@@ -5,6 +5,7 @@ import { RequestDocument } from "../../models/request-document";
 import { finalize } from "rxjs/operators";
 import { ClrLoadingState } from "@clr/angular";
 import { ContractService } from "../../services/contract.service";
+import { Request } from "../../models/request";
 
 @Component({
   selector: 'app-contract-upload-document',
@@ -12,6 +13,7 @@ import { ContractService } from "../../services/contract.service";
   styleUrls: ['./contract-upload-document.component.scss']
 })
 export class ContractUploadDocumentComponent implements OnChanges {
+  @Input() request: Request;
   @Input() documents: RequestDocument[] = [];
   @Input() files: File[] = [];
   @Input() contract: Contract;
@@ -56,18 +58,17 @@ export class ContractUploadDocumentComponent implements OnChanges {
     }).length > 0;
   }
 
-  public submit(form: FormGroup) {
-    form.get('state').setValue(ClrLoadingState.LOADING);
+  public submit(form: FormGroup): void {
     const file: File = form.get('file').value;
     const comment: string = form.get('comment').value;
 
-    this.contractService.uploadDocument(file, comment).pipe(
+    form.get('state').setValue(ClrLoadingState.LOADING);
+
+    this.contractService.uploadDocument(this.request, this.contract, file, comment).pipe(
       finalize(() => {
         this.complete.emit();
         this.forms = this.forms.filter(_form => _form !== form);
       })
-    ).subscribe(document => {
-      this.contract.documents.push(document);
-    });
+    ).subscribe(document => this.contract.documents = [...this.contract.documents, ...document]);
   }
 }
