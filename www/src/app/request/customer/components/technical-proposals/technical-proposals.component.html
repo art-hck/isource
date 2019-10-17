@@ -46,7 +46,7 @@
             <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
               <td class="left">
                 <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
-                  <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                  <input clrCheckbox type="checkbox"
                          value="{{i}}"
                          [(ngModel)]="technicalProposalPosition.checked"
                          (change)="onSelectPosition(i, technicalProposalPosition)">
@@ -72,9 +72,6 @@
       </div>
     </div>
   </div>
-
-
-
 
   <!--  Модальное окно отображения информации о контрагенте -->
 

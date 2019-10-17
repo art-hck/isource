@@ -124,7 +124,7 @@ export class TechnicalProposalsComponent implements OnInit {
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
 
-    if (!(this.contragent && this.contragent.id === contragentId)) {
+    if (!this.contragent || this.contragent.id !== contragentId) {
       this.contragent = null;
 
       const subscription = this.getContragentService
