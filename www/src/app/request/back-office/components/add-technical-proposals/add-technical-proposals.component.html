@@ -24,7 +24,8 @@
             <div class="clr-row clr-align-items-center">
               <span class="supplier-name clr-col">
 
-                <span>{{ technicalProposal.name }}</span>
+                <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
+                  {{ technicalProposal.supplierContragent.shortName }}</a>
 
                 <div class="edit-btn"
                      *ngIf="isTpHasEditablePositions(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
@@ -131,11 +132,12 @@
           <app-supplier-select
                   *ngIf="!(technicalProposal.positions && tpIsOnReview(technicalProposal)); else readonly"
                   [contragentName]="getCurrentTpContragentName()"
-                  (selectedContragent)="onSelectedContragent($event)">
+                  (selectedContragent)="onSelectedContragent($event)"
+                  (contragentNameChange)="onContragentInputChange($event)">
           </app-supplier-select>
 
           <ng-template #readonly>
-            <p class="readonly-supplier-name">{{ technicalProposal.name }}</p>
+            <p class="readonly-supplier-name">{{ technicalProposal.supplierContragent.shortName }}</p>
           </ng-template>
 
         </div>
@@ -214,6 +216,19 @@
           </ng-template>
         </div>
       </div>
+    </div>
+  </clr-modal>
+
+
+  <!--  Модальное окно отображения информации о контрагенте -->
+
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent?.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
     </div>
   </clr-modal>
 
