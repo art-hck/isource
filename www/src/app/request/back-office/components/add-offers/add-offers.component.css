@@ -142,19 +142,24 @@ clr-checkbox-wrapper {
   padding-top: 10px;
 }
 
-.sent-for-agreement-label {
+
+.sent-for-agreement-label,
+.has-procedure-label,
+.has-finished-procedure-label {
   margin: 10px 22px;
   display: block;
   font-weight: bold;
+}
+
+.sent-for-agreement-label {
   color: #4CAF50;
 }
 .has-procedure-label {
-  margin: 10px 22px;
-  display: block;
-  font-weight: bold;
   color: #2196F3;
 }
-
+.has-finished-procedure-label {
+  color: #e7a20b;
+}
 
 .grey {
   color: #999999;
