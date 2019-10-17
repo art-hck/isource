@@ -401,11 +401,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   showContragentInfo(contragentId: Uuid): void {
-    if (this.contragent && this.contragent.id === contragentId) {
-      this.contragentInfoModalOpened = true;
-    } else {
+    this.contragentInfoModalOpened = true;
+
+    if (!(this.contragent && this.contragent.id === contragentId)) {
       this.contragent = null;
-      this.contragentInfoModalOpened = true;
 
       const subscription = this.getContragentService
         .getContragentInfo(contragentId)
