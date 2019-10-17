@@ -72,14 +72,13 @@
                 </clr-checkbox-container>
               </div>
             </th>
-            <th class="contragent-name" *ngFor="let supplier of suppliers">{{ supplier }}</th>
+            <th class="contragent-name" *ngFor="let supplier of suppliers">
+              <a (click)="showContragentInfo(supplier.id)">{{ supplier.shortName }}</a>
+            </th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let requestPosition of requestPositions">
-
-
-
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
                 <input clrCheckbox type="checkbox"
@@ -549,4 +548,17 @@
       </div>
     </clr-wizard-page>
   </clr-wizard>
+
+
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent?.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+
+
 </ng-container>
