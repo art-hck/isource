@@ -54,12 +54,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    protected router: Router,
+    private router: Router,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
-    protected getContragentService: ContragentService
+    private getContragentService: ContragentService
   ) { }
 
   ngOnInit() {
