@@ -7,20 +7,22 @@
     <a routerLink="../..">Заявки</a> / <a routerLink="..">Заявка №{{request.number}}</a>
   </div>
   <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
-    <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
-      <button class="btn btn-primary-outline btn-add-contract" (click)="showModal = true"
-              [disabled]="!isAvailableToCreate(contragentsWithPositions)">
-        <clr-icon shape="plus" class="is-solid"></clr-icon>
-        <span>Добавить договор</span>
-      </button>
+    <ng-container *ngIf="userInfoService.isBackOffice()">
+      <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
+        <button class="btn btn-primary-outline btn-add-contract" (click)="showModal = true"
+                [disabled]="!isAvailableToCreate(contragentsWithPositions)">
+          <clr-icon shape="plus" class="is-solid"></clr-icon>
+          <span>Добавить договор</span>
+        </button>
 
-      <app-contract-create
-        *ngIf="showModal"
-        [request]="request"
-        [contragentsWithPositions]="contragentsWithPositions"
-        (close)="showModal = false"
-        (create)="addContract($event)"
-      ></app-contract-create>
+        <app-contract-create
+          *ngIf="showModal"
+          [request]="request"
+          [contragentsWithPositions]="contragentsWithPositions"
+          (close)="showModal = false"
+          (create)="addContract($event)"
+        ></app-contract-create>
+      </ng-container>
     </ng-container>
 
     <h2><b>Согласование договора</b></h2>
