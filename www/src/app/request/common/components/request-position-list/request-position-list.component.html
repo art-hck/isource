@@ -138,11 +138,11 @@
       <ng-container *ngFor="let requestPosition of requestItems[i].positions">
 
         <div class="position-row clr-row w-100 sub-list-item"
+             (click)="onSelectItem(requestPosition)"
              [ngClass]="{'selected-row' : isSelectedListItem(requestPosition)}">
 
           <!-- Колонка 1: Название позиции -->
           <div class="cell position-name clr-col"
-               (click)="onSelectItem(requestPosition)"
                [ngClass]="{ 'clr-col' : selectItem, 'clr-col' : !selectItem }">
             {{requestPosition.name}}
           </div>

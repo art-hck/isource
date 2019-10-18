@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../models/request";
-import { RequestService } from "../../../back-office/services/request.service";
+import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { RequestService as CustomerRequestService} from "../../../customer/services/request.service";
 import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
 import { DesignDocumentationList } from "../../models/design-documentationList";
 import { RequestPosition } from "../../models/request-position";
@@ -13,6 +14,7 @@ import { DesignDocumentationStatus } from "../../enum/design-documentation-statu
 import { ClrLoadingState } from "@clr/angular";
 import { Observable } from "rxjs";
 import { DesignDocumentationType } from "../../enum/design-documentation-type";
+import { RequestDocument } from "../../models/request-document";
 
 @Component({
   selector: 'app-design-documentation',
@@ -37,6 +39,7 @@ export class DesignDocumentationComponent implements OnInit {
   selectedPositions: RequestPosition[] = [];
   existingPositions: RequestPosition[] = [];
   designDocStatus = DesignDocumentationStatus;
+  designDocumentationType = DesignDocumentationType;
   clrLoadingState = ClrLoadingState;
 
   private loadingDesignDocs: DesignDocumentation[] = [];
@@ -49,7 +52,8 @@ export class DesignDocumentationComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private requestService: RequestService,
+    private backofficeRequestService: BackofficeRequestService,
+    private customerRequestService: CustomerRequestService,
     private designDocumentationService: DesignDocumentationService,
     private formBuilder: FormBuilder
   ) {
@@ -61,7 +65,14 @@ export class DesignDocumentationComponent implements OnInit {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.routeData = this.route.snapshot.data;
-    this.request$ = this.requestService.getRequestInfo(this.requestId);
+
+    if (this.routeData.isBackoffice) {
+      this.request$ = this.backofficeRequestService.getRequestInfo(this.requestId);
+    }
+
+    if (this.routeData.isCustomer) {
+      this.request$ = this.customerRequestService.getRequestInfo(this.requestId);
+    }
 
     this.getPositionList();
     this.getDesignDocumentationList();
@@ -244,5 +255,18 @@ export class DesignDocumentationComponent implements OnInit {
 
   getRemark(designDocumentation: DesignDocumentationList) {
     return designDocumentation.designDocs.filter(designDoc => designDoc.type === DesignDocumentationType.REMARK);
+  }
+
+  getAwaitingDoc(designDocumentation: DesignDocumentation): RequestDocument {
+    return {
+      id: null,
+      filename: designDocumentation.name,
+      created: designDocumentation.adjustmentDate ? designDocumentation.adjustmentDate.toString() : '1991-07-18',
+      comments: designDocumentation.comment,
+      size: 0,
+      user: null,
+      extension: null,
+      mime: null
+    };
   }
 }

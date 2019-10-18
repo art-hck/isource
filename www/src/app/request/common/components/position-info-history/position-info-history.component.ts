@@ -6,6 +6,8 @@ import * as moment from "moment";
 import { PositionHistoryTypes } from "../../enum/position-history-types";
 import { Uuid } from "../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-position-info-history',
@@ -15,9 +17,13 @@ import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-field
 export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   @Input() requestPosition: RequestPosition;
+
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
   history: History[];
 
   constructor(
+    protected getContragentService: ContragentService,
     private historyService: RequestPositionHistoryService
   ) {
   }
@@ -54,6 +60,21 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     this.historyService.downloadFileFromHistory(documentId, documentName);
   }
 
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
+  }
+
   isPositionEditAction(activityItem: History): boolean {
     return activityItem.type === PositionHistoryTypes.POSITION_EDITED.valueOf();
   }
@@ -69,6 +90,22 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
         PositionHistoryTypes.POSITION_ADDED.valueOf()
       ].indexOf(activityItem.type) !== -1
     );
+  }
+
+  /**
+   * Функция определяет относится ли активность к типу выбора победителя
+   * @param activityItem
+   */
+  isPositionWinnerSelectedAction(activityItem: History): boolean {
+    return activityItem.type === PositionHistoryTypes.WINNER_ADDED.valueOf();
+  }
+
+  /**
+   * Функция определяет относится ли активность к типу удаления победителя
+   * @param activityItem
+   */
+  isPositionWinnerRemovedAction(activityItem: History): boolean {
+    return activityItem.type === PositionHistoryTypes.WINNER_REMOVED.valueOf();
   }
 
   /**

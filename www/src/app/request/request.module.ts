@@ -49,6 +49,7 @@ import { ContractCreateComponent } from "./common/components/contract-create-mod
 import { ContractUploadDocumentComponent } from "./common/components/contract-upload-document/contract-upload-document.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "./common/components/contract/contract.component";
+import { ContragentModule } from "../contragent/contragent.module";
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { ContractComponent } from "./common/components/contract/contract.compone
     SharedModule,
     RequestRoutingModule,
     ReactiveFormsModule,
-    TextMaskModule
+    TextMaskModule,
+    ContragentModule
   ],
   providers: [
     BackofficeRequestService,

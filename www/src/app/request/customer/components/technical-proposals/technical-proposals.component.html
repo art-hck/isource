@@ -13,7 +13,8 @@
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
           <div class="clr-row clr-align-items-center">
             <span class="supplier-name clr-col">
-              <span>{{ technicalProposal.name }}</span>
+              <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
+                {{ technicalProposal.supplierContragent.shortName }}</a>
             </span>
           </div>
           <div class="document">
@@ -45,7 +46,7 @@
             <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
               <td class="left">
                 <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
-                  <input type="checkboxselect-checkbox" clrCheckbox type="checkbox"
+                  <input clrCheckbox type="checkbox"
                          value="{{i}}"
                          [(ngModel)]="technicalProposalPosition.checked"
                          (change)="onSelectPosition(i, technicalProposalPosition)">
@@ -71,4 +72,18 @@
       </div>
     </div>
   </div>
+
+  <!--  Модальное окно отображения информации о контрагенте -->
+
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent?.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+
+
 </ng-container>

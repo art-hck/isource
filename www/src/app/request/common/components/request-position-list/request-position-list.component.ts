@@ -42,20 +42,13 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    this.positionListForm = this.formBuilder.group({
-      positions: this.formBuilder.array([])
-    });
+    this.updatePositionListForm();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // обновляем только если пришли новые позиции
+    // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
     if (changes.requestItems && this.requestItems && this.requestItems.length > 0) {
-      // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
-      this.positionListForm = this.formBuilder.group({
-        positions: this.formBuilder.array(this.requestItems.map(element => {
-          return this.formBuilder.control(false);
-        }))
-      });
+      this.updatePositionListForm();
     }
   }
 
@@ -72,11 +65,11 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
 
     this.groupService.addPositionsInGroup(this.request.id, requestGroup.id, this.selectedPositions).subscribe(
       () => {
-        this.selectedPositions.forEach((selectedPosition: RequestPosition, i) => {
+        this.selectedPositions.forEach((selectedPosition: RequestPosition) => {
           selectedPosition.groupId = requestGroup.id;
           requestGroup.positions.push(selectedPosition);
         });
-        this.selectedPositions.forEach((selectedPosition: RequestPositionList, i) => {
+        this.selectedPositions.forEach((selectedPosition: RequestPositionList) => {
           const deleteIndex = this.requestItems.indexOf(selectedPosition);
           this.deletePosition(deleteIndex);
         });
@@ -189,5 +182,16 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
     } else {
       return true;
     }
+  }
+
+  /**
+   * Перестраивает форму списка позиций в записимости от списка позиций
+   */
+  protected updatePositionListForm() {
+    this.positionListForm = this.formBuilder.group({
+      positions: this.formBuilder.array(this.requestItems.map(() => {
+        return this.formBuilder.control(false);
+      }))
+    });
   }
 }
