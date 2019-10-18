@@ -13,6 +13,8 @@ import {ContragentList} from "../../../../contragent/models/contragent-list";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -27,6 +29,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
   documentsForm: FormGroup;
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
+
+  contragentInfoModalOpened = false;
+  contragent: ContragentInfo;
+  contragentSearchFieldValue: string;
 
   selectedContragent: ContragentList;
 
@@ -48,11 +54,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    protected router: Router,
+    private router: Router,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private requestService: RequestService,
-    private technicalProposalsService: TechnicalProposalsService
+    private technicalProposalsService: TechnicalProposalsService,
+    private getContragentService: ContragentService
   ) { }
 
   ngOnInit() {
@@ -102,6 +109,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowEditTechnicalProposalModal(technicalProposal): void {
     this.technicalProposal = technicalProposal;
+
+    this.selectedContragent = technicalProposal.supplierContragent;
+    this.contragentSearchFieldValue = technicalProposal.supplierContragent.shortName;
 
     this.selectedTechnicalProposalPositionsIds = [];
     this.uploadedFiles = [];
@@ -358,7 +368,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
   checkIfCreatingIsEnabled(): boolean {
     return (
       this.selectedTechnicalProposalPositionsIds.length > 0 &&
-      this.selectedContragent !== null
+      this.selectedContragent !== null &&
+      this.selectedContragent.shortName === this.contragentSearchFieldValue
     );
   }
 
@@ -370,7 +381,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
     } else {
       // Если ТП ещё не рассматривалось заказчиком,
       // проверяем, выбраны ли позиции или заполнено ли поле наименования
-      return (this.selectedTechnicalProposalPositionsIds.length > 0 && this.selectedContragent !== null);
+      return (this.selectedTechnicalProposalPositionsIds.length > 0 &&
+        this.selectedContragent !== null &&
+        this.selectedContragent.shortName === this.contragentSearchFieldValue
+      );
     }
   }
 
@@ -380,6 +394,25 @@ export class AddTechnicalProposalsComponent implements OnInit {
       name = this.technicalProposal.name;
     }
     return name;
+  }
+
+  onContragentInputChange(value: string): void {
+    this.contragentSearchFieldValue = value;
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 
 }

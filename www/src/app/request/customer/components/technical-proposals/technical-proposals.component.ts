@@ -8,6 +8,8 @@ import {TechnicalProposalsService} from "../../../customer/services/technical-pr
 import {TechnicalProposalPosition} from "../../../common/models/technical-proposal-position";
 import {NotificationService} from "../../../../shared/services/notification.service";
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -19,13 +21,16 @@ export class TechnicalProposalsComponent implements OnInit {
   request: Request;
   technicalProposals: TechnicalProposal[];
   selectedTechnicalProposalsPositions: TechnicalProposalPosition[][] = [];
+  contragentInfoModalOpened = false;
+  contragent: ContragentInfo;
 
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    protected getContragentService: ContragentService
   ) { }
 
   ngOnInit() {
@@ -114,5 +119,20 @@ export class TechnicalProposalsComponent implements OnInit {
       this.selectedTechnicalProposalsPositions[i] &&
       this.selectedTechnicalProposalsPositions[i].length > 0
     );
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 }

@@ -23,5 +23,8 @@ import { ContragentInfoViewComponent } from './components/contragent-info-view/c
   providers: [
     ContragentService,
   ],
+  exports: [
+    ContragentInfoComponent
+  ]
 })
 export class ContragentModule { }

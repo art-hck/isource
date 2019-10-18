@@ -206,7 +206,11 @@ export class AddOffersComponent implements OnInit {
   }
 
   positionHasProcedure(requestPosition: RequestPosition): boolean {
-    return requestPosition.hasProcedure === true;
+    return requestPosition.hasProcedure;
+  }
+
+  positionHasFinishedProcedure(requestPosition: RequestPosition): boolean {
+    return requestPosition.procedureEndDate && !requestPosition.hasProcedure;
   }
 
   onShowAddContragentModal() {
@@ -385,12 +389,48 @@ export class AddOffersComponent implements OnInit {
   }
 
   onPublishOffers() {
-    this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
-      () => {
-        this.updatePositionsAndSuppliers();
-        this.selectedRequestPositions = [];
+    let alertWidth = 340;
+    let htmlTemplate = '<p class="text-alert warning-msg">Отправить на согласование?</p>' +
+      '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+      '<button id="cancel" class="btn btn-link">Отменить</button>';
+
+    if (this.selectedRequestPositions.some(requestPosition => requestPosition.hasProcedure === true)) {
+      alertWidth = 500;
+      htmlTemplate = '<p class="text-alert warning-msg">' +
+        'Процедура сбора коммерческих предложений по позиции ещё не завершена. ' +
+        '<br>' +
+        'Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>' +
+        '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+        '<button id="cancel" class="btn btn-link">Отменить</button>';
+    }
+
+    Swal.fire({
+      width: alertWidth,
+      html: htmlTemplate,
+      showConfirmButton: false,
+
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+
+        submit.addEventListener('click', () => {
+          this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
+            () => {
+              this.updatePositionsAndSuppliers();
+              this.selectedRequestPositions = [];
+            }
+          );
+          Swal.close();
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
       }
-    );
+    });
+
   }
 
   onPublishProcedure() {
@@ -407,6 +447,8 @@ export class AddOffersComponent implements OnInit {
     ).subscribe(
       (data: any) => {
         this.resetWizardForm();
+        this.updatePositionsAndSuppliers();
+        this.selectedRequestPositions = [];
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +

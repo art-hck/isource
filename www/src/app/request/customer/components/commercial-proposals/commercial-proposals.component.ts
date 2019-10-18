@@ -8,6 +8,8 @@ import { RequestOfferPosition } from "../../../common/models/request-offer-posit
 import { RequestDocument } from "../../../common/models/request-document";
 import * as moment from "moment";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from "../../../common/dictionaries/request-position-workflow-order";
+import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-commercial-proposals',
@@ -227,7 +229,14 @@ export class CommercialProposalsComponent implements OnInit {
   }
 
   positionHasWinner(requestPosition: RequestPosition): boolean {
-    return requestPosition.linkedOffers.some(linkedOffer => linkedOffer.isWinner === true);
+    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(requestPosition.status);
+    const positionHasWinnerIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
+    );
+    return (
+      requestPosition &&
+      currentStateIndex >= positionHasWinnerIndex
+    );
   }
 
   sendForAgreement(): void {

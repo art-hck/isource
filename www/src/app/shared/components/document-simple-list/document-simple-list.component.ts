@@ -48,6 +48,9 @@ export class DocumentSimpleListComponent implements OnInit {
   }
 
   onDownloadDocument(document: RequestDocument) {
+    if (!document.id) {
+      return;
+    }
     this.documentsService.downloadFile(document);
   }
 
@@ -56,5 +59,10 @@ export class DocumentSimpleListComponent implements OnInit {
 
     // очищаем, чтобы можно было снова загрузить тот же файл
     this.uploadElRef.nativeElement.value = '';
+  }
+
+  getDocuments() {
+    // Если showAll=true или не указан limit возвращаем всё.
+    return this.documents.slice(0, this.showAll ? this.documents.length : (this.limit || this.documents.length));
   }
 }

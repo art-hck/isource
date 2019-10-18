@@ -25,7 +25,6 @@ $bckg-color: #fbfcfe;
 }
 
 h2 {
-  font-family: PT Root UI, Roboto, sans-serif;
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -44,10 +43,6 @@ h2 {
   border: 0;
   color: #002033;
   box-shadow: 0 3px 14px rgba(0, 72, 113, 0.14);
-}
-
-.modal-body:focus {
-  outline: 0;
 }
 
 table {
