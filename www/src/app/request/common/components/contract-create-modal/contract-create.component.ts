@@ -27,7 +27,7 @@ export class ContractCreateComponent implements OnInit {
   });
 
   get contragents(): ContragentList[] {
-    return this.contragentsWithPositions.map(contragentsWithPosition => contragentsWithPosition.contragent);
+    return this.contragentsWithPositions.map(contragentsWithPosition => contragentsWithPosition.supplier);
   }
 
   get formPositions(): FormArray {
@@ -61,7 +61,7 @@ export class ContractCreateComponent implements OnInit {
 
   public getContragentPositions(contragent: ContragentList): RequestPosition[] {
     return this.contragentsWithPositions
-      .filter(contragentsWithPosition => contragentsWithPosition.contragent.id === contragent.id)
+      .filter(contragentsWithPosition => contragentsWithPosition.supplier.id === contragent.id)
       .map(contragentsWithPosition => contragentsWithPosition.positions)
       .reduce((prev, curr) => [...prev, ...curr], []);
   }

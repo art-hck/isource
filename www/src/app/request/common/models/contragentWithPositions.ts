@@ -3,6 +3,6 @@ import { RequestPosition } from "./request-position";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 
 export class ContragentWithPositions {
-  contragent: ContragentList;
+  supplier: ContragentList;
   positions: RequestPosition[];
 }
