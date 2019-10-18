@@ -5,14 +5,14 @@
 <ng-container *ngIf="request">
   <div class="clr-row">
     <div class="info-card clr-col">
-      <div class="request-info">
+      <div class="technical-proposals">
         <div class="breadcrumbs">
           <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
         <h2>Технические предложения</h2>
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
-          <div class="clr-row clr-align-items-center">
-            <span class="supplier-name clr-col">
+          <div class="clr-row clr-justify-content-between clr-align-items-center">
+            <span class="supplier-name clr-col-auto">
               <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
                 <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
                 {{ technicalProposal.supplierContragent.shortName }}</a>
@@ -22,6 +22,19 @@
                 <span>Отсутствует наименование контрагента</span>
               </ng-template>
             </span>
+
+            <div class="clr-col-5 send-for-approval">
+              <button class="btn btn-link"
+                      (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                      *ngIf="isResolutionButtonsAvailable(i)">
+                Отклонить
+              </button>
+              <button class="btn btn-primary"
+                      (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
+                      *ngIf="isResolutionButtonsAvailable(i)">
+                Согласовать
+              </button>
+            </div>
           </div>
           <div class="document">
             <app-document-simple-list
@@ -29,51 +42,50 @@
               [documents]="technicalProposal.documents"
             ></app-document-simple-list>
           </div>
-          <div class="clr-col send-for-approval">
-            <button class="btn btn-link"
-                    (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                    *ngIf="isResolutionButtonsAvailable(i)">
-              Отклонить
-            </button>
-            <button class="btn btn-primary"
-                    (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                    *ngIf="isResolutionButtonsAvailable(i)">
-              Согласовать
-            </button>
+
+
+          <div *ngIf="technicalProposal.positions && technicalProposal.positions.length > 0; else tpHasNoPositions">
+
+            <table class="positions-list table table-noborder">
+              <thead>
+              <tr>
+                <th class="left">Наименование позиции</th>
+                <th class="left">Заводское наименование</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
+                <td class="left">
+                  <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
+                    <input clrCheckbox type="checkbox"
+                           value="{{i}}"
+                           [(ngModel)]="technicalProposalPosition.checked"
+                           (change)="onSelectPosition(i, technicalProposalPosition)">
+                    <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
+                  </clr-checkbox-wrapper>
+                  <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
+                    <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
+                              shape="check"></clr-icon>
+                    <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"
+                              shape="times"></clr-icon>
+                    <span class="position-name">{{technicalProposalPosition.position.name}}</span>
+                  </div>
+                </td>
+                <td class="left">
+                  <div class="form-group compact">
+                    {{ technicalProposalPosition.manufacturingName }}
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
           </div>
-          <table class="positions-list table table-noborder">
-            <thead>
-            <tr>
-              <th class="left">Наименование позиции</th>
-              <th class="left">Заводское наименование</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
-              <td class="left">
-                <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
-                  <input clrCheckbox type="checkbox"
-                         value="{{i}}"
-                         [(ngModel)]="technicalProposalPosition.checked"
-                         (change)="onSelectPosition(i, technicalProposalPosition)">
-                  <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
-                </clr-checkbox-wrapper>
-                <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
-                  <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
-                            shape="check"></clr-icon>
-                  <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"
-                            shape="times"></clr-icon>
-                  <span class="position-name">{{technicalProposalPosition.position.name}}</span>
-                </div>
-              </td>
-              <td class="left">
-                <div class="form-group compact">
-                  {{ technicalProposalPosition.manufacturingName }}
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+
+          <ng-template #tpHasNoPositions>
+            <div class="tp-has-no-positions">Техническое предложение не содержит позиций</div>
+          </ng-template>
+
         </div>
       </div>
     </div>
