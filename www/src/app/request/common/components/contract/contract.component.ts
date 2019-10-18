@@ -4,10 +4,11 @@ import { RequestService } from "../../../back-office/services/request.service";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
 import { map, publishReplay, refCount, tap } from "rxjs/operators";
-import { Contract } from "../../models/contract";
+import { Contract, ContractStatus } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
+import { UserInfoService } from "../../../../core/services/user-info.service";
 
 @Component({
   selector: 'app-contract',
@@ -19,12 +20,14 @@ export class ContractComponent implements OnInit {
   public contracts$: Observable<Contract[]>;
   public contragentsWithPositions$: Observable<ContragentWithPositions[]>;
   public showModal = false;
+  public ContractStatus = ContractStatus;
   public attachedFiles: { file: File, contract: Contract }[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
     private contractService: ContractService,
+    private userInfoService: UserInfoService,
   ) {
   }
 
@@ -36,13 +39,11 @@ export class ContractComponent implements OnInit {
       .pipe(publishReplay(1), refCount())
     ;
 
-    this.contracts$ = this.contractService.getContracts(requestId).pipe(
-      tap(contracts => this.updateContragentsWithPositions(contracts)), // @TODO Скорее всего не понадобится, когда будет REST
-      publishReplay(1), refCount()
-    );
+    this.contracts$ = this.contractService.getContracts(requestId)
+      .pipe(publishReplay(1), refCount());
   }
 
-  // Добавляем контракт и обновляем позиции
+  // Добавляем контракт и обновляем доступных контрагентов и их позиции
   public addContract(contract: Contract): void {
     this.updateContragentsWithPositions([contract]);
     this.contracts$ = this.contracts$
@@ -53,12 +54,20 @@ export class ContractComponent implements OnInit {
   public isAvailableToCreate(contragentsWithPositions: ContragentWithPositions[]): boolean {
     return contragentsWithPositions
       .map(contragentsWithPosition => contragentsWithPosition.positions)
-      .reduce((prev, curr) => [...prev, ...curr])
+      .reduce((prev, curr) => [...prev, ...curr], [])
       .length > 0;
   }
 
+  public isAvailableForApproval(contract: Contract): boolean {
+    return this.isAvailableToAttach(contract) && contract.documents.length > 0;
+  }
+
+  public isAvailableToAttach(contract: Contract): boolean {
+    return [ContractStatus.NEW, ContractStatus.REJECTED].includes(contract.status);
+  }
+
   // Прикрепление (не загрузка) файла к контракту
-  public attachFileToContract(files: FileList, contract: Contract) {
+  public attachFileToContract(files: FileList, contract: Contract): void {
     this.attachedFiles = [...this.attachedFiles, {file: files[0], contract: contract}];
   }
 
@@ -78,6 +87,21 @@ export class ContractComponent implements OnInit {
     return contract.winners
       .map(winner => winner.offerPosition.priceWithoutVat)
       .reduce((a, b) => a + b, 0);
+  }
+
+  public getCurrencies(contract: Contract): string[] {
+    return Object.keys(this.groupPositionsByCurrency(contract));
+  }
+
+  public groupPositionsByCurrency(contract: Contract): GroupedPositionsByCurrency {
+    return contract.winners
+      .map(winner => winner.offerPosition)
+      .reduce((g: GroupedPositionsByCurrency, offerPosition) => {
+        g[offerPosition.currency] = g[offerPosition.currency] || {total: 0, positions: []};
+        g[offerPosition.currency].total += offerPosition.priceWithoutVat;
+        g[offerPosition.currency].positions.push(offerPosition.requestPosition);
+        return g;
+      }, {});
   }
 
   // Убираем все позиции, которые есть в передаваемых функции котнрактах
@@ -102,3 +126,5 @@ export class ContractComponent implements OnInit {
     ;
   }
 }
+
+export class GroupedPositionsByCurrency { [name: string]: {total: number, positions: RequestPosition[] }; }

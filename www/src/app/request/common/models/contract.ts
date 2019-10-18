@@ -13,4 +13,12 @@ export class Contract {
   createdDate: string;
   winners: Winner[];
   documents: RequestDocument[];
+  status: ContractStatus;
+}
+
+export enum ContractStatus {
+  NEW = 'NEW',
+  ON_APPROVAL = 'ON_APPROVAL',
+  REJECTED = 'REJECTED',
+  APPROVAL = 'APPROVAL'
 }

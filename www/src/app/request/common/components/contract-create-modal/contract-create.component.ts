@@ -22,19 +22,19 @@ export class ContractCreateComponent implements OnInit {
   @Output() create = new EventEmitter<Contract>();
 
   public form: FormGroup = new FormGroup({
-    'contragent': new FormControl("Выберите поставщика", CustomValidators.validContragent),
+    'contragent': new FormControl("", CustomValidators.validContragent),
     'positions': new FormArray([], CustomValidators.multipleCheckboxRequireOne)
   });
 
-  get contragents() {
+  get contragents(): ContragentList[] {
     return this.contragentsWithPositions.map(contragentsWithPosition => contragentsWithPosition.contragent);
   }
 
-  get formPositions() {
+  get formPositions(): FormArray {
     return this.form.get('positions') as FormArray;
   }
 
-  get formContragentInvalid() {
+  get formContragentInvalid(): boolean {
     return this.form.get('contragent').dirty && this.form.get('contragent').invalid;
   }
 
@@ -55,7 +55,22 @@ export class ContractCreateComponent implements OnInit {
     });
   }
 
-  public submit() {
+  public getContragentList(contragent): ContragentList {
+    return new ContragentList(contragent);
+  }
+
+  public getContragentPositions(contragent: ContragentList): RequestPosition[] {
+    return this.contragentsWithPositions
+      .filter(contragentsWithPosition => contragentsWithPosition.contragent.id === contragent.id)
+      .map(contragentsWithPosition => contragentsWithPosition.positions)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
+  public compareContragentByID(c1: ContragentList, c2: ContragentList): boolean {
+    return c1 && c2 && c1.id === c2.id;
+  }
+
+  public submit(): void {
     const contragent: ContragentList = this.form.get('contragent').value;
     const positions: RequestPosition[] = this.form.get('positions').value
       .map((v, i) => v ? this.getContragentPositions(contragent)[i] : null)
@@ -63,25 +78,9 @@ export class ContractCreateComponent implements OnInit {
     ;
 
 
-    this.contractService.create(contragent, positions)
+    this.contractService.create(this.request, contragent, positions)
       .pipe(finalize(() => this.close.emit()))
       .subscribe((contract) => this.create.emit(contract))
     ;
-  }
-
-  public getContragentList(contragent) {
-    return new ContragentList(contragent);
-  }
-
-  public getContragentPositions(contragent: ContragentList) {
-    return this.contragentsWithPositions
-      .filter(contragentsWithPosition => contragentsWithPosition.contragent.id === contragent.id)
-      .map(contragentsWithPosition => contragentsWithPosition.positions)
-      .reduce((prev, curr) => [...prev, ...curr])
-      ;
-  }
-
-  public compareContragentByID(c1: ContragentList, c2: ContragentList) {
-    return c1 && c2 && c1.id === c2.id;
   }
 }

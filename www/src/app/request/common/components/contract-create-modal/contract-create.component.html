@@ -24,11 +24,12 @@
 
         <ng-container *ngIf="form.get('contragent').valid">
           <h5>Выберите позиции</h5>
-
-          <clr-checkbox-wrapper formArrayName="positions" *ngFor="let position of formPositions.controls; index as i">
-            <input type="checkbox" clrCheckbox [formControlName]="i.toString()"/>
-            <label>{{ getContragentPositions(form.get('contragent').value)[i].name }}</label>
-          </clr-checkbox-wrapper>
+          <div *ngFor="let position of formPositions.controls; index as i">
+            <clr-checkbox-wrapper formArrayName="positions" >
+              <input type="checkbox" clrCheckbox [formControlName]="i.toString()"/>
+              <label>{{ getContragentPositions(form.get('contragent').value)[i].name }}</label>
+            </clr-checkbox-wrapper>
+          </div>
         </ng-container>
       </div>
       <div class="modal-footer">
