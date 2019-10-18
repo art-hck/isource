@@ -1,103 +1,104 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import { RequestService } from "../../../back-office/services/request.service";
+import { Observable } from "rxjs";
+import { Request } from "../../models/request";
+import { map, publishReplay, refCount, tap } from "rxjs/operators";
 import { Contract } from "../../models/contract";
-import { Uuid } from "../../../../cart/models/uuid";
-import { RequestPosition } from "../../models/request-position";
+import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
-import { RequestContract } from "../../models/request-contract";
-import { DocumentsService } from "../../services/documents.service";
-import { RequestDocument } from "../../models/request-document";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPosition } from "../../models/request-position";
 
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
-  styleUrls: ['./contract.component.css']
+  styleUrls: ['./contract.component.scss']
 })
-export class ContractComponent implements OnChanges, OnInit {
-  @Input() requestId: Uuid;
-  @Input() requestPosition: RequestPosition;
-  @Input() isCustomerView: boolean;
-
-  contractForm: FormGroup;
-  contractItem: Contract;
-  requestContract: RequestContract;
-  uploadedFiles: File[] = [];
+export class ContractComponent implements OnInit {
+  public request$: Observable<Request>;
+  public contracts$: Observable<Contract[]>;
+  public contragentsWithPositions$: Observable<ContragentWithPositions[]>;
+  public showModal = false;
+  public attachedFiles: { file: File, contract: Contract }[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private requestService: RequestService,
     private contractService: ContractService,
-    private documentsService: DocumentsService,
-    private notificationService: NotificationService
   ) {
   }
 
   ngOnInit() {
-    this.contractForm = this.formBuilder.group({
-      comments: [''],
-      documents: [null]
-    });
+    const requestId = this.route.snapshot.paramMap.get('id');
+    this.request$ = this.requestService.getRequestInfo(requestId);
+
+    this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
+      .pipe(publishReplay(1), refCount())
+    ;
+
+    this.contracts$ = this.contractService.getContracts(requestId).pipe(
+      tap(contracts => this.updateContragentsWithPositions(contracts)), // @TODO Скорее всего не понадобится, когда будет REST
+      publishReplay(1), refCount()
+    );
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.getContractList();
-    this.uploadedFiles = [];
+  // Добавляем контракт и обновляем позиции
+  public addContract(contract: Contract): void {
+    this.updateContragentsWithPositions([contract]);
+    this.contracts$ = this.contracts$
+      .pipe(map(contracts => [contract, ...contracts]));
   }
 
-  getContractList() {
-    if (this.isCustomerView) {
-      this.contractService.getCustomerContract(this.requestId, this.requestPosition).subscribe(
-        (data: any) => this.afterGetContract(data)
-      );
-    } else {
-      this.contractService.getBackofficeContract(this.requestId, this.requestPosition).subscribe(
-        (data: any) => this.afterGetContract(data)
-      );
-    }
+  // Проверяем есть ли доступные позиции для добавления договора
+  public isAvailableToCreate(contragentsWithPositions: ContragentWithPositions[]): boolean {
+    return contragentsWithPositions
+      .map(contragentsWithPosition => contragentsWithPosition.positions)
+      .reduce((prev, curr) => [...prev, ...curr])
+      .length > 0;
   }
 
-  onDocumentSelected(uploadedFiles: File[], contractForm) {
-    contractForm.get('documents').setValue(uploadedFiles);
+  // Прикрепление (не загрузка) файла к контракту
+  public attachFileToContract(files: FileList, contract: Contract) {
+    this.attachedFiles = [...this.attachedFiles, {file: files[0], contract: contract}];
   }
 
-  onAddContract() {
-    this.contractItem = this.contractForm.value;
-    return this.isCustomerView ?
-      this.contractService.addCustomerContract(this.requestId, this.requestPosition, this.contractItem)
-        .subscribe(() => this.afterAddContract()) :
-      this.contractService.addBackofficeContract(this.requestId, this.requestPosition, this.contractItem)
-        .subscribe(() => this.afterAddContract());
+  public removeFile(contract: Contract) {
+    this.attachedFiles = this.attachedFiles.filter(files => files.contract.id !== contract.id);
   }
 
-  onDownloadFile(document: RequestDocument) {
-    this.documentsService.downloadFile(document);
+  public getAttachedFiles(contract: Contract): File[] {
+    return this.attachedFiles.filter(files => files.contract.id === contract.id).map(files => files.file);
   }
 
-  afterAddContract() {
-    this.contractForm.reset();
-    this.uploadedFiles = [];
-    this.getContractList();
-    this.notificationService.toast('Договор загружен');
+  public getContractPositions(contract: Contract): RequestPosition[] {
+    return contract.winners.map(winner => winner.offerPosition.requestPosition);
   }
 
-  afterGetContract(data: any) {
-    this.requestContract = data;
+  public getTotalPrice(contract: Contract): number {
+    return contract.winners
+      .map(winner => winner.offerPosition.priceWithoutVat)
+      .reduce((a, b) => a + b, 0);
   }
 
-  isCommentsColumnShown(): boolean {
-    if (
-      !this.requestContract ||
-      !this.requestContract.documents ||
-      this.requestContract.documents.length === 0
-    ) {
-      return false;
-    }
-    for (const document of this.requestContract.documents) {
-      if (document.comments) {
-        return true;
-      }
-    }
+  // Убираем все позиции, которые есть в передаваемых функции котнрактах
+  private updateContragentsWithPositions(contracts: Contract[]) {
+    this.contragentsWithPositions$ = this.contragentsWithPositions$.pipe(
+      map(contragentsWithPositions => contragentsWithPositions.map(contragentsWithPosition => {
+          contragentsWithPosition.positions = contragentsWithPosition.positions
+            .filter(position => contracts
+              // получаем массив массивов позиций контрактов
+              .map(contract => contract.winners.map(winner => winner.offerPosition.requestPosition))
+              // переводим их в один массив
+              .reduce((prev, curr) => [...prev, ...curr], [])
+              // получаем массив из id позиций
+              .map(contractPosition => contractPosition.id)
+              // true, если позиция контрагента не найдена в массиве
+              .indexOf(position.id) < 0
+            );
 
-    return false;
+          return contragentsWithPosition;
+        })
+      ))
+    ;
   }
 }

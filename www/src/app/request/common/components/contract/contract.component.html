@@ -1,28 +1,72 @@
-<form [formGroup]="contractForm" class="form">
-  <app-document-upload-list (fileSelected)="onDocumentSelected($event, contractForm)"
-                            [documents]="uploadedFiles"></app-document-upload-list>
-  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
-    <div class="clr-col-9">
-      <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
-    </div>
-    <div class="clr-col-3">
-      <button class="btn btn-link" (click)="onAddContract()">Загрузить</button>
-    </div>
-  </div>
-</form>
-<clr-datagrid class="clr-row" *ngIf="requestContract">
-  <clr-dg-column class="clr-col-5">Наименование документа</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Дата загрузки</clr-dg-column>
-  <clr-dg-column class="clr-col-2" *ngIf="isCommentsColumnShown()">Комментарии</clr-dg-column>
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
 
-  <clr-dg-row *ngFor="let document of requestContract?.documents">
-    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>
-    </clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{ requestPosition.statusLabel }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-1">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2" *ngIf="isCommentsColumnShown()">{{ document.comments }}</clr-dg-cell>
-  </clr-dg-row>
-</clr-datagrid>
+<ng-container *ngIf="(request$ | async) as request; else loading">
+  <div class="breadcrumbs">
+    <a routerLink="../..">Заявки</a> / <a routerLink="..">Заявка №{{request.number}}</a>
+  </div>
+  <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
+
+    <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
+      <button class="btn btn-primary-outline btn-add-contract" (click)="showModal = true"
+              [disabled]="!isAvailableToCreate(contragentsWithPositions)">
+        <clr-icon shape="plus" class="is-solid"></clr-icon>
+        <span>Добавить договор</span>
+      </button>
+
+      <app-contract-create
+        *ngIf="showModal"
+        [request]="request"
+        [contragentsWithPositions]="contragentsWithPositions"
+        (close)="showModal = false"
+        (create)="addContract($event)"
+      ></app-contract-create>
+    </ng-container>
+
+    <h2><b>Согласование договора</b></h2>
+    <br/>
+
+    <div class="card" *ngFor="let contract of contracts">
+      <div class="card-header">
+        {{ contract.supplier.shortName }}
+      </div>
+      <div class="card-block">
+        <div class="card-text">
+          <div class="table table-noborder">
+            <div class="clr-row">
+              <div class="left clr-col-4">Позиции</div>
+              <div class="left clr-col-8">Документы</div>
+            </div>
+            <div class="clr-row">
+              <div class="left clr-col-4">
+                <p *ngFor="let position of getContractPositions(contract)">{{ position.name }}</p>
+                <p><b>Итого:</b> {{ getTotalPrice(contract) }}</p>
+              </div>
+              <div class="left clr-col-8">
+                <app-contract-upload-document
+                  [contract]="contract"
+                  [documents]="contract.documents"
+                  [files]="getAttachedFiles(contract)"
+                  (complete)="removeFile(contract)"
+                ></app-contract-upload-document>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="clr-row">
+          <div class="left clr-col-4"></div>
+          <div class="left clr-col-8">
+            <label class="btn btn-primary">Добавить документ
+              <input type="file" onclick="this.value = null"
+                     (change)="attachFileToContract($event.target.files, contract)">
+            </label>
+            <button class="btn btn-primary" [disabled]="contract.documents.length <= 0">Согласовать</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

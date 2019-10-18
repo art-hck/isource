@@ -1,11 +1,11 @@
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import {Uuid} from "../../../cart/models/uuid";
-import {RequestPosition} from "../../common/models/request-position";
-import {DesignDocumentation} from "../../common/models/design-documentation";
-import {RequestDocument} from "../../common/models/request-document";
-import {Observable} from "rxjs";
-import {DesignDocumentationList} from "../../common/models/design-documentationList";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Uuid } from "../../../cart/models/uuid";
+import { RequestPosition } from "../../common/models/request-position";
+import { DesignDocumentation } from "../../common/models/design-documentation";
+import { RequestDocument } from "../../common/models/request-document";
+import { Observable } from "rxjs";
+import { DesignDocumentationList } from "../../common/models/design-documentationList";
 
 @Injectable()
 export class DesignDocumentationService {
@@ -17,12 +17,12 @@ export class DesignDocumentationService {
 
   getDesignDocumentationList(requestId: Uuid) {
     const url = `requests/${requestId}/designs`;
-    return this.api.get(url);
+    return this.api.get<DesignDocumentationList[]>(url);
   }
 
   getPositionList(requestId: Uuid) {
     const url = `requests/${requestId}/designs/positions`;
-    return this.api.get(url);
+    return this.api.get<RequestPosition[]>(url);
   }
 
   addDesignDocumentationList(id: Uuid, designDocs: DesignDocumentation[], positions: RequestPosition[]) {

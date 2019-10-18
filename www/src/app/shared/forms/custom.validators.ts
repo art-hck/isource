@@ -1,6 +1,7 @@
-import {AbstractControl, FormControl, ValidationErrors, ValidatorFn} from "@angular/forms";
-import {Subscription} from "rxjs";
+import { AbstractControl, FormArray, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { Subscription } from "rxjs";
 import * as moment from "moment";
+import { ContragentList } from "../../contragent/models/contragent-list";
 
 export class CustomValidators {
 
@@ -148,5 +149,16 @@ export class CustomValidators {
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
       return controlDate.isAfter(validationDate) ? null : { 'field': true };
     };
+  }
+
+  static multipleCheckboxRequireOne(formArray: FormArray): ValidationErrors {
+    return formArray.value
+      .filter(value => value)
+      .length > 0 ? null : { 'multipleCheckboxRequireOne': true }
+    ;
+  }
+
+  static validContragent(control: FormControl): ValidationErrors {
+    return control.value instanceof ContragentList ? null : { 'invalidContragent': true };
   }
 }

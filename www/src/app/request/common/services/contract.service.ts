@@ -1,68 +1,90 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {RequestPosition} from "../models/request-position";
-import {Contract} from "../models/contract";
-import {Uuid} from "../../../cart/models/uuid";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, of, pipe } from "rxjs";
+import { ContragentWithPositions } from "../models/contragentWithPositions";
+import { DesignDocumentationService } from "../../back-office/services/design-documentation.service";
+import { ContragentService } from "../../../contragent/services/contragent.service";
+import { delay, flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
+import { Contract } from "../models/contract";
+import { ContragentList } from "../../../contragent/models/contragent-list";
+import { RequestPosition } from "../models/request-position";
+import { RequestDocument } from "../models/request-document";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ContractService {
 
-  constructor(protected api: HttpClient) {
+  constructor(
+    protected api: HttpClient,
+    private designDocumentationService: DesignDocumentationService,
+    private contragentService: ContragentService
+  ) {
   }
 
-  addCustomerContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
-    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/add-contract-documents`,
-      this.convertModelToFormData(contractItem));
+  // @TODO implement REST
+  create(contragent: ContragentList, positions: RequestPosition[]): Observable<Contract> {
+    return of(this.generateContract(contragent, positions)).pipe(this.simulateDelay());
   }
 
-  addBackofficeContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
-    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/add-contract-documents`,
-      this.convertModelToFormData(contractItem));
+  // @TODO implement REST
+  uploadDocument(file: File, comment: string): Observable<RequestDocument> {
+    return of({
+      id: file.lastModified.toString(),
+      created: file.lastModified.toString(),
+      filename: file.name,
+      extension: null,
+      mime: null,
+      size: file.size,
+      comments: comment
+    }).pipe(this.simulateDelay());
   }
 
-  getCustomerContract(id: Uuid, requestPosition: RequestPosition) {
-    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/contract`, {});
+  // @TODO implement REST
+  getContragentsWithPositions(requestId): Observable<ContragentWithPositions[]> {
+    return this.designDocumentationService.getPositionList(requestId).pipe(
+      flatMap(
+        positions => this.contragentService.getContragentList().pipe(
+          map(contragents => contragents.map(contragent => ({contragent, positions})))
+        )
+      )
+    );
   }
 
-  getBackofficeContract(id: Uuid, requestPosition: RequestPosition) {
-    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/contract`, {});
+  // @TODO implement REST
+  getContracts(requestId): Observable<Contract[]> {
+    return this.designDocumentationService.getDesignDocumentationList(requestId)
+      .pipe(map(ddl => ddl.map(dd => this.generateContract(
+        new ContragentList({shortName: "ООО Ромашка"}), [dd.position]
+        ))
+      ));
   }
 
-  // TODO копипаст, вынести в отдельный сервис
-  convertModelToFormData(model: any, form: FormData = null, namespace = ''): FormData {
-    const formData = form || new FormData();
+  // @TODO remove after implement all REST
+  private simulateDelay<T>(min = 1000, max = 2000) {
+    return delay<T>(Math.floor(Math.random() * (max - min + 1) + min));
+  }
 
-    if (model instanceof File) {
-      formData.append(namespace, model);
-      return formData;
-    }
-
-    for (const propertyName in model) {
-      if (!model.hasOwnProperty(propertyName) || !model[propertyName]) {
-        continue;
-      }
-
-      const formKey = namespace ? `${namespace}[${propertyName}]` : propertyName;
-
-      if (model[propertyName] instanceof Date) {
-        formData.append(formKey, model[propertyName].toISOString());
-      } else if (model[propertyName] instanceof Array) {
-        model[propertyName].forEach((element, index) => {
-          const tempFormKey = `${formKey}[${index}]`;
-          this.convertModelToFormData(element, formData, tempFormKey);
-        });
-      } else if (model[propertyName] instanceof File) {
-        formData.append(formKey, model[propertyName]);
-      } else if (typeof model[propertyName] === 'object') {
-        this.convertModelToFormData(model[propertyName], formData, formKey);
-      } else {
-        formData.append(formKey, model[propertyName].toString());
-      }
-    }
-
-    return formData;
+  // @TODO remove after implement all REST
+  private generateContract(contragent: ContragentList, positions: RequestPosition[]): Contract {
+    return {
+      id: null,
+      documents: [],
+      customer: null,
+      supplier: contragent,
+      createdDate: null,
+      request: null,
+      winners: positions.map(position => ({
+        id: null,
+        offerPosition: {
+          id: null,
+          requestPosition: position,
+          priceWithVat: 110,
+          priceWithoutVat: 100,
+          vatPercent: 100,
+          currency: "RUB",
+          quantity: 1,
+          measureUnit: ""
+        }
+      }))
+    };
   }
 }

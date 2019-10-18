@@ -1,0 +1,27 @@
+<div *ngFor="let document of documents">
+  <div class="clr-row">
+    <div class="left clr-col-4">
+      <app-document-simple-list [enableUpload]="false" [documents]="[document]"></app-document-simple-list>
+    </div>
+    <div class="left clr-col-8">
+      {{ document?.comments }}
+    </div>
+  </div>
+</div>
+
+<div *ngIf="forms.length > 0">
+  <form *ngFor="let form of forms; index as i" [formGroup]="form" (ngSubmit)="submit(form)">
+    <div class="clr-row">
+      <div class="left clr-col-4">
+        <app-document-simple-list [enableUpload]="false"
+                                  [documents]="[fileAsDocument(form.get('file').value)]"></app-document-simple-list>
+      </div>
+      <div class="left clr-col-6">
+        <textarea formControlName="comment"></textarea>
+      </div>
+      <div class="clr-col-2">
+        <button class="btn btn-primary-outline" [clrLoading]="form.get('state').value">Загрузить</button>
+      </div>
+    </div>
+  </form>
+</div>

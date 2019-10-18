@@ -10,6 +10,7 @@ import { AddTechnicalProposalsComponent } from "./back-office/components/add-tec
 import { TechnicalProposalsComponent } from "./customer/components/technical-proposals/technical-proposals.component";
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
+import { ContractComponent } from "./common/components/contract/contract.component";
 
 const routes: Routes = [
   {
@@ -65,6 +66,10 @@ const routes: Routes = [
           {
             path: 'add-offers',
             component: AddOffersComponent
+          },
+          {
+            path: 'contract',
+            component: ContractComponent
           },
           {
             path: 'add-technical-proposals',

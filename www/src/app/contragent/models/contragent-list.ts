@@ -14,4 +14,8 @@ export class ContragentList {
   directorFullName: string;
   phone: string;
   createdDate: Date;
+
+  constructor(params?: Partial<ContragentList>) {
+    Object.assign(this, params);
+  }
 }
