@@ -188,7 +188,6 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
    * Перестраивает форму списка позиций в записимости от списка позиций
    */
   protected updatePositionListForm() {
-    // обновляем массив контролов при каждом изменении списка позиций (добавление позиций и групп)
     this.positionListForm = this.formBuilder.group({
       positions: this.formBuilder.array(this.requestItems.map(() => {
         return this.formBuilder.control(false);
