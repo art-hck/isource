@@ -115,6 +115,10 @@ table {
   font-size: 12px;
 }
 
+::ng-deep .clr-wizard-content .clr-control-label {
+  padding-bottom: 5px;
+}
+
 .clr-control-label {
   padding-top: 10px;
   font-weight: 100;
@@ -261,7 +265,7 @@ h2 {
   text-align: left;
 }
 
-.dates {
+.dates, .positions {
   padding: 0;
 }
 
@@ -288,7 +292,7 @@ clr-checkbox-wrapper {
 }
 
 .position-list {
-  padding-top: 0;
+  padding-top: 10px;
 }
 
 .position-list clr-checkbox-wrapper {
