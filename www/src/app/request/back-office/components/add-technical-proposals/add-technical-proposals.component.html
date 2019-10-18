@@ -24,8 +24,14 @@
             <div class="clr-row clr-align-items-center">
               <span class="supplier-name clr-col">
 
-                <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
+                <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
+                  <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
                   {{ technicalProposal.supplierContragent.shortName }}</a>
+                </ng-container>
+
+                <ng-template #noContragent>
+                  <span>Отсутствует наименование контрагента</span>
+                </ng-template>
 
                 <div class="edit-btn"
                      *ngIf="isTpHasEditablePositions(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
