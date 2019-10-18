@@ -89,7 +89,7 @@ export class ContractComponent implements OnInit {
               // получаем массив массивов позиций контрактов
               .map(contract => contract.winners.map(winner => winner.offerPosition.requestPosition))
               // переводим их в один массив
-              .reduce((prev, curr) => [...prev, ...curr])
+              .reduce((prev, curr) => [...prev, ...curr], [])
               // получаем массив из id позиций
               .map(contractPosition => contractPosition.id)
               // true, если позиция контрагента не найдена в массиве
