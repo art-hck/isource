@@ -5,9 +5,7 @@ import {RequestPosition} from "../models/request-position";
 import {PositionInfoContract} from "../models/positionInfoContract";
 import {Uuid} from "../../../cart/models/uuid";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PositionInfoContractService {
 
   constructor(protected api: HttpClient) {

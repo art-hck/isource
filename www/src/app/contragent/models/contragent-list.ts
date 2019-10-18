@@ -4,7 +4,7 @@ export class ContragentList {
   id: Uuid|null;
   type: string;
   legalForm?: string;
-  name: string;
+  fullName: string;
   shortName: string;
   inn: string;
   kpp: string;

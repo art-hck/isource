@@ -85,11 +85,15 @@ export class ContractComponent implements OnInit {
     this.contragentsWithPositions$ = this.contragentsWithPositions$.pipe(
       map(contragentsWithPositions => contragentsWithPositions.map(contragentsWithPosition => {
           contragentsWithPosition.positions = contragentsWithPosition.positions
-            .filter(position => contracts // массив контрактов
-              .map(contract => contract.winners.map(winner => winner.offerPosition.requestPosition)) // получаем массив массивов позиций контрактов
-              .reduce((prev, curr) => [...prev, ...curr]) // переводим их в один массив
-              .map(contractPosition => contractPosition.id) // получаем массив из id позиций
-              .indexOf(position.id) < 0 // true, если позиция контрагента не найдена в массиве
+            .filter(position => contracts
+              // получаем массив массивов позиций контрактов
+              .map(contract => contract.winners.map(winner => winner.offerPosition.requestPosition))
+              // переводим их в один массив
+              .reduce((prev, curr) => [...prev, ...curr])
+              // получаем массив из id позиций
+              .map(contractPosition => contractPosition.id)
+              // true, если позиция контрагента не найдена в массиве
+              .indexOf(position.id) < 0
             );
 
           return contragentsWithPosition;
