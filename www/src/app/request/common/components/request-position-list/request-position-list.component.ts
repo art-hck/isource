@@ -188,10 +188,14 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
    * Перестраивает форму списка позиций в записимости от списка позиций
    */
   protected updatePositionListForm() {
-    this.positionListForm = this.formBuilder.group({
-      positions: this.formBuilder.array(this.requestItems.map(() => {
+    const controls = this.requestItems ?
+      this.requestItems.map(() => {
         return this.formBuilder.control(false);
-      }))
+      }) :
+      [];
+
+    this.positionListForm = this.formBuilder.group({
+      positions: this.formBuilder.array(controls)
     });
   }
 }
