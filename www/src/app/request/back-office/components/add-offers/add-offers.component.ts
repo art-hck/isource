@@ -131,7 +131,7 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  getSelectedPositions(requestPosition) {
+  onPositionSelect(requestPosition) {
     if (this.selectedProcedurePositions.indexOf(requestPosition) > -1) {
       for (let i = 0; i < this.selectedProcedurePositions.length; i++) {
         if (this.selectedProcedurePositions[i] === requestPosition) {
