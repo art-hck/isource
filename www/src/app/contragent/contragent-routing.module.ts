@@ -11,14 +11,16 @@ const routes: Routes = [
   },
   {
     path: 'list',
-    component: ContragentListViewComponent
+    component: ContragentListViewComponent,
+    data: { title: "Контрагенты" }
   },
   {
     path: ':id',
     children: [
       {
         path: 'info',
-        component: ContragentInfoViewComponent
+        component: ContragentInfoViewComponent,
+        data: { title: "Контрагент" }
       }
     ]
   }

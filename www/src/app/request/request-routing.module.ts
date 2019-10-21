@@ -19,16 +19,20 @@ const routes: Routes = [
       {
         path: '',
         component: CustomerRequestsList,
-        data: {
-          title: "Заявки"
-        }
+        data: { title: "Заявки" }
       },
       {
         path: ':id',
         children: [
           {
             path: '',
-            component: CustomerRequestViewComponent
+            component: CustomerRequestViewComponent,
+            data: { title: "Заявка" }
+          },
+          {
+            path: 'contracts',
+            component: ContractComponent,
+            data: { title: "На рассмотрении договора" }
           },
           {
             path: 'contract',
@@ -36,17 +40,20 @@ const routes: Routes = [
           },
           {
             path: 'technical-proposals',
-            component: TechnicalProposalsComponent
+            component: TechnicalProposalsComponent,
+            data: { title: "На согласовании ТП" }
           },
           {
             path: 'commercial-proposals',
-            component: CommercialProposalsComponent
+            component: CommercialProposalsComponent,
+            data: { title: "На согласовании КП" }
           },
           {
             path: 'design-documentation',
             component: DesignDocumentationComponent,
             data: {
-              isCustomer : true
+              isCustomer : true,
+              title: "На согласовании РКД"
             }
           }
         ]
@@ -58,32 +65,38 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: BackofficeRequestsList
+        component: BackofficeRequestsList,
+        data: { title: "Заявки" }
       },
       {
         path: ':id',
         children: [
           {
             path: '',
-            component: BackOfficeRequestViewComponent
+            component: BackOfficeRequestViewComponent,
+            data: { title: "Заявка" }
           },
           {
             path: 'add-offers',
-            component: AddOffersComponent
+            component: AddOffersComponent,
+            data: { title: "Коммерческие предложения" }
           },
           {
-            path: 'contract',
-            component: ContractComponent
+            path: 'contracts',
+            component: ContractComponent,
+            data: { title: "На рассмотрении договора" }
           },
           {
             path: 'add-technical-proposals',
-            component: AddTechnicalProposalsComponent
+            component: AddTechnicalProposalsComponent,
+            data: { title: "На согласовании ТП" }
           },
           {
             path: 'add-design-documentation',
             component: DesignDocumentationComponent,
             data: {
-              isBackoffice : true
+              isBackoffice : true,
+              title: "На согласовании ТП"
             }
           },
         ]
@@ -92,7 +105,8 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateRequestComponent
+    component: CreateRequestComponent,
+    data: { title: "Индивидуальная заявка" }
   }
 ];
 
