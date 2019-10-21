@@ -5,7 +5,7 @@
 <ng-container *ngIf="request">
   <div class="clr-row">
     <div class="info-card clr-col">
-      <div class="request-info">
+      <div class="technical-proposals">
         <div class="breadcrumbs">
           <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
         </div>
@@ -21,21 +21,28 @@
 
         <div class="technical-proposal-card-list">
           <div  class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
-            <div class="clr-row clr-align-items-center">
-              <span class="supplier-name clr-col">
+            <div class="clr-row clr-justify-content-between clr-align-items-center">
+              <span class="supplier-name clr-col-auto">
 
-                <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
+                <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
+                  <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
                   {{ technicalProposal.supplierContragent.shortName }}</a>
+                </ng-container>
+
+                <ng-template #noContragent>
+                  <span>Отсутствует наименование контрагента</span>
+                </ng-template>
 
                 <div class="edit-btn"
                      *ngIf="isTpHasEditablePositions(technicalProposal) || tpHasDeclinedPosition(technicalProposal)"
                      (click)="onShowEditTechnicalProposalModal(technicalProposal)">
                   <clr-icon shape="pencil"></clr-icon>
                 </div>
+
               </span>
 
 
-              <div class="clr-col send-for-approval">
+              <div class="clr-col-5 send-for-approval">
                 <div *ngIf="isTpHasEditablePositions(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
@@ -57,20 +64,22 @@
               ></app-document-simple-list>
             </div>
 
-            <table class="positions-list table table-noborder">
-              <thead>
+
+            <div *ngIf="technicalProposal.positions && technicalProposal.positions.length > 0; else tpHasNoPositions">
+              <table class="positions-list table table-noborder">
+                <thead>
                 <tr>
                   <th class="left">Наименование позиции</th>
                   <th class="left">Заводское наименование</th>
                   <th class="left">Решение принято</th>
                 </tr>
-              </thead>
+                </thead>
 
-              <tbody>
+                <tbody>
                 <tr *ngFor="let technicalProposalPosition of technicalProposal.positions"
                     [class.not-clickable]="
-                      !isEditablePosition(technicalProposalPosition) &&
-                      technicalProposalPosition.status !== 'DECLINED'">
+                        !isEditablePosition(technicalProposalPosition) &&
+                        technicalProposalPosition.status !== 'DECLINED'">
 
                   <td class="left">
                     <clr-icon class="accepted"
@@ -82,8 +91,8 @@
                     <clr-icon class="unknown-status"
                               shape="unknown-status"
                               *ngIf="!isEditablePosition(technicalProposalPosition) &&
-                                     technicalProposalPosition.status !== 'DECLINED' &&
-                                     technicalProposalPosition.status !== 'ACCEPTED'"></clr-icon>
+                                       technicalProposalPosition.status !== 'DECLINED' &&
+                                       technicalProposalPosition.status !== 'ACCEPTED'"></clr-icon>
 
                     {{ technicalProposalPosition.position.name }}
                   </td>
@@ -93,18 +102,26 @@
                       <input type="text"
                              placeholder="Наименование не заполнено.."
                              (change)="updateTpPositionManufacturingName(
-                               technicalProposalPosition,
-                               technicalProposal.id,
-                               $event.target.value
-                             )"
+                                 technicalProposalPosition,
+                                 technicalProposal.id,
+                                 $event.target.value
+                               )"
                              value="{{ technicalProposalPosition.manufacturingName }}" />
                     </div>
                   </td>
                   <td class="left history"><b>{{ technicalProposalPosition.history?.user.shortName }}</b>
                     {{technicalProposalPosition.history?.createdDate | date :'shortDate'}}</td>
                 </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
+
+            <ng-template #tpHasNoPositions>
+              <div class="tp-has-no-positions">Техническое предложение не содержит позиций</div>
+            </ng-template>
+
+
+
           </div>
         </div>
       </div>
