@@ -15,6 +15,7 @@ import { ClrLoadingState } from "@clr/angular";
 import { Observable } from "rxjs";
 import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-design-documentation',
@@ -92,7 +93,7 @@ export class DesignDocumentationComponent implements OnInit {
 
   addDocumentationListFormGroup(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, CustomValidators.simpleText]],
       adjustmentLimit: ['15', Validators.required],
       receivingLimit: ['5', Validators.required]
     });
