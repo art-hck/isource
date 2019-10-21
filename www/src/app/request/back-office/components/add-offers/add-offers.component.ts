@@ -131,13 +131,11 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  onPositionSelect(requestPosition) {
-    if (this.selectedProcedurePositions.indexOf(requestPosition) > -1) {
-      for (let i = 0; i < this.selectedProcedurePositions.length; i++) {
-        if (this.selectedProcedurePositions[i] === requestPosition) {
-          this.selectedProcedurePositions.splice(i, 1);
-        }
-      }
+  onPositionSelect(requestPosition: RequestPosition): void {
+    const pos = this.selectedProcedurePositions.find(selectedPosition => selectedPosition === requestPosition);
+    if (pos) {
+      const index = this.selectedProcedurePositions.indexOf(requestPosition);
+      this.selectedProcedurePositions.splice(index, 1);
     } else {
       this.selectedProcedurePositions.push(requestPosition);
     }
@@ -148,8 +146,7 @@ export class AddOffersComponent implements OnInit {
    * @param requestPosition
    */
   checkIfPositionIsChecked(requestPosition: RequestPosition): boolean {
-    console.log(this.selectedProcedurePositions);
-    return (this.selectedProcedurePositions.indexOf(requestPosition) > -1);
+    return this.selectedProcedurePositions.indexOf(requestPosition) > -1;
   }
 
   onSelectProcedureDocument(document: RequestDocument) {
