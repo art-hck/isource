@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../../back-office/services/request.service";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
-import { map, publishReplay, refCount, tap } from "rxjs/operators";
+import { flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { Contract, ContractStatus } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
@@ -102,6 +102,23 @@ export class ContractComponent implements OnInit {
         g[offerPosition.currency].positions.push(offerPosition.requestPosition);
         return g;
       }, {});
+  }
+
+  public changeStatus(contract: Contract, contractStatus: ContractStatus): void {
+    contract.status = contractStatus;
+
+    this.request$.pipe(
+      flatMap(request => {
+          switch (contractStatus) {
+            case ContractStatus.ON_APPROVAL:
+              return this.contractService.onApproval(request.id, contract.id);
+            case ContractStatus.APPROVAL:
+              return this.contractService.approval(request.id, contract.id);
+            case ContractStatus.REJECTED:
+              return this.contractService.reject(request.id, contract.id);
+          }
+        }
+      )).subscribe();
   }
 
   // Убираем все позиции, которые есть в передаваемых функции котнрактах
