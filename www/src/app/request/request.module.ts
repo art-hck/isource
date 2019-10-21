@@ -22,7 +22,6 @@ import { PositionInfoComponent } from "./common/components/position-info/positio
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
 import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
-import { ContractComponent } from './common/components/contract/contract.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
 import { CreateRequestFormComponent } from './common/components/create-request-form/create-request-form.component';
 import { RequestListStatusesFilterComponent } from "./common/components/request-list/request-list-statuses-filter/request-list-statuses-filter.component";
@@ -44,7 +43,11 @@ import { SupplierSelectComponent } from './back-office/components/supplier-selec
 import { CommercialProposalsComponent } from './customer/components/commercial-proposals/commercial-proposals.component';
 import { ProcedureService } from "./back-office/services/procedure.service";
 import { DesignDocumentationService } from "./back-office/services/design-documentation.service";
+import { ContractService } from "./common/services/contract.service";
+import { ContractCreateComponent } from "./common/components/contract-create-modal/contract-create.component";
+import { ContractUploadDocumentComponent } from "./common/components/contract-upload-document/contract-upload-document.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
+import { ContractComponent } from "./common/components/contract/contract.component";
 import { ContragentModule } from "../contragent/contragent.module";
 
 @NgModule({
@@ -64,7 +67,6 @@ import { ContragentModule } from "../contragent/contragent.module";
     PositionInfoComponent,
     RequestViewComponent,
     CustomerRequestViewComponent,
-    ContractComponent,
     EditPositionInfoFormComponent,
     CreateRequestFormComponent,
     RequestListNumberFilterComponent,
@@ -84,7 +86,10 @@ import { ContragentModule } from "../contragent/contragent.module";
     DesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent,
-    DesignDocumentationComponent
+    ContractComponent,
+    DesignDocumentationComponent,
+    ContractCreateComponent,
+    ContractUploadDocumentComponent
   ],
   imports: [
     SharedModule,
@@ -104,7 +109,8 @@ import { ContragentModule } from "../contragent/contragent.module";
     SupplierSelectComponent,
     ProcedureService,
     SupplierSelectComponent,
-    DesignDocumentationService
+    DesignDocumentationService,
+    ContractService
   ]
 })
 export class RequestModule {

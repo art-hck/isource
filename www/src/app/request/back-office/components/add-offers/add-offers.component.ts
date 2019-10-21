@@ -228,7 +228,11 @@ export class AddOffersComponent implements OnInit {
   }
 
   positionHasProcedure(requestPosition: RequestPosition): boolean {
-    return requestPosition.hasProcedure === true;
+    return requestPosition.hasProcedure;
+  }
+
+  positionHasFinishedProcedure(requestPosition: RequestPosition): boolean {
+    return requestPosition.procedureEndDate && !requestPosition.hasProcedure;
   }
 
   onShowAddContragentModal() {
@@ -441,6 +445,7 @@ export class AddOffersComponent implements OnInit {
               this.selectedRequestPositions = [];
             }
           );
+          Swal.close();
         });
         cancel.addEventListener('click', () => {
           Swal.close();

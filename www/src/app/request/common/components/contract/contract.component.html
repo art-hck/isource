@@ -1,28 +1,110 @@
-<form [formGroup]="contractForm" class="form">
-  <app-document-upload-list (fileSelected)="onDocumentSelected($event, contractForm)"
-                            [documents]="uploadedFiles"></app-document-upload-list>
-  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
-    <div class="clr-col-9">
-      <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
-    </div>
-    <div class="clr-col-3">
-      <button class="btn btn-link" (click)="onAddContract()">Загрузить</button>
-    </div>
-  </div>
-</form>
-<clr-datagrid class="clr-row" *ngIf="requestContract">
-  <clr-dg-column class="clr-col-5">Наименование документа</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Дата загрузки</clr-dg-column>
-  <clr-dg-column class="clr-col-2" *ngIf="isCommentsColumnShown()">Комментарии</clr-dg-column>
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
 
-  <clr-dg-row *ngFor="let document of requestContract?.documents">
-    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>
-    </clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{ requestPosition.statusLabel }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-1">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2" *ngIf="isCommentsColumnShown()">{{ document.comments }}</clr-dg-cell>
-  </clr-dg-row>
-</clr-datagrid>
+<ng-container *ngIf="(request$ | async) as request; else loading">
+  <div class="breadcrumbs">
+    <a routerLink="../..">Заявки</a> / <a routerLink="..">Заявка №{{request.number}}</a>
+  </div>
+  <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
+    <ng-container *ngIf="userInfoService.isBackOffice()">
+      <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
+        <button class="btn btn-primary-outline btn-add-contract" (click)="showModal = true"
+                [disabled]="!isAvailableToCreate(contragentsWithPositions)">
+          <clr-icon shape="plus" class="is-solid"></clr-icon>
+          <span>Добавить договор</span>
+        </button>
+
+        <app-contract-create
+          *ngIf="showModal"
+          [request]="request"
+          [contragentsWithPositions]="contragentsWithPositions"
+          (close)="showModal = false"
+          (create)="addContract($event)"
+        ></app-contract-create>
+      </ng-container>
+    </ng-container>
+
+    <h2><b>Согласование договора</b></h2>
+    <br/>
+
+    <div class="card" *ngFor="let contract of contracts">
+      <div class="card-header">
+        <div class="clr-row">
+          <div class="clr-col">{{ contract.supplier.shortName }}</div>
+        </div>
+      </div>
+      <div class="card-block" *ngFor="let currency of getCurrencies(contract);">
+        <div class="clr-row">
+          <div class="clr-col">
+              <p *ngFor="let position of groupPositionsByCurrency(contract)[currency].positions">{{ position.name }}</p>
+              <p><b>Итого:</b> {{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-block" *ngIf="contract.documents.length > 0 || getAttachedFiles(contract).length > 0">
+        <div class="card-text">
+          <div class="clr-row" >
+            <div class="clr-col"><b>Документы</b></div>
+            <div [ngSwitch]="contract.status">
+              <span class="label label-warning" *ngSwitchCase="ContractStatus.REJECTED">
+                <clr-icon shape="hourglass"></clr-icon>На доработке
+              </span>
+              <span class="label label-info" *ngSwitchCase="ContractStatus.ON_APPROVAL">
+                <clr-icon shape="hourglass"></clr-icon>На согласовании
+              </span>
+              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVAL">
+                <clr-icon shape="check"></clr-icon>Согласовано
+              </span>
+            </div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">
+              <app-contract-upload-document
+                [request]="request"
+                [contract]="contract"
+                [documents]="contract.documents"
+                [files]="getAttachedFiles(contract)"
+                (complete)="removeFile(contract)"
+              ></app-contract-upload-document>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="clr-row">
+          <div class="clr-col">
+            <input type="file" #file onclick="this.value = null"
+                   (change)="attachFileToContract($event.target.files, contract)"/>
+            <clr-button-group *ngIf="userInfoService.isBackOffice()">
+              <clr-button [disabled]="!isAvailableToAttach(contract)" (click)="file.click()">
+                <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
+              </clr-button>
+              <clr-button [disabled]="!isAvailableForApproval(contract)"
+                          (click)="contractService.onApproval(contract).subscribe()">
+                <clr-icon shape="check"></clr-icon><span>Отправить на согласование</span>
+              </clr-button>
+            </clr-button-group>
+
+            <clr-button-group *ngIf="userInfoService.isCustomer()">
+              <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
+                          (click)="contractService.approval(contract).subscribe()">
+                <clr-icon shape="check"></clr-icon>
+                <span>Согласовать</span>
+              </clr-button>
+              <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-info-outline"
+                          (click)="file.click()">
+                <clr-icon shape="attachment"></clr-icon>
+                <span>Прикрепить замечания</span>
+              </clr-button>
+              <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
+                          (click)="contractService.reject(contract).subscribe()">
+                <span>На доработку</span>
+              </clr-button>
+            </clr-button-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

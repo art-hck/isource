@@ -98,8 +98,13 @@
                 </ng-template>
               </p>
 
-              <span class="sent-for-agreement-label" *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
-              <span class="has-procedure-label" *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
+              <span class="sent-for-agreement-label"
+                    *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
+              <span class="has-procedure-label"
+                    *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
+              <span class="has-finished-procedure-label"
+                    *ngIf="positionHasFinishedProcedure(requestPosition)">Процедура завершена</span>
+
 
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">
