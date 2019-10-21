@@ -33,7 +33,8 @@ export class ContractComponent implements OnInit {
 
   ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.requestService.getRequestInfo(requestId);
+    this.request$ = this.requestService.getRequestInfo(requestId)
+      .pipe(publishReplay(1), refCount());
 
     this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
       .pipe(publishReplay(1), refCount())
