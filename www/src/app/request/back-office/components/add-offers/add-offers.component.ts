@@ -247,7 +247,6 @@ export class AddOffersComponent implements OnInit {
 
   onAddContragent() {
     this.suppliers.push(this.selectedContragent);
-    this.suppliers.sort(); // todo надо ли?
     this.onCloseAddContragentModal();
   }
 
@@ -358,11 +357,11 @@ export class AddOffersComponent implements OnInit {
   }
 
   onRequestsClick() {
-    this.router.navigateByUrl(`requests/backoffice`).then(r => {});
+    this.router.navigateByUrl(`requests/backoffice`);
   }
 
   onRequestClick() {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`).then(r => {});
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   onDownloadOffersTemplate() {
