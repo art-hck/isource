@@ -96,7 +96,7 @@ const routes: Routes = [
             component: DesignDocumentationComponent,
             data: {
               isBackoffice : true,
-              title: "На согласовании ТП"
+              title: "На согласовании РКД"
             }
           },
         ]
