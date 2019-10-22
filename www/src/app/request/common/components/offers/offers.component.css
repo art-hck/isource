@@ -69,21 +69,15 @@ span {
 }
 
 .cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 10px -10px 0;
+  margin-top: 10px;
 }
 
-.cards::after, .card {
-  width: auto;
-  min-width: 350px;
-  flex-grow: 1;
+.card-wrap {
+  margin-bottom: 24px;
 }
 
-.cards::after {
-  content: '';
-  margin: 0 39px;
+.card {
+  height: 100%;
 }
 
 .card-header a {
@@ -112,3 +106,5 @@ span {
   color: #AA4500;
   transition: color 0s;
 }
+
+

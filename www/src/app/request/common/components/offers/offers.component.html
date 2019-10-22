@@ -79,7 +79,7 @@
 <div class="cards clr-row" *ngIf="requestPosition.linkedOffers.length !== 0">
   <ng-container *ngFor="let linkedOffer of requestPosition.linkedOffers">
 
-  <div class="clr-col-xl-6 clr-col-lg-12">
+  <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
           <a href="assets/Отчет ООО Камский кабель.pdf" [target]="'_blank'">{{linkedOffer.supplierContragentName}}</a>
