@@ -248,6 +248,16 @@ export class AddOffersComponent implements OnInit {
   onAddContragent() {
     this.suppliers.push(this.selectedContragent);
     this.onCloseAddContragentModal();
+
+    this.suppliers = this.suppliers.sort((prev, next) => {
+      if (prev.shortName < next.shortName) {
+        return -1;
+      } else if (prev.shortName > next.shortName) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   // Модальное окно создание КП
