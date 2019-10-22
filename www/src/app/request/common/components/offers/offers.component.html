@@ -88,7 +88,7 @@
 
   <clr-dg-row *ngFor="let linkedOffer of requestPosition.linkedOffers">
     <clr-dg-cell class="clr-col-2 offer">
-      <a (click)="showContragentInfo(linkedOffer.supplierContragentId)">{{linkedOffer.supplierContragentName}}</a>
+      <a (click)="showContragentInfo(linkedOffer.supplierContragentId)">{{ linkedOffer.supplierContragentName }}</a>
     </clr-dg-cell>
 
     <clr-dg-cell class="clr-col-1 offer text-right offer-price">
