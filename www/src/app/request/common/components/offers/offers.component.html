@@ -79,12 +79,12 @@
 <div class="cards" *ngIf="requestPosition.linkedOffers.length !== 0">
   <ng-container *ngFor="let linkedOffer of requestPosition.linkedOffers">
 
-    <div class="card">
+    <div class="card" [class.winner]="linkedOffer.isWinner">
       <div class="card-header">
         <a href="assets/Отчет ООО Камский кабель.pdf" [target]="'_blank'">{{linkedOffer.supplierContragentName}}</a>
+        <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
       </div>
       <div class="card-block">
-        <div *ngIf="showWinnerStateColumn && linkedOffer.isWinner" class="label label-info">Победитель</div>
         <div class="clr-row">
           <div class="clr-col">Цена</div>
           <div class="clr-col">{{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}</div>

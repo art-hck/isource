@@ -21,7 +21,6 @@ export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
-  @Input() showWinnerStateColumn = false;
 
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
@@ -150,7 +149,6 @@ export class OffersComponent implements OnInit {
       (data: any) => {
         this.requestPosition.status = data.status;
         this.requestPosition.statusLabel = data.statusLabel;
-        this.showWinnerStateColumn = true;
         offerWinner.isWinner = true;
 
         this.notificationService.toast('Победитель выбран');

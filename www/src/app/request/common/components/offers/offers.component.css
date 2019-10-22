@@ -87,3 +87,15 @@ span {
   content: '';
   margin: 0 39px;
 }
+
+.winner .card-header {
+  background: #FFE5C9;
+}
+
+.winner .card-header * {
+  color:#E46C00;
+}
+
+.winner .card-header clr-icon {
+  float: right;
+}
