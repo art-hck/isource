@@ -79,13 +79,19 @@ span {
   width: auto;
   min-width: 350px;
   flex-grow: 1;
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
 .cards::after {
   content: '';
   margin: 0 39px;
+}
+
+.card-header a {
+  max-width: calc(100% - 30px);
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .winner .card-header {
