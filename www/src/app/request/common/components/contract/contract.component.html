@@ -53,7 +53,7 @@
               <span class="label label-info" *ngSwitchCase="ContractStatus.ON_APPROVAL">
                 <clr-icon shape="hourglass"></clr-icon>На согласовании
               </span>
-              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVAL">
+              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVED">
                 <clr-icon shape="check"></clr-icon>Согласовано
               </span>
             </div>
@@ -81,14 +81,14 @@
                 <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
               </clr-button>
               <clr-button [disabled]="!isAvailableForApproval(contract)"
-                          (click)="contractService.onApproval(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.ON_APPROVAL)">
                 <clr-icon shape="check"></clr-icon><span>Отправить на согласование</span>
               </clr-button>
             </clr-button-group>
 
             <clr-button-group *ngIf="userInfoService.isCustomer()">
               <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
-                          (click)="contractService.approval(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.APPROVED)">
                 <clr-icon shape="check"></clr-icon>
                 <span>Согласовать</span>
               </clr-button>
@@ -98,7 +98,7 @@
                 <span>Прикрепить замечания</span>
               </clr-button>
               <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
-                          (click)="contractService.reject(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.REJECTED)">
                 <span>На доработку</span>
               </clr-button>
             </clr-button-group>

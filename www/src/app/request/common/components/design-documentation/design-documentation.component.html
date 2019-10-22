@@ -112,7 +112,7 @@
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
                       <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-info-outline btn-label">На согласовании</button>
-                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVAL" class="btn btn-info-outline btn-label status-success">Согласовано</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVED" class="btn btn-info-outline btn-label status-success">Согласовано</button>
                       <button disabled="" *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
                     </ng-container>
                     <button *ngIf="canSendOnApprove(designDocumentation)" class="btn btn-primary"
@@ -190,7 +190,7 @@
                       <clr-icon shape="caret down"></clr-icon>
                     </button>
                     <clr-dropdown-menu>
-                      <div clrDropdownItem (click)="approval(designDocumentation)">
+                      <div clrDropdownItem (click)="approve(designDocumentation)">
                         <clr-icon shape="check"></clr-icon>
                         <span> Согласовать</span>
                       </div>
@@ -205,7 +205,7 @@
                   <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
                   </span>
-                  <span *ngSwitchCase="designDocStatus.APPROVAL" class="status status-success">
+                  <span *ngSwitchCase="designDocStatus.APPROVED" class="status status-success">
                     <clr-icon shape="check"></clr-icon>
                     <span> Согласовано</span>
                   </span>
