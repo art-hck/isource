@@ -3,7 +3,7 @@ import { User } from "./user";
 import { ActivityData } from "./history-activity-data";
 
 export class History {
-  createdDate: Date;
+  createdDate: string;
   type: string;
   typeLabel: string;
   data: ActivityData;

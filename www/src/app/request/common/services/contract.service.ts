@@ -1,68 +1,79 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {RequestPosition} from "../models/request-position";
-import {Contract} from "../models/contract";
-import {Uuid} from "../../../cart/models/uuid";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { ContragentWithPositions } from "../models/contragentWithPositions";
+import { delay, flatMap, map } from "rxjs/operators";
+import { Contract, ContractStatus } from "../models/contract";
+import { ContragentList } from "../../../contragent/models/contragent-list";
+import { RequestPosition } from "../models/request-position";
+import { RequestDocument } from "../models/request-document";
+import { Request } from "../models/request";
+import { ContractCreate } from "../models/requests-list/contract-create";
+import { ContragentService } from "../../../contragent/services/contragent.service";
+import { DesignDocumentationService } from "../../back-office/services/design-documentation.service";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ContractService {
 
-  constructor(protected api: HttpClient) {
+  constructor(protected api: HttpClient, private contragentService: ContragentService, private designDocumentationService: DesignDocumentationService) {
   }
 
-  addCustomerContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
-    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/add-contract-documents`,
-      this.convertModelToFormData(contractItem));
+  create(request: Request, contragent: ContragentList, positions: RequestPosition[]): Observable<Contract> {
+    const url = `requests/${request.id}/contracts/create`;
+    const body: ContractCreate = {
+      supplierId: contragent.id,
+      positions: positions.map(position => position.id)
+    };
+
+    return this.api.post<Contract>(url, body)
+      // TODO: remove after implement statuses
+      .pipe(map(contract => {contract.status = ContractStatus.NEW; return contract; }));
   }
 
-  addBackofficeContract(id: Uuid, requestPosition: RequestPosition, contractItem: Contract) {
-    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/add-contract-documents`,
-      this.convertModelToFormData(contractItem));
+  uploadDocument(request: Request, contract: Contract, file: File, comment: string): Observable<RequestDocument[]> {
+    const url = `requests/${request.id}/contracts/${contract.id}/upload`;
+
+    const formData = new FormData();
+    formData.append('files[]', file, file.name);
+    formData.append('comments[]', comment);
+
+    return this.api.post<RequestDocument[]>(url, formData);
   }
 
-  getCustomerContract(id: Uuid, requestPosition: RequestPosition) {
-    return this.api.post(`requests/customer/${id}/positions/${requestPosition.id}/contract`, {});
+  getContragentsWithPositions(requestId): Observable<ContragentWithPositions[]> {
+    const url = `requests/${requestId}/contracts/suppliers`;
+
+    return this.api.get<ContragentWithPositions[]>(url);
   }
 
-  getBackofficeContract(id: Uuid, requestPosition: RequestPosition) {
-    return this.api.post(`requests/backoffice/${id}/positions/${requestPosition.id}/contract`, {});
+  getContracts(requestId): Observable<Contract[]> {
+    const url = `requests/${requestId}/contracts`;
+
+    return this.api.get<Contract[]>(url)
+      .pipe(map(contracts => contracts.map(contract => {
+        contract.status = ContractStatus.NEW;
+        return contract;
+      }))) // TODO: remove
+      ;
   }
 
-  // TODO копипаст, вынести в отдельный сервис
-  convertModelToFormData(model: any, form: FormData = null, namespace = ''): FormData {
-    const formData = form || new FormData();
+  // @TODO: REST not implemented
+  onApproval(contract: Contract) {
+    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.ON_APPROVAL; return contract; }));
+  }
 
-    if (model instanceof File) {
-      formData.append(namespace, model);
-      return formData;
-    }
+  // @TODO: REST not implemented
+  reject(contract: Contract) {
+    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.REJECTED; return contract; }));
+  }
 
-    for (const propertyName in model) {
-      if (!model.hasOwnProperty(propertyName) || !model[propertyName]) {
-        continue;
-      }
+  // @TODO: REST not implemented
+  approval(contract: Contract) {
+    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.APPROVAL; return contract; }));
+  }
 
-      const formKey = namespace ? `${namespace}[${propertyName}]` : propertyName;
-
-      if (model[propertyName] instanceof Date) {
-        formData.append(formKey, model[propertyName].toISOString());
-      } else if (model[propertyName] instanceof Array) {
-        model[propertyName].forEach((element, index) => {
-          const tempFormKey = `${formKey}[${index}]`;
-          this.convertModelToFormData(element, formData, tempFormKey);
-        });
-      } else if (model[propertyName] instanceof File) {
-        formData.append(formKey, model[propertyName]);
-      } else if (typeof model[propertyName] === 'object') {
-        this.convertModelToFormData(model[propertyName], formData, formKey);
-      } else {
-        formData.append(formKey, model[propertyName].toString());
-      }
-    }
-
-    return formData;
+  // @TODO remove after implement all REST
+  private simulateDelay<T>(min = 100, max = 400) {
+    return delay<T>(Math.floor(Math.random() * (max - min + 1) + min));
   }
 }

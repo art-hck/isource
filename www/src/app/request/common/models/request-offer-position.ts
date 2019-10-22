@@ -1,28 +1,30 @@
 import {Uuid} from "../../../cart/models/uuid";
 import { RequestDocument } from "./request-document";
+import { RequestPosition } from "./request-position";
 
 export class RequestOfferPosition {
-  comments: string;
-  createdDate: string;
-  customerContragentId: string;
-  deliveryDate: string;
+  comments?: string;
+  createdDate?: string;
+  customerContragentId?: string;
+  deliveryDate?: string;
   id: Uuid;
-  paymentTerms: string;
+  paymentTerms?: string;
   priceWithVat: number;
   priceWithoutVat: number;
   quantity: number;
   currency: string;
   measureUnit: string;
-  requestId: Uuid;
-  requestLotId: Uuid;
-  requestPositionId: Uuid;
-  supplierContragentId: Uuid;
-  supplierContragentName: string;
-  userId: Uuid;
+  requestPosition: RequestPosition;
+  requestId?: Uuid;
+  requestLotId?: Uuid;
+  requestPositionId?: Uuid;
+  supplierContragentId?: Uuid;
+  supplierContragentName?: string;
+  userId?: Uuid;
   vatPercent: number;
-  isMinPrice: boolean;
-  isWinner: boolean;
-  documents: RequestDocument[];
-  technicalProposals: RequestDocument[];
-  status: string;
+  isMinPrice?: boolean;
+  isWinner?: boolean;
+  documents?: RequestDocument[];
+  technicalProposals?: RequestDocument[];
+  status?: string;
 }

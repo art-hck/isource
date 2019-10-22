@@ -1,0 +1,16 @@
+.btn-add-contract {
+  float: right;
+}
+
+input[type=file] {
+  display: none;
+}
+
+clr-icon ~ * {
+  margin-left: .5em;
+}
+
+clr-button span {
+  padding: 0;
+  background: red;
+}

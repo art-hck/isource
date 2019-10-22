@@ -115,6 +115,10 @@ table {
   font-size: 12px;
 }
 
+::ng-deep .clr-wizard-content .clr-control-label {
+  padding-bottom: 5px;
+}
+
 .clr-control-label {
   padding-top: 10px;
   font-weight: 100;
@@ -142,19 +146,24 @@ clr-checkbox-wrapper {
   padding-top: 10px;
 }
 
-.sent-for-agreement-label {
+
+.sent-for-agreement-label,
+.has-procedure-label,
+.has-finished-procedure-label {
   margin: 10px 22px;
   display: block;
   font-weight: bold;
+}
+
+.sent-for-agreement-label {
   color: #4CAF50;
 }
 .has-procedure-label {
-  margin: 10px 22px;
-  display: block;
-  font-weight: bold;
   color: #2196F3;
 }
-
+.has-finished-procedure-label {
+  color: #e7a20b;
+}
 
 .grey {
   color: #999999;
@@ -213,16 +222,17 @@ h2 {
   margin-bottom: 0;
 }
 
-.modal-body:focus {
-  outline: 0;
-}
-
 .modal-body {
   height: 300px;
 }
 
 .document-list {
   padding-top: 15px;
+}
+
+::ng-deep p.text-alert.warning-msg {
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .error-message {
@@ -260,7 +270,7 @@ h2 {
   text-align: left;
 }
 
-.dates {
+.dates, .positions {
   padding: 0;
 }
 
@@ -287,7 +297,7 @@ clr-checkbox-wrapper {
 }
 
 .position-list {
-  padding-top: 0;
+  padding-top: 10px;
 }
 
 .position-list clr-checkbox-wrapper {
