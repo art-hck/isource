@@ -152,9 +152,7 @@
             <clr-tab-content *clrIfActive>
               <app-offers [requestPosition]="requestPosition"
                           [isCustomerView]="isCustomerView"
-                          (offerWinner)="getOfferWinner($event)"
-                          [requestId]="requestId"
-                          [showWinnerStateColumn]="showWinnerStateColumn">
+                          [requestId]="requestId">
               </app-offers>
 
               <div class="submit">
@@ -168,11 +166,6 @@
                   [showCancelButton]="true"
                   (confirm)="onConfirmPublishOffers(requestPosition)">
                 </swal>
-
-                <button class="btn btn-primary"
-                        (click)="onChoiceWinner(requestPosition)"
-                        *ngIf="canChoiceWinner(requestPosition)"><b>Согласовать</b>
-                </button>
               </div>
             </clr-tab-content>
           </clr-tab>

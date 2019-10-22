@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  QueryList,
-  ViewChildren,
-  OnChanges
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
@@ -23,7 +13,6 @@ import { ClrTabLink } from '@clr/angular';
 import * as moment from "moment";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
-import { LinkedOffersSortService } from '../../services/linked-offers-sort-service';
 import { RequestPositionDraftService } from "../../services/request-position-draft.service";
 
 @Component({
@@ -31,7 +20,7 @@ import { RequestPositionDraftService } from "../../services/request-position-dra
   templateUrl: './position-info.component.html',
   styleUrls: ['./position-info.component.css']
 })
-export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
+export class PositionInfoComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(ClrTabLink) tabLinks: QueryList<ClrTabLink>;
 
@@ -45,7 +34,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() requestId: Uuid;
   @Input() isCustomerView: boolean;
-  @Input() showWinnerStateColumn = false;
 
   @Input() fullScreen = false;
   @Output() fullScreenChange = new EventEmitter<boolean>();
@@ -53,10 +41,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() changeRequestInfo = new EventEmitter<boolean>();
 
   requestPositionWorkflowStepLabels = Object.entries(RequestPositionWorkflowStepLabels);
-  offerWinner: Uuid;
   contractForm: FormGroup;
-
-  protected linkedOfferSorter = new LinkedOffersSortService();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -95,12 +80,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  ngOnChanges() {
-    if (this.requestPosition) {
-      this.updateShowWinnerColumn();
-    }
-  }
-
   getDeliveryDate(val: any) {
     if (!moment(val, 'DD.MM.YYYY', true).isValid()) {
       return moment(val).format('DD.MM.YYYY');
@@ -129,31 +108,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
       && !this.isCustomerView;
   }
 
-  canChoiceWinner(requestPosition: RequestPosition) {
-    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT && this.isCustomerView;
-  }
-
-  getOfferWinner(offerWinner: Uuid) {
-    this.offerWinner = offerWinner;
-  }
-
-  onChoiceWinner(requestPosition: RequestPosition) {
-    this.customerRequestService.choiceWinner(this.offerWinner, requestPosition.id, this.requestId).subscribe(
-      (data: any) => {
-        requestPosition.status = data.status;
-        requestPosition.statusLabel = data.statusLabel;
-        const offerWinner = requestPosition.linkedOffers.find((linkedOffer) => {
-          return (linkedOffer.id === this.offerWinner);
-        });
-        if (offerWinner) {
-          offerWinner.isWinner = true;
-        }
-        this.updateShowWinnerColumn();
-        this.notificationService.toast('Победитель выбран');
-      }
-    );
-  }
-
   onChangeStatus(requestPosition: RequestPosition, newStatus: string) {
     this.backofficeRequestService.changeStatus(this.requestId, requestPosition.id, newStatus).subscribe(
       (data: any) => {
@@ -162,17 +116,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.changeRequestInfo.emit();
       });
-  }
-
-  canDownloadContract(requestPosition: RequestPosition) {
-    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(requestPosition.status);
-    const winnerSelectedIndex = RequestPositionWorkflowStatuses.indexOf(
-      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
-    );
-    return (
-      requestPosition &&
-      currentStateIndex >= winnerSelectedIndex
-    );
   }
 
   onRequestPositionChanged(requestPosition: any) {
@@ -224,17 +167,6 @@ export class PositionInfoComponent implements OnInit, AfterViewInit, OnChanges {
       requestPosition.status === RequestPositionWorkflowSteps.MANUFACTURING &&
       !this.isCustomerView
     );
-  }
-
-  updateShowWinnerColumn(): void {
-    const currentStateIndex = RequestPositionWorkflowStatuses.indexOf(this.requestPosition.status);
-    const winnerSelectedIndex = RequestPositionWorkflowStatuses.indexOf(
-      RequestPositionWorkflowSteps.WINNER_SELECTED.valueOf()
-    );
-    this.showWinnerStateColumn = currentStateIndex >= winnerSelectedIndex;
-    if (this.showWinnerStateColumn) {
-      this.linkedOfferSorter.sortLinkedOffers(this.requestPosition.linkedOffers);
-    }
   }
 
   onDeleteDraft(): void {
