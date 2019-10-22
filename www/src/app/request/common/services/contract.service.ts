@@ -11,6 +11,7 @@ import { Request } from "../models/request";
 import { ContractCreate } from "../models/requests-list/contract-create";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { DesignDocumentationService } from "../../back-office/services/design-documentation.service";
+import { Uuid } from "../../../cart/models/uuid";
 
 @Injectable()
 export class ContractService {
@@ -25,9 +26,7 @@ export class ContractService {
       positions: positions.map(position => position.id)
     };
 
-    return this.api.post<Contract>(url, body)
-      // TODO: remove after implement statuses
-      .pipe(map(contract => {contract.status = ContractStatus.NEW; return contract; }));
+    return this.api.post<Contract>(url, body);
   }
 
   uploadDocument(request: Request, contract: Contract, file: File, comment: string): Observable<RequestDocument[]> {
@@ -49,31 +48,24 @@ export class ContractService {
   getContracts(requestId): Observable<Contract[]> {
     const url = `requests/${requestId}/contracts`;
 
-    return this.api.get<Contract[]>(url)
-      .pipe(map(contracts => contracts.map(contract => {
-        contract.status = ContractStatus.NEW;
-        return contract;
-      }))) // TODO: remove
-      ;
+    return this.api.get<Contract[]>(url);
   }
 
-  // @TODO: REST not implemented
-  onApproval(contract: Contract) {
-    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.ON_APPROVAL; return contract; }));
+  onApproval(requestId: Uuid, contractId: Uuid) {
+    const url = `requests/${requestId}/contracts/${contractId}/send-for-approval`;
+
+    return this.api.post<Contract>(url, null);
   }
 
-  // @TODO: REST not implemented
-  reject(contract: Contract) {
-    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.REJECTED; return contract; }));
+  reject(requestId: Uuid, contractId: Uuid) {
+    const url = `requests/${requestId}/contracts/${contractId}/reject`;
+
+    return this.api.post<Contract>(url, null);
   }
 
-  // @TODO: REST not implemented
-  approval(contract: Contract) {
-    return of(contract).pipe(this.simulateDelay(), map(c => { c.status = ContractStatus.APPROVAL; return contract; }));
-  }
+  approve(requestId: Uuid, contractId: Uuid) {
+    const url = `requests/${requestId}/contracts/${contractId}/approve`;
 
-  // @TODO remove after implement all REST
-  private simulateDelay<T>(min = 100, max = 400) {
-    return delay<T>(Math.floor(Math.random() * (max - min + 1) + min));
+    return this.api.post<Contract>(url, null);
   }
 }
