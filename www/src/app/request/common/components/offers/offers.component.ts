@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { OffersService } from "../../../back-office/services/offers.service";
 import { ActivatedRoute } from "@angular/router";
@@ -10,6 +10,7 @@ import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
+import { RequestService } from "../../../customer/services/request.service";
 
 @Component({
   selector: 'app-offers',
@@ -22,8 +23,6 @@ export class OffersComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() showWinnerStateColumn = false;
 
-  @Output() offerWinner = new EventEmitter<Uuid>();
-
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
@@ -34,7 +33,8 @@ export class OffersComponent implements OnInit {
     protected offersService: OffersService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private customerRequestService: RequestService
   ) {
   }
 
@@ -52,7 +52,6 @@ export class OffersComponent implements OnInit {
     const winnerOffer = this.findDefaultOffer();
     if (winnerOffer) {
       this.offerWinnerId = winnerOffer.id;
-      this.offerWinner.emit(this.offerWinnerId);
     }
   }
 
@@ -107,11 +106,6 @@ export class OffersComponent implements OnInit {
       || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
-  winnerChoice(linkedOffer: RequestOfferPosition) {
-    this.offerWinnerId = linkedOffer.id;
-    this.offerWinner.emit(this.offerWinnerId);
-  }
-
   canChoiceWinner() {
     return this.requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
@@ -132,10 +126,6 @@ export class OffersComponent implements OnInit {
       });
   }
 
-  showWinnerSelectionColumn(): boolean {
-    return (this.isCustomerView && !this.showWinnerStateColumn);
-  }
-
   canUploadTp(): boolean {
     if (this.isCustomerView) {
       return false;
@@ -153,5 +143,18 @@ export class OffersComponent implements OnInit {
 
   canUploadKp(): boolean {
     return this.canUploadTp();
+  }
+
+  onChoiceWinner(offerWinner: RequestOfferPosition) {
+    this.customerRequestService.choiceWinner(offerWinner.id, this.requestPosition.id, this.requestId).subscribe(
+      (data: any) => {
+        this.requestPosition.status = data.status;
+        this.requestPosition.statusLabel = data.statusLabel;
+        this.showWinnerStateColumn = true;
+        offerWinner.isWinner = true;
+
+        this.notificationService.toast('Победитель выбран');
+      }
+    );
   }
 }

@@ -67,3 +67,23 @@ span {
 ::ng-deep .offers-datagrid .datagrid .datagrid-cell {
   line-height: 1.6;
 }
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 10px -10px 0;
+}
+
+.cards::after, .card {
+  width: auto;
+  min-width: 350px;
+  flex-grow: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.cards::after {
+  content: '';
+  margin: 0 39px;
+}
