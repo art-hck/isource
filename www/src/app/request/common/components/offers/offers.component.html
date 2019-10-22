@@ -82,7 +82,7 @@
   <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
-          <a href="assets/Отчет ООО Камский кабель.pdf" [target]="'_blank'">{{linkedOffer.supplierContragentName}}</a>
+          <a (click)="showContragentInfo(linkedOffer.supplierContragentId)">{{linkedOffer.supplierContragentName}}</a>
           <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
         </div>
         <div class="card-block">
@@ -136,4 +136,15 @@
     <p>Коммерческие предложения по позиции отсутствуют</p>
   </div>
 </ng-container>
+
+
+<clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+  <h3 class="modal-title">{{ contragent?.shortName }}</h3>
+
+  <div class="modal-body">
+    <app-contragent-info
+            [contragent]="contragent">
+    </app-contragent-info>
+  </div>
+</clr-modal>
 

@@ -11,6 +11,8 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 import { RequestService } from "../../../customer/services/request.service";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-offers',
@@ -22,6 +24,9 @@ export class OffersComponent implements OnInit {
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
 
@@ -32,8 +37,9 @@ export class OffersComponent implements OnInit {
     protected offersService: OffersService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private customerRequestService: RequestService,
     private notificationService: NotificationService,
-    private customerRequestService: RequestService
+    protected getContragentService: ContragentService,
   ) {
   }
 
@@ -123,6 +129,21 @@ export class OffersComponent implements OnInit {
         documents.forEach(document => offer.technicalProposals.push(document));
         this.notificationService.toast('Документ загружен');
       });
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 
   canUploadTp(): boolean {
