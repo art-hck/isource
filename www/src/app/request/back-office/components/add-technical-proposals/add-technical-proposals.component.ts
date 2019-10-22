@@ -124,6 +124,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onCloseModal() {
+    this.supplierSelectComponent.resetSearchFilter();
     this.showAddTechnicalProposalModal = false;
   }
 
@@ -212,7 +213,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       }
     );
 
-    this.showAddTechnicalProposalModal = false;
+    this.onCloseModal();
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
@@ -263,7 +264,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       }
     );
 
-    this.showAddTechnicalProposalModal = false;
+    this.onCloseModal();
   }
 
   onDocumentSelected(uploadedFiles, documentsForm): void {
