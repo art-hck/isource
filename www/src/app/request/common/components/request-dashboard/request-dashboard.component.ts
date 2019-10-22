@@ -108,12 +108,12 @@ export class RequestDashboardComponent implements OnChanges {
     }
   }
 
-  openAddContractPage() {
+  openContractsPage() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/contract`).then(r => {});
+      this.router.navigateByUrl(`/requests/customer/${this.request.id}/contracts`).then(r => {});
       return false;
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/contract`).then(r => {});
+      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/contracts`).then(r => {});
     } else {
       return false;
     }

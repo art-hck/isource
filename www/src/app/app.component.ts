@@ -9,7 +9,7 @@ import {Title} from "@angular/platform-browser";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'The Mall';
+  title = 'Marketplace';
 
   constructor(
     private titleService: Title,
@@ -28,8 +28,7 @@ export class AppComponent {
         }),
         filter(route => route.outlet === "primary"),
         mergeMap(route => route.data),
-        filter(event => event["title"] !== undefined),
-        map(event => event["title"])
+        map(event => event["title"] || this.title)
       ).subscribe((title) => {
         this.titleService.setTitle(title);
       })
