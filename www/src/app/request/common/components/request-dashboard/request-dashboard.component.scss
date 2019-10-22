@@ -20,8 +20,8 @@
   }
 }
 
-.positions-stats-item:hover,
-.info-stats-item:hover {
+.positions-stats-item:not(.not-clickable):hover,
+.info-stats-item:not(.not-clickable):hover {
   background: #E1F5FE;
   cursor: pointer;
   border-bottom: 2px solid #3788ff;
