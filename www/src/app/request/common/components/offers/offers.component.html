@@ -95,7 +95,7 @@
       {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
     </clr-dg-cell>
 
-    <clr-dg-cell class="clr-col-1 offer text-right">{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</clr-dg-cell>
+    <clr-dg-cell class="clr-col-1 offer text-right">{{linkedOffer.quantity}} {{ linkedOffer.measureUnit }}</clr-dg-cell>
 
     <clr-dg-cell class="clr-col-1 offer text-right">{{linkedOffer.deliveryDate | date :'shortDate'}}</clr-dg-cell>
 
