@@ -92,10 +92,17 @@ span {
   background: #FFE5C9;
 }
 
-.winner .card-header * {
-  color:#E46C00;
+.winner .card-header clr-icon {
+  color: #E46C00;
+  float: right;
 }
 
-.winner .card-header clr-icon {
-  float: right;
+.winner .card-header a {
+  color: #E46C00;
+  transition: color 0.3s;
+}
+
+.winner .card-header a:hover {
+  color: #AA4500;
+  transition: color 0s;
 }
