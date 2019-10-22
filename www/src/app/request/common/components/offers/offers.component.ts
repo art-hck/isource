@@ -142,15 +142,11 @@ export class OffersComponent implements OnInit {
     return (this.isCustomerView && !this.showWinnerStateColumn);
   }
 
-
   showContragentInfo(contragentId: Uuid): void {
-    console.log(contragentId);
+    this.contragentInfoModalOpened = true;
 
-    if (this.contragent && this.contragent.id === contragentId) {
-      this.contragentInfoModalOpened = true;
-    } else {
+    if (!this.contragent || this.contragent.id !== contragentId) {
       this.contragent = null;
-      this.contragentInfoModalOpened = true;
 
       const subscription = this.getContragentService
         .getContragentInfo(contragentId)
@@ -160,7 +156,6 @@ export class OffersComponent implements OnInit {
         });
     }
   }
-
 
   canUploadTp(): boolean {
     if (this.isCustomerView) {
