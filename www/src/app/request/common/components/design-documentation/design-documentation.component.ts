@@ -227,9 +227,9 @@ export class DesignDocumentationComponent implements OnInit {
     ;
   }
 
-  approval(designDocumentationList: DesignDocumentationList) {
+  approve(designDocumentationList: DesignDocumentationList) {
     const subscription = this.designDocumentationService
-      .approval(this.requestId, designDocumentationList.id)
+      .approve(this.requestId, designDocumentationList.id)
       .subscribe((_designDocumentationList: DesignDocumentationList) => {
         this.updateDesignDoc(designDocumentationList, _designDocumentationList);
         subscription.unsubscribe();
@@ -261,7 +261,7 @@ export class DesignDocumentationComponent implements OnInit {
     return {
       id: null,
       filename: designDocumentation.name,
-      created: designDocumentation.adjustmentDate ? designDocumentation.adjustmentDate.toString() : '1991-07-18',
+      created: (designDocumentation.adjustmentDate || "").toString(),
       comments: designDocumentation.comment,
       size: 0,
       user: null,

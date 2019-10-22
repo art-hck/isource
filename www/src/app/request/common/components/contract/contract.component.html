@@ -53,7 +53,7 @@
               <span class="label label-info" *ngSwitchCase="ContractStatus.ON_APPROVAL">
                 <clr-icon shape="hourglass"></clr-icon>На согласовании
               </span>
-              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVAL">
+              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVED">
                 <clr-icon shape="check"></clr-icon>Согласовано
               </span>
             </div>
@@ -88,7 +88,7 @@
 
             <clr-button-group *ngIf="userInfoService.isCustomer()">
               <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
-                          (click)="changeStatus(contract, ContractStatus.APPROVAL)">
+                          (click)="changeStatus(contract, ContractStatus.APPROVED)">
                 <clr-icon shape="check"></clr-icon>
                 <span>Согласовать</span>
               </clr-button>

@@ -20,5 +20,5 @@ export enum ContractStatus {
   NEW = 'NEW',
   ON_APPROVAL = 'ON_APPROVAL',
   REJECTED = 'REJECTED',
-  APPROVAL = 'APPROVAL'
+  APPROVED = 'APPROVED'
 }

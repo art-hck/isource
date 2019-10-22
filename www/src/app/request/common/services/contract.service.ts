@@ -52,7 +52,7 @@ export class ContractService {
   }
 
   onApproval(requestId: Uuid, contractId: Uuid) {
-    const url = `requests/${requestId}/contracts/${contractId}/on-approval`;
+    const url = `requests/${requestId}/contracts/${contractId}/send-for-approval`;
 
     return this.api.post<Contract>(url, null);
   }
@@ -63,8 +63,8 @@ export class ContractService {
     return this.api.post<Contract>(url, null);
   }
 
-  approval(requestId: Uuid, contractId: Uuid) {
-    const url = `requests/${requestId}/contracts/${contractId}/approval`;
+  approve(requestId: Uuid, contractId: Uuid) {
+    const url = `requests/${requestId}/contracts/${contractId}/approve`;
 
     return this.api.post<Contract>(url, null);
   }

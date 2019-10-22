@@ -113,8 +113,8 @@ export class ContractComponent implements OnInit {
           switch (contractStatus) {
             case ContractStatus.ON_APPROVAL:
               return this.contractService.onApproval(request.id, contract.id);
-            case ContractStatus.APPROVAL:
-              return this.contractService.approval(request.id, contract.id);
+            case ContractStatus.APPROVED:
+              return this.contractService.approve(request.id, contract.id);
             case ContractStatus.REJECTED:
               return this.contractService.reject(request.id, contract.id);
           }
