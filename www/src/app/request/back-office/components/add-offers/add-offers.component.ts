@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -6,7 +6,7 @@ import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { OffersService } from "../../services/offers.service";
 import { RequestDocument } from "../../../common/models/request-document";
@@ -56,6 +56,7 @@ export class AddOffersComponent implements OnInit {
   selectedProcedurePositions: RequestPosition[] = [];
   selectedProcedureDocuments: RequestDocument[] = [];
   selectedProcedureLotDocuments: RequestDocument[] = [];
+  positionSearchValue = "";
 
   showPrivateAccessContragents = false;
   contragentsWithTp: ContragentList[] = [];
@@ -64,6 +65,7 @@ export class AddOffersComponent implements OnInit {
   files: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+  @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
   @ViewChild("wizard", { static: false }) wizard: ClrWizard;
 
   constructor(
@@ -117,9 +119,6 @@ export class AddOffersComponent implements OnInit {
       dishonestSuppliersForbidden: [false],
       dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
       summingupDate: ['', [Validators.required, CustomValidators.customDate('dateEndRegistration')]],
-      positions: this.formBuilder.array(this.requestPositions.map(() => {
-        return this.formBuilder.control(false);
-      }))
     });
 
     this.procedureBasicDataForm.get('summingupDate').disable();
@@ -132,17 +131,22 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  get positionsArray() {
-    return <FormArray>this.procedureBasicDataForm.get('positions');
+  onPositionSelect(requestPosition: RequestPosition): void {
+    const pos = this.selectedProcedurePositions.find(selectedPosition => selectedPosition === requestPosition);
+    if (pos) {
+      const index = this.selectedProcedurePositions.indexOf(requestPosition);
+      this.selectedProcedurePositions.splice(index, 1);
+    } else {
+      this.selectedProcedurePositions.push(requestPosition);
+    }
   }
 
-  getSelectedPositions() {
-    this.selectedProcedurePositions = [];
-    this.positionsArray.controls.forEach((control, i) => {
-      if (control.value) {
-        this.selectedProcedurePositions.push(this.requestPositions[i]);
-      }
-    });
+  /**
+   * Функция проверяет, должна ли быть отмечена позиция в списке в модальном окне
+   * @param requestPosition
+   */
+  checkIfPositionIsChecked(requestPosition: RequestPosition): boolean {
+    return this.selectedProcedurePositions.indexOf(requestPosition) > -1;
   }
 
   onSelectProcedureDocument(document: RequestDocument) {
@@ -475,6 +479,19 @@ export class AddOffersComponent implements OnInit {
       }
     );
   }
+
+  getPositionSearchValue() {
+    if (this.searchPositionInput) {
+      return this.searchPositionInput.nativeElement.value;
+    }
+    return this.positionSearchValue;
+  }
+
+  onPositionSearchInputChange(value) {
+    this.positionSearchValue = value;
+  }
+
+
 
   resetWizardForm() {
     this.wizard.reset();
