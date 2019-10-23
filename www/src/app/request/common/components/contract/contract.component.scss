@@ -14,3 +14,15 @@ clr-button span {
   padding: 0;
   background: red;
 }
+
+.clr-head {
+  color: #999;
+}
+
+.total {
+  padding-bottom: 2em;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
