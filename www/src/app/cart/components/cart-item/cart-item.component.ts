@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CartStoreService } from '../../services/cart-store.service';
 import { CartItem } from '../../models/cart-item';
+import { Uuid } from "../../models/uuid";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'cart-item',
@@ -11,7 +14,11 @@ export class CartItemComponent implements OnInit {
 
   @Input() item: CartItem;
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   constructor(
+    protected getContragentService: ContragentService,
     protected store: CartStoreService
   ) { }
 
@@ -30,5 +37,20 @@ export class CartItemComponent implements OnInit {
   filterEnteredText(event: KeyboardEvent): boolean {
     const key = Number(event.key);
     return (key >= 0 && key <= 9);
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 }
