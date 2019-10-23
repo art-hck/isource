@@ -10,11 +10,13 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    component: SearchViewComponent
+    component: SearchViewComponent,
+    data: { title: "Каталог" }
   },
   {
     path: ':categoryId',
-    component: CategoryViewComponent
+    component: CategoryViewComponent,
+    data: { title: "Каталог" }
   }
 ];
 

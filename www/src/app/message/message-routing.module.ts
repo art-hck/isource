@@ -6,7 +6,8 @@ import { MessageService } from "./messages/message.service";
 const routes: Routes = [
   {
     path: '',
-    component: MessagesViewComponent
+    component: MessagesViewComponent,
+    data: { title: "Сообщения" }
   }
 ];
 
@@ -21,6 +22,6 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class MessageRoutineModule {
+export class MessageRoutingModule {
 
 }

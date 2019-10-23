@@ -67,3 +67,42 @@ span {
 ::ng-deep .offers-datagrid .datagrid .datagrid-cell {
   line-height: 1.6;
 }
+
+.cards {
+  margin-top: 10px;
+}
+
+.card-wrap {
+  margin-bottom: 24px;
+}
+
+.card {
+  height: 100%;
+}
+
+.card-header a {
+  max-width: calc(100% - 30px);
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.winner .card-header {
+  background: #FFE5C9;
+}
+
+.winner .card-header clr-icon {
+  color: #E46C00;
+  float: right;
+}
+
+.winner .card-header a {
+  color: #E46C00;
+  transition: color 0.3s;
+}
+
+.winner .card-header a:hover {
+  color: #AA4500;
+  transition: color 0s;
+}
