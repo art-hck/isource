@@ -19,4 +19,5 @@ export class Request extends BaseModel {
   comment?: string;
   type?: string;
   dashboard: DashboardInfo;
+  isOlderTwoWeeks: boolean;
 }
