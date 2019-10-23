@@ -43,7 +43,7 @@ export class RequestDashboardComponent implements OnChanges {
   getRequestDashboardCounters() {
     this.tpOnAgreementCount = this.request.dashboard.tp || 0;
     this.kpOnAgreementCount = this.request.dashboard.kp || 0;
-    this.rkdOnAgreementCount = 0;
+    this.rkdOnAgreementCount =  this.request.dashboard.rkd || 0;
     this.onAgreementReviewCount = this.request.dashboard.contractAgreement || 0;
 
     this.newMessagesCount = 3;

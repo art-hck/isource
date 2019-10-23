@@ -41,7 +41,8 @@
 
 
           <div class="clr-col-auto positions-stats-item"
-               (click)="openAddDesignDocumentationPage()">
+               (click)="rkdOnAgreementCount > 0 ? openAddDesignDocumentationPage() : false"
+               [ngClass]="{'not-clickable' : rkdOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании РКД</span>
 
             <div class="stats-items-content">
@@ -51,7 +52,9 @@
           </div>
 
 
-          <div class="clr-col-auto positions-stats-item" (click)="openContractsPage()">
+          <div class="clr-col-auto positions-stats-item"
+               (click)="onAgreementReviewCount > 0 ? openContractsPage() : false"
+               [ngClass]="{'not-clickable' : onAgreementReviewCount === 0 }">
             <span class="stats-items-title">На рассмотрении договора</span>
 
             <div class="stats-items-content">
