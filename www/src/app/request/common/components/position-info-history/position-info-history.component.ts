@@ -68,7 +68,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
       publishReplay(1),
       refCount()
     );
- }
+  }
 
   isPositionEditAction(activityItem: History): boolean {
     return activityItem.type === PositionHistoryTypes.POSITION_EDITED.valueOf();
