@@ -27,7 +27,7 @@ export class ContractComponent implements OnInit {
   public ContractStatus = ContractStatus;
   public attachedFiles: { file: File, contract: Contract }[] = [];
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
 
   constructor(
@@ -154,16 +154,11 @@ export class ContractComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
     }
   }
 }
