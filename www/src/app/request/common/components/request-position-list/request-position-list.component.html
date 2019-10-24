@@ -42,7 +42,12 @@
       </clr-dropdown-menu>
     </clr-dropdown>
 
-    <small *ngIf="request.isOlderTwoWeeks">Заявка старше 2х недель, добавление новых позиций запрещено</small>
+    <div class="old-request-info">
+      <small *ngIf="request.isOlderTwoWeeks">
+        Заявка старше двух недель. <br>
+        Добавление новых позиций запрещено.
+      </small>
+    </div>
   </div>
 
   <!--  Форма загрузки эклесль файла-->
