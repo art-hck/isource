@@ -1,3 +1,7 @@
+form {
+  max-width: 650px;
+}
+
 ::ng-deep .position-info form.form label {
     margin-top: 10px;
     padding-bottom: 5px;
@@ -14,4 +18,42 @@
 ::ng-deep .checkbox-block .isDeliveryDateAsap {
     display: flex;
     align-items: flex-end;
+}
+
+::ng-deep .clr-control-container,
+::ng-deep .clr-select-wrapper {
+  width: 100%;
+}
+
+.clr-textarea {
+  border: 1px solid #D4D9E2;
+  color: #2B2B2B;
+  border-radius: 2px;
+  padding: 10px 15px;
+  line-height: 18px;
+  min-height: 36px;
+  width: 100%;
+  max-width: inherit;
+}
+
+/* todo эти стили желательно перенести в общие, после определения общего дизайна форм */
+.clr-input:disabled {
+  opacity: 1;
+}
+.clr-form-control-disabled .clr-checkbox-wrapper input[type=checkbox]+label::before,
+.clr-form-control-disabled .clr-checkbox-wrapper input[type=checkbox]:checked+label::before {
+  background-color: white;
+}
+.clr-multiselect-wrapper select,
+.clr-select-wrapper select {
+  background-size: initial;
+}
+::ng-deep .clr-select-wrapper::after {
+  z-index: 1000;
+  top: 0.5rem;
+  right: .5rem;
+}
+::ng-deep .clr-select-wrapper select:focus {
+  background-image: initial;
+  border: 1px solid #D4D9E2;
 }
