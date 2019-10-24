@@ -2,43 +2,48 @@
 
   <!--  Верхняя панель с кнопками-->
   <div class="action-bar">
-    <button (click)="addNewPosition()"
-            [disabled]="selectedIsNewPosition()"
-            class="btn btn-link"
-            title="Добавить позицию">
-      <clr-icon shape="plus-circle" size="24"></clr-icon>
-      <span *ngIf="!selectItem">Добавить позицию</span>
-    </button>
-
-    <button *ngIf="!isCustomerView"
-            (click)="addNewGroup()"
-            [disabled]="selectedIsNewPosition()"
-            class="btn btn-link"
-            title="Добавить группу">
-      <clr-icon shape="add-text" size="24"></clr-icon>
-      <span *ngIf="!selectItem">Добавить группу</span>
-    </button>
-
-    <button (click)="onUploadPositionsFromExcel()"
-            class="btn btn-link"
-            title="Загрузить из шаблона">
-      <clr-icon shape="upload" size="24"></clr-icon>
-      <span *ngIf="!selectItem">Загрузить из шаблона</span>
-    </button>
-
-    <clr-dropdown *ngIf="selectedPositions.length && requestGroups && requestGroups.length > 0" class="add-in-group">
-      <button type="button" class="btn btn-link" clrDropdownTrigger>
-        Добавить в группу
-        <clr-icon shape="angle" style="transform: rotate(180deg);"></clr-icon>
+    <ng-container *ngIf="!request.isOlderTwoWeeks; else olderTwoWeeks">
+      <button (click)="addNewPosition()"
+              [disabled]="selectedIsNewPosition()"
+              class="btn btn-link"
+              title="Добавить позицию">
+        <clr-icon shape="plus-circle" size="24"></clr-icon>
+        <span *ngIf="!selectItem">Добавить позицию</span>
       </button>
-      <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-        <div class="group-name" *ngFor="let requestGroup of requestGroups">
-          <button type="button" clrDropdownItem (click)="onAddPositionsInGroup(requestGroup)">
-            {{requestGroup.name}}
-          </button>
-        </div>
-      </clr-dropdown-menu>
-    </clr-dropdown>
+
+      <button *ngIf="!isCustomerView"
+              (click)="addNewGroup()"
+              [disabled]="selectedIsNewPosition()"
+              class="btn btn-link"
+              title="Добавить группу">
+        <clr-icon shape="add-text" size="24"></clr-icon>
+        <span *ngIf="!selectItem">Добавить группу</span>
+      </button>
+
+      <button (click)="onUploadPositionsFromExcel()"
+              class="btn btn-link"
+              title="Загрузить из шаблона">
+        <clr-icon shape="upload" size="24"></clr-icon>
+        <span *ngIf="!selectItem">Загрузить из шаблона</span>
+      </button>
+
+      <clr-dropdown *ngIf="selectedPositions.length && requestGroups && requestGroups.length > 0" class="add-in-group">
+        <button type="button" class="btn btn-link" clrDropdownTrigger>
+          Добавить в группу
+          <clr-icon shape="angle" style="transform: rotate(180deg);"></clr-icon>
+        </button>
+        <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+          <div class="group-name" *ngFor="let requestGroup of requestGroups">
+            <button type="button" clrDropdownItem (click)="onAddPositionsInGroup(requestGroup)">
+              {{requestGroup.name}}
+            </button>
+          </div>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </ng-container>
+    <ng-template #olderTwoWeeks>
+      <small>Заявка старше 2х недель, добавление новых позиций запрещено</small>
+    </ng-template>
   </div>
 
   <!--  Форма загрузки эклесль файла-->
