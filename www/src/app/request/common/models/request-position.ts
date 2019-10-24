@@ -37,5 +37,6 @@ export class RequestPosition extends RequestPositionList {
   procedureEndDate?: Date;
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
+  isDesignRequired: boolean;
   checked: boolean;
 }

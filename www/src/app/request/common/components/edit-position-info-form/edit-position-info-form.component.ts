@@ -83,6 +83,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
       currency: [this.requestPosition.currency],
       relatedServices: [this.requestPosition.relatedServices],
+      isDesignRequired: [this.requestPosition.isDesignRequired],
       comments: [this.requestPosition.comments]
     });
 
