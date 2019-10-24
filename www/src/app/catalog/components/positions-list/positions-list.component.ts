@@ -6,6 +6,8 @@ import { Router } from "@angular/router";
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-catalog-positions-list',
@@ -15,7 +17,7 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 export class PositionsListComponent implements OnInit {
   @Input() positions: CatalogPosition[];
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
 
   constructor(
@@ -39,17 +41,10 @@ export class PositionsListComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
+    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+      publishReplay(1),
+      refCount()
+    );
   }
 
 }

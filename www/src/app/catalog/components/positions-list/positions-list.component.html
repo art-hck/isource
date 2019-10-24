@@ -30,12 +30,14 @@
   </div>
 </ng-template>
 
-<clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-  <h3 class="modal-title">{{ contragent?.shortName }}</h3>
+<ng-container *ngIf="(contragent$ | async) as contragent;">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
 
-  <div class="modal-body">
-    <app-contragent-info
-            [contragent]="contragent">
-    </app-contragent-info>
-  </div>
-</clr-modal>
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+</ng-container>

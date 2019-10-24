@@ -20,6 +20,8 @@ import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-add-offers',
@@ -40,7 +42,7 @@ export class AddOffersComponent implements OnInit {
 
   showImportOffersExcel = false;
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
 
   selectedRequestPosition: RequestPosition;
@@ -119,17 +121,10 @@ export class AddOffersComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
+    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+      publishReplay(1),
+      refCount()
+    );
   }
 
   initProcedureBasicDataForm() {

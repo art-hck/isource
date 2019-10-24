@@ -13,6 +13,8 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-commercial-proposals',
@@ -30,7 +32,7 @@ export class CommercialProposalsComponent implements OnInit {
   requestPositions: RequestPosition[] = [];
   suppliers: ContragentList[] = [];
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
 
   linkedOfferDocuments: RequestDocument[] = [];
@@ -200,17 +202,10 @@ export class CommercialProposalsComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
+    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+      publishReplay(1),
+      refCount()
+    );
   }
 
 

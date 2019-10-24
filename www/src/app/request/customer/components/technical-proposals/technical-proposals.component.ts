@@ -10,6 +10,8 @@ import {NotificationService} from "../../../../shared/services/notification.serv
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -22,7 +24,7 @@ export class TechnicalProposalsComponent implements OnInit {
   technicalProposals: TechnicalProposal[];
   selectedTechnicalProposalsPositions: TechnicalProposalPosition[][] = [];
   contragentInfoModalOpened = false;
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
 
   constructor(
     private route: ActivatedRoute,
@@ -123,16 +125,9 @@ export class TechnicalProposalsComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
+    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+      publishReplay(1),
+      refCount()
+    );
   }
 }
