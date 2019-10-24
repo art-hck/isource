@@ -17,7 +17,7 @@ import { publishReplay, refCount } from "rxjs/operators";
 export class PositionsListComponent implements OnInit {
   @Input() positions: CatalogPosition[];
 
-  contragent$: Observable<ContragentInfo>;
+  contragent: ContragentInfo;
   contragentInfoModalOpened = false;
 
   constructor(
@@ -41,11 +41,16 @@ export class PositionsListComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    if (!this.contragent$) {
-      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-        publishReplay(1),
-        refCount()
-      );
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
     }
   }
 

@@ -26,7 +26,7 @@ export class OffersComponent implements OnInit {
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
 
-  contragent$: Observable<ContragentInfo>;
+  contragent: ContragentInfo;
   contragentInfoModalOpened = false;
 
   offer: RequestOfferPosition;
@@ -135,11 +135,16 @@ export class OffersComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    if (!this.contragent$) {
-      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-        publishReplay(1),
-        refCount()
-      );
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
     }
   }
 

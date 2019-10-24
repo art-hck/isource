@@ -44,7 +44,7 @@
   </div>
 </div>
 
-<ng-container *ngIf="(contragent$ | async) as contragent;">
+<ng-container *ngIf="contragent">
   <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
     <h3 class="modal-title">{{ contragent.shortName }}</h3>
 

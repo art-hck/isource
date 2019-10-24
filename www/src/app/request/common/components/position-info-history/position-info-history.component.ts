@@ -20,7 +20,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 
-  contragent$: Observable<ContragentInfo>;
+  contragent: ContragentInfo;
   contragentInfoModalOpened = false;
   history: History[];
 
@@ -64,11 +64,16 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    if (!this.contragent$) {
-      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-        publishReplay(1),
-        refCount()
-      );
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
     }
   }
 

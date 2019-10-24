@@ -32,7 +32,7 @@ export class CommercialProposalsComponent implements OnInit {
   requestPositions: RequestPosition[] = [];
   suppliers: ContragentList[] = [];
 
-  contragent$: Observable<ContragentInfo>;
+  contragent: ContragentInfo;
   contragentInfoModalOpened = false;
 
   linkedOfferDocuments: RequestDocument[] = [];
@@ -202,11 +202,16 @@ export class CommercialProposalsComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    if (!this.contragent$) {
-      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-        publishReplay(1),
-        refCount()
-      );
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
     }
   }
 

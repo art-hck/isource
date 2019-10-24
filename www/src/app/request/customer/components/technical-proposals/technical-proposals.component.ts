@@ -24,7 +24,7 @@ export class TechnicalProposalsComponent implements OnInit {
   technicalProposals: TechnicalProposal[];
   selectedTechnicalProposalsPositions: TechnicalProposalPosition[][] = [];
   contragentInfoModalOpened = false;
-  contragent$: Observable<ContragentInfo>;
+  contragent: ContragentInfo;
 
   constructor(
     private route: ActivatedRoute,
@@ -125,11 +125,16 @@ export class TechnicalProposalsComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    if (!this.contragent$) {
-      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-        publishReplay(1),
-        refCount()
-      );
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
     }
   }
 }
