@@ -31,7 +31,9 @@
     <div class="card" *ngFor="let contract of contracts">
       <div class="card-header">
         <div class="clr-row">
-          <div class="clr-col">{{ contract.supplier.shortName }}</div>
+          <div class="clr-col">
+            <a (click)="showContragentInfo(contract.supplier.id)">{{ contract.supplier.shortName }}</a>
+          </div>
         </div>
       </div>
       <div class="card-block">
@@ -125,4 +127,16 @@
       </div>
     </div>
   </ng-container>
+</ng-container>
+
+<ng-container *ngIf="(contragent$ | async) as contragent;">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
 </ng-container>
