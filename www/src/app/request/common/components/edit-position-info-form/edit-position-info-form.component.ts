@@ -2,18 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { EditRequestService } from "../../services/edit-request.service";
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import * as moment from "moment";
 import { CreateRequestService } from '../../services/create-request.service';
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionStatusService } from "../../services/request-position-status.service";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -33,8 +28,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private editRequestService: EditRequestService,
-    protected createRequestService: CreateRequestService,
-    private notificationService: NotificationService
+    private createRequestService: CreateRequestService,
+    private notificationService: NotificationService,
+    private positionStatusService: RequestPositionStatusService
   ) {
   }
 
@@ -134,6 +130,10 @@ export class EditPositionInfoFormComponent implements OnInit {
         });
       }
     });
+  }
+
+  isPositionStatusPreviousManufacturing(position) {
+    return this.positionStatusService.isStatusPrevious(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
   }
 
   protected saveExistsPosition(): void {

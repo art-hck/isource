@@ -140,7 +140,7 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-8">
+    <div class="clr-col-8" *ngIf="isPositionStatusPreviousManufacturing(requestPosition)">
       <div class="isDesignRequired">
         <clr-checkbox-wrapper>
           <input type="checkbox" formControlName="isDesignRequired" clrCheckbox>
