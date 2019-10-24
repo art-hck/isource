@@ -103,7 +103,8 @@ export class EditPositionInfoFormComponent implements OnInit {
     // Если позиция ушла дальше по статусной модели, чем "Подготовка технических предложений",
     // то не даем редактировать ничего, кроме «количество», «базис поставки», «условия оплаты»,
     // а так же галочки «требуется РКД»
-    if (![RequestPositionWorkflowSteps.DRAFT.valueOf(),
+    if (this.requestPosition.id
+      && ![RequestPositionWorkflowSteps.DRAFT.valueOf(),
       RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL.valueOf(),
       RequestPositionWorkflowSteps.NEW.valueOf(),
       RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION.valueOf()].includes(this.requestPosition.status)
