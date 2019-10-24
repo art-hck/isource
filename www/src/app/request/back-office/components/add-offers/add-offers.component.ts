@@ -121,10 +121,12 @@ export class AddOffersComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-      publishReplay(1),
-      refCount()
-    );
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
+    }
   }
 
   initProcedureBasicDataForm() {

@@ -64,10 +64,12 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-    this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
-      publishReplay(1),
-      refCount()
-    );
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
+    }
   }
 
   isPositionEditAction(activityItem: History): boolean {
