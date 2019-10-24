@@ -108,6 +108,12 @@ export class EditPositionInfoFormComponent implements OnInit {
       itemForm.get('paymentTerms').enable();
     }
 
+    if (!this.positionStatusService.isStatusPrevious(
+      this.requestPosition.status, RequestPositionWorkflowSteps.MANUFACTURING
+    )) {
+      itemForm.get('isDesignRequired').disable();
+    }
+
     return itemForm;
   }
 
