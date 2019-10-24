@@ -10,6 +10,9 @@ import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { RequestOfferPosition } from "../../models/request-offer-position";
+import { Uuid } from "../../../../cart/models/uuid";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-contract',
@@ -24,11 +27,15 @@ export class ContractComponent implements OnInit {
   public ContractStatus = ContractStatus;
   public attachedFiles: { file: File, contract: Contract }[] = [];
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
     private contractService: ContractService,
     private userInfoService: UserInfoService,
+    protected getContragentService: ContragentService,
   ) {
   }
 
@@ -143,6 +150,21 @@ export class ContractComponent implements OnInit {
         })
       ))
     ;
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 }
 
