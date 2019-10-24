@@ -14,6 +14,7 @@ import * as moment from "moment";
 import { CreateRequestService } from '../../services/create-request.service';
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -98,6 +99,20 @@ export class EditPositionInfoFormComponent implements OnInit {
         itemForm.get('deliveryDate').enable();
       }
     });
+
+    // Если позиция ушла дальше по статусной модели, чем "Подготовка технических предложений",
+    // то не даем редактировать ничего, кроме «количество», «базис поставки», «условия оплаты»,
+    // а так же галочки «требуется РКД»
+    if (![RequestPositionWorkflowSteps.DRAFT.valueOf(),
+      RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL.valueOf(),
+      RequestPositionWorkflowSteps.NEW.valueOf(),
+      RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION.valueOf()].includes(this.requestPosition.status)
+    ) {
+      itemForm.disable();
+      itemForm.get('quantity').enable();
+      itemForm.get('deliveryBasis').enable();
+      itemForm.get('paymentTerms').enable();
+    }
 
     return itemForm;
   }

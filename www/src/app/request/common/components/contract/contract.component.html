@@ -34,11 +34,29 @@
           <div class="clr-col">{{ contract.supplier.shortName }}</div>
         </div>
       </div>
-      <div class="card-block" *ngFor="let currency of getCurrencies(contract);">
+      <div class="card-block">
         <div class="clr-row">
           <div class="clr-col">
-              <p *ngFor="let position of groupPositionsByCurrency(contract)[currency].positions">{{ position.name }}</p>
-              <p><b>Итого:</b> {{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</p>
+
+            <div class="clr-row clr-head">
+              <div class="clr-col-4 clr-col-xl-6">Позиция</div>
+              <div class="clr-col-2">Количество</div>
+              <div class="clr-col-3 clr-col-xl-2">Цена за ед.</div>
+              <div class="clr-col-3 clr-col-xl-2">Сумма</div>
+            </div>
+            <ng-container *ngFor="let currency of getCurrencies(contract);">
+            <div class="clr-row" *ngFor="let offerPosition of groupPositionsByCurrency(contract)[currency].offerPositions">
+
+              <div class="clr-col-4 clr-col-xl-6">{{ offerPosition.requestPosition.name }}</div>
+              <div class="clr-col-2">{{ offerPosition.quantity }} {{ offerPosition.measureUnit}}</div>
+              <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat | currency: currency }}</div>
+              <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat * offerPosition.quantity  | currency: currency }}</div>
+            </div>
+            <div class="clr-row total">
+              <div class="clr-col-9 clr-col-xl-10"></div>
+              <div class="clr-col-3 clr-col-xl-2"><b>{{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</b></div>
+            </div>
+            </ng-container>
           </div>
         </div>
       </div>

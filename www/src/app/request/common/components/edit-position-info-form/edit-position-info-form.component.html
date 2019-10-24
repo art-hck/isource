@@ -1,122 +1,173 @@
 <form [formGroup]="positionInfoDataForm" class="form">
   <div class="clr-row">
 
-    <div class="clr-col-8">
-      <label class="clr-control-label">Наименование МТР</label>
-      <input type="text"
-             name="name"
-             id="name"
-             formControlName="name"
-             [class.invalid]="isFieldValid('name')"
-             value="{{ requestPosition.name }}">
+    <div class="clr-col-12">
+      <clr-input-container>
+        <label>Наименование МТР</label>
+        <input clrInput
+               type="text"
+               name="name"
+               formControlName="name"
+               [class.invalid]="isFieldValid('name')"
+               value="{{ requestPosition.name }}">
+      </clr-input-container>
     </div>
 
     <div class="clr-break-row"></div>
 
-    <div class="clr-col-3">
-      <label class="clr-control-label">Необходимый срок поставки</label>
-      <div class="deliveryDate">
+    <div class="clr-col-4">
+      <clr-date-container>
+        <label>Необходимый срок поставки</label>
         <input clrDate
+               type="date"
                [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
-               id="deliveryDate"
+               name="deliveryDate"
                placeholder="ДД.ММ.ГГГГ"
-               type="text"
                formControlName="deliveryDate"
-               [class.invalid]="isFieldValid('deliveryDate')" />
-      </div>
+               [class.invalid]="isFieldValid('deliveryDate')"/>
+      </clr-date-container>
     </div>
 
     <div class="clr-col-4 checkbox-block">
       <div class="isDeliveryDateAsap">
-        <input clrCheckbox
-               type="checkbox"
-               name="isDeliveryDateAsap"
-               id="isDeliveryDateAsap"
-               formControlName="isDeliveryDateAsap"
-               [class.invalid]="isFieldValid('isDeliveryDateAsap')">
-        <label for="isDeliveryDateAsap">как можно скорее</label>
+        <clr-checkbox-container>
+          <clr-checkbox-wrapper>
+            <input clrCheckbox
+                   type="checkbox"
+                   name="isDeliveryDateAsap"
+                   formControlName="isDeliveryDateAsap"
+                   [class.invalid]="isFieldValid('isDeliveryDateAsap')">
+            <label>как можно скорее</label>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
       </div>
     </div>
 
 
-
     <div class="clr-break-row"></div>
 
 
-
-    <div class="clr-col-8">
-      <label class="clr-control-label">Базис поставки <br>
-        (пункт, до которого требуется доставка)</label>
-      <input type="text" id="deliveryBasis"
-             formControlName="deliveryBasis"
-             [class.invalid]="isFieldValid('deliveryBasis')"
-             value="{{requestPosition.deliveryBasis}}">
-    </div>
-
-
-    <div class="clr-break-row"></div>
-
-
-    <div class="clr-col-8">
-      <label class="clr-control-label">Условия оплаты</label>
-      <input type="text" id="paymentTerms"
-             formControlName="paymentTerms"
-             value="{{requestPosition.paymentTerms}}"
-             [class.invalid]="isFieldValid('paymentTerms')">
+    <div class="clr-col-12">
+      <clr-input-container>
+        <label>Базис поставки <br>
+          (пункт, до которого требуется доставка)</label>
+        <input clrInput
+               type="text"
+               formControlName="deliveryBasis"
+               [class.invalid]="isFieldValid('deliveryBasis')"
+               value="{{requestPosition.deliveryBasis}}">
+      </clr-input-container>
     </div>
 
 
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-4">
-      <label class="clr-control-label">Количество</label>
-      <input type="number"
-             id="quantity"
-             name="quantity"
-             formControlName="quantity"
-             min="0.1"
-             step="0.01" class="hidden-arrows text-right price"
-             value="{{requestPosition.quantity}}"
-             [class.invalid]="isFieldValid('quantity')">
-    </div>
-
-
-    <div class="clr-col-4">
-      <label class="clr-control-label">Ед. измерения</label>
-      <input type="text"
-             id="measureUnit"
-             name="measureUnit"
-             formControlName="measureUnit"
-             value="{{requestPosition.measureUnit}}"
-             [class.invalid]="isFieldValid('measureUnit')">
+    <div class="clr-col-12">
+      <clr-input-container>
+        <label>Условия оплаты</label>
+        <input clrInput
+               type="text"
+               formControlName="paymentTerms"
+               value="{{requestPosition.paymentTerms}}"
+               [class.invalid]="isFieldValid('paymentTerms')">
+      </clr-input-container>
     </div>
 
 
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-4">
-      <label class="clr-control-label">Начальная максимальная цена</label>
-      <input type="number"
-             id="startPrice"
-             name="startPrice"
-             formControlName="startPrice"
-             min="0.1"
-             step="0.01" class="hidden-arrows text-right price"
-             value="{{requestPosition.startPrice}}"
-             [class.invalid]="isFieldValid('startPrice')">
+    <div class="clr-col-6">
+      <clr-input-container>
+        <label>Количество</label>
+        <input clrInput
+               type="number"
+               name="quantity"
+               formControlName="quantity"
+               min="0.1"
+               step="0.01" class="hidden-arrows text-right price"
+               value="{{requestPosition.quantity}}"
+               [class.invalid]="isFieldValid('quantity')">
+      </clr-input-container>
     </div>
 
-    <div class="clr-col-4">
-      <label class="clr-control-label" for="currency">Валюта</label>
-      <div class="select">
-        <select name="currency" id="currency" formControlName="currency">
+
+    <div class="clr-col-6">
+      <clr-input-container>
+        <label>Ед. измерения</label>
+        <input clrInput
+               type="text"
+               name="measureUnit"
+               formControlName="measureUnit"
+               value="{{requestPosition.measureUnit}}"
+               [class.invalid]="isFieldValid('measureUnit')">
+      </clr-input-container>
+    </div>
+
+
+    <div class="clr-break-row"></div>
+
+
+    <div class="clr-col-6">
+      <clr-input-container>
+        <label>Начальная максимальная цена</label>
+        <input clrInput
+               type="number"
+               name="startPrice"
+               formControlName="startPrice"
+               min="0.1"
+               step="0.01" class="hidden-arrows text-right price"
+               value="{{requestPosition.startPrice}}"
+               [class.invalid]="isFieldValid('startPrice')">
+      </clr-input-container>
+    </div>
+
+    <div class="clr-col-6">
+      <clr-select-container>
+        <label>Валюта</label>
+        <select clrSelect name="currency" formControlName="currency" class="select">
           <option value="RUB" [selected]="checkIfSelected('RUB')">RUB</option>
           <option value="USD" [selected]="checkIfSelected('USD')">USD</option>
           <option value="EUR" [selected]="checkIfSelected('EUR')">EUR</option>
           <option value="CHF" [selected]="checkIfSelected('CHF')">CHF</option>
         </select>
+      </clr-select-container>
+    </div>
+
+
+    <div class="clr-break-row"></div>
+
+
+    <div class="clr-col-12">
+      <clr-input-container>
+        <label>
+          Документ, в соответствии с которым необходимо изготовление <br>
+          (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+        </label>
+
+        <input clrInput
+               type="text"
+               formControlName="productionDocument"
+               value="{{requestPosition.productionDocument}}">
+      </clr-input-container>
+    </div>
+
+
+    <div class="clr-break-row"></div>
+
+
+    <div class="clr-col-12">
+      <div class="relatedServices">
+        <clr-input-container>
+          <label class="nopadding">Необходимость сопутствующих услуг
+            (ШМР, ПНР, Инспекционный контроль)</label>
+          <input clrInput
+                 type="text"
+                 name="relatedServices"
+                 formControlName="relatedServices"
+                 value="{{requestPosition.relatedServices}}">
+        </clr-input-container>
       </div>
     </div>
 
@@ -124,55 +175,23 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-8">
-      <label class="clr-control-label">
-        Документ, в соответствии с которым необходимо изготовление <br>
-        (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
-      </label>
-
-      <input type="text"
-             id="productionDocument"
-             formControlName="productionDocument"
-             value="{{requestPosition.productionDocument}}">
-    </div>
-
-
-    <div class="clr-break-row"></div>
-
-
-    <div class="clr-col-8">
-      <div class="relatedServices">
-        <label class="clr-control-label nopadding">Необходимость сопутствующих услуг
-          (ШМР, ПНР, Инспекционный контроль)</label>
-        <input type="text" id="relatedServices"
-               name="relatedServices"
-               formControlName="relatedServices"
-               value="{{requestPosition.relatedServices}}">
-      </div>
-    </div>
-
-
-    <div class="clr-break-row"></div>
-
-
-    <div class="clr-col-8">
-      <div class="relatedServices">
-        <label class="clr-control-label">Примечания/комментарии</label>
-        <textarea style="width: 100%"
+    <div class="clr-col-12">
+      <clr-textarea-container>
+        <label>Примечания/комментарии</label>
+        <textarea clrTextarea
                   type="textarea"
-                  id="comments"
                   name="comments"
                   formControlName="comments">
-                  {{requestPosition.comments}}
+                {{requestPosition.comments}}
         </textarea>
-      </div>
+      </clr-textarea-container>
     </div>
 
 
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-8">
+    <div class="clr-col-12">
       <button type="button"
               class="btn btn-primary"
               (click)="onSavePositionInfo()"

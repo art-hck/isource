@@ -9,6 +9,7 @@ import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
 import { UserInfoService } from "../../../../core/services/user-info.service";
+import { RequestOfferPosition } from "../../models/request-offer-position";
 
 @Component({
   selector: 'app-contract',
@@ -98,9 +99,9 @@ export class ContractComponent implements OnInit {
     return contract.winners
       .map(winner => winner.offerPosition)
       .reduce((g: GroupedPositionsByCurrency, offerPosition) => {
-        g[offerPosition.currency] = g[offerPosition.currency] || {total: 0, positions: []};
-        g[offerPosition.currency].total += offerPosition.priceWithoutVat;
-        g[offerPosition.currency].positions.push(offerPosition.requestPosition);
+        g[offerPosition.currency] = g[offerPosition.currency] || {total: 0, offerPositions: []};
+        g[offerPosition.currency].total += offerPosition.priceWithoutVat * offerPosition.quantity;
+        g[offerPosition.currency].offerPositions.push(offerPosition);
         return g;
       }, {});
   }
@@ -145,4 +146,4 @@ export class ContractComponent implements OnInit {
   }
 }
 
-export class GroupedPositionsByCurrency { [name: string]: {total: number, positions: RequestPosition[] }; }
+export class GroupedPositionsByCurrency { [name: string]: {total: number, offerPositions: RequestOfferPosition[] }; }
