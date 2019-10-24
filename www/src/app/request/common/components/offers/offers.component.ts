@@ -13,6 +13,8 @@ import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-posi
 import { RequestService } from "../../../customer/services/request.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-offers',
@@ -24,7 +26,7 @@ export class OffersComponent implements OnInit {
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
 
   offer: RequestOfferPosition;
@@ -133,16 +135,11 @@ export class OffersComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
     }
   }
 

@@ -1,4 +1,5 @@
 import { Uuid } from "../../cart/models/uuid";
+import { ContragentInfo } from "../../contragent/models/contragent-info";
 
 export class CatalogPosition {
   id: Uuid;
@@ -8,7 +9,9 @@ export class CatalogPosition {
   currency: string;
   description: string;
   image: string;
-  supplierContragentName: string;
+  supplierContragent: ContragentInfo;
+  supplierContragentName?: string;
+  supplierContragentId?: string;
   productionDocument: string;
   productionTime: number;
   createdDate: string;

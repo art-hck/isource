@@ -8,6 +8,8 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-position-info-history',
@@ -18,7 +20,7 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   @Input() requestPosition: RequestPosition;
 
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentInfoModalOpened = false;
   history: History[];
 
@@ -62,16 +64,11 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
     }
   }
 

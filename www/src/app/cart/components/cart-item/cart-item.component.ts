@@ -1,6 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CartStoreService } from '../../services/cart-store.service';
 import { CartItem } from '../../models/cart-item';
+import { Uuid } from "../../models/uuid";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'cart-item',
@@ -11,7 +16,11 @@ export class CartItemComponent implements OnInit {
 
   @Input() item: CartItem;
 
+  contragent$: Observable<ContragentInfo>;
+  contragentInfoModalOpened = false;
+
   constructor(
+    protected getContragentService: ContragentService,
     protected store: CartStoreService
   ) { }
 
@@ -30,5 +39,15 @@ export class CartItemComponent implements OnInit {
   filterEnteredText(event: KeyboardEvent): boolean {
     const key = Number(event.key);
     return (key >= 0 && key <= 9);
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
+    }
   }
 }

@@ -7,11 +7,13 @@ import { OrderComponent } from './components/order/order.component';
 import { CartSumComponent } from './components/cart-sum/cart-sum.component';
 import { SharedModule } from "../shared/shared.module";
 import { CartRoutingModule } from "./cart-routing.module";
+import { ContragentModule } from "../contragent/contragent.module";
 
 @NgModule({
   imports: [
     SharedModule,
-    CartRoutingModule
+    CartRoutingModule,
+    ContragentModule
   ],
   exports: [
     WidgetComponent,

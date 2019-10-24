@@ -15,6 +15,8 @@ import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/t
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -31,7 +33,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposalsPositions: RequestPositionList[];
 
   contragentInfoModalOpened = false;
-  contragent: ContragentInfo;
+  contragent$: Observable<ContragentInfo>;
   contragentSearchFieldValue: string;
 
   selectedContragent: ContragentList;
@@ -403,16 +405,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   showContragentInfo(contragentId: Uuid): void {
     this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
+    if (!this.contragent$) {
+      this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
+        publishReplay(1),
+        refCount()
+      );
     }
   }
 
