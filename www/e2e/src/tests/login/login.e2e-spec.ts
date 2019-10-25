@@ -1,13 +1,13 @@
-import {LoginPage} from '../../pages/login.po';
-import {browser, protractor} from "protractor";
-import {Login} from "./login";
+import { LoginPage } from '../../pages/login.po';
+import { browser, protractor } from "protractor";
+import { Login } from "./login";
 
-let loginData = require("../../test-data/login-data");
+const loginData = require("../../test-data/login-data");
 
 describe('Логин', () => {
 
   const EC = protractor.ExpectedConditions;
-  let login = new Login();
+  const login = new Login();
 
   beforeEach(() => {
     browser.get(browser.baseUrl);

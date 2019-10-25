@@ -4,12 +4,12 @@ import {Login} from "../../login/login";
 import {CreateRequestForm} from "./create-request-form";
 import {RequestViewPage} from "../../../pages/request-view.po";
 
-let createRequestData = require("../../../test-data/create-request-data");
+const createRequestData = require("../../../test-data/create-request-data");
 const EC = protractor.ExpectedConditions;
 
-describe('Создание заявки вручную при заполнении всех обязательных полей',()=> {
-  let login = new Login();
-  let createRequest = new CreateRequestForm();
+describe('Создание заявки вручную при заполнении всех обязательных полей', () => {
+  const login = new Login();
+  const createRequest = new CreateRequestForm();
 
   beforeAll(() => {
     browser.get(browser.baseUrl);
@@ -20,64 +20,64 @@ describe('Создание заявки вручную при заполнени
     login.logout();
   });
 
-  it('Нажать на пункт меню Индивидуальная заявка',()=> {
+  it('Нажать на пункт меню Индивидуальная заявка', () => {
     CreateRequestFormPage.individualRequestLink().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.individualRequestTitle()));
     expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/create');
     expect(CreateRequestFormPage.individualRequestTitle().getText()).toEqual('Индивидуальная заявка');
   });
 
-  it('Нажать на вкладку Заполнить вручную',()=> {
+  it('Нажать на вкладку Заполнить вручную', () => {
     CreateRequestFormPage.manualRequestButton().click();
     expect(CreateRequestFormPage.manualRequestLabels().getText()).toEqual(createRequestData.fieldsLabel);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Наименование заявки',()=> {
+  it('Заполнить поле Наименование заявки', () => {
     CreateRequestFormPage.requestNameInput().sendKeys(createRequestData.requestForm.requestName);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Наименования МТР',()=> {
+  it('Заполнить поле Наименования МТР', () => {
     CreateRequestFormPage.nameInput().sendKeys(createRequestData.requestForm.name);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)',()=> {
+  it('Заполнить поле Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)', () => {
     CreateRequestFormPage.productionDocumentInput().sendKeys(createRequestData.requestForm.productionDocument);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Количество',()=> {
+  it('Заполнить поле Количество', () => {
     CreateRequestFormPage.quantityInput().sendKeys(createRequestData.requestForm.quantity);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Единицы измерения',()=> {
+  it('Заполнить поле Единицы измерения', () => {
     CreateRequestFormPage.measureUnitInput().sendKeys(createRequestData.requestForm.measureUnit);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Необходимый срок поставки',()=> {
+  it('Заполнить поле Необходимый срок поставки', () => {
     CreateRequestFormPage.deliveryDateInput().sendKeys(createRequestData.requestForm.deliveryDate);
     expect(CreateRequestFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Заполнить поле Базис поставки (пункт, до которого требуется доставка)',()=> {
+  it('Заполнить поле Базис поставки (пункт, до которого требуется доставка)', () => {
     CreateRequestFormPage.deliveryBasisInput().sendKeys(createRequestData.requestForm.deliveryBasis);
     expect(CreateRequestFormPage.submitButton().isEnabled()).toBe(true);
   });
 
-  it('Загрузка документа',()=> {
+  it('Загрузка документа', () => {
     createRequest.uploadFile();
   });
 
-  it('Нажать кнопку Отправить', ()=> {
+  it('Нажать кнопку Отправить', () => {
     CreateRequestFormPage.submitButton().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.draftApplicationCreatedTitle()));
   });
 
-  it('Нажать кнопку ОК в появившемся модальном окне', ()=> {
+  it('Нажать кнопку ОК в появившемся модальном окне', () => {
     expect(CreateRequestFormPage.draftApplicationCreatedTitle().getText()).toEqual('Черновик заявки создан');
     CreateRequestFormPage.okButton().click();
     browser.wait(EC.visibilityOf(RequestViewPage.requestNameTitle()));

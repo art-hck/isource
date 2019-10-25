@@ -1,4 +1,4 @@
-import {by, element} from "protractor";
+import { by, element } from "protractor";
 
 export class CreateRequestFreeFormPage {
 
@@ -6,7 +6,7 @@ export class CreateRequestFreeFormPage {
     return element(by.buttonText('Произвольная заявка'));
   }
 
-  public static freeRequestNameInput(){
+  public static freeRequestNameInput() {
     return element(by.id('request-name'));
   }
 

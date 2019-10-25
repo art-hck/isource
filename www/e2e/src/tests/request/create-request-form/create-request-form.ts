@@ -1,8 +1,8 @@
 import {CreateRequestFormPage} from "../../../pages/create-request-form.po";
 import * as path from "path";
 
-let requestData = require("../../../test-data/create-request-data");
-let fileToUpload = '../../../files/RequestTemplate.xlsx',
+const requestData = require("../../../test-data/create-request-data");
+const fileToUpload = '../../../files/RequestTemplate.xlsx',
   absolutePath = path.resolve(__dirname, fileToUpload);
 
 export class CreateRequestForm {

@@ -7,10 +7,10 @@ import {RequestViewPage} from "../../../pages/request-view.po";
 
 const EC = protractor.ExpectedConditions;
 
-describe('Создание заявки из xls-файла',()=> {
-  let login = new Login();
-  let createRequest = new CreateRequestForm();
-  let createRequestData = require("../../../test-data/create-request-data");
+describe('Создание заявки из xls-файла', () => {
+  const login = new Login();
+  const createRequest = new CreateRequestForm();
+  const createRequestData = require("../../../test-data/create-request-data");
 
   beforeAll(() => {
     browser.get(browser.baseUrl);
@@ -23,22 +23,22 @@ describe('Создание заявки из xls-файла',()=> {
     login.logout();
   });
 
-  it('Заполнить поле Наименование заявки',()=> {
+  it('Заполнить поле Наименование заявки', () => {
     CreateRequestFreeFormPage.freeRequestNameInput().sendKeys(createRequestData.requestXls.requestName);
     expect(CreateRequestFreeFormPage.submitButton().getAttribute('disabled')).toBe('true');
   });
 
-  it('Загрузка документа',()=> {
+  it('Загрузка документа', () => {
     createRequest.uploadFile();
     expect(CreateRequestFormPage.submitButton().isEnabled()).toBe(true);
   });
 
-  it('Нажать кнопку Отправить',()=> {
+  it('Нажать кнопку Отправить', () => {
     CreateRequestFreeFormPage.submitButton().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.draftApplicationCreatedTitle()));
   });
 
-  it('Нажать кнопку ОК в появившемся модальном окне', ()=> {
+  it('Нажать кнопку ОК в появившемся модальном окне', () => {
     expect(CreateRequestFormPage.draftApplicationCreatedTitle().getText()).toEqual('Черновик заявки создан');
     CreateRequestFormPage.okButton().click();
     browser.wait(EC.visibilityOf(RequestViewPage.requestNameTitle()));

@@ -1,5 +1,5 @@
-import{LoginPage} from "../../pages/login.po";
-import {browser} from "protractor";
+import { LoginPage } from "../../pages/login.po";
+import { browser } from "protractor";
 
 export class Login {
   username: string;

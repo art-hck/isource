@@ -34,4 +34,4 @@ module.exports = {
   "requestXls": {
     "requestName": "Заявка из xls-шаблона",
   },
-}
+};

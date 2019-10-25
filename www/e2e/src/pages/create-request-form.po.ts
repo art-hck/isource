@@ -21,7 +21,7 @@ export class CreateRequestFormPage {
     return element(by.buttonText('Отправить'));
   }
 
-  public static requestNameInput(){
+  public static requestNameInput() {
     return element(by.id('request-name'));
   }
 
