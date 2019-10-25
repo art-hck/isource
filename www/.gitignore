@@ -39,3 +39,7 @@ testem.log
 Thumbs.db
 
 /src/app/config/app.config.ts
+
+#e2e test
+/e2e/protractor.conf.js
+/e2e/allure-results
