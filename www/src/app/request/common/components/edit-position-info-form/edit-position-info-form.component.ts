@@ -108,6 +108,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       itemForm.get('quantity').enable();
       itemForm.get('deliveryBasis').enable();
       itemForm.get('paymentTerms').enable();
+      itemForm.get('isDesignRequired').enable();
     }
 
     if (!this.positionStatusService.isStatusPrevious(
