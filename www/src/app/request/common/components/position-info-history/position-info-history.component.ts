@@ -8,6 +8,8 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-position-info-history',

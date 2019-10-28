@@ -15,6 +15,8 @@ import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/t
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-add-technical-proposals',

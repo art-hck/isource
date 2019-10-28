@@ -102,7 +102,9 @@ export class EditPositionInfoFormComponent implements OnInit {
     if (this.positionStatusService.isStatusAfter(
       this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
     )) {
-      itemForm.disable();
+      itemForm.disable({
+        emitEvent: false
+      });
       itemForm.get('quantity').enable();
       itemForm.get('deliveryBasis').enable();
       itemForm.get('paymentTerms').enable();

@@ -20,6 +20,8 @@ import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { Observable } from "rxjs";
+import { publishReplay, refCount, take } from "rxjs/operators";
 
 @Component({
   selector: 'app-add-offers',

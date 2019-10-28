@@ -13,6 +13,8 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-commercial-proposals',
