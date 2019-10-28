@@ -317,3 +317,21 @@ clr-checkbox-wrapper {
 .send-offers button {
   margin-left: 10px;
 }
+
+span.counted-offer-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2b2b2b;
+  padding-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+span.offer-quantity {
+  color: #9FA8B0;
+}
+
+div.per-unit-price-block {
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #002033;
+}
