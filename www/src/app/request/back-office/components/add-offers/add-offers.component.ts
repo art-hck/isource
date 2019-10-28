@@ -528,7 +528,6 @@ export class AddOffersComponent implements OnInit {
     const id = requestPosition.procedureId;
 
     return procedureUrl + id;
-    // return '<a target="_blank" href="' + procedureUrl + id + '">' + id + '</a>';
   }
 
   onPositionSearchInputChange(value) {
