@@ -33,6 +33,7 @@ export class RequestPosition extends RequestPositionList {
   manufacturingDocuments: ManufacturingDocument[];
   linkedOffers: RequestOfferPosition[];
   hasProcedure: boolean;
+  procedureId: string;
   procedureStartDate?: Date;
   procedureEndDate?: Date;
   isDraftEntity: boolean;
