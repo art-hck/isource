@@ -58,6 +58,10 @@ export class RequestDashboardComponent implements OnChanges {
 
 
   protected getRkdAvailable() {
+    if (!this.requestPositions) {
+      return false;
+    }
+
     const positionWithIsDesignRequired = this.requestPositions.find(item => {
       if (item instanceof RequestPosition && item.isDesignRequired) {
         return true;
