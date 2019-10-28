@@ -1,0 +1,32 @@
+:host {
+  width: 100%;
+}
+
+form {
+  padding: 0;
+}
+
+table {
+  padding: 0 25px;
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  margin: 0;
+}
+
+.btn-save,
+.btn-delete {
+  margin-left: .5rem;
+}
+
+
+.clr-row > input {
+  flex-grow: 1;
+  width: auto;
+}

@@ -4,8 +4,9 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { DesignDocumentation } from "../../common/models/design-documentation";
 import { RequestDocument } from "../../common/models/request-document";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { DesignDocumentationList } from "../../common/models/design-documentationList";
+import { delay, map } from "rxjs/operators";
 
 @Injectable()
 export class DesignDocumentationService {
@@ -37,6 +38,22 @@ export class DesignDocumentationService {
     });
   }
 
+  edit(id: Uuid, designDoc: DesignDocumentationList): Observable<DesignDocumentationList> {
+    const url = `requests/${id}/designs/edit`;
+
+    return of(designDoc).pipe(
+      this.simulateDelay(),
+      map(designDocList => {
+        designDocList.designDocs = designDocList.designDocs.map(_designDoc => {
+          _designDoc.id = Date.now() as any as string;
+          return _designDoc;
+        });
+        return designDocList;
+      })
+    );
+
+  }
+
   uploadDocuments(id: Uuid, designDocId: Uuid, files: File[]): Observable<RequestDocument[]> {
     const url = `requests/${id}/designs/docs/${designDocId}/upload`;
     const formData = new FormData();
@@ -63,5 +80,10 @@ export class DesignDocumentationService {
     formData.append('remarksFile', file, file.name);
 
     return this.api.post<DesignDocumentationList>(url, formData);
+  }
+
+  // TODO: Remove after implement REST
+  private simulateDelay<T>(min = 400, max = 1400) {
+    return delay<T>(Math.floor(Math.random() * (max - min + 1) + min));
   }
 }

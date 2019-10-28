@@ -250,7 +250,7 @@ export class DesignDocumentationComponent implements OnInit {
     const i = this.designDocumentations.indexOf(oldDoc);
 
     if (i !== -1) {
-      this.designDocumentations[i] = newDoc;
+      this.designDocumentations[i] = {...this.designDocumentations[i], ...newDoc};
     }
   }
 
@@ -269,5 +269,9 @@ export class DesignDocumentationComponent implements OnInit {
       extension: null,
       mime: null
     };
+  }
+
+  deleteDocument(document) {
+    console.log(document);
   }
 }

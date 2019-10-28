@@ -50,6 +50,7 @@ import { ContractUploadDocumentComponent } from "./common/components/contract-up
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "./common/components/contract/contract.component";
 import { ContragentModule } from "../contragent/contragent.module";
+import { DesignDocumentationEditComponent } from "./common/components/design-documentation-edit/design-documentation-edit.component";
 
 @NgModule({
   declarations: [
@@ -85,11 +86,11 @@ import { ContragentModule } from "../contragent/contragent.module";
     PositionSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
-    DesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent,
     ContractComponent,
     DesignDocumentationComponent,
+    DesignDocumentationEditComponent,
     ContractCreateComponent,
     ContractUploadDocumentComponent
   ],

@@ -19,7 +19,6 @@ export class DocumentSimpleListComponent implements OnInit {
 
   @Input() documents: RequestDocument[] = [];
 
-  @Input() deleteLabel = '✖';
   @Input() uploadLabel = 'Загрузить';
 
   @Input() enableDelete = false;

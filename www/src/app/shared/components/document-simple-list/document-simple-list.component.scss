@@ -2,14 +2,7 @@
   display: none;
 }
 
-.btn-delete {
-  color: #888;
-  padding: 0 5px;
-  margin: 0;
-}
-
 .document {
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: flex;
@@ -20,12 +13,18 @@
   }
 
   &:not(.awaiting) > div {
+    overflow: hidden;
+  }
+
+  &:not(.awaiting) > div,
+  &:not(.awaiting) > document-icon {
     cursor: pointer;
   }
 
   & > div {
     margin: 8px;
     line-height: 1.4em;
+    flex-grow: 1;
 
     .title {
       font-size: 1.2em;
@@ -47,4 +46,31 @@
   font-size: 1.2em;
   margin: 10px 0;
   cursor: pointer;
+}
+
+.btn-delete {
+  display: none;
+  margin: 0;
+  flex-shrink: 0;
+  animation: show-btn 300ms;
+}
+
+li:hover .btn-delete{
+  display: block;
+}
+
+@keyframes show-btn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  80% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

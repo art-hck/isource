@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <table class="document-list table table-noborder">
+    <thead>
+    <tr class="clr-row">
+      <th class="left clr-col-8"><label>Наименование документа</label></th>
+      <th class="left clr-col-2"><label>Срок предоставления</label></th>
+      <th class="left clr-col-2"><label>Срок корректировки</label></th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container formArrayName="designDocs">
+      <tr class="clr-row" formGroupName="{{i}}" *ngFor="let designDoc of designDocs.controls; index as i">
+        <ng-container *ngIf="designDocumentationList.designDocs[i]?.type !== 'REMARK'">
+          <td class="clr-col-8">
+            <input formControlName="name" type="text" [class.invalid]="isControlInvalid(designDoc.get('name'))"/>
+          </td>
+          <td class="clr-col-2">
+            <input type="number" formControlName="adjustmentDate"
+                   [class.invalid]="isControlInvalid(designDoc.get('adjustmentDate'))"/>
+          </td>
+          <td class="clr-col-2">
+            <div class="clr-row">
+              <input type="number" formControlName="receivingDate"
+                     [class.invalid]="isControlInvalid(designDoc.get('receivingDate'))"/>
+              <button type="button" class="btn btn-icon btn-danger-outline btn-delete" (click)="designDocs.removeAt(i)"
+                      title="Удалить из списка" *ngIf="designDocs.controls.length > 2">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
+    <tr class="clr-row">
+      <td class="left clr-col">
+        <button type="button" class="btn" (click)="addDesignDoc()">Добавить документ</button>
+      </td>
+      <td class="footer clr-col">
+        <div class="clr-row">
+          <button type="button" class="btn btn-link" (click)="openChange.emit(false)">Отмена</button>
+          <button class="btn btn-primary btn-save">Сохранить</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</form>
