@@ -1,11 +1,6 @@
 import { LoginPage } from '../../pages/login.po';
 import { browser, protractor } from "protractor";
-import { Login } from "./login";
-
-export enum Role {
-  CUSTOMER = 'customer',
-  BACKOFFICE = 'backoffice'
-}
+import { Login, Role } from "./login";
 
 const loginData = require("../../test-data/login-data");
 

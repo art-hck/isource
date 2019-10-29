@@ -1,6 +1,10 @@
 import { LoginPage } from "../../pages/login.po";
 import { browser } from "protractor";
-import {Role} from "./login.e2e-spec";
+
+export enum Role {
+  CUSTOMER = 'customer',
+  BACKOFFICE = 'backoffice'
+}
 
 export class Login {
   username: string;
