@@ -14,4 +14,7 @@ export interface GpnmarketConfigInterface {
   paginator: {
     pageSize: number
   };
+  procedure: {
+    url: string
+  };
 }

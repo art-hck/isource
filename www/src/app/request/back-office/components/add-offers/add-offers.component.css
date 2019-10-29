@@ -158,11 +158,21 @@ clr-checkbox-wrapper {
 .sent-for-agreement-label {
   color: #4CAF50;
 }
-.has-procedure-label {
-  color: #2196F3;
-}
 .has-finished-procedure-label {
   color: #e7a20b;
+}
+
+.has-procedure-info {
+  margin: 10px 22px;
+  display: block;
+}
+.has-procedure-info a.has-procedure-link {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+.has-procedure-info div.end-date-info {
+  font-size: 12px;
 }
 
 .grey {
@@ -306,4 +316,22 @@ clr-checkbox-wrapper {
 
 .send-offers button {
   margin-left: 10px;
+}
+
+span.counted-offer-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2b2b2b;
+  padding-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+span.offer-quantity {
+  color: #9FA8B0;
+}
+
+div.per-unit-price-block {
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #002033;
 }

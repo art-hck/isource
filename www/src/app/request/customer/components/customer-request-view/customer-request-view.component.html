@@ -28,7 +28,8 @@
 <app-request-view [isCustomerView]="true"
                   [request]="request"
                   [requestPositions]="requestPositions"
-                  [updatedPosition]="updatedPosition">
+                  [updatedPosition]="updatedPosition"
+                  (changeRequestInfo)="onUpdateRequestInfo()">
 </app-request-view>
 
 <clr-modal [(clrModalOpen)]="rejectionMessageModalOpen">

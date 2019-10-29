@@ -2,18 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { EditRequestService } from "../../services/edit-request.service";
 import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrectedDatePipe';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import * as moment from "moment";
 import { CreateRequestService } from '../../services/create-request.service';
 import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
@@ -34,8 +28,9 @@ export class EditPositionInfoFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private editRequestService: EditRequestService,
-    protected createRequestService: CreateRequestService,
-    private notificationService: NotificationService
+    private createRequestService: CreateRequestService,
+    private notificationService: NotificationService,
+    private positionStatusService: RequestPositionStatusService
   ) {
   }
 
@@ -84,6 +79,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
       currency: [this.requestPosition.currency],
       relatedServices: [this.requestPosition.relatedServices],
+      isDesignRequired: [this.requestPosition.isDesignRequired],
       comments: [this.requestPosition.comments]
     });
 
@@ -103,18 +99,22 @@ export class EditPositionInfoFormComponent implements OnInit {
     // Если позиция ушла дальше по статусной модели, чем "Подготовка технических предложений",
     // то не даем редактировать ничего, кроме «количество», «базис поставки», «условия оплаты»,
     // а так же галочки «требуется РКД»
-    if (this.requestPosition.id
-      && ![RequestPositionWorkflowSteps.DRAFT.valueOf(),
-      RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL.valueOf(),
-      RequestPositionWorkflowSteps.NEW.valueOf(),
-      RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION.valueOf()].includes(this.requestPosition.status)
-    ) {
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
+    )) {
       itemForm.disable({
         emitEvent: false
       });
       itemForm.get('quantity').enable();
       itemForm.get('deliveryBasis').enable();
       itemForm.get('paymentTerms').enable();
+      itemForm.get('isDesignRequired').enable();
+    }
+
+    if (!this.positionStatusService.isStatusPrevious(
+      this.requestPosition.status, RequestPositionWorkflowSteps.MANUFACTURING
+    )) {
+      itemForm.get('isDesignRequired').disable();
     }
 
     return itemForm;
@@ -151,6 +151,10 @@ export class EditPositionInfoFormComponent implements OnInit {
         });
       }
     });
+  }
+
+  isPositionStatusPreviousManufacturing(position) {
+    return this.positionStatusService.isStatusPrevious(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
   }
 
   protected saveExistsPosition(): void {

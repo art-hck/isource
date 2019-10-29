@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -20,8 +20,8 @@ import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
-import { Observable } from "rxjs";
-import { publishReplay, refCount, take } from "rxjs/operators";
+import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
 
 @Component({
   selector: 'app-add-offers',
@@ -70,6 +70,8 @@ export class AddOffersComponent implements OnInit {
 
   files: File[] = [];
 
+  appConfig: GpnmarketConfigInterface;
+
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
   @ViewChild("wizard", {static: false}) wizard: ClrWizard;
@@ -83,8 +85,10 @@ export class AddOffersComponent implements OnInit {
     private getContragentService: ContragentService,
     private documentsService: DocumentsService,
     private procedureService: ProcedureService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
+    this.appConfig = appConfig;
   }
 
   ngOnInit() {
@@ -517,6 +521,13 @@ export class AddOffersComponent implements OnInit {
       return this.searchPositionInput.nativeElement.value;
     }
     return this.positionSearchValue;
+  }
+
+  getProcedureLink(requestPosition): string {
+    const procedureUrl = this.appConfig.procedure.url;
+    const id = requestPosition.procedureId;
+
+    return procedureUrl + id;
   }
 
   onPositionSearchInputChange(value) {

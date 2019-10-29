@@ -166,4 +166,8 @@ export class CustomerRequestViewComponent implements OnInit {
     }
     return null;
   }
+
+  onUpdateRequestInfo() {
+    this.getRequest();
+  }
 }
