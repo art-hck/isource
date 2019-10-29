@@ -126,7 +126,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onCloseModal() {
-    this.supplierSelectComponent.resetSearchFilter();
+    if (this.supplierSelectComponent) {
+      this.supplierSelectComponent.resetSearchFilter();
+    }
+
     this.showAddTechnicalProposalModal = false;
   }
 
