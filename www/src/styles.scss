@@ -23,6 +23,10 @@ h5 {
     margin-bottom: 25px;
 }
 
+select option:disabled {
+  color: #ccc;
+}
+
 .text-muted {
   color: #6c757d !important;
 }
