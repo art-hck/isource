@@ -39,13 +39,13 @@ exports.config = {
     login: {
       backoffice: {
         username: 'testbackoffice@mail.ru',
-        password: 'bL6w96hyK4AKrGY',
-        user: 'null null'
+        password: 'password',
+        user: 'username'
       },
       customer: {
         username: 'customer@mail.ru',
-        password: 'bL6w96hyK4AKrGY',
-        user: 'Александра Непонятная'
+        password: 'password',
+        user: 'username'
       }
     }
   }

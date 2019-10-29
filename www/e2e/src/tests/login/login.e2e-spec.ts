@@ -30,7 +30,6 @@ describe('Логин', () => {
 
   it('Успешный выход бэкофисом', () => {
     login.logout();
-    browser.sleep(1000);
     expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать в');
   });
 
@@ -44,7 +43,6 @@ describe('Логин', () => {
 
   it('Успешный выход заказчиком', () => {
     login.logout();
-    browser.sleep(1000);
     expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать в');
   });
 });
