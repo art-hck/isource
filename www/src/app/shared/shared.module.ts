@@ -7,9 +7,10 @@ import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
-import {DocumentIconComponent} from "./components/document-icon/document-icon.component";
-import {PluralizePipe} from "./pipes/pluralize-pipe";
-import {BytesToSizePipe} from "./pipes/bytes-to-size-pipe";
+import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
+import { PluralizePipe } from "./pipes/pluralize-pipe";
+import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
+import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import {BytesToSizePipe} from "./pipes/bytes-to-size-pipe";
     DocumentUploadListComponent,
     DocumentIconComponent,
     PluralizePipe,
-    BytesToSizePipe
+    BytesToSizePipe,
+    ControlInvalidClassDirective
   ],
   exports: [
     CommonModule,
@@ -55,7 +57,8 @@ import {BytesToSizePipe} from "./pipes/bytes-to-size-pipe";
     DocumentUploadListComponent,
     DocumentIconComponent,
     PluralizePipe,
-    BytesToSizePipe
+    BytesToSizePipe,
+    ControlInvalidClassDirective
   ]
 })
 export class SharedModule {

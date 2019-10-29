@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { DesignDocumentation } from "../../models/design-documentation";
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { DesignDocumentationList } from "../../models/design-documentationList";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
@@ -38,10 +37,6 @@ export class DesignDocumentationEditComponent implements OnInit {
         })
       ))
     });
-  }
-
-  isControlInvalid(control: AbstractControl): boolean {
-    return control.errors && (control.touched || control.dirty);
   }
 
   public addDesignDoc(): void {

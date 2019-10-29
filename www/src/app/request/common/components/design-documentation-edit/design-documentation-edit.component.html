@@ -8,28 +8,26 @@
     </tr>
     </thead>
     <tbody>
-    <ng-container formArrayName="designDocs">
-      <tr class="clr-row" formGroupName="{{i}}" *ngFor="let designDoc of designDocs.controls; index as i">
-        <ng-container *ngIf="designDocumentationList.designDocs[i]?.type !== 'REMARK'">
+    <ng-container formArrayName="designDocs" *ngFor="let designDoc of designDocs.controls; index as i">
+      <ng-container formGroupName="{{i}}">
+        <tr class="clr-row" *ngIf="designDocumentationList.designDocs[i]?.type !== 'REMARK'">
           <td class="clr-col-8">
-            <input formControlName="name" type="text" [class.invalid]="isControlInvalid(designDoc.get('name'))"/>
+            <input formControlName="name" type="text" appFormControlInvalidClass="invalid"/>
           </td>
           <td class="clr-col-2">
-            <input type="number" formControlName="adjustmentDate"
-                   [class.invalid]="isControlInvalid(designDoc.get('adjustmentDate'))"/>
+            <input type="number" formControlName="adjustmentDate" class="foo" appFormControlInvalidClass="invalid"/>
           </td>
           <td class="clr-col-2">
-            <div class="clr-row">
-              <input type="number" formControlName="receivingDate"
-                     [class.invalid]="isControlInvalid(designDoc.get('receivingDate'))"/>
+            <div class="clr-row no-wrap">
+              <input type="number" formControlName="receivingDate" appFormControlInvalidClass="invalid"/>
               <button type="button" class="btn btn-icon btn-danger-outline btn-delete" (click)="designDocs.removeAt(i)"
-                      title="Удалить из списка" *ngIf="designDocs.controls.length > 2">
+                      *ngIf="designDocs.controls.length > 2">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
           </td>
-        </ng-container>
-      </tr>
+        </tr>
+      </ng-container>
     </ng-container>
     <tr class="clr-row">
       <td class="left clr-col">

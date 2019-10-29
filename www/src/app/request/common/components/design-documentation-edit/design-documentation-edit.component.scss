@@ -6,9 +6,12 @@ form {
   padding: 0;
 }
 
+table, button {
+  margin: 0;
+}
+
 table {
   padding: 0 25px;
-  margin: 0;
 }
 
 .footer {
@@ -16,15 +19,15 @@ table {
   justify-content: flex-end;
 }
 
-.btn {
-  margin: 0;
-}
-
 .btn-save,
 .btn-delete {
   margin-left: .5rem;
+  flex-shrink: 0;
 }
 
+.no-wrap {
+  flex-wrap: nowrap;
+}
 
 .clr-row > input {
   flex-grow: 1;
