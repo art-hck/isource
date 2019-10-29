@@ -8,6 +8,8 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-position-info-history',
@@ -87,7 +89,12 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     return (
       [
         PositionHistoryTypes.POSITION_STATUS.valueOf(),
-        PositionHistoryTypes.POSITION_ADDED.valueOf()
+        PositionHistoryTypes.POSITION_ADDED.valueOf(),
+        PositionHistoryTypes.OFFER_STATUS.valueOf(),
+        PositionHistoryTypes.WINNER_STATUS.valueOf(),
+        PositionHistoryTypes.CONTRACT_STATUS.valueOf(),
+        PositionHistoryTypes.POSITION_TECHNICAL_PROPOSAL_STATUS.valueOf(),
+        PositionHistoryTypes.DESIGN_STATUS.valueOf()
       ].indexOf(activityItem.type) !== -1
     );
   }

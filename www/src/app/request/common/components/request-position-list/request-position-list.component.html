@@ -5,7 +5,8 @@
     <button (click)="addNewPosition()"
             [disabled]="selectedIsNewPosition()"
             class="btn btn-link"
-            title="Добавить позицию">
+            title="Добавить позицию"
+            *ngIf="!request.isOlderTwoWeeks">
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <span *ngIf="!selectItem">Добавить позицию</span>
     </button>
@@ -21,7 +22,8 @@
 
     <button (click)="onUploadPositionsFromExcel()"
             class="btn btn-link"
-            title="Загрузить из шаблона">
+            title="Загрузить из шаблона"
+            *ngIf="!request.isOlderTwoWeeks">
       <clr-icon shape="upload" size="24"></clr-icon>
       <span *ngIf="!selectItem">Загрузить из шаблона</span>
     </button>
@@ -39,6 +41,13 @@
         </div>
       </clr-dropdown-menu>
     </clr-dropdown>
+
+    <div *ngIf="request.isOlderTwoWeeks" class="old-request-info">
+      <small>
+        Заявка старше двух недель. <br>
+        Добавление новых позиций запрещено.
+      </small>
+    </div>
   </div>
 
   <!--  Форма загрузки эклесль файла-->

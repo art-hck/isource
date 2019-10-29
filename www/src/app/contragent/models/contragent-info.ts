@@ -11,7 +11,7 @@ export class ContragentInfo {
   inn: string;
   kpp: string;
   ogrn: string;
-  taxAuthorityRegistrationDate: Date;
+  taxAuthorityRegistrationDate?: Date;
   email: string;
   directorFullName?: string;
   phone: string;

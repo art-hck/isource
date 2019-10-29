@@ -3,12 +3,16 @@ import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../../back-office/services/request.service";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
-import { map, publishReplay, refCount, tap } from "rxjs/operators";
+import { flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { Contract, ContractStatus } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
 import { UserInfoService } from "../../../../core/services/user-info.service";
+import { RequestOfferPosition } from "../../models/request-offer-position";
+import { Uuid } from "../../../../cart/models/uuid";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-contract',
@@ -23,17 +27,22 @@ export class ContractComponent implements OnInit {
   public ContractStatus = ContractStatus;
   public attachedFiles: { file: File, contract: Contract }[] = [];
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
     private contractService: ContractService,
     private userInfoService: UserInfoService,
+    protected getContragentService: ContragentService,
   ) {
   }
 
   ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.requestService.getRequestInfo(requestId);
+    this.request$ = this.requestService.getRequestInfo(requestId)
+      .pipe(publishReplay(1), refCount());
 
     this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
       .pipe(publishReplay(1), refCount())
@@ -97,11 +106,28 @@ export class ContractComponent implements OnInit {
     return contract.winners
       .map(winner => winner.offerPosition)
       .reduce((g: GroupedPositionsByCurrency, offerPosition) => {
-        g[offerPosition.currency] = g[offerPosition.currency] || {total: 0, positions: []};
-        g[offerPosition.currency].total += offerPosition.priceWithoutVat;
-        g[offerPosition.currency].positions.push(offerPosition.requestPosition);
+        g[offerPosition.currency] = g[offerPosition.currency] || {total: 0, offerPositions: []};
+        g[offerPosition.currency].total += offerPosition.priceWithoutVat * offerPosition.quantity;
+        g[offerPosition.currency].offerPositions.push(offerPosition);
         return g;
       }, {});
+  }
+
+  public changeStatus(contract: Contract, contractStatus: ContractStatus): void {
+    contract.status = contractStatus;
+
+    this.request$.pipe(
+      flatMap(request => {
+          switch (contractStatus) {
+            case ContractStatus.ON_APPROVAL:
+              return this.contractService.onApproval(request.id, contract.id);
+            case ContractStatus.APPROVED:
+              return this.contractService.approve(request.id, contract.id);
+            case ContractStatus.REJECTED:
+              return this.contractService.reject(request.id, contract.id);
+          }
+        }
+      )).subscribe();
   }
 
   // Убираем все позиции, которые есть в передаваемых функции котнрактах
@@ -125,6 +151,21 @@ export class ContractComponent implements OnInit {
       ))
     ;
   }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
+  }
 }
 
-export class GroupedPositionsByCurrency { [name: string]: {total: number, positions: RequestPosition[] }; }
+export class GroupedPositionsByCurrency { [name: string]: {total: number, offerPositions: RequestOfferPosition[] }; }

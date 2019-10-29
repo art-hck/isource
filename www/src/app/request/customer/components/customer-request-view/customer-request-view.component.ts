@@ -50,6 +50,7 @@ export class CustomerRequestViewComponent implements OnInit {
   protected getRequestPositions(): void {
     this.requestService.getRequestPositions(this.requestId).subscribe((requestPositions) => {
       this.requestPositions = requestPositions;
+      this.selectUpdatedPosition();
     });
   }
 
@@ -121,6 +122,16 @@ export class CustomerRequestViewComponent implements OnInit {
     );
   }
 
+  selectUpdatedPosition(): void {
+    if (this.requestView.selectPositionListItem) {
+      this.requestView.selectPositionListItem = this.requestPositions.find(
+        requestPosition => {
+          return requestPosition.id === this.requestView.selectPositionListItem.sourceRequestPositionId;
+        }
+      );
+    }
+  }
+
   checkDeclineButtonEnabled(): boolean {
     if (this.rejectionMessage && this.rejectionMessage.length) {
       return true;
@@ -154,5 +165,9 @@ export class CustomerRequestViewComponent implements OnInit {
       return item as RequestGroup;
     }
     return null;
+  }
+
+  onUpdateRequestInfo() {
+    this.getRequest();
   }
 }

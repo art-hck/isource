@@ -11,5 +11,8 @@ export const AppConfig: GpnmarketConfigInterface = {
   },
   paginator: {
     pageSize: 10,
-  }
+  },
+  procedure: {
+    url: 'https://demo2.etpgpb.ru/#com/procedure/edit/id/',
+  },
 };

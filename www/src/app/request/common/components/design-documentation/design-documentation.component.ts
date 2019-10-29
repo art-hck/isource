@@ -15,6 +15,7 @@ import { ClrLoadingState } from "@clr/angular";
 import { Observable } from "rxjs";
 import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-design-documentation',
@@ -92,7 +93,7 @@ export class DesignDocumentationComponent implements OnInit {
 
   addDocumentationListFormGroup(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, CustomValidators.simpleText]],
       adjustmentLimit: ['15', Validators.required],
       receivingLimit: ['5', Validators.required]
     });
@@ -227,9 +228,9 @@ export class DesignDocumentationComponent implements OnInit {
     ;
   }
 
-  approval(designDocumentationList: DesignDocumentationList) {
+  approve(designDocumentationList: DesignDocumentationList) {
     const subscription = this.designDocumentationService
-      .approval(this.requestId, designDocumentationList.id)
+      .approve(this.requestId, designDocumentationList.id)
       .subscribe((_designDocumentationList: DesignDocumentationList) => {
         this.updateDesignDoc(designDocumentationList, _designDocumentationList);
         subscription.unsubscribe();
@@ -261,7 +262,7 @@ export class DesignDocumentationComponent implements OnInit {
     return {
       id: null,
       filename: designDocumentation.name,
-      created: designDocumentation.adjustmentDate ? designDocumentation.adjustmentDate.toString() : '1991-07-18',
+      created: (designDocumentation.adjustmentDate || "").toString(),
       comments: designDocumentation.comment,
       size: 0,
       user: null,

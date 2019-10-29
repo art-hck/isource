@@ -146,7 +146,8 @@ p {
 }
 
 .nopadding {
-  padding: 0 0 0 30px;
+  padding: 0 0 0 25px;
+  display: table;
 }
 
 input {
@@ -212,6 +213,8 @@ clr-dropdown-menu  {
 }
 
 .design-actions {
+  position: relative;
+
   th {
     font-size: 17px;
     color: #97a4ad;

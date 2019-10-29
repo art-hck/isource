@@ -31,14 +31,34 @@
     <div class="card" *ngFor="let contract of contracts">
       <div class="card-header">
         <div class="clr-row">
-          <div class="clr-col">{{ contract.supplier.shortName }}</div>
+          <div class="clr-col">
+            <a (click)="showContragentInfo(contract.supplier.id)">{{ contract.supplier.shortName }}</a>
+          </div>
         </div>
       </div>
-      <div class="card-block" *ngFor="let currency of getCurrencies(contract);">
+      <div class="card-block">
         <div class="clr-row">
           <div class="clr-col">
-              <p *ngFor="let position of groupPositionsByCurrency(contract)[currency].positions">{{ position.name }}</p>
-              <p><b>Итого:</b> {{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</p>
+
+            <div class="clr-row clr-head">
+              <div class="clr-col-4 clr-col-xl-6">Позиция</div>
+              <div class="clr-col-2">Количество</div>
+              <div class="clr-col-3 clr-col-xl-2">Цена за ед.</div>
+              <div class="clr-col-3 clr-col-xl-2">Сумма</div>
+            </div>
+            <ng-container *ngFor="let currency of getCurrencies(contract);">
+            <div class="clr-row" *ngFor="let offerPosition of groupPositionsByCurrency(contract)[currency].offerPositions">
+
+              <div class="clr-col-4 clr-col-xl-6">{{ offerPosition.requestPosition.name }}</div>
+              <div class="clr-col-2">{{ offerPosition.quantity }} {{ offerPosition.measureUnit}}</div>
+              <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat | currency: currency }}</div>
+              <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat * offerPosition.quantity  | currency: currency }}</div>
+            </div>
+            <div class="clr-row total">
+              <div class="clr-col-9 clr-col-xl-10"></div>
+              <div class="clr-col-3 clr-col-xl-2"><b>{{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</b></div>
+            </div>
+            </ng-container>
           </div>
         </div>
       </div>
@@ -53,7 +73,7 @@
               <span class="label label-info" *ngSwitchCase="ContractStatus.ON_APPROVAL">
                 <clr-icon shape="hourglass"></clr-icon>На согласовании
               </span>
-              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVAL">
+              <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVED">
                 <clr-icon shape="check"></clr-icon>Согласовано
               </span>
             </div>
@@ -81,14 +101,14 @@
                 <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
               </clr-button>
               <clr-button [disabled]="!isAvailableForApproval(contract)"
-                          (click)="contractService.onApproval(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.ON_APPROVAL)">
                 <clr-icon shape="check"></clr-icon><span>Отправить на согласование</span>
               </clr-button>
             </clr-button-group>
 
             <clr-button-group *ngIf="userInfoService.isCustomer()">
               <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
-                          (click)="contractService.approval(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.APPROVED)">
                 <clr-icon shape="check"></clr-icon>
                 <span>Согласовать</span>
               </clr-button>
@@ -98,7 +118,7 @@
                 <span>Прикрепить замечания</span>
               </clr-button>
               <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
-                          (click)="contractService.reject(contract).subscribe()">
+                          (click)="changeStatus(contract, ContractStatus.REJECTED)">
                 <span>На доработку</span>
               </clr-button>
             </clr-button-group>
@@ -107,4 +127,16 @@
       </div>
     </div>
   </ng-container>
+</ng-container>
+
+<ng-container *ngIf="contragent">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
 </ng-container>

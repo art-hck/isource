@@ -16,7 +16,12 @@
         <clr-icon shape="times"></clr-icon>
       </button>
 
-      <p class="supplier-name">{{ item.catalogPosition.supplierContragentName }}</p>
+      <p class="supplier-name">
+        <a (click)="showContragentInfo(item.catalogPosition.supplierContragent.id)">
+          {{ item.catalogPosition.supplierContragent.shortName }}
+        </a>
+      </p>
+
       <p class="price">{{ item.catalogPosition.price | currency : item.catalogPosition.currency }} / {{ item.catalogPosition.measureUnit }}</p>
 
       <div class="cart-quantity-block">
@@ -38,4 +43,16 @@
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="contragent">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+</ng-container>
 

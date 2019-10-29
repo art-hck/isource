@@ -39,7 +39,9 @@
     <div class="info-field clr-row">
       <div class="clr-col-4">
         <label class="clr-control-label" for="checkedDate">Дата регистрации</label>
-        <span>{{ contragent.taxAuthorityRegistrationDate | date : 'shortDate' }}</span>
+        <span>{{ contragent.taxAuthorityRegistrationDate ?
+                (contragent.taxAuthorityRegistrationDate | date : 'shortDate') :
+                 '—' }}</span>
       </div>
 
       <div class="clr-col-4">

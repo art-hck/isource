@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { OffersService } from "../../../back-office/services/offers.service";
 import { ActivatedRoute } from "@angular/router";
@@ -10,6 +10,11 @@ import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
+import { RequestService } from "../../../customer/services/request.service";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
+import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-offers',
@@ -20,9 +25,9 @@ export class OffersComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
   @Input() isCustomerView: boolean;
   @Input() requestId: Uuid;
-  @Input() showWinnerStateColumn = false;
 
-  @Output() offerWinner = new EventEmitter<Uuid>();
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
 
   offer: RequestOfferPosition;
   offerWinnerId: Uuid;
@@ -34,7 +39,9 @@ export class OffersComponent implements OnInit {
     protected offersService: OffersService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private customerRequestService: RequestService,
+    private notificationService: NotificationService,
+    protected getContragentService: ContragentService,
   ) {
   }
 
@@ -52,7 +59,6 @@ export class OffersComponent implements OnInit {
     const winnerOffer = this.findDefaultOffer();
     if (winnerOffer) {
       this.offerWinnerId = winnerOffer.id;
-      this.offerWinner.emit(this.offerWinnerId);
     }
   }
 
@@ -107,11 +113,6 @@ export class OffersComponent implements OnInit {
       || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
-  winnerChoice(linkedOffer: RequestOfferPosition) {
-    this.offerWinnerId = linkedOffer.id;
-    this.offerWinner.emit(this.offerWinnerId);
-  }
-
   canChoiceWinner() {
     return this.requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
@@ -132,8 +133,19 @@ export class OffersComponent implements OnInit {
       });
   }
 
-  showWinnerSelectionColumn(): boolean {
-    return (this.isCustomerView && !this.showWinnerStateColumn);
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 
   canUploadTp(): boolean {
@@ -153,5 +165,17 @@ export class OffersComponent implements OnInit {
 
   canUploadKp(): boolean {
     return this.canUploadTp();
+  }
+
+  onChoiceWinner(offerWinner: RequestOfferPosition) {
+    this.customerRequestService.choiceWinner(offerWinner.id, this.requestPosition.id, this.requestId).subscribe(
+      (data: any) => {
+        this.requestPosition.status = data.status;
+        this.requestPosition.statusLabel = data.statusLabel;
+        offerWinner.isWinner = true;
+
+        this.notificationService.toast('Победитель выбран');
+      }
+    );
   }
 }

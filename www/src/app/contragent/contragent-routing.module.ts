@@ -7,18 +7,21 @@ import { ContragentInfoViewComponent } from "./components/contragent-info-view/c
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     redirectTo: 'list',
   },
   {
     path: 'list',
-    component: ContragentListViewComponent
+    component: ContragentListViewComponent,
+    data: { title: "Контрагенты" }
   },
   {
     path: ':id',
     children: [
       {
         path: 'info',
-        component: ContragentInfoViewComponent
+        component: ContragentInfoViewComponent,
+        data: { title: "Контрагент" }
       }
     ]
   }

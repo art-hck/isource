@@ -46,13 +46,13 @@ export class DesignDocumentationService {
   }
 
   sendForApproval(id: Uuid, designDocId: Uuid): Observable<DesignDocumentationList> {
-    const url = `requests/${id}/designs/${designDocId}/on-approval`;
+    const url = `requests/${id}/designs/${designDocId}/send-for-approval`;
 
     return this.api.post<DesignDocumentationList>(url, null);
   }
 
-  approval(id: Uuid, designDocId: Uuid): Observable<DesignDocumentationList> {
-    const url = `requests/${id}/designs/${designDocId}/approval`;
+  approve(id: Uuid, designDocId: Uuid): Observable<DesignDocumentationList> {
+    const url = `requests/${id}/designs/${designDocId}/approve`;
 
     return this.api.post<DesignDocumentationList>(url, null);
   }

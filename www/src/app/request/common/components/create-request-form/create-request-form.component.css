@@ -14,9 +14,11 @@ clr-accordion-content {
   color: #FF2519;
 }
 
-label {
+.clr-row {
   padding-top: 15px;
-  padding-bottom: 5px;
+}
+
+label.clr-control-label {
   font-size: 12px;
   font-weight: 600;
   color: #999999;

@@ -3,6 +3,7 @@ import { RequestDocument } from "./request-document";
 import { ManufacturingDocument } from './manufacturing-document';
 import {RequestPositionList} from "./request-position-list";
 import {RequestOfferPosition} from "./request-offer-position";
+import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
 
 export class RequestPosition extends RequestPositionList {
   /**
@@ -25,7 +26,7 @@ export class RequestPosition extends RequestPositionList {
   paymentTerms: string;
   relatedServices: string;
   comments: string;
-  status: string;
+  status: RequestPositionWorkflowSteps;
   statusLabel: string;
   statusChangedDate: string;
   statusExpectedDate: string;
@@ -33,9 +34,11 @@ export class RequestPosition extends RequestPositionList {
   manufacturingDocuments: ManufacturingDocument[];
   linkedOffers: RequestOfferPosition[];
   hasProcedure: boolean;
+  procedureId: string;
   procedureStartDate?: Date;
   procedureEndDate?: Date;
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
+  isDesignRequired: boolean;
   checked: boolean;
 }

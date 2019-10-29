@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { Request } from "../../models/request";
 import { UserInfoService } from "../../../../core/services/user-info.service";
 import { Router } from "@angular/router";
+import { RequestPosition } from "../../models/request-position";
+import { RequestPositionList } from "../../models/request-position-list";
 
 @Component({
   selector: 'app-request-dashboard',
@@ -13,12 +15,14 @@ export class RequestDashboardComponent implements OnChanges {
   @Output() draftClick = new EventEmitter<void>();
 
   @Input() request: Request;
+  @Input() requestPositions: RequestPositionList[] = [];
   @Input() filteredByDraftStatus = false;
 
   @Input() draftPositionsCount: number;
   tpOnAgreementCount: number;
   kpOnAgreementCount: number;
   rkdOnAgreementCount: number;
+  rkdAvailable: boolean;
   onAgreementReviewCount: number;
 
   newMessagesCount: number;
@@ -43,7 +47,8 @@ export class RequestDashboardComponent implements OnChanges {
   getRequestDashboardCounters() {
     this.tpOnAgreementCount = this.request.dashboard.tp || 0;
     this.kpOnAgreementCount = this.request.dashboard.kp || 0;
-    this.rkdOnAgreementCount = 0;
+    this.rkdOnAgreementCount = this.request.dashboard.rkd || 0;
+    this.rkdAvailable = this.getRkdAvailable() || false;
     this.onAgreementReviewCount = this.request.dashboard.contractAgreement || 0;
 
     this.newMessagesCount = 3;
@@ -51,6 +56,20 @@ export class RequestDashboardComponent implements OnChanges {
     this.requestDocumentsCount = this.request.documents.length || 0;
   }
 
+
+  protected getRkdAvailable() {
+    if (!this.requestPositions) {
+      return false;
+    }
+
+    const positionWithIsDesignRequired = this.requestPositions.find(item => {
+      if (item instanceof RequestPosition && item.isDesignRequired) {
+        return true;
+      }
+    });
+
+    return !!positionWithIsDesignRequired;
+  }
 
   /**
    * Функция возвращает правильный лейбл для указанного количества позиций
@@ -108,12 +127,12 @@ export class RequestDashboardComponent implements OnChanges {
     }
   }
 
-  openAddContractPage() {
+  openContractsPage() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/contract`).then(r => {});
+      this.router.navigateByUrl(`/requests/customer/${this.request.id}/contracts`).then(r => {});
       return false;
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/contract`).then(r => {});
+      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/contracts`).then(r => {});
     } else {
       return false;
     }

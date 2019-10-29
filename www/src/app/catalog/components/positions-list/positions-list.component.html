@@ -14,7 +14,9 @@
       </div>
       <div class="clr-col-3 right-align">
         <span class="supplier-name">
-          <a [href]="'assets/Отчет ООО Камский кабель.pdf'" [target]="'_blank'">{{position.supplierContragentName}}</a>
+          <a (click)="showContragentInfo(position.supplierContragent.id)">
+            {{ position.supplierContragent.shortName }}
+          </a>
         </span>
         <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
         <button *ngIf="!isPositionInCart(position)" class="btn btn-primary" (click)="onAddPositionToCart(position)">В заявку</button>
@@ -27,3 +29,15 @@
     Позиций не найдено
   </div>
 </ng-template>
+
+<ng-container *ngIf="contragent">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+              [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+</ng-container>

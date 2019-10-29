@@ -72,14 +72,13 @@
                 </clr-checkbox-container>
               </div>
             </th>
-            <th class="contragent-name" *ngFor="let supplier of suppliers">{{ supplier }}</th>
+            <th class="contragent-name" *ngFor="let supplier of suppliers">
+              <a (click)="showContragentInfo(supplier.id)">{{ supplier.shortName }}</a>
+            </th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let requestPosition of requestPositions">
-
-
-
             <td class="position-name">
               <clr-checkbox-wrapper class="select-checkbox">
                 <input clrCheckbox type="checkbox"
@@ -101,11 +100,20 @@
 
               <span class="sent-for-agreement-label"
                     *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
-              <span class="has-procedure-label"
-                    *ngIf="positionHasProcedure(requestPosition)">Создана процедура</span>
+
+              <div class="has-procedure-info"
+                    *ngIf="positionHasProcedure(requestPosition)">
+                <a class="has-procedure-link" target="_blank" href="{{ getProcedureLink(requestPosition) }}">
+                  Создана процедура №{{ requestPosition.procedureId }}
+                </a>
+
+                <div class="end-date-info gray">
+                  Подведение итогов процедуры: <b>{{ requestPosition.procedureEndDate | date : 'shortDate' }}</b>
+                </div>
+              </div>
+
               <span class="has-finished-procedure-label"
                     *ngIf="positionHasFinishedProcedure(requestPosition)">Процедура завершена</span>
-
 
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">
@@ -120,8 +128,15 @@
                        [class.disabled]="!isOfferClickable(requestPosition)"
                        (click)="isOfferClickable(requestPosition) ?
                        onShowEditOfferModal(requestPosition, supplier, linkedOffer) : false">
-                    {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}
-                    <p>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</p>
+                    <span class="counted-offer-price">
+                              {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
+                              <span class="offer-quantity">за
+                                <span>{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</span>
+                              </span>
+                    </span>
+                    <div class="per-unit-price-block">
+                      {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
+                    </div>
                     <p class="delivery">{{linkedOffer.deliveryDate | date :'shortDate'}}</p>
                   </div>
                 </ng-container>
@@ -181,7 +196,7 @@
           <div class="clr-form-control">
             <div class="clr-row w-100">
               <div class="clr-col-4">
-                <label class="clr-control-label" for="priceWithVat">Цена</label>
+                <label class="clr-control-label" for="priceWithVat">Цена за ед. (без НДС)</label>
                 <input type="number" id="priceWithVat" name="priceWithVat" formControlName="priceWithVat" min="0.1"
                        step="0.01" class="hidden-arrows text-right price"
                        [class.invalid]="isFieldValid('priceWithVat')">
@@ -567,4 +582,19 @@
       </div>
     </clr-wizard-page>
   </clr-wizard>
+
+
+  <ng-container *ngIf="contragent">
+    <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+      <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+      <div class="modal-body">
+        <app-contragent-info
+                [contragent]="contragent">
+        </app-contragent-info>
+      </div>
+    </clr-modal>
+  </ng-container>
+
+
 </ng-container>

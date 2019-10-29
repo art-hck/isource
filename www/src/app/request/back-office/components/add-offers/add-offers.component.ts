@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -19,6 +19,9 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { ContragentInfo } from "../../../../contragent/models/contragent-info";
+import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
 
 @Component({
   selector: 'app-add-offers',
@@ -29,7 +32,7 @@ export class AddOffersComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
-  suppliers: string[] = [];
+  suppliers: ContragentList[] = [];
 
   showAddContragentModal = false;
 
@@ -39,8 +42,11 @@ export class AddOffersComponent implements OnInit {
 
   showImportOffersExcel = false;
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   selectedRequestPosition: RequestPosition;
-  selectedSupplier: string;
+  selectedSupplierId: Uuid;
   selectedOffer: RequestOfferPosition;
   offerFiles: File[] = [];
 
@@ -64,9 +70,11 @@ export class AddOffersComponent implements OnInit {
 
   files: File[] = [];
 
-  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+  appConfig: GpnmarketConfigInterface;
+
+  @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
-  @ViewChild("wizard", { static: false }) wizard: ClrWizard;
+  @ViewChild("wizard", {static: false}) wizard: ClrWizard;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,8 +85,10 @@ export class AddOffersComponent implements OnInit {
     private getContragentService: ContragentService,
     private documentsService: DocumentsService,
     private procedureService: ProcedureService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
+    this.appConfig = appConfig;
   }
 
   ngOnInit() {
@@ -111,6 +121,21 @@ export class AddOffersComponent implements OnInit {
 
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
+  }
+
+  showContragentInfo(contragentId: Uuid): void {
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
   }
 
   initProcedureBasicDataForm() {
@@ -187,9 +212,11 @@ export class AddOffersComponent implements OnInit {
 
   getSupplierLinkedOffers(
     linkedOffers: RequestOfferPosition[],
-    supplier: string
+    supplier: ContragentList
   ): RequestOfferPosition[] {
-    return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
+    return linkedOffers.filter(function (item) {
+      return item.supplierContragentName === supplier.shortName;
+    });
   }
 
   onSelectedContragent(contragent: ContragentList) {
@@ -198,7 +225,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   isSupplierOfferExist() {
-    return this.suppliers.indexOf(this.selectedContragent.shortName) !== -1;
+    return this.suppliers.indexOf(this.selectedContragent) !== -1;
   }
 
   positionCanBeSelected(requestPosition: RequestPosition): boolean {
@@ -229,23 +256,32 @@ export class AddOffersComponent implements OnInit {
   }
 
   onAddContragent() {
-    this.suppliers.push(this.selectedContragent.shortName);
-    this.suppliers.sort();
+    this.suppliers.push(this.selectedContragent);
     this.onCloseAddContragentModal();
+
+    this.suppliers = this.suppliers.sort((prev, next) => {
+      if (prev.shortName < next.shortName) {
+        return -1;
+      } else if (prev.shortName > next.shortName) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   // Модальное окно создание КП
-  onShowAddOfferModal(requestPosition: RequestPosition, supplier: string) {
+  onShowAddOfferModal(requestPosition: RequestPosition, supplier: ContragentList) {
     this.selectedRequestPosition = requestPosition;
-    this.selectedSupplier = supplier;
+    this.selectedSupplierId = supplier.id;
     this.showAddOfferModal = true;
     this.offerFiles = [];
     this.addOfferValues(requestPosition);
   }
 
-  onShowEditOfferModal(requestPosition: RequestPosition, supplier: string, linkedOffer: RequestOfferPosition) {
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: ContragentList, linkedOffer: RequestOfferPosition) {
     this.selectedRequestPosition = requestPosition;
-    this.selectedSupplier = supplier;
+    this.selectedSupplierId = supplier.id;
     this.selectedOffer = linkedOffer;
     this.showAddOfferModal = true;
     this.editMode = true;
@@ -296,7 +332,7 @@ export class AddOffersComponent implements OnInit {
 
   onAddOffer() {
     const formValue = this.offerForm.value;
-    formValue.supplierContragentName = this.selectedSupplier;
+    formValue.supplierContragentId = this.selectedSupplierId;
 
     this.offersService.addOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
       (data: RequestOfferPosition) => {
@@ -309,7 +345,7 @@ export class AddOffersComponent implements OnInit {
 
   onEditOffer() {
     const formValue = this.offerForm.value;
-    formValue.supplierContragentName = this.selectedSupplier;
+    formValue.supplierContragentId = this.selectedSupplierId;
 
     this.offersService.editOffer(this.requestId, this.selectedRequestPosition.id, formValue).subscribe(
       () => {
@@ -487,11 +523,16 @@ export class AddOffersComponent implements OnInit {
     return this.positionSearchValue;
   }
 
+  getProcedureLink(requestPosition): string {
+    const procedureUrl = this.appConfig.procedure.url;
+    const id = requestPosition.procedureId;
+
+    return procedureUrl + id;
+  }
+
   onPositionSearchInputChange(value) {
     this.positionSearchValue = value;
   }
-
-
 
   resetWizardForm() {
     this.wizard.reset();

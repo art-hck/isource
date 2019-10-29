@@ -46,12 +46,24 @@
                 <label class="clr-control-label" for="name">Наименование МТР</label>
                 <input type="text" id="name" formControlName="name"
                        [class.invalid]="isFieldInvalid(i, 'name')">
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
                 <label class="clr-control-label" for="productionDocument">
                   Документ, в соответствии с которым необходимо изготовление
                   (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
                 </label>
                 <input type="text" id="productionDocument" formControlName="productionDocument"
                        [class.invalid]="isFieldInvalid(i, 'productionDocument')">
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <clr-checkbox-wrapper>
+                  <input type="checkbox" clrCheckbox formControlName="isDesignRequired">
+                  <label>Требуется РКД</label>
+                </clr-checkbox-wrapper>
               </div>
             </div>
             <div class="clr-row">
@@ -90,6 +102,10 @@
                 </label>
                 <input type="text" id="deliveryBasis" formControlName="deliveryBasis"
                        [class.invalid]="isFieldInvalid(i, 'deliveryBasis')">
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
                 <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
                 <input type="text" id="paymentTerms" formControlName="paymentTerms"
                        [class.invalid]="isFieldInvalid(i, 'paymentTerms')">
@@ -136,11 +152,18 @@
                        id="relatedServices"
                        name="relatedServices"
                        formControlName="relatedServices">
-
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
                 <label class="clr-control-label" for="comments">Примечания/комментарии</label>
                 <textarea type="textarea" id="comments" name="comments" formControlName="comments">
                     </textarea>
 
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
                 <label class="clr-control-label">Документы</label>
                 <app-document-upload-list (fileSelected)="onDocumentSelected($event, item)"
                                           [documents]="item.get('documents').value">
