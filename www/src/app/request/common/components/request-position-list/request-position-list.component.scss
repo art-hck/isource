@@ -3,8 +3,6 @@ h3.request-title {
   padding-left: 35px;
 }
 
-
-
 .request-view {
   display: flex;
   justify-content: center;
@@ -122,11 +120,11 @@ clr-datagrid {
 .request-row {
   border-bottom: 1px solid #d4d9e2;
   padding: 10px 0;
-  cursor: pointer;
 }
 
 .request-row:hover {
   background: aliceblue;
+  cursor: pointer;
 }
 
 .position-row {
@@ -135,15 +133,16 @@ clr-datagrid {
   flex: auto;
   flex-wrap: nowrap;
   justify-content: space-between;
-  cursor: pointer;
+
 }
 
 .cell {
-  padding: 10px;
+  padding: 5px;
 }
 
-.position-row:hover {
+.position-row:not(.group-item):not(.selected-row):hover {
   background: aliceblue;
+  cursor: pointer;
 }
 
 .card-content {
@@ -174,11 +173,10 @@ clr-datagrid {
   color: #999999;
 }
 
-.position-name {
+.cell.position-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-left: 0;
 }
 
 .request {
@@ -187,7 +185,6 @@ clr-datagrid {
 
 .btn-link {
   margin-right: 15px;
-  ma: 0;
 }
 
 .selected-row, .selected-row:hover, .selected-row h3, .selected-row span {
@@ -204,9 +201,6 @@ clr-datagrid {
   padding: 0;
 }
 
-.group-item {
-  font-weight: 800;
-}
 
 .group-position-row {
   border-bottom: 1px solid #d4d9e2;
@@ -232,9 +226,67 @@ clr-datagrid {
   }
 }
 
+.group-item {
+  border-bottom: 0;
+  font-weight: 800;
+}
+
+.group-item:not(:nth-of-type(1)) {
+  border-top: 1px solid #d4d9e2;
+  margin-top: 15px;
+}
+
+.group-item clr-icon[shape=angle] {
+  display: none;
+}
+
+.sub-list-item {
+  border-bottom: 0;
+}
 
 .sub-list-item .position-name {
-  padding-left: 40px;
+  padding-left: 15px;
+  margin-left: 35px;
+  border-left: 2px solid #b2d0ff;
+}
+
+.sub-list-item.selected-row .position-name {
+  border-left: 2px solid transparent;
+}
+
+.request-position-list .checkbox-cell {
+  padding-left: 10px;
+  width: 30px;
+}
+
+// Стиль для позиции, которая находится под группой
+.sub-list-item + .position-row:not(.sub-list-item):not(.group-item) {
+  margin-top: 15px;
+}
+
+// Стиль для невложенной в группу позиции, которая находится под группой
+.group-item + .position-row:not(.sub-list-item) {
+  border-top: 1px solid #d4d9e2;
+}
+
+// Обнуление верхнего отступа для групп, идущих друг за другом
+.group-item + .group-item {
+  margin-top: 0;
+}
+
+// Обнуление верхнего отступа для группы, находящейся под создаваемой новой позицией
+.position-row:not(.group-item):not(.sub-list-item) + .group-item {
+  margin-top: 0;
+  border-top: 0;
+}
+
+// Уменьшение левого отступа позиций в списке для заказчика (т.к. нет области для чекбокса у него)
+.customer-position-list .cell.position-name {
+  margin-left: 10px;
+}
+
+.customer-position-list .sub-list-item .cell.position-name {
+  margin-left: 15px;
 }
 
 .btn clr-icon {
