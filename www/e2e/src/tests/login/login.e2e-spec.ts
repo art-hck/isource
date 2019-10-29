@@ -2,6 +2,11 @@ import { LoginPage } from '../../pages/login.po';
 import { browser, protractor } from "protractor";
 import { Login } from "./login";
 
+export enum Role {
+  CUSTOMER = 'customer',
+  BACKOFFICE = 'backoffice'
+}
+
 const loginData = require("../../test-data/login-data");
 
 describe('Логин', () => {
@@ -21,7 +26,7 @@ describe('Логин', () => {
 
   it('Успешный логин бэкофисом', () => {
 
-    login.login('backoffice');
+    login.login(Role.BACKOFFICE);
     browser.wait(EC.visibilityOf(LoginPage.requestListTitle()));
     expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/backoffice');
     expect(LoginPage.menuItems().getText()).toEqual(loginData.backoffice.menuItems);
@@ -34,7 +39,7 @@ describe('Логин', () => {
   });
 
   it('Успешный логин заказчиком', () => {
-    login.login('customer');
+    login.login(Role.CUSTOMER);
     browser.wait(EC.visibilityOf(LoginPage.requestListTitle()));
     expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/customer');
     expect(LoginPage.menuItems().getText()).toEqual(loginData.customer.menuItems);

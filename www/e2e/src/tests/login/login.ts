@@ -1,12 +1,13 @@
 import { LoginPage } from "../../pages/login.po";
 import { browser } from "protractor";
+import {Role} from "./login.e2e-spec";
 
 export class Login {
   username: string;
   password: string;
 
-  login(role: string) {
-    if (role === 'customer') {
+  login(role: Role) {
+    if (role === Role.CUSTOMER) {
       this.username = browser.params.login.customer.username;
       this.password = browser.params.login.customer.password;
     } else {
