@@ -1,0 +1,52 @@
+const { SpecReporter } = require('jasmine-spec-reporter');
+
+exports.config = {
+  allScriptsTimeout: 11000,
+  specs: [
+    './src/**/*.e2e-spec.ts'
+  ],
+  capabilities: {
+    'browserName': 'chrome',
+    chromeOptions: {
+      args: [ '--headless', '--no-sandbox', '--disable-gpu',  '--test-type=browser', '--window-size=1920,1080' ]
+    }
+  },
+  suites: {
+    login: './src/tests/login/login.e2e-spec.ts',
+    createRequest: './src/tests/request/**/*.e2e-spec.ts'
+  },
+  directConnect: true,
+  baseUrl: 'http://gpnmarket.gpb.local',
+  framework: 'jasmine',
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 100000,
+    print: function() {}
+  },
+  onPrepare() {
+    browser.baseUrl = 'http://gpnmarket.gpb.local';
+    
+    let AllureReporter = require('jasmine-allure-reporter');
+    jasmine.getEnv().addReporter(new AllureReporter({
+      resultsDir: 'e2e/allure-results'
+    }));
+    require('ts-node').register({
+      project: require('path').join(__dirname, './tsconfig.e2e.json')
+    });
+    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+  },
+  params: {
+    login: {
+      backoffice: {
+        username: 'testbackoffice@mail.ru',
+        password: 'password',
+        user: 'username'
+      },
+      customer: {
+        username: 'customer@mail.ru',
+        password: 'password',
+        user: 'username'
+      }
+    }
+  }
+};
