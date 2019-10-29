@@ -510,7 +510,7 @@
                          name="isPrivateAccess"
                          value="false"
                          (change)="onHidePrivateAccessContragents()"
-                         checked/>
+                         disabled/>
                   <label class="clr-control-label nopadding">Открытая процедура</label>
                 </clr-radio-wrapper>
                 <clr-radio-wrapper>
@@ -518,7 +518,8 @@
                          clrRadio
                          name="isPrivateAccess"
                          value="true"
-                         (change)="onShowPrivateAccessContragents()"/>
+                         (change)="onShowPrivateAccessContragents()"
+                         checked/>
                   <label class="clr-control-label nopadding">Для ограниченного круга участников</label>
                 </clr-radio-wrapper>
               </clr-radio-container>
