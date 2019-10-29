@@ -41,8 +41,8 @@
 
 
           <div class="clr-col-auto positions-stats-item"
-               (click)="rkdOnAgreementCount > 0 ? openAddDesignDocumentationPage() : false"
-               [ngClass]="{'not-clickable' : rkdOnAgreementCount === 0 }">
+               (click)="rkdAvailable ? openAddDesignDocumentationPage() : false"
+               [ngClass]="{'not-clickable' : !rkdAvailable }">
             <span class="stats-items-title">На согласовании РКД</span>
 
             <div class="stats-items-content">

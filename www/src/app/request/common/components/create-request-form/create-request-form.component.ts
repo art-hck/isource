@@ -85,7 +85,8 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
       currency: ['RUB'],
       relatedServices: [''],
       comments: [''],
-      documents: [[]]
+      documents: [[]],
+      isDesignRequired: [false]
     });
     itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       itemForm.get('deliveryDate').reset();

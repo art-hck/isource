@@ -46,6 +46,7 @@ export class RequestViewComponent implements OnChanges {
   onRequestPositionChanged(updatedPosition: RequestPosition | RequestGroup): void {
     // делаем assign, чтобы не изменилась ссылка на объект и выделение позиции в гриде
     Object.assign(this.selectPositionListItem, updatedPosition);
+    this.onUpdateRequestInfo();
   }
 
   isRequest(item: any): boolean {
