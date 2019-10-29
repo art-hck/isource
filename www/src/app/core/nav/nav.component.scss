@@ -12,6 +12,7 @@ nav a.active {
   a {
     padding: 16px 10px;
     display: inline-block;
+    font-size: 17px;
   }
 
   .btn-user {
@@ -20,7 +21,6 @@ nav a.active {
 
   .link-active {
     color: #2585F5;
-    //box-shadow: inset 0 -2px 0 #2585F5;
     box-shadow: none;
 
     &:after {
