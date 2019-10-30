@@ -64,7 +64,7 @@ export class AddOffersComponent implements OnInit {
   selectedProcedureLotDocuments: RequestDocument[] = [];
   positionSearchValue = "";
 
-  showPrivateAccessContragents = false;
+  showPrivateAccessContragents = true;
   contragentsWithTp: ContragentList[] = [];
   selectedPrivateAccessContragents: ContragentList[] = [];
 
@@ -587,9 +587,10 @@ export class AddOffersComponent implements OnInit {
   }
 
   onShowPrivateAccessContragents(): void {
-    this.offersService.getContragentsWithTp(this.request, this.selectedProcedurePositions).subscribe(
+    const subscription = this.offersService.getContragentsWithTp(this.request, this.selectedProcedurePositions).subscribe(
       (contragents: ContragentList[]) => {
         this.contragentsWithTp = contragents;
+        subscription.unsubscribe();
       }
     );
     this.showPrivateAccessContragents = true;

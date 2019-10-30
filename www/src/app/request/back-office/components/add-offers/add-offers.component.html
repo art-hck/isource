@@ -318,7 +318,8 @@
 
     <clr-wizard-page
       [clrWizardPageNextDisabled]="procedureBasicDataForm.invalid || selectedProcedurePositions.length === 0"
-      (clrWizardPageOnCancel)="resetWizardForm()">
+      (clrWizardPageOnCancel)="resetWizardForm()"
+      (clrWizardPageNext)="onShowPrivateAccessContragents()">
       <ng-template clrPageTitle>Общие сведения</ng-template>
       <form [formGroup]="procedureBasicDataForm" class="form">
         <div class="form-block">
