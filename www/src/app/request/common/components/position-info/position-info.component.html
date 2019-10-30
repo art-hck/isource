@@ -29,12 +29,12 @@
 
     <div class="card-content">
       <div class="clr-row">
-        <div class="clr-col-8">
+        <div class="clr-col-7">
           <h4 class="position-title">{{requestPosition.name}}</h4>
           <span class="quantity grey">{{requestPosition.quantity}} {{requestPosition.measureUnit}}</span>
         </div>
 
-        <div class="clr-col-4 right">
+        <div class="clr-col-5 right">
           <div class="select change-status status status-position-{{requestPosition.status}}" *ngIf="!isCustomerView">
             <select name="status"
                     (change)="onChangeStatus(requestPosition, $event.target.value)"

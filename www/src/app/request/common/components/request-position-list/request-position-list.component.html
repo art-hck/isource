@@ -62,31 +62,18 @@
     </div>
   </div>
 
-  <div class="card-content">
-
-    <div class="clr-row w-100 request-row"
-         (click)="onSelectItem(request)"
-         [ngClass]="{'selected-row' : isSelectedListItem(request)}">
-      <div class="clr-col cell">
-        <h3 class="request-title"><b>Заявка №{{request.number}}</b></h3>
-      </div>
-      <div class="clr-col-auto cell status request">
-        <span class="status-request-{{request.status}}">
-         {{request.statusLabel}}
-        </span>
-        <clr-icon shape="angle" style="transform: rotate(90deg);"></clr-icon>
-      </div>
-    </div>
+  <div class="card-content request-position-list"
+       [ngClass]="{'customer-position-list' : isCustomerView}">
 
     <ng-container *ngFor="let control of positionsArray.controls; let i = index">
 
       <div class="clr-row w-100 position-row"
            *ngIf="isDraftPositionShown(requestItems[i])"
            [ngClass]="{'selected-row' : isSelectedListItem(requestItems[i]),
-        'group-item' : requestItems[i].entityType == 'GROUP'}">
+                       'group-item' : requestItems[i].entityType == 'GROUP'}">
 
-        <div class="clr-col-auto cell"> <!-- Колонка с чекбоксом -->
-          <clr-checkbox-wrapper class="select-checkbox" *ngIf="!isCustomerView">
+        <div class="clr-col-auto cell checkbox-cell" *ngIf="!isCustomerView"> <!-- Колонка с чекбоксом -->
+          <clr-checkbox-wrapper class="select-checkbox">
             <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
                    *ngIf="requestItems[i].entityType !== 'GROUP'"
                    [formControl]="control"
@@ -96,7 +83,7 @@
         </div>
 
         <div class="clr-col">
-          <div class="clr-row" (click)="onSelectItem(requestItems[i])">
+          <div class="clr-row" (click)="requestItems[i].entityType !== 'GROUP' ?  onSelectItem(requestItems[i]) : false">
 
             <!-- Колонка 1: Название позиции -->
             <div class="cell position-name clr-col">

@@ -1,13 +1,3 @@
-::ng-deep .clr-checkbox-wrapper .clr-control-label {
-    display: inline;
-    height: 18px;
-}
-
-::ng-deep .clr-checkbox-wrapper {
-    margin-bottom: 5px;
-    display: inline-block;
-}
-
 .input-label {
     font-size: 14px;
 }

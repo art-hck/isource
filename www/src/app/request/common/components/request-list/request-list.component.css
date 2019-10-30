@@ -3,6 +3,16 @@
     font-weight: 600;
 }
 
+::ng-deep .datagrid-filter .clr-checkbox-wrapper .clr-control-label {
+    display: inline;
+    height: 18px;
+}
+
+::ng-deep .datagrid-filter .clr-checkbox-wrapper {
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
 .more-positions {
     color: gray;
 }
@@ -80,7 +90,7 @@
 
 ::ng-deep .requests-list-datagrid .datagrid-table .request-number.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {
-    min-width: 110px;
+    min-width: 135px;
     max-width: 120px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .customer-name.datagrid-column,
