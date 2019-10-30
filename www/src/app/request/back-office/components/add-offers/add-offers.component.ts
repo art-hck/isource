@@ -64,7 +64,7 @@ export class AddOffersComponent implements OnInit {
   selectedProcedureLotDocuments: RequestDocument[] = [];
   positionSearchValue = "";
 
-  showPrivateAccessContragents = false;
+  showPrivateAccessContragents = true;
   contragentsWithTp: ContragentList[] = [];
   selectedPrivateAccessContragents: ContragentList[] = [];
 
