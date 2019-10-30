@@ -1,9 +1,9 @@
-import {browser, protractor} from "protractor";
-import {Login} from "../../login/login";
-import {CreateRequestFormPage} from "../../../pages/create-request-form.po";
-import {CreateRequestFreeFormPage} from "../../../pages/create-request-free-form.po";
-import {CreateRequestForm} from "../create-request-form/create-request-form";
-import {RequestViewPage} from "../../../pages/request-view.po";
+import { browser, protractor } from "protractor";
+import { Login, Role } from "../../login/login";
+import { CreateRequestFormPage } from "../../../pages/create-request-form.po";
+import { CreateRequestFreeFormPage } from "../../../pages/create-request-free-form.po";
+import { CreateRequestForm } from "../create-request-form/create-request-form";
+import { RequestViewPage } from "../../../pages/request-view.po";
 
 const createRequestData = require("../../../test-data/create-request-data");
 const EC = protractor.ExpectedConditions;
@@ -14,7 +14,7 @@ describe('Создание произвольной заявки', () => {
 
   beforeAll(() => {
     browser.get(browser.baseUrl);
-    login.login('customer');
+    login.login(Role.CUSTOMER);
     CreateRequestFormPage.individualRequestLink().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.individualRequestTitle()));
   });

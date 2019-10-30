@@ -1,4 +1,5 @@
 const { SpecReporter } = require('jasmine-spec-reporter');
+const baseUrl = 'http://gpnmarket.gpb.local';
 
 exports.config = {
   allScriptsTimeout: 11000,
@@ -16,15 +17,15 @@ exports.config = {
     createRequest: './src/tests/request/**/*.e2e-spec.ts'
   },
   directConnect: true,
-  baseUrl: 'http://gpnmarket.gpb.local',
+  baseUrl: baseUrl,
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 100000,
+    defaultTimeoutInterval: 30000,
     print: function() {}
   },
   onPrepare() {
-    browser.baseUrl = 'http://gpnmarket.gpb.local';
+    browser.baseUrl = baseUrl;
     
     let AllureReporter = require('jasmine-allure-reporter');
     jasmine.getEnv().addReporter(new AllureReporter({

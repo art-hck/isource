@@ -1,8 +1,8 @@
-import {browser, protractor} from "protractor";
-import {CreateRequestFormPage} from "../../../pages/create-request-form.po";
-import {Login} from "../../login/login";
-import {CreateRequestForm} from "./create-request-form";
-import {RequestViewPage} from "../../../pages/request-view.po";
+import { browser, protractor } from "protractor";
+import { CreateRequestFormPage } from "../../../pages/create-request-form.po";
+import { Login, Role } from "../../login/login";
+import { CreateRequestForm } from "./create-request-form";
+import { RequestViewPage } from "../../../pages/request-view.po";
 
 const createRequestData = require("../../../test-data/create-request-data");
 const EC = protractor.ExpectedConditions;
@@ -13,7 +13,7 @@ describe('Создание заявки вручную при заполнени
 
   beforeAll(() => {
     browser.get(browser.baseUrl);
-    login.login('customer');
+    login.login(Role.CUSTOMER);
   });
 
   afterAll(() => {
