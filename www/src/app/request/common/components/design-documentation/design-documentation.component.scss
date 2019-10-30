@@ -266,3 +266,11 @@ clr-dropdown-menu  {
   color: #fac400;
   border-color: #fac400;
 }
+
+.modal-body {
+  min-height: auto;
+}
+
+.document-list td:last-child {
+  padding-right: 0;
+}

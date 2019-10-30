@@ -48,16 +48,15 @@
                       <div class="clr-form-control">
                         <div class="clr-row w-100" formGroupName="{{i}}">
                           <div class="clr-col-5">
-                            <input id="name" type="text" formControlName="name"
-                                   [class.invalid]="isFieldInvalid(i, 'name')"/>
+                            <input id="name" type="text" formControlName="name" appFormControlInvalidClass="invalid"/>
                           </div>
                           <div class="clr-col-3">
                             <input id="adjustmentLimit" type="number" formControlName="adjustmentLimit"
-                                   [class.invalid]="isFieldInvalid(i, 'adjustmentLimit')"/>
+                                   appFormControlInvalidClass="invalid"/>
                           </div>
                           <div class="clr-col-3">
                             <input id="receivingLimit" type="number" formControlName="receivingLimit"
-                                   [class.invalid]="isFieldInvalid(i, 'receivingLimit')"/>
+                                   appFormControlInvalidClass="invalid"/>
                           </div>
                           <div class="clr-col-1">
                             <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
@@ -102,7 +101,7 @@
             </div>
           </clr-modal>
 
-          <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations; index as i; let edit = false">
+          <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations; index as i">
             <div class="design-documentation-card">
               <div class="clr-row clr-align-items-center">
                 <span class="position-name">
@@ -115,30 +114,45 @@
                       <button disabled="" *ngSwitchCase="designDocStatus.APPROVED" class="btn btn-info-outline btn-label status-success">Согласовано</button>
                       <button disabled="" *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
                     </ng-container>
-                    <ng-container *ngIf="canSendOnApprove(designDocumentation)">
-                      <button class="btn" *ngIf="!edit" (click)="edit = true">Редактировать</button>
-                      <button class="btn btn-primary"
-                              [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
-                              [disabled]="!isSendOnApproveActive(designDocumentation)"
-                              (click)="sendForApproval(designDocumentation)">Согласовать</button>
+                    <ng-container *ngIf="status === designDocStatus.NEW">
+                      <clr-modal #confirmDelete [clrModalStaticBackdrop]="false">
+                        <h3 class="modal-title">Удалить перечень полностью?</h3>
+                        <h5 class="modal-body"><b>Отменить действие будет невозможно.</b></h5>
+                        <div class="modal-footer">
+                          <button type="button" class="btn" (click)="confirmDelete.close()">Отмена</button>
+                          <button
+                            (click)="removeDesignDocumentList(request, designDocumentation); confirmDelete.close()"
+                            type="button" class="btn btn-danger">Удалить</button>
+                        </div>
+                      </clr-modal>
+                      <button *ngIf="designDocumentation.status === 'NEW'" (click)="confirmDelete.open()" type="button"
+                              class="btn">Удалить</button>
                     </ng-container>
+                    <button class="btn btn-primary" *ngIf="canEditDesignDocList(designDocumentation)"
+                            [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
+                            [disabled]="!isSendOnApproveActive(designDocumentation)"
+                            (click)="sendForApproval(designDocumentation)">Согласовать</button>
                   </ng-container>
                 </span>
               </div>
               <div class="clr-row clr-align-items-center">
-                <table class="document-list table table-noborder" *ngIf="!edit">
+                <table class="document-list table table-noborder">
                   <thead>
                   <tr class="clr-row">
                     <th class="left clr-col-4">Наименование документа</th>
                     <th class="left clr-col-4">Документ</th>
-                    <th class="left clr-col-2">Срок предоставления</th>
-                    <th class="left clr-col-2">Срок корректировки</th>
+                    <th class="left clr-col">Срок предоставления</th>
+                    <th class="left clr-col">Срок корректировки</th>
+                    <th class="left clr-col-2"></th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="clr-row" *ngFor="let designDoc of designDocumentation.designDocs">
+                  <tr class="clr-row"
+                      *ngFor="let designDoc of designDocumentation.designDocs; let designDocModel = null">
                     <td class="left clr-col-4">
-                      {{designDoc.name}}
+                      <span *ngIf="!designDocModel">{{designDoc.name}}</span>
+                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.name"
+                             appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left clr-col-4">
                       <div class="form-group compact">
@@ -146,22 +160,87 @@
                           [documents]="designDoc.documents"
                           [enableUpload]="canUploadDocuments(designDoc, designDocumentation) && designDoc.id"
                           [limit]="5"
-                          [enableDelete]="canSendOnApprove(designDocumentation)"
-                          (delete)="deleteDocument($event)"
+                          [enableDelete]="designDocumentation.status === designDocStatus.NEW"
+                          (delete)="removeDocuments(request, designDoc, [$event])"
                           (selected)="onSelectDocument($event, designDoc)"
                         ></app-document-simple-list>
                         <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                       </div>
                     </td>
-                    <td class="left clr-col-2">{{designDoc.adjustmentDate}}</td>
-                    <td class="left clr-col-2">{{designDoc.receivingDate}}</td>
+                    <td class="left clr-col">
+                      <span *ngIf="!designDocModel">{{designDoc.adjustmentDate}}</span>
+                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.adjustmentLimit"
+                             appFormControlInvalidClass="invalid"/>
+                    </td>
+                    <td class="left clr-col">
+                      <span *ngIf="!designDocModel">{{designDoc.receivingDate}}</span>
+                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.receivingLimit"
+                             appFormControlInvalidClass="invalid"/>
+                    </td>
+                    <td class="left clr-col-2"
+                        *ngIf="designDocumentation.status === designDocStatus.NEW">
+                      <clr-modal #confirmDeleteDoc [clrModalStaticBackdrop]="false">
+                        <h3 class="modal-title">Удалить документ {{ designDoc.name }}?</h3>
+                        <h5 class="modal-body">
+                          <div *ngIf="designDoc.documents.length > 0">Документ содержит загруженные файлы, которые тоже
+                            будут удалены.
+                          </div>
+                          <div><b>Отменить действие будет невозможно.</b></div>
+                        </h5>
+                        <div class="modal-footer">
+                          <button type="button" class="btn" (click)="confirmDeleteDoc.close()">Отмена</button>
+                          <button type="button" class="btn btn-danger"
+                                  (click)="removeDesignDocument(request, designDoc); confirmDeleteDoc.close()">Удалить
+                          </button>
+                        </div>
+                      </clr-modal>
+                      <div class="clr-row clr-justify-content-end">
+                        <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModel">
+                          <button (click)="confirmDeleteDoc.open()" type="button" class="btn">Удалить</button>
+                          <button (click)="designDocModel = getDesignDocModel(designDoc)" class="btn">Изменить</button>
+                        </ng-container>
+                        <ng-container *ngIf="designDocModel">
+                          <button (click)="designDocModel = null" class="btn btn-icon">Отмена</button>
+                          <button [disabled]="isDesignDocModelInvalid(designDocModel)"
+                                  (click)="editDesignDoc(request, designDocModel, designDocumentation)" type="button"
+                                  class="btn btn-primary">Сохранить
+                          </button>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="clr-row" *ngFor="let newDesignDocModel of newDesignDocModels; index as i">
+                    <td class="clr-col-4">
+                      <input type="text" [(ngModel)]="newDesignDocModel.name"/>
+                    </td>
+                    <td class="clr-col-4"></td>
+                    <td class="clr-col">
+                      <input type="text" [(ngModel)]="newDesignDocModel.adjustmentLimit"/>
+                    </td>
+                    <td class="clr-col">
+                      <input type="text" [(ngModel)]="newDesignDocModel.receivingLimit"/>
+                    </td>
+                    <td class="clr-col-2 ">
+                      <div class="clr-row clr-justify-content-end">
+                        <button (click)="newDesignDocModels.splice(i, 1)" type="button" class="btn">Удалить</button>
+                        <button [disabled]="isDesignDocModelInvalid(newDesignDocModel)"
+                                (click)="addDesignDoc(request, newDesignDocModel, designDocumentation)" type="button"
+                                class="btn btn-primary">Добавить
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="clr-row" *ngIf="canEditDesignDocList(designDocumentation)">
+                    <td class="clr-col clr-justify-content-end">
+                      <div class="clr-row clr-justify-content-end">
+                        <button (click)="newDesignDocModels.push(getDesignDocModel())" type="button"
+                                class="btn btn-primary">Добавить документ
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                   </tbody>
                 </table>
-                <app-design-documentation-edit *ngIf="edit" [(open)]="edit"
-                                               [request]="request"
-                                               [(designDocumentationList)]="designDocumentation">
-                </app-design-documentation-edit>
               </div>
             </div>
           </div>

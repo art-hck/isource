@@ -7,7 +7,9 @@ export class DesignDocumentation {
   name: string;
   status: string;
   adjustmentDate?: Date;
+  adjustmentLimit: number;
   receivingDate?: Date;
+  receivingLimit: number;
   reviewDate?: Date;
   comment: string;
   type: DesignDocumentationType;

@@ -12,7 +12,7 @@
         </div>
 
       </div>
-      <button (click)="modal.open()" type="button" class="btn btn-delete btn-danger-outline btn-icon"
+      <button *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn btn-delete btn-icon"
               title="Удалить"><clr-icon shape="trash"></clr-icon>
       </button>
       <clr-modal #modal [clrModalStaticBackdrop]="false">

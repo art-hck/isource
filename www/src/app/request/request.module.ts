@@ -51,7 +51,6 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
 import { ContractComponent } from "./common/components/contract/contract.component";
 import { ContragentModule } from "../contragent/contragent.module";
 import { RequestPositionStatusService } from "./common/services/request-position-status.service";
-import { DesignDocumentationEditComponent } from "./common/components/design-documentation-edit/design-documentation-edit.component";
 
 @NgModule({
   declarations: [
@@ -91,7 +90,6 @@ import { DesignDocumentationEditComponent } from "./common/components/design-doc
     CommercialProposalsComponent,
     ContractComponent,
     DesignDocumentationComponent,
-    DesignDocumentationEditComponent,
     ContractCreateComponent,
     ContractUploadDocumentComponent
   ],

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../models/request";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
-import { RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
 import { DesignDocumentationList } from "../../models/design-documentationList";
 import { RequestPosition } from "../../models/request-position";
@@ -16,6 +16,7 @@ import { Observable } from "rxjs";
 import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
 
 @Component({
   selector: 'app-design-documentation',
@@ -45,6 +46,7 @@ export class DesignDocumentationComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
+  public newDesignDocModels: DesignDocumentationEdit[] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -109,10 +111,8 @@ export class DesignDocumentationComponent implements OnInit {
     }
   }
 
-  isFieldInvalid(i, field: string) {
-    return this.addDocumentationListForm.at(i).get(field).errors
-      && (this.addDocumentationListForm.at(i).get(field).touched
-        || this.addDocumentationListForm.at(i).get(field).dirty);
+  isDesignDocModelInvalid(designDocModel: DesignDocumentationEdit) {
+    return !designDocModel.name || !designDocModel.receivingLimit || !designDocModel.adjustmentLimit;
   }
 
   getPositionList() {
@@ -179,12 +179,16 @@ export class DesignDocumentationComponent implements OnInit {
     return this.routeData.isBackoffice
       && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
-      && this.canSendOnApprove(designDocumentationList)
+      && this.canEditDesignDocList(designDocumentationList)
     ;
   }
 
-  canSendOnApprove(designDoc: DesignDocumentationList) {
+  canEditDesignDocList(designDoc: DesignDocumentationList) {
     return [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
+  }
+
+  canEditDesignDoc(designDocumentation: DesignDocumentationList, designDoc: DesignDocumentation) {
+    return designDoc.type !== DesignDocumentationType.REMARK && this.canEditDesignDocList(designDocumentation);
   }
 
   isSendOnApproveActive(designDocList: DesignDocumentationList) {
@@ -271,7 +275,45 @@ export class DesignDocumentationComponent implements OnInit {
     };
   }
 
-  deleteDocument(document) {
-    console.log(document);
+  removeDesignDocumentList(request: Request, designDocumentationList: DesignDocumentationList) {
+    this.designDocumentationService.removeDesignDocumentList(request.id, designDocumentationList.id)
+      .subscribe(() => this.designDocumentations = this.designDocumentations.filter(designDocList => (
+        designDocList !== designDocumentationList
+      )));
+  }
+
+  removeDesignDocument(request: Request, designDocumentation: DesignDocumentation) {
+    this.designDocumentationService.removeDesignDocument(request.id, designDocumentation.id)
+      .subscribe(() => this.designDocumentations = this.designDocumentations.map(designDocList => (
+        {...designDocList, designDocs: designDocList.designDocs.filter(designDoc => designDoc !== designDocumentation)}
+      )));
+  }
+
+  removeDocuments(request: Request, designDocumentation: DesignDocumentation, documents: RequestDocument[]) {
+    this.designDocumentationService.removeDocuments(request.id, designDocumentation.id, documents)
+      .subscribe(data => designDocumentation.documents  = designDocumentation.documents.filter(doc => !documents.includes(doc)))
+    ;
+  }
+
+  getDesignDocModel(designDoc?: DesignDocumentation): DesignDocumentationEdit {
+    const {id = null, name = "", receivingLimit = 5, adjustmentLimit = 15, comment = ""} = designDoc || {};
+
+    return {id, name, receivingLimit, adjustmentLimit, comment};
+  }
+
+  editDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList) {
+    this.designDocumentationService.editDesignDocument(request.id, designDocModel.id, designDocModel)
+      .subscribe(data => {
+        const i = designDocumentationList.designDocs.findIndex(_designDoc => _designDoc.id === designDocModel.id);
+        designDocumentationList.designDocs[i] = data;
+      });
+  }
+
+  addDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList) {
+    this.designDocumentationService.addDesignDocument(request.id, designDocumentationList.id, designDocModel)
+      .subscribe(designDoc => {
+        designDocumentationList.designDocs.push(designDoc);
+        this.newDesignDocModels = this.newDesignDocModels.filter(_designDocModel => _designDocModel !== designDocModel);
+      });
   }
 }
