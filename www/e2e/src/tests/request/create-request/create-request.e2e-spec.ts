@@ -1,5 +1,5 @@
 import {browser, protractor} from "protractor";
-import {Login} from "../../login/login";
+import { Login, Role } from "../../login/login";
 import {CreateRequestFormPage} from "../../../pages/create-request-form.po";
 import {CreateRequestFreeFormPage} from "../../../pages/create-request-free-form.po";
 import {CreateRequestForm} from "../create-request-form/create-request-form";
@@ -14,7 +14,7 @@ describe('Создание заявки из xls-файла', () => {
 
   beforeAll(() => {
     browser.get(browser.baseUrl);
-    login.login('customer');
+    login.login(Role.CUSTOMER);
     CreateRequestFormPage.individualRequestLink().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.individualRequestTitle()));
   });
