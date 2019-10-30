@@ -39,7 +39,10 @@ export class PositionsListComponent implements OnInit {
     return this.cartStoreService.isCatalogPositionInCart(position);
   }
 
-  showContragentInfo(contragentId: Uuid): void {
+  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
+    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
+    event.preventDefault();
+
     this.contragentInfoModalOpened = true;
 
     if (!this.contragent || this.contragent.id !== contragentId) {

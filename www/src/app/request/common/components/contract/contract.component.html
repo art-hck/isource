@@ -4,7 +4,7 @@
 
 <ng-container *ngIf="(request$ | async) as request; else loading">
   <div class="breadcrumbs">
-    <a routerLink="../..">Заявки</a> / <a routerLink="..">Заявка №{{request.number}}</a>
+    <a routerLink="../..">Заявки</a> → <a routerLink="..">Заявка №{{request.number}}</a>
   </div>
   <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
     <ng-container *ngIf="userInfoService.isBackOffice()">
@@ -32,7 +32,8 @@
       <div class="card-header">
         <div class="clr-row">
           <div class="clr-col">
-            <a (click)="showContragentInfo(contract.supplier.id)">{{ contract.supplier.shortName }}</a>
+            <a [href]="'/contragents/' + contract.supplier.id + '/info'"
+               (click)="showContragentInfo($event, contract.supplier.id)">{{ contract.supplier.shortName }}</a>
           </div>
         </div>
       </div>

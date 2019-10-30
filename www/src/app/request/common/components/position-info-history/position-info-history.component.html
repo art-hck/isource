@@ -55,7 +55,8 @@
               </span>
 
               <ng-template #clickableWinnerLink>
-                <a (click)="showContragentInfo(activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+                <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
+                   [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName }}</a>
               </ng-template>
             </div>
 
@@ -77,7 +78,8 @@
               </span>
 
               <ng-template #clickableRemovedWinnerLink>
-                <a (click)="showContragentInfo(activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+                <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
+                   (click)="showContragentInfo($event, activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
               </ng-template>
             </div>
 

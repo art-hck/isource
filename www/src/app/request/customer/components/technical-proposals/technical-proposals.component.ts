@@ -42,14 +42,6 @@ export class TechnicalProposalsComponent implements OnInit {
     this.getTechnicalProposals();
   }
 
-  onRequestsClick() {
-    this.router.navigateByUrl(`requests/customer`).then(r => {});
-  }
-
-  onRequestClick() {
-    this.router.navigateByUrl(`requests/customer/${this.request.id}`).then(r => {});
-  }
-
   protected updateRequestInfo() {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
@@ -123,7 +115,10 @@ export class TechnicalProposalsComponent implements OnInit {
     );
   }
 
-  showContragentInfo(contragentId: Uuid): void {
+  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
+    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
+    event.preventDefault();
+
     this.contragentInfoModalOpened = true;
 
     if (!this.contragent || this.contragent.id !== contragentId) {
