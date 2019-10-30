@@ -31,10 +31,6 @@ export class SearchPanelComponent implements OnInit {
     this.searchTextChange.emit(this.searchText);
   }
 
-  createRequest(): void {
-    this.router.navigateByUrl(`requests/create`);
-  }
-
   onToggleCategories() {
     this.categoriesOpened = !this.categoriesOpened;
   }
