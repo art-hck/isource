@@ -16,7 +16,7 @@ import { TechnicalProposalPosition } from 'src/app/request/common/models/technic
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { Observable } from "rxjs";
-import { publishReplay, refCount } from "rxjs/operators";
+import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -35,6 +35,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   contragentInfoModalOpened = false;
   contragent: ContragentInfo;
   contragentSearchFieldValue: string;
+  contragentList$: Observable<ContragentList[]>;
 
   selectedContragent: ContragentList;
 
@@ -43,6 +44,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
   uploadedFiles: File[] = [];
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+  @ViewChild('createProcedureWizard', {static: false}) createProcedureWizard: WizardCreateProcedureComponent;
+
+  requestPositions$: Observable<RequestPositionList[]>;
 
   protected editableStatuses = [
     TechnicalProposalPositionStatuses.NEW.valueOf(),
@@ -74,14 +78,18 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.updateRequestInfo();
     this.getTechnicalProposals();
     this.getPositionsListForTp();
+
+    this.requestPositions$ = this.requestService.getRequestPositions(this.requestId);
+
+    this.contragentList$ = this.getContragentService.getContragentList();
   }
 
-  onRequestsClick() {
-    this.router.navigateByUrl(`requests/backoffice`).then(r => {});
+  onRequestsClick(): void {
+    this.router.navigateByUrl(`requests/backoffice`);
   }
 
-  onRequestClick() {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`).then(r => {});
+  onRequestClick(): void {
+    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   /**
@@ -125,7 +133,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.showAddTechnicalProposalModal = true;
   }
 
-  onCloseModal() {
+  onCloseModal(): void {
     if (this.supplierSelectComponent) {
       this.supplierSelectComponent.resetSearchFilter();
     }

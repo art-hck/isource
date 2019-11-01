@@ -16,6 +16,12 @@
             <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
               + Добавить ТП
             </span>
+
+            <button class="btn btn-primary send-offers"
+                    (click)="createProcedureWizard.open()"
+            >
+              <b>Создать процедуру</b>
+            </button>
           </div>
         </div>
 
@@ -251,5 +257,13 @@
     </clr-modal>
   </ng-container>
 
+  <app-wizard-create-procedure
+    #createProcedureWizard
+    [request]="request"
+    [requestPositions$]="requestPositions$"
+    [contragents$]="contragentList$"
+    [allowOpenedProcedure]="true"
+  >
+  </app-wizard-create-procedure>
 
 </ng-container>
