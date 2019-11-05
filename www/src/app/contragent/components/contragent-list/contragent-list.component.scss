@@ -3,6 +3,18 @@
   font-weight: 600;
 }
 
+::ng-deep .contragent-list-datagrid *:focus {
+  outline: 0;
+}
+
+::ng-deep .contragent-list-datagrid .datagrid .datagrid-row:hover {
+  cursor: default;
+  background: initial;
+}
+
+::ng-deep .contragent-list-datagrid {
+  margin-bottom: 50px;
+}
 ::ng-deep .contragent-list-datagrid .datagrid {
   overflow: visible;
 }
@@ -10,7 +22,7 @@
   overflow: visible;
 }
 ::ng-deep .contragent-list-datagrid .datagrid-header {
-  top: -30px;
+  top: -50px;
   border-bottom: 1px solid #d4d9e2;
 }
 
@@ -53,6 +65,3 @@
 ::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-separator {
   top: 0;
 }
-
-
-

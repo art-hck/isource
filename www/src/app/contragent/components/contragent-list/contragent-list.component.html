@@ -12,21 +12,19 @@
   </clr-dg-column>
 
 
-  <clr-dg-row
-          *clrDgItems="let contragent of contragents"
-          (click)="showContragentInfo(contragent.id)">
+  <clr-dg-row *clrDgItems="let contragent of contragents">
 
-    <clr-dg-cell class="contragent-name">
-      {{contragent.shortName}}
-    </clr-dg-cell>
+      <clr-dg-cell class="contragent-name">
+        <a target="_blank" href="/contragents/{{ contragent.id }}/info">{{contragent.shortName}}</a>
+      </clr-dg-cell>
 
-    <clr-dg-cell class="contragent-inn">
-      {{contragent.inn}}
-    </clr-dg-cell>
+      <clr-dg-cell class="contragent-inn">
+        {{contragent.inn}}
+      </clr-dg-cell>
 
-    <clr-dg-cell class="contragent-kpp">
-      {{contragent.kpp}}
-    </clr-dg-cell>
+      <clr-dg-cell class="contragent-kpp">
+        {{contragent.kpp}}
+      </clr-dg-cell>
 
   </clr-dg-row>
 </clr-datagrid>

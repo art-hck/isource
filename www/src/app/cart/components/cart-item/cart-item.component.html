@@ -17,7 +17,8 @@
       </button>
 
       <p class="supplier-name">
-        <a (click)="showContragentInfo(item.catalogPosition.supplierContragent.id)">
+        <a [href]="'/contragents/' + item.catalogPosition.supplierContragent.id + '/info'"
+           (click)="showContragentInfo($event, item.catalogPosition.supplierContragent.id)">
           {{ item.catalogPosition.supplierContragent.shortName }}
         </a>
       </p>

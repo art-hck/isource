@@ -7,14 +7,15 @@
     <div class="info-card clr-col">
       <div class="technical-proposals">
         <div class="breadcrumbs">
-          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+          <a [href]="'requests/customer/'">Заявки</a> → <a [href]="'requests/customer/' + request.id">Заявка №{{request.number}}</a>
         </div>
         <h2>Технические предложения</h2>
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
           <div class="clr-row clr-justify-content-between clr-align-items-center">
             <span class="supplier-name clr-col-auto">
               <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
-                <a (click)="showContragentInfo(technicalProposal.supplierContragent.id)">
+                <a [href]="'/contragents/' + technicalProposal.supplierContragent.id + '/info'"
+                   (click)="showContragentInfo($event, technicalProposal.supplierContragent.id)">
                 {{ technicalProposal.supplierContragent.shortName }}</a>
               </ng-container>
 

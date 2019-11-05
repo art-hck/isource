@@ -94,47 +94,43 @@ export class RequestDashboardComponent implements OnChanges {
   }
 
 
-  openAddOffersPage() {
+  getOffersPageLink() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/commercial-proposals`).then(r => {});
+      return '/requests/customer/' + this.request.id + '/commercial-proposals';
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-offers`).then(r => {});
-    } else {
-      return false;
+      return '/requests/backoffice/' + this.request.id + '/add-offers';
     }
+
+    return '';
   }
 
-
-  openAddTechnicalProposalsPage() {
+  getAddTechnicalProposalsLink() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/technical-proposals`).then(r => {});
-      return false;
+      return '/requests/customer/' + this.request.id + '/technical-proposals';
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-technical-proposals`).then(r => {});
-    } else {
-      return false;
+      return '/requests/backoffice/' + this.request.id + '/add-technical-proposals';
     }
+
+    return '';
   }
 
-  openAddDesignDocumentationPage() {
+  getAddDesignDocumentationLink() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/design-documentation`).then(r => {});
-      return false;
+      return '/requests/customer/' + this.request.id + '/design-documentation';
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/add-design-documentation`).then(r => {});
-    } else {
-      return false;
+      return '/requests/backoffice/' + this.request.id + '/add-design-documentation';
     }
+
+    return '';
   }
 
-  openContractsPage() {
+  getContractsLink() {
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl(`/requests/customer/${this.request.id}/contracts`).then(r => {});
-      return false;
+      return '/requests/customer/' + this.request.id + '/contracts';
     } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl(`/requests/backoffice/${this.request.id}/contracts`).then(r => {});
-    } else {
-      return false;
+      return '/requests/backoffice/' + this.request.id + '/contracts';
     }
+
+    return '';
   }
 }

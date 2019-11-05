@@ -8,7 +8,7 @@
 
 .categories-wrap {
   position: absolute;
-  margin-top: -30px;
+  margin-top: -50px;
   margin-bottom: 30px;
   right: 0;
   left: 0;
@@ -80,6 +80,10 @@
                 overflow: hidden;
                 display: block;
                 padding-bottom: 10px;
+
+                &:hover {
+                  color: #0085FF;
+                }
               }
 
               .subitem {
@@ -92,6 +96,10 @@
                 color: #222;
                 display: block;
                 opacity: .7;
+
+                &:hover {
+                  color: #0085FF;
+                }
               }
             }
           }
