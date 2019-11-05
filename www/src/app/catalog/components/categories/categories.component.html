@@ -22,7 +22,7 @@
                 <span class="child-category-header">{{ subCategory.name }}</span>
               </a>
               <div class="subitem" *ngFor="let subSubCategory of subCategory?.child">
-                <a [routerLink]="'/catalog/' + subCategory.id"
+                <a [routerLink]="'/catalog/' + subSubCategory.id"
                    title="{{ subSubCategory.name }}">
                   <span class="subitem-text">{{ subSubCategory.name }}</span>
                 </a>
