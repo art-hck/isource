@@ -46,7 +46,7 @@ export class DesignDocumentationComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
-  public newDesignDocModels: DesignDocumentationEdit[] = [];
+  public newDesignDocModels: {model: DesignDocumentationEdit, state: ClrLoadingState}[][] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -309,11 +309,27 @@ export class DesignDocumentationComponent implements OnInit {
       });
   }
 
-  addDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList) {
+  // Загружает документ в перечень. После загрузки удаляет поля ввода
+  addDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList, j: number, i: number) {
+    this.newDesignDocModels[j][i].state = ClrLoadingState.LOADING;
+
     this.designDocumentationService.addDesignDocument(request.id, designDocumentationList.id, designDocModel)
       .subscribe(designDoc => {
+         this.newDesignDocModels[j][i].state = ClrLoadingState.SUCCESS;
+        this.removeNewDesignDoc(j, i);
         designDocumentationList.designDocs.push(designDoc);
-        this.newDesignDocModels = this.newDesignDocModels.filter(_designDocModel => _designDocModel !== designDocModel);
       });
+  }
+
+  // Создаёт или добавляет поля ввода создания документа к перечню
+  pushNewDesignDoc(j) {
+    (this.newDesignDocModels[j] = this.newDesignDocModels[j] || []).push({model: this.getDesignDocModel(), state: ClrLoadingState.DEFAULT});
+  }
+
+  // Удаляет поля ввода создания документа к перечню
+  // j - индекс перечня РКД
+  // i - индекс удаляемого поля
+  removeNewDesignDoc(j, i) {
+    this.newDesignDocModels[j].splice(i, 1);
   }
 }
