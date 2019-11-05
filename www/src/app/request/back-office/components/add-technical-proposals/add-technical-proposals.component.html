@@ -13,6 +13,7 @@
 
         <div class="clr-row w-100">
           <div class="clr-col-2">
+
             <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
               + Добавить ТП
             </span>
@@ -22,6 +23,12 @@
             >
               <b>Создать процедуру</b>
             </button>
+            <button class="btn btn-primary"
+                    (click)="onImportOffersFromProcedure()"
+            >
+              <b>Получить КП из процедуры</b>
+            </button>
+
           </div>
         </div>
 
@@ -263,6 +270,7 @@
     [requestPositions$]="requestPositions$"
     [contragents$]="contragentList$"
     [allowOpenedProcedure]="true"
+    (publishProcedure)="onPublishProcedure($event)"
   >
   </app-wizard-create-procedure>
 

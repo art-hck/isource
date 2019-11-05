@@ -9,7 +9,54 @@ import { Observable } from 'rxjs';
 import { PublishProcedureInfo } from '../../models/publish-procedure-info';
 import { Request } from 'src/app/request/common/models/request';
 import { shareReplay } from 'rxjs/operators';
+import { ProcedureInfo } from '../../models/procedure-info';
+import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 
+/**
+ * Мастер создания процедуры
+ *
+ * Необходимо передать контрагентов либо явно, либо через функцию загрузки контрагентов
+ *
+ * Явно:
+ *
+ * ```
+ * <app-wizard-create-procedure
+ *   #createProcedureWizard
+ *   [request]="request"
+ *   [requestPositions$]="requestPositions$"
+ *   [contragents$]="contragentList$"         <!-- <=== явное указание списка конрагентов -->
+ *   [allowOpenedProcedure]="true"
+ *   (publishProcedure)="onPublishProcedure($event)"
+ * >
+ * </app-wizard-create-procedure>
+ * ```
+ *
+ * Через функцию загрузки контрагентов:
+ *
+ * ```html
+ * <app-wizard-create-procedure
+ *   #createProcedureWizard
+ *   [request]="request"
+ *   [requestPositions$]="requestPositions$"
+ *   [allowOpenedProcedure]="true"
+ *   (publishProcedure)="onPublishProcedure($event)"
+ * >
+ * </app-wizard-create-procedure>
+ * ```
+ *
+ * ```ts
+ * class AddOffersComponent {
+ *   @ViewChild("createProcedureWizard", {static: false}) wizard: WizardCreateProcedureComponent;
+ *   onWizardOpen(): void {
+ *     this.wizard.open();
+ *     this.wizard.setContragentLoader((procedureBasicDataPage: ProcedureBasicDataPage) => {
+ *       const list: ContragentList[] = [];
+ *       return Observable.of(list); // return Observable<ContragentList[]>
+ *     });
+ *   }
+ * }
+ * ```
+ */
 @Component({
   selector: 'app-wizard-create-procedure',
   templateUrl: './wizard-create-procedure.component.html',
@@ -18,7 +65,7 @@ import { shareReplay } from 'rxjs/operators';
 export class WizardCreateProcedureComponent implements OnInit {
 
   @Input() requestPositions$: Observable<RequestPosition[]>;
-  @Input() contragents$: Observable<ContragentList[]>;
+  @Input() contragents$?: Observable<ContragentList[]>;
   @Input() request: Request;
   @Input() allowOpenedProcedure: boolean;
 
@@ -27,7 +74,7 @@ export class WizardCreateProcedureComponent implements OnInit {
   @ViewChild('openedProcedureRadioButton', {static: false}) openedProcedureRadioButton: ElementRef;
   @ViewChild('closedProcedureRadioButton', {static: false}) closedProcedureRadioButton: ElementRef;
 
-  @Output() publishProcedure: EventEmitter<PublishProcedureInfo>;
+  @Output() publishProcedure = new EventEmitter<PublishProcedureInfo>();
 
   procedureBasicDataForm: FormGroup;
   procedurePropertiesForm: FormGroup;
@@ -41,6 +88,8 @@ export class WizardCreateProcedureComponent implements OnInit {
   showPrivateAccessContragents: boolean|null = null;
   selectedPrivateAccessContragents: ContragentList[] = [];
 
+  protected contragentLoader?: (procedureBasicData: ProcedureBasicDataPage) => Observable<ContragentList[]>;
+
   constructor(
     private formBuilder: FormBuilder
   ) { }
@@ -50,7 +99,7 @@ export class WizardCreateProcedureComponent implements OnInit {
     this.initProcedurePropertiesForm();
 
     // Однократная загрузка контрагентов
-    this.contragents$ = this.contragents$.pipe(shareReplay());
+    // this.contragents$ = this.contragents$.pipe(shareReplay());
   }
 
   resetWizardForm(): void {
@@ -130,6 +179,10 @@ export class WizardCreateProcedureComponent implements OnInit {
     this.wizard.open();
   }
 
+  reset(): void {
+    this.wizard.reset();
+  }
+
   /**
    * Отображение страницы 2: ProcedureProperties - Свойства процедуры
    */
@@ -148,6 +201,26 @@ export class WizardCreateProcedureComponent implements OnInit {
       this.openedProcedureRadioButton.nativeElement.checked = true;
       this.showPrivateAccessContragents = false;
     }
+  }
+
+  getContragents(): Observable<ContragentList[]> {
+    if (this.contragents$) {
+      return this.contragents$;
+    }
+    if (this.contragentLoader) {
+      const procedureBasicDataPage: ProcedureBasicDataPage = {
+        procedureInfo: this.procedureBasicDataForm.value,
+        selectedProcedurePositions: this.selectedProcedurePositions
+      };
+      this.contragents$ = this.contragentLoader(procedureBasicDataPage);
+    } else {
+      throw new Error('contragents$ and contragentLoader undefined');
+    }
+    return this.contragents$;
+  }
+
+  setContragentLoader(loader: (procedureBasicData: ProcedureBasicDataPage) => Observable<ContragentList[]>): void {
+    this.contragentLoader = loader;
   }
 
   /**

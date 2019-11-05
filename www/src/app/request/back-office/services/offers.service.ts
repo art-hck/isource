@@ -86,7 +86,6 @@ export class OffersService {
       `requests/backoffice/${request.id}/contragents-with-tp`,
       {positions: ids}
     ).pipe(map((data) => {
-      // TODO: 2019-10-30 Проверить правильность приведения типа
       return data as ContragentList[];
     }));
   }

@@ -1,5 +1,3 @@
-<p>wizard-create-procedure works!</p>
-
 <clr-wizard
   #wizard
   clrWizardSize="lg"
@@ -203,7 +201,6 @@
             <clr-radio-container>
               <label class="clr-control-label nopadding radio-label"><b>Доступ к процедуре</b></label>
               <clr-radio-wrapper>
-                <!-- TODO: 2019-10-30 Проверить как работают свойства disabled и checked в процессе работы с компонентом -->
                 <input type="radio"
                        #openedProcedureRadioButton
                        clrRadio
@@ -224,7 +221,7 @@
             </clr-radio-container>
             <clr-checkbox-container class="w-100" *ngIf="showPrivateAccessContragents">
               <label class="clr-control-label nopadding radio-label">Выберите мин. 2х участников:</label>
-              <clr-checkbox-wrapper class="select-checkbox" *ngFor="let contragent of (contragents$ | async)">
+              <clr-checkbox-wrapper class="select-checkbox" *ngFor="let contragent of (getContragents() | async)">
                 <input class="checkbox select-checkbox"
                        clrCheckbox
                        type="checkbox"

@@ -17,6 +17,12 @@ import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { Observable } from "rxjs";
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
+import { PublishProcedureInfo } from '../../models/publish-procedure-info';
+import { ProcedureService } from '../../services/procedure.service';
+import { PublishProcedureResult } from '../../models/publish-procedure-result';
+import Swal from 'sweetalert2';
+import { RequestOfferPosition } from 'src/app/request/common/models/request-offer-position';
+import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -65,7 +71,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     private notificationService: NotificationService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
-    private getContragentService: ContragentService
+    private getContragentService: ContragentService,
+    private procedureService: ProcedureService
   ) { }
 
   ngOnInit() {
@@ -153,6 +160,61 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal).subscribe(
       (data) => {
         this.getTechnicalProposals();
+      }
+    );
+  }
+
+  onPublishProcedure(data: PublishProcedureInfo): void {
+    const request: PublishProcedureRequest = {
+      procedureInfo: data,
+      getTPFilesOnImport: true
+    };
+
+    const subscription = this.procedureService.publishProcedure(request).subscribe(
+      (data: PublishProcedureResult) => {
+        subscription.unsubscribe();
+        Swal.fire({
+          width: 400,
+          html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
+            data.procedureId + '</a> успешно создана</br></br></p>' +
+            '<button id="submit" class="btn btn-primary">ОК</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              Swal.close();
+            });
+          }
+        });
+      },
+      (error: any) => {
+        subscription.unsubscribe();
+        let msg = 'Ошибка при создании процедуры';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
+      }
+    );
+  }
+
+  onImportOffersFromProcedure(): void {
+    this.procedureService.importOffersFromProcedure(this.request).subscribe(
+      (offers: RequestOfferPosition[]) => {
+        if (offers.length) {
+          this.notificationService.toast('Предложения из процедуры загружены');
+        } else {
+          this.notificationService.toast('Нет новых предложений');
+        }
+      }, (error: any) => {
+        let msg = 'Ошибка';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
       }
     );
   }
