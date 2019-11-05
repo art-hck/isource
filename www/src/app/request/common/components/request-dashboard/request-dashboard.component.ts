@@ -99,8 +99,6 @@ export class RequestDashboardComponent implements OnChanges {
       return '/requests/customer/' + this.request.id + '/commercial-proposals';
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-offers';
-    } else {
-      return '';
     }
   }
 
@@ -109,8 +107,6 @@ export class RequestDashboardComponent implements OnChanges {
       return '/requests/customer/' + this.request.id + '/technical-proposals';
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-technical-proposals';
-    } else {
-      return '';
     }
   }
 
@@ -119,8 +115,6 @@ export class RequestDashboardComponent implements OnChanges {
       return '/requests/customer/' + this.request.id + '/design-documentation';
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-design-documentation';
-    } else {
-      return '';
     }
   }
 
@@ -129,8 +123,6 @@ export class RequestDashboardComponent implements OnChanges {
       return '/requests/customer/' + this.request.id + '/contracts';
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/contracts';
-    } else {
-      return '';
     }
   }
 }
