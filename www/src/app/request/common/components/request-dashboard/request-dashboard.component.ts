@@ -100,6 +100,7 @@ export class RequestDashboardComponent implements OnChanges {
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-offers';
     }
+
     return '';
   }
 
@@ -109,6 +110,7 @@ export class RequestDashboardComponent implements OnChanges {
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-technical-proposals';
     }
+
     return '';
   }
 
@@ -118,6 +120,7 @@ export class RequestDashboardComponent implements OnChanges {
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/add-design-documentation';
     }
+
     return '';
   }
 
@@ -127,6 +130,7 @@ export class RequestDashboardComponent implements OnChanges {
     } else if (this.user.isBackOffice()) {
       return '/requests/backoffice/' + this.request.id + '/contracts';
     }
+
     return '';
   }
 }
