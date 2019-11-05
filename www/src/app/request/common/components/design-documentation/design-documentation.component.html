@@ -36,12 +36,8 @@
                     <div class="clr-col-5">
                       <label>Наименование документа</label>
                     </div>
-                    <div class="clr-col-3">
-                      <label>Срок предоставления (календ. дней)</label>
-                    </div>
-                    <div class="clr-col-3">
-                      <label>Срок корректировки (календ. дней)</label>
-                    </div>
+                    <div class="clr-col-3"><label>Срок корректировки (календ. дней)</label></div>
+                    <div class="clr-col-3"><label>Срок предоставления (календ. дней)</label></div>
                   </div>
                   <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
                     <div class="form-block">
@@ -138,23 +134,24 @@
               <div class="clr-row clr-align-items-center">
                 <table class="document-list table table-noborder">
                   <thead>
-                  <tr class="clr-row">
-                    <th class="left clr-col-4">Наименование документа</th>
-                    <th class="left clr-col-4">Документ</th>
-                    <th class="left clr-col">Срок предоставления</th>
-                    <th class="left clr-col">Срок корректировки</th>
-                    <th class="left clr-col-2"></th>
+                  <tr class="clr-row clr-flex-nowrap">
+                    <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа</th>
+                    <th class="left clr-col-lg-3 clr-col-xl-4">Документ</th>
+                    <th class="left clr-col">Дата корректировки</th>
+                    <th class="left clr-col">Дата предоставления</th>
+                    <th class="left clr-col">Дата рассмотрения</th>
+                    <th class="left clr-col-2" *ngIf="designDocumentation.status === designDocStatus.NEW"></th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr class="clr-row"
                       *ngFor="let designDoc of designDocumentation.designDocs; let designDocModel = null">
-                    <td class="left clr-col-4">
+                    <td class="left clr-col-lg-2 clr-col-xl-3">
                       <span *ngIf="!designDocModel">{{designDoc.name}}</span>
                       <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.name"
                              appFormControlInvalidClass="invalid"/>
                     </td>
-                    <td class="left clr-col-4">
+                    <td class="left clr-col-lg-3 clr-col-xl-4">
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
@@ -168,14 +165,21 @@
                       </div>
                     </td>
                     <td class="left clr-col">
-                      <span *ngIf="!designDocModel">{{designDoc.adjustmentDate}}</span>
+                      <span *ngIf="!designDocModel" [class.expired]="isDateExpired(designDoc.adjustmentDate)">
+                        {{designDoc.adjustmentDate | date :'shortDate'}}
+                      </span>
                       <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.adjustmentLimit"
                              appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left clr-col">
-                      <span *ngIf="!designDocModel">{{designDoc.receivingDate}}</span>
+                      <span *ngIf="!designDocModel" [class.expired]="isDateExpired(designDoc.receivingDate)">
+                        {{designDoc.receivingDate | date :'shortDate'}}
+                      </span>
                       <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.receivingLimit"
                              appFormControlInvalidClass="invalid"/>
+                    </td>
+                    <td class="left clr-col">
+                      <span>{{designDoc.reviewDate | date :'shortDate'}}</span>
                     </td>
                     <td class="left clr-col-2"
                         *ngIf="designDocumentation.status === designDocStatus.NEW">

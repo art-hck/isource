@@ -96,8 +96,8 @@ export class DesignDocumentationComponent implements OnInit {
   addDocumentationListFormGroup(): FormGroup {
     return this.formBuilder.group({
       name: ['', [Validators.required, CustomValidators.simpleText]],
-      adjustmentLimit: ['15', Validators.required],
-      receivingLimit: ['5', Validators.required]
+      adjustmentLimit: ['5', Validators.required],
+      receivingLimit: ['15', Validators.required]
     });
   }
 
@@ -296,7 +296,7 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   getDesignDocModel(designDoc?: DesignDocumentation): DesignDocumentationEdit {
-    const {id = null, name = "", receivingLimit = 5, adjustmentLimit = 15, comment = ""} = designDoc || {};
+    const {id = null, name = "", receivingLimit = 15, adjustmentLimit = 5, comment = ""} = designDoc || {};
 
     return {id, name, receivingLimit, adjustmentLimit, comment};
   }
@@ -331,5 +331,10 @@ export class DesignDocumentationComponent implements OnInit {
   // i - индекс удаляемого поля
   removeNewDesignDoc(j, i) {
     this.newDesignDocModels[j].splice(i, 1);
+  }
+
+  isDateExpired(dateStr: string) {
+    const date: Date = new Date(dateStr);
+    return new Date() > date;
   }
 }
