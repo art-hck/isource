@@ -1,3 +1,2 @@
-<app-catalog-search-panel [searchText]="searchStr" (searchTextChange)="onSearch($event)"></app-catalog-search-panel>
-
-<app-catalog-positions-list [positions]="positions"></app-catalog-positions-list>
+<app-catalog-positions-list *ngIf="(positions$ | async) as positions" [positions]="positions">
+</app-catalog-positions-list>
