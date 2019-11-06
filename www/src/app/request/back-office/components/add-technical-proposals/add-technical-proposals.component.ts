@@ -156,9 +156,9 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
   }
 
-  onPublishProcedure(data: PublishProcedureInfo): void {
+  onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
     const request: PublishProcedureRequest = {
-      procedureInfo: data,
+      procedureInfo: publishProcedureInfo,
       getTPFilesOnImport: true
     };
 

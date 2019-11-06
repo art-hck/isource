@@ -383,9 +383,9 @@ export class AddOffersComponent implements OnInit {
 
   }
 
-  onPublishProcedure(data: PublishProcedureInfo): void {
+  onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
     const request: PublishProcedureRequest = {
-      procedureInfo: data,
+      procedureInfo: publishProcedureInfo,
       getTPFilesOnImport: false
     };
 
