@@ -6,7 +6,7 @@
     <div class="info-card clr-col">
       <div class="request-info">
         <div class="breadcrumbs">
-          <a (click)="onRequestsClick()">Заявки</a> / <a (click)="onRequestClick()">Заявка №{{request.number}}</a>
+          <a [href]="'requests/backoffice/'">Заявки</a> → <a [href]="'requests/backoffice/' + request.id">Заявка №{{request.number}}</a>
         </div>
         <div class="clr-row w-100">
           <div class="clr-col-5">
@@ -73,7 +73,8 @@
               </div>
             </th>
             <th class="contragent-name" *ngFor="let supplier of suppliers">
-              <a (click)="showContragentInfo(supplier.id)">{{ supplier.shortName }}</a>
+              <a [href]="'/contragents/' + supplier.id + '/info'"
+                 (click)="showContragentInfo($event, supplier.id)">{{ supplier.shortName }}</a>
             </th>
           </tr>
           </thead>

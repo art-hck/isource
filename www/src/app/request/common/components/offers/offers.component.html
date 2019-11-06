@@ -82,7 +82,8 @@
   <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
-          <a (click)="showContragentInfo(linkedOffer.supplierContragentId)">{{linkedOffer.supplierContragentName}}</a>
+          <a [href]="'/contragents/' + linkedOffer.supplierContragentId + '/info'"
+             (click)="showContragentInfo($event, linkedOffer.supplierContragentId)">{{linkedOffer.supplierContragentName}}</a>
           <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
         </div>
         <div class="card-block">

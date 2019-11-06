@@ -14,7 +14,8 @@
       </div>
       <div class="clr-col-3 right-align">
         <span class="supplier-name">
-          <a (click)="showContragentInfo(position.supplierContragent.id)">
+          <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
+             (click)="showContragentInfo($event, position.supplierContragent.id)">
             {{ position.supplierContragent.shortName }}
           </a>
         </span>

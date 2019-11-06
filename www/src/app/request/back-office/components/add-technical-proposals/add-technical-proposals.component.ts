@@ -91,14 +91,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.contragentList$ = this.getContragentService.getContragentList();
   }
 
-  onRequestsClick(): void {
-    this.router.navigateByUrl(`requests/backoffice`);
-  }
-
-  onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
-  }
-
   /**
    * Подготовка модального окна для добавления ТП
    */
@@ -476,7 +468,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.contragentSearchFieldValue = value;
   }
 
-  showContragentInfo(contragentId: Uuid): void {
+  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
+    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
+    event.preventDefault();
+
     this.contragentInfoModalOpened = true;
 
     if (!this.contragent || this.contragent.id !== contragentId) {

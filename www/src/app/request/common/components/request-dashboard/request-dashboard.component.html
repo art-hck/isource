@@ -16,8 +16,8 @@
           </div>
 
 
-          <div class="clr-col-auto positions-stats-item"
-               (click)="tpOnAgreementCount > 0 ? openAddTechnicalProposalsPage() : false"
+          <a class="clr-col-auto positions-stats-item"
+               [routerLink]="tpOnAgreementCount > 0 ? getAddTechnicalProposalsLink() : null"
                [ngClass]="{'not-clickable' : tpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании ТП</span>
 
@@ -25,11 +25,11 @@
               <span class="items-count">{{ tpOnAgreementCount }}</span>
               <span class="items-count-label gray">{{ getPositionsCountLabel(tpOnAgreementCount) }}</span>
             </div>
-          </div>
+          </a>
 
 
-          <div class="clr-col-auto positions-stats-item"
-               (click)="kpOnAgreementCount > 0 ? openAddOffersPage() : false"
+          <a class="clr-col-auto positions-stats-item"
+               [routerLink]="kpOnAgreementCount > 0 ? getOffersPageLink() : null"
                [ngClass]="{'not-clickable' : kpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании КП</span>
 
@@ -37,11 +37,11 @@
               <span class="items-count">{{ kpOnAgreementCount }}</span>
               <span class="items-count-label gray">{{ getPositionsCountLabel(kpOnAgreementCount) }}</span>
             </div>
-          </div>
+          </a>
 
 
-          <div class="clr-col-auto positions-stats-item"
-               (click)="rkdAvailable ? openAddDesignDocumentationPage() : false"
+          <a class="clr-col-auto positions-stats-item"
+               [routerLink]="rkdAvailable ? getAddDesignDocumentationLink() : null"
                [ngClass]="{'not-clickable' : !rkdAvailable }">
             <span class="stats-items-title">На согласовании РКД</span>
 
@@ -49,11 +49,11 @@
               <span class="items-count">{{ rkdOnAgreementCount }}</span>
               <span class="items-count-label gray">{{ getPositionsCountLabel(rkdOnAgreementCount) }}</span>
             </div>
-          </div>
+          </a>
 
 
-          <div class="clr-col-auto positions-stats-item"
-               (click)="onAgreementReviewCount > 0 ? openContractsPage() : false"
+          <a class="clr-col-auto positions-stats-item"
+               [routerLink]="onAgreementReviewCount > 0 ? getContractsLink() : null"
                [ngClass]="{'not-clickable' : onAgreementReviewCount === 0 }">
             <span class="stats-items-title">На рассмотрении договора</span>
 
@@ -61,7 +61,7 @@
               <span class="items-count">{{ onAgreementReviewCount }}</span>
               <span class="items-count-label gray">{{ getPositionsCountLabel(onAgreementReviewCount) }}</span>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

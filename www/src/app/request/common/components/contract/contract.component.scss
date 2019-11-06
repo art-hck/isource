@@ -1,3 +1,15 @@
+.breadcrumbs {
+  margin-bottom: 15px;
+}
+.breadcrumbs, .breadcrumbs a {
+  color: #646566;
+  font-weight: 400;
+  font-size: 20px;
+}
+.breadcrumbs a:hover {
+  text-decoration: none;
+}
+
 .btn-add-contract {
   float: right;
 }

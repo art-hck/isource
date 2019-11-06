@@ -8,6 +8,11 @@ body, body p, input, select, h2, h3, h4, h5, h6 {
   font-family: PT Root UI, Roboto, sans-serif !important;
 }
 
+*:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
 body {
     background-color: #f3f7fa;
 }

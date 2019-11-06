@@ -108,7 +108,10 @@ export class AddOffersComponent implements OnInit {
     this.updatePositionsAndSuppliers();
   }
 
-  showContragentInfo(contragentId: Uuid): void {
+  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
+    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
+    event.preventDefault();
+
     this.contragentInfoModalOpened = true;
 
     if (!this.contragent || this.contragent.id !== contragentId) {
@@ -288,14 +291,6 @@ export class AddOffersComponent implements OnInit {
   onDocumentSelected(documents: File[], form): void {
     // TODO: 2019-11-06 Определить тип аргумента form
     form.get('documents').setValue(documents);
-  }
-
-  onRequestsClick(): void {
-    this.router.navigateByUrl(`requests/backoffice`);
-  }
-
-  onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.request.id}`);
   }
 
   onDownloadOffersTemplate(): void {

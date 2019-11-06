@@ -8,9 +8,11 @@ import { SearchViewComponent } from "./components/search-view/search-view.compon
 import { PositionsListComponent } from "./components/positions-list/positions-list.component";
 import { CategoriesComponent } from './components/categories/categories.component';
 import { ContragentModule } from "../contragent/contragent.module";
+import { CatalogComponent } from "./components/catalog/catalog.component";
 
 @NgModule({
   declarations: [
+    CatalogComponent,
     SearchViewComponent,
     CategoryViewComponent,
 
