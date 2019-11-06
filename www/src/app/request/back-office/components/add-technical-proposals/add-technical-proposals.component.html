@@ -11,25 +11,26 @@
         </div>
         <h2>Технические предложения</h2>
 
-        <div class="clr-row w-100">
-          <div class="clr-col-2">
+        <div class="clr-row clr-justify-content-between">
 
+          <div class="clr-col">
             <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
               + Добавить ТП
             </span>
+          </div>
 
+          <div class="clr-col-auto">
             <button class="btn btn-primary send-offers"
-                    (click)="createProcedureWizard.open()"
-            >
+                    (click)="createProcedureWizard.open()">
               <b>Создать процедуру</b>
             </button>
+
             <button class="btn btn-primary"
-                    (click)="onImportOffersFromProcedure()"
-            >
+                    (click)="onImportOffersFromProcedure()">
               <b>Получить КП из процедуры</b>
             </button>
-
           </div>
+
         </div>
 
         <div class="technical-proposal-card-list">
