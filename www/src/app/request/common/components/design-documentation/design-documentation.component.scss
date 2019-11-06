@@ -56,6 +56,7 @@ span.position-name {
   font-size: 17px;
   line-height: 100%;
   flex-grow: 1;
+  min-height: 36px;
 }
 
 span.position-name-label, span.positions-list-label {
@@ -276,4 +277,16 @@ clr-dropdown-menu  {
 .status-warning {
   color: #fac400;
   border-color: #fac400;
+}
+
+.modal-body {
+  min-height: auto;
+}
+
+.document-list td:last-child {
+  padding-right: 0;
+}
+
+.expired {
+  color: #a32100;
 }

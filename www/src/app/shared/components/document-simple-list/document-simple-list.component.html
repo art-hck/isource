@@ -1,25 +1,31 @@
 <ul class="list-unstyled">
   <li class="document" [class.awaiting]="document.id === null" *ngFor="let document of getDocuments()">
-    <button *ngIf="enableDelete"
-            (click)="onDeleteDocument(document)"
-            type="button"
-            class="btn btn-link btn-delete"
-            title="Удалить">
-      {{ deleteLabel }}
-    </button>
-
-    <document-icon [name]="document.filename" [size]="documentIconSize.medium"></document-icon>
-    <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
-      <div class="title">{{ document.filename }}</div>
-      <div class="description">
-        <span *ngIf="document.size > 0">{{document.size | bytesToSize : 2}}</span>
-        <span *ngIf="document.created">
+      <document-icon (click)="onDownloadDocument(document)" [name]="document.filename" [size]="documentIconSize.medium"></document-icon>
+      <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
+        <div class="title">{{ document.filename }}</div>
+        <div class="description">
+          <span *ngIf="document.size > 0">{{document.size | bytesToSize : 2}}</span>
+          <span *ngIf="document.created">
           <ng-container *ngIf="document.id === null">будет скорректирован до</ng-container>
-          {{document.created  | date :' d MMMM y '}}
+            {{document.created  | date :' d MMMM y '}}
         </span>
-      </div>
+        </div>
 
-    </div>
+      </div>
+      <button *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn btn-delete btn-icon"
+              title="Удалить"><clr-icon shape="trash"></clr-icon>
+      </button>
+      <clr-modal #modal [clrModalStaticBackdrop]="false">
+        <h3 class="modal-title">Удалить <b>{{document.filename}}</b>?</h3>
+        <div class="modal-footer">
+          <button type="button" class="btn" (click)="modal.close()">
+            Отмена
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onDeleteDocument(document); modal.close()">
+            Удалить
+          </button>
+        </div>
+      </clr-modal>
   </li>
 
   <ng-container *ngIf="limit > 0 && limit < documents.length">

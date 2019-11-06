@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../models/request";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
-import { RequestService as CustomerRequestService} from "../../../customer/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { DesignDocumentationService } from "../../../back-office/services/design-documentation.service";
 import { DesignDocumentationList } from "../../models/design-documentationList";
 import { RequestPosition } from "../../models/request-position";
@@ -16,6 +16,7 @@ import { Observable } from "rxjs";
 import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
 
 @Component({
   selector: 'app-design-documentation',
@@ -45,6 +46,7 @@ export class DesignDocumentationComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
+  public newDesignDocModels: {model: DesignDocumentationEdit, state: ClrLoadingState}[][] = [];
 
   get addDocumentationListForm() {
     return this.addDocumentationForm.get('addDocumentationListForm') as FormArray;
@@ -94,8 +96,8 @@ export class DesignDocumentationComponent implements OnInit {
   addDocumentationListFormGroup(): FormGroup {
     return this.formBuilder.group({
       name: ['', [Validators.required, CustomValidators.simpleText]],
-      adjustmentLimit: ['15', Validators.required],
-      receivingLimit: ['5', Validators.required]
+      adjustmentLimit: ['5', Validators.required],
+      receivingLimit: ['15', Validators.required]
     });
   }
 
@@ -109,10 +111,8 @@ export class DesignDocumentationComponent implements OnInit {
     }
   }
 
-  isFieldInvalid(i, field: string) {
-    return this.addDocumentationListForm.at(i).get(field).errors
-      && (this.addDocumentationListForm.at(i).get(field).touched
-        || this.addDocumentationListForm.at(i).get(field).dirty);
+  isDesignDocModelInvalid(designDocModel: DesignDocumentationEdit) {
+    return !designDocModel.name || !designDocModel.receivingLimit || !designDocModel.adjustmentLimit;
   }
 
   getPositionList() {
@@ -179,12 +179,16 @@ export class DesignDocumentationComponent implements OnInit {
     return this.routeData.isBackoffice
       && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
-      && this.canSendOnApprove(designDocumentationList)
+      && this.canEditDesignDocList(designDocumentationList)
     ;
   }
 
-  canSendOnApprove(designDoc: DesignDocumentationList) {
+  canEditDesignDocList(designDoc: DesignDocumentationList) {
     return [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
+  }
+
+  canEditDesignDoc(designDocumentation: DesignDocumentationList, designDoc: DesignDocumentation) {
+    return designDoc.type !== DesignDocumentationType.REMARK && this.canEditDesignDocList(designDocumentation);
   }
 
   isSendOnApproveActive(designDocList: DesignDocumentationList) {
@@ -250,7 +254,7 @@ export class DesignDocumentationComponent implements OnInit {
     const i = this.designDocumentations.indexOf(oldDoc);
 
     if (i !== -1) {
-      this.designDocumentations[i] = newDoc;
+      this.designDocumentations[i] = {...this.designDocumentations[i], ...newDoc};
     }
   }
 
@@ -269,5 +273,68 @@ export class DesignDocumentationComponent implements OnInit {
       extension: null,
       mime: null
     };
+  }
+
+  removeDesignDocumentList(request: Request, designDocumentationList: DesignDocumentationList) {
+    this.designDocumentationService.removeDesignDocumentList(request.id, designDocumentationList.id)
+      .subscribe(() => this.designDocumentations = this.designDocumentations.filter(designDocList => (
+        designDocList !== designDocumentationList
+      )));
+  }
+
+  removeDesignDocument(request: Request, designDocumentation: DesignDocumentation) {
+    this.designDocumentationService.removeDesignDocument(request.id, designDocumentation.id)
+      .subscribe(() => this.designDocumentations = this.designDocumentations.map(designDocList => (
+        {...designDocList, designDocs: designDocList.designDocs.filter(designDoc => designDoc !== designDocumentation)}
+      )));
+  }
+
+  removeDocuments(request: Request, designDocumentation: DesignDocumentation, documents: RequestDocument[]) {
+    this.designDocumentationService.removeDocuments(request.id, designDocumentation.id, documents)
+      .subscribe(data => designDocumentation.documents  = designDocumentation.documents.filter(doc => !documents.includes(doc)))
+    ;
+  }
+
+  getDesignDocModel(designDoc?: DesignDocumentation): DesignDocumentationEdit {
+    const {id = null, name = "", receivingLimit = 15, adjustmentLimit = 5, comment = ""} = designDoc || {};
+
+    return {id, name, receivingLimit, adjustmentLimit, comment};
+  }
+
+  editDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList) {
+    this.designDocumentationService.editDesignDocument(request.id, designDocModel.id, designDocModel)
+      .subscribe(data => {
+        const i = designDocumentationList.designDocs.findIndex(_designDoc => _designDoc.id === designDocModel.id);
+        designDocumentationList.designDocs[i] = data;
+      });
+  }
+
+  // Загружает документ в перечень. После загрузки удаляет поля ввода
+  addDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList, j: number, i: number) {
+    this.newDesignDocModels[j][i].state = ClrLoadingState.LOADING;
+
+    this.designDocumentationService.addDesignDocument(request.id, designDocumentationList.id, designDocModel)
+      .subscribe(designDoc => {
+         this.newDesignDocModels[j][i].state = ClrLoadingState.SUCCESS;
+        this.removeNewDesignDoc(j, i);
+        designDocumentationList.designDocs.push(designDoc);
+      });
+  }
+
+  // Создаёт или добавляет поля ввода создания документа к перечню
+  pushNewDesignDoc(j) {
+    (this.newDesignDocModels[j] = this.newDesignDocModels[j] || []).push({model: this.getDesignDocModel(), state: ClrLoadingState.DEFAULT});
+  }
+
+  // Удаляет поля ввода создания документа к перечню
+  // j - индекс перечня РКД
+  // i - индекс удаляемого поля
+  removeNewDesignDoc(j, i) {
+    this.newDesignDocModels[j].splice(i, 1);
+  }
+
+  isDateExpired(dateStr: string) {
+    const date: Date = new Date(dateStr);
+    return new Date() > date;
   }
 }

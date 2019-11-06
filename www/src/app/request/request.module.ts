@@ -86,7 +86,6 @@ import { RequestPositionStatusService } from "./common/services/request-position
     PositionSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
-    DesignDocumentationComponent,
     SupplierSelectComponent,
     CommercialProposalsComponent,
     ContractComponent,

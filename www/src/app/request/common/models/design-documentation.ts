@@ -6,9 +6,11 @@ export class DesignDocumentation {
   id: Uuid;
   name: string;
   status: string;
-  adjustmentDate?: Date;
-  receivingDate?: Date;
-  reviewDate?: Date;
+  adjustmentDate?: string;
+  adjustmentLimit: number;
+  receivingDate?: string;
+  receivingLimit: number;
+  reviewDate?: string;
   comment: string;
   type: DesignDocumentationType;
   documents: RequestDocument[];
