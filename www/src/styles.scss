@@ -1,5 +1,8 @@
 /* Подключение шрифтов */
 @import "assets/styles/fonts.scss";
+@import "assets/styles/tabs.scss";
+@import "assets/styles/grid.scss";
+@import "assets/styles/buttons.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -8,18 +11,26 @@ body, body p, input, select, h2, h3, h4, h5, h6 {
   font-family: PT Root UI, Roboto, sans-serif !important;
 }
 
+$color_black: #2B2B2B;
+$color_blue: #0085FF;
+$color_orange: #FF9E00;
+$color_green: #417505;
+$color_red: #FF2519;
+$color_gray: #999999;
+$color_light_gray: #D4D9E2;
+
 *:focus {
   outline: 0;
   box-shadow: none;
 }
 
 body {
-    background-color: #f3f7fa;
+    background-color: #FBFCFE;
 }
 
 h2 {
-    font-weight: 400;
-    line-height: 1;
+    font-weight: 800;
+    line-height: 40px;
     margin-bottom: 13px;
 }
 
@@ -38,7 +49,7 @@ select option:disabled {
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
-    padding: 50px 10px 30px 10px;
+    padding: 50px 130px 30px 130px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }
