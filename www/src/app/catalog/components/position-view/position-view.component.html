@@ -1,0 +1,67 @@
+<div class="position-view">
+  <div class="breadcrumbs">
+    Хлебные крошки
+  </div>
+<div class="position-document">
+  <span class="document-label">Нормативный документ:</span> Документ
+</div>
+  <h2>Наименование позиции</h2>
+  <div class="clr-row">
+    <div class="clr-col-9">
+  <clr-tabs>
+    <clr-tab>
+      <button clrTabLink>Характеристики</button>
+      <ng-template [(clrIfActive)]="dashboardActive">
+        <clr-tab-content>
+          <div class="clr-row position-info">
+            <div class="clr-col-4">
+              картинка
+            </div>
+            <div class="clr-col-8">
+              <div class="info-title">
+                основные характеристики
+              </div>
+            </div>
+          </div>
+        </clr-tab-content>
+      </ng-template>
+    </clr-tab>
+
+    <clr-tab>
+      <button clrTabLink>Документы</button>
+      <ng-template [(clrIfActive)]="managementActive">
+        <clr-tab-content>
+          ...
+        </clr-tab-content>
+      </ng-template>
+    </clr-tab>
+
+    <clr-tab>
+      <button clrTabLink>Поставщики</button>
+      <ng-template [(clrIfActive)]="cloudActive">
+        <clr-tab-content>
+          ...
+        </clr-tab-content>
+      </ng-template>
+    </clr-tab>
+  </clr-tabs>
+    </div>
+    <div class="clr-col-3 price-card">
+      <span class="card-title">доступность и доставка</span>
+      <div class="price-info">Наличие на складе
+      </div>
+        <b>550 шт</b>
+      <div class="price-info">Под заказ</div>
+      <b><a>ООО "Красный факел"</a></b>
+      <div class="price-info">Срок поставки</div>
+      <b>30 дней</b>
+      <div class="price-info">Количество</div>
+      <input type="number" class="quantity" value="1">
+      <div class="price">
+        <b>500000 RUB</b><span class="one-item">  за 1 шт</span>
+      </div>
+      <button class="btn btn-primary">В корзину</button>
+    </div>
+  </div>
+</div>
+

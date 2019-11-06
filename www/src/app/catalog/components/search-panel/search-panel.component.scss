@@ -11,13 +11,14 @@ $border-radius: 18px;
 
 .btn-categories {
   padding: 0 20px;
-  margin: 0 1.5em 0 0;
+  margin: 0;
 }
 
 .input-search {
-  border-radius: $border-radius 0 0 $border-radius;
-  padding: 10px 20px;
-  border-right: none;
+  border: 1px solid #D5DDE2;
+  padding: 10px;
+  height: 32px;
+  border-radius: 4px;
 }
 
 .btn-reset {
@@ -26,15 +27,39 @@ $border-radius: 18px;
   right: 0;
   top: 0;
   margin: 0;
+  padding-right: 70px;
+  height: 32px;
 }
 
 .btn-search {
+  position: absolute;
   margin: 0;
-  padding: 0 40px;
-  border-radius: 0 $border-radius $border-radius 0;
+  padding: 0;
+  right: 0;
+  top: 0;
+  height: 32px;
+  color: #2585F5;
+}
+
+button .btn-search {
+  background-color: white;
+  height: 32px;
 }
 
 .new-request {
-  font-size: 12px;
-  margin-left: 154px;
+  font-size: 14px;
+}
+
+.search-bar {
+  background-color: #E5E8EF;
+  height: 56px;
+  right: 0;
+  top: 64px;
+  position: absolute;
+  padding-left: 150px;
+  width: 100%;
+}
+
+.search {
+  position: relative;
 }

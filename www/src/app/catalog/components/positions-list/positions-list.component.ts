@@ -8,6 +8,8 @@ import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { Observable } from "rxjs";
 import { publishReplay, refCount } from "rxjs/operators";
+import { RequestsList } from "../../../request/common/models/requests-list/requests-list";
+import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Component({
   selector: 'app-catalog-positions-list',
@@ -57,4 +59,7 @@ export class PositionsListComponent implements OnInit {
     }
   }
 
+  onPositionClick(position: CatalogPosition): void {
+    this.router.navigateByUrl(`/catalog/position/${position.id}`);
+  }
 }
