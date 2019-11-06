@@ -51,6 +51,8 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
 import { ContractComponent } from "./common/components/contract/contract.component";
 import { ContragentModule } from "../contragent/contragent.module";
 import { RequestPositionStatusService } from "./common/services/request-position-status.service";
+import { DeliveryMonitorComponent } from './common/components/delivery-monitor/delivery-monitor.component';
+import { SpecificationComponent } from './common/components/delivery-monitor/specification/specification.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,9 @@ import { RequestPositionStatusService } from "./common/services/request-position
     ContractComponent,
     DesignDocumentationComponent,
     ContractCreateComponent,
-    ContractUploadDocumentComponent
+    ContractUploadDocumentComponent,
+    DeliveryMonitorComponent,
+    SpecificationComponent
   ],
   imports: [
     SharedModule,
