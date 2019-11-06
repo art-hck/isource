@@ -391,7 +391,7 @@ export class AddOffersComponent implements OnInit {
 
     this.procedureService.publishProcedure(request).subscribe(
       (data: PublishProcedureResult) => {
-        this.resetWizardForm();
+        this.wizard.resetWizardForm();
         this.updatePositionsAndSuppliers();
         this.selectedRequestPositions = [];
         Swal.fire({
