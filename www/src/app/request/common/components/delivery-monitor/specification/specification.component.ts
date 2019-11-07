@@ -32,8 +32,6 @@ export class SpecificationComponent implements OnInit {
       this.deliveredCount;
   }
 
-
-
   getProgressWidth(countParam) {
     const percent = (countParam / this.totalCount) * 100 ;
     return percent + "%";

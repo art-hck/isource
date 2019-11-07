@@ -16,7 +16,4 @@ export class DeliveryMonitorComponent implements OnInit {
     return "сегодня, 17:00";
   }
 
-  fetchChildren() {
-    console.log('trigger');
-  }
 }
