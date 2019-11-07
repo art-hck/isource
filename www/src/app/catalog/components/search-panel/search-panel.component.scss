@@ -23,27 +23,17 @@ $border-radius: 18px;
 
 .btn-reset {
   position: absolute;
-  color: #aaa;
-  right: 0;
+  color: black;
+  right: 13px;
   top: 0;
   margin: 0;
-  padding-right: 70px;
   height: 32px;
 }
 
 .btn-search {
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  right: 0;
-  top: 0;
   height: 32px;
-  color: #2585F5;
-}
-
-button .btn-search {
-  background-color: white;
-  height: 32px;
+  width: 32px;
+  margin-right: 20px;
 }
 
 .new-request {
@@ -58,8 +48,25 @@ button .btn-search {
   position: absolute;
   padding-left: 150px;
   width: 100%;
+  z-index: 10;
 }
 
 .search {
   position: relative;
+}
+
+.btn-primary {
+  .btn, &.btn {
+    background-color: #2585F5;
+    color: white;
+    padding: 0;
+
+    &:disabled {
+      border-color: white;
+      background-color: white;
+      color: black;
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
 }

@@ -27,6 +27,10 @@ export class CatalogService {
     });
   }
 
+  getPositionInfo(positionId: Uuid): Observable<CatalogPosition> {
+    return this.api.get<CatalogPosition>(`catalog/position/${positionId}`);
+  }
+
   getCategoryInfo(categoryId: Uuid): Observable<CatalogCategory> {
     return this.api.get<CatalogCategory>(`catalog/categories/${categoryId}/info`);
   }

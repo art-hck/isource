@@ -2,11 +2,6 @@
   padding-left: 8px;
 }
 
-.breadcrumbs {
-  font-size: 11px;
-  padding-top: 5px;
-}
-
 .card-title {
   text-transform: uppercase;
   font-size: 11px;
@@ -21,8 +16,8 @@
   background: #FFFFFF;
   border: 1px solid #D5DDE2;
   border-radius: 8px;
-  padding: 10px 20px 20px 20px;
-  margin-top: 40px;
+  padding: 15px 20px 20px 20px;
+  margin-top: 30px;
 }
 
 .info-title  {
@@ -38,11 +33,12 @@
   line-height: 18px;
   color: black;
   opacity: 0.3;
+  padding-right: 5px;
 }
 
 .position-document {
   color: black;
-  padding-top: 20px;
+  padding-top: 45px;
 }
 
 .position-info {
@@ -59,8 +55,8 @@
 .price {
   font-size: 22px;
   line-height: 28px;
-  padding-top: 32px;
-  padding-bottom: 10px;
+  padding-top: 14px;
+  padding-bottom: 8px;
 }
 
 .one-item {
@@ -71,5 +67,27 @@
 }
 
 .quantity {
-  width: 100px;
+  width: 80px;
+  margin: 0 10px 0 12px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.description {
+  padding-top: 10px;
+  color: black;
+  opacity: 0.6;
+}
+
+.btn-primary {
+  margin-top: 0;
+}
+
+.tabs {
+  padding-right: 20px;
+}
+
+.info {
+  padding-right: 30px;
+  padding-left: 0;
 }

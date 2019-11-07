@@ -1,5 +1,8 @@
 /* Кнопки */
 
+$color_blue: #2585F5;
+$color_dark_blue: #1A71D8;
+
 button:focus {
   outline: none;
 }
@@ -11,12 +14,13 @@ button:focus {
   font-size: 14px;
   font-weight: 500;
   height: 40px;
-  background: #2585F5;
+  background: $color_blue;
   border: 0;
   border-radius: 4px;
   line-height: 1;
   padding: 0 9px;
   max-width: initial;
+  min-width: unset;
 
   span { /* Дополнительный отступ вокруг текста в кнопке */
     padding: 0 4px;
@@ -36,23 +40,23 @@ button:focus {
 /* Синяя кнопка большая*/
 .btn-primary {
   .btn, &.btn {
-    background-color: #2585F5;
+    background-color: $color_blue;
     color: white;
 
     &:hover {
-      background-color: #1A71D8;
+      background-color: $color_dark_blue;
       color: white; // todo убрать?
     }
 
     &:active {
       -webkit-box-shadow: none;
       box-shadow: none;
-      background-color: #1A71D8;
+      background-color: $color_dark_blue;
     }
 
     &:disabled {
-      border-color: #E5E6E9;
-      background-color: #E5E6E9;
+      border-color: black;
+      background-color: black;
       color: black;
       opacity: 0.3;
       cursor: not-allowed;
@@ -63,27 +67,27 @@ button:focus {
 /* Синяя кнопка маленькая*/
 .btn-secondary {
   .btn, &.btn {
-    border-color: #2585F5;
-    background-color: #2585F5;
+    border-color: $color_blue;
+    background-color: $color_blue;
     color: white;
     height: 32px;
 
     &:hover {
-      border-color: #1A71D8;
-      background-color: #1A71D8;
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
       color: white; // todo убрать?
     }
 
     &:active {
       -webkit-box-shadow: none;
       box-shadow: none;
-      border-color: #1A71D8;
-      background-color: #1A71D8;
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
     }
 
     &:disabled {
-      border-color: #E5E6E9;
-      background-color: #E5E6E9;
+      border-color: black;
+      background-color: black;
       color: black;
       opacity: 0.3;
       cursor: not-allowed;
@@ -96,24 +100,24 @@ button:focus {
   .btn, &.btn {
     border-color: transparent;
     background-color: transparent;
-    color: #2585F5;
+    color: $color_blue;
 
     &:hover {
       border-color: transparent;
       background-color: transparent;
-      color: #1A71D8;
+      color: $color_dark_blue;
     }
 
     &:active {
       border-color: transparent;
       background-color: transparent;
-      color: #1A71D8;
+      color: $color_dark_blue;
     }
 
     &:disabled {
       border-color: transparent;
       background-color: transparent;
-      color: #2585F5;
+      color: $color_blue;
       cursor: not-allowed;
       opacity: .5;
     }
