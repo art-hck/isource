@@ -8,30 +8,30 @@
 
     <div>
       <div class="good-name">Труба ОШ-D-1020х17-К60 Т20/60</div>
-      <div class="total-count">100,00 т</div>
+      <div class="total-count">{{ totalCount | number : '1.2-2' }} т</div>
     </div>
   </div>
 
 
   <div class="good-statistics-info">
-    <div class="awaiting-progress" [style.width]="getAwaitingProgressWidth()">
-      <span>0,00 т</span>
+    <div class="awaiting-progress" [style.width]="getProgressWidth(awaitingCount)">
+      <span>{{ awaitingCount | number : '1.2-2' }} т</span>
     </div>
 
-    <div class="production-progress" [style.width]="getProductionProgressWidth()">
-      <span>8,17 т</span>
+    <div class="production-progress" [style.width]="getProgressWidth(productionCount)">
+      <span>{{ productionCount | number : '1.2-2' }} т</span>
     </div>
 
-    <div class="shipment-progress" [style.width]="getShipmentProgressWidth()">
-      <span>35,00 т</span>
+    <div class="shipment-progress" [style.width]="getProgressWidth(shipmentCount)">
+      <span>{{ shipmentCount | number : '1.2-2' }} т</span>
     </div>
 
-    <div class="in-transit-progress" [style.width]="getInTransitProgressWidth()">
-      <span>40,04 т</span>
+    <div class="in-transit-progress" [style.width]="getProgressWidth(inTransitCount)">
+      <span>{{ inTransitCount | number : '1.2-2' }} т</span>
     </div>
 
-    <div class="delivered-progress" [style.width]="getDeliveredProgressWidth()">
-      <span>17,65 т</span>
+    <div class="delivered-progress" [style.width]="getProgressWidth(deliveredCount)">
+      <span>{{ deliveredCount | number : '1.2-2' }} т</span>
     </div>
   </div>
 
@@ -39,27 +39,27 @@
   <div class="good-statuses">
     <div class="good-status-block">
       <div class="good-status-label st-awaiting">Ожидает</div>
-      <div class="good-status-count">0,00 т</div>
+      <div class="good-status-count">{{ awaitingCount | number : '1.2-2' }} т</div>
     </div>
 
     <div class="good-status-block">
       <div class="good-status-label st-production">Производство</div>
-      <div class="good-status-count">8,17 т</div>
+      <div class="good-status-count">{{ productionCount | number : '1.2-2' }} т</div>
     </div>
 
     <div class="good-status-block">
       <div class="good-status-label st-shipment">Отгрузка</div>
-      <div class="good-status-count">35,00 т</div>
+      <div class="good-status-count">{{ shipmentCount | number : '1.2-2' }} т</div>
     </div>
 
     <div class="good-status-block">
       <div class="good-status-label st-in-transit">В пути</div>
-      <div class="good-status-count">40,04 т</div>
+      <div class="good-status-count">{{ inTransitCount | number : '1.2-2' }} т</div>
     </div>
 
     <div class="good-status-block">
       <div class="good-status-label st-delivered">Доставлено</div>
-      <div class="good-status-count">17,65 т</div>
+      <div class="good-status-count">{{ deliveredCount | number : '1.2-2' }} т</div>
     </div>
   </div>
 

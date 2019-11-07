@@ -7,30 +7,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SpecificationComponent implements OnInit {
 
+  totalCount: number;
+
+  awaitingCount: number;
+  productionCount: number;
+  shipmentCount: number;
+  inTransitCount: number;
+  deliveredCount: number;
+
   constructor() { }
 
   ngOnInit() {
+    this.awaitingCount = 8.00;
+    this.productionCount = 16.17;
+    this.shipmentCount = 25;
+    this.inTransitCount = 10.5;
+    this.deliveredCount = 27.65;
+
+    this.totalCount =
+      this.awaitingCount +
+      this.productionCount +
+      this.shipmentCount +
+      this.inTransitCount +
+      this.deliveredCount;
   }
 
 
 
-  getAwaitingProgressWidth() {
-    return "0%";
-  }
-
-  getProductionProgressWidth() {
-    return "20%";
-  }
-
-  getShipmentProgressWidth() {
-    return "40%";
-  }
-
-  getInTransitProgressWidth() {
-    return "30%";
-  }
-
-  getDeliveredProgressWidth() {
-    return "10%";
+  getProgressWidth(countParam) {
+    const percent = (countParam / this.totalCount) * 100 ;
+    return percent + "%";
   }
 }
