@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  margin-top: 20px;
+  width: 280px;
+
+  label {
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+  }
+}

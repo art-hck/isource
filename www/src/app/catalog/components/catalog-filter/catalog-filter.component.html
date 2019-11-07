@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <app-catalog-filter-section label="Цена">
+    <range-slider-control [min]="0" [max]="1000" formControlName="price"></range-slider-control>
+  </app-catalog-filter-section>
+
+  <app-catalog-filter-section label="Наличие">
+    <label class="clr-row clr-align-items-center">
+      <div class="clr-col">Поставка только со склада</div>
+      <div class="clr-col clr-flex-grow-0">
+        <checkbox-slider-control formControlName="availability"></checkbox-slider-control>
+      </div>
+    </label>
+  </app-catalog-filter-section>
+
+  <ng-container *ngFor="let attribute of attributes.controls; let i=index;" formArrayName="attributes">
+    <app-catalog-filter-section [label]="attribute.get('label').value" formGroupName="{{i}}">
+      <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index" formArrayName="values">
+          <clr-checkbox-wrapper formGroupName="{{j}}">
+            <input type="checkbox" clrCheckbox formControlName="checked"/>
+            <label>{{ attributeValue.get('value').value }}</label>
+          </clr-checkbox-wrapper>
+      </ng-container>
+    </app-catalog-filter-section>
+  </ng-container>
+</form>

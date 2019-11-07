@@ -33,6 +33,8 @@
     "jasmine-allure-reporter": "^1.0.2",
     "moment": "^2.24.0",
     "ng2-file-upload": "^1.4.0",
+    "ng2-nouislider": "^1.8.2",
+    "nouislider": "^14.0.3",
     "rxjs": "^6.5.3",
     "stdlib-ng": "git+ssh://git@gitlab.etpgpb.loc:newetp-stdlib/stdlib-ng.git#gpn_market-173",
     "sweetalert2": "^8.18.6",

@@ -1,0 +1,25 @@
+:host {
+  border-bottom: 1px #dddee0 solid;
+  display: block;
+  margin: 0 0 16px;
+  padding: 0 0 24px;
+}
+
+label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  user-select: none;
+
+  clr-icon {
+    transform: rotate(180deg);
+    transition: transform 150ms;
+  }
+
+  &.showed clr-icon {
+    transform: rotate(0deg);
+  }
+}

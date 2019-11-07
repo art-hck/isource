@@ -9,7 +9,13 @@ import { PositionsListComponent } from "./components/positions-list/positions-li
 import { CategoriesComponent } from './components/categories/categories.component';
 import { ContragentModule } from "../contragent/contragent.module";
 import { CatalogComponent } from "./components/catalog/catalog.component";
+import { CatalogFilterComponent } from "./components/catalog-filter/catalog-filter.component";
+import { CheckboxSliderControlComponent } from "./controls/checkbox-slider/checkbox-slider.control";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RangeSliderControlComponent } from "./controls/range-slider/range-slider.control";
+import { NouisliderModule } from "ng2-nouislider";
 import { PositionViewComponent } from './components/position-view/position-view.component';
+import { CatalogFilterSectionComponent } from "./components/catalog-filter-section/catalog-filter-section.component";
 
 @NgModule({
   declarations: [
@@ -20,12 +26,18 @@ import { PositionViewComponent } from './components/position-view/position-view.
     PositionsListComponent,
     SearchPanelComponent,
     CategoriesComponent,
-    PositionViewComponent
+    PositionViewComponent,
+    CatalogFilterComponent,
+    CheckboxSliderControlComponent,
+    RangeSliderControlComponent,
+    CatalogFilterSectionComponent
   ],
   imports: [
+    ReactiveFormsModule,
     SharedModule,
     CatalogRoutingModule,
-    ContragentModule
+    ContragentModule,
+    NouisliderModule
   ],
   providers: [
     CatalogService
