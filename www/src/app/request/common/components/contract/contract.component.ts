@@ -169,6 +169,23 @@ export class ContractComponent implements OnInit {
         });
     }
   }
+
+  /**
+   * Скачивает сгенерированный шаблон договора
+   * @param request
+   * @param contract
+   */
+  onGenerateContract(request: Request, contract: Contract) {
+    this.contractService.generateContract(request.id, contract.id);
+  }
+
+  /**
+   * Нужно ли отображать кнопку скачивания шаблона договора
+   * @param contract
+   */
+  isShowGenerateContractButton(contract: Contract) {
+    return contract.status !== ContractStatus.APPROVED;
+  }
 }
 
 export class GroupedPositionsByCurrency { [name: string]: {total: number, offerPositions: RequestOfferPosition[] }; }
