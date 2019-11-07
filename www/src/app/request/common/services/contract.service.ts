@@ -1,9 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { ContragentWithPositions } from "../models/contragentWithPositions";
-import { delay, flatMap, map } from "rxjs/operators";
-import { Contract, ContractStatus } from "../models/contract";
+import { Contract } from "../models/contract";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { RequestPosition } from "../models/request-position";
 import { RequestDocument } from "../models/request-document";
@@ -12,6 +11,7 @@ import { ContractCreate } from "../models/requests-list/contract-create";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { DesignDocumentationService } from "../../back-office/services/design-documentation.service";
 import { Uuid } from "../../../cart/models/uuid";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable()
 export class ContractService {
@@ -67,5 +67,16 @@ export class ContractService {
     const url = `requests/${requestId}/contracts/${contractId}/approve`;
 
     return this.api.post<Contract>(url, null);
+  }
+
+  generateContract(requestId: Uuid, contractId: Uuid) {
+    const fileName = 'Договор.docx';
+    this.api.post(
+      `requests/${requestId}/contracts/${contractId}/generate`,
+      {},
+      {responseType: 'blob'})
+      .subscribe(data => {
+        saveAs(data, fileName);
+      });
   }
 }
