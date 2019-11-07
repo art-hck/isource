@@ -1,0 +1,127 @@
+/* Кнопки */
+
+$color_blue: #2585F5;
+$color_dark_blue: #1A71D8;
+
+button:focus {
+  outline: none;
+}
+
+.btn {
+  border-radius: 2px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  background: $color_blue;
+  border: 0;
+  border-radius: 4px;
+  line-height: 1;
+  padding: 0 9px;
+  max-width: initial;
+  min-width: unset;
+
+  span { /* Дополнительный отступ вокруг текста в кнопке */
+    padding: 0 4px;
+  }
+
+  &.large { /* Переопределение высоты для больших кнопок высотой 46px */
+    height: 46px;
+  }
+
+  clr-icon { /* Фикс разной высоты текста в кнопках с иконкой и без */
+    -webkit-transform: none;
+    transform: none;
+    vertical-align: sub;
+  }
+}
+
+/* Синяя кнопка большая*/
+.btn-primary {
+  .btn, &.btn {
+    background-color: $color_blue;
+    color: white;
+
+    &:hover {
+      background-color: $color_dark_blue;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-color: $color_dark_blue;
+    }
+
+    &:disabled {
+      border-color: black;
+      background-color: black;
+      color: black;
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Синяя кнопка маленькая*/
+.btn-secondary {
+  .btn, &.btn {
+    border-color: $color_blue;
+    background-color: $color_blue;
+    color: white;
+    height: 32px;
+
+    &:hover {
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
+    }
+
+    &:disabled {
+      border-color: black;
+      background-color: black;
+      color: black;
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Кнопка-ссылка без рамки и фона */
+.btn-link {
+  .btn, &.btn {
+    border-color: transparent;
+    background-color: transparent;
+    color: $color_blue;
+
+    &:hover {
+      border-color: transparent;
+      background-color: transparent;
+      color: $color_dark_blue;
+    }
+
+    &:active {
+      border-color: transparent;
+      background-color: transparent;
+      color: $color_dark_blue;
+    }
+
+    &:disabled {
+      border-color: transparent;
+      background-color: transparent;
+      color: $color_blue;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+

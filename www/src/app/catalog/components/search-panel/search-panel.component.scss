@@ -11,30 +11,62 @@ $border-radius: 18px;
 
 .btn-categories {
   padding: 0 20px;
-  margin: 0 1.5em 0 0;
+  margin: 0;
 }
 
 .input-search {
-  border-radius: $border-radius 0 0 $border-radius;
-  padding: 10px 20px;
-  border-right: none;
+  border: 1px solid #D5DDE2;
+  padding: 10px;
+  height: 32px;
+  border-radius: 4px;
 }
 
 .btn-reset {
   position: absolute;
-  color: #aaa;
-  right: 0;
+  color: black;
+  right: 13px;
   top: 0;
   margin: 0;
+  height: 32px;
 }
 
 .btn-search {
-  margin: 0;
-  padding: 0 40px;
-  border-radius: 0 $border-radius $border-radius 0;
+  height: 32px;
+  width: 32px;
+  margin-right: 20px;
 }
 
 .new-request {
-  font-size: 12px;
-  margin-left: 154px;
+  font-size: 14px;
+}
+
+.search-bar {
+  background-color: #E5E8EF;
+  height: 56px;
+  right: 0;
+  top: 64px;
+  position: absolute;
+  padding-left: 150px;
+  width: 100%;
+  z-index: 10;
+}
+
+.search {
+  position: relative;
+}
+
+.btn-primary {
+  .btn, &.btn {
+    background-color: #2585F5;
+    color: white;
+    padding: 0;
+
+    &:disabled {
+      border-color: white;
+      background-color: white;
+      color: black;
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
 }
