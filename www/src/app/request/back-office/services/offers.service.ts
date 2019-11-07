@@ -7,6 +7,8 @@ import { RequestDocument } from "../../common/models/request-document";
 import { Request } from "../../common/models/request";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestPosition } from "../../common/models/request-position";
+import { map } from 'rxjs/operators';
+import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
 @Injectable()
 export class OffersService {
@@ -77,13 +79,15 @@ export class OffersService {
     );
   }
 
-  getContragentsWithTp(request: Request, requestPositions: RequestPosition[]): Observable<any> {
+  getContragentsWithTp(request: Request, requestPositions: RequestPosition[]): Observable<ContragentList[]> {
     const ids = requestPositions.map(item => item.id);
 
     return this.api.post(
       `requests/backoffice/${request.id}/contragents-with-tp`,
       {positions: ids}
-    );
+    ).pipe(map((data) => {
+      return data as ContragentList[];
+    }));
   }
 
   /**

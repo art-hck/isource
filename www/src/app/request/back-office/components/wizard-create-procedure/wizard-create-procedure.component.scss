@@ -1,0 +1,342 @@
+h6 {
+  margin: 0;
+}
+
+.title-info {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 0;
+}
+
+.action-bar {
+  border-bottom: 1px solid #d7d7d7;
+}
+.card-content {
+  padding: 25px;
+}
+
+.position-row {
+  padding: 0 25px;
+}
+
+.action-row {
+  padding: 0 20px;
+}
+
+.blue {
+  color: #0085FF;
+}
+
+.grey {
+  color: #999999;
+}
+
+.request-info {
+  flex: 0 1 1200px;
+  min-width: 700px;
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-close {
+  margin-left: 10px;
+}
+
+.right {
+  text-align: right;
+}
+
+th {
+  text-align: inherit;
+  background-color: #f3f7fa;
+}
+
+td {
+  text-align: inherit;
+}
+
+th .position-name {
+  width: 400px;
+  min-width: 400px;
+}
+
+td .position-name {
+  width: 400px;
+  min-width: 400px;
+}
+
+.table {
+  border: 0;
+  background-color: #f3f7fa;
+  margin-top: 10px;
+}
+
+.contragent-name {
+  font-size: 18px;
+  font-weight: 400;
+  width: 250px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+table {
+  width: auto;
+}
+
+.offer {
+  background-color: white;
+  height: 100px;
+  border-radius: 4px;
+  padding: 5px 15px;
+}
+
+.offer:not(.disabled):hover {
+  border-bottom: 3px solid #0085FF;
+  cursor: pointer;
+}
+.offer.disabled {
+  opacity: 0.6;
+}
+
+.add-offer {
+  padding: 5px 15px;
+  cursor: pointer;
+  height: 100px;
+}
+
+.add-offer:hover {
+  background-color: white;
+  border-radius: 4px;
+}
+
+.delivery {
+  color: #999999;
+  font-size: 12px;
+}
+
+::ng-deep .clr-wizard-content .clr-control-label {
+  padding-bottom: 5px;
+}
+
+.clr-control-label {
+  padding-top: 10px;
+  font-weight: 100;
+}
+
+.import {
+  text-align: end;
+}
+
+.btn.btn-outline {
+  color: #0085FF;
+  border-color: #0085FF;
+}
+
+.position-label {
+  padding-top: 0;
+  font-weight: 400;
+}
+
+clr-checkbox-wrapper {
+  padding-top: 10px;
+}
+
+.position-name {
+  padding-top: 10px;
+}
+
+
+.sent-for-agreement-label,
+.has-procedure-label,
+.has-finished-procedure-label {
+  margin: 10px 22px;
+  display: block;
+  font-weight: bold;
+}
+
+.sent-for-agreement-label {
+  color: #4CAF50;
+}
+.has-finished-procedure-label {
+  color: #e7a20b;
+}
+
+.has-procedure-info {
+  margin: 10px 22px;
+  display: block;
+}
+.has-procedure-info a.has-procedure-link {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+.has-procedure-info div.end-date-info {
+  font-size: 12px;
+}
+
+.grey {
+  color: #999999;
+}
+
+.delivery-date {
+  color: #999999;
+  font-size: 12px;
+  margin: 0 22px;
+}
+
+.add-contragent {
+  text-align: end;
+}
+
+.send-offers {
+  margin: 0;
+  text-align: end;
+}
+
+h2 {
+  margin-bottom: 40px;
+}
+
+.import-export {
+  width: auto;
+}
+
+.container-dropdown {
+  position: absolute;
+  z-index: 100;
+  width: 516px; /* todo временное решение */
+  height: auto;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #d7d7d7;
+  background: white;
+}
+
+.contragent-list {
+  padding: 0 15px;
+}
+
+.contragent-list:hover {
+  background-color: #D4D9E2;
+}
+
+.searchContragent {
+  width: 100%;
+  padding-left: 10px;
+}
+
+.label-contragent {
+  font-size: 12px;
+  color: #999999;
+  margin-bottom: 0;
+}
+
+.document-list {
+  padding-top: 15px;
+}
+
+::ng-deep p.text-alert.warning-msg {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
+}
+
+.nopadding {
+  padding-top: 0;
+  text-align: left;
+  font-size: 13px;
+}
+
+::ng-deep .clr-wizard-title {
+  text-align: left;
+}
+
+::ng-deep .modal-title-text{
+  text-align: left;
+}
+
+::ng-deep .clr-wizard-page {
+  padding: 0 0 0 20px!important;
+}
+
+::ng-deep .modal-nav {
+  width: 200px!important;
+}
+
+.left {
+  text-align: left;
+}
+
+.dates, .positions {
+  padding: 0;
+}
+
+::ng-deep .clr-input-group-icon-action {
+  margin-right: 20px!important;
+}
+
+clr-checkbox-wrapper {
+  padding-top: 0;
+}
+
+.input-time {
+  width: 70px;
+  height: 32px;
+  margin-left: 15px;
+}
+
+.padding-top {
+  padding-top: 15px;
+}
+
+.radio-label {
+  padding-bottom: 10px;
+}
+
+.position-list {
+  padding-top: 10px;
+}
+
+.position-list clr-checkbox-wrapper {
+  display: block;
+}
+
+.document-list {
+  padding-top: 0;
+}
+
+.document-list clr-checkbox-container {
+  margin-right: 10px;
+}
+
+.send-offers button {
+  margin-left: 10px;
+}
+
+span.counted-offer-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2b2b2b;
+  padding-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+span.offer-quantity {
+  color: #9FA8B0;
+}
+
+div.per-unit-price-block {
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #002033;
+}
+
+.clr-radio-wrapper input[type=radio][disabled]+label {
+  cursor: default;
+  opacity: 0.5;
+}

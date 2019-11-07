@@ -9,6 +9,10 @@ import { ContragentList } from "../../../contragent/models/contragent-list";
 import { RequestOfferPosition } from "../../common/models/request-offer-position";
 import { Observable } from "rxjs";
 import { Request } from "../../common/models/request";
+import { PublishProcedureInfo } from '../models/publish-procedure-info';
+import { map } from 'rxjs/operators';
+import { PublishProcedureResult } from '../models/publish-procedure-result';
+import { PublishProcedureRequest } from '../models/publish-procedure-request';
 
 @Injectable()
 export class ProcedureService {
@@ -18,15 +22,17 @@ export class ProcedureService {
   ) {
   }
 
-  publishProcedure(
-    id: Uuid,
-    procedureInfo: ProcedureInfo,
-    procedureProperties: ProcedureProperties,
-    requestPositions: RequestPosition[],
-    procedureDocuments: RequestDocument[],
-    procedureLotDocuments: RequestDocument[],
-    procedurePrivateAccessContragents: ContragentList[]
-  ) {
+  publishProcedure(request: PublishProcedureRequest): Observable<PublishProcedureResult> {
+    const publishProcedureInfo = request.procedureInfo;
+
+    const id = publishProcedureInfo.requestId;
+    const requestPositions = publishProcedureInfo.selectedProcedurePositions;
+    const procedureDocuments = publishProcedureInfo.selectedProcedureDocuments;
+    const procedureLotDocuments = publishProcedureInfo.selectedProcedureLotDocuments;
+    const procedurePrivateAccessContragents = publishProcedureInfo.selectedPrivateAccessContragents;
+    const procedureInfo = publishProcedureInfo.procedureInfo;
+    const procedureProperties = publishProcedureInfo.procedureProperties;
+
     const url = `requests/backoffice/${id}/create-procedure`;
 
     const positionIds = requestPositions.map(item => item.id);
@@ -51,8 +57,11 @@ export class ProcedureService {
       prolongateEndRegistration: procedureProperties.prolongateEndRegistration,
       procedureDocuments: procedureDocumentIds,
       procedureLotDocuments: procedureLotDocumentIds,
-      privateAccessContragents: procedurePrivateAccessContragentIds
-    });
+      privateAccessContragents: procedurePrivateAccessContragentIds,
+      getTPFilesOnImport: request.getTPFilesOnImport
+    }).pipe(map((data) => {
+      return data as PublishProcedureResult;
+    }));
   }
 
   importOffersFromProcedure(request: Request): Observable<RequestOfferPosition[]> {
