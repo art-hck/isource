@@ -7,7 +7,7 @@
         <p>Изображение отсутствует</p>
         </ng-template>
       </div>
-      <div class="clr-col-7">
+      <div class="clr-col-7 position-info" (click)="onPositionClick(position)">
         <p class="position-name">{{position.name}}</p>
         <p class="description">{{position.description}}</p>
         <p>Срок поставки: {{position.productionTime}} дней</p>

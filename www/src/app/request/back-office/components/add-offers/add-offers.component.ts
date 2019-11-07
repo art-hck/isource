@@ -13,7 +13,6 @@ import { RequestDocument } from "../../../common/models/request-document";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
 import Swal from "sweetalert2";
-import { ClrWizard } from "@clr/angular";
 import { ProcedureService } from "../../services/procedure.service";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { DocumentsService } from "../../../common/services/documents.service";
@@ -22,6 +21,13 @@ import { ContragentService } from "../../../../contragent/services/contragent.se
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
+import { Observable } from 'rxjs';
+import { pluck } from 'rxjs/operators';
+import { PublishProcedureInfo } from '../../models/publish-procedure-info';
+import { PublishProcedureResult } from '../../models/publish-procedure-result';
+import { PublishProcedureRequest } from '../../models/publish-procedure-request';
+import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
+import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
 
 @Component({
   selector: 'app-add-offers',
@@ -32,6 +38,7 @@ export class AddOffersComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
+  requestPositions$: Observable<RequestPosition[]>;
   suppliers: ContragentList[] = [];
 
   showAddContragentModal = false;
@@ -52,21 +59,7 @@ export class AddOffersComponent implements OnInit {
 
   selectedRequestPositions: RequestPosition[] = [];
 
-  contragents: ContragentList[];
-  procedureBasicDataForm: any;
-  procedurePropertiesForm: any;
   selectedContragent: ContragentList;
-
-  procedureInfo: any;
-  procedureProperties: any;
-  selectedProcedurePositions: RequestPosition[] = [];
-  selectedProcedureDocuments: RequestDocument[] = [];
-  selectedProcedureLotDocuments: RequestDocument[] = [];
-  positionSearchValue = "";
-
-  showPrivateAccessContragents = true;
-  contragentsWithTp: ContragentList[] = [];
-  selectedPrivateAccessContragents: ContragentList[] = [];
 
   files: File[] = [];
 
@@ -74,7 +67,7 @@ export class AddOffersComponent implements OnInit {
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
-  @ViewChild("wizard", {static: false}) wizard: ClrWizard;
+  @ViewChild("createProcedureWizard", {static: false}) wizard: WizardCreateProcedureComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -94,6 +87,13 @@ export class AddOffersComponent implements OnInit {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
+    const getRequestInfoSubscription = this.requestService.getRequestInfo(this.requestId).subscribe(
+      (request: Request) => {
+        getRequestInfoSubscription.unsubscribe();
+        this.request = request;
+      }
+    );
+
     this.offerForm = this.formBuilder.group({
       priceWithVat: ['', [Validators.required, Validators.min(1)]],
       currency: ['', Validators.required],
@@ -105,21 +105,6 @@ export class AddOffersComponent implements OnInit {
       documents: [[]]
     });
 
-    this.procedurePropertiesForm = this.formBuilder.group({
-      manualEndRegistration: [false],
-      positionsRequiredAll: [false],
-      positionsEntireVolume: [false],
-      positionsAnalogs: [false],
-      positionsAllowAnalogsOnly: [false],
-      prolongateEndRegistration: [10, Validators.min(1)],
-      positionsSuppliersVisibility: ['NameHidden'],
-      positionsBestPriceType: ['LowerStartPrice'],
-      positionsApplicsVisibility: ['PriceAndRating']
-    });
-
-    this.initProcedureBasicDataForm();
-
-    this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
   }
 
@@ -141,78 +126,6 @@ export class AddOffersComponent implements OnInit {
     }
   }
 
-  initProcedureBasicDataForm() {
-    this.procedureBasicDataForm = this.formBuilder.group({
-      procedureTitle: ['', Validators.required],
-      dishonestSuppliersForbidden: [false],
-      dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
-      summingupDate: ['', [Validators.required, CustomValidators.customDate('dateEndRegistration')]],
-    });
-
-    this.procedureBasicDataForm.get('summingupDate').disable();
-    this.procedureBasicDataForm.get('dateEndRegistration').valueChanges.subscribe(value => {
-      if (value) {
-        this.procedureBasicDataForm.get('summingupDate').enable();
-      } else {
-        this.procedureBasicDataForm.get('summingupDate').disable();
-      }
-    });
-  }
-
-  onPositionSelect(requestPosition: RequestPosition): void {
-    const pos = this.selectedProcedurePositions.find(selectedPosition => selectedPosition === requestPosition);
-    if (pos) {
-      const index = this.selectedProcedurePositions.indexOf(requestPosition);
-      this.selectedProcedurePositions.splice(index, 1);
-    } else {
-      this.selectedProcedurePositions.push(requestPosition);
-    }
-  }
-
-  /**
-   * Функция проверяет, должна ли быть отмечена позиция в списке в модальном окне
-   * @param requestPosition
-   */
-  checkIfPositionIsChecked(requestPosition: RequestPosition): boolean {
-    return this.selectedProcedurePositions.indexOf(requestPosition) > -1;
-  }
-
-  onSelectProcedureDocument(document: RequestDocument) {
-    const index = this.selectedProcedureDocuments.indexOf(document);
-
-    if (index === -1) {
-      this.selectedProcedureDocuments.push(document);
-    } else {
-      this.selectedProcedureDocuments.splice(index, 1);
-    }
-  }
-
-  onSelectProcedureLotDocument(document: RequestDocument) {
-    const index = this.selectedProcedureLotDocuments.indexOf(document);
-
-    if (index === -1) {
-      this.selectedProcedureLotDocuments.push(document);
-    } else {
-      this.selectedProcedureLotDocuments.splice(index, 1);
-    }
-  }
-
-  isDataFieldValid(field: string) {
-    return this.procedureBasicDataForm.get(field).errors
-      && (this.procedureBasicDataForm.get(field).touched
-        || this.procedureBasicDataForm.get(field).dirty);
-  }
-
-  isDocumentsExists(positions: RequestPosition[]): boolean {
-    for (const position of positions) {
-      if (position.documents.length) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   getSupplierLinkedOffers(
     linkedOffers: RequestOfferPosition[],
     supplier: ContragentList
@@ -224,10 +137,10 @@ export class AddOffersComponent implements OnInit {
 
   onSelectedContragent(contragent: ContragentList) {
     this.selectedContragent = contragent;
-    this.isSupplierOfferExist();
+    this.isSupplierOfferExist(); // TODO: 2019-11-06 Убрать, если не получится найти смысл этого вызова
   }
 
-  isSupplierOfferExist() {
+  isSupplierOfferExist(): boolean {
     return this.suppliers.indexOf(this.selectedContragent) !== -1;
   }
 
@@ -247,18 +160,18 @@ export class AddOffersComponent implements OnInit {
     return requestPosition.procedureEndDate && !requestPosition.hasProcedure;
   }
 
-  onShowAddContragentModal() {
+  onShowAddContragentModal(): void {
     this.showAddContragentModal = true;
     this.supplierSelectComponent.resetSearchFilter();
   }
 
-  onCloseAddContragentModal() {
+  onCloseAddContragentModal(): void {
     this.showAddContragentModal = false;
     this.supplierSelectComponent.resetSearchFilter();
     this.selectedContragent = null;
   }
 
-  onAddContragent() {
+  onAddContragent(): void {
     this.suppliers.push(this.selectedContragent);
     this.onCloseAddContragentModal();
 
@@ -274,7 +187,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   // Модальное окно создание КП
-  onShowAddOfferModal(requestPosition: RequestPosition, supplier: ContragentList) {
+  onShowAddOfferModal(requestPosition: RequestPosition, supplier: ContragentList): void {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplierId = supplier.id;
     this.showAddOfferModal = true;
@@ -282,7 +195,7 @@ export class AddOffersComponent implements OnInit {
     this.addOfferValues(requestPosition);
   }
 
-  onShowEditOfferModal(requestPosition: RequestPosition, supplier: ContragentList, linkedOffer: RequestOfferPosition) {
+  onShowEditOfferModal(requestPosition: RequestPosition, supplier: ContragentList, linkedOffer: RequestOfferPosition): void {
     this.selectedRequestPosition = requestPosition;
     this.selectedSupplierId = supplier.id;
     this.selectedOffer = linkedOffer;
@@ -291,7 +204,7 @@ export class AddOffersComponent implements OnInit {
     this.setOfferValues(linkedOffer);
   }
 
-  setOfferValues(linkedOffer: RequestOfferPosition) {
+  setOfferValues(linkedOffer: RequestOfferPosition): void {
     const deliveryDate = linkedOffer.deliveryDate ?
       moment(new Date(linkedOffer.deliveryDate)).format('DD.MM.YYYY') :
       linkedOffer.deliveryDate;
@@ -308,7 +221,7 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  addOfferValues(requestPosition: RequestPosition) {
+  addOfferValues(requestPosition: RequestPosition): void {
     this.offerForm.reset();
     this.offerForm.patchValue({
       'currency': requestPosition.currency,
@@ -324,7 +237,7 @@ export class AddOffersComponent implements OnInit {
     }
   }
 
-  isFieldValid(field: string) {
+  isFieldValid(field: string): boolean {
     return this.offerForm.get(field).errors
       && (this.offerForm.get(field).touched || this.offerForm.get(field).dirty);
   }
@@ -333,7 +246,7 @@ export class AddOffersComponent implements OnInit {
     return !this.positionIsSentForAgreement(requestPosition);
   }
 
-  onAddOffer() {
+  onAddOffer(): void {
     const formValue = this.offerForm.value;
     formValue.supplierContragentId = this.selectedSupplierId;
 
@@ -346,7 +259,7 @@ export class AddOffersComponent implements OnInit {
     this.offerFiles = [];
   }
 
-  onEditOffer() {
+  onEditOffer(): void {
     const formValue = this.offerForm.value;
     formValue.supplierContragentId = this.selectedSupplierId;
 
@@ -359,31 +272,32 @@ export class AddOffersComponent implements OnInit {
     this.offerFiles = [];
   }
 
-  onCloseAddOfferModal() {
+  onCloseAddOfferModal(): void {
     this.showAddOfferModal = false;
     this.editMode = false;
   }
 
-  onDownloadFile(document: RequestDocument) {
+  onDownloadFile(document: RequestDocument): void {
     this.documentsService.downloadFile(document);
   }
 
-  onUploadDocuments(files: File[], offer: RequestOfferPosition) {
-    this.offersService.uploadDocuments(offer, files)
+  onUploadDocuments(files: File[], offer: RequestOfferPosition): void {
+    const subscription = this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
       });
   }
 
-  onDocumentSelected(documents: File[], form) {
+  onDocumentSelected(documents: File[], form): void {
+    // TODO: 2019-11-06 Определить тип аргумента form
     form.get('documents').setValue(documents);
   }
 
-  onDownloadOffersTemplate() {
+  onDownloadOffersTemplate(): void {
     this.offersService.downloadOffersTemplate(this.request);
   }
 
-  onSelectPosition(requestPosition: RequestPosition) {
+  onSelectPosition(requestPosition: RequestPosition): void {
     const index = this.selectedRequestPositions.indexOf(requestPosition);
 
     if (index === -1) {
@@ -394,6 +308,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   onSelectAllPositions(event, requestPositions: RequestPosition[]): void {
+    // TODO: 2019-11-06 Указать тип аргумента event
     if (event.target.checked === true) {
       this.selectedRequestPositions = [];
       requestPositions.forEach(requestPosition => {
@@ -423,7 +338,7 @@ export class AddOffersComponent implements OnInit {
     return requestPositions.some(requestPosition => this.positionCanBeSelected(requestPosition));
   }
 
-  onPublishOffers() {
+  onPublishOffers(): void {
     let alertWidth = 340;
     let htmlTemplate = '<p class="text-alert warning-msg">Отправить на согласование?</p>' +
       '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
@@ -468,20 +383,15 @@ export class AddOffersComponent implements OnInit {
 
   }
 
-  onPublishProcedure() {
-    this.procedureInfo = this.procedureBasicDataForm.value;
-    this.procedureProperties = this.procedurePropertiesForm.value;
-    this.procedureService.publishProcedure(
-      this.requestId,
-      this.procedureInfo,
-      this.procedureProperties,
-      this.selectedProcedurePositions,
-      this.selectedProcedureDocuments,
-      this.selectedProcedureLotDocuments,
-      this.selectedPrivateAccessContragents
-    ).subscribe(
-      (data: any) => {
-        this.resetWizardForm();
+  onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
+    const request: PublishProcedureRequest = {
+      procedureInfo: publishProcedureInfo,
+      getTPFilesOnImport: false
+    };
+
+    this.procedureService.publishProcedure(request).subscribe(
+      (data: PublishProcedureResult) => {
+        this.wizard.resetWizardForm();
         this.updatePositionsAndSuppliers();
         this.selectedRequestPositions = [];
         Swal.fire({
@@ -511,32 +421,11 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
-  getPositionSearchValue() {
-    if (this.searchPositionInput) {
-      return this.searchPositionInput.nativeElement.value;
-    }
-    return this.positionSearchValue;
-  }
-
-  getProcedureLink(requestPosition): string {
+  getProcedureLink(requestPosition: RequestPosition): string {
     const procedureUrl = this.appConfig.procedure.url;
     const id = requestPosition.procedureId;
 
     return procedureUrl + id;
-  }
-
-  onPositionSearchInputChange(value) {
-    this.positionSearchValue = value;
-  }
-
-  resetWizardForm() {
-    this.wizard.reset();
-    this.procedureBasicDataForm.reset();
-    this.procedurePropertiesForm.reset();
-
-    this.selectedProcedurePositions = [];
-    this.selectedProcedureDocuments = [];
-    this.selectedProcedureLotDocuments = [];
   }
 
   onShowImportOffersExcel(): void {
@@ -577,30 +466,6 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  onHidePrivateAccessContragents(): void {
-    this.showPrivateAccessContragents = false;
-  }
-
-  onShowPrivateAccessContragents(): void {
-    const subscription = this.offersService.getContragentsWithTp(this.request, this.selectedProcedurePositions).subscribe(
-      (contragents: ContragentList[]) => {
-        this.contragentsWithTp = contragents;
-        subscription.unsubscribe();
-      }
-    );
-    this.showPrivateAccessContragents = true;
-  }
-
-  onSelectPrivateAccessContragent(contragent: ContragentList): void {
-    const index = this.selectedPrivateAccessContragents.indexOf(contragent);
-
-    if (index === -1) {
-      this.selectedPrivateAccessContragents.push(contragent);
-    } else {
-      this.selectedPrivateAccessContragents.splice(index, 1);
-    }
-  }
-
   onImportOffersFromProcedure(): void {
     this.procedureService.importOffersFromProcedure(this.request).subscribe(
       (offers: RequestOfferPosition[]) => {
@@ -620,28 +485,35 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
+  onCreateProcedureWizardOpen(): void {
+    this.wizard.open();
+    this.wizard.setContragentLoader((procedureBasicDataPage: ProcedureBasicDataPage) => {
+      return this.offersService.getContragentsWithTp(
+        this.request,
+        procedureBasicDataPage.selectedProcedurePositions
+      );
+    });
+  }
+
   protected updatePositionsAndSuppliers(): void {
-    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+    const requestPositionsWithOffersData = this.requestService.getRequestPositionsWithOffers(this.requestId);
+    this.requestPositions$ = requestPositionsWithOffersData.pipe(pluck('positions'));
+    const subscription = requestPositionsWithOffersData.subscribe(
       (data: any) => {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
-        this.initProcedureBasicDataForm();
+        subscription.unsubscribe();
       }
     );
   }
 
   protected updatePositions(): void {
-    this.requestService.getRequestPositionsWithOffers(this.requestId).subscribe(
+    const requestPositionsWithOffersData = this.requestService.getRequestPositionsWithOffers(this.requestId);
+    this.requestPositions$ = requestPositionsWithOffersData.pipe(pluck('positions'));
+    const subscription = requestPositionsWithOffersData.subscribe(
       (data: any) => {
         this.requestPositions = data.positions;
-      }
-    );
-  }
-
-  protected updateRequestInfo() {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
+        subscription.unsubscribe();
       }
     );
   }

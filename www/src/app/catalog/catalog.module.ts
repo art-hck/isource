@@ -9,6 +9,7 @@ import { PositionsListComponent } from "./components/positions-list/positions-li
 import { CategoriesComponent } from './components/categories/categories.component';
 import { ContragentModule } from "../contragent/contragent.module";
 import { CatalogComponent } from "./components/catalog/catalog.component";
+import { PositionViewComponent } from './components/position-view/position-view.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { CatalogComponent } from "./components/catalog/catalog.component";
 
     PositionsListComponent,
     SearchPanelComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    PositionViewComponent
   ],
   imports: [
     SharedModule,

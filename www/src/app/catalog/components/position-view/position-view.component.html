@@ -1,0 +1,76 @@
+<div class="position-view" *ngIf="(position$ | async) as position">
+  <div class="position-document">
+    <span class="document-label">Нормативный документ:</span>{{position.productionDocument}}
+  </div>
+  <h2>{{position.name}}</h2>
+  <div class="clr-row">
+    <div class="clr-col-9 tabs">
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink>Характеристики</button>
+          <ng-template [(clrIfActive)]="dashboardActive">
+            <clr-tab-content>
+              <div class="clr-row position-info">
+                <div class="clr-col-4">
+                  <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
+                  <ng-template #noImage>
+                    <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
+                  </ng-template>
+                </div>
+                <div class="clr-col-8 info">
+                  <div class="info-title">
+                    Описание
+                  </div>
+                  <div class="description">
+                    {{position.description}}
+                  </div>
+                </div>
+              </div>
+            </clr-tab-content>
+          </ng-template>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink>Документы</button>
+          <ng-template [(clrIfActive)]="managementActive">
+            <clr-tab-content>
+              ...
+            </clr-tab-content>
+          </ng-template>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink>Поставщики</button>
+          <ng-template [(clrIfActive)]="cloudActive">
+            <clr-tab-content>
+              ...
+            </clr-tab-content>
+          </ng-template>
+        </clr-tab>
+      </clr-tabs>
+    </div>
+    <div class="clr-col-3 price-card">
+      <span class="card-title">доступность и доставка</span>
+      <div class="price-info">Наличие на складе
+      </div>
+      <b>Под заказ</b>
+      <div class="price-info">Поставщик</div>
+      <b><a>{{position.supplierContragentName}}</a></b>
+      <div class="price-info">Срок поставки</div>
+      <b>{{position.productionTime}} дней</b>
+      <div class="price">
+        <b>{{position.price | currency: 'RUB'}}</b>
+        <div class="one-item"> За 1 {{position.measureUnit}}
+        </div>
+      </div>
+      <div class="price-info">Количество</div>
+      <div class="clr-row">
+        <input type="number" class="quantity" value="1">
+        <button class="btn btn-primary in-cart" (click)="onAddPositionToCart(position)">
+          <img src="../../../../assets/images/cart-button.svg">
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

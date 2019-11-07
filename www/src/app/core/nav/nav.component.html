@@ -1,63 +1,64 @@
 <nav *ngIf="showMenu" class="subnav">
   <div class="container">
-      <div class="logo-block">
-        <a [routerLink]="'/'">Marketplace</a>
-      </div>
+    <div class="logo-block">
+      <a [routerLink]="'/'">Marketplace</a>
+    </div>
 
-      <ul class="nav menu-block">
-        <li class="nav-item" *ngFor="let link of mainMenu">
-          <a class="nav-link" [routerLink]="link.path" routerLinkActive="link-active">{{ link.text }}</a>
+    <ul class="nav menu-block">
+      <li class="nav-item" *ngFor="let link of mainMenu">
+        <a class="nav-link" [routerLink]="link.path" routerLinkActive="link-active">{{ link.text }}</a>
 
-          <span *ngIf="link.children.length > 0">
+        <span *ngIf="link.children.length > 0">
           (<a *ngFor="let link of link.children">
             <a [routerLink]="link.path">{{ link.text }}</a>
           </a>)
         </span>
-        </li>
-      </ul>
+      </li>
+    </ul>
 
-      <ul class="nav login-block">
+    <ul class="nav login-block">
 
-        <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
-          <a routerLink="/login" class="nav-icon nav-logout">
-            Вход
-            <clr-icon shape="login" size="32"></clr-icon>
+      <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
+        <a routerLink="/login" class="nav-icon nav-logout">
+          Вход
+          <clr-icon shape="login" size="32"></clr-icon>
+        </a>
+      </li>
+
+      <ng-container *ngIf="auth.isAuth()">
+        <li class="nav-item">
+          <a [routerLink]="'messages'" routerLinkActive="link-active" class="nav-icon">
+            <img src="../../../assets/images/messages.svg">
           </a>
         </li>
 
-        <ng-container *ngIf="auth.isAuth()">
-          <li class="nav-item">
-            <a [routerLink]="'messages'"  routerLinkActive="link-active" class="nav-icon">
-              <clr-icon shape="chat-bubble" size="32"></clr-icon>
-            </a>
-          </li>
+        <li *ngIf="user.isCustomer()" class="nav-item">
+          <a [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
+            <img src="../../../assets/images/cart.svg">
+            <cart-widget class="cart-widget-margin"></cart-widget>
+          </a>
+        </li>
 
-          <li *ngIf="user.isCustomer()" class="nav-item">
-            <a [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
-              <clr-icon shape="shopping-cart" size="32"></clr-icon>
-              <cart-widget class="cart-widget-margin"></cart-widget>
-            </a>
-          </li>
+        <li class="nav-item">
+          <clr-dropdown class="btn-user">
+            <button class="nav-icon" clrDropdownTrigger>
+                <span class="avatar">
+                 <img src="../../../assets/images/avatar.svg">
+                </span>
+              <div class="user-info-block">
+                <p class="user-name">{{ user.getShortUserFio() }}</p>
+                <p class="user-role gray">{{ user.getUserRoleName() }}</p>
+              </div>
+            </button>
 
-          <li class="nav-item">
-            <clr-dropdown class="btn-user">
-              <button class="nav-icon" clrDropdownTrigger>
-                <clr-icon class="user-icon" shape="user" size="32"></clr-icon>
-
-                <div class="user-info-block">
-                  <p class="user-name">{{ user.getShortUserFio() }}</p>
-                  <p class="user-role gray">{{ user.getUserRoleName() }}</p>
-                </div>
-              </button>
-
-              <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
-                <div class="dropdown-divider"></div>
-                <button (click)="logout()" clrDropdownItem>Выход</button>
-              </clr-dropdown-menu>
-            </clr-dropdown>
-          </li>
-        </ng-container>
-      </ul>
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+              <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
+              <div class="dropdown-divider"></div>
+              <button (click)="logout()" clrDropdownItem>Выход</button>
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </li>
+      </ng-container>
+    </ul>
   </div>
 </nav>
