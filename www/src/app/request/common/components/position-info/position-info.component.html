@@ -202,6 +202,14 @@
               </app-position-info-history>
             </clr-tab-content>
           </clr-tab>
+
+          <!-- Фикс ошибки переключении табов из-за неправильного индекса -->
+          <clr-tab *ngFor="let i of [1, 2, 3, 4]">
+            <button clrTabLink></button>
+            <clr-tab-content *clrIfActive>
+            </clr-tab-content>
+          </clr-tab>
+
         </ng-container>
 
       </clr-tabs>
