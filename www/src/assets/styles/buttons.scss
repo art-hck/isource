@@ -2,6 +2,9 @@
 
 $color_blue: #2585F5;
 $color_dark_blue: #1A71D8;
+$color_grey: #E5E8EF;
+$color_dark_grey: #D0D4DE;
+$color_light_gray: #E5E6E9;
 
 button:focus {
   outline: none;
@@ -21,6 +24,7 @@ button:focus {
   padding: 0 9px;
   max-width: initial;
   min-width: unset;
+  color: white;
 
   span { /* Дополнительный отступ вокруг текста в кнопке */
     padding: 0 4px;
@@ -55,17 +59,17 @@ button:focus {
     }
 
     &:disabled {
-      border-color: black;
-      background-color: black;
-      color: black;
-      opacity: 0.3;
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
       cursor: not-allowed;
+      font-weight: 500;
     }
   }
 }
 
 /* Синяя кнопка маленькая*/
-.btn-secondary {
+.btn-primary-small {
   .btn, &.btn {
     border-color: $color_blue;
     background-color: $color_blue;
@@ -86,11 +90,73 @@ button:focus {
     }
 
     &:disabled {
-      border-color: black;
-      background-color: black;
-      color: black;
-      opacity: 0.3;
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
       cursor: not-allowed;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Серая кнопка*/
+.btn-secondary {
+  .btn, &.btn {
+    border-color: $color_grey;
+    background-color: $color_grey;
+    color: black;
+    height: 40px;
+
+    &:hover {
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Серая кнопка маленькая*/
+.btn-secondary-small {
+  .btn, &.btn {
+    border-color: $color_grey;
+    background-color: $color_grey;
+    color: black;
+    height: 32px;
+
+    &:hover {
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
     }
   }
 }

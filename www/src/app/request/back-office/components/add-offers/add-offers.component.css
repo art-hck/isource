@@ -61,7 +61,7 @@ h6 {
 
 th {
   text-align: inherit;
-  background-color: #f3f7fa;
+  background-color: #FBFCFE;
 }
 
 td {
@@ -80,7 +80,7 @@ td .position-name {
 
 .table {
   border: 0;
-  background-color: #f3f7fa;
+  background-color: #FBFCFE;
   margin-top: 10px;
 }
 
@@ -351,4 +351,8 @@ div.per-unit-price-block {
 .clr-radio-wrapper input[type=radio][disabled]+label {
   cursor: default;
   opacity: 0.5;
+}
+
+.content-area {
+  padding: 50px 30px 30px 30px!important;
 }

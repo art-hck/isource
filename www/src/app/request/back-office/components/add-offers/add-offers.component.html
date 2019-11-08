@@ -9,10 +9,10 @@
           <a [href]="'requests/backoffice/'">Заявки</a> → <a [href]="'requests/backoffice/' + request.id">Заявка №{{request.number}}</a>
         </div>
         <div class="clr-row w-100">
-          <div class="clr-col-5">
+          <div class="clr-col-7">
             <h2>Коммерческие предложения</h2>
           </div>
-          <div class="clr-col-7 add-contragent">
+          <div class="clr-col-5 add-contragent">
             <button class="btn btn-link add-contragent"
                     (click)="onShowAddContragentModal()"
                     *ngIf="requestPositions.length !== 0">
@@ -29,7 +29,7 @@
                       (click)="onDownloadOffersTemplate()">
                 Экспортировать шаблон
               </button>
-              <button class="btn import-export"
+              <button class="btn btn-outline import-export"
                       (click)="onShowImportOffersExcel()">Импортировать КП
               </button>
             </div>
