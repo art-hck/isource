@@ -21,6 +21,7 @@ import {
 export class RangeSliderControlComponent implements ControlValueAccessor, Validator {
   @Input() min: number;
   @Input() max: number;
+  @Input() step = 1;
 
   public value: [number, number];
   public onTouched: (value: [number, number]) => void;

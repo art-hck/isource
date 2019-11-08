@@ -15,10 +15,14 @@ import { CatalogCategoryFilter } from "../../models/catalog-category-filter";
 export class CatalogFilterComponent implements OnInit, OnDestroy {
   @Output() filter = new EventEmitter<CatalogCategoryFilter>();
   private subscription: Subscription = new Subscription();
+  public priceRange = [0, 3000000];
+  public productionTimeRange = [1, 365];
 
   public form = new FormGroup({
     'availability': new FormControl({value: true, disabled: true}),
-    'price': new FormControl({value: [0, 1000], disabled: true}),
+    'price': new FormControl(this.priceRange),
+    'productionTime': new FormControl(this.productionTimeRange),
+    'contragents': new FormControl([]),
     'attributes': new FormArray([])
   });
 
@@ -48,7 +52,7 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
                 attributeValue => new FormGroup({
                   'id': new FormControl(attributeValue.id),
                   'value': new FormControl(attributeValue.value),
-                  'checked': new FormControl(true)
+                  'checked': new FormControl(false)
                 })))
             }));
           });
@@ -63,6 +67,18 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
   }
 
   public submit(): void {
+    let price = this.form.value.price;
+    let productionTime = this.form.value.productionTime === this.productionTimeRange ? [] : this.form.value.productionTime;
+
+    if (price[0] === this.priceRange[0] && price[1] === this.priceRange[1]) {
+      price = [];
+    }
+
+    if (productionTime[0] === this.productionTimeRange[0] && productionTime[1] === this.productionTimeRange[1]) {
+      productionTime = [];
+    }
+
+    const contragents = this.form.value.contragents.map(contragent => contragent.id);
     const attributes = this.form.value.attributes
       // Оставляем только те аттрибуты, у которых не все значения выделены чекбоксами
       .filter(attribute => attribute.values.length > attribute.values.filter((value) => value.checked).length)
@@ -71,7 +87,7 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
       // Преобразуем в единый массив
       .reduce((prev, curr) => [...prev, ...curr], []);
 
-    this.filter.emit({attributes});
+    this.filter.emit({attributes, contragents, price, productionTime});
   }
 
   public asFormArray(control: AbstractControl): FormArray {

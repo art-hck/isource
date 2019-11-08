@@ -3,6 +3,14 @@
   display: block;
   margin: 0 0 16px;
   padding: 0 0 24px;
+
+  &.disabled ::ng-deep {
+    opacity: .5;
+
+    .control * {
+      cursor: not-allowed;
+    }
+  }
 }
 
 label {
