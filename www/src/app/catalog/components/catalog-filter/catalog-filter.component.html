@@ -4,7 +4,7 @@
   </app-catalog-filter-section>
 
   <app-catalog-filter-section label="Наличие">
-    <label class="clr-row clr-align-items-center">
+    <label class="clr-row clr-align-items-center" [class.disabled]="form.get('availability').disabled">
       <div class="clr-col">Поставка только со склада</div>
       <div class="clr-col clr-flex-grow-0">
         <checkbox-slider-control formControlName="availability"></checkbox-slider-control>
