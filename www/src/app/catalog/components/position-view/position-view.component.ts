@@ -14,9 +14,9 @@ export class PositionViewComponent implements OnInit {
   position$: Observable<CatalogPosition>;
 
   constructor(
-              private catalogService: CatalogService,
-              private route: ActivatedRoute,
-              private cartStoreService: CartStoreService
+    private catalogService: CatalogService,
+    private route: ActivatedRoute,
+    private cartStoreService: CartStoreService
   ) {
   }
 

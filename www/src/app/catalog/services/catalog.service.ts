@@ -28,7 +28,7 @@ export class CatalogService {
   }
 
   getPositionInfo(positionId: Uuid): Observable<CatalogPosition> {
-    return this.api.get<CatalogPosition>(`catalog/position/${positionId}`);
+    return this.api.get<CatalogPosition>(`catalog/position/${positionId}/info`);
   }
 
   getCategoryInfo(categoryId: Uuid): Observable<CatalogCategory> {
