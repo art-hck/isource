@@ -79,7 +79,7 @@
 <div class="cards clr-row" *ngIf="requestPosition.linkedOffers.length !== 0">
   <ng-container *ngFor="let linkedOffer of requestPosition.linkedOffers">
 
-  <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
+    <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
           <a [href]="'/contragents/' + linkedOffer.supplierContragentId + '/info'"
@@ -145,7 +145,7 @@
 
     <div class="modal-body">
       <app-contragent-info
-              [contragent]="contragent">
+        [contragent]="contragent">
       </app-contragent-info>
     </div>
   </clr-modal>

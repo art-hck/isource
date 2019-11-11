@@ -83,7 +83,8 @@
         </div>
 
         <div class="clr-col">
-          <div class="clr-row" (click)="requestItems[i].entityType !== 'GROUP' ?  onSelectItem(requestItems[i]) : false">
+          <div class="clr-row"
+               (click)="requestItems[i].entityType !== 'GROUP' ?  onSelectItem(requestItems[i]) : false">
 
             <!-- Колонка 1: Название позиции -->
             <div class="cell position-name clr-col">

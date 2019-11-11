@@ -69,18 +69,21 @@ select option:disabled {
 @media (min-width: 992px) {
   .main-container .content-container .content-area .positions-list {
     padding-left: 50px;
+    padding-right: 50px;
   }
 }
 
 @media (min-width: 1440px) {
   .main-container .content-container .content-area .positions-list {
     padding-left: 100px;
+    padding-right: 100px;
   }
 }
 
 @media (min-width: 1800px) {
   .main-container .content-container .content-area .positions-list {
     padding-left: 0;
+    padding-right: 0;
   }
 }
 

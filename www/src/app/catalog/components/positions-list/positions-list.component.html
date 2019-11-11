@@ -1,5 +1,3 @@
-<div class="clr-row positions-list">
-  <div class="clr-col">
 <div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
     <div class="clr-row position-list">
@@ -11,8 +9,8 @@
       </div>
       <div class="clr-col position-info">
         <div class="open-info" (click)="onPositionClick(position)">
-        <p class="position-name">{{position.name}}</p>
-        <p class="document">{{position.productionDocument}}</p>
+          <p class="position-name">{{position.name}}</p>
+          <p class="document">{{position.productionDocument}}</p>
         </div>
         <div class="clr-row w-100">
           <div class="clr-col open-info" (click)="onPositionClick(position)">
@@ -25,21 +23,22 @@
             Под заказ
             <div class="price-info">Поставщик</div>
             <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
-            (click)="showContragentInfo($event, position.supplierContragent.id)">
+               (click)="showContragentInfo($event, position.supplierContragent.id)">
               {{position.supplierContragentName}}
             </a>
             <div class="price-info">Срок поставки</div>
             {{position.productionTime}} дней
             <div class="clr-row w-100 inline nopadding">
               <div class="clr-col price">
-              <b>{{position.price | currency: 'RUB'}}</b>
+                <b>{{position.price | currency: 'RUB'}}</b>
                 <p class="one-item">За 1 {{position.measureUnit}}</p>
               </div>
               <div class="clr-col inline nopadding">
-              <input type="number" class="quantity" value="1">
-              <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart" (click)="onAddPositionToCart(position)">
-                <img src="../../../../assets/images/cart-button.svg">
-              </button>
+                <input type="number" class="quantity" value="1">
+                <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
+                        (click)="onAddPositionToCart(position)">
+                  <img src="../../../../assets/images/cart-button.svg">
+                </button>
                 <ng-template #inCart>
                   <button class="btn btn-primary in-cart disabled-cart" disabled>
                     <img src="../../../../assets/images/cart.svg">
@@ -54,7 +53,7 @@
   </div>
 </div>
 <ng-template #noPositions>
-  <div class="no-positions">
+  <div class="clr-row position-list no-positions">
     Позиций не найдено
   </div>
 </ng-template>
@@ -70,8 +69,3 @@
     </div>
   </clr-modal>
 </ng-container>
-</div>
-  <div class="filter">
-
-  </div>
-</div>
