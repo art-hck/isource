@@ -1,0 +1,21 @@
+<input
+  type="text"
+  [placeholder]="placeholder"
+  [disabled]="isDisabled"
+  [ngModel]="inputValue"
+  (input)="onInput.next($event.target.value)"/>
+
+<ng-container *ngIf="(contragents$ | async) as contragents">
+  <clr-dropdown *ngIf="contragents.length > 0 && isOpen">
+    <clr-dropdown-menu *clrIfOpen="true">
+      <div clrDropdownItem *ngFor="let contragent of contragents;" (click)="select(contragent)">
+        {{contragent.shortName}}
+      </div>
+    </clr-dropdown-menu>
+  </clr-dropdown>
+</ng-container>
+
+<label class="label" *ngFor="let contragent of value;">
+  {{contragent.shortName}}
+  <clr-icon *ngIf="multiple && !isDisabled" shape="times" (click)="delete(contragent)"></clr-icon>
+</label>

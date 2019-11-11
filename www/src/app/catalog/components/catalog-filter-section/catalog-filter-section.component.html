@@ -1,0 +1,8 @@
+<label (click)="isShowed = !isShowed" [class.showed]="isShowed">
+  <div class="clr-flex-grow-1">{{label}}</div>
+  <clr-icon shape="angle"></clr-icon>
+</label>
+
+<div class="control" *ngIf="isShowed">
+  <ng-content></ng-content>
+</div>

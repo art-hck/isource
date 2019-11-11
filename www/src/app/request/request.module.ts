@@ -51,6 +51,8 @@ import { DesignDocumentationComponent } from "./common/components/design-documen
 import { ContractComponent } from "./common/components/contract/contract.component";
 import { ContragentModule } from "../contragent/contragent.module";
 import { RequestPositionStatusService } from "./common/services/request-position-status.service";
+import { DeliveryMonitorComponent } from './common/components/delivery-monitor/delivery-monitor.component';
+import { SpecificationComponent } from './common/components/delivery-monitor/specification/specification.component';
 import { WizardCreateProcedureComponent } from './back-office/components/wizard-create-procedure/wizard-create-procedure.component';
 
 @NgModule({
@@ -93,6 +95,8 @@ import { WizardCreateProcedureComponent } from './back-office/components/wizard-
     DesignDocumentationComponent,
     ContractCreateComponent,
     ContractUploadDocumentComponent,
+    DeliveryMonitorComponent,
+    SpecificationComponent,
     WizardCreateProcedureComponent
   ],
   imports: [
