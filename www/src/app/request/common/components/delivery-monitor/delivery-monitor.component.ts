@@ -32,19 +32,4 @@ export class DeliveryMonitorComponent implements OnInit {
     this.deliveryMonitorInfo$ =  this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
   }
 
-  getShipmentItemCreatedDate(shipmentItem: ShipmentItem): string {
-    const shipmentItemCreatedDate = shipmentItem.createdDate;
-    return shipmentItemCreatedDate ? moment(shipmentItemCreatedDate).locale("ru").format('dd, DD.MM') : '—';
-  }
-
-  getShipmentItemShippingDate(shipmentItem: ShipmentItem): string {
-    const shipmentItemShippingDate = shipmentItem.shipmentDate;
-    return shipmentItemShippingDate ? moment(shipmentItemShippingDate).locale("ru").format('dd, DD.MM') : '—';
-  }
-
-  getShipmentItemArrivalDate(shipmentItem: ShipmentItem): string {
-    return "Изменена c 28.08 на cб, 30.08" + shipmentItem;
-  }
-
-
 }
