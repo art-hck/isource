@@ -1,6 +1,7 @@
 <form [formGroup]="form">
   <app-catalog-filter-section label="Цена">
-    <range-slider-control [step]="100" [min]="priceRange[0]" [max]="priceRange[1]" formControlName="price"></range-slider-control>
+    <range-slider-control [step]="100" [min]="priceRange[0]" [max]="priceRange[1]"
+                          formControlName="price"></range-slider-control>
   </app-catalog-filter-section>
 
   <app-catalog-filter-section label="Наличие" [disabled]="form.get('availability').disabled">
@@ -13,7 +14,8 @@
   </app-catalog-filter-section>
 
   <app-catalog-filter-section label="Сроки поставки (дн.)">
-    <range-slider-control [step]="1" [min]="productionTimeRange[0]" [max]="productionTimeRange[1]" formControlName="productionTime"></range-slider-control>
+    <range-slider-control [step]="1" [min]="productionTimeRange[0]" [max]="productionTimeRange[1]"
+                          formControlName="productionTime"></range-slider-control>
   </app-catalog-filter-section>
 
   <app-catalog-filter-section label="Поставщик">
@@ -22,11 +24,12 @@
 
   <ng-container *ngFor="let attribute of attributes.controls; let i=index;" formArrayName="attributes">
     <app-catalog-filter-section [label]="attribute.get('label').value" formGroupName="{{i}}">
-      <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index" formArrayName="values">
-          <clr-checkbox-wrapper formGroupName="{{j}}">
-            <input type="checkbox" clrCheckbox formControlName="checked"/>
-            <label>{{ attributeValue.get('value').value }}</label>
-          </clr-checkbox-wrapper>
+      <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index"
+                    formArrayName="values">
+        <clr-checkbox-wrapper formGroupName="{{j}}">
+          <input type="checkbox" clrCheckbox formControlName="checked"/>
+          <label>{{ attributeValue.get('value').value }}</label>
+        </clr-checkbox-wrapper>
       </ng-container>
     </app-catalog-filter-section>
   </ng-container>

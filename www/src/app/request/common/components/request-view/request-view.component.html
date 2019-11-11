@@ -15,7 +15,8 @@
   ></app-request-dashboard>
 
   <div class="clr-row">
-    <div [ngClass]="{'clr-col-4' : (selectPositionListItem), 'clr-col' : (!selectPositionListItem)}" [hidden]="!showPositionList">
+    <div [ngClass]="{'clr-col-4' : (selectPositionListItem), 'clr-col' : (!selectPositionListItem)}"
+         [hidden]="!showPositionList">
       <app-request-position-list
         [filteredByDrafts]="filteredByDrafts"
         [request]="request"

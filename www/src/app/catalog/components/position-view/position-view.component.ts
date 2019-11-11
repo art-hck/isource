@@ -4,6 +4,9 @@ import { CatalogPosition } from "../../models/catalog-position";
 import { CatalogService } from "../../services/catalog.service";
 import { ActivatedRoute } from "@angular/router";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
+import { Uuid } from "../../../cart/models/uuid";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-position-view',
@@ -13,10 +16,14 @@ import { CartStoreService } from "../../../cart/services/cart-store.service";
 export class PositionViewComponent implements OnInit {
   position$: Observable<CatalogPosition>;
 
+  contragent: ContragentInfo;
+  contragentInfoModalOpened = false;
+
   constructor(
-    private catalogService: CatalogService,
-    private route: ActivatedRoute,
-    private cartStoreService: CartStoreService
+              protected getContragentService: ContragentService,
+              private catalogService: CatalogService,
+              private route: ActivatedRoute,
+              private cartStoreService: CartStoreService
   ) {
   }
 
@@ -30,4 +37,27 @@ export class PositionViewComponent implements OnInit {
   onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
     return this.cartStoreService.addItem(position);
   }
+
+  isPositionInCart(position: CatalogPosition): boolean {
+    return this.cartStoreService.isCatalogPositionInCart(position);
+  }
+
+  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
+    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
+    event.preventDefault();
+
+    this.contragentInfoModalOpened = true;
+
+    if (!this.contragent || this.contragent.id !== contragentId) {
+      this.contragent = null;
+
+      const subscription = this.getContragentService
+        .getContragentInfo(contragentId)
+        .subscribe(contragentInfo => {
+          this.contragent = contragentInfo;
+          subscription.unsubscribe();
+        });
+    }
+  }
+
 }

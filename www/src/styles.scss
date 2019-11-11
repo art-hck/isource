@@ -5,6 +5,7 @@
 @import "assets/styles/grid.scss";
 @import "assets/styles/buttons.scss";
 @import "assets/styles/header.scss";
+@import "assets/styles/card-items.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -54,6 +55,50 @@ select option:disabled {
     padding: 50px 130px 30px 130px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
+}
+
+@media (min-width: 992px) {
+  .main-container .content-container .content-area {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+}
+
+
+
+@media (min-width: 992px) {
+  .main-container .content-container .content-area .positions-list {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .main-container .content-container .content-area .positions-list {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .main-container .content-container .content-area .positions-list {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .main-container .content-container .content-area .search-bar {
+    padding-right: 80px;
+    padding-left: 80px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .main-container .content-container .content-area .search-bar {
+    padding-right: 130px;
+    padding-left: 130px;
+  }
 }
 
 span.spinner {

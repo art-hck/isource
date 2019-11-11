@@ -14,7 +14,7 @@
         <ng-container *ngIf="routeData?.isBackoffice">
           <div class="clr-row w-100">
             <div class="clr-col-2">
-              <button class="btn btn-primary-outline"
+              <button class="btn btn-link"
                       [disabled]="getPositions().length === 0"
                       title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
                       (click)="onShowDesignDocumentationListModal()">
@@ -64,7 +64,7 @@
                       </div>
                     </div>
                   </ng-container>
-                  <button class="btn btn-outline-primary" (click)="onAddNext()">
+                  <button class="btn btn-link" (click)="onAddNext()">
                     <clr-icon shape="plus"></clr-icon>
                     Добавить документ
                   </button>
@@ -97,7 +97,8 @@
             </div>
           </clr-modal>
 
-          <div class="design-documentation-card-list" *ngFor="let designDocumentation of designDocumentations; index as j">
+          <div class="design-documentation-card-list"
+               *ngFor="let designDocumentation of designDocumentations; index as j">
             <div class="design-documentation-card">
               <div class="clr-row clr-align-items-center">
                 <span class="position-name">
@@ -106,9 +107,12 @@
                 <span class="design-actions">
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
-                      <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL" class="btn btn-info-outline btn-label">На согласовании</button>
-                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVED" class="btn btn-info-outline btn-label status-success">Согласовано</button>
-                      <button disabled="" *ngSwitchCase="designDocStatus.REJECTED" class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL"
+                              class="btn btn-info-outline btn-label">На согласовании</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVED"
+                              class="btn btn-info-outline btn-label status-success">Согласовано</button>
+                      <button disabled="" *ngSwitchCase="designDocStatus.REJECTED"
+                              class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
                     </ng-container>
                     <ng-container *ngIf="status === designDocStatus.NEW">
                       <clr-modal #confirmDelete [clrModalStaticBackdrop]="false">
@@ -229,7 +233,8 @@
                         <button (click)="removeNewDesignDoc(j, i)" type="button" class="btn">Удалить</button>
                         <button [disabled]="isDesignDocModelInvalid(newDesignDocModel.model)"
                                 [clrLoading]="newDesignDocModel.state"
-                                (click)="addDesignDoc(request, newDesignDocModel.model, designDocumentation, j, i)" type="button"
+                                (click)="addDesignDoc(request, newDesignDocModel.model, designDocumentation, j, i)"
+                                type="button"
                                 class="btn btn-primary">Добавить
                         </button>
                       </div>
