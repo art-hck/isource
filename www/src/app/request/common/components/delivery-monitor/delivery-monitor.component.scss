@@ -128,7 +128,7 @@ p.updated-date-info {
 
 ::ng-deep .delivery-timeline-block .clr-accordion-header,
 ::ng-deep .delivery-timeline-block .clr-accordion-panel:last-child .clr-accordion-header,
-::ng-deep .clr-accordion:not(.clr-stepper-forms) .clr-accordion-panel:first-child .clr-accordion-header {
+::ng-deep .delivery-timeline-block.clr-accordion:not(.clr-stepper-forms) .clr-accordion-panel:first-child .clr-accordion-header {
   border-top: 1px solid #e6e6e6;
   border-radius: 0;
 
