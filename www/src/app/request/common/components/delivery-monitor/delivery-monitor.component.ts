@@ -18,13 +18,15 @@ export class DeliveryMonitorComponent implements OnInit {
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
 
   goodId: string;
+  demoGoodId = '61';
 
   constructor(
     private deliveryMonitorService: DeliveryMonitorService
   ) { }
 
   ngOnInit() {
-    this.goodId = '61';
+    // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
+    this.goodId = this.demoGoodId;
     this.getDeliveryMonitorInfo();
   }
 

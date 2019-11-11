@@ -19,6 +19,4 @@ export class DeliveryMonitorInfo {
     inTransit: number,
     delivered: number
   };
-
-  shipmentItems: ShipmentItem[];
 }
