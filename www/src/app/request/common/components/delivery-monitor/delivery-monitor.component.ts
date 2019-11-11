@@ -4,6 +4,7 @@ import { DeliveryMonitorService } from "../../services/delivery-monitor.service"
 import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
 import { ShipmentItem } from "../../models/shipment-item";
 import * as moment from "moment";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -14,7 +15,7 @@ export class DeliveryMonitorComponent implements OnInit {
 
   @Input() requestPosition: RequestPosition;
 
-  deliveryMonitorInfo: DeliveryMonitorInfo;
+  deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
 
   goodId: string;
 
@@ -28,16 +29,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getDeliveryMonitorInfo(): void {
-    const subscription = this.deliveryMonitorService
-      .getDeliveryMonitorInfo(this.goodId)
-      .subscribe(deliveryMonitorInfo => {
-        this.deliveryMonitorInfo = deliveryMonitorInfo;
-        subscription.unsubscribe();
-      });
-  }
-
-  getShipmentItemsList(): ShipmentItem[] {
-    return this.deliveryMonitorInfo.shipmentItems;
+    this.deliveryMonitorInfo$ =  this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
   }
 
   getShipmentItemCreatedDate(shipmentItem: ShipmentItem): string {

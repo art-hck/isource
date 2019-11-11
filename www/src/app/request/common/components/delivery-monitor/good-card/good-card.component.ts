@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { DeliveryMonitorInfo } from "../../../models/delivery-monitor-info";
 import { RequestPosition } from "../../../models/request-position";
 
@@ -7,7 +7,7 @@ import { RequestPosition } from "../../../models/request-position";
   templateUrl: './good-card.component.html',
   styleUrls: ['./good-card.component.scss']
 })
-export class GoodCardComponent implements OnInit {
+export class GoodCardComponent implements OnChanges {
 
   @Input() requestPosition: RequestPosition;
   @Input() deliveryMonitorInfo: DeliveryMonitorInfo;
@@ -22,15 +22,17 @@ export class GoodCardComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.getGoodItemCounters();
+  ngOnChanges() {
+    if (this.deliveryMonitorInfo) {
+      this.getGoodItemCounters();
 
-    this.totalCount =
-      this.awaitingCount +
-      this.inProductionCount +
-      this.loadingCount +
-      this.inTransitCount +
-      this.deliveredCount;
+      this.totalCount =
+        this.awaitingCount +
+        this.inProductionCount +
+        this.loadingCount +
+        this.inTransitCount +
+        this.deliveredCount;
+    }
   }
 
   getGoodItemCounters() {
