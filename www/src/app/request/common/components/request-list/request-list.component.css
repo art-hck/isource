@@ -56,6 +56,7 @@
     box-shadow: none;
     border: 1px solid #B2D0FF;
     border-radius: 8px;
+    overflow:hidden;
 }
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-column {
     padding: 0;
@@ -111,12 +112,12 @@
 ::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {
     min-width: 280px;
-    max-width: 710px;
+    max-width: 810px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
     min-width: 140px;
-    max-width: 160px;
+    max-width: 230px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-position-statuses.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {
