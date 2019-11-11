@@ -6,6 +6,10 @@ clr-accordion-content {
   max-width: inherit;
 }
 
+.accordion-title-block {
+  width: 100%;
+}
+
 .label-gray {
   color: #999999;
 }
