@@ -17,8 +17,12 @@ export class DeliveryMonitorService {
     return this.api.get<DeliveryMonitorInfo>(`monitor/goods/${goodId}`);
   }
 
-  getShipmentItemInfo(positionId, shipmentItemId) {
-    return this.api.get<ShipmentItem>(`requests/positions/${positionId}/shipment-item-info/${shipmentItemId}`);
+  getShipmentItems(goodId): Observable<ShipmentItem[]> {
+    return this.api.get<ShipmentItem[]>(`monitor/goods/${goodId}/shipment-items`);
+  }
+
+  getShipmentItemInfo(goodId, shipmentItemId): Observable<ShipmentItem> {
+    return this.api.get<ShipmentItem>(`monitor/goods/${goodId}/shipment-items/${shipmentItemId}`);
   }
 
 
