@@ -52,8 +52,9 @@ import { ContractComponent } from "./common/components/contract/contract.compone
 import { ContragentModule } from "../contragent/contragent.module";
 import { RequestPositionStatusService } from "./common/services/request-position-status.service";
 import { DeliveryMonitorComponent } from './common/components/delivery-monitor/delivery-monitor.component';
-import { SpecificationComponent } from './common/components/delivery-monitor/specification/specification.component';
+import { GoodCardComponent } from './common/components/delivery-monitor/good-card/good-card.component';
 import { WizardCreateProcedureComponent } from './back-office/components/wizard-create-procedure/wizard-create-procedure.component';
+import { DeliveryMonitorService } from "./common/services/delivery-monitor.service";
 
 @NgModule({
   declarations: [
@@ -96,7 +97,7 @@ import { WizardCreateProcedureComponent } from './back-office/components/wizard-
     ContractCreateComponent,
     ContractUploadDocumentComponent,
     DeliveryMonitorComponent,
-    SpecificationComponent,
+    GoodCardComponent,
     WizardCreateProcedureComponent
   ],
   imports: [
@@ -119,7 +120,8 @@ import { WizardCreateProcedureComponent } from './back-office/components/wizard-
     SupplierSelectComponent,
     DesignDocumentationService,
     ContractService,
-    RequestPositionStatusService
+    RequestPositionStatusService,
+    DeliveryMonitorService
   ]
 })
 export class RequestModule {
