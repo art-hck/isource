@@ -54,6 +54,7 @@ import { RequestPositionStatusService } from "./common/services/request-position
 import { DeliveryMonitorComponent } from './common/components/delivery-monitor/delivery-monitor.component';
 import { GoodCardComponent } from './common/components/delivery-monitor/good-card/good-card.component';
 import { WizardCreateProcedureComponent } from './back-office/components/wizard-create-procedure/wizard-create-procedure.component';
+import { DeliveryMonitorService } from "./common/services/delivery-monitor.service";
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { WizardCreateProcedureComponent } from './back-office/components/wizard-
     SupplierSelectComponent,
     DesignDocumentationService,
     ContractService,
-    RequestPositionStatusService
+    RequestPositionStatusService,
+    DeliveryMonitorService
   ]
 })
 export class RequestModule {
