@@ -89,10 +89,18 @@
 
 .info {
   padding-right: 30px;
-  padding-left: 0;
+  padding-left: 35px;
 }
 
 img {
   max-height: 240px;
   max-width: 240px;
+}
+
+.img {
+  max-width: 240px;
+}
+
+.disabled-cart img {
+  opacity: 0.3;
 }

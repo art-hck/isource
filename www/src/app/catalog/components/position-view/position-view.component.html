@@ -11,7 +11,7 @@
           <ng-template [(clrIfActive)]="dashboardActive">
             <clr-tab-content>
               <div class="clr-row position-info">
-                <div class="clr-col-4">
+                <div class="clr-col-4 img">
                   <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
                   <ng-template #noImage>
                     <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
@@ -55,7 +55,11 @@
       </div>
       <b>Под заказ</b>
       <div class="price-info">Поставщик</div>
-      <b><a>{{position.supplierContragentName}}</a></b>
+      <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
+         (click)="showContragentInfo($event, position.supplierContragent.id)">
+        <b>{{position.supplierContragentName}}</b>
+      </a>
+
       <div class="price-info">Срок поставки</div>
       <b>{{position.productionTime}} дней</b>
       <div class="price">
@@ -66,9 +70,14 @@
       <div class="price-info">Количество</div>
       <div class="clr-row">
         <input type="number" class="quantity" value="1">
-        <button class="btn btn-primary in-cart" (click)="onAddPositionToCart(position)">
+        <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart" (click)="onAddPositionToCart(position)">
           <img src="../../../../assets/images/cart-button.svg">
         </button>
+        <ng-template #inCart>
+          <button class="btn btn-primary in-cart disabled-cart" disabled>
+            <img src="../../../../assets/images/cart.svg">
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>

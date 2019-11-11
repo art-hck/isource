@@ -1,5 +1,7 @@
 <nav *ngIf="showMenu" class="subnav">
   <div class="container">
+    <div class="clr-row w-100">
+      <div class="clr-col-8 menu">
     <div class="logo-block">
       <a [routerLink]="'/'">Marketplace</a>
     </div>
@@ -15,7 +17,10 @@
         </span>
       </li>
     </ul>
-
+      </div>
+      <div class="clr-col">
+      </div>
+      <div class="clr-col-3">
     <ul class="nav login-block">
 
       <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
@@ -60,5 +65,7 @@
         </li>
       </ng-container>
     </ul>
+      </div>
+  </div>
   </div>
 </nav>

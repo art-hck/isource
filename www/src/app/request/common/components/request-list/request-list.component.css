@@ -13,6 +13,9 @@
     display: inline-block;
 }
 
+::ng-deep .datagrid .datagrid-row {
+  border-top: 1px solid #B2D0FF;
+}
 .more-positions {
     color: gray;
 }
@@ -38,7 +41,7 @@
 }
 ::ng-deep .requests-list-datagrid .datagrid-header {
     top: -50px;
-    border-bottom: 1px solid #d4d9e2;
+    border-bottom: 1px solid #B2D0FF;
 }
 
 
@@ -50,7 +53,9 @@
     background-color: rgba(247, 247, 252, 1);
 }
 ::ng-deep .requests-list-datagrid .datagrid {
-    box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    border: 1px solid #B2D0FF;
+    border-radius: 8px;
 }
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-column {
     padding: 0;
@@ -106,7 +111,7 @@
 ::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {
     min-width: 280px;
-    max-width: 510px;
+    max-width: 710px;
 }
 ::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {

@@ -38,8 +38,7 @@ export class CategoriesComponent implements OnInit {
     this.selectedMainCategory = category;
   }
 
-  onCategoryRefClick(category: CatalogCategory) {
+  onCategoryClick() {
     this.openedChange.emit(false);
-    this.router.navigateByUrl(`catalog/${category.id}`);
   }
 }

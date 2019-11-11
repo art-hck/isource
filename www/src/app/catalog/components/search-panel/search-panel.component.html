@@ -1,14 +1,13 @@
 <app-catalog-categories *ngIf="categoriesOpened" [(opened)]="categoriesOpened"></app-catalog-categories>
 
 <div class="clr-row search-bar clr-align-items-center">
-  <div>
+  <div class="container">
+  <div class="clr-col-9 search">
     <button class="btn btn-categories btn-primary-small" aria-label="Каталог" title="Каталог"
             (click)="onToggleCategories()">
       <clr-icon shape="bars"></clr-icon>
       Каталог
     </button>
-  </div>
-  <div class="clr-col-7 search">
     <input placeholder="Введите наименование позиции для поиска"
            type="text"
            name="searchName"
@@ -18,11 +17,12 @@
     <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
       <img src="../../../../assets/images/delete.svg">
     </button>
+    <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
+            [disabled]="!searchText">
+      <clr-icon shape="search" size="17"></clr-icon>
+    </button>
   </div>
-  <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
-          [disabled]="!searchText">
-    <clr-icon shape="search" size="17"></clr-icon>
-  </button>
   <a class="new-request" [routerLink]="'/requests/create'">Не нашли, что искали?</a>
+  </div>
 </div>
 

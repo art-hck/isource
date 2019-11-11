@@ -4,8 +4,8 @@
 }
 
 .item-card {
-  border-bottom: 1px solid #d7d7d7;
-  padding: 15px;
+  border-bottom: 1px solid #B2D0FF;
+  padding: 15px 20px;
 }
 
 .right-align {
@@ -15,14 +15,14 @@
 
 .btn.btn-primary {
   margin-right: 0;
-  margin-top: 40px;
 }
 
 .position-name {
-  font-size: 16px;
-  color: #0085FF;
+  font-size: 14px;
+  color: black;
   font-weight: 600;
-  margin-top: 20px;
+  margin-top: 0;
+  line-height: 14px;
 }
 
 .description {
@@ -37,17 +37,17 @@
 .price {
   font-weight: 600;
   font-size: 16px;
+  display: inline-block;
 }
 
 .image {
-  margin: 0 25px;
-  display: block;
-  text-align: center;
+  width: 240px;
+  height: 240px;
+  margin-left: 10px;
 }
 
 .image img {
   width: 100%;
-  margin-top: 30px;
 }
 
 .image p {
@@ -55,23 +55,97 @@
   color: #b9b9b9;
 }
 
-.clr-col-2.image {
-  flex: 0 0 150px;
-  padding: 0;
-}
-
-.no-positions {
-  display: block;
-  text-align: center;
-  color: #b9b9b9;
-  padding-top: 20px;
-}
-
 .position-list {
   flex-wrap: unset;
 }
 
 .position-info {
-  cursor: pointer;
+  padding-right: 0;
+  margin-left: 10px;
 }
 
+.position-header {
+  text-transform: uppercase;
+  color: black;
+  opacity: 0.3;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-top: 20px;
+}
+
+.price-info {
+  color: black;
+  opacity: 0.6;
+  line-height: 14px;
+  padding-top: 9px;
+}
+
+.price {
+  font-size: 22px;
+  line-height: 22px;
+  padding-bottom: 8px;
+  padding-right: 0;
+  margin-top: 25px;
+}
+
+.one-item {
+  font-size: 14px;
+  line-height: 14px;
+  color: black;
+  opacity: 0.6;
+}
+
+.quantity {
+  width: 80px;
+  margin: 25px 10px 0 12px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+p {
+  margin: 5px 0 0 0;
+}
+
+.inline {
+  display: inline-flex;
+  padding-right: 0;
+  padding-left: 0;
+  margin-right: -10px;
+}
+
+.nopadding {
+  padding-right: 0;
+}
+
+.filter {
+  width: 280px;
+}
+
+.document {
+  color: black;
+  opacity: 0.6;
+  line-height: 14px;
+}
+
+.disabled-cart img {
+  opacity: 0.3;
+}
+
+.open-info {
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.in-cart {
+  margin-top: 25px;
+}
+
+@media (min-width: 1400px) {
+  .main-container .content-container .content-area {
+    padding-right: 130px;
+    padding-left: 130px;
+  }
+}

@@ -14,7 +14,7 @@
         <ng-container *ngIf="routeData?.isBackoffice">
           <div class="clr-row w-100">
             <div class="clr-col-2">
-              <button class="btn btn-primary-outline"
+              <button class="btn btn-link"
                       [disabled]="getPositions().length === 0"
                       title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
                       (click)="onShowDesignDocumentationListModal()">
@@ -64,7 +64,7 @@
                       </div>
                     </div>
                   </ng-container>
-                  <button class="btn btn-outline-primary" (click)="onAddNext()">
+                  <button class="btn btn-link" (click)="onAddNext()">
                     <clr-icon shape="plus"></clr-icon>
                     Добавить документ
                   </button>

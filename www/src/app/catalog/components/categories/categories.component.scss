@@ -8,7 +8,7 @@
 
 .categories-wrap {
   position: absolute;
-  margin-top: -50px;
+  margin-top: 0;
   margin-bottom: 30px;
   right: 0;
   left: 0;
@@ -21,30 +21,36 @@
     position: relative;
     margin: 0 auto;
     padding: 0;
-    background-color: #fff;
+    background-color: white;
 
     .c3 {
       display: flex;
       justify-content: center;
       min-width: 960px;
       min-height: 350px;
-      background: linear-gradient(90deg,#f7f7f7 50%,#fff 0);
+      padding: 0 130px 0 130px;
 
       .main-categories {
         list-style: none;
         position: relative;
         min-width: 220px;
         padding: 24px 0;
-        background: #f7f7f7;
+        background: white;
 
         .main-category-item {
           padding: 8px 24px 8px 16px;
           cursor: pointer;
+
+          a {
+            color: black;
+            font-weight: 600;
+          }
         }
 
         .main-category-item-selected {
-          background-color: #fff;
+          background-color: #E5E8EF;
           height: 100%;
+          border-radius: 4px;
         }
       }
 
@@ -52,29 +58,29 @@
         width: 724px;
 
         .child-categories-container {
-          background-color: #fff;
+          background-color: white;
           height: 100%;
-          padding: 8px 24px 8px 16px;
+          padding: 8px 24px 8px 8px;
           cursor: pointer;
 
           .child-categories-wrap {
             width: 724px;
             height: 100%;
-            padding: 27px 50px 15px;
-            background: #fff;
+            padding: 27px 0 15px;
+            background: white;
             -webkit-column-count: 2;
             column-count: 2;
 
             .child-category-item {
-              padding: 0 24px 12px 0;
+              padding: 0 4px 12px 0;
               -webkit-column-break-inside: avoid;
               break-inside: avoid;
 
               .child-category-header {
-                font-size: 16px;
+                font-size: 17px;
                 line-height: 22px;
-                font-weight: 500;
-                color: #222;
+                font-weight: 400;
+                color: black;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -93,9 +99,9 @@
               .subitem-text {
                 font-size: 14px;
                 line-height: 18px;
-                color: #222;
+                color: black;
                 display: block;
-                opacity: .7;
+                opacity: .6;
 
                 &:hover {
                   color: #0085FF;
@@ -109,8 +115,12 @@
   }
 }
 
+.categories {
+  padding-right: 20px;
+  border-right: 1px solid #E5E8EF;
+}
+
 .backdrop {
-  position: fixed;
   top: 130px;
   left: 0;
   width: 100%;
