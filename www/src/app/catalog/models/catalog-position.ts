@@ -1,7 +1,9 @@
 import { Uuid } from "../../cart/models/uuid";
 import { ContragentInfo } from "../../contragent/models/contragent-info";
+import { CatalogCategoryAttribute } from "./catalog-category-attribute";
 
 export class CatalogPosition {
+  attributes: CatalogCategoryAttribute[];
   id: Uuid;
   name: string;
   measureUnit: string;
