@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { UserInfoService } from "../core/services/user-info.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CustomValidators } from "../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-login',
@@ -9,6 +11,7 @@ import { UserInfoService } from "../core/services/user-info.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  authForm: FormGroup;
 
   login: string;
   password: string;
@@ -20,8 +23,14 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private user: UserInfoService
+    private user: UserInfoService,
+    private formBuilder: FormBuilder,
   ) {
+    this.authForm = this.formBuilder.group({
+        'login': ['', Validators.required],
+        'password': ['', Validators.required]
+      }
+    );
   }
 
   ngOnInit() {
@@ -35,8 +44,10 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
 
-    this.authService.login(this.login, this.password)
-      .subscribe(() => {
+    this.authService.login(
+      this.authForm.value['login'],
+      this.authForm.value['password']
+    ).subscribe(() => {
         this.authService.saveAuthUserData()
           .subscribe(() => {
             this.loading = false;
@@ -68,5 +79,10 @@ export class LoginComponent implements OnInit {
 
   onRegistrationClick() {
       this.router.navigateByUrl(`registration`);
+  }
+
+  isFieldInvalid(field: string) {
+    return this.authForm.get(field).errors
+      && (this.authForm.get(field).touched || this.authForm.get(field).dirty);
   }
 }
