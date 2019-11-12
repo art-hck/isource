@@ -15,6 +15,16 @@
         <div class="clr-row w-100">
           <div class="clr-col open-info" (click)="onPositionClick(position)">
             <p class="position-header">основные характристики</p>
+            <div class="attr-block">
+              <div class="clr-row w-100 attributes" *ngFor="let attribute of position.attributes">
+                <div class="clr-col-6 attribute-name">
+                  <span class="name">{{attribute.name}}</span>
+                </div>
+                <div class="clr-col-6 attribute-values">
+                  <span *ngFor="let value of attribute.values">{{value.value}}</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="clr-col-6 nopadding">
             <p class="position-header">доступность и поставка</p>
@@ -30,7 +40,7 @@
             {{position.productionTime}} дней
             <div class="clr-row w-100 inline nopadding">
               <div class="clr-col price">
-                <b>{{position.price | currency: 'RUB'}}</b>
+                <b>{{position.price | currency: 'RUB' :true:"1.0-2"}}</b>
                 <p class="one-item">За 1 {{position.measureUnit}}</p>
               </div>
               <div class="clr-col inline nopadding">

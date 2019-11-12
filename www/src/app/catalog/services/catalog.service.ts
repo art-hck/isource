@@ -52,4 +52,8 @@ export class CatalogService {
       })
     );
   }
+
+  getPositionAttributes(positionId: Uuid): Observable<CatalogCategoryAttribute[]> {
+    return this.api.get<CatalogCategoryAttribute[]>(`catalog/position/${positionId}/attributes`);
+  }
 }
