@@ -22,10 +22,9 @@ export class CatalogService {
     return this.api.post<CatalogPosition[]>(`catalog/list`, body);
   }
 
-  searchPositionsByName(searchName: string): Observable<CatalogPosition[]> {
-    return this.api.post<CatalogPosition[]>(`catalog/find`, {
-      name: searchName
-    });
+  searchPositionsByName(name: string, filters?: {}): Observable<CatalogPosition[]> {
+    const body = {name, filters};
+    return this.api.post<CatalogPosition[]>(`catalog/find`, body);
   }
 
   getPositionInfo(positionId: Uuid): Observable<CatalogPosition> {
