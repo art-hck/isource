@@ -1,0 +1,48 @@
+:host {
+  color: #666;
+  line-height: normal;
+  padding: 20px;
+}
+
+img {
+  max-height: 240px;
+  object-fit: contain;
+  width: 240px;
+}
+
+input {
+  border-radius: 4px; // @TODO: вынести в общий стиль;
+  margin: 16px 0;
+  width: 80px;
+}
+
+.clr-col {
+  padding: 0 10px;
+}
+
+.title {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.btn-delete {
+  color: #666;
+  height: 21px;
+  margin: 0;
+  width: 21px;
+}
+
+.price, .title, .productionTime, .unitPrice {
+  color: #000;
+}
+
+.currency {
+  color: #b3b3b3;
+}

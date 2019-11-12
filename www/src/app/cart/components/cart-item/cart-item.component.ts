@@ -6,26 +6,25 @@ import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { Observable } from "rxjs";
 import { publishReplay, refCount } from "rxjs/operators";
+import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   selector: 'cart-item',
   templateUrl: './cart-item.component.html',
-  styleUrls: ['./cart-item.component.css']
+  styleUrls: ['./cart-item.component.scss']
 })
-export class CartItemComponent implements OnInit {
+export class CartItemComponent {
 
   @Input() item: CartItem;
 
   contragent: ContragentInfo;
   contragentInfoModalOpened = false;
+  getCurrencySymbol = getCurrencySymbol;
 
   constructor(
     protected getContragentService: ContragentService,
     protected store: CartStoreService
   ) { }
-
-  ngOnInit() {
-  }
 
   async onDeleteItem(item: CartItem): Promise<boolean> {
     return this.store.deleteItem(item);

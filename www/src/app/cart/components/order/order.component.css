@@ -1,41 +1,15 @@
 h3 {
-  margin-top: 30px;
+  margin: 30px 0 0;
 }
 
-.order-form {
-  width: 100%;
+input[type=text] {
+  min-width: 250px;
 }
 
-.order-additional-information-block {
-  margin-top: 20px;
+form > .clr-row {
+  margin-bottom: 15px;
 }
 
-.order-supplier-sum-block {
-  text-align: right;
-}
-
-.is-delivery-date-asap {
-  display: flex;
-  align-items: flex-end;
-  font-size: 14px;
-}
-
-.is-delivery-date-asap label {
-  font-size: 14px;
-  padding: 0 0 0 25px;
-}
-
-button {
-  margin-bottom: 150px;
-}
-
-
-.asap-checkbox {
-  display: block;
-  padding-top: 8px;
-}
-.asap-checkbox label {
-  margin: 0;
-  line-height: 100%;
-  display: table !important;
+.btn.btn-submit {
+  margin: 0 0 155px;
 }
