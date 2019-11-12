@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <app-catalog-filter-section label="Цена">
-    <range-slider-control [step]="100" [min]="priceRange[0]" [max]="priceRange[1]"
+    <range-slider-control [min]="priceRange[0]" [max]="priceRange[1]"
                           formControlName="price"></range-slider-control>
   </app-catalog-filter-section>
 
