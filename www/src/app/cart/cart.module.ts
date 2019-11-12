@@ -8,12 +8,14 @@ import { CartSumComponent } from './components/cart-sum/cart-sum.component';
 import { SharedModule } from "../shared/shared.module";
 import { CartRoutingModule } from "./cart-routing.module";
 import { ContragentModule } from "../contragent/contragent.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     SharedModule,
     CartRoutingModule,
-    ContragentModule
+    ContragentModule,
+    ReactiveFormsModule
   ],
   exports: [
     WidgetComponent,
