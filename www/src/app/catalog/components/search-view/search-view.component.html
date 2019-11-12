@@ -1,2 +1,12 @@
-<app-catalog-positions-list *ngIf="(positions$ | async) as positions" [positions]="positions">
-</app-catalog-positions-list>
+<div class="clr-row positions-list">
+  <div class="clr-row w-100">
+    <h2>Все категории</h2>
+  </div>
+  <div class="clr-col-9">
+    <app-catalog-positions-list *ngIf="(positions$ | async) as positions" [positions]="positions">
+    </app-catalog-positions-list>
+  </div>
+  <div class="clr-col-3 clr-flex-grow-0">
+    <app-catalog-filter></app-catalog-filter>
+  </div>
+</div>

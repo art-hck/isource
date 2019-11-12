@@ -17,7 +17,7 @@
     <clr-accordion>
       <ng-container *ngFor="let item of itemForm.controls; let i=index">
         <clr-accordion-panel [(clrAccordionPanelOpen)]="formShow[i]" formGroupName="{{i}}">
-          <clr-accordion-title>
+          <clr-accordion-title class="accordion-title-block">
             <clr-icon shape="success-standard" size="24" class="label-success" *ngIf="item.valid"></clr-icon>
 
             <span class="label-gray" *ngIf="!item.get('name').value">

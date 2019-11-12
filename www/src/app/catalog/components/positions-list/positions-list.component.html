@@ -1,32 +1,59 @@
 <div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
     <div class="clr-row position-list">
-      <div class="clr-col-2 image">
-        <img *ngIf="position.image; else noImage" src="{{ position.image }}" />
+      <div class="image open-info" (click)="onPositionClick(position)">
+        <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
         <ng-template #noImage>
-        <p>Изображение отсутствует</p>
+          <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
         </ng-template>
       </div>
-      <div class="clr-col-7 position-info" (click)="onPositionClick(position)">
-        <p class="position-name">{{position.name}}</p>
-        <p class="description">{{position.description}}</p>
-        <p>Срок поставки: {{position.productionTime}} дней</p>
-      </div>
-      <div class="clr-col-3 right-align">
-        <span class="supplier-name">
-          <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
-             (click)="showContragentInfo($event, position.supplierContragent.id)">
-            {{ position.supplierContragent.shortName }}
-          </a>
-        </span>
-        <p class="price">{{position.price}} {{position.currency}}/{{position.measureUnit}}</p>
-        <button *ngIf="!isPositionInCart(position)" class="btn btn-primary" (click)="onAddPositionToCart(position)">В заявку</button>
+      <div class="clr-col position-info">
+        <div class="open-info" (click)="onPositionClick(position)">
+          <p class="position-name">{{position.name}}</p>
+          <p class="document">{{position.productionDocument}}</p>
+        </div>
+        <div class="clr-row w-100">
+          <div class="clr-col open-info" (click)="onPositionClick(position)">
+            <p class="position-header">основные характристики</p>
+          </div>
+          <div class="clr-col-6 nopadding">
+            <p class="position-header">доступность и поставка</p>
+            <div class="price-info">Наличие на складе
+            </div>
+            Под заказ
+            <div class="price-info">Поставщик</div>
+            <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
+               (click)="showContragentInfo($event, position.supplierContragent.id)">
+              {{position.supplierContragentName}}
+            </a>
+            <div class="price-info">Срок поставки</div>
+            {{position.productionTime}} дней
+            <div class="clr-row w-100 inline nopadding">
+              <div class="clr-col price">
+                <b>{{position.price | currency: 'RUB'}}</b>
+                <p class="one-item">За 1 {{position.measureUnit}}</p>
+              </div>
+              <div class="clr-col inline nopadding">
+                <input type="number" class="quantity" value="1">
+                <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
+                        (click)="onAddPositionToCart(position)">
+                  <img src="../../../../assets/images/cart-button.svg">
+                </button>
+                <ng-template #inCart>
+                  <button class="btn btn-primary in-cart disabled-cart" disabled>
+                    <img src="../../../../assets/images/cart.svg">
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <ng-template #noPositions>
-  <div class="no-positions">
+  <div class="clr-row position-list no-positions">
     Позиций не найдено
   </div>
 </ng-template>
@@ -37,7 +64,7 @@
 
     <div class="modal-body">
       <app-contragent-info
-              [contragent]="contragent">
+        [contragent]="contragent">
       </app-contragent-info>
     </div>
   </clr-modal>

@@ -1,7 +1,7 @@
 <div class="dashboard-block">
   <div class="clr-row">
     <div class="clr-col-8">
-      <div class="request-positions-stats clr-col">
+      <div class="request-positions-stats clr-col card">
         <div class="clr-row clr-justify-content-between">
           <div class="clr-col-auto positions-stats-item"
                *ngIf="this.user.isCustomer()"
@@ -17,8 +17,8 @@
 
 
           <a class="clr-col-auto positions-stats-item"
-               [routerLink]="tpOnAgreementCount > 0 ? getAddTechnicalProposalsLink() : null"
-               [ngClass]="{'not-clickable' : tpOnAgreementCount === 0 }">
+             [routerLink]="tpOnAgreementCount > 0 ? getAddTechnicalProposalsLink() : null"
+             [ngClass]="{'not-clickable' : tpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании ТП</span>
 
             <div class="stats-items-content">
@@ -29,8 +29,8 @@
 
 
           <a class="clr-col-auto positions-stats-item"
-               [routerLink]="kpOnAgreementCount > 0 ? getOffersPageLink() : null"
-               [ngClass]="{'not-clickable' : kpOnAgreementCount === 0 }">
+             [routerLink]="kpOnAgreementCount > 0 ? getOffersPageLink() : null"
+             [ngClass]="{'not-clickable' : kpOnAgreementCount === 0 }">
             <span class="stats-items-title">На согласовании КП</span>
 
             <div class="stats-items-content">
@@ -41,8 +41,8 @@
 
 
           <a class="clr-col-auto positions-stats-item"
-               [routerLink]="rkdAvailable ? getAddDesignDocumentationLink() : null"
-               [ngClass]="{'not-clickable' : !rkdAvailable }">
+             [routerLink]="rkdAvailable ? getAddDesignDocumentationLink() : null"
+             [ngClass]="{'not-clickable' : !rkdAvailable }">
             <span class="stats-items-title">На согласовании РКД</span>
 
             <div class="stats-items-content">
@@ -53,8 +53,8 @@
 
 
           <a class="clr-col-auto positions-stats-item"
-               [routerLink]="onAgreementReviewCount > 0 ? getContractsLink() : null"
-               [ngClass]="{'not-clickable' : onAgreementReviewCount === 0 }">
+             [routerLink]="onAgreementReviewCount > 0 ? getContractsLink() : null"
+             [ngClass]="{'not-clickable' : onAgreementReviewCount === 0 }">
             <span class="stats-items-title">На рассмотрении договора</span>
 
             <div class="stats-items-content">
@@ -67,9 +67,8 @@
     </div>
 
 
-
     <div class="clr-col-4">
-      <div class="request-info-items clr-col">
+      <div class="request-info-items clr-col card">
         <div class="clr-row clr-justify-content-between">
           <div class="clr-col-auto info-stats-item">
             <span class="stats-items-title">Новых сообщений</span>
@@ -101,7 +100,6 @@
     </div>
   </div>
 </div>
-
 
 
 <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="requestDocumentsModalOpened">

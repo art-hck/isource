@@ -16,7 +16,7 @@ nav a.active {
   }
 
   .btn-user {
-    padding: 10px 60px 10px 10px;
+    padding: 10px 10px 10px 10px;
   }
 
   .link-active {
@@ -40,7 +40,7 @@ nav a.active {
 .logo-block {
   font-size: 22px;
   line-height: 25px;
-  padding: 22px 0 20px 60px;
+  padding: 22px 0 20px 48px;
   font-weight: 700;
 
   a {
@@ -76,7 +76,7 @@ nav a.active {
 .sub-nav, .subnav {
   padding: 0;
   position: relative;
-  z-index: 5;
+  z-index: 20;
 }
 
 .container {
@@ -109,3 +109,20 @@ img {
   margin-bottom: 25px;
 }
 
+.menu {
+  display: flex;
+}
+
+.nav-icon img {
+  opacity: 0.3;
+}
+
+.avatar img {
+  opacity: 1;
+}
+
+@media (min-width: 1740px) {
+  .logo-block {
+    padding-left: 0;
+  }
+}

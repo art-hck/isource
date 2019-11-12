@@ -1,6 +1,15 @@
 <ng-container *ngIf="(category$ | async) as category">
-  <ng-container *ngIf="(positions$ | async) as positions">
-    <h2>{{ category.name }}</h2>
-    <app-catalog-positions-list [positions]="positions"></app-catalog-positions-list>
-  </ng-container>
+  <div class="clr-row positions-list">
+    <div class="clr-row w-100">
+      <h2>{{ category.name }}</h2>
+    </div>
+    <div class="clr-col-9">
+      <ng-template #loading class="load-block"><span class="spinner spinner-md"></span></ng-template>
+      <app-catalog-positions-list *ngIf="(positions$ | async) as positions; else loading" [positions]="positions">
+      </app-catalog-positions-list>
+    </div>
+    <div class="clr-col-3 clr-flex-grow-0">
+      <app-catalog-filter (filter)="filter($event)"></app-catalog-filter>
+    </div>
+  </div>
 </ng-container>

@@ -26,13 +26,19 @@
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1000px) {
   .container {
-    max-width: 960px;
+    max-width: 1200px;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1300px) {
+  .container {
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1400px) {
   .container {
     max-width: 1600px;
   }

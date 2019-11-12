@@ -2,7 +2,7 @@
    class="clear-filter"
    (click)="clearAllCheckboxes()">Очистить фильтр</a>
 
-<div #checkboxesListEl>
+<div #checkboxesListEl class="status-list">
   <div *ngFor="let status of requestPositionWorkflowStepLabels">
     <input type="checkbox"
            clrCheckbox

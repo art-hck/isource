@@ -70,11 +70,13 @@
                           [class.btn-primary]="positionInfoEditable"
                           *ngIf="!isNewPosition()"
                           (click)="onPositionInfoEditableToggle()">
-                    <clr-icon size="16" shape="pencil" ></clr-icon>
+                    <clr-icon size="16" shape="pencil"></clr-icon>
                     <span> {{ positionInfoEditable ? 'Отменить' : 'Редактировать' }} </span>
                   </button>
                 </div>
-                <ng-template #isEditingByAnotherUserLabel><small>Позиция редактируется другим пользователем</small></ng-template>
+                <ng-template #isEditingByAnotherUserLabel>
+                  <small>Позиция редактируется другим пользователем</small>
+                </ng-template>
               </div>
 
               <div class="clr-col-12" *ngIf="!positionInfoEditable; else positionInfoEditForm">
@@ -200,7 +202,7 @@
             <button clrTabLink>История</button>
             <clr-tab-content *clrIfActive>
               <app-position-info-history
-                      [requestPosition]="requestPosition">
+                [requestPosition]="requestPosition">
               </app-position-info-history>
             </clr-tab-content>
           </clr-tab>
