@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {ContragentService} from "../../../../contragent/services/contragent.service";
@@ -17,6 +17,21 @@ export class SupplierSelectComponent implements OnInit {
   @Output() contragentNameChange = new EventEmitter<string>();
 
   @Output() selectedContragent = new EventEmitter<ContragentList>();
+
+  private wasInside = false;
+
+  @HostListener('click')
+  clickInside() {
+    this.wasInside = true;
+  }
+
+  @HostListener('document:click')
+  clickOut() {
+    if (!this.wasInside) {
+      this.showContragentList = false;
+    }
+    this.wasInside = false;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
