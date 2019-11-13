@@ -61,11 +61,9 @@
     color: #8B9AA3;
     display: inline-block;
 
-    &.st-awaiting:before,
-    &.st-production:before,
-    &.st-shipment:before,
-    &.st-in-transit:before,
-    &.st-delivered:before {
+    &.st-Loaded:before,
+    &.st-Moving:before,
+    &.st-Arrived:before {
       content: "";
       width: 6px;
       height: 6px;
@@ -76,20 +74,14 @@
       background-color: #0089E9;
     }
 
-    &.st-awaiting:before {
-      background-color: #F0F3F5;
+    &.st-Loaded:before {
+      background-color: #DBDBDB;
     }
-    &.st-production:before {
-      background-color: #E9E9E9;
+    &.st-Moving:before {
+      background-color: #0089E9;
     }
-    &.st-shipment:before {
-      background-color: #90C6E5;
-    }
-    &.st-in-transit:before {
-      background-color: #30A8ED;
-    }
-    &.st-delivered:before {
-      background-color: #0071B2;
+    &.st-Arrived:before {
+      background-color: #20B55F;
     }
   }
 
@@ -129,6 +121,7 @@
 ::ng-deep .delivery-timeline-block.clr-accordion:not(.clr-stepper-forms) .clr-accordion-panel:first-child .clr-accordion-header {
   border-top: 1px solid #e6e6e6;
   border-radius: 0;
+  background-color: white;
 
   &:hover {
     background-color: #f1f6f9;

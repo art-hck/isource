@@ -5,6 +5,8 @@ import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
 import { ShipmentItem } from "../../models/shipment-item";
 import * as moment from "moment";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consignment";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -16,10 +18,10 @@ export class DeliveryMonitorComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
-  shipmentItems$: Observable<ShipmentItem[]>;
+  consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
-  demoGoodId = '61';
+  demoGoodId = '23510'; // '13761'
 
   constructor(
     private deliveryMonitorService: DeliveryMonitorService
@@ -29,30 +31,56 @@ export class DeliveryMonitorComponent implements OnInit {
     // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
     this.goodId = this.demoGoodId;
     this.getDeliveryMonitorInfo();
-    this.getShipmentItems();
   }
 
   getDeliveryMonitorInfo(): void {
-    this.deliveryMonitorInfo$ =  this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
+    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
+    this.consignments$ = this.deliveryMonitorInfo$
+      .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
   }
 
-  getShipmentItems(): void {
-    this.shipmentItems$ =  this.deliveryMonitorService.getShipmentItems(this.goodId);
-  }
-
-  getShipmentItemCreatedDate(shipmentItem: ShipmentItem): string {
-    const shipmentItemCreatedDate = shipmentItem.createdDate;
+  getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
+    const shipmentItemCreatedDate = consignment.factualShipmentDate ? consignment.factualShipmentDate : null;
     return shipmentItemCreatedDate ? moment(shipmentItemCreatedDate).locale("ru").format('dd, DD.MM') : '—';
   }
 
-  getShipmentItemShippingDate(shipmentItem: ShipmentItem): string {
-    const shipmentItemShippingDate = shipmentItem.shipmentDate;
+  getShipmentItemArrivalDate(consignment: DeliveryMonitorConsignment): string {
+    const shipmentItemShippingDate = consignment.planeShipmentDate ? consignment.planeShipmentDate : null;
     return shipmentItemShippingDate ? moment(shipmentItemShippingDate).locale("ru").format('dd, DD.MM') : '—';
   }
 
-  getShipmentItemArrivalDate(shipmentItem: ShipmentItem): string {
-    return "Изменена c 28.08 на cб, 30.08" + shipmentItem;
+  consignmentCanBeShown(consignment: DeliveryMonitorConsignment): boolean {
+    return !!consignment.cargos;
+  }
+
+  canGetWaybillInfo(consignment): boolean {
+    return consignment.waybills && consignment.waybills[0];
+  }
+
+  getWeightByTd(consignment) {
+    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].weightByTd : '—';
+  }
+
+  getWaybillNumber(consignment) {
+    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].waybillNumber : '—';
+  }
+
+  getVehicleNumber(consignment) {
+    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].vehicles[0].vehicleNumber : '—';
   }
 
 
+
+  getStatusLabel(status): string {
+    switch (status) {
+      case 'Pending':
+        return 'Ожидает';
+      case 'Loaded':
+        return 'Отгружено';
+      case 'Moving':
+        return 'В пути';
+      case 'Arrived':
+        return 'Доставлено';
+    }
+  }
 }

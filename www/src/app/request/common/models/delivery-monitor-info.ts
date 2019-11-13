@@ -1,4 +1,4 @@
-import { ShipmentItem } from "./shipment-item";
+import { DeliveryMonitorConsignment } from "./delivery-monitor-consignment";
 
 export class DeliveryMonitorInfo {
   goodId: string;
@@ -18,5 +18,17 @@ export class DeliveryMonitorInfo {
     loading: number,
     inTransit: number,
     delivered: number
+  };
+  contractAnnex: {
+    consignee: {
+      companyId: string,
+      sapCode: string,
+      name: string,
+      companyType: string,
+      actualAddressId?: null,
+      requisites?: null,
+      actualAddress?: null
+    };
+    consignments: DeliveryMonitorConsignment[];
   };
 }

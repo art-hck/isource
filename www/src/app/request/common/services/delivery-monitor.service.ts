@@ -17,13 +17,4 @@ export class DeliveryMonitorService {
     return this.api.get<DeliveryMonitorInfo>(`monitor/goods/${goodId}`);
   }
 
-  getShipmentItems(goodId): Observable<ShipmentItem[]> {
-    return this.api.get<ShipmentItem[]>(`monitor/goods/${goodId}/shipment-items`);
-  }
-
-  getShipmentItemInfo(goodId, shipmentItemId): Observable<ShipmentItem> {
-    return this.api.get<ShipmentItem>(`monitor/goods/${goodId}/shipment-items/${shipmentItemId}`);
-  }
-
-
 }
