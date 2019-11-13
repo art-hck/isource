@@ -133,7 +133,10 @@ clr-datagrid {
   flex: auto;
   flex-wrap: nowrap;
   justify-content: space-between;
+}
 
+.position-row:last-child {
+  border-bottom: 0;
 }
 
 .cell {

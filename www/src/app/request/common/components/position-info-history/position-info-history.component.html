@@ -25,7 +25,7 @@
               <span class="edit-info-label gray">{{ item.label }}:</span>
 
               <span class="edit-info-value">{{ item.oldValue }}</span>
-                <span class="arrow">→</span>
+              <span class="arrow">→</span>
               <span class="edit-info-value">{{ item.newValue }}</span>
             </div>
           </div>
@@ -37,7 +37,7 @@
               <span class="position-status status-position-{{ activityItem.data.oldStatus }}">
                 {{ activityItem.data.oldStatusLabel }}
               </span>
-                <span class="arrow">→</span>
+                <span *ngIf="activityItem.data.oldStatus" class="arrow">→</span>
               <span class="position-status status-position-{{ activityItem.data.newStatus }}">
                 {{ activityItem.data.newStatusLabel }}
               </span>
@@ -56,14 +56,16 @@
 
               <ng-template #clickableWinnerLink>
                 <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
-                   [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName }}</a>
+                   [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName
+                  }}</a>
               </ng-template>
             </div>
 
             <div class="position-winner-offer">
               {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
-                currency : activityItem.data.offerCurrency }}
-              <span class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
+              currency : activityItem.data.offerCurrency }}
+              <span
+                class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
             </div>
           </div>
         </ng-container>
@@ -79,14 +81,16 @@
 
               <ng-template #clickableRemovedWinnerLink>
                 <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
-                   (click)="showContragentInfo($event, activityItem.data.supplierId)">{{ activityItem.data.supplierName }}</a>
+                   (click)="showContragentInfo($event, activityItem.data.supplierId)">{{ activityItem.data.supplierName
+                  }}</a>
               </ng-template>
             </div>
 
             <div class="position-winner-offer">
               {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
-                currency : activityItem.data.offerCurrency }}
-              <span class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
+              currency : activityItem.data.offerCurrency }}
+              <span
+                class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
             </div>
           </div>
         </ng-container>
@@ -108,7 +112,7 @@
 
     <div class="modal-body">
       <app-contragent-info
-              [contragent]="contragent">
+        [contragent]="contragent">
       </app-contragent-info>
     </div>
   </clr-modal>

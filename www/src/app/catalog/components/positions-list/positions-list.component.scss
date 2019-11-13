@@ -15,6 +15,7 @@
 
 .btn.btn-primary {
   margin-right: 0;
+  padding: 0 10px;
 }
 
 .position-name {
@@ -133,7 +134,6 @@ p {
 }
 
 .open-info {
-  cursor: pointer;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
