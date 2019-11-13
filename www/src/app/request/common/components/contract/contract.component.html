@@ -9,7 +9,10 @@
   <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
     <ng-container *ngIf="userInfoService.isBackOffice()">
       <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
-        <button class="btn btn-primary-outline btn-add-contract" (click)="showModal = true"
+
+        <button class="btn btn-primary-outline btn-add-contract"
+                (click)="showModal = true"
+                [title]="isAvailableToCreate(contragentsWithPositions) ? '' : 'Нет доступных позиций для создания договора'"
                 [disabled]="!isAvailableToCreate(contragentsWithPositions)">
           <clr-icon shape="plus" class="is-solid"></clr-icon>
           <span>Добавить договор</span>
@@ -64,7 +67,7 @@
         </div>
         <div class="clr-row" *ngIf="isShowGenerateContractButton(contract)">
           <div class="clr-col">
-            <button class="btn btn-primary" (click)="onGenerateContract(request, contract)"> Скачать договор </button>
+            <button class="btn btn-primary" (click)="onGenerateContract(request, contract)"> Создать типовой договор </button>
           </div>
         </div>
       </div>
