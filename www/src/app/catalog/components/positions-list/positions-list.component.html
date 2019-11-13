@@ -44,9 +44,9 @@
                 <p class="one-item">За 1 {{position.measureUnit}}</p>
               </div>
               <div class="clr-col inline nopadding">
-                <input type="number" class="quantity" value="1">
+                <input #quantity [disabled]="isPositionInCart(position)" type="number" class="quantity" value="1">
                 <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
-                        (click)="onAddPositionToCart(position)">
+                        (click)="onAddPositionToCart(position, +quantity.value)">
                   <img src="../../../../assets/images/cart-button.svg">
                 </button>
                 <ng-template #inCart>

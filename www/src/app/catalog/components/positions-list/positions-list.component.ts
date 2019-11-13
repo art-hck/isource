@@ -33,8 +33,8 @@ export class PositionsListComponent implements OnInit {
   ngOnInit() {
   }
 
-  onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
-    return this.cartStoreService.addItem(position);
+  onAddPositionToCart(position: CatalogPosition, quantity: number) {
+    return this.cartStoreService.addItem(position, quantity);
   }
 
   isPositionInCart(position: CatalogPosition): boolean {
