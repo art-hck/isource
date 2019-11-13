@@ -11,7 +11,9 @@
 
             <div class="stats-items-content">
               <span class="items-count">{{ draftPositionsCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(draftPositionsCount) }}</span>
+              <span class="items-count-label gray">
+                {{ draftPositionsCount | pluralize : false : 'позиция' : 'позиции' : 'позиций'}}
+              </span>
             </div>
           </div>
 
@@ -23,7 +25,9 @@
 
             <div class="stats-items-content">
               <span class="items-count">{{ tpOnAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(tpOnAgreementCount) }}</span>
+              <span class="items-count-label gray">
+                {{ tpOnAgreementCount | pluralize : false : 'позиция' : 'позиции' : 'позиций'}}
+              </span>
             </div>
           </a>
 
@@ -35,7 +39,9 @@
 
             <div class="stats-items-content">
               <span class="items-count">{{ kpOnAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(kpOnAgreementCount) }}</span>
+              <span class="items-count-label gray">
+                {{ kpOnAgreementCount | pluralize : false : 'позиция' : 'позиции' : 'позиций'}}
+              </span>
             </div>
           </a>
 
@@ -47,7 +53,9 @@
 
             <div class="stats-items-content">
               <span class="items-count">{{ rkdOnAgreementCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(rkdOnAgreementCount) }}</span>
+              <span class="items-count-label gray">
+                {{ rkdOnAgreementCount | pluralize : false : 'позиция' : 'позиции' : 'позиций'}}
+              </span>
             </div>
           </a>
 
@@ -59,7 +67,9 @@
 
             <div class="stats-items-content">
               <span class="items-count">{{ onAgreementReviewCount }}</span>
-              <span class="items-count-label gray">{{ getPositionsCountLabel(onAgreementReviewCount) }}</span>
+              <span class="items-count-label gray">
+                {{ onAgreementReviewCount | pluralize : false : 'позиция' : 'позиции' : 'позиций'}}
+              </span>
             </div>
           </a>
         </div>
