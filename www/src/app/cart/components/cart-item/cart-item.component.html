@@ -18,7 +18,7 @@
           <div>{{ item.catalogPosition.description }}</div>
           <br/>
           <div>Срок поставки: <span class="productionTime">{{ item.catalogPosition.productionTime }} дней</span></div>
-          Поставщик: <a [routerLink]="['contragents', item.catalogPosition.supplierContragent.id, 'info']"
+          Поставщик: <a href="/contragents/{{item.catalogPosition.supplierContragent.id}}/info"
                         (click)="showContragentInfo($event, item.catalogPosition.supplierContragent.id)">
           {{ item.catalogPosition.supplierContragent.shortName }}</a>
         </div>
