@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { Request } from "../../models/request";
-import { UserInfoService } from "../../../../core/services/user-info.service";
-import { Router } from "@angular/router";
-import { RequestPosition } from "../../models/request-position";
-import { RequestPositionList } from "../../models/request-position-list";
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Request} from "../../models/request";
+import {UserInfoService} from "../../../../core/services/user-info.service";
+import {RequestPosition} from "../../models/request-position";
+import {RequestPositionList} from "../../models/request-position-list";
+import {RequestGroup} from "../../models/request-group";
 
 @Component({
   selector: 'app-request-dashboard',
@@ -31,10 +31,7 @@ export class RequestDashboardComponent implements OnChanges {
 
   requestDocumentsModalOpened = false;
 
-  constructor(
-    private router: Router,
-    public user: UserInfoService
-  ) { }
+  constructor(public user: UserInfoService) { }
 
   ngOnChanges() {
     this.getRequestDashboardCounters();
@@ -58,41 +55,13 @@ export class RequestDashboardComponent implements OnChanges {
 
 
   protected getRkdAvailable() {
-    if (!this.requestPositions) {
-      return false;
-    }
+    return this.requestPositions.filter(function getWithDesignRequired(position) {
+      const isDesignRequired: boolean = position instanceof RequestPosition &&  position.isDesignRequired;
+      const isGroupDesignRequired: boolean = position instanceof RequestGroup && position.positions.filter(getWithDesignRequired).length > 0;
 
-    const positionWithIsDesignRequired = this.requestPositions.find(item => {
-      if (item instanceof RequestPosition && item.isDesignRequired) {
-        return true;
-      }
-    });
-
-    return !!positionWithIsDesignRequired;
+      return isDesignRequired || isGroupDesignRequired;
+    }).length > 0;
   }
-
-  /**
-   * Функция возвращает правильный лейбл для указанного количества позиций
-   *
-   * @param count
-   */
-  getPositionsCountLabel(count: number): string {
-    const cases = [2, 0, 1, 1, 1, 2];
-    const strings = ['позиция', 'позиции', 'позиций'];
-
-    const positionsString = strings[
-      ( count % 100 > 4 && count % 100 < 20 ) ?
-        2 :
-        cases[
-          (count % 10 < 5) ?
-            count % 10 :
-            5
-          ]
-      ];
-
-    return positionsString;
-  }
-
 
   getOffersPageLink() {
     if (this.user.isCustomer()) {
