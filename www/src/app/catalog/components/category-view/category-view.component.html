@@ -1,8 +1,6 @@
 <ng-container *ngIf="(category$ | async) as category">
-  <div class="clr-row positions-list">
-    <div class="clr-row w-100">
-      <h2>{{ category.name }}</h2>
-    </div>
+  <h2>{{ category.name }}</h2>
+  <div class="clr-row" *ngIf="category.positionsCount > 0; else categories">
     <div class="clr-col-9">
       <ng-template #loading class="load-block"><span class="spinner spinner-md"></span></ng-template>
       <app-catalog-positions-list *ngIf="(positions$ | async) as positions; else loading" [positions]="positions">
@@ -12,4 +10,20 @@
       <app-catalog-filter (filter)="filter($event)"></app-catalog-filter>
     </div>
   </div>
+  <ng-template #categories>
+    <div class="clr-row" *ngIf="(categoryChilds$ | async) as categories">
+      <div class="clr-col-xl-3 clr-col-lg-4 clr-col-md-6" *ngFor="let category of categories.reverse()">
+        <ul>
+          <li>
+            <h3><a [routerLink]="['/catalog', category.id]">{{ category.name }}</a></h3>
+            <ul *ngIf="category.child.length > 0">
+              <li *ngFor="let childCategory of category.child.reverse()">
+                <a [routerLink]="['/catalog', childCategory.id]">{{ childCategory.name }}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
 </ng-container>

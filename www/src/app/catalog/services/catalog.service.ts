@@ -35,6 +35,10 @@ export class CatalogService {
     return this.api.get<CatalogCategory>(`catalog/categories/${categoryId}/info`);
   }
 
+  getCategoryChilds(categoryId: Uuid): Observable<CatalogCategory[]> {
+    return this.api.get<CatalogCategory[]>(`catalog/categories/${categoryId}/childs`);
+  }
+
   getCategoryAttributes(categoryId: Uuid): Observable<CatalogCategoryAttribute[]> {
     return this.api.get<CatalogCategoryAttribute[]>(`catalog/categories/${categoryId}/attributes`);
   }
