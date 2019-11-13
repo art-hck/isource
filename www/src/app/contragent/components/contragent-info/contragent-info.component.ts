@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ContragentInfo } from "../../models/contragent-info";
+import { ContragentService } from "../../services/contragent.service";
 
 @Component({
   selector: 'app-contragent-info',
@@ -9,5 +10,13 @@ import { ContragentInfo } from "../../models/contragent-info";
 export class ContragentInfoComponent {
 
   @Input() contragent: ContragentInfo;
+
+  constructor(
+    protected contragentService: ContragentService
+  ) { }
+
+  onDownloadPrimaInformReport(): void {
+    this.contragentService.downloadPrimaInformReport(this.contragent);
+  }
 
 }
