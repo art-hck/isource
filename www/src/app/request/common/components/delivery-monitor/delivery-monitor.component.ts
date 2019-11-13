@@ -21,7 +21,7 @@ export class DeliveryMonitorComponent implements OnInit {
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
-  demoGoodId = '23510'; // '13761'
+  demoGoodId = '61';
 
   constructor(
     private deliveryMonitorService: DeliveryMonitorService
