@@ -70,23 +70,14 @@
     <div class="clr-col-4">
       <div class="request-info-items clr-col card">
         <div class="clr-row clr-justify-content-between">
-          <div class="clr-col-auto info-stats-item">
-            <span class="stats-items-title">Новых сообщений</span>
-
-            <div class="stats-items-content">
-              <span class="items-count">{{ newMessagesCount }}</span>
-            </div>
-          </div>
-
-          <div class="clr-col-auto info-stats-item">
+          <div class="clr-col-6 info-stats-item" [ngClass]="{'not-clickable' : requestDocumentsCount === 0 }">
             <span class="stats-items-title">Новых событий</span>
-
             <div class="stats-items-content">
               <span class="items-count">{{ newActivitiesCount }}</span>
             </div>
           </div>
 
-          <div class="clr-col-auto info-stats-item"
+          <div class="clr-col-6 info-stats-item"
                (click)="requestDocumentsModalOpened = true"
                [ngClass]="{'not-clickable' : requestDocumentsCount === 0 }">
             <span class="stats-items-title">Документы заявки</span>
