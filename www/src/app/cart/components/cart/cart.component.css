@@ -20,3 +20,16 @@ cart-item:last-child {
 .total .price {
   color: #000;
 }
+
+.empty {
+  height: calc(100vh - 165px);
+  font-size: 32px;
+  color: #b3b3b3;
+}
+
+.empty img {
+  width: 200px;
+  opacity: .1;
+  margin-bottom: 30px;
+}
+

@@ -16,7 +16,7 @@ import { ClrLoadingState } from "@clr/angular";
 export class OrderComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
-  private loadingState = ClrLoadingState.DEFAULT;
+  public loadingState = ClrLoadingState.DEFAULT;
   public form = new FormGroup({
     'deliveryDate': new FormControl(null, CustomValidators.futureDate()),
     'isDeliveryDateAsap': new FormControl(false),

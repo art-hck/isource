@@ -1,10 +1,8 @@
-<div class="clr-row clr-justify-content-center">
+<div class="clr-row clr-justify-content-center" *ngIf="cartStore.getItems().length > 0; else emptyCart">
 
   <div class="clr-col-xl-10">
-
     <h2>Корзина</h2>
 
-    <ng-container *ngIf="cartStore.getItems().length > 0; else emptyCart">
       <div class="card">
         <cart-item *ngFor="let cartItem of cartStore.getItems()" [item]="cartItem"></cart-item>
       </div>
@@ -16,18 +14,14 @@
         </div>
       </div>
       <cart-order></cart-order>
-    </ng-container>
-
-    <ng-template #emptyCart>
-      <div *ngIf="cartStore.getItems().length === 0" class="alert alert-info" role="alert">
-        <div class="alert-items">
-          <div class="alert-item static">
-            <div class="alert-icon-wrapper"></div>
-            <span class="alert-text">Корзина пуста</span>
-          </div>
-        </div>
-      </div>
-    </ng-template>
   </div>
 
 </div>
+<ng-template #emptyCart>
+  <div class="empty clr-row clr-justify-content-center clr-align-items-center">
+    <div class="clr-col text-center">
+      <img src="../../../../assets/images/cart.svg">
+      <div>Корзина пуста</div>
+    </div>
+  </div>
+</ng-template>
