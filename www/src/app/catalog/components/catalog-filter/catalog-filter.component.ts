@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { of, Subscription } from "rxjs";
 import { debounceTime, filter, flatMap, switchMap, tap } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CatalogService } from "../../services/catalog.service";
@@ -39,23 +39,27 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription.add(
       this.route.params.pipe(
-        // Только если есть categoryId
-        filter(routeParams => routeParams.categoryId),
-        // Только после получения categoryId получаем аттрибуты категории
-        flatMap(routeParams => this.catalogService.getCategoryAttributes(routeParams.categoryId)),
-        // Проставляем их в форме
-        tap(attributes => {
-          attributes.forEach(attribute => {
-            this.attributes.push(new FormGroup({
-              'label': new FormControl(attribute.name),
-              'values': new FormArray(attribute.values.map(
-                attributeValue => new FormGroup({
-                  'id': new FormControl(attributeValue.id),
-                  'value': new FormControl(attributeValue.value),
-                  'checked': new FormControl(false)
-                })))
-            }));
-          });
+        flatMap(routeParams => {
+          // Если у роута есть categoryId запрашиваем аттрибуты категории
+          if (routeParams.categoryId) {
+            return this.catalogService.getCategoryAttributes(routeParams.categoryId).pipe(
+              // Проставляем их в форме
+              tap(attributes => {
+                attributes.forEach(attribute => {
+                  this.attributes.push(new FormGroup({
+                    'label': new FormControl(attribute.name),
+                    'values': new FormArray(attribute.values.map(
+                      attributeValue => new FormGroup({
+                        'id': new FormControl(attributeValue.id),
+                        'value': new FormControl(attributeValue.value),
+                        'checked': new FormControl(false)
+                      })))
+                  }));
+                });
+              }),
+            );
+          }
+          return of(routeParams);
         }),
         // После того как проинициализировали форму, подписываемся на её изменения
         switchMap(() => this.form.valueChanges),

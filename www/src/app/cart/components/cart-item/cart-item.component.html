@@ -1,59 +1,61 @@
-<div class="card">
-  <div class="clr-row position-list">
-    <div class="clr-col-2 image">
-      <img *ngIf="item.catalogPosition.image; else noImage" src="{{ item.catalogPosition.image }}" />
-      <ng-template #noImage>
-        <p>Изображение отсутствует</p>
-      </ng-template>
+<div class="clr-row">
+  <div class="clr-col clr-flex-grow-0">
+    <img *ngIf="item.catalogPosition.image; else noImage" src="{{ item.catalogPosition.image }}"/>
+    <ng-template #noImage>
+      <img src="../../../../assets/images/no-image.svg" alt="Изображение отсуствует"/>
+    </ng-template>
+  </div>
+  <div class="clr-col">
+    <div class="clr-row">
+      <div class="clr-col">
+        <a class="title"
+                [routerLink]="['/catalog', 'position', item.catalogPosition.id]">{{ item.catalogPosition.name }}</a>
+      </div>
     </div>
-    <div class="clr-col-7">
-      <p class="position-name">{{ item.catalogPosition.name }}</p>
-      <p class="description">{{ item.catalogPosition.description }}</p>
-      <p>Срок поставки: {{ item.catalogPosition.productionTime }} дней</p>
-    </div>
-    <div class="clr-col-3 right-align">
-      <button class="btn btn-link btn-icon cart-delete-button" (click)="onDeleteItem(item)">
-        <clr-icon shape="times"></clr-icon>
-      </button>
-
-      <p class="supplier-name">
-        <a [href]="'/contragents/' + item.catalogPosition.supplierContragent.id + '/info'"
-           (click)="showContragentInfo($event, item.catalogPosition.supplierContragent.id)">
-          {{ item.catalogPosition.supplierContragent.shortName }}
-        </a>
-      </p>
-
-      <p class="price">{{ item.catalogPosition.price | currency : item.catalogPosition.currency }} / {{ item.catalogPosition.measureUnit }}</p>
-
-      <div class="cart-quantity-block">
-        <div class="cart-quantity-block-field">
-          <input type="number"
-                 name="quantity"
-                 step="1"
-                 min="0"
-                 [value]="item.quantity"
-                 (change)="updateItemQuantity(item, $event.target.value)"
-                 [class.invalid]="item.quantity <= 0"
-                 (keypress)="filterEnteredText($event)"
-                 class="hidden-arrows text-right price cart-quantity-field"/>
+    <div class="clr-row">
+      <div class="clr-col">
+        <div class="description">
+          <div>{{ item.catalogPosition.description }}</div>
+          <br/>
+          <div>Срок поставки: <span class="productionTime">{{ item.catalogPosition.productionTime }} дней</span></div>
+          Поставщик: <a href="/contragents/{{item.catalogPosition.supplierContragent.id}}/info"
+                        (click)="showContragentInfo($event, item.catalogPosition.supplierContragent.id)">
+          {{ item.catalogPosition.supplierContragent.shortName }}</a>
         </div>
-        <div class="cart-quantity-block-sum">
-          <span class="cart-value">{{ item.getSum() | currency : item.catalogPosition.currency }}</span>
+      </div>
+      <div class="clr-col-3">
+        <div>
+          За 1 {{ item.catalogPosition.measureUnit }}<br/>
+          <span class="unitPrice">{{ item.catalogPosition.price | number : '1.0-2' }}</span>
+          <span class="currency">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+        </div>
+        <input type="number" name="quantity" step="1" min="1"
+               [value]="item.quantity"
+               (change)="updateItemQuantity(item, $event.target.value)"
+               [class.invalid]="item.quantity <= 0"
+               (keypress)="filterEnteredText($event)"
+        />
+        <div>Общая:</div>
+        <div class="price">
+          <span>{{ item.getSum() | number : '1.0-2' }}</span>
+          <span class="currency">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="clr-col clr-flex-grow-0">
+    <button class="btn btn-link btn-delete" (click)="onDeleteItem(item)">
+      <clr-icon shape="trash" class="is-solid" size="21"></clr-icon>
+    </button>
   </div>
 </div>
 
 <ng-container *ngIf="contragent">
   <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
     <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
     <div class="modal-body">
-      <app-contragent-info
-              [contragent]="contragent">
-      </app-contragent-info>
+      <app-contragent-info [contragent]="contragent"></app-contragent-info>
     </div>
   </clr-modal>
 </ng-container>
-

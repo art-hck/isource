@@ -7,6 +7,7 @@ import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
+import { CatalogCategoryAttribute } from "../../models/catalog-category-attribute";
 
 @Component({
   selector: 'app-position-view',
@@ -15,15 +16,16 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 })
 export class PositionViewComponent implements OnInit {
   position$: Observable<CatalogPosition>;
+  attributes$: Observable<CatalogCategoryAttribute[]>;
 
   contragent: ContragentInfo;
   contragentInfoModalOpened = false;
 
   constructor(
-              protected getContragentService: ContragentService,
-              private catalogService: CatalogService,
-              private route: ActivatedRoute,
-              private cartStoreService: CartStoreService
+    protected getContragentService: ContragentService,
+    private catalogService: CatalogService,
+    private route: ActivatedRoute,
+    private cartStoreService: CartStoreService
   ) {
   }
 
@@ -31,6 +33,7 @@ export class PositionViewComponent implements OnInit {
     this.route.params.subscribe(routeParams => {
       const positionId = routeParams.positionId;
       this.position$ = this.catalogService.getPositionInfo(positionId);
+      this.attributes$ = this.catalogService.getPositionAttributes(positionId);
     });
   }
 

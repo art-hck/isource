@@ -157,3 +157,66 @@ p {
   color: black;
   opacity: 0.6;
 }
+
+.attribute-values {
+  display: inline-flex;
+  vertical-align: top;
+  padding: 0;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.attribute-values span:not(:last-child)::after {
+  content: ",  ";
+}
+
+.attribute-values span {
+  padding-left: 5px;
+  position: relative;
+}
+
+.attribute-name span {
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding-right: 10px;
+}
+
+.attribute-name:after {
+  position: absolute;
+  right: 5px;
+  left: 15px;
+  height: 1px;
+  margin: 16px 0 0;
+  content: '';
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAABCAAAAAA+i0toAAAAAnRSTlMA/1uRIrUAAAAMSURBVHheY7j1/z8ABY8C2UtBe8oAAAAASUVORK5CYII=) 0 0 repeat-x;
+}
+
+.attribute-name {
+  position: relative;
+  align-items: flex-start;
+  color: black;
+  opacity: 0.6;
+}
+
+.attribute-values span {
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding: 0 0 0 5px;
+  color: black;
+}
+
+.attribute-values:before {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 1px;
+  margin: 16px 0 0;
+  content: '';
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAABCAAAAAA+i0toAAAAAnRSTlMA/1uRIrUAAAAMSURBVHheY7j1/z8ABY8C2UtBe8oAAAAASUVORK5CYII=) 0 0 repeat-x;
+}
+
+.attr-block {
+  padding-top: 4px;
+}

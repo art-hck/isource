@@ -1,26 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { CartItem } from "../../models/cart-item";
+import { Component } from '@angular/core';
 import { CartStoreService } from "../../services/cart-store.service";
-import { CartService } from "../../services/cart.service";
-import { Router } from "@angular/router";
+import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   selector: 'cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent {
+  getCurrencySymbol = getCurrencySymbol;
 
   constructor(
-    protected cartStore: CartStoreService,
-    protected cart: CartService,
-    protected router: Router
+    public cartStore: CartStoreService,
   ) { }
-
-  ngOnInit() {
-  }
-
-  getCartItems(): CartItem[] {
-    return this.cartStore.getItems();
-  }
 }

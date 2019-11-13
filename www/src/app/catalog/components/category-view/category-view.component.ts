@@ -17,6 +17,7 @@ export class CategoryViewComponent implements OnInit {
   categoryId: Uuid;
   category$: Observable<CatalogCategory>;
   positions$: Observable<CatalogPosition[]>;
+  categoryChilds$: Observable<CatalogCategory[]>;
 
   constructor(private catalogService: CatalogService, private route: ActivatedRoute) {}
 
@@ -25,6 +26,7 @@ export class CategoryViewComponent implements OnInit {
       this.categoryId = routeParams.categoryId;
       this.category$ = this.catalogService.getCategoryInfo(this.categoryId);
       this.positions$ = this.catalogService.getPositionsList(this.categoryId);
+      this.categoryChilds$ = this.catalogService.getCategoryChilds(this.categoryId);
     });
   }
 

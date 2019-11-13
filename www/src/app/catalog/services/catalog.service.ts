@@ -22,10 +22,9 @@ export class CatalogService {
     return this.api.post<CatalogPosition[]>(`catalog/list`, body);
   }
 
-  searchPositionsByName(searchName: string): Observable<CatalogPosition[]> {
-    return this.api.post<CatalogPosition[]>(`catalog/find`, {
-      name: searchName
-    });
+  searchPositionsByName(name: string, filters?: {}): Observable<CatalogPosition[]> {
+    const body = {name, filters};
+    return this.api.post<CatalogPosition[]>(`catalog/find`, body);
   }
 
   getPositionInfo(positionId: Uuid): Observable<CatalogPosition> {
@@ -34,6 +33,10 @@ export class CatalogService {
 
   getCategoryInfo(categoryId: Uuid): Observable<CatalogCategory> {
     return this.api.get<CatalogCategory>(`catalog/categories/${categoryId}/info`);
+  }
+
+  getCategoryChilds(categoryId: Uuid): Observable<CatalogCategory[]> {
+    return this.api.get<CatalogCategory[]>(`catalog/categories/${categoryId}/childs`);
   }
 
   getCategoryAttributes(categoryId: Uuid): Observable<CatalogCategoryAttribute[]> {
@@ -51,5 +54,9 @@ export class CatalogService {
         this.categoryForMenu = categories;
       })
     );
+  }
+
+  getPositionAttributes(positionId: Uuid): Observable<CatalogCategoryAttribute[]> {
+    return this.api.get<CatalogCategoryAttribute[]>(`catalog/position/${positionId}/attributes`);
   }
 }

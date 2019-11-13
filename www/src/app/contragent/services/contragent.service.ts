@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ContragentList } from "../models/contragent-list";
 import { ContragentInfo } from "../models/contragent-info";
 import { Uuid } from "../../cart/models/uuid";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable()
 export class ContragentService {
@@ -19,5 +20,21 @@ export class ContragentService {
 
   getContragentInfo(id: Uuid): Observable<ContragentInfo> {
     return this.api.get<ContragentInfo>(`contragents/${id}/info`);
+  }
+
+  downloadPrimaInformReport(contragent: ContragentInfo) {
+    this.api.post(
+      `contragents/${contragent.id}/download-prima-inform-report`,
+      {},
+      {responseType: 'blob'})
+      .subscribe(data => {
+        saveAs(data, `PrimaInformReport${contragent.id}.pdf`);
+      }, (error: any) => {
+        let msg = 'Ошибка при получении отчета';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
+      });
   }
 }
