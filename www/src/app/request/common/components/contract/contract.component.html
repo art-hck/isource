@@ -103,12 +103,15 @@
       <div class="card-footer">
         <div class="clr-row">
           <div class="clr-col">
+
             <input type="file" #file onclick="this.value = null"
                    (change)="attachFileToContract($event.target.files, contract)"/>
+
             <clr-button-group *ngIf="userInfoService.isBackOffice()">
               <clr-button [disabled]="!isAvailableToAttach(contract)" (click)="file.click()">
                 <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
               </clr-button>
+
               <clr-button [disabled]="!isAvailableForApproval(contract)"
                           (click)="changeStatus(contract, ContractStatus.ON_APPROVAL)">
                 <clr-icon shape="check"></clr-icon><span>Отправить на согласование</span>

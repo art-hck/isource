@@ -57,7 +57,7 @@ table {
 }
 .table-header-wrapper {
   position: sticky;
-  top: -30px;
+  top: -50px;
   z-index: 50;
   background: $bckg-color;
 }
@@ -67,7 +67,7 @@ table {
 .table-footer-wrapper {
   position: sticky;
   bottom: -30px;
-  z-index: 50;
+  z-index: 10;
   background: $bckg-color;
 }
 
@@ -209,10 +209,12 @@ tr.has-winner td .offer:not(.selected) {
 }
 
 span.position-label {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
   display: block;
-  line-height: 22px;
+  line-height: 16px;
   color: #002033;
+  padding-bottom: 5px;
 }
 
 .table th.position-name {
@@ -332,7 +334,6 @@ a.offer-documents {
 }
 
 .footer-total-sum {
-  background: white;
   height: 100%;
   padding: 20px 0 20px 0;
   width: 100%;
