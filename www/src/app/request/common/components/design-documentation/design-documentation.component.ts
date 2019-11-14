@@ -184,10 +184,6 @@ export class DesignDocumentationComponent implements OnInit {
     ;
   }
 
-  foo(designDoc: DesignDocumentation, designDocumentation) {
-    return designDoc.id && this.canUploadDocuments(designDoc, designDocumentation);
-  }
-
   canEditDesignDocList(designDoc: DesignDocumentationList) {
     return [DesignDocumentationStatus.NEW, DesignDocumentationStatus.REJECTED].includes(designDoc.status);
   }
