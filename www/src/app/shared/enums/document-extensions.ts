@@ -1,6 +1,7 @@
 export enum DocumentExtension {
   csv = "csv",
   doc = "doc",
+  docx = "doc",
   gif = "gif",
   jpg = "jpg",
   pdf = "pdf",
