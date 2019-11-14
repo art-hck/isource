@@ -284,10 +284,12 @@
               <div class="design-actions clr-col-2">
                 <ng-container [ngSwitch]="designDocumentation.status">
                   <clr-dropdown *ngSwitchCase="designDocStatus.ON_APPROVAL" class="bottom-right">
+
                     <button class="btn btn-primary btn-dropdown" clrDropdownTrigger>
                       <div>Принять решение</div>
                       <clr-icon shape="caret down"></clr-icon>
                     </button>
+
                     <clr-dropdown-menu>
                       <div clrDropdownItem (click)="approve(designDocumentation)">
                         <clr-icon shape="check"></clr-icon>
@@ -298,8 +300,8 @@
                         <span> Приложить замечания</span>
                         <input type="file" (change)="reject(designDocumentation, $event.target.files[0])">
                       </label>
-
                     </clr-dropdown-menu>
+
                   </clr-dropdown>
                   <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>

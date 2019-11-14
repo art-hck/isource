@@ -195,7 +195,7 @@ background: aliceblue;
   padding: 0;
 }
 
-::ng-deep .dropdown .dropdown-toggle clr-icon[shape^=caret] {
+.dropdown .dropdown-toggle clr-icon[shape^=caret] {
   display: none;
 }
 

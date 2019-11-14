@@ -56,7 +56,6 @@
     box-shadow: none;
     border: 1px solid #B2D0FF;
     border-radius: 8px;
-    overflow:hidden;
 }
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-column {
     padding: 0;

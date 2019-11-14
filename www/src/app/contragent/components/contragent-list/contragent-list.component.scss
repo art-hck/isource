@@ -30,6 +30,7 @@
 
 ::ng-deep .contragent-list-datagrid .datagrid .datagrid-header {
   padding: 0;
+  z-index: 5;
 }
 ::ng-deep .contragent-list-datagrid .datagrid .datagrid-row:hover {
   background-color: rgba(247, 247, 252, 1);

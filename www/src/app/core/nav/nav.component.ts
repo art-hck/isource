@@ -112,4 +112,14 @@ export class NavComponent implements OnInit {
       }
     ];
   }
+
+  protected getUserAvatarFile(): string {
+    if (this.user.isCustomer()) {
+      return 'avatar_tesla.jpg';
+    } else if (this.user.isBackOffice()) {
+      return 'avatar_nitshe.jpg';
+    }
+    return 'avatar.svg';
+  }
+
 }
