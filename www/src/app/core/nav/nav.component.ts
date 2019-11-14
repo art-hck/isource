@@ -3,6 +3,7 @@ import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../services/user-info.service";
+import { CartStoreService } from "../../cart/services/cart-store.service";
 
 @Component({
   selector: 'app-nav',
@@ -19,7 +20,8 @@ export class NavComponent implements OnInit {
     public auth: AuthService,
     protected gui: AvailableGuiService,
     private router: Router,
-    public user: UserInfoService
+    public user: UserInfoService,
+    public cartStoreService: CartStoreService
   ) {
     router.events.subscribe(() => {
       this.showMenu = !(this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0);

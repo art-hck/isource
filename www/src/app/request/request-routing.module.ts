@@ -51,10 +51,7 @@ const routes: Routes = [
           {
             path: 'design-documentation',
             component: DesignDocumentationComponent,
-            data: {
-              isCustomer : true,
-              title: "На согласовании РКД"
-            }
+            data: { title: "На согласовании РКД" }
           }
         ]
       },
@@ -94,10 +91,7 @@ const routes: Routes = [
           {
             path: 'add-design-documentation',
             component: DesignDocumentationComponent,
-            data: {
-              isBackoffice : true,
-              title: "На согласовании РКД"
-            }
+            data: { title: "На согласовании РКД" }
           },
         ]
       },

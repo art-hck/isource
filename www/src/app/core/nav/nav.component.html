@@ -38,10 +38,13 @@
             </li>
 
             <li *ngIf="user.isCustomer()" class="nav-item">
-              <a [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
+              <a *ngIf="cartStoreService.getCount() > 0; else emptyCart" [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
                 <img src="../../../assets/images/cart.svg">
                 <cart-widget class="cart-widget-margin"></cart-widget>
               </a>
+              <ng-template #emptyCart>
+                <span class="nav-icon"><img src="../../../assets/images/cart.svg"></span>
+              </ng-template>
             </li>
 
             <li class="nav-item">
