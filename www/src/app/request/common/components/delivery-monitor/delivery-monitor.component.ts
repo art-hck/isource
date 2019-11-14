@@ -54,25 +54,23 @@ export class DeliveryMonitorComponent implements OnInit {
     return !!consignment.cargos;
   }
 
-  canGetWaybillInfo(consignment): boolean {
-    return consignment.waybills && consignment.waybills[0];
+  canGetWaybillInfo(consignment: DeliveryMonitorConsignment): boolean {
+    return ((!!consignment.waybills) && (!!consignment.waybills[0]));
   }
 
-  getWeightByTd(consignment) {
+  getWeightByTd(consignment: DeliveryMonitorConsignment): number|string {
     return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].weightByTd : '—';
   }
 
-  getWaybillNumber(consignment) {
+  getWaybillNumber(consignment: DeliveryMonitorConsignment): string {
     return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].waybillNumber : '—';
   }
 
-  getVehicleNumber(consignment) {
+  getVehicleNumber(consignment: DeliveryMonitorConsignment): string {
     return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].vehicles[0].vehicleNumber : '—';
   }
 
-
-
-  getStatusLabel(status): string {
+  getStatusLabel(status: string): string {
     switch (status) {
       case DeliveryMonitorStatus.PENDING:
         return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.PENDING];
