@@ -2,11 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { DeliveryMonitorService } from "../../services/delivery-monitor.service";
 import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
-import { ShipmentItem } from "../../models/shipment-item";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consignment";
+import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
+import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -73,14 +74,14 @@ export class DeliveryMonitorComponent implements OnInit {
 
   getStatusLabel(status): string {
     switch (status) {
-      case 'Pending':
-        return 'Ожидает';
-      case 'Loaded':
-        return 'Отгружено';
-      case 'Moving':
-        return 'В пути';
-      case 'Arrived':
-        return 'Доставлено';
+      case DeliveryMonitorStatus.PENDING:
+        return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.PENDING];
+      case DeliveryMonitorStatus.LOADED:
+        return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.LOADED];
+      case DeliveryMonitorStatus.MOVING:
+        return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.MOVING];
+      case DeliveryMonitorStatus.ARRIVED:
+        return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.ARRIVED];
     }
   }
 }
