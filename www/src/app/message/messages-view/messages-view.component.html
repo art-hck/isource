@@ -3,7 +3,9 @@
     <ul class="list-unstyled">
       <li *ngFor="let request of (requests$ | async)?.entities"
           (click)="onRequestClick(request.request)"
-          [ngClass]="{'selected': request.request.id === selectedRequest?.id}">
+          [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
+          [title]="request.request.name"
+      >
         <div class="title">
           <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
         </div>
