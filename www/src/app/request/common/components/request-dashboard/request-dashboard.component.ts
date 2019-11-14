@@ -48,8 +48,7 @@ export class RequestDashboardComponent implements OnChanges {
     this.rkdAvailable = this.getRkdAvailable() || false;
     this.onAgreementReviewCount = this.request.dashboard.contractAgreement || 0;
 
-    this.newMessagesCount = 3;
-    this.newActivitiesCount = 6;
+    this.newActivitiesCount = 0;
     this.requestDocumentsCount = this.request.documents.length || 0;
   }
 

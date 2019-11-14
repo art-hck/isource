@@ -46,6 +46,7 @@ button:focus {
   .btn, &.btn {
     background-color: $color_blue;
     color: white;
+    padding: 0 20px;
 
     &:hover {
       background-color: $color_dark_blue;
@@ -76,6 +77,7 @@ button:focus {
     background-color: $color_blue;
     color: white;
     height: 32px;
+    padding: 0 16px;
 
     &:hover {
       border-color: $color_dark_blue;
@@ -107,6 +109,7 @@ button:focus {
     background-color: $color_grey;
     color: black;
     height: 40px;
+    padding: 0 20px;
 
     &:hover {
       border-color: $color_dark_grey;
@@ -138,6 +141,7 @@ button:focus {
     background-color: $color_grey;
     color: black;
     height: 32px;
+    padding: 0 16px;
 
     &:hover {
       border-color: $color_dark_grey;
