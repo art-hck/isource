@@ -17,6 +17,7 @@ import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
+import { UserInfoService } from "../../../../core/services/user-info.service";
 
 @Component({
   selector: 'app-design-documentation',
@@ -28,10 +29,6 @@ export class DesignDocumentationComponent implements OnInit {
   requestId: Uuid;
   request$: Observable<Request>;
   positions: RequestPosition[] = [];
-  routeData: {
-    isBackoffice?: boolean,
-    isCustomer?: boolean
-  } = {};
 
   designDocumentations: DesignDocumentationList[] = [];
   documentationList: DesignDocumentation[];
@@ -58,7 +55,8 @@ export class DesignDocumentationComponent implements OnInit {
     private backofficeRequestService: BackofficeRequestService,
     private customerRequestService: CustomerRequestService,
     private designDocumentationService: DesignDocumentationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public userInfoService: UserInfoService
   ) {
     this.addDocumentationForm = this.formBuilder.group({
       'addDocumentationListForm': this.formBuilder.array([])
@@ -67,13 +65,12 @@ export class DesignDocumentationComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.routeData = this.route.snapshot.data;
 
-    if (this.routeData.isBackoffice) {
+    if (this.userInfoService.isBackOffice()) {
       this.request$ = this.backofficeRequestService.getRequestInfo(this.requestId);
     }
 
-    if (this.routeData.isCustomer) {
+    if (this.userInfoService.isCustomer()) {
       this.request$ = this.customerRequestService.getRequestInfo(this.requestId);
     }
 
@@ -99,6 +96,10 @@ export class DesignDocumentationComponent implements OnInit {
       adjustmentLimit: ['5', Validators.required],
       receivingLimit: ['15', Validators.required]
     });
+  }
+
+  isPositionIsChecked(position: RequestPosition) {
+    return this.selectedPositions.indexOf(position) > -1;
   }
 
   onSelectPosition(position: RequestPosition) {
@@ -176,11 +177,15 @@ export class DesignDocumentationComponent implements OnInit {
 
   canUploadDocuments(designDoc: DesignDocumentation, designDocumentationList: DesignDocumentationList) {
     // Если мы бэкофис и загрузка еще не началась и не отправляем на согласование и можем отправить на согласование
-    return this.routeData.isBackoffice
+    return this.userInfoService.isBackOffice()
       && !this.isLoadingDesignDoc(designDoc)
       && !this.isSendingForApproval(designDocumentationList)
       && this.canEditDesignDocList(designDocumentationList)
     ;
+  }
+
+  foo(designDoc: DesignDocumentation, designDocumentation) {
+    return designDoc.id && this.canUploadDocuments(designDoc, designDocumentation);
   }
 
   canEditDesignDocList(designDoc: DesignDocumentationList) {
@@ -289,9 +294,9 @@ export class DesignDocumentationComponent implements OnInit {
       )));
   }
 
-  removeDocuments(request: Request, designDocumentation: DesignDocumentation, documents: RequestDocument[]) {
-    this.designDocumentationService.removeDocuments(request.id, designDocumentation.id, documents)
-      .subscribe(data => designDocumentation.documents  = designDocumentation.documents.filter(doc => !documents.includes(doc)))
+  removeDocuments(request: Request, designDoc: DesignDocumentation, documents: RequestDocument[]) {
+    this.designDocumentationService.removeDocuments(request.id, designDoc.id, documents)
+      .subscribe(() => designDoc.documents = designDoc.documents.filter(doc => !documents.includes(doc)))
     ;
   }
 
@@ -301,29 +306,30 @@ export class DesignDocumentationComponent implements OnInit {
     return {id, name, receivingLimit, adjustmentLimit, comment};
   }
 
-  editDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList) {
+  editDesignDoc(request: Request, designDocModel, designDocList: DesignDocumentationList) {
     this.designDocumentationService.editDesignDocument(request.id, designDocModel.id, designDocModel)
       .subscribe(data => {
-        const i = designDocumentationList.designDocs.findIndex(_designDoc => _designDoc.id === designDocModel.id);
-        designDocumentationList.designDocs[i] = data;
+        const i = designDocList.designDocs.findIndex(_designDoc => _designDoc.id === designDocModel.id);
+        designDocList.designDocs[i] = data;
       });
   }
 
   // Загружает документ в перечень. После загрузки удаляет поля ввода
-  addDesignDoc(request: Request, designDocModel, designDocumentationList: DesignDocumentationList, j: number, i: number) {
+  addDesignDoc(request: Request, designDocModel, designDocList: DesignDocumentationList, j: number, i: number) {
     this.newDesignDocModels[j][i].state = ClrLoadingState.LOADING;
 
-    this.designDocumentationService.addDesignDocument(request.id, designDocumentationList.id, designDocModel)
+    this.designDocumentationService.addDesignDocument(request.id, designDocList.id, designDocModel)
       .subscribe(designDoc => {
          this.newDesignDocModels[j][i].state = ClrLoadingState.SUCCESS;
         this.removeNewDesignDoc(j, i);
-        designDocumentationList.designDocs.push(designDoc);
+        designDocList.designDocs.push(designDoc);
       });
   }
 
   // Создаёт или добавляет поля ввода создания документа к перечню
   pushNewDesignDoc(j) {
-    (this.newDesignDocModels[j] = this.newDesignDocModels[j] || []).push({model: this.getDesignDocModel(), state: ClrLoadingState.DEFAULT});
+    (this.newDesignDocModels[j] = this.newDesignDocModels[j] || [])
+      .push({model: this.getDesignDocModel(), state: ClrLoadingState.DEFAULT});
   }
 
   // Удаляет поля ввода создания документа к перечню

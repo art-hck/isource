@@ -11,7 +11,7 @@
         </div>
         <h2><b>Рабочая конструкторская документация</b></h2>
 
-        <ng-container *ngIf="routeData?.isBackoffice">
+        <ng-container *ngIf="userInfoService.isBackOffice()">
           <div class="clr-row w-100">
             <div class="clr-col-2">
               <button class="btn btn-link"
@@ -78,8 +78,7 @@
                   <div class="clr-col-12">
                     <clr-checkbox-wrapper class="select-checkbox">
                       <input clrCheckbox type="checkbox"
-                             value="{{ position }}"
-                             [(ngModel)]="position.checked"
+                             [checked]="isPositionIsChecked(position)"
                              (change)="onSelectPosition(position)">
                       <label class="position-label nopadding">{{ position.name }}
                       </label>
@@ -159,7 +158,7 @@
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
-                          [enableUpload]="canUploadDocuments(designDoc, designDocumentation) && designDoc.id"
+                          [enableUpload]="designDoc.id && canUploadDocuments(designDoc, designDocumentation)"
                           [limit]="5"
                           [enableDelete]="designDocumentation.status === designDocStatus.NEW"
                           (delete)="removeDocuments(request, designDoc, [$event])"
@@ -256,7 +255,7 @@
           </div>
         </ng-container>
 
-        <div class="designDocumentation" *ngIf="routeData?.isCustomer">
+        <div class="designDocumentation" *ngIf="userInfoService.isCustomer()">
           <div class="table designDocumentationHead">
             <div class="clr-row">
               <div class="left clr-col-4">ПОЗИЦИЯ</div>
