@@ -9,6 +9,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { CreateRequestPositionService } from "../../services/create-request-position.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 import { Observable } from "rxjs";
+import { RequestOfferPosition } from "../../models/request-offer-position";
 
 @Component({
   selector: 'app-request-position-list',
@@ -197,5 +198,9 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
     this.positionListForm = this.formBuilder.group({
       positions: this.formBuilder.array(controls)
     });
+  }
+
+  getWinner(position: RequestPosition): RequestOfferPosition | undefined {
+    return position.linkedOffers.find(offer => offer.isWinner);
   }
 }

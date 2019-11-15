@@ -111,8 +111,14 @@
 
               <!-- Колонка 4: Цена -->
               <div class="clr-col-1 cell position-price">
-                <span class="quantity">{{requestItems[i].startPrice | number}}</span>
-                <span *ngIf="requestItems[i].startPrice">{{requestItems[i].currency}}</span>
+                <span *ngIf="getWinner(requestItems[i]) as winner; else startPrice">
+                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :true:"1.0-2"}}
+                </span>
+                <ng-template #startPrice>
+                  <span *ngIf="requestItems[i].startPrice">
+                    {{requestItems[i].startPrice | currency: requestItems[i].currency :true:"1.0-2"}}
+                  </span>
+                </ng-template>
               </div>
 
             </ng-container>
@@ -163,8 +169,14 @@
 
             <!-- Колонка 4: Цена -->
             <div class="clr-col-1 cell position-price">
-              <span class="quantity">{{requestPosition.startPrice | number}}</span>
-              <span *ngIf="requestPosition.startPrice">{{requestPosition.currency}}</span>
+              <span *ngIf="getWinner(requestPosition) as winner; else startPrice">
+                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :true:"1.0-2"}}
+              </span>
+              <ng-template #startPrice>
+                <span *ngIf="requestPosition.startPrice">
+                  {{requestPosition.startPrice | currency: requestPosition.currency :true:"1.0-2"}}
+                </span>
+              </ng-template>
             </div>
 
           </ng-container>

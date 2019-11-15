@@ -89,7 +89,7 @@
         <div class="card-block">
           <div class="clr-row">
             <div class="clr-col">Цена</div>
-            <div class="clr-col">{{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}</div>
+            <div class="clr-col">{{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}</div>
           </div>
           <div class="clr-row">
             <div class="clr-col">Количество</div>
