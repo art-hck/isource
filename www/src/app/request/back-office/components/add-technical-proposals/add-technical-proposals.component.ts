@@ -23,6 +23,9 @@ import { PublishProcedureResult } from '../../models/publish-procedure-result';
 import Swal from 'sweetalert2';
 import { RequestOfferPosition } from 'src/app/request/common/models/request-offer-position';
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
+import { map } from "rxjs/operators";
+import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -86,7 +89,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.getTechnicalProposals();
     this.getPositionsListForTp();
 
-    this.requestPositions$ = this.requestService.getRequestPositions(this.requestId);
+    this.requestPositions$ = this.requestService.getRequestPositions(this.requestId).pipe(
+      map((requestPositions: RequestPositionList[]) => {
+      return requestPositions.filter(
+        (requestPosition: RequestPosition) =>
+          requestPosition.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION);
+    }));
 
     this.contragentList$ = this.getContragentService.getContragentList();
   }
