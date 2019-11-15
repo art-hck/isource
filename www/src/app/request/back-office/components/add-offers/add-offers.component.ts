@@ -49,7 +49,7 @@ export class AddOffersComponent implements OnInit {
 
   showImportOffersExcel = false;
 
-  contragent: ContragentInfo;
+  contragent: ContragentList;
   contragentInfoModalOpened = false;
 
   selectedRequestPosition: RequestPosition;
@@ -137,11 +137,14 @@ export class AddOffersComponent implements OnInit {
 
   onSelectedContragent(contragent: ContragentList) {
     this.selectedContragent = contragent;
-    this.isSupplierOfferExist(); // TODO: 2019-11-06 Убрать, если не получится найти смысл этого вызова
   }
 
   isSupplierOfferExist(): boolean {
-    return this.suppliers.indexOf(this.selectedContragent) !== -1;
+    const ids = [];
+    for (const supplier of this.suppliers) {
+      ids.push(supplier.id);
+    }
+    return ids.indexOf(this.selectedContragent.id) !== -1;
   }
 
   positionCanBeSelected(requestPosition: RequestPosition): boolean {
