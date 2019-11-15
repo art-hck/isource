@@ -1,34 +1,35 @@
-<form [formGroup]="manufacturingForm" class="form" *ngIf="canUpload">
-  <app-document-upload-list (fileSelected)="onDocumentSelected($event)"
-                            [documents]="uploadedFiles"></app-document-upload-list>
-  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">
-    <div class="clr-col-9">
-      <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">
-    </div>
-    <div class="clr-col-3">
-      <button class="btn btn-link" (click)="onAddManufacturingDocument()" [disabled]="!canSendFiles()">
-        Загрузить
-      </button>
-    </div>
-  </div>
-</form>
-<clr-datagrid class="clr-row" *ngIf="requestPosition?.manufacturingDocuments">
-  <clr-dg-column class="clr-col-5">Наименование документа</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>
-  <clr-dg-column class="clr-col-1">Дата загрузки</clr-dg-column>
-  <clr-dg-column class="clr-col-2">Комментарии</clr-dg-column>
+<!-- todo 15.11.19 Расскоментировать при необходимости -->
 
-  <clr-dg-row *ngFor="let document of requestPosition?.manufacturingDocuments">
-    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>
-    </clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{requestPosition.statusLabel}}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-1">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>
-    <clr-dg-cell class="clr-col-2">{{document.comments}}</clr-dg-cell>
-  </clr-dg-row>
-</clr-datagrid>
+<!--<form [formGroup]="manufacturingForm" class="form" *ngIf="canUpload">-->
+<!--  <app-document-upload-list (fileSelected)="onDocumentSelected($event)"-->
+<!--                            [documents]="uploadedFiles"></app-document-upload-list>-->
+<!--  <div class="clr-row" *ngIf="uploadedFiles.length !== 0">-->
+<!--    <div class="clr-col-9">-->
+<!--      <input type="text" id="comments" formControlName="comments" placeholder="Введите комментарии">-->
+<!--    </div>-->
+<!--    <div class="clr-col-3">-->
+<!--      <button class="btn btn-link" (click)="onAddManufacturingDocument()" [disabled]="!canSendFiles()">-->
+<!--        Загрузить-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</form>-->
+<!--<clr-datagrid class="clr-row" *ngIf="requestPosition?.manufacturingDocuments">-->
+<!--  <clr-dg-column class="clr-col-5">Наименование документа</clr-dg-column>-->
+<!--  <clr-dg-column class="clr-col-2">Сотрудник</clr-dg-column>-->
+<!--  <clr-dg-column class="clr-col-2">Статус позиции</clr-dg-column>-->
+<!--  <clr-dg-column class="clr-col-1">Дата загрузки</clr-dg-column>-->
+<!--  <clr-dg-column class="clr-col-2">Комментарии</clr-dg-column>-->
 
+<!--  <clr-dg-row *ngFor="let document of requestPosition?.manufacturingDocuments">-->
+<!--    <clr-dg-cell class="clr-col-5"><a (click)="onDownloadFile(document)">{{ document.filename }}</a>-->
+<!--    </clr-dg-cell>-->
+<!--    <clr-dg-cell class="clr-col-2">{{ document?.user?.shortName }}</clr-dg-cell>-->
+<!--    <clr-dg-cell class="clr-col-2">{{requestPosition.statusLabel}}</clr-dg-cell>-->
+<!--    <clr-dg-cell class="clr-col-1">{{ document.created | date:'dd.MM.yyyy' }}</clr-dg-cell>-->
+<!--    <clr-dg-cell class="clr-col-2">{{document.comments}}</clr-dg-cell>-->
+<!--  </clr-dg-row>-->
+<!--</clr-datagrid>-->
 
 
 <ng-template #loading>
@@ -66,8 +67,8 @@
               <div class="item-name">Создан производственный график</div>
               <div class="item-info">
                 <div class="clr-row">
-                  <div class="clr-col-5">Объёмом: 3,15</div>
-                  <div class="clr-col-7">Период: Вс, 01.09.2019 г. — Пн, 30.09.2019 г.</div>
+                  <div class="clr-col-4">Объёмом: 3,15</div>
+                  <div class="clr-col-8">Период: Вс, 01.09.2019 г. — Пн, 30.09.2019 г.</div>
                 </div>
               </div>
             </div>
@@ -99,8 +100,8 @@
               <div class="item-name">Пакеты прошли через производственное звено</div>
               <div class="item-info">
                 <div class="clr-row">
-                  <div class="clr-col-5">Цех 2. Прокат труб</div>
-                  <div class="clr-col-7">Общая масса: 3,15 т / кол-во: 24 трубы</div>
+                  <div class="clr-col-4">Цех 2. Прокат труб</div>
+                  <div class="clr-col-8">Общая масса: 3,15 т / кол-во: 24 трубы</div>
                 </div>
               </div>
             </div>
@@ -112,7 +113,6 @@
       </clr-accordion-content>
 
     </clr-accordion-panel>
-
 
 
 
@@ -132,8 +132,8 @@
               <div class="item-name">Выписано уведомление о несоответствии</div>
               <div class="item-info">
                 <div class="clr-row">
-                  <div class="clr-col-5">Ср, 20.09 в 12:20</div>
-                  <div class="clr-col-7 alert-status-dot">Существенно</div>
+                  <div class="clr-col-4">Ср, 20.09 в 12:20</div>
+                  <div class="clr-col-8 alert-status-dot">Существенно</div>
                 </div>
               </div>
             </div>

@@ -29,6 +29,21 @@
   }
 }
 
+.item-status-block {
+  float: right;
+
+  & .item-toggle-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-image: url('/assets/images/delivery-monitor/toggle-arrow-icon.svg');
+    background-repeat: no-repeat;
+    margin-left: 20px;
+
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
 ::ng-deep .clr-accordion.manufacturing-timeline-block:not(.clr-stepper-forms) .clr-accordion-header-button {
   padding: 24px 20px;
 
@@ -95,6 +110,14 @@
     background-color: #f1f6f9;
   }
 }
+
+::ng-deep .manufacturing-timeline-block[disabled=true] .clr-accordion-header:hover,
+::ng-deep .manufacturing-timeline-block[disabled=true] .clr-accordion-panel:last-child .clr-accordion-header:hover,
+::ng-deep .manufacturing-timeline-block[disabled=true].clr-accordion:not(.clr-stepper-forms) .clr-accordion-panel:first-child .clr-accordion-header:hover {
+  background-color: initial;
+  cursor: default;
+}
+
 
 .item-info-inner-content {
   padding-top: 10px;
@@ -224,7 +247,7 @@ clr-accordion-panel.manufacturing-timeline-panel {
   background-color: #EC343A;
 }
 
-.manufacturing-timeline-panel .clr-accordion-panel-open {
+::ng-deep .manufacturing-timeline-panel .clr-accordion-panel-open {
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
