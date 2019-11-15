@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from 'src/app/shared/forms/custom.validators';
 import { RequestPosition } from 'src/app/request/common/models/request-position';
 import { ClrWizard } from '@clr/angular';
@@ -8,9 +8,9 @@ import { ContragentList } from 'src/app/contragent/models/contragent-list';
 import { Observable } from 'rxjs';
 import { PublishProcedureInfo } from '../../models/publish-procedure-info';
 import { Request } from 'src/app/request/common/models/request';
-import { shareReplay } from 'rxjs/operators';
-import { ProcedureInfo } from '../../models/procedure-info';
+import { map, publishReplay, refCount } from 'rxjs/operators';
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
+import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 
 /**
  * Мастер создания процедуры
@@ -70,7 +70,7 @@ export class WizardCreateProcedureComponent implements OnInit {
   @Input() allowOpenedProcedure: boolean;
 
   @ViewChild("wizard", {static: false}) wizard: ClrWizard;
-  @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
+  @ViewChild('searchPositionInput', {static: false}) searchPositionInput: ElementRef;
   @ViewChild('openedProcedureRadioButton', {static: false}) openedProcedureRadioButton: ElementRef;
   @ViewChild('closedProcedureRadioButton', {static: false}) closedProcedureRadioButton: ElementRef;
 
@@ -84,22 +84,27 @@ export class WizardCreateProcedureComponent implements OnInit {
   selectedProcedureLotDocuments: RequestDocument[] = [];
 
   positionSearchValue = "";
+  positionsForProcedure$: Observable<RequestPosition[]>;
 
-  showPrivateAccessContragents: boolean|null = null;
+  showPrivateAccessContragents: boolean | null = null;
   selectedPrivateAccessContragents: ContragentList[] = [];
 
   protected contragentLoader?: (procedureBasicData: ProcedureBasicDataPage) => Observable<ContragentList[]>;
 
   constructor(
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.initProcedureBasicDataForm();
     this.initProcedurePropertiesForm();
 
-    // Однократная загрузка контрагентов
-    // this.contragents$ = this.contragents$.pipe(shareReplay());
+    this.positionsForProcedure$ = this.requestPositions$.pipe(map((requestPositions: RequestPosition[]) => {
+      return requestPositions.filter(
+        (requestPosition: RequestPosition) =>
+          requestPosition.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT);
+    }));
   }
 
   resetWizardForm(): void {
@@ -270,5 +275,4 @@ export class WizardCreateProcedureComponent implements OnInit {
       array.splice(index, 1);
     }
   }
-
 }

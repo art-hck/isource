@@ -56,12 +56,12 @@
                      autocomplete="off"
                      type="text"
                      [value]="positionSearchValue"
-                     (input)="onPositionSearchInputChange($event.target.value)" />
+                     (input)="onPositionSearchInputChange($event.target.value)"/>
 
               <div class="position-list">
                 <clr-checkbox-container>
                   <clr-checkbox-wrapper class="select-checkbox"
-                                        *ngFor="let requestPosition of (requestPositions$ | async) |
+                                        *ngFor="let requestPosition of (positionsForProcedure$ | async) |
                                         positionSearchFilter: getPositionSearchValue();">
 
                     <label class="nopadding">{{ requestPosition.name }}</label>
