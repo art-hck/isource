@@ -18,9 +18,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   public loadingState = ClrLoadingState.DEFAULT;
   public form = new FormGroup({
+    'requestName': new FormControl('', [Validators.required]),
     'deliveryDate': new FormControl(null, CustomValidators.futureDate()),
     'isDeliveryDateAsap': new FormControl(false),
-    'deliveryBasis': new FormControl(null),
+    'deliveryBasis': new FormControl(null, [Validators.required]),
     'paymentTerms': new FormControl('30 банковских дней по факту поставки', [Validators.required, Validators.minLength(1)]),
   });
 
