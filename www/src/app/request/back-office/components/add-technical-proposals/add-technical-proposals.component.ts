@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -49,6 +49,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
 
+  addTechnicalProposalLoader = false;
+
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('createProcedureWizard', {static: false}) createProcedureWizard: WizardCreateProcedureComponent;
 
@@ -72,7 +74,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
     private getContragentService: ContragentService,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -223,6 +226,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
+        this.addTechnicalProposalLoader = false;
       }
     );
   }
@@ -260,6 +264,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
+    this.addTechnicalProposalLoader = true;
+
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
         if (!this.uploadedFiles.length) {
@@ -274,6 +280,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
         );
 
         this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
+
+        this.addTechnicalProposalLoader = false;
       },
       () => {
         this.notificationService.toast('Не удалось создать техническое предложение');
@@ -281,6 +289,16 @@ export class AddTechnicalProposalsComponent implements OnInit {
     );
 
     this.onCloseModal();
+  }
+
+
+  showLoader(event) {
+    this.renderer.addClass(event.target.parentElement, "loading-state");
+    this.renderer.addClass(event.target.parentElement, "disabled");
+  }
+
+  getLoaderState() {
+    return this.addTechnicalProposalLoader;
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {

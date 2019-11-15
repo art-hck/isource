@@ -19,4 +19,8 @@ export class ContragentInfoComponent {
     this.contragentService.downloadPrimaInformReport(this.contragent);
   }
 
+  getLoaderState() {
+    return this.contragentService.loading;
+  }
+
 }

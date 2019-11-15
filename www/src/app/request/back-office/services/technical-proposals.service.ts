@@ -5,6 +5,8 @@ import {Uuid} from "../../../cart/models/uuid";
 @Injectable()
 export class TechnicalProposalsService {
 
+  addTechnicalProposalLoader = false;
+
   constructor(
     protected api: HttpClient,
   ) {

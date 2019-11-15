@@ -17,6 +17,10 @@
             <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
               + Добавить ТП
             </span>
+
+            <div class="loader add-tp-btn">
+              <span *ngIf="getLoaderState()" class="spinner spinner-md ng-star-inserted"></span>
+            </div>
           </div>
 
           <div class="clr-col-auto">
@@ -61,7 +65,7 @@
                 <div *ngIf="isTpHasEditablePositions(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
-                          (click)="onSendForApproval(technicalProposal)">
+                          (click)="onSendForApproval(technicalProposal); showLoader($event)">
                     <b>Отправить на согласование</b>
                   </button>
                 </div>
