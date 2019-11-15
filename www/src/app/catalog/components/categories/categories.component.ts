@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { CatalogCategory } from "../../models/catalog-category";
 import { CatalogService } from "../../services/catalog.service";
 import { Router } from "@angular/router";
@@ -18,7 +18,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     private catalogService: CatalogService,
-    private router: Router
+    private router: Router,
+    private el: ElementRef
   ) { }
 
   ngOnInit() {
@@ -39,6 +40,10 @@ export class CategoriesComponent implements OnInit {
   }
 
   onCategoryClick() {
+    this.openedChange.emit(false);
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     this.openedChange.emit(false);
   }
 }

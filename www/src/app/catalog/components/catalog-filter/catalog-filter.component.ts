@@ -45,7 +45,9 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
             return this.catalogService.getCategoryAttributes(routeParams.categoryId).pipe(
               // Проставляем их в форме
               tap(attributes => {
-                attributes.forEach(attribute => {
+                attributes
+                  .filter(attribute => attribute.values.length > 0)
+                  .forEach(attribute => {
                   this.attributes.push(new FormGroup({
                     'label': new FormControl(attribute.name),
                     'values': new FormArray(attribute.values.map(

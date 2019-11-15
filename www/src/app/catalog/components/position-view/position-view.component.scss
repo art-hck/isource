@@ -130,13 +130,11 @@ img {
 }
 
 .attribute-name span {
-  position: relative;
-  z-index: 2;
-  background: white;
+  background: #fbfcfe;
   padding-right: 10px;
 }
 
-.attribute-name:after {
+.attribute-name:before {
   position: absolute;
   right: 5px;
   left: 15px;
@@ -155,9 +153,7 @@ img {
 }
 
 .attribute-values span {
-  position: relative;
-  z-index: 2;
-  background: white;
+  background: #fbfcfe;
   padding-right: 0;
 }
 
