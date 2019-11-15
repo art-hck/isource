@@ -61,7 +61,7 @@
               <div class="position-list">
                 <clr-checkbox-container>
                   <clr-checkbox-wrapper class="select-checkbox"
-                                        *ngFor="let requestPosition of (positionsForProcedure$ | async) |
+                                        *ngFor="let requestPosition of (requestPositions$ | async) |
                                         positionSearchFilter: getPositionSearchValue();">
 
                     <label class="nopadding">{{ requestPosition.name }}</label>
