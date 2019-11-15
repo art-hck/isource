@@ -44,8 +44,8 @@
             </button>
 
             <button class="btn btn-primary send-offers"
-                    (click)="onCreateProcedureWizardOpen()"
-            >
+                    (click)="onCreateProcedureWizardOpen()">
+              <span *ngIf="creatingProcedureLoader" class="creating-procedure-loader"></span>
               <b>Создать процедуру</b>
             </button>
 
