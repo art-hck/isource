@@ -7,6 +7,10 @@ import { RequestDocument } from "../../models/request-document";
 import { ManufacturingService } from '../../services/manufacturing.service';
 import { ManufacturingDocument } from '../../models/manufacturing-document';
 import { Manufacturing } from '../../models/manufacturing';
+import { Observable } from "rxjs";
+import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
+import { DeliveryMonitorService } from "../../services/delivery-monitor.service";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: 'app-manufacturing',
@@ -18,17 +22,27 @@ export class ManufacturingComponent implements OnInit, OnChanges {
   @Input() requestPosition: RequestPosition;
   @Input() canUpload: boolean;
 
+  deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
+
   manufacturingForm: FormGroup;
   uploadedFiles: File[] = [];
+
+  goodId: string;
+  demoGoodId = '61';
 
   constructor(
     private formBuilder: FormBuilder,
     private manufacturingService: ManufacturingService,
-    private documentsService: DocumentsService
+    private documentsService: DocumentsService,
+    private deliveryMonitorService: DeliveryMonitorService
   ) {
   }
 
   ngOnInit() {
+    // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
+    this.goodId = this.demoGoodId;
+    this.getDeliveryMonitorInfo();
+
     this.manufacturingForm = this.formBuilder.group({
       comments: [''],
       documents: [null]
@@ -37,6 +51,10 @@ export class ManufacturingComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.uploadedFiles = [];
+  }
+
+  getDeliveryMonitorInfo(): void {
+    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
   }
 
   onDocumentSelected(uploadedFiles: File[]) {

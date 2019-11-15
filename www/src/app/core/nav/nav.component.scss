@@ -9,7 +9,7 @@ nav a.active {
 .nav-item {
   position: relative;
 
-  a, span {
+  & > a, & > span {
     padding: 20px 0;
     display: inline-block;
     font-size: 17px;
