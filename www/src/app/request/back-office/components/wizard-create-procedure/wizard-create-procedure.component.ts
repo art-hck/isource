@@ -8,9 +8,7 @@ import { ContragentList } from 'src/app/contragent/models/contragent-list';
 import { Observable } from 'rxjs';
 import { PublishProcedureInfo } from '../../models/publish-procedure-info';
 import { Request } from 'src/app/request/common/models/request';
-import { map, publishReplay, refCount } from 'rxjs/operators';
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
-import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 
 /**
  * Мастер создания процедуры
@@ -84,7 +82,6 @@ export class WizardCreateProcedureComponent implements OnInit {
   selectedProcedureLotDocuments: RequestDocument[] = [];
 
   positionSearchValue = "";
-  positionsForProcedure$: Observable<RequestPosition[]>;
 
   showPrivateAccessContragents: boolean | null = null;
   selectedPrivateAccessContragents: ContragentList[] = [];
@@ -99,12 +96,6 @@ export class WizardCreateProcedureComponent implements OnInit {
   ngOnInit() {
     this.initProcedureBasicDataForm();
     this.initProcedurePropertiesForm();
-
-    this.positionsForProcedure$ = this.requestPositions$.pipe(map((requestPositions: RequestPosition[]) => {
-      return requestPositions.filter(
-        (requestPosition: RequestPosition) =>
-          requestPosition.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT);
-    }));
   }
 
   resetWizardForm(): void {
