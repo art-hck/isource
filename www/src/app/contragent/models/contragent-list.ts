@@ -9,9 +9,9 @@ export class ContragentList {
   inn: string;
   kpp: string;
   ogrn: string;
-  taxAuthorityRegistrationDate: Date;
+  taxAuthorityRegistrationDate?: Date;
   email: string;
-  directorFullName: string;
+  directorFullName?: string;
   phone: string;
   createdDate: Date;
 
