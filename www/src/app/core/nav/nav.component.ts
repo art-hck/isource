@@ -115,7 +115,7 @@ export class NavComponent implements OnInit {
 
   protected getUserAvatarFile(): string {
     if (this.user.isCustomer()) {
-      return 'avatar_tesla.jpg';
+      return 'avatar_ludmila.jpg';
     } else if (this.user.isBackOffice()) {
       return 'avatar_nitshe.jpg';
     }
