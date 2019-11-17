@@ -176,13 +176,11 @@ p {
 }
 
 .attribute-name span {
-  position: relative;
-  z-index: 2;
   background: white;
   padding-right: 10px;
 }
 
-.attribute-name:after {
+.attribute-name:before {
   position: absolute;
   right: 5px;
   left: 15px;
@@ -200,8 +198,6 @@ p {
 }
 
 .attribute-values span {
-  position: relative;
-  z-index: 2;
   background: white;
   padding: 0 0 0 5px;
   color: black;

@@ -8,6 +8,7 @@
 
 .categories-wrap {
   position: absolute;
+  top: 56px;
   margin-top: 0;
   margin-bottom: 30px;
   right: 0;
@@ -118,15 +119,6 @@
 .categories {
   padding-right: 20px;
   border-right: 1px solid #E5E8EF;
-}
-
-.backdrop {
-  top: 130px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.4);
-  z-index: 1;
 }
 
 @keyframes catalog-accordion {

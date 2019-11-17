@@ -1,3 +1,7 @@
+.content-area {
+  position: relative;
+}
+
 .container {
   height: 100%;
 }
