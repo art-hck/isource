@@ -16,13 +16,27 @@ import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor
 })
 export class DeliveryMonitorComponent implements OnInit {
 
-  @Input() requestPosition: RequestPosition;
+  // @Input() requestPosition: RequestPosition; // TODO: 2019-11-20 Раскаментить после демо
+  requestPositionValue: RequestPosition; // TODO: 2019-11-20 Убрать после демо
+
+  // TODO: 2019-11-18 Убрать getter и setter requestPosition после демо
+
+  @Input()
+  set requestPosition(value: RequestPosition) {
+    this.requestPositionValue = value;
+    this.goodId = this.getGoodId();
+    this.getDeliveryMonitorInfo();
+  }
+
+  get requestPosition(): RequestPosition {
+    return this.requestPositionValue;
+  }
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
-  demoGoodId = '61';
+  // demoGoodId = '61'; // TODO: 2019-11-20 Раскаментить после демо
 
   constructor(
     private deliveryMonitorService: DeliveryMonitorService
@@ -30,7 +44,8 @@ export class DeliveryMonitorComponent implements OnInit {
 
   ngOnInit() {
     // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
-    this.goodId = this.demoGoodId;
+    // this.goodId = this.demoGoodId; // TODO: 2019-11-20 Раскаментить после демо
+    this.goodId = this.getGoodId(); // TODO: 2019-11-20 Убрать после демо
     this.getDeliveryMonitorInfo();
   }
 
@@ -81,5 +96,13 @@ export class DeliveryMonitorComponent implements OnInit {
       case DeliveryMonitorStatus.ARRIVED:
         return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.ARRIVED];
     }
+  }
+
+  // TODO: 2019-11-20 Убрать метод getGoodId после демо
+
+  protected getGoodId(): string {
+    const positionName = this.requestPositionValue.name;
+    const re = /^Установка.*$/i;
+    return positionName.match(re) ? '1' : '2';
   }
 }
