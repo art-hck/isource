@@ -39,6 +39,13 @@
 }
 
 
+.technical-proposals .send-offers {
+  width: initial !important;
+}
+::ng-deep .technical-proposals .send-offers.btn span {
+  padding: 0;
+}
+
 .tp-has-no-positions {
   background: #eee;
   padding: 20px;

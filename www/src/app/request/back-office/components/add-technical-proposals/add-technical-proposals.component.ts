@@ -53,6 +53,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   uploadedFiles: File[] = [];
 
   addTechnicalProposalLoader = false;
+  creatingProcedureLoader = false;
 
   @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('createProcedureWizard', {static: false}) createProcedureWizard: WizardCreateProcedureComponent;
@@ -173,9 +174,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
       getTPFilesOnImport: true
     };
 
+    this.creatingProcedureLoader = true;
+
     const subscription = this.procedureService.publishProcedure(request).subscribe(
       (data: PublishProcedureResult) => {
         subscription.unsubscribe();
+        this.creatingProcedureLoader = false;
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
@@ -195,6 +199,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       },
       (error: any) => {
         subscription.unsubscribe();
+        this.creatingProcedureLoader = false;
         let msg = 'Ошибка при создании процедуры';
         if (error && error.error && error.error.detail) {
           msg = `${msg}: ${error.error.detail}`;

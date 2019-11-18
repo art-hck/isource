@@ -214,10 +214,11 @@ clr-checkbox-wrapper {
   text-align: end;
 }
 
-.send-offers {
-  margin: 0;
-  text-align: end;
-  transition: width 1s ease-in;
+.request-info .send-offers {
+  width: initial !important;
+}
+::ng-deep .request-info .send-offers.btn span {
+  padding: 0;
 }
 
 h2 {

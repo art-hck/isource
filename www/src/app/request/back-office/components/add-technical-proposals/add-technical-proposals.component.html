@@ -25,7 +25,8 @@
 
           <div class="clr-col-auto">
             <button class="btn btn-primary send-offers"
-                    (click)="createProcedureWizard.open()">
+                    (click)="createProcedureWizard.open()"
+                    [clrLoading]="creatingProcedureLoader">
               <b>Создать процедуру</b>
             </button>
 

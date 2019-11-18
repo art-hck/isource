@@ -18,7 +18,6 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { Observable } from 'rxjs';

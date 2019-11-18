@@ -6,9 +6,8 @@
 
 
   <div class="loader">
-    <span *ngIf="getLoaderState()" class="spinner spinner-md ng-star-inserted"></span>
-
     <button class="btn btn-primary btn-sm download-report-button"
+            [clrLoading]="getLoaderState()"
             (click)="onDownloadPrimaInformReport()">
       Скачать отчет из Прима-Информ
     </button>
