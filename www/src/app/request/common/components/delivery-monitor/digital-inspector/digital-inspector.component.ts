@@ -3,7 +3,8 @@ import { NotificationService } from "../../../../../shared/services/notification
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { RequestPosition } from "../../../models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
-import { HttpClient } from "@angular/common/http";
+import { DeliveryMonitorService } from "../../../services/delivery-monitor.service";
+import { InspectorStage } from "../../../models/delivery-monitor-info";
 
 @Component({
   selector: 'app-digital-inspector',
@@ -16,7 +17,7 @@ import { HttpClient } from "@angular/common/http";
 
 export class DigitalInspectorComponent implements OnInit {
 
-  @Input() inspectorEvents = [];
+  @Input() inspectorStages: InspectorStage[] = [];
   @Input() requestId: Uuid;
   @Input() position: RequestPosition;
 
@@ -26,23 +27,19 @@ export class DigitalInspectorComponent implements OnInit {
   gibertForm = new FormGroup({
     requestId: new FormControl('', Validators.required),
     positionId: new FormControl('', Validators.required),
-    time: new FormControl('', Validators.required),
+    createdDate: new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
   })
 
-  constructor(private notificationService: NotificationService, private http: HttpClient) {
-  }
+  constructor(
+    private notificationService: NotificationService,
+    private deliveryMonitorService: DeliveryMonitorService
+  ) {}
 
   ngOnInit() {
     this.gibertForm.get('positionId').setValue(this.position.id);
     this.gibertForm.get('requestId').setValue(this.requestId);
-
-    // this.inspectorEvents.push({
-    //   time: "12:00",
-    //   title: "Создан производственный график",
-    //   description: "Период: Вс, 01.09.2019 г. — Пн, 30.09.2019 г.",
-    // })
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -72,11 +69,15 @@ export class DigitalInspectorComponent implements OnInit {
 
   gibertSubmit() {
     this.gibertOpened = false;
+    const formData = this.gibertForm.value;
+    const date = new Date();
+    const time = this.gibertForm.value.createdDate.split(":");
+    date.setHours(time[0]);
+    date.setMinutes(time[1]);
+    formData.createdDate = date;
 
-    const url = `/requests/backoffice/${this.requestId}/positions/${this.position.id}/fooBar`;
-
-    this.http.post(url, this.gibertForm.value).subscribe();
+    this.deliveryMonitorService.addInspectorStage(formData).subscribe();
     this.notificationService.toast('Конишуа :)');
-    this.inspectorEvents.push(this.gibertForm.value);
+    this.inspectorStages.push(this.gibertForm.value);
   }
 }

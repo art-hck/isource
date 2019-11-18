@@ -1,15 +1,15 @@
-<div class="date-bubble-block" *ngIf="inspectorEvents.length > 0">
+<div class="date-bubble-block" *ngIf="inspectorStages.length > 0">
   <div class="status-dot"></div>
   <div class="date-bubble">Ср, 20.09</div>
 </div>
 
 <clr-accordion class="manufacturing-timeline-block" [clrAccordionMultiPanel]="true">
-  <clr-accordion-panel *ngFor="let inspectorEvent of inspectorEvents" class="manufacturing-timeline-panel"
+  <clr-accordion-panel *ngFor="let inspectorEvent of inspectorStages" class="manufacturing-timeline-panel"
                        [clrAccordionPanelDisabled]="true">
 
     <clr-accordion-title class="manufacturing-timeline-header">
       <div class="status-dot">
-        <span class="time-item">{{ inspectorEvent.time }}</span>
+        <span class="time-item">{{ inspectorEvent.createdDate | date : "h:mm" }}</span>
       </div>
       <div class="clr-row">
         <div class="clr-col manufacturing-timeline-item">
@@ -44,7 +44,7 @@
           </div>
           <div class="clr-input-wrapper">
             <label>Time:</label>
-            <input type="time" formControlName="time" appFormControlInvalidClass="invalid"/>
+            <input type="time" formControlName="createdDate" appFormControlInvalidClass="invalid"/>
           </div>
           <button class="btn btn-primary">Операция кобра</button>
         </div>

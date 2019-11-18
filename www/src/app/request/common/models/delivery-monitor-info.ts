@@ -6,6 +6,7 @@ export class DeliveryMonitorInfo {
   amountBei: number;
   dateDeliveryAnnex: Date;
   numberPlanMto: string;
+  inspectorStages: InspectorStage[];
   material: {
     materialId: string,
     codeMtr: string,
@@ -31,4 +32,10 @@ export class DeliveryMonitorInfo {
     };
     consignments: DeliveryMonitorConsignment[];
   };
+}
+
+export class InspectorStage {
+  title: string;
+  description: string;
+  createdDate: string;
 }

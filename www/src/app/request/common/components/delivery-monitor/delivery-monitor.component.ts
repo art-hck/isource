@@ -52,7 +52,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getDeliveryMonitorInfo(): void {
-    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
+    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId, this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
       .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
   }
