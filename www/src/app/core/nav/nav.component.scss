@@ -70,8 +70,16 @@ nav a.active {
     line-height: 1;
     margin: 0;
     font-size: 13px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.user-info-dropdown .dropdown-header {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .sub-nav, .subnav {
   padding: 0;
