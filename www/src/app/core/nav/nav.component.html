@@ -55,13 +55,18 @@
                 </span>
                   <div class="user-info-block">
                     <p class="user-name">{{ user.getShortUserFio() }}</p>
-                    <p class="user-role gray">{{ user.getUserRoleName() }}</p>
+                    <p class="user-role gray">{{ user.isCustomer() ?
+                        user.getUserInfo().contragent?.shortName :
+                        user.getUserRoleName() }}</p>
                   </div>
                 </button>
 
                 <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                  <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
-                  <div class="dropdown-divider"></div>
+                  <ng-container *ngIf="user.isBackOffice()">
+                    <h4 class="dropdown-header">{{ user.getUserInfo().contragent?.shortName }}</h4>
+                    <div class="dropdown-divider"></div>
+                  </ng-container>
+
                   <button (click)="logout()" clrDropdownItem>Выход</button>
                 </clr-dropdown-menu>
               </clr-dropdown>
