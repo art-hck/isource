@@ -128,7 +128,7 @@ export class NavComponent implements OnInit {
   getUserBriefInfo(user: UserInfoService): string {
     return user.isCustomer() ?
       (user.getUserInfo().contragent ? user.getUserInfo().contragent.shortName : '') :
-      user.getUserRoleName();
+      'Бэк-офис';
   }
 
 }
