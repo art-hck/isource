@@ -201,6 +201,10 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
   }
 
   getWinner(position: RequestPosition): RequestOfferPosition | undefined {
-    return position.linkedOffers.find(offer => offer.isWinner);
+    if (position.linkedOffers) {
+      return position.linkedOffers.find(offer => offer.isWinner);
+    }
+
+    return undefined;
   }
 }
