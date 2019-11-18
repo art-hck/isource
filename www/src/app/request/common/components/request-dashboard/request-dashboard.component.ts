@@ -54,16 +54,12 @@ export class RequestDashboardComponent implements OnChanges {
 
 
   protected getRkdAvailable() {
-    if (this.requestPositions) {
-      return this.requestPositions.filter(function getWithDesignRequired(position) {
-        const isDesignRequired: boolean = position instanceof RequestPosition &&  position.isDesignRequired;
-        const isGroupDesignRequired: boolean = position instanceof RequestGroup && position.positions.filter(getWithDesignRequired).length > 0;
+    return this.requestPositions.filter(function getWithDesignRequired(position) {
+      const isDesignRequired: boolean = position instanceof RequestPosition &&  position.isDesignRequired;
+      const isGroupDesignRequired: boolean = position instanceof RequestGroup && position.positions.filter(getWithDesignRequired).length > 0;
 
-        return isDesignRequired || isGroupDesignRequired;
-      }).length > 0;
-    }
-
-    return false;
+      return isDesignRequired || isGroupDesignRequired;
+    }).length > 0;
   }
 
   getOffersPageLink() {
