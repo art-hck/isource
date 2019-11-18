@@ -8,6 +8,7 @@ import { map } from "rxjs/operators";
 import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consignment";
 import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -16,6 +17,7 @@ import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor
 })
 export class DeliveryMonitorComponent implements OnInit {
 
+  @Input() requestId: Uuid;
   @Input() requestPosition: RequestPosition;
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;

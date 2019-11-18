@@ -9,6 +9,8 @@
           [deliveryMonitorInfo]="deliveryMonitorInfo">
   </app-good-card>
 
+  <app-digital-inspector [requestId]="requestId" [position]="requestPosition"></app-digital-inspector>
+
   <clr-accordion class="delivery-timeline-block" [clrAccordionMultiPanel]="true">
 
     <ng-container *ngFor="let consignment of deliveryMonitorInfo.contractAnnex.consignments">

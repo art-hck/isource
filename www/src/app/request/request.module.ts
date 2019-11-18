@@ -55,6 +55,7 @@ import { DeliveryMonitorComponent } from './common/components/delivery-monitor/d
 import { GoodCardComponent } from './common/components/delivery-monitor/good-card/good-card.component';
 import { WizardCreateProcedureComponent } from './back-office/components/wizard-create-procedure/wizard-create-procedure.component';
 import { DeliveryMonitorService } from "./common/services/delivery-monitor.service";
+import { DigitalInspectorComponent } from "./common/components/delivery-monitor/digital-inspector/digital-inspector.component";
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { DeliveryMonitorService } from "./common/services/delivery-monitor.servi
     ContractUploadDocumentComponent,
     DeliveryMonitorComponent,
     GoodCardComponent,
-    WizardCreateProcedureComponent
+    WizardCreateProcedureComponent,
+    DigitalInspectorComponent
   ],
   imports: [
     SharedModule,
