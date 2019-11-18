@@ -4,14 +4,11 @@
 
 <div class="contragent-info-content" *ngIf="contragent; else loading">
 
-
-
   <button class="btn btn-primary btn-sm download-report-button"
           [clrLoading]="getLoaderState()"
           (click)="onDownloadPrimaInformReport()">
     Скачать отчет из Прима-Информ
   </button>
-
 
   <div class="basic-info">
     <div class="info-field clr-row">

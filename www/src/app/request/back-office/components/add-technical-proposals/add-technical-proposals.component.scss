@@ -175,19 +175,6 @@ p.readonly-supplier-name {
   margin: 0 4px 3px 0;
 }
 
-.loader.add-tp-btn {
-  display: inline-block;
-  vertical-align: text-top;
-
-  .spinner {
-    width: 15px;
-    height: 15px;
-    min-width: 15px;
-    min-height: 15px;
-    margin-left: 8px;
-  }
-}
-
 .loading-state {
   pointer-events: none;
 
