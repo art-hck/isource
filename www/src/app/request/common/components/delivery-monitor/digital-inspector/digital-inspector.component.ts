@@ -30,7 +30,7 @@ export class DigitalInspectorComponent implements OnInit {
     createdDate: new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-  })
+  });
 
   constructor(
     private notificationService: NotificationService,
