@@ -45,3 +45,12 @@
     </button>
   </div>
 </clr-modal>
+
+<ng-container *ngIf="requestPositions">
+  <clr-modal [clrModalOpen]="qualityService.getCompletedWithoutQualityRating(requestPositions).length > 0">
+    <div class="modal-body">
+      <app-quality-component [positions]="qualityService.getCompletedWithoutQualityRating(requestPositions)">
+      </app-quality-component>
+    </div>
+  </clr-modal>
+</ng-container>
