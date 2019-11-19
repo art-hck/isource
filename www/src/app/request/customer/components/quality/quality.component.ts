@@ -14,13 +14,11 @@ import { of, Subscription } from "rxjs";
 
 export class QualityComponent {
   @Input() positions: RequestPosition[];
-  public stars = [false, false, false, false, false];
+
+  public rating = 0;
+
   public loadingState: ClrLoadingState;
   private subscription = new Subscription();
-
-  get rate() {
-    return this.stars.reverse().findIndex(Boolean) + 1;
-  }
 
   constructor(
     private qualityService: QualityService,
@@ -28,8 +26,13 @@ export class QualityComponent {
   ) {
   }
 
-  activate(count): void {
-    this.stars.forEach((star, i) => this.stars[i] = i === count);
+  rate(rating) {
+   this.rating = rating;
+   console.log(this.rating);
+  }
+
+  isActive(value) {
+    return value <= this.rating;
   }
 
   cancel(): void {
