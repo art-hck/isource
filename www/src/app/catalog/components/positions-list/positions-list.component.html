@@ -1,7 +1,7 @@
 <div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
     <div class="clr-row position-list">
-      <div class="image open-info">
+      <div class="clr-col-3 image open-info">
         <a class="title" [routerLink]="['/catalog', 'position', position.id]">
           <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
           <ng-template #noImage>
@@ -9,7 +9,7 @@
           </ng-template>
         </a>
       </div>
-      <div class="clr-col position-info">
+      <div class="clr-col-9 position-info">
         <a class="title" [routerLink]="['/catalog', 'position', position.id]">
           <p class="position-name">{{position.name}}</p>
           <p class="document">{{position.productionDocument}}</p>
