@@ -82,7 +82,7 @@
           </clr-checkbox-wrapper>
         </div>
 
-        <div class="clr-col">
+        <div class="clr-col" [ngClass]="{ 'backoffice-column' : !isCustomerView }">
           <div class="clr-row"
                (click)="requestItems[i].entityType !== 'GROUP' ?  onSelectItem(requestItems[i]) : false">
 

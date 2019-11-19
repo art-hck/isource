@@ -204,6 +204,9 @@ clr-datagrid {
   padding: 0;
 }
 
+.backoffice-column {
+  width: calc(100% - 30px);
+}
 
 .group-position-row {
   border-bottom: 1px solid #d4d9e2;

@@ -1,6 +1,7 @@
 <div class="clr-row">
   <div class="clr-col clr-flex-grow-0">
     <img *ngIf="item.catalogPosition.image; else noImage" src="{{ item.catalogPosition.image }}"/>
+
     <ng-template #noImage>
       <img src="../../../../assets/images/no-image.svg" alt="Изображение отсуствует"/>
     </ng-template>
