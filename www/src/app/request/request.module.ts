@@ -55,6 +55,8 @@ import { DeliveryMonitorComponent } from './common/components/delivery-monitor/d
 import { GoodCardComponent } from './common/components/delivery-monitor/good-card/good-card.component';
 import { WizardCreateProcedureComponent } from './back-office/components/wizard-create-procedure/wizard-create-procedure.component';
 import { DeliveryMonitorService } from "./common/services/delivery-monitor.service";
+import { QualityComponent } from "./customer/components/quality/quality.component";
+import { QualityService } from "./customer/services/quality.service";
 import { DigitalInspectorComponent } from "./common/components/delivery-monitor/digital-inspector/digital-inspector.component";
 
 @NgModule({
@@ -100,6 +102,7 @@ import { DigitalInspectorComponent } from "./common/components/delivery-monitor/
     DeliveryMonitorComponent,
     GoodCardComponent,
     WizardCreateProcedureComponent,
+    QualityComponent,
     DigitalInspectorComponent
   ],
   imports: [
@@ -123,7 +126,8 @@ import { DigitalInspectorComponent } from "./common/components/delivery-monitor/
     DesignDocumentationService,
     ContractService,
     RequestPositionStatusService,
-    DeliveryMonitorService
+    DeliveryMonitorService,
+    QualityService
   ]
 })
 export class RequestModule {

@@ -9,6 +9,7 @@ import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-step
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestGroup } from 'src/app/request/common/models/request-group';
+import { QualityService } from "../../services/quality.service";
 
 @Component({
   selector: 'app-customer-request-view',
@@ -28,7 +29,8 @@ export class CustomerRequestViewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private requestService: RequestService
+    private requestService: RequestService,
+    public qualityService: QualityService
   ) {
   }
 

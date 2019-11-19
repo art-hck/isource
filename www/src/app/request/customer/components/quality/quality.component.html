@@ -1,0 +1,16 @@
+<div class="title">Оцените работу сервиса</div>
+<div class="description">
+  Пожалуйста, оцените качество работы сервиса. Ваше мнение очень важно для нас, и поможет улучшить сервис в будущем.
+</div>
+<div class="stars clr-row clr-flex-row-reverse clr-flex-grow-0 clr-justify-content-end">
+  <a [class.active]="star" class="star" *ngFor="let star of stars; index as i" (click)="activate(i)">
+    <svg width="30" height="28" viewBox="0 0 30 28" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 0L20.2901 7.71885L29.2658 10.3647L23.5595 17.7812L23.8168 27.1353L15 24L6.18322 27.1353L6.44049 17.7812L0.734152 10.3647L9.70993 7.71885L15 0Z"/>
+    </svg>
+  </a>
+</div>
+
+<div class="actions clr-row clr-justify-content-end">
+  <button (click)="cancel()" class="btn btn-secondary">Отмена</button>
+  <button [disabled]="rate === 0" (click)="submit()" [clrLoading]="loadingState" class="btn btn-primary">Готово</button>
+</div>

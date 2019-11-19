@@ -1,0 +1,36 @@
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.description {
+  color: #666;
+  font-size: 14px;
+  line-height: normal;
+  margin-bottom: 20px;
+}
+
+.stars {
+  margin: 0;
+
+  .star {
+    margin: 0 5px;
+
+    svg {
+      fill: #E5E8EF;
+    }
+
+    &.active svg, &.active ~ a svg {
+      fill: #ffa10a !important;
+    }
+
+    &:hover svg, &:hover ~ a svg {
+      fill: #ffcc80;
+    }
+  }
+}
+
+.actions {
+  margin-top: 29px;
+}
