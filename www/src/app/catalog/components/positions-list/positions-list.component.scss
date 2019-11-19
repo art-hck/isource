@@ -44,7 +44,6 @@
 .image {
   width: 240px;
   height: 240px;
-  margin-left: 10px;
 }
 
 .image img {
@@ -164,6 +163,7 @@ p {
   padding: 0;
   justify-content: flex-end;
   position: relative;
+  overflow: hidden;
 }
 
 .attribute-values span:not(:last-child)::after {
@@ -195,6 +195,7 @@ p {
   align-items: flex-start;
   color: black;
   opacity: 0.6;
+  overflow: hidden;
 }
 
 .attribute-values span {
