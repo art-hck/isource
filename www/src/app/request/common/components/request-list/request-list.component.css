@@ -40,7 +40,7 @@
     overflow: visible;
 }
 ::ng-deep .requests-list-datagrid .datagrid-header {
-    top: -50px;
+    top: -55px;
     border-bottom: 1px solid #B2D0FF;
 }
 
@@ -49,10 +49,18 @@
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-header {
     padding: 0;
     z-index: 5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
 }
 ::ng-deep .requests-list-datagrid .datagrid .datagrid-row:hover {
     background-color: rgba(247, 247, 252, 1);
 }
+::ng-deep .requests-list-datagrid .datagrid .datagrid-row:last-of-type {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
 ::ng-deep .requests-list-datagrid .datagrid {
     box-shadow: none;
     border: 1px solid #B2D0FF;
@@ -142,6 +150,9 @@
     min-height: 25px;
 }
 
+::ng-deep .requests-list-datagrid .datagrid-table .datagrid-placeholder {
+    background: initial;
+}
 
 ::ng-deep clr-dg-footer.datagrid-footer {
     background-color: transparent;
