@@ -15,18 +15,15 @@ import { InspectorStage } from "../../../models/delivery-monitor-info";
   ]
 })
 
-export class DigitalInspectorComponent implements OnInit {
+export class DigitalInspectorComponent {
 
   @Input() inspectorStages: InspectorStage[] = [];
-  @Input() requestId: Uuid;
   @Input() position: RequestPosition;
 
   opened = false;
   shiftCount = 0;
 
   form = new FormGroup({
-    // requestId: new FormControl('', Validators.required),
-    // positionId: new FormControl('', Validators.required),
     createdDate: new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -36,11 +33,6 @@ export class DigitalInspectorComponent implements OnInit {
     private notificationService: NotificationService,
     private deliveryMonitorService: DeliveryMonitorService
   ) {}
-
-  ngOnInit() {
-    // this.form.get('positionId').setValue(this.position.id);
-    // this.form.get('requestId').setValue(this.requestId);
-  }
 
   @HostListener('document:keyup', ['$event'])
   resetShift(e: KeyboardEvent) {
@@ -79,6 +71,8 @@ export class DigitalInspectorComponent implements OnInit {
     date.setHours(time[0]);
     date.setMinutes(time[1]);
     formData.createdDate = date;
+    formData.positionId = this.position.id;
+
     this.form.reset();
     this.deliveryMonitorService.addInspectorStage(formData).subscribe();
     this.notificationService.toast('Добавлено');
