@@ -9,6 +9,7 @@ import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consig
 import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 import { Uuid } from "../../../../cart/models/uuid";
+import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -58,17 +59,42 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
-    const shipmentItemCreatedDate = consignment.factualShipmentDate ? consignment.factualShipmentDate : null;
+    const shipmentItemCreatedDate = consignment.factualShipmentDate || consignment.planeShipmentDate || null;
     return shipmentItemCreatedDate ? moment(shipmentItemCreatedDate).locale("ru").format('dd, DD.MM') : '—';
   }
 
   getShipmentItemArrivalDate(consignment: DeliveryMonitorConsignment): string {
-    const shipmentItemShippingDate = consignment.planeShipmentDate ? consignment.planeShipmentDate : null;
-    return shipmentItemShippingDate ? moment(shipmentItemShippingDate).locale("ru").format('dd, DD.MM') : '—';
+    if (this.isEmptyArray(consignment.waybills)) {
+      return '—';
+    }
+
+    let estimatedDates: Date[] = [];
+
+    for (let i = 0; i < consignment.waybills.length; i++) {
+      const waybill = consignment.waybills[i];
+      if (waybill.estimatedDateOfArrival) {
+        estimatedDates.push(waybill.estimatedDateOfArrival);
+      }
+    }
+
+    if (this.isEmptyArray(estimatedDates)) {
+      return '—';
+    }
+
+    if (estimatedDates.length > 1) {
+      estimatedDates = estimatedDates.sort(
+        (a, b) => a.getTime() - b.getTime()
+      )
+    }
+
+    return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
   }
 
   consignmentCanBeShown(consignment: DeliveryMonitorConsignment): boolean {
-    return !!consignment.cargos;
+    return (
+      !this.isEmptyArray(consignment.cargos) &&
+      !this.isEmptyCargo(consignment.cargos[0])
+    );
   }
 
   canGetWaybillInfo(consignment: DeliveryMonitorConsignment): boolean {
@@ -76,15 +102,42 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getWeightByTd(consignment: DeliveryMonitorConsignment): number|string {
-    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].weightByTd : '—';
+    if (this.isEmptyArray(consignment.cargos)) {
+      return '—';
+    }
+    return consignment.cargos.reduce(
+      (acc, cargo) => acc + (cargo.weightByTd || cargo.amountEi || 0), 0
+    );
   }
 
   getWaybillNumber(consignment: DeliveryMonitorConsignment): string {
-    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].waybillNumber : '—';
+    if (this.isEmptyArray(consignment.waybills)) {
+      return '—';
+    }
+    return consignment.waybills.map((waybill) => {
+      return waybill.waybillNumber;
+    }).join(',');
   }
 
   getVehicleNumber(consignment: DeliveryMonitorConsignment): string {
-    return this.canGetWaybillInfo(consignment) ? consignment.waybills[0].vehicles[0].vehicleNumber : '—';
+    let numbers = new Set<string>();
+
+    if (this.isEmptyArray(consignment.waybills)) {
+      return '—';
+    }
+
+    for (let i = 0; i < consignment.waybills.length; i++) {
+      const waybill = consignment.waybills[i];
+      if (this.isEmptyArray(waybill.vehicles)) {
+        continue;
+      }
+      for (let j = 0; j < waybill.vehicles.length; j++) {
+        const vehicle = waybill.vehicles[j];
+        numbers.add(vehicle.vehicleNumber)
+      }
+    }
+
+    return [ ...numbers.values() ].join(',');
   }
 
   getStatusLabel(status: string): string {
@@ -106,5 +159,21 @@ export class DeliveryMonitorComponent implements OnInit {
     const positionName = this.requestPositionValue.name;
     const re = /^Установка.*$/i;
     return positionName.match(re) ? '1' : '2';
+  }
+
+  protected isEmptyArray(a?: Array<any>|null): boolean {
+    return Boolean(!a || a.length === 0);
+  }
+
+  protected isEmpty(v: any): boolean {
+    return (
+      (typeof v === 'string' && v.length === 0) ||
+      this.isEmptyArray(v) ||
+      (typeof v === 'object' && this.isEmptyArray(Object.keys(v)))
+    );
+  }
+
+  protected isEmptyCargo(cargo: DeliveryMonitorCargo): boolean {
+    return this.isEmpty(cargo.weightByTd) || cargo.weightByTd === 0;
   }
 }
