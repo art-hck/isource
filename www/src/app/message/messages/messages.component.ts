@@ -8,6 +8,7 @@ import { Uuid } from "../../cart/models/uuid";
 import { MessageContextToEventTypesMap } from "../message-context-types";
 import { DocumentUploadListComponent } from "../../shared/components/document-upload-list/document-upload-list.component";
 import * as moment from 'moment';
+import { SubscriptionLike } from "rxjs";
 
 @Component({
   selector: 'app-message-messages',
@@ -26,6 +27,7 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
   sendMessageForm: FormGroup;
   uploadedFiles: File[] = [];
   loading: boolean;
+  socketSubscription: SubscriptionLike;
 
   constructor(
     private messageService: MessageService,
@@ -45,7 +47,13 @@ export class MessagesComponent implements AfterViewChecked, OnChanges {
     if (this.contextType && this.contextId) {
       this.getMessages();
 
-      this.wsService.on<any>(MessageContextToEventTypesMap[this.contextType] + '.' + this.contextId)
+      // отписываемся от предыдущего канала сообщений
+      if (this.socketSubscription) {
+        this.socketSubscription.unsubscribe();
+        this.socketSubscription = null;
+      }
+
+      this.socketSubscription = this.wsService.on<any>(MessageContextToEventTypesMap[this.contextType] + '.' + this.contextId)
         .subscribe((message: Message) => {
           console.log(message);
           if (message.user.id !== this.userInfoService.getUserInfo().id) {

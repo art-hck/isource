@@ -41,4 +41,5 @@ export class RequestPosition extends RequestPositionList {
   isEditingByAnotherUser: boolean;
   isDesignRequired: boolean;
   checked: boolean;
+  sourceRequestPositionId?: Uuid;
 }
