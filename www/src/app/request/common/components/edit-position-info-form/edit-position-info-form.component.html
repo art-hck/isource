@@ -17,10 +17,10 @@
 
     <div class="clr-col-4">
       <clr-date-container>
-        <label>Необходимый срок поставки</label>
+        <label for="deliveryDate">Необходимый срок поставки</label>
         <input clrDate
                type="date"
-               [textMask]="{mask: dateMask, keepCharPositions: true, pipe: autoCorrectedDatePipe}"
+               id="deliveryDate"
                name="deliveryDate"
                placeholder="ДД.ММ.ГГГГ"
                formControlName="deliveryDate"
