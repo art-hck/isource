@@ -124,4 +124,11 @@ export class NavComponent implements OnInit {
     return 'avatar.svg';
   }
 
+
+  getUserBriefInfo(user: UserInfoService): string {
+    return user.isCustomer() ?
+      (user.getUserInfo().contragent ? user.getUserInfo().contragent.shortName : '') :
+      'Бэк-офис';
+  }
+
 }
