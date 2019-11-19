@@ -1,0 +1,46 @@
+<div class="date-bubble-block" *ngIf="inspectorStages && inspectorStages.length > 0">
+  <div class="status-dot"></div>
+  <div class="date-bubble">Ср, 20.09</div>
+</div>
+
+<clr-accordion class="manufacturing-timeline-block" [clrAccordionMultiPanel]="true">
+  <clr-accordion-panel *ngFor="let inspectorEvent of inspectorStages" class="manufacturing-timeline-panel"
+                       [clrAccordionPanelDisabled]="true">
+
+    <clr-accordion-title class="manufacturing-timeline-header">
+      <div class="status-dot">
+        <span class="time-item">{{ inspectorEvent.createdDate | date : "HH:mm" }}</span>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col manufacturing-timeline-item">
+          <div class="icon">
+            <clr-icon shape="asterisk" class="is-solid" size="20"></clr-icon>
+          </div>
+          <div class="item-info-block">
+            <div class="item-name">{{inspectorEvent.title}}</div>
+            <div class="item-info">
+              {{inspectorEvent.description}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </clr-accordion-title>
+  </clr-accordion-panel>
+</clr-accordion>
+
+<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="opened">
+  <div class="clr-input-wrapper">
+    <label>Title:</label>
+    <input type="text" formControlName="title" appFormControlInvalidClass="invalid"/>
+  </div>
+  <div class="clr-input-wrapper">
+    <label>Description:</label>
+    <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
+  </div>
+  <div class="clr-input-wrapper">
+    <label>Time:</label>
+    <input type="time" formControlName="createdDate" appFormControlInvalidClass="invalid"/>
+  </div>
+  <button class="btn btn-primary">Добавить</button>
+  <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
+</form>

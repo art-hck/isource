@@ -1,0 +1,23 @@
+.icon {
+  background: #f0f3f5;
+  border-radius: 50px;
+  display: inline-block;
+  height: 32px;
+  margin-right: 16px;
+  text-align: center;
+  vertical-align: top;
+  width: 32px;
+
+  clr-icon {
+    margin: 6px auto;
+  }
+}
+
+
+:host ::ng-deep .clr-control-container {
+  width: 100%;
+}
+
+.date-bubble {
+  visibility: hidden;
+}

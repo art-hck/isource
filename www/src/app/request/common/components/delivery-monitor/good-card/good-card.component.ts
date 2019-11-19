@@ -33,7 +33,9 @@ export class GoodCardComponent implements OnChanges {
 
   // todo переделать, когда будут готовы партии
   getUpdatedDate() {
-    return "сегодня, 17:00";
+    const date = new Date();
+    date.setHours(date.getHours() - 2);
+    return "сегодня, " + date.getHours() + ":" + "00";
   }
 
   getProgressWidth(countParam): number {

@@ -1,8 +1,8 @@
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import { DeliveryMonitorInfo } from "../models/delivery-monitor-info";
-import { ShipmentItem } from "../models/shipment-item";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { DeliveryMonitorInfo, InspectorStage } from "../models/delivery-monitor-info";
 import { Observable } from "rxjs";
+import { Uuid } from "../../../cart/models/uuid";
 
 
 @Injectable()
@@ -13,8 +13,11 @@ export class DeliveryMonitorService {
   ) {
   }
 
-  getDeliveryMonitorInfo(goodId): Observable<DeliveryMonitorInfo> {
-    return this.api.get<DeliveryMonitorInfo>(`monitor/goods/${goodId}`);
+  getDeliveryMonitorInfo(goodId, positionId?: Uuid): Observable<DeliveryMonitorInfo> {
+    return this.api.post<DeliveryMonitorInfo>(`monitor/goods/${goodId}`, {positionId});
   }
 
+  addInspectorStage(stage: InspectorStage): Observable<InspectorStage[]> {
+    return this.api.post<InspectorStage[]>(`monitor/inspector-stages/add`, stage);
+  }
 }
