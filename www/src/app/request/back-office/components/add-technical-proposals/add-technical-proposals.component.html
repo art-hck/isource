@@ -14,14 +14,18 @@
         <div class="clr-row clr-justify-content-between">
 
           <div class="clr-col">
-            <span class="add-technical-proposal" (click)="onShowAddTechnicalProposalModal()">
-              + Добавить ТП
-            </span>
+            <button class="add-technical-proposal btn btn-link"
+                    [clrLoading]="getLoaderState()"
+                    (click)="onShowAddTechnicalProposalModal()">
+              <b>+ Добавить ТП</b>
+            </button>
+
           </div>
 
           <div class="clr-col-auto">
             <button class="btn btn-primary send-offers"
-                    (click)="createProcedureWizard.open()">
+                    (click)="createProcedureWizard.open()"
+                    [clrLoading]="creatingProcedureLoader">
               <b>Создать процедуру</b>
             </button>
 
@@ -61,7 +65,7 @@
                 <div *ngIf="isTpHasEditablePositions(technicalProposal); else sentForReview">
                   <button class="btn btn-primary"
                           [class.disabled]="!isReadyToSendForApproval(technicalProposal)"
-                          (click)="onSendForApproval(technicalProposal)">
+                          (click)="onSendForApproval(technicalProposal); showLoader($event)">
                     <b>Отправить на согласование</b>
                   </button>
                 </div>

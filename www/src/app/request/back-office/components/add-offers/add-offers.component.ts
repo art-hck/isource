@@ -18,7 +18,6 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { DocumentsService } from "../../../common/services/documents.service";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { Observable } from 'rxjs';
@@ -64,6 +63,8 @@ export class AddOffersComponent implements OnInit {
   files: File[] = [];
 
   appConfig: GpnmarketConfigInterface;
+
+  creatingProcedureLoader = false;
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
@@ -398,11 +399,14 @@ export class AddOffersComponent implements OnInit {
       getTPFilesOnImport: false
     };
 
+    this.creatingProcedureLoader = true;
+
     this.procedureService.publishProcedure(request).subscribe(
       (data: PublishProcedureResult) => {
         this.wizard.resetWizardForm();
         this.updatePositionsAndSuppliers();
         this.selectedRequestPositions = [];
+        this.creatingProcedureLoader = false;
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
@@ -421,6 +425,7 @@ export class AddOffersComponent implements OnInit {
         });
       },
       (error: any) => {
+        this.creatingProcedureLoader = false;
         let msg = 'Ошибка при создании процедуры';
         if (error && error.error && error.error.detail) {
           msg = `${msg}: ${error.error.detail}`;

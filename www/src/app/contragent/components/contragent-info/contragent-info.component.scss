@@ -10,3 +10,6 @@
   float: right;
 }
 
+::ng-deep .download-report-button.btn span {
+  padding: 0;
+}

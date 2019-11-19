@@ -3,7 +3,6 @@
     <ng-container *ngIf="!loading">
       <div class="message" *ngFor="let message of messages">
 
-
         <div class="message-body"
              [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
           <div class="message-user" *ngIf="!isOwnMessage(message)">

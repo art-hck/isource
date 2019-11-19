@@ -43,9 +43,9 @@
               <b>Отправить на согласование</b>
             </button>
 
-            <button class="btn btn-primary send-offers"
+            <button class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
-            >
+                    [clrLoading]="creatingProcedureLoader">
               <b>Создать процедуру</b>
             </button>
 
