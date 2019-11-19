@@ -84,7 +84,7 @@ export class DeliveryMonitorComponent implements OnInit {
     if (estimatedDates.length > 1) {
       estimatedDates = estimatedDates.sort(
         (a, b) => a.getTime() - b.getTime()
-      )
+      );
     }
 
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
@@ -120,7 +120,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getVehicleNumber(consignment: DeliveryMonitorConsignment): string {
-    let numbers = new Set<string>();
+    const numbers = new Set<string>();
 
     if (this.isEmptyArray(consignment.waybills)) {
       return '—';
@@ -133,7 +133,7 @@ export class DeliveryMonitorComponent implements OnInit {
       }
       for (let j = 0; j < waybill.vehicles.length; j++) {
         const vehicle = waybill.vehicles[j];
-        numbers.add(vehicle.vehicleNumber)
+        numbers.add(vehicle.vehicleNumber);
       }
     }
 
