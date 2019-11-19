@@ -21,12 +21,12 @@ export class DigitalInspectorComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition;
 
-  gibertOpened = false;
-  gibertShiftCount = 0;
+  opened = false;
+  shiftCount = 0;
 
-  gibertForm = new FormGroup({
-    requestId: new FormControl('', Validators.required),
-    positionId: new FormControl('', Validators.required),
+  form = new FormGroup({
+    // requestId: new FormControl('', Validators.required),
+    // positionId: new FormControl('', Validators.required),
     createdDate: new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -38,46 +38,50 @@ export class DigitalInspectorComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.gibertForm.get('positionId').setValue(this.position.id);
-    this.gibertForm.get('requestId').setValue(this.requestId);
+    // this.form.get('positionId').setValue(this.position.id);
+    // this.form.get('requestId').setValue(this.requestId);
   }
 
   @HostListener('document:keyup', ['$event'])
   resetShift(e: KeyboardEvent) {
     if (e.key !== "Shift") {
-      this.gibertShiftCount = 0;
+      this.shiftCount = 0;
     }
   }
 
   @HostListener('document:keyup.shift')
-  gibertShift() {
-    if (this.gibertOpened) {
+  onShift() {
+    if (this.opened) {
       return;
     }
 
-    this.gibertShiftCount++;
+    this.shiftCount++;
 
-    if (this.gibertShiftCount === 5) {
-      this.notificationService.toast('Вы собираетесь активировать режим "Жибер"', "warning");
+    if (this.shiftCount === 5) {
+      this.notificationService.toast('Активация...', "warning");
     }
 
-    if (this.gibertShiftCount === 10) {
-      this.gibertShiftCount = 0;
-      this.gibertOpened = true;
+    if (this.shiftCount === 10) {
+      this.shiftCount = 0;
+      this.opened = true;
     }
   }
 
-  gibertSubmit() {
-    this.gibertOpened = false;
-    const formData = this.gibertForm.value;
+  submit() {
+    if (this.form.invalid) {
+      this.notificationService.toast('Заполните все поля!', "error");
+      return;
+    }
+
+    const formData = this.form.value;
     const date = new Date();
-    const time = this.gibertForm.value.createdDate.split(":");
+    const time = this.form.value.createdDate.split(":");
     date.setHours(time[0]);
     date.setMinutes(time[1]);
     formData.createdDate = date;
-
+    this.form.reset();
     this.deliveryMonitorService.addInspectorStage(formData).subscribe();
-    this.notificationService.toast('Конишуа :)');
-    this.inspectorStages.push(this.gibertForm.value);
+    this.notificationService.toast('Добавлено');
+    this.inspectorStages.push(formData);
   }
 }

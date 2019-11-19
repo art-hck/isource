@@ -86,8 +86,7 @@ export class CatalogFilterComponent implements OnInit, OnDestroy {
 
     const contragents = this.form.value.contragents.map(contragent => contragent.id);
     const attributes = this.form.value.attributes
-      // Оставляем только те аттрибуты, у которых не все значения выделены чекбоксами
-      .filter(attribute => attribute.values.length > attribute.values.filter((value) => value.checked).length)
+
       // Оставляем только массивы с id значений аттрибутов
       .map(attribute => attribute.values.filter((value) => value.checked).map(value => value.id))
       // Преобразуем в единый массив
