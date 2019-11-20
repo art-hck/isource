@@ -10,6 +10,7 @@ export class DeliveryMonitorConsignment {
   factualShipmentDate: null;
   cargos: DeliveryMonitorCargo[];
   consignor: DeliveryMonitorCompany;
+  consignee?: DeliveryMonitorCompany|null;
   waybills: [
     {
       waybillNumber: string,

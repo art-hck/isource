@@ -121,12 +121,12 @@
             <div class="clr-col">
               <div class="item-info-element">
                 <p class="item-info-label">Грузополучатель</p>
-                <p class="item-info-content">{{ deliveryMonitorInfo.contractAnnex.consignee.name || '—' }}</p>
+                <p class="item-info-content">{{ consignment?.consignee?.name || '—' }}</p>
               </div>
 
               <div class="item-info-element">
                 <p class="item-info-label">Пункт назначения</p>
-                <p class="item-info-content">{{ deliveryMonitorInfo.contractAnnex.consignee.actualAddress?.city || '—' }}</p>
+                <p class="item-info-content">{{ consignment?.consignee?.actualAddress?.city || '—' }}</p>
               </div>
             </div>
 
