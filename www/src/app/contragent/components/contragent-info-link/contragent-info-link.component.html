@@ -9,14 +9,20 @@
 
 
 <!-- Модальное окно с карточкой контрагента -->
-<ng-container *ngIf="contragentInfo">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragentName }}</h3>
+<clr-modal [clrModalSize]="'lg'" *ngIf="contragentInfoModalOpened" [(clrModalOpen)]="contragentInfoModalOpened">
+  <h3 class="modal-title">{{ contragentName }}</h3>
 
-    <div class="modal-body">
+  <div class="modal-body">
+
+    <ng-container *ngIf="!contragentInfo; else loadedContragentInfo">
+      <span class="spinner spinner-md"></span>
+    </ng-container>
+
+    <ng-template #loadedContragentInfo>
       <app-contragent-info
               [contragent]="contragentInfo">
       </app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>
+    </ng-template>
+
+  </div>
+</clr-modal>
