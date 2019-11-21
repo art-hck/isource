@@ -41,7 +41,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   technicalProposal: TechnicalProposal;
   technicalProposalsPositions: RequestPositionList[];
 
-  contragentInfoModalOpened = false;
   contragent: ContragentInfo;
   contragentSearchFieldValue: string;
   contragentList$: Observable<ContragentList[]>;
@@ -497,24 +496,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   onContragentInputChange(value: string): void {
     this.contragentSearchFieldValue = value;
-  }
-
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
   }
 
 }

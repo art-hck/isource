@@ -6,10 +6,6 @@ import { Router } from "@angular/router";
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
-import { Observable } from "rxjs";
-import { publishReplay, refCount } from "rxjs/operators";
-import { RequestsList } from "../../../request/common/models/requests-list/requests-list";
-import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Component({
   selector: 'app-catalog-positions-list',
@@ -20,7 +16,6 @@ export class PositionsListComponent implements OnInit {
   @Input() positions: CatalogPosition[];
 
   contragent: ContragentInfo;
-  contragentInfoModalOpened = false;
 
   constructor(
     protected getContragentService: ContragentService,
@@ -41,25 +36,4 @@ export class PositionsListComponent implements OnInit {
     return this.cartStoreService.isCatalogPositionInCart(position);
   }
 
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
-  }
-
-  onPositionClick(position: CatalogPosition): void {
-    this.router.navigateByUrl(`/catalog/position/${position.id}`);
-  }
 }

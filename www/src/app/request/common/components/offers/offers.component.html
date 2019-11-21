@@ -82,8 +82,13 @@
     <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
-          <a [href]="'/contragents/' + linkedOffer.supplierContragentId + '/info'"
-             (click)="showContragentInfo($event, linkedOffer.supplierContragentId)">{{linkedOffer.supplierContragentName}}</a>
+
+          <!-- todo 21.11.2019 Не передаётся сущность контрагента -->
+          <app-contragent-info-link
+                  [contragentId]="linkedOffer.supplierContragentId"
+                  [contragentName]="linkedOffer.supplierContragentName">
+          </app-contragent-info-link>
+
           <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
         </div>
         <div class="card-block">

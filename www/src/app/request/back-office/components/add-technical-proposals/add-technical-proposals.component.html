@@ -43,9 +43,12 @@
               <span class="supplier-name clr-col-auto">
 
                 <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
-                  <a [href]="'/contragents/' + technicalProposal.supplierContragent.id + '/info'"
-                     (click)="showContragentInfo($event, technicalProposal.supplierContragent.id)">
-                  {{ technicalProposal.supplierContragent.shortName }}</a>
+
+                  <app-contragent-info-link
+                          [contragentId]="technicalProposal.supplierContragent.id"
+                          [contragentName]="technicalProposal.supplierContragent.shortName">
+                  </app-contragent-info-link>
+
                 </ng-container>
 
                 <ng-template #noContragent>
@@ -254,21 +257,6 @@
       </div>
     </div>
   </clr-modal>
-
-
-  <!--  Модальное окно отображения информации о контрагенте -->
-
-  <ng-container *ngIf="contragent">
-    <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-      <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-      <div class="modal-body">
-        <app-contragent-info
-                [contragent]="contragent">
-        </app-contragent-info>
-      </div>
-    </clr-modal>
-  </ng-container>
 
   <app-wizard-create-procedure
     #createProcedureWizard

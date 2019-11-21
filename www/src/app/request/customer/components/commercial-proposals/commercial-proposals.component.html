@@ -27,8 +27,10 @@
               <th class="position-name"></th>
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
                 <div class="contragent-info">
-                  <a [href]="'/contragents/' + supplier.id + '/info'"
-                     (click)="showContragentInfo($event, supplier.id)">{{ supplier.shortName }}</a>
+                  <app-contragent-info-link
+                          [contragentId]="supplier.id"
+                          [contragentName]="supplier.shortName">
+                  </app-contragent-info-link>
                 </div>
               </th>
             </tr>
@@ -186,19 +188,6 @@
       </div>
     </div>
   </div>
-</ng-container>
-
-<!-- Модальное окно с карточкой контрагента -->
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-    <div class="modal-body">
-      <app-contragent-info
-              [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
 </ng-container>
 
 <!-- Модальное окно со списком документов КП -->

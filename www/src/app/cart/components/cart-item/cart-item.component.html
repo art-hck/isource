@@ -19,9 +19,11 @@
           <div>{{ item.catalogPosition.description }}</div>
           <br/>
           <div>Срок поставки: <span class="productionTime">{{ item.catalogPosition.productionTime }} дней</span></div>
-          Поставщик: <a href="/contragents/{{item.catalogPosition.supplierContragent.id}}/info"
-                        (click)="showContragentInfo($event, item.catalogPosition.supplierContragent.id)">
-          {{ item.catalogPosition.supplierContragent.shortName }}</a>
+          Поставщик:
+          <app-contragent-info-link
+                  [contragentId]="item.catalogPosition.supplierContragent.id"
+                  [contragentName]="item.catalogPosition.supplierContragent.shortName">
+          </app-contragent-info-link>
         </div>
       </div>
       <div class="clr-col-3">
@@ -51,12 +53,3 @@
     </button>
   </div>
 </div>
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-    <div class="modal-body">
-      <app-contragent-info [contragent]="contragent"></app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>
