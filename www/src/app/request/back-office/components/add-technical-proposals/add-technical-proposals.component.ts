@@ -9,7 +9,7 @@ import { RequestPositionList } from "../../../common/models/request-position-lis
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
-import {ContragentList} from "../../../../contragent/models/contragent-list";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
@@ -25,7 +25,6 @@ import { RequestOfferPosition } from 'src/app/request/common/models/request-offe
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 import { map } from "rxjs/operators";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
-import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -93,12 +92,10 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.getTechnicalProposals();
     this.getPositionsListForTp();
 
-    this.requestPositions$ = this.requestService.getRequestPositions(this.requestId).pipe(
-      map((requestPositions: RequestPositionList[]) => {
-      return requestPositions.filter(
-        (requestPosition: RequestPosition) =>
-          requestPosition.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION);
-    }));
+    this.requestPositions$ = this.requestService.getRequestPositionsFlat(this.requestId)
+      .pipe(map(positions => positions.filter(
+        position => position.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
+      )));
 
     this.contragentList$ = this.getContragentService.getContragentList();
   }
@@ -161,11 +158,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   onSendForApproval(technicalProposal: TechnicalProposal): void {
-    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal).subscribe(
-      (data) => {
-        this.getTechnicalProposals();
-      }
-    );
+    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal)
+      .subscribe(() => this.getTechnicalProposals());
   }
 
   onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
