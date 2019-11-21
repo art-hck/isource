@@ -15,8 +15,9 @@
   display: flex;
   flex: 1 1 auto;
   min-height: 1px;
-  height: 100%;
+  height: calc(100vh - 64px);
   align-items: stretch;
+  margin-top: -50px;
 
   .request-list {
     display: flex;

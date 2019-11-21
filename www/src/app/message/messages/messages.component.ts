@@ -1,121 +1,122 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { Message } from "../../request/common/models/message";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UserInfoService } from "../../core/services/user-info.service";
-import { WebsocketService } from "../../websocket/websocket.service";
-import { MessageService } from "./message.service";
-import { Uuid } from "../../cart/models/uuid";
-import { MessageContextToEventTypesMap } from "../message-context-types";
-import { DocumentUploadListComponent } from "../../shared/components/document-upload-list/document-upload-list.component";
 import * as moment from 'moment';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import { expand, map, take, tap } from "rxjs/operators";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { merge, Observable, Subject, Subscription } from "rxjs";
+import { Message } from "../../request/common/models/message";
+import { MessageContextToEventTypesMap } from "../message-context-types";
+import { MessageService } from "./message.service";
+import { UserInfoService } from "../../core/services/user-info.service";
+import { Uuid } from "../../cart/models/uuid";
+import { WebsocketService } from "../../websocket/websocket.service";
 
 @Component({
   selector: 'app-message-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements AfterViewChecked, OnChanges {
+export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
   @Input() contextType: string;
+  @ViewChild('messagesList', { static: false }) private messagesList: ElementRef;
 
-  @ViewChild('messagesList', {static: false}) private myScrollContainer: ElementRef;
-  @ViewChild('documentUploadList', {static: false}) private documentUploadList: DocumentUploadListComponent;
+  public messages$: Observable<Message[]>;
+  public form = new FormGroup({
+    text: new FormControl(null, Validators.required),
+    files: new FormControl()
+  });
 
-  messages: Message[];
-  sendMessageForm: FormGroup;
-  uploadedFiles: File[] = [];
-  loading: boolean;
+  private subscription = new Subscription();
+  private outgoingMessagesSubject = new Subject();
+  private scrollToBottom: boolean;
 
   constructor(
     private messageService: MessageService,
-    private formBuilder: FormBuilder,
     private userInfoService: UserInfoService,
     private wsService: WebsocketService
   ) {
-    this.sendMessageForm = this.formBuilder.group({
-      message: [null, [Validators.required]],
-      files: [null]
-    });
+  }
+
+  get wsEvent() {
+    return MessageContextToEventTypesMap[this.contextType] + '.' + this.contextId;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.formReset();
+    if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
+      this.form.reset();
+      const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
+      const sendedMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom = true));
+      const newMessages$ = merge(receivedMessages$, sendedMessages$);
 
-    if (this.contextType && this.contextId) {
-      this.getMessages();
-
-      this.wsService.on<any>(MessageContextToEventTypesMap[this.contextType] + '.' + this.contextId)
-        .subscribe((message: Message) => {
-          console.log(message);
-          if (message.user.id !== this.userInfoService.getUserInfo().id) {
-            this.messages.push(message);
-          }
-        });
+      this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
+        tap(() => this.scrollToBottom = true),
+        expand(messages => newMessages$.pipe(
+          take(1),
+          map(message => [...messages, message]),
+        ))
+      );
     }
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if (this.scrollToBottom) {
+      this.scrollToBottom = false;
+      this.messagesList.nativeElement.scrollTop = this.messagesList.nativeElement.scrollHeight;
+    }
   }
 
-  getMessages() {
-    this.loading = true;
-    this.messageService.getList(this.contextType, this.contextId)
-      .subscribe((messages: Message[]) => {
-        this.messages = messages;
-        this.loading = false;
-      });
-  }
-
-  scrollToBottom(): void {
-    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-  }
-
-  isOwnMessage(message: Message) {
+  public isOwnMessage(message: Message) {
     return message.user.id === this.userInfoService.getUserInfo().id;
-  }
-
-  onCreateClick(customerData) {
-    this.messageService.addMessage(
-      customerData.message,
-      this.contextType,
-      this.contextId,
-      customerData.files
-    ).subscribe((newMessage: Message) => {
-      this.messages.push(newMessage);
-    });
-
-    this.formReset();
-  }
-
-  /**
-   * Прописываем это событие, чтобы в textarea после отправки не оставалось перевода строки
-   */
-  onCreateClickKeyup() {
-    this.formReset();
-  }
-
-  onFileSelected(files: File[]) {
-    this.sendMessageForm.get('files').setValue(files);
-  }
-
-  formReset() {
-    this.sendMessageForm.reset();
-    this.uploadedFiles = [];
-  }
-
-  onUploadFileClick() {
-    this.documentUploadList.open();
   }
 
   /**
    * Если дата сегодняшняя, то возвращает время, иначе дату без времени
    * @param createdDate
    */
-  getMessageDate(createdDate: string) {
+  public getMessageDate(createdDate: string): string {
     return moment(new Date()).isSame(createdDate, 'date') ?
       moment(createdDate).format('HH:mm') :
       moment(createdDate).format('YYYY.MM.DD');
+  }
+
+  public submit(): void {
+    if (this.form.invalid) {
+      return;
+    }
+
+    const { text, files } = this.form.value;
+
+    const message: Message = {
+      user: this.userInfoService.getUserInfo(),
+      message: text,
+      isSending: true,
+      documents: []
+    };
+
+    this.outgoingMessagesSubject.next(message);
+    this.form.reset();
+
+    this.subscription.add(
+      this.messageService.addMessage(text, this.contextType, this.contextId, files)
+        .subscribe(_message => {
+          message.id = _message.id;
+          message.isSending = false;
+          message.documents = _message.documents;
+        })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
