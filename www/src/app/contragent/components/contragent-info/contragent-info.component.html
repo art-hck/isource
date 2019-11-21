@@ -108,29 +108,29 @@
     <div class="info-field clr-row">
       <div class="clr-col-4">
         <label class="clr-control-label" for="bik">БИК</label>
-        <span>{{ contragent.bankRequisites[0]?.bik || '—' }}</span>
+        <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.bik : '—' }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
-        <span>{{ contragent.bankRequisites[0]?.account || '—' }}</span>
+        <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.account : '—' }}</span>
       </div>
 
       <div class="clr-col-4">
         <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
-        <span>{{ contragent.bankRequisites[0]?.correspondentAccount || '—' }}</span>
+        <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.correspondentAccount : '—' }}</span>
       </div>
     </div>
 
     <div class="info-field clr-row">
       <div class="clr-col-4">
         <label class="clr-control-label" for="bankName">Наименование банка</label>
-        <span>{{ contragent.bankRequisites[0]?.name || '—' }}</span>
+        <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.name : '—' }}</span>
       </div>
 
       <div class="clr-col-auto">
         <label class="clr-control-label" for="bankAddress">Адрес банка</label>
-        <span>{{ contragent.bankRequisites[0]?.address || '—' }}</span>
+        <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.address : '—' }}</span>
       </div>
     </div>
   </div>

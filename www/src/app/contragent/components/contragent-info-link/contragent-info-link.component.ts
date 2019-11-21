@@ -14,6 +14,7 @@ export class ContragentInfoLinkComponent implements OnInit {
   @Input() contragentId: Uuid;
   @Input() contragentName: string;
 
+  contragentInfo: ContragentInfo;
   contragentInfoModalOpened = false;
 
   constructor(
@@ -21,7 +22,10 @@ export class ContragentInfoLinkComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.contragentName) {
+    if (this.contragent) {
+      this.contragentId = this.contragent.id;
+      this.contragentName = this.contragent.shortName;
+    } else {
       this.getContragentName(this.contragentId);
     }
   }
@@ -41,13 +45,13 @@ export class ContragentInfoLinkComponent implements OnInit {
 
     this.contragentInfoModalOpened = true;
 
-    if (!this.contragent || this.contragentId !== contragentId) {
-      this.contragent = null;
+    if (!this.contragentInfo || this.contragentId !== contragentId) {
+      this.contragentInfo = null;
 
       const subscription = this.getContragentService
         .getContragentInfo(contragentId)
         .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
+          this.contragentInfo = contragentInfo;
           subscription.unsubscribe();
         });
     }

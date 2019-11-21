@@ -21,8 +21,7 @@
           <div>Срок поставки: <span class="productionTime">{{ item.catalogPosition.productionTime }} дней</span></div>
           Поставщик:
           <app-contragent-info-link
-                  [contragentId]="item.catalogPosition.supplierContragent.id"
-                  [contragentName]="item.catalogPosition.supplierContragent.shortName">
+                  [contragent]="item.catalogPosition.supplierContragent">
           </app-contragent-info-link>
         </div>
       </div>

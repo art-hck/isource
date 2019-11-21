@@ -45,8 +45,7 @@
                 <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
 
                   <app-contragent-info-link
-                          [contragentId]="technicalProposal.supplierContragent.id"
-                          [contragentName]="technicalProposal.supplierContragent.shortName">
+                          [contragent]="technicalProposal.supplierContragent">
                   </app-contragent-info-link>
 
                 </ng-container>

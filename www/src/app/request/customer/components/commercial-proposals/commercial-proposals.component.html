@@ -28,8 +28,7 @@
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
                 <div class="contragent-info">
                   <app-contragent-info-link
-                          [contragentId]="supplier.id"
-                          [contragentName]="supplier.shortName">
+                          [contragent]="supplier">
                   </app-contragent-info-link>
                 </div>
               </th>
