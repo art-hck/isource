@@ -69,6 +69,7 @@
                   <button class="btn btn-info-outline btn-edit"
                           [class.btn-primary]="positionInfoEditable"
                           *ngIf="!isNewPosition()"
+                          [disabled]="canViewManufacturing(requestPosition)"
                           (click)="onPositionInfoEditableToggle()">
                     <clr-icon size="16" shape="pencil"></clr-icon>
                     <span> {{ positionInfoEditable ? 'Отменить' : 'Редактировать' }} </span>
