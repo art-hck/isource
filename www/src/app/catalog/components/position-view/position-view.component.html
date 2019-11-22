@@ -69,10 +69,10 @@
       </div>
       <b>Под заказ</b>
       <div class="price-info">Поставщик</div>
-      <a href="/contragents/{{position.supplierContragent.id}}/info"
-         (click)="showContragentInfo($event, position.supplierContragent.id)">
-        <b>{{position.supplierContragentName}}</b>
-      </a>
+
+      <app-contragent-info-link
+              [contragent]="position.supplierContragent">
+      </app-contragent-info-link>
 
       <div class="price-info">Срок поставки</div>
       <b>{{position.productionTime}} дней</b>
@@ -97,11 +97,3 @@
     </div>
   </div>
 </div>
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-    <div class="modal-body">
-      <app-contragent-info [contragent]="contragent"></app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>

@@ -6,7 +6,8 @@ import { SharedModule } from "../shared/shared.module";
 import { ContragentListViewComponent } from "./components/contragent-list-view/contragent-list-view.component";
 import { ContragentService } from "./services/contragent.service";
 import { ContragentInfoComponent } from './components/contragent-info/contragent-info.component';
-import { ContragentInfoViewComponent } from './components/contragent-info-view/contragent-info-view.component';
+import { ContragentInfoLinkComponent } from './components/contragent-info-link/contragent-info-link.component';
+import { ContragentInfoViewComponent } from "./components/contragent-info-view/contragent-info-view.component";
 
 @NgModule({
   imports: [
@@ -19,12 +20,14 @@ import { ContragentInfoViewComponent } from './components/contragent-info-view/c
     ContragentListComponent,
     ContragentInfoComponent,
     ContragentInfoViewComponent,
+    ContragentInfoLinkComponent,
   ],
   providers: [
     ContragentService,
   ],
   exports: [
-    ContragentInfoComponent
+    ContragentInfoComponent,
+    ContragentInfoLinkComponent
   ]
 })
 export class ContragentModule { }

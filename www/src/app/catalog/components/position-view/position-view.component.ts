@@ -19,7 +19,6 @@ export class PositionViewComponent implements OnInit {
   attributes$: Observable<CatalogCategoryAttribute[]>;
 
   contragent: ContragentInfo;
-  contragentInfoModalOpened = false;
 
   constructor(
     protected getContragentService: ContragentService,
@@ -43,24 +42,6 @@ export class PositionViewComponent implements OnInit {
 
   isPositionInCart(position: CatalogPosition): boolean {
     return this.cartStoreService.isCatalogPositionInCart(position);
-  }
-
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
   }
 
 }

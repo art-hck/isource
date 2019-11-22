@@ -35,8 +35,9 @@
       <div class="card-header">
         <div class="clr-row">
           <div class="clr-col">
-            <a [href]="'/contragents/' + contract.supplier.id + '/info'"
-               (click)="showContragentInfo($event, contract.supplier.id)">{{ contract.supplier.shortName }}</a>
+            <app-contragent-info-link
+                    [contragent]="contract.supplier">
+            </app-contragent-info-link>
           </div>
         </div>
       </div>
@@ -139,16 +140,4 @@
       </div>
     </div>
   </ng-container>
-</ng-container>
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-    <div class="modal-body">
-      <app-contragent-info
-              [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
 </ng-container>
