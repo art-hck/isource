@@ -164,6 +164,7 @@ p {
   justify-content: flex-end;
   position: relative;
   white-space: normal;
+  word-break: break-word;
 }
 
 .attribute-values span:not(:last-child)::after {
@@ -179,6 +180,7 @@ p {
   background: white;
   padding-right: 10px;
   position: relative;
+  opacity: 0.6;
 }
 
 .attribute-name:before {
@@ -195,7 +197,6 @@ p {
   position: relative;
   align-items: flex-start;
   color: black;
-  opacity: 0.6;
   white-space: normal;
 }
 
