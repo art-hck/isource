@@ -58,6 +58,7 @@ import { DeliveryMonitorService } from "./common/services/delivery-monitor.servi
 import { QualityComponent } from "./customer/components/quality/quality.component";
 import { QualityService } from "./customer/services/quality.service";
 import { DigitalInspectorComponent } from "./common/components/delivery-monitor/digital-inspector/digital-inspector.component";
+import { RequestListFilterComponent } from './common/components/request-list/request-list-filter/request-list-filter.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { DigitalInspectorComponent } from "./common/components/delivery-monitor/
     GoodCardComponent,
     WizardCreateProcedureComponent,
     QualityComponent,
-    DigitalInspectorComponent
+    DigitalInspectorComponent,
+    RequestListFilterComponent
   ],
   imports: [
     SharedModule,

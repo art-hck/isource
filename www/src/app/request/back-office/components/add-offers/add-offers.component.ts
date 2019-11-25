@@ -49,6 +49,7 @@ export class AddOffersComponent implements OnInit {
   showImportOffersExcel = false;
 
   contragent: ContragentList;
+  contragentsWithTp: ContragentList[] = [];
 
   selectedRequestPosition: RequestPosition;
   selectedSupplierId: Uuid;
@@ -491,6 +492,16 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
+  protected updateContragentsWithTp(): void {
+    const contragentsWithTpData = this.offersService.getContragentsWithTp(this.request, this.requestPositions);
+    const subscription = contragentsWithTpData.subscribe(
+      (data: ContragentList[]) => {
+        this.contragentsWithTp = data;
+        subscription.unsubscribe();
+      }
+    );
+  }
+
   protected updatePositionsAndSuppliers(): void {
     const requestPositionsWithOffersData = this.requestService.getRequestPositionsWithOffers(this.requestId);
     this.requestPositions$ = requestPositionsWithOffersData.pipe(pluck('positions'));
@@ -499,6 +510,8 @@ export class AddOffersComponent implements OnInit {
         this.requestPositions = data.positions;
         this.suppliers = data.suppliers;
         subscription.unsubscribe();
+
+        this.updateContragentsWithTp();
       }
     );
   }
@@ -510,6 +523,8 @@ export class AddOffersComponent implements OnInit {
       (data: any) => {
         this.requestPositions = data.positions;
         subscription.unsubscribe();
+
+        this.updateContragentsWithTp();
       }
     );
   }

@@ -10,10 +10,22 @@ import {ContragentService} from "../../../../contragent/services/contragent.serv
 })
 export class SupplierSelectComponent implements OnInit {
   contragentForm: FormGroup;
-  contragents: ContragentList[];
+  contragentsValue: ContragentList[] = [];
   showContragentList = false;
 
   @Input() contragentName: string;
+
+  @Input()
+  set contragents(value: ContragentList[]) {
+    if (value.length) {
+      this.contragentsValue = value;
+    }
+  }
+
+  get contragents(): ContragentList[] {
+    return this.contragentsValue;
+  }
+
   @Output() contragentNameChange = new EventEmitter<string>();
 
   @Output() selectedContragent = new EventEmitter<ContragentList>();
@@ -46,10 +58,14 @@ export class SupplierSelectComponent implements OnInit {
   }
 
   getContragentList(): void {
+    if (this.contragents.length > 0) {
+      return;
+    }
     this.getContragentService.getContragentList().subscribe(
       (data: ContragentList[]) => {
         this.contragents = data;
-      });
+      }
+    );
   }
 
   getSearchValue() {
