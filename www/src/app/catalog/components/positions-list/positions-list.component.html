@@ -21,7 +21,7 @@
               <div class="attr-block">
                 <div class="clr-row w-100 attributes" *ngFor="let attribute of position.attributes">
                   <div class="clr-col-6 attribute-name">
-                    <span class="name">{{attribute.name}}</span>
+                    <span>{{attribute.name}}</span>
                   </div>
                   <div class="clr-col-6 attribute-values">
                     <span *ngFor="let value of attribute.values">{{value.value}}</span>
@@ -36,10 +36,10 @@
             </div>
             Под заказ
             <div class="price-info">Поставщик</div>
-            <a [href]="'/contragents/' + position.supplierContragent.id + '/info'"
-               (click)="showContragentInfo($event, position.supplierContragent.id)">
-              {{position.supplierContragentName}}
-            </a>
+            <app-contragent-info-link
+                    [contragent]="position.supplierContragent">
+            </app-contragent-info-link>
+
             <div class="price-info">Срок поставки</div>
             {{position.productionTime}} дней
             <div class="clr-row w-100 inline nopadding">
@@ -71,15 +71,3 @@
     Позиций не найдено
   </div>
 </ng-template>
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-    <div class="modal-body">
-      <app-contragent-info
-        [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>

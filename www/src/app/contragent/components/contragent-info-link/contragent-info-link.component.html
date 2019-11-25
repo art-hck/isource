@@ -1,0 +1,28 @@
+<ng-container *ngIf="!contragentName; else contragentLink">
+  <span class="contragent-name-loader spinner spinner-md"></span>
+</ng-container>
+
+<ng-template #contragentLink>
+  <a [href]="'/contragents/' + contragentId + '/info'"
+     (click)="showContragentInfo($event, contragentId)"><b>{{ contragentName }}</b></a>
+</ng-template>
+
+
+<!-- Модальное окно с карточкой контрагента -->
+<clr-modal [clrModalSize]="'lg'" *ngIf="contragentInfoModalOpened" [(clrModalOpen)]="contragentInfoModalOpened">
+  <h3 class="modal-title">{{ contragentName }}</h3>
+
+  <div class="modal-body">
+
+    <ng-container *ngIf="!contragentInfo; else loadedContragentInfo">
+      <span class="spinner spinner-md"></span>
+    </ng-container>
+
+    <ng-template #loadedContragentInfo>
+      <app-contragent-info
+              [contragent]="contragentInfo">
+      </app-contragent-info>
+    </ng-template>
+
+  </div>
+</clr-modal>

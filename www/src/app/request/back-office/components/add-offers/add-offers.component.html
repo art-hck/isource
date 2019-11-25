@@ -72,9 +72,11 @@
                 </clr-checkbox-container>
               </div>
             </th>
+
             <th class="contragent-name" *ngFor="let supplier of suppliers">
-              <a [href]="'/contragents/' + supplier.id + '/info'"
-                 (click)="showContragentInfo($event, supplier.id)">{{ supplier.shortName }}</a>
+              <app-contragent-info-link
+                      [contragent]="supplier">
+              </app-contragent-info-link>
             </th>
           </tr>
           </thead>
@@ -318,18 +320,5 @@
     [allowOpenedProcedure]="false"
     (publishProcedure)="onPublishProcedure($event)"
   ></app-wizard-create-procedure>
-
-  <ng-container *ngIf="contragent">
-    <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-      <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-      <div class="modal-body">
-        <app-contragent-info
-                [contragent]="contragent">
-        </app-contragent-info>
-      </div>
-    </clr-modal>
-  </ng-container>
-
 
 </ng-container>

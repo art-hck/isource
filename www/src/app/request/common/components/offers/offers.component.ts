@@ -133,24 +133,6 @@ export class OffersComponent implements OnInit {
       });
   }
 
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
-  }
-
   canUploadTp(): boolean {
     if (this.isCustomerView) {
       return false;

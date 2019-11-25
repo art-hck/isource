@@ -23,7 +23,6 @@ export class TechnicalProposalsComponent implements OnInit {
   request: Request;
   technicalProposals: TechnicalProposal[];
   selectedTechnicalProposalsPositions: TechnicalProposalPosition[][] = [];
-  contragentInfoModalOpened = false;
   contragent: ContragentInfo;
 
   constructor(
@@ -113,23 +112,5 @@ export class TechnicalProposalsComponent implements OnInit {
       this.selectedTechnicalProposalsPositions[i] &&
       this.selectedTechnicalProposalsPositions[i].length > 0
     );
-  }
-
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
   }
 }

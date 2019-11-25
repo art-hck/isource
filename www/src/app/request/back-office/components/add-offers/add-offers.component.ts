@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -49,7 +49,6 @@ export class AddOffersComponent implements OnInit {
   showImportOffersExcel = false;
 
   contragent: ContragentList;
-  contragentInfoModalOpened = false;
   contragentsWithTp: ContragentList[] = [];
 
   selectedRequestPosition: RequestPosition;
@@ -81,6 +80,7 @@ export class AddOffersComponent implements OnInit {
     private documentsService: DocumentsService,
     private procedureService: ProcedureService,
     private notificationService: NotificationService,
+    private componentFactoryResolver: ComponentFactoryResolver,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
     this.appConfig = appConfig;
@@ -108,24 +108,6 @@ export class AddOffersComponent implements OnInit {
     });
 
     this.updatePositionsAndSuppliers();
-  }
-
-  showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
-    // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
-    event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragent || this.contragent.id !== contragentId) {
-      this.contragent = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragent = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
   }
 
   getSupplierLinkedOffers(

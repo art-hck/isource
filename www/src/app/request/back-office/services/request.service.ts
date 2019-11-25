@@ -12,37 +12,37 @@ import { Request } from "../../common/models/request";
 @Injectable()
 export class RequestService {
 
-  constructor(
-    protected api: HttpClient,
-  ) {
+  constructor(protected api: HttpClient) {
   }
 
   getRequestInfo(id: Uuid) {
     const url = `requests/backoffice/${id}/info`;
-    return this.api.post(url, {}).pipe(
-      map((data: Request) => {
-        return new Request(data);
-      })
-    );
+    return this.api.post<Request>(url, {})
+      .pipe(map(data => new Request(data)));
   }
 
   getRequestPositions(id: Uuid): Observable<RequestPositionList[]> {
     const url = `requests/backoffice/${id}/positions`;
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
-      map((data: RequestPositionList[]) => {
-        return data.map(function recursiveMapPositionList(item: RequestPositionList) {
-          switch (item.entityType) {
-            case 'GROUP':
-              const group = new RequestGroup(item);
-              group.positions = group.positions.map(recursiveMapPositionList);
-
-              return group;
-            case 'POSITION':
-              return new RequestPosition(item);
-          }
-        });
-      })
+      map(data => this.mapPositionList(data))
     );
+  }
+
+  /**
+   * Преобразует RequestPositionList в одноуровневый массив позиций без групп
+   */
+  getRequestPositionsFlat(id: Uuid): Observable<RequestPosition[]> {
+    return this.getRequestPositions(id).pipe(map(
+      requestPositionsList =>
+        requestPositionsList.reduce(
+          function flatPositionList(arr, curr: RequestPositionList) {
+            if (curr instanceof RequestGroup) {
+              return flatPositionList(curr.positions, null);
+            } else {
+              return [...arr, curr].filter(Boolean);
+            }
+          }, [])
+    ));
   }
 
   getRequestPositionsWithOffers(id: Uuid): Observable<any> {
@@ -60,6 +60,21 @@ export class RequestService {
     return this.api.post(url, {
       status: status
     });
+  }
+
+  private mapPositionList(requestPositionsList: RequestPositionList[]) {
+    return requestPositionsList.map(
+      function recursiveMapPositionList(item: RequestPositionList) {
+        switch (item.entityType) {
+          case 'GROUP':
+            const group = new RequestGroup(item);
+            group.positions = group.positions.map(recursiveMapPositionList);
+
+            return group;
+          case 'POSITION':
+            return new RequestPosition(item);
+        }
+      });
   }
 }
 
