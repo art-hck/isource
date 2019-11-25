@@ -27,10 +27,6 @@ export class RequestListComponent implements OnInit {
   datagridLoader = false;
   pageSize: number;
 
-  isNotebookResolution: boolean;
-  filterModalOpened =false;
-
-
   constructor(
     protected router: Router,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
@@ -40,7 +36,6 @@ export class RequestListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isNotebookResolution = window.innerWidth < 1440;
   }
 
   /**
@@ -114,9 +109,5 @@ export class RequestListComponent implements OnInit {
     };
 
     this.datagridState.emit(datagridState);
-  }
-
-  onFilterModalOpened() {
-    this.filterModalOpened = true;
   }
 }
