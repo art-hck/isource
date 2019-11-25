@@ -6,6 +6,7 @@
 @import "assets/styles/buttons.scss";
 @import "assets/styles/header.scss";
 @import "assets/styles/card-items.scss";
+@import "assets/styles/datagrid.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -125,12 +126,6 @@ span.spinner {
     margin-right: 10px;
 }
 
-
-/* Белый фон в хедере гридов */
-.datagrid .datagrid-header {
-    background-color: white;
-    border-bottom: 0;
-}
 
 
 /* Увеличенный шрифт лейблов полей ввода */
