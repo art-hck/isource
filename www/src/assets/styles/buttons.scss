@@ -47,6 +47,7 @@ button:focus {
     background-color: $color_blue;
     color: white;
     padding: 0 20px;
+    transition: background-color 0.5s ease;
 
     &:hover {
       background-color: $color_dark_blue;
@@ -78,6 +79,7 @@ button:focus {
     color: white;
     height: 32px;
     padding: 0 16px;
+    transition: background-color 0.5s ease;
 
     &:hover {
       border-color: $color_dark_blue;
@@ -110,11 +112,12 @@ button:focus {
     color: black;
     height: 40px;
     padding: 0 20px;
+    transition: background-color 0.5s ease;
 
     &:hover {
       border-color: $color_dark_grey;
       background-color: $color_dark_grey;
-      color: white; // todo убрать?
+      color: black;
     }
 
     &:active {
@@ -142,11 +145,11 @@ button:focus {
     color: black;
     height: 32px;
     padding: 0 16px;
+    transition: background-color 0.5s ease;
 
     &:hover {
       border-color: $color_dark_grey;
       background-color: $color_dark_grey;
-      color: white; // todo убрать?
     }
 
     &:active {

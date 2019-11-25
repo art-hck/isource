@@ -175,3 +175,7 @@ span.request-name {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.action-buttons {
+  justify-content: flex-end
+}

@@ -1,3 +1,11 @@
+
+<div class="clr-row action-buttons">
+  <button class="btn btn-secondary" *ngIf="isNotebookResolution" (click)="onFilterModalOpened()">
+    Фильтр
+  </button>
+</div>
+<div class="clr-row">
+  <div class="clr-col-9" [ngClass]="{'clr-col-12' : isNotebookResolution}">
 <clr-datagrid class="requests-list-datagrid" (clrDgRefresh)="refresh($event)" [clrDgLoading]="datagridLoader">
   <clr-dg-column class="request-number" [clrDgField]="'requestNumber'">
     № Заявки
@@ -107,4 +115,14 @@
 
 </clr-datagrid>
 
-
+</div>
+  <div class="clr-col-3" *ngIf="!isNotebookResolution">
+    <app-request-list-filter></app-request-list-filter>
+  </div>
+</div>
+<clr-modal [(clrModalOpen)]="filterModalOpened" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Фильтр</h3>
+  <div class="modal-body">
+    <app-request-list-filter></app-request-list-filter>
+  </div>
+</clr-modal>
