@@ -1,3 +1,6 @@
+import { DeliveryMonitorCompany } from './delivery-monitor-company';
+import { DeliveryMonitorCargo } from './delivery-monitor-cargo';
+
 export class DeliveryMonitorConsignment {
   consignmentId: string;
   contractAnnexId: string;
@@ -5,45 +8,22 @@ export class DeliveryMonitorConsignment {
   deliveryNoteNumber: null;
   deliveryState: string;
   factualShipmentDate: null;
-  cargos: [
-    {
-        cargoId: string,
-        eiCargoAmount: string,
-        amountEi: number,
-        numberPositionSf: string,
-        isLong: null,
-        isPonderous: null,
-        weightByTd: number,
-        eiWeightByProvider: null,
-        amountSeatsByTd: number,
-        cargoNameByTd: null,
-        weightFromProvider: number
-      }
-  ];
-  consignor: {
-    companyId: string,
-    sapCode: null,
-    name: string,
-    companyType: string,
-    actualAddressId: null,
-    requisites: null,
-    actualAddress: {
-      rawAddress: string
-    }
-  };
+  cargos: DeliveryMonitorCargo[];
+  consignor: DeliveryMonitorCompany;
+  consignee?: DeliveryMonitorCompany|null;
   waybills: [
     {
       waybillNumber: string,
       rawWaybillNumber: null,
       actualDocumentLocation: null,
-      loadingDate: null,
+      loadingDate?: Date|null,
       amountSeats: number,
       cargoWeight: number,
-      expectedDateOfArrival: null,
-      estimatedDateOfArrival: null,
-      actualArrivalDate: null,
-      departureDate: null,
-      consignmentId: null,
+      expectedDateOfArrival?: Date|null,
+      estimatedDateOfArrival?: Date|null,
+      actualArrivalDate?: Date|null,
+      departureDate?: Date|null,
+      consignmentId: string,
       deliveryState: string,
       weightByTd: number,
       waybillId: string,

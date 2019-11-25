@@ -66,11 +66,7 @@ export class DigitalInspectorComponent {
     }
 
     const formData = this.form.value;
-    const date = new Date();
-    const time = this.form.value.createdDate.split(":");
-    date.setHours(time[0]);
-    date.setMinutes(time[1]);
-    formData.createdDate = date;
+    formData.createdDate = new Date(this.form.value.createdDate);
     formData.positionId = this.position.id;
 
     this.form.reset();

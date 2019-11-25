@@ -1,4 +1,5 @@
 import { DeliveryMonitorConsignment } from "./delivery-monitor-consignment";
+import { DeliveryMonitorCompany } from './delivery-monitor-company';
 
 export class DeliveryMonitorInfo {
   goodId: string;
@@ -21,15 +22,7 @@ export class DeliveryMonitorInfo {
     delivered: number
   };
   contractAnnex: {
-    consignee: {
-      companyId: string,
-      sapCode: string,
-      name: string,
-      companyType: string,
-      actualAddressId?: null,
-      requisites?: null,
-      actualAddress?: null
-    };
+    consignee: DeliveryMonitorCompany;
     consignments: DeliveryMonitorConsignment[];
   };
 }

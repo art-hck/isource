@@ -34,6 +34,21 @@ export class MessagesViewComponent implements OnInit {
   ) {
   }
 
+  protected static getContextType(item: (RequestGroup | RequestPosition)) {
+    if (item instanceof RequestPosition) {
+      return MessageContextTypes.REQUEST_POSITION;
+    } else if (item instanceof RequestGroup) {
+      return MessageContextTypes.REQUEST_GROUP;
+    }
+  }
+
+  protected static getContextId(item: (RequestGroup | RequestPosition)) {
+    // Костыль, т.к. у нас есть еще и черновики, которые приходят со своим id
+    return item instanceof RequestPosition && !!item.sourceRequestPositionId ?
+      item.sourceRequestPositionId :
+      item.id;
+  }
+
   ngOnInit() {
     this.requests$ = this.messageService
       .getRequests(this.user.getUserRole(), 0, 1000, [], null)
@@ -55,11 +70,11 @@ export class MessagesViewComponent implements OnInit {
     this.onRequestContextClick();
   }
 
-  onRequestItemClick(item: RequestPositionList) {
+  onRequestItemClick(item: (RequestGroup | RequestPosition)) {
     this.selectedRequestsItem = item;
 
-    this.contextType = this.getContextType(item);
-    this.contextId = item.id;
+    this.contextType = MessagesViewComponent.getContextType(item);
+    this.contextId = MessagesViewComponent.getContextId(item);
   }
 
   onRequestContextClick() {
@@ -67,14 +82,6 @@ export class MessagesViewComponent implements OnInit {
 
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
-  }
-
-  getContextType(item: RequestPositionList) {
-    if (item instanceof RequestPosition) {
-      return MessageContextTypes.REQUEST_POSITION;
-    } else if (item instanceof RequestGroup) {
-      return MessageContextTypes.REQUEST_GROUP;
-    }
   }
 
   getMessageHeader() {
