@@ -175,3 +175,23 @@ span.request-name {
     white-space: nowrap;
     overflow: hidden;
 }
+
+@media (min-width: 1440px) {
+  .clr-col-xxl-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+
+  .filter-button {
+    display: none;
+  }
+  .filter {
+    display: block;
+  }
+}
+
+@media (max-width: 1440px) {
+  .filter {
+    display: none;
+  }
+}
