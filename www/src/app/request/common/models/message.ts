@@ -9,4 +9,5 @@ export class Message {
   message: string;
   documents?: RequestDocument[];
   requestPositionId?: Uuid;
+  isSending?: boolean;
 }
