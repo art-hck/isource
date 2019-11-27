@@ -9,13 +9,5 @@ export class CustomerNameFilter implements ClrDatagridStringFilterInterface<Requ
     if (search.length === 0) {
       return true;
     }
-    // if (!request.positions || request.positions.length === 0) {
-    //   return false;
-    // }
-    // const customer = request.contragent;
-    // return (customer && customer.name && (
-    //   customer.name === search ||
-    //   customer.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
-    // ));
   }
 }
