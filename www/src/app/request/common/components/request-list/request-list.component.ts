@@ -48,7 +48,7 @@ export class RequestListComponent implements OnInit {
   }
 
   calcPieChart(request: RequestsList) {
-    const completedItems =  request.requestData.completedPositionsCount/request.requestData.positionsCount*100;
+    const completedItems =  request.requestData.completedPositionsCount / request.requestData.positionsCount * 100;
     return (65 - (65 * completedItems) / 100);
   }
 
