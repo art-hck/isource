@@ -9,13 +9,16 @@
   border: 0;
   margin-top: 0;
   overflow: hidden;
+  border-bottom: 1px solid #B2D0FF;
+  border-radius: 0 0 8px 8px;
 
   .datagrid-row { /* Цвет разделительных линий между строками */
     border-top: 1px solid gray;
 
     &:hover { /* Цвет фона и курсор при наведении на строку */
-      background-color: #e6f3ff;
+      background-color: #F0F6FA;
       cursor: pointer;
+      transition: background-color 0.5s ease;
     }
     &:focus { /* Убираем обводку при клике на строку */
       outline: 0;
@@ -47,7 +50,7 @@
 
   .datagrid-column, .datagrid-head .datagrid-row-actions {
     letter-spacing: initial;
-    padding: 10px;
+    padding: 10px 0 10px 20px;
     background-color: #FBFCFE;
 
     & .datagrid-column-title {
@@ -66,8 +69,8 @@
   .datagrid-cell {
     color: black;
     font-size: 14px;
-    padding: 9px 10px 8px 10px;
-    line-height: 30px;
+    padding: 17px 10px 17px 20px;
+    line-height: 18px;
   }
 
   .datagrid-select {
@@ -97,10 +100,6 @@
 
     &:nth-child(2) {
       border-radius: 8px 8px 0 0;
-    }
-
-    &:last-child {
-      border-radius: 0 0 8px 8px;
     }
 
     .datagrid-column-separator { /* Отключаем сепаратор справа от чекбокса в шапке грида */

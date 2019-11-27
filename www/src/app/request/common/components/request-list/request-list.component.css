@@ -1,182 +1,112 @@
 ::ng-deep h2 {
-    margin-bottom: 20px;
-    font-weight: 600;
+  margin-bottom: 20px;
+  font-weight: 600;
+  padding-left: 8px;
 }
 
-/*::ng-deep .datagrid-filter .clr-checkbox-wrapper .clr-control-label {*/
-    /*display: inline;*/
-    /*height: 18px;*/
-/*}*/
-
-/*::ng-deep .datagrid-filter .clr-checkbox-wrapper {*/
-    /*margin-bottom: 5px;*/
-    /*display: inline-block;*/
-/*}*/
-
-/*::ng-deep .datagrid .datagrid-row {*/
-  /*border-top: 1px solid #B2D0FF;*/
-/*}*/
-.more-positions {
-    color: gray;
-}
-.position-count {
-    float: right;
-    color: gray;
+.items-page {
+  text-align: left;
 }
 
-/*::ng-deep .clear-filter {*/
-    /*position: absolute;*/
-    /*top: 17px;*/
-/*}*/
-
-/*::ng-deep .request-number .datagrid-filter {*/
-    /*width: 160px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid {*/
-    /*overflow: visible;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table {*/
-    /*overflow: visible;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-header {*/
-    /*top: -55px;*/
-    /*border-bottom: 1px solid #B2D0FF;*/
-/*}*/
-
-
-
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-header {*/
-    /*padding: 0;*/
-    /*z-index: 5;*/
-    /*border-top-left-radius: 10px;*/
-    /*border-top-right-radius: 10px;*/
-    /*overflow: hidden;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-row:hover {*/
-    /*background-color: rgba(247, 247, 252, 1);*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-row:last-of-type {*/
-    /*border-bottom-left-radius: 8px;*/
-    /*border-bottom-right-radius: 8px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid {*/
-    /*box-shadow: none;*/
-    /*border: 1px solid #B2D0FF;*/
-    /*border-radius: 8px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-column {*/
-    /*padding: 0;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {*/
-    /*color: #5a5a5a;*/
-    /*font-size: 13px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {*/
-    /*padding: 23px 10px 23px 30px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {*/
-    /*padding: 13px 10px 13px 30px;*/
-/*}*/
-
-
-
-
-
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {*/
-    /*font-weight: bold;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-cell {*/
-    /*font-size: 13px !important;*/
-    /*line-height: 1.6;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-flex,*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {*/
-    /*display: inherit;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column .datagrid-column-separator {*/
-    /*top: 0;*/
-/*}*/
-
-
-/*::ng-deep .requests-list-datagrid .datagrid-table .request-number.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-number.datagrid-cell {*/
-    /*min-width: 135px;*/
-    /*max-width: 120px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .customer-name.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .customer-name.datagrid-cell {*/
-    /*min-width: 170px;*/
-    /*max-width: 190px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .request-status.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-status.datagrid-cell {*/
-    /*min-width: 130px;*/
-    /*max-width: 180px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .request-positions-list.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-positions-list.datagrid-cell {*/
-    /*min-width: 280px;*/
-    /*max-width: 810px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {*/
-    /*min-width: 140px;*/
-    /*max-width: 230px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid-table .request-position-statuses.datagrid-column,*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {*/
-    /*min-width: 140px;*/
-    /*max-width: 210px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {*/
-    /*padding-top: 15px;*/
-/*}*/
-/*::ng-deep .requests-list-datagrid .datagrid .request-position-statuses.datagrid-cell {*/
-    /*padding-top: 45px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-column:last-of-type,*/
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-cell:last-of-type {*/
-    /*padding-right: 10px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid .datagrid-cell .position-info {*/
-    /*padding-bottom: 5px;*/
-    /*min-height: 25px;*/
-/*}*/
-
-/*::ng-deep .requests-list-datagrid .datagrid-table .datagrid-placeholder {*/
-    /*background: initial;*/
-/*}*/
-
-/*::ng-deep clr-dg-footer.datagrid-footer {*/
-    /*background-color: transparent;*/
-/*}*/
-
-/*::ng-deep clr-datagrid.requests-list-datagrid.datagrid-host {*/
-    /*height: auto !important;*/
-/*}*/
-
-/*::ng-deep .pagination-list .pagination-current:focus {*/
-    /*background-color: white;*/
-/*}*/
-
-span.request-name {
-    font-weight: bold;
-    font-size: 13px;
-    padding-bottom: 12px;
-    display: block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+.pagination {
+  padding-left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
-@media (min-width: 1440px) {
+::ng-deep .datagrid-footer .pagination-list {
+  margin-left: 0;
+}
+
+::ng-deep .datagrid-footer .pagination-size {
+  flex: 0;
+}
+
+.light-grey {
+  opacity: 0.3;
+}
+
+.grey {
+  opacity: 0.6;
+}
+
+.customer-name, .request-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
+  width: 320px;
+
+}
+
+/*Chart pie*/
+
+svg circle {
+  width: 100%;
+  height: 100%;
+  stroke-width: 7;
+  stroke-linecap: round;
+  fill: none;
+  stroke: #E5E8EF;
+}
+
+svg circle:nth-child(2) {
+  stroke: #0074d9;
+  stroke-width: 7;
+  stroke-linecap: butt;
+  stroke-dasharray: 65;
+  transition: stroke-dasharray 2s ease;
+}
+
+svg {
+  margin: 0 auto;
+  transform: rotate(-90deg);
+  border-radius: 50%;
+  display: block;
+}
+
+.request-completed-title {
+  width: 130px;
+}
+
+.request-completed {
+  min-width: 130px;
+  display: inline-flex;
+  padding-right: 20px;
+}
+
+.pie-chart {
+  display: flex;
+}
+
+.pie-chart div {
+  padding-left: 5px;
+}
+
+
+
+.filter-button img {
+  padding: 0 5px 3px 0;
+}
+
+.filter-button {
+  margin: auto 20px 10px -20px;
+}
+
+.request-dates span + span {
+  border-left: 1px solid #b9b9b9;
+  padding-left: 3px;
+}
+
+.request-dates {
+  min-width: 300px;
+}
+
+@media (min-width: 1601px) {
   .clr-col-xxl-9 {
     flex: 0 0 75%;
     max-width: 75%;
@@ -190,7 +120,7 @@ span.request-name {
   }
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1600px) {
   .filter {
     display: none;
   }
