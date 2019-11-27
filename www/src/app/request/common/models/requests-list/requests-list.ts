@@ -1,10 +1,7 @@
-import {PositionsListItem} from "./positions-list-item";
-import {CustomerInfo} from "./customer-info";
 import {RequestListItem} from "./requests-list-item";
+import { RequestData } from "./request-data";
 
 export class RequestsList {
   request: RequestListItem;
-  customer?: CustomerInfo;
-  positions: PositionsListItem[];
-  positionsCount?: number;
+  requestData: RequestData;
 }

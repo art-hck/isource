@@ -23,7 +23,6 @@
 }
 ::ng-deep .contragent-list-datagrid .datagrid-header {
   top: -50px;
-  border-bottom: 1px solid #d4d9e2;
 }
 
 
@@ -31,38 +30,4 @@
 ::ng-deep .contragent-list-datagrid .datagrid .datagrid-header {
   padding: 0;
   z-index: 5;
-}
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-row:hover {
-  background-color: rgba(247, 247, 252, 1);
-}
-::ng-deep .contragent-list-datagrid .datagrid {
-  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
-}
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-column {
-  padding: 0;
-}
-::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
-  color: #5a5a5a;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
-  padding: 23px 10px 23px 30px;
-}
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-cell {
-  padding: 13px 10px 13px 30px;
-}
-
-
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-cell {
-  font-size: 13px !important;
-  line-height: 1.6;
-}
-::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-flex,
-::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-title {
-  display: inherit;
-}
-::ng-deep .contragent-list-datagrid .datagrid-table .datagrid-column .datagrid-column-separator {
-  top: 0;
 }

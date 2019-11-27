@@ -6,6 +6,8 @@
 @import "assets/styles/buttons.scss";
 @import "assets/styles/header.scss";
 @import "assets/styles/card-items.scss";
+@import "assets/styles/datagrid.scss";
+@import "assets/styles/select.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -14,7 +16,7 @@ body, body p, input, select, h2, h3, h4, h5, h6 {
   font-family: PT Root UI, Roboto, sans-serif !important;
 }
 
-$color_black: #2B2B2B;
+$color_black: #000000;
 $color_blue: #0085FF;
 $color_orange: #FF9E00;
 $color_green: #417505;
@@ -28,7 +30,8 @@ $color_light_gray: #D4D9E2;
 }
 
 body {
-    background-color: #FBFCFE;
+  background-color: #FBFCFE;
+  color: $color_black;
 }
 
 h2 {
@@ -125,12 +128,6 @@ span.spinner {
     margin-right: 10px;
 }
 
-
-/* Белый фон в хедере гридов */
-.datagrid .datagrid-header {
-    background-color: white;
-    border-bottom: 0;
-}
 
 
 /* Увеличенный шрифт лейблов полей ввода */
