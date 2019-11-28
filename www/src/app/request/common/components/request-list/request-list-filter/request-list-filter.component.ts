@@ -82,6 +82,15 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
 
   clearFilter() {
     this.requestListFilterForm.reset();
+    this.requestListFilterForm = new FormGroup({
+      'requestNameOrNumber': new FormControl(''),
+      'onlyOpenTasks': new FormControl(false),
+      'customers': new FormControl([]),
+      'shipmentDateFrom': new FormControl(''),
+      'shipmentDateTo': new FormControl(''),
+      'shipmentDateAsap': new FormControl(false),
+    });
+
     this.requestFilterCustomerListComponent.selectedCustomers = [];
     this.requestFilterCustomerListComponent.customerSearchValue = "";
   }
