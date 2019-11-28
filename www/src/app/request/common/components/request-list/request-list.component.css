@@ -40,7 +40,11 @@
 ::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
   width: 320px;
+}
 
+::ng-deep .requests-list-datagrid .datagrid-table .request-name.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-name.datagrid-cell {
+  max-width: 350px;
 }
 
 /*Chart pie*/

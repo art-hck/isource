@@ -20,12 +20,12 @@ export class GetRequestsService {
    * @param filters
    * @param sort
    */
-  getRequests(role, startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
+  getRequests(role, startFrom, pageSize, filters): Observable<Page<RequestsList>> {
     return this.api.post<Page<RequestsList>>(`requests/${role}/list`, {
       startFrom: startFrom,
       pageSize: pageSize,
       filters: filters,
-      sort: sort,
+      // sort: sort,
     });
   }
 

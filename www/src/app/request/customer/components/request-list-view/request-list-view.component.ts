@@ -5,6 +5,7 @@ import { Page } from "../../../../core/models/page";
 import { ClrDatagridStateInterface } from "@clr/angular";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 
 @Component({
   selector: 'app-request-list-view',
@@ -21,12 +22,23 @@ export class RequestListViewComponent implements OnInit {
   public requests: RequestsList[];
   @Output() totalItems: number;
   @Output() datagridLoader: boolean;
+  @Output() requestStatus = RequestWorkflowSteps.IN_PROGRESS;
+
+  filters: any;
+  requestWorkflowSteps = RequestWorkflowSteps;
 
   constructor(
     protected getRequestService: GetRequestsService
   ) { }
 
   ngOnInit() {
+    this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+  }
+
+  getRequestList(requestStatus: RequestWorkflowSteps) {
+    this.requestStatus = requestStatus;
+    this.filters = {'requestListStatusesFilter': [this.requestStatus]};
+    this.getRequestListForCustomer(0, 10, this.filters);
   }
 
   filter(filter: RequestsListFilter): void {
@@ -48,11 +60,11 @@ export class RequestListViewComponent implements OnInit {
       state.filters = this.currentFilters;
     }
 
-    this.getRequestListForCustomer(state.startFrom, state.pageSize, state.filters, state.sort);
+    this.getRequestListForCustomer(state.startFrom, state.pageSize, this.filters);
   }
 
-  getRequestListForCustomer(startFrom, pageSize, filters, sort): void {
-    this.getRequestService.getRequests('customer', startFrom, pageSize, filters, sort).subscribe(
+  getRequestListForCustomer(startFrom, pageSize, filters): void {
+    this.getRequestService.getRequests('customer', startFrom, pageSize, filters).subscribe(
       (data: Page<RequestsList>) => {
         this.requests = data.entities;
         this.totalItems = data.totalCount;

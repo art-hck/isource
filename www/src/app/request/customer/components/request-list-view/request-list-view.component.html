@@ -1,31 +1,84 @@
 <div class="container">
   <h2 class="newRequest">Заявки</h2>
-
+  <div class="clr-row clr-justify-content-end">
+    <button class="btn btn-secondary-small filter-button" (click)="filterModalOpened = true">
+      <img src="../../../../../assets/images/union.png">
+      Фильтр <div *ngIf="getFilterCounter() > 0" class="counter-bubble">{{ getFilterCounter() }}</div>
+    </button>
+  </div>
   <div class="clr-row">
     <div class="clr-col-12 clr-col-xxl-9">
-      <div class="clr-row clr-justify-content-end">
-        <button class="btn btn-secondary-small filter-button" (click)="filterModalOpened = true">
-          <img src="../../../../../assets/images/union.png">
-          Фильтр <div *ngIf="getFilterCounter() > 0" class="counter-bubble">{{ getFilterCounter() }}</div>
-        </button>
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)">В обработке</button>
+          <clr-tab-content id="content1" *clrIfActive="true">
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="false"
+              [requestStatus]="requestWorkflowSteps.IN_PROGRESS">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)">Новые</button>
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="false"
+              [requestStatus]="requestWorkflowSteps.NEW">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.DRAFT)">Черновики</button>
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="false"
+              [requestStatus]="requestWorkflowSteps.DRAFT">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)">На согласовании</button>
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="false"
+              [requestStatus]="requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)">Завершенные</button>
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="false"
+              [requestStatus]="requestWorkflowSteps.COMPLETED">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+      </clr-tabs>
+
+      <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
+        <app-request-list-filter
+                [resultsCount]="totalItems"
+                [backofficeView]="false"
+                (filter)="filter($event)"
+                (showResults)="onShowResults()">
+        </app-request-list-filter>
       </div>
-
-      <app-request-list
-            (datagridState)="onDatagridStateChange($event)"
-            [requests]="requests"
-            [totalItems]="totalItems"
-            [customerNameColumnShow]="false">
-      </app-request-list>
-    </div>
-
-    <div class="clr-col-3 filter"[ngClass]="{ 'opened' : filterModalOpened }">
-      <app-request-list-filter
-              [resultsCount]="totalItems"
-              [backofficeView]="false"
-              (filter)="filter($event)"
-              (showResults)="onShowResults()">
-      </app-request-list-filter>
     </div>
   </div>
-
 </div>

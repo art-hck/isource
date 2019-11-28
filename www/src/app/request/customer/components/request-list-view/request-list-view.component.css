@@ -1,4 +1,4 @@
-@media (min-width: 1440px) {
+@media (min-width: 1521px) {
     .clr-col-xxl-9 {
         flex: 0 0 75%;
         max-width: 75%;
@@ -16,7 +16,7 @@
     }
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1520px) {
     .filter {
         position: fixed;
         background: white;
