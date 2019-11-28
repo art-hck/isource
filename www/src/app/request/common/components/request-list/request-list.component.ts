@@ -6,6 +6,7 @@ import { ClrDatagridStateInterface } from "@clr/angular";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
+import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 
 @Component({
   selector: 'app-request-list',
@@ -20,12 +21,14 @@ export class RequestListComponent implements OnInit {
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
   @Input() totalItems: number;
-  @Input() requestStatus: string;
+  @Input() requestStatus: RequestWorkflowSteps;
 
   @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
 
   datagridLoader = false;
   pageSize = 10;
+
+  requestWorkflowSteps = RequestWorkflowSteps;
 
   constructor(
     protected router: Router,

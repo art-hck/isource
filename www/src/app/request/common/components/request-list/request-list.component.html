@@ -6,10 +6,10 @@
       <clr-dg-column class="request-number clr-col-1">
         Номер
       </clr-dg-column>
-      <clr-dg-column class="request-published clr-col-2" *ngIf="requestStatus === 'NEW'">
+      <clr-dg-column class="request-published clr-col-2" *ngIf="requestStatus === requestWorkflowSteps.NEW">
         Опубликована
       </clr-dg-column>
-      <clr-dg-column class="request-completed clr-col-2" *ngIf="requestStatus === 'COMPLETED'">
+      <clr-dg-column class="request-completed clr-col-2" *ngIf="requestStatus === requestWorkflowSteps.COMPLETED">
         Завершена
       </clr-dg-column>
       <clr-dg-column class="customer-name clr-col-2" *ngIf="customerNameColumnShow">
@@ -21,23 +21,25 @@
       <clr-dg-column class="request-delivery-dates clr-col-3">
         Сроки поставки
       </clr-dg-column>
-      <clr-dg-column class="position-count clr-col-1" *ngIf="requestStatus === 'NEW' || requestStatus === 'COMPLETED' || requestStatus === 'ON_CUSTOMER_APPROVAL'">
+      <clr-dg-column class="position-count clr-col-1" *ngIf="requestStatus === requestWorkflowSteps.NEW ||
+      requestWorkflowSteps.COMPLETED || requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
         Позиций
       </clr-dg-column>
-      <clr-dg-column class="tasks clr-col-1" *ngIf="customerNameColumnShow && requestStatus === 'IN_PROGRESS'">
+      <clr-dg-column class="tasks clr-col-1" *ngIf="customerNameColumnShow &&
+      requestStatus === requestWorkflowSteps.IN_PROGRESS">
         Задач
       </clr-dg-column>
-      <clr-dg-column class="request-completed-title clr-col" *ngIf="requestStatus === 'IN_PROGRESS'">
+      <clr-dg-column class="request-completed-title clr-col" *ngIf="requestStatus === requestWorkflowSteps.IN_PROGRESS">
         Заверш/Поз.
       </clr-dg-column>
       <clr-dg-row *ngFor="let request of requests; let i = index" (click)="onRowClick(request)">
         <clr-dg-cell class="request-number clr-col-1 clr-align-self-center"><b>{{request.request.number}}</b>
         </clr-dg-cell>
-        <clr-dg-cell class="published clr-col-2 clr-align-self-center" *ngIf="requestStatus === 'NEW'">
+        <clr-dg-cell class="published clr-col-2 clr-align-self-center" *ngIf="requestStatus === requestWorkflowSteps.NEW">
 
         </clr-dg-cell>
-        <clr-dg-cell class="completed clr-col-2 clr-align-self-center" *ngIf="requestStatus === 'COMPLETED'">
-
+        <clr-dg-cell class="completed clr-col-2 clr-align-self-center"
+                     *ngIf="requestStatus === requestWorkflowSteps.COMPLETED">
         </clr-dg-cell>
         <clr-dg-cell class="customer-name clr-col-2 clr-align-self-center" *ngIf="customerNameColumnShow"
                      title="{{ request.request.contragent?.shortName }}">
@@ -58,16 +60,18 @@
           </div>
         </clr-dg-cell>
         <clr-dg-cell class="position-count clr-col-1 clr-align-self-center"
-                     *ngIf="requestStatus === 'NEW' || requestStatus === 'COMPLETED' || requestStatus === 'ON_CUSTOMER_APPROVAL'">
+                     *ngIf="requestStatus === requestWorkflowSteps.NEW || requestWorkflowSteps.COMPLETED ||
+                     requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
          {{ request.requestData.positionsCount}}
         </clr-dg-cell>
         <clr-dg-cell class="request-tasks clr-col-1 clr-align-self-center"
-                     *ngIf="customerNameColumnShow && requestStatus === 'IN_PROGRESS'">
+                     *ngIf="customerNameColumnShow && requestStatus === requestWorkflowSteps.IN_PROGRESS">
           <span [ngClass]="{ 'light-grey' : request.requestData.tasksCount === 0}">
             {{request.requestData.tasksCount}}
           </span>
         </clr-dg-cell>
-        <clr-dg-cell class="request-completed clr-col-1 clr-align-self-center" *ngIf="requestStatus === 'IN_PROGRESS'">
+        <clr-dg-cell class="request-completed clr-col-1 clr-align-self-center"
+                     *ngIf="requestStatus === requestWorkflowSteps.IN_PROGRESS">
           <div class="pie-chart" *ngIf="!checkIfFreeFormRequest(request.request.type)">
             <svg width="20" height="20" class="chart">
               <circle r="10" cx="10" cy="10" class="pie"/>

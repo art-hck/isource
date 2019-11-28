@@ -10,50 +10,50 @@
   <div class="clr-col-12 clr-col-xxl-9">
     <clr-tabs>
       <clr-tab>
-        <button clrTabLink id="link1" (click)="getRequestList('IN_PROGRESS')">В обработке</button>
+        <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)">В обработке</button>
         <clr-tab-content id="content1" *clrIfActive="true">
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
             [requests]="requests"
             [totalItems]="totalItems"
             [customerNameColumnShow]="true"
-            [requestStatus]="'IN_PROGRESS'">
+            [requestStatus]="requestWorkflowSteps.IN_PROGRESS">
           </app-request-list>
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList('NEW')">Новые</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)">Новые</button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
             [requests]="requests"
             [totalItems]="totalItems"
             [customerNameColumnShow]="true"
-            [requestStatus]="'NEW'">
+            [requestStatus]="requestWorkflowSteps.NEW">
           </app-request-list>
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList('ON_CUSTOMER_APPROVAL')">На согласовании</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)">На согласовании</button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
             [requests]="requests"
             [totalItems]="totalItems"
             [customerNameColumnShow]="true"
-            [requestStatus]="'ON_CUSTOMER_APPROVAL'">
+            [requestStatus]="requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
           </app-request-list>
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList('COMPLETED')">Завершенные</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)">Завершенные</button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
             [requests]="requests"
             [totalItems]="totalItems"
             [customerNameColumnShow]="true"
-            [requestStatus]="'COMPLETED'">
+            [requestStatus]="requestWorkflowSteps.COMPLETED">
           </app-request-list>
         </clr-tab-content>
       </clr-tab>
