@@ -58,13 +58,14 @@
         </clr-tab-content>
       </clr-tab>
     </clr-tabs>
-
-    <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
-      <app-request-list-filter
-              [resultsCount]="totalItems"
-              [backofficeView]="true"
-              (filter)="filter($event)"
-              (showResults)="onShowResults()">
-      </app-request-list-filter>
-    </div>
   </div>
+
+  <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
+    <app-request-list-filter
+            [resultsCount]="totalItems"
+            [backofficeView]="true"
+            (filter)="filter($event)"
+            (showResults)="onShowResults()">
+    </app-request-list-filter>
+  </div>
+</div>
