@@ -20,11 +20,12 @@ export class RequestListComponent implements OnInit {
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
   @Input() totalItems: number;
+  @Input() requestStatus: string;
 
   @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
 
   datagridLoader = false;
-  pageSize: number;
+  pageSize = 10;
 
   constructor(
     protected router: Router,
@@ -44,7 +45,7 @@ export class RequestListComponent implements OnInit {
    */
   getDeliveryDate(minDate: string, maxDate: String): string {
     const dates = [minDate, maxDate];
-    return dates.filter((date, index) => dates.indexOf(date) === index).join(' - ');
+    return dates.filter((date, index) => dates.indexOf(date) === index).join(' – ');
   }
 
   calcPieChart(request: RequestsList) {

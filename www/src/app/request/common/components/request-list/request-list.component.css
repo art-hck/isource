@@ -40,7 +40,11 @@
 ::ng-deep .requests-list-datagrid .datagrid-table .request-delivery-dates.datagrid-column,
 ::ng-deep .requests-list-datagrid .datagrid .request-delivery-dates.datagrid-cell {
   width: 320px;
+}
 
+::ng-deep .requests-list-datagrid .datagrid-table .request-name.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-name.datagrid-cell {
+  max-width: 350px;
 }
 
 /*Chart pie*/
@@ -106,22 +110,4 @@ svg {
   min-width: 300px;
 }
 
-@media (min-width: 1601px) {
-  .clr-col-xxl-9 {
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
 
-  .filter-button {
-    display: none;
-  }
-  .filter {
-    display: block;
-  }
-}
-
-@media (max-width: 1600px) {
-  .filter {
-    display: none;
-  }
-}
