@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import {Router} from "@angular/router";
 import {RequestTypes} from "../../enum/request-types";
@@ -17,6 +17,10 @@ import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 export class RequestListComponent implements OnInit {
 
   appConfig: GpnmarketConfigInterface;
+
+  @ViewChild('datagridElement', { static: false }) datagridElement: ElementRef;
+  currentDatagridState: ClrDatagridStateInterface;
+  datagridFilter: {};
 
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
@@ -66,14 +70,14 @@ export class RequestListComponent implements OnInit {
   }
 
   refresh(state: ClrDatagridStateInterface): void {
-
-    const filters: {[prop: string]: any[]} = {};
+    this.currentDatagridState = state;
 
     const datagridState: DatagridStateAndFilter = {
       startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
       pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,
-      filters: filters
+      filters: this.datagridFilter ? this.datagridFilter : {},
     };
+
     this.datagridState.emit(datagridState);
   }
 }

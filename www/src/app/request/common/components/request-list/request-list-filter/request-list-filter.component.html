@@ -1,1 +1,110 @@
+<div class="request-list-filter">
+
+  <div class="filter-header clr-row clr-justify-content-between">
+    <div class="clr-col">
+      <span class="title">Фильтр</span>
+    </div>
+
+    <div class="clr-col-auto" *ngIf="formIsFilled()">
+      <span class="reset" (click)="clearFilter()">Сбросить все</span>
+    </div>
+  </div>
+
+
+  <div class="filter-body">
+
+    <form [formGroup]="requestListFilterForm">
+
+      <app-request-list-filter-section
+              class="filter-section"
+              [label]="'Номер или наименование'">
+
+        <input type="text"
+               placeholder="Номер заявки или наименование"
+               formControlName="requestNameOrNumber" />
+
+      </app-request-list-filter-section>
+
+
+
+      <app-request-list-filter-section
+              style="display: none"
+              *ngIf="backofficeView"
+              class="filter-section"
+              [label]="'Задачи'">
+
+        <div class="clr-row clr-align-items-center">
+          <div class="clr-col">
+            <div class="toggle-label">
+              <label for="tasks-toggle">Есть открытые задачи</label>
+            </div>
+          </div>
+
+          <div class="clr-col-auto">
+            <div class="toggle-checkbox">
+              <input id="tasks-toggle" type="checkbox" name="tasks-toggle" formControlName="onlyOpenTasks" />
+              <label for="tasks-toggle"></label>
+            </div>
+          </div>
+        </div>
+
+      </app-request-list-filter-section>
+
+
+
+      <app-request-list-filter-section
+              *ngIf="backofficeView"
+              class="filter-section"
+              [label]="'Заказчик'">
+
+        <app-request-filter-customer-list
+                [customers]="customersList"
+                [limit]="5"
+                formControlName="customers">
+        </app-request-filter-customer-list>
+
+      </app-request-list-filter-section>
+
+
+
+      <app-request-list-filter-section
+              style="display: none"
+              class="filter-section"
+              [label]="'Даты поставки'">
+
+        <div class="shipping-dates clr-row">
+          <div class="clr-col-6">
+            <input clrDate type="date" autocomplete="off" placeholder="Дата с" formControlName="shipmentDateFrom" />
+          </div>
+          <div class="clr-col-6">
+            <input clrDate type="date" autocomplete="off" placeholder="Дата по" formControlName="shipmentDateTo" />
+          </div>
+        </div>
+
+        <div class="clr-row clr-align-items-center">
+          <div class="clr-col-auto">
+            <div class="toggle-checkbox">
+              <input id="asap-toggle" type="checkbox" name="asap-toggle" formControlName="shipmentDateAsap" />
+              <label for="asap-toggle"></label>
+            </div>
+          </div>
+
+          <div class="clr-col">
+            <div class="toggle-label">
+              <label for="asap-toggle">Как можно быстрее</label>
+            </div>
+          </div>
+        </div>
+
+      </app-request-list-filter-section>
+
+    </form>
+
+  </div>
+
+  <div class="show-results" (click)="hideFilterModal($event)">
+    Показать <span class="results-count">{{ resultsCount }}</span>
+  </div>
+
+</div>
 

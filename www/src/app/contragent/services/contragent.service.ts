@@ -17,7 +17,11 @@ export class ContragentService {
   }
 
   getContragentList(): Observable<ContragentList[]> {
-    return this.api.post<ContragentList[]>(`/contragents`, {});
+    return this.api.post<ContragentList[]>(`contragents`, {});
+  }
+
+  getCustomersList(): Observable<ContragentList[]> {
+    return this.api.post<ContragentList[]>(`customers`, {});
   }
 
   getContragentInfo(id: Uuid): Observable<ContragentInfo> {

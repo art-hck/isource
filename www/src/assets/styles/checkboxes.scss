@@ -1,0 +1,89 @@
+/************/
+/* Чекбоксы */
+
+.clr-checkbox-wrapper {
+  display: block;
+  padding-bottom: 15px;
+
+  & input[type=checkbox] {  /* Скрытие дефолтного чекбокса */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 18px;
+    height: 18px;
+
+    & + label {
+      &:before {
+        content: '';
+        display: block;
+        background: url('/assets/images/checkbox-off.svg') 0 50% no-repeat;
+        width: 18px;
+        height: 18px;
+        top: 0;
+        border: 0;
+        border-radius: 0;
+      }
+
+      &:after {
+        content: '';
+        display: none !important;
+      }
+    }
+
+    &:focus + label:before { /* Убираем свечение фокуса при клике */
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+
+    &:checked + label:before {
+      content: '';
+      background: url('/assets/images/checkbox-on.svg') 0 50% no-repeat;
+    }
+
+  }
+
+  & label {
+    padding-left: 22px;
+    color: $color_black;
+    font-size: $font_size_basic;
+    font-weight: 400;
+    line-height: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  &.disabled {
+    & input[type=checkbox]:checked+label:before {
+      background-color: initial;
+    }
+  }
+
+  &:disabled + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  & label {
+    padding-left: 28px;
+    color: $color_black;
+    font-size: $font_size_basic;
+    font-weight: 400;
+    line-height: 18px;
+    min-height: initial;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+}
+
+.checkbox-inline {
+  margin-right: 12px;
+}
+
+.clr-toggle-wrapper input[type=checkbox]:focus+label::before {
+  outline: 0;
+  box-shadow: none;
+}

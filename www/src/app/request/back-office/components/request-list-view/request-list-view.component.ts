@@ -5,6 +5,7 @@ import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
+import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 
 @Component({
   selector: 'app-request-list-view',
@@ -12,6 +13,11 @@ import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-step
   styleUrls: ['./request-list-view.component.css']
 })
 export class RequestListViewComponent implements OnInit {
+
+  currentDatagridState: DatagridStateAndFilter;
+  currentFilters: RequestsListFilter;
+
+  filterModalOpened = false;
 
   public requests: RequestsList[];
   @Output() totalItems: number;
@@ -35,7 +41,25 @@ export class RequestListViewComponent implements OnInit {
     this.getRequestListForBackoffice(0, 10, this.filters);
   }
 
+  filter(filter: RequestsListFilter): void {
+    this.currentFilters = filter;
+
+    let pageSize = null;
+
+    if (this.currentDatagridState) {
+      pageSize = this.currentDatagridState.pageSize;
+    }
+
+    this.getRequestListForBackoffice(0, pageSize, filter);
+  }
+
   onDatagridStateChange(state: DatagridStateAndFilter): void {
+    this.currentDatagridState = state;
+
+    if (this.currentFilters) {
+      state.filters = this.currentFilters;
+    }
+
     this.getRequestListForBackoffice(state.startFrom, state.pageSize, this.filters);
   }
 
@@ -45,5 +69,16 @@ export class RequestListViewComponent implements OnInit {
         this.requests = data.entities;
         this.totalItems = data.totalCount;
       });
+  }
+
+  getFilterCounter() {
+    if (this.currentFilters) {
+      return Object.keys(this.currentFilters).length;
+    }
+    return 0;
+  }
+
+  onShowResults() {
+    this.filterModalOpened = false;
   }
 }

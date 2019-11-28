@@ -38,6 +38,7 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
 import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { PositionSearchFilterPipe } from "../shared/pipes/position-list-filter-pipe";
+import { CustomerSearchFilterPipe } from "../shared/pipes/customer-list-filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
@@ -59,6 +60,8 @@ import { QualityComponent } from "./customer/components/quality/quality.componen
 import { QualityService } from "./customer/services/quality.service";
 import { DigitalInspectorComponent } from "./common/components/delivery-monitor/digital-inspector/digital-inspector.component";
 import { RequestListFilterComponent } from './common/components/request-list/request-list-filter/request-list-filter.component';
+import { RequestFilterCustomerListComponent } from './common/components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
+import { RequestListFilterSectionComponent } from "./common/components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
 
 @NgModule({
   declarations: [
@@ -92,6 +95,7 @@ import { RequestListFilterComponent } from './common/components/request-list/req
     RequestDashboardComponent,
     SearchFilterPipe,
     PositionSearchFilterPipe,
+    CustomerSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
     SupplierSelectComponent,
@@ -105,7 +109,9 @@ import { RequestListFilterComponent } from './common/components/request-list/req
     WizardCreateProcedureComponent,
     QualityComponent,
     DigitalInspectorComponent,
-    RequestListFilterComponent
+    RequestListFilterComponent,
+    RequestListFilterSectionComponent,
+    RequestFilterCustomerListComponent
   ],
   imports: [
     SharedModule,
@@ -122,7 +128,6 @@ import { RequestListFilterComponent } from './common/components/request-list/req
     CustomerTechnicalProposalsService,
     GroupService,
     ContragentService,
-    SupplierSelectComponent,
     ProcedureService,
     SupplierSelectComponent,
     DesignDocumentationService,
