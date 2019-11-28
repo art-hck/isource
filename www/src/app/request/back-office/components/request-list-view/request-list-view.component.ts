@@ -1,11 +1,11 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { GetRequestsService } from "../../../common/services/get-requests.service";
 import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
-import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
 
 @Component({
   selector: 'app-request-list-view',
@@ -13,6 +13,9 @@ import { RequestsListFilter } from "../../../common/models/requests-list/request
   styleUrls: ['./request-list-view.component.css']
 })
 export class RequestListViewComponent implements OnInit {
+
+  @ViewChild(RequestListFilterComponent, {static: false})
+             requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
   currentFilters: RequestsListFilter;
@@ -39,6 +42,7 @@ export class RequestListViewComponent implements OnInit {
     this.requestStatus = requestStatus;
     this.filters = {'requestListStatusesFilter': [this.requestStatus]};
     this.getRequestListForBackoffice(0, 10, this.filters);
+    this.requestListFilterComponent.clearFilter();
   }
 
   filter(filter: RequestsListFilter): void {

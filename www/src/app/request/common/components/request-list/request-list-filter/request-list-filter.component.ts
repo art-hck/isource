@@ -44,10 +44,6 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription.add(
       this.route.params.pipe(
-        flatMap(routeParams => {
-          return of(routeParams);
-        }),
-
         // После того как проинициализировали форму, подписываемся на её изменения
         switchMap(() => this.requestListFilterForm.valueChanges),
 
@@ -85,15 +81,7 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
   }
 
   clearFilter() {
-    this.requestListFilterForm = new FormGroup({
-      'requestNameOrNumber': new FormControl(''),
-      'onlyOpenTasks': new FormControl(false),
-      'customers': new FormControl([]),
-      'shipmentDateFrom': new FormControl(''),
-      'shipmentDateTo': new FormControl(''),
-      'shipmentDateAsap': new FormControl(false),
-    });
-
+    this.requestListFilterForm.reset();
     this.requestFilterCustomerListComponent.selectedCustomers = [];
     this.requestFilterCustomerListComponent.customerSearchValue = "";
   }
