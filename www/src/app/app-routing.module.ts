@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
+  { path: 'guidlines', loadChildren: () => import('./ux-guidlines/ux-guidlines.module').then(m => m.UxGuidlinesModule)},
   { path: 'login', component: LoginComponent, data: { title: "Авторизация" }},
   { path: 'registration', component: RegistrationComponent, data: { title: "Регистрация" } },
   { path: '**', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } }

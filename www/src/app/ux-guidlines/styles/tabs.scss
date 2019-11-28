@@ -1,0 +1,35 @@
+@import "constants";
+
+.app-tabs {
+  border-bottom: 1px $secondary-color solid;
+  display: flex;
+
+  &-item {
+    color: $secondary-font-color;
+    cursor: pointer;
+    display: block;
+    padding: 10px 0;
+    position: relative;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    &-active {
+      color: $primary-font-color;
+
+      &:after {
+        background: $primary-color;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 2px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+      }
+    }
+  }
+}

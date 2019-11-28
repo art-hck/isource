@@ -1,0 +1,19 @@
+<clr-modal>
+  <h2 class="modal-title">Создать группу <span class="app-ghost-color">({{ positions.length }})</span></h2>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
+      <p>Вы можете создавать группы из любых позиций с одинаковым статусом.</p>
+      <label class="app-ghost-color">Название группы</label>
+      <input class="app-control" type="text"/>
+      <div class="modal-footer">
+        <button class="app-btn app-btn-secondary app-btn-large" (click)="this.close()" type="button">Отмена</button>
+        <button class="app-btn app-btn-primary app-btn-large">Создать</button>
+      </div>
+    </form>
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
+  </div>
+</clr-modal>

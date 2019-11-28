@@ -1,0 +1,13 @@
+@import "constants";
+@import "controls-slider";
+@import "controls-input";
+@import "controls-checkbox";
+
+label ~ .app-control,
+.app-control ~ label,
+.app-control label,
+.app-control-checkbox {
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}

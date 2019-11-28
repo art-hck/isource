@@ -1,12 +1,12 @@
 import {Uuid} from "../../../cart/models/uuid";
-import {ContragentRegistration} from "../../../registration/models/contragent-registration";
 import {UserRegistration} from "../../../registration/models/user-registration";
 import {RequestDocument} from "./request-document";
 import { BaseModel } from "../../../core/models/base-model";
 import { DashboardInfo } from "./dashboard-info";
+import { ContragentInfo } from "../../../contragent/models/contragent-info";
 
 export class Request extends BaseModel {
-  contragent: ContragentRegistration;
+  contragent: ContragentInfo;
   id: Uuid;
   name?: string;
   contragentId: Uuid;

@@ -8,7 +8,6 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { RequestDocument } from "../../common/models/request-document";
-import { RequestOfferPosition } from "../../common/models/request-offer-position";
 
 @Injectable()
 export class RequestService {
@@ -44,6 +43,23 @@ export class RequestService {
         });
       })
     );
+  }
+
+  /**
+   * Преобразует RequestPositionList в одноуровневый массив позиций без групп
+   */
+  getRequestPositionsFlat(getRequestPositions$: Observable<RequestPositionList[]>): Observable<RequestPosition[]> {
+    return getRequestPositions$.pipe(map(
+      requestPositionsList =>
+        requestPositionsList.reduce(
+          function flatPositionList(arr, curr: RequestPositionList) {
+            if (curr instanceof RequestGroup) {
+              return flatPositionList(curr.positions, null);
+            } else {
+              return [...arr, curr].filter(Boolean);
+            }
+          }, [])
+    ));
   }
 
   getRequestPositionsWithOffers(id: Uuid): Observable<any> {

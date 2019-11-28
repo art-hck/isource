@@ -1,0 +1,66 @@
+<!-- Счетчики статусов -->
+<ng-container *ngFor="let statusCounter of getStatusCounters(positions)">
+  <div [class.app-ghost-color]="!statusCounter.positions.length">
+    <div class="app-row app-section app-bold">
+      <div class="app-col">
+        <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
+          <a routerLink="../{{statusCounter.url}}">{{ statusCounter.label }}</a>
+        </ng-container>
+        <ng-template #statusLabelSpan>{{ statusCounter.label }}</ng-template>
+      </div>
+      <div class="app-col text-right clr-flex-grow-0">
+        <div class="app-position-status">
+          <span>{{ statusCounter.positions.length }}</span>
+          <div class="app-position-status-icon" [ngClass]="statusCounter.statuses[0]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<hr class="divider"/>
+
+<!-- Информация о заявке -->
+<div class="app-accordion">
+  <div class="app-accordion-title" (click)="isInfoTabVisible = !isInfoTabVisible">
+    <div>Общая инф. по заявке</div>
+    <clr-icon class="app-accordion-title-icon" shape="app-chevron"
+              [dir]="isInfoTabVisible ? 'up':'down'"></clr-icon>
+  </div>
+  <div class="app-accordion-body" *ngIf="isInfoTabVisible">
+    <div class="app-section">
+      <div class="app-ghost-color">Заявка №</div>
+      <div class="app-bold">{{ request.number }}</div>
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Статус заявки</div>
+      <div>{{ request.statusLabel }}</div>
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Заказчик</div>
+      <div>{{ request.contragent.shortName }}</div>
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Контактное лицо</div>
+      <a target="_blank" href="mailto:{{request.contragent.email }}">
+        {{ request.contragent.directorFullName }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<!-- Статистика -->
+<div class="app-accordion">
+  <div class="app-accordion-title" (click)="isStatTabVisible = !isStatTabVisible">
+    <div>Статистика</div>
+    <clr-icon class="app-accordion-title-icon" shape="app-chevron"
+              [dir]="isStatTabVisible ? 'up':'down'"></clr-icon>
+  </div>
+  <div class="app-accordion-body" *ngIf="isStatTabVisible">
+    <div class="app-section">
+      Not implemented
+    </div>
+  </div>
+</div>

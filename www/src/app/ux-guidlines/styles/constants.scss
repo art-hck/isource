@@ -1,0 +1,56 @@
+/**
+ Цвета заливки
+ Фоны, бордеры. Не контролы
+*/
+$default-color: #fff;
+$primary-color: #2585f5;
+$soft-color: #cccccc; // 20% black
+$divider-color: #dedede; // 13% black
+$secondary-color: #e5e5e5; // 11% black
+$stripe-color: #f6faff;
+$border-color: #b2d0ff;
+$bg-color: #fbfcfe;
+
+/**
+  Контролы
+  Кнопки, инпуты, т. д.
+ */
+$primary-control-color: $primary-color;
+$primary-hover-control-color: #1a71d8;
+$disabled-control-color: #e8e8e8; // 10% black
+$secondary-control-color: #e5e8ef;
+$secondary-hover-control-color: #d0d4de;
+$secondary-hover-border-control-color: #b3b3b3; // 30% black
+
+$control-border-radius: 4px;
+$control-height: 32px;
+$control-l-height: 40px;
+
+$button-min-width: 3rem;
+$button-max-width: 15rem;
+$button-padding: 0 16px;
+$button-l-padding: 0 20px;
+
+
+/**
+  Цвета типографики
+  Цвета иконок на этих же переменных
+ */
+$primary-font-color: #000;
+$secondary-font-color: #666666; // 60% black
+$ghost-font-color: #b3b3b3; // 30% black
+$brand-font-color: $primary-color;
+$link-font-color: $primary-color;
+$link-hover-font-color: #55a3ff;
+$success-font-color: #0ea04b;
+$warning-font-color: #ffa10a;
+$alert-font-color: #eb3333;
+
+/**
+   Размеры типографики
+ */
+$font-size-xxl: 32px;
+$font-size-xl: 22px;
+$font-size-l: 17px;
+$font-size-m: 14px;
+$font-size-s: 11px;

@@ -18,4 +18,5 @@ export class ContragentRegistration {
   bik: string;
   bankName: string;
   bankAddress: string;
+  directorFullName: string;
 }

@@ -1,0 +1,12 @@
+@import "constants";
+
+.app-control[type=text] {
+  border-radius: $control-border-radius;
+  border: 1px solid $secondary-control-color;
+  height: $control-l-height;
+  cursor: text;
+
+  &:focus {
+    border: 1px solid $primary-control-color
+  }
+}
