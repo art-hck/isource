@@ -1,20 +1,8 @@
 /* Подключение шрифтов */
 @import "assets/styles/fonts.scss";
-@import "~nouislider/distribute/nouislider.min.css";
-@import "assets/styles/tabs.scss";
-@import "assets/styles/grid.scss";
-@import "assets/styles/buttons.scss";
-@import "assets/styles/header.scss";
-@import "assets/styles/card-items.scss";
-@import "assets/styles/datagrid.scss";
-@import "assets/styles/select.scss";
 
-/* You can add global styles to this file, and also import other style files */
-
-/* Применение нового шрифта к элементам */
-body, body p, input, select, h2, h3, h4, h5, h6 {
-  font-family: PT Root UI, Roboto, sans-serif !important;
-}
+$font_ptroot: PT Root UI, Roboto, sans-serif;
+$font_size_basic: 14px;
 
 $color_black: #000000;
 $color_blue: #0085FF;
@@ -23,6 +11,28 @@ $color_green: #417505;
 $color_red: #FF2519;
 $color_gray: #999999;
 $color_light_gray: #D4D9E2;
+
+
+
+@import "~nouislider/distribute/nouislider.min.css";
+@import "assets/styles/tabs.scss";
+@import "assets/styles/grid.scss";
+@import "assets/styles/buttons.scss";
+@import "assets/styles/header.scss";
+@import "assets/styles/card-items.scss";
+@import "assets/styles/datagrid.scss";
+@import "assets/styles/select.scss";
+@import "assets/styles/input-fields.scss";
+@import "assets/styles/checkbox-toggle.scss";
+@import "assets/styles/checkboxes.scss";
+
+/* You can add global styles to this file, and also import other style files */
+
+/* Применение нового шрифта к элементам */
+body, body p, input, select, h2, h3, h4, h5, h6 {
+  font-family: $font_ptroot !important;
+}
+
 
 *:focus {
   outline: 0;

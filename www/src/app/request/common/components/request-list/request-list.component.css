@@ -105,23 +105,3 @@ svg {
 .request-dates {
   min-width: 300px;
 }
-
-@media (min-width: 1601px) {
-  .clr-col-xxl-9 {
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
-
-  .filter-button {
-    display: none;
-  }
-  .filter {
-    display: block;
-  }
-}
-
-@media (max-width: 1600px) {
-  .filter {
-    display: none;
-  }
-}

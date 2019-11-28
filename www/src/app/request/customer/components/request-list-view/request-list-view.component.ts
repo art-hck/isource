@@ -4,6 +4,7 @@ import { RequestsList } from "../../../common/models/requests-list/requests-list
 import { Page } from "../../../../core/models/page";
 import { ClrDatagridStateInterface } from "@clr/angular";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
+import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 
 @Component({
   selector: 'app-request-list-view',
@@ -11,6 +12,11 @@ import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-an
   styleUrls: ['./request-list-view.component.css']
 })
 export class RequestListViewComponent implements OnInit {
+
+  currentDatagridState: DatagridStateAndFilter;
+  currentFilters: RequestsListFilter;
+
+  filterModalOpened = false;
 
   public requests: RequestsList[];
   @Output() totalItems: number;
@@ -23,7 +29,25 @@ export class RequestListViewComponent implements OnInit {
   ngOnInit() {
   }
 
+  filter(filter: RequestsListFilter): void {
+    this.currentFilters = filter;
+
+    let pageSize = null;
+
+    if (this.currentDatagridState) {
+      pageSize = this.currentDatagridState.pageSize;
+    }
+
+    this.getRequestListForCustomer(0, pageSize, filter, null);
+  }
+
   onDatagridStateChange(state: DatagridStateAndFilter): void {
+    this.currentDatagridState = state;
+
+    if (this.currentFilters) {
+      state.filters = this.currentFilters;
+    }
+
     this.getRequestListForCustomer(state.startFrom, state.pageSize, state.filters, state.sort);
   }
 
@@ -33,5 +57,16 @@ export class RequestListViewComponent implements OnInit {
         this.requests = data.entities;
         this.totalItems = data.totalCount;
       });
+  }
+
+  getFilterCounter() {
+    if (this.currentFilters) {
+      return Object.keys(this.currentFilters).length;
+    }
+    return 0;
+  }
+
+  onShowResults() {
+    this.filterModalOpened = false;
   }
 }
