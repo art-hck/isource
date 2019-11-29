@@ -8,6 +8,7 @@ import { RequestsListFilter } from "../../../common/models/requests-list/request
 import { Request } from "../../../common/models/request";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
+import { FormControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-request-list-view',
@@ -46,9 +47,8 @@ export class RequestListViewComponent implements OnInit {
 
   getRequestList(requestStatus: RequestWorkflowSteps) {
     this.requestStatus = requestStatus;
-    this.filters = {'requestListStatusesFilter': [this.requestStatus]};
-    this.getRequestListForBackoffice(0, 10, this.filters);
     this.requestListFilterComponent.clearFilter();
+    this.filters = {'requestListStatusesFilter': [this.requestStatus]};
     this.getRequestListForBackoffice(0, this.pageSize, this.filters);
   }
 
@@ -61,7 +61,9 @@ export class RequestListViewComponent implements OnInit {
   }
 
   filter(filter: RequestsListFilter): void {
-    this.currentFilters = filter;
+    this.filters = {...this.filters, ...filter};
+
+    this.currentFilters = this.filters;
 
     let pageSize = null;
 
@@ -69,7 +71,7 @@ export class RequestListViewComponent implements OnInit {
       pageSize = this.currentDatagridState.pageSize;
     }
 
-    this.getRequestListForBackoffice(0, pageSize, filter);
+    this.getRequestListForBackoffice(0, pageSize, this.filters);
   }
 
   onDatagridStateChange(state: DatagridStateAndFilter): void {
@@ -79,7 +81,7 @@ export class RequestListViewComponent implements OnInit {
       state.filters = this.currentFilters;
     }
 
-    this.getRequestListForBackoffice(state.startFrom, state.pageSize, this.filters);
+    this.getRequestListForBackoffice(state.startFrom, state.pageSize, state.filters);
   }
 
   getRequestListForBackoffice(startFrom, pageSize, filters): void {
