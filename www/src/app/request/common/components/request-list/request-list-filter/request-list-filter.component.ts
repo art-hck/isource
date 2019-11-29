@@ -82,8 +82,10 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
 
   clearFilter() {
     this.requestListFilterForm.reset();
-    this.requestFilterCustomerListComponent.selectedCustomers = [];
-    this.requestFilterCustomerListComponent.customerSearchValue = "";
+    if (this.backofficeView) {
+      this.requestFilterCustomerListComponent.selectedCustomers = [];
+      this.requestFilterCustomerListComponent.customerSearchValue = "";
+    }
   }
 
   ngOnDestroy() {
