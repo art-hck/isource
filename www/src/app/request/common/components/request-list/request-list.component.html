@@ -12,14 +12,13 @@
   <clr-dg-column class="customer-name clr-col-2" *ngIf="customerNameColumnShow">
     Заказчик
   </clr-dg-column>
-  <clr-dg-column class="request-name clr-col">
+  <clr-dg-column class="request-name clr-col" [ngClass]="{'request-name-wight' : !customerNameColumnShow}">
     Наименование
   </clr-dg-column>
   <clr-dg-column class="request-delivery-dates clr-col-3">
     Сроки поставки
   </clr-dg-column>
-  <clr-dg-column class="position-count clr-col-1" *ngIf="requestStatus === requestWorkflowSteps.NEW ||
-  requestWorkflowSteps.COMPLETED || requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
+  <clr-dg-column class="position-count clr-col-1" *ngIf="requestStatus !== requestWorkflowSteps.IN_PROGRESS">
     Позиций
   </clr-dg-column>
   <clr-dg-column class="tasks clr-col-1" *ngIf="customerNameColumnShow &&
@@ -42,7 +41,9 @@
                  title="{{ request.request.contragent?.shortName }}">
       {{request.request.contragent?.shortName}}
     </clr-dg-cell>
-    <clr-dg-cell class="request-name clr-col clr-align-self-center" title="{{ request.request.name }}">
+    <clr-dg-cell class="request-name clr-col clr-align-self-center"
+                 [ngClass]="{'request-name-wight' : !customerNameColumnShow}"
+                 title="{{ request.request.name }}">
       {{ request.request.name }}
     </clr-dg-cell>
     <clr-dg-cell class="request-delivery-dates clr-col-3 clr-align-self-center">
@@ -57,8 +58,7 @@
       </div>
     </clr-dg-cell>
     <clr-dg-cell class="position-count clr-col-1 clr-align-self-center"
-                 *ngIf="requestStatus === requestWorkflowSteps.NEW || requestWorkflowSteps.COMPLETED ||
-                 requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
+                 *ngIf="requestStatus === requestWorkflowSteps.NEW">
      {{ request.requestData.positionsCount}}
     </clr-dg-cell>
     <clr-dg-cell class="request-tasks clr-col-1 clr-align-self-center"

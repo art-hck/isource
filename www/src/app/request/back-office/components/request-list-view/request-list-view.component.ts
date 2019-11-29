@@ -6,6 +6,8 @@ import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-an
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { Request } from "../../../common/models/request";
+import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 
 @Component({
   selector: 'app-request-list-view',
@@ -19,6 +21,8 @@ export class RequestListViewComponent implements OnInit {
 
   filterModalOpened = false;
 
+  pageSize = 10;
+
   public requests: RequestsList[];
   @Output() totalItems: number;
   @Output() datagridLoader: boolean;
@@ -26,6 +30,7 @@ export class RequestListViewComponent implements OnInit {
 
   filters: any;
   requestWorkflowSteps = RequestWorkflowSteps;
+  requestStatusCount: RequestStatusCount;
 
   constructor(
     protected getRequestService: GetRequestsService
@@ -33,12 +38,21 @@ export class RequestListViewComponent implements OnInit {
 
   ngOnInit() {
     this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+    this.getRequestStatusCount('backoffice');
   }
 
   getRequestList(requestStatus: RequestWorkflowSteps) {
     this.requestStatus = requestStatus;
     this.filters = {'requestListStatusesFilter': [this.requestStatus]};
-    this.getRequestListForBackoffice(0, 10, this.filters);
+    this.getRequestListForBackoffice(0, this.pageSize, this.filters);
+  }
+
+  getRequestStatusCount(role: string) {
+      this.getRequestService.requestStatusCount(role).subscribe(
+        (requestStatusCount: RequestStatusCount) => {
+          this.requestStatusCount = requestStatusCount
+        }
+      );
   }
 
   filter(filter: RequestsListFilter): void {

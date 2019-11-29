@@ -6,6 +6,7 @@ import { ClrDatagridStateInterface } from "@clr/angular";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
+import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 
 @Component({
   selector: 'app-request-list-view',
@@ -26,6 +27,7 @@ export class RequestListViewComponent implements OnInit {
 
   filters: any;
   requestWorkflowSteps = RequestWorkflowSteps;
+  requestStatusCount: RequestStatusCount;
 
   constructor(
     protected getRequestService: GetRequestsService
@@ -33,6 +35,15 @@ export class RequestListViewComponent implements OnInit {
 
   ngOnInit() {
     this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+    this.getRequestStatusCount('customer');
+  }
+
+  getRequestStatusCount(role: string) {
+    this.getRequestService.requestStatusCount(role).subscribe(
+      (requestStatusCount: RequestStatusCount) => {
+        this.requestStatusCount = requestStatusCount
+      }
+    );
   }
 
   getRequestList(requestStatus: RequestWorkflowSteps) {
