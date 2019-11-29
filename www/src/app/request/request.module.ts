@@ -62,6 +62,10 @@ import { DigitalInspectorComponent } from "./common/components/delivery-monitor/
 import { RequestListFilterComponent } from './common/components/request-list/request-list-filter/request-list-filter.component';
 import { RequestFilterCustomerListComponent } from './common/components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
 import { RequestListFilterSectionComponent } from "./common/components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
+import { RequestAddGroupModalComponent } from "./common/components/request/request-add-group-modal/request-add-group-modal.component";
+import { RequestComponent } from "./common/components/request/request.component";
+import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
+import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
 
 @NgModule({
   declarations: [
@@ -111,14 +115,18 @@ import { RequestListFilterSectionComponent } from "./common/components/request-l
     DigitalInspectorComponent,
     RequestListFilterComponent,
     RequestListFilterSectionComponent,
-    RequestFilterCustomerListComponent
+    RequestFilterCustomerListComponent,
+    RequestComponent,
+    RequestAsideInfoComponent,
+    RequestAddGroupModalComponent
   ],
   imports: [
     SharedModule,
     RequestRoutingModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentModule
+    ContragentModule,
+    UxGuidlinesModule
   ],
   providers: [
     BackofficeRequestService,

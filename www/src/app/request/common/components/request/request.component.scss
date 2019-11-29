@@ -1,0 +1,61 @@
+@import "src/app/ux-guidlines/styles/constants";
+
+.app-dropdown {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.item {
+  &-title {
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-quantity {
+    flex-grow: .15; // 15% width
+    max-width: 100px;
+  }
+
+  &-status {
+    max-width: 200px;
+  }
+
+  &-date {
+    max-width: 120px;
+  }
+}
+
+.app-row.app-row-group {
+  background: #F0F6FA;
+  border-left: 4px #B2D0FF solid;
+  cursor: pointer;
+  padding-left: 7px;
+
+  &:hover {
+    background: #E9F1F7;
+  }
+
+  .group-title {
+    color: $secondary-font-color;
+    padding-bottom: 14px;
+
+    b {
+      color: $primary-font-color;
+    }
+  }
+
+  .app-row-group-positions .app-col {
+    padding: 10px 14px;
+
+    &:first-child {
+      padding-left: 0;
+      padding-right: 6px;
+    }
+
+    &:last-child  {
+      padding-right: 0;
+    }
+  }
+}

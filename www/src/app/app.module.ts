@@ -28,6 +28,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
+import { UxGuidlinesModule } from "./ux-guidlines/ux-guidlines.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -40,7 +41,7 @@ registerLocaleData(localeRu, 'ru');
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +55,7 @@ registerLocaleData(localeRu, 'ru');
     ReactiveFormsModule,
     HttpClientModule,
     NgxDadataModule,
+    UxGuidlinesModule,
     WebsocketModule.config({
       url: AppConfig.endpoints.ws
     })

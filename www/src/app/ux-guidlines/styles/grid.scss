@@ -1,0 +1,63 @@
+@import "constants";
+
+.app-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.app-col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+
+  & + &-aside {
+    margin-left: 20px;
+  }
+
+  &-aside {
+    max-width: 280px;
+    & + * {
+      margin-left: 20px;
+    }
+  }
+}
+
+.app-table {
+  &:not(.app-no-border) > .app-row {
+    border: 1px solid $border-color;
+    background: $default-color;
+    transition: background-color 250ms;
+
+    &-clickable:hover {
+      background: $bg-color;
+    }
+  }
+
+  & > .app-row {
+    padding: 0 10px;
+
+    &:not(:first-child) {
+      border-top: none;
+    }
+
+
+    &:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    & > .app-col {
+      padding: 17px 14px;
+      box-sizing: content-box;
+
+      &:first-child {
+        padding:17px 6px;
+      }
+    }
+  }
+}

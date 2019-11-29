@@ -1,3 +1,5 @@
+import '@clr/icons';
+import '@clr/icons/shapes/all-shapes';
 import { Component } from '@angular/core';
 import {filter, map, mergeMap} from "rxjs/operators";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";

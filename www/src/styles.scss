@@ -15,6 +15,7 @@ $color_light_gray: #D4D9E2;
 
 
 @import "~nouislider/distribute/nouislider.min.css";
+@import "app/ux-guidlines/styles/index";
 @import "assets/styles/tabs.scss";
 @import "assets/styles/grid.scss";
 @import "assets/styles/buttons.scss";
@@ -29,8 +30,9 @@ $color_light_gray: #D4D9E2;
 /* You can add global styles to this file, and also import other style files */
 
 /* Применение нового шрифта к элементам */
-body, body p, input, select, h2, h3, h4, h5, h6 {
+body, body p, input, select, h1, h2, h3, h4, h5, h6 {
   font-family: $font_ptroot !important;
+  line-height: normal;
 }
 
 
@@ -40,19 +42,24 @@ body, body p, input, select, h2, h3, h4, h5, h6 {
 }
 
 body {
+  color: $primary-font-color;
   background-color: #FBFCFE;
-  color: $color_black;
+
+  a, a:link, a:visited, a:link:hover, button {
+    color: unset;
+    text-decoration: unset;
+  }
 }
 
 h2 {
-    font-weight: 800;
-    line-height: 40px;
-    margin-bottom: 13px;
+  font-weight: 800;
+  line-height: 40px;
+  margin-bottom: 13px;
 }
 
 h5 {
-    font-weight: 300;
-    margin-bottom: 25px;
+  font-weight: 300;
+  margin-bottom: 25px;
 }
 
 select option:disabled {
@@ -61,6 +68,10 @@ select option:disabled {
 
 .text-muted {
   color: #6c757d !important;
+}
+
+.main-container {
+  background: $bg-color;
 }
 
 /* Улучшение отступов для контента */
@@ -542,4 +553,3 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 }
 
 /* end Стили для всплывающих уведомлений */
-

@@ -4,7 +4,7 @@
 <ng-container *ngIf="request">
 
   <h4 class="request-number"><b>Заявка №{{request.number}}</b></h4>
-  <h3 class="request-name"><b>{{ request.name }}</b></h3>
+  <h3 class="request-name"><b><a routerLink="new">{{ request.name }}</a></b></h3>
 
   <app-request-dashboard
     (draftClick)="onDraftClick()"

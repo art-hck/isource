@@ -1,0 +1,264 @@
+<div class="card">
+  <div class="card-header">Custom icons</div>
+  <div class="card-block icons">
+    <clr-icon shape="app-attach"></clr-icon>
+    <clr-icon shape="app-arrow"></clr-icon>
+    <clr-icon shape="app-basket"></clr-icon>
+    <clr-icon shape="app-calendar"></clr-icon>
+    <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+    <clr-icon shape="app-check"></clr-icon>
+    <clr-icon shape="app-chevron"></clr-icon>
+    <clr-icon shape="app-cross"></clr-icon>
+    <clr-icon shape="app-doc"></clr-icon>
+    <clr-icon shape="app-group"></clr-icon>
+    <clr-icon shape="app-hamburger"></clr-icon>
+    <clr-icon shape="app-logout" size="24"></clr-icon>
+    <clr-icon shape="app-info"></clr-icon>
+    <clr-icon shape="app-kebab"></clr-icon>
+    <clr-icon shape="app-mail"></clr-icon>
+    <clr-icon shape="app-message"></clr-icon>
+    <clr-icon shape="app-move"></clr-icon>
+    <clr-icon shape="app-pen"></clr-icon>
+    <clr-icon shape="app-photo"></clr-icon>
+    <clr-icon shape="app-plus"></clr-icon>
+    <clr-icon shape="app-ring"></clr-icon>
+    <clr-icon shape="app-search"></clr-icon>
+    <clr-icon shape="app-triangle"></clr-icon>
+    <clr-icon shape="app-triangle down"></clr-icon>
+    <clr-icon shape="app-sort"></clr-icon>
+    <clr-icon shape="app-sort" flip="horizontal"></clr-icon>
+    <clr-icon shape="app-sort2"></clr-icon>
+    <clr-icon shape="app-sort2 down"></clr-icon>
+    <clr-icon shape="app-star"></clr-icon>
+    <clr-icon shape="app-star" class="is-solid"></clr-icon>
+    <clr-icon shape="app-top"></clr-icon>
+    <clr-icon shape="app-trash"></clr-icon>
+    <clr-icon shape="app-upload"></clr-icon>
+    <clr-icon shape="app-user"></clr-icon>
+    <clr-icon shape="app-warning"></clr-icon>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">List items</div>
+  <div class="card-block">
+    <div class="card-title">Horizontal tabs</div>
+    <div class="app-tabs">
+      <a class="app-tabs-item app-tabs-item-active">Позиции</a>
+      <a class="app-tabs-item">Общая информация</a>
+      <a class="app-tabs-item">Документы</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">Controls</div>
+  <div class="card-block">
+    <div class="card-title">Slider control</div>
+    <div class="app-control app-control-slider">
+      <label (click)="controlSlider.click()">Slide me</label>
+      <input type="checkbox" #controlSlider/>
+      <div class="app-control-checkbox" (click)="controlSlider.click()"></div>
+    </div>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Right label</div>
+    <div class="app-control app-control-slider">
+      <input type="checkbox" #controlSlider2/>
+      <div class="app-control-checkbox" (click)="controlSlider2.click()"></div>
+      <label (click)="controlSlider2.click()">Slide me</label>
+    </div>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Checkbox control</div>
+    <input class="app-control" type="checkbox" #controlCheckbox/>
+    <div class="app-control-checkbox" (click)="controlCheckbox.click()"></div>
+    <label (click)="controlCheckbox.click()">Check me</label>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Typography</div>
+  <div class="card-block">
+    <h1>H1 title</h1>
+    <h2>H2 title</h2>
+    <h3>H3 title</h3>
+    <h4>H4 title</h4>
+    <p>Paragraph</p>
+    <small>small text</small>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Status model</div>
+  <div class="card-block">
+    <div class="card-title">Standart usage</div>
+    <div class="clr-row">
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon DRAFT"></div>
+          <span>Черновик</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon ON_CUSTOMER_APPROVAL"></div>
+          <span>На согласовании заказчика</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon NEW"></div>
+          <span>Новый</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon TECHNICAL_PROPOSALS_PREPARATION"></div>
+          <span>Подготовка ТП</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon TECHNICAL_PROPOSALS_AGREEMENT"></div>
+          <span>Согласование ТП</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon PROPOSALS_PREPARATION"></div>
+          <span>Подготовка КП</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon RESULTS_AGREEMENT"></div>
+          <span>Выбор победителя</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon WINNER_SELECTED"></div>
+          <span>Выбран победитель</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon CONTRACT_AGREEMENT"></div>
+          <span>Согласование договора</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon CONTRACT_SIGNING"></div>
+          <span>Подписание договора</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon CONTRACTED"></div>
+          <span>Законтрактовано</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon RKD_AGREEMENT"></div>
+          <span>Согласование РКД</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon MANUFACTURING"></div>
+          <span>Изготовление</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon DELIVERY"></div>
+          <span>Доставка</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon DELIVERED"></div>
+          <span>Поставлено</span>
+        </div>
+      </div>
+      <div class="clr-col clr-flex-grow-0">
+        <div class="app-position-status">
+          <div class="app-position-status-icon PAID"></div>
+          <span>Оплачено</span>
+        </div>
+        <div class="app-position-status">
+          <div class="app-position-status-icon COMPLETED"></div>
+          <span>Завершено</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Custom layout & icon position</div>
+    <div class="clr-row">
+      <div class="clr-col" style="max-width: 200px">Согласование ТП</div>
+      <div class="clr-col text-right" style="max-width: 80px">
+        <div class="app-position-status">
+          <span>14</span>
+          <div class="app-position-status-icon TECHNICAL_PROPOSALS_AGREEMENT"></div>
+        </div>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col" style="max-width: 200px">Изготовление</div>
+      <div class="clr-col text-right" style="max-width: 80px">
+        <div class="app-position-status">
+          <span>20</span>
+          <div class="app-position-status-icon MANUFACTURING"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Buttons</div>
+  <div class="card-block">
+    <div class="card-title">Standart Buttons</div>
+    <button class="app-btn app-btn-primary">Primary button</button>
+    <button class="app-btn app-btn-primary app-btn-icon">
+      <clr-icon shape="app-message" size="16" class="is-solid"></clr-icon>
+    </button>
+    <button class="app-btn app-btn-primary app-btn-icon-text">
+      <clr-icon shape="app-trash" size="16" class="is-solid"></clr-icon>
+      <span>Удалить</span>
+    </button>
+    <button disabled class="app-btn app-btn-primary">Primary disabled</button>
+    <button class="app-btn app-btn-secondary">Secondary button</button>
+    <button disabled class="app-btn app-btn-secondary">Secondary disabled</button>
+    <button class="app-btn app-btn-outline">Outline button</button>
+    <button disabled class="app-btn app-btn-outline">Outline disabled</button>
+    <button class="app-btn app-btn-link">Link button</button>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Large Buttons</div>
+    <button class="app-btn app-btn-primary app-btn-large">L Primary button</button>
+    <button class="app-btn app-btn-primary app-btn-large app-btn-icon">
+      <clr-icon shape="app-message" size="16" class="is-solid"></clr-icon>
+    </button>
+    <button class="app-btn app-btn-primary app-btn-large app-btn-icon-text">
+      <clr-icon shape="app-trash" size="16" class="is-solid"></clr-icon>
+      <span>Удалить</span>
+    </button>
+    <button class="app-btn app-btn-secondary app-btn-large">L Secondary button</button>
+    <button class="app-btn app-btn-outline app-btn-large">L Outline button</button>
+    <button class="app-btn app-btn-link app-btn-large">button</button>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Group Buttons</div>
+    <div class="app-btn-group">
+      <button class="app-btn app-btn-outline">Create</button>
+      <button class="app-btn app-btn-outline">Read</button>
+      <button class="app-btn app-btn-outline">Update</button>
+      <button class="app-btn app-btn-outline">Delete</button>
+    </div>
+    <div class="app-btn-group">
+      <button class="app-btn app-btn-outline app-btn-large">Create</button>
+      <button class="app-btn app-btn-outline app-btn-large">Read</button>
+      <button class="app-btn app-btn-outline app-btn-large">Update</button>
+      <button class="app-btn app-btn-outline app-btn-large">Delete</button>
+    </div>
+    <div class="app-btn-group">
+      <button class="app-btn app-btn-primary app-btn-large">Create</button>
+      <button class="app-btn app-btn-primary app-btn-large">Read</button>
+      <button class="app-btn app-btn-primary app-btn-large">Update</button>
+      <button class="app-btn app-btn-primary app-btn-large">Delete</button>
+    </div>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Clarity Buttons</div>
+    <button class="btn btn-primary">Primary button</button>
+    <button class="btn btn-secondary">Secondary button</button>
+    <button class="btn btn-outline">Outline button</button>
+    <button class="btn btn-link">Link button</button>
+  </div>
+</div>
+
