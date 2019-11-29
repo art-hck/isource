@@ -50,7 +50,7 @@ export class RequestListViewComponent implements OnInit {
   getRequestStatusCount(role: string) {
       this.getRequestService.requestStatusCount(role).subscribe(
         (requestStatusCount: RequestStatusCount) => {
-          this.requestStatusCount = requestStatusCount
+          this.requestStatusCount = requestStatusCount;
         }
       );
   }
