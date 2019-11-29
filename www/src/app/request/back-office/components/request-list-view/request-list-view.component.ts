@@ -92,7 +92,10 @@ export class RequestListViewComponent implements OnInit {
 
   getFilterCounter() {
     if (this.currentFilters) {
-      return Object.keys(this.currentFilters).length;
+      const activeFilters = Object.keys(this.currentFilters).filter(
+        filterItem => filterItem !== 'requestListStatusesFilter'
+      );
+      return activeFilters.length;
     }
     return 0;
   }
