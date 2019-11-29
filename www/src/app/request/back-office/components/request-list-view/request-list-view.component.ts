@@ -47,9 +47,9 @@ export class RequestListViewComponent implements OnInit {
 
   getRequestList(requestStatus: RequestWorkflowSteps) {
     this.requestStatus = requestStatus;
-    this.requestListFilterComponent.clearFilter();
     this.filters = {'requestListStatusesFilter': [this.requestStatus]};
     this.getRequestListForBackoffice(0, this.pageSize, this.filters);
+    this.requestListFilterComponent.clearFilter();
   }
 
   getRequestStatusCount(role: string) {
@@ -81,7 +81,7 @@ export class RequestListViewComponent implements OnInit {
       state.filters = this.currentFilters;
     }
 
-    this.getRequestListForBackoffice(state.startFrom, state.pageSize, state.filters);
+    this.getRequestListForBackoffice(state.startFrom, state.pageSize, this.filters);
   }
 
   getRequestListForBackoffice(startFrom, pageSize, filters): void {
