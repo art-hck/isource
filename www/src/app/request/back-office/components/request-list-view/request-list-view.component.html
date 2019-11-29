@@ -6,11 +6,14 @@
       Фильтр <div *ngIf="getFilterCounter() > 0" class="counter-bubble">{{ getFilterCounter() }}</div>
     </button>
   </div>
-<div class="clr-row">
+<div class="clr-row request-list">
   <div class="clr-col-12 clr-col-xxl-9">
     <clr-tabs>
       <clr-tab>
-        <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)">В обработке</button>
+        <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)"
+                                      [disabled]="requestStatusCount?.inProgressRequestsCount === 0">
+          В обработке <span class="light-grey">({{requestStatusCount?.inProgressRequestsCount}})</span>
+        </button>
         <clr-tab-content id="content1" *clrIfActive="true">
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
@@ -22,7 +25,10 @@
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)">Новые</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)"
+                [disabled]="requestStatusCount?.newRequestsCount === 0">
+          Новые <span class="light-grey">({{requestStatusCount?.newRequestsCount}})</span>
+        </button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
@@ -34,7 +40,10 @@
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)">На согласовании</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)"
+                [disabled]="requestStatusCount?.onCustomerApprovalRequestsCount === 0">
+          На согласовании <span class="light-grey">({{requestStatusCount?.onCustomerApprovalRequestsCount}})</span>
+        </button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"
@@ -46,7 +55,10 @@
         </clr-tab-content>
       </clr-tab>
       <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)">Завершенные</button>
+        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)"
+                            [disabled]="requestStatusCount?.completedRequestsCount === 0">
+          Завершенные <span class="light-grey">({{requestStatusCount?.completedRequestsCount}})</span>
+        </button>
         <clr-tab-content *clrIfActive>
           <app-request-list
             (datagridState)="onDatagridStateChange($event)"

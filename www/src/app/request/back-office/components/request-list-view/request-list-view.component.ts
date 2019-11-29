@@ -5,6 +5,8 @@ import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { Request } from "../../../common/models/request";
+import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
 
 @Component({
@@ -22,6 +24,8 @@ export class RequestListViewComponent implements OnInit {
 
   filterModalOpened = false;
 
+  pageSize = 10;
+
   public requests: RequestsList[];
   @Output() totalItems: number;
   @Output() datagridLoader: boolean;
@@ -29,6 +33,7 @@ export class RequestListViewComponent implements OnInit {
 
   filters: any;
   requestWorkflowSteps = RequestWorkflowSteps;
+  requestStatusCount: RequestStatusCount;
 
   constructor(
     protected getRequestService: GetRequestsService
@@ -36,6 +41,7 @@ export class RequestListViewComponent implements OnInit {
 
   ngOnInit() {
     this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+    this.getRequestStatusCount('backoffice');
   }
 
   getRequestList(requestStatus: RequestWorkflowSteps) {
@@ -43,6 +49,15 @@ export class RequestListViewComponent implements OnInit {
     this.filters = {'requestListStatusesFilter': [this.requestStatus]};
     this.getRequestListForBackoffice(0, 10, this.filters);
     this.requestListFilterComponent.clearFilter();
+    this.getRequestListForBackoffice(0, this.pageSize, this.filters);
+  }
+
+  getRequestStatusCount(role: string) {
+      this.getRequestService.requestStatusCount(role).subscribe(
+        (requestStatusCount: RequestStatusCount) => {
+          this.requestStatusCount = requestStatusCount;
+        }
+      );
   }
 
   filter(filter: RequestsListFilter): void {

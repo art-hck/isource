@@ -8,6 +8,10 @@
   text-align: left;
 }
 
+.datagrid {
+  padding-top: 10px;
+}
+
 .pagination {
   padding-left: 0;
   width: 100%;
@@ -46,6 +50,12 @@
 ::ng-deep .requests-list-datagrid .datagrid .request-name.datagrid-cell {
   max-width: 350px;
 }
+
+::ng-deep .requests-list-datagrid .datagrid-table .request-name-wight.datagrid-column,
+::ng-deep .requests-list-datagrid .datagrid .request-name-wight.datagrid-cell {
+  max-width: 650px;
+}
+
 
 /*Chart pie*/
 
@@ -108,4 +118,8 @@ svg {
 
 .request-dates {
   min-width: 300px;
+}
+
+.requests-list-datagrid {
+  height: auto;
 }

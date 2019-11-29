@@ -24,9 +24,11 @@ export class GetRequestsService {
     return this.api.post<Page<RequestsList>>(`requests/${role}/list`, {
       startFrom: startFrom,
       pageSize: pageSize,
-      filters: filters,
-      // sort: sort,
+      filters: filters
     });
   }
 
+  requestStatusCount(role: string) {
+    return this.api.get(`requests/${role}/counts-on-different-statuses`);
+  }
 }
