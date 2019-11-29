@@ -39,6 +39,7 @@ export class UxgCheckboxComponent {
     el.click();
     ev.preventDefault();
     ev.stopPropagation();
+    this.writeValue(el.checked);
   }
 
 }
