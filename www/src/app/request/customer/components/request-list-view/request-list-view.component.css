@@ -59,7 +59,7 @@
 }
 
 ::ng-deep .request-list .nav {
-  box-shadow: none;
+    box-shadow: none;
 }
 
 .light-grey {

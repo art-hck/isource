@@ -57,7 +57,9 @@ export class RequestListViewComponent implements OnInit {
   }
 
   filter(filter: RequestsListFilter): void {
-    this.currentFilters = filter;
+    this.filters = {...this.filters, ...filter};
+
+    this.currentFilters = this.filters;
 
     let pageSize = null;
 
@@ -65,7 +67,7 @@ export class RequestListViewComponent implements OnInit {
       pageSize = this.currentDatagridState.pageSize;
     }
 
-    this.getRequestListForCustomer(0, pageSize, filter);
+    this.getRequestListForCustomer(0, pageSize, this.filters);
   }
 
   onDatagridStateChange(state: DatagridStateAndFilter): void {
