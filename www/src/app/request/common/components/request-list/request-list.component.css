@@ -121,5 +121,9 @@ svg {
 }
 
 .requests-list-datagrid {
-  height: auto;
+  height: auto !important;
+}
+
+.requests-list-datagrid clr-dg-footer.datagrid-footer {
+  background-color: transparent;
 }
