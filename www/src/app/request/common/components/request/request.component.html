@@ -9,7 +9,7 @@
         <!-- Царь-чекбокс  -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <div class="app-row clr-align-items-center">
-            <uxg-checkbox formControlName="selected" [isMixed]="isMixedSelected"></uxg-checkbox>
+            <uxg-checkbox formControlName="checked" [isMixed]="isMixedChecked"></uxg-checkbox>
             <div class="app-dropdown">
               <button class="app-btn app-btn-clear app-btn-link">
                 <clr-icon shape="app-triangle down"></clr-icon>
@@ -21,11 +21,11 @@
         <!-- Добавить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <button class="app-btn app-btn-clear app-btn-link"
-                  [disabled]="selectedPositions.length === 0" (click)="addGroupModal.open()">
+                  [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
-            <span>Добавить в группу</span>
+            <span>Создать группу</span>
           </button>
-          <app-request-add-group-modal #addGroupModal [request]="request" [positions]="selectedPositions">
+          <app-request-add-group-modal #addGroupModal [request]="request" [positions]="checkedPositions">
           </app-request-add-group-modal>
         </div>
 
@@ -65,13 +65,13 @@
 
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(position) as position">
-            <a href="{{position.id}}" (click)="navigateToPosition(position, $event, positionCheckbox)" class="app-row">
-              <div class="app-col clr-flex-grow-0" #positionCheckbox>
-                <uxg-checkbox formControlName="selected"></uxg-checkbox>
+            <a href="{{position.id}}" (click)="navigateToPosition(position, $event)" class="app-row">
+              <div class="app-col clr-flex-grow-0">
+                <uxg-checkbox formControlName="checked"></uxg-checkbox>
               </div>
               <div class="app-col app-bold item-title">{{ position.name }}</div>
               <div class="app-col item-quantity">
-                <span>{{ position.quantity }}</span>
+                <span>{{ position.quantity }} </span>
                 <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
               </div>
               <div class="app-col item-date">
@@ -89,9 +89,9 @@
 
           <!-- Группа -->
           <ng-container *ngIf="asGroup(position) as group">
-            <div (click)="navigateToPosition(group, $event, groupCheckbox)" class="app-row app-row-group">
+            <div (click)="navigateToPosition(group, $event)" class="app-row app-row-group">
               <div class="app-col clr-flex-grow-0">
-                <uxg-checkbox formControlName="selected" #groupCheckbox></uxg-checkbox>
+                <uxg-checkbox formControlName="checked"></uxg-checkbox>
               </div>
               <div class="app-col">
                 <div class="item-title group-title">
@@ -105,11 +105,11 @@
                   <div class="app-row app-row-group-positions" *ngFor="let groupPositions of group.positions; index as j" >
                     <ng-container formGroupName="{{j}}">
                       <div class="app-col clr-flex-grow-0 app-row">
-                        <uxg-checkbox formControlName="selected"></uxg-checkbox>
+                        <uxg-checkbox formControlName="checked"></uxg-checkbox>
                       </div>
                       <div class="app-col item-title">{{ groupPositions.name }}</div>
                       <div class="app-col item-quantity">
-                        <span>{{ groupPositions.quantity }}</span>
+                        <span>{{ groupPositions.quantity }} </span>
                         <span class="app-ghost-color">{{ groupPositions.measureUnit | lowercase }}</span>
                       </div>
                       <div class="app-col item-date">
