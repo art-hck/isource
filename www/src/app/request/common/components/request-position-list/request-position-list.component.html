@@ -88,7 +88,7 @@
 
             <!-- Колонка 1: Название позиции -->
             <div class="cell position-name clr-col">
-              {{requestItems[i].name}}
+              {{requestItems[i].name || this.newPositionName}}
             </div>
 
             <!-- Дополнительные колонки, котороые отображаются в раскрытом списке -->
