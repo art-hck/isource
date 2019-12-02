@@ -7,6 +7,7 @@ import { SharedModule } from "../shared/shared.module";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { AuthRoutingModule } from "./auth-routing.module";
 import { PasswordRecoverModalComponent } from './components/password-recover-modal/password-recover-modal.component';
+import { RestorePasswordByCodeComponent } from './components/restore-password-by-code/restore-password-by-code.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { PasswordRecoverModalComponent } from './components/password-recover-mod
   declarations: [
     LoginComponent,
     RegistrationComponent,
-    PasswordRecoverModalComponent
+    PasswordRecoverModalComponent,
+    RestorePasswordByCodeComponent
   ]
 })
 export class AuthModule { }

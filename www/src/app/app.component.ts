@@ -57,10 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
       );
     } else if (this.user.isCustomer()) {
       this.cartStoreService.load();
-    }
-
-    // Выгружаем корзину при логауте
-    if (this.user.isCustomer()) {
+      // Выгружаем корзину при логауте
       this.subscription
         .add(this.authService.onLogout.subscribe(() => {
           this.cartStoreService.cartItems = [];

@@ -105,6 +105,6 @@ export class AuthService {
 
   changePasswordByCode(password: string, code: string) {
     const url = `change-password-by-code`;
-    this.http.post(url, { password, code });
+    return this.http.post<null>(url, { password, code });
   }
 }
