@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
-import { UserInfoService } from "../services/user-info.service";
+import { UserInfoService } from "../../auth/services/user-info.service";
 import { CartStoreService } from "../../cart/services/cart-store.service";
 
 @Component({
@@ -33,10 +33,8 @@ export class NavComponent implements OnInit {
   }
 
   logout(): void {
-    this.auth.logout().subscribe(() => {
-      // полностью перезагружаем приложение после логаута
-      window.location.href = "/login";
-    });
+    this.router.navigate(["/login"]);
+    const subscription = this.auth.logout().subscribe(() => subscription.unsubscribe());
   }
 
   public updateMenu(): void {

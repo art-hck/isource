@@ -1,11 +1,10 @@
-import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {tap} from 'rxjs/internal/operators';
-import { TokenService } from '@stdlib-ng/core';
+import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/internal/operators';
+import { APP_CONFIG, TokenService } from '@stdlib-ng/core';
 import { UserInfoService } from "./user-info.service";
-import { APP_CONFIG } from '@stdlib-ng/core';
-import { GpnmarketConfigInterface } from '../config/gpnmarket-config.interface';
+import { GpnmarketConfigInterface } from '../../core/config/gpnmarket-config.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +12,8 @@ import { GpnmarketConfigInterface } from '../config/gpnmarket-config.interface';
 export class AuthService {
 
   appConfig: GpnmarketConfigInterface;
+  onLogin = new Subject();
+  onLogout = new Subject();
 
   constructor(
       private http: HttpClient,
@@ -60,11 +61,7 @@ export class AuthService {
         'password': password
       };
     return this.http.post<any>('oauth', params, options)
-      .pipe(
-        tap(data => {
-          this.token.saveToken(data.access_token, data.token_type);
-        })
-      );
+      .pipe(tap(data => this.token.saveToken(data.access_token, data.token_type)));
   }
 
   saveAuthUserData(): Observable<any> {
@@ -76,6 +73,7 @@ export class AuthService {
       .pipe(
         tap(data => {
           this.userInfoService.saveData(data);
+          this.onLogin.next();
         })
       );
   }
@@ -90,6 +88,7 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.post('logout', {}).pipe(
       tap(() => {
+        this.onLogout.next();
         this.token.signOut();
       })
     );
@@ -97,5 +96,15 @@ export class AuthService {
 
   isAuth(): boolean {
     return !!this.token.getToken();
+  }
+
+  requestPasswordRecover(email: string) {
+    const url = `request-password-recover`;
+    return this.http.post<null>(url, { email });
+  }
+
+  changePasswordByCode(password: string, code: string) {
+    const url = `change-password-by-code`;
+    this.http.post(url, { password, code });
   }
 }
