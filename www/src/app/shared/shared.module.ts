@@ -10,6 +10,7 @@ import { DocumentUploadListComponent } from "./components/document-upload-list/d
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
 import { PluralizePipe } from "./pipes/pluralize-pipe";
 import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
+import { SafeStylePipe } from "./pipes/safe-style-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 
 @NgModule({
@@ -43,6 +44,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     DocumentIconComponent,
     PluralizePipe,
     BytesToSizePipe,
+    SafeStylePipe,
     ControlInvalidClassDirective
   ],
   exports: [
@@ -58,6 +60,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     DocumentIconComponent,
     PluralizePipe,
     BytesToSizePipe,
+    SafeStylePipe,
     ControlInvalidClassDirective
   ]
 })
