@@ -12,7 +12,7 @@
   </clr-dg-column>
 
 
-  <clr-dg-row *clrDgItems="let contragent of contragents | customerSearchFilter: getCustomerSearchInputValue();">
+  <clr-dg-row *clrDgItems="let contragent of contragents | contragentSearchFilter: getCustomerSearchInputValue();">
 
       <clr-dg-cell class="clr-col-6 contragent-name">
         <a target="_blank" href="/contragents/{{ contragent.id }}/info">{{contragent.shortName}}</a>
