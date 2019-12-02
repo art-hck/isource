@@ -31,7 +31,8 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
   ],
   exports: [
     UxgCheckboxComponent,
-    UxgSwitcherComponent
+    UxgSwitcherComponent,
+    UxgPositionStatusComponent
   ],
 })
 export class UxGuidlinesModule {
