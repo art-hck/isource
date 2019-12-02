@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
@@ -10,6 +10,9 @@ import { Router } from "@angular/router";
 })
 export class ContragentListComponent implements OnInit {
 
+  @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
+
+  @Input() searchValue: string;
   @Input() contragents: ContragentList[];
 
   constructor(
@@ -19,8 +22,11 @@ export class ContragentListComponent implements OnInit {
   ngOnInit() {
   }
 
-  showContragentInfo(id) {
-    this.router.navigateByUrl(`/contragents/${id}/info`).then(r => {});
+  getCustomerSearchInputValue(): string {
+    if (this.searchValue && this.customerSearchInput) {
+      return this.customerSearchInput.nativeElement.value;
+    }
+    return this.searchValue;
   }
 
 }

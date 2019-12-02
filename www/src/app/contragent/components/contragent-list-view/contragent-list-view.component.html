@@ -1,7 +1,22 @@
 <div class="container">
-  <h2>Контрагенты</h2>
+
+  <div class="clr-row clr-align-items-center clr-justify-content-between">
+    <div class="clr-col">
+      <h2>Контрагенты</h2>
+    </div>
+
+    <div class="clr-col-auto">
+      <input #customerSearchInput
+            class="contragent-search-field"
+            type="text"
+            placeholder="Введите наименование контрагента или ИНН.."
+            [value]="customerSearchValue"
+            (input)="onCustomerSearchInputChange($event.target.value)"/>
+    </div>
+  </div>
 
   <app-contragent-list
+          [searchValue]="customerSearchValue"
           [contragents]="(contragents$ | async)">
   </app-contragent-list>
 
