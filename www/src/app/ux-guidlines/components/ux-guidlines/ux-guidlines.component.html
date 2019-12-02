@@ -52,26 +52,19 @@
 <div class="card">
   <div class="card-header">Controls</div>
   <div class="card-block">
-    <div class="card-title">Slider control</div>
-    <div class="app-control app-control-slider">
-      <label (click)="controlSlider.click()">Slide me</label>
-      <input type="checkbox" #controlSlider/>
-      <div class="app-control-checkbox" (click)="controlSlider.click()"></div>
-    </div>
+    <div class="card-title">Swicher control</div>
+    <uxg-switcher label="Swich me"></uxg-switcher>
   </div>
   <div class="card-block">
     <div class="card-title">Right label</div>
-    <div class="app-control app-control-slider">
-      <input type="checkbox" #controlSlider2/>
-      <div class="app-control-checkbox" (click)="controlSlider2.click()"></div>
-      <label (click)="controlSlider2.click()">Slide me</label>
-    </div>
+    <uxg-switcher label="Swich me" labelAlign="right"></uxg-switcher>
   </div>
   <div class="card-block">
     <div class="card-title">Checkbox control</div>
-    <input class="app-control" type="checkbox" #controlCheckbox/>
-    <div class="app-control-checkbox" (click)="controlCheckbox.click()"></div>
-    <label (click)="controlCheckbox.click()">Check me</label>
+    <div class="app-row">
+      <uxg-checkbox class="app-control" #controlCheckbox></uxg-checkbox>
+      <label (click)="controlCheckbox.check($event)"> Check me</label>
+    </div>
   </div>
 </div>
 
@@ -91,105 +84,55 @@
   <div class="card-header">Status model</div>
   <div class="card-block">
     <div class="card-title">Standart usage</div>
-    <div class="clr-row">
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon DRAFT"></div>
-          <span>Черновик</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon ON_CUSTOMER_APPROVAL"></div>
-          <span>На согласовании заказчика</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon NEW"></div>
-          <span>Новый</span>
-        </div>
+
+    <div class="app-row">
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Черновик" [status]="positionStatus.DRAFT"></uxg-position-status>
+        <uxg-position-status label="На согласовании заказчика" [status]="positionStatus.ON_CUSTOMER_APPROVAL"></uxg-position-status>
+        <uxg-position-status label="Новый" [status]="positionStatus.NEW"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon TECHNICAL_PROPOSALS_PREPARATION"></div>
-          <span>Подготовка ТП</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon TECHNICAL_PROPOSALS_AGREEMENT"></div>
-          <span>Согласование ТП</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Подготовка ТП" [status]="positionStatus.TECHNICAL_PROPOSALS_PREPARATION"></uxg-position-status>
+        <uxg-position-status label="Согласование ТП" [status]="positionStatus.TECHNICAL_PROPOSALS_AGREEMENT"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon PROPOSALS_PREPARATION"></div>
-          <span>Подготовка КП</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon RESULTS_AGREEMENT"></div>
-          <span>Выбор победителя</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon WINNER_SELECTED"></div>
-          <span>Выбран победитель</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Подготовка КП" [status]="positionStatus.PROPOSALS_PREPARATION"></uxg-position-status>
+        <uxg-position-status label="Выбор победителя" [status]="positionStatus.RESULTS_AGREEMENT"></uxg-position-status>
+        <uxg-position-status label="Выбран победитель" [status]="positionStatus.WINNER_SELECTED"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon CONTRACT_AGREEMENT"></div>
-          <span>Согласование договора</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon CONTRACT_SIGNING"></div>
-          <span>Подписание договора</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon CONTRACTED"></div>
-          <span>Законтрактовано</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Согласование договора" [status]="positionStatus.CONTRACT_AGREEMENT"></uxg-position-status>
+        <uxg-position-status label="Подписание договора" [status]="positionStatus.CONTRACT_SIGNING"></uxg-position-status>
+        <uxg-position-status label="Законтрактовано" [status]="positionStatus.CONTRACTED"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon RKD_AGREEMENT"></div>
-          <span>Согласование РКД</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon MANUFACTURING"></div>
-          <span>Изготовление</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Согласование РКД" [status]="positionStatus.RKD_AGREEMENT"></uxg-position-status>
+        <uxg-position-status label="Изготовление" [status]="positionStatus.MANUFACTURING"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon DELIVERY"></div>
-          <span>Доставка</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon DELIVERED"></div>
-          <span>Поставлено</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Доставка" [status]="positionStatus.DELIVERY"></uxg-position-status>
+        <uxg-position-status label="Поставлено" [status]="positionStatus.DELIVERED"></uxg-position-status>
       </div>
-      <div class="clr-col clr-flex-grow-0">
-        <div class="app-position-status">
-          <div class="app-position-status-icon PAID"></div>
-          <span>Оплачено</span>
-        </div>
-        <div class="app-position-status">
-          <div class="app-position-status-icon COMPLETED"></div>
-          <span>Завершено</span>
-        </div>
+      <div class="app-col clr-flex-grow-0">
+        <uxg-position-status label="Оплачено" [status]="positionStatus.PAID"></uxg-position-status>
+        <uxg-position-status label="Завершено" [status]="positionStatus.COMPLETED"></uxg-position-status>
       </div>
     </div>
   </div>
   <div class="card-block">
     <div class="card-title">Custom layout & icon position</div>
-    <div class="clr-row">
-      <div class="clr-col" style="max-width: 200px">Согласование ТП</div>
-      <div class="clr-col text-right" style="max-width: 80px">
+    <div class="app-row">
+      <div class="app-col" style="max-width: 200px">Согласование ТП</div>
+      <div class="app-col text-right" style="max-width: 80px">
         <div class="app-position-status">
           <span>14</span>
           <div class="app-position-status-icon TECHNICAL_PROPOSALS_AGREEMENT"></div>
         </div>
       </div>
     </div>
-    <div class="clr-row">
-      <div class="clr-col" style="max-width: 200px">Изготовление</div>
-      <div class="clr-col text-right" style="max-width: 80px">
+    <div class="app-row">
+      <div class="app-col" style="max-width: 200px">Изготовление</div>
+      <div class="app-col text-right" style="max-width: 80px">
         <div class="app-position-status">
           <span>20</span>
           <div class="app-position-status-icon MANUFACTURING"></div>

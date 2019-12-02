@@ -81,7 +81,7 @@
     }
   }
 
-  &-icon {
+  &-icon:not(&-clear) {
     min-width: $control-height;
     padding: 0;
   }
