@@ -48,4 +48,8 @@ export class DocumentUploadListComponent {
   open() {
     this.uploadElRef.nativeElement.click();
   }
+
+  clear() {
+    this.documents = [];
+  }
 }

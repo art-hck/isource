@@ -55,7 +55,6 @@
       <div class="document-upload-list-wrap">
         <app-document-upload-list
             #documentUploadList
-            [documents]="form.get('files').value || []"
             [uploadLabel]="''"
             (fileSelected)="form.get('files').setValue($event)"
         ></app-document-upload-list>
