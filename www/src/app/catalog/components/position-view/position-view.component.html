@@ -77,7 +77,7 @@
       <div class="price-info">Срок поставки</div>
       <b>{{position.productionTime}} дней</b>
       <div class="price">
-        <b>{{position.price | currency: 'RUB' :true:"1.0-2"}}</b>
+        <b>{{position.price | currency: 'RUB' :"symbol":"1.0-2"}}</b>
         <div class="one-item"> За 1 {{position.measureUnit}}
         </div>
       </div>
