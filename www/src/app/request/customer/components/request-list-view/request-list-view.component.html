@@ -101,7 +101,19 @@
       </clr-tabs>
     </div>
 
+    <div class="clr-col-12 backdrop"
+         (click)="filterModalOpened = false"
+         [ngClass]="{ 'opened' : filterModalOpened }">
+    </div>
+
+
     <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
+
+      <div class="close-btn"
+           [ngClass]="{ 'opened' : filterModalOpened }"
+           (click)="filterModalOpened = false">
+      </div>
+
       <app-request-list-filter
               [resultsCount]="totalItems"
               [backofficeView]="false"
