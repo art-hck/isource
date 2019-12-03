@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: 'restore-password-by-code',
     component: RestorePasswordByCodeComponent,
-    data: { title: "Восстановление пароля" }
+    data: { title: "Смена пароля" }
   }
 ];
 
