@@ -26,6 +26,7 @@ label.clr-control-label {
   font-size: 12px;
   font-weight: 600;
   color: #999999;
+  padding-bottom: 7px;
 }
 
 .btn-delete {

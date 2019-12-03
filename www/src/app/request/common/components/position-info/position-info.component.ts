@@ -187,4 +187,21 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
         this.requestPositionChanged.emit(requestPosition);
       });
   }
+
+  getRelatedServicesList(requestPosition: RequestPosition) {
+    const relatedServices = [];
+
+    if (requestPosition.isShmrRequired) {
+      relatedServices.push('ШМР');
+    }
+    if (requestPosition.isPnrRequired) {
+      relatedServices.push('ПНР');
+    }
+    if (requestPosition.isInspectionControlRequired) {
+      relatedServices.push('Инспекционный контроль');
+    }
+
+    return relatedServices.join(', ');
+  }
+
 }

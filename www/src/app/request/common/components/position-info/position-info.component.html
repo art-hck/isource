@@ -113,11 +113,15 @@
                   <p>{{requestPosition.isDesignRequired ? 'Да' : 'Нет'}}</p>
                 </div>
 
-                <div class="relatedServices" *ngIf="requestPosition.relatedServices">
+                <div class="relatedServices"
+                     *ngIf="requestPosition.isShmrRequired ||
+                            requestPosition.isPnrRequired ||
+                            requestPosition.isInspectionControlRequired">
+
                   <label class="clr-control-label nopadding">
                     Необходимость сопутствующих услуг (ШМР, ПНР, Инспекционный контроль)
                   </label>
-                  <p>{{requestPosition.relatedServices}}</p>
+                  <p>{{ getRelatedServicesList(requestPosition) }}</p>
                 </div>
 
                 <div class="relatedServices" *ngIf="requestPosition.comments">
