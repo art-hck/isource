@@ -78,7 +78,9 @@ export class EditPositionInfoFormComponent implements OnInit {
       paymentTerms: [this.requestPosition.paymentTerms, [Validators.required]],
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
       currency: [this.requestPosition.currency],
-      relatedServices: [this.requestPosition.relatedServices],
+      isShmrRequired: [this.requestPosition.isShmrRequired],
+      isPnrRequired: [this.requestPosition.isPnrRequired],
+      isInspectionControlRequired: [this.requestPosition.isInspectionControlRequired],
       isDesignRequired: [this.requestPosition.isDesignRequired],
       comments: [this.requestPosition.comments]
     });

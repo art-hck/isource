@@ -24,7 +24,9 @@ export class RequestPosition extends RequestPositionList {
   startPrice: number;
   currency: string;
   paymentTerms: string;
-  relatedServices: string;
+  isShmrRequired: boolean;
+  isPnrRequired: boolean;
+  isInspectionControlRequired: boolean;
   comments: string;
   status: RequestPositionWorkflowSteps;
   statusLabel: string;

@@ -170,16 +170,33 @@
 
 
     <div class="clr-col-12">
-      <div class="relatedServices">
-        <clr-input-container>
+      <div class="relatedServices clr-row">
+        <div class="clr-col-12">
           <label class="nopadding">Необходимость сопутствующих услуг
             (ШМР, ПНР, Инспекционный контроль)</label>
-          <input clrInput
-                 type="text"
-                 name="relatedServices"
-                 formControlName="relatedServices"
-                 value="{{requestPosition.relatedServices}}">
-        </clr-input-container>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">ШМР</label>
+          </clr-checkbox-wrapper>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">ПНР</label>
+          </clr-checkbox-wrapper>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">Инспекционный контроль</label>
+          </clr-checkbox-wrapper>
+        </div>
+
       </div>
     </div>
 

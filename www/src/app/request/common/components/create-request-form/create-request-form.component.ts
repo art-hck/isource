@@ -83,7 +83,9 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
       paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
       currency: ['RUB'],
-      relatedServices: [''],
+      isShmrRequired: [false],
+      isPnrRequired: [false],
+      isInspectionControlRequired: [false],
       comments: [''],
       documents: [[]],
       isDesignRequired: [false]
