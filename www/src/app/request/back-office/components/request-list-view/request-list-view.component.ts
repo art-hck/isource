@@ -1,14 +1,12 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { GetRequestsService } from "../../../common/services/get-requests.service";
 import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
-import { Request } from "../../../common/models/request";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
-import { FormControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-request-list-view',
@@ -21,16 +19,14 @@ export class RequestListViewComponent implements OnInit {
              requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
+  currentStatus: string;
   currentFilters: RequestsListFilter;
 
   filterModalOpened = false;
 
-  pageSize = 10;
-
   public requests: RequestsList[];
   @Output() totalItems: number;
   @Output() datagridLoader: boolean;
-  @Output() requestStatus = RequestWorkflowSteps.IN_PROGRESS;
 
   filters: any;
   requestWorkflowSteps = RequestWorkflowSteps;
@@ -41,43 +37,58 @@ export class RequestListViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+    this.currentStatus = RequestWorkflowSteps.IN_PROGRESS;
     this.getRequestStatusCount('backoffice');
   }
 
-  getRequestList(requestStatus: RequestWorkflowSteps) {
-    this.requestStatus = requestStatus;
-    this.filters = {'requestListStatusesFilter': [this.requestStatus]};
-    this.getRequestListForBackoffice(0, this.pageSize, this.filters);
-    this.requestListFilterComponent.clearFilter();
+  /**
+   * Здесь происходит объединение фильтров из правой панели и фильтров по статусам
+   */
+  composeFilters(): void {
+    const statusTab = { 'requestListStatusesFilter': [this.currentStatus] };
+    this.filters = {...this.currentFilters, ...statusTab};
   }
 
-  getRequestStatusCount(role: string) {
-      this.getRequestService.requestStatusCount(role).subscribe(
-        (requestStatusCount: RequestStatusCount) => {
-          this.requestStatusCount = requestStatusCount;
-        }
-      );
+  /**
+   * Переключалка табов со статусами — записывает в переменную выбранный статус и сбрасывает фильтры справа
+   *
+   * @param requestStatus
+   */
+  switchTab(requestStatus: RequestWorkflowSteps): void {
+    this.currentStatus = requestStatus;
+    this.composeFilters();
+
+    if (this.requestListFilterComponent) {
+      this.requestListFilterComponent.clearFilter();
+      this.currentFilters = <RequestsListFilter>{};
+    }
   }
 
-  filter(filter: RequestsListFilter): void {
-    this.currentFilters = {...this.filters, ...filter};
+  /**
+   * Функция вызывается при обновлении значении фильтров в дочернем компоненте с фильтрами справа
+   *
+   * @param filter
+   */
+  onFilterUpdate(filter: RequestsListFilter): void {
+    this.currentFilters = filter;
+    this.composeFilters();
 
     let pageSize = null;
-
     if (this.currentDatagridState) {
       pageSize = this.currentDatagridState.pageSize;
     }
 
-    this.getRequestListForBackoffice(0, pageSize, this.currentFilters);
+    this.getRequestListForBackoffice(0, pageSize, this.filters);
   }
 
+  /**
+   * Функция вызывается при изменеии состояния датагрида — например, при пагинации
+   *
+   * @param state
+   */
   onDatagridStateChange(state: DatagridStateAndFilter): void {
     this.currentDatagridState = state;
-
-    if (this.currentFilters) {
-      state.filters = this.currentFilters;
-    }
+    this.composeFilters();
 
     this.getRequestListForBackoffice(state.startFrom, state.pageSize, this.filters);
   }
@@ -90,6 +101,22 @@ export class RequestListViewComponent implements OnInit {
       });
   }
 
+  /**
+   * Функция получает кол-во заявок по статусу («В обработке (23)»)
+   *
+   * @param role
+   */
+  getRequestStatusCount(role: string) {
+    this.getRequestService.requestStatusCount(role).subscribe(
+      (requestStatusCount: RequestStatusCount) => {
+        this.requestStatusCount = requestStatusCount;
+      }
+    );
+  }
+
+  /**
+   * Функция получает кол-во активных фильтров («Фильтр [2]»)
+   */
   getFilterCounter() {
     if (this.currentFilters) {
       const activeFilters = Object.keys(this.currentFilters).filter(

@@ -11,7 +11,14 @@
         display: block;
     }
 
+    .backdrop {
+        display: none;
+    }
+
     ::ng-deep .filter div.show-results {
+        display: none !important;
+    }
+    ::ng-deep .filter .close-btn {
         display: none !important;
     }
 }
@@ -42,9 +49,63 @@
         transition: margin 0.3s ease-out;
     }
 
+    .close-btn {
+        background-color: white;
+        background-image: url('/assets/images/cross.svg');
+        background-size: 12px;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-left: -80px;
+        margin-top: -10px;
+        box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.15);
+        float: left;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .close-btn:hover {
+        box-shadow: 0 3px 13px 1px rgba(0, 0, 0, 0.25);
+        transition: all 0.3s ease-out;
+    }
+
+    .close-btn:not(.opened) {
+        display: none;
+    }
+
+
     ::ng-deep .filter .show-results {
         display: block;
     }
+
+    .backdrop {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.15);
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        z-index: 950;
+        width: 100%;
+        max-width: 100%;
+        transition: margin 0.3s ease-out;
+    }
+
+    .backdrop:not(.opened) {
+        margin-right: -320px;
+        display: none;
+        transition: margin 0.3s ease-out;
+    }
+
+    .backdrop.opened {
+        margin-right: 0;
+        display: block;
+        transition: margin 0.3s ease-out;
+    }
+
 }
 
 .counter-bubble {
@@ -63,11 +124,11 @@
 }
 
 .light-grey {
-  opacity: 0.3;
+    opacity: 0.3;
 }
 
 .filter-button {
-  position: absolute;
-  margin-left: -30px;
-  margin-top: 0;
+    position: absolute;
+    margin-left: -30px;
+    margin-top: 0;
 }

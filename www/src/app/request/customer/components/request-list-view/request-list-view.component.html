@@ -10,10 +10,12 @@
     <div class="clr-col-12 clr-col-xxl-9">
       <clr-tabs>
         <clr-tab>
-          <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)"
+          <button clrTabLink id="link1"
+                  (click)="switchTab(requestWorkflowSteps.IN_PROGRESS)"
                   [disabled]="requestStatusCount?.inProgressRequestsCount === 0">
             В обработке <span class="light-grey">({{requestStatusCount?.inProgressRequestsCount}})</span>
           </button>
+
           <clr-tab-content id="content1" *clrIfActive="true">
             <app-request-list
               (datagridState)="onDatagridStateChange($event)"
@@ -24,11 +26,14 @@
             </app-request-list>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
-          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)"
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.NEW)"
                   [disabled]="requestStatusCount?.newRequestsCount === 0">
             Новые <span class="light-grey">({{requestStatusCount?.newRequestsCount}})</span>
           </button>
+
           <clr-tab-content *clrIfActive>
             <app-request-list
               (datagridState)="onDatagridStateChange($event)"
@@ -39,11 +44,14 @@
             </app-request-list>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
-          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.DRAFT)"
-          [disabled]="requestStatusCount?.draftRequestsCount === 0">
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.DRAFT)"
+                  [disabled]="requestStatusCount?.draftRequestsCount === 0">
             Черновики <span class="light-grey">({{requestStatusCount?.draftRequestsCount}})</span>
           </button>
+
           <clr-tab-content *clrIfActive>
             <app-request-list
               (datagridState)="onDatagridStateChange($event)"
@@ -54,11 +62,14 @@
             </app-request-list>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
-          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)"
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)"
                   [disabled]="requestStatusCount?.onCustomerApprovalRequestsCount === 0">
             На согласовании <span class="light-grey">({{requestStatusCount?.onCustomerApprovalRequestsCount}})</span>
           </button>
+
           <clr-tab-content *clrIfActive>
             <app-request-list
               (datagridState)="onDatagridStateChange($event)"
@@ -69,11 +80,14 @@
             </app-request-list>
           </clr-tab-content>
         </clr-tab>
+
         <clr-tab>
-          <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)"
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.COMPLETED)"
                   [disabled]="requestStatusCount?.completedRequestsCount === 0">
             Завершенные <span class="light-grey">({{requestStatusCount?.completedRequestsCount}})</span>
           </button>
+
           <clr-tab-content *clrIfActive>
             <app-request-list
               (datagridState)="onDatagridStateChange($event)"
@@ -87,11 +101,23 @@
       </clr-tabs>
     </div>
 
+    <div class="clr-col-12 backdrop"
+         (click)="filterModalOpened = false"
+         [ngClass]="{ 'opened' : filterModalOpened }">
+    </div>
+
+
     <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
+
+      <div class="close-btn"
+           [ngClass]="{ 'opened' : filterModalOpened }"
+           (click)="filterModalOpened = false">
+      </div>
+
       <app-request-list-filter
               [resultsCount]="totalItems"
               [backofficeView]="false"
-              (filter)="filter($event)"
+              (filter)="onFilterUpdate($event)"
               (showResults)="onShowResults()">
       </app-request-list-filter>
     </div>
