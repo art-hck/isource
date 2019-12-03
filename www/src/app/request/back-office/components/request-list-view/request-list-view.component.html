@@ -6,78 +6,101 @@
       Фильтр <div *ngIf="getFilterCounter() > 0" class="counter-bubble">{{ getFilterCounter() }}</div>
     </button>
   </div>
-<div class="clr-row request-list">
-  <div class="clr-col-12 clr-col-xxl-9">
-    <clr-tabs>
-      <clr-tab>
-        <button clrTabLink id="link1" (click)="getRequestList(requestWorkflowSteps.IN_PROGRESS)"
-                                      [disabled]="requestStatusCount?.inProgressRequestsCount === 0">
-          В обработке <span class="light-grey">({{requestStatusCount?.inProgressRequestsCount}})</span>
-        </button>
-        <clr-tab-content id="content1" *clrIfActive="true">
-          <app-request-list
-            (datagridState)="onDatagridStateChange($event)"
-            [requests]="requests"
-            [totalItems]="totalItems"
-            [customerNameColumnShow]="true"
-            [requestStatus]="requestWorkflowSteps.IN_PROGRESS">
-          </app-request-list>
-        </clr-tab-content>
-      </clr-tab>
-      <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.NEW)"
-                [disabled]="requestStatusCount?.newRequestsCount === 0">
-          Новые <span class="light-grey">({{requestStatusCount?.newRequestsCount}})</span>
-        </button>
-        <clr-tab-content *clrIfActive>
-          <app-request-list
-            (datagridState)="onDatagridStateChange($event)"
-            [requests]="requests"
-            [totalItems]="totalItems"
-            [customerNameColumnShow]="true"
-            [requestStatus]="requestWorkflowSteps.NEW">
-          </app-request-list>
-        </clr-tab-content>
-      </clr-tab>
-      <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)"
-                [disabled]="requestStatusCount?.onCustomerApprovalRequestsCount === 0">
-          На согласовании <span class="light-grey">({{requestStatusCount?.onCustomerApprovalRequestsCount}})</span>
-        </button>
-        <clr-tab-content *clrIfActive>
-          <app-request-list
-            (datagridState)="onDatagridStateChange($event)"
-            [requests]="requests"
-            [totalItems]="totalItems"
-            [customerNameColumnShow]="true"
-            [requestStatus]="requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
-          </app-request-list>
-        </clr-tab-content>
-      </clr-tab>
-      <clr-tab>
-        <button clrTabLink (click)="getRequestList(requestWorkflowSteps.COMPLETED)"
-                            [disabled]="requestStatusCount?.completedRequestsCount === 0">
-          Завершенные <span class="light-grey">({{requestStatusCount?.completedRequestsCount}})</span>
-        </button>
-        <clr-tab-content *clrIfActive>
-          <app-request-list
-            (datagridState)="onDatagridStateChange($event)"
-            [requests]="requests"
-            [totalItems]="totalItems"
-            [customerNameColumnShow]="true"
-            [requestStatus]="requestWorkflowSteps.COMPLETED">
-          </app-request-list>
-        </clr-tab-content>
-      </clr-tab>
-    </clr-tabs>
-  </div>
+  <div class="clr-row request-list">
+    <div class="clr-col-12 clr-col-xxl-9">
+      <clr-tabs>
+        <clr-tab>
+          <button clrTabLink id="link1"
+                  (click)="switchTab(requestWorkflowSteps.IN_PROGRESS)"
+                  [disabled]="requestStatusCount?.inProgressRequestsCount === 0">
+            В обработке <span class="light-grey">({{requestStatusCount?.inProgressRequestsCount}})</span>
+          </button>
 
-  <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
-    <app-request-list-filter
-            [resultsCount]="totalItems"
-            [backofficeView]="true"
-            (filter)="filter($event)"
-            (showResults)="onShowResults()">
-    </app-request-list-filter>
+          <clr-tab-content id="content1" *clrIfActive="true">
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="true"
+              [requestStatus]="requestWorkflowSteps.IN_PROGRESS">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.NEW)"
+                  [disabled]="requestStatusCount?.newRequestsCount === 0">
+            Новые <span class="light-grey">({{requestStatusCount?.newRequestsCount}})</span>
+          </button>
+
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="true"
+              [requestStatus]="requestWorkflowSteps.NEW">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.ON_CUSTOMER_APPROVAL)"
+                  [disabled]="requestStatusCount?.onCustomerApprovalRequestsCount === 0">
+            На согласовании <span class="light-grey">({{requestStatusCount?.onCustomerApprovalRequestsCount}})</span>
+          </button>
+
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="true"
+              [requestStatus]="requestWorkflowSteps.ON_CUSTOMER_APPROVAL">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink
+                  (click)="switchTab(requestWorkflowSteps.COMPLETED)"
+                  [disabled]="requestStatusCount?.completedRequestsCount === 0">
+            Завершенные <span class="light-grey">({{requestStatusCount?.completedRequestsCount}})</span>
+          </button>
+
+          <clr-tab-content *clrIfActive>
+            <app-request-list
+              (datagridState)="onDatagridStateChange($event)"
+              [requests]="requests"
+              [totalItems]="totalItems"
+              [customerNameColumnShow]="true"
+              [requestStatus]="requestWorkflowSteps.COMPLETED">
+            </app-request-list>
+          </clr-tab-content>
+        </clr-tab>
+      </clr-tabs>
+    </div>
+
+    <div class="clr-col-12 backdrop"
+         (click)="filterModalOpened = false"
+         [ngClass]="{ 'opened' : filterModalOpened }">
+    </div>
+
+    <div class="clr-col-3 filter" [ngClass]="{ 'opened' : filterModalOpened }">
+
+      <div class="close-btn"
+           [ngClass]="{ 'opened' : filterModalOpened }"
+           (click)="filterModalOpened = false">
+      </div>
+
+      <app-request-list-filter
+              [resultsCount]="totalItems"
+              [backofficeView]="true"
+              (filter)="onFilterUpdate($event)"
+              (showResults)="onShowResults()">
+      </app-request-list-filter>
+    </div>
   </div>
 </div>
