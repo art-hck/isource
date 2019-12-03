@@ -188,7 +188,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getRelatedServicesList(requestPosition: RequestPosition) {
+  getRelatedServicesList(requestPosition: RequestPosition): string {
     const relatedServices = [];
 
     if (requestPosition.isShmrRequired) {
