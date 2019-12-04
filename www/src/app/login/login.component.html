@@ -1,4 +1,88 @@
-<div class="login-wrapper">
+<div class="login-splash">
+
+
+  <div class="login-block-wrapper">
+
+    <div class="login-form-block">
+
+      <div class="welcome-text">
+        <span class="title">Marketplace</span>
+        <span class="welcome-msg">Добро пожаловать</span>
+      </div>
+
+      <div class="login-form">
+
+        <div class="form-text">
+          <span class="login-title">Вход в систему</span>
+          <span class="login-description">Используйте ваш логин и пароль, чтобы войти в систему (логином является адрес электронной почты).</span>
+        </div>
+
+        <form [formGroup]="authForm">
+          <input type="text"
+                 name="login"
+                 clrInput
+                 placeholder="Логин"
+                 formControlName="login"
+                 [class.invalid]="isFieldInvalid('login')" />
+
+          <input type="password"
+                 name="password"
+                 clrInput
+                 placeholder="Пароль"
+                 formControlName="password"
+                 [class.invalid]="isFieldInvalid('password')" />
+
+          <input type="button"
+                 name="password"
+                 clrInput
+                 placeholder="Пароль"
+                 formControlName="password"
+                 [class.invalid]="isFieldInvalid('password')" />
+        </form>
+      </div>
+
+      <div class="footer-text">
+        © Marketplace, 2020
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="login-wrapper" style="display: none">
   <form class="login">
     <section class="title">
       <h3 class="welcome">Добро пожаловать в</h3>
