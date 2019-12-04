@@ -1,14 +1,14 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { CustomValidators } from "../../shared/forms/custom.validators";
-import { UserRegistration } from "../models/user-registration";
-import { ContragentRegistration } from "../models/contragent-registration";
-import { RegistrationService } from "../services/registration.service";
+import { CustomValidators } from "../../../shared/forms/custom.validators";
+import { UserRegistration } from "../../models/user-registration";
+import { ContragentRegistration } from "../../models/contragent-registration";
+import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
 import { DadataConfig, DadataType, NgxDadataComponent } from '@kolkov/ngx-dadata';
 import Swal from "sweetalert2";
 import * as moment from "moment";
-import { GpnmarketConfigInterface } from "../../core/config/gpnmarket-config.interface";
+import { GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 
 @Component({

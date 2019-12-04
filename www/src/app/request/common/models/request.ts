@@ -1,5 +1,5 @@
 import {Uuid} from "../../../cart/models/uuid";
-import {UserRegistration} from "../../../registration/models/user-registration";
+import {UserRegistration} from "../../../auth/models/user-registration";
 import {RequestDocument} from "./request-document";
 import { BaseModel } from "../../../core/models/base-model";
 import { DashboardInfo } from "./dashboard-info";

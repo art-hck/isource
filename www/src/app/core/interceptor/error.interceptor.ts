@@ -79,10 +79,6 @@ export class ErrorInterceptor implements HttpInterceptor {
       // добавляем к редиректу ссылку на страницу, с которой перешли
       this.router.navigate(['/login'], {
         queryParams: queryParams
-      }).then(() => {
-        // перезагружаем страницу, чтобы обновились доступные ресурсы
-        // tslint:disable-next-line
-        location.reload(true);
       });
     }
 

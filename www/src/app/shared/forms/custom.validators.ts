@@ -86,7 +86,7 @@ export class CustomValidators {
   static email(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
-    return valid ? null : {field: true};
+    return valid ? null : {invalid_email: true};
   }
 
   static phone(control: FormControl): any {

@@ -8,9 +8,9 @@ export class RegistrationService {
 
   constructor(
     protected api: HttpClient
-  ) {
-  }
-registration(userRegistration: UserRegistration, contragentRegistration: ContragentRegistration) {
+  ) {}
+
+  registration(userRegistration: UserRegistration, contragentRegistration: ContragentRegistration) {
     return this.api.post(
       `registration`,
       {
