@@ -1,8 +1,8 @@
 @import "constants";
 
 .app-tabs {
-  border-bottom: 1px $secondary-color solid;
   display: flex;
+  position: relative;
 
   &-item {
     color: $secondary-font-color;
@@ -14,22 +14,27 @@
     &:not(:last-child) {
       margin-right: 20px;
     }
+  }
 
-    &-active {
-      color: $primary-font-color;
+  &-border {
+    border-bottom: 1px $secondary-color solid;
+  }
 
-      &:after {
-        background: $primary-color;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        bottom: 0;
-        content: "";
-        display: block;
-        height: 2px;
-        left: 0;
-        position: absolute;
-        width: 100%;
-      }
+  &-indicator {
+    background: $primary-color;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 0;
+    position: absolute;
+
+    &-left {
+      transition: left .125s cubic-bezier(0.35, 0, 0.25, 1), right .25s cubic-bezier(0.35, 0, 0.25, 1);
+    }
+
+    &-right {
+      transition: left .25s cubic-bezier(0.35, 0, 0.25, 1), right .125s cubic-bezier(0.35, 0, 0.25, 1);
     }
   }
 }

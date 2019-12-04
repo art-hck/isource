@@ -23,3 +23,13 @@ body, h4, input {
 small {
   font-size: $font-size-s;
 }
+
+a.link,
+a[routerlink]:link,
+a[ng-reflect-router-link]:link {
+  color: $link-font-color;
+
+  &:hover {
+    color: $link-hover-font-color;
+  }
+}

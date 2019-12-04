@@ -1,0 +1,6 @@
+<ng-content></ng-content>
+<div class="app-tabs-indicator"
+     [class.app-tabs-indicator-left]="isTabPrevous"
+     [class.app-tabs-indicator-right]="!isTabPrevous"
+     [style.left.px]="activeTab.left"
+     [style.right.px]="activeTab.right"></div>

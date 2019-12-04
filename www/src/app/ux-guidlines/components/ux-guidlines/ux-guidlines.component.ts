@@ -6,10 +6,5 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['ux-guidlines.component.scss']
 })
 
-export class UxGuidlinesComponent implements OnInit {
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
+export class UxGuidlinesComponent {
 }
