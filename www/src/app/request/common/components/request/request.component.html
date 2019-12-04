@@ -79,10 +79,7 @@
                 <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
               </div>
               <div class="app-col item-status">
-                <div class="app-position-status">
-                  <div class="app-position-status-icon" [ngClass]="position.status"></div>
-                  <span>{{ position.statusLabel }}</span>
-                </div>
+                <uxg-position-status [label]="position.statusLabel" [status]="position.status"></uxg-position-status>
               </div>
             </a>
           </ng-container>
@@ -121,10 +118,8 @@
                         </ng-template>
                       </div>
                       <div class="app-col item-status">
-                        <div class="app-position-status">
-                          <div class="app-position-status-icon" [ngClass]="groupPositions.status"></div>
-                          <span>{{ groupPositions.statusLabel }}</span>
-                        </div>
+                        <uxg-position-status [label]="groupPositions.statusLabel" [status]="groupPositions.status">
+                        </uxg-position-status>
                       </div>
                     </ng-container>
                   </div>

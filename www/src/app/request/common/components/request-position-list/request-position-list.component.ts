@@ -127,7 +127,7 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
   addNewPosition(): void {
     const requestPosition = new RequestPosition({
       id: null,
-      name: this.newPositionName,
+      name: null,
       requestId: this.request.id,
       entityType: 'POSITION',
     });
