@@ -8,8 +8,9 @@
 .login-splash {
   background: linear-gradient(to top, #1A71D8, #2585F5);
   position: absolute;
+  display: inline-table;
   width: 100%;
-  bottom: 0;
+  height: 100%;
   left: 0;
   top: 0;
   right: 0;
@@ -38,7 +39,7 @@
 
   & .title {
     font-size: 48px;
-    line-height: 60px;
+    line-height: 55px;
   }
 
   & .welcome-msg {
@@ -51,7 +52,17 @@
     background: #FFFFFF;
     box-shadow: 0 0 20px rgba(26, 84, 153, 0.5);
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 17px;
+
+    & a {
+      text-decoration: none;
+      color: #2585F5;
+
+      &:hover {
+        color: #0960c3;
+      }
+
+    }
 
     & .form-text {
 
@@ -60,7 +71,7 @@
         color: #000000;
         font-weight: bold;
         font-size: 22px;
-        line-height: 28px;
+        line-height: 25px;
         padding-bottom: 15px;
       }
 
@@ -70,7 +81,33 @@
         font-weight: normal;
         font-size: 14px;
         line-height: 18px;
+        margin-bottom: 32px;
       }
+    }
+
+    & .login-input,
+    & .password-input {
+      & .error-msg-container {
+        display: block;
+        height: 20px;
+        padding-top: 5px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 11px;
+        line-height: 100%;
+        color: #EB5757;
+      }
+    }
+
+    & input[name=login],
+    & input[name=password] {
+      height: 40px;
+      width: 100%;
+    }
+
+    & button {
+      width: 100%;
+      margin: 0 0 12px 0;
     }
 
   }
@@ -79,6 +116,11 @@
     font-size: 14px;
     line-height: 18px;
     color: rgba(255, 255, 255, 0.3);
+    padding: 0 15px;
   }
+}
+
+::ng-deep .login-form button.btn span {
+  padding: 0;
 }
 
