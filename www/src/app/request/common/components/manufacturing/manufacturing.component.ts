@@ -54,7 +54,7 @@ export class ManufacturingComponent implements OnInit, OnChanges {
   }
 
   getDeliveryMonitorInfo(): void {
-    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.goodId);
+    this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
   }
 
   onDocumentSelected(uploadedFiles: File[]) {
