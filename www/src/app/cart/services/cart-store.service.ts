@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Response } from '../../core/models/response.model';
-import { OrderFormInfo } from '../models/order-form-info';
-import { dateToString } from '../../core/utils/date-to-string';
 import { CartItem } from "../models/cart-item";
 import { CatalogPosition } from "../../catalog/models/catalog-position";
 
@@ -13,11 +11,7 @@ export class CartStoreService {
 
   public cartItems: CartItem[] = [];
 
-  constructor(
-    protected api: HttpClient
-  ) {
-    this.load();
-  }
+  constructor(private api: HttpClient) {}
 
   protected static createItems(rawData: any): CartItem[] {
     const res = [];

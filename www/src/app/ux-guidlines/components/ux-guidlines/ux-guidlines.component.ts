@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestPositionWorkflowSteps } from "../../../request/common/enum/request-position-workflow-steps";
 
 @Component({
   selector: 'uxg-guidlines',
@@ -7,4 +8,5 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class UxGuidlinesComponent {
+  positionStatus = RequestPositionWorkflowSteps;
 }

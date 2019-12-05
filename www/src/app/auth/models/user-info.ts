@@ -1,5 +1,5 @@
 import {Uuid} from "../../cart/models/uuid";
-import { Contragent } from "./contragent";
+import { Contragent } from "../../core/models/contragent";
 
 export class UserInfo {
   id: Uuid;
