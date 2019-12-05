@@ -66,6 +66,10 @@ select option:disabled {
   color: #ccc;
 }
 
+b.required-star {
+  color: $color_red;
+}
+
 .text-muted {
   color: #6c757d !important;
 }
