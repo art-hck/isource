@@ -30,7 +30,7 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxGuidlinesComponent,
     UxgCheckboxComponent,
     UxgSwitcherComponent,
-    UxgPositionStatusComponent
+    UxgPositionStatusComponent,
     UxgTabDirective,
     UxgTabTitleComponent,
     UxgTabsComponent
@@ -38,7 +38,7 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
   exports: [
     UxgCheckboxComponent,
     UxgSwitcherComponent,
-    UxgPositionStatusComponent
+    UxgPositionStatusComponent,
     UxgTabDirective,
     UxgTabTitleComponent,
     UxgTabsComponent
