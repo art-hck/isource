@@ -40,6 +40,10 @@
       cursor: default;
       opacity: .5;
     }
+
+    &-active {
+      color: $primary-font-color;
+    }
   }
 
   &-border {
@@ -65,13 +69,13 @@
   }
 
   &-slide {
-    position: absolute;
-    top: 0;
-    cursor: pointer;
     background: #fff;
+    cursor: pointer;
+    display: none;
     height: 100%;
     padding: 0 10px;
-    display: none;
+    position: absolute;
+    top: 0;
 
     &-left { left: 0; }
     &-right { right: 0; }

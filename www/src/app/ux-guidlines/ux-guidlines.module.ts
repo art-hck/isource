@@ -12,6 +12,8 @@ import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
 import { UxgPositionStatusComponent } from './components/uxg-position-status/uxg-position-status.component';
 import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.component';
 import { UxGuidlinesComponent } from "./components/ux-guidlines/ux-guidlines.component";
+import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
+import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
 
 AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -27,21 +29,25 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     ClarityModule
   ],
   declarations: [
-    UxGuidlinesComponent,
     UxgCheckboxComponent,
-    UxgSwitcherComponent,
+    UxgDropdownComponent,
+    UxgDropdownItemDirective,
     UxgPositionStatusComponent,
+    UxgSwitcherComponent,
     UxgTabDirective,
+    UxgTabsComponent,
     UxgTabTitleComponent,
-    UxgTabsComponent
+    UxGuidlinesComponent
   ],
   exports: [
     UxgCheckboxComponent,
-    UxgSwitcherComponent,
+    UxgDropdownComponent,
+    UxgDropdownItemDirective,
     UxgPositionStatusComponent,
+    UxgSwitcherComponent,
     UxgTabDirective,
-    UxgTabTitleComponent,
-    UxgTabsComponent
+    UxgTabsComponent,
+    UxgTabTitleComponent
   ],
 })
 export class UxGuidlinesModule {

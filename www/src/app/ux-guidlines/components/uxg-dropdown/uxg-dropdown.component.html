@@ -1,0 +1,15 @@
+<div class="app-dropdown-handler" (click)="isHidden = !isHidden">
+  <div class="app-dropdown-handler-title">{{ label || placeholder }}</div>
+  <div class="app-dropdown-handler-icon">
+    <clr-icon shape="app-triangle" [dir]="isHidden ? 'down':'up'"></clr-icon>
+  </div>
+</div>
+<div class="app-dropdown-items-wrapper" #dropdownItems
+     [class.hidden]="isHidden"
+     [style.width.px]="width"
+     [style.left.px]="coords.left"
+     [style.top.px]="coords.top">
+  <div class="app-dropdown-items">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input }
 export class UxgTabTitleComponent {
 
   @HostBinding('class.app-tabs-item') appTabsItem = true;
+  @HostBinding('class.app-tabs-item-active')
   @Input() active = false;
   public onToggle = new EventEmitter<boolean>();
 

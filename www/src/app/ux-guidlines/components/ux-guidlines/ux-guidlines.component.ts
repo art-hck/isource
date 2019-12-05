@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RequestPositionWorkflowSteps } from "../../../request/common/enum/request-position-workflow-steps";
 
 @Component({

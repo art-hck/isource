@@ -38,9 +38,9 @@
     <div class="app-col app-col-aside">
       <div class="app-row">
         <div class="app-col">
-          <select>
-            <option>{{ position.status }}</option>
-          </select>
+          <uxg-dropdown [placeholder]="position.statusLabel" (select)="changeStatus($event, position)" >
+            <div uxgDropdownItem *ngFor="let status of statuses" [value]="status">{{ status[1] }}</div>
+          </uxg-dropdown>
         </div>
       </div>
     </div>

@@ -1,0 +1,91 @@
+@import "constants";
+
+.app-dropdown {
+  display: block;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+
+
+  &-handler, &-items-item {
+    cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    padding: 0 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-handler {
+    align-items: center;
+    background: $secondary-control-color;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0;
+
+    &-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-icon {
+      border-left: 1px $divider-color solid;
+      display: flex;
+      height: 24px;
+      padding: 0 14px;
+    }
+  }
+
+  &-items {
+    max-height: 300px;
+    overflow: auto;
+
+    &-wrapper {
+      background: $secondary-control-color;
+      border-radius: 4px;
+      left: 0;
+      overflow: hidden;
+      padding-top: 40px;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    /* total width */
+    &::-webkit-scrollbar {
+      background-color: $secondary-control-color;
+      width: 16px;
+    }
+
+    /* background of the scrollbar except button or resizer */
+    &::-webkit-scrollbar-track {
+      background-color: $secondary-control-color
+    }
+
+    /* scrollbar itself */
+    &::-webkit-scrollbar-thumb {
+      background-color: $secondary-hover-border-control-color;
+      border: 5px solid $secondary-control-color;
+      border-radius: 16px;
+      transition: border 500ms;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      border-width:4px;
+    }
+
+    /* set button(top and bottom of the scrollbar) */
+    &::-webkit-scrollbar-button { display:none }
+
+    &-item[disabled]:not([disabled=false]) {
+      cursor: default;
+      opacity: .5;
+    }
+  }
+}

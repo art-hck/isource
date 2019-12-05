@@ -1,4 +1,15 @@
 <div class="card">
+  <div class="card-header">Select</div>
+  <div class="card-block">
+    <uxg-dropdown class="app-dropdown" placeholder="Drop me down...">
+      <div uxgDropdownItem>Option 1</div>
+      <div uxgDropdownItem value="string">Option with string value</div>
+      <div uxgDropdownItem [value]="12">Option int value</div>
+      <div uxgDropdownItem disabled>Disabled option</div>
+    </uxg-dropdown>
+  </div>
+</div>
+<div class="card">
   <div class="card-header">Custom icons</div>
   <div class="card-block">
 
