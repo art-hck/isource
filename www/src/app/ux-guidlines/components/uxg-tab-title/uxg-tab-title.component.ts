@@ -2,29 +2,42 @@ import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input }
 
 @Component({
   selector: 'uxg-tab-title',
-  templateUrl: './uxg-tab-title.component.html'
+  templateUrl: './uxg-tab-title.component.html',
 })
 export class UxgTabTitleComponent {
 
-  @HostBinding('class') appTabsItem = 'app-tabs-item';
+  @HostBinding('class.app-tabs-item') appTabsItem = true;
   @Input() active = false;
+  public onToggle = new EventEmitter<boolean>();
 
   get right(): number {
-    return this.el.nativeElement.parentElement.offsetWidth - this.el.nativeElement.offsetWidth - this.left;
+    const el = this.el.nativeElement;
+    return el.parentElement.offsetWidth - el.offsetWidth - this.left;
   }
 
   get left(): number {
     return this.el.nativeElement.offsetLeft;
   }
 
+  get disabled() {
+    const attr = this.el.nativeElement.getAttribute("disabled");
+    return attr !== null && attr !== "false";
+  }
+
   constructor(private el: ElementRef) {}
 
-  public onClick = new EventEmitter();
-
-  @HostListener("click") click() {
-    if (!this.active) {
-      this.onClick.emit();
+  @HostListener("click")
+  activate() {
+    if (!this.active && !this.disabled) {
+      this.onToggle.emit(true);
       this.active = true;
+    }
+  }
+
+  deactivate() {
+    if (this.active && !this.disabled) {
+      this.onToggle.emit(false);
+      this.active = false;
     }
   }
 }

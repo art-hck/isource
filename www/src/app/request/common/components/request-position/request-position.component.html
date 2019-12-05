@@ -1,0 +1,137 @@
+<ng-container *ngIf="(position$ | async) as position">
+  <h1>{{ position.name }}</h1>
+  <div class="app-row">
+
+    <!-- Горизонтальная инфа о позиции -->
+    <div class="app-col app-table app-no-border actions">
+      <div class="app-row">
+
+        <div class="app-col">
+          <span class="app-ghost-color">Последнее изменение: </span>
+          <span>{{ position.createdDate | date : "dd.MM.yyyy hh:mm" }}</span>
+        </div>
+
+        <div class="app-col separator"></div>
+
+        <div class="app-col">
+          <span class="app-ghost-color">Группа: </span>
+          <a routerLink="/">Насосное оборудование 1</a>
+        </div>
+
+        <div class="app-col separator"></div>
+
+        <div class="app-col">
+          <span class="app-ghost-color">Сообщений: </span>
+          <span>5</span>
+          &nbsp;
+          <a routerLink="/messages">
+            <span class="app-secondary-color">
+              <clr-icon shape="app-comment"></clr-icon>
+              <span>Перейти к чату по позиции</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Статус -->
+    <div class="app-col app-col-aside">
+      <div class="app-row">
+        <div class="app-col">
+          <select>
+            <option>{{ position.status }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="app-row">
+
+    <!-- Табы -->
+    <div class="app-col app-table app-no-border actions">
+      <uxg-tabs class="app-tabs-border">
+        <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
+        <uxg-tab-title #docTab>Документы</uxg-tab-title>
+        <uxg-tab-title #technicalTab disabled>Технические предложения</uxg-tab-title>
+        <uxg-tab-title #offersTab>Коммерческие предложения</uxg-tab-title>
+        <uxg-tab-title #productionTab disabled>Изготовление</uxg-tab-title>
+        <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
+      </uxg-tabs>
+
+      <ng-container *uxgTab="historyTab">
+        <app-position-info-history  [requestPosition]="position"></app-position-info-history>
+      </ng-container>
+      <ng-container *uxgTab="docTab">
+        <app-document-simple-list [uploadLabel]="''" [documents]="position.documents"></app-document-simple-list>
+      </ng-container>
+      <ng-container *uxgTab="offersTab">
+        <app-offers [requestPosition]="position" [requestId]="requestId" [isCustomerView]="false"></app-offers>
+      </ng-container>
+      <ng-container *uxgTab="deliveryTab">
+        <app-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-delivery-monitor>
+      </ng-container>
+      <button class="app-btn app-btn-primary" (click)="nextStatus(position)">nextStatus</button>
+    </div>
+
+    <!-- Сайдбар с информацией -->
+    <div class="app-col app-col-aside">
+      <div class="app-row">
+        <div class="app-col">
+          <h3>Общая информация о позиции</h3>
+
+          <div class="app-ghost-color">Наименование МТР</div>
+          <div class="app-bold">{{ position.name }}</div>
+          <br/>
+
+          <div class="app-ghost-color">Количество</div>
+          <div class="app-bold">{{ position.quantity }} {{ position.measureUnit | lowercase }}</div>
+          <br/>
+
+          <div class="app-ghost-color">Необходимый срок поставки</div>
+          <div class="app-bold">{{ position.deliveryDate | date : "dd.MM.yyyy" }}</div>
+          <br/>
+
+          <div class="app-ghost-color">Базис поставки</div>
+          <div class="app-bold">{{ position.deliveryBasis }}</div>
+          <br/>
+
+          <div class="app-ghost-color">Условия оплаты</div>
+          <div class="app-bold">{{ position.paymentTerms }}</div>
+          <br/>
+
+          <div class="app-ghost-color">Начальная максимальная цена</div>
+          <div class="app-bold">{{ position.startPrice | currency: position.currency }}</div>
+          <br/>
+
+          <!-- @TODO: not implemented -->
+          <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
+          <div class="app-bold">ГОСТ 10667-90</div>
+          <br/>
+
+          <ng-container *ngIf="position.isDesignRequired">
+            <div class="app-ghost-color">Необходимость РКД</div>
+            <div class="app-bold">Да, необходимо</div>
+            <br/>
+          </ng-container>
+
+          <!-- @TODO: not implemented -->
+          <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
+          <div class="app-bold">Необходимы ПНР и ШМР</div>
+          <br/>
+
+          <ng-container *ngIf="position.comments">
+            <div class="app-ghost-color">Комментарии</div>
+            <div class="app-bold">{{ position.comments }}</div>
+          </ng-container>
+
+          <button class="app-btn">
+            <clr-icon shape="app-pen"></clr-icon>
+            <span>Редактировать</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

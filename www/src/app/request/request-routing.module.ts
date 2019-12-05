@@ -12,6 +12,7 @@ import { CommercialProposalsComponent } from "./customer/components/commercial-p
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "./common/components/contract/contract.component";
 import { RequestComponent } from "./common/components/request/request.component";
+import { RequestPositionComponent } from "./common/components/request-position/request-position.component";
 
 const routes: Routes = [
   {
@@ -27,8 +28,18 @@ const routes: Routes = [
         children: [
           {
             path: 'new',
-            component: RequestComponent,
-            data: { title: "Заявка" }
+            children: [
+              {
+                path: "",
+                component: RequestComponent,
+                data: { title: "Заявка" }
+              },
+              {
+                path: ':position-id',
+                component: RequestPositionComponent,
+                data: { title: "Позиция" }
+              }
+            ]
           },
           {
             path: '',
@@ -76,8 +87,18 @@ const routes: Routes = [
         children: [
           {
             path: 'new',
-            component: RequestComponent,
-            data: { title: "Заявка" }
+            children: [
+              {
+                path: "",
+                component: RequestComponent,
+                data: { title: "Заявка" },
+              },
+              {
+                path: ':position-id',
+                component: RequestPositionComponent,
+                data: { title: "Позиция" }
+              }
+            ]
           },
           {
             path: '',

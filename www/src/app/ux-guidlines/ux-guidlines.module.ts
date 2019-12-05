@@ -7,8 +7,7 @@ import { RouterModule } from "@angular/router";
 import { UxGuidlinesComponent } from "./components/ux-guidlines/ux-guidlines.component";
 import { UxgCheckboxComponent } from "./components/uxg-checkbox/uxg-checkbox.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { UxgTabComponent } from './components/uxg-tab/uxg-tab.component';
-import { UxgTabActiveDirective } from './directives/uxg-tab-active.directive';
+import { UxgTabDirective } from './directives/uxg-tab.directive';
 import { UxgTabTitleComponent } from './components/uxg-tab-title/uxg-tab-title.component';
 import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
 
@@ -28,13 +27,15 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
   declarations: [
     UxGuidlinesComponent,
     UxgCheckboxComponent,
-    UxgTabComponent,
-    UxgTabActiveDirective,
+    UxgTabDirective,
     UxgTabTitleComponent,
     UxgTabsComponent
   ],
   exports: [
-    UxgCheckboxComponent
+    UxgCheckboxComponent,
+    UxgTabsComponent,
+    UxgTabTitleComponent,
+    UxgTabDirective
   ],
 })
 export class UxGuidlinesModule {
