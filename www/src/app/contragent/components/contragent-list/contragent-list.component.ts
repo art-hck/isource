@@ -10,8 +10,6 @@ import { Router } from "@angular/router";
 })
 export class ContragentListComponent implements OnInit {
 
-  @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
-
   @Input() searchValue: string;
   @Input() contragents: ContragentList[];
 
@@ -20,13 +18,6 @@ export class ContragentListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
-
-  getCustomerSearchInputValue(): string {
-    if (this.searchValue && this.customerSearchInput) {
-      return this.customerSearchInput.nativeElement.value;
-    }
-    return this.searchValue;
   }
 
 }

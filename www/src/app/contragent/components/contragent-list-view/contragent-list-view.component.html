@@ -6,12 +6,11 @@
     </div>
 
     <div class="clr-col-auto">
-      <input #customerSearchInput
-            class="contragent-search-field"
-            type="text"
-            placeholder="Введите наименование контрагента или ИНН.."
-            [value]="customerSearchValue"
-            (input)="onCustomerSearchInputChange($event.target.value)"/>
+      <input class="contragent-search-field"
+             type="text"
+             placeholder="Введите наименование контрагента или ИНН.."
+             [value]="customerSearchValue"
+             (input)="onCustomerSearchInputChange($event.target.value)"/>
     </div>
   </div>
 

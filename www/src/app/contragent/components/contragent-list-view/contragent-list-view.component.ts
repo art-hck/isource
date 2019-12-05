@@ -10,8 +10,6 @@ import { Observable } from "rxjs";
 })
 export class ContragentListViewComponent implements OnInit {
 
-  @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
-
   customerSearchValue = "";
   contragents$: Observable<ContragentList[]>;
 
