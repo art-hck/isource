@@ -65,6 +65,7 @@ import { RequestAddGroupModalComponent } from "./common/components/request/reque
 import { RequestComponent } from "./common/components/request/request.component";
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
+import { RequestPositionComponent } from './common/components/request-position/request-position.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +117,8 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
     RequestFilterCustomerListComponent,
     RequestComponent,
     RequestAsideInfoComponent,
-    RequestAddGroupModalComponent
+    RequestAddGroupModalComponent,
+    RequestPositionComponent
   ],
   imports: [
     SharedModule,

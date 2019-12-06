@@ -1,0 +1,28 @@
+.actions {
+  .app-row:first-child,
+  .app-col:first-child {
+    padding-left: 0;
+  }
+
+  .app-col {
+    flex-grow: 0;
+    flex-basis: auto;
+
+    &.separator {
+      border-left: 1px #D5DDE2 solid;
+      flex-grow: 0;
+      padding: 0;
+      height: 16px;
+      align-self: center;
+    }
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+
+  .app-position-status-icon {
+    margin-right: 7px;
+  }
+}

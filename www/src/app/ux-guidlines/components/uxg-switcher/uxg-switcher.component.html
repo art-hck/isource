@@ -1,6 +1,6 @@
 <div class="app-control app-control-switcher">
   <label *ngIf="label && labelAlign =='left'" (click)="switch($event, checkbox);">{{ label }}</label>
-  <input type="checkbox" #checkbox [disabled]="isDisabled" [ngModel]="value" (input)="onChange($event.target.checked)"/>
+  <input type="checkbox" #checkbox [disabled]="isDisabled" [ngModel]="value" (input)="onChange && onChange($event.target.checked)"/>
   <div class="app-control-checkbox"  (click)="switch($event, checkbox);"></div>
   <label *ngIf="label && labelAlign =='right'" (click)="switch($event, checkbox);">{{ label }}</label>
 </div>
