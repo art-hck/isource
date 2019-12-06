@@ -66,6 +66,7 @@ import { RequestAddGroupModalComponent } from "./common/components/request/reque
 import { RequestComponent } from "./common/components/request/request.component";
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
+import { PieChartComponent } from './common/components/request/pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
     RequestFilterCustomerListComponent,
     RequestComponent,
     RequestAsideInfoComponent,
-    RequestAddGroupModalComponent
+    RequestAddGroupModalComponent,
+    PieChartComponent
   ],
   imports: [
     SharedModule,
