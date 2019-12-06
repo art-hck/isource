@@ -13,8 +13,8 @@ export class DeliveryMonitorService {
   ) {
   }
 
-  getDeliveryMonitorInfo(goodId, positionId?: Uuid): Observable<DeliveryMonitorInfo> {
-    return this.api.post<DeliveryMonitorInfo>(`monitor/goods/${goodId}`, {positionId});
+  getDeliveryMonitorInfo(positionId: Uuid): Observable<DeliveryMonitorInfo> {
+    return this.api.post<DeliveryMonitorInfo>(`monitor/goods/${positionId}`, null);
   }
 
   addInspectorStage(stage: InspectorStage): Observable<InspectorStage[]> {
