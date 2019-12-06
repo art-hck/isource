@@ -35,14 +35,11 @@
     </div>
 
     <!-- Статус -->
-    <div class="app-col app-col-aside">
-      <div class="app-row">
-        <div class="app-col">
-          <uxg-dropdown [placeholder]="position.statusLabel" (select)="changeStatus($event, position)" >
-            <div uxgDropdownItem *ngFor="let status of statuses" [value]="status">{{ status[1] }}</div>
-          </uxg-dropdown>
-        </div>
-      </div>
+    <div class="app-col app-col-aside status">
+      <div class="app-position-status-icon" [ngClass]="position.status"></div>
+      <uxg-dropdown class="clr-flex-grow-1" [placeholder]="position.statusLabel" (select)="changeStatus($event, position)" >
+        <div uxgDropdownItem *ngFor="let status of statuses" [value]="status">{{ status[1] }}</div>
+      </uxg-dropdown>
     </div>
   </div>
 
@@ -72,7 +69,6 @@
       <ng-container *uxgTab="deliveryTab">
         <app-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-delivery-monitor>
       </ng-container>
-      <button class="app-btn app-btn-primary" (click)="nextStatus(position)">nextStatus</button>
     </div>
 
     <!-- Сайдбар с информацией -->
@@ -126,10 +122,19 @@
             <div class="app-bold">{{ position.comments }}</div>
           </ng-container>
 
-          <button class="app-btn">
+          <button class="app-btn app-btn-secondary" (click)="edit.open()">
             <clr-icon shape="app-pen"></clr-icon>
             <span>Редактировать</span>
           </button>
+
+          <clr-modal #edit [clrModalStaticBackdrop]="false">
+            <h3 class="modal-title">{{ position.name }}</h3>
+            <div class="modal-body">Not implemented yet</div>
+            <div class="modal-footer">
+              <button class="app-btn app-btn-secondary app-btn-large" (click)="edit.close()">Отмена</button>
+              <button class="app-btn app-btn-primary app-btn-large" (click)="edit.close()">Сохранить</button>
+            </div>
+          </clr-modal>
         </div>
       </div>
     </div>

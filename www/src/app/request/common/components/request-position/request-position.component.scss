@@ -17,3 +17,12 @@
     }
   }
 }
+
+.status {
+  display: flex;
+  align-items: center;
+
+  .app-position-status-icon {
+    margin-right: 7px;
+  }
+}
