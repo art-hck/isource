@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'customerSearchFilter'})
+@Pipe({name: 'contragentSearchFilter'})
 
-export class CustomerSearchFilterPipe implements PipeTransform {
+export class ContragentSearchFilterPipe implements PipeTransform {
   transform(value: any, input: string) {
     if (input) {
       input = input.toLowerCase().trim();

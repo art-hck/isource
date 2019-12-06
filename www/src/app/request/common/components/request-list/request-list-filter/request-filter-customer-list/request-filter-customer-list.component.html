@@ -14,7 +14,7 @@
 
 
 <div class="customers-list">
-  <ng-container *ngFor="let customer of getCustomers() | customerSearchFilter: getCustomerSearchInputValue();">
+  <ng-container *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue();">
     <clr-checkbox-wrapper>
       <input type="checkbox"
              clrCheckbox
@@ -30,7 +30,7 @@
     customers &&
     limit > 0 &&
     limit < customers.length && !showAll ||
-    (showAll && limit < ( getCustomers() | customerSearchFilter: getCustomerSearchInputValue() ).length)">
+    (showAll && limit < ( getCustomers() | contragentSearchFilter: getCustomerSearchInputValue() ).length)">
 
   <div class="show-all" (click)="showAll = !showAll">
     <a>{{ showAll ? 'Свернуть' : 'Показать всех' }}</a>

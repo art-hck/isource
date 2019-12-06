@@ -38,7 +38,6 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
 import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { PositionSearchFilterPipe } from "../shared/pipes/position-list-filter-pipe";
-import { CustomerSearchFilterPipe } from "../shared/pipes/customer-list-filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
@@ -99,7 +98,6 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
     RequestDashboardComponent,
     SearchFilterPipe,
     PositionSearchFilterPipe,
-    CustomerSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
     SupplierSelectComponent,
