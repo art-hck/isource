@@ -165,7 +165,7 @@ export class RegistrationComponent implements OnInit {
 
             const submit = $('#submit');
             submit.addEventListener('click', () => {
-              this.router.navigateByUrl(`login`);
+              this.router.navigateByUrl(`auth/login`);
               Swal.close();
             });
           }

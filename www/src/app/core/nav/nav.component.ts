@@ -21,7 +21,10 @@ export class NavComponent {
   }
 
   get isMenuHidden(): boolean {
-    return this.router.isActive('login', false) || this.router.isActive('registration', false);
+    return this.router.isActive('auth/login', false) ||
+      this.router.isActive('auth/registration', false) ||
+      this.router.isActive('auth/forgot-password', false) ||
+      this.router.isActive('auth/change-password', false);
   }
 
   constructor(
@@ -38,7 +41,7 @@ export class NavComponent {
   }
 
   logout(): void {
-    this.router.navigate(["/login"]);
+    this.router.navigate(["auth/login"]);
     const subscription = this.auth.logout().subscribe(() => subscription.unsubscribe());
   }
 }

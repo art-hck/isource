@@ -1,0 +1,49 @@
+<div class="login-form">
+
+  <div class="form-text">
+    <span class="title">Вход в систему</span>
+    <span class="description">
+      Используйте ваш логин и пароль, чтобы войти в систему (логином является адрес электронной почты).
+    </span>
+  </div>
+
+  <form [formGroup]="authForm" (ngSubmit)="submit()">
+
+    <div class="login-input">
+      <input type="text"
+             class="email"
+             placeholder="Эл. почта"
+             formControlName="email"
+             appFormControlInvalidClass="invalid">
+      <span class="error-msg-container">{{ getErrorMsg('email') }}</span>
+    </div>
+
+    <div class="password-input">
+      <input type="password"
+             class="password"
+             placeholder="Пароль"
+             formControlName="password"
+             appFormControlInvalidClass="invalid">
+      <span class="error-msg-container">{{ getErrorMsg('password') }}</span>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary"
+            [disabled]="authForm.invalid"
+            [clrLoading]="loading">
+      Войти
+    </button>
+
+  </form>
+
+  <div class="clr-row clr-justify-content-between">
+    <div class="clr-col-auto">
+      <a (click)="router.navigateByUrl('auth/forgot-password')">Забыли пароль?</a>
+    </div>
+
+    <div class="clr-col-auto">
+      <a (click)="router.navigateByUrl('registration')">Регистрация</a>
+    </div>
+  </div>
+
+</div>

@@ -76,7 +76,7 @@ input[type=url] {
     background-image: none;
     background-color: white;
     box-shadow: none;
-    border: 1px solid $color_blue !important;
+    border: 1px solid $color_blue;
   }
 }
 
@@ -84,7 +84,7 @@ textarea:focus { // todo дублируются свойства выше, пр�
   outline: 0;
   background: 0;
   box-shadow: none;
-  border: 1px solid $color_blue !important;
+  border: 1px solid $color_blue;
 }
 
 

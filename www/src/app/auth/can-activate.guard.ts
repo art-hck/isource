@@ -16,7 +16,7 @@ export class CanActivateGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (!this.authService.isAuth()) {
-      this.router.navigateByUrl("/login");
+      this.router.navigateByUrl("/auth/login");
       return false;
     }
 
