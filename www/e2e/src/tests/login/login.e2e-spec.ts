@@ -16,7 +16,7 @@ describe('Логин', () => {
   it('Отображение страница логина', () => {
     expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать в');
     expect(LoginPage.reqLink().getText()).toEqual(('Нет аккаунта? Зарегистрироваться'));
-    expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + 'auth/login');
+    expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/auth/login');
   });
 
   it('Успешный логин бэкофисом', () => {
