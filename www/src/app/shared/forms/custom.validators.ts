@@ -92,13 +92,13 @@ export class CustomValidators {
   static phone(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/^\d{10,11}$/);
-    return valid ? null : {field: true};
+    return valid ? null : {invalid_phone: true};
   }
 
   static password(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).trim().match(/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/);
-    return valid ? null : {field: true};
+    return valid ? null : {invalid_password: true};
   }
 
   static passwordConfirming(controlNameToCompare: string): ValidatorFn {
