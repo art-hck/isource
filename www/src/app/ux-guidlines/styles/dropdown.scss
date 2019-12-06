@@ -15,6 +15,10 @@
     padding: 0 20px;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:hover {
+      background: $secondary-hover-control-color;
+    }
   }
 
   &-handler {
@@ -39,10 +43,24 @@
   }
 
   &-items {
-    max-height: 300px;
+    max-height: 320px;
     overflow: auto;
 
+    &:after {
+      content: "";
+      height: 16px;
+      left: 0;
+      position: absolute;
+      right: 0;
+    }
+
+    &:after {
+      background: linear-gradient(to top, $secondary-control-color 0%, rgba(255, 255, 255, 0) 100%);
+      bottom: 0;
+    }
+
     &-wrapper {
+      animation: app-dropdown-show 300ms;
       background: $secondary-control-color;
       border-radius: 4px;
       left: 0;
@@ -50,6 +68,7 @@
       padding-top: 40px;
       position: absolute;
       top: 0;
+      transform-origin: top;
       z-index: 1;
 
       &.hidden {
@@ -87,5 +106,17 @@
       cursor: default;
       opacity: .5;
     }
+  }
+}
+
+@keyframes app-dropdown-show {
+  0% {
+    transform: scaleY(.7);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }
