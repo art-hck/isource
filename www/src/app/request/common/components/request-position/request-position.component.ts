@@ -4,7 +4,6 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../../customer/services/request.service";
 import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
-import { map } from "rxjs/operators";
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
@@ -18,6 +17,7 @@ import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-po
 export class RequestPositionComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
+  positionId: Uuid;
   position$: Observable<RequestPosition>;
   statuses = Object.entries(RequestPositionWorkflowStepLabels);
   subsription = new Subscription();
@@ -32,8 +32,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.position$ = this.requestService.getRequestPositionsFlat(this.requestService.getRequestPositions(this.requestId))
-      .pipe(map(positions => positions[0] as RequestPosition));
+    this.positionId = this.route.snapshot.paramMap.get('position-id');
+    this.position$ = this.requestService.getRequestPosition(this.positionId);
   }
 
   isAfterManufacturing(position: RequestPosition): boolean {

@@ -45,6 +45,11 @@ export class RequestService {
     );
   }
 
+  getRequestPosition(id: Uuid) {
+    const url = `requests/positions/${id}/info`;
+    return this.api.get<RequestPosition>(url);
+  }
+
   /**
    * Преобразует RequestPositionList в одноуровневый массив позиций без групп
    */
