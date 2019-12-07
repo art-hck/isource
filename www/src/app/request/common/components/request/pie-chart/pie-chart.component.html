@@ -1,4 +1,5 @@
-<div class="clr-row">
+<h6 class="pie-header">По статусам</h6>
+<div class="clr-row pie-header">
   <div class="clr-col-7 agenda">
     <div *ngFor="let statusCounter of getStatusCounters(positions)">
       <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
