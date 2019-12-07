@@ -7,77 +7,43 @@ import { RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-po
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent {
 
   @Input() positions: RequestPosition[];
+  @ViewChild('canvas', { static: true }) canvas: ElementRef;
 
-  @ViewChild('canvas', {static: true}) canvas: ElementRef;
-  cx: CanvasRenderingContext2D;
-
-  colors = [];
-  width = 100;
-  height = 100;
-  centerX: number;
-  centerY: number;
-  radius: number;
-  startingAngle: number;
-  arcSize: number;
-  endingAngle: number;
+  radius = 50;
   positionsCounterDegrees = [];
-  statusCounters: any;
-
-  constructor() {
-  }
-
-  ngOnInit() {
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    this.cx = canvasEl.getContext('2d');
-
-    canvasEl.width = this.width;
-    canvasEl.height = this.height;
-
-    for (let i = 0; i < 8; i++) {
-      this.drawSegment(canvasEl, this.cx, i);
-    }
-  }
 
   getStatusCounters(positions: RequestPosition[]) {
-    this.statusCounters = RequestPositionWorkflowStepsGroupsInfo.map(statusCounter => ({
+    const cx = this.canvas.nativeElement.getContext('2d');
+    return RequestPositionWorkflowStepsGroupsInfo
+      .map(statusCounter => ({
         ...statusCounter,
         positions: positions.filter(position => statusCounter.statuses.indexOf(position.status) >= 0)
-      })
-    );
-    console.log(this.statusCounters);
-    this.statusCounters.forEach((statusCounter) => {
-      this.positionsCounterDegrees.push(statusCounter.positions.length / this.positions.length * 360)
-    });
-    console.log(this.positionsCounterDegrees);
-    this.statusCounters.forEach((statusCounter) => {
-      this.colors.push(statusCounter.color);
-    });
-    return this.statusCounters;
+      }))
+      .map((statusCounter, index) => {
+        this.positionsCounterDegrees[index] = statusCounter.positions.length / this.positions.length * 360;
+        this.drawSegment(cx, index, statusCounter.color);
+        return statusCounter;
+      });
   }
 
-  drawSegment(canvas, context, i) {
+  drawSegment(context, i, color) {
 
-    this.centerX = Math.floor(this.width / 2);
-    this.centerY = Math.floor(this.height / 2);
-    this.radius = Math.floor(this.width / 2);
+    const radius = this.radius;
 
-    this.startingAngle = this.degreesToRadians(this.sumTo(this.positionsCounterDegrees, i));
-    this.arcSize = this.degreesToRadians(this.positionsCounterDegrees[i]);
-    this.endingAngle = this.startingAngle + this.arcSize;
+    const startingAngle = this.degreesToRadians(this.sumTo(this.positionsCounterDegrees, i));
+    const arcSize = this.degreesToRadians(this.positionsCounterDegrees[i]);
 
-    this.cx.beginPath();
-    this.cx.moveTo(this.centerX, this.centerY);
-    this.cx.arc(this.centerX, this.centerY, this.radius,
-      this.startingAngle, this.endingAngle, false);
-    this.cx.closePath();
+    context.beginPath();
+    context.moveTo(radius, radius);
+    context.arc(radius, radius, radius, startingAngle, startingAngle + arcSize);
+    context.closePath();
+    context.fillStyle = color;
+    context.fill();
 
-    this.cx.fillStyle = this.colors[i];
-    this.cx.fill();
-
-    this.cx.restore();
+    context.restore();
   }
 
   degreesToRadians(degrees) {
