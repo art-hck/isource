@@ -44,11 +44,6 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 body {
   color: $primary-font-color;
   background-color: #FBFCFE;
-
-  a, a:link, a:visited, a:link:hover, button {
-    color: unset;
-    text-decoration: unset;
-  }
 }
 
 h2 {
@@ -64,6 +59,10 @@ h5 {
 
 select option:disabled {
   color: #ccc;
+}
+
+b.required-star {
+  color: $color_red;
 }
 
 .text-muted {

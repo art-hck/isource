@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
   selector: 'uxg-checkbox',
@@ -11,13 +11,14 @@ import { NG_VALUE_ACCESSOR } from "@angular/forms";
   }]
 })
 
-export class UxgCheckboxComponent {
+export class UxgCheckboxComponent implements ControlValueAccessor {
   public value: boolean;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
   public isDisabled: boolean;
 
   @Input() isMixed: boolean;
+  @ViewChild('checkbox', { static: false }) el: ElementRef;
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -35,11 +36,11 @@ export class UxgCheckboxComponent {
     this.value = value;
   }
 
-  check(ev, el) {
-    el.click();
+  check(ev) {
+    this.el.nativeElement.click();
     ev.preventDefault();
     ev.stopPropagation();
-    this.writeValue(el.checked);
+    this.writeValue(this.el.nativeElement.checked);
   }
 
 }

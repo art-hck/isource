@@ -88,7 +88,7 @@
 
             <!-- Колонка 1: Название позиции -->
             <div class="cell position-name clr-col">
-              {{requestItems[i].name}}
+              {{requestItems[i].name || this.newPositionName}}
             </div>
 
             <!-- Дополнительные колонки, котороые отображаются в раскрытом списке -->
@@ -112,11 +112,11 @@
               <!-- Колонка 4: Цена -->
               <div class="clr-col-1 cell position-price">
                 <span *ngIf="getWinner(requestItems[i]) as winner; else startPrice">
-                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :true:"1.0-2"}}
+                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :"symbol":"1.0-2"}}
                 </span>
                 <ng-template #startPrice>
                   <span *ngIf="requestItems[i].startPrice">
-                    {{requestItems[i].startPrice | currency: requestItems[i].currency :true:"1.0-2"}}
+                    {{requestItems[i].startPrice | currency: requestItems[i].currency :"symbol":"1.0-2"}}
                   </span>
                 </ng-template>
               </div>
@@ -170,11 +170,11 @@
             <!-- Колонка 4: Цена -->
             <div class="clr-col-1 cell position-price">
               <span *ngIf="getWinner(requestPosition) as winner; else startPrice">
-                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :true:"1.0-2"}}
+                  {{ winner.priceWithoutVat * winner.quantity | currency: winner.currency :"symbol":"1.0-2"}}
               </span>
               <ng-template #startPrice>
                 <span *ngIf="requestPosition.startPrice">
-                  {{requestPosition.startPrice | currency: requestPosition.currency :true:"1.0-2"}}
+                  {{requestPosition.startPrice | currency: requestPosition.currency :"symbol":"1.0-2"}}
                 </span>
               </ng-template>
             </div>

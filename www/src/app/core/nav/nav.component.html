@@ -1,4 +1,4 @@
-<nav *ngIf="showMenu" class="subnav">
+<nav *ngIf="!isMenuHidden" class="subnav">
   <div class="container">
     <div class="clr-row w-100">
       <div class="clr-col-8 menu">
@@ -6,15 +6,9 @@
           <a [routerLink]="'/'">Marketplace</a>
         </div>
 
-        <ul class="nav menu-block">
-          <li class="nav-item" *ngFor="let link of mainMenu">
+        <ul class="nav menu-block" *ngIf="auth.isAuth()">
+          <li class="nav-item" *ngFor="let link of menu">
             <a class="nav-link" [routerLink]="link.path" routerLinkActive="link-active">{{ link.text }}</a>
-
-            <span *ngIf="link.children.length > 0">
-          (<a *ngFor="let link of link.children">
-            <a [routerLink]="link.path">{{ link.text }}</a>
-          </a>)
-        </span>
           </li>
         </ul>
       </div>
@@ -22,15 +16,7 @@
       </div>
       <div class="clr-col-3">
         <ul class="nav login-block">
-
-          <li *ngIf="!auth.isAuth() && !isLoginPage()" class="nav-item">
-            <a routerLink="/login" class="nav-icon nav-logout">
-              Вход
-              <clr-icon shape="login" size="32"></clr-icon>
-            </a>
-          </li>
-
-          <ng-container *ngIf="auth.isAuth()">
+          <ng-container *ngIf="auth.isAuth(); else login">
             <li class="nav-item">
               <a [routerLink]="'messages'" routerLinkActive="link-active" class="nav-icon message-icon">
                 <img src="../../../assets/images/messages.svg">
@@ -51,7 +37,9 @@
               <clr-dropdown class="btn-user">
                 <button class="nav-icon" clrDropdownTrigger>
                 <span class="avatar">
-                 <img src="../../../assets/images/{{ getUserAvatarFile() }}">
+                 <img *ngIf="user.isCustomer()" src="../../../assets/images/avatar_ludmila.jpg"/>
+                 <img *ngIf="user.isBackOffice()" src="../../../assets/images/avatar_nitshe.jpg"/>
+                 <img *ngIf="!user.isBackOffice() && !user.isCustomer()" src="../../../assets/images/avatar.svg"/>
                 </span>
                   <div class="user-info-block">
                     <p class="user-name">{{ user.getShortUserFio() }}</p>
@@ -73,6 +61,14 @@
               </clr-dropdown>
             </li>
           </ng-container>
+          <ng-template #login>
+            <li class="nav-item">
+              <a routerLink="auth/login" class="nav-icon nav-logout">
+                Вход
+                <clr-icon shape="login" size="32"></clr-icon>
+              </a>
+            </li>
+          </ng-template>
         </ul>
       </div>
     </div>

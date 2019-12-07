@@ -38,7 +38,6 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
 import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { PositionSearchFilterPipe } from "../shared/pipes/position-list-filter-pipe";
-import { CustomerSearchFilterPipe } from "../shared/pipes/customer-list-filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
@@ -66,6 +65,7 @@ import { RequestAddGroupModalComponent } from "./common/components/request/reque
 import { RequestComponent } from "./common/components/request/request.component";
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
+import { RequestPositionComponent } from './common/components/request-position/request-position.component';
 import { PieChartComponent } from './common/components/request/pie-chart/pie-chart.component';
 
 @NgModule({
@@ -100,7 +100,6 @@ import { PieChartComponent } from './common/components/request/pie-chart/pie-cha
     RequestDashboardComponent,
     SearchFilterPipe,
     PositionSearchFilterPipe,
-    CustomerSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
     SupplierSelectComponent,
@@ -121,6 +120,7 @@ import { PieChartComponent } from './common/components/request/pie-chart/pie-cha
     RequestAsideInfoComponent,
     RequestAddGroupModalComponent,
     PieChartComponent
+    RequestPositionComponent
   ],
   imports: [
     SharedModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
@@ -10,6 +10,7 @@ import { Observable } from "rxjs";
 })
 export class ContragentListViewComponent implements OnInit {
 
+  customerSearchValue = "";
   contragents$: Observable<ContragentList[]>;
 
   constructor(
@@ -18,6 +19,10 @@ export class ContragentListViewComponent implements OnInit {
 
   ngOnInit() {
     this.getContragentList();
+  }
+
+  onCustomerSearchInputChange(value: string): void {
+    this.customerSearchValue = value;
   }
 
   getContragentList(): void {
