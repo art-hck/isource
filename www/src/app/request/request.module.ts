@@ -119,7 +119,7 @@ import { PieChartComponent } from './common/components/request/pie-chart/pie-cha
     RequestComponent,
     RequestAsideInfoComponent,
     RequestAddGroupModalComponent,
-    PieChartComponent
+    PieChartComponent,
     RequestPositionComponent
   ],
   imports: [

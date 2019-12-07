@@ -10,8 +10,19 @@
 
 .pie-chart {
   position: relative;
+  padding: 0;
+  max-width: 100px;
+  display: block;
 }
 
 .agenda {
   padding-right: 0;
+  line-height: 1.1rem;
+  min-width: 190px;
+}
+
+.column {
+  display: inline-block;
+  width: 40px;
+  font-weight: 500;
 }

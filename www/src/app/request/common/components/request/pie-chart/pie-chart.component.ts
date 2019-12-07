@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
 import { RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
 
@@ -10,7 +10,7 @@ import { RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-po
 export class PieChartComponent {
 
   @Input() positions: RequestPosition[];
-  @ViewChild('canvas', { static: true }) canvas: ElementRef;
+  @ViewChild('canvas', {static: true}) canvas: ElementRef;
 
   radius = 50;
   positionsCounterDegrees = [];

@@ -74,7 +74,7 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
   },
   {
     url: "technical-proposals",
-    label: "Согласование ТП",
+    label: "Технические предложения",
     statuses: RequestPositionWorkflowStepsGroups.TECHNICAL_PROPOSALS,
     positions: [],
     shortName: "ТП",
@@ -83,7 +83,7 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
   },
   {
     url: "commercial-proposals",
-    label: "Согласование КП",
+    label: "Коммерческие предложения",
     statuses: RequestPositionWorkflowStepsGroups.PROPOSALS,
     positions: [],
     shortName: "КП",
@@ -92,7 +92,7 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
   },
   {
     url: "design-documentation",
-    label: "Согласование РКД",
+    label: "РКД",
     statuses: RequestPositionWorkflowStepsGroups.RKD,
     positions: [],
     shortName: "РКД и изготовление",
@@ -101,7 +101,7 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
   },
   {
     url: "contract",
-    label: "Рассмотрение договора",
+    label: "Договор",
     statuses: RequestPositionWorkflowStepsGroups.CONTRACT,
     positions: [],
     shortName: "Договор",

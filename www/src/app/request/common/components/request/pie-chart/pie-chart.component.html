@@ -1,19 +1,24 @@
 <div class="clr-row">
   <div class="clr-col-7 agenda">
     <div *ngFor="let statusCounter of getStatusCounters(positions)">
-    <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
-      {{statusCounter.positions.length / positions.length * 100 | number:'1.0-0' }}%
-      <a routerLink="../{{statusCounter.url}}">{{ statusCounter.shortName }}</a>
-    </ng-container>
-    <ng-template #statusLabelSpan>0% {{ statusCounter.shortName }}</ng-template>
-  </div>
+      <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
+        <span class="column">
+          {{ statusCounter.positions.length / positions.length * 100 | number:'1.0-0' }}%
+        </span>
+        {{ statusCounter.shortName }}
+      </ng-container>
+      <ng-template #statusLabelSpan>
+        <span class="app-ghost-color column">
+          0%
+        </span>
+        {{ statusCounter.shortName }}
+      </ng-template>
+    </div>
   </div>
   <div class="clr-col-5 pie-chart">
     <canvas #canvas>
-
     </canvas>
     <div class="circle">
-
     </div>
   </div>
 </div>
