@@ -1,26 +1,139 @@
-$status-color-NEW: rgb(185, 185, 185);
-$status-color-DRAFT: rgb(173, 147, 185);
-$status-color-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
-$status-color-TECHNICAL_PROPOSALS_PREPARATION: rgb(91, 154, 185);
-$status-color-TECHNICAL_PROPOSALS_AGREEMENT: rgb(99, 185, 154);
-$status-color-PROPOSALS_PREPARATION: rgb(40, 177, 236);
-$status-color-RESULTS_AGREEMENT: rgb(0, 183, 94);
-$status-color-WINNER_SELECTED: rgb(255, 71, 90);
-$status-color-CONTRACT_AGREEMENT: rgb(97, 77, 255);
-$status-color-CONTRACT_SIGNING: rgb(159, 56, 255);
-$status-color-CONTRACTED: rgb(150, 183, 57);
-$status-color-RKD_AGREEMENT: rgb(142, 46, 90);
-$status-color-MANUFACTURING: rgb(149, 65, 25);
-$status-color-DELIVERY: rgb(84, 199, 171);
-$status-color-DELIVERED: rgb(100, 142, 255);
-$status-color-PAID: rgb(231, 200, 35);
-$status-color-COMPLETED: rgb(255, 127, 127);
+@import "../../../../ux-guidlines/styles/statuses";
 
 .activity-feed {
   margin-top: 20px;
   max-height: 600px;
   overflow: hidden auto;
-  padding: 5px 10px 0 35px;
+  padding: 5px 10px 0 9px;
+  position: relative;
+
+  & div.activity-block {
+    border-left: 2px solid #B2D0FF;
+    padding: 0 0 20px 15px;
+    line-height: 1rem;
+
+    & div.position-status-change {
+      display: inline-flex;
+      line-height: 1.1rem;
+
+      & div.arrow-icon {
+        width: 12px;
+        height: 20px;
+        background-image: url('../../../../../assets/images/arrow.svg');
+        background-repeat: no-repeat;
+        margin: 7px 12px 0 12px;
+      }
+    }
+
+    & div.timeline {
+      max-width: 130px;
+      opacity: 0.6;
+    }
+
+    & div.status-pie {
+      height: 24px;
+      position: absolute;
+      left: 0;
+      padding: 2px 0;
+      background-color: #fbfcfe;
+
+      & div[class*="position-new-status"] {
+        width: 20px;
+        height: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      & div[class*="position-current-status"] {
+        width: 20px;
+        height: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+
+      & div[class*="DRAFT"],
+      div[class*="ON_CUSTOMER_APPROVAL"],
+      div[class*="NEW"] {
+        background-color: $draft;
+      }
+
+      & div[class*="TECHNICAL_PROPOSALS_PREPARATION"],
+      div[class*="TECHNICAL_PROPOSALS_AGREEMENT"] {
+        background-color: $technical-proposals-preparation;
+      }
+
+      & div[class*="PROPOSALS_PREPARATION"],
+      div[class*="RESULTS_AGREEMENT"],
+      div[class*="WINNER_SELECTED"] {
+        background-color: $proposals-preparation;
+      }
+
+      & div[class*="CONTRACT_AGREEMENT"],
+      div[class*="CONTRACT_SIGNING"],
+      div[class*="CONTRACTED"] {
+        background-color: $contract-agreement;
+      }
+
+      & div[class*="RKD_AGREEMENT"],
+      div[class*="MANUFACTURING"] {
+        background-color: $rkd-agreement;
+      }
+
+      & div[class*="DELIVERY"],
+      div[class*="DELIVERED"] {
+        background-color: $delivery;
+      }
+
+      & div[class*="PAID"],
+      div[class*="COMPLETED"] {
+        background-color: $paid;
+      }
+
+      & div.white-circle {
+        width: 8px;
+        height: 8px;
+        background-color: #fbfcfe;
+        margin-left: 6px;
+        margin-top: -14px;
+        border-radius: 50%;
+      }
+    }
+    &:last-of-type {
+      border-left: 2px solid transparent;
+    }
+
+    & span.activity-type,
+    & span.status-name,
+    & a.document-item {
+      display: block;
+      line-height: 1rem;
+    }
+
+    & div.position-winner-selected-item {
+      display: inline-flex;
+    }
+
+    & div.position-winner-name {
+      line-height: 1.6;
+    }
+
+    & div.position-winner-offer {
+      line-height: 1.6;
+      padding: 0 0 3px 5px;
+    }
+
+    & div.position-edit-item {
+      & .edit-info-item {
+        line-height: 1.2rem;
+        & .arrow {
+          padding: 0 5px;
+        }
+      }
+      & .edit-info-label {
+        padding-right: 10px;
+      }
+    }
+  }
 }
 
 .empty-history p {
@@ -29,100 +142,6 @@ $status-color-COMPLETED: rgb(255, 127, 127);
   text-align: center;
 }
 
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  float: left;
-  margin-left: -40px;
-
-  &.status-change:before {
-    content: '';
-    border: 5px solid;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    display: block;
-    margin-left: -50%;
-    margin-top: -50%;
-  }
-}
-
-
-.activity-block  {
-  border-left: 2px solid lightgrey;
-  padding: 0 0 25px 34px;
-
-  &:last-of-type {
-    border-left: 2px solid transparent;
-  }
-
-  & span.activity-type,
-  & span.status-name,
-  & a.document-item {
-    display: block;
-  }
-
-  & div.position-status-change,
-  & a.document-item,
-  & div.position-edit-item,
-  & div.position-winner-selected-item {
-    padding-top: 5px;
-    display: table;
-  }
-
-  & div.position-winner-name {
-    font-size: 13px;
-    line-height: 1.6;
-
-    & clr-icon[shape=thumbs-up],
-    & clr-icon[shape=thumbs-down] {
-      vertical-align: initial;
-      margin-right: 6px;
-      margin-bottom: -1px;
-    }
-  }
-
-  & div.position-winner-offer {
-    font-size: 13px;
-    line-height: 1.6;
-    padding-bottom: 3px;
-  }
-
-  & span.activity-type {
-    font-size: 13px;
-    line-height: 1;
-  }
-
-  & span.user-name {
-    padding-right: 7px;
-    font-size: 13px;
-  }
-
-  & span.activity-date {
-    font-size: 13px;
-  }
-
-  & div.position-status-change .arrow {
-    padding: 0 10px 0 5px;
-  }
-
-  & div.position-edit-item {
-    font-size: 13px;
-
-    & .edit-info-item {
-      line-height: 19px;
-
-      & .arrow {
-        padding: 0 5px;
-      }
-    }
-
-    & .edit-info-label {
-      padding-right: 10px;
-    }
-  }
-}
 
 
 
@@ -130,107 +149,8 @@ $status-color-COMPLETED: rgb(255, 127, 127);
 
 
 
-// todo в будущем перенести в корневой style.css, переделать его в scss
 
-.position-history-status-NEW {
-  background: $status-color-NEW;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-NEW, 0.7);
-  }
-}
-.position-history-status-DRAFT {
-  background: $status-color-DRAFT;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-DRAFT, 0.7);
-  }
-}
-.position-history-status-ON_CUSTOMER_APPROVAL {
-  background: $status-color-ON_CUSTOMER_APPROVAL;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-ON_CUSTOMER_APPROVAL, 0.7);
-  }
-}
-.position-history-status-TECHNICAL_PROPOSALS_PREPARATION {
-  background: $status-color-TECHNICAL_PROPOSALS_PREPARATION;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-TECHNICAL_PROPOSALS_PREPARATION, 0.7);
-  }
-}
-.position-history-status-TECHNICAL_PROPOSALS_AGREEMENT {
-  background: $status-color-TECHNICAL_PROPOSALS_AGREEMENT;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-TECHNICAL_PROPOSALS_AGREEMENT, 0.7);
-  }
-}
-.position-history-status-PROPOSALS_PREPARATION {
-  background: $status-color-PROPOSALS_PREPARATION;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-PROPOSALS_PREPARATION, 0.7);
-  }
-}
-.position-history-status-RESULTS_AGREEMENT {
-  background: $status-color-RESULTS_AGREEMENT;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-RESULTS_AGREEMENT, 0.7);
-  }
-}
-.position-history-status-WINNER_SELECTED {
-  background: $status-color-WINNER_SELECTED;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-WINNER_SELECTED, 0.7);
-  }
-}
-.position-history-status-CONTRACT_AGREEMENT {
-  background: $status-color-CONTRACT_AGREEMENT;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-CONTRACT_AGREEMENT, 0.7);
-  }
-}
-.position-history-status-CONTRACT_SIGNING {
-  background: $status-color-CONTRACT_SIGNING;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-CONTRACT_SIGNING, 0.7);
-  }
-}
-.position-history-status-CONTRACTED {
-  background: $status-color-CONTRACTED;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-CONTRACTED, 0.7);
-  }
-}
-.position-history-status-RKD_AGREEMENT {
-  background: $status-color-RKD_AGREEMENT;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-RKD_AGREEMENT, 0.7);
-  }
-}
-.position-history-status-MANUFACTURING {
-  background: $status-color-MANUFACTURING;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-MANUFACTURING, 0.7);
-  }
-}
-.position-history-status-DELIVERY {
-  background: $status-color-DELIVERY;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-DELIVERY, 0.7);
-  }
-}
-.position-history-status-DELIVERED {
-  background: $status-color-DELIVERED;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-DELIVERED, 0.7);
-  }
-}
-.position-history-status-PAID {
-  background: $status-color-PAID;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-PAID, 0.7);
-  }
-}
-.position-history-status-COMPLETED {
-  background: $status-color-COMPLETED;
-  &.status-change.status-dot:before {
-    border-color: transparentize($status-color-COMPLETED, 0.7);
-  }
-}
+
+
+
+
