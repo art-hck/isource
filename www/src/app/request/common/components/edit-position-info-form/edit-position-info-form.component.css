@@ -8,6 +8,7 @@ form {
     font-size: 12px;
     font-weight: 600;
     color: #999999;
+    display: block;
 }
 
 ::ng-deep .position-info .form, form {
@@ -20,8 +21,7 @@ form {
     align-items: flex-end;
 }
 
-::ng-deep .clr-control-container,
-::ng-deep .clr-select-wrapper {
+::ng-deep .clr-control-container {
   width: 100%;
 }
 
@@ -48,12 +48,8 @@ form {
 .clr-select-wrapper select {
   background-size: initial;
 }
-::ng-deep .clr-select-wrapper::after {
-  z-index: 1000;
-  top: 0.5rem;
-  right: .5rem;
-}
-::ng-deep .clr-select-wrapper select:focus {
-  background-image: initial;
-  border: 1px solid #D4D9E2;
-}
+/*::ng-deep .clr-select-wrapper::after {*/
+/*  z-index: 1000;*/
+/*  top: 0.5rem;*/
+/*  right: .5rem;*/
+/*}*/
