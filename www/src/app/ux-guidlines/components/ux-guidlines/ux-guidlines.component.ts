@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import "prismjs/themes/prism.css";
-
 @Component({
   selector: 'uxg-guidlines',
   templateUrl: 'ux-guidlines.component.html'

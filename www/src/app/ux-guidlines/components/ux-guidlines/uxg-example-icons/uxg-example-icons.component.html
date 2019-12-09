@@ -17,7 +17,8 @@
   <ng-template #example let-shape>
     <div class="card-block">
       <div class="card-title">Sources</div>
-      <ngx-prism [cd]="{ code: true } " language="html" [code]="getExmample(shape)"></ngx-prism>
+      <uxg-code>{{getExmample(shape)}}</uxg-code>
+
 
       <div>
         <button uxgButton outline icon lg>

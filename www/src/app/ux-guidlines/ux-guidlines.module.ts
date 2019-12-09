@@ -4,7 +4,6 @@ import { ClarityModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
 import { UxgCheckboxComponent } from "./components/uxg-checkbox/uxg-checkbox.component";
 import { UxgTabDirective } from './directives/uxg-tab.directive';
 import { UxgTabTitleComponent } from './components/uxg-tab-title/uxg-tab-title.component';
@@ -16,7 +15,6 @@ import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.com
 import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
 import { UxgInputDirective } from './directives/uxg-input.directive';
 import { UxgButtonDirective } from './directives/uxg-button.directive';
-import { PrismModule } from '@ngx-prism/core';
 import { UxgExampleDropdownComponent } from './components/ux-guidlines/uxg-example-dropdown/uxg-example-dropdown.component';
 import { UxgExampleIconsComponent } from './components/ux-guidlines/uxg-example-icons/uxg-example-icons.component';
 import { UxgExampleTabsComponent } from './components/ux-guidlines/uxg-example-tabs/uxg-example-tabs.component';
@@ -26,6 +24,7 @@ import { UxgExamplePositionStatusComponent } from './components/ux-guidlines/uxg
 import { UxgExampleInputComponent } from './components/ux-guidlines/uxg-example-input/uxg-example-input.component';
 import { UxgExampleTypographyComponent } from './components/ux-guidlines/uxg-example-typography/uxg-example-typography.component';
 import { UxGuidlinesRoutingModule } from "./ux-guidlines-routing.module";
+import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
 
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -36,7 +35,6 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     ReactiveFormsModule,
     CommonModule,
     ClarityModule,
-    PrismModule
   ],
   declarations: [
     UxgCheckboxComponent,
@@ -58,7 +56,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgExampleControlsComponent,
     UxgExamplePositionStatusComponent,
     UxgExampleInputComponent,
-    UxgExampleTypographyComponent
+    UxgExampleTypographyComponent,
+    UxgCodeComponent
   ],
   exports: [
     UxgCheckboxComponent,
