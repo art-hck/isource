@@ -1,8 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { publishReplay, refCount, tap } from "rxjs/operators";
+import { Observable, of, Subscription } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
@@ -17,8 +16,8 @@ import { Uuid } from "../../../../cart/models/uuid";
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
-  request$: Observable<Request>;
-  positions$: Observable<RequestPositionList[]>;
+  @Input() request: Request;
+  @Input() positions: RequestPositionList[];
   flatPositions$: Observable<RequestPosition[]>;
   subscription = new Subscription();
 
@@ -63,17 +62,10 @@ export class RequestComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
-    this.request$ = this.requestService.getRequestInfo(this.requestId);
-    this.positions$ = this.requestService.getRequestPositions(this.requestId)
-      .pipe(
-        tap(positions => {
-          // Иницилизация позиций в форме
-          positions.forEach(position => this.formPositionPush(position));
-        }),
-        publishReplay(1), refCount()
-      )
-    ;
-    this.flatPositions$ = this.requestService.getRequestPositionsFlat(this.positions$);
+    // Иницилизация позиций в форме
+    this.positions.forEach(position => this.formPositionPush(position));
+
+    this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
 
     this.subscription.add(
       this.form.get('checked').valueChanges.subscribe(checked =>
