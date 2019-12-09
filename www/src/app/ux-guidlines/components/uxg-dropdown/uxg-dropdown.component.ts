@@ -21,14 +21,13 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
   @Input() placeholder = "";
 
   public value = null;
-  public label: string = null;
   public isHidden = true;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
   public isDisabled: boolean;
 
   private _coords;
-  get coords() {
+  get coords(): ClientRect {
     // Avoid ExpressionChangedAfterItHasBeenCheckedError
     if (JSON.stringify(this._coords) !== JSON.stringify(this.el.nativeElement.getBoundingClientRect())) {
       this._coords = this.el.nativeElement.getBoundingClientRect();
@@ -37,8 +36,12 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
     return this._coords;
   }
 
-  get width() {
+  get width(): number | null {
     return this.el.nativeElement.offsetWidth;
+  }
+
+  get selected(): UxgDropdownItemDirective | null {
+    return this.items.find(item => item.value === this.value);
   }
 
   constructor(
@@ -67,13 +70,12 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
   ngAfterViewInit() {
     this.document.body.appendChild(this.dropdownItems.nativeElement);
     this.items.forEach(item => {
-      item.onSelect.subscribe(data => {
-        this.writeValue(data.value);
-        this.select.emit(data.value);
-        this.label = data.label;
+      item.onSelect.subscribe(value => {
+        this.writeValue(value);
+        this.select.emit(value);
 
         if (this.onChange) {
-          this.onChange(data.value);
+          this.onChange(value);
         }
 
         if (this.hideAfterSelect) {

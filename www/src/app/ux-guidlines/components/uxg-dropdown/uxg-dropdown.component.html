@@ -1,5 +1,5 @@
 <div class="app-dropdown-handler" (click)="isHidden = !isHidden">
-  <div class="app-dropdown-handler-title">{{ label || placeholder }}</div>
+  <div class="app-dropdown-handler-title">{{ selected?.label || placeholder }}</div>
   <div class="app-dropdown-handler-icon">
     <clr-icon shape="app-triangle" [dir]="isHidden ? 'down':'up'"></clr-icon>
   </div>
