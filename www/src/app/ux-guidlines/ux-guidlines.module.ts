@@ -1,4 +1,4 @@
-import { AppIconShapesSources } from "./ux-guidlines.icons";
+import { UxgIconShapesSources } from "./ux-guidlines.icons";
 import { ClarityIcons } from "@clr/icons";
 import { ClarityModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
@@ -14,19 +14,29 @@ import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.com
 import { UxGuidlinesComponent } from "./components/ux-guidlines/ux-guidlines.component";
 import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
 import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
+import { UxgInputDirective } from './directives/uxg-input.directive';
+import { UxgButtonDirective } from './directives/uxg-button.directive';
+import { PrismModule } from '@ngx-prism/core';
+import { UxgExampleDropdownComponent } from './components/ux-guidlines/uxg-example-dropdown/uxg-example-dropdown.component';
+import { UxgExampleIconsComponent } from './components/ux-guidlines/uxg-example-icons/uxg-example-icons.component';
+import { UxgExampleTabsComponent } from './components/ux-guidlines/uxg-example-tabs/uxg-example-tabs.component';
+import { UxgExampleButtonsComponent } from './components/ux-guidlines/uxg-example-buttons/uxg-example-buttons.component';
+import { UxgExampleControlsComponent } from './components/ux-guidlines/uxg-example-controls/uxg-example-controls.component';
+import { UxgExamplePositionStatusComponent } from './components/ux-guidlines/uxg-example-position-status/uxg-example-position-status.component';
+import { UxgExampleInputComponent } from './components/ux-guidlines/uxg-example-input/uxg-example-input.component';
+import { UxgExampleTypographyComponent } from './components/ux-guidlines/uxg-example-typography/uxg-example-typography.component';
+import { UxGuidlinesRoutingModule } from "./ux-guidlines-routing.module";
 
-AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
+UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
 @NgModule({
   imports: [
-    RouterModule.forChild([{
-      path: "",
-      component: UxGuidlinesComponent
-    }]),
+    UxGuidlinesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    ClarityModule
+    ClarityModule,
+    PrismModule
   ],
   declarations: [
     UxgCheckboxComponent,
@@ -37,7 +47,18 @@ AppIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgTabDirective,
     UxgTabsComponent,
     UxgTabTitleComponent,
-    UxGuidlinesComponent
+    UxGuidlinesComponent,
+    UxgInputDirective,
+    UxgButtonDirective,
+    UxgButtonDirective,
+    UxgExampleDropdownComponent,
+    UxgExampleIconsComponent,
+    UxgExampleTabsComponent,
+    UxgExampleButtonsComponent,
+    UxgExampleControlsComponent,
+    UxgExamplePositionStatusComponent,
+    UxgExampleInputComponent,
+    UxgExampleTypographyComponent
   ],
   exports: [
     UxgCheckboxComponent,

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, Input, OnDestroy, OnInit, Output, QueryList, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, Input, OnDestroy, OnInit, Output, QueryList, Renderer2, ViewChild } from '@angular/core';
 import { UxgDropdownItemDirective } from "../../directives/uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT } from "@angular/common";
@@ -27,8 +27,14 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
   public onChange: (value: boolean) => void;
   public isDisabled: boolean;
 
+  private _coords;
   get coords() {
-    return this.el.nativeElement.getBoundingClientRect();
+    // Avoid ExpressionChangedAfterItHasBeenCheckedError
+    if (JSON.stringify(this._coords) !== JSON.stringify(this.el.nativeElement.getBoundingClientRect())) {
+      this._coords = this.el.nativeElement.getBoundingClientRect();
+      this.cdr.detectChanges();
+    }
+    return this._coords;
   }
 
   get width() {
@@ -37,9 +43,10 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2, private el: ElementRef
-  ) {
-  }
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -99,5 +106,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
 
   ngOnDestroy() {
     window.removeEventListener('scroll', () => this.hideOnScrollOutside, true);
+    this.dropdownItems.nativeElement.remove();
   }
 }
