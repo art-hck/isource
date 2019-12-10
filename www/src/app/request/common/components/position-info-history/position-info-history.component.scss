@@ -16,12 +16,8 @@
       display: inline-flex;
       line-height: 1.1rem;
 
-      & div.arrow-icon {
-        width: 12px;
-        height: 20px;
-        background-image: url('../../../../../assets/images/arrow.svg');
-        background-repeat: no-repeat;
-        margin: 7px 12px 0 12px;
+      & clr-icon {
+        opacity: 0.3;
       }
     }
 
