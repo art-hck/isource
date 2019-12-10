@@ -9,7 +9,7 @@ export class UxgExampleButtonsComponent {
 <button uxgButton primary icon>
   <clr-icon shape="app-message" size="16" class="is-solid"></clr-icon>
 </button>
-<button uxgButton primary icon-text>
+<button uxgButton primary iconText>
   <clr-icon shape="app-trash" size="16" class="is-solid"></clr-icon>
   <span>Удалить</span>
 </button>
@@ -22,7 +22,7 @@ export class UxgExampleButtonsComponent {
 
   readonly example2 = `<button uxgButton primary lg>L Primary button</button>
 <button uxgButton primary lg icon><clr-icon shape="app-message" size="16" class="is-solid"></clr-icon></button>
-<button uxgButton primary lg icon-text>
+<button uxgButton primary lg iconText>
   <clr-icon shape="app-trash" size="16" class="is-solid"></clr-icon>
   <span>Удалить</span>
 </button>

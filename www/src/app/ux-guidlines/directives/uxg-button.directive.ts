@@ -3,7 +3,7 @@ import { Directive, HostBinding, Input } from '@angular/core';
 @Directive({
   selector: '[uxgButton], [uxgButton][lg], [uxgButton][primary], ' +
     '[uxgButton][secondary], [uxgButton][outline], [uxgButton][link], ' +
-    '[uxgButton][icon], [uxgButton][icon-text], [uxgButton][clear]'
+    '[uxgButton][icon], [uxgButton][iconText], [uxgButton][clear]'
 })
 export class UxgButtonDirective {
 
@@ -13,7 +13,7 @@ export class UxgButtonDirective {
   @Input() outline: boolean | string;
   @Input() link: boolean | string;
   @Input() icon: boolean | string;
-  @Input('icon-text') iconText: boolean | string;
+  @Input() iconText: boolean | string;
   @Input() clear: boolean | string;
 
   @HostBinding('class.app-btn') buttonClass = true;
