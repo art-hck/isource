@@ -1,5 +1,4 @@
-<ng-container *ngIf="(request$ | async) as request">
-<form [formGroup]="form" *ngIf="(positions$ | async) as positions">
+<form [formGroup]="form" *ngIf="positions && request">
   <h1 *ngIf="request.name">{{request?.name || 'Заявка #' + request.id}}</h1>
   <div class="app-row">
 
@@ -137,4 +136,3 @@
     </div>
   </div>
 </form>
-</ng-container>

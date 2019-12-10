@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, Input, OnDestroy, OnInit, Output, QueryList, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, Input, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
 import { UxgDropdownItemDirective } from "../../directives/uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: 'uxg-dropdown',
@@ -12,32 +12,38 @@ import { DOCUMENT } from "@angular/common";
     multi: true
   }]
 })
-export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor {
+export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, AfterViewChecked, ControlValueAccessor {
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
-  @ViewChild('dropdownItems', { static: false }) dropdownItems: ElementRef;
+  @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
+  @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
   @Output() select = new EventEmitter();
   @Input() hideAfterSelect = true;
   @Input() placeholder = "";
+  @Input() disabled: boolean;
+  @Input() direction: "up" | "down";
 
   public value = null;
   public isHidden = true;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
-  public isDisabled: boolean;
 
-  private _coords;
-  get coords(): ClientRect {
-    // Avoid ExpressionChangedAfterItHasBeenCheckedError
-    if (JSON.stringify(this._coords) !== JSON.stringify(this.el.nativeElement.getBoundingClientRect())) {
-      this._coords = this.el.nativeElement.getBoundingClientRect();
-      this.cdr.detectChanges();
-    }
-    return this._coords;
+  get itemsWrapper(): HTMLDivElement | null {
+    return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
   }
 
-  get width(): number | null {
-    return this.el.nativeElement.offsetWidth;
+  get coords(): ClientRect {
+    return this.el.nativeElement.getBoundingClientRect();
+  }
+
+  get windowHeight() {
+    return isPlatformBrowser(this.platformId) ? window.innerHeight : 0;
+  }
+
+  get isDirectionUp() {
+    if (this.itemsWrapper) {
+      return this.direction === "up" || this.windowHeight < this.coords.top + this.itemsWrapper.offsetHeight;
+    }
   }
 
   get selected(): UxgDropdownItemDirective | null {
@@ -46,10 +52,11 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2,
-    private el: ElementRef,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private renderer: Renderer2, private el: ElementRef,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -60,15 +67,20 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+    this.disabled = isDisabled;
   }
 
   writeValue(value: any): void {
     this.value = value;
   }
 
+  ngAfterViewChecked() {
+    this.setPosition(this.itemsWrapper, this.isDirectionUp);
+  }
+
   ngAfterViewInit() {
-    this.document.body.appendChild(this.dropdownItems.nativeElement);
+    this.document.body.appendChild(this.itemsWrapper);
+
     this.items.forEach(item => {
       item.onSelect.subscribe(value => {
         this.writeValue(value);
@@ -86,7 +98,9 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
   }
 
   ngOnInit() {
-    window.addEventListener('scroll', this.hideOnScrollOutside, true);
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('scroll', this.hideOnScrollOutside, true);
+    }
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -96,18 +110,40 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, C
     }
   }
 
+  toggle() {
+    if (!this.is(this.disabled)) {
+      this.isHidden = !this.isHidden;
+    }
+  }
+
+  private is = (prop?: boolean | string) => prop !== undefined && prop !== false;
+
   private isInside(targetElement): boolean {
-    return this.el.nativeElement.contains(targetElement) || this.dropdownItems.nativeElement.contains(targetElement);
+    return this.el.nativeElement.contains(targetElement) || this.itemsWrapper.contains(targetElement);
   }
 
   private hideOnScrollOutside = (e) => {
-    if (!this.isInside(e.target)) {
+    if (!this.isHidden && !this.isInside(e.target)) {
       this.isHidden = true;
     }
   }
 
+  private setPosition(el, isDirectionUp: boolean = false): void {
+    if (isDirectionUp) {
+      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.coords.bottom) + "px");
+      this.renderer.removeStyle(el, 'top');
+    } else {
+      this.renderer.setStyle(el, 'top', this.coords.top + "px");
+      this.renderer.removeStyle(el, 'bottom');
+    }
+
+    this.cdr.detectChanges();
+  }
+
   ngOnDestroy() {
-    window.removeEventListener('scroll', () => this.hideOnScrollOutside, true);
-    this.dropdownItems.nativeElement.remove();
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('scroll', () => this.hideOnScrollOutside, true);
+      this.itemsWrapper.remove();
+    }
   }
 }

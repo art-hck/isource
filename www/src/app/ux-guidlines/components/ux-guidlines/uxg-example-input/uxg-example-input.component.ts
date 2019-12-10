@@ -31,7 +31,7 @@ export class UxgExampleInputComponent {
       <button uxgButton outline lg icon type="button" (click)="form.reset()">
         <clr-icon shape="refresh" flip="horizontal" class="is-solid"></clr-icon>
       </button>
-      <button uxgButton primary lg icon-text [disabled]="form.invalid">
+      <button uxgButton primary lg iconText [disabled]="form.invalid">
         <clr-icon shape="login" class="is-solid"></clr-icon>
         <span>Войти</span>
       </button>
