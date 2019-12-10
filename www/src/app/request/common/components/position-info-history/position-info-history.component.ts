@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { History } from "../../models/history";
 import { RequestPositionHistoryService } from "../../services/request-position-history.service";
@@ -8,8 +8,6 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { Observable } from "rxjs";
-import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-position-info-history',
@@ -92,7 +90,6 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     return (
       [
         PositionHistoryTypes.POSITION_STATUS.valueOf(),
-        PositionHistoryTypes.POSITION_ADDED.valueOf(),
         PositionHistoryTypes.OFFER_STATUS.valueOf(),
         PositionHistoryTypes.WINNER_STATUS.valueOf(),
         PositionHistoryTypes.CONTRACT_STATUS.valueOf(),
@@ -118,35 +115,25 @@ export class PositionInfoHistoryComponent implements OnInit, OnChanges {
     return activityItem.type === PositionHistoryTypes.WINNER_REMOVED.valueOf();
   }
 
-  /**
-   * Функция возвращает список классов для html-элемента в зависимости от типа активности
-   * @param activityItem
-   */
-  getActivityTypeStatusClass(activityItem: History): string {
+  getCurrentStatusClass(activityItem: History) {
     const positionStatus = this.isStatusChangeAction(activityItem) ?
-      activityItem.data.newStatus + ' status-change' :
-      activityItem.status;
+      activityItem.data.oldStatus : activityItem.status;
 
-    return 'status-dot ' + 'position-history-status-' + positionStatus;
+    return 'position-current-status-' + positionStatus;
   }
 
-  /**
-   * Функция приводит полный ФИО пользователя в формат Иванов И. И.
-   * @param activityItem
-   */
-  getUserName(activityItem: History): string {
-    const lastName = activityItem.user.lastName;
-    const firstName = activityItem.user.firstName.charAt(0);
-    const middleName = activityItem.user.middleName ? activityItem.user.middleName.charAt(0) + '.' : '';
+  getNewStatusClass(activityItem: History) {
+    const positionStatus = this.isStatusChangeAction(activityItem) ?
+      activityItem.data.newStatus : activityItem.status;
 
-    return lastName + ' ' + firstName + '. ' + middleName;
+    return 'position-new-status-' + positionStatus;
   }
 
   /**
    * Функция приводит возвращаемые данные редактирования позиции в более удобный для фронта вид
    * @param data
    */
-  getPositionEditInfoList(data): Array<{label: string, oldValue: any, newValue: any}> {
+  getPositionEditInfoList(data): Array<{ label: string, oldValue: any, newValue: any }> {
     const positionEditInfo = [];
 
     Object.entries(data.oldValues).forEach(([key, value]) => {
