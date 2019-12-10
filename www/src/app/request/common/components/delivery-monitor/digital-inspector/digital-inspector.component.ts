@@ -5,6 +5,9 @@ import { RequestPosition } from "../../../models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { DeliveryMonitorService } from "../../../services/delivery-monitor.service";
 import { InspectorStage } from "../../../models/delivery-monitor-info";
+import { InspectorInfo } from "../../../models/inspector-info";
+import { InspectorStatus } from "../../../enum/inspector-status";
+import { InspectorStatusLabels } from "../../../dictionaries/inspector-status-labels";
 
 @Component({
   selector: 'app-digital-inspector',
@@ -17,15 +20,15 @@ import { InspectorStage } from "../../../models/delivery-monitor-info";
 
 export class DigitalInspectorComponent {
 
-  @Input() inspectorStages: InspectorStage[] = [];
+  @Input() inspectorStages: InspectorInfo[];
   @Input() position: RequestPosition;
 
   opened = false;
   shiftCount = 0;
 
   form = new FormGroup({
-    createdDate: new FormControl('', Validators.required),
-    title: new FormControl('', Validators.required),
+    occurredAt: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
   });
 
@@ -66,12 +69,24 @@ export class DigitalInspectorComponent {
     }
 
     const formData = this.form.value;
-    formData.createdDate = new Date(this.form.value.createdDate);
+    formData.occurredAt = new Date(this.form.value.occurredAt);
     formData.positionId = this.position.id;
 
     this.form.reset();
     this.deliveryMonitorService.addInspectorStage(formData).subscribe();
     this.notificationService.toast('Добавлено');
     this.inspectorStages.push(formData);
+  }
+
+
+  getEventTitleByType(type) {
+    switch (type) {
+      case InspectorStatus.CERTIFICATE_UPLOADED:
+        return InspectorStatusLabels[InspectorStatus.CERTIFICATE_UPLOADED];
+      case InspectorStatus.PACKAGES_LEFT_PRODUCTION_OPERATION_LINK:
+        return InspectorStatusLabels[InspectorStatus.PACKAGES_LEFT_PRODUCTION_OPERATION_LINK];
+      case InspectorStatus.OPTION_VERIFICATION:
+        return InspectorStatusLabels[InspectorStatus.OPTION_VERIFICATION];
+    }
   }
 }

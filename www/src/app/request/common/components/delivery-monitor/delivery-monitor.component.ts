@@ -10,6 +10,7 @@ import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 import { Uuid } from "../../../../cart/models/uuid";
 import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
+import { InspectorInfo } from "../../models/inspector-info";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -36,6 +37,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
+  inspectorStages: InspectorInfo;
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
@@ -50,12 +52,19 @@ export class DeliveryMonitorComponent implements OnInit {
     // this.goodId = this.demoGoodId; // TODO: 2019-11-20 Раскаментить после демо
     this.goodId = this.getGoodId(); // TODO: 2019-11-20 Убрать после демо
     this.getDeliveryMonitorInfo();
+    this.getManufacturingInfo();
   }
 
   getDeliveryMonitorInfo(): void {
     this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
       .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
+  }
+
+  getManufacturingInfo(): void {
+    this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(data => {
+      this.inspectorStages = data;
+    });
   }
 
   getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
