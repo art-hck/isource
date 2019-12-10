@@ -54,11 +54,14 @@
       }
 
       & div[class*="TECHNICAL_PROPOSALS_PREPARATION"],
-      div[class*="TECHNICAL_PROPOSALS_AGREEMENT"] {
+      div[class*="TECHNICAL_PROPOSALS_AGREEMENT"],
+      div[class*="REVIEW"],
+      div[class*="DECLINED"],
+      div[class*="ACCEPTED"] {
         background-color: $technical-proposals-preparation;
       }
 
-      & div[class*="PROPOSALS_PREPARATION"],
+      & div[class*="-PROPOSALS_PREPARATION"],
       div[class*="RESULTS_AGREEMENT"],
       div[class*="WINNER_SELECTED"] {
         background-color: $proposals-preparation;
@@ -66,7 +69,10 @@
 
       & div[class*="CONTRACT_AGREEMENT"],
       div[class*="CONTRACT_SIGNING"],
-      div[class*="CONTRACTED"] {
+      div[class*="CONTRACTED"],
+      div[class*="ON_APPROVAL"],
+      div[class*="APPROVED"],
+      div[class*="REJECTED"] {
         background-color: $contract-agreement;
       }
 
