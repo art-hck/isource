@@ -45,10 +45,11 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(status, position) {
-    position.status = status[0];
-    position.statusLabel = status[1];
+    position.statusLabel = status.label;
+    position.status = status.value;
+
     this.subsription.add(
-      this.backofficeRequestService.changeStatus(this.requestId, position.id, status[0]).subscribe()
+      this.backofficeRequestService.changeStatus(this.requestId, position.id, position.status).subscribe()
     );
   }
 

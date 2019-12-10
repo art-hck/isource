@@ -82,12 +82,12 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
     this.document.body.appendChild(this.itemsWrapper);
 
     this.items.forEach(item => {
-      item.onSelect.subscribe(value => {
-        this.writeValue(value);
-        this.select.emit(value);
+      item.onSelect.subscribe(data => {
+        this.writeValue(data.value);
+        this.select.emit({value: data.value, label: data.label});
 
         if (this.onChange) {
-          this.onChange(value);
+          this.onChange(data.value);
         }
 
         if (this.hideAfterSelect) {

@@ -20,7 +20,7 @@ export class UxgDropdownItemDirective {
   @HostListener('click')
   click() {
     if (this.disabled === false) {
-      this.onSelect.emit(this.value);
+      this.onSelect.emit({value: this.value, label: this.label});
     }
   }
 }
