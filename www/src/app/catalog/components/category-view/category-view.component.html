@@ -1,5 +1,5 @@
 <ng-container *ngIf="(category$ | async) as category">
-  <h2>{{ category.name }}</h2>
+  <h1>{{ category.name }}</h1>
   <div class="clr-row" *ngIf="category.positionsCount > 0; else categories">
     <div class="clr-col-9">
       <ng-template #loading class="load-block"><span class="spinner spinner-md"></span></ng-template>

@@ -1,0 +1,18 @@
+@import "constants";
+
+.app-breadcrumbs {
+  display: flex;
+  align-items: center;
+
+  &-separator {
+    color: $ghost-font-color;
+  }
+
+  &, a.app-breadcrumbs-breadcrumb {
+    color: $secondary-font-color;
+
+    &:hover {
+      color: $primary-font-color;
+    }
+  }
+}

@@ -3,9 +3,6 @@
 </ng-template>
 
 <ng-container *ngIf="(request$ | async) as request; else loading">
-  <div class="breadcrumbs">
-    <a routerLink="../..">Заявки</a> → <a routerLink="..">Заявка №{{request.number}}</a>
-  </div>
   <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
     <ng-container *ngIf="userInfoService.isBackOffice()">
       <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
@@ -27,9 +24,6 @@
         ></app-contract-create>
       </ng-container>
     </ng-container>
-
-    <h2><b>Согласование договора</b></h2>
-    <br/>
 
     <div class="card" *ngFor="let contract of contracts">
       <div class="card-header">

@@ -25,6 +25,7 @@ import { UxgExampleInputComponent } from './components/ux-guidlines/uxg-example-
 import { UxgExampleTypographyComponent } from './components/ux-guidlines/uxg-example-typography/uxg-example-typography.component';
 import { UxGuidlinesRoutingModule } from "./ux-guidlines-routing.module";
 import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
+import { UxgBreadcrumbsComponent } from './components/uxg-breadcrumbs/uxg-breadcrumbs.component';
 
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -57,7 +58,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgExamplePositionStatusComponent,
     UxgExampleInputComponent,
     UxgExampleTypographyComponent,
-    UxgCodeComponent
+    UxgCodeComponent,
+    UxgBreadcrumbsComponent
   ],
   exports: [
     UxgCheckboxComponent,
@@ -67,7 +69,9 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgSwitcherComponent,
     UxgTabDirective,
     UxgTabsComponent,
-    UxgTabTitleComponent
+    UxgTabTitleComponent,
+    UxgBreadcrumbsComponent,
+    UxgCodeComponent
   ],
 })
 export class UxGuidlinesModule {

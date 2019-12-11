@@ -8,6 +8,8 @@ import { RequestViewComponent } from 'src/app/request/common/components/request-
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import {RequestGroup} from "../../../common/models/request-group";
+import { Title } from "@angular/platform-browser";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-back-office-request-view',
@@ -24,8 +26,10 @@ export class BackOfficeRequestViewComponent implements OnInit {
   protected requestId: Uuid;
 
   constructor(
+    public title: Title,
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
-    private requestService: RequestService
+    private requestService: RequestService,
   ) {
   }
 
@@ -94,6 +98,12 @@ export class BackOfficeRequestViewComponent implements OnInit {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
+        this.title.setTitle(request.name || "Заявка №" + request.id);
+
+        this.bc.breadcrumbs = [
+          { label: "Заявки", link: "/requests/backoffice" },
+          { label: this.title.getTitle(), link: "/requests/backoffice/" + request.id }
+        ];
       }
     );
   }

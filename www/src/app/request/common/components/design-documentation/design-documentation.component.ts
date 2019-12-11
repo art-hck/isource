@@ -9,7 +9,7 @@ import { DesignDocumentationList } from "../../models/design-documentationList";
 import { RequestPosition } from "../../models/request-position";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DesignDocumentation } from "../../models/design-documentation";
-import { finalize } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { DesignDocumentationStatus } from "../../enum/design-documentation-status";
 import { ClrLoadingState } from "@clr/angular";
 import { Observable } from "rxjs";
@@ -18,6 +18,7 @@ import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
 import { UserInfoService } from "../../../../auth/services/user-info.service";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-design-documentation',
@@ -50,6 +51,7 @@ export class DesignDocumentationComponent implements OnInit {
   }
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private router: Router,
     private route: ActivatedRoute,
     private backofficeRequestService: BackofficeRequestService,
@@ -73,6 +75,13 @@ export class DesignDocumentationComponent implements OnInit {
     if (this.userInfoService.isCustomer()) {
       this.request$ = this.customerRequestService.getRequestInfo(this.requestId);
     }
+
+    this.request$ = this.request$.pipe(tap(request => {
+      this.bc.breadcrumbs = [
+        { label: "Заявки", link: "../.." },
+        { label: `Заявка №${request.number }`, link: ".." }
+      ];
+    }));
 
     this.getPositionList();
     this.getDesignDocumentationList();

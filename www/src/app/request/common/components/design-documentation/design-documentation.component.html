@@ -6,10 +6,6 @@
   <div class="clr-row">
     <div class="info-card clr-col">
       <div class="request-info">
-        <div class="breadcrumbs">
-          <a [routerLink]="'../..'">Заявки</a> → <a [routerLink]="'..'">Заявка №{{request.number}}</a>
-        </div>
-        <h2><b>Рабочая конструкторская документация</b></h2>
 
         <ng-container *ngIf="userInfoService.isBackOffice()">
           <div class="clr-row w-100">

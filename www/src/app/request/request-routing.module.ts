@@ -33,19 +33,16 @@ const routes: Routes = [
               {
                 path: "",
                 component: CustomerRequestComponent,
-                data: { title: "Заявка" }
               },
               {
                 path: ':position-id',
-                component: RequestPositionComponent,
-                data: { title: "Позиция" }
+                component: RequestPositionComponent
               }
             ]
           },
           {
             path: '',
             component: CustomerRequestViewComponent,
-            data: { title: "Заявка" }
           },
           {
             path: 'contracts',
@@ -55,21 +52,22 @@ const routes: Routes = [
           {
             path: 'contract',
             component: ContractComponent,
+            data: { title: "Согласование договора" }
           },
           {
             path: 'technical-proposals',
             component: TechnicalProposalsComponent,
-            data: { title: "На согласовании ТП" }
+            data: { title: "Технические предложения" }
           },
           {
             path: 'commercial-proposals',
             component: CommercialProposalsComponent,
-            data: { title: "На согласовании КП" }
+            data: { title: "Коммерческие предложения" }
           },
           {
             path: 'design-documentation',
             component: DesignDocumentationComponent,
-            data: { title: "На согласовании РКД" }
+            data: { title: "Рабочая конструкторская документация" }
           }
         ]
       },
@@ -92,19 +90,16 @@ const routes: Routes = [
               {
                 path: "",
                 component: BackOfficeRequestComponent,
-                data: { title: "Заявка" },
               },
               {
                 path: ':position-id',
-                component: RequestPositionComponent,
-                data: { title: "Позиция" }
+                component: RequestPositionComponent
               }
             ]
           },
           {
             path: '',
             component: BackOfficeRequestViewComponent,
-            data: { title: "Заявка" }
           },
           {
             path: 'add-offers',
@@ -114,17 +109,17 @@ const routes: Routes = [
           {
             path: 'contracts',
             component: ContractComponent,
-            data: { title: "На рассмотрении договора" }
+            data: { title: "Согласование договора" }
           },
           {
             path: 'add-technical-proposals',
             component: AddTechnicalProposalsComponent,
-            data: { title: "На согласовании ТП" }
+            data: { title: "Технические предложения" }
           },
           {
             path: 'add-design-documentation',
             component: DesignDocumentationComponent,
-            data: { title: "На согласовании РКД" }
+            data: { title: "Рабочая конструкторская документация" }
           },
         ]
       },
