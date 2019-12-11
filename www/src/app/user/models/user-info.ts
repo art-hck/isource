@@ -8,9 +8,13 @@ export class UserInfo {
   username: string;
   firstName: string;
   lastName: string;
+  middleName: string;
   isSupplier: boolean;
   isCustomer: boolean;
   isBackOffice: boolean;
+  isSeniorBackoffice: boolean;
+  isRegularBackoffice: boolean;
+  isContragentCreator: boolean;
 }
 
 

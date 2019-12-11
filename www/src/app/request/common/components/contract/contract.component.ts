@@ -8,7 +8,7 @@ import { Contract, ContractStatus } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
-import { UserInfoService } from "../../../../auth/services/user-info.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 import { RequestOfferPosition } from "../../models/request-offer-position";
 import { Uuid } from "../../../../cart/models/uuid";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";

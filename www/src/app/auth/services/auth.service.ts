@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/internal/operators';
 import { APP_CONFIG, TokenService } from '@stdlib-ng/core';
-import { UserInfoService } from "./user-info.service";
+import { UserInfoService } from "../../user/service/user-info.service";
 import { GpnmarketConfigInterface } from '../../core/config/gpnmarket-config.interface';
 
 @Injectable({
