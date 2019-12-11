@@ -37,7 +37,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
-  inspectorStages: InspectorInfo;
+  inspectorStages: InspectorInfo[];
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
@@ -52,7 +52,38 @@ export class DeliveryMonitorComponent implements OnInit {
     // this.goodId = this.demoGoodId; // TODO: 2019-11-20 Раскаментить после демо
     this.goodId = this.getGoodId(); // TODO: 2019-11-20 Убрать после демо
     this.getDeliveryMonitorInfo();
-    this.getManufacturingInfo();
+    // this.getInspectorStagesInfo();
+
+    this.inspectorStages = [
+      {
+        "mtrEventId": "1",
+        "goodId": "74",
+        "occurredAt": "2019-12-03T11:40:55.000Z",
+        "type": "PackagesLeftProductionOperationLink",
+        "payload": {
+          "productionOperationLinkId": "1"
+        }
+      },
+      {
+        "mtrEventId": "2",
+        "goodId": "74",
+        "occurredAt": "2019-12-03T11:42:38.000Z",
+        "type": "CertificateUploaded",
+        "payload": {
+          "certificateId": "1"
+        }
+      },
+      {
+        "mtrEventId": "3",
+        "goodId": "74",
+        "occurredAt": "2019-12-03T11:43:00.000Z",
+        "type": "PackagesLeftProductionOperationLink",
+        "payload": {
+          "productionOperationLinkId": "4"
+        }
+      },
+    ];
+
   }
 
   getDeliveryMonitorInfo(): void {
@@ -61,7 +92,7 @@ export class DeliveryMonitorComponent implements OnInit {
       .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
   }
 
-  getManufacturingInfo(): void {
+  getInspectorStagesInfo(): void {
     this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(data => {
       this.inspectorStages = data;
     });

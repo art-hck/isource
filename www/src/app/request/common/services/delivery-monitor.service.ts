@@ -22,7 +22,7 @@ export class DeliveryMonitorService {
     return this.api.post<InspectorStage[]>(`monitor/inspector-stages/add`, stage);
   }
 
-  getInspectorInfo(positionId: Uuid): Observable<InspectorInfo> {
-    return this.api.post<InspectorInfo>(`monitor/inspector-info/${positionId}`, null);
+  getInspectorInfo(positionId: Uuid): Observable<InspectorInfo[]> {
+    return this.api.post<InspectorInfo[]>(`monitor/inspector-info/${positionId}`, null);
   }
 }

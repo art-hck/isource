@@ -12,10 +12,7 @@ import { InspectorStatusLabels } from "../../../dictionaries/inspector-status-la
 @Component({
   selector: 'app-digital-inspector',
   templateUrl: 'digital-inspector.component.html',
-  styleUrls: [
-    './digital-inspector.component.scss',
-    '../../manufacturing/manufacturing.component.scss'
-  ]
+  styleUrls: ['digital-inspector.component.scss']
 })
 
 export class DigitalInspectorComponent {
