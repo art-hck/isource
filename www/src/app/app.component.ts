@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
         tap(data => {
           this.isBreadcrumbsHidden = data.hideBreadcrumbs;
           this._isTitleHidden = data.hideTitle;
-          this.bc.breadcrumbs = []
+          this.bc.breadcrumbs = [];
         }),
         map(event => event["title"] || this.title)
       ).subscribe((title) => {
