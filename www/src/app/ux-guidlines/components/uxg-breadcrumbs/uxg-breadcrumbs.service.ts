@@ -6,7 +6,17 @@ import { UxgBreadcrumbs } from "./uxg-breadcrumbs";
   providedIn: 'root'
 })
 export class UxgBreadcrumbsService {
-  public breadcrumbs: UxgBreadcrumbs = [];
+  private bc: UxgBreadcrumbs = [];
+
+  // Avoid ExpressionChangedAfterItHasBeenCheckedError.
+  set breadcrumbs(breadcrumbs: UxgBreadcrumbs) {
+    this.bc.length = 0;
+    this.bc.push(...breadcrumbs);
+  }
+
+  get breadcrumbs() {
+    return this.bc;
+  }
 
   public fromActivatedRoute(route: ActivatedRouteSnapshot, link = '', bc: UxgBreadcrumbs = []): UxgBreadcrumbs {
     const children: ActivatedRouteSnapshot[] = route.children;

@@ -70,7 +70,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgTabDirective,
     UxgTabsComponent,
     UxgTabTitleComponent,
-    UxgBreadcrumbsComponent
+    UxgBreadcrumbsComponent,
+    UxgCodeComponent
   ],
 })
 export class UxGuidlinesModule {

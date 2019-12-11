@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     component: MessagesViewComponent,
-    data: { title: "Сообщения" }
+    data: { title: "Сообщения", hideTitle: true, hideBreadcrumbs: true }
   }
 ];
 

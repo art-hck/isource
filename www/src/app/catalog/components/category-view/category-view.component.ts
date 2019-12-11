@@ -6,6 +6,8 @@ import { CatalogCategory } from "../../models/catalog-category";
 import { Observable } from "rxjs";
 import { CatalogCategoryFilter } from "../../models/catalog-category-filter";
 import { Uuid } from "../../../cart/models/uuid";
+import { tap } from "rxjs/operators";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-category-view',
@@ -19,12 +21,14 @@ export class CategoryViewComponent implements OnInit {
   positions$: Observable<CatalogPosition[]>;
   categoryChilds$: Observable<CatalogCategory[]>;
 
-  constructor(private catalogService: CatalogService, private route: ActivatedRoute) {}
+  constructor(private catalogService: CatalogService, private route: ActivatedRoute, private title: Title) {}
 
   ngOnInit() {
     this.route.params.subscribe(routeParams => {
       this.categoryId = routeParams.categoryId;
-      this.category$ = this.catalogService.getCategoryInfo(this.categoryId);
+      this.category$ = this.catalogService.getCategoryInfo(this.categoryId).pipe(
+        tap(category => this.title.setTitle(category.name))
+      );
       this.positions$ = this.catalogService.getPositionsList(this.categoryId);
       this.categoryChilds$ = this.catalogService.getCategoryChilds(this.categoryId);
     });
