@@ -63,9 +63,11 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   getInspectorStagesInfo(): void {
-    this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(data => {
-      this.inspectorStages = data;
-    });
+    const subscription = this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(
+      data => {
+        this.inspectorStages = data;
+        subscription.unsubscribe();
+      });
   }
 
   getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
