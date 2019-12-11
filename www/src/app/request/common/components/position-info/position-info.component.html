@@ -184,17 +184,6 @@
             </clr-tab-content>
           </clr-tab>
 
-          <!-- @TODO: Скрыто на время DEMO (до 20.11.19) -->
-<!--          <clr-tab *ngIf="canViewManufacturing(requestPosition)">-->
-<!--            <button clrTabLink>Изготовление</button>-->
-<!--            <clr-tab-content *clrIfActive>-->
-<!--              <app-manufacturing [requestPosition]="requestPosition"-->
-<!--                                 [requestId]="requestId"-->
-<!--                                 [canUpload]="canUploadManufacturing(requestPosition)">-->
-<!--              </app-manufacturing>-->
-<!--            </clr-tab-content>-->
-<!--          </clr-tab>-->
-
           <clr-tab *ngIf="canViewDeliveryMonitor(requestPosition)">
             <button clrTabLink>Монитор поставок</button>
             <clr-tab-content *clrIfActive>
