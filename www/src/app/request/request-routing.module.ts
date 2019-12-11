@@ -11,8 +11,9 @@ import { TechnicalProposalsComponent } from "./customer/components/technical-pro
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "./common/components/contract/contract.component";
-import { RequestComponent } from "./common/components/request/request.component";
 import { RequestPositionComponent } from "./common/components/request-position/request-position.component";
+import { RequestComponent as BackOfficeRequestComponent } from "./back-office/components/request/request.component";
+import { RequestComponent as CustomerRequestComponent} from "./customer/components/request/request.component";
 
 const routes: Routes = [
   {
@@ -31,7 +32,7 @@ const routes: Routes = [
             children: [
               {
                 path: "",
-                component: RequestComponent,
+                component: CustomerRequestComponent,
                 data: { title: "Заявка" }
               },
               {
@@ -90,7 +91,7 @@ const routes: Routes = [
             children: [
               {
                 path: "",
-                component: RequestComponent,
+                component: BackOfficeRequestComponent,
                 data: { title: "Заявка" },
               },
               {

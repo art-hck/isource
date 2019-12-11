@@ -20,6 +20,8 @@ import { AddFromExcelComponent } from './common/components/add-from-excel/add-fr
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
+import { RequestComponent as BackOfficeRequestComponent  } from './back-office/components/request/request.component';
+import { RequestComponent as CustomerRequestComponent  } from './customer/components/request/request.component';
 import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
@@ -118,7 +120,9 @@ import { RequestPositionComponent } from './common/components/request-position/r
     RequestComponent,
     RequestAsideInfoComponent,
     RequestAddGroupModalComponent,
-    RequestPositionComponent
+    RequestPositionComponent,
+    BackOfficeRequestComponent,
+    CustomerRequestComponent
   ],
   imports: [
     SharedModule,
