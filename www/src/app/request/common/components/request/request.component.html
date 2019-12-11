@@ -17,6 +17,17 @@
           </div>
         </div>
 
+        <!-- Назначиь ответственного -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isSeniorBackoffice()">
+          <button class="app-btn app-btn-clear app-btn-link"
+                  [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
+            <clr-icon shape="app-user" size="16"></clr-icon>
+            <span>Назначить</span>
+          </button>
+          <app-request-add-responsible-modal #addResponsibleModal [request]="request" [positions]="checkedPositions" (success)="onSetResponsible($event)">
+          </app-request-add-responsible-modal>
+        </div>
+
         <!-- Добавить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <button class="app-btn app-btn-clear app-btn-link"
