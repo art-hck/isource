@@ -23,6 +23,6 @@ export class DeliveryMonitorService {
   }
 
   getInspectorInfo(positionId: Uuid): Observable<InspectorInfo[]> {
-    return this.api.post<InspectorInfo[]>(`monitor/inspector-info/${positionId}`, null);
+    return this.api.post<InspectorInfo[]>(`monitor/goods/${positionId}/production`, null);
   }
 }

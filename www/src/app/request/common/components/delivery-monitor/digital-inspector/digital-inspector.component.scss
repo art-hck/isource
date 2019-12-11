@@ -18,32 +18,12 @@
     background-repeat: no-repeat;
   }
 
-  &.ConsignmentLoaded-icon {
-    background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
-    background-repeat: no-repeat;
-  }
-
-  &.ConsignmentCreated-icon {
-    background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
-    background-repeat: no-repeat;
-  }
-
-  &.ConsignmentIsMoving-icon {
-    background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
-    background-repeat: no-repeat;
-  }
-
   &.PackagesLeftProductionOperationLink-icon {
     background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
     background-repeat: no-repeat;
   }
 
   &.OptionVerification-icon {
-    background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
-    background-repeat: no-repeat;
-  }
-
-  &.ConsignmentIsMoving-icon {
     background-image: url('/assets/images/manufacturing/сertificate-icon.svg');
     background-repeat: no-repeat;
   }
@@ -86,13 +66,16 @@
   }
 }
 
+.no-inspector-data {
+  text-align: center;
+  padding-top: 50px;
+}
 
 .item-info-block {
   & .item-name {
     font-size: 16px;
-    line-height: 18px;
+    line-height: 30px;
     color: #254456;
-    margin-bottom: 5px;
   }
 
   & .item-info {

@@ -1,4 +1,8 @@
-<div class="date-bubble-block" *ngIf="inspectorStages && inspectorStages.length > 0">
+<ng-template #noData>
+  <span class="spinner spinner-md delivery-monitor-loader"></span>
+</ng-template>
+
+<div class="date-bubble-block" *ngIf="inspectorStages && inspectorStages.length > 0; else noData">
   <div class="status-dot"></div>
   <div class="date-bubble">Инспекционный контроль</div>
 </div>
@@ -15,14 +19,11 @@
 
       <div class="clr-row">
         <div class="clr-col manufacturing-timeline-item">
-          <div class="icon">
-            <clr-icon shape="asterisk" class="is-solid" size="20"></clr-icon>
-          </div>
+          <div class="manufacturing-icon {{ inspectorEvent.type}}-icon"></div>
+
           <div class="item-info-block">
             <div class="item-name">{{ getEventTitleByType(inspectorEvent.type) }}</div>
-            <div class="item-info">
-              {{ inspectorEvent.type }}
-            </div>
+            <div class="item-info"></div>
           </div>
         </div>
       </div>

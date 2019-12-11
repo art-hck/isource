@@ -1,10 +1,8 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { NotificationService } from "../../../../../shared/services/notification.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { RequestPosition } from "../../../models/request-position";
-import { Uuid } from "../../../../../cart/models/uuid";
 import { DeliveryMonitorService } from "../../../services/delivery-monitor.service";
-import { InspectorStage } from "../../../models/delivery-monitor-info";
 import { InspectorInfo } from "../../../models/inspector-info";
 import { InspectorStatus } from "../../../enum/inspector-status";
 import { InspectorStatusLabels } from "../../../dictionaries/inspector-status-labels";
@@ -74,7 +72,6 @@ export class DigitalInspectorComponent {
     this.notificationService.toast('Добавлено');
     this.inspectorStages.push(formData);
   }
-
 
   getEventTitleByType(type) {
     switch (type) {
