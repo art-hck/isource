@@ -97,7 +97,8 @@ export class CustomValidators {
 
   static password(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/(?=.*[А-ЯA-Z])(?=.*[а-яa-z])(?=.*[0-9]).{6,}/);
+    const valid = String(value).match(/(?=.*[0-9])(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=\S+$).{6,}/);
+    console.log(value);
     return valid ? null : {invalid_password: true};
   }
 
