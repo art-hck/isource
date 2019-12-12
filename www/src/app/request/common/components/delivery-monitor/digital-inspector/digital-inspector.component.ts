@@ -74,13 +74,6 @@ export class DigitalInspectorComponent {
   }
 
   getEventTitleByType(type) {
-    switch (type) {
-      case InspectorStatus.CERTIFICATE_UPLOADED:
-        return InspectorStatusLabels[InspectorStatus.CERTIFICATE_UPLOADED];
-      case InspectorStatus.PACKAGES_LEFT_PRODUCTION_OPERATION_LINK:
-        return InspectorStatusLabels[InspectorStatus.PACKAGES_LEFT_PRODUCTION_OPERATION_LINK];
-      case InspectorStatus.OPTION_VERIFICATION:
-        return InspectorStatusLabels[InspectorStatus.OPTION_VERIFICATION];
-    }
+    return InspectorStatusLabels[type];
   }
 }

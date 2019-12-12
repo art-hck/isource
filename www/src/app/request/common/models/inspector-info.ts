@@ -3,10 +3,12 @@ export class InspectorInfo {
   goodId: string;
   occurredAt: string;
   type: string;
-  payload: InspectorPayload;
+  payload: CertificateUploaded | PackagesLeftProduction;
 }
 
-export class InspectorPayload {
-  certificateId?: string;
-  productionOperationLinkId?: string;
+interface CertificateUploaded {
+  certificateId: string;
+}
+interface PackagesLeftProduction {
+  productionOperationLinkId: string;
 }
