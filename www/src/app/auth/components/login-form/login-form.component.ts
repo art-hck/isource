@@ -59,6 +59,10 @@ export class LoginFormComponent implements OnDestroy {
   }
 
   getErrorMsg(field: string) {
+    if ((field === 'email') && (this.authForm.hasError('invalid_credentials'))) {
+      return '';
+    }
+
     if ((field === 'password') && (this.authForm.hasError('invalid_credentials'))) {
       return 'Неверная эл. почта или пароль';
     }
