@@ -60,7 +60,10 @@
       <app-position-info-history  [requestPosition]="position"></app-position-info-history>
     </ng-container>
     <ng-container *uxgTab="docTab">
-      <app-document-simple-list [uploadLabel]="''" [documents]="position.documents"></app-document-simple-list>
+      <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
+        <h4>{{dateWithDocs.date}}</h4>
+        <app-document-simple-list [gridable]="true" [uploadLabel]="''" [documents]="dateWithDocs.documents"></app-document-simple-list>
+      </div>
     </ng-container>
     <ng-container *uxgTab="offersTab">
       <app-offers [requestPosition]="position" [requestId]="requestId" [isCustomerView]="user.isCustomer()"></app-offers>

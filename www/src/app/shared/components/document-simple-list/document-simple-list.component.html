@@ -1,4 +1,4 @@
-<ul class="list-unstyled">
+<ul class="list-unstyled" [class.gridable]="gridable">
   <li class="document" [class.awaiting]="document.id === null" *ngFor="let document of getDocuments()">
       <document-icon (click)="onDownloadDocument(document)" [name]="document.filename" [size]="documentIconSize.medium"></document-icon>
       <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
