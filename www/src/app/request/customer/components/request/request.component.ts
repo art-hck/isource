@@ -34,7 +34,8 @@ export class RequestComponent implements OnInit {
           { label: "Заявки", link: "/requests/customer" },
           { label: this.title.getTitle(), link: "/requests/customer/" + request.id }
         ];
-      });
+      })
+    );
     this.getPositions();
   }
 
