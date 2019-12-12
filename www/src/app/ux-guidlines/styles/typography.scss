@@ -26,11 +26,16 @@ small {
 }
 
 a.link,
+a:link,
 a[routerlink]:link,
 a[ng-reflect-router-link]:link {
   color: $link-font-color;
 
   &:hover {
     color: $link-hover-font-color;
+  }
+
+  &.app-link-no-color {
+    color: unset;
   }
 }

@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Observable, of, Subscription } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
@@ -9,8 +9,6 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { RequestService } from "../../../customer/services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { User } from "../../../../user/models/user";
-import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-request',
@@ -21,6 +19,8 @@ export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
+  @Output() addGroup = new EventEmitter();
+  @Output() addResponsible = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
   subscription = new Subscription();
 
@@ -59,8 +59,7 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
-    private user: UserInfoService,
-    private notification: NotificationService,
+    private user: UserInfoService
   ) {
   }
 
@@ -94,11 +93,6 @@ export class RequestComponent implements OnInit, OnDestroy {
       this.router.navigate([position.id], { relativeTo: this.route });
       e.preventDefault();
     }
-  }
-
-  // @TODO Implement!
-  onSetResponsible(user: User) {
-    this.notification.toast("Позиции успешно назначены на " + (user.fullName || user.shortName));
   }
 
   private formPositionPush(position): void {
@@ -140,6 +134,10 @@ export class RequestComponent implements OnInit, OnDestroy {
     ));
 
     return formGroup;
+  }
+
+  asFormArray(control: AbstractControl) {
+    return control as FormArray;
   }
 
   ngOnDestroy() {

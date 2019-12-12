@@ -4,7 +4,6 @@ import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
 import { ActivatedRoute } from "@angular/router";
-import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   templateUrl: './request.component.html'
@@ -23,8 +22,13 @@ export class RequestComponent implements OnInit {
     const requestId = this.route.snapshot.paramMap.get('id');
 
     this.request$ = this.requestService.getRequestInfo(requestId);
-    this.positions$ = this.requestService.getRequestPositions(requestId).pipe(
-      publishReplay(1), refCount()
-    );
+    this.getPositions();
   }
+
+  getPositions() {
+    const requestId = this.route.snapshot.paramMap.get('id');
+
+    this.positions$ = this.requestService.getRequestPositions(requestId);
+  }
+
 }
