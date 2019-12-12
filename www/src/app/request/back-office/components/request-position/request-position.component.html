@@ -1,0 +1,8 @@
+<ng-container *ngIf="(position$ | async) as position">
+  <app-request-position
+    [requestId]="requestId"
+    [position]="position"
+    [statuses]="statuses"
+    (changeStatus)="changeStatus($event)">
+  </app-request-position>
+</ng-container>

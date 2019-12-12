@@ -68,6 +68,8 @@ import { RequestComponent } from "./common/components/request/request.component"
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
 import { RequestPositionComponent } from './common/components/request-position/request-position.component';
+import { RequestPositionComponent as BackOfficeRequestPositionComponent } from './back-office/components/request-position/request-position.component';
+import { RequestPositionComponent as CustomerRequestPositionComponent } from './customer/components/request-position/request-position.component';
 
 @NgModule({
   declarations: [
@@ -121,8 +123,10 @@ import { RequestPositionComponent } from './common/components/request-position/r
     RequestAsideInfoComponent,
     RequestAddGroupModalComponent,
     RequestPositionComponent,
+    BackOfficeRequestPositionComponent,
+    CustomerRequestPositionComponent,
     BackOfficeRequestComponent,
-    CustomerRequestComponent
+    CustomerRequestComponent,
   ],
   imports: [
     SharedModule,
