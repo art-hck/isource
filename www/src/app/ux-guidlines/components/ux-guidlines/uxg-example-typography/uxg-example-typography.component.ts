@@ -1,10 +1,20 @@
 import { Component } from '@angular/core';
+import { UxgBreadcrumbsService } from "../../uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'uxg-example-typography',
   templateUrl: './uxg-example-typography.component.html'
 })
 export class UxgExampleTypographyComponent {
+  constructor(public breadcrumbsService: UxgBreadcrumbsService) {
+    // Here is generating breadcrumbs logic ...
+    this.breadcrumbsService.breadcrumbs = [
+      { label: "Home", link: "/" },
+      { label: "Page1", link: "/page1" },
+      { label: "Page2", link: "/page1" }
+    ];
+  }
+
   readonly example1 = `<h1>H1 title</h1>
 <h2>H2 title</h2>
 <h3>H3 title</h3>
@@ -88,4 +98,13 @@ export class UxgExampleTypographyComponent {
   </div>
 </div>`;
 
+  readonly example6 = `<uxg-breadcrumbs [breadcrumbs]="breadcrumbsService.breadcrumbs"></uxg-breadcrumbs>`;
+  readonly example6_1 = `constructor(public breadcrumbsService: UxgBreadcrumbsService) {
+  // Here is generating breadcrumbs logic ...
+  this.breadcrumbsService.breadcrumbs = [
+    { label: "Home", link: "/" },
+    { label: "Page1", link: "/page1" },
+    { label: "Page2", link: "/page1" }
+  ];
+}`;
 }
