@@ -1,14 +1,15 @@
 <ng-container *ngIf="(position$ | async) as position">
   <h1>{{ position.name }}</h1>
-  <div class="app-row">
+  <div class="app-row dashboard">
 
     <!-- Горизонтальная инфа о позиции -->
     <div class="app-col app-table app-no-border actions">
       <div class="app-row">
 
         <div class="app-col">
-          <span class="app-ghost-color">Последнее изменение: </span>
-          <span>{{ position.createdDate | date : "dd.MM.yyyy hh:mm" }}</span>
+          <span class="app-ghost-color">Изменена: </span>
+          <span>{{ position.createdDate | date : "dd.MM.yyyy" }} </span>
+          <span class="app-ghost-color">{{ position.createdDate | date : "hh:mm" }}</span>
         </div>
 
         <div class="app-col separator"></div>
