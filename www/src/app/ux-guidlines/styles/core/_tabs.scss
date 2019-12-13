@@ -1,3 +1,5 @@
+@import "../uxg";
+
 @mixin tabs($theme) {
 .app-tabs {
   &-wrap {
@@ -24,7 +26,7 @@
   }
 
   &-item {
-    color: map_get($theme, color-font-secondary);
+    color: uxg($theme, color-font-secondary);
     cursor: pointer;
     display: block;
     padding: 10px 0;
@@ -41,16 +43,16 @@
     }
 
     &-active {
-      color: map_get($theme, color-font-primary);
+      color: uxg($theme, color-font-primary);
     }
   }
 
   &-border {
-    border-bottom: 1px map_get($theme, color-secondary) solid;
+    border-bottom: 1px uxg($theme, color-secondary) solid;
   }
 
   &-indicator {
-    background: map_get($theme, color-primary);
+    background: uxg($theme, color-primary);
     bottom: 0;
     content: "";
     display: block;

@@ -1,10 +1,12 @@
+@import "../uxg";
+
 @mixin accordion($theme) {
 .app-accordion {
   &-title {
     display: flex;
     cursor: pointer;
     align-items: center;
-    font-size: map_get($theme, font-size-l);
+    font-size: uxg($theme, font-size-l);
     font-weight: bold;
 
     :first-child {

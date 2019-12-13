@@ -1,3 +1,5 @@
+@import "../uxg";
+
 @mixin statuses($theme, $statuses) {
 .app-position-status {
   white-space: nowrap;

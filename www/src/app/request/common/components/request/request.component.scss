@@ -38,11 +38,11 @@
   }
 
   .group-title {
-    color: map_get($theme, color-font-secondary);
+    color: uxg($theme, color-font-secondary);
     padding-bottom: 14px;
 
     b {
-      color: map_get($theme, color-font-primary);
+      color: uxg($theme, color-font-primary);
     }
   }
 

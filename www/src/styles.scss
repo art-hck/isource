@@ -42,7 +42,7 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-  color: map_get($theme, color-font-primary);
+  color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
 }
 
@@ -70,7 +70,7 @@ b.required-star {
 }
 
 .main-container {
-  background: map_get($theme, color-bg);
+  background: uxg($theme, color-bg);
 }
 
 /* Улучшение отступов для контента */

@@ -1,3 +1,5 @@
+@import "../uxg";
+
 @mixin grid($theme) {
 .app-row {
   display: flex;
@@ -24,12 +26,12 @@
 
 .app-table {
   &:not(.app-no-border) > .app-row {
-    border: 1px solid map_get($theme, color-border);
-    background: map_get($theme, color-default);
+    border: 1px solid uxg($theme, color-border);
+    background: uxg($theme, color-default);
     transition: background-color 250ms;
 
     &-clickable:hover {
-      background: map_get($theme, color-bg);
+      background: uxg($theme, color-bg);
     }
   }
 

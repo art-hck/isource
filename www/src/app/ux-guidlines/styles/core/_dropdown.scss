@@ -1,3 +1,5 @@
+@import "../uxg";
+
 @mixin dropdown($theme) {
 .app-dropdown {
   display: block;
@@ -17,24 +19,24 @@
   }
 
   &-items-item:hover {
-    background: map_get($theme, color-list-hover);
+    background: uxg($theme, color-list-hover);
   }
 
   &-handler {
     align-items: center;
-    border: 1px map_get($theme, color-control-secondary) solid;
-    background: map_get($theme, color-default);
+    border: 1px uxg($theme, color-control-secondary) solid;
+    background: uxg($theme, color-default);
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
     padding-right: 0;
 
     &:hover {
-      border-color: map_get($theme, color-control-primary);
+      border-color: uxg($theme, color-control-primary);
     }
 
     &.active {
-      border-color: map_get($theme, color-control-primary);
+      border-color: uxg($theme, color-control-primary);
     }
 
     &:not(&-up).active {
@@ -67,8 +69,8 @@
 
     &-wrapper {
       animation: app-dropdown-show 300ms;
-      background: map_get($theme, color-default);
-      border: 1px map_get($theme, color-control-primary) solid;
+      background: uxg($theme, color-default);
+      border: 1px uxg($theme, color-control-primary) solid;
       border-radius: 4px;
       left: 0;
       overflow: hidden;
@@ -97,8 +99,8 @@
 
     /* scrollbar itself */
     &::-webkit-scrollbar-thumb {
-      background-color: map_get($theme, color-soft);
-      border: 5px solid map_get($theme, color-default);
+      background-color: uxg($theme, color-soft);
+      border: 5px solid uxg($theme, color-default);
       border-radius: 16px;
       transition: border 500ms;
     }
@@ -117,9 +119,9 @@
   }
 
   &-disabled .app-dropdown-handler {
-    background: map_get($theme, color-control-secondary);
-    border-color: map_get($theme, color-secondary);
-    color: map_get($theme, color-font-ghost);
+    background: uxg($theme, color-control-secondary);
+    border-color: uxg($theme, color-secondary);
+    color: uxg($theme, color-font-ghost);
   }
 }
 

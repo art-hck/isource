@@ -1,4 +1,4 @@
-@import "controls-checkbox", "controls-input", "controls-switcher";
+@import "../uxg", "controls-checkbox", "controls-input", "controls-switcher";
 
 @mixin controls($theme) {
 @include controls-switcher($theme);

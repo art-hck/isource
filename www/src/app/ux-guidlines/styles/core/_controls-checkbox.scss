@@ -1,10 +1,12 @@
+@import "../uxg";
+
 @mixin controls-checkbox($theme) {
 .app-control[type=checkbox] {
   display: none;
 
   & + .app-control-checkbox {
-    background-color: map_get($theme, color-default);
-    border: 1px map_get($theme, color-soft) solid;
+    background-color: uxg($theme, color-default);
+    border: 1px uxg($theme, color-soft) solid;
     border-radius: 2px;
     box-sizing: border-box;
     cursor: pointer;
@@ -20,8 +22,8 @@
     }
 
     &:after {
-      border-bottom: 2px map_get($theme, color-default) solid;
-      border-right: 2px map_get($theme, color-default) solid;
+      border-bottom: 2px uxg($theme, color-default) solid;
+      border-right: 2px uxg($theme, color-default) solid;
       content: "";
       display: block;
       height: 12px;
@@ -54,7 +56,7 @@
   }
 
   &:checked + .app-control-checkbox {
-    border-color: map_get($theme, color-control-primary);
+    border-color: uxg($theme, color-control-primary);
     border-width: 9px;
     transition-delay: 0ms;
 

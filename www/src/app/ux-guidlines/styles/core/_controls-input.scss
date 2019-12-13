@@ -1,18 +1,20 @@
+@import "../uxg";
+
 @mixin controls-input($theme) {
 .app-control {
   &[type=text], &[type=password] {
-    border-radius: map_get($theme, control-border-radius);
-    border: 1px solid map_get($theme, color-control-secondary);
-    height: map_get($theme, control-height);
+    border-radius: uxg($theme, control-border-radius);
+    border: 1px solid uxg($theme, color-control-secondary);
+    height: uxg($theme, control-height);
     cursor: text;
     margin-bottom: 2em;
 
     &.app-control-large {
-      height: map_get($theme, control-height-l);
+      height: uxg($theme, control-height-l);
     }
 
     &:not(.invalid):focus {
-      border-color: map_get($theme, color-control-primary);
+      border-color: uxg($theme, color-control-primary);
     }
 
     & + .app-control-error {
@@ -22,7 +24,7 @@
     }
 
     &.invalid {
-      border-color: map_get($theme, color-control-invalid);
+      border-color: uxg($theme, color-control-invalid);
 
       & + .app-control-error {
         display: block;
@@ -31,9 +33,9 @@
   }
 
   &-error > * {
-    color: map_get($theme, color-control-invalid);
+    color: uxg($theme, color-control-invalid);
     display: block;
-    font-size: map_get($theme, font-size-s);
+    font-size: uxg($theme, font-size-s);
     font-weight: bold;
   }
 }

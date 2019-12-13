@@ -1,17 +1,19 @@
+@import "../uxg";
+
 @mixin breadcrumbs($theme) {
 .app-breadcrumbs {
   display: flex;
   align-items: center;
 
   &-separator {
-    color: map_get($theme, color-font-ghost);
+    color: uxg($theme, color-font-ghost);
   }
 
   &, a.app-breadcrumbs-breadcrumb {
-    color: map_get($theme, color-font-secondary);
+    color: uxg($theme, color-font-secondary);
 
     &:hover {
-      color: map_get($theme, color-font-primary);
+      color: uxg($theme, color-font-primary);
     }
   }
 }
