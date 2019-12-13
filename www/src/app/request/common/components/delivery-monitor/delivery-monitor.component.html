@@ -190,3 +190,45 @@
 
 
 </ng-container>
+
+
+
+<form [formGroup]="assignIdForm" (ngSubmit)="assignIdSubmit()" *ngIf="opened">
+  <span class="gibert-title">Замена ID товара</span>
+
+  <div class="clr-input-wrapper control-element">
+    <label>ID товара:</label>
+    <input type="text" formControlName="newGoodId" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <button class="btn btn-primary">Заменить</button>
+  <br><br>
+</form>
+
+
+<form [formGroup]="newEventForm" (ngSubmit)="newEventSubmit()" *ngIf="opened">
+  <span class="gibert-title">Добавление нового события</span>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Тип события:</label>
+
+    <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
+      <option value="CertificateUploaded">Загружен сертификат качества</option>
+      <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
+      <option value="OptionVerification">Инспектор проверил характеристику</option>
+    </select>
+  </div>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Описание:</label>
+    <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Дата:</label>
+    <input type="date" formControlName="occurredAt" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <button class="btn btn-primary">Добавить</button>
+  <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
+</form>

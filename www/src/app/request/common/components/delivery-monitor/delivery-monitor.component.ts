@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { DeliveryMonitorService } from "../../services/delivery-monitor.service";
 import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
@@ -11,6 +11,8 @@ import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor
 import { Uuid } from "../../../../cart/models/uuid";
 import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 import { InspectorInfo } from "../../models/inspector-info";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { NotificationService } from "../../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -41,12 +43,51 @@ export class DeliveryMonitorComponent implements OnInit {
   inspectorStages: InspectorInfo[];
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
+  opened = false;
+  shiftCount = 0;
+
   goodId: string;
   // demoGoodId = '61'; // TODO: 2019-11-20 Раскаментить после демо
 
+  assignIdForm = new FormGroup({
+    newGoodId: new FormControl('', Validators.required),
+  });
+
+  newEventForm = new FormGroup({
+    occurredAt: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+  });
+
   constructor(
+    private notificationService: NotificationService,
     private deliveryMonitorService: DeliveryMonitorService
   ) { }
+
+  @HostListener('document:keyup', ['$event'])
+  resetShift(e: KeyboardEvent) {
+    if (e.key !== "Shift") {
+      this.shiftCount = 0;
+    }
+  }
+
+  @HostListener('document:keyup.shift')
+  onShift() {
+    if (this.opened) {
+      return;
+    }
+
+    this.shiftCount++;
+
+    if (this.shiftCount === 5) {
+      this.notificationService.toast('Активация...', "warning");
+    }
+
+    if (this.shiftCount === 10) {
+      this.shiftCount = 0;
+      this.opened = true;
+    }
+  }
 
   ngOnInit() {
     // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
@@ -164,6 +205,38 @@ export class DeliveryMonitorComponent implements OnInit {
         return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.ARRIVED];
     }
   }
+
+
+
+  assignIdSubmit() {
+    if (this.assignIdForm.invalid) {
+      this.notificationService.toast('Заполните поле!', "error");
+      return;
+    }
+
+    const formData = this.assignIdForm.value;
+    this.assignIdForm.reset();
+    this.deliveryMonitorService.assignNewGoodId(this.requestPosition.id, formData).subscribe();
+    this.notificationService.toast('Идентификатор товара заменён');
+  }
+
+  newEventSubmit() {
+    if (this.newEventForm.invalid) {
+      this.notificationService.toast('Заполните все поля!', "error");
+      return;
+    }
+
+    const formData = this.newEventForm.value;
+    formData.occurredAt = new Date(this.newEventForm.value.occurredAt);
+    formData.positionId = this.requestPosition.id;
+
+    this.newEventForm.reset();
+    this.deliveryMonitorService.addInspectorStage(formData).subscribe();
+    this.notificationService.toast('Событие добавлено');
+    this.inspectorStages.push(formData);
+  }
+
+
 
   // TODO: 2019-11-20 Убрать метод getGoodId после демо
 
