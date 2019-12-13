@@ -4,6 +4,10 @@ select option {
   border-radius: 4px;
 }
 
+.clr-select-wrapper {
+  max-height: initial !important;
+}
+
 .clr-select-wrapper select {
   background: #E5E8EF;
   border-radius: 4px;
