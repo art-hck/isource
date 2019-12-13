@@ -64,6 +64,10 @@ export class ProcedureService {
     }));
   }
 
+  /**
+   *   Функция возможно может понадобиться для автоматической выгрузки результатов процедуры
+   *   в Маркетплейс при переходе процедуры на статус «Подведение итогов»
+   */
   importOffersFromProcedure(request: Request): Observable<RequestOfferPosition[]> {
     return this.api.get<RequestOfferPosition[]>(`requests/backoffice/${request.id}/procedure-offers`);
   }
