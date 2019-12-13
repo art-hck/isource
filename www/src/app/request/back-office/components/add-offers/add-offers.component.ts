@@ -574,7 +574,6 @@ export class AddOffersComponent implements OnInit, OnDestroy {
   }
 
   availableCancelPublishOffers(requestPosition: RequestPosition) {
-    return true;
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT
       && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
   }
