@@ -1,56 +1,67 @@
-<ng-template #noData>
-  <span class="spinner spinner-md delivery-monitor-loader"></span>
-</ng-template>
+<div class="digital-inspector-content">
+  <ng-template #noData>
+    <ng-template #loadingInspectorData>
+      <span class="spinner spinner-md delivery-monitor-loader"></span>
+    </ng-template>
 
-<div class="date-bubble-block" *ngIf="inspectorStages && inspectorStages.length > 0; else noData">
-  <div class="status-dot"></div>
-  <div class="date-bubble">Инспекционный контроль</div>
-</div>
+    <ng-container *ngIf="inspectorStages && inspectorStages.length === 0; else loadingInspectorData">
+      <p class="no-inspector-data gray">На данный момент событий нет</p>
+    </ng-container>
+  </ng-template>
 
-<clr-accordion class="manufacturing-timeline-block" [clrAccordionMultiPanel]="true">
-  <clr-accordion-panel *ngFor="let inspectorEvent of inspectorStages" class="manufacturing-timeline-panel"
-                       [clrAccordionPanelDisabled]="true">
+  <ng-container *ngIf="inspectorStages && inspectorStages.length !== 0; else noData">
 
-    <clr-accordion-title class="manufacturing-timeline-header">
+    <div class="date-bubble-block">
+      <div class="status-dot"></div>
+      <div class="date-bubble">Инспекционный контроль</div>
+    </div>
 
-      <div class="status-dot">
-        <span class="time-item">{{ inspectorEvent.occurredAt | date : "dd.MM.yyyy" }}</span>
-      </div>
+    <clr-accordion class="manufacturing-timeline-block" [clrAccordionMultiPanel]="true">
+      <clr-accordion-panel *ngFor="let inspectorEvent of inspectorStages" class="manufacturing-timeline-panel"
+                           [clrAccordionPanelDisabled]="true">
 
-      <div class="clr-row">
-        <div class="clr-col manufacturing-timeline-item">
-          <div class="manufacturing-icon {{ inspectorEvent.type}}-icon"></div>
+        <clr-accordion-title class="manufacturing-timeline-header">
 
-          <div class="item-info-block">
-            <div class="item-name">{{ getEventTitleByType(inspectorEvent.type) }}</div>
-            <div class="item-info"></div>
+          <div class="status-dot">
+            <span class="time-item">{{ inspectorEvent.occurredAt | date : "dd.MM.yyyy" }}</span>
           </div>
-        </div>
+
+          <div class="clr-row">
+            <div class="clr-col manufacturing-timeline-item">
+              <div class="manufacturing-icon {{ inspectorEvent.type}}-icon"></div>
+
+              <div class="item-info-block">
+                <div class="item-name">{{ getEventTitleByType(inspectorEvent.type) }}</div>
+                <div class="item-info"></div>
+              </div>
+            </div>
+          </div>
+        </clr-accordion-title>
+      </clr-accordion-panel>
+    </clr-accordion>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="opened">
+      <div class="clr-input-wrapper">
+        <label>Type:</label>
+
+        <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
+          <option value="CertificateUploaded">Загружен сертификат качества</option>
+          <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
+          <option value="OptionVerification">Инспектор проверил характеристику</option>
+        </select>
       </div>
-    </clr-accordion-title>
-  </clr-accordion-panel>
-</clr-accordion>
 
-<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="opened">
-  <div class="clr-input-wrapper">
-    <label>Type:</label>
+      <div class="clr-input-wrapper">
+        <label>Description:</label>
+        <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
+      </div>
 
-    <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
-      <option value="CertificateUploaded">Загружен сертификат качества</option>
-      <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
-      <option value="OptionVerification">Инспектор проверил характеристику</option>
-    </select>
-  </div>
-
-  <div class="clr-input-wrapper">
-    <label>Description:</label>
-    <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
-  </div>
-
-  <div class="clr-input-wrapper">
-    <label>Date:</label>
-    <input type="date" formControlName="occurredAt" appFormControlInvalidClass="invalid"/>
-  </div>
-  <button class="btn btn-primary">Добавить</button>
-  <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
-</form>
+      <div class="clr-input-wrapper">
+        <label>Date:</label>
+        <input type="date" formControlName="occurredAt" appFormControlInvalidClass="invalid"/>
+      </div>
+      <button class="btn btn-primary">Добавить</button>
+      <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
+    </form>
+  </ng-container>
+</div>

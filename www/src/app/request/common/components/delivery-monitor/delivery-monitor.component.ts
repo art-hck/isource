@@ -38,7 +38,7 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
-  inspectorStages: InspectorInfo[] = [];
+  inspectorStages: InspectorInfo[];
   consignments$: Observable<DeliveryMonitorConsignment[]>;
 
   goodId: string;
