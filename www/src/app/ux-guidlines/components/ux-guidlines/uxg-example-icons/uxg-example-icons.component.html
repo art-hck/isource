@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header">Icons</div>
+
+  <div class="card-block">
+    <div class="card-title">Example</div>
+    <div>
+      <button uxgButton secondary icon (click)="ctx.$implicit = shape" *ngFor="let shape of shapes">
+        <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></clr-icon>
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="ctx.$implicit">
+    <ng-container *ngTemplateOutlet="example;context:ctx;"></ng-container>
+  </ng-container>
+
+  <ng-template #example let-shape>
+    <div class="card-block">
+      <div class="card-title">Sources</div>
+      <uxg-code>{{getExmample(shape)}}</uxg-code>
+
+
+      <div>
+        <button uxgButton outline icon lg>
+          <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></clr-icon>
+        </button>
+        <button *ngIf="hasSolid(shape)" uxgButton outline icon lg>
+          <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)" class="is-solid"></clr-icon>
+        </button>
+      </div>
+      <br/>
+      <div>See more usage options in <a target="_blank" href="https://clarity.design/icons/how-to-use">How To Use</a></div>
+      <br/>
+      <div>
+        <button uxgButton secondary (click)="ctx.$implicit = ''">Close</button>
+      </div>
+    </div>
+  </ng-template>
+</div>

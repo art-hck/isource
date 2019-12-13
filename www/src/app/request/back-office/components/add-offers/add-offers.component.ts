@@ -28,6 +28,7 @@ import { PublishProcedureRequest } from '../../models/publish-procedure-request'
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
 import { ClrLoadingState } from "@clr/angular";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -82,6 +83,7 @@ export class AddOffersComponent implements OnInit, OnDestroy {
   protected updateTimerId: number;
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private requestService: RequestService,
     private formBuilder: FormBuilder,
@@ -107,6 +109,11 @@ export class AddOffersComponent implements OnInit, OnDestroy {
       (request: Request) => {
         getRequestInfoSubscription.unsubscribe();
         this.request = request;
+
+        this.bc.breadcrumbs = [
+          { label: "Заявки", link: "/requests/backoffice"},
+          { label: `Заявка №${request.number}`, link: "/requests/backoffice/" + request.id }
+        ];
 
         this.updatePositionsAndSuppliers();
       }

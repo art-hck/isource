@@ -4,6 +4,11 @@
   <div class="content-container">
     <div class="content-area">
       <div class="container">
+        <div class="breadcrumbs" *ngIf="!isBreadcrumbsHidden">
+          <uxg-breadcrumbs [breadcrumbs]="bc.breadcrumbs"></uxg-breadcrumbs>
+        </div>
+        <h1 *ngIf="!isTitleHidden">{{ titleService.getTitle() }}</h1>
+
         <router-outlet></router-outlet>
       </div>
     </div>

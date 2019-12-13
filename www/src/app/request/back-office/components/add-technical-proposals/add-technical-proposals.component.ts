@@ -28,6 +28,7 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
 import * as moment from "moment";
 import { ClrLoadingState } from "@clr/angular";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -76,6 +77,7 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -108,6 +110,11 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
       )));
 
     this.contragentList$ = this.getContragentService.getContragentList();
+
+    this.bc.breadcrumbs = [
+      { label: "Заявки", link: "/requests/backoffice"},
+      { label: `Заявка №${this.request.number}`, link: "/requests/backoffice/" + this.request.id }
+    ];
   }
 
   ngOnDestroy() {
