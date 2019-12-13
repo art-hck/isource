@@ -45,6 +45,9 @@ export class AddOffersComponent implements OnInit {
   showAddOfferModal = false;
   editMode = false;
   offerForm: FormGroup;
+  procedureEndDateForm: FormGroup;
+
+  showProcedureProlongateModal = false;
 
   showImportOffersExcel = false;
 
@@ -108,6 +111,10 @@ export class AddOffersComponent implements OnInit {
     });
 
     this.updatePositionsAndSuppliers();
+
+    this.procedureEndDateForm = this.formBuilder.group({
+      procedureEndDate: ['', [Validators.required, CustomValidators.futureDate()]]
+    });
   }
 
   getSupplierLinkedOffers(
@@ -528,4 +535,9 @@ export class AddOffersComponent implements OnInit {
       }
     );
   }
+
+  openProcedureProlongateModal(procedureId) {
+    this.showProcedureProlongateModal = true;
+  }
+
 }
