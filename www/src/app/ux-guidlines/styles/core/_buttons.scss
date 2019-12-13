@@ -1,13 +1,12 @@
-@import "constants";
-
+@mixin buttons($theme) {
 .app-btn {
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: $control-border-radius;
+  border-radius: map_get($theme, control-border-radius);
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
-  font-size: $font-size-m;
+  font-size: map_get($theme, font-size-m);
   min-height: 26px;
   overflow: hidden;
   padding: 0;
@@ -20,10 +19,10 @@
   line-height: normal;
 
   &:not(&-clear) {
-    height: $control-height;
-    max-width: $button-max-width;
-    min-width: $button-min-width;
-    padding: $button-padding;
+    height: map_get($theme, control-height);
+    max-width: map_get($theme, button-max-width);
+    min-width: map_get($theme, button-min-width);
+    padding: map_get($theme, button-padding);
 
     // Если после кнопки есть элемент делаем отступ
     & + * {
@@ -38,51 +37,51 @@
   }
 
   &-primary {
-    background-color: $primary-control-color;
-    color: $default-color;
+    background-color: map_get($theme, color-control-primary);
+    color: map_get($theme, color-default);
 
     &:not(:disabled):hover {
-      background-color: $primary-hover-control-color;
+      background-color: map_get($theme, color-control-primary-hover);
     }
   }
 
   &-secondary {
-    background-color: $secondary-control-color;
-    color: $primary-font-color;
+    background-color: map_get($theme, color-control-secondary);
+    color: map_get($theme, color-font-primary);
 
     &:not(:disabled):hover {
-      background-color: $secondary-hover-control-color;
+      background-color: map_get($theme, color-control-secondary-hover);
     }
   }
 
   &-outline {
-    border-color: $soft-color;
-    color: $secondary-font-color;
+    border-color: map-get($theme, color-soft);
+    color: map_get($theme, color-font-secondary);
 
     &:not(:disabled):hover {
-      border-color: $secondary-hover-border-control-color;
+      border-color: map_get($theme, color-control-secondary-hover-border);
     }
   }
 
   &-link {
-    color: $secondary-font-color;
+    color: map_get($theme, color-font-secondary);
 
     &:not(:disabled):hover {
-      color: $primary-font-color;
+      color: map_get($theme, color-font-primary);
     }
   }
 
-  &-large:not(&-clear)  {
-    height: $control-l-height;
-    padding: $button-l-padding;
+  &-large:not(&-clear) {
+    height: map_get($theme, control-height-l);
+    padding: map_get($theme, button-padding-l);
 
     &.app-btn-icon {
-      min-width: $control-l-height;
+      min-width: map_get($theme, control-height-l);
     }
   }
 
   &-icon:not(&-clear) {
-    min-width: $control-height;
+    min-width: map_get($theme, control-height);
     padding: 0;
   }
 
@@ -100,4 +99,5 @@
 
 * + .app-btn {
   margin-left: .5rem;
+}
 }

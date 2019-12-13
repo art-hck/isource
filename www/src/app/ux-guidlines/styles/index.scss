@@ -1,46 +1,28 @@
-@import "accordion";
-@import "buttons";
-@import "buttons-group";
-@import "constants";
-@import "controls";
-@import "grid";
-@import "statuses";
-@import "tabs";
-@import "typography";
-@import "dropdown";
-@import "breadcrumbs";
+@import
+  "core/theme",
+  "core/accordion",
+  "core/buttons",
+  "core/buttons-group",
+  "core/controls",
+  "core/grid",
+  "core/statuses",
+  "core/tabs",
+  "core/typography",
+  "core/dropdown",
+  "core/breadcrumbs",
+  "core/helpers";
 
-.app-bold { font-weight: bold; }
-.app-ghost-color { color: $ghost-font-color}
-.app-secondary-color { color: $secondary-font-color}
-.app-basis-auto { flex-basis: auto; }
+@mixin core($theme: (), $statuses: ()) {
 
-.divider {
-  background: $divider-color;
-  border: none;
-  display: block;
-  height: 1px;
-  margin: 15px 0;
-  width: 100%;
-}
-
-.app-section {
-  margin-bottom: .9em;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-}
-
-* + clr-icon {
-  margin-left: .5em;
-}
-
-clr-icon {
-  vertical-align: middle;
-  align-self: center;
-
-  & + * {
-    margin-left: .5em;
-  }
+  @include accordion($theme);
+  @include buttons($theme);
+  @include buttons-group($theme);
+  @include controls($theme);
+  @include grid($theme);
+  @include statuses($theme, $statuses);
+  @include tabs($theme);
+  @include typography($theme);
+  @include dropdown($theme);
+  @include breadcrumbs($theme);
+  @include helpers($theme);
 }

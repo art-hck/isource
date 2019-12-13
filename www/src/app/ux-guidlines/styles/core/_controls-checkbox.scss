@@ -1,11 +1,10 @@
-@import "constants";
-
+@mixin controls-checkbox($theme) {
 .app-control[type=checkbox] {
   display: none;
 
   & + .app-control-checkbox {
-    background-color: $default-color;
-    border: 1px $soft-color solid;
+    background-color: map_get($theme, color-default);
+    border: 1px map_get($theme, color-soft) solid;
     border-radius: 2px;
     box-sizing: border-box;
     cursor: pointer;
@@ -21,8 +20,8 @@
     }
 
     &:after {
-      border-bottom: 2px $default-color solid;
-      border-right: 2px $default-color solid;
+      border-bottom: 2px map_get($theme, color-default) solid;
+      border-right: 2px map_get($theme, color-default) solid;
       content: "";
       display: block;
       height: 12px;
@@ -55,7 +54,7 @@
   }
 
   &:checked + .app-control-checkbox {
-    border-color: $primary-control-color;
+    border-color: map_get($theme, color-control-primary);
     border-width: 9px;
     transition-delay: 0ms;
 
@@ -78,4 +77,5 @@
     transform: rotate(90deg) scale(1);
     width: 2px;
   }
+}
 }

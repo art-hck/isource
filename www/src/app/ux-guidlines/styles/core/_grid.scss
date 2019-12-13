@@ -1,5 +1,4 @@
-@import "constants";
-
+@mixin grid($theme) {
 .app-row {
   display: flex;
   flex-wrap: wrap;
@@ -16,6 +15,7 @@
 
   &-aside {
     max-width: 280px;
+
     & + * {
       margin-left: 20px;
     }
@@ -24,12 +24,12 @@
 
 .app-table {
   &:not(.app-no-border) > .app-row {
-    border: 1px solid $border-color;
-    background: $default-color;
+    border: 1px solid map_get($theme, color-border);
+    background: map_get($theme, color-default);
     transition: background-color 250ms;
 
     &-clickable:hover {
-      background: $bg-color;
+      background: map_get($theme, color-bg);
     }
   }
 
@@ -56,4 +56,5 @@
       box-sizing: content-box;
     }
   }
+}
 }

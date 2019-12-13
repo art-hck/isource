@@ -1,5 +1,4 @@
-@import "constants";
-
+@mixin tabs($theme) {
 .app-tabs {
   &-wrap {
     display: block;
@@ -25,7 +24,7 @@
   }
 
   &-item {
-    color: $secondary-font-color;
+    color: map_get($theme, color-font-secondary);
     cursor: pointer;
     display: block;
     padding: 10px 0;
@@ -42,16 +41,16 @@
     }
 
     &-active {
-      color: $primary-font-color;
+      color: map_get($theme, color-font-primary);
     }
   }
 
   &-border {
-    border-bottom: 1px $secondary-color solid;
+    border-bottom: 1px map_get($theme, color-secondary) solid;
   }
 
   &-indicator {
-    background: $primary-color;
+    background: map_get($theme, color-primary);
     bottom: 0;
     content: "";
     display: block;
@@ -80,4 +79,5 @@
     &-left { left: 0; }
     &-right { right: 0; }
   }
+}
 }

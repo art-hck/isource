@@ -1,5 +1,4 @@
-@import "constants";
-
+@mixin controls-switcher($theme) {
 $slider-margin: calc(.5em + 6px);
 
 .app-control-switcher {
@@ -7,7 +6,7 @@ $slider-margin: calc(.5em + 6px);
     display: none;
 
     & + .app-control-checkbox {
-      background: $secondary-control-color;
+      background: map_get($theme, color-control-secondary);
       border-radius: 7px;
       display: inline-block;
       height: 14px;
@@ -17,7 +16,7 @@ $slider-margin: calc(.5em + 6px);
       margin-left: 3px;
 
       + label {
-        margin-left: $slider-margin;
+        margin-left: map_get($theme, slider-margin);
       }
 
       &:after {
@@ -35,10 +34,10 @@ $slider-margin: calc(.5em + 6px);
     }
 
     &:checked + .app-control-checkbox {
-      background: $border-color;
+      background: map_get($theme, color-border);
 
       &:after {
-        background: $primary-color;
+        background: map_get($theme, color-primary);
         left: 17px;
       }
     }
@@ -49,6 +48,7 @@ $slider-margin: calc(.5em + 6px);
   }
 
   label + input[type=checkbox] + .app-control-checkbox {
-    margin-left: $slider-margin;
+    margin-left: map_get($theme, slider-margin);
   }
+}
 }

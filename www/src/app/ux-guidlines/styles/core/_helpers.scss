@@ -1,0 +1,47 @@
+@mixin helpers($theme) {
+.app-bold {
+  font-weight: bold;
+}
+
+.app-ghost-color {
+  color: map_get($theme, ghost-font-color);
+}
+
+.app-secondary-color {
+  color: map_get($theme, secondary-font-color);
+}
+
+.app-basis-auto {
+  flex-basis: auto;
+}
+
+.divider {
+  background: map_get($theme, divider-color);
+  border: none;
+  display: block;
+  height: 1px;
+  margin: 15px 0;
+  width: 100%;
+}
+
+.app-section {
+  margin-bottom: .9em;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+* + clr-icon {
+  margin-left: .5em;
+}
+
+clr-icon {
+  vertical-align: middle;
+  align-self: center;
+
+  & + * {
+    margin-left: .5em;
+  }
+}
+}

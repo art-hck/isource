@@ -1,5 +1,4 @@
-@import "constants";
-
+@mixin dropdown($theme) {
 .app-dropdown {
   display: block;
   flex-direction: column;
@@ -18,24 +17,24 @@
   }
 
   &-items-item:hover {
-    background: $list-hover-color;
+    background: map_get($theme, color-list-hover);
   }
 
   &-handler {
     align-items: center;
-    border: 1px $secondary-control-color solid;
-    background: $default-color;
+    border: 1px map_get($theme, color-control-secondary) solid;
+    background: map_get($theme, color-default);
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
     padding-right: 0;
 
     &:hover {
-      border-color: $primary-control-color;
+      border-color: map_get($theme, color-control-primary);
     }
 
     &.active {
-      border-color: $primary-control-color;
+      border-color: map_get($theme, color-control-primary);
     }
 
     &:not(&-up).active {
@@ -68,8 +67,8 @@
 
     &-wrapper {
       animation: app-dropdown-show 300ms;
-      background: $default-color;
-      border: 1px $primary-control-color solid;
+      background: map_get($theme, color-default);
+      border: 1px map_get($theme, color-control-primary) solid;
       border-radius: 4px;
       left: 0;
       overflow: hidden;
@@ -98,18 +97,18 @@
 
     /* scrollbar itself */
     &::-webkit-scrollbar-thumb {
-      background-color: $soft-color;
-      border: 5px solid $default-color;
+      background-color: map_get($theme, color-soft);
+      border: 5px solid map_get($theme, color-default);
       border-radius: 16px;
       transition: border 500ms;
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      border-width:4px;
+      border-width: 4px;
     }
 
     /* set button(top and bottom of the scrollbar) */
-    &::-webkit-scrollbar-button { display:none }
+    &::-webkit-scrollbar-button { display: none }
 
     &-item[disabled]:not([disabled=false]) {
       cursor: default;
@@ -118,9 +117,9 @@
   }
 
   &-disabled .app-dropdown-handler {
-    background: $secondary-control-color;
-    border-color: $secondary-color;
-    color: $ghost-font-color;
+    background: map_get($theme, color-control-secondary);
+    border-color: map_get($theme, color-secondary);
+    color: map_get($theme, color-font-ghost);
   }
 }
 
@@ -134,4 +133,5 @@
     transform: scaleY(1);
     opacity: 1;
   }
+}
 }

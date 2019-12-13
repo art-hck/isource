@@ -1,0 +1,18 @@
+@mixin breadcrumbs($theme) {
+.app-breadcrumbs {
+  display: flex;
+  align-items: center;
+
+  &-separator {
+    color: map_get($theme, color-font-ghost);
+  }
+
+  &, a.app-breadcrumbs-breadcrumb {
+    color: map_get($theme, color-font-secondary);
+
+    &:hover {
+      color: map_get($theme, color-font-primary);
+    }
+  }
+}
+}
