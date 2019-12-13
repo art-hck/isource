@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -27,13 +27,14 @@ import { PublishProcedureResult } from '../../models/publish-procedure-result';
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
+import { ClrLoadingState } from "@clr/angular";
 
 @Component({
   selector: 'app-add-offers',
   templateUrl: './add-offers.component.html',
-  styleUrls: ['./add-offers.component.css']
+  styleUrls: ['./add-offers.component.scss']
 })
-export class AddOffersComponent implements OnInit {
+export class AddOffersComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -64,11 +65,21 @@ export class AddOffersComponent implements OnInit {
 
   appConfig: GpnmarketConfigInterface;
 
-  creatingProcedureLoader = false;
+  loaders = {
+    creatingProcedure: ClrLoadingState.DEFAULT,
+    sendOffers: ClrLoadingState.DEFAULT,
+    cancelPublish: ClrLoadingState.DEFAULT
+  };
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('searchPositionInput', { static: false }) searchPositionInput: ElementRef;
   @ViewChild("createProcedureWizard", {static: false}) wizard: WizardCreateProcedureComponent;
+
+  /**
+   * Время в течение которого бэкофис может отозвать КП (в секундах)
+   */
+  protected durationCancelPublish = 10 * 60;
+  protected updateTimerId: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,10 +100,15 @@ export class AddOffersComponent implements OnInit {
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
+    // Костыль, чтобы каждую секунду обновлялся счетчик со временем возможности возврата ТП
+    this.updateTimerId = setInterval(() => {}, 1000);
+
     const getRequestInfoSubscription = this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         getRequestInfoSubscription.unsubscribe();
         this.request = request;
+
+        this.updatePositionsAndSuppliers();
       }
     );
 
@@ -106,8 +122,12 @@ export class AddOffersComponent implements OnInit {
       id: [''],
       documents: [[]]
     });
+  }
 
-    this.updatePositionsAndSuppliers();
+  ngOnDestroy() {
+    if (this.updateTimerId) {
+      clearInterval(this.updateTimerId);
+    }
   }
 
   getSupplierLinkedOffers(
@@ -360,10 +380,14 @@ export class AddOffersComponent implements OnInit {
         const cancel = $('#cancel');
 
         submit.addEventListener('click', () => {
+          this.loaders.sendOffers = ClrLoadingState.LOADING;
           this.offersService.publishRequestOffers(this.requestId, this.selectedRequestPositions).subscribe(
             () => {
               this.updatePositionsAndSuppliers();
               this.selectedRequestPositions = [];
+              this.loaders.sendOffers = ClrLoadingState.SUCCESS;
+            }, () => {
+              this.loaders.sendOffers = ClrLoadingState.ERROR;
             }
           );
           Swal.close();
@@ -373,7 +397,20 @@ export class AddOffersComponent implements OnInit {
         });
       }
     });
+  }
 
+  onCancelPublishOffers(requestPosition: RequestPosition) {
+    this.loaders.cancelPublish = ClrLoadingState.LOADING;
+    this.offersService.cancelPublishRequestOffers(this.requestId, requestPosition).subscribe(
+      (updatedRequestPosition: RequestPosition) => {
+        Object.assign(requestPosition, updatedRequestPosition);
+        this.updatePositionsAndSuppliers();
+        this.selectedRequestPositions = [];
+        this.loaders.cancelPublish = ClrLoadingState.DEFAULT;
+      }, () => {
+        this.loaders.cancelPublish = ClrLoadingState.ERROR;
+      }
+    );
   }
 
   onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
@@ -382,14 +419,14 @@ export class AddOffersComponent implements OnInit {
       getTPFilesOnImport: false
     };
 
-    this.creatingProcedureLoader = true;
+    this.loaders.creatingProcedure = ClrLoadingState.LOADING;
 
     this.procedureService.publishProcedure(request).subscribe(
       (data: PublishProcedureResult) => {
         this.wizard.resetWizardForm();
         this.updatePositionsAndSuppliers();
         this.selectedRequestPositions = [];
-        this.creatingProcedureLoader = false;
+        this.loaders.creatingProcedure = ClrLoadingState.SUCCESS;
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
@@ -408,7 +445,7 @@ export class AddOffersComponent implements OnInit {
         });
       },
       (error: any) => {
-        this.creatingProcedureLoader = false;
+        this.loaders.creatingProcedure = ClrLoadingState.ERROR;
         let msg = 'Ошибка при создании процедуры';
         if (error && error.error && error.error.detail) {
           msg = `${msg}: ${error.error.detail}`;
@@ -527,5 +564,25 @@ export class AddOffersComponent implements OnInit {
         this.updateContragentsWithTp();
       }
     );
+  }
+
+  availableCancelPublishOffers(requestPosition: RequestPosition) {
+    return true;
+    return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT
+      && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
+  }
+
+  getAvailableTimeCancelPublish(requestPosition: RequestPosition) {
+    const durationReview = this.durationCancelPublish - this.getDurationChangeStatus(requestPosition);
+
+    return moment.utc(durationReview * 1000).format('mm:ss');
+  }
+
+  /**
+   * Возвращает время в секундах, которое прошло с момента смены статуса ТП
+   * @param requestPosition
+   */
+  protected getDurationChangeStatus(requestPosition: RequestPosition): number {
+    return moment().diff(moment(requestPosition.statusChangedDate), 'seconds');
   }
 }

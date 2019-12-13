@@ -14,25 +14,27 @@
         <div class="clr-row clr-justify-content-between">
 
           <div class="clr-col">
-            <button class="add-technical-proposal btn btn-link"
+            <button class="btn btn-primary"
                     [clrLoading]="getLoaderState()"
                     (click)="onShowAddTechnicalProposalModal()">
-              <b>+ Добавить ТП</b>
+              <clr-icon shape="plus"></clr-icon>
+              Добавить ТП
             </button>
-
           </div>
 
           <div class="clr-col-auto">
-            <button class="btn btn-primary send-offers"
-                    (click)="createProcedureWizard.open()"
-                    [clrLoading]="creatingProcedureLoader">
-              <b>Создать процедуру</b>
-            </button>
+            <div class="btn-group">
+              <button class="btn send-offers"
+                      (click)="createProcedureWizard.open()"
+                      [clrLoading]="loaders.creatingProcedure">
+                Создать процедуру
+              </button>
 
-            <button class="btn btn-primary"
-                    (click)="onImportOffersFromProcedure()">
-              <b>Получить КП из процедуры</b>
-            </button>
+              <button class="btn"
+                      (click)="onImportOffersFromProcedure()">
+                Получить КП из процедуры
+              </button>
+            </div>
           </div>
 
         </div>
@@ -71,6 +73,13 @@
                     <b>Отправить на согласование</b>
                   </button>
                 </div>
+
+                <button *ngIf="availableCancelSendToReview(technicalProposal)"
+                        class="btn btn-primary btn-cancel-send-to-approval"
+                        (click)="onCancelSendForApproval(technicalProposal)"
+                        [clrLoading]="loaders.cancelReview">
+                  Отозвать <span class="cancel-timer">{{ getAvailableTimeCancelSendToReview(technicalProposal) }} </span>
+                </button>
 
                 <ng-template #sentForReview>
                   <p class="sent-label">{{ tpStatusLabel(technicalProposal) }}</p>
@@ -263,8 +272,7 @@
     [requestPositions$]="requestPositions$"
     [contragents$]="contragentList$"
     [allowOpenedProcedure]="true"
-    (publishProcedure)="onPublishProcedure($event)"
-  >
+    (publishProcedure)="onPublishProcedure($event)">
   </app-wizard-create-procedure>
 
 </ng-container>

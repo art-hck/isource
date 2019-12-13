@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -25,13 +25,16 @@ import { RequestOfferPosition } from 'src/app/request/common/models/request-offe
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 import { map } from "rxjs/operators";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
+import * as moment from "moment";
+import { ClrLoadingState } from "@clr/angular";
 
 @Component({
   selector: 'app-add-technical-proposals',
   templateUrl: './add-technical-proposals.component.html',
   styleUrls: ['./add-technical-proposals.component.scss']
 })
-export class AddTechnicalProposalsComponent implements OnInit {
+export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
   request: Request;
@@ -50,10 +53,19 @@ export class AddTechnicalProposalsComponent implements OnInit {
   showAddTechnicalProposalModal = false;
   uploadedFiles: File[] = [];
 
-  addTechnicalProposalLoader = false;
-  creatingProcedureLoader = false;
+  loaders = {
+    addTechnicalProposal: false,
+    cancelReview: ClrLoadingState.DEFAULT,
+    creatingProcedure: ClrLoadingState.DEFAULT
+  };
 
-  @ViewChild(SupplierSelectComponent, { static: false }) supplierSelectComponent: SupplierSelectComponent;
+  /**
+   * Время в течение которого бэкофис может отозвать ТП (в секундах)
+   */
+  protected durationCancelReview = 10 * 60;
+  protected updateTimerId: number;
+
+  @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('createProcedureWizard', {static: false}) createProcedureWizard: WizardCreateProcedureComponent;
 
   requestPositions$: Observable<RequestPositionList[]>;
@@ -61,11 +73,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
   protected editableStatuses = [
     TechnicalProposalPositionStatuses.NEW.valueOf(),
     TechnicalProposalPositionStatuses.EDITED.valueOf()
-  ];
-
-  protected completedStatuses = [
-    TechnicalProposalPositionStatuses.ACCEPTED.valueOf(),
-    TechnicalProposalPositionStatuses.DECLINED.valueOf()
   ];
 
   constructor(
@@ -78,9 +85,13 @@ export class AddTechnicalProposalsComponent implements OnInit {
     private getContragentService: ContragentService,
     private procedureService: ProcedureService,
     private renderer: Renderer2
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
+    // Костыль, чтобы каждую секунду обновлялся счетчик со временем возможности возврата ТП
+    this.updateTimerId = setInterval(() => {}, 1000);
+
     this.documentsForm = this.formBuilder.group({
       documents: [null]
     });
@@ -97,6 +108,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
       )));
 
     this.contragentList$ = this.getContragentService.getContragentList();
+  }
+
+  ngOnDestroy() {
+    if (this.updateTimerId) {
+      clearInterval(this.updateTimerId);
+    }
   }
 
   /**
@@ -151,14 +168,24 @@ export class AddTechnicalProposalsComponent implements OnInit {
   isReadyToSendForApproval(technicalProposal: TechnicalProposal): boolean {
     if (technicalProposal) {
       return (technicalProposal.positions.length > 0 &&
-              technicalProposal.positions.every(position => position.manufacturingName !== "")) ||
-              technicalProposal.documents.length > 0;
+        technicalProposal.positions.every(position => position.manufacturingName !== "")) ||
+        technicalProposal.documents.length > 0;
     }
   }
 
   onSendForApproval(technicalProposal: TechnicalProposal): void {
-    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal.id, technicalProposal)
+    this.technicalProposalsService.sendToAgreement(this.requestId, technicalProposal)
       .subscribe(() => this.getTechnicalProposals());
+  }
+
+  onCancelSendForApproval(technicalProposal: TechnicalProposal): void {
+    this.loaders.cancelReview = ClrLoadingState.LOADING;
+    this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal)
+      .subscribe((updatedTechnicalProposal: TechnicalProposal) => {
+        Object.assign(technicalProposal, updatedTechnicalProposal);
+        this.getTechnicalProposals();
+        this.loaders.cancelReview = ClrLoadingState.DEFAULT;
+      });
   }
 
   onPublishProcedure(publishProcedureInfo: PublishProcedureInfo): void {
@@ -167,12 +194,12 @@ export class AddTechnicalProposalsComponent implements OnInit {
       getTPFilesOnImport: true
     };
 
-    this.creatingProcedureLoader = true;
+    this.loaders.creatingProcedure = ClrLoadingState.LOADING;
 
     const subscription = this.procedureService.publishProcedure(request).subscribe(
       (data: PublishProcedureResult) => {
         subscription.unsubscribe();
-        this.creatingProcedureLoader = false;
+        this.loaders.creatingProcedure = ClrLoadingState.SUCCESS;
         Swal.fire({
           width: 400,
           html: '<p class="text-alert">Процедура ' + '<a href="' + data.procedureUrl + '" target="_blank">' +
@@ -192,7 +219,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       },
       (error: any) => {
         subscription.unsubscribe();
-        this.creatingProcedureLoader = false;
+        this.loaders.creatingProcedure = ClrLoadingState.ERROR;
         let msg = 'Ошибка при создании процедуры';
         if (error && error.error && error.error.detail) {
           msg = `${msg}: ${error.error.detail}`;
@@ -232,7 +259,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
-        this.addTechnicalProposalLoader = false;
+        this.loaders.addTechnicalProposal = false;
       }
     );
   }
@@ -270,7 +297,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
       positions: this.selectedTechnicalProposalPositionsIds,
     };
 
-    this.addTechnicalProposalLoader = true;
+    this.loaders.addTechnicalProposal = true;
 
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
@@ -287,7 +314,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
         this.uploadSelectedDocuments(this.requestId, tpData.id, filesToUpload);
 
-        this.addTechnicalProposalLoader = false;
+        this.loaders.addTechnicalProposal = false;
       },
       () => {
         this.notificationService.toast('Не удалось создать техническое предложение');
@@ -304,7 +331,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   getLoaderState() {
-    return this.addTechnicalProposalLoader;
+    return this.loaders.addTechnicalProposal;
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData): void {
@@ -413,6 +440,29 @@ export class AddTechnicalProposalsComponent implements OnInit {
     return technicalProposal.status === TechnicalProposalsStatuses.NEW;
   }
 
+  tpIsSendToReview(technicalProposal: TechnicalProposal): boolean {
+    return technicalProposal.status === TechnicalProposalsStatuses.SENT_TO_REVIEW;
+  }
+
+  availableCancelSendToReview(technicalProposal: TechnicalProposal): boolean {
+    return this.tpIsSendToReview(technicalProposal)
+      && this.getDurationChangeStatus(technicalProposal) < this.durationCancelReview;
+  }
+
+  getAvailableTimeCancelSendToReview(technicalProposal: TechnicalProposal) {
+    const durationReview = this.durationCancelReview - this.getDurationChangeStatus(technicalProposal);
+
+    return moment.utc(durationReview * 1000).format('mm:ss');
+  }
+
+  /**
+   * Возвращает время в секундах, которое прошло с момента смены статуса ТП
+   * @param technicalProposal
+   */
+  getDurationChangeStatus(technicalProposal: TechnicalProposal): number {
+    return moment().diff(moment(technicalProposal.statusChangedDate), 'seconds');
+  }
+
   isTpHasEditablePositions(tp: TechnicalProposal): boolean {
     return tp.positions.some((position) => {
       return this.isEditablePosition(position);
@@ -429,7 +479,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   tpIsOnReview(technicalProposal: TechnicalProposal): boolean {
     return technicalProposal.status !== TechnicalProposalsStatuses.NEW &&
-           technicalProposal.positions.some(position => position.status !== "NEW");
+      technicalProposal.positions.some(position => position.status !== "NEW");
   }
 
   /**
@@ -440,21 +490,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     return technicalProposal.positions.some(position => position.status === "DECLINED");
   }
 
-
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
-    if (technicalProposal.positions.some((position) => {
-      return position.status === TechnicalProposalPositionStatuses.REVIEW.valueOf();
-    })) {
-      return "Согласование заказчиком";
-    }
-
-    if (technicalProposal.positions.every((position) => {
-      return this.completedStatuses.indexOf(position.status) >= 0;
-    })) {
-      return "Завершено согласование заказчиком";
-    }
-
-    return "";
+    return TechnicalProposalsStatusesLabels[technicalProposal.status];
   }
 
   checkIfCreatingIsEnabled(): boolean {
@@ -491,5 +528,4 @@ export class AddTechnicalProposalsComponent implements OnInit {
   onContragentInputChange(value: string): void {
     this.contragentSearchFieldValue = value;
   }
-
 }
