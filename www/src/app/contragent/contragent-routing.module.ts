@@ -21,8 +21,7 @@ const routes: Routes = [
     children: [
       {
         path: 'info',
-        component: ContragentInfoViewComponent,
-        data: { title: "Контрагент" }
+        component: ContragentInfoViewComponent
       }
     ]
   }

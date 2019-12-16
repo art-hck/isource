@@ -11,20 +11,19 @@ button:focus {
 }
 
 .btn {
-  border-radius: 2px;
   text-transform: none;
   letter-spacing: 0;
   font-size: 14px;
   font-weight: 500;
   height: 40px;
-  background: $color_blue;
-  border: 0;
   border-radius: 4px;
   line-height: 1;
   padding: 0 9px;
   max-width: initial;
-  min-width: unset;
-  color: white;
+
+  border: 0 $color_grey;
+  background-color: $color_grey;
+  color: #000000;
 
   span { /* Дополнительный отступ вокруг текста в кнопке */
     padding: 0 4px;
@@ -201,4 +200,7 @@ button:focus {
   }
 }
 
+.btn-group .btn:not(:last-child) {
+  margin: 0 1px 0 0;
+}
 

@@ -1,10 +1,11 @@
 <!-- Счетчики статусов -->
+<h3>Страницы согласований</h3>
 <ng-container *ngFor="let statusCounter of getStatusCounters(positions)">
   <div [class.app-ghost-color]="!statusCounter.positions.length">
     <div class="app-row app-section app-bold">
       <div class="app-col">
         <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
-          <a routerLink="../{{statusCounter.url}}">{{ statusCounter.label }}</a>
+          <a routerLink="../{{ statusCounter.url }}">{{ statusCounter.label }}</a>
         </ng-container>
         <ng-template #statusLabelSpan>{{ statusCounter.label }}</ng-template>
       </div>
@@ -60,7 +61,7 @@
   </div>
   <div class="app-accordion-body" *ngIf="isStatTabVisible">
     <div class="app-section">
-      Not implemented
+      <app-pie-chart [positions]="positions"></app-pie-chart>
     </div>
   </div>
 </div>

@@ -11,15 +11,16 @@ export class UxgDropdownItemDirective {
 
   onSelect = new EventEmitter();
 
+  get label(): string | null {
+    return this.el.nativeElement.innerText || null;
+  }
+
   constructor(private el: ElementRef) {}
 
   @HostListener('click')
   click() {
     if (this.disabled === false) {
-      this.onSelect.emit({
-        value: this.value || this.el.nativeElement.innerText,
-        label: this.el.nativeElement.innerText
-      });
+      this.onSelect.emit({value: this.value, label: this.label});
     }
   }
 }

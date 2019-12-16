@@ -11,8 +11,9 @@ import { TechnicalProposalsComponent } from "./customer/components/technical-pro
 import { CommercialProposalsComponent } from "./customer/components/commercial-proposals/commercial-proposals.component";
 import { DesignDocumentationComponent } from "./common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "./common/components/contract/contract.component";
-import { RequestComponent } from "./common/components/request/request.component";
 import { RequestPositionComponent } from "./common/components/request-position/request-position.component";
+import { RequestComponent as BackOfficeRequestComponent } from "./back-office/components/request/request.component";
+import { RequestComponent as CustomerRequestComponent} from "./customer/components/request/request.component";
 
 const routes: Routes = [
   {
@@ -31,20 +32,17 @@ const routes: Routes = [
             children: [
               {
                 path: "",
-                component: RequestComponent,
-                data: { title: "Заявка" }
+                component: CustomerRequestComponent,
               },
               {
                 path: ':position-id',
-                component: RequestPositionComponent,
-                data: { title: "Позиция" }
+                component: RequestPositionComponent
               }
             ]
           },
           {
             path: '',
             component: CustomerRequestViewComponent,
-            data: { title: "Заявка" }
           },
           {
             path: 'contracts',
@@ -54,21 +52,22 @@ const routes: Routes = [
           {
             path: 'contract',
             component: ContractComponent,
+            data: { title: "Согласование договора" }
           },
           {
             path: 'technical-proposals',
             component: TechnicalProposalsComponent,
-            data: { title: "На согласовании ТП" }
+            data: { title: "Технические предложения" }
           },
           {
             path: 'commercial-proposals',
             component: CommercialProposalsComponent,
-            data: { title: "На согласовании КП" }
+            data: { title: "Коммерческие предложения" }
           },
           {
             path: 'design-documentation',
             component: DesignDocumentationComponent,
-            data: { title: "На согласовании РКД" }
+            data: { title: "Рабочая конструкторская документация" }
           }
         ]
       },
@@ -90,20 +89,17 @@ const routes: Routes = [
             children: [
               {
                 path: "",
-                component: RequestComponent,
-                data: { title: "Заявка" },
+                component: BackOfficeRequestComponent,
               },
               {
                 path: ':position-id',
-                component: RequestPositionComponent,
-                data: { title: "Позиция" }
+                component: RequestPositionComponent
               }
             ]
           },
           {
             path: '',
             component: BackOfficeRequestViewComponent,
-            data: { title: "Заявка" }
           },
           {
             path: 'add-offers',
@@ -113,17 +109,17 @@ const routes: Routes = [
           {
             path: 'contracts',
             component: ContractComponent,
-            data: { title: "На рассмотрении договора" }
+            data: { title: "Согласование договора" }
           },
           {
             path: 'add-technical-proposals',
             component: AddTechnicalProposalsComponent,
-            data: { title: "На согласовании ТП" }
+            data: { title: "Технические предложения" }
           },
           {
             path: 'add-design-documentation',
             component: DesignDocumentationComponent,
-            data: { title: "На согласовании РКД" }
+            data: { title: "Рабочая конструкторская документация" }
           },
         ]
       },

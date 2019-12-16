@@ -13,6 +13,7 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-commercial-proposals',
@@ -38,6 +39,7 @@ export class CommercialProposalsComponent implements OnInit {
   selectedOffers = {};
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     protected router: Router,
     private requestService: RequestService,
@@ -49,6 +51,7 @@ export class CommercialProposalsComponent implements OnInit {
 
     this.updateRequestInfo();
     this.updatePositionsAndSuppliers();
+
   }
 
   getSupplierLinkedOffers(
@@ -112,6 +115,11 @@ export class CommercialProposalsComponent implements OnInit {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
+
+        this.bc.breadcrumbs = [
+          { label: "Заявки", link: "/requests/backoffice"},
+          { label: `Заявка №${this.request.number}`, link: "/requests/customer/" + this.request.id }
+        ];
       }
     );
   }

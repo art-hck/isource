@@ -1,6 +1,8 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
+import { TechnicalProposal } from "../../common/models/technical-proposal";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -42,11 +44,15 @@ export class TechnicalProposalsService {
     return this.api.post(url, technicalProposal);
   }
 
-  sendToAgreement(requestId: Uuid, tpId: Uuid, technicalProposal) {
-    const url = `requests/backoffice/${requestId}/technical-proposals/${tpId}/send-to-agreement`;
+  sendToAgreement(requestId: Uuid, technicalProposal: TechnicalProposal) {
+    const url = `requests/backoffice/${requestId}/technical-proposals/${technicalProposal.id}/send-to-agreement`;
     return this.api.post(url, technicalProposal);
   }
 
+  cancelSendToAgreement(requestId: Uuid, technicalProposal: TechnicalProposal): Observable<TechnicalProposal> {
+    const url = `requests/backoffice/${requestId}/technical-proposals/${technicalProposal.id}/cancel-send-to-agreement`;
+    return this.api.post<TechnicalProposal>(url, technicalProposal);
+  }
 
 
   /**

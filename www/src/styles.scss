@@ -62,7 +62,8 @@ select option:disabled {
 }
 
 b.required-star {
-  color: $color_red;
+  font-size: 18px;
+  color: #F44336;
 }
 
 .text-muted {
@@ -75,7 +76,7 @@ b.required-star {
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
-    padding: 50px 130px 30px 130px;
+    padding: 10px 130px 30px 130px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }
