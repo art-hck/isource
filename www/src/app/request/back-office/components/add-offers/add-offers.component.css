@@ -361,3 +361,12 @@ div.per-unit-price-block {
 .content-area {
   padding: 50px 30px 30px 30px!important;
 }
+
+::ng-deep clr-modal.procedure-prolongation .modal-dialog {
+  width: 375px;
+}
+
+::ng-deep clr-modal.procedure-prolongation .modal-dialog .modal-body label[for=procedureEndDate] {
+  padding-bottom: 5px;
+  display: block;
+}
