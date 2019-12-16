@@ -41,8 +41,8 @@ export class PositionViewComponent implements OnInit {
     });
   }
 
-  onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
-    return this.cartStoreService.addItem(position);
+  onAddPositionToCart(position: CatalogPosition, quantity: number): Promise<boolean> {
+    return this.cartStoreService.addItem(position, quantity);
   }
 
   isPositionInCart(position: CatalogPosition): boolean {
