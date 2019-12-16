@@ -198,25 +198,12 @@ clr-checkbox-wrapper {
   margin: 0 22px;
 }
 
-.add-contragent {
-  text-align: end;
-}
-
 .request-info .send-offers {
   width: initial !important;
   text-align: right;
-  margin: 0;
 }
 ::ng-deep .request-info .send-offers.btn span {
   padding: 0;
-}
-
-h2 {
-  margin-bottom: 40px;
-}
-
-.import-export {
-  width: auto;
 }
 
 .container-dropdown {
@@ -331,10 +318,6 @@ clr-checkbox-wrapper {
   margin-right: 10px;
 }
 
-.send-offers button {
-  margin-left: 10px;
-}
-
 span.counted-offer-price {
   font-size: 18px;
   font-weight: bold;
@@ -360,4 +343,16 @@ div.per-unit-price-block {
 
 .content-area {
   padding: 50px 30px 30px 30px!important;
+}
+
+.btn-cancel-publish {
+  min-width: 150px;
+  .cancel-timer {
+    opacity: 0.3;
+  }
+}
+
+::ng-deep .add-offers-modal .clr-control-container,
+::ng-deep .add-offers-modal .clr-control-container .clr-select-wrapper {
+  width: 100%;
 }

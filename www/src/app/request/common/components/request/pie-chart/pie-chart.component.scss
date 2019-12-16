@@ -1,0 +1,32 @@
+.circle {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+  top: 20px;
+  margin-left: 20px;
+}
+
+.pie-chart {
+  position: relative;
+  padding: 0;
+  max-width: 100px;
+  display: block;
+}
+
+.agenda {
+  padding-right: 0;
+  line-height: 1.1rem;
+  min-width: 190px;
+}
+
+.column {
+  display: inline-block;
+  width: 40px;
+  font-weight: 500;
+}
+
+.pie-header {
+  margin-top: 10px;
+}
