@@ -1,15 +1,14 @@
-<ng-container *ngIf="deliveryMonitorInfoCanBeShown()">
+<ng-template #loading>
+  <span class="spinner spinner-md delivery-monitor-loader"></span>
+</ng-template>
 
-  <ng-template #loading>
-    <span class="spinner spinner-md delivery-monitor-loader"></span>
-  </ng-template>
+<ng-container *ngIf="(deliveryMonitorInfo$ | async ) as deliveryMonitorInfo; else loading">
+  <app-good-card
+          [requestPosition]="requestPosition"
+          [deliveryMonitorInfo]="deliveryMonitorInfo">
+  </app-good-card>
 
-  <ng-container *ngIf="(deliveryMonitorInfo$ | async ) as deliveryMonitorInfo; else loading">
-    <app-good-card
-            [requestPosition]="requestPosition"
-            [deliveryMonitorInfo]="deliveryMonitorInfo">
-    </app-good-card>
-
+  <ng-container *ngIf="deliveryMonitorInfoCanBeShown()">
     <clr-accordion class="delivery-timeline-block" [clrAccordionMultiPanel]="true">
 
       <ng-container *ngFor="let consignment of deliveryMonitorInfo.contractAnnex.consignments">
@@ -187,15 +186,9 @@
 
     </clr-accordion>
   </ng-container>
+
+  <app-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-digital-inspector>
 </ng-container>
-
-
-
-
-<app-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-digital-inspector>
-
-
-
 
 
 <form [formGroup]="assignIdForm" (ngSubmit)="assignIdSubmit()" *ngIf="opened">
