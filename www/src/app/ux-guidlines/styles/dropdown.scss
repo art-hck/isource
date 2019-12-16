@@ -15,19 +15,40 @@
     padding: 0 20px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
 
-    &:hover {
-      background: $secondary-hover-control-color;
-    }
+  &-items-item:hover {
+    background: $list-hover-color;
   }
 
   &-handler {
     align-items: center;
-    background: $secondary-control-color;
+    border: 1px $secondary-control-color solid;
+    background: $default-color;
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
     padding-right: 0;
+
+    &:hover {
+      border-color: $primary-control-color;
+    }
+
+    &.active {
+      border-color: $primary-control-color;
+    }
+
+    &:not(&-up).active {
+      border-bottom-color: transparent;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &-up.active {
+      border-top-color: transparent;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
 
     &-title {
       overflow: hidden;
@@ -35,7 +56,6 @@
     }
 
     &-icon {
-      border-left: 1px $divider-color solid;
       display: flex;
       height: 24px;
       padding: 0 14px;
@@ -46,30 +66,25 @@
     max-height: 320px;
     overflow: auto;
 
-    &:after {
-      content: "";
-      height: 16px;
-      left: 0;
-      position: absolute;
-      right: 0;
-    }
-
-    &:after {
-      background: linear-gradient(to top, $secondary-control-color 0%, rgba(255, 255, 255, 0) 100%);
-      bottom: 0;
-    }
-
     &-wrapper {
       animation: app-dropdown-show 300ms;
-      background: $secondary-control-color;
+      background: $default-color;
+      border: 1px $primary-control-color solid;
       border-radius: 4px;
       left: 0;
       overflow: hidden;
-      padding-top: 40px;
       position: absolute;
-      top: 0;
-      transform-origin: top;
       z-index: 1;
+
+      &:not(&-up) {
+        padding-top: 40px;
+        transform-origin: top;
+      }
+
+      &-up {
+        padding-bottom: 40px;
+        transform-origin: bottom;
+      }
 
       &.hidden {
         display: none;
@@ -78,19 +93,13 @@
 
     /* total width */
     &::-webkit-scrollbar {
-      background-color: $secondary-control-color;
       width: 16px;
-    }
-
-    /* background of the scrollbar except button or resizer */
-    &::-webkit-scrollbar-track {
-      background-color: $secondary-control-color
     }
 
     /* scrollbar itself */
     &::-webkit-scrollbar-thumb {
-      background-color: $secondary-hover-border-control-color;
-      border: 5px solid $secondary-control-color;
+      background-color: $soft-color;
+      border: 5px solid $default-color;
       border-radius: 16px;
       transition: border 500ms;
     }
@@ -106,6 +115,12 @@
       cursor: default;
       opacity: .5;
     }
+  }
+
+  &-disabled .app-dropdown-handler {
+    background: $secondary-control-color;
+    border-color: $secondary-color;
+    color: $ghost-font-color;
   }
 }
 

@@ -25,6 +25,7 @@ import { RequestOfferPosition } from 'src/app/request/common/models/request-offe
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 import { map } from "rxjs/operators";
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -69,6 +70,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   ];
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -97,6 +99,11 @@ export class AddTechnicalProposalsComponent implements OnInit {
       )));
 
     this.contragentList$ = this.getContragentService.getContragentList();
+
+    this.bc.breadcrumbs = [
+      { label: "Заявки", link: "/requests/backoffice"},
+      { label: `Заявка №${this.request.number}`, link: "/requests/backoffice/" + this.request.id }
+    ];
   }
 
   /**
