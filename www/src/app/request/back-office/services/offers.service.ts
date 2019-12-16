@@ -42,6 +42,13 @@ export class OffersService {
     });
   }
 
+  cancelPublishRequestOffers(id: Uuid, requestPosition: RequestPosition): Observable<RequestPosition> {
+    const url = `requests/backoffice/${id}/cancel-publish-offers`;
+    return this.api.post<RequestPosition>(url, {
+      positionId: requestPosition.id
+    });
+  }
+
   uploadDocuments(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {
     const formData = new FormData();
     files.forEach(file => {
