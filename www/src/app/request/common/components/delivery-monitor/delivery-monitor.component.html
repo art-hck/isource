@@ -3,190 +3,230 @@
 </ng-template>
 
 <ng-container *ngIf="(deliveryMonitorInfo$ | async ) as deliveryMonitorInfo; else loading">
-
   <app-good-card
           [requestPosition]="requestPosition"
           [deliveryMonitorInfo]="deliveryMonitorInfo">
   </app-good-card>
 
-  <app-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-digital-inspector>
+  <ng-container *ngIf="deliveryMonitorInfoCanBeShown()">
+    <clr-accordion class="delivery-timeline-block" [clrAccordionMultiPanel]="true">
 
-  <clr-accordion class="delivery-timeline-block" [clrAccordionMultiPanel]="true">
+      <ng-container *ngFor="let consignment of deliveryMonitorInfo.contractAnnex.consignments">
 
-    <ng-container *ngFor="let consignment of deliveryMonitorInfo.contractAnnex.consignments">
+        <clr-accordion-panel class="delivery-timeline-panel" *ngIf="consignmentCanBeShown(consignment)">
 
-      <clr-accordion-panel class="delivery-timeline-panel" *ngIf="consignmentCanBeShown(consignment)">
+          <clr-accordion-title class="delivery-timeline-header">
+            <div class="clr-row">
+              <div class="clr-col delivery-timeline-item">
+                <div class="vehicle-icon"></div>
 
-        <clr-accordion-title class="delivery-timeline-header">
-          <div class="clr-row">
-            <div class="clr-col delivery-timeline-item">
-              <div class="vehicle-icon"></div>
-
-              <div class="item-info-block">
-                <div class="item-name">Партия от {{ getShipmentItemShippingDate(consignment) }}</div>
-                <div class="item-info">{{ getWaybillNumber(consignment) }}</div>
-              </div>
-
-              <div class="item-status-block">
-                <div class="item-status st-{{ consignment.deliveryState }}">
-                  {{ getStatusLabel(consignment.deliveryState) }}
+                <div class="item-info-block">
+                  <div class="item-name">Партия от {{ getShipmentItemShippingDate(consignment) }}</div>
+                  <div class="item-info">{{ getWaybillNumber(consignment) }}</div>
                 </div>
 
-                <div class="item-toggle-icon"></div>
+                <div class="item-status-block">
+                  <div class="item-status st-{{ consignment.deliveryState }}">
+                    {{ getStatusLabel(consignment.deliveryState) }}
+                  </div>
+
+                  <div class="item-toggle-icon"></div>
+                </div>
               </div>
             </div>
-          </div>
-        </clr-accordion-title>
+          </clr-accordion-title>
 
-        <clr-accordion-content class="item-info-inner-content" *clrIfExpanded>
+          <clr-accordion-content class="item-info-inner-content" *clrIfExpanded>
 
-          <div class="clr-row">
-            <div class="clr-col-4">
-              <div class="item-info-element">
-                <p class="item-info-label">Вес по документам</p>
-                <p class="item-info-content">{{ getWeightByTd(consignment) }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="clr-row">
-            <div class="clr-col-4">
-              <div class="item-info-element">
-                <p class="item-info-label">Дата отгрузки</p>
-                <p class="item-info-content">{{ getShipmentItemShippingDate(consignment) }}</p>
+            <div class="clr-row">
+              <div class="clr-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Вес по документам</p>
+                  <p class="item-info-content">{{ getWeightByTd(consignment) }}</p>
+                </div>
               </div>
             </div>
 
-            <div class="clr-col-auto">
-              <div class="item-info-element">
-                <p class="item-info-label">Плановая дата прибытия</p>
-                <p class="item-info-content">{{ getShipmentItemArrivalDate(consignment) }}</p>
+            <div class="clr-row">
+              <div class="clr-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Дата отгрузки</p>
+                  <p class="item-info-content">{{ getShipmentItemShippingDate(consignment) }}</p>
+                </div>
               </div>
-            </div>
-          </div>
 
-
-          <div class="clr-row">
-            <div class="clr-col-4">
-              <div class="item-info-element">
-                <p class="item-info-label">Внутренний номер c/ф</p>
-                <p class="item-info-content">{{ consignment.invoice?.internalNumber || '—' }}</p>
-              </div>
-            </div>
-
-            <div class="clr-col-4">
-              <div class="item-info-element">
-                <p class="item-info-label">Внешний номер с/ф</p>
-                <p class="item-info-content">{{ consignment.invoice?.externalNumber || '—' }}</p>
+              <div class="clr-col-auto">
+                <div class="item-info-element">
+                  <p class="item-info-label">Плановая дата прибытия</p>
+                  <p class="item-info-content">{{ getShipmentItemArrivalDate(consignment) }}</p>
+                </div>
               </div>
             </div>
 
-            <div class="clr-col-4">
-              <div class="item-info-element">
-                <p class="item-info-label">Транспортная накладная</p>
-                <p class="item-info-content">{{ getWaybillNumber(consignment) }}</p>
-              </div>
-            </div>
-          </div>
 
-
-          <div class="clr-row">
-            <div class="clr-col">
-              <div class="item-info-element">
-                <p class="item-info-label">Транспортные средства или номер заказа транспортной компании</p>
-                <p class="item-info-content">{{ getVehicleNumber(consignment) }}</p>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="clr-row from-to-block">
-
-            <div class="clr-col">
-              <div class="item-info-element">
-                <p class="item-info-label">Грузоотправитель</p>
-                <p class="item-info-content">{{ consignment.consignor.name || '—' }}</p>
+            <div class="clr-row">
+              <div class="clr-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Внутренний номер c/ф</p>
+                  <p class="item-info-content">{{ consignment.invoice?.internalNumber || '—' }}</p>
+                </div>
               </div>
 
-              <div class="item-info-element">
-                <p class="item-info-label">Пункт отправления</p>
-                <p class="item-info-content">{{ consignment.consignor?.actualAddress?.city || '—' }}</p>
+              <div class="clr-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Внешний номер с/ф</p>
+                  <p class="item-info-content">{{ consignment.invoice?.externalNumber || '—' }}</p>
+                </div>
+              </div>
+
+              <div class="clr-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Транспортная накладная</p>
+                  <p class="item-info-content">{{ getWaybillNumber(consignment) }}</p>
+                </div>
               </div>
             </div>
 
-            <div class="clr-col-auto clr-align-self-center">
-              <div class="from-to-icon"></div>
-            </div>
 
-            <div class="clr-col">
-              <div class="item-info-element">
-                <p class="item-info-label">Грузополучатель</p>
-                <p class="item-info-content">{{ consignment?.consignee?.name || '—' }}</p>
-              </div>
-
-              <div class="item-info-element">
-                <p class="item-info-label">Пункт назначения</p>
-                <p class="item-info-content">{{ consignment?.consignee?.actualAddress?.city || '—' }}</p>
+            <div class="clr-row">
+              <div class="clr-col">
+                <div class="item-info-element">
+                  <p class="item-info-label">Транспортные средства или номер заказа транспортной компании</p>
+                  <p class="item-info-content">{{ getVehicleNumber(consignment) }}</p>
+                </div>
               </div>
             </div>
 
-          </div>
+
+            <div class="clr-row from-to-block">
+
+              <div class="clr-col">
+                <div class="item-info-element">
+                  <p class="item-info-label">Грузоотправитель</p>
+                  <p class="item-info-content">{{ consignment.consignor.name || '—' }}</p>
+                </div>
+
+                <div class="item-info-element">
+                  <p class="item-info-label">Пункт отправления</p>
+                  <p class="item-info-content">{{ consignment.consignor?.actualAddress?.city || '—' }}</p>
+                </div>
+              </div>
+
+              <div class="clr-col-auto clr-align-self-center">
+                <div class="from-to-icon"></div>
+              </div>
+
+              <div class="clr-col">
+                <div class="item-info-element">
+                  <p class="item-info-label">Грузополучатель</p>
+                  <p class="item-info-content">{{ consignment?.consignee?.name || '—' }}</p>
+                </div>
+
+                <div class="item-info-element">
+                  <p class="item-info-label">Пункт назначения</p>
+                  <p class="item-info-content">{{ consignment?.consignee?.actualAddress?.city || '—' }}</p>
+                </div>
+              </div>
+
+            </div>
 
 
-          <!--        <div class="clr-row">-->
-          <!--          <table class="shipment-tracker">-->
-          <!--            <thead>-->
-          <!--            <tr>-->
-          <!--              <th>Этап поставки</th>-->
-          <!--              <th>Дата прогнозная/фактическая</th>-->
-          <!--              <th>Статус</th>-->
-          <!--            </tr>-->
-          <!--            </thead>-->
+            <!--        <div class="clr-row">-->
+            <!--          <table class="shipment-tracker">-->
+            <!--            <thead>-->
+            <!--            <tr>-->
+            <!--              <th>Этап поставки</th>-->
+            <!--              <th>Дата прогнозная/фактическая</th>-->
+            <!--              <th>Статус</th>-->
+            <!--            </tr>-->
+            <!--            </thead>-->
 
-          <!--            <tbody>-->
-          <!--            <tr>-->
-          <!--              <td><div class="circle-item"></div></td>-->
+            <!--            <tbody>-->
+            <!--            <tr>-->
+            <!--              <td><div class="circle-item"></div></td>-->
 
-          <!--              <td>-->
-          <!--                <div class="expected-date">{{ consignment.shippingExpectedDate | date : 'shortDate' }}</div>-->
-          <!--                <div class="factual-date">{{ consignment.shippingActualDate | date : 'shortDate' }}</div>-->
-          <!--              </td>-->
+            <!--              <td>-->
+            <!--                <div class="expected-date">{{ consignment.shippingExpectedDate | date : 'shortDate' }}</div>-->
+            <!--                <div class="factual-date">{{ consignment.shippingActualDate | date : 'shortDate' }}</div>-->
+            <!--              </td>-->
 
-          <!--              <td><div class="shipment-tracker-label">Партия отгружена</div></td>-->
-          <!--            </tr>-->
+            <!--              <td><div class="shipment-tracker-label">Партия отгружена</div></td>-->
+            <!--            </tr>-->
 
-          <!--            <tr>-->
-          <!--              <td><div class="circle-item"></div></td>-->
+            <!--            <tr>-->
+            <!--              <td><div class="circle-item"></div></td>-->
 
-          <!--              <td>-->
-          <!--                <div class="expected-date">{{ consignment.sentToConsigneeCityExpectedDate | date : 'shortDate' }}</div>-->
-          <!--                <div class="factual-date">{{ consignment.sentToConsigneeCityActualDate | date : 'shortDate' }}</div>-->
-          <!--              </td>-->
+            <!--              <td>-->
+            <!--                <div class="expected-date">{{ consignment.sentToConsigneeCityExpectedDate | date : 'shortDate' }}</div>-->
+            <!--                <div class="factual-date">{{ consignment.sentToConsigneeCityActualDate | date : 'shortDate' }}</div>-->
+            <!--              </td>-->
 
-          <!--              <td><div class="shipment-tracker-label">Отправлена в город грузополучателя</div></td>-->
-          <!--            </tr>-->
+            <!--              <td><div class="shipment-tracker-label">Отправлена в город грузополучателя</div></td>-->
+            <!--            </tr>-->
 
-          <!--            <tr>-->
-          <!--              <td><div class="circle-item"></div></td>-->
+            <!--            <tr>-->
+            <!--              <td><div class="circle-item"></div></td>-->
 
-          <!--              <td>-->
-          <!--                <div class="expected-date">{{ consignment.arrivedToConsigneeCityExpectedDate | date : 'shortDate' }}</div>-->
-          <!--                <div class="factual-date">{{ consignment.arrivedToConsigneeCityActualDate | date : 'shortDate' }}</div>-->
-          <!--              </td>-->
+            <!--              <td>-->
+            <!--                <div class="expected-date">{{ consignment.arrivedToConsigneeCityExpectedDate | date : 'shortDate' }}</div>-->
+            <!--                <div class="factual-date">{{ consignment.arrivedToConsigneeCityActualDate | date : 'shortDate' }}</div>-->
+            <!--              </td>-->
 
-          <!--              <td><div class="shipment-tracker-label">Доставлена в город грузополучателя</div></td>-->
-          <!--            </tr>-->
-          <!--            </tbody>-->
-          <!--          </table>-->
-          <!--        </div>-->
+            <!--              <td><div class="shipment-tracker-label">Доставлена в город грузополучателя</div></td>-->
+            <!--            </tr>-->
+            <!--            </tbody>-->
+            <!--          </table>-->
+            <!--        </div>-->
 
-        </clr-accordion-content>
+          </clr-accordion-content>
 
-      </clr-accordion-panel>
-    </ng-container>
-
-
-  </clr-accordion>
+        </clr-accordion-panel>
+      </ng-container>
 
 
+    </clr-accordion>
+  </ng-container>
+
+  <app-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-digital-inspector>
 </ng-container>
+
+
+<form [formGroup]="assignIdForm" (ngSubmit)="assignIdSubmit()" *ngIf="opened">
+  <span class="gibert-title">Замена ID товара</span>
+
+  <div class="clr-input-wrapper control-element">
+    <label>ID товара:</label>
+    <input type="text" formControlName="newGoodId" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <button class="btn btn-primary">Заменить</button>
+  <br><br>
+</form>
+
+
+<form [formGroup]="newEventForm" (ngSubmit)="newEventSubmit()" *ngIf="opened">
+  <span class="gibert-title">Добавление нового события</span>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Тип события:</label>
+
+    <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
+      <option value="CertificateUploaded">Загружен сертификат качества</option>
+      <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
+      <option value="OptionVerification">Инспектор проверил характеристику</option>
+    </select>
+  </div>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Описание:</label>
+    <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <div class="clr-input-wrapper control-element">
+    <label>Дата:</label>
+    <input type="date" formControlName="occurredAt" appFormControlInvalidClass="invalid"/>
+  </div>
+
+  <button class="btn btn-primary">Добавить</button>
+  <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
+</form>
