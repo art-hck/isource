@@ -5,111 +5,120 @@
   </div>
 
   <ng-template #historyList>
-    <div class="activity-block" *ngFor="let activityItem of history">
-      <div class="{{ getActivityTypeStatusClass(activityItem) }}"></div>
+    <div class="activity-block app-row" *ngFor="let activityItem of history">
+      <div class="status-pie">
+        <div class="{{getNewStatusClass(activityItem)}}">
+        </div>
+        <div class="{{getCurrentStatusClass(activityItem)}}">
+        </div>
+        <div class="white-circle">
+        </div>
+      </div>
+      <div class="app-col timeline">
+        <span class="activity-date">{{activityItem.createdDate | date: 'd LLLL в H:mm'}}</span>
+      </div>
+      <div class="app-col">
+        <span class="activity-type" [class.app-bold]="isPositionWinnerSelectedAction(activityItem)"
+              [class.gray]="isStatusChangeAction(activityItem)">
+          {{ activityItem.typeLabel }}
+        </span>
 
-      <span class="activity-type gray">{{ activityItem.typeLabel }}</span>
+        <ng-container *ngIf="isDocumentUploadAction(activityItem); else restActivityData">
+          <a class="document-item" (click)="downloadDocument(activityItem.documentId, activityItem.data.filename)">
+            {{ activityItem.data.filename }}
+          </a>
+        </ng-container>
 
-      <ng-container *ngIf="isDocumentUploadAction(activityItem); else restActivityData">
-        <a class="document-item" (click)="downloadDocument(activityItem.documentId, activityItem.data.filename)">
-          {{ activityItem.data.filename }}
-        </a>
-      </ng-container>
+        <ng-template #restActivityData>
 
+          <ng-container *ngIf="isPositionEditAction(activityItem)">
+            <div class="position-edit-item">
+              <div class="edit-info-item" *ngFor="let item of getPositionEditInfoList(activityItem.data)">
+                <span class="edit-info-label gray">{{ item.label }}:</span>
 
-      <ng-template #restActivityData>
-
-        <ng-container *ngIf="isPositionEditAction(activityItem)">
-          <div class="position-edit-item">
-            <div class="edit-info-item" *ngFor="let item of getPositionEditInfoList(activityItem.data)">
-              <span class="edit-info-label gray">{{ item.label }}:</span>
-
-              <span class="edit-info-value">{{ item.oldValue }}</span>
-              <span class="arrow">→</span>
-              <span class="edit-info-value">{{ item.newValue }}</span>
+                <span class="edit-info-value">{{ item.oldValue }}</span>
+                <span class="arrow">→</span>
+                <span class="edit-info-value">{{ item.newValue }}</span>
+              </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
 
-        <ng-container *ngIf="isStatusChangeAction(activityItem)">
-          <div class="position-status-change">
-            <span class="status-name">
-              <span class="position-status status-position-{{ activityItem.data.oldStatus }}">
-                {{ activityItem.data.oldStatusLabel }}
-              </span>
-                <span *ngIf="activityItem.data.oldStatus" class="arrow">→</span>
-              <span class="position-status status-position-{{ activityItem.data.newStatus }}">
-                {{ activityItem.data.newStatusLabel }}
-              </span>
-            </span>
-          </div>
-        </ng-container>
+          <ng-container *ngIf="isStatusChangeAction(activityItem)">
+            <div class="position-status-change">
+              <uxg-position-status [label]="activityItem.data.oldStatusLabel"
+                                   [status]="activityItem.data.oldStatus"></uxg-position-status>
+              <clr-icon shape="app-top" dir="right"></clr-icon>
+              <uxg-position-status [label]="activityItem.data.newStatusLabel"
+                                   [status]="activityItem.data.newStatus"></uxg-position-status>
+            </div>
+          </ng-container>
 
-        <ng-container *ngIf="isPositionWinnerSelectedAction(activityItem)">
-          <div class="position-winner-selected-item">
-            <div class="position-winner-name">
-              <clr-icon shape="thumbs-up" size="12" class="is-solid gray"></clr-icon>
-
-              <span *ngIf="!activityItem.data.supplierId; else clickableWinnerLink">
+          <ng-container *ngIf="isPositionWinnerSelectedAction(activityItem)">
+            <div class="position-winner-selected-item">
+              <div class="position-winner-name">
+                <span *ngIf="!activityItem.data.supplierId; else clickableWinnerLink">
                 {{ activityItem.data.supplierName || 'Без имени' }}
               </span>
 
-              <ng-template #clickableWinnerLink>
-                <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
-                   [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName
-                  }}</a>
-              </ng-template>
+                <ng-template #clickableWinnerLink>
+                  <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
+                     [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName
+                    }}</a>
+                </ng-template>
+              </div>
+
+              <div class="position-winner-offer">
+                {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
+                currency : activityItem.data.offerCurrency }}
+                <span class="gray">
+                  за </span>
+                {{ activityItem.data.offerQuantity }}
+                <span class="gray">
+                  {{ activityItem.data.offerMeasureUnit }}
+                </span>
+              </div>
             </div>
+          </ng-container>
 
-            <div class="position-winner-offer">
-              {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
-              currency : activityItem.data.offerCurrency }}
-              <span
-                class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
-            </div>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="isPositionWinnerRemovedAction(activityItem)">
-          <div class="position-winner-selected-item">
-            <div class="position-winner-name">
-              <clr-icon shape="thumbs-down" size="12" class="is-solid gray"></clr-icon>
-
-              <span *ngIf="!activityItem.data.supplierId; else clickableRemovedWinnerLink">
+          <ng-container *ngIf="isPositionWinnerRemovedAction(activityItem)">
+            <div class="position-winner-selected-item">
+              <div class="position-winner-name">
+                <span *ngIf="!activityItem.data.supplierId; else clickableRemovedWinnerLink">
                 {{ activityItem.data.supplierName || 'Без имени' }}
               </span>
 
-              <ng-template #clickableRemovedWinnerLink>
-                <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
-                   (click)="showContragentInfo($event, activityItem.data.supplierId)">{{ activityItem.data.supplierName
-                  }}</a>
-              </ng-template>
+                <ng-template #clickableRemovedWinnerLink>
+                  <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
+                     (click)="showContragentInfo($event, activityItem.data.supplierId)">{{
+                    activityItem.data.supplierName
+                    }}</a>
+                </ng-template>
+              </div>
+
+              <div class="position-winner-offer">
+                {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
+                currency : activityItem.data.offerCurrency }}
+                <span
+                  class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
+              </div>
             </div>
+          </ng-container>
 
-            <div class="position-winner-offer">
-              {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
-              currency : activityItem.data.offerCurrency }}
-              <span
-                class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
-            </div>
-          </div>
-        </ng-container>
+        </ng-template>
 
-      </ng-template>
-
-      <div class="author-block">
-        <span class="user-name gray"><b>{{ getUserName(activityItem) }}</b></span>
-        <span class="activity-date gray">{{ activityItem.createdDate | date:'dd.MM.yyyy HH:mm' }}</span>
+        <div class="author-block">
+          <span class="user-name gray">
+            {{ activityItem.user.lastName }} {{ activityItem.user.firstName }} {{ activityItem.user.middleName }}
+          </span>
+        </div>
       </div>
     </div>
   </ng-template>
-
 </div>
 
 <ng-container *ngIf="contragent">
   <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
     <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
     <div class="modal-body">
       <app-contragent-info
         [contragent]="contragent">

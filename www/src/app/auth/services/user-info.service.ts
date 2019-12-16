@@ -22,7 +22,9 @@ export class UserInfoService {
     lastName: 'lastName',
     isSupplier: 'isSupplier',
     isCustomer: 'isCustomer',
-    isBackOffice: 'isBackOffice'
+    isBackOffice: 'isBackOffice',
+    isSeniorBackoffice: 'isSeniorBackoffice',
+    isRegularBackoffice: 'isRegularBackoffice'
   };
 
   constructor(
@@ -63,6 +65,14 @@ export class UserInfoService {
 
   public isBackOffice(): boolean {
     return this.getUserInfo().isBackOffice;
+  }
+
+  public isSeniorBackoffice(): boolean {
+    return this.getUserInfo().isSeniorBackoffice;
+  }
+
+  public isRegularBackoffice(): boolean {
+    return this.getUserInfo().isRegularBackoffice;
   }
 
   public getUserRole(): string {

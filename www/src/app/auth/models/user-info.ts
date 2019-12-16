@@ -11,6 +11,8 @@ export class UserInfo {
   isSupplier: boolean;
   isCustomer: boolean;
   isBackOffice: boolean;
+  isSeniorBackoffice: boolean;
+  isRegularBackoffice: boolean;
 }
 
 

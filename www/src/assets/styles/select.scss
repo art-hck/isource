@@ -9,6 +9,10 @@ select option {
 }
 
 .clr-select-wrapper {
+  max-height: initial !important;
+}
+
+.clr-select-wrapper {
   max-height: initial;
   margin: 0;
   color: black;

@@ -1,31 +1,29 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { NotificationService } from "../../../../../shared/services/notification.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { RequestPosition } from "../../../models/request-position";
-import { Uuid } from "../../../../../cart/models/uuid";
 import { DeliveryMonitorService } from "../../../services/delivery-monitor.service";
-import { InspectorStage } from "../../../models/delivery-monitor-info";
+import { InspectorInfo } from "../../../models/inspector-info";
+import { InspectorStatus } from "../../../enum/inspector-status";
+import { InspectorStatusLabels } from "../../../dictionaries/inspector-status-labels";
 
 @Component({
   selector: 'app-digital-inspector',
   templateUrl: 'digital-inspector.component.html',
-  styleUrls: [
-    './digital-inspector.component.scss',
-    '../../manufacturing/manufacturing.component.scss'
-  ]
+  styleUrls: ['digital-inspector.component.scss']
 })
 
 export class DigitalInspectorComponent {
 
-  @Input() inspectorStages: InspectorStage[] = [];
+  @Input() inspectorStages: InspectorInfo[];
   @Input() position: RequestPosition;
 
   opened = false;
   shiftCount = 0;
 
   form = new FormGroup({
-    createdDate: new FormControl('', Validators.required),
-    title: new FormControl('', Validators.required),
+    occurredAt: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
   });
 
@@ -66,12 +64,16 @@ export class DigitalInspectorComponent {
     }
 
     const formData = this.form.value;
-    formData.createdDate = new Date(this.form.value.createdDate);
+    formData.occurredAt = new Date(this.form.value.occurredAt);
     formData.positionId = this.position.id;
 
     this.form.reset();
     this.deliveryMonitorService.addInspectorStage(formData).subscribe();
     this.notificationService.toast('Добавлено');
     this.inspectorStages.push(formData);
+  }
+
+  getEventTitleByType(type) {
+    return InspectorStatusLabels[type];
   }
 }
