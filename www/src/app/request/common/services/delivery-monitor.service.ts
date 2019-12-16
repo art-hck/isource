@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { DeliveryMonitorInfo, InspectorStage } from "../models/delivery-monitor-info";
 import { Observable } from "rxjs";
 import { Uuid } from "../../../cart/models/uuid";
+import { InspectorInfo } from "../models/inspector-info";
 
 
 @Injectable()
@@ -19,5 +20,9 @@ export class DeliveryMonitorService {
 
   addInspectorStage(stage: InspectorStage): Observable<InspectorStage[]> {
     return this.api.post<InspectorStage[]>(`monitor/inspector-stages/add`, stage);
+  }
+
+  getInspectorInfo(positionId: Uuid): Observable<InspectorInfo[]> {
+    return this.api.post<InspectorInfo[]>(`monitor/goods/${positionId}/production`, null);
   }
 }
