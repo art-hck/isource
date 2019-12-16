@@ -15,7 +15,9 @@ export class RequestAsideInfoComponent {
   isStatTabVisible: boolean;
 
   getStatusCounters(positions: RequestPosition[]) {
-    return RequestPositionWorkflowStepsGroupsInfo.map(statusCounter => ({
+    return RequestPositionWorkflowStepsGroupsInfo.filter(statusCounter => (
+      statusCounter.hasActions
+    )).map(statusCounter => ({
         ...statusCounter,
         positions: positions.filter(position => statusCounter.statuses.indexOf(position.status) >= 0)
       })
