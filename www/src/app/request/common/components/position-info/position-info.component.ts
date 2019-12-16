@@ -162,7 +162,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     return currentStatusIndex >= manufacturingIndex;
   }
 
-  canViewDeliveryMonitor(requestPosition: RequestPosition): boolean {
+  canViewManufacturingAndDeliveryMonitor(requestPosition: RequestPosition): boolean {
     const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(
       RequestPositionWorkflowSteps.MANUFACTURING.valueOf()
     );

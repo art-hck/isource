@@ -184,8 +184,8 @@
             </clr-tab-content>
           </clr-tab>
 
-          <clr-tab *ngIf="canViewDeliveryMonitor(requestPosition)">
-            <button clrTabLink>Монитор поставок</button>
+          <clr-tab *ngIf="canViewManufacturingAndDeliveryMonitor(requestPosition)">
+            <button clrTabLink>Изготовление и доставка</button>
             <clr-tab-content *clrIfActive>
               <app-delivery-monitor
                       [requestPosition]="requestPosition"
