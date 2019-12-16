@@ -1,4 +1,4 @@
-<form [formGroup]="requestDataForm" class="form">
+<form [formGroup]="requestDataForm" class="create-request-form">
 
   <label class="clr-control-label request-name-label" for="request-name">
     Введите наименование заявки <b class="required-star">*</b>:
@@ -107,8 +107,18 @@
             <div class="clr-row">
               <div class="clr-col">
                 <label class="clr-control-label" for="paymentTerms">Условия оплаты <b class="required-star">*</b></label>
-                <input type="text" id="paymentTerms" formControlName="paymentTerms"
-                       [class.invalid]="isFieldInvalid(i, 'paymentTerms')">
+                <select clrSelect
+                        name="paymentTerms"
+                        id="paymentTerms"
+                        formControlName="paymentTerms"
+                        [class.invalid]="isFieldInvalid(i, 'paymentTerms')">
+                  <option value="30 дней по факту поставки" selected>
+                    30 дней по факту поставки
+                  </option>
+                  <option value="60 дней по факту поставки">
+                    60 дней по факту поставки
+                  </option>
+                </select>
               </div>
             </div>
             <div class="clr-row">
@@ -124,22 +134,23 @@
               </div>
               <div class="clr-col-3">
                 <label class="clr-control-label" for="currency">Валюта</label>
-                <div class="select">
-                  <select name="currency" id="currency" formControlName="currency">
-                    <option value="RUB">
-                      RUB
-                    </option>
-                    <option value="USD" disabled>
-                      USD
-                    </option>
-                    <option value="EUR" disabled>
-                      EUR
-                    </option>
-                    <option value="CHF" disabled>
-                      CHF
-                    </option>
-                  </select>
-                </div>
+                <select clrSelect
+                        name="currency"
+                        id="currency"
+                        formControlName="currency">
+                  <option value="RUB">
+                    RUB
+                  </option>
+                  <option value="USD" disabled>
+                    USD
+                  </option>
+                  <option value="EUR" disabled>
+                    EUR
+                  </option>
+                  <option value="CHF" disabled>
+                    CHF
+                  </option>
+                </select>
               </div>
             </div>
 

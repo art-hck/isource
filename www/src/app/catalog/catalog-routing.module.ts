@@ -17,16 +17,17 @@ const routes: Routes = [
       {
         path: 'search',
         component: SearchViewComponent,
-        data: { title: "Каталог" }
+        data: { title: "Каталог", hideTitle: true, hideBreadcrumbs: true }
       },
       {
         path: ':categoryId',
         component: CategoryViewComponent,
-        data: { title: "Каталог" }
+        data: { hideTitle: true, hideBreadcrumbs: true }
       },
       {
         path: 'position/:positionId',
-        component: PositionViewComponent
+        component: PositionViewComponent,
+        data: { hideTitle: true, hideBreadcrumbs: true }
       }
     ]
   },

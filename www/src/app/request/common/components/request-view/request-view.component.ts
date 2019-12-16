@@ -11,7 +11,7 @@ import {RequestPositionListComponent} from "../request-position-list/request-pos
   templateUrl: './request-view.component.html',
   styleUrls: ['./request-view.component.scss']
 })
-export class RequestViewComponent implements OnChanges {
+export class RequestViewComponent {
   @Input() filteredByDrafts: boolean;
 
   @Input() isCustomerView: boolean;
@@ -25,13 +25,6 @@ export class RequestViewComponent implements OnChanges {
 
   selectPositionListItem: any;
   showPositionList = true;
-
-  constructor(
-  ) {
-  }
-
-  ngOnChanges() {
-  }
 
   onUpdateRequestInfo() {
     this.changeRequestInfo.emit();

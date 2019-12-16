@@ -6,20 +6,15 @@
   <div class="clr-row">
     <div class="info-card clr-col">
       <div class="technical-proposals">
-        <div class="breadcrumbs">
-          <a [href]="'requests/backoffice/'">Заявки</a> → <a [href]="'requests/backoffice/' + request.id">Заявка №{{request.number}}</a>
-        </div>
-        <h2>Технические предложения</h2>
-
         <div class="clr-row clr-justify-content-between">
 
           <div class="clr-col">
-            <button class="add-technical-proposal btn btn-link"
+            <button class="btn btn-primary"
                     [clrLoading]="getLoaderState()"
                     (click)="onShowAddTechnicalProposalModal()">
-              <b>+ Добавить ТП</b>
+              <clr-icon shape="plus"></clr-icon>
+              Добавить ТП
             </button>
-
           </div>
 
           <div class="clr-col-auto">
@@ -66,6 +61,13 @@
                     <b>Отправить на согласование</b>
                   </button>
                 </div>
+
+                <button *ngIf="availableCancelSendToReview(technicalProposal)"
+                        class="btn btn-primary btn-cancel-send-to-approval"
+                        (click)="onCancelSendForApproval(technicalProposal)"
+                        [clrLoading]="loaders.cancelReview">
+                  Отозвать <span class="cancel-timer">{{ technicalProposal.statusChangedDate | countdownTimer: durationCancelReview }} </span>
+                </button>
 
                 <ng-template #sentForReview>
                   <p class="sent-label">{{ tpStatusLabel(technicalProposal) }}</p>
@@ -258,8 +260,7 @@
     [requestPositions$]="requestPositions$"
     [contragents$]="contragentList$"
     [allowOpenedProcedure]="true"
-    (publishProcedure)="onPublishProcedure($event)"
-  >
+    (publishProcedure)="onPublishProcedure($event)">
   </app-wizard-create-procedure>
 
 </ng-container>

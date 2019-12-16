@@ -3,7 +3,7 @@
 
 .clr-checkbox-wrapper {
   display: block;
-  padding-bottom: 15px;
+  padding-bottom: 0;
 
   & input[type=checkbox] {  /* Скрытие дефолтного чекбокса */
     position: absolute;

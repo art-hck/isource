@@ -20,6 +20,8 @@ import { AddFromExcelComponent } from './common/components/add-from-excel/add-fr
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
+import { RequestComponent as BackOfficeRequestComponent  } from './back-office/components/request/request.component';
+import { RequestComponent as CustomerRequestComponent  } from './customer/components/request/request.component';
 import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
@@ -28,7 +30,6 @@ import { RequestListStatusesFilterComponent } from "./common/components/request-
 import { RequestListPositionStatusesFilterComponent } from "./common/components/request-list/request-list-position-statuses-filter/request-list-position-statuses-filter.component";
 import { CustomerListNamesFilterComponent } from "./common/components/request-list/customer-list-names-filter/customer-list-names-filter.component";
 import { RequestListNumberFilterComponent } from "./common/components/request-list/request-list-number-filter/request-list-number-filter.component";
-import { ManufacturingComponent } from './common/components/manufacturing/manufacturing.component';
 import { RequestPositionListComponent } from './common/components/request-position-list/request-position-list.component';
 import { PositionInfoHistoryComponent } from './common/components/position-info-history/position-info-history.component';
 import { GroupInfoComponent } from './common/components/group-info/group-info.component';
@@ -66,6 +67,7 @@ import { RequestComponent } from "./common/components/request/request.component"
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
 import { RequestPositionComponent } from './common/components/request-position/request-position.component';
+import { PieChartComponent } from './common/components/request/pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +92,6 @@ import { RequestPositionComponent } from './common/components/request-position/r
     CustomerListNamesFilterComponent,
     RequestListStatusesFilterComponent,
     RequestListPositionStatusesFilterComponent,
-    ManufacturingComponent,
     RequestPositionListComponent,
     PositionInfoHistoryComponent,
     GroupInfoComponent,
@@ -118,7 +119,10 @@ import { RequestPositionComponent } from './common/components/request-position/r
     RequestComponent,
     RequestAsideInfoComponent,
     RequestAddGroupModalComponent,
-    RequestPositionComponent
+    PieChartComponent,
+    RequestPositionComponent,
+    BackOfficeRequestComponent,
+    CustomerRequestComponent
   ],
   imports: [
     SharedModule,
