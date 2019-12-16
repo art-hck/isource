@@ -1,7 +1,7 @@
 <div class="digital-inspector-content">
   <ng-template #noData>
     <ng-template #loadingInspectorData>
-      <span class="spinner spinner-md delivery-monitor-loader"></span>
+      <p class="no-inspector-data gray">Загружаются события инспекционного контроля...</p>
     </ng-template>
 
     <ng-container *ngIf="inspectorStages && inspectorStages.length === 0; else loadingInspectorData">
