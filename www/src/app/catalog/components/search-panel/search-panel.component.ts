@@ -1,13 +1,13 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Inject, Input, OnInit, Output } from '@angular/core';
 import { Router } from "@angular/router";
-import { animate, style, transition, trigger } from "@angular/animations";
+import { DOCUMENT } from "@angular/common";
 
 @Component({
   selector: 'app-catalog-search-panel',
   templateUrl: './search-panel.component.html',
   styleUrls: ['./search-panel.component.scss'],
 })
-export class SearchPanelComponent implements OnInit {
+export class SearchPanelComponent {
 
   @Input() searchText: string;
   @Output() searchTextChange = new EventEmitter<string>();
@@ -15,12 +15,9 @@ export class SearchPanelComponent implements OnInit {
   categoriesOpened = false;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     protected router: Router
   ) {
-  }
-
-  ngOnInit() {
-    this.getSearchBarWidth();
   }
 
   onSearch() {
@@ -41,6 +38,6 @@ export class SearchPanelComponent implements OnInit {
   }
 
   getSearchBarWidth() {
-    return document.getElementsByClassName('content-area')[0].clientWidth + 'px';
+    return this.document.getElementsByClassName('content-area')[0].clientWidth + 'px';
   }
 }
