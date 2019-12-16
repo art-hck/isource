@@ -68,7 +68,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       const currentUrl = window.location.pathname;
 
       // если уже находимся на странице логина, то редиректа не делаем
-      if (currentUrl === 'auth/login') {
+      if (currentUrl === '/auth/login') {
         return;
       }
 
@@ -77,7 +77,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         {};
 
       // добавляем к редиректу ссылку на страницу, с которой перешли
-      this.router.navigate(['auth/login'], {
+      this.router.navigate(['/auth/login'], {
         queryParams: queryParams
       });
     }
