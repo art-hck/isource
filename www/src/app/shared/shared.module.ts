@@ -10,8 +10,9 @@ import { DocumentUploadListComponent } from "./components/document-upload-list/d
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
 import { PluralizePipe } from "./pipes/pluralize-pipe";
 import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
-import { ContragentSearchFilterPipe } from "../shared/pipes/contragent-list-filter-pipe";
+import { ContragentSearchFilterPipe } from "./pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
+import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     PluralizePipe,
     BytesToSizePipe,
     ContragentSearchFilterPipe,
+    CountdownTimerPipe,
     ControlInvalidClassDirective
   ],
   exports: [
@@ -58,9 +60,12 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
+
     PluralizePipe,
     BytesToSizePipe,
     ContragentSearchFilterPipe,
+    CountdownTimerPipe,
+
     ControlInvalidClassDirective
   ]
 })

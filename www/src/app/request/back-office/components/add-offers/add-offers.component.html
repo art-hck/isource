@@ -118,7 +118,7 @@
                       class="btn btn-primary btn-cancel-publish"
                       [clrLoading]="loaders.cancelPublish"
                       (click)="onCancelPublishOffers(requestPosition)">
-                Отозвать <span class="cancel-timer"> {{ getAvailableTimeCancelPublish(requestPosition) }} </span>
+                Отозвать <span class="cancel-timer"> {{ requestPosition.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
               </button>
 
             </td>

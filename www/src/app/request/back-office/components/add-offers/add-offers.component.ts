@@ -35,7 +35,7 @@ import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-b
   templateUrl: './add-offers.component.html',
   styleUrls: ['./add-offers.component.scss']
 })
-export class AddOffersComponent implements OnInit, OnDestroy {
+export class AddOffersComponent implements OnInit {
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -80,7 +80,6 @@ export class AddOffersComponent implements OnInit, OnDestroy {
    * Время в течение которого бэкофис может отозвать КП (в секундах)
    */
   protected durationCancelPublish = 10 * 60;
-  protected updateTimerId: number;
 
   constructor(
     private bc: UxgBreadcrumbsService,
@@ -101,9 +100,6 @@ export class AddOffersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-
-    // Костыль, чтобы каждую секунду обновлялся счетчик со временем возможности возврата ТП
-    this.updateTimerId = setInterval(() => {}, 1000);
 
     const getRequestInfoSubscription = this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
@@ -129,12 +125,6 @@ export class AddOffersComponent implements OnInit, OnDestroy {
       id: [''],
       documents: [[]]
     });
-  }
-
-  ngOnDestroy() {
-    if (this.updateTimerId) {
-      clearInterval(this.updateTimerId);
-    }
   }
 
   getSupplierLinkedOffers(
@@ -576,12 +566,6 @@ export class AddOffersComponent implements OnInit, OnDestroy {
   availableCancelPublishOffers(requestPosition: RequestPosition) {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT
       && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
-  }
-
-  getAvailableTimeCancelPublish(requestPosition: RequestPosition) {
-    const durationReview = this.durationCancelPublish - this.getDurationChangeStatus(requestPosition);
-
-    return moment.utc(durationReview * 1000).format('mm:ss');
   }
 
   /**

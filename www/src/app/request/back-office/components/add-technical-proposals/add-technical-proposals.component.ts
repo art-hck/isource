@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -35,7 +35,7 @@ import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-b
   templateUrl: './add-technical-proposals.component.html',
   styleUrls: ['./add-technical-proposals.component.scss']
 })
-export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
+export class AddTechnicalProposalsComponent implements OnInit {
 
   requestId: Uuid;
   request: Request;
@@ -64,7 +64,6 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
    * Время в течение которого бэкофис может отозвать ТП (в секундах)
    */
   protected durationCancelReview = 10 * 60;
-  protected updateTimerId: number;
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
   @ViewChild('createProcedureWizard', {static: false}) createProcedureWizard: WizardCreateProcedureComponent;
@@ -91,16 +90,22 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Костыль, чтобы каждую секунду обновлялся счетчик со временем возможности возврата ТП
-    this.updateTimerId = setInterval(() => {}, 1000);
-
     this.documentsForm = this.formBuilder.group({
       documents: [null]
     });
 
     this.requestId = this.route.snapshot.paramMap.get('id');
 
-    this.updateRequestInfo();
+    this.requestService.getRequestInfo(this.requestId).subscribe(
+      (request: Request) => {
+        this.request = request;
+        this.bc.breadcrumbs = [
+          {label: "Заявки", link: "/requests/backoffice"},
+          {label: `Заявка №${this.request.number}`, link: "/requests/backoffice/" + this.request.id}
+        ];
+      }
+    );
+
     this.getTechnicalProposals();
     this.getPositionsListForTp();
 
@@ -110,17 +115,6 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
       )));
 
     this.contragentList$ = this.getContragentService.getContragentList();
-
-    this.bc.breadcrumbs = [
-      { label: "Заявки", link: "/requests/backoffice"},
-      { label: `Заявка №${this.request.number}`, link: "/requests/backoffice/" + this.request.id }
-    ];
-  }
-
-  ngOnDestroy() {
-    if (this.updateTimerId) {
-      clearInterval(this.updateTimerId);
-    }
   }
 
   /**
@@ -250,14 +244,6 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
           msg = `${msg}: ${error.error.detail}`;
         }
         alert(msg);
-      }
-    );
-  }
-
-  protected updateRequestInfo(): void {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
-      (request: Request) => {
-        this.request = request;
       }
     );
   }
@@ -454,12 +440,6 @@ export class AddTechnicalProposalsComponent implements OnInit, OnDestroy {
   availableCancelSendToReview(technicalProposal: TechnicalProposal): boolean {
     return this.tpIsSendToReview(technicalProposal)
       && this.getDurationChangeStatus(technicalProposal) < this.durationCancelReview;
-  }
-
-  getAvailableTimeCancelSendToReview(technicalProposal: TechnicalProposal) {
-    const durationReview = this.durationCancelReview - this.getDurationChangeStatus(technicalProposal);
-
-    return moment.utc(durationReview * 1000).format('mm:ss');
   }
 
   /**

@@ -73,7 +73,7 @@
                         class="btn btn-primary btn-cancel-send-to-approval"
                         (click)="onCancelSendForApproval(technicalProposal)"
                         [clrLoading]="loaders.cancelReview">
-                  Отозвать <span class="cancel-timer">{{ getAvailableTimeCancelSendToReview(technicalProposal) }} </span>
+                  Отозвать <span class="cancel-timer">{{ technicalProposal.statusChangedDate | countdownTimer: durationCancelReview }} </span>
                 </button>
 
                 <ng-template #sentForReview>
