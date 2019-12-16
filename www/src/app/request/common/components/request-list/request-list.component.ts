@@ -19,7 +19,6 @@ export class RequestListComponent implements OnInit {
   appConfig: GpnmarketConfigInterface;
 
   @ViewChild('datagridElement', { static: false }) datagridElement: ElementRef;
-  currentDatagridState: ClrDatagridStateInterface;
   datagridFilter: {};
 
   @Input() customerNameColumnShow = false;
@@ -70,8 +69,6 @@ export class RequestListComponent implements OnInit {
   }
 
   refresh(state: ClrDatagridStateInterface): void {
-    this.currentDatagridState = state;
-
     const datagridState: DatagridStateAndFilter = {
       startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
       pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,

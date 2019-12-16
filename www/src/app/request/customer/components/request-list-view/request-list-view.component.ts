@@ -19,6 +19,7 @@ export class RequestListViewComponent implements OnInit {
              requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
+  currentStatus: string;
   currentFilters: RequestsListFilter;
 
   filterModalOpened = false;
@@ -26,7 +27,6 @@ export class RequestListViewComponent implements OnInit {
   public requests: RequestsList[];
   @Output() totalItems: number;
   @Output() datagridLoader: boolean;
-  @Output() requestStatus = RequestWorkflowSteps.IN_PROGRESS;
 
   filters: any;
   requestWorkflowSteps = RequestWorkflowSteps;
@@ -37,47 +37,58 @@ export class RequestListViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.filters = {'requestListStatusesFilter': [RequestWorkflowSteps.IN_PROGRESS]};
+    this.currentStatus = RequestWorkflowSteps.IN_PROGRESS;
     this.getRequestStatusCount('customer');
   }
 
-  getRequestStatusCount(role: string) {
-    this.getRequestService.requestStatusCount(role).subscribe(
-      (requestStatusCount: RequestStatusCount) => {
-        this.requestStatusCount = requestStatusCount;
-      }
-    );
+  /**
+   * Здесь происходит объединение фильтров из правой панели и фильтров по статусам
+   */
+  composeFilters(): void {
+    const statusTab = { 'requestListStatusesFilter': [this.currentStatus] };
+    this.filters = {...this.currentFilters, ...statusTab};
   }
 
-  getRequestList(requestStatus: RequestWorkflowSteps) {
-    this.requestStatus = requestStatus;
-    this.filters = {'requestListStatusesFilter': [this.requestStatus]};
-    this.getRequestListForCustomer(0, 10, this.filters);
-    this.requestListFilterComponent.clearFilter();
+  /**
+   * Переключалка табов со статусами — записывает в переменную выбранный статус и сбрасывает фильтры справа
+   *
+   * @param requestStatus
+   */
+  switchTab(requestStatus: RequestWorkflowSteps): void {
+    this.currentStatus = requestStatus;
+    this.composeFilters();
+
+    if (this.requestListFilterComponent) {
+      this.requestListFilterComponent.clearFilter();
+      this.currentFilters = <RequestsListFilter>{};
+    }
   }
 
-  filter(filter: RequestsListFilter): void {
-    this.currentFilters = {...this.filters, ...filter};
+  /**
+   * Функция вызывается при обновлении значении фильтров в дочернем компоненте с фильтрами справа
+   *
+   * @param filter
+   */
+  onFilterUpdate(filter: RequestsListFilter): void {
+    this.currentFilters = filter;
+    this.composeFilters();
 
     let pageSize = null;
-
     if (this.currentDatagridState) {
       pageSize = this.currentDatagridState.pageSize;
     }
 
-    if (this.currentDatagridState) {
-      pageSize = this.currentDatagridState.pageSize;
-    }
-
-    this.getRequestListForCustomer(0, pageSize, this.currentFilters);
+    this.getRequestListForCustomer(0, pageSize, this.filters);
   }
 
+  /**
+   * Функция вызывается при изменеии состояния датагрида — например, при пагинации
+   *
+   * @param state
+   */
   onDatagridStateChange(state: DatagridStateAndFilter): void {
     this.currentDatagridState = state;
-
-    if (this.currentFilters) {
-      state.filters = this.currentFilters;
-    }
+    this.composeFilters();
 
     this.getRequestListForCustomer(state.startFrom, state.pageSize, this.filters);
   }
@@ -90,6 +101,22 @@ export class RequestListViewComponent implements OnInit {
       });
   }
 
+  /**
+   * Функция получает кол-во заявок по статусу («В обработке (23)»)
+   *
+   * @param role
+   */
+  getRequestStatusCount(role: string) {
+    this.getRequestService.requestStatusCount(role).subscribe(
+      (requestStatusCount: RequestStatusCount) => {
+        this.requestStatusCount = requestStatusCount;
+      }
+    );
+  }
+
+  /**
+   * Функция получает кол-во активных фильтров («Фильтр [2]»)
+   */
   getFilterCounter() {
     if (this.currentFilters) {
       const activeFilters = Object.keys(this.currentFilters).filter(

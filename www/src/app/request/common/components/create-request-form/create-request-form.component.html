@@ -1,7 +1,7 @@
 <form [formGroup]="requestDataForm" class="form">
 
   <label class="clr-control-label request-name-label" for="request-name">
-    Введите наименование заявки:
+    Введите наименование заявки <b class="required-star">*</b>:
   </label>
 
   <input type="text"
@@ -43,7 +43,7 @@
           <clr-accordion-content *clrIfExpanded>
             <div class="clr-row">
               <div class="clr-col">
-                <label class="clr-control-label" for="name">Наименование МТР</label>
+                <label class="clr-control-label" for="name">Наименование МТР <b class="required-star">*</b></label>
                 <input type="text" id="name" formControlName="name"
                        [class.invalid]="isFieldInvalid(i, 'name')">
               </div>
@@ -52,7 +52,7 @@
               <div class="clr-col">
                 <label class="clr-control-label" for="productionDocument">
                   Документ, в соответствии с которым необходимо изготовление
-                  (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+                  (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.) <b class="required-star">*</b>
                 </label>
                 <input type="text" id="productionDocument" formControlName="productionDocument"
                        [class.invalid]="isFieldInvalid(i, 'productionDocument')">
@@ -68,20 +68,20 @@
             </div>
             <div class="clr-row">
               <div class="clr-col-3">
-                <label class="clr-control-label" for="quantity">Количество</label>
+                <label class="clr-control-label" for="quantity">Количество <b class="required-star">*</b></label>
                 <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"
                        step="0.01" class="hidden-arrows text-right price"
                        [class.invalid]="isFieldInvalid(i, 'quantity')">
               </div>
               <div class="clr-col-3">
-                <label class="clr-control-label" for="measureUnit">Единицы измерения</label>
+                <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>
                 <div class="select">
                   <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
                          [class.invalid]="isFieldInvalid(i, 'measureUnit')">
                 </div>
               </div>
               <div class="clr-col-3">
-                <label class="clr-control-label" for="deliveryDate"> Необходимый срок поставки</label>
+                <label class="clr-control-label" for="deliveryDate"> Необходимый срок поставки <b class="required-star">*</b></label>
                 <input id="deliveryDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
                        formControlName="deliveryDate"
                        [class.invalid]="isFieldInvalid(i, 'deliveryDate')"/>
@@ -91,14 +91,14 @@
                   <input type="checkbox" clrCheckbox name="isDeliveryDateAsap" id="isDeliveryDateAsap"
                          formControlName="isDeliveryDateAsap"
                          [class.invalid]="isFieldInvalid(i, 'isDeliveryDateAsap')">
-                  <label>как можно быстрее</label>
+                  <label>как можно скорее</label>
                 </clr-checkbox-wrapper>
               </div>
             </div>
             <div class="clr-row">
               <div class="clr-col">
                 <label class="clr-control-label" for="deliveryBasis">Базис поставки
-                  (пункт, до которого требуется доставка)
+                  (пункт, до которого требуется доставка) <b class="required-star">*</b>
                 </label>
                 <input type="text" id="deliveryBasis" formControlName="deliveryBasis"
                        [class.invalid]="isFieldInvalid(i, 'deliveryBasis')">
@@ -106,7 +106,7 @@
             </div>
             <div class="clr-row">
               <div class="clr-col">
-                <label class="clr-control-label" for="paymentTerms">Условия оплаты</label>
+                <label class="clr-control-label" for="paymentTerms">Условия оплаты <b class="required-star">*</b></label>
                 <input type="text" id="paymentTerms" formControlName="paymentTerms"
                        [class.invalid]="isFieldInvalid(i, 'paymentTerms')">
               </div>
@@ -144,14 +144,32 @@
             </div>
 
             <div class="clr-row">
-              <div class="clr-col">
+              <div class="clr-col-12">
                 <label class="clr-control-label nopadding" for="relatedServices">
                   Необходимость сопутствующих услуг (ШМР, ПНР, Инспекционный контроль)
                 </label>
-                <input type="text"
-                       id="relatedServices"
-                       name="relatedServices"
-                       formControlName="relatedServices">
+              </div>
+
+
+              <div class="clr-col-auto">
+                <clr-checkbox-wrapper>
+                  <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>
+                  <label class="clr-control-label nopadding">ШМР</label>
+                </clr-checkbox-wrapper>
+              </div>
+
+              <div class="clr-col-auto">
+                <clr-checkbox-wrapper>
+                  <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>
+                  <label class="clr-control-label nopadding">ПНР</label>
+                </clr-checkbox-wrapper>
+              </div>
+
+              <div class="clr-col-auto">
+                <clr-checkbox-wrapper>
+                  <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>
+                  <label class="clr-control-label nopadding">Инспекционный контроль</label>
+                </clr-checkbox-wrapper>
               </div>
             </div>
             <div class="clr-row">

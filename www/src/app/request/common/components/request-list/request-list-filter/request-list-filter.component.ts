@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../../models/requests-list/requests-list-filter";
-import { debounceTime, filter, flatMap, switchMap } from "rxjs/operators";
-import { of, Subscription } from "rxjs";
+import { debounceTime, filter, switchMap } from "rxjs/operators";
+import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { RequestFilterCustomerListComponent } from "./request-filter-customer-list/request-filter-customer-list.component";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
@@ -20,6 +20,7 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
 
   @Output() filter = new EventEmitter<RequestsListFilter>();
   @Output() showResults = new EventEmitter();
+
   @Input() backofficeView: boolean;
   @Input() resultsCount: number;
 
@@ -80,8 +81,22 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearFilter() {
+  /**
+   * Сброс значений фильтра и подтягивание новых данных
+   */
+  resetFilter() {
     this.requestListFilterForm.reset();
+    if (this.backofficeView) {
+      this.requestFilterCustomerListComponent.selectedCustomers = [];
+      this.requestFilterCustomerListComponent.customerSearchValue = "";
+    }
+  }
+
+  /**
+   * Сброс значений фильтра без обновления данных
+   */
+  clearFilter() {
+    this.requestListFilterForm.reset('', { emitEvent: false });
     if (this.backofficeView) {
       this.requestFilterCustomerListComponent.selectedCustomers = [];
       this.requestFilterCustomerListComponent.customerSearchValue = "";

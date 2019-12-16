@@ -11,6 +11,7 @@ import { DocumentIconComponent } from "./components/document-icon/document-icon.
 import { PluralizePipe } from "./pipes/pluralize-pipe";
 import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
 import { SafeStylePipe } from "./pipes/safe-style-pipe";
+import { ContragentSearchFilterPipe } from "../shared/pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
+    ContragentSearchFilterPipe,
     ControlInvalidClassDirective
   ],
   exports: [
@@ -61,6 +63,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
+    ContragentSearchFilterPipe,
     ControlInvalidClassDirective
   ]
 })

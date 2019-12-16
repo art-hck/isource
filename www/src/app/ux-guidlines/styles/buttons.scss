@@ -81,7 +81,7 @@
     }
   }
 
-  &-icon {
+  &-icon:not(&-clear) {
     min-width: $control-height;
     padding: 0;
   }
@@ -96,4 +96,8 @@
     cursor: not-allowed;
   }
 
+}
+
+* + .app-btn {
+  margin-left: .5rem;
 }

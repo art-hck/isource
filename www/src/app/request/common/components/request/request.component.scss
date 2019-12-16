@@ -54,8 +54,12 @@
       padding-right: 6px;
     }
 
-    &:last-child  {
+    &:last-child {
       padding-right: 0;
     }
   }
+}
+
+.app-table > .app-row > .app-col:first-child {
+  padding: 17px 6px;
 }

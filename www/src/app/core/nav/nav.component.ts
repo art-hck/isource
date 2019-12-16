@@ -1,129 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
-import { MenuModel } from "../models/menu.model";
+import { Component } from '@angular/core';
+import { Menu, MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
-import { UserInfoService } from "../services/user-info.service";
+import { UserInfoService } from "../../auth/services/user-info.service";
 import { CartStoreService } from "../../cart/services/cart-store.service";
+import { AuthService } from "../../auth/services/auth.service";
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent {
 
-  mainMenu: Array<MenuModel> = [];
-  url: string;
-  showMenu: boolean;
+  get menu(): MenuModel[] {
+    switch (true) {
+      case this.user.isSupplier(): return Menu.supplier;
+      case this.user.isCustomer(): return Menu.customer;
+      case this.user.isBackOffice(): return Menu.backoffice;
+    }
+  }
+
+  get isMenuHidden(): boolean {
+    return this.router.isActive('auth/login', false) ||
+      this.router.isActive('auth/registration', false) ||
+      this.router.isActive('auth/forgot-password', false) ||
+      this.router.isActive('auth/change-password', false);
+  }
 
   constructor(
-    public auth: AuthService,
-    protected gui: AvailableGuiService,
     private router: Router,
+    public auth: AuthService,
     public user: UserInfoService,
     public cartStoreService: CartStoreService
-  ) {
-    router.events.subscribe(() => {
-      this.showMenu = !(this.router.url.indexOf('/login') === 0 || this.router.url.indexOf('/registration') === 0);
-    });
-  }
-
-  ngOnInit() {
-    this.updateMenu();
-  }
-
-  logout(): void {
-    this.auth.logout().subscribe(() => {
-      // полностью перезагружаем приложение после логаута
-      window.location.href = "/login";
-    });
-  }
-
-  public updateMenu(): void {
-    if (this.auth.isAuth() && this.user.isSupplier()) {
-      this.mainMenu = this.getSupplierMenu();
-    } else if (this.auth.isAuth() && this.user.isCustomer()) {
-      this.mainMenu = this.getCustomerMenu();
-    } else if (this.auth.isAuth() && this.user.isBackOffice()) {
-      this.mainMenu = this.getBackOfficeMenu();
-    } else {
-      this.mainMenu = this.getUnauthMenu();
-    }
-  }
-
-  public isLoginPage(): boolean {
-    return this.router.isActive('login', false);
-  }
-
-  protected getSupplierMenu(): Array<MenuModel> {
-    return [
-      {
-        text: 'Заявки',
-        path: 'requests/backoffice',
-        children: []
-      }
-    ];
-  }
-
-  protected getCustomerMenu(): Array<MenuModel> {
-    return [
-      {
-        text: 'Заявки',
-        path: 'requests/customer',
-        children: []
-      },
-      {
-        text: 'Индивидуальная заявка',
-        path: 'requests/create',
-        children: []
-      },
-      {
-        text: 'Каталог',
-        path: 'catalog',
-        children: []
-      },
-      {
-        text: 'Контрагенты',
-        path: 'contragents',
-        children: []
-      }
-    ];
-  }
-
-  protected getBackOfficeMenu(): Array<MenuModel> {
-    return [
-      {
-        text: 'Заявки',
-        path: 'requests/backoffice',
-        children: []
-      },
-      {
-        text: 'Контрагенты',
-        path: 'contragents',
-        children: []
-      }
-    ];
-  }
-
-  protected getUnauthMenu(): Array<MenuModel> {
-    return [
-      {
-        text: '',
-        path: 'test',
-        children: []
-      }
-    ];
-  }
-
-  protected getUserAvatarFile(): string {
-    if (this.user.isCustomer()) {
-      return 'avatar_ludmila.jpg';
-    } else if (this.user.isBackOffice()) {
-      return 'avatar_nitshe.jpg';
-    }
-    return 'avatar.svg';
-  }
-
+  ) {}
 
   getUserBriefInfo(user: UserInfoService): string {
     return user.isCustomer() ?
@@ -131,4 +40,8 @@ export class NavComponent implements OnInit {
       'Бэк-офис';
   }
 
+  logout(): void {
+    this.router.navigate(["auth/login"]);
+    const subscription = this.auth.logout().subscribe(() => subscription.unsubscribe());
+  }
 }

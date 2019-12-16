@@ -10,8 +10,6 @@ import { ClarityModule } from '@clr/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
 import { CoreModule } from "./core/core.module";
 import { AccessGuard, APP_CONFIG, AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { PagesModule } from "./pages/pages.module";
@@ -20,8 +18,7 @@ import { CartStoreService as CartStoreService } from './cart/services/cart-store
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
 import { CreateRequestService } from "./request/common/services/create-request.service";
-import { RegistrationComponent } from './registration/components/registration.component';
-import { RegistrationService } from "./registration/services/registration.service";
+import { RegistrationService } from "./auth/services/registration.service";
 import { GetRequestsService } from "./request/common/services/get-requests.service";
 import { EditRequestService } from "./request/common/services/edit-request.service";
 import { HttpClientModule } from "@angular/common/http";
@@ -29,6 +26,7 @@ import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
 import { UxGuidlinesModule } from "./ux-guidlines/ux-guidlines.module";
+import { AuthModule } from "./auth/auth.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -37,13 +35,9 @@ export function startupServiceFactory(startupService: StartupService): Function 
 registerLocaleData(localeRu, 'ru');
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    RegistrationComponent,
-  ],
+  declarations: [ AppComponent ],
   imports: [
+    AuthModule,
     BrowserModule,
     ClarityModule,
     AppRoutingModule,
@@ -61,8 +55,8 @@ registerLocaleData(localeRu, 'ru');
     })
   ],
   providers: [
-    {provide: APP_CONFIG, useValue: AppConfig},
     StartupService,
+    { provide: APP_CONFIG, useValue: AppConfig },
     {
       provide: APP_INITIALIZER,
       useFactory: startupServiceFactory,

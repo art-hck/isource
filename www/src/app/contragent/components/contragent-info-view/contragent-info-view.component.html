@@ -3,12 +3,8 @@
 </ng-template>
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
-  <div class="container">
-    <div class="contragent-info-content">
-      <h2 class="contragent-name">{{ contragent.shortName }}</h2>
-
-      <app-contragent-info [contragent]="contragent">
-      </app-contragent-info>
-    </div>
+  <div class="contragent-info-content">
+    <app-contragent-info [contragent]="contragent">
+    </app-contragent-info>
   </div>
 </ng-container>

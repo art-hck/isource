@@ -3,13 +3,13 @@
 
     <div class="clr-col-12">
       <clr-input-container>
-        <label>Наименование МТР</label>
+        <label>Наименование МТР <b class="required-star">*</b></label>
         <input clrInput
                type="text"
                name="name"
                formControlName="name"
                [class.invalid]="isFieldValid('name')"
-               value="{{ requestPosition.name }}">
+               />
       </clr-input-container>
     </div>
 
@@ -17,7 +17,7 @@
 
     <div class="clr-col-4">
       <clr-date-container>
-        <label for="deliveryDate">Необходимый срок поставки</label>
+        <label for="deliveryDate">Необходимый срок поставки <b class="required-star">*</b></label>
         <input clrDate
                type="date"
                id="deliveryDate"
@@ -50,7 +50,7 @@
     <div class="clr-col-12">
       <clr-input-container>
         <label>Базис поставки <br>
-          (пункт, до которого требуется доставка)</label>
+          (пункт, до которого требуется доставка) <b class="required-star">*</b></label>
         <input clrInput
                type="text"
                formControlName="deliveryBasis"
@@ -65,7 +65,7 @@
 
     <div class="clr-col-12">
       <clr-input-container>
-        <label>Условия оплаты</label>
+        <label>Условия оплаты <b class="required-star">*</b></label>
         <input clrInput
                type="text"
                formControlName="paymentTerms"
@@ -80,7 +80,7 @@
 
     <div class="clr-col-6">
       <clr-input-container>
-        <label>Количество</label>
+        <label>Количество <b class="required-star">*</b></label>
         <input clrInput
                type="number"
                name="quantity"
@@ -95,7 +95,7 @@
 
     <div class="clr-col-6">
       <clr-input-container>
-        <label>Ед. измерения</label>
+        <label>Ед. измерения <b class="required-star">*</b></label>
         <input clrInput
                type="text"
                name="measureUnit"
@@ -143,7 +143,7 @@
       <clr-input-container>
         <label>
           Документ, в соответствии с которым необходимо изготовление <br>
-          (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)
+          (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.) <b class="required-star">*</b>
         </label>
 
         <input clrInput
@@ -170,16 +170,33 @@
 
 
     <div class="clr-col-12">
-      <div class="relatedServices">
-        <clr-input-container>
+      <div class="relatedServices clr-row">
+        <div class="clr-col-12">
           <label class="nopadding">Необходимость сопутствующих услуг
             (ШМР, ПНР, Инспекционный контроль)</label>
-          <input clrInput
-                 type="text"
-                 name="relatedServices"
-                 formControlName="relatedServices"
-                 value="{{requestPosition.relatedServices}}">
-        </clr-input-container>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">ШМР</label>
+          </clr-checkbox-wrapper>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">ПНР</label>
+          </clr-checkbox-wrapper>
+        </div>
+
+        <div class="clr-col-auto">
+          <clr-checkbox-wrapper>
+            <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>
+            <label class="clr-control-label nopadding">Инспекционный контроль</label>
+          </clr-checkbox-wrapper>
+        </div>
+
       </div>
     </div>
 

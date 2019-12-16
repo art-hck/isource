@@ -19,7 +19,7 @@
       <div class="form-block">
         <div class="clr-form-control">
           <div class="clr-row w-100">
-            <label class="clr-control-label" for="procedureTitle">Наименование закупки</label>
+            <label class="clr-control-label" for="procedureTitle">Наименование закупки <b class="required-star">*</b></label>
             <input id="procedureTitle" type="text" formControlName="procedureTitle"
                    [class.invalid]="isDataFieldValid('procedureTitle')"/>
           </div>
@@ -34,13 +34,13 @@
           </div>
           <div class="clr-row w-100">
             <div class="clr-col-6 dates">
-              <label class="clr-control-label left" for="dateEndRegistration">Прием заявок до:</label>
+              <label class="clr-control-label left" for="dateEndRegistration">Прием заявок до <b class="required-star">*</b>:</label>
               <input id="dateEndRegistration" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
                      formControlName="dateEndRegistration"
                      [class.invalid]="isDataFieldValid('dateEndRegistration')"/>
             </div>
             <div class="clr-col-6 dates">
-              <label class="clr-control-label left" for="summingupDate">Подведение итогов:</label>
+              <label class="clr-control-label left" for="summingupDate">Подведение итогов <b class="required-star">*</b>:</label>
               <input id="summingupDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
                      formControlName="summingupDate"
                      [class.invalid]="isDataFieldValid('summingupDate')"/>
@@ -49,7 +49,7 @@
 
           <div class="clr-row w-100">
             <div class="clr-col-6 positions">
-              <label class="clr-control-label">Позиции, участвующие в процедуре:</label>
+              <label class="clr-control-label">Позиции, участвующие в процедуре <b class="required-star">*</b>:</label>
 
               <input #searchPositionInput
                      placeholder="Введите наименование позиции"
@@ -220,7 +220,7 @@
               </clr-radio-wrapper>
             </clr-radio-container>
             <clr-checkbox-container class="w-100" *ngIf="showPrivateAccessContragents">
-              <label class="clr-control-label nopadding radio-label">Выберите мин. 2х участников:</label>
+              <label class="clr-control-label nopadding radio-label">Выберите мин. 2х участников  <b class="required-star">*</b>:</label>
               <clr-checkbox-wrapper class="select-checkbox" *ngFor="let contragent of (getContragents() | async)">
                 <input class="checkbox select-checkbox"
                        clrCheckbox

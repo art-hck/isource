@@ -20,6 +20,8 @@ import { AddFromExcelComponent } from './common/components/add-from-excel/add-fr
 import { RequestInfoComponent } from "./common/components/request-info/request-info.component";
 import { PositionInfoComponent } from "./common/components/position-info/position-info.component";
 import { BackOfficeRequestViewComponent } from './back-office/components/back-office-request-view/back-office-request-view.component';
+import { RequestComponent as BackOfficeRequestComponent  } from './back-office/components/request/request.component';
+import { RequestComponent as CustomerRequestComponent  } from './customer/components/request/request.component';
 import { RequestViewComponent } from "./common/components/request-view/request-view.component";
 import { CustomerRequestViewComponent } from './customer/components/customer-request-view/customer-request-view.component';
 import { EditPositionInfoFormComponent } from './common/components/edit-position-info-form/edit-position-info-form.component';
@@ -38,7 +40,6 @@ import { RequestDashboardComponent } from './common/components/request-dashboard
 import { ContragentService } from "../contragent/services/contragent.service";
 import { SearchFilterPipe } from "../shared/pipes/filter-pipe";
 import { PositionSearchFilterPipe } from "../shared/pipes/position-list-filter-pipe";
-import { CustomerSearchFilterPipe } from "../shared/pipes/customer-list-filter-pipe";
 import { AddTechnicalProposalsComponent } from './back-office/components/add-technical-proposals/add-technical-proposals.component';
 import { TechnicalProposalsComponent } from './customer/components/technical-proposals/technical-proposals.component';
 import { SupplierSelectComponent } from './back-office/components/supplier-select/supplier-select.component';
@@ -66,6 +67,7 @@ import { RequestAddGroupModalComponent } from "./common/components/request/reque
 import { RequestComponent } from "./common/components/request/request.component";
 import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
+import { RequestPositionComponent } from './common/components/request-position/request-position.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +101,6 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
     RequestDashboardComponent,
     SearchFilterPipe,
     PositionSearchFilterPipe,
-    CustomerSearchFilterPipe,
     TechnicalProposalsComponent,
     SupplierSelectComponent,
     SupplierSelectComponent,
@@ -118,7 +119,10 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
     RequestFilterCustomerListComponent,
     RequestComponent,
     RequestAsideInfoComponent,
-    RequestAddGroupModalComponent
+    RequestAddGroupModalComponent,
+    RequestPositionComponent,
+    BackOfficeRequestComponent,
+    CustomerRequestComponent
   ],
   imports: [
     SharedModule,

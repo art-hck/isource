@@ -1,0 +1,137 @@
+@import "constants";
+
+.app-dropdown {
+  display: block;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+
+
+  &-handler, &-items-item {
+    cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    padding: 0 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-items-item:hover {
+    background: $list-hover-color;
+  }
+
+  &-handler {
+    align-items: center;
+    border: 1px $secondary-control-color solid;
+    background: $default-color;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0;
+
+    &:hover {
+      border-color: $primary-control-color;
+    }
+
+    &.active {
+      border-color: $primary-control-color;
+    }
+
+    &:not(&-up).active {
+      border-bottom-color: transparent;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &-up.active {
+      border-top-color: transparent;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-icon {
+      display: flex;
+      height: 24px;
+      padding: 0 14px;
+    }
+  }
+
+  &-items {
+    max-height: 320px;
+    overflow: auto;
+
+    &-wrapper {
+      animation: app-dropdown-show 300ms;
+      background: $default-color;
+      border: 1px $primary-control-color solid;
+      border-radius: 4px;
+      left: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: 1;
+
+      &:not(&-up) {
+        padding-top: 40px;
+        transform-origin: top;
+      }
+
+      &-up {
+        padding-bottom: 40px;
+        transform-origin: bottom;
+      }
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    /* total width */
+    &::-webkit-scrollbar {
+      width: 16px;
+    }
+
+    /* scrollbar itself */
+    &::-webkit-scrollbar-thumb {
+      background-color: $soft-color;
+      border: 5px solid $default-color;
+      border-radius: 16px;
+      transition: border 500ms;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      border-width:4px;
+    }
+
+    /* set button(top and bottom of the scrollbar) */
+    &::-webkit-scrollbar-button { display:none }
+
+    &-item[disabled]:not([disabled=false]) {
+      cursor: default;
+      opacity: .5;
+    }
+  }
+
+  &-disabled .app-dropdown-handler {
+    background: $secondary-control-color;
+    border-color: $secondary-color;
+    color: $ghost-font-color;
+  }
+}
+
+@keyframes app-dropdown-show {
+  0% {
+    transform: scaleY(.7);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

@@ -6,15 +6,9 @@
   <div class="clr-row commercial-proposals">
     <div class="info-card clr-col">
       <div class="request-info">
-        <div class="breadcrumbs">
-          <a [href]="'requests/customer/'">Заявки</a> → <a [href]="'requests/customer/' + request.id">Заявка №{{request.number}}</a>
-        </div>
-
         <div class="clr-row">
           <div class="clr-col-5">
-            <h2>Коммерческие предложения</h2>
           </div>
-
           <div class="clr-col-7 price-auto-select">
             <button class="btn btn-outline" (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
           </div>
@@ -51,7 +45,7 @@
                       к {{ makeReadableDate(requestPosition.deliveryDate) }}
                     </span>
                     <ng-template #ASAP>
-                      как можно быстрее
+                      как можно скорее
                     </ng-template>
                   </span>
                 </td>
