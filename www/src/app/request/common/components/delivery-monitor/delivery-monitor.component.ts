@@ -13,6 +13,8 @@ import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 import { InspectorInfo } from "../../models/inspector-info";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from "../../dictionaries/request-position-workflow-order";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -22,6 +24,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
 export class DeliveryMonitorComponent implements OnInit {
 
   @Input() requestId: Uuid;
+
   // @Input() requestPosition: RequestPosition; // TODO: 2019-11-20 Раскаментить после демо
   requestPositionValue: RequestPosition; // TODO: 2019-11-20 Убрать после демо
 
@@ -143,10 +146,20 @@ export class DeliveryMonitorComponent implements OnInit {
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
   }
 
+
+  deliveryMonitorInfoCanBeShown() {
+    const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.DELIVERY.valueOf()
+    );
+    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      this.requestPositionValue.status
+    );
+    return currentStatusIndex >= deliveryStatusIndex;
+  }
+
   consignmentCanBeShown(consignment: DeliveryMonitorConsignment): boolean {
     return (
-      !this.isEmptyArray(consignment.cargos) &&
-      !this.isEmptyCargo(consignment.cargos[0])
+      !this.isEmptyArray(consignment.cargos)
     );
   }
 
@@ -248,17 +261,5 @@ export class DeliveryMonitorComponent implements OnInit {
 
   protected isEmptyArray(a?: Array<any>|null): boolean {
     return Boolean(!a || a.length === 0);
-  }
-
-  protected isEmpty(v: any): boolean {
-    return (
-      (typeof v === 'string' && v.length === 0) ||
-      this.isEmptyArray(v) ||
-      (typeof v === 'object' && this.isEmptyArray(Object.keys(v)))
-    );
-  }
-
-  protected isEmptyCargo(cargo: DeliveryMonitorCargo): boolean {
-    return this.isEmpty(cargo.weightByTd) || cargo.weightByTd === 0;
   }
 }
