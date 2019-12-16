@@ -63,15 +63,23 @@
     <div class="clr-break-row"></div>
 
 
-    <div class="clr-col-12">
-      <clr-input-container>
+    <div class="clr-col-6">
         <label>Условия оплаты <b class="required-star">*</b></label>
-        <input clrInput
-               type="text"
-               formControlName="paymentTerms"
-               value="{{requestPosition.paymentTerms}}"
-               [class.invalid]="isFieldValid('paymentTerms')">
-      </clr-input-container>
+
+        <select clrSelect
+                name="paymentTerms"
+                id="paymentTerms"
+                formControlName="paymentTerms"
+                [class.invalid]="isFieldValid('paymentTerms')">
+          <option value="30 дней по факту поставки"
+                  [selected]="requestPosition.paymentTerms === '30 дней по факту поставки'">
+            30 дней по факту поставки
+          </option>
+          <option value="60 дней по факту поставки"
+                  [selected]="requestPosition.paymentTerms === '60 дней по факту поставки'">
+            60 дней по факту поставки
+          </option>
+        </select>
     </div>
 
 
@@ -126,7 +134,7 @@
     <div class="clr-col-6">
       <clr-select-container>
         <label>Валюта</label>
-        <select clrSelect name="currency" formControlName="currency" class="select">
+        <select clrSelect name="currency" formControlName="currency">
           <option value="RUB" [selected]="checkIfSelected('RUB')">RUB</option>
           <option value="USD" disabled [selected]="checkIfSelected('USD')">USD</option>
           <option value="EUR" disabled [selected]="checkIfSelected('EUR')">EUR</option>

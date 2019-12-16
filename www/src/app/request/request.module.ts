@@ -30,7 +30,6 @@ import { RequestListStatusesFilterComponent } from "./common/components/request-
 import { RequestListPositionStatusesFilterComponent } from "./common/components/request-list/request-list-position-statuses-filter/request-list-position-statuses-filter.component";
 import { CustomerListNamesFilterComponent } from "./common/components/request-list/customer-list-names-filter/customer-list-names-filter.component";
 import { RequestListNumberFilterComponent } from "./common/components/request-list/request-list-number-filter/request-list-number-filter.component";
-import { ManufacturingComponent } from './common/components/manufacturing/manufacturing.component';
 import { RequestPositionListComponent } from './common/components/request-position-list/request-position-list.component';
 import { PositionInfoHistoryComponent } from './common/components/position-info-history/position-info-history.component';
 import { GroupInfoComponent } from './common/components/group-info/group-info.component';
@@ -92,7 +91,6 @@ import { RequestPositionComponent } from './common/components/request-position/r
     CustomerListNamesFilterComponent,
     RequestListStatusesFilterComponent,
     RequestListPositionStatusesFilterComponent,
-    ManufacturingComponent,
     RequestPositionListComponent,
     PositionInfoHistoryComponent,
     GroupInfoComponent,
