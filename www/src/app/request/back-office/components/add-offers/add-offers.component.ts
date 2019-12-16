@@ -497,6 +497,10 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
+  /**
+   *   Функция возможно может понадобиться для автоматической выгрузки результатов процедуры
+   *   в Маркетплейс при переходе процедуры на статус «Подведение итогов»
+   */
   onImportOffersFromProcedure(): void {
     this.procedureService.importOffersFromProcedure(this.request).subscribe(
       (offers: RequestOfferPosition[]) => {
