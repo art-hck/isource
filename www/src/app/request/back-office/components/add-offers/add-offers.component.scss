@@ -351,3 +351,8 @@ div.per-unit-price-block {
     opacity: 0.3;
   }
 }
+
+::ng-deep .add-offers-modal .clr-control-container,
+::ng-deep .add-offers-modal .clr-control-container .clr-select-wrapper {
+  width: 100%;
+}
