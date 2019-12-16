@@ -11,6 +11,7 @@ import { tap } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { TokenService } from "@stdlib-ng/core";
 import { Router } from "@angular/router";
+import { NotificationService } from "../../shared/services/notification.service";
 
 /**
  * Исключение для запроса с success=false
@@ -29,7 +30,8 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   constructor(
     private token: TokenService,
-    private router: Router
+    private router: Router,
+    private notification: NotificationService
   ) {
   }
 
@@ -46,7 +48,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       .pipe(
         tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse && 'success' in event.body && event.body.success === false) {
-              alert(event.body.message || this.DEFAULT_ERROR_MSG);
+              this.notification.toast(event.body.message || this.DEFAULT_ERROR_MSG, 'error', 5000);
               throw new ResponseSuccessError();
             }
           },
@@ -68,7 +70,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       const currentUrl = window.location.pathname;
 
       // если уже находимся на странице логина, то редиректа не делаем
-      if (currentUrl === 'auth/login') {
+      if (currentUrl === '/auth/login') {
         return;
       }
 
@@ -77,9 +79,13 @@ export class ErrorInterceptor implements HttpInterceptor {
         {};
 
       // добавляем к редиректу ссылку на страницу, с которой перешли
-      this.router.navigate(['auth/login'], {
+      this.router.navigate(['/auth/login'], {
         queryParams: queryParams
       });
+    }
+
+    if (err instanceof HttpErrorResponse && err.status === 422) {
+      this.notification.toast(err.error.detail || this.DEFAULT_ERROR_MSG, 'error', 5000);
     }
 
     return throwError(err);

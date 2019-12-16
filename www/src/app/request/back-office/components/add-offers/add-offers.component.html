@@ -8,47 +8,40 @@
         <div class="clr-row w-100">
           <div class="clr-col-7">
           </div>
-          <div class="clr-col-5 add-contragent">
-            <button class="btn btn-link add-contragent"
+        </div>
+
+        <div class="clr-row w-100">
+          <div class="clr-col-6">
+            <button class="btn btn-primary"
                     (click)="onShowAddContragentModal()"
                     *ngIf="requestPositions.length !== 0">
               <clr-icon shape="plus"></clr-icon>
               Добавить контрагента
             </button>
-          </div>
-        </div>
 
-        <div class="clr-row w-100">
-          <div class="clr-col-6">
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
-              <button class="btn btn-outline import-export"
+              <button class="btn btn-outline"
                       (click)="onDownloadOffersTemplate()">
                 Экспортировать шаблон
               </button>
-              <button class="btn btn-outline import-export"
+              <button class="btn btn-outline"
                       (click)="onShowImportOffersExcel()">Импортировать КП
               </button>
             </div>
-
           </div>
+
           <div class="clr-col-6 send-offers">
-            <button class="btn btn-primary send-offers"
-                    *ngIf="selectedRequestPositions.length !== 0"
+            <button class="btn btn-primary"
+                    [disabled]="selectedRequestPositions.length === 0"
                     (click)="onPublishOffers()"
-            >
-              <b>Отправить на согласование</b>
+                    [clrLoading]="loaders.sendOffers">
+              Отправить на согласование
             </button>
 
             <button class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
                     [clrLoading]="creatingProcedureLoader">
               <b>Создать процедуру</b>
-            </button>
-
-            <button class="btn btn-primary"
-                    (click)="onImportOffersFromProcedure()"
-            >
-              <b>Получить КП из процедуры</b>
             </button>
           </div>
         </div>
@@ -113,6 +106,13 @@
 
               <span class="has-finished-procedure-label"
                     *ngIf="positionHasFinishedProcedure(requestPosition)">Процедура завершена</span>
+
+              <button *ngIf="availableCancelPublishOffers(requestPosition)"
+                      class="btn btn-primary btn-cancel-publish"
+                      [clrLoading]="loaders.cancelPublish"
+                      (click)="onCancelPublishOffers(requestPosition)">
+                Отозвать <span class="cancel-timer"> {{ requestPosition.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+              </button>
 
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">

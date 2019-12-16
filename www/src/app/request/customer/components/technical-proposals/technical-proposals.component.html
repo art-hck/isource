@@ -20,15 +20,17 @@
               </ng-template>
             </span>
 
-            <div class="clr-col-5 send-for-approval">
+            <div *ngIf="isSendToReview(technicalProposal)" class="clr-col-5 send-for-approval">
               <button class="btn btn-secondary"
                       (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                      *ngIf="isResolutionButtonsAvailable(i)">
+                      [disabled]="!isResolutionButtonsAvailable(i)"
+                      [title]="isResolutionButtonsAvailable(i) ? '' : 'Для отклонения выберите необходимые позиции'">
                 Отклонить
               </button>
               <button class="btn btn-primary"
                       (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
-                      *ngIf="isResolutionButtonsAvailable(i)">
+                      [disabled]="!isResolutionButtonsAvailable(i)"
+                      [title]="isResolutionButtonsAvailable(i) ? '' : 'Для согласования выберите необходимые позиции'">
                 Согласовать
               </button>
             </div>

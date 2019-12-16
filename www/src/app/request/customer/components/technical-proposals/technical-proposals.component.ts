@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {Uuid} from "../../../../cart/models/uuid";
-import {Request} from "../../../common/models/request";
-import {TechnicalProposal} from "../../../common/models/technical-proposal";
-import {ActivatedRoute, Router} from "@angular/router";
-import {RequestService} from "../../../back-office/services/request.service";
-import {TechnicalProposalsService} from "../../../customer/services/technical-proposals.service";
-import {TechnicalProposalPosition} from "../../../common/models/technical-proposal-position";
-import {NotificationService} from "../../../../shared/services/notification.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../common/models/request";
+import { TechnicalProposal } from "../../../common/models/technical-proposal";
+import { ActivatedRoute, Router } from "@angular/router";
+import { RequestService } from "../../../back-office/services/request.service";
+import { TechnicalProposalsService } from "../../services/technical-proposals.service";
+import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
+import { NotificationService } from "../../../../shared/services/notification.service";
 import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import { Observable } from "rxjs";
 import { publishReplay, refCount } from "rxjs/operators";
 import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
@@ -34,7 +35,8 @@ export class TechnicalProposalsComponent implements OnInit {
     private technicalProposalsService: TechnicalProposalsService,
     private notificationService: NotificationService,
     protected getContragentService: ContragentService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
@@ -89,6 +91,7 @@ export class TechnicalProposalsComponent implements OnInit {
       }
     );
   }
+
   toDeclineTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
     this.technicalProposalsService.declineTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
       () => {
@@ -119,5 +122,9 @@ export class TechnicalProposalsComponent implements OnInit {
       this.selectedTechnicalProposalsPositions[i] &&
       this.selectedTechnicalProposalsPositions[i].length > 0
     );
+  }
+
+  isSendToReview(technicalProposal: TechnicalProposal): boolean {
+    return technicalProposal.status === TechnicalProposalsStatuses.SENT_TO_REVIEW;
   }
 }
