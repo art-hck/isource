@@ -48,8 +48,3 @@ form {
 .clr-select-wrapper select {
   background-size: initial;
 }
-/*::ng-deep .clr-select-wrapper::after {*/
-/*  z-index: 1000;*/
-/*  top: 0.5rem;*/
-/*  right: .5rem;*/
-/*}*/
