@@ -177,7 +177,8 @@ export class ContractComponent implements OnInit {
    * @param contract
    */
   isShowGenerateContractButton(contract: Contract) {
-    return contract.status !== ContractStatus.APPROVED;
+    return contract.status !== ContractStatus.APPROVED &&
+      (this.userInfoService.isBackOffice() || this.userInfoService.isSeniorBackoffice());
   }
 }
 

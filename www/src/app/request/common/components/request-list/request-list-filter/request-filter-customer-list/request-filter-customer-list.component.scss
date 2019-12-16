@@ -5,6 +5,10 @@
 .customers-list {
   max-height: 320px;
   overflow: auto;
+
+  & .clr-checkbox-wrapper {
+    padding-bottom: 10px;
+  }
 }
 
 .show-all {

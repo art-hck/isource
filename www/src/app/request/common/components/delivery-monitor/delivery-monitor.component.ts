@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { DeliveryMonitorService } from "../../services/delivery-monitor.service";
 import { DeliveryMonitorInfo } from "../../models/delivery-monitor-info";
@@ -10,6 +10,11 @@ import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 import { Uuid } from "../../../../cart/models/uuid";
 import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
+import { InspectorInfo } from "../../models/inspector-info";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPositionWorkflowStatuses } from "../../dictionaries/request-position-workflow-order";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-delivery-monitor',
@@ -19,6 +24,7 @@ import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 export class DeliveryMonitorComponent implements OnInit {
 
   @Input() requestId: Uuid;
+
   // @Input() requestPosition: RequestPosition; // TODO: 2019-11-20 Раскаментить после демо
   requestPositionValue: RequestPosition; // TODO: 2019-11-20 Убрать после демо
 
@@ -29,6 +35,7 @@ export class DeliveryMonitorComponent implements OnInit {
     this.requestPositionValue = value;
     this.goodId = this.getGoodId();
     this.getDeliveryMonitorInfo();
+    this.getInspectorStagesInfo();
   }
 
   get requestPosition(): RequestPosition {
@@ -36,26 +43,75 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   deliveryMonitorInfo$: Observable<DeliveryMonitorInfo>;
+  inspectorStages: InspectorInfo[];
   consignments$: Observable<DeliveryMonitorConsignment[]>;
+
+  opened = false;
+  shiftCount = 0;
 
   goodId: string;
   // demoGoodId = '61'; // TODO: 2019-11-20 Раскаментить после демо
 
+  assignIdForm = new FormGroup({
+    newGoodId: new FormControl('', Validators.required),
+  });
+
+  newEventForm = new FormGroup({
+    occurredAt: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+  });
+
   constructor(
+    private notificationService: NotificationService,
     private deliveryMonitorService: DeliveryMonitorService
   ) { }
+
+  @HostListener('document:keyup', ['$event'])
+  resetShift(e: KeyboardEvent) {
+    if (e.key !== "Shift") {
+      this.shiftCount = 0;
+    }
+  }
+
+  @HostListener('document:keyup.shift')
+  onShift() {
+    if (this.opened) {
+      return;
+    }
+
+    this.shiftCount++;
+
+    if (this.shiftCount === 5) {
+      this.notificationService.toast('Активация...', "warning");
+    }
+
+    if (this.shiftCount === 10) {
+      this.shiftCount = 0;
+      this.opened = true;
+    }
+  }
 
   ngOnInit() {
     // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
     // this.goodId = this.demoGoodId; // TODO: 2019-11-20 Раскаментить после демо
     this.goodId = this.getGoodId(); // TODO: 2019-11-20 Убрать после демо
     this.getDeliveryMonitorInfo();
+    this.getInspectorStagesInfo();
   }
 
   getDeliveryMonitorInfo(): void {
     this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
       .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
+  }
+
+  getInspectorStagesInfo(): void {
+    const subscription = this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(
+      data => {
+        this.inspectorStages = data;
+        subscription.unsubscribe();
+      });
   }
 
   getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
@@ -90,10 +146,20 @@ export class DeliveryMonitorComponent implements OnInit {
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
   }
 
+
+  deliveryMonitorInfoCanBeShown() {
+    const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      RequestPositionWorkflowSteps.DELIVERY.valueOf()
+    );
+    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+      this.requestPositionValue.status
+    );
+    return currentStatusIndex >= deliveryStatusIndex;
+  }
+
   consignmentCanBeShown(consignment: DeliveryMonitorConsignment): boolean {
     return (
-      !this.isEmptyArray(consignment.cargos) &&
-      !this.isEmptyCargo(consignment.cargos[0])
+      !this.isEmptyArray(consignment.cargos)
     );
   }
 
@@ -153,6 +219,38 @@ export class DeliveryMonitorComponent implements OnInit {
     }
   }
 
+
+
+  assignIdSubmit() {
+    if (this.assignIdForm.invalid) {
+      this.notificationService.toast('Заполните поле!', "error");
+      return;
+    }
+
+    const formData = this.assignIdForm.value;
+    this.assignIdForm.reset();
+    this.deliveryMonitorService.assignNewGoodId(this.requestPosition.id, formData).subscribe();
+    this.notificationService.toast('Идентификатор товара заменён');
+  }
+
+  newEventSubmit() {
+    if (this.newEventForm.invalid) {
+      this.notificationService.toast('Заполните все поля!', "error");
+      return;
+    }
+
+    const formData = this.newEventForm.value;
+    formData.occurredAt = new Date(this.newEventForm.value.occurredAt);
+    formData.positionId = this.requestPosition.id;
+
+    this.newEventForm.reset();
+    this.deliveryMonitorService.addInspectorStage(formData).subscribe();
+    this.notificationService.toast('Событие добавлено');
+    this.inspectorStages.push(formData);
+  }
+
+
+
   // TODO: 2019-11-20 Убрать метод getGoodId после демо
 
   protected getGoodId(): string {
@@ -163,17 +261,5 @@ export class DeliveryMonitorComponent implements OnInit {
 
   protected isEmptyArray(a?: Array<any>|null): boolean {
     return Boolean(!a || a.length === 0);
-  }
-
-  protected isEmpty(v: any): boolean {
-    return (
-      (typeof v === 'string' && v.length === 0) ||
-      this.isEmptyArray(v) ||
-      (typeof v === 'object' && this.isEmptyArray(Object.keys(v)))
-    );
-  }
-
-  protected isEmptyCargo(cargo: DeliveryMonitorCargo): boolean {
-    return this.isEmpty(cargo.weightByTd) || cargo.weightByTd === 0;
   }
 }

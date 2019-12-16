@@ -19,6 +19,13 @@ export enum RequestPositionWorkflowSteps {
 }
 
 export const RequestPositionWorkflowStepsGroups = {
+  DRAFT: [
+    RequestPositionWorkflowSteps.DRAFT,
+    RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL
+  ],
+  NEW: [
+    RequestPositionWorkflowSteps.NEW
+  ],
   TECHNICAL_PROPOSALS: [
     RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION,
     RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT
@@ -49,27 +56,74 @@ export const RequestPositionWorkflowStepsGroups = {
 
 export const RequestPositionWorkflowStepsGroupsInfo = [
   {
+    url: "draft",
+    label: "Черновик",
+    statuses: RequestPositionWorkflowStepsGroups.DRAFT,
+    positions: [],
+    shortName: "Черновик",
+    hasActions: false
+  },
+  {
+    url: "new",
+    label: "Новая",
+    statuses: RequestPositionWorkflowStepsGroups.NEW,
+    positions: [],
+    shortName: "Новая",
+    hasActions: false,
+    color: "#b3b3b3"
+  },
+  {
     url: "technical-proposals",
-    label: "Согласование ТП",
+    label: "Технические предложения",
     statuses: RequestPositionWorkflowStepsGroups.TECHNICAL_PROPOSALS,
-    positions: []
+    positions: [],
+    shortName: "ТП",
+    hasActions: true,
+    color: "#fb6a9e"
   },
   {
     url: "commercial-proposals",
-    label: "Согласование КП",
+    label: "Коммерческие предложения",
     statuses: RequestPositionWorkflowStepsGroups.PROPOSALS,
-    positions: []
+    positions: [],
+    shortName: "КП",
+    hasActions: true,
+    color: "#f38b00"
   },
   {
     url: "design-documentation",
-    label: "Согласование РКД",
+    label: "РКД",
     statuses: RequestPositionWorkflowStepsGroups.RKD,
-    positions: []
+    positions: [],
+    shortName: "РКД и изготовление",
+    hasActions: true,
+    color: "#56b9f2"
   },
   {
     url: "contract",
-    label: "Рассмотрение договора",
+    label: "Договор",
     statuses: RequestPositionWorkflowStepsGroups.CONTRACT,
-    positions: []
+    positions: [],
+    shortName: "Договор",
+    hasActions: true,
+    color: "#f2c94c"
+  },
+  {
+    url: "delivery",
+    label: "Доставка и оплата",
+    statuses: RequestPositionWorkflowStepsGroups.DELIVERY,
+    positions: [],
+    shortName: "Доставка и оплата",
+    hasActions: false,
+    color: "#9b51e0"
+  },
+  {
+    url: "completed",
+    label: "Завершено",
+    statuses: RequestPositionWorkflowStepsGroups.COMPLETED,
+    positions: [],
+    shortName: "Завершено",
+    hasActions: false,
+    color: "#20b55f"
   },
 ];
