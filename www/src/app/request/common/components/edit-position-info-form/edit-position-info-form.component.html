@@ -71,12 +71,10 @@
                 id="paymentTerms"
                 formControlName="paymentTerms"
                 [class.invalid]="isFieldValid('paymentTerms')">
-          <option value="30 дней по факту поставки"
-                  [selected]="requestPosition.paymentTerms === '30 дней по факту поставки'">
+          <option value="30 дней по факту поставки">
             30 дней по факту поставки
           </option>
-          <option value="60 дней по факту поставки"
-                  [selected]="requestPosition.paymentTerms === '60 дней по факту поставки'">
+          <option value="60 дней по факту поставки">
             60 дней по факту поставки
           </option>
         </select>

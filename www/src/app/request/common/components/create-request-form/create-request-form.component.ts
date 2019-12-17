@@ -80,7 +80,7 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
       deliveryDate: ['', [Validators.required, this.dateMinimum()]],
       isDeliveryDateAsap: [false],
       deliveryBasis: ['', [Validators.required]],
-      paymentTerms: ['30 банковских дней по факту поставки', [Validators.required]],
+      paymentTerms: ['30 дней по факту поставки', [Validators.required]],
       startPrice: [null, [Validators.min(1)]],
       currency: ['RUB'],
       isShmrRequired: [false],
