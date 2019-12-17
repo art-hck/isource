@@ -1,0 +1,49 @@
+@import "../uxg";
+
+@mixin helpers($theme) {
+.app-bold {
+  font-weight: bold;
+}
+
+.app-ghost-color {
+  color: uxg($theme, color-font-ghost);
+}
+
+.app-secondary-color {
+  color: uxg($theme, color-font-secondary);
+}
+
+.app-basis-auto {
+  flex-basis: auto;
+}
+
+.divider {
+  background: uxg($theme, color-divider);
+  border: none;
+  display: block;
+  height: 1px;
+  margin: 15px 0;
+  width: 100%;
+}
+
+.app-section {
+  margin-bottom: .9em;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+* + clr-icon {
+  margin-left: .5em;
+}
+
+clr-icon {
+  vertical-align: middle;
+  align-self: center;
+
+  & + * {
+    margin-left: .5em;
+  }
+}
+}

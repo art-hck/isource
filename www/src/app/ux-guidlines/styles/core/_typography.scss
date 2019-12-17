@@ -1,0 +1,38 @@
+@import "../uxg";
+
+@mixin typography($theme) {
+h1 {
+  font-size: uxg($theme, font-size-xxl);
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: uxg($theme, font-size-xl);
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+h3 {
+  font-size: uxg($theme, font-size-l);
+  font-weight: bold;
+}
+
+body, h4, input {
+  font-size: uxg($theme, font-size-m);
+}
+
+small {
+  font-size: uxg($theme, font-size-s);
+}
+
+a.link,
+a[routerlink]:link,
+a[ng-reflect-router-link]:link {
+  color: uxg($theme, color-font-link);
+
+  &:hover {
+    color: uxg($theme, color-font-link-hover);
+  }
+}
+}

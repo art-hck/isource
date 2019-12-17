@@ -1,5 +1,6 @@
-@import "constants";
+@import "../uxg";
 
+@mixin buttons-group($theme) {
 .app-btn-group {
   display: inline-flex;
 
@@ -34,4 +35,5 @@
 
 * + .app-btn-group {
   margin-left: .5rem;
+}
 }
