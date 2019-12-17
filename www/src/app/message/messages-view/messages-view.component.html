@@ -59,13 +59,19 @@
   <div class="messages-list">
     <div class="messages-list-header">
       <div> {{ getMessageHeader() }} <span class="text-muted">{{ getMessageHeaderExt() }}</span> </div>
-      <div>
+      <div class="messages-list-header-desc">
 
-        <!-- Статус для позиции или группы -->
-        <span *ngIf="getRequestItemStatus(selectedRequestsItem)"
-              class="position-status status-position-{{ getRequestItemStatus(selectedRequestsItem).name }}">
-          {{ getRequestItemStatus(selectedRequestsItem).label }}
-        </span>
+        <!-- Статус для позиции -->
+        <ng-container *ngIf="getRequestItemStatus(selectedRequestsItem) as itemStatus">
+          <span  class="position-status status-position-{{ itemStatus.name }}">{{ itemStatus.label }}</span>
+        </ng-container>
+
+        <!-- @TODO: Переделать на ссылку в саму группу/позицию. -->
+        <!-- Ссылка на заявку если в позиции или группе -->
+        <button *ngIf="selectedRequestsItem" class="btn btn-link btn-description" [routerLink]="getRequestUrl()">
+          <clr-icon shape="align-left-text"></clr-icon>
+          Описание
+        </button>
 
         <!-- Статус для заявки -->
         <span *ngIf="selectedRequest && !selectedRequestsItem" class="request-status status-request-{{ selectedRequest.status.name }}">
