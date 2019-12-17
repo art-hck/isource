@@ -69,6 +69,8 @@ import { RequestAsideInfoComponent } from "./common/components/request/request-a
 import { RequestPositionComponent } from './common/components/request-position/request-position.component';
 import { PieChartComponent } from './common/components/request/pie-chart/pie-chart.component';
 import { RequestAddResponsibleModalComponent } from './common/components/request/request-add-responsible-modal/request-add-responsible-modal.component';
+import { RequestPositionComponent as BackOfficeRequestPositionComponent } from './back-office/components/request-position/request-position.component';
+import { RequestPositionComponent as CustomerRequestPositionComponent } from './customer/components/request-position/request-position.component';
 
 @NgModule({
   declarations: [
@@ -122,7 +124,10 @@ import { RequestAddResponsibleModalComponent } from './common/components/request
     RequestAddGroupModalComponent,
     PieChartComponent,
     RequestPositionComponent,
+    BackOfficeRequestPositionComponent,
+    CustomerRequestPositionComponent,
     BackOfficeRequestComponent,
+    CustomerRequestComponent,
     CustomerRequestComponent,
     RequestAddResponsibleModalComponent
   ],

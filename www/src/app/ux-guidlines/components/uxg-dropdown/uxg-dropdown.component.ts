@@ -53,9 +53,8 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: any,
-    private renderer: Renderer2,
-    private cdr: ChangeDetectorRef,
-    public el: ElementRef
+    private renderer: Renderer2, public el: ElementRef,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
