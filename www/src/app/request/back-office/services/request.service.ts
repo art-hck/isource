@@ -30,7 +30,7 @@ export class RequestService {
     );
   }
 
-  getRequestPosition(id: Uuid) {
+  getRequestPosition(id: Uuid): Observable<RequestPosition> {
     const url = `requests/positions/${id}/info`;
     return this.api.get<RequestPosition>(url);
   }
