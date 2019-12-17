@@ -133,10 +133,10 @@
       <clr-select-container>
         <label>Валюта</label>
         <select clrSelect name="currency" formControlName="currency">
-          <option value="RUB" [selected]="checkIfSelected('RUB')">RUB</option>
-          <option value="USD" disabled [selected]="checkIfSelected('USD')">USD</option>
-          <option value="EUR" disabled [selected]="checkIfSelected('EUR')">EUR</option>
-          <option value="CHF" disabled [selected]="checkIfSelected('CHF')">CHF</option>
+          <option value="RUB">RUB</option>
+          <option value="USD" disabled>USD</option>
+          <option value="EUR" disabled>EUR</option>
+          <option value="CHF" disabled>CHF</option>
         </select>
       </clr-select-container>
     </div>
@@ -183,25 +183,32 @@
         </div>
 
         <div class="clr-col-auto">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>
-            <label class="clr-control-label nopadding">ШМР</label>
-          </clr-checkbox-wrapper>
+          <clr-checkbox-container>
+            <clr-checkbox-wrapper>
+              <input clrCheckbox type="checkbox" formControlName="isShmrRequired">
+              <label class="clr-control-label nopadding">ШМР</label>
+            </clr-checkbox-wrapper>
+          </clr-checkbox-container>
         </div>
 
         <div class="clr-col-auto">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>
-            <label class="clr-control-label nopadding">ПНР</label>
-          </clr-checkbox-wrapper>
+          <clr-checkbox-container>
+            <clr-checkbox-wrapper>
+              <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>
+              <label class="clr-control-label nopadding">ПНР</label>
+            </clr-checkbox-wrapper>
+          </clr-checkbox-container>
         </div>
 
         <div class="clr-col-auto">
-          <clr-checkbox-wrapper>
-            <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>
-            <label class="clr-control-label nopadding">Инспекционный контроль</label>
-          </clr-checkbox-wrapper>
+          <clr-checkbox-container>
+            <clr-checkbox-wrapper>
+              <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>
+              <label class="clr-control-label nopadding">Инспекционный контроль</label>
+            </clr-checkbox-wrapper>
+          </clr-checkbox-container>
         </div>
+
 
       </div>
     </div>

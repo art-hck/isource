@@ -1,3 +1,14 @@
+.gridable {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .document {
+    max-width: 33%;
+    flex-grow: 1;
+  }
+}
+
 .file-upload {
   display: none;
 }
