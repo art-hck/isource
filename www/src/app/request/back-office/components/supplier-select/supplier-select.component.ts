@@ -10,21 +10,21 @@ import {ContragentService} from "../../../../contragent/services/contragent.serv
 })
 export class SupplierSelectComponent implements OnInit {
   contragentForm: FormGroup;
+  allContragents: ContragentList[] = [];
   contragentsValue: ContragentList[] = [];
   showContragentList = false;
 
+  get contragents(): ContragentList[] {
+    // у контрагентов из инпута приоритет над всеми
+    if (this.inputContragents.length) {
+      return this.inputContragents;
+    }
+    return this.allContragents;
+  }
+
   @Input() contragentName: string;
 
-  @Input()
-  set contragents(value: ContragentList[]) {
-    if (value.length) {
-      this.contragentsValue = value;
-    }
-  }
-
-  get contragents(): ContragentList[] {
-    return this.contragentsValue;
-  }
+  @Input() inputContragents: ContragentList[] = [];
 
   @Output() contragentNameChange = new EventEmitter<string>();
 
@@ -54,16 +54,17 @@ export class SupplierSelectComponent implements OnInit {
     this.contragentForm = this.formBuilder.group({
       searchContragent: [null, Validators.required]
     });
-    this.getContragentList();
+
+    // если из инпута еще не пришли данные, то пытаемся загрузить весь список конрагентов
+    if (!this.inputContragents.length) {
+      this.getAllContragentList();
+    }
   }
 
-  getContragentList(): void {
-    if (this.contragents.length > 0) {
-      return;
-    }
+  getAllContragentList(): void {
     this.getContragentService.getContragentList().subscribe(
       (data: ContragentList[]) => {
-        this.contragents = data;
+        this.allContragents = data;
       }
     );
   }
