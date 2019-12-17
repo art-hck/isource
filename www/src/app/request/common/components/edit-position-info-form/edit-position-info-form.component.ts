@@ -111,12 +111,28 @@ export class EditPositionInfoFormComponent implements OnInit {
       itemForm.get('deliveryBasis').enable();
       itemForm.get('paymentTerms').enable();
       itemForm.get('isDesignRequired').enable();
+      itemForm.get('isShmrRequired').enable();
+      itemForm.get('isPnrRequired').enable();
+      itemForm.get('isInspectionControlRequired').enable();
     }
 
     if (!this.positionStatusService.isStatusPrevious(
       this.requestPosition.status, RequestPositionWorkflowSteps.MANUFACTURING
     )) {
       itemForm.get('isDesignRequired').disable();
+    }
+
+    if (!this.positionStatusService.isStatusPrevious(
+      this.requestPosition.status, RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+    )) {
+      itemForm.get('isShmrRequired').disable();
+      itemForm.get('isPnrRequired').disable();
+    }
+
+    if (!this.positionStatusService.isStatusPrevious(
+      this.requestPosition.status, RequestPositionWorkflowSteps.CONTRACT_SIGNING
+    )) {
+      itemForm.get('isInspectionControlRequired').disable();
     }
 
     return itemForm;
