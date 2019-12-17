@@ -305,7 +305,7 @@ export class CommercialProposalsComponent implements OnInit {
       }
 
       const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
-      if (supplierLinkedOffers[0] && supplierLinkedOffers[0].quantity < requestPosition.quantity) {
+      if (supplierLinkedOffers[0] && supplierLinkedOffers[0].quantity !== requestPosition.quantity) {
         return false;
       }
     }
