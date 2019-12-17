@@ -28,6 +28,8 @@ export class MessagesViewComponent implements OnInit {
   contextId: Uuid;
   contextType: MessageContextTypes;
 
+  requestFilterInputValue = '';
+
   constructor(
     private messageService: MessageService,
     private user: UserInfoService
@@ -126,5 +128,23 @@ export class MessagesViewComponent implements OnInit {
     return item instanceof RequestPosition ?
       'status-position-' + item.status :
       'status-position-default';
+  }
+
+  onRequestFilterChange(event: Event): void {
+    const value = event.target['value'] || '';
+    this.requestFilterInputValue = value.trim();
+    const filter = {};
+    if (this.requestFilterInputValue.length > 0) {
+      filter['requestNameOrNumber'] = this.requestFilterInputValue;
+    }
+    this.requests$ = this.messageService
+      .getRequests(this.user.getUserRole(), 0, 1000, filter, null)
+      .pipe(
+        tap((page: Page<RequestsList>) => {
+          if (page.entities.length > 0) {
+            this.onRequestClick(page.entities[0].request);
+          }
+        })
+      );
   }
 }

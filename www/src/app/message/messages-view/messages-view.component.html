@@ -1,6 +1,12 @@
 <div class="wrapper">
   <div class="request-list">
     <ul class="list-unstyled">
+      <li>
+        <input type="text"
+               (keypress)="onRequestFilterChange($event)"
+               (change)="onRequestFilterChange($event)"
+        >
+      </li>
       <li *ngFor="let request of (requests$ | async)?.entities"
           (click)="onRequestClick(request.request)"
           [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
