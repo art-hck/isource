@@ -320,12 +320,14 @@
     <h3 class="modal-title">Продление процедуры</h3>
 
     <div class="modal-body">
-      <form [formGroup]="procedureEndDateForm">
+      <form [formGroup]="procedureEndDateForm" (ngSubmit)="saveProcedureEndDate()">
         <label for="procedureEndDate">Окончание процедуры:</label>
         <input clrDate
                type="date"
                placeholder="ДД.ММ.ГГГГ"
                formControlName="procedureEndDate">
+        <br>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
       </form>
 
     </div>

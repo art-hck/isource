@@ -20,13 +20,14 @@ import { SupplierSelectComponent } from "../supplier-select/supplier-select.comp
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { PublishProcedureInfo } from '../../models/publish-procedure-info';
 import { PublishProcedureResult } from '../../models/publish-procedure-result';
 import { PublishProcedureRequest } from '../../models/publish-procedure-request';
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
+import { ClrLoadingState } from "@clr/angular";
 
 @Component({
   selector: 'app-add-offers',
@@ -34,6 +35,8 @@ import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizar
   styleUrls: ['./add-offers.component.css']
 })
 export class AddOffersComponent implements OnInit {
+  subscription = new Subscription();
+
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
@@ -47,6 +50,7 @@ export class AddOffersComponent implements OnInit {
   offerForm: FormGroup;
   procedureEndDateForm: FormGroup;
 
+  prolongationProcedureId: Uuid;
   showProcedureProlongateModal = false;
 
   showImportOffersExcel = false;
@@ -425,6 +429,31 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
+  saveProcedureEndDate() {
+    // console.log(this.prolongationProcedureId);
+    // console.log(this.procedureEndDateForm);
+
+    if (this.procedureEndDateForm.invalid) {
+      return;
+    }
+
+    const newProcedureEndDate = this.procedureEndDateForm.get('procedureEndDate');
+    // this.loadingState = ClrLoadingState.LOADING;
+
+    const prolongateProcedureSubscription = this.offersService.prolongateProcedureEndDate(
+      this.prolongationProcedureId,
+      newProcedureEndDate
+    ).subscribe(
+      () => {
+       prolongateProcedureSubscription.unsubscribe();
+        // this.loadingState = ClrLoadingState.SUCCESS;
+      },
+      () => {
+        // this.loadingState = ClrLoadingState.ERROR;
+      }
+    );
+  }
+
   getProcedureLink(requestPosition: RequestPosition): string {
     const procedureUrl = this.appConfig.procedure.url;
     const id = requestPosition.procedureId;
@@ -537,6 +566,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   openProcedureProlongateModal(procedureId) {
+    this.prolongationProcedureId = procedureId;
     this.showProcedureProlongateModal = true;
   }
 

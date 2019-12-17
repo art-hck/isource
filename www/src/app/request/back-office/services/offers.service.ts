@@ -130,4 +130,14 @@ export class OffersService {
 
     return formData;
   }
+
+
+  prolongateProcedureEndDate(prolongationProcedureId, newProcedureEndDate): Observable<any> {
+    return this.api.post(`requests/backoffice/${prolongationProcedureId}/save-new-end-date`,
+      {
+        procedureId: prolongationProcedureId,
+        newEndDate: newProcedureEndDate
+      }
+    );
+  }
 }
