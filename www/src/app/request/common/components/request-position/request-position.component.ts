@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { UserInfoService } from "../../../../auth/services/user-info.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestDocument } from "../../models/request-document";
 import * as moment from "moment";
