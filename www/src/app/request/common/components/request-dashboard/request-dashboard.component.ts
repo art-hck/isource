@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {Request} from "../../models/request";
-import {UserInfoService} from "../../../../auth/services/user-info.service";
+import {UserInfoService} from "../../../../user/service/user-info.service";
 import {RequestPosition} from "../../models/request-position";
 import {RequestPositionList} from "../../models/request-position-list";
 import {RequestGroup} from "../../models/request-group";

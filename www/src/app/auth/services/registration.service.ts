@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {UserRegistration} from "../models/user-registration";
-import {ContragentRegistration} from "../models/contragent-registration";
+import {UserRegistration} from "../../user/models/user-registration";
+import {ContragentRegistration} from "../../contragent/models/contragent-registration";
 
 @Injectable()
 export class RegistrationService {

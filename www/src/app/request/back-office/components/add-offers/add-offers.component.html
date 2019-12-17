@@ -38,18 +38,11 @@
               Отправить на согласование
             </button>
 
-            <div class="btn-group">
-              <button class="btn add-offers-btn"
-                      (click)="onCreateProcedureWizardOpen()"
-                      [clrLoading]="loaders.creatingProcedure">
-                Создать процедуру
-              </button>
-
-              <button class="btn"
-                      (click)="onImportOffersFromProcedure()">
-                Получить КП из процедуры
-              </button>
-            </div>
+            <button class="btn btn-primary add-offers-btn send-offers"
+                    (click)="onCreateProcedureWizardOpen()"
+                    [clrLoading]="creatingProcedureLoader">
+              <b>Создать процедуру</b>
+            </button>
           </div>
         </div>
         <table class="table">
@@ -169,7 +162,7 @@
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
     <app-supplier-select
-      [contragents]="contragentsWithTp"
+      [inputContragents]="contragentsWithTp"
       (selectedContragent)="onSelectedContragent($event)">
     </app-supplier-select>
       <div class="contragent-info" *ngIf="selectedContragent">

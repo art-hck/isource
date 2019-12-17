@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Menu, MenuModel } from "../models/menu.model";
 import { Router } from "@angular/router";
-import { UserInfoService } from "../../auth/services/user-info.service";
+import { UserInfoService } from "../../user/service/user-info.service";
 import { CartStoreService } from "../../cart/services/cart-store.service";
 import { AuthService } from "../../auth/services/auth.service";
 

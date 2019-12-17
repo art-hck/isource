@@ -22,7 +22,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     'deliveryDate': new FormControl(null, CustomValidators.futureDate()),
     'isDeliveryDateAsap': new FormControl(false),
     'deliveryBasis': new FormControl(null, [Validators.required]),
-    'paymentTerms': new FormControl('30 дней по факту поставки', [Validators.required, Validators.minLength(1)]),
+    'paymentTerms': new FormControl('30 дней по факту поставки', [Validators.required]),
   });
 
   constructor(

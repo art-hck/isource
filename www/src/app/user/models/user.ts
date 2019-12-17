@@ -1,8 +1,8 @@
-import { Uuid } from "../../../cart/models/uuid";
+import { Uuid } from "../../cart/models/uuid";
 
 export class User {
-  id?: Uuid;
-  username?: string;
+  id: Uuid;
+  username: string;
   firstName?: string;
   lastName?: string;
   middleName?: string;

@@ -1,4 +1,4 @@
-import { UserRole } from "../../auth/models/user-role";
+import { UserRole } from "../../user/models/user-role";
 
 export interface MenuModel {
   text: string;

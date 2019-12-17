@@ -8,11 +8,10 @@
     <clr-icon shape="app-triangle" [dir]="isHidden ? 'down':'up'"></clr-icon>
   </div>
 </div>
-<div class="app-dropdown-items-wrapper" #itemsWrapper
+<div #itemsWrapper
+     class="app-dropdown-items-wrapper"
      [class.hidden]="isHidden"
      [class.app-dropdown-items-wrapper-up]="isDirectionUp"
-     [style.width.px]="el.nativeElement.offsetWidth"
-     [style.left.px]="coords.left"
 >
   <div class="app-dropdown-items">
     <ng-content></ng-content>

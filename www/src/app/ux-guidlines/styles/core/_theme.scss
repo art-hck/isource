@@ -1,0 +1,78 @@
+$theme: (
+  /**
+   Цвета заливки
+   Фоны, бордеры. Не контролы
+  */
+  color-default: #fff,
+  color-primary: #2585f5,
+  color-soft: #cccccc, // 20% black
+  color-divider: #dedede, // 13% black
+  color-secondary: #e5e5e5, // 11% black
+  color-stripe: #f6faff,
+  color-list-hover: #f0f6fa,
+  color-border: #b2d0ff,
+  color-bg: #fbfcfe,
+
+  /**
+    Контролы
+    Кнопки, инпуты, т. д.
+   */
+  color-control-primary: #2585f5,
+  color-control-primary-hover: #1a71d8,
+  color-control-invalid: #EB5757,
+  color-control-disabled: #e8e8e8, // 10% black
+  color-control-secondary: #e5e8ef,
+  color-control-secondary-hover: #d0d4de,
+  color-control-secondary-hover-border: #b3b3b3, // 30% black
+
+  control-border-radius: 4px,
+  control-height: 32px,
+  control-height-l: 40px,
+  button-min-width: 3rem,
+  button-max-width: 15rem,
+  button-padding: 0 16px,
+  button-padding-l: 0 20px,
+
+  /**
+    Цвета типографики
+    Цвета иконок на этих же переменных
+   */
+  color-font-primary: #000,
+  color-font-secondary: #666666, // 60% black
+  color-font-ghost: #b3b3b3, // 30% black
+  color-font-brand: #2585f5,
+  color-font-link: #2585f5,
+  color-font-link-hover: #55a3ff,
+  color-font-success: #0ea04b,
+  color-font-warning: #ffa10a,
+  color-font-alert: #eb3333,
+
+  /**
+     Размеры типографики
+   */
+  font-size-xxl: 32px,
+  font-size-xl: 22px,
+  font-size-l: 17px,
+  font-size-m: 14px,
+  font-size-s: 11px,
+);
+
+$statuses: (
+  DRAFT: #b3b3b3, // Черновик
+  ON_CUSTOMER_APPROVAL: #b3b3b3, // На согласовании заказчика
+  NEW: #b3b3b3, // Новый
+  TECHNICAL_PROPOSALS_PREPARATION: #fb6a9e, // Подготовка ТП
+  TECHNICAL_PROPOSALS_AGREEMENT: #fb6a9e, // Согласование ТП
+  PROPOSALS_PREPARATION: #f38b00, // Подготовка КП
+  RESULTS_AGREEMENT: #f38b00, // Выбор победителя
+  WINNER_SELECTED: #f38b00, // Выбран победитель
+  CONTRACT_AGREEMENT: #f2c94c, // Согласование договора
+  CONTRACT_SIGNING: #f2c94c, // Подписание договора
+  CONTRACTED: #f2c94c, // Законтрактовано
+  RKD_AGREEMENT: #56b9f2, // Согласование РКД
+  MANUFACTURING: #56b9f2, // Изготовление
+  DELIVERY: #9b51e0, // Доставка
+  DELIVERED: #9b51e0, // Поставлено
+  PAID: #20b55f, // Оплачено
+  COMPLETED: #20b55f, // Завершено
+)

@@ -49,7 +49,6 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxGuidlinesComponent,
     UxgInputDirective,
     UxgButtonDirective,
-    UxgButtonDirective,
     UxgExampleDropdownComponent,
     UxgExampleIconsComponent,
     UxgExampleTabsComponent,
@@ -71,7 +70,9 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgTabsComponent,
     UxgTabTitleComponent,
     UxgBreadcrumbsComponent,
-    UxgCodeComponent
+    UxgCodeComponent,
+    UxgInputDirective,
+    UxgButtonDirective
   ],
 })
 export class UxGuidlinesModule {

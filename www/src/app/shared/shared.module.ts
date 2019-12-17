@@ -10,6 +10,7 @@ import { DocumentUploadListComponent } from "./components/document-upload-list/d
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
 import { PluralizePipe } from "./pipes/pluralize-pipe";
 import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
+import { SafeStylePipe } from "./pipes/safe-style-pipe";
 import { ContragentSearchFilterPipe } from "./pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
@@ -45,6 +46,7 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
     DocumentIconComponent,
     PluralizePipe,
     BytesToSizePipe,
+    SafeStylePipe,
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
     ControlInvalidClassDirective
@@ -63,6 +65,7 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 
     PluralizePipe,
     BytesToSizePipe,
+    SafeStylePipe,
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
 

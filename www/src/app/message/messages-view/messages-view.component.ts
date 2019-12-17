@@ -10,7 +10,7 @@ import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
 import { tap } from "rxjs/operators";
-import { UserInfoService } from "../../auth/services/user-info.service";
+import { UserInfoService } from "../../user/service/user-info.service";
 
 @Component({
   selector: 'app-message-messages-view',

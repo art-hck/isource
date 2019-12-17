@@ -5,7 +5,7 @@ import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { AuthService } from "./auth/services/auth.service";
-import { UserInfoService } from "./auth/services/user-info.service";
+import { UserInfoService } from "./user/service/user-info.service";
 import { CartStoreService } from "./cart/services/cart-store.service";
 import { Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "./ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";

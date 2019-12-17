@@ -1,4 +1,4 @@
-@import "src/app/ux-guidlines/styles/constants";
+@import "src/app/ux-guidlines/styles/default-theme";
 
 .app-dropdown {
   display: inline-block;
@@ -38,11 +38,11 @@
   }
 
   .group-title {
-    color: $secondary-font-color;
+    color: uxg($theme, color-font-secondary);
     padding-bottom: 14px;
 
     b {
-      color: $primary-font-color;
+      color: uxg($theme, color-font-primary);
     }
   }
 

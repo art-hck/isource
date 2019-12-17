@@ -117,7 +117,7 @@ export class AddOffersComponent implements OnInit {
 
     this.offerForm = this.formBuilder.group({
       priceWithVat: ['', [Validators.required, Validators.min(1)]],
-      currency: ['', Validators.required],
+      currency: ['RUB', Validators.required],
       quantity: ['', [Validators.required, Validators.min(1)]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
@@ -497,6 +497,10 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
+  /**
+   *   Функция возможно может понадобиться для автоматической выгрузки результатов процедуры
+   *   в Маркетплейс при переходе процедуры на статус «Подведение итогов»
+   */
   onImportOffersFromProcedure(): void {
     this.procedureService.importOffersFromProcedure(this.request).subscribe(
       (offers: RequestOfferPosition[]) => {

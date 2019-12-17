@@ -15,7 +15,7 @@ import { merge, Observable, Subject, Subscription } from "rxjs";
 import { Message } from "../../request/common/models/message";
 import { MessageContextToEventTypesMap } from "../message-context-types";
 import { MessageService } from "./message.service";
-import { UserInfoService } from "../../auth/services/user-info.service";
+import { UserInfoService } from "../../user/service/user-info.service";
 import { Uuid } from "../../cart/models/uuid";
 import { WebsocketService } from "../../websocket/websocket.service";
 import { DocumentUploadListComponent } from "../../shared/components/document-upload-list/document-upload-list.component";
