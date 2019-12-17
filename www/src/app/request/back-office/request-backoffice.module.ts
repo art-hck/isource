@@ -25,6 +25,7 @@ import { WizardCreateProcedureComponent } from './components/wizard-create-proce
     RequestListViewComponent,
     SupplierSelectComponent,
     WizardCreateProcedureComponent,
+    RequestPositionComponent
 
   ],
   imports: [
@@ -37,7 +38,6 @@ import { WizardCreateProcedureComponent } from './components/wizard-create-proce
     ProcedureService,
     RequestService,
     SupplierSelectComponent,
-    RequestPositionComponent,
     TechnicalProposalsService,
   ]
 })
