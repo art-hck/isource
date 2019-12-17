@@ -58,10 +58,6 @@ export class EditPositionInfoFormComponent implements OnInit {
     };
   }
 
-  checkIfSelected(val) {
-    return (val === this.requestPosition.currency);
-  }
-
   addItemFormGroup(): FormGroup {
     const deliveryDate = this.requestPosition.deliveryDate ?
       moment(new Date(this.requestPosition.deliveryDate)).format('DD.MM.YYYY') :
@@ -77,7 +73,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       deliveryBasis: [this.requestPosition.deliveryBasis, [Validators.required]],
       paymentTerms: [this.requestPosition.paymentTerms, [Validators.required]],
       startPrice: [this.requestPosition.startPrice, [Validators.min(1)]],
-      currency: [this.requestPosition.currency],
+      currency: ['RUB'],
       isShmrRequired: [this.requestPosition.isShmrRequired],
       isPnrRequired: [this.requestPosition.isPnrRequired],
       isInspectionControlRequired: [this.requestPosition.isInspectionControlRequired],
