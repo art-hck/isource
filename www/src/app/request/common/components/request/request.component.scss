@@ -27,39 +27,41 @@
   }
 }
 
-.app-row.app-row-group {
-  background: #F0F6FA;
-  border-left: 4px #B2D0FF solid;
-  cursor: pointer;
-  padding-left: 7px;
+.app-table > .app-row {
+  &.app-row-group {
+    background: #F0F6FA;
+    border-left: 4px #B2D0FF solid;
+    cursor: pointer;
+    padding-left: 7px;
 
-  &:hover {
-    background: #E9F1F7;
-  }
+    &:hover {
+      background: #E9F1F7;
+    }
 
-  .group-title {
-    color: uxg($theme, color-font-secondary);
-    padding-bottom: 14px;
+    .group-title {
+      color: uxg($theme, color-font-secondary);
+      padding-bottom: 14px;
 
-    b {
-      color: uxg($theme, color-font-primary);
+      b {
+        color: uxg($theme, color-font-primary);
+      }
+    }
+
+    .app-row-group-positions .app-col {
+      padding: 10px 14px;
+
+      &:first-child {
+        padding-left: 0;
+        padding-right: 6px;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
     }
   }
 
-  .app-row-group-positions .app-col {
-    padding: 10px 14px;
-
-    &:first-child {
-      padding-left: 0;
-      padding-right: 6px;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
+  & > .app-col:first-child {
+    padding: 17px 6px;
   }
-}
-
-.app-table > .app-row > .app-col:first-child {
-  padding: 17px 6px;
 }
