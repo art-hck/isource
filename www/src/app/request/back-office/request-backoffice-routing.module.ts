@@ -9,7 +9,7 @@ import { AddTechnicalProposalsComponent } from "./components/add-technical-propo
 
 import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "../common/components/contract/contract.component";
-import { RequestPositionComponent } from "../common/components/request-position/request-position.component";
+import { RequestPositionComponent } from "./components/request-position/request-position.component";
 
 const routes: Routes = [
   {

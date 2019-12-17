@@ -10,6 +10,7 @@ import { RequestListViewComponent as CustomerRequestListViewComponent } from './
 import { RequestService as CustomerRequestService } from "./services/request.service";
 import { TechnicalProposalsComponent } from './components/technical-proposals/technical-proposals.component';
 import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "./services/technical-proposals.service";
+import { RequestPositionComponent } from "./components/request-position/request-position.component";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "
     CustomerRequestListViewComponent,
     CustomerRequestViewComponent,
     QualityComponent,
+    RequestPositionComponent,
     TechnicalProposalsComponent
   ],
   imports: [

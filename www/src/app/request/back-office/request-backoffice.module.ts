@@ -10,6 +10,7 @@ import { OffersService } from "./services/offers.service";
 import { ProcedureService } from "./services/procedure.service";
 import { RequestComponent } from './components/request/request.component';
 import { RequestListViewComponent } from './components/request-list-view/request-list-view.component';
+import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestService } from "./services/request.service";
 import { SupplierSelectComponent } from './components/supplier-select/supplier-select.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
@@ -36,6 +37,7 @@ import { WizardCreateProcedureComponent } from './components/wizard-create-proce
     ProcedureService,
     RequestService,
     SupplierSelectComponent,
+    RequestPositionComponent,
     TechnicalProposalsService,
   ]
 })

@@ -7,7 +7,7 @@ import { RequestListViewComponent as CustomerRequestsList } from "./components/r
 import { TechnicalProposalsComponent } from "./components/technical-proposals/technical-proposals.component";
 import { ContractComponent } from "../common/components/contract/contract.component";
 import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
-import { RequestPositionComponent } from "../common/components/request-position/request-position.component";
+import { RequestPositionComponent } from "./components/request-position/request-position.component";
 
 const routes: Routes = [
   {
