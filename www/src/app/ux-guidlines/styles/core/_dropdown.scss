@@ -75,15 +75,19 @@
       left: 0;
       overflow: hidden;
       position: absolute;
-      z-index: 1;
+      z-index: 999999;
 
       &:not(&-up) {
-        padding-top: 40px;
+        border-top-color: transparent;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
         transform-origin: top;
       }
 
       &-up {
-        padding-bottom: 40px;
+        border-bottom-color: transparent;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
         transform-origin: bottom;
       }
 

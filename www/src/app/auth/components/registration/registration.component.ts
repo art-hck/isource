@@ -1,8 +1,8 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
-import { UserRegistration } from "../../models/user-registration";
-import { ContragentRegistration } from "../../models/contragent-registration";
+import { UserRegistration } from "../../../user/models/user-registration";
+import { ContragentRegistration } from "../../../contragent/models/contragent-registration";
 import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
 import { DadataConfig, DadataType, NgxDadataComponent } from '@kolkov/ngx-dadata';

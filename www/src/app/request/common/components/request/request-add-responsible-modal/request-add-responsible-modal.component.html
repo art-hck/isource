@@ -1,0 +1,24 @@
+<clr-modal>
+  <h2 class="modal-title">Назначить позиции <span class="app-ghost-color">({{ positions.length }})</span></h2>
+  <div class="modal-body">
+    <ng-container *ngIf="(regularBackofficeUsers$ | async) as users; else loading">
+      <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
+        <p class="app-secondary-color">Вы можете назначить позиции на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
+        <br/>
+        <uxg-dropdown placeholder="Выберите на кого назначить" formControlName="user">
+          <div uxgDropdownItem [value]="user" *ngFor="let user of users">{{ user.fullName || user.shortName }}</div>
+        </uxg-dropdown>
+
+        <div class="modal-footer">
+          <button uxgButton secondary lg (click)="this.close()" type="button">Отмена</button>
+          <button uxgButton primary lg>Назначить</button>
+        </div>
+      </form>
+    </ng-container>
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
+  </div>
+</clr-modal>

@@ -17,7 +17,7 @@ import { DesignDocumentationType } from "../../enum/design-documentation-type";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
-import { UserInfoService } from "../../../../auth/services/user-info.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({

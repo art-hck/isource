@@ -68,6 +68,7 @@ import { UxGuidlinesModule } from "../ux-guidlines/ux-guidlines.module";
 import { RequestAsideInfoComponent } from "./common/components/request/request-aside-info/request-aside-info.component";
 import { RequestPositionComponent } from './common/components/request-position/request-position.component';
 import { PieChartComponent } from './common/components/request/pie-chart/pie-chart.component';
+import { RequestAddResponsibleModalComponent } from './common/components/request/request-add-responsible-modal/request-add-responsible-modal.component';
 
 @NgModule({
   declarations: [
@@ -122,7 +123,8 @@ import { PieChartComponent } from './common/components/request/pie-chart/pie-cha
     PieChartComponent,
     RequestPositionComponent,
     BackOfficeRequestComponent,
-    CustomerRequestComponent
+    CustomerRequestComponent,
+    RequestAddResponsibleModalComponent
   ],
   imports: [
     SharedModule,

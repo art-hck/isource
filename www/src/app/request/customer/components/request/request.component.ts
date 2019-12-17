@@ -36,8 +36,13 @@ export class RequestComponent implements OnInit {
         ];
       })
     );
-    this.positions$ = this.requestService.getRequestPositions(requestId).pipe(
-      publishReplay(1), refCount()
-    );
+    this.getPositions();
   }
+
+  getPositions() {
+    const requestId = this.route.snapshot.paramMap.get('id');
+
+    this.positions$ = this.requestService.getRequestPositions(requestId);
+  }
+
 }

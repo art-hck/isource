@@ -20,11 +20,13 @@ export class UserInfoService {
     username: 'username',
     firstName: 'firstName',
     lastName: 'lastName',
+    middleName: 'middleName',
     isSupplier: 'isSupplier',
     isCustomer: 'isCustomer',
     isBackOffice: 'isBackOffice',
     isSeniorBackoffice: 'isSeniorBackoffice',
-    isRegularBackoffice: 'isRegularBackoffice'
+    isRegularBackoffice: 'isRegularBackoffice',
+    isContragentCreator: 'isContragentCreator'
   };
 
   constructor(

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
-import { UserInfoService } from "../../services/user-info.service";
+import { UserInfoService } from "../../../user/service/user-info.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { switchMap } from "rxjs/operators";
 

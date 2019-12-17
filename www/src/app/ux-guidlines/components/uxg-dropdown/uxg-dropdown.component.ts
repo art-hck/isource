@@ -47,7 +47,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
   }
 
   get selected(): UxgDropdownItemDirective | null {
-    return this.items.find(item => item.value === this.value);
+    return this.items ? this.items.find(item => item.value === this.value) : null;
   }
 
   constructor(
@@ -131,12 +131,15 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   private setPosition(el, isDirectionUp: boolean = false): void {
     if (isDirectionUp) {
-      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.coords.bottom) + "px");
+      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.coords.bottom + this.el.nativeElement.offsetHeight) + "px");
       this.renderer.removeStyle(el, 'top');
     } else {
-      this.renderer.setStyle(el, 'top', this.coords.top + "px");
+      this.renderer.setStyle(el, 'top', (this.coords.top + this.el.nativeElement.offsetHeight) + "px");
       this.renderer.removeStyle(el, 'bottom');
     }
+
+    this.renderer.setStyle(el, 'width', this.el.nativeElement.offsetWidth + "px");
+    this.renderer.setStyle(el, 'left', this.coords.left + "px");
 
     this.cdr.detectChanges();
   }

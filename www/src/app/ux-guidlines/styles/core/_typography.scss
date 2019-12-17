@@ -27,12 +27,17 @@ small {
 }
 
 a.link,
+a:link,
 a[routerlink]:link,
 a[ng-reflect-router-link]:link {
   color: uxg($theme, color-font-link);
 
   &:hover {
     color: uxg($theme, color-font-link-hover);
+  }
+
+  &.app-link-no-color {
+    color: unset;
   }
 }
 }
