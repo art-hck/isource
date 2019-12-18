@@ -36,6 +36,13 @@
 
       <div class="request-items-list">
         <ul class="list-unstyled">
+          <li>
+            <input type="text"
+                   (keypress)="onRequestItemFilterChange($event)"
+                   (change)="onRequestItemFilterChange($event)"
+            >
+          </li>
+
           <li (click)="onRequestContextClick()"
               class="status-position-default"
               [class.selected]="!selectedRequestsItem">
