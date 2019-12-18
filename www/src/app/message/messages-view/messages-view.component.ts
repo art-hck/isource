@@ -65,7 +65,7 @@ export class MessagesViewComponent implements OnInit {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
 
-    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id);
+    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole());
 
     this.onRequestContextClick();
   }

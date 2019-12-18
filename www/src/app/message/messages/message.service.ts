@@ -52,8 +52,8 @@ export class MessageService {
     });
   }
 
-  getRequestItems(id: Uuid): Observable<RequestPositionList[]> {
-    const url = `requests/customer/${id}/positions`;
+  getRequestItems(id: Uuid, role): Observable<RequestPositionList[]> {
+    const url = `requests/${role}/${id}/positions`;
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
       map((data: RequestPositionList[]) => {
         return data.map(function recursiveMapPositionList(item: RequestPositionList) {
