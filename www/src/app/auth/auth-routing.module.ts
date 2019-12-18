@@ -5,6 +5,7 @@ import { AuthPageComponent } from "./components/auth-page/auth-page.component";
 import { ForgotPasswordFormComponent } from "./components/forgot-password-form/forgot-password-form.component";
 import { LoginFormComponent } from "./components/login-form/login-form.component";
 import { ChangePasswordFormComponent } from "./components/change-password-form/change-password-form.component";
+import { ActivationFormComponent } from "./components/activation-form/activation-form.component";
 
 const routes: Routes = [
   {
@@ -38,6 +39,11 @@ const routes: Routes = [
     path: 'registration',
     component: RegistrationComponent,
     data: { title: "Регистрация" }
+  },
+  {
+    path: 'activate',
+    component: ActivationFormComponent,
+    data: { title: "Активация аккаунта" }
   }
 ];
 
