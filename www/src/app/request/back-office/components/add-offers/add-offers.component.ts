@@ -530,6 +530,22 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
+  getContragentsWithTpIfAllTpAccepted(): ContragentList[] {
+    let allTpAccepted = true;
+    for (const requestPosition of this.requestPositions) {
+      if (requestPosition.acceptedTpCount === 0) {
+        allTpAccepted = false;
+      }
+    }
+
+    // Если не все ТП по позициям приняты, то не предустанавливаем контрагентов по ТП, а выводим весь список контров
+    if (!allTpAccepted) {
+      return [];
+    }
+
+    return this.contragentsWithTp;
+  }
+
   protected updateContragentsWithTp(): void {
     const contragentsWithTpData = this.offersService.getContragentsWithTp(this.request, this.requestPositions);
     const subscription = contragentsWithTpData.subscribe(
