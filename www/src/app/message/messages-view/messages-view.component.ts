@@ -9,8 +9,9 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { tap } from "rxjs/operators";
+import { tap, map, publishReplay, refCount } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
+import { RequestItemsStore } from '../data/request-items-store';
 
 @Component({
   selector: 'app-message-messages-view',
@@ -27,6 +28,11 @@ export class MessagesViewComponent implements OnInit {
 
   contextId: Uuid;
   contextType: MessageContextTypes;
+
+  requestFilterInputValue = '';
+  requestItemFilterInputValue = '';
+
+  protected requestsItems: RequestItemsStore;
 
   constructor(
     private messageService: MessageService,
@@ -65,7 +71,14 @@ export class MessagesViewComponent implements OnInit {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
 
-    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id);
+    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id).pipe(
+      tap(data => {
+        this.requestsItems = new RequestItemsStore();
+        this.requestsItems.setRequestItems(data);
+      }),
+      publishReplay(1),
+      refCount()
+    );
 
     this.onRequestContextClick();
   }
@@ -126,5 +139,41 @@ export class MessagesViewComponent implements OnInit {
     return item instanceof RequestPosition ?
       'status-position-' + item.status :
       'status-position-default';
+  }
+
+  onRequestFilterChange(event: Event): void {
+    const value = event.target['value'] || '';
+    this.requestFilterInputValue = value.trim();
+    const filter = {};
+    if (this.requestFilterInputValue.length > 0) {
+      filter['requestNameOrNumber'] = this.requestFilterInputValue;
+    }
+    this.requests$ = this.messageService
+      .getRequests(this.user.getUserRole(), 0, 1000, filter, null)
+      .pipe(
+        tap((page: Page<RequestsList>) => {
+          if (page.entities.length > 0) {
+            this.onRequestClick(page.entities[0].request);
+          }
+        })
+      );
+  }
+
+  onRequestItemFilterChange(event: Event): void {
+    const value = event.target['value'] || '';
+    this.requestItemFilterInputValue = value.trim();
+    this.filterRequestItems(this.requestItemFilterInputValue);
+  }
+
+  protected filterRequestItems(filter: string): void {
+    if (filter.length === 0) {
+      this.requestsItems$ = this.requestsItems$.pipe(map(() => {
+        return this.requestsItems.getRequestItems();
+      }));
+    } else {
+      this.requestsItems$ = this.requestsItems$.pipe(map(data => {
+        return this.requestsItems.getFiltredRequestItems(filter);
+      }));
+    }
   }
 }

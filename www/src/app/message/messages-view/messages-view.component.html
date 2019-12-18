@@ -1,6 +1,11 @@
 <div class="wrapper">
   <div class="request-list">
     <ul class="list-unstyled">
+      <li>
+        <input type="text"
+               (input)="onRequestFilterChange($event)"
+        >
+      </li>
       <li *ngFor="let request of (requests$ | async)?.entities"
           (click)="onRequestClick(request.request)"
           [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
@@ -30,6 +35,12 @@
 
       <div class="request-items-list">
         <ul class="list-unstyled">
+          <li>
+            <input type="text"
+                   (input)="onRequestItemFilterChange($event)"
+            >
+          </li>
+
           <li (click)="onRequestContextClick()"
               class="status-position-default"
               [class.selected]="!selectedRequestsItem">
