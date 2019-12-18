@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { fromEvent, Observable } from "rxjs";
 import { MessageService } from "../messages/message.service";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
@@ -18,7 +18,9 @@ import { RequestItemsStore } from '../data/request-items-store';
   templateUrl: './messages-view.component.html',
   styleUrls: ['./messages-view.component.scss']
 })
-export class MessagesViewComponent implements OnInit {
+export class MessagesViewComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('requestsSearchField', { static: false }) requestsSearchField: ElementRef;
 
   requests$: Observable<Page<RequestsList>>;
   requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
@@ -67,6 +69,15 @@ export class MessagesViewComponent implements OnInit {
           }
         })
       );
+  }
+
+  ngAfterViewInit() {
+    fromEvent(this.requestsSearchField.nativeElement, 'input').pipe(
+      // Пропускаем изменения, которые происходят чаще 500ms для разгрузки бэкенда
+      debounceTime(500)
+    ).subscribe(
+      (event: Event) => this.onRequestFilterChange(event)
+    );
   }
 
   onRequestClick(request: RequestListItem) {
