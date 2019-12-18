@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UxgBreadcrumbsService } from "../../uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "../../../../src/app/ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'uxg-example-typography',
