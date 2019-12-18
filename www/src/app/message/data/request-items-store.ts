@@ -67,7 +67,7 @@ export class RequestItemsStore {
   }
 
   protected filterPositions(items: Items, filter: string): Items {
-    let res = [];
+    const res = [];
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
