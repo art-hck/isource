@@ -530,8 +530,7 @@ export class AddOffersComponent implements OnInit {
     });
   }
 
-  getContragentsWithTpIfAllTpAccepted(): ContragentList[]
-  {
+  getContragentsWithTpIfAllTpAccepted(): ContragentList[] {
     let allTpAccepted = true;
     for (const requestPosition of this.requestPositions) {
       if (requestPosition.acceptedTpCount === 0) {
