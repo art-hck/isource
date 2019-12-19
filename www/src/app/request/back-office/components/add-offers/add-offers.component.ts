@@ -36,8 +36,6 @@ import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-b
   styleUrls: ['./add-offers.component.scss']
 })
 export class AddOffersComponent implements OnInit {
-  subscription = new Subscription();
-
   requestId: Uuid;
   request: Request;
   requestPositions: RequestPosition[] = [];
