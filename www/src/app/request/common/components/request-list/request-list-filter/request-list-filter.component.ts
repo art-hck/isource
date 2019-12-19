@@ -116,6 +116,12 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
       JSON.stringify(this.requestListFilterForm.value) !== JSON.stringify(this.filterFormInitialState);
   }
 
+  logForms() {
+    console.log('dirty? — ' + this.requestListFilterForm.dirty);
+    console.log(JSON.stringify(this.requestListFilterForm.value));
+    console.log(JSON.stringify(this.filterFormInitialState));
+  }
+
   hideFilterModal() {
     this.showResults.emit();
   }
