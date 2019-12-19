@@ -469,7 +469,7 @@ export class AddOffersComponent implements OnInit {
     let newProcedureEndDate = this.procedureEndDateForm.get('procedureEndDate').value;
     newProcedureEndDate = moment(newProcedureEndDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
 
-    this.offersService.prolongateProcedureEndDate(
+    const prolongateProcedureSubscription = this.offersService.prolongateProcedureEndDate(
       this.requestId,
       this.prolongationProcedureId,
       newProcedureEndDate
@@ -478,10 +478,12 @@ export class AddOffersComponent implements OnInit {
         this.loaders.prolongateProcedure = ClrLoadingState.SUCCESS;
         this.updatePositionsAndSuppliers();
         this.showProcedureProlongateModal = false;
+        prolongateProcedureSubscription.unsubscribe();
       },
       () => {
         this.loaders.prolongateProcedure = ClrLoadingState.ERROR;
         this.showProcedureProlongateModal = false;
+        prolongateProcedureSubscription.unsubscribe();
       }
     );
   }
