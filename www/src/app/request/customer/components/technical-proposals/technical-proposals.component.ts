@@ -111,8 +111,10 @@ export class TechnicalProposalsComponent implements OnInit {
     if (event.target.checked === true) {
       this.selectedTechnicalProposalsPositions[i] = [];
       technicalProposalPositions.forEach(technicalProposalPosition => {
-        technicalProposalPosition.checked = true;
-        this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+        if (this.isPositionSelectorAvailable(technicalProposalPosition)) {
+          technicalProposalPosition.checked = true;
+          this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+        }
       });
     } else {
       this.selectedTechnicalProposalsPositions[i] = [];
