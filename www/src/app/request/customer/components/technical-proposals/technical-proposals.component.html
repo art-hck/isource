@@ -11,7 +11,7 @@
             <span class="supplier-name clr-col-auto">
               <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
                 <app-contragent-info-link
-                        [contragent]="technicalProposal.supplierContragent">
+                  [contragent]="technicalProposal.supplierContragent">
                 </app-contragent-info-link>
               </ng-container>
 
@@ -48,16 +48,28 @@
             <table class="positions-list table table-noborder">
               <thead>
               <tr>
-                <th class="left">Наименование позиции</th>
+                <th class="left">
+                  <clr-checkbox-container>
+                    <clr-checkbox-wrapper class="select-checkbox"
+                                          *ngIf="hasSelectablePositions(technicalProposal.positions)">
+                      <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
+                             (change)="onSelectAllPositions($event, i, technicalProposal.positions)"
+                             [checked]="areAllPositionsChecked(technicalProposal.positions)"
+                      />
+                    </clr-checkbox-wrapper>
+                  </clr-checkbox-container>
+                  <span class="position-header">Наименование позиции</span>
+                </th>
                 <th class="left">Заводское наименование</th>
               </tr>
               </thead>
               <tbody>
               <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
                 <td class="left">
-                  <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)" class="select-checkbox">
+                  <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)"
+                                        class="select-checkbox">
                     <input clrCheckbox type="checkbox"
-                           value="{{i}}"
+                           value="{{technicalProposalPosition}}"
                            [(ngModel)]="technicalProposalPosition.checked"
                            (change)="onSelectPosition(i, technicalProposalPosition)">
                     <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
