@@ -20,7 +20,7 @@ import { SupplierSelectComponent } from "../supplier-select/supplier-select.comp
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { PublishProcedureInfo } from '../../models/publish-procedure-info';
 import { PublishProcedureResult } from '../../models/publish-procedure-result';
