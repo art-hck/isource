@@ -1,14 +1,14 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
-import { publishReplay, refCount, tap } from "rxjs/operators";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
+import { Observable, of, Subscription } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionList } from "../../models/request-position-list";
 import { RequestService } from "../../../customer/services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-request',
@@ -17,8 +17,10 @@ import { Uuid } from "../../../../cart/models/uuid";
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
-  request$: Observable<Request>;
-  positions$: Observable<RequestPositionList[]>;
+  @Input() request: Request;
+  @Input() positions: RequestPositionList[];
+  @Output() addGroup = new EventEmitter();
+  @Output() addResponsible = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
   subscription = new Subscription();
 
@@ -57,23 +59,17 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
+    private user: UserInfoService
   ) {
   }
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
-    this.request$ = this.requestService.getRequestInfo(this.requestId);
-    this.positions$ = this.requestService.getRequestPositions(this.requestId)
-      .pipe(
-        tap(positions => {
-          // Иницилизация позиций в форме
-          positions.forEach(position => this.formPositionPush(position));
-        }),
-        publishReplay(1), refCount()
-      )
-    ;
-    this.flatPositions$ = this.requestService.getRequestPositionsFlat(this.positions$);
+    // Иницилизация позиций в форме
+    this.positions.forEach(position => this.formPositionPush(position));
+
+    this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
 
     this.subscription.add(
       this.form.get('checked').valueChanges.subscribe(checked =>
@@ -138,6 +134,10 @@ export class RequestComponent implements OnInit, OnDestroy {
     ));
 
     return formGroup;
+  }
+
+  asFormArray(control: AbstractControl) {
+    return control as FormArray;
   }
 
   ngOnDestroy() {

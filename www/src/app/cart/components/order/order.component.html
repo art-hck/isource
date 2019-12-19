@@ -2,12 +2,12 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="clr-row">
     <div class="clr-col-6">
-      <label>Наименование заявки</label>
+      <label>Наименование заявки <b class="required-star">*</b></label>
       <input type="text" formControlName="requestName" appFormControlInvalidClass="invalid"/>
     </div>
     <div class="clr-col-6">
       <div class="clr-row">
-        <div class="clr-col"><label>Необходимый срок поставки</label></div>
+        <div class="clr-col"><label>Необходимый срок поставки <b class="required-star">*</b></label></div>
       </div>
       <div class="clr-row clr-align-items-center">
         <div class="clr-col clr-flex-grow-0">
@@ -28,12 +28,27 @@
   </div>
   <div class="clr-row">
     <div class="clr-col-6">
-      <label>Базис поставки (пункт, до которого требуется доставка)</label>
+      <label>Базис поставки (пункт, до которого требуется доставка) <b class="required-star">*</b></label>
       <input type="text" formControlName="deliveryBasis" appFormControlInvalidClass="invalid"/>
     </div>
+
     <div class="clr-col-6">
-      <label>Условия оплаты</label>
-      <input type="text" formControlName="paymentTerms" appFormControlInvalidClass="invalid"/>
+      <label>Условия оплаты <b class="required-star">*</b></label>
+
+      <select clrSelect
+              name="paymentTerms"
+              id="paymentTerms"
+              formControlName="paymentTerms"
+              appFormControlInvalidClass="invalid">
+
+        <option value="30 дней по факту поставки">
+          30 дней по факту поставки
+        </option>
+
+        <option value="60 дней по факту поставки">
+          60 дней по факту поставки
+        </option>
+      </select>
     </div>
 
   </div>

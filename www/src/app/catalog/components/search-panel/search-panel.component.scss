@@ -46,10 +46,9 @@ $border-radius: 18px;
 .search-bar {
   background-color: #E5E8EF;
   height: 56px;
-  right: 0;
-   top: 0;
+  left: 0;
+  top: 64px;
   position: absolute;
-  width: 100%;
   z-index: 10;
   padding: 0 130px;
 }

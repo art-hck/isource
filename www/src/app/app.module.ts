@@ -27,6 +27,7 @@ import { WebsocketModule } from "./websocket/websocket.module";
 import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
 import { UxGuidlinesModule } from "./ux-guidlines/ux-guidlines.module";
 import { AuthModule } from "./auth/auth.module";
+import { UserModule } from "./user/user.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -50,6 +51,7 @@ registerLocaleData(localeRu, 'ru');
     HttpClientModule,
     NgxDadataModule,
     UxGuidlinesModule,
+    UserModule,
     WebsocketModule.config({
       url: AppConfig.endpoints.ws
     })

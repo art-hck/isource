@@ -8,6 +8,8 @@ import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { CatalogCategoryAttribute } from "../../models/catalog-category-attribute";
+import { Title } from "@angular/platform-browser";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-position-view',
@@ -24,20 +26,23 @@ export class PositionViewComponent implements OnInit {
     protected getContragentService: ContragentService,
     private catalogService: CatalogService,
     private route: ActivatedRoute,
-    private cartStoreService: CartStoreService
+    private cartStoreService: CartStoreService,
+    private title: Title
   ) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(routeParams => {
       const positionId = routeParams.positionId;
-      this.position$ = this.catalogService.getPositionInfo(positionId);
+      this.position$ = this.catalogService.getPositionInfo(positionId).pipe(
+        tap(position => this.title.setTitle(position.name))
+      );
       this.attributes$ = this.catalogService.getPositionAttributes(positionId);
     });
   }
 
-  onAddPositionToCart(position: CatalogPosition): Promise<boolean> {
-    return this.cartStoreService.addItem(position);
+  onAddPositionToCart(position: CatalogPosition, quantity: number): Promise<boolean> {
+    return this.cartStoreService.addItem(position, quantity);
   }
 
   isPositionInCart(position: CatalogPosition): boolean {

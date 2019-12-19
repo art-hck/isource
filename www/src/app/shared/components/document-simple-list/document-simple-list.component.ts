@@ -23,6 +23,7 @@ export class DocumentSimpleListComponent implements OnInit {
 
   @Input() enableDelete = false;
   @Input() enableUpload = true;
+  @Input() gridable = false;
   @Input() limit = 0;
 
   @Output() selected = new EventEmitter<File[]>();

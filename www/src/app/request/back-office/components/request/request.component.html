@@ -1,0 +1,16 @@
+<ng-container *ngIf="(request$ | async) as request; else loading">
+  <ng-container *ngIf="(positions$ | async) as positions; else loading">
+    <app-request
+      [positions]="positions"
+      [request]="request"
+      (addGroup)="getPositions()"
+      (addResponsible)="getPositions()"
+    ></app-request>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>

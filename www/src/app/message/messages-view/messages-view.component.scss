@@ -17,7 +17,7 @@
   min-height: 1px;
   height: calc(100vh - 64px);
   align-items: stretch;
-  margin-top: -50px;
+  margin-top: -10px;
 
   .request-list {
     display: flex;
@@ -173,6 +173,15 @@
       position: relative;
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
       color: #000000;
+
+      &-desc {
+        display: flex;
+        align-items: center;
+
+        * + .btn-description {
+          margin-left: 10px;
+        }
+      }
     }
 
     .messages-list-content {

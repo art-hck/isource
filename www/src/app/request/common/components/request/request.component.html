@@ -1,6 +1,4 @@
-<ng-container *ngIf="(request$ | async) as request">
-<form [formGroup]="form" *ngIf="(positions$ | async) as positions">
-  <h1 *ngIf="request.name">{{request?.name || 'Заявка #' + request.id}}</h1>
+<form [formGroup]="form" *ngIf="positions && request">
   <div class="app-row">
 
     <!-- Контролы управления позициями -->
@@ -18,6 +16,17 @@
           </div>
         </div>
 
+        <!-- Назначиь ответственного -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isSeniorBackoffice()">
+          <button class="app-btn app-btn-clear app-btn-link"
+                  [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
+            <clr-icon shape="app-user" size="16"></clr-icon>
+            <span>Назначить</span>
+          </button>
+          <app-request-add-responsible-modal #addResponsibleModal [request]="request" [positions]="checkedPositions" (success)="addResponsible.emit($event)">
+          </app-request-add-responsible-modal>
+        </div>
+
         <!-- Добавить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <button class="app-btn app-btn-clear app-btn-link"
@@ -25,7 +34,7 @@
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
           </button>
-          <app-request-add-group-modal #addGroupModal [request]="request" [positions]="checkedPositions">
+          <app-request-add-group-modal #addGroupModal [request]="request" [positions]="checkedPositions" (success)="addGroup.emit($event)">
           </app-request-add-group-modal>
         </div>
 
@@ -61,26 +70,15 @@
     <!-- Список позиций -->
     <div class="app-col app-table positions">
       <ng-container *ngFor="let position of positions; index as i;" formArrayName="positions">
-        <ng-container formGroupName="{{i}}">
+        <ng-container formGroupName="{{i}}" *ngIf="formPositions.controls[i]">
 
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(position) as position">
-            <a href="{{position.id}}" (click)="navigateToPosition(position, $event)" class="app-row">
-              <div class="app-col clr-flex-grow-0">
-                <uxg-checkbox formControlName="checked"></uxg-checkbox>
-              </div>
-              <div class="app-col app-bold item-title">{{ position.name }}</div>
-              <div class="app-col item-quantity">
-                <span>{{ position.quantity }} </span>
-                <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
-              </div>
-              <div class="app-col item-date">
-                <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-                <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
-              </div>
-              <div class="app-col item-status">
-                <uxg-position-status [label]="position.statusLabel" [status]="position.status"></uxg-position-status>
-              </div>
+            <a href="{{position.id}}" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
+              <ng-container *ngTemplateOutlet="positionItem; context: {
+                position: position,
+                formControl: formPositions.controls[i]
+              }"></ng-container>
             </a>
           </ng-container>
 
@@ -100,28 +98,10 @@
                 <!-- Позиции группы -->
                 <ng-container formArrayName="positions">
                   <div class="app-row app-row-group-positions" *ngFor="let groupPositions of group.positions; index as j" >
-                    <ng-container formGroupName="{{j}}">
-                      <div class="app-col clr-flex-grow-0 app-row">
-                        <uxg-checkbox formControlName="checked"></uxg-checkbox>
-                      </div>
-                      <div class="app-col item-title">{{ groupPositions.name }}</div>
-                      <div class="app-col item-quantity">
-                        <span>{{ groupPositions.quantity }} </span>
-                        <span class="app-ghost-color">{{ groupPositions.measureUnit | lowercase }}</span>
-                      </div>
-                      <div class="app-col item-date">
-                        <ng-container *ngIf="groupPositions.isDeliveryDateAsap; else deliveryDate">
-                          Как можно скорее
-                        </ng-container>
-                        <ng-template #deliveryDate>
-                          {{ groupPositions.deliveryDate | date : 'dd.MM.yyyy' }}
-                        </ng-template>
-                      </div>
-                      <div class="app-col item-status">
-                        <uxg-position-status [label]="groupPositions.statusLabel" [status]="groupPositions.status">
-                        </uxg-position-status>
-                      </div>
-                    </ng-container>
+                    <ng-container formGroupName="{{j}}" *ngTemplateOutlet="positionItem; context:{
+                        position: groupPositions,
+                        formControl: asFormArray(formPositions.controls[i].get('positions')).controls[j]
+                    }"></ng-container>
                   </div>
                 </ng-container>
               </div>
@@ -137,4 +117,29 @@
     </div>
   </div>
 </form>
-</ng-container>
+
+<!-- Шаблон позиции -->
+<ng-template #positionItem let-position="position" let-formControl="formControl">
+  <div class="app-col clr-flex-grow-0">
+    <uxg-checkbox [formControl]="formControl.get('checked')"></uxg-checkbox>
+  </div>
+  <div class="app-col app-bold item-title">{{ position.name }}</div>
+  <div class="app-col item-quantity">
+    <span>{{ position.quantity }} </span>
+    <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+  </div>
+  <div class="app-col item-date">
+    <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+    <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+  </div>
+  <div class="app-col item-status">
+    <ng-container *ngIf="user.isSeniorBackoffice() && position.responsibleUser as user; else status">
+      {{ position.responsibleUser.shortName }}
+    </ng-container>
+    <ng-template #status>
+      <uxg-position-status  [label]="position.statusLabel" [status]="position.status">
+      </uxg-position-status>
+    </ng-template>
+  </div>
+</ng-template>
+

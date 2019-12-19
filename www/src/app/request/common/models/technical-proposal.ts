@@ -12,4 +12,5 @@ export class TechnicalProposal {
   documents: RequestDocument[];
   positions: TechnicalProposalPosition[];
   status: string;
+  statusChangedDate: Date;
 }

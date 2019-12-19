@@ -8,11 +8,12 @@ import { Contract, ContractStatus } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
-import { UserInfoService } from "../../../../auth/services/user-info.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 import { RequestOfferPosition } from "../../models/request-offer-position";
 import { Uuid } from "../../../../cart/models/uuid";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
 
 @Component({
   selector: 'app-contract',
@@ -31,6 +32,7 @@ export class ContractComponent implements OnInit {
   contragentInfoModalOpened = false;
 
   constructor(
+    private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private requestService: RequestService,
     private contractService: ContractService,
@@ -42,7 +44,15 @@ export class ContractComponent implements OnInit {
   ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
     this.request$ = this.requestService.getRequestInfo(requestId)
-      .pipe(publishReplay(1), refCount());
+      .pipe(
+        tap(request => {
+          this.bc.breadcrumbs = [
+            { label: "Заявки", link: "../.." },
+            { label: `Заявка №${request.number }`, link: ".." }
+          ];
+        }),
+        publishReplay(1), refCount()
+      );
 
     this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
       .pipe(publishReplay(1), refCount())
@@ -50,6 +60,7 @@ export class ContractComponent implements OnInit {
 
     this.contracts$ = this.contractService.getContracts(requestId)
       .pipe(publishReplay(1), refCount());
+
   }
 
   // Добавляем контракт и обновляем доступных контрагентов и их позиции
@@ -166,7 +177,8 @@ export class ContractComponent implements OnInit {
    * @param contract
    */
   isShowGenerateContractButton(contract: Contract) {
-    return contract.status !== ContractStatus.APPROVED;
+    return contract.status !== ContractStatus.APPROVED &&
+      (this.userInfoService.isBackOffice() || this.userInfoService.isSeniorBackoffice());
   }
 }
 

@@ -2,7 +2,7 @@
   <div class="position-document">
     <span class="document-label">Нормативный документ:</span>{{position.productionDocument}}
   </div>
-  <h2>{{position.name}}</h2>
+  <h1>{{position.name}}</h1>
   <div class="clr-row">
     <div class="clr-col-9 tabs">
       <clr-tabs>
@@ -83,9 +83,9 @@
       </div>
       <div class="price-info">Количество</div>
       <div class="clr-row">
-        <input type="number" class="quantity" value="1">
+        <input #quantity [disabled]="isPositionInCart(position)" type="number" class="quantity" value="1">
         <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
-                (click)="onAddPositionToCart(position)">
+                (click)="onAddPositionToCart(position, +quantity.value)">
           <img src="../../../../assets/images/cart-button.svg">
         </button>
         <ng-template #inCart>

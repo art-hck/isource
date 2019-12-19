@@ -1,7 +1,7 @@
-.content-area {
-  position: relative;
-}
-
 .container {
   height: 100%;
+}
+
+.breadcrumbs {
+  margin-bottom: 30px;
 }

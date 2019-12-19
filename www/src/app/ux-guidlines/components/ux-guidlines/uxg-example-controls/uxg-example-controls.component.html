@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header">Controls</div>
+  <div class="card-block">
+    <div class="card-title">Swicher control</div>
+    <uxg-switcher label="Swich me"></uxg-switcher>
+    <uxg-code language="html">{{example1}}</uxg-code>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Right label</div>
+    <uxg-switcher label="Swich me" labelAlign="right"></uxg-switcher>
+    <uxg-code language="html">{{example2}}</uxg-code>
+  </div>
+  <div class="card-block">
+    <div class="card-title">Checkbox control</div>
+    <div class="app-row">
+      <uxg-checkbox class="app-control" #controlCheckbox></uxg-checkbox>
+      <label (click)="controlCheckbox.check($event)"> Check me</label>
+    </div>
+    <uxg-code language="html">{{example3}}</uxg-code>
+  </div>
+</div>
+
+

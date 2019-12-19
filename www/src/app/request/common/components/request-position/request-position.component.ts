@@ -1,58 +1,45 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
-import { Uuid } from "../../../../cart/models/uuid";
-import { ActivatedRoute, Router } from "@angular/router";
-import { RequestService } from "../../../customer/services/request.service";
-import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { RequestPositionWorkflowStepLabels } from "../../dictionaries/request-position-workflow-step-labels";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { RequestDocument } from "../../models/request-document";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-request-position',
   templateUrl: './request-position.component.html',
   styleUrls: ['./request-position.component.scss']
 })
-export class RequestPositionComponent implements OnInit, OnDestroy {
+export class RequestPositionComponent implements OnInit {
+  @Input() requestId: Uuid;
+  @Input() position: RequestPosition;
+  @Input() statuses: [string, string][];
+  @Output() changeStatus = new EventEmitter<{ status, position }>();
+  datesWithDocuments: DateWithDocuments[];
 
-  requestId: Uuid;
-  positionId: Uuid;
-  position$: Observable<RequestPosition>;
-  statuses = Object.entries(RequestPositionWorkflowStepLabels);
-  subsription = new Subscription();
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private requestService: RequestService,
-    private backofficeRequestService: BackofficeRequestService,
-    private positionStatusService: RequestPositionStatusService
-  ) {}
+  constructor(private positionStatusService: RequestPositionStatusService, public user: UserInfoService) {}
 
   ngOnInit() {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-    this.positionId = this.route.snapshot.paramMap.get('position-id');
-    this.position$ = this.requestService.getRequestPosition(this.positionId);
+    this.datesWithDocuments = this.position.documents.reduce(
+      (arr: DateWithDocuments[], document: RequestDocument) => {
+        const date = moment(document.created).locale("ru").format('DD MMMM YYYY');
+        let i = arr.findIndex(_item => _item.date === date);
+
+        if (i < 0) {
+          i = arr.push({date, documents: []}) - 1;
+        }
+
+        arr[i].documents.push(document);
+        return arr;
+      }, []
+    );
   }
 
   isAfterManufacturing(position: RequestPosition): boolean {
     return this.positionStatusService.isStatusAfter(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
   }
-
-  nextStatus(position: RequestPosition) {
-    position.status = this.positionStatusService.getNextStatus(position.status);
-  }
-
-  changeStatus(status, position) {
-    position.status = status[0];
-    position.statusLabel = status[1];
-    this.subsription.add(
-      this.backofficeRequestService.changeStatus(this.requestId, position.id, status[0]).subscribe()
-    );
-  }
-
-  ngOnDestroy() {
-    this.subsription.unsubscribe();
-  }
 }
+
+export class DateWithDocuments { date: string; documents: RequestDocument[]; }

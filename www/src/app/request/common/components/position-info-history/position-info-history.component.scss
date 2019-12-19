@@ -1,4 +1,4 @@
-@import "../../../../ux-guidlines/styles/statuses";
+@import "../../../../ux-guidlines/styles/default-theme";
 
 .activity-feed {
   margin-top: 20px;
@@ -47,48 +47,10 @@
         border-bottom-right-radius: 10px;
       }
 
-      & div[class*="DRAFT"],
-      div[class*="ON_CUSTOMER_APPROVAL"],
-      div[class*="NEW"] {
-        background-color: $draft;
-      }
-
-      & div[class*="TECHNICAL_PROPOSALS_PREPARATION"],
-      div[class*="TECHNICAL_PROPOSALS_AGREEMENT"],
-      div[class*="REVIEW"],
-      div[class*="DECLINED"],
-      div[class*="ACCEPTED"] {
-        background-color: $technical-proposals-preparation;
-      }
-
-      & div[class*="-PROPOSALS_PREPARATION"],
-      div[class*="RESULTS_AGREEMENT"],
-      div[class*="WINNER_SELECTED"] {
-        background-color: $proposals-preparation;
-      }
-
-      & div[class*="CONTRACT_AGREEMENT"],
-      div[class*="CONTRACT_SIGNING"],
-      div[class*="CONTRACTED"],
-      div[class*="ON_APPROVAL"],
-      div[class*="APPROVED"],
-      div[class*="REJECTED"] {
-        background-color: $contract-agreement;
-      }
-
-      & div[class*="RKD_AGREEMENT"],
-      div[class*="MANUFACTURING"] {
-        background-color: $rkd-agreement;
-      }
-
-      & div[class*="DELIVERY"],
-      div[class*="DELIVERED"] {
-        background-color: $delivery;
-      }
-
-      & div[class*="PAID"],
-      div[class*="COMPLETED"] {
-        background-color: $paid;
+      @each $status, $color in $statuses {
+        & div[class*=#{$status}] {
+          background-color: $color;
+        }
       }
 
       & div.white-circle {

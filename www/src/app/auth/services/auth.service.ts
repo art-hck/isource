@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/internal/operators';
 import { APP_CONFIG, TokenService } from '@stdlib-ng/core';
-import { UserInfoService } from "./user-info.service";
+import { UserInfoService } from "../../user/service/user-info.service";
 import { GpnmarketConfigInterface } from '../../core/config/gpnmarket-config.interface';
 
 @Injectable({
@@ -106,4 +106,15 @@ export class AuthService {
     const url = `change-password-by-code`;
     return this.http.post<null>(url, { password, code });
   }
+
+  activateAccount(activationCode: string) {
+    const url = `activation/${activationCode}`;
+    return this.http.post<null>(url, null);
+  }
+
+  resendActivationLink(activationCode: string) {
+    const url = `activation/resend/${activationCode}`;
+    return this.http.post<null>(url, null);
+  }
+
 }

@@ -1,5 +1,5 @@
 import {Uuid} from "../../../cart/models/uuid";
-import {User} from "./user";
+import {User} from "../../../user/models/user";
 
 export class RequestDocument {
   id: Uuid;

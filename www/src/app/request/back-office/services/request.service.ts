@@ -8,6 +8,7 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { RequestPositionWorkflowSteps } from "../../common/enum/request-position-workflow-steps";
+import { User } from "../../../user/models/user";
 
 
 @Injectable()
@@ -27,6 +28,11 @@ export class RequestService {
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
       map(data => this.mapPositionList(data))
     );
+  }
+
+  getRequestPosition(id: Uuid): Observable<RequestPosition> {
+    const url = `requests/positions/${id}/info`;
+    return this.api.get<RequestPosition>(url);
   }
 
   /**
@@ -61,6 +67,12 @@ export class RequestService {
     return this.api.post<{status: RequestPositionWorkflowSteps, statusLabel: string}>(url, {
       status: status
     });
+  }
+
+  setResponsibleUser(id: Uuid, user: User, positions: RequestPosition[]) {
+    const url = `requests/backoffice/${id}/change-responsible-user`;
+    const body = {user: user.id, positions: positions.map(position => position.id)};
+    return this.api.post(url, body);
   }
 
   private mapPositionList(requestPositionsList: RequestPositionList[]) {

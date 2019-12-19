@@ -5,54 +5,43 @@
   <div class="clr-row">
     <div class="info-card clr-col">
       <div class="request-info">
-        <div class="breadcrumbs">
-          <a [href]="'requests/backoffice/'">Заявки</a> → <a [href]="'requests/backoffice/' + request.id">Заявка №{{request.number}}</a>
-        </div>
         <div class="clr-row w-100">
           <div class="clr-col-7">
-            <h2>Коммерческие предложения</h2>
-          </div>
-          <div class="clr-col-5 add-contragent">
-            <button class="btn btn-link add-contragent"
-                    (click)="onShowAddContragentModal()"
-                    *ngIf="requestPositions.length !== 0">
-              <clr-icon shape="plus"></clr-icon>
-              Добавить контрагента
-            </button>
           </div>
         </div>
 
         <div class="clr-row w-100">
           <div class="clr-col-6">
+            <button class="btn btn-primary"
+                    (click)="onShowAddContragentModal()"
+                    *ngIf="requestPositions.length !== 0">
+              <clr-icon shape="plus"></clr-icon>
+              Добавить контрагента
+            </button>
+
             <div class="btn-group" *ngIf="requestPositions.length !== 0">
-              <button class="btn btn-outline import-export"
+              <button class="btn btn-outline"
                       (click)="onDownloadOffersTemplate()">
                 Экспортировать шаблон
               </button>
-              <button class="btn btn-outline import-export"
+              <button class="btn btn-outline"
                       (click)="onShowImportOffersExcel()">Импортировать КП
               </button>
             </div>
-
           </div>
+
           <div class="clr-col-6 send-offers">
-            <button class="btn btn-primary send-offers"
-                    *ngIf="selectedRequestPositions.length !== 0"
+            <button class="btn btn-primary"
+                    [disabled]="selectedRequestPositions.length === 0"
                     (click)="onPublishOffers()"
-            >
-              <b>Отправить на согласование</b>
+                    [clrLoading]="loaders.sendOffers">
+              Отправить на согласование
             </button>
 
             <button class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
                     [clrLoading]="creatingProcedureLoader">
               <b>Создать процедуру</b>
-            </button>
-
-            <button class="btn btn-primary"
-                    (click)="onImportOffersFromProcedure()"
-            >
-              <b>Получить КП из процедуры</b>
             </button>
           </div>
         </div>
@@ -119,6 +108,13 @@
               <span class="has-finished-procedure-label"
                     *ngIf="positionHasFinishedProcedure(requestPosition)">Процедура завершена</span>
 
+              <button *ngIf="availableCancelPublishOffers(requestPosition)"
+                      class="btn btn-primary btn-cancel-publish"
+                      [clrLoading]="loaders.cancelPublish"
+                      (click)="onCancelPublishOffers(requestPosition)">
+                Отозвать <span class="cancel-timer"> {{ requestPosition.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+              </button>
+
             </td>
             <td class="contragent-name" *ngFor="let supplier of suppliers">
               <ng-container
@@ -167,7 +163,7 @@
     <h3 class="modal-title">Добавление контрагента</h3>
     <div class="modal-body">
     <app-supplier-select
-      [contragents]="contragentsWithTp"
+      [inputContragents]="getContragentsWithTpIfAllTpAccepted()"
       (selectedContragent)="onSelectedContragent($event)">
     </app-supplier-select>
       <div class="contragent-info" *ngIf="selectedContragent">
@@ -196,7 +192,7 @@
   <!-- Модальное окно добавления/редактирования КП -->
   <clr-modal [(clrModalOpen)]="showAddOfferModal"
              [clrModalClosable]="false">
-    <div class="modal-body">
+    <div class="add-offers-modal modal-body">
       <form [formGroup]="offerForm" class="form">
         <div class="form-block">
           <div class="clr-form-control">
@@ -209,23 +205,24 @@
               </div>
               <div class="clr-col-8">
                 <label class="clr-control-label" for="currency">Валюта</label>
-                <div class="select">
-                  <select name="currency" id="currency" formControlName="currency"
-                          [class.invalid]="isFieldValid('currency')">
-                    <option value="RUB">
-                      RUB
-                    </option>
-                    <option value="USD" disabled>
-                      USD
-                    </option>
-                    <option value="EUR" disabled>
-                      EUR
-                    </option>
-                    <option value="CHF" disabled>
-                      CHF
-                    </option>
-                  </select>
-                </div>
+                <select clrSelect
+                        name="currency"
+                        id="currency"
+                        formControlName="currency"
+                        [class.invalid]="isFieldValid('currency')">
+                  <option value="RUB">
+                    RUB
+                  </option>
+                  <option value="USD" disabled>
+                    USD
+                  </option>
+                  <option value="EUR" disabled>
+                    EUR
+                  </option>
+                  <option value="CHF" disabled>
+                    CHF
+                  </option>
+                </select>
               </div>
             </div>
             <div class="clr-row w-100">
@@ -250,8 +247,18 @@
               </div>
               <div class="clr-col-8">
                 <label class="clr-control-label" for="paymentTerms">Условия оплаты <b class="required-star">*</b></label>
-                <input type="text" id="paymentTerms" formControlName="paymentTerms"
-                       [class.invalid]="isFieldValid('paymentTerms')">
+                <select clrSelect
+                        name="paymentTerms"
+                        id="paymentTerms"
+                        formControlName="paymentTerms"
+                        [class.invalid]="isFieldValid('paymentTerms')">
+                  <option value="30 дней по факту поставки">
+                    30 дней по факту поставки
+                  </option>
+                  <option value="60 дней по факту поставки">
+                    60 дней по факту поставки
+                  </option>
+                </select>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { ManufacturingDocument } from './manufacturing-document';
 import {RequestPositionList} from "./request-position-list";
 import {RequestOfferPosition} from "./request-offer-position";
 import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
+import { User } from "../../../user/models/user";
 
 export class RequestPosition extends RequestPositionList {
   /**
@@ -44,4 +45,6 @@ export class RequestPosition extends RequestPositionList {
   isDesignRequired: boolean;
   checked: boolean;
   sourceRequestPositionId?: Uuid;
+  responsibleUser?: User;
+  acceptedTpCount?: number;
 }

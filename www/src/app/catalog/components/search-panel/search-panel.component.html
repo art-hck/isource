@@ -1,6 +1,8 @@
 <app-catalog-categories *ngIf="categoriesOpened" [(opened)]="categoriesOpened"></app-catalog-categories>
 
-<div class="clr-row search-bar clr-align-items-center">
+<div class="clr-row search-bar clr-align-items-center"
+     (window:resize)="onResize()"
+     [attr.style]="('width:' + getSearchBarWidth()) | safeStyle">
   <div class="container">
     <div class="clr-col-9 search">
       <button class="btn btn-categories btn-primary-small" aria-label="Каталог" title="Каталог"

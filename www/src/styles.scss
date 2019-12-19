@@ -15,7 +15,7 @@ $color_light_gray: #D4D9E2;
 
 
 @import "~nouislider/distribute/nouislider.min.css";
-@import "app/ux-guidlines/styles/index";
+@import "app/ux-guidlines/styles/default-theme";
 @import "assets/styles/tabs.scss";
 @import "assets/styles/grid.scss";
 @import "assets/styles/buttons.scss";
@@ -42,7 +42,7 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-  color: $primary-font-color;
+  color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
 }
 
@@ -62,7 +62,8 @@ select option:disabled {
 }
 
 b.required-star {
-  color: $color_red;
+  font-size: 18px;
+  color: #F44336;
 }
 
 .text-muted {
@@ -70,12 +71,12 @@ b.required-star {
 }
 
 .main-container {
-  background: $bg-color;
+  background: uxg($theme, color-bg);
 }
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
-    padding: 50px 130px 30px 130px;
+    padding: 10px 130px 30px 130px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }

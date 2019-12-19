@@ -10,6 +10,8 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestGroup } from 'src/app/request/common/models/request-group';
 import { QualityService } from "../../services/quality.service";
+import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-customer-request-view',
@@ -30,7 +32,9 @@ export class CustomerRequestViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
-    public qualityService: QualityService
+    public qualityService: QualityService,
+    private title: Title,
+    private bc: UxgBreadcrumbsService,
   ) {
   }
 
@@ -45,6 +49,12 @@ export class CustomerRequestViewComponent implements OnInit {
     this.requestService.getRequestInfo(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
+        this.title.setTitle(request.name || "Заявка №" + request.id);
+
+        this.bc.breadcrumbs = [
+          { label: "Заявки", link: "/requests/customer" },
+          { label: this.title.getTitle(), link: "/requests/customer/" + request.id }
+        ];
       }
     );
   }

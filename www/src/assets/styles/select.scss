@@ -1,21 +1,50 @@
+.select select:hover {
+  background-color: initial;
+}
+
 select option {
   background: #E5E8EF;
   border: 0;
   border-radius: 4px;
 }
 
-.clr-select-wrapper select {
-  background: #E5E8EF;
-  border-radius: 4px;
-  height: 32px;
-  border-bottom: 0;
-  padding-left: 16px;
+.clr-select-wrapper {
+  max-height: initial !important;
 }
 
-::ng-deep .clr-select-wrapper {
-  margin: 5px;
+.clr-select-wrapper {
+  max-height: initial;
+  margin: 0;
   color: black;
   border-bottom: 0;
+
+  &::after {
+    content: "";
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000;
+    position: absolute;
+    z-index: 2;
+    height: initial;
+    width: initial;
+    right: 12px;
+    background-image: none;
+    top: 14px;
+  }
+
+  & select {
+    background: #E5E8EF;
+    border-radius: 4px;
+    height: 32px;
+    border-bottom: 0;
+    padding-left: 12px;
+    padding-right: 30px;
+    width: 100%;
+
+    &:focus {
+      border: 0;
+    }
+  }
 }
 
 .ng-select {
@@ -46,7 +75,6 @@ select option {
 
     .ng-arrow {
       border: 0;
-      //background: url('../images/down-arrow.svg') no-repeat;
       width: 15px !important;
       height: 9px !important;
       top: 0;
