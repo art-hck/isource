@@ -3,7 +3,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../../common/models/request";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { ActivatedRoute, Router } from "@angular/router";
-import { RequestService } from "../../../back-office/services/request.service";
+import { RequestService } from "../../services/request.service";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
 import { NotificationService } from "../../../../shared/services/notification.service";

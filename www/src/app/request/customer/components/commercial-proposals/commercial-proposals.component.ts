@@ -117,7 +117,7 @@ export class CommercialProposalsComponent implements OnInit {
         this.request = request;
 
         this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/backoffice"},
+          { label: "Заявки", link: "/requests/customer"},
           { label: `Заявка №${this.request.number}`, link: "/requests/customer/" + this.request.id }
         ];
       }
