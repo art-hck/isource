@@ -9,7 +9,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { tap, map, publishReplay, refCount, debounceTime, switchMap } from "rxjs/operators";
+import { tap, map, publishReplay, refCount, debounceTime } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 
@@ -173,7 +173,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
           this.requestListSearchLoader = false;
         })
       );
-
   }
 
   onRequestItemFilterChange(event: Event): void {
