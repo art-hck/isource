@@ -18,7 +18,7 @@ export class RequestItemsStore {
     return this.cloneItems(this.requestItems);
   }
 
-  getFiltredRequestItems(filter: string): Items {
+  getFilteredRequestItems(filter: string): Items {
     return this.filterPositions(this.requestItems, filter);
   }
 

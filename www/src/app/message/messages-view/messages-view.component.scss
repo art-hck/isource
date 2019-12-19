@@ -89,6 +89,20 @@
           display: block;
         }
       }
+
+      & .loader {
+        position: absolute;
+        right: 15px;
+        background: white;
+        padding: 5px;
+
+        & span.spinner.spinner-md {
+          min-height: 15px;
+          min-width: 15px;
+          height: 15px;
+          width: 15px;
+        }
+      }
     }
   }
 
@@ -121,6 +135,10 @@
       margin: 4px 8px;
 
       li {
+        &.search-bar {
+          height: 46px;
+        }
+
         box-sizing: border-box;
         border-radius: 4px;
         padding: 8px 12px;
@@ -156,6 +174,21 @@
 
         &.sub-item {
           margin-left: 12px;
+        }
+
+        & .loader {
+          position: absolute;
+          right: 17px;
+          background: white;
+          padding: 5px;
+          top: 11px;
+
+          & span.spinner.spinner-md {
+            min-height: 15px;
+            min-width: 15px;
+            height: 15px;
+            width: 15px;
+          }
         }
       }
     }

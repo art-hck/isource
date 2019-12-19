@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { fromEvent, Observable } from "rxjs";
 import { MessageService } from "../messages/message.service";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
@@ -9,7 +9,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { tap, map, publishReplay, refCount } from "rxjs/operators";
+import { tap, map, publishReplay, refCount, debounceTime } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 
@@ -18,7 +18,9 @@ import { RequestItemsStore } from '../data/request-items-store';
   templateUrl: './messages-view.component.html',
   styleUrls: ['./messages-view.component.scss']
 })
-export class MessagesViewComponent implements OnInit {
+export class MessagesViewComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('requestsSearchField', { static: false }) requestsSearchField: ElementRef;
 
   requests$: Observable<Page<RequestsList>>;
   requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
@@ -31,6 +33,8 @@ export class MessagesViewComponent implements OnInit {
 
   requestFilterInputValue = '';
   requestItemFilterInputValue = '';
+
+  requestListSearchLoader = false;
 
   protected requestsItems: RequestItemsStore;
 
@@ -67,11 +71,20 @@ export class MessagesViewComponent implements OnInit {
       );
   }
 
+  ngAfterViewInit() {
+    fromEvent(this.requestsSearchField.nativeElement, 'input').pipe(
+      // Пропускаем изменения, которые происходят чаще 500ms для разгрузки бэкенда
+      debounceTime(500)
+    ).subscribe(
+      (event: Event) => this.onRequestFilterChange(event)
+    );
+  }
+
   onRequestClick(request: RequestListItem) {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
 
-    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id).pipe(
+    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
       tap(data => {
         this.requestsItems = new RequestItemsStore();
         this.requestsItems.setRequestItems(data);
@@ -142,6 +155,8 @@ export class MessagesViewComponent implements OnInit {
   }
 
   onRequestFilterChange(event: Event): void {
+    this.requestListSearchLoader = true;
+
     const value = event.target['value'] || '';
     this.requestFilterInputValue = value.trim();
     const filter = {};
@@ -155,6 +170,7 @@ export class MessagesViewComponent implements OnInit {
           if (page.entities.length > 0) {
             this.onRequestClick(page.entities[0].request);
           }
+          this.requestListSearchLoader = false;
         })
       );
   }
@@ -172,7 +188,7 @@ export class MessagesViewComponent implements OnInit {
       }));
     } else {
       this.requestsItems$ = this.requestsItems$.pipe(map(data => {
-        return this.requestsItems.getFiltredRequestItems(filter);
+        return this.requestsItems.getFilteredRequestItems(filter);
       }));
     }
   }
