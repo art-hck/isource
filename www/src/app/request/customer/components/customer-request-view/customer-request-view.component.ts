@@ -10,7 +10,7 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestGroup } from 'src/app/request/common/models/request-group';
 import { QualityService } from "../../services/quality.service";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
 
 @Component({

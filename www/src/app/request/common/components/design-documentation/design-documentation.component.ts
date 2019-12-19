@@ -18,7 +18,7 @@ import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DesignDocumentationEdit } from "../../models/requests-list/design-documentation-edit";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-design-documentation',

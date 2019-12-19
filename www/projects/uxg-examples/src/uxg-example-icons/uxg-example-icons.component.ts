@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UxgIconShapesSources } from "../../../../src/app/ux-guidlines/ux-guidlines.icons";
+import { UxgIconShapesSources } from "uxg";
 
 @Component({
   selector: 'uxg-example-icons',

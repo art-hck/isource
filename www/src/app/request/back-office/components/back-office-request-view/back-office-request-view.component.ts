@@ -9,7 +9,7 @@ import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-step
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import {RequestGroup} from "../../../common/models/request-group";
 import { Title } from "@angular/platform-browser";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-back-office-request-view',

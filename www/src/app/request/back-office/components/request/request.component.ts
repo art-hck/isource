@@ -4,9 +4,9 @@ import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
 import { ActivatedRoute } from "@angular/router";
-import { publishReplay, refCount, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   templateUrl: './request.component.html'

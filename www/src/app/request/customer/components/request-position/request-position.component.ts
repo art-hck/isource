@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { Title } from "@angular/platform-browser";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 import { tap } from "rxjs/operators";
 
 @Component({ templateUrl: './request-position.component.html' })

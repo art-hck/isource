@@ -1,4 +1,4 @@
-import { UxgIconShapesSources } from "./ux-guidlines.icons";
+import { UxgIconShapesSources } from "./uxg.icons";
 import { ClarityIcons } from "@clr/icons";
 import { ClarityModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
@@ -57,5 +57,5 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgButtonDirective
   ],
 })
-export class UxGuidlinesModule {
+export class UxgModule {
 }

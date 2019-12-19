@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RequestPositionWorkflowSteps } from "../../../../src/app/request/common/enum/request-position-workflow-steps";
+import { UxgPositionStatus } from "uxg";
 
 @Component({
   selector: 'uxg-example-position-status',
   templateUrl: './uxg-example-position-status.component.html'
 })
 export class UxgExamplePositionStatusComponent {
-  positionStatus = RequestPositionWorkflowSteps;
+  positionStatus = UxgPositionStatus;
   readonly example1 = `<uxg-position-status label="Черновик" [status]="positionStatus.DRAFT"></uxg-position-status>`;
   readonly example2 = `<div class="app-row">
   <div class="app-col">Согласование ТП</div>

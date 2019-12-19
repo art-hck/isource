@@ -28,7 +28,7 @@ import { RequestPositionWorkflowSteps } from "../../../common/enum/request-posit
 import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
 import * as moment from "moment";
 import { ClrLoadingState } from "@clr/angular";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-add-technical-proposals',

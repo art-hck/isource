@@ -8,7 +8,7 @@ import { AuthService } from "./auth/services/auth.service";
 import { UserInfoService } from "./user/service/user-info.service";
 import { CartStoreService } from "./cart/services/cart-store.service";
 import { Subscription } from "rxjs";
-import { UxgBreadcrumbsService } from "./ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-root',

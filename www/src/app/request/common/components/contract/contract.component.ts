@@ -10,10 +10,9 @@ import { ContractService } from "../../services/contract.service";
 import { RequestPosition } from "../../models/request-position";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { RequestOfferPosition } from "../../models/request-offer-position";
-import { Uuid } from "../../../../cart/models/uuid";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-contract',

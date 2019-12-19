@@ -1,0 +1,10 @@
+{
+  "name": "uxg",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.2.11",
+    "@angular/core": "^8.2.11",
+    "@clr/angular": "~2.3.0",
+    "@clr/icons": "~2.3.0"
+  }
+}
