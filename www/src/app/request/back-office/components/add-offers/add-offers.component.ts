@@ -75,7 +75,8 @@ export class AddOffersComponent implements OnInit {
   loaders = {
     creatingProcedure: ClrLoadingState.DEFAULT,
     sendOffers: ClrLoadingState.DEFAULT,
-    cancelPublish: ClrLoadingState.DEFAULT
+    cancelPublish: ClrLoadingState.DEFAULT,
+    prolongateProcedure: ClrLoadingState.DEFAULT
   };
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
@@ -463,27 +464,24 @@ export class AddOffersComponent implements OnInit {
   }
 
   saveProcedureEndDate() {
-    // console.log(this.prolongationProcedureId);
-    // console.log(this.procedureEndDateForm);
+    this.loaders.prolongateProcedure = ClrLoadingState.LOADING;
 
-    if (this.procedureEndDateForm.invalid) {
-      return;
-    }
+    let newProcedureEndDate = this.procedureEndDateForm.get('procedureEndDate').value;
+    newProcedureEndDate = moment(newProcedureEndDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
 
-    const newProcedureEndDate = this.procedureEndDateForm.get('procedureEndDate');
-    // this.loadingState = ClrLoadingState.LOADING;
-
-    const prolongateProcedureSubscription = this.offersService.prolongateProcedureEndDate(
+    this.offersService.prolongateProcedureEndDate(
       this.requestId,
       this.prolongationProcedureId,
       newProcedureEndDate
     ).subscribe(
       () => {
-       prolongateProcedureSubscription.unsubscribe();
-        // this.loadingState = ClrLoadingState.SUCCESS;
+        this.loaders.prolongateProcedure = ClrLoadingState.SUCCESS;
+        this.updatePositionsAndSuppliers();
+        this.showProcedureProlongateModal = false;
       },
       () => {
-        // this.loadingState = ClrLoadingState.ERROR;
+        this.loaders.prolongateProcedure = ClrLoadingState.ERROR;
+        this.showProcedureProlongateModal = false;
       }
     );
   }
