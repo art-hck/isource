@@ -474,6 +474,7 @@ export class AddOffersComponent implements OnInit {
     // this.loadingState = ClrLoadingState.LOADING;
 
     const prolongateProcedureSubscription = this.offersService.prolongateProcedureEndDate(
+      this.requestId,
       this.prolongationProcedureId,
       newProcedureEndDate
     ).subscribe(
