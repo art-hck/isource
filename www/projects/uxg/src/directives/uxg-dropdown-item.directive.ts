@@ -1,7 +1,6 @@
 import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input } from '@angular/core';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[uxgDropdownItem]'
 })
 export class UxgDropdownItemDirective {
