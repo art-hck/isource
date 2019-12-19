@@ -14,6 +14,7 @@ import { TechnicalProposalsStatuses } from "../../../common/enum/technical-propo
 import { Observable } from "rxjs";
 import { publishReplay, refCount } from "rxjs/operators";
 import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -51,8 +52,8 @@ export class TechnicalProposalsComponent implements OnInit {
       (request: Request) => {
         this.request = request;
         this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/customer/" },
-          { label: `Заявка №${this.request.number }`, link: "/requests/customer/" + this.request.id }
+          {label: "Заявки", link: "/requests/customer/"},
+          {label: `Заявка №${this.request.number }`, link: "/requests/customer/" + this.request.id}
         ];
       }
     );
@@ -103,6 +104,35 @@ export class TechnicalProposalsComponent implements OnInit {
         this.selectedTechnicalProposalsPositions = [];
       }
     );
+  }
+
+  onSelectAllPositions(event, i, technicalProposalPositions: TechnicalProposalPosition[]): void {
+    // TODO: 2019-11-06 Указать тип аргумента event
+    if (event.target.checked === true) {
+      this.selectedTechnicalProposalsPositions[i] = [];
+      technicalProposalPositions.forEach(technicalProposalPosition => {
+        if (this.isPositionSelectorAvailable(technicalProposalPosition)) {
+          technicalProposalPosition.checked = true;
+          this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+        }
+      });
+    } else {
+      this.selectedTechnicalProposalsPositions[i] = [];
+      technicalProposalPositions.forEach(technicalProposalPosition => {
+        technicalProposalPosition.checked = null;
+      });
+    }
+  }
+
+  areAllPositionsChecked(technicalProposalPositions: TechnicalProposalPosition[]) {
+    return !technicalProposalPositions.some(
+      technicalProposalPosition => technicalProposalPosition.checked !== true
+    );
+  }
+
+  hasSelectablePositions(technicalProposalPositions: TechnicalProposalPosition[]): boolean {
+    return technicalProposalPositions.some(technicalProposalPosition =>
+      this.isPositionSelectorAvailable(technicalProposalPosition));
   }
 
   isPositionSelectorAvailable(tpPosition: TechnicalProposalPosition): boolean {
