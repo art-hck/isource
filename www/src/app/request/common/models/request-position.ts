@@ -46,4 +46,5 @@ export class RequestPosition extends RequestPositionList {
   checked: boolean;
   sourceRequestPositionId?: Uuid;
   responsibleUser?: User;
+  acceptedTpCount?: number;
 }

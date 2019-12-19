@@ -9,6 +9,7 @@ import { ForgotPasswordFormComponent } from './components/forgot-password-form/f
 import { AuthPageComponent } from './components/auth-page/auth-page.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { ChangePasswordFormComponent } from './components/change-password-form/change-password-form.component';
+import { ActivationFormComponent } from './components/activation-form/activation-form.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { ChangePasswordFormComponent } from './components/change-password-form/c
     ForgotPasswordFormComponent,
     AuthPageComponent,
     LoginFormComponent,
-    ChangePasswordFormComponent
+    ChangePasswordFormComponent,
+    ActivationFormComponent
   ]
 })
 export class AuthModule { }
