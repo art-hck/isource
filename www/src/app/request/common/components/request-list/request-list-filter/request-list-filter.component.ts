@@ -89,7 +89,14 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
    * Сброс значений фильтра и подтягивание новых данных
    */
   resetFilter() {
-    this.requestListFilterForm.reset();
+    this.requestListFilterForm.reset({
+        requestNameOrNumber: '',
+        onlyOpenTasks: false,
+        customers: [],
+        shipmentDateFrom: '',
+        shipmentDateTo: '',
+        shipmentDateAsap: false
+      });
     if (this.backofficeView) {
       this.requestFilterCustomerListComponent.selectedCustomers = [];
       this.requestFilterCustomerListComponent.customerSearchValue = "";
@@ -100,7 +107,17 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
    * Сброс значений фильтра без обновления данных
    */
   clearFilter() {
-    this.requestListFilterForm.reset('', { emitEvent: false });
+    this.requestListFilterForm.reset({
+        requestNameOrNumber: '',
+        onlyOpenTasks: false,
+        customers: [],
+        shipmentDateFrom: '',
+        shipmentDateTo: '',
+        shipmentDateAsap: false
+      }, {
+        emitEvent: false
+      });
+
     if (this.backofficeView) {
       this.requestFilterCustomerListComponent.selectedCustomers = [];
       this.requestFilterCustomerListComponent.customerSearchValue = "";
