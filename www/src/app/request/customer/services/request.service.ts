@@ -59,7 +59,7 @@ export class RequestService {
         requestPositionsList.reduce(
           function flatPositionList(arr, curr: RequestPositionList) {
             if (curr instanceof RequestGroup) {
-              return flatPositionList(curr.positions, null);
+              return [...arr, ...flatPositionList(curr.positions, null)];
             } else {
               return [...arr, curr].filter(Boolean);
             }
