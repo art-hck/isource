@@ -7,7 +7,6 @@
     <div class="app-control-error" *ngIf="form.get('name').errors as e">
       <span *ngIf="e.required">Обязательное поле</span>
     </div>
-
   </div>
 
 
@@ -23,6 +22,9 @@
             <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
+            <div class="app-control-error" *ngIf="form.get('deliveryDate').errors as e">
+              <span *ngIf="e.field">Неверная дата</span>
+            </div>
           </div>
           <clr-date-container #datepicker class="hidden-datepicker">
             <input clrDate formControlName="deliveryDate" />
@@ -41,6 +43,9 @@
       <div class="app-control-wrap">
         <input #deliveryBasis uxgInput lg formControlName="deliveryBasis">
         <label class="app-control-label" (click)="deliveryBasis.focus()">Базис поставки (пункт, до которого требуется доставка)</label>
+        <div class="app-control-error" *ngIf="form.get('deliveryBasis').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
   </div>
@@ -62,18 +67,27 @@
       <div class="app-control-wrap">
         <input #quantity uxgInput lg formControlName="quantity"/>
         <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+        <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <div class="app-control-wrap">
         <input #measureUnit uxgInput lg formControlName="measureUnit"/>
         <label class="app-control-label" (click)="measureUnit.focus()">Ед. измерения</label>
+        <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
       <div class="app-control-wrap">
         <input #startPrice uxgInput lg formControlName="startPrice"/>
         <label class="app-control-label" (click)="startPrice.focus()">Начальная макс. цена (необязательно)</label>
+        <div class="app-control-error" *ngIf="form.get('startPrice').errors as e">
+          <span *ngIf="e.min">Значение должно быть больше 0</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0 app-control-wrap" [style.width.px]="130">
@@ -91,6 +105,9 @@
       <div class="app-control-wrap">
         <input #productionDocument uxgInput lg formControlName="productionDocument"/>
         <label class="app-control-label" (click)="productionDocument.focus()">Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)</label>
+        <div class="app-control-error" *ngIf="form.get('productionDocument').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
@@ -131,8 +148,8 @@
       Все поля, кроме начальной максимальной цены и комментария, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
-      <button type="button" class="app-btn app-btn-secondary app-btn-large" (click)="cancel.emit()">Отмена</button>
-      <button class="app-btn app-btn-primary app-btn-large">Сохранить</button>
+      <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
+      <button uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
     </div>
   </div>
 </form>

@@ -9,7 +9,11 @@ export class UxgInputDirective implements OnInit {
   @Input() lg: boolean | string;
   @HostBinding('class.app-control') classInput = true;
   @HostBinding('class.app-control-large') get isLarge() { return this.is(this.lg); }
-  @HostBinding('class.app-control-label-shown') get labelShown() { return !!this.ngControl.control.value; }
+  @HostBinding('class.app-control-label-shown')
+  get labelShown() {
+    const value = this.ngControl.control.value;
+    return value !== null && value.toString().length;
+  }
 
   // true, если хотя бы 1 раз был onBlur
   private wasBlured = false;
