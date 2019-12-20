@@ -1,25 +1,16 @@
-<h6 class="pie-header">По статусам</h6>
-<div class="clr-row pie-header">
-  <div class="clr-col-7 agenda">
-    <div *ngFor="let statusCounter of getStatusCounters(positions)">
-      <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
-        <span class="column">
-          {{ statusCounter.positions.length / positions.length * 100 | number:'1.0-0' }}%
-        </span>
-        {{ statusCounter.shortName }}
-      </ng-container>
-      <ng-template #statusLabelSpan>
-        <span class="app-ghost-color column">
-          0%
-        </span>
-        {{ statusCounter.shortName }}
-      </ng-template>
+<h6 class="app-secondary-color">По статусам</h6>
+<div class="app-row">
+  <div class="app-col">
+    <div class="app-row" *ngFor="let statusCounter of statusCounters">
+      <div class="percent" [class.app-ghost-color]="statusCounter.positions.length === 0">
+        {{ statusCounter.positions.length / positions.length * 100 | number:'1.0-0' }}%
+      </div>
+      <div [style.color]="statusCounter.color">{{ statusCounter.shortName }}</div>
     </div>
   </div>
-  <div class="clr-col-5 pie-chart">
-    <canvas #canvas>
-    </canvas>
-    <div class="circle">
+  <div class="app-col clr-flex-grow-0">
+    <div class="pie-chart">
+      <canvas #chart></canvas>
     </div>
   </div>
 </div>

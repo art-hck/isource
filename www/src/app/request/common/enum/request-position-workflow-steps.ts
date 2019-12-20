@@ -1,3 +1,5 @@
+import { RequestPosition } from "../models/request-position";
+
 export enum RequestPositionWorkflowSteps {
   DRAFT = 'DRAFT',                                 // Черновик
   ON_CUSTOMER_APPROVAL = 'ON_CUSTOMER_APPROVAL',   // На согласовании заказчика
@@ -54,7 +56,7 @@ export const RequestPositionWorkflowStepsGroups = {
   ],
 };
 
-export const RequestPositionWorkflowStepsGroupsInfo = [
+export const RequestPositionWorkflowStepsGroupsInfo: RequestPositionWorkflowStepGroupInfo[] = [
   {
     url: "draft",
     label: "Черновик",
@@ -70,7 +72,7 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
     positions: [],
     shortName: "Новая",
     hasActions: false,
-    color: "#b3b3b3"
+    color: "#EB5757"
   },
   {
     url: "technical-proposals",
@@ -127,3 +129,13 @@ export const RequestPositionWorkflowStepsGroupsInfo = [
     color: "#20b55f"
   },
 ];
+
+export interface RequestPositionWorkflowStepGroupInfo {
+  url: string;
+  label: string;
+  statuses: RequestPositionWorkflowSteps[];
+  positions: RequestPosition[];
+  shortName: string;
+  hasActions: boolean;
+  color?: string;
+}
