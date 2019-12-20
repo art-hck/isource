@@ -1,0 +1,65 @@
+<div class="activation-splash">
+
+  <div class="activation-block-wrapper">
+
+    <div class="activation-form-block">
+
+      <div class="welcome-text">
+        <span class="title">Marketplace</span>
+      </div>
+
+      <div class="activation-form">
+
+        <div class="form-text">
+
+          <ng-container *ngIf="titleMessage; else loadingBlock">
+            <span class="title">{{ titleMessage }}</span>
+            <span class="description">
+              {{ descriptionMessage }}
+            </span>
+          </ng-container>
+
+          <ng-template #loadingBlock>
+            <div class="text-center">
+              <span class="spinner spinner-md"></span>
+            </div>
+          </ng-template>
+
+        </div>
+
+
+        <div class="clr-row">
+
+          <ng-container *ngIf="!errorCode && titleMessage">
+            <div class="clr-col">
+              <button [clrLoading]="loading"
+                      (click)="router.navigateByUrl('auth/login')"
+                      class="btn btn-primary">
+                Перейти к авторизации
+              </button>
+            </div>
+          </ng-container>
+
+
+          <ng-container *ngIf="errorCode === activationErrorCode.ACTIVATION_TOKEN_EXPIRED">
+            <div class="clr-col">
+              <button [clrLoading]="loading"
+                      (click)="resendActivationLink(activationToken)"
+                      class="btn btn-primary">
+                Отправить письмо ещё раз
+              </button>
+            </div>
+          </ng-container>
+
+        </div>
+
+      </div>
+
+      <div class="footer-text">
+        © Marketplace, 2020
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -37,12 +37,16 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
     'shipmentDateAsap': new FormControl(false),
   });
 
+  filterFormInitialState = {};
+
   constructor(
     private route: ActivatedRoute,
     private contragentService: ContragentService
   ) { }
 
   ngOnInit() {
+    this.filterFormInitialState = this.requestListFilterForm.value;
+
     this.subscription.add(
       this.route.params.pipe(
         // После того как проинициализировали форму, подписываемся на её изменения
@@ -85,7 +89,14 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
    * Сброс значений фильтра и подтягивание новых данных
    */
   resetFilter() {
-    this.requestListFilterForm.reset();
+    this.requestListFilterForm.reset({
+        requestNameOrNumber: '',
+        onlyOpenTasks: false,
+        customers: [],
+        shipmentDateFrom: '',
+        shipmentDateTo: '',
+        shipmentDateAsap: false
+      });
     if (this.backofficeView) {
       this.requestFilterCustomerListComponent.selectedCustomers = [];
       this.requestFilterCustomerListComponent.customerSearchValue = "";
@@ -96,7 +107,17 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
    * Сброс значений фильтра без обновления данных
    */
   clearFilter() {
-    this.requestListFilterForm.reset('', { emitEvent: false });
+    this.requestListFilterForm.reset({
+        requestNameOrNumber: '',
+        onlyOpenTasks: false,
+        customers: [],
+        shipmentDateFrom: '',
+        shipmentDateTo: '',
+        shipmentDateAsap: false
+      }, {
+        emitEvent: false
+      });
+
     if (this.backofficeView) {
       this.requestFilterCustomerListComponent.selectedCustomers = [];
       this.requestFilterCustomerListComponent.customerSearchValue = "";
@@ -108,7 +129,8 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
   }
 
   formIsFilled() {
-    return this.requestListFilterForm.dirty;
+    return this.requestListFilterForm.dirty &&
+      JSON.stringify(this.requestListFilterForm.value) !== JSON.stringify(this.filterFormInitialState);
   }
 
   hideFilterModal() {

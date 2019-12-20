@@ -48,6 +48,8 @@
   }
 }
 
-::ng-deep .login-form button.btn span {
+::ng-deep .login-form button.btn span,
+::ng-deep .change-password-form button.btn span,
+::ng-deep .forgot-password-form button.btn span {
   padding: 0;
 }
