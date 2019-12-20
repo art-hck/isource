@@ -47,6 +47,10 @@ export class AddOffersComponent implements OnInit {
   showAddOfferModal = false;
   editMode = false;
   offerForm: FormGroup;
+  procedureEndDateForm: FormGroup;
+
+  prolongationProcedureId: Uuid;
+  showProcedureProlongateModal = false;
 
   showImportOffersExcel = false;
 
@@ -69,7 +73,8 @@ export class AddOffersComponent implements OnInit {
   loaders = {
     creatingProcedure: ClrLoadingState.DEFAULT,
     sendOffers: ClrLoadingState.DEFAULT,
-    cancelPublish: ClrLoadingState.DEFAULT
+    cancelPublish: ClrLoadingState.DEFAULT,
+    prolongateProcedure: ClrLoadingState.DEFAULT
   };
 
   @ViewChild(SupplierSelectComponent, {static: false}) supplierSelectComponent: SupplierSelectComponent;
@@ -124,6 +129,10 @@ export class AddOffersComponent implements OnInit {
       paymentTerms: ['', Validators.required],
       id: [''],
       documents: [[]]
+    });
+
+    this.procedureEndDateForm = this.formBuilder.group({
+      procedureEndDate: ['', [Validators.required, CustomValidators.futureDate()]]
     });
   }
 
@@ -452,6 +461,31 @@ export class AddOffersComponent implements OnInit {
     );
   }
 
+  saveProcedureEndDate() {
+    this.loaders.prolongateProcedure = ClrLoadingState.LOADING;
+
+    let newProcedureEndDate = this.procedureEndDateForm.get('procedureEndDate').value;
+    newProcedureEndDate = moment(newProcedureEndDate, 'DD.MM.YYYY').format('YYYY-MM-DD');
+
+    const prolongateProcedureSubscription = this.offersService.prolongateProcedureEndDate(
+      this.requestId,
+      this.prolongationProcedureId,
+      newProcedureEndDate
+    ).subscribe(
+      () => {
+        this.loaders.prolongateProcedure = ClrLoadingState.SUCCESS;
+        this.updatePositionsAndSuppliers();
+        this.showProcedureProlongateModal = false;
+        prolongateProcedureSubscription.unsubscribe();
+      },
+      () => {
+        this.loaders.prolongateProcedure = ClrLoadingState.ERROR;
+        this.showProcedureProlongateModal = false;
+        prolongateProcedureSubscription.unsubscribe();
+      }
+    );
+  }
+
   getProcedureLink(requestPosition: RequestPosition): string {
     const procedureUrl = this.appConfig.procedure.url;
     const id = requestPosition.procedureId;
@@ -595,4 +629,10 @@ export class AddOffersComponent implements OnInit {
   protected getDurationChangeStatus(requestPosition: RequestPosition): number {
     return moment().diff(moment(requestPosition.statusChangedDate), 'seconds');
   }
+
+  openProcedureProlongateModal(procedureId) {
+    this.prolongationProcedureId = procedureId;
+    this.showProcedureProlongateModal = true;
+  }
+
 }
