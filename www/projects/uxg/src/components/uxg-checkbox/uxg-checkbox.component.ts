@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, HostBinding, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -15,6 +15,7 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
   public value: boolean;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
+  @HostBinding('attr.disabled')
   @Input() disabled: boolean;
 
   @Input() isMixed: boolean;

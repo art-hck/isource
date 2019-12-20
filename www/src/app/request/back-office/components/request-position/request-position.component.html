@@ -1,8 +1,10 @@
 <ng-container *ngIf="(position$ | async) as position">
   <app-request-position
     [requestId]="requestId"
-    [position]="position"
+    [(position)]="position"
     [statuses]="statuses"
-    (changeStatus)="changeStatus($event)">
+    (changeStatus)="changeStatus($event)"
+    (positionChange)="router.navigate(['..', position.id], {relativeTo: route})"
+  >
   </app-request-position>
 </ng-container>

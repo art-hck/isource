@@ -1,0 +1,138 @@
+<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+
+  <div class="app-control-wrap">
+    <!-- name -->
+    <input #name uxgInput lg formControlName="name">
+    <label class="app-control-label" (click)="name.focus()">Наименование МТР</label>
+    <div class="app-control-error" *ngIf="form.get('name').errors as e">
+      <span *ngIf="e.required">Обязательное поле</span>
+    </div>
+
+  </div>
+
+
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row clr-align-items-center">
+
+        <!-- deliveryDate -->
+        <div class="app-col">
+          <div class="app-control-wrap">
+            <input #deliveryDate uxgInput lg formControlName="deliveryDate">
+            <label class="app-control-label" (click)="deliveryDate.focus()" >Срок поставки</label>
+            <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            </label>
+          </div>
+          <clr-date-container #datepicker class="hidden-datepicker">
+            <input clrDate formControlName="deliveryDate" />
+          </clr-date-container>
+        </div>
+        <!-- isDeliveryDateAsap -->
+        <div class="app-col app-row clr-align-items-center">
+          <uxg-checkbox class="app-control" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
+          <label (click)="isDeliveryDateAsap.check($event)"> Как можно скорее</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- deliveryBasis -->
+    <div class="app-col">
+      <div class="app-control-wrap">
+        <input #deliveryBasis uxgInput lg formControlName="deliveryBasis">
+        <label class="app-control-label" (click)="deliveryBasis.focus()">Базис поставки (пункт, до которого требуется доставка)</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- paymentTerms -->
+  <div>
+    <label>Способ оплаты</label>
+    <uxg-dropdown placeholder="Способ оплаты" formControlName="paymentTerms">
+      <div uxgDropdownItem value="30 банковских дней по факту поставки">30 банковских дней по факту поставки</div>
+      <div uxgDropdownItem value="60 банковских дней по факту поставки">60 банковских дней по факту поставки</div>
+      <div uxgDropdownItem value="90 банковских дней по факту поставки">90 банковских дней по факту поставки</div>
+    </uxg-dropdown>
+  </div>
+
+  <br/>
+
+  <div class="app-row">
+    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
+      <div class="app-control-wrap">
+        <input #quantity uxgInput lg formControlName="quantity"/>
+        <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+      </div>
+    </div>
+    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
+      <div class="app-control-wrap">
+        <input #measureUnit uxgInput lg formControlName="measureUnit"/>
+        <label class="app-control-label" (click)="measureUnit.focus()">Ед. измерения</label>
+      </div>
+    </div>
+    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
+      <div class="app-control-wrap">
+        <input #startPrice uxgInput lg formControlName="startPrice"/>
+        <label class="app-control-label" (click)="startPrice.focus()">Начальная макс. цена (необязательно)</label>
+      </div>
+    </div>
+    <div class="app-col app-basis-auto clr-flex-grow-0 app-control-wrap" [style.width.px]="130">
+      <label>Валюта</label>
+      <uxg-dropdown placeholder="Валюта" formControlName="currency">
+        <ng-container *ngFor="let currency of currencies">
+          <div uxgDropdownItem [value]="currency.value">{{ currency.label }}</div>
+        </ng-container>
+      </uxg-dropdown>
+    </div>
+  </div>
+
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-control-wrap">
+        <input #productionDocument uxgInput lg formControlName="productionDocument"/>
+        <label class="app-control-label" (click)="productionDocument.focus()">Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)</label>
+      </div>
+    </div>
+    <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+      <uxg-checkbox class="app-control" #design formControlName="isDesignRequired"></uxg-checkbox>
+      <label (click)="design.check($event)">Требуется РКД</label>
+    </div>
+  </div>
+
+  <div class="app-row">
+
+    <!-- isShmrRequired | isPnrRequired | isInspectionControlRequired -->
+    <div class="app-col">
+      <h3>Необходимость сопутствующих услуг</h3>
+      <div class="app-row">
+        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+          <uxg-checkbox class="app-control" #shmr formControlName="isShmrRequired"></uxg-checkbox>
+          <label (click)="shmr.check($event)">ШМР</label>
+        </div>
+        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+          <uxg-checkbox class="app-control" #pnr formControlName="isPnrRequired"></uxg-checkbox>
+          <label (click)="pnr.check($event)">ПНР</label>
+        </div>
+        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+          <uxg-checkbox class="app-control" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
+          <label (click)="inspection.check($event)">Инспекционный контроль</label>
+        </div>
+      </div>
+    </div>
+    <div class="app-col">
+      <h3>Комментарий <span class="app-ghost-color" style="font-weight: normal">(не обязательно)</span></h3>
+      <!-- comment -->
+      <textarea uxgInput formControlName="comments"></textarea>
+    </div>
+  </div>
+  <br/>
+  <div class="app-row">
+    <div class="app-col">
+      Все поля, кроме начальной максимальной цены и комментария, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
+    </div>
+    <div class="app-col clr-flex-grow-0 app-basis-auto">
+      <button type="button" class="app-btn app-btn-secondary app-btn-large" (click)="cancel.emit()">Отмена</button>
+      <button class="app-btn app-btn-primary app-btn-large">Сохранить</button>
+    </div>
+  </div>
+</form>
