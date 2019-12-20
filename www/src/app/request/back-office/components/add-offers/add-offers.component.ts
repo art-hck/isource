@@ -231,7 +231,7 @@ export class AddOffersComponent implements OnInit {
   addOfferValues(requestPosition: RequestPosition): void {
     this.offerForm.reset();
     this.offerForm.patchValue({
-      'currency': requestPosition.currency,
+      'currency': 'RUB',
       'quantity': requestPosition.quantity,
       'measureUnit': requestPosition.measureUnit,
       'paymentTerms': requestPosition.paymentTerms,
