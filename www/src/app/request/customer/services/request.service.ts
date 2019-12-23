@@ -101,7 +101,7 @@ export class RequestService {
     });
 
     return this.api.post<RequestDocument[]>(
-      `requests/customer/${requestPosition.requestId}/positions/${requestPosition.id}/documents/upload`,
+      `requests/customer/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
       formData
     );
   }
