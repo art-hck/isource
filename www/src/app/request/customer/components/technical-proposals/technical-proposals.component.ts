@@ -3,7 +3,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { Request } from "../../../common/models/request";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { ActivatedRoute, Router } from "@angular/router";
-import { RequestService } from "../../../back-office/services/request.service";
+import { RequestService } from "../../services/request.service";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
 import { NotificationService } from "../../../../shared/services/notification.service";
@@ -12,6 +12,7 @@ import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import { UxgBreadcrumbsService } from "uxg";
+import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -101,6 +102,35 @@ export class TechnicalProposalsComponent implements OnInit {
         this.selectedTechnicalProposalsPositions = [];
       }
     );
+  }
+
+  onSelectAllPositions(event, i, technicalProposalPositions: TechnicalProposalPosition[]): void {
+    // TODO: 2019-11-06 Указать тип аргумента event
+    if (event.target.checked === true) {
+      this.selectedTechnicalProposalsPositions[i] = [];
+      technicalProposalPositions.forEach(technicalProposalPosition => {
+        if (this.isPositionSelectorAvailable(technicalProposalPosition)) {
+          technicalProposalPosition.checked = true;
+          this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+        }
+      });
+    } else {
+      this.selectedTechnicalProposalsPositions[i] = [];
+      technicalProposalPositions.forEach(technicalProposalPosition => {
+        technicalProposalPosition.checked = null;
+      });
+    }
+  }
+
+  areAllPositionsChecked(technicalProposalPositions: TechnicalProposalPosition[]) {
+    return !technicalProposalPositions.some(
+      technicalProposalPosition => technicalProposalPosition.checked !== true
+    );
+  }
+
+  hasSelectablePositions(technicalProposalPositions: TechnicalProposalPosition[]): boolean {
+    return technicalProposalPositions.some(technicalProposalPosition =>
+      this.isPositionSelectorAvailable(technicalProposalPosition));
   }
 
   isPositionSelectorAvailable(tpPosition: TechnicalProposalPosition): boolean {

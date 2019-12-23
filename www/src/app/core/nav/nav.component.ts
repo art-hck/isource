@@ -24,7 +24,8 @@ export class NavComponent {
     return this.router.isActive('auth/login', false) ||
       this.router.isActive('auth/registration', false) ||
       this.router.isActive('auth/forgot-password', false) ||
-      this.router.isActive('auth/change-password', false);
+      this.router.isActive('auth/change-password', false) ||
+      this.router.isActive('activate', false);
   }
 
   constructor(
