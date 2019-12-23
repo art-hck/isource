@@ -192,7 +192,7 @@ export class EditPositionInfoFormComponent implements OnInit {
     });
     const formData = dataForm.value['itemForm'];
 
-    this.createRequestService.addRequestPosition(this.requestPosition.requestId, formData).subscribe(
+    this.createRequestService.addRequestPosition(this.requestPosition.request.id, formData).subscribe(
       (updatedPosition) => {
         this.requestPosition = updatedPosition[0];
         this.afterSavePosition();
