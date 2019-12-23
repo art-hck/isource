@@ -10,6 +10,7 @@ import { AddTechnicalProposalsComponent } from "./components/add-technical-propo
 import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "../common/components/contract/contract.component";
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
+import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
           {
             path: "",
             component: BackOfficeRequestComponent,
+          },
+          {
+            path: 'technical-proposals',
+            component: RequestTechnicalProposalsComponent,
+            data: { title: "Технические предложения" }
           },
           {
             path: ':position-id',

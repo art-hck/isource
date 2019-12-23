@@ -15,6 +15,7 @@ import { RequestService } from "./services/request.service";
 import { SupplierSelectComponent } from './components/supplier-select/supplier-select.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { WizardCreateProcedureComponent } from './components/wizard-create-procedure/wizard-create-procedure.component';
+import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { WizardCreateProcedureComponent } from './components/wizard-create-proce
     RequestListViewComponent,
     SupplierSelectComponent,
     WizardCreateProcedureComponent,
-    RequestPositionComponent
+    RequestPositionComponent,
+    RequestTechnicalProposalsComponent
 
   ],
   imports: [
