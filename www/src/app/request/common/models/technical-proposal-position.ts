@@ -10,4 +10,5 @@ export class TechnicalProposalPosition {
   positionId: Uuid;
   technicalProposalId: Uuid;
   status: string;
+  checked?: boolean;
 }

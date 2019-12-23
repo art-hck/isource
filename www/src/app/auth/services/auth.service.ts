@@ -106,4 +106,15 @@ export class AuthService {
     const url = `change-password-by-code`;
     return this.http.post<null>(url, { password, code });
   }
+
+  activateAccount(activationCode: string) {
+    const url = `activation/${activationCode}`;
+    return this.http.post<null>(url, null);
+  }
+
+  resendActivationLink(activationCode: string) {
+    const url = `activation/resend/${activationCode}`;
+    return this.http.post<null>(url, null);
+  }
+
 }

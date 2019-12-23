@@ -9,16 +9,23 @@ import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { RequestPositionWorkflowSteps } from "../../common/enum/request-position-workflow-steps";
 import { User } from "../../../user/models/user";
+import { UserInfoService } from "../../../user/service/user-info.service";
 
 
 @Injectable()
 export class RequestService {
 
-  constructor(protected api: HttpClient) {
+  protected role: string;
+
+  constructor(
+    protected api: HttpClient,
+    public user: UserInfoService,
+  ) {
+    this.role = user.isBackOffice() ? 'backoffice' : 'customer';
   }
 
   getRequestInfo(id: Uuid) {
-    const url = `requests/backoffice/${id}/info`;
+    const url = `requests/${this.role}/${id}/info`;
     return this.api.post<Request>(url, {})
       .pipe(map(data => new Request(data)));
   }

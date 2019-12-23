@@ -137,4 +137,9 @@ export class OffersService {
 
     return formData;
   }
+
+  prolongateProcedureEndDate(requestId, prolongationProcedureId, newProcedureEndDate): Observable<any> {
+    const url = `requests/backoffice/${requestId}/procedures/${prolongationProcedureId}/change-end-registration`;
+    return this.api.post(url, { dateEndRegistration: newProcedureEndDate });
+  }
 }

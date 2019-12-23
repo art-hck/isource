@@ -1,11 +1,12 @@
 .gridable {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
 
   .document {
-    max-width: 33%;
-    flex-grow: 1;
+    width: 25%;
+    min-width: 310px;
+    padding: 10px 10px 10px 0;
+    box-sizing: border-box;
   }
 }
 
@@ -39,6 +40,8 @@
 
     .title {
       font-size: 1.2em;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .description {
