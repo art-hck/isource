@@ -62,7 +62,7 @@
     <ng-container *uxgTab="docTab">
       <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
         <h4>{{dateWithDocs.date}}</h4>
-        <app-document-simple-list [gridable]="true" [uploadLabel]="''" [documents]="dateWithDocs.documents"></app-document-simple-list>
+        <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="dateWithDocs.documents"></app-document-simple-list>
       </div>
     </ng-container>
     <ng-container *uxgTab="offersTab">

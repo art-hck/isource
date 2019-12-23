@@ -40,7 +40,7 @@
 
             <button class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
-                    [clrLoading]="creatingProcedureLoader">
+                    [clrLoading]="loaders.creatingProcedure">
               <b>Создать процедуру</b>
             </button>
           </div>
@@ -101,6 +101,7 @@
 
                 <div class="end-date-info gray">
                   Подведение итогов процедуры: <b>{{ requestPosition.procedureEndDate | date : 'shortDate' }}</b>
+                  (<a (click)="openProcedureProlongateModal(requestPosition.procedureId)">продлить</a>)
                 </div>
               </div>
 
@@ -317,6 +318,27 @@
               [disabled]="this.files.length === 0">
         Отправить
       </button>
+    </div>
+  </clr-modal>
+
+
+  <!-- Модальное окно редактирования даты окончания процедуры -->
+  <clr-modal class="procedure-prolongation" [(clrModalOpen)]="showProcedureProlongateModal">
+    <h3 class="modal-title">Продление процедуры</h3>
+
+    <div class="modal-body">
+      <form [formGroup]="procedureEndDateForm" (ngSubmit)="saveProcedureEndDate()">
+        <label for="procedureEndDate">Окончание процедуры:</label>
+        <input clrDate
+               type="date"
+               placeholder="ДД.ММ.ГГГГ"
+               appFormControlInvalidClass="invalid"
+               formControlName="procedureEndDate">
+        <br>
+        <button type="submit" class="btn btn-primary"
+                [clrLoading]="loaders.prolongateProcedure"
+                [disabled]="procedureEndDateForm.invalid">Сохранить</button>
+      </form>
     </div>
   </clr-modal>
 
