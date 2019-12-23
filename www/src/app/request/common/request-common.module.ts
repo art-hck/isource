@@ -34,6 +34,7 @@ import { RequestDashboardComponent } from './components/request-dashboard/reques
 import { RequestFilterCustomerListComponent } from './components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
 import { RequestInfoComponent } from "./components/request-info/request-info.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
+import { RequestTpFilterComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter.component";
 import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
 import { RequestListFilterSectionComponent } from "./components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
 import { RequestListNumberFilterComponent } from "./components/request-list/request-list-number-filter/request-list-number-filter.component";
@@ -83,6 +84,7 @@ const RequestCommonModuleDeclarations = [
   RequestFilterCustomerListComponent,
   RequestInfoComponent,
   RequestListComponent,
+  RequestTpFilterComponent,
   RequestListFilterComponent,
   RequestListFilterSectionComponent,
   RequestListNumberFilterComponent,

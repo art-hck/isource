@@ -1,0 +1,39 @@
+<ng-container class="load-block"
+              *ngIf="!customers">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<div class="search" *ngIf="showAll">
+  <input #customerSearchInput
+         type="text"
+         placeholder="Заказчик"
+         autocomplete="off"
+         [value]="customerSearchValue"
+         (input)="onCustomerSearchInputChange($event.target.value)" />
+</div>
+
+
+<div class="customers-list">
+  <ng-container *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue();">
+    <clr-checkbox-wrapper>
+      <input type="checkbox"
+             clrCheckbox
+             [checked]="checkIfCustomerIsChecked(customer.id)"
+             (input)="onCustomerSelected($event.target.value)"
+             value="{{ customer.id }}" />
+      <label>{{ customer.shortName }}</label>
+    </clr-checkbox-wrapper>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="
+    customers &&
+    limit > 0 &&
+    limit < customers.length && !showAll ||
+    (showAll && limit < ( getCustomers() | contragentSearchFilter: getCustomerSearchInputValue() ).length)">
+
+  <div class="show-all" (click)="showAll = !showAll">
+    <a>{{ showAll ? 'Свернуть' : 'Показать всех' }}</a>
+  </div>
+
+</ng-container>
