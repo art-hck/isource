@@ -1,5 +1,6 @@
 import {Uuid} from "../../../cart/models/uuid";
 import { BaseModel } from "../../../core/models/base-model";
+import { Request } from "./request";
 
 export class RequestPositionList extends BaseModel {
   /**
@@ -8,6 +9,6 @@ export class RequestPositionList extends BaseModel {
   id: Uuid|null;
   entityType?: string;
   createdDate: string;
-  requestId: Uuid;
+  request: Request;
   name: string;
 }
