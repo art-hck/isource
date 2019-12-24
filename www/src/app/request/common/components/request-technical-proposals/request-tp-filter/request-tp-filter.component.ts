@@ -4,7 +4,7 @@ import { RequestsListFilter } from "../../../models/requests-list/requests-list-
 import { debounceTime, filter, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { RequestFilterCustomerListComponent } from "./request-tp-filter-customer-list/request-tp-filter-customer-list.component";
+import { RequestTpFilterCustomerListComponent } from "./request-tp-filter-customer-list/request-tp-filter-customer-list.component";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
 
@@ -15,8 +15,8 @@ import { ContragentList } from "../../../../../contragent/models/contragent-list
 })
 export class RequestTpFilterComponent implements OnInit, OnDestroy {
 
-  @ViewChild(RequestFilterCustomerListComponent, {static: false})
-             requestFilterCustomerListComponent: RequestFilterCustomerListComponent;
+  @ViewChild(RequestTpFilterCustomerListComponent, {static: false})
+             requestTpFilterCustomerListComponent: RequestTpFilterCustomerListComponent;
 
   @Output() filter = new EventEmitter<RequestsListFilter>();
   @Output() showResults = new EventEmitter();
@@ -87,16 +87,14 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
    */
   resetFilter() {
     this.requestTpListFilterForm.reset({
-        requestNameOrNumber: '',
-        onlyOpenTasks: false,
-        customers: [],
-        shipmentDateFrom: '',
-        shipmentDateTo: '',
-        shipmentDateAsap: false
+      positionName: '',
+      contragents: [],
+      agreementState: [],
       });
     if (this.backofficeView) {
-      this.requestFilterCustomerListComponent.selectedCustomers = [];
-      this.requestFilterCustomerListComponent.customerSearchValue = "";
+      this.requestTpFilterCustomerListComponent.contragents = [];
+      this.requestTpFilterCustomerListComponent.agreementState = [];
+      this.requestTpFilterCustomerListComponent.positionName = "";
     }
   }
 
@@ -105,19 +103,17 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
    */
   clearFilter() {
     this.requestTpListFilterForm.reset({
-        requestNameOrNumber: '',
-        onlyOpenTasks: false,
-        customers: [],
-        shipmentDateFrom: '',
-        shipmentDateTo: '',
-        shipmentDateAsap: false
+      positionName: '',
+      contragents: [],
+      agreementState: [],
       }, {
         emitEvent: false
       });
 
     if (this.backofficeView) {
-      this.requestFilterCustomerListComponent.selectedCustomers = [];
-      this.requestFilterCustomerListComponent.customerSearchValue = "";
+      this.requestTpFilterCustomerListComponent.contragents = [];
+      this.requestTpFilterCustomerListComponent.agreementState = [];
+      this.requestTpFilterCustomerListComponent.positionName = "";
     }
   }
 

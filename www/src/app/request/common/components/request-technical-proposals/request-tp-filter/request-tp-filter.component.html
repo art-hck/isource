@@ -13,90 +13,51 @@
 
   <div class="filter-body">
 
-    <form [formGroup]="requestListFilterForm">
+    <form [formGroup]="requestTpListFilterForm">
 
       <app-request-list-filter-section
               class="filter-section"
-              [label]="'Номер или наименование'">
+              [label]="'Наименование позиции'">
 
         <input type="text"
-               placeholder="Номер заявки или наименование"
-               formControlName="requestNameOrNumber" />
+               placeholder="Введите наименование позиции.."
+               formControlName="positionName" />
 
       </app-request-list-filter-section>
-
-
-
-      <app-request-list-filter-section
-              style="display: none"
-              *ngIf="backofficeView"
-              class="filter-section"
-              [label]="'Задачи'">
-
-        <div class="clr-row clr-align-items-center">
-          <div class="clr-col">
-            <div class="toggle-label">
-              <label for="tasks-toggle">Есть открытые задачи</label>
-            </div>
-          </div>
-
-          <div class="clr-col-auto">
-            <div class="toggle-checkbox">
-              <input id="tasks-toggle" type="checkbox" name="tasks-toggle" formControlName="onlyOpenTasks" />
-              <label for="tasks-toggle"></label>
-            </div>
-          </div>
-        </div>
-
-      </app-request-list-filter-section>
-
 
 
       <app-request-list-filter-section
               *ngIf="backofficeView"
               class="filter-section"
-              [label]="'Заказчик'">
+              [label]="'Контрагент'">
 
-        <app-request-filter-customer-list
-                [customers]="customersList"
+        <app-request-tp-filter-customer-list
+                [contragents]="contragents"
                 [limit]="5"
-                formControlName="customers">
-        </app-request-filter-customer-list>
+                formControlName="contragents">
+        </app-request-tp-filter-customer-list>
 
       </app-request-list-filter-section>
 
 
 
       <app-request-list-filter-section
-              style="display: none"
+              *ngIf="backofficeView"
               class="filter-section"
-              [label]="'Даты поставки'">
+              [label]="'Контрагент'">
 
-        <div class="shipping-dates clr-row">
-          <div class="clr-col-6">
-            <input clrDate type="date" autocomplete="off" placeholder="Дата с" formControlName="shipmentDateFrom" />
-          </div>
-          <div class="clr-col-6">
-            <input clrDate type="date" autocomplete="off" placeholder="Дата по" formControlName="shipmentDateTo" />
-          </div>
-        </div>
-
-        <div class="clr-row clr-align-items-center">
-          <div class="clr-col-auto">
-            <div class="toggle-checkbox">
-              <input id="asap-toggle" type="checkbox" name="asap-toggle" formControlName="shipmentDateAsap" />
-              <label for="asap-toggle"></label>
-            </div>
-          </div>
-
-          <div class="clr-col">
-            <div class="toggle-label">
-              <label for="asap-toggle">Как можно скорее</label>
-            </div>
-          </div>
+        <div class="agreement-state-list">
+          <clr-checkbox-wrapper>
+            <input type="checkbox"
+                   clrCheckbox
+                   (input)="onAgreementStateSelected($event.target.value)"
+                   value="{{ agreement-state.id }}" />
+            <label>{{ customer.shortName }}</label>
+          </clr-checkbox-wrapper>
         </div>
 
       </app-request-list-filter-section>
+
 
     </form>
 

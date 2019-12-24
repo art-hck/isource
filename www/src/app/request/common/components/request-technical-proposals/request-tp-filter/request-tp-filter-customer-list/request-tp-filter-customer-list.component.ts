@@ -4,9 +4,9 @@ import { Uuid } from "../../../../../../cart/models/uuid";
 import { ContragentList } from "../../../../../../contragent/models/contragent-list";
 
 @Component({
-  selector: 'app-request-filter-customer-list',
-  templateUrl: './request-filter-customer-list.component.html',
-  styleUrls: ['./request-filter-customer-list.component.scss'],
+  selector: 'app-request-tp-filter-customer-list',
+  templateUrl: './request-tp-filter-customer-list.component.html',
+  styleUrls: ['./request-tp-filter-customer-list.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => RequestTpFilterCustomerListComponent),
@@ -15,12 +15,12 @@ import { ContragentList } from "../../../../../../contragent/models/contragent-l
 })
 export class RequestTpFilterCustomerListComponent implements ControlValueAccessor {
 
-  @Input() customers;
+  @Input() contragents;
   @Input() limit: number;
 
-  @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
+  @ViewChild('contragentSearchInput', { static: false }) contragentSearchInput: ElementRef;
 
-  customerSearchValue = "";
+  contragentSearchValue = "";
   selectedCustomers = [];
 
   value: Uuid[];
@@ -33,20 +33,20 @@ export class RequestTpFilterCustomerListComponent implements ControlValueAccesso
 
   getCustomers(): ContragentList[] {
     // Если showAll = true или не указан limit — возвращаем всё
-    if (this.customers) {
-      return this.customers.slice(0, this.showAll ? this.customers.length : (this.limit || this.customers.length));
+    if (this.contragents) {
+      return this.contragents.slice(0, this.showAll ? this.contragents.length : (this.limit || this.contragents.length));
     }
   }
 
   onCustomerSearchInputChange(value: string): void {
-    this.customerSearchValue = value;
+    this.contragentSearchValue = value;
   }
 
   getCustomerSearchInputValue(): string {
-    if (this.customerSearchValue && this.customerSearchInput) {
-      return this.customerSearchInput.nativeElement.value;
+    if (this.contragentSearchValue && this.contragentSearchInput) {
+      return this.contragentSearchInput.nativeElement.value;
     }
-    return this.customerSearchValue;
+    return this.contragentSearchValue;
   }
 
   onCustomerSelected(selectedCustomer) {

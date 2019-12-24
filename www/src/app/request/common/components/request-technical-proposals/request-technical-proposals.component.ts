@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { RequestFilterCustomerListComponent } from "../request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component";
-import { RequestTpFilterComponent } from "./request-technical-proposals-filter/request-technical-proposals-filter.component";
+import { RequestTpFilterComponent } from "./request-tp-filter/request-tp-filter.component";
 
 @Component({
   selector: 'app-request-technical-proposals',
@@ -10,7 +9,7 @@ import { RequestTpFilterComponent } from "./request-technical-proposals-filter/r
 export class RequestTechnicalProposalsComponent {
 
   @ViewChild(RequestTpFilterComponent, {static: false})
-  requestFilterCustomerListComponent: RequestTpFilterComponent;
+  requestTpFilterCustomerListComponent: RequestTpFilterComponent;
 
 
 }
