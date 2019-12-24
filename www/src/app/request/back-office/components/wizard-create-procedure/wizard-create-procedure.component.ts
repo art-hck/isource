@@ -227,16 +227,6 @@ export class WizardCreateProcedureComponent implements OnInit {
       procedureTitle: ['', Validators.required],
       dishonestSuppliersForbidden: [false],
       dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
-      summingupDate: ['', [Validators.required, CustomValidators.customDate('dateEndRegistration')]],
-    });
-
-    this.procedureBasicDataForm.get('summingupDate').disable();
-    this.procedureBasicDataForm.get('dateEndRegistration').valueChanges.subscribe(value => {
-      if (value) {
-        this.procedureBasicDataForm.get('summingupDate').enable();
-      } else {
-        this.procedureBasicDataForm.get('summingupDate').disable();
-      }
     });
   }
 
