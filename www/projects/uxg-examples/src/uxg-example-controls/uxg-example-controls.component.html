@@ -12,9 +12,17 @@
   </div>
   <div class="card-block">
     <div class="card-title">Checkbox control</div>
-    <div class="app-row">
+    <div class="app-row clr-align-items-center">
       <uxg-checkbox class="app-control" #controlCheckbox></uxg-checkbox>
       <label (click)="controlCheckbox.check($event)"> Check me</label>
+    </div>
+    <div class="app-row clr-align-items-center">
+      <uxg-checkbox [disabled]="true" class="app-control" #controlDisabledCheckbox></uxg-checkbox>
+      <label (click)="controlDisabledCheckbox.check($event)"> You can't check me</label>
+    </div>
+    <div class="app-row clr-align-items-center">
+      <uxg-checkbox [disabled]="true" [ngModel]="true" class="app-control" #controlDisabledCheckbox></uxg-checkbox>
+      <label (click)="controlDisabledCheckbox.check($event)"> You can't check me</label>
     </div>
     <uxg-code language="html">{{example3}}</uxg-code>
   </div>
