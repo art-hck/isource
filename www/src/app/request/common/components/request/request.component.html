@@ -74,7 +74,7 @@
 
           <!-- Позиция -->
           <ng-container *ngIf="asPosition(position) as position">
-            <a href="{{position.id}}" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
+            <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
               <ng-container *ngTemplateOutlet="positionItem; context: {
                 position: position,
                 formControl: formPositions.controls[i]
