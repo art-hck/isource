@@ -143,15 +143,4 @@
     margin-left: -30px;
     margin-top: 0;
     line-height: 18px;
-
-    &:before {
-        content: "";
-        display: block;
-        background: url('/assets/images/filter-icon.svg') 0 50% no-repeat;
-        background-size: 12px;
-        width: 12px;
-        height: 18px;
-        float: left;
-        margin-right: 10px;
-    }
 }
