@@ -77,6 +77,7 @@ export class RequestService {
     });
   }
 
+  // Функция не подсвечивается, но она на самом деле используется
   uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
     const formData = new FormData();
     files.forEach(file => {
