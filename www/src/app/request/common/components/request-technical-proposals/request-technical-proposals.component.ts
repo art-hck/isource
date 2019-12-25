@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Uuid} from "../../../../cart/models/uuid";
 import {Request} from "../../models/request";
 import {TechnicalProposal} from "../../models/technical-proposal";
@@ -15,7 +15,7 @@ import {TechnicalProposalsStatuses} from "../../enum/technical-proposals-statuse
   templateUrl: './request-technical-proposals.component.html',
   styleUrls: ['./request-technical-proposals.component.scss']
 })
-export class RequestTechnicalProposalsComponent {
+export class RequestTechnicalProposalsComponent implements OnInit {
 
   requestId: Uuid;
   request: Request;
