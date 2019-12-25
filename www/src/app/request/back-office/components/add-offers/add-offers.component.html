@@ -100,13 +100,16 @@
                 </a>
 
                 <div class="end-date-info gray">
-                  Подведение итогов процедуры: <b>{{ requestPosition.procedureEndDate | date : 'shortDate' }}</b>
+                  Окончание приема заявок: <b>{{ requestPosition.procedureEndDate | date : 'shortDate' }}</b>
                   (<a (click)="openProcedureProlongateModal(requestPosition.procedureId)">продлить</a>)
                 </div>
               </div>
 
               <span class="has-finished-procedure-label"
-                    *ngIf="positionHasFinishedProcedure(requestPosition)">Процедура завершена</span>
+                    *ngIf="positionHasFinishedProcedure(requestPosition)">
+                <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(requestPosition) }}">
+                  Процедура №{{ requestPosition.procedureId }} завершена
+                </a></span>
 
               <button *ngIf="availableCancelPublishOffers(requestPosition)"
                       class="btn btn-primary btn-cancel-publish"
@@ -328,7 +331,7 @@
 
     <div class="modal-body">
       <form [formGroup]="procedureEndDateForm" (ngSubmit)="saveProcedureEndDate()">
-        <label for="procedureEndDate">Окончание процедуры:</label>
+        <label for="procedureEndDate">Прием заявок до:</label>
         <input clrDate
                type="date"
                placeholder="ДД.ММ.ГГГГ"

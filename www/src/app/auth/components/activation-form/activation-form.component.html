@@ -51,6 +51,17 @@
             </div>
           </ng-container>
 
+
+          <ng-container *ngIf="errorCode === activationErrorCode.NOT_ACTIVATED">
+            <div class="clr-col">
+              <button [clrLoading]="loading"
+                      (click)="router.navigateByUrl('auth/login')"
+                      class="btn btn-primary">
+                Вернуться к авторизации
+              </button>
+            </div>
+          </ng-container>
+
         </div>
 
       </div>

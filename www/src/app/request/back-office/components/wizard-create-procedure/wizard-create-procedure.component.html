@@ -33,18 +33,17 @@
             </clr-checkbox-wrapper>
           </div>
           <div class="clr-row w-100">
-            <div class="clr-col-6 dates">
+            <div class="clr-col-auto dates">
               <label class="clr-control-label left" for="dateEndRegistration">Прием заявок до <b class="required-star">*</b>:</label>
               <input id="dateEndRegistration" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
                      formControlName="dateEndRegistration"
                      [class.invalid]="isDataFieldValid('dateEndRegistration')"/>
             </div>
-            <div class="clr-col-6 dates">
-              <label class="clr-control-label left" for="summingupDate">Подведение итогов <b class="required-star">*</b>:</label>
-              <input id="summingupDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate
-                     formControlName="summingupDate"
-                     [class.invalid]="isDataFieldValid('summingupDate')"/>
+
+            <div class="clr-col-6 date-disclaimer">
+              <span>Заявки будут приниматься до <b>23:59:59</b> указанной даты</span>
             </div>
+
           </div>
 
           <div class="clr-row w-100">
