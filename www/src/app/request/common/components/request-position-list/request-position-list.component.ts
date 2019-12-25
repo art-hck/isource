@@ -128,7 +128,7 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
     const requestPosition = new RequestPosition({
       id: null,
       name: null,
-      requestId: this.request.id,
+      request: this.request,
       entityType: 'POSITION',
     });
 
@@ -142,7 +142,7 @@ export class RequestPositionListComponent implements OnChanges, OnInit {
     const requestGroup = new RequestGroup({
       id: null,
       name: this.newGroupName,
-      requestId: this.request.id,
+      request: this.request,
       entityType: 'GROUP',
       positions: [],
     });

@@ -299,10 +299,6 @@ export class CommercialProposalsComponent implements OnInit {
 
   validPositionsCount(requestPositions: RequestPosition[], supplier: string): boolean {
     for (const requestPosition of requestPositions) {
-      if (this.positionHasWinner(requestPosition)) {
-        continue;
-      }
-
       const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
       if (supplierLinkedOffers[0] && supplierLinkedOffers[0].quantity !== requestPosition.quantity) {
         return false;
@@ -314,10 +310,6 @@ export class CommercialProposalsComponent implements OnInit {
 
   validPositionsDeliveryDate(requestPositions: RequestPosition[], supplier: string): boolean {
     for (const requestPosition of requestPositions) {
-      if (this.positionHasWinner(requestPosition)) {
-        continue;
-      }
-
       const supplierLinkedOffers = this.getSupplierLinkedOffers(requestPosition.linkedOffers, supplier);
       if (supplierLinkedOffers[0] &&
           !this.correctDeliveryDate(supplierLinkedOffers[0].deliveryDate, requestPosition.deliveryDate)

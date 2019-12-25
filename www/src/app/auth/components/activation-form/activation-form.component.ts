@@ -21,6 +21,8 @@ export class ActivationFormComponent implements OnInit {
   descriptionMessage: string;
   errorCode: string;
 
+  notActivated = false;
+
   activationToken: string;
   activationErrorCode = ActivationErrorCode;
 
@@ -33,8 +35,14 @@ export class ActivationFormComponent implements OnInit {
   ngOnInit() {
     this.activationToken = this.route.snapshot.queryParams.code;
 
-    if (this.activationToken) {
+    if (this.route.snapshot.queryParams.activated && this.route.snapshot.queryParams.activated === 'false') {
+      this.notActivated = true;
 
+      this.titleMessage = this.getErrorTitleByType(ActivationErrorCode.NOT_ACTIVATED);
+      this.descriptionMessage = this.getErrorDescriptionByType(ActivationErrorCode.NOT_ACTIVATED);
+      this.errorCode = ActivationErrorCode.NOT_ACTIVATED;
+      return;
+    } else if (this.activationToken) {
       this.loading = true;
 
       const subscription = this.authService.activateAccount(this.activationToken).subscribe(

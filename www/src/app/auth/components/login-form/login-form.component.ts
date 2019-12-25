@@ -6,6 +6,7 @@ import { AuthService } from "../../services/auth.service";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { switchMap } from "rxjs/operators";
+import { ActivationErrorCode } from "../../enum/activation-error-code";
 
 @Component({
   selector: 'app-login-form',
@@ -46,9 +47,16 @@ export class LoginFormComponent implements OnDestroy {
               .then(() => this.loading = false);
           },
           // если ошибка, то считаем что логин/пароль не подошли
-          () => {
-            this.authForm.setErrors({ invalid_credentials: true });
+          (errorResponse) => {
             this.loading = false;
+
+            if (errorResponse.error.error && errorResponse.error.error === ActivationErrorCode.NOT_ACTIVATED ) {
+              this.router.navigateByUrl('activate?activated=false');
+            }
+
+            if (errorResponse.error.title && errorResponse.error.title === ActivationErrorCode.INVALID_GRANT) {
+              this.authForm.setErrors({invalid_credentials: true});
+            }
           }
         ));
   }
