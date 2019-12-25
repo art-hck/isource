@@ -1,0 +1,125 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="app-card">
+    <h3>Новое техническое предложение</h3>
+
+    <!-- name -->
+    <div class="app-row clr-align-items-center">
+      <div class="app-col">
+        <div class="app-control-wrap">
+          <input #name uxgInput lg formControlName="name"/>
+          <label class="app-control-label" (click)="name.focus()">Наименование контрагента</label>
+        </div>
+      </div>
+      <div class="app-col app-secondary-color">
+        Начните вводить наименование контрагента или его ИНН и система предложит вам варианты
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- upload documents -->
+    <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
+    <div class="app-row">
+      <div class="app-col app-bold">
+        <div class="upload-area" hoverClass="upload-area-hover" (appOnDropFile)="filesDropped($event)">
+          <div>Перетащите документы сюда</div>
+        </div>
+      </div>
+      <div class="app-col app-row clr-justify-content-between clr-flex-column">
+        <div class="app-secondary-color">
+          Вы можете перетащить документы в окно слева, или нажать на кнопку ниже, и выбрать необходимые документы в
+          проводнике
+        </div>
+        <div>
+          <button type="button" uxgButton secondary (click)="inputFile.click()">Выбрать документы</button>
+          <input #inputFile type="file" multiple (change)="filesSelected($event)"/>
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- document list -->
+    <ng-container *ngIf="form.get('documents').value">
+      <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+      <app-document-upload-list
+        [documents]="form.get('documents').value"
+        (fileSelected)="form.get('documents').setValue($event)"
+        uploadLabel=""></app-document-upload-list>
+    </ng-container>
+
+    <div class="app-secondary-color">
+      Вы можете либо приложить необходимые документы, либо заполнить все заводсике наименования, либо приложить
+      документы и заполнить все заводские наименования.
+    </div>
+
+    <br/>
+    <br/>
+
+    <!-- positions -->
+    <div class="app-row">
+      <div class="app-col">
+        <small class="app-ghost-color app-bold">НАИМЕНОВАНИЕ ПОЗИЦИИ</small>
+        <div>
+          <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
+        </div>
+      </div>
+      <div class="app-col">
+        <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
+        <div>
+          <button type="button" uxgButton secondary [disabled]="!form.get('positions').value?.length > 0" (click)="manufacturerModal.open()">
+            Заполнить наименования
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="positions">
+      <div class="app-row" *ngFor="let positionWithManufacturerName of formPositions.value">
+        <div class="app-col">
+          {{positionWithManufacturerName.position.name}}
+        </div>
+        <div class="app-col app-secondary-color">
+          {{positionWithManufacturerName.manufacturer_name}}
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- footer -->
+    <div class="app-row clr-align-items-center">
+      <div class="app-col app-secondary-color">
+        Черновики технических предложений видны только сотрудникам бэкофиса, но не заказчику
+      </div>
+      <div class="app-col clr-flex-grow-0 app-basis-auto">
+        <button uxgButton secondary [disabled]="form.invalid">Сохранить черновик</button>
+        <button uxgButton primary [disabled]="form.invalid">Отправить на согласование</button>
+      </div>
+    </div>
+
+    <!-- modals -->
+    <clr-modal #positionsModal [clrModalSize]="'lg'" >
+      <h2 class="modal-title">Выбор позиций для технического предложения</h2>
+      <div class="modal-body">
+        <app-request-technical-proposals-create-positions
+          [request]="request"
+          (cancel)="positionsModal.close()"
+          (ngModelChange)="positionsModal.close()"
+          formControlName="positions"
+        ></app-request-technical-proposals-create-positions>
+      </div>
+    </clr-modal>
+
+    <clr-modal #manufacturerModal [clrModalSize]="'lg'" >
+      <h2 class="modal-title">Заполнение заводских наименований</h2>
+      <div class="modal-body">
+        <app-request-technical-proposals-create-manufacturer
+          (cancel)="manufacturerModal.close()"
+          (ngModelChange)="manufacturerModal.close()"
+         formControlName="positions"
+        ></app-request-technical-proposals-create-manufacturer>
+      </div>
+    </clr-modal>
+
+  </div>
+</form>

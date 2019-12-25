@@ -29,7 +29,7 @@
   background: uxg($theme, color-default);
   transition: background-color 250ms;
   border-radius: 8px;
-  padding: 17px 24px;
+  padding: 17px 20px;
 
   &-clickable:hover {
     background: uxg($theme, color-bg);
@@ -39,10 +39,11 @@
 .app-table {
   &:not(.app-no-border) > .app-row {
     @extend .app-card;
+    padding: 17px 6px;
   }
 
   & > .app-row {
-    padding: 17px 10px;
+    padding: 17px 6px;
 
     &:not(:first-child) {
       border-top: none;

@@ -97,7 +97,7 @@ $EDITOR src/app/config/app.config.ts
 ```bash
 cd $GPNMARKET_FRONT/www
 npm install
-ng serve
+npm start
 ```
 
 Вывод должен завершаться записью: `Compiled successfully.`
@@ -145,7 +145,7 @@ server {
 
 ```bash
 cd $GPNMARKET_FRONT/www
-ng build
+npm run build
 ```
 
 Результаты сборки будут доступны в папке `$GPNMARKET_FRONT/www/dist`
@@ -156,7 +156,7 @@ ng build
 
 ```bash
 cd $GPNMARKET_FRONT/www
-ng build --prod
+npm run build -- --prod
 ```
 
 Результаты сборки будут доступны в папке `$GPNMARKET_FRONT/www/dist`

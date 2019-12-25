@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
+import { RequestPosition } from "../../common/models/request-position";
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -21,7 +22,7 @@ export class TechnicalProposalsService {
 
   getTechnicalProposalsPositionsList(id: Uuid) {
     const url = `requests/backoffice/${id}/technical-proposals/positions`;
-    return this.api.get(url);
+    return this.api.get<RequestPosition[]>(url);
   }
 
   addTechnicalProposal(requestId: Uuid, technicalProposal) {

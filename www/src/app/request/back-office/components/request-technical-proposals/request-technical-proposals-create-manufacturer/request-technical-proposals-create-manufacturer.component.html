@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="submit(formPositions.controls)">
+  <div class="app-secondary-color">
+    Обратите внимание, что заводские наименованиея необходимо заполнить для всех выбранных позиций в одном техническом
+    предложении, частичное заполнение ЗН не допускается
+  </div>
+  <br/>
+  <br/>
+  <hr/>
+  <div class="app-table app-no-border">
+    <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
+      <ng-container *ngIf="positionControl.get('position').value as position" formArrayName="positions">
+        <div class="app-row" formGroupName="{{i}}">
+          <div class="app-col app-bold item-title">{{ position.name }}</div>
+          <div class="app-col"><input type="text" uxgInput formControlName="manufacturer_name"/></div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <hr/>
+  <br/>
+  <div class="app-row clr-justify-content-end">
+    <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
+    <button uxgButton lg primary [disabled]="form.invalid">Всё готово</button>
+  </div>
+</form>

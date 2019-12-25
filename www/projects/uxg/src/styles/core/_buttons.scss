@@ -9,6 +9,8 @@
   cursor: pointer;
   display: inline-block;
   font-size: uxg($theme, font-size-m);
+  font-weight: 500;
+  line-height: normal;
   min-height: 26px;
   overflow: hidden;
   padding: 0;
@@ -18,7 +20,6 @@
   transition-property: background-color, color, border;
   transition-timing-function: ease;
   white-space: nowrap;
-  line-height: normal;
 
   &:not(&-clear) {
     height: uxg($theme, control-height);
