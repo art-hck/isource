@@ -262,9 +262,10 @@
 
           <div class="table designDocumentationBody">
             <div class="clr-row" *ngFor="let designDocumentation of designDocumentations">
-              <div class="left clr-col title">{{designDocumentation.position.name}}</div>
-              <div class="left clr-col-6">
 
+              <div class="left clr-col-4 title">{{designDocumentation.position.name}}</div>
+
+              <div class="left clr-col-6">
                 <ng-container *ngFor="let designDoc of designDocumentation.designDocs">
                   <app-document-simple-list
                     *ngIf="designDoc.type !== designDocumentationType.REMARK"
@@ -273,9 +274,8 @@
                     [limit]="5"
                   ></app-document-simple-list>
                 </ng-container>
-
-
               </div>
+
               <div class="design-actions clr-col-2">
                 <ng-container [ngSwitch]="designDocumentation.status">
                   <clr-dropdown *ngSwitchCase="designDocStatus.ON_APPROVAL" class="bottom-right">
@@ -311,6 +311,7 @@
                   </span>
                 </ng-container>
                 <br/><br/>
+
                 <app-document-simple-list
                   [documents]="getRemark(designDocumentation)[0].documents"
                   [enableUpload]="false"
