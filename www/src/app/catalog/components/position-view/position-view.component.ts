@@ -4,7 +4,6 @@ import { CatalogPosition } from "../../models/catalog-position";
 import { CatalogService } from "../../services/catalog.service";
 import { ActivatedRoute } from "@angular/router";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
-import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { CatalogCategoryAttribute } from "../../models/catalog-category-attribute";
@@ -49,10 +48,9 @@ export class PositionViewComponent implements OnInit {
     return this.cartStoreService.isCatalogPositionInCart(position);
   }
 
-  setValidQuantity(value, quantityEl) {
+  setValidQuantity(value, quantityEl): void {
     if (value <= 0 || value === "") {
       quantityEl.value = 1;
     }
   }
-
 }
