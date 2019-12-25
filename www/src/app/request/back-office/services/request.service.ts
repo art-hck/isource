@@ -10,6 +10,7 @@ import { Request } from "../../common/models/request";
 import { RequestPositionWorkflowSteps } from "../../common/enum/request-position-workflow-steps";
 import { User } from "../../../user/models/user";
 import { UserInfoService } from "../../../user/service/user-info.service";
+import { RequestDocument } from "../../common/models/request-document";
 
 
 @Injectable()
@@ -74,6 +75,18 @@ export class RequestService {
     return this.api.post<{status: RequestPositionWorkflowSteps, statusLabel: string}>(url, {
       status: status
     });
+  }
+
+  uploadDocuments(requestPosition: RequestPosition, files: File[]): Observable<RequestDocument[]> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files[]', file, file.name);
+    });
+
+    return this.api.post<RequestDocument[]>(
+      `requests/backoffice/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
+      formData
+    );
   }
 
   setResponsibleUser(id: Uuid, user: User, positions: RequestPosition[]) {
