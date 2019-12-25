@@ -83,12 +83,18 @@
       </div>
       <div class="price-info">Количество</div>
       <div class="clr-row">
-        <input #quantity [disabled]="isPositionInCart(position)" type="number" class="quantity" value="1">
-        <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
+        <input #quantity
+               [disabled]="isPositionInCart(position)"
+               type="number"
+               class="quantity"
+               min="1"
+               value="1"
+               (input)="setValidQuantity($event.target.value, quantity)">
+        <button *ngIf="!isPositionInCart(position) && quantity.value > 0; else disabledButton" class="btn btn-primary in-cart"
                 (click)="onAddPositionToCart(position, +quantity.value)">
           <img src="../../../../assets/images/cart-button.svg">
         </button>
-        <ng-template #inCart>
+        <ng-template #disabledButton>
           <button class="btn btn-primary in-cart disabled-cart" disabled>
             <img src="../../../../assets/images/cart.svg">
           </button>

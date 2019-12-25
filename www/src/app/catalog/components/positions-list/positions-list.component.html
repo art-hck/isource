@@ -48,12 +48,19 @@
                 <p class="one-item">За 1 {{position.measureUnit}}</p>
               </div>
               <div class="clr-col inline nopadding">
-                <input #quantity [disabled]="isPositionInCart(position)" type="number" class="quantity" value="1">
-                <button *ngIf="!isPositionInCart(position); else inCart" class="btn btn-primary in-cart"
+                <input #quantity
+                       [disabled]="isPositionInCart(position)"
+                       type="number"
+                       min="1"
+                       class="quantity"
+                       value="1"
+                       (input)="setValidQuantity($event.target.value, quantity)">
+                <button *ngIf="!isPositionInCart(position) && quantity.value > 0; else disabledButton" class="btn btn-primary in-cart"
                         (click)="onAddPositionToCart(position, +quantity.value)">
                   <img src="../../../../assets/images/cart-button.svg">
                 </button>
-                <ng-template #inCart>
+
+                <ng-template #disabledButton>
                   <button class="btn btn-primary in-cart disabled-cart" disabled>
                     <img src="../../../../assets/images/cart.svg">
                   </button>
