@@ -155,7 +155,8 @@ export class RegistrationComponent implements OnInit {
       () => {
         Swal.fire({
           width: 500,
-          html: '<p class="text-alert">' + 'Регистрация прошла успешно</br></br>' + '</p>' +
+          html: '<p class="text-alert">' + 'Регистрация прошла успешно.</br></br>' +
+            'На Вашу почту отправлено письмо со ссылкой для активации учётной записи.</br></br></p>' +
             '<button id="submit" class="btn btn-primary">' +
             'ОК' + '</button>',
           showConfirmButton: false,
