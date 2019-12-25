@@ -28,7 +28,7 @@ import { PublishProcedureRequest } from '../../models/publish-procedure-request'
 import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
 import { ClrLoadingState } from "@clr/angular";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-add-offers',

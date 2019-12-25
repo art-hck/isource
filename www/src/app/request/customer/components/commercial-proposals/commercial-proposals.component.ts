@@ -12,8 +12,7 @@ import { RequestPositionWorkflowStatuses } from "../../../common/dictionaries/re
 import { RequestPositionWorkflowSteps } from "../../../common/enum/request-position-workflow-steps";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-commercial-proposals',

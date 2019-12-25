@@ -7,7 +7,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { RequestPositionWorkflowStepLabels } from "../../../common/dictionaries/request-position-workflow-step-labels";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({ templateUrl: './request-position.component.html' })
 export class RequestPositionComponent implements OnInit, OnDestroy {

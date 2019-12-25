@@ -6,7 +6,7 @@ import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
 import { Title } from "@angular/platform-browser";
 import { tap } from "rxjs/operators";
-import { UxgBreadcrumbsService } from "../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-contragent-info-view',

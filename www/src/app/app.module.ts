@@ -25,7 +25,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
-import { UxGuidlinesModule } from "./ux-guidlines/ux-guidlines.module";
+import { UxgModule } from "uxg";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 
@@ -50,7 +50,7 @@ registerLocaleData(localeRu, 'ru');
     ReactiveFormsModule,
     HttpClientModule,
     NgxDadataModule,
-    UxGuidlinesModule,
+    UxgModule,
     UserModule,
     WebsocketModule.config({
       url: AppConfig.endpoints.ws

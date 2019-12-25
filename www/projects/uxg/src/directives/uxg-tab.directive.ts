@@ -3,7 +3,6 @@ import { UxgTabTitleComponent } from "../components/uxg-tab-title/uxg-tab-title.
 import { Subscription } from "rxjs";
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[uxgTab]'
 })
 export class UxgTabDirective implements OnDestroy {

@@ -8,7 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prestart": "ng build uxg",
+    "prebuild": "ng build uxg"
   },
   "private": true,
   "dependencies": {

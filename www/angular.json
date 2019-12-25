@@ -207,6 +207,21 @@
           }
         }
       }
+    },
+    "uxg": {
+      "projectType": "library",
+      "root": "projects/uxg",
+      "sourceRoot": "projects/uxg/src",
+      "prefix": "uxg",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/uxg/tsconfig.json",
+            "project": "projects/uxg/ng-package.json"
+          }
+        }
+      }
     }
   },
   "defaultProject": "mall-front"

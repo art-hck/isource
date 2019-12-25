@@ -2,7 +2,7 @@
   class="app-control"
   type="checkbox"
   #checkbox
-  [disabled]="isDisabled"
+  [disabled]="disabled"
   [ngModel]="value"
   (input)="onChange && onChange($event.target.checked)"
   [class.mixed]="isMixed"

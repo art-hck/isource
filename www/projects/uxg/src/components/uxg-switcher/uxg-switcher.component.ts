@@ -1,24 +1,24 @@
-import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
-  selector: 'uxg-checkbox',
-  templateUrl: 'uxg-checkbox.component.html',
+  selector: 'uxg-switcher',
+  templateUrl: './uxg-switcher.component.html',
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => UxgCheckboxComponent),
+    useExisting: forwardRef(() => UxgSwitcherComponent),
     multi: true
   }]
 })
-
-export class UxgCheckboxComponent implements ControlValueAccessor {
+export class UxgSwitcherComponent implements ControlValueAccessor {
   public value: boolean;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
-  public isDisabled: boolean;
+  @Input() disabled: boolean;
 
   @Input() isMixed: boolean;
-  @ViewChild('checkbox', { static: false }) el: ElementRef;
+  @Input() label: string;
+  @Input() labelAlign: "left" | "right" = "left";
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -28,19 +28,18 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+  setDisabledState(disabled: boolean): void {
+    this.disabled = disabled;
   }
 
   writeValue(value: boolean | null): void {
     this.value = value;
   }
 
-  check(ev) {
-    this.el.nativeElement.click();
+  switch(ev, el) {
+    el.click();
     ev.preventDefault();
     ev.stopPropagation();
-    this.writeValue(this.el.nativeElement.checked);
+    this.writeValue(el.checked);
   }
-
 }

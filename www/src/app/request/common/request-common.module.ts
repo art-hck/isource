@@ -49,7 +49,7 @@ import { ContragentService } from "../../contragent/services/contragent.service"
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
-import { UxGuidlinesModule } from "../../ux-guidlines/ux-guidlines.module";
+import { UxgModule } from "uxg";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -101,7 +101,7 @@ const RequestCommonModuleDeclarations = [
     ReactiveFormsModule,
     TextMaskModule,
     ContragentModule,
-    UxGuidlinesModule
+    UxgModule
   ],
   providers: [
     GroupService,

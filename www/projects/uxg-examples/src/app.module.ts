@@ -14,7 +14,7 @@ import { UxgExampleControlsComponent } from "./uxg-example-controls/uxg-example-
 import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status/uxg-example-position-status.component";
 import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.component";
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
-import { UxGuidlinesModule } from "../../../src/app/ux-guidlines/ux-guidlines.module";
+import { UxgModule } from "uxg";
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { UxGuidlinesModule } from "../../../src/app/ux-guidlines/ux-guidlines.mo
     ReactiveFormsModule,
     CommonModule,
     ClarityModule,
-    UxGuidlinesModule
+    UxgModule
   ],
   bootstrap: [AppComponent]
 })

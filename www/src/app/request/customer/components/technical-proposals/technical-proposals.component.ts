@@ -11,9 +11,7 @@ import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/t
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
-import { Observable } from "rxjs";
-import { publishReplay, refCount } from "rxjs/operators";
-import { UxgBreadcrumbsService } from "../../../../ux-guidlines/components/uxg-breadcrumbs/uxg-breadcrumbs.service";
+import { UxgBreadcrumbsService } from "uxg";
 import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
@@ -52,8 +50,8 @@ export class TechnicalProposalsComponent implements OnInit {
       (request: Request) => {
         this.request = request;
         this.bc.breadcrumbs = [
-          {label: "Заявки", link: "/requests/customer/"},
-          {label: `Заявка №${this.request.number }`, link: "/requests/customer/" + this.request.id}
+          { label: "Заявки", link: "/requests/customer/" },
+          { label: `Заявка №${this.request.number }`, link: "/requests/customer/" + this.request.id }
         ];
       }
     );

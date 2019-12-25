@@ -3,13 +3,13 @@ import { AbstractControl, NgControl } from "@angular/forms";
 import { Subscription } from "rxjs";
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[uxgInput], [uxgInput][lg]',
 })
 export class UxgInputDirective implements OnInit {
   @Input() lg: boolean | string;
   @HostBinding('class.app-control') classInput = true;
   @HostBinding('class.app-control-large') get isLarge() { return this.is(this.lg); }
+  @HostBinding('class.app-control-label-shown') labelShown;
 
   // true, если хотя бы 1 раз был onBlur
   private wasBlured = false;
@@ -44,6 +44,7 @@ export class UxgInputDirective implements OnInit {
     } else {
       this.el.nativeElement.classList.remove('invalid');
     }
+    this.labelShown = !!control.value;
   }
 
   private is = (prop?: boolean | string) => prop !== undefined && prop !== false;
