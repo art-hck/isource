@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CatalogService } from "../../services/catalog.service";
 import { CatalogPosition } from "../../models/catalog-position";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
@@ -34,6 +34,12 @@ export class PositionsListComponent implements OnInit {
 
   isPositionInCart(position: CatalogPosition): boolean {
     return this.cartStoreService.isCatalogPositionInCart(position);
+  }
+
+  setValidQuantity(value, quantityEl) {
+    if (value <= 0 || value === "") {
+      quantityEl.value = 1;
+    }
   }
 
 }

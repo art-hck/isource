@@ -49,4 +49,10 @@ export class PositionViewComponent implements OnInit {
     return this.cartStoreService.isCatalogPositionInCart(position);
   }
 
+  setValidQuantity(value, quantityEl) {
+    if (value <= 0 || value === "") {
+      quantityEl.value = 1;
+    }
+  }
+
 }
