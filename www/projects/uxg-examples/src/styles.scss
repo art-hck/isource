@@ -1,0 +1,13 @@
+@import "../../../src/app/ux-guidlines/styles/default-theme";
+
+body {
+  max-width: 1280px;
+  padding: 40px;
+  margin: auto;
+  overflow-y: scroll;
+}
+
+*:focus {
+  outline: 0;
+}
+

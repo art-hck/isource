@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'uxg-guidlines',
-  templateUrl: 'ux-guidlines.component.html'
+  selector: 'uxg-root',
+  templateUrl: 'app.component.html'
 })
 
-export class UxGuidlinesComponent {
+export class AppComponent {
   readonly menu = [
     { path: 'grid-and-typography', title: 'Grid and typography' },
     { path: 'control', title: 'Controls' },

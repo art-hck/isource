@@ -138,6 +138,75 @@
           }
         }
       }
+    },
+    "uxg-examples": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/uxg-examples",
+      "sourceRoot": "projects/uxg-examples/src",
+      "prefix": "uxg",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/uxg-examples",
+            "index": "projects/uxg-examples/src/index.html",
+            "main": "projects/uxg-examples/src/main.ts",
+            "polyfills": "projects/uxg-examples/src/polyfills.ts",
+            "tsConfig": "projects/uxg-examples/tsconfig.json",
+            "aot": false,
+            "styles": [
+              "./node_modules/@clr/icons/clr-icons.min.css",
+              "./node_modules/@clr/ui/clr-ui.min.css",
+              "projects/uxg-examples/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/uxg-examples/src/environments/environment.ts",
+                  "with": "projects/uxg-examples/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 4201,
+            "browserTarget": "uxg-examples:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "uxg-examples:build:production"
+            }
+          }
+        }
+      }
     }
   },
   "defaultProject": "mall-front"

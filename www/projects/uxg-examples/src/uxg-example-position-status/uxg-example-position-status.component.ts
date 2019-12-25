@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RequestPositionWorkflowSteps } from "../../../../request/common/enum/request-position-workflow-steps";
+import { RequestPositionWorkflowSteps } from "../../../../src/app/request/common/enum/request-position-workflow-steps";
 
 @Component({
   selector: 'uxg-example-position-status',
