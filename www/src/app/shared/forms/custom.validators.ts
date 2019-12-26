@@ -95,6 +95,12 @@ export class CustomValidators {
     return valid ? null : {invalid_phone: true};
   }
 
+  static notEmpty(control: FormControl): any {
+    const value = control.value || '';
+    const valid = String(value).trim();
+    return valid ? null : { empty : true};
+  }
+
   static password(control: FormControl): any {
     const value = control.value || '';
     const valid = String(value).match(/(?=.*[0-9])(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=\S+$).{6,}/);
