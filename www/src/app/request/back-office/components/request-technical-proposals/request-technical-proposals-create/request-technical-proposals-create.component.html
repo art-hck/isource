@@ -37,16 +37,32 @@
       </div>
     </div>
 
-    <hr/>
+    <br/>
 
     <!-- document list -->
-    <ng-container *ngIf="form.get('documents').value">
+    <ng-container *ngIf="formDocuments.controls.length">
       <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
-      <app-document-upload-list
-        [documents]="form.get('documents').value"
-        (fileSelected)="form.get('documents').setValue($event)"
-        uploadLabel=""></app-document-upload-list>
+      <div class="documents">
+        <div class="app-row">
+          <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
+            <document-icon [name]="document.value.name"></document-icon>
+            <div class="documents-title">
+              <div>{{ document.value.name }}</div>
+              <div *ngIf="document.value.size > 0" class="app-secondary-color">
+                {{document.value.size | bytesToSize : 2}}
+              </div>
+            </div>
+            <div class="clr-align-self-start">
+              <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
+                <clr-icon shape="app-trash"></clr-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </ng-container>
+
+    <hr/>
 
     <div class="app-secondary-color">
       Вы можете либо приложить необходимые документы, либо заполнить все заводсике наименования, либо приложить
@@ -74,12 +90,19 @@
       </div>
     </div>
     <div class="positions">
-      <div class="app-row" *ngFor="let positionWithManufacturerName of formPositions.value">
+      <div class="app-row" *ngFor="let positionWithName of form.get('positions').value">
         <div class="app-col">
-          {{positionWithManufacturerName.position.name}}
+          {{positionWithName.position.name}}
         </div>
-        <div class="app-col app-secondary-color">
-          {{positionWithManufacturerName.manufacturer_name}}
+        <div class="app-col">
+          <ng-container *ngIf="positionWithName.manufacturer_name as name; else manufactureError">
+            <span class="app-secondary-color">{{ name }}</span>
+          </ng-container>
+          <ng-template #manufactureError>
+            <ng-container *ngIf="!isManufacturerPristine && form.get('positions').hasError('manufacturer_name_error')">
+              <span class="app-error-color app-bold">Необходимо заполнить!</span>
+            </ng-container>
+          </ng-template>
         </div>
       </div>
     </div>

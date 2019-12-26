@@ -1,10 +1,22 @@
 @import "projects/uxg/src/styles/index";
 
-.item-title {
-  line-height: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.item {
+  &-title {
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-quantity {
+    flex-grow: .15; // 15% width
+    max-width: 100px;
+  }
+
+  &-date {
+    max-width: 120px;
+    text-align: right;
+  }
 }
 
 hr {

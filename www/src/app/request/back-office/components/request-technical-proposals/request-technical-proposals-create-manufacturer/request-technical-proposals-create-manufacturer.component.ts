@@ -1,6 +1,6 @@
 import { Component, EventEmitter, forwardRef, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { RequestPositionList } from "../../../../common/models/request-position-list";
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
 
 @Component({
   selector: 'app-request-technical-proposals-create-manufacturer',
@@ -43,14 +43,14 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
     this.value = value;
     if (value) {
       this.formPositions.clear();
-      value.map(valueItem => this.formPositions.push(this.createFormGroupPosition(valueItem.position)));
+      value.map(valueItem => this.formPositions.push(this.createFormGroupPosition(valueItem)));
     }
   }
 
-  createFormGroupPosition(position: RequestPositionList) {
+  createFormGroupPosition(value: PositionWithManufacturerName) {
     return this.fb.group({
-      manufacturer_name: null,
-      position: position
+      position: value.position,
+      manufacturer_name: [value.manufacturer_name, Validators.required]
     });
   }
 
@@ -60,4 +60,7 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
     this.onChange(value);
   }
 
+  get pristineCount() {
+    return this.formPositions.controls.filter(c => !c.get('manufacturer_name').value).length;
+  }
 }

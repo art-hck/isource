@@ -4,9 +4,18 @@
     предложении, частичное заполнение ЗН не допускается
   </div>
   <br/>
-  <br/>
-  <hr/>
   <div class="app-table app-no-border">
+    <div class="app-row">
+      <div class="app-col">
+        <small class="app-ghost-color app-bold">НАИМЕНОВАНИИ ПОЗИЦИИ</small>
+      </div>
+      <div class="app-col app-row clr-justify-content-between">
+        <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
+        <small class="app-secondary-color">Остаталось заполнить: <b>{{ pristineCount }}</b></small>
+      </div>
+    </div>
+    <hr/>
+    <br/>
     <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
       <ng-container *ngIf="positionControl.get('position').value as position" formArrayName="positions">
         <div class="app-row" formGroupName="{{i}}">

@@ -6,6 +6,8 @@ import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGrou
 import { RequestPositionList } from "../../../../common/models/request-position-list";
 import { tap } from "rxjs/operators";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
+import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
+import { RequestPosition } from "../../../../common/models/request-position";
 
 @Component({
   selector: 'app-request-technical-proposals-create-positions',
@@ -24,10 +26,14 @@ export class RequestTechnicalProposalsCreatePositionsComponent implements OnInit
   public onChange: (value) => void;
   public positions$: Observable<RequestPositionList[]>;
   public form: FormGroup;
-  public value;
+  public value: PositionWithManufacturerName[];
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
+  }
+
+  get checkedFormPositions() {
+    return this.formPositions.controls.filter(control => control.get("checked").value);
   }
 
   constructor(
@@ -46,6 +52,8 @@ export class RequestTechnicalProposalsCreatePositionsComponent implements OnInit
 
   ngOnInit() {
     this.form = this.fb.group({
+      search: "",
+      checked: false,
       positions: this.fb.array([], CustomValidators.oneOrMoreSelected)
     });
 
@@ -69,8 +77,15 @@ export class RequestTechnicalProposalsCreatePositionsComponent implements OnInit
   }
 
   submit(controls: AbstractControl[]) {
-    const value = controls.filter(group => group.get("checked").value).map(control => control.value);
+    const value = controls.filter(group => group.get("checked").value).map(control => {
+      const existPos = (this.value || []).find(val => val.position === control.get('position').value);
+      return {...control.value, ...existPos};
+    });
     this.writeValue(value);
     this.onChange(value);
+  }
+
+  isFiltered(position: RequestPosition) {
+    return position.name.toLowerCase().indexOf(this.form.get("search").value.toLowerCase()) >= 0;
   }
 }

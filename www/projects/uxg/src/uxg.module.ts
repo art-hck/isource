@@ -17,6 +17,7 @@ import { UxgButtonDirective } from './directives/uxg-button.directive';
 import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
 import { UxgBreadcrumbsComponent } from './components/uxg-breadcrumbs/uxg-breadcrumbs.component';
 import { RouterModule } from "@angular/router";
+import { UxgSelectAllDirective } from "./directives/uxg-select-all.directive";
 
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -39,6 +40,7 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgTabTitleComponent,
     UxgInputDirective,
     UxgButtonDirective,
+    UxgSelectAllDirective,
     UxgCodeComponent,
     UxgBreadcrumbsComponent
   ],
@@ -54,7 +56,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgBreadcrumbsComponent,
     UxgCodeComponent,
     UxgInputDirective,
-    UxgButtonDirective
+    UxgButtonDirective,
+    UxgSelectAllDirective
   ],
 })
 export class UxgModule {
