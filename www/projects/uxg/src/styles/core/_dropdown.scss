@@ -30,6 +30,7 @@
     display: flex;
     justify-content: space-between;
     padding-right: 0;
+    transition: border 250ms;
 
     &:hover {
       border-color: uxg($theme, color-control-primary);

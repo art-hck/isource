@@ -125,17 +125,23 @@
           <div class="app-bold">{{ position.comments }}</div>
         </ng-container>
 
-        <button class="app-btn app-btn-secondary" (click)="edit.open()">
-          <clr-icon shape="app-pen"></clr-icon>
-          <span>Редактировать</span>
-        </button>
+        <div>
+          <button class="app-btn app-btn-secondary" (click)="edit.open()">
+            <clr-icon shape="app-pen"></clr-icon>
+            <span>Редактировать</span>
+          </button>
+        </div>
 
-        <clr-modal #edit [clrModalStaticBackdrop]="false">
-          <h3 class="modal-title">{{ position.name }}</h3>
-          <div class="modal-body">Not implemented yet</div>
-          <div class="modal-footer">
-            <button class="app-btn app-btn-secondary app-btn-large" (click)="edit.close()">Отмена</button>
-            <button class="app-btn app-btn-primary app-btn-large" (click)="edit.close()">Сохранить</button>
+        <clr-modal #edit [clrModalStaticBackdrop]="false" clrModalSize="lg">
+          <h2 class="modal-title">Редактирование общей информации по позиции</h2>
+          <div class="modal-body">
+            <app-request-position-form
+              *ngIf="edit._open"
+              [reqeustId]="requestId"
+              [(position)]="position"
+              (cancel)="edit.close()"
+              (positionChange)="positionChange.emit($event); edit.close()"
+            ></app-request-position-form>
           </div>
         </clr-modal>
       </div>

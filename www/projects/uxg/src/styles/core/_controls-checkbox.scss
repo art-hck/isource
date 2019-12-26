@@ -79,5 +79,18 @@
     transform: rotate(90deg) scale(1);
     width: 2px;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    & + .app-control-checkbox {
+      border-color: uxg($theme, color-soft);
+      background: uxg($theme, color-control-disabled);
+      cursor: default;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
 }
 }

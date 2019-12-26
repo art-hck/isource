@@ -2,34 +2,88 @@
 
 @mixin controls-input($theme) {
 .app-control {
-  &[type=text], &[type=password] {
-    border-radius: uxg($theme, control-border-radius);
-    border: 1px solid uxg($theme, color-control-secondary);
-    height: uxg($theme, control-height);
-    cursor: text;
-    margin-bottom: 2em;
+  @at-root {
+    textarea#{&}, input#{&} {
+      border: 1px solid uxg($theme, color-control-secondary);
+      border-radius: uxg($theme, control-border-radius);
+      cursor: text;
+      display: block;
+      height: uxg($theme, control-height);
+      margin: 1.5em 0;
+      padding: 10px;
+      width: 100%;
+      transition: border 250ms;
 
-    &.app-control-large {
-      height: uxg($theme, control-height-l);
-    }
+      &-large {
+        height: uxg($theme, control-height-l);
+      }
 
-    &:not(.invalid):focus {
-      border-color: uxg($theme, color-control-primary);
-    }
+      &:not(.invalid):focus {
+        border-color: uxg($theme, color-control-primary);
+      }
 
-    & + .app-control-error {
-      display: none;
-      margin-top: -2em;
-      margin-bottom: 1em;
-    }
+      & ~ .app-control-error {
+        animation: app-control-error-show 250ms;
+        bottom: 0;
+        display: none;
+        padding: 2px 0;
+        position: absolute;
+        transform: translateY(100%);
+        transform-origin: top;
+      }
 
-    &.invalid {
-      border-color: uxg($theme, color-control-invalid);
+      &.invalid {
+        border-color: uxg($theme, color-control-invalid);
 
-      & + .app-control-error {
-        display: block;
+        & ~ .app-control-error {
+          display: block;
+        }
       }
     }
+
+    &:focus, &.app-control-label-shown {
+      & + .app-control-label {
+        color: uxg($theme, color-font-secondary);
+        cursor: default;
+        height: uxg($theme, font-size-m) * 1.285;
+        transform: translateY(calc(-100% - 4px)) scale(0.785);
+      }
+    }
+
+    & ~ &-label {
+      color: uxg($theme, color-font-ghost);
+      cursor: text;
+      height: 100%;
+      border: 1px transparent solid;
+      line-height: uxg($theme, font-size-m) * 1.286;
+      position: absolute;
+      transform: translateX(10px);
+      transform-origin: bottom left;
+      transition: transform 200ms, height 200ms, color 200ms;
+      top: 0;
+
+      &:after {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+
+    & ~ &-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      margin: 0 10px;
+      display: flex;
+      align-items: center;
+      color: uxg($theme, color-font-ghost);
+    }
+  }
+
+  &-wrap {
+    position: relative;
   }
 
   &-error > * {
@@ -40,3 +94,16 @@
   }
 }
 }
+
+@keyframes app-control-error-show {
+  0% {
+    transform: translateY(100%) scaleY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(100%) scaleY(1);
+    opacity: 1;
+  }
+}
+

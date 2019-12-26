@@ -1,32 +1,27 @@
-.circle {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: white;
-  top: 20px;
-  margin-left: 20px;
+h6 {
+  margin: 10px 0;
 }
 
 .pie-chart {
   position: relative;
-  padding: 0;
-  max-width: 100px;
   display: block;
+
+  &:after {
+    content: "";
+    top:0;
+    left: 0;
+    position: absolute;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    border-radius: 50%;
+    background-color: white;
+    margin: 20px;
+  }
+
+  canvas { display: block; }
 }
 
-.agenda {
-  padding-right: 0;
-  line-height: 1.1rem;
-  min-width: 190px;
-}
-
-.column {
-  display: inline-block;
+.percent {
   width: 40px;
   font-weight: 500;
-}
-
-.pie-header {
-  margin-top: 10px;
 }

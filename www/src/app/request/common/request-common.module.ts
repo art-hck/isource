@@ -50,6 +50,7 @@ import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filte
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { UxgModule } from "uxg";
+import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -87,6 +88,7 @@ const RequestCommonModuleDeclarations = [
   RequestListPositionStatusesFilterComponent,
   RequestListStatusesFilterComponent,
   RequestPositionComponent,
+  RequestPositionFormComponent,
   RequestPositionListComponent,
   RequestViewComponent,
   SearchFilterPipe

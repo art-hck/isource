@@ -13,6 +13,10 @@
   color: uxg($theme, color-font-secondary);
 }
 
+.app-error-color {
+  color: uxg($theme, color-control-invalid);
+}
+
 .app-basis-auto {
   flex-basis: auto;
 }

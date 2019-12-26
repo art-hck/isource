@@ -17,6 +17,7 @@ export class RequestPositionComponent implements OnInit {
   @Input() position: RequestPosition;
   @Input() statuses: [string, string][];
   @Output() changeStatus = new EventEmitter<{ status, position }>();
+  @Output() positionChange = new EventEmitter<RequestPosition>();
   datesWithDocuments: DateWithDocuments[];
 
   constructor(private positionStatusService: RequestPositionStatusService, public user: UserInfoService) {}

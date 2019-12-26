@@ -1,60 +1,47 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
-import { RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
+import { RequestPositionWorkflowStepGroupInfo, RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
 
 @Component({
   selector: 'app-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
-export class PieChartComponent {
+export class PieChartComponent implements OnInit {
 
   @Input() positions: RequestPosition[];
-  @ViewChild('canvas', {static: true}) canvas: ElementRef;
+  @ViewChild('chart', {static: true}) chart: ElementRef;
+  statusCounters: RequestPositionWorkflowStepGroupInfo[];
 
-  radius = 50;
-  positionsCounterDegrees = [];
+  ngOnInit() {
+    this.statusCounters = this.getStatusCounters(this.positions);
+    const cx = this.chart.nativeElement.getContext('2d');
+    const R = 50; // Радиус
+    const total = this.statusCounters.reduce(
+      (sum, statusCounter) => sum + statusCounter.positions.length, 0
+    );
 
-  getStatusCounters(positions: RequestPosition[]) {
-    const cx = this.canvas.nativeElement.getContext('2d');
+    cx.canvas.width = R * 2;
+    cx.canvas.height = R * 2;
+
+    let  currentAngle = -0.5 * Math.PI;
+    this.statusCounters.forEach(statusCounter => {
+      const nextAngle = currentAngle + (statusCounter.positions.length / total) * 2 * Math.PI;
+      cx.beginPath();
+      cx.arc(R, R, R, currentAngle, nextAngle);
+      currentAngle = nextAngle;
+      cx.lineTo(R, R);
+      cx.fillStyle = statusCounter.color;
+      cx.fill();
+    });
+  }
+
+  private getStatusCounters(positions: RequestPosition[]) {
     return RequestPositionWorkflowStepsGroupsInfo
+      .filter(statusCounter => statusCounter.color)
       .map(statusCounter => ({
         ...statusCounter,
         positions: positions.filter(position => statusCounter.statuses.indexOf(position.status) >= 0)
-      }))
-      .map((statusCounter, index) => {
-        this.positionsCounterDegrees[index] = statusCounter.positions.length / this.positions.length * 360;
-        this.drawSegment(cx, index, statusCounter.color);
-        return statusCounter;
-      });
-  }
-
-  drawSegment(context, i, color) {
-
-    const radius = this.radius;
-
-    const startingAngle = this.degreesToRadians(this.sumTo(this.positionsCounterDegrees, i));
-    const arcSize = this.degreesToRadians(this.positionsCounterDegrees[i]);
-
-    context.beginPath();
-    context.moveTo(radius, radius);
-    context.arc(radius, radius, radius, startingAngle, startingAngle + arcSize);
-    context.closePath();
-    context.fillStyle = color;
-    context.fill();
-
-    context.restore();
-  }
-
-  degreesToRadians(degrees) {
-    return (degrees * Math.PI) / 180;
-  }
-
-  sumTo(a, i) {
-    let sum = 0;
-    for (let j = 0; j < i; j++) {
-      sum += a[j];
-    }
-    return sum;
+      }));
   }
 }
