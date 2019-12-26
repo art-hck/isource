@@ -92,6 +92,6 @@ h4.position-title {
   min-width: 150px;
 }
 
-::ng-deep .nav .nav-link.btn {
-  font-size: 11px!important;
+::ng-deep .position-info-tabs li.nav-item button {
+  font-size: 11px;
 }

@@ -78,8 +78,8 @@ export class DesignDocumentationComponent implements OnInit {
 
     this.request$ = this.request$.pipe(tap(request => {
       this.bc.breadcrumbs = [
-        { label: "Заявки", link: "../.." },
-        { label: `Заявка №${request.number }`, link: ".." }
+        { label: "Заявки", link: this.router.createUrlTree(["../.."], { relativeTo: this.route }).toString() },
+        { label: `Заявка №${request.number }`, link: this.router.createUrlTree([".."], { relativeTo: this.route }).toString() }
       ];
     }));
 

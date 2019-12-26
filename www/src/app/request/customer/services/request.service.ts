@@ -59,7 +59,7 @@ export class RequestService {
         requestPositionsList.reduce(
           function flatPositionList(arr, curr: RequestPositionList) {
             if (curr instanceof RequestGroup) {
-              return flatPositionList(curr.positions, null);
+              return [...arr, ...flatPositionList(curr.positions, null)];
             } else {
               return [...arr, curr].filter(Boolean);
             }
@@ -101,7 +101,7 @@ export class RequestService {
     });
 
     return this.api.post<RequestDocument[]>(
-      `requests/customer/${requestPosition.requestId}/positions/${requestPosition.id}/documents/upload`,
+      `requests/customer/${requestPosition.request.id}/positions/${requestPosition.id}/documents/upload`,
       formData
     );
   }

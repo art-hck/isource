@@ -240,7 +240,7 @@ export class AddOffersComponent implements OnInit {
   addOfferValues(requestPosition: RequestPosition): void {
     this.offerForm.reset();
     this.offerForm.patchValue({
-      'currency': requestPosition.currency,
+      'currency': 'RUB',
       'quantity': requestPosition.quantity,
       'measureUnit': requestPosition.measureUnit,
       'paymentTerms': requestPosition.paymentTerms,
@@ -328,23 +328,22 @@ export class AddOffersComponent implements OnInit {
 
   onSelectAllPositions(event, requestPositions: RequestPosition[]): void {
     // TODO: 2019-11-06 Указать тип аргумента event
-    if (event.target.checked === true) {
-      this.selectedRequestPositions = [];
-      requestPositions.forEach(requestPosition => {
-        if (requestPosition.linkedOffers.length !== 0) {
-          requestPosition.checked = true;
-          this.selectedRequestPositions.push(requestPosition);
-        }
-      });
-    } else {
-      this.selectedRequestPositions = [];
+    this.selectedRequestPositions = [];
 
-      requestPositions.forEach(requestPosition => {
-        if (requestPosition.linkedOffers.length !== 0) {
-          requestPosition.checked = null;
-        }
-      });
-    }
+    requestPositions.forEach(requestPosition => {
+      // если позицию нельзя выделить, то на всякий случай снимем с нее галочку
+      if (!this.positionCanBeSelected(requestPosition)) {
+        requestPosition.checked = null;
+        return;
+      }
+
+      if (event.target.checked === true) {
+        requestPosition.checked = true;
+        this.selectedRequestPositions.push(requestPosition);
+      } else {
+        requestPosition.checked = null;
+      }
+    });
   }
 
   areAllPositionsChecked(requestPositions: RequestPosition[]): boolean {

@@ -1,8 +1,118 @@
-<div class="clr-row">
-  <div class="clr-col-9"></div>
+<div class="app-row">
+  <div class="app-col app-table app-no-border">
+    <div class="app-row action-bar">
+      <div class="app-col app-basis-auto clr-flex-grow-0">
 
+        <!-- Создать процедуру  -->
+        <button class="app-btn app-btn-secondary app-btn-icon-text">
+          <clr-icon shape="app-plus"></clr-icon>
+          <span>Создать процедуру</span>
+        </button>
 
-  <div class="clr-col-3">
-    <app-request-tp-list-filter></app-request-tp-list-filter>
+        <!-- Новое ТП  -->
+        <button class="app-btn app-btn-primary app-btn-icon-text">
+          <clr-icon shape="app-plus"></clr-icon>
+          <span>Новое ТП</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Карточка ТП -->
+<div class="app-table tp-card" *ngFor="let technicalProposal of (technicalProposals$ | async); let i = index">
+  <div class="app-row">
+    <div class="app-col">
+      <div class="tp-header">
+        <div class="app-col">
+          <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
+            <h3>
+              <app-contragent-info-link
+                [contragent]="technicalProposal.supplierContragent">
+              </app-contragent-info-link>
+            </h3>
+          </ng-container>
+
+          <ng-template #noContragent>
+            <span>Отсутствует наименование контрагента</span>
+          </ng-template>
+        </div>
+
+        <div class="app-col app-col-aside status">
+          <div [ngClass]="{'accepted': technicalProposal.status === 'ACCEPTED',
+                           'declined': technicalProposal.status === 'DECLINED',
+                           'draft': technicalProposal.status === 'NEW',
+                           'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
+            <clr-icon shape="app-check"
+                      *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
+            <clr-icon shape="app-cross"
+                      *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
+            <clr-icon shape="app-doc"
+                      *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
+            <clr-icon shape="app-warning"
+                      *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
+            <b>{{ tpStatusLabel(technicalProposal) }}</b>
+          </div>
+          <button uxgButton link icon [disabled]="!isTpEditable(technicalProposal)">
+            <clr-icon shape="app-pen"></clr-icon>
+          </button>
+          <button uxgButton link icon>
+            <clr-icon shape="app-chevron"
+                      [dir]="isFolded[i] ? 'up':'down'" (click)="isFolded[i] = !isFolded[i]"></clr-icon>
+          </button>
+        </div>
+      </div>
+      <div class="extendable-block" *ngIf="!isFolded[i]">
+
+        <!-- Секция докуметов ТП -->
+        <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
+          <hr>
+          <div class="section">
+            <span class="upper-label">документы предложения</span>
+            <app-document-simple-list
+              [gridable]="true"
+              [enableUpload]="false"
+              [documents]="technicalProposal.documents">
+            </app-document-simple-list>
+          </div>
+        </div>
+
+        <!-- Секция списка позиций ТП -->
+        <hr>
+        <div class="app-row position-list section">
+          <div class="app-col upper-label">Наименование позиции</div>
+          <div class="app-col upper-label">Заводское наименование</div>
+          <div class="app-col upper-label">Решение принято</div>
+          <div class="app-col icon-status"></div>
+        </div>
+        <div class="app-row position-list" *ngFor="let technicalProposalPosition of technicalProposal.positions">
+          <div class="app-col">{{ technicalProposalPosition.position.name }}</div>
+          <div class="app-col">
+            <ng-container *ngIf="technicalProposalPosition.manufacturingName; else noItem">
+              <span class="grey">{{ technicalProposalPosition.manufacturingName }}</span>
+            </ng-container>
+          </div>
+          <div class="app-col">
+            <ng-container class="user" *ngIf="technicalProposalPosition.history; else noItem">
+              {{ technicalProposalPosition.history?.user.shortName }}
+              <span class="light-grey">
+              {{ technicalProposalPosition.history?.createdDate | date:'shortDate' }}
+            </span>
+            </ng-container>
+          </div>
+          <div class="app-col icon-status">
+            <clr-icon class="accepted"
+                      shape="app-check"
+                      *ngIf="technicalProposalPosition.status === 'ACCEPTED'"></clr-icon>
+            <clr-icon class="declined"
+                      shape="app-cross"
+                      *ngIf="technicalProposalPosition.status === 'DECLINED'"></clr-icon>
+          </div>
+          <ng-template #noItem>
+            <span class="light-grey">—</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
