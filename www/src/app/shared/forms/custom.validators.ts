@@ -151,6 +151,14 @@ export class CustomValidators {
     };
   }
 
+  static futureDateOrToday(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const controlDate = moment(control.value, 'DD.MM.YYYY');
+      const validationDate = moment(new Date(), 'DD.MM.YYYY');
+      return controlDate.isSameOrBefore(validationDate) ? null : { 'notFutureDateOrToday': true };
+    };
+  }
+
   static multipleCheckboxRequireOne(formArray: FormArray): ValidationErrors {
     return formArray.value
       .filter(value => value)

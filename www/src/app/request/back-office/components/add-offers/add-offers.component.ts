@@ -132,7 +132,7 @@ export class AddOffersComponent implements OnInit {
     });
 
     this.procedureEndDateForm = this.formBuilder.group({
-      procedureEndDate: ['', [Validators.required, CustomValidators.futureDate()]]
+      procedureEndDate: ['', [Validators.required, CustomValidators.futureDateOrToday()]]
     });
   }
 
@@ -633,6 +633,13 @@ export class AddOffersComponent implements OnInit {
   openProcedureProlongateModal(procedureId) {
     this.prolongationProcedureId = procedureId;
     this.showProcedureProlongateModal = true;
+    this.procedureEndDateForm.reset();
+  }
+
+  logForm() {
+    // Убрать *ngIf="!positionHasProcedure(requestPosition)" восклицательный знак
+
+    console.log(this.procedureEndDateForm);
   }
 
 }
