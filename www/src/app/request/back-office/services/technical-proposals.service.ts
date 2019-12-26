@@ -14,9 +14,9 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid) {
+  getTechnicalProposalsList(requestId: Uuid): Observable<any> {
     const url = `requests/backoffice/${requestId}/technical-proposals`;
-    return this.api.get(url);
+    return this.api.get<any>(url);
   }
 
   getTechnicalProposalsPositionsList(id: Uuid) {
