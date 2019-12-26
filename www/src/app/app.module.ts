@@ -25,15 +25,17 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
-import { UxgModule } from "uxg";
+import { UxgIconShapesSources, UxgModule } from "uxg";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
+import { ClarityIcons } from "@clr/icons";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
 }
 
 registerLocaleData(localeRu, 'ru');
+UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
 @NgModule({
   declarations: [ AppComponent ],
