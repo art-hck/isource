@@ -11,6 +11,7 @@ import { RequestService as CustomerRequestService } from "./services/request.ser
 import { TechnicalProposalsComponent } from './components/technical-proposals/technical-proposals.component';
 import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "./services/technical-proposals.service";
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
+import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { RequestPositionComponent } from "./components/request-position/request-
     CustomerRequestViewComponent,
     QualityComponent,
     RequestPositionComponent,
-    TechnicalProposalsComponent
+    TechnicalProposalsComponent,
+    RequestTechnicalProposalsComponent
   ],
   imports: [
     RequestCustomerRoutingModule,
