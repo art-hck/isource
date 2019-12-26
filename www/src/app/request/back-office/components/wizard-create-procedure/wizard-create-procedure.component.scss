@@ -185,6 +185,24 @@ clr-checkbox-wrapper {
   margin: 0 22px;
 }
 
+.date-disclaimer {
+  display: flex;
+  padding-left: 20px;
+
+  & span {
+    align-self: flex-end;
+    color: dimgrey;
+    line-height: 1.2;
+  }
+}
+
+input#procedureTitle,
+input#dateEndRegistration,
+.date-disclaimer span {
+  margin-bottom: 10px;
+}
+
+
 .send-offers {
   margin: 0;
   text-align: end;

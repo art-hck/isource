@@ -1,0 +1,78 @@
+@import "projects/uxg/src/styles/index";
+
+.app-table {
+  &.tp-card {
+    margin-bottom: 24px;
+  }
+}
+
+.tp-header {
+  display: flex;
+  padding-bottom: 7px;
+  align-items: center;
+}
+
+.status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.icon-status {
+  max-width: 18px;
+}
+.section {
+  padding-top: 24px;
+}
+
+.position-list {
+    padding-bottom: 10px;
+}
+
+hr {
+  border-top:1px uxg($theme, color-border) dotted;
+  border-bottom: none;
+  border-right: none;
+  border-left: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+h3, p.sent-label {
+  margin: 0;
+}
+
+.light-grey {
+  color: uxg($theme, color-font-ghost);
+}
+
+.grey {
+  color: uxg($theme, color-font-secondary);
+}
+.upper-label {
+  text-transform: uppercase;
+  color: uxg($theme, color-font-ghost);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+
+.accepted {
+  color: uxg($theme, color-font-success);
+}
+
+.declined {
+  color: uxg($theme, color-font-alert);
+}
+
+.draft {
+  color: uxg($theme, color-font-ghost);
+}
+
+.onReview {
+  color: uxg($theme, color-font-warning);
+}
+
+.action-bar {
+justify-content: flex-end;
+}

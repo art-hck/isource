@@ -173,19 +173,30 @@ clr-checkbox-wrapper {
 }
 .has-finished-procedure-label {
   color: #e7a20b;
+
+  a.has-finished-procedure-link {
+    color: #e7a20b;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  a.has-finished-procedure-link:hover {
+    color: #e78c08;
+  }
 }
 
 .has-procedure-info {
   margin: 10px 22px;
   display: block;
-}
-.has-procedure-info a.has-procedure-link {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-}
-.has-procedure-info div.end-date-info {
-  font-size: 12px;
+
+  & a.has-procedure-link {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  & div.end-date-info {
+    font-size: 12px;
+  }
 }
 
 .grey {

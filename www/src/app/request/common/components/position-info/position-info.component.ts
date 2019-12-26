@@ -14,6 +14,7 @@ import * as moment from "moment";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 import { RequestPositionDraftService } from "../../services/request-position-draft.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-position-info',
@@ -44,6 +45,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   contractForm: FormGroup;
 
   constructor(
+    private user: UserInfoService,
     private formBuilder: FormBuilder,
     private offersService: OffersService,
     private backofficeRequestService: BackofficeRequestService,
@@ -127,7 +129,9 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
   }
 
   onUploadDocuments(files: File[]) {
-    this.customerRequestService.uploadDocuments(this.requestPosition, files)
+    const service = this.user.isCustomer() ? this.customerRequestService : this.backofficeRequestService;
+
+    service.uploadDocuments(this.requestPosition, files)
       .subscribe((documents: RequestDocument[]) => {
         this.notificationService.toast('Документ загружен');
         documents.forEach(document => this.requestPosition.documents.push(document));

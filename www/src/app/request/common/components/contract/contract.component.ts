@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../../back-office/services/request.service";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
@@ -32,6 +32,7 @@ export class ContractComponent implements OnInit {
 
   constructor(
     private bc: UxgBreadcrumbsService,
+    private router: Router,
     private route: ActivatedRoute,
     private requestService: RequestService,
     private contractService: ContractService,
@@ -46,8 +47,8 @@ export class ContractComponent implements OnInit {
       .pipe(
         tap(request => {
           this.bc.breadcrumbs = [
-            { label: "Заявки", link: "../.." },
-            { label: `Заявка №${request.number }`, link: ".." }
+            { label: "Заявки", link: this.router.createUrlTree(["../.."], { relativeTo: this.route }).toString() },
+            { label: `Заявка №${request.number }`, link: this.router.createUrlTree([".."], { relativeTo: this.route }).toString() }
           ];
         }),
         publishReplay(1), refCount()

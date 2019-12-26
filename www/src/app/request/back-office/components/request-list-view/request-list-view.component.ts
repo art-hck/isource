@@ -11,7 +11,7 @@ import { RequestListFilterComponent } from "../../../common/components/request-l
 @Component({
   selector: 'app-request-list-view',
   templateUrl: './request-list-view.component.html',
-  styleUrls: ['./request-list-view.component.css']
+  styleUrls: ['./request-list-view.component.scss']
 })
 export class RequestListViewComponent implements OnInit {
 
