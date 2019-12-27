@@ -16,6 +16,7 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 import { DragFileUploadDirective } from './directives/drag-file-upload.directive';
 import { UxgModule } from "uxg";
+import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { UxgModule } from "uxg";
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
+    ContragentAutocompleteComponent,
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
@@ -67,6 +69,7 @@ import { UxgModule } from "uxg";
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
+    ContragentAutocompleteComponent,
 
     PluralizePipe,
     BytesToSizePipe,

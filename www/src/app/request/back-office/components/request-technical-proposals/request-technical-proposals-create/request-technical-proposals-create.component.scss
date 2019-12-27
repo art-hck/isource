@@ -1,5 +1,11 @@
 @import "projects/uxg/src/styles/index";
 
+:host {
+  display: block;
+  animation: host-show 200ms;
+  transform-origin: top;
+}
+
 input[type=file] {
   display: none;
 }
@@ -22,8 +28,12 @@ input[type=file] {
   }
 }
 
-.app-card .app-col:not(:last-child) {
-  padding-right: 24px;
+.app-card {
+  margin-bottom: 24px;
+
+  .app-col:not(:last-child) {
+    padding-right: 24px;
+  }
 }
 
 .positions {
@@ -74,5 +84,17 @@ small {
 
   button {
     min-height: auto;
+  }
+}
+
+@keyframes host-show {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }

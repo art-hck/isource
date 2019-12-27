@@ -1,13 +1,27 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-card">
-    <h3>Новое техническое предложение</h3>
 
-    <!-- name -->
+    <!-- page title -->
+    <div class="app-row">
+      <div class="app-col">
+        <h3>Новое техническое предложение</h3>
+      </div>
+      <div class="app-col clr-flex-grow-0">
+        <button type="button" uxgButton icon (click)="visibleChange.emit(false)">
+          <clr-icon shape="app-trash"></clr-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- contragent -->
     <div class="app-row clr-align-items-center">
       <div class="app-col">
         <div class="app-control-wrap">
-          <input #name uxgInput lg formControlName="name"/>
-          <label class="app-control-label" (click)="name.focus()">Наименование контрагента</label>
+          <!-- @TODO uxg-autocomplete! -->
+          <input #contragentName uxgInput lg (input)="autocomplete.onInput.next($event.target.value)"
+                 formControlName="contragentName"/>
+          <label class="app-control-label" (click)="contragentName.focus()">Наименование контрагента</label>
+          <app-contragent-autocomplete #autocomplete formControlName="contragent"></app-contragent-autocomplete>
         </div>
       </div>
       <div class="app-col app-secondary-color">
@@ -25,13 +39,17 @@
           <div>Перетащите документы сюда</div>
         </div>
       </div>
+
       <div class="app-col app-row clr-justify-content-between clr-flex-column">
         <div class="app-secondary-color">
           Вы можете перетащить документы в окно слева, или нажать на кнопку ниже, и выбрать необходимые документы в
           проводнике
         </div>
         <div>
-          <button type="button" uxgButton secondary (click)="inputFile.click()">Выбрать документы</button>
+          <button
+            type="button" uxgButton secondary (click)="inputFile.click()"
+            [disabled]="form.get('documents').disabled">Выбрать документы
+          </button>
           <input #inputFile type="file" multiple (change)="filesSelected($event)"/>
         </div>
       </div>
@@ -52,7 +70,7 @@
                 {{document.value.size | bytesToSize : 2}}
               </div>
             </div>
-            <div class="clr-align-self-start">
+            <div class="clr-align-self-start" *ngIf="!form.get('documents').disabled">
               <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
                 <clr-icon shape="app-trash"></clr-icon>
               </button>
@@ -77,14 +95,19 @@
       <div class="app-col">
         <small class="app-ghost-color app-bold">НАИМЕНОВАНИЕ ПОЗИЦИИ</small>
         <div>
-          <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
+          <button
+            type="button" uxgButton secondary (click)="positionsModal.open()"
+            [disabled]="form.get('positions').disabled">Выбрать позиции
+          </button>
         </div>
       </div>
       <div class="app-col">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
         <div>
-          <button type="button" uxgButton secondary [disabled]="!form.get('positions').value?.length > 0" (click)="manufacturerModal.open()">
-            Заполнить наименования
+          <button
+            type="button" uxgButton secondary (click)="manufacturerModal.open()"
+            [disabled]="form.get('positions').disabled || form.get('positions').value?.length <= 0">Заполнить
+            наименования
           </button>
         </div>
       </div>
@@ -114,14 +137,18 @@
       <div class="app-col app-secondary-color">
         Черновики технических предложений видны только сотрудникам бэкофиса, но не заказчику
       </div>
-      <div class="app-col clr-flex-grow-0 app-basis-auto">
-        <button uxgButton secondary [disabled]="form.invalid">Сохранить черновик</button>
-        <button uxgButton primary [disabled]="form.invalid">Отправить на согласование</button>
+      <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+        <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
+        <button
+          type="button" uxgButton secondary (click)="submit(true)"
+          [disabled]="form.disabled || form.invalid">Сохранить черновик
+        </button>
+        <button uxgButton primary [disabled]="form.disabled || form.invalid" >Отправить на согласование</button>
       </div>
     </div>
 
     <!-- modals -->
-    <clr-modal #positionsModal [clrModalSize]="'lg'" >
+    <clr-modal #positionsModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Выбор позиций для технического предложения</h2>
       <div class="modal-body">
         <app-request-technical-proposals-create-positions
@@ -133,13 +160,13 @@
       </div>
     </clr-modal>
 
-    <clr-modal #manufacturerModal [clrModalSize]="'lg'" >
+    <clr-modal #manufacturerModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Заполнение заводских наименований</h2>
       <div class="modal-body">
         <app-request-technical-proposals-create-manufacturer
           (cancel)="manufacturerModal.close()"
           (ngModelChange)="manufacturerModal.close()"
-         formControlName="positions"
+          formControlName="positions"
         ></app-request-technical-proposals-create-manufacturer>
       </div>
     </clr-modal>
