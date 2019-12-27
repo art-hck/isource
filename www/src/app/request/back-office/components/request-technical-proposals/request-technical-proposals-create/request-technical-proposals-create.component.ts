@@ -109,6 +109,22 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       );
     }
 
+    // Проставляем заводские наименования.
+    // @TODO Отправлять весь массив а не по одному элементу, как только будет бэк!
+    this.form.get("positions").value
+      .filter(positionWithMan => positionWithMan.manufacturer_name)
+      .map(positionWithMan => ({
+        position: {id: positionWithMan.position.id},
+        manufacturingName: positionWithMan.manufacturer_name
+      }))
+      .forEach(data => {
+        tp$ = tp$.pipe(flatMap(
+          tp => this.technicalProposalsService.updateTpPositionManufacturingName(this.request.id, tp.id, data)
+            .pipe(map(() => tp))
+          )
+        );
+      });
+
     // Если не черновик, отправляем на согласование
     if (!isDraft) {
       tp$ = tp$.pipe(flatMap(
