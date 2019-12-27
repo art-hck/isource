@@ -175,7 +175,7 @@ export class EditPositionInfoFormComponent implements OnInit {
   }
 
   protected saveExistsPosition(): void {
-    const formData = this.positionInfoDataForm.value;
+    const formData = this.positionInfoDataForm.getRawValue();
     this.editRequestService.updateRequestPosition(this.requestPosition.id, formData).subscribe(
       (updatedPosition) => {
         this.requestPosition = updatedPosition;
