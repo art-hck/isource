@@ -1,5 +1,3 @@
-import { UxgIconShapesSources } from "./uxg.icons";
-import { ClarityIcons } from "@clr/icons";
 import { ClarityModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -19,7 +17,6 @@ import { UxgBreadcrumbsComponent } from './components/uxg-breadcrumbs/uxg-breadc
 import { RouterModule } from "@angular/router";
 import { UxgSelectAllDirective } from "./directives/uxg-select-all.directive";
 
-UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
 @NgModule({
   imports: [
