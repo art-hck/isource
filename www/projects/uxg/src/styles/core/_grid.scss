@@ -24,37 +24,40 @@
   }
 }
 
+.app-card {
+  border: 1px solid uxg($theme, color-border);
+  background: uxg($theme, color-default);
+  transition: background-color 250ms;
+  border-radius: 8px;
+  padding: 17px 20px;
+
+  &-clickable:hover {
+    background: uxg($theme, color-bg);
+  }
+}
+
 .app-table {
   &:not(.app-no-border) > .app-row {
-    border: 1px solid uxg($theme, color-border);
-    background: uxg($theme, color-default);
-    transition: background-color 250ms;
-
-    &-clickable:hover {
-      background: uxg($theme, color-bg);
-    }
+    @extend .app-card;
+    padding: 17px 6px;
   }
 
   & > .app-row {
-    padding: 0 10px;
+    padding: 17px 6px;
 
     &:not(:first-child) {
       border-top: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
 
-
-    &:first-child {
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-
-    &:last-child {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+    &:not(:last-child) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     & > .app-col {
-      padding: 17px 14px;
+      padding: 0 14px;
       box-sizing: content-box;
     }
   }

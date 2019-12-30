@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 
 @Component({
   selector: 'uxg-example-input',
@@ -48,6 +48,10 @@ export class UxgExampleInputComponent {
     ]),
     rememberMe: new FormControl()
   });
+
+  errorsCount(errors: ValidationErrors): number {
+    return Object.keys(errors).length;
+  }
 
   submit(form) {
     form.setErrors({invalid : true});

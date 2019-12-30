@@ -7,18 +7,39 @@
         <span *ngIf="e.invalid">Неверные имя пользователя или пароль.</span>
       </div>
 
-      <input uxgInput type="text" lg formControlName="user" placeholder="Почта"/>
-      <div class="app-control-error" *ngIf="form.get('user').errors as e">
-        <span *ngIf="e.required">Обязательное поле</span>
-        <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
-        <span *ngIf="e.email">Неверная почта</span>
-      </div>
+      <div class="app-control-wrap">
+        <input #user uxgInput type="text" lg formControlName="user"/>
+        <label class="app-control-label" (click)="user.focus()">Почта</label>
 
-      <input uxgInput type="text" lg formControlName="password" placeholder="Пароль"/>
-      <div class="app-control-error" *ngIf="form.get('password').errors as e">
-        <span *ngIf="e.required">Обязательное поле</span>
-        <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
-        <span *ngIf="e.pattern">Заглавные и строчные буквы и цифры.</span>
+        <div class="app-control-error" *ngIf="form.get('user').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+          <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
+          <span *ngIf="e.email">Неверная почта</span>
+        </div>
+      </div>
+      <div class="app-control-wrap">
+        <input uxgInput type="text" lg formControlName="password" placeholder="Пароль"/>
+        <ng-container *ngIf="form.get('password').errors as e">
+          <div class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
+            <clr-tooltip>
+              <clr-icon clrTooltipTrigger shape="app-info" size="16"></clr-icon>
+              <clr-tooltip-content clrPosition="top-left" clrSize="lg" *clrIfOpen>
+                <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
+              </clr-tooltip-content>
+            </clr-tooltip>
+          </div>
+          <ng-template #passowrdSingleError>
+            <div class="app-control-error">
+              <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
+            </div>
+          </ng-template>
+
+          <ng-template #passwordErrors>
+            <div *ngIf="e.required">Обязательное поле</div>
+            <div *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</div>
+            <div *ngIf="e.pattern">Заглавные и строчные буквы и цифры.</div>
+          </ng-template>
+        </ng-container>
       </div>
 
       <div class="app-row clr-align-items-center">

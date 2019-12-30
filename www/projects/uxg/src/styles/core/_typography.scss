@@ -26,10 +26,8 @@ small {
   font-size: uxg($theme, font-size-s);
 }
 
-a.link,
 a:link,
-a[routerlink]:link,
-a[ng-reflect-router-link]:link {
+a:visited {
   color: uxg($theme, color-font-link);
 
   &:hover {
@@ -39,5 +37,10 @@ a[ng-reflect-router-link]:link {
   &.app-link-no-color {
     color: unset;
   }
+}
+
+[routerlink],
+[ng-reflect-router-link] {
+  @extend a;
 }
 }

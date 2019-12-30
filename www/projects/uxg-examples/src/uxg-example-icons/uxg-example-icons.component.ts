@@ -11,10 +11,10 @@ export class UxgExampleIconsComponent {
   ctx = { $implicit: "" };
 
   getExmample(shape: string) {
-    let example = `<clr-icon [attr.shape]="${shape}"></clr-icon>`;
+    let example = `<clr-icon shape="${shape}"></clr-icon>`;
 
     if (this.hasSolid(shape)) {
-      example += `\n<clr-icon [attr.shape]="${shape}" class="is-solid"></clr-icon>`;
+      example += `\n<clr-icon shape="${shape}" class="is-solid"></clr-icon>`;
     }
     return example;
   }

@@ -17,3 +17,4 @@ export * from './directives/uxg-tab.directive';
 export * from './directives/uxg-input.directive';
 export * from './directives/uxg-dropdown-item.directive';
 export * from './directives/uxg-button.directive';
+export * from './directives/uxg-select-all.directive';
