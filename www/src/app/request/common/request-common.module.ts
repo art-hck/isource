@@ -50,7 +50,6 @@ import { ContragentService } from "../../contragent/services/contragent.service"
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
-import { UxgModule } from "uxg";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestTpFilterCustomerListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-customer-list/request-tp-filter-customer-list.component";
@@ -108,8 +107,7 @@ const RequestCommonModuleDeclarations = [
     SharedModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentModule,
-    UxgModule
+    ContragentModule
   ],
   providers: [
     GroupService,

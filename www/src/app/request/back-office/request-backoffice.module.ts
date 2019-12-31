@@ -16,6 +16,9 @@ import { SupplierSelectComponent } from './components/supplier-select/supplier-s
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { WizardCreateProcedureComponent } from './components/wizard-create-procedure/wizard-create-procedure.component';
 import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
+import { RequestTechnicalProposalsCreateComponent } from './components/request-technical-proposals/request-technical-proposals-create/request-technical-proposals-create.component';
+import { RequestTechnicalProposalsCreatePositionsComponent } from './components/request-technical-proposals/request-technical-proposals-create-positions/request-technical-proposals-create-positions.component';
+import { RequestTechnicalProposalsCreateManufacturerComponent } from './components/request-technical-proposals/request-technical-proposals-create-manufacturer/request-technical-proposals-create-manufacturer.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { RequestTechnicalProposalsComponent } from './components/request-technic
     SupplierSelectComponent,
     WizardCreateProcedureComponent,
     RequestPositionComponent,
-    RequestTechnicalProposalsComponent
+    RequestTechnicalProposalsComponent,
+    RequestTechnicalProposalsCreateComponent,
+    RequestTechnicalProposalsCreatePositionsComponent,
+    RequestTechnicalProposalsCreateManufacturerComponent
 
   ],
   imports: [

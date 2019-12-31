@@ -1,5 +1,5 @@
-import { ActivatedRoute, Router } from "@angular/router";
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Observable, of, Subscription } from "rxjs";
 import { Request } from "../../models/request";
@@ -89,10 +89,14 @@ export class RequestComponent implements OnInit, OnDestroy {
   }
 
   navigateToPosition(position: RequestPositionList, e: MouseEvent): void {
-    if (!(e.target instanceof HTMLInputElement)) {
-      this.router.navigate([position.id], { relativeTo: this.route });
+    if (!(e.target instanceof HTMLInputElement) && !e.ctrlKey && !e.shiftKey) {
+      this.router.navigateByUrl(this.getPositionUrl(position));
       e.preventDefault();
     }
+  }
+
+  getPositionUrl(position: RequestPositionList): UrlTree {
+    return this.router.createUrlTree([position.id], { relativeTo: this.route });
   }
 
   private formPositionPush(position): void {

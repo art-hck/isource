@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { Router } from "@angular/router";
 import { ClrLoadingState } from "@clr/angular";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../services/auth.service";
+import { ResponseSuccessError } from "../../../core/interceptor/error.interceptor";
 
 @Component({
   selector: 'app-forgot-password-form',
@@ -18,6 +19,8 @@ export class ForgotPasswordFormComponent implements OnDestroy {
   loadingState = <ClrLoadingState>0;
   clrLoadingState = ClrLoadingState;
   subscription = new Subscription();
+
+  timeLimitError = false;
 
   constructor(
     public router: Router,
@@ -54,8 +57,17 @@ export class ForgotPasswordFormComponent implements OnDestroy {
     this.loadingState = ClrLoadingState.LOADING;
     this.subscription.add(
       this.authService.requestPasswordRecover(this.passwordRestoreForm.get('email').value).subscribe(
-        () => this.loadingState = ClrLoadingState.SUCCESS,
-        () => this.loadingState = ClrLoadingState.ERROR
+        () => {
+          this.loadingState = ClrLoadingState.SUCCESS;
+        },
+        (error) => {
+          if (error instanceof ResponseSuccessError) {
+            this.timeLimitError = true;
+            this.loadingState = ClrLoadingState.DEFAULT;
+          } else {
+            this.loadingState = ClrLoadingState.ERROR;
+          }
+        }
       )
     );
   }

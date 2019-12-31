@@ -1,0 +1,100 @@
+@import "projects/uxg/src/styles/index";
+
+:host {
+  display: block;
+  animation: host-show 200ms;
+  transform-origin: top;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.upload-area {
+  align-items: center;
+  background: uxg($theme, color-list-hover);
+  color: rgba(uxg($theme, color-control-primary), .3);
+  font-size: uxg($theme, font-size-l);
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  border: 2px transparent solid;
+  transition: border 200ms, color 200ms;
+  border-radius: 4px;
+
+  &-hover {
+    border-color: uxg($theme, color-border);
+    color: rgba(uxg($theme, color-control-primary), 1);
+  }
+}
+
+.app-card {
+  margin-bottom: 24px;
+
+  .app-col:not(:last-child) {
+    padding-right: 24px;
+  }
+}
+
+.positions {
+  padding: 8px 0;
+
+  .app-col {
+    @extend .positions;
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px uxg($theme, color-border) dotted;
+  margin: 14px 0;
+}
+
+small {
+  margin-bottom: 17px;
+  display: block;
+}
+
+.modal-body {
+  overflow: visible;
+}
+
+.documents {
+  & > .app-row > .app-col {
+    width: 25%;
+    min-width: 310px;
+    padding: 0 20px 12px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+  }
+
+  &-title {
+    padding: 0 12px;
+    overflow: hidden;
+    flex-grow: 1;
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  button {
+    min-height: auto;
+  }
+}
+
+@keyframes host-show {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

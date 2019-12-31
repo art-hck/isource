@@ -22,9 +22,6 @@ export class EditPositionInfoFormComponent implements OnInit {
   @Input() requestPosition: RequestPosition;
   @Output() requestPositionChanged = new EventEmitter<RequestPosition>();
 
-  autoCorrectedDatePipe: any = createAutoCorrectedDatePipe('dd.mm.yyyy');
-  public dateMask = [/\d/, /\d/, '.', /\d/, /\d/, '.', /[1-3]/, /\d/, /\d/, /\d/];
-
   constructor(
     private formBuilder: FormBuilder,
     private editRequestService: EditRequestService,
@@ -94,42 +91,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       }
     });
 
-    // Если позиция ушла дальше по статусной модели, чем "Подготовка технических предложений",
-    // то не даем редактировать ничего, кроме «количество», «базис поставки», «условия оплаты»,
-    // а так же галочки «требуется РКД»
-    if (this.positionStatusService.isStatusAfter(
-      this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
-    )) {
-      itemForm.disable({
-        emitEvent: false
-      });
-      itemForm.get('quantity').enable();
-      itemForm.get('deliveryBasis').enable();
-      itemForm.get('paymentTerms').enable();
-      itemForm.get('isDesignRequired').enable();
-      itemForm.get('isShmrRequired').enable();
-      itemForm.get('isPnrRequired').enable();
-      itemForm.get('isInspectionControlRequired').enable();
-    }
-
-    if (!this.positionStatusService.isStatusPrevious(
-      this.requestPosition.status, RequestPositionWorkflowSteps.MANUFACTURING
-    )) {
-      itemForm.get('isDesignRequired').disable();
-    }
-
-    if (!this.positionStatusService.isStatusPrevious(
-      this.requestPosition.status, RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-    )) {
-      itemForm.get('isShmrRequired').disable();
-      itemForm.get('isPnrRequired').disable();
-    }
-
-    if (!this.positionStatusService.isStatusPrevious(
-      this.requestPosition.status, RequestPositionWorkflowSteps.CONTRACT_SIGNING
-    )) {
-      itemForm.get('isInspectionControlRequired').disable();
-    }
+    this.setAccessForFormFields(itemForm);
 
     return itemForm;
   }
@@ -167,12 +129,53 @@ export class EditPositionInfoFormComponent implements OnInit {
     });
   }
 
-  isPositionStatusPreviousManufacturing(position) {
-    return this.positionStatusService.isStatusPrevious(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
+  /**
+   * Устанавливает возможность редактирвания полей формы в соответствии со статусной политикой
+   * @param itemForm
+   */
+  protected setAccessForFormFields(itemForm: FormGroup) {
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
+    )) {
+      itemForm.get('name').disable();
+      itemForm.get('deliveryDate').disable();
+      itemForm.get('isDeliveryDateAsap').disable();
+      itemForm.get('productionDocument').disable();
+      itemForm.get('measureUnit').disable();
+    }
+
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT
+    )) {
+      itemForm.get('startPrice').disable();
+      itemForm.get('currency').disable();
+      itemForm.get('isShmrRequired').disable();
+      itemForm.get('isPnrRequired').disable();
+    }
+
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.RESULTS_AGREEMENT
+    )) {
+      itemForm.get('deliveryBasis').disable();
+      itemForm.get('paymentTerms').disable();
+      itemForm.get('quantity').disable();
+    }
+
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.CONTRACT_AGREEMENT
+    )) {
+      itemForm.get('isInspectionControlRequired').disable();
+    }
+
+    if (this.positionStatusService.isStatusAfter(
+      this.requestPosition.status, RequestPositionWorkflowSteps.RKD_AGREEMENT
+    )) {
+      itemForm.get('isDesignRequired').disable();
+    }
   }
 
   protected saveExistsPosition(): void {
-    const formData = this.positionInfoDataForm.value;
+    const formData = this.positionInfoDataForm.getRawValue();
     this.editRequestService.updateRequestPosition(this.requestPosition.id, formData).subscribe(
       (updatedPosition) => {
         this.requestPosition = updatedPosition;

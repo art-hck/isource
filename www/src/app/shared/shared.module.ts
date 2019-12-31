@@ -14,6 +14,9 @@ import { SafeStylePipe } from "./pipes/safe-style-pipe";
 import { ContragentSearchFilterPipe } from "./pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
+import { DragFileUploadDirective } from './directives/drag-file-upload.directive';
+import { UxgModule } from "uxg";
+import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 
 @NgModule({
   imports: [
@@ -21,6 +24,7 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
     FormsModule,
     ClarityModule,
     CustomComponentsModule,
+    UxgModule,
     SweetAlert2Module.forRoot({
       buttonsStyling: false,
       customClass: {
@@ -44,12 +48,14 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
+    ContragentAutocompleteComponent,
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
-    ControlInvalidClassDirective
+    ControlInvalidClassDirective,
+    DragFileUploadDirective
   ],
   exports: [
     CommonModule,
@@ -57,11 +63,13 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
     ClarityModule,
     CustomComponentsModule,
     SweetAlert2Module,
+    UxgModule,
 
     CardComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
+    ContragentAutocompleteComponent,
 
     PluralizePipe,
     BytesToSizePipe,
@@ -69,7 +77,8 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
 
-    ControlInvalidClassDirective
+    ControlInvalidClassDirective,
+    DragFileUploadDirective
   ]
 })
 export class SharedModule {

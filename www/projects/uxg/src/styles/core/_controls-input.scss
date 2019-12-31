@@ -9,7 +9,6 @@
       cursor: text;
       display: block;
       height: uxg($theme, control-height);
-      margin: 1.5em 0;
       padding: 10px;
       width: 100%;
       transition: border 250ms;
@@ -28,14 +27,14 @@
         display: none;
         padding: 2px 0;
         position: absolute;
-        transform: translateY(100%);
         transform-origin: top;
       }
 
       &.invalid {
         border-color: uxg($theme, color-control-invalid);
 
-        & ~ .app-control-error {
+        & ~ .app-control-error,
+        & ~ .app-control-icon-error > * {
           display: block;
         }
       }
@@ -46,7 +45,7 @@
         color: uxg($theme, color-font-secondary);
         cursor: default;
         height: uxg($theme, font-size-m) * 1.285;
-        transform: translateY(calc(-100% - 4px)) scale(0.785);
+        transform: scale(0.785);
       }
     }
 
@@ -79,11 +78,21 @@
       display: flex;
       align-items: center;
       color: uxg($theme, color-font-ghost);
+
+      &-error {
+        @extend .app-control-icon;
+        color: uxg($theme, color-control-invalid);
+
+        & > * {
+          display: none;
+        }
+      }
     }
   }
 
   &-wrap {
     position: relative;
+    padding: 1.5em 0;
   }
 
   &-error > * {
@@ -97,12 +106,12 @@
 
 @keyframes app-control-error-show {
   0% {
-    transform: translateY(100%) scaleY(0);
+    transform: scaleY(0);
     opacity: 0;
   }
 
   100% {
-    transform: translateY(100%) scaleY(1);
+    transform: scaleY(1);
     opacity: 1;
   }
 }

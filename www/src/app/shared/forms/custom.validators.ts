@@ -161,4 +161,8 @@ export class CustomValidators {
   static validContragent(control: FormControl): ValidationErrors {
     return control.value instanceof ContragentList ? null : { 'invalidContragent': true };
   }
+
+  static oneOrMoreSelected(control: FormArray): ValidationErrors {
+    return control.controls.filter(formGroup => formGroup.get("checked").value).length > 0 ? null : { '': true };
+  }
 }

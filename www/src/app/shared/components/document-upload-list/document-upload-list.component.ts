@@ -24,9 +24,7 @@ export class DocumentUploadListComponent {
   public documentIconSize = DocumentIconSize;
 
   addDocument(files: FileList) {
-    Array.from(files).forEach(file => {
-      this.documents.push(file);
-    });
+    this.documents = [...this.documents, ...Array.from(files)];
     this.onChangeDocuments();
 
     // очищаем, чтобы можно было снова загрузить тот же файл
