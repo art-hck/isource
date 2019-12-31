@@ -253,7 +253,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
   }
 
   protected getTechnicalProposals(): void {
-    this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
+    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, {}).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
         this.loaders.addTechnicalProposal = false;

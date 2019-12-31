@@ -1,14 +1,14 @@
 <ng-container class="load-block"
-              *ngIf="!customers">
+              *ngIf="!contragents">
   <span class="spinner spinner-md"></span>
 </ng-container>
 
 <div class="search" *ngIf="showAll">
-  <input #customerSearchInput
+  <input #contragentSearchInput
          type="text"
          placeholder="Контрагент"
          autocomplete="off"
-         [value]="customerSearchValue"
+         [value]="contragentSearchValue"
          (input)="onCustomerSearchInputChange($event.target.value)" />
 </div>
 
@@ -27,9 +27,9 @@
 </div>
 
 <ng-container *ngIf="
-    customers &&
+    contragents &&
     limit > 0 &&
-    limit < customers.length && !showAll ||
+    limit < contragents.length && !showAll ||
     (showAll && limit < ( getCustomers() | contragentSearchFilter: getCustomerSearchInputValue() ).length)">
 
   <div class="show-all" (click)="showAll = !showAll">

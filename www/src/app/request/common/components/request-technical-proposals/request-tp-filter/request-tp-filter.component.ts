@@ -7,6 +7,10 @@ import { ActivatedRoute } from "@angular/router";
 import { RequestTpFilterCustomerListComponent } from "./request-tp-filter-customer-list/request-tp-filter-customer-list.component";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
+import { TechnicalProposalsService } from "../../../../back-office/services/technical-proposals.service";
+import { Uuid } from "../../../../../cart/models/uuid";
+import { TechnicalProposal } from "../../../models/technical-proposal";
+import { TechnicalProposalsStatusesLabels } from "../../../dictionaries/technical-proposals-statuses-labels";
 
 @Component({
   selector: 'app-request-tp-list-filter',
@@ -18,7 +22,7 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   @ViewChild(RequestTpFilterCustomerListComponent, {static: false})
              requestTpFilterCustomerListComponent: RequestTpFilterCustomerListComponent;
 
-  @Output() filter = new EventEmitter<RequestsListFilter>();
+  @Output() filters = new EventEmitter<RequestsListFilter>();
   @Output() showResults = new EventEmitter();
 
   @Input() backofficeView: boolean;
@@ -26,22 +30,29 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
 
-  customersList: ContragentList[];
+  requestId: Uuid;
+  contragents: ContragentList[] = [];
+  tpStatuses = [];
+  technicalProposals = [];
+
 
   public requestTpListFilterForm = new FormGroup({
     'positionName': new FormControl(''),
     'contragents': new FormControl([]),
-    'agreementState': new FormControl([])
+    'tpStatus': new FormControl([])
   });
 
   filterFormInitialState = {};
 
   constructor(
     private route: ActivatedRoute,
-    private contragentService: ContragentService
+    private contragentService: ContragentService,
+    private technicalProposalsService: TechnicalProposalsService
   ) { }
 
   ngOnInit() {
+    this.requestId = this.route.snapshot.paramMap.get('id');
+
     this.filterFormInitialState = this.requestTpListFilterForm.value;
 
     this.subscription.add(
@@ -55,7 +66,8 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
       ).subscribe(() => this.submit())
     );
 
-    this.getCustomerList();
+    this.getTechnicalProposals();
+    this.getContragentList();
   }
 
 
@@ -73,13 +85,37 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.filter.emit(filters);
+    console.log(filters);
+
+    this.filters.emit(filters);
   }
 
-  getCustomerList() {
-    this.contragentService.getCustomersList().subscribe(customers => {
-      this.customersList = customers;
+  getTechnicalProposals() {
+    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, {}).subscribe((res) => {
+      this.technicalProposals = res;
+
+      this.getContragentList();
+      this.getAgreementStateList();
     });
+  }
+
+
+  getContragentList() {
+    this.technicalProposals.forEach(tp => {
+      this.contragents.push(tp.supplierContragent);
+    });
+
+    // Убираем из массива дублирующихся контрагентов
+    this.contragents = [...new Set(this.contragents)];
+  }
+
+  getAgreementStateList() {
+    this.technicalProposals.forEach(tp => {
+      this.tpStatuses.push(tp.status);
+    });
+
+    // Убираем из массива дублирующиеся статусы
+    this.tpStatuses = [...new Set(this.tpStatuses)];
   }
 
   /**
@@ -89,13 +125,8 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     this.requestTpListFilterForm.reset({
       positionName: '',
       contragents: [],
-      agreementState: [],
+      tpStatus: [],
       });
-    if (this.backofficeView) {
-      this.requestTpFilterCustomerListComponent.contragents = [];
-      this.requestTpFilterCustomerListComponent.agreementState = [];
-      this.requestTpFilterCustomerListComponent.positionName = "";
-    }
   }
 
   /**
@@ -105,16 +136,10 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     this.requestTpListFilterForm.reset({
       positionName: '',
       contragents: [],
-      agreementState: [],
+      tpStatus: [],
       }, {
         emitEvent: false
       });
-
-    if (this.backofficeView) {
-      this.requestTpFilterCustomerListComponent.contragents = [];
-      this.requestTpFilterCustomerListComponent.agreementState = [];
-      this.requestTpFilterCustomerListComponent.positionName = "";
-    }
   }
 
   ngOnDestroy() {

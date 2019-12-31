@@ -53,6 +53,7 @@ import { SharedModule } from "../../shared/shared.module";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestTpFilterCustomerListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-customer-list/request-tp-filter-customer-list.component";
+import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -83,6 +84,7 @@ const RequestCommonModuleDeclarations = [
   RequestDashboardComponent,
   RequestFilterCustomerListComponent,
   RequestTpFilterCustomerListComponent,
+  RequestTpFilterStatusesListComponent,
   RequestInfoComponent,
   RequestListComponent,
   RequestTpFilterComponent,

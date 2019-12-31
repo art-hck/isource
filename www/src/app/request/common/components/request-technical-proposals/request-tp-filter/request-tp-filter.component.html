@@ -27,7 +27,6 @@
 
 
       <app-request-list-filter-section
-              *ngIf="backofficeView"
               class="filter-section"
               [label]="'Контрагент'">
 
@@ -42,19 +41,13 @@
 
 
       <app-request-list-filter-section
-              *ngIf="backofficeView"
               class="filter-section"
-              [label]="'Контрагент'">
+              [label]="'Согласование'">
 
-        <div class="agreement-state-list">
-          <clr-checkbox-wrapper>
-            <input type="checkbox"
-                   clrCheckbox
-                   (input)="onAgreementStateSelected($event.target.value)"
-                   value="{{ agreement-state.id }}" />
-            <label>{{ customer.shortName }}</label>
-          </clr-checkbox-wrapper>
-        </div>
+        <app-request-tp-filter-statuses-list
+                [tpStatuses]="tpStatuses"
+                formControlName="tpStatus">
+        </app-request-tp-filter-statuses-list>
 
       </app-request-list-filter-section>
 
@@ -63,7 +56,7 @@
 
   </div>
 
-  <div class="show-results" (click)="hideFilterModal()">
+  <div class="show-results" style="display: none" (click)="hideFilterModal()">
     Показать <span class="results-count">{{ resultsCount }}</span>
   </div>
 

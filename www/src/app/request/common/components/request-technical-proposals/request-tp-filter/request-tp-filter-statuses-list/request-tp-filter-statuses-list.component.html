@@ -1,0 +1,17 @@
+<ng-container class="load-block"
+              *ngIf="!tpStatuses">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+
+<div class="agreement-state-list">
+  <div *ngFor="let status of tpStatuses">
+    <clr-checkbox-wrapper>
+      <input type="checkbox"
+             clrCheckbox
+             (input)="onStatusSelected($event.target.value)"
+             value="{{ status }}" />
+      <label>{{ tpStatusLabel(status) }}</label>
+    </clr-checkbox-wrapper>
+  </div>
+</div>

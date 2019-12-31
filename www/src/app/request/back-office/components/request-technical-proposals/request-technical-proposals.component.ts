@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { ActivatedRoute } from "@angular/router";
 import { UxgBreadcrumbsService } from "uxg";
@@ -11,6 +11,10 @@ import { TechnicalProposal } from "../../../common/models/technical-proposal";
 
 @Component({ templateUrl: './request-technical-proposals.component.html' })
 export class RequestTechnicalProposalsComponent implements OnInit {
+
+  @Input() resultsCount: number;
+
+  filters = {};
   requestId: Uuid;
   request$: Observable<Request>;
   technicalProposals$: Observable<TechnicalProposal[]>;
@@ -39,10 +43,14 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       })
     );
 
-    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId).pipe(
+    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, this.filters).pipe(
       tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
+  }
+
+  onFiltersSubmit(filters) {
+    this.filters = filters;
   }
 
   addTechnicalProposal(technicalProposal) {
