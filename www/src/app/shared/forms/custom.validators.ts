@@ -95,10 +95,8 @@ export class CustomValidators {
     return valid ? null : {invalid_phone: true};
   }
 
-  static notEmpty(control: FormControl): any {
-    const value = control.value || '';
-    const valid = String(value).trim();
-    return valid ? null : { empty : true};
+  static requiredNotEmpty(control: FormControl): any {
+    return (control.value || '').trim().length ? null : { empty : true};
   }
 
   static password(control: FormControl): any {
