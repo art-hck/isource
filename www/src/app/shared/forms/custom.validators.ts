@@ -154,8 +154,9 @@ export class CustomValidators {
   static futureDateOrToday(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const controlDate = moment(control.value, 'DD.MM.YYYY');
-      const validationDate = moment(new Date(), 'DD.MM.YYYY');
-      return controlDate.isSameOrBefore(validationDate) ? null : { 'notFutureDateOrToday': true };
+      const validationDate = moment(moment(new Date()).format('DD.MM.YYYY'), 'DD.MM.YYYY');
+
+      return controlDate.isSameOrAfter(validationDate) ? null : { 'notFutureDateOrToday': true };
     };
   }
 

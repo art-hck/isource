@@ -636,10 +636,4 @@ export class AddOffersComponent implements OnInit {
     this.procedureEndDateForm.reset();
   }
 
-  logForm() {
-    // Убрать *ngIf="!positionHasProcedure(requestPosition)" восклицательный знак
-
-    console.log(this.procedureEndDateForm);
-  }
-
 }

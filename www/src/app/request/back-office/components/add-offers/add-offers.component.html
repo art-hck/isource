@@ -94,7 +94,7 @@
                     *ngIf="positionIsSentForAgreement(requestPosition)">Отправлено на согласование</span>
 
               <div class="has-procedure-info"
-                    *ngIf="!positionHasProcedure(requestPosition)">
+                    *ngIf="positionHasProcedure(requestPosition)">
                 <a class="has-procedure-link" target="_blank" href="{{ getProcedureLink(requestPosition) }}">
                   Создана процедура №{{ requestPosition.procedureId }}
                 </a>
@@ -342,8 +342,6 @@
                 [clrLoading]="loaders.prolongateProcedure"
                 [disabled]="procedureEndDateForm.invalid">Сохранить</button>
       </form>
-
-      <button (click)="logForm()">Сохранить</button>
     </div>
   </clr-modal>
 
