@@ -51,6 +51,7 @@ import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
+import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -76,6 +77,7 @@ const RequestCommonModuleDeclarations = [
   PositionSearchFilterPipe,
   RequestAddGroupModalComponent,
   RequestAddResponsibleModalComponent,
+  RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
   RequestDashboardComponent,

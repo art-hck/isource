@@ -28,7 +28,7 @@
 }
 
 .app-table > .app-row {
-  &.app-row-group {
+  &-group {
     background: #F0F6FA;
     border-left: 4px #B2D0FF solid;
     cursor: pointer;
@@ -38,25 +38,20 @@
       background: #E9F1F7;
     }
 
-    .group-title {
-      color: uxg($theme, color-font-secondary);
-      padding-bottom: 14px;
+    .positions {
+      padding-top: 14px;
 
-      b {
-        color: uxg($theme, color-font-primary);
-      }
-    }
+      .app-col {
+        padding: 10px 14px;
 
-    .app-row-group-positions .app-col {
-      padding: 10px 14px;
+        &:first-child {
+          padding-left: 0;
+          padding-right: 6px;
+        }
 
-      &:first-child {
-        padding-left: 0;
-        padding-right: 6px;
-      }
-
-      &:last-child {
-        padding-right: 0;
+        &:last-child {
+          padding-right: 0;
+        }
       }
     }
   }
