@@ -87,12 +87,10 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log(filters);
-
     this.filters.emit(filters);
   }
 
-  getTechnicalProposals() {
+  getTechnicalProposals(): void {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId, {}).subscribe((res) => {
       this.technicalProposals = res;
 
@@ -102,7 +100,7 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  getContragentList() {
+  getContragentList(): void {
     this.technicalProposals.forEach(tp => {
       this.contragents.push(tp.supplierContragent);
     });
@@ -111,7 +109,7 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     this.contragents = [...new Set(this.contragents)];
   }
 
-  getAgreementStateList() {
+  getAgreementStateList(): void {
     this.technicalProposals.forEach(tp => {
       this.tpStatuses.push(tp.status);
     });
@@ -141,7 +139,7 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  formIsFilled() {
+  formIsFilled(): boolean {
     return this.requestTpListFilterForm.dirty &&
       JSON.stringify(this.requestTpListFilterForm.value) !== JSON.stringify(this.filterFormInitialState);
   }
