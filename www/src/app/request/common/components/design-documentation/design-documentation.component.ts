@@ -348,4 +348,8 @@ export class DesignDocumentationComponent implements OnInit {
     const date: Date = new Date(dateStr);
     return new Date() > date;
   }
+
+  isDocumentsVisible(designDocumentation: DesignDocumentationList): boolean {
+    return this.userInfoService.isBackOffice() || this.canEditDesignDocList(designDocumentation);
+  }
 }
