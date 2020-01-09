@@ -123,7 +123,11 @@
   <div class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formControl.get('checked')"></uxg-checkbox>
   </div>
-  <div class="app-col app-bold item-title">{{ position.name }}</div>
+  <div class="app-col app-bold item-title">
+    <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
+      {{ position.name }}
+    </a>
+  </div>
   <div class="app-col item-quantity">
     <span>{{ position.quantity }} </span>
     <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>

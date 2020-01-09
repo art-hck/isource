@@ -47,6 +47,10 @@
       }
     }
 
+    .item-title a:hover {
+      color: uxg($theme, color-font-secondary);
+    }
+
     .app-row-group-positions .app-col {
       padding: 10px 14px;
 
