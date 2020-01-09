@@ -1,0 +1,11 @@
+<input
+  class="app-control"
+  type="radio"
+  #radio
+  [name]="name"
+  [disabled]="disabled"
+  [value]="value"
+  [ngModel]="mainValue"
+  (input)="onChange && onChange(value)"
+/>
+<div class="app-control-radio" (click)="select($event)"></div>

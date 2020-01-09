@@ -1,13 +1,11 @@
-<div class="card">
-  <div class="card-header">Dropdown</div>
-  <div class="card-block">
-    <uxg-dropdown class="app-dropdown" placeholder="Drop me down...">
-      <div uxgDropdownItem>Option 1</div>
-      <div uxgDropdownItem value="string">Option with string value</div>
-      <div uxgDropdownItem [value]="12">Option int value</div>
-      <div uxgDropdownItem disabled>Disabled option</div>
-    </uxg-dropdown>
-
-    <uxg-code language="html">{{example}}</uxg-code>
-  </div>
+<div class="app-card">
+  <h1>Dropdown</h1>
+  <uxg-dropdown class="app-dropdown" placeholder="Drop me down...">
+    <div uxgDropdownItem>Option 1</div>
+    <div uxgDropdownItem value="string">Option with string value</div>
+    <div uxgDropdownItem [value]="12">Option int value</div>
+    <div uxgDropdownItem disabled>Disabled option</div>
+  </uxg-dropdown>
+  <br/>
+  <ngx-prism language="html">{{example}}</ngx-prism>
 </div>

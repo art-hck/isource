@@ -22,6 +22,7 @@
 
   & {
     display: inline-flex;
+    align-items: center;
     position: relative;
   }
 
@@ -70,7 +71,7 @@
   }
 
   &-slide {
-    background: #fff;
+    background: uxg($theme, color-bg);
     cursor: pointer;
     display: none;
     height: 100%;

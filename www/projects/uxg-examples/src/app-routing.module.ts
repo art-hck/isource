@@ -2,51 +2,59 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
 import { UxgExampleControlsComponent } from "./uxg-example-controls/uxg-example-controls.component";
-import { UxgExampleButtonsComponent } from "./uxg-example-buttons/uxg-example-buttons.component";
 import { UxgExampleDropdownComponent } from "./uxg-example-dropdown/uxg-example-dropdown.component";
 import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.component";
 import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status/uxg-example-position-status.component";
 import { UxgExampleTabsComponent } from "./uxg-example-tabs/uxg-example-tabs.component";
 import { UxgExampleIconsComponent } from "./uxg-example-icons/uxg-example-icons.component";
+import { UxgExampleHomeComponent } from "./uxg-example-home/uxg-example-home.component";
 
 
 const routes: Routes = [
   {
+    path: "",
+    component: UxgExampleHomeComponent,
+    data: { title: 'Home' }
+  },
+  {
     path: "grid-and-typography",
-    component: UxgExampleTypographyComponent
+    component: UxgExampleTypographyComponent,
+    data: { title: 'Grid and typography' }
   },
   {
     path: "control",
-    component: UxgExampleControlsComponent
-  },
-  {
-    path: "button",
-    component: UxgExampleButtonsComponent
-  },
-  {
-    path: "dropdown",
-    component: UxgExampleDropdownComponent
+    component: UxgExampleControlsComponent,
+    data: { title: 'Controls' }
   },
   {
     path: "input",
-    component: UxgExampleInputComponent
+    component: UxgExampleInputComponent,
+    data: { title: 'Inputs' }
   },
   {
+    path: "dropdown",
+    component: UxgExampleDropdownComponent,
+    data: { title: 'Dropdowns' }
+  },
+{
     path: "position-status",
-    component: UxgExamplePositionStatusComponent
+    component: UxgExamplePositionStatusComponent,
+    data: { title: 'Position status' }
   },
   {
     path: "tab",
-    component: UxgExampleTabsComponent
+    component: UxgExampleTabsComponent,
+    data: { title: 'Tabs' }
   },
   {
     path: "icon",
-    component: UxgExampleIconsComponent
+    component: UxgExampleIconsComponent,
+    data: { title: 'Icons' }
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {anchorScrolling: 'enabled'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,64 +1,61 @@
-<div class="card">
-  <div class="card-header">Input</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <form [formGroup]="form" (ngSubmit)="submit(form)">
-      <div class="app-control-error" *ngIf="form.errors as e">
-        <span *ngIf="e.invalid">Неверные имя пользователя или пароль.</span>
-      </div>
+<div class="app-card">
+  <h2>Input</h2>
+  <form [formGroup]="form" (ngSubmit)="submit(form)">
+    <div class="app-control-error" *ngIf="form.errors as e">
+      <span *ngIf="e.invalid">Неверные имя пользователя или пароль.</span>
+    </div>
 
-      <div class="app-control-wrap">
-        <input #user uxgInput type="text" lg formControlName="user"/>
-        <label class="app-control-label" (click)="user.focus()">Почта</label>
+    <div class="app-control-wrap">
+      <input #user uxgInput type="text" lg formControlName="user"/>
+      <label class="app-control-label" (click)="user.focus()">Почта</label>
 
-        <div class="app-control-error" *ngIf="form.get('user').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
-          <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
-          <span *ngIf="e.email">Неверная почта</span>
-        </div>
+      <div class="app-control-error" *ngIf="form.get('user').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
+        <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
+        <span *ngIf="e.email">Неверная почта</span>
       </div>
-      <div class="app-control-wrap">
-        <input uxgInput type="text" lg formControlName="password" placeholder="Пароль"/>
-        <ng-container *ngIf="form.get('password').errors as e">
-          <div class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
-            <clr-tooltip>
-              <clr-icon clrTooltipTrigger shape="app-info" size="16"></clr-icon>
-              <clr-tooltip-content clrPosition="top-left" clrSize="lg" *clrIfOpen>
-                <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
-              </clr-tooltip-content>
-            </clr-tooltip>
-          </div>
-          <ng-template #passowrdSingleError>
-            <div class="app-control-error">
+    </div>
+    <div class="app-control-wrap">
+      <input uxgInput type="password" lg formControlName="password" placeholder="Пароль"/>
+      <ng-container *ngIf="form.get('password').errors as e">
+        <div class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
+          <clr-tooltip>
+            <clr-icon clrTooltipTrigger shape="app-info" size="16"></clr-icon>
+            <clr-tooltip-content clrPosition="top-left" clrSize="lg" *clrIfOpen>
               <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
-            </div>
-          </ng-template>
-
-          <ng-template #passwordErrors>
-            <div *ngIf="e.required">Обязательное поле</div>
-            <div *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</div>
-            <div *ngIf="e.pattern">Заглавные и строчные буквы и цифры.</div>
-          </ng-template>
-        </ng-container>
-      </div>
-
-      <div class="app-row clr-align-items-center">
-        <uxg-switcher label="Запомнить меня" labelAlign="right" formControlName="rememberMe"></uxg-switcher>
-        <div class="app-btn-group">
-          <button uxgButton outline lg icon type="button" (click)="form.reset()">
-            <clr-icon shape="refresh" flip="horizontal" class="is-solid"></clr-icon>
-          </button>
-          <button uxgButton primary lg iconText [disabled]="form.invalid">
-            <clr-icon shape="login" class="is-solid"></clr-icon>
-            <span>Войти</span>
-          </button>
+            </clr-tooltip-content>
+          </clr-tooltip>
         </div>
-      </div>
-    </form>
+        <ng-template #passowrdSingleError>
+          <div class="app-control-error">
+            <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
+          </div>
+        </ng-template>
 
-  </div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <uxg-code language="html">{{example}}</uxg-code>
-  </div>
+        <ng-template #passwordErrors>
+          <div *ngIf="e.required">Обязательное поле</div>
+          <div *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</div>
+          <div *ngIf="e.pattern">Заглавные и строчные буквы и цифры.</div>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div class="app-row app-align-items-center">
+      <uxg-switcher label="Запомнить меня" labelAlign="right" formControlName="rememberMe"></uxg-switcher>
+      <div class="app-col"></div>
+      <div class="app-btn-group">
+        <button uxgButton outline lg icon type="button" (click)="form.reset()">
+          <clr-icon shape="refresh" flip="horizontal" class="is-solid"></clr-icon>
+        </button>
+        <button uxgButton primary lg iconText [disabled]="form.invalid">
+          <clr-icon shape="login" class="is-solid"></clr-icon>
+          <span>Войти</span>
+        </button>
+      </div>
+    </div>
+  </form>
+  <br/>
+  <br/>
+  <h2>Sources</h2>
+  <ngx-prism language="html">{{example}}</ngx-prism>
 </div>

@@ -1,14 +1,16 @@
-@import "../uxg", "controls-checkbox", "controls-input", "controls-switcher";
+@import "../uxg", "controls-checkbox", "controls-input", "controls-switcher", "controls-radio";
 
 @mixin controls($theme) {
   @include controls-switcher($theme);
   @include controls-input($theme);
   @include controls-checkbox($theme);
+  @include controls-radio($theme);
 
   .app-control,
   .app-control ~ label,
   .app-control label,
   .app-control-checkbox {
+    box-sizing: border-box;
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
