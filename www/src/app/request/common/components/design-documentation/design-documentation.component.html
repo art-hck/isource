@@ -266,14 +266,17 @@
               <div class="left clr-col-4 title">{{designDocumentation.position.name}}</div>
 
               <div class="left clr-col-6">
-                <ng-container *ngFor="let designDoc of designDocumentation.designDocs">
-                  <app-document-simple-list
-                    *ngIf="designDoc.type !== designDocumentationType.REMARK"
-                    [documents]="designDoc.documents.length > 0 ? designDoc.documents : [getAwaitingDoc(designDoc)]"
-                    [enableUpload]="false"
-                    [limit]="5"
-                  ></app-document-simple-list>
-                </ng-container>
+                <div *ngIf="canEditDesignDocList(designDocumentation); else designDocs" class="app-ghost-color">В процессе загрузки</div>
+                <ng-template #designDocs>
+                  <ng-container *ngFor="let designDoc of designDocumentation.designDocs">
+                    <app-document-simple-list
+                      *ngIf="designDoc.type !== designDocumentationType.REMARK"
+                      [documents]="designDoc.documents.length > 0 ? designDoc.documents : [getAwaitingDoc(designDoc)]"
+                      [enableUpload]="false"
+                      [limit]="5"
+                    ></app-document-simple-list>
+                  </ng-container>
+                </ng-template>
               </div>
 
               <div class="design-actions clr-col-2">
