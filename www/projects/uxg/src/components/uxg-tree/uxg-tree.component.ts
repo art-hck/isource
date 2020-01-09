@@ -15,9 +15,9 @@ export class UxgTreeComponent implements AfterViewInit {
   @ContentChild(UxgTreeNodeDirective, {static: false, read: TemplateRef}) nodeTpl: TemplateRef<any>;
   @ViewChildren("wrapRef") wraps: QueryList<ElementRef>;
   @ViewChildren("nodeRef") nodes: QueryList<ElementRef>;
-  @Input() getChildrenFn: (node: any) => any = node => node.children;
   @Input() tree: any[];
   @Input() depth = 0;
+  @Input() getChildrenFn: (node: any) => any = node => node.children;
 
   ngAfterViewInit() {
     this.wraps.forEach((wrap, i) => {
