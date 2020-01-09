@@ -4,13 +4,14 @@ import { RequestsListFilter } from "../../../models/requests-list/requests-list-
 import { debounceTime, filter, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { RequestTpFilterCustomerListComponent } from "./request-tp-filter-customer-list/request-tp-filter-customer-list.component";
+import { RequestTpFilterContragentListComponent } from "./request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
 import { TechnicalProposalsService } from "../../../../back-office/services/technical-proposals.service";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { TechnicalProposal } from "../../../models/technical-proposal";
 import { TechnicalProposalsStatusesLabels } from "../../../dictionaries/technical-proposals-statuses-labels";
+import { RequestTpFilterStatusesListComponent } from "./request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 
 @Component({
   selector: 'app-request-tp-list-filter',
@@ -19,8 +20,10 @@ import { TechnicalProposalsStatusesLabels } from "../../../dictionaries/technica
 })
 export class RequestTpFilterComponent implements OnInit, OnDestroy {
 
-  @ViewChild(RequestTpFilterCustomerListComponent, {static: false})
-             requestTpFilterCustomerListComponent: RequestTpFilterCustomerListComponent;
+  @ViewChild(RequestTpFilterContragentListComponent, {static: false})
+             requestTpFilterContragentListComponent: RequestTpFilterContragentListComponent;
+  @ViewChild(RequestTpFilterStatusesListComponent, {static: false})
+             requestTpFilterStatusesListComponent: RequestTpFilterStatusesListComponent;
 
   @Output() filters = new EventEmitter<RequestsListFilter>();
   @Output() showResults = new EventEmitter();
@@ -126,20 +129,13 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
       contragents: [],
       tpStatus: [],
       });
+
+    this.requestTpFilterContragentListComponent.selectedContragents = [];
+    this.requestTpFilterContragentListComponent.contragentSearchValue = "";
+
+    this.requestTpFilterStatusesListComponent.selectedStatuses = [];
   }
 
-  /**
-   * Сброс значений фильтра без обновления данных
-   */
-  clearFilter() {
-    this.requestTpListFilterForm.reset({
-      positionName: '',
-      contragents: [],
-      tpStatus: [],
-      }, {
-        emitEvent: false
-      });
-  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -148,10 +144,6 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   formIsFilled() {
     return this.requestTpListFilterForm.dirty &&
       JSON.stringify(this.requestTpListFilterForm.value) !== JSON.stringify(this.filterFormInitialState);
-  }
-
-  hideFilterModal() {
-    this.showResults.emit();
   }
 
 }

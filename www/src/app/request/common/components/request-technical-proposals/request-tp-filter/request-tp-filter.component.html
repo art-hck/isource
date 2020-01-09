@@ -1,4 +1,4 @@
-<div class="request-list-filter">
+<div class="request-tp-filter">
 
   <div class="filter-header clr-row clr-justify-content-between">
     <div class="clr-col">
@@ -15,7 +15,7 @@
 
     <form [formGroup]="requestTpListFilterForm">
 
-      <app-request-list-filter-section
+      <app-request-tp-filter-section
               class="filter-section"
               [label]="'Наименование позиции'">
 
@@ -23,24 +23,23 @@
                placeholder="Введите наименование позиции.."
                formControlName="positionName" />
 
-      </app-request-list-filter-section>
+      </app-request-tp-filter-section>
 
 
-      <app-request-list-filter-section
+      <app-request-tp-filter-section
               class="filter-section"
               [label]="'Контрагент'">
 
-        <app-request-tp-filter-customer-list
+        <app-request-tp-filter-contragent-list
                 [contragents]="contragents"
                 [limit]="5"
                 formControlName="contragents">
-        </app-request-tp-filter-customer-list>
+        </app-request-tp-filter-contragent-list>
 
-      </app-request-list-filter-section>
+      </app-request-tp-filter-section>
 
 
-
-      <app-request-list-filter-section
+      <app-request-tp-filter-section
               class="filter-section"
               [label]="'Согласование'">
 
@@ -49,15 +48,10 @@
                 formControlName="tpStatus">
         </app-request-tp-filter-statuses-list>
 
-      </app-request-list-filter-section>
-
+      </app-request-tp-filter-section>
 
     </form>
 
-  </div>
-
-  <div class="show-results" style="display: none" (click)="hideFilterModal()">
-    Показать <span class="results-count">{{ resultsCount }}</span>
   </div>
 
 </div>

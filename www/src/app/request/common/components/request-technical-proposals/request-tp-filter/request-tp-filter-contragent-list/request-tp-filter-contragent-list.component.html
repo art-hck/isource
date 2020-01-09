@@ -6,22 +6,22 @@
 <div class="search" *ngIf="showAll">
   <input #contragentSearchInput
          type="text"
-         placeholder="Контрагент"
+         placeholder="Введите наименование контрагента.."
          autocomplete="off"
          [value]="contragentSearchValue"
-         (input)="onCustomerSearchInputChange($event.target.value)" />
+         (input)="onContragentSearchInputChange($event.target.value)" />
 </div>
 
 
-<div class="customers-list">
-  <ng-container *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue();">
+<div class="contragents-list">
+  <ng-container *ngFor="let contragent of getContragents() | contragentSearchFilter: getContragentSearchInputValue();">
     <clr-checkbox-wrapper>
       <input type="checkbox"
              clrCheckbox
-             [checked]="checkIfCustomerIsChecked(customer.id)"
-             (input)="onCustomerSelected($event.target.value)"
-             value="{{ customer.id }}" />
-      <label>{{ customer.shortName }}</label>
+             [checked]="checkIfContragentIsChecked(contragent.id)"
+             (input)="onContragentSelected($event.target.value)"
+             value="{{ contragent.id }}" />
+      <label>{{ contragent.shortName }}</label>
     </clr-checkbox-wrapper>
   </ng-container>
 </div>
@@ -30,7 +30,7 @@
     contragents &&
     limit > 0 &&
     limit < contragents.length && !showAll ||
-    (showAll && limit < ( getCustomers() | contragentSearchFilter: getCustomerSearchInputValue() ).length)">
+    (showAll && limit < ( getContragents() | contragentSearchFilter: getContragentSearchInputValue() ).length)">
 
   <div class="show-all" (click)="showAll = !showAll">
     <a>{{ showAll ? 'Свернуть' : 'Показать всех' }}</a>

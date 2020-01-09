@@ -34,6 +34,10 @@ export class RequestTpFilterStatusesListComponent implements ControlValueAccesso
     this.onChange(this.selectedStatuses);
   }
 
+  checkIfStatusIsChecked(selectedStatus) {
+    return this.selectedStatuses && this.selectedStatuses.indexOf(selectedStatus) > -1;
+  }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }

@@ -9,6 +9,7 @@
     <clr-checkbox-wrapper>
       <input type="checkbox"
              clrCheckbox
+             [checked]="checkIfStatusIsChecked(status)"
              (input)="onStatusSelected($event.target.value)"
              value="{{ status }}" />
       <label>{{ tpStatusLabel(status) }}</label>

@@ -1,19 +1,19 @@
-import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Uuid } from "../../../../../../cart/models/uuid";
 import { ContragentList } from "../../../../../../contragent/models/contragent-list";
 
 @Component({
-  selector: 'app-request-tp-filter-customer-list',
-  templateUrl: './request-tp-filter-customer-list.component.html',
-  styleUrls: ['./request-tp-filter-customer-list.component.scss'],
+  selector: 'app-request-tp-filter-contragent-list',
+  templateUrl: './request-tp-filter-contragent-list.component.html',
+  styleUrls: ['./request-tp-filter-contragent-list.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => RequestTpFilterCustomerListComponent),
+    useExisting: forwardRef(() => RequestTpFilterContragentListComponent),
     multi: true
   }]
 })
-export class RequestTpFilterCustomerListComponent implements ControlValueAccessor {
+export class RequestTpFilterContragentListComponent implements ControlValueAccessor {
 
   @Input() contragents;
   @Input() limit: number;
@@ -21,7 +21,7 @@ export class RequestTpFilterCustomerListComponent implements ControlValueAccesso
   @ViewChild('contragentSearchInput', { static: false }) contragentSearchInput: ElementRef;
 
   contragentSearchValue = "";
-  selectedCustomers = [];
+  selectedContragents = [];
 
   value: Uuid[];
   onTouched: (value: Uuid[]) => void;
@@ -31,31 +31,31 @@ export class RequestTpFilterCustomerListComponent implements ControlValueAccesso
 
   constructor() { }
 
-  getCustomers(): ContragentList[] {
+  getContragents(): ContragentList[] {
     // Если showAll = true или не указан limit — возвращаем всё
     if (this.contragents) {
       return this.contragents.slice(0, this.showAll ? this.contragents.length : (this.limit || this.contragents.length));
     }
   }
 
-  onCustomerSearchInputChange(value: string): void {
+  onContragentSearchInputChange(value: string): void {
     this.contragentSearchValue = value;
   }
 
-  getCustomerSearchInputValue(): string {
+  getContragentSearchInputValue(): string {
     if (this.contragentSearchValue && this.contragentSearchInput) {
       return this.contragentSearchInput.nativeElement.value;
     }
     return this.contragentSearchValue;
   }
 
-  onCustomerSelected(selectedCustomer) {
-    this.updateArray(this.selectedCustomers, selectedCustomer);
-    this.onChange(this.selectedCustomers);
+  onContragentSelected(selectedContragent) {
+    this.updateArray(this.selectedContragents, selectedContragent);
+    this.onChange(this.selectedContragents);
   }
 
-  checkIfCustomerIsChecked(customerId) {
-    return this.selectedCustomers && this.selectedCustomers.indexOf(customerId) > -1;
+  checkIfContragentIsChecked(contragentId) {
+    return this.selectedContragents && this.selectedContragents.indexOf(contragentId) > -1;
   }
 
   registerOnChange(fn: any): void {
@@ -69,15 +69,6 @@ export class RequestTpFilterCustomerListComponent implements ControlValueAccesso
   writeValue(value: Uuid[] | null): void {
     this.value = value;
   }
-
-  // canSeeToggleLink(customers, limit) {
-  //   return customers && limit > 0 &&
-  //   (
-  //     limit > customers.length ||
-  //     limit >= filteredCustomers.length
-  //   );
-  // }
-
 
   protected updateArray(array: Array<Object>, item: Object): void {
     const index = array.indexOf(item);

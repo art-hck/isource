@@ -1,11 +1,10 @@
-app-request-list-filter-section:not(:last-child):after {
+app-request-tp-filter-section:not(:last-child):after {
   content: '';
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   width: 100%;
   height: 1px;
   display: block;
 }
-
 
 .filter-header {
   padding-bottom: 10px;
@@ -45,43 +44,6 @@ app-request-list-filter-section:not(:last-child):after {
   padding: 15px 0 0 0;
   display: block;
 }
-
-.shipping-dates {
-  padding-bottom: 18px;
-}
-
-::ng-deep .filter.opened div.show-results {
-  display: block;
-}
-::ng-deep .filter:not(.opened) div.show-results {
-  display: none;
-}
-
-div.show-results {
-  width: 280px;
-  background-color: #2585f5;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  line-height: 40px;
-  border-radius: 3px;
-  margin-top: 20px;
-  position: absolute;
-  bottom: 20px;
-  cursor: pointer;
-  transition: background-color 0.5s ease;
-}
-
-div.show-results:hover {
-  background-color: #1A71D8;
-  transition: background-color 0.5s ease;
-}
-
-.results-count {
-  opacity: 0.6;
-  font-weight: 400;
-}
-
 
 .agreement-state-list clr-checkbox-wrapper {
   padding-bottom: 10px
