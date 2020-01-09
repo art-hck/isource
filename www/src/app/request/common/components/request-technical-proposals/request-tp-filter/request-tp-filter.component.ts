@@ -33,8 +33,7 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   contragents: ContragentList[] = [];
   tpStatuses = [];
-  technicalProposals = [];
-
+  technicalProposals: TechnicalProposal[] = [];
 
   public requestTpListFilterForm = new FormGroup({
     'positionName': new FormControl(''),

@@ -43,14 +43,14 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       })
     );
 
-    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, this.filters).pipe(
+    this.onFiltersSubmit();
+  }
+
+  onFiltersSubmit(filters = {}) {
+    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
       tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
-  }
-
-  onFiltersSubmit(filters) {
-    this.filters = filters;
   }
 
   addTechnicalProposal(technicalProposal) {

@@ -29,8 +29,10 @@
         (visibleChange)="showForm = $event"
         (create)="addTechnicalProposal($event)"
       ></app-request-technical-proposals-create>
-      <app-request-technical-proposals [filters]="filters" [technicalProposals]="technicalProposals$ | async"></app-request-technical-proposals>
+
+      <app-request-technical-proposals [technicalProposals]="technicalProposals$ | async"></app-request-technical-proposals>
     </div>
+
     <div class="app-col app-col-aside">
       <app-request-tp-list-filter (filters)="onFiltersSubmit($event)"></app-request-tp-list-filter>
     </div>
