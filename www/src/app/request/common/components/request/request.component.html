@@ -28,7 +28,7 @@
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <button class="app-btn app-btn-clear app-btn-link"
                   [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <button class="app-btn app-btn-clear app-btn-link" [disabled]="true">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
