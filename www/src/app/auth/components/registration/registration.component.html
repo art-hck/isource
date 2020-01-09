@@ -112,6 +112,9 @@
                       id="inn"
                       formControlName="inn"
                       [class.invalid]="isContragentFieldValid('inn')"></ngx-dadata>
+              <div class="app-control-error" *ngIf="isExistContragent()">
+                <span>Контрагент с данными ИНН и КПП уже зарегистрирован в системе</span>
+              </div>
             </div>
 
             <div class="clr-col-4">

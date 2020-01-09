@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {UserRegistration} from "../../user/models/user-registration";
-import {ContragentRegistration} from "../../contragent/models/contragent-registration";
+import { UserRegistration } from "../../user/models/user-registration";
+import { ContragentRegistration } from "../../contragent/models/contragent-registration";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class RegistrationService {
@@ -48,4 +49,15 @@ export class RegistrationService {
       });
   }
 
+  /**
+   * Проверяет был ли зарегистрирован ранее контрагент
+   * @param inn
+   * @param kpp
+   */
+  isExistContragent(inn: string, kpp: string): Observable<boolean> {
+    return this.api.post<boolean>('check-contragent-exist', {
+      inn: inn,
+      kpp: kpp
+    });
+  }
 }

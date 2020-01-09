@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { UserRegistration } from "../../../user/models/user-registration";
 import { ContragentRegistration } from "../../../contragent/models/contragent-registration";
@@ -10,6 +10,8 @@ import Swal from "sweetalert2";
 import * as moment from "moment";
 import { GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
+import { Observable } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 
 @Component({
   selector: 'app-registration',
@@ -66,8 +68,8 @@ export class RegistrationComponent implements OnInit {
     this.contragentRegistrationForm = this.formBuilder.group({
       fullName: ['', [Validators.required, CustomValidators.simpleText]],
       shortName: ['', [Validators.required, CustomValidators.simpleText]],
-      inn: ['', [Validators.required, CustomValidators.inn]],
-      kpp: ['', [Validators.required, CustomValidators.kpp]],
+      inn: ['', [Validators.required, CustomValidators.inn], this.contragentExistValidator()],
+      kpp: ['', [Validators.required, CustomValidators.kpp], this.contragentExistValidator()],
       ogrn: ['', [Validators.required, CustomValidators.ogrn]],
       checkedDate: ['', [Validators.required, CustomValidators.pastDate()]],
       contragentEmail: ['', [Validators.required, CustomValidators.email]],
@@ -96,6 +98,15 @@ export class RegistrationComponent implements OnInit {
       return this.contragentRegistrationForm.get(field).errors
         && (this.contragentRegistrationForm.get(field).touched || this.contragentRegistrationForm.get(field).dirty);
     }
+  }
+
+  isExistContragent() {
+    const form = this.contragentRegistrationForm;
+    const inn = form.get('inn');
+    const kpp = form.get('kpp');
+
+    return (inn.errors && inn.errors.isExistContragent && (inn.touched || inn.dirty))
+      || (kpp.errors && kpp.errors.isExistContragent && (kpp.touched || kpp.dirty));
   }
 
   onChangeStep() {
@@ -176,5 +187,18 @@ export class RegistrationComponent implements OnInit {
         alert('Ошибка регистрации! ' + msg.error.detail);
       }
     );
+  }
+
+  contragentExistValidator(): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors | null> => {
+      const form = control.parent;
+
+      return this.registrationService.isExistContragent(form.get('inn').value, form.get('kpp').value).pipe(
+        map((res: boolean) => {
+            return res ? {isExistContragent: true} : null;
+          },
+          catchError(() => null))
+      );
+    };
   }
 }
