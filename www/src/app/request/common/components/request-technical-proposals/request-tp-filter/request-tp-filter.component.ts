@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../../models/requests-list/requests-list-filter";
 import { debounceTime, filter, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
@@ -10,7 +10,6 @@ import { ContragentList } from "../../../../../contragent/models/contragent-list
 import { TechnicalProposalsService } from "../../../../back-office/services/technical-proposals.service";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { TechnicalProposal } from "../../../models/technical-proposal";
-import { TechnicalProposalsStatusesLabels } from "../../../dictionaries/technical-proposals-statuses-labels";
 import { RequestTpFilterStatusesListComponent } from "./request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 
 @Component({
@@ -38,21 +37,24 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   tpStatuses = [];
   technicalProposals: TechnicalProposal[] = [];
 
-  public requestTpListFilterForm = new FormGroup({
-    'positionName': new FormControl(''),
-    'contragents': new FormControl([]),
-    'tpStatus': new FormControl([])
-  });
+  requestTpListFilterForm: FormGroup;
 
   filterFormInitialState = {};
 
   constructor(
     private route: ActivatedRoute,
     private contragentService: ContragentService,
+    private formBuilder: FormBuilder,
     private technicalProposalsService: TechnicalProposalsService
   ) { }
 
   ngOnInit() {
+    this.requestTpListFilterForm = this.formBuilder.group({
+      positionName: [''],
+      contragents: [[]],
+      tpStatus: [[]],
+    });
+
     this.requestId = this.route.snapshot.paramMap.get('id');
 
     this.filterFormInitialState = this.requestTpListFilterForm.value;
