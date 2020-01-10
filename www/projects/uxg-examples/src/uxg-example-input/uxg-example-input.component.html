@@ -11,21 +11,18 @@
 
       <div class="app-control-error" *ngIf="form.get('user').errors as e">
         <span *ngIf="e.required">Обязательное поле</span>
-        <span *ngIf="e.minlength as e">Минимальная длина {{e.requiredLength}}, а сейчас {{e.actualLength}}</span>
         <span *ngIf="e.email">Неверная почта</span>
       </div>
     </div>
     <div class="app-control-wrap">
       <input uxgInput type="password" lg formControlName="password" placeholder="Пароль"/>
       <ng-container *ngIf="form.get('password').errors as e">
-        <div class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
-          <clr-tooltip>
-            <clr-icon clrTooltipTrigger shape="app-info" size="16"></clr-icon>
-            <clr-tooltip-content clrPosition="top-left" clrSize="lg" *clrIfOpen>
-              <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
-            </clr-tooltip-content>
-          </clr-tooltip>
-        </div>
+        <uxg-popover class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError" #errorPopover (mouseenter)="errorPopover.show()" (mouseleave)="errorPopover.hide()">
+          <clr-icon shape="app-info" size="16"></clr-icon>
+          <div *uxgPopoverContent="popoverDir.topRight" class="app-primary-color">
+            <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
+          </div>
+        </uxg-popover>
         <ng-template #passowrdSingleError>
           <div class="app-control-error">
             <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>

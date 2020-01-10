@@ -6,6 +6,7 @@
 .app-bold { font-weight: bold; }
 
 // Colors
+.app-primary-color { color: uxg($theme, color-font-primary); }
 .app-ghost-color { color: uxg($theme, color-font-ghost); }
 .app-secondary-color { color: uxg($theme, color-font-secondary); }
 .app-error-color { color: uxg($theme, color-control-invalid); }
