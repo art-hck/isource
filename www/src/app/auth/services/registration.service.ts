@@ -54,8 +54,8 @@ export class RegistrationService {
    * @param inn
    * @param kpp
    */
-  isExistContragent(inn: string, kpp: string): Observable<boolean> {
-    return this.api.post<boolean>('check-contragent-exist', {
+  contragentExists(inn: string, kpp: string): Observable<boolean> {
+    return this.api.post<boolean>('check-contragent-exists', {
       inn: inn,
       kpp: kpp
     });

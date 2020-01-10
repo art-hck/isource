@@ -100,7 +100,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  isExistContragent() {
+  contragentExists() {
     const form = this.contragentRegistrationForm;
     const inn = form.get('inn');
     const kpp = form.get('kpp');
@@ -193,7 +193,7 @@ export class RegistrationComponent implements OnInit {
     return (control: FormControl): Observable<ValidationErrors | null> => {
       const form = control.parent;
 
-      return this.registrationService.isExistContragent(form.get('inn').value, form.get('kpp').value).pipe(
+      return this.registrationService.contragentExists(form.get('inn').value, form.get('kpp').value).pipe(
         map((res: boolean) => {
             return res ? {isExistContragent: true} : null;
           },
