@@ -1,11 +1,14 @@
-<h1>UX Examples</h1>
-<uxg-tabs class="app-tabs-border">
-  <ng-container *ngFor="let item of menu">
-    <uxg-tab-title #rla="routerLinkActive" routerLinkActive [active]="rla.isActive" [routerLink]="item.path">
-      {{ item.title }}
-    </uxg-tab-title>
-  </ng-container>
-</uxg-tabs>
-<br/>
-
-<router-outlet></router-outlet>
+<div class="app-main">
+  <br/>
+  <div>
+    <uxg-tabs class="app-tabs-border">
+      <ng-container *ngFor="let item of menu">
+        <uxg-tab-title #rla="routerLinkActive" routerLinkActive [active]="rla.isActive" [routerLink]="item.path">
+          {{ item.title }}
+        </uxg-tab-title>
+      </ng-container>
+    </uxg-tabs>
+    <br/>
+  </div>
+  <router-outlet></router-outlet>
+</div>

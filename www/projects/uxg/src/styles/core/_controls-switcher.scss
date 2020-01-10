@@ -22,7 +22,7 @@ $slider-margin: calc(.5em + 6px);
       }
 
       &:after {
-        background: #c3cad1;
+        background: uxg($theme, color-soft);
         border-radius: 50%;
         content: "";
         height: 20px;

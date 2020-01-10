@@ -25,7 +25,7 @@
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <button uxgButton clear link [disabled]="true">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
@@ -92,7 +92,11 @@
   <div class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
-  <div class="app-col app-bold item-title">{{ position.name }}</div>
+  <div class="app-col app-bold item-title">
+    <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
+      {{ position.name }}
+    </a>
+  </div>
   <div class="app-col item-quantity">
     <span>{{ position.quantity }} </span>
     <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>

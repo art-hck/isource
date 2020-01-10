@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, Input, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, InjectionToken, Input, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
 import { UxgDropdownItemDirective } from "../../directives/uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
@@ -40,9 +40,13 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
     return isPlatformBrowser(this.platformId) ? window.innerHeight : 0;
   }
 
+  get scrollTop() {
+    return isPlatformBrowser(this.platformId) ? window.pageYOffset : null;
+  }
+
   get isDirectionUp() {
     if (this.itemsWrapper) {
-      return this.direction === "up" || this.windowHeight < this.coords.top + this.itemsWrapper.offsetHeight;
+      return this.direction === "up" || this.windowHeight < this.coords.bottom + this.itemsWrapper.offsetHeight;
     }
   }
 
@@ -52,7 +56,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
     private renderer: Renderer2, public el: ElementRef,
     private cdr: ChangeDetectorRef
   ) {
@@ -130,10 +134,10 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   private setPosition(el, isDirectionUp: boolean = false): void {
     if (isDirectionUp) {
-      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.coords.bottom + this.el.nativeElement.offsetHeight) + "px");
+      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.scrollTop - this.coords.bottom + this.el.nativeElement.offsetHeight - 2) + "px");
       this.renderer.removeStyle(el, 'top');
     } else {
-      this.renderer.setStyle(el, 'top', (this.coords.top + this.el.nativeElement.offsetHeight) + "px");
+      this.renderer.setStyle(el, 'top', (this.coords.top + this.scrollTop + this.el.nativeElement.offsetHeight - 1) + "px");
       this.renderer.removeStyle(el, 'bottom');
     }
 
@@ -145,7 +149,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId)) {
-      window.removeEventListener('scroll', () => this.hideOnScrollOutside, true);
+      window.removeEventListener('scroll', this.hideOnScrollOutside, true);
       this.itemsWrapper.remove();
     }
   }

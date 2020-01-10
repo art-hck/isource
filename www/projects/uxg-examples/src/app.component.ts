@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'uxg-root',
@@ -6,14 +7,9 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  readonly menu = [
-    { path: 'grid-and-typography', title: 'Grid and typography' },
-    { path: 'control', title: 'Controls' },
-    { path: 'button', title: 'Buttons' },
-    { path: 'dropdown', title: 'Dropdowns' },
-    { path: 'input', title: 'Inputs' },
-    { path: 'position-status', title: 'Position status' },
-    { path: 'tab', title: 'Tabs' },
-    { path: 'icon', title: 'Icons' },
-  ];
+  readonly menu = this.router.config
+    .filter(route => route.data && route.data.title)
+    .map(route => ({path: route.path, title: route.data.title}));
+
+  constructor(private router: Router) {}
 }

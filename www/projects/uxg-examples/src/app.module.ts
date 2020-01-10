@@ -9,12 +9,17 @@ import { ClarityModule } from "@clr/angular";
 import { UxgExampleDropdownComponent } from "./uxg-example-dropdown/uxg-example-dropdown.component";
 import { UxgExampleIconsComponent } from "./uxg-example-icons/uxg-example-icons.component";
 import { UxgExampleTabsComponent } from "./uxg-example-tabs/uxg-example-tabs.component";
-import { UxgExampleButtonsComponent } from "./uxg-example-buttons/uxg-example-buttons.component";
-import { UxgExampleControlsComponent } from "./uxg-example-controls/uxg-example-controls.component";
+import { UxgExampleControlsComponent, UxgRouterLinkActiveDirective } from "./uxg-example-controls/uxg-example-controls.component";
 import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status/uxg-example-position-status.component";
 import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.component";
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
-import { UxgModule } from "uxg";
+import { UxgIconShapesSources, UxgModule } from "uxg";
+import { PrismModule } from "@ngx-prism/core";
+import { ClarityIcons } from "@clr/icons";
+import '@clr/icons/shapes/all-shapes';
+import { UxgExampleHomeComponent } from './uxg-example-home/uxg-example-home.component';
+
+UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
 @NgModule({
   declarations: [
@@ -22,11 +27,12 @@ import { UxgModule } from "uxg";
     UxgExampleDropdownComponent,
     UxgExampleIconsComponent,
     UxgExampleTabsComponent,
-    UxgExampleButtonsComponent,
     UxgExampleControlsComponent,
     UxgExamplePositionStatusComponent,
     UxgExampleInputComponent,
     UxgExampleTypographyComponent,
+    UxgRouterLinkActiveDirective,
+    UxgExampleHomeComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +41,7 @@ import { UxgModule } from "uxg";
     ReactiveFormsModule,
     CommonModule,
     ClarityModule,
+    PrismModule,
     UxgModule
   ],
   bootstrap: [AppComponent]

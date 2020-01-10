@@ -38,6 +38,10 @@
       background: #E9F1F7;
     }
 
+    .item-title a:hover {
+      color: uxg($theme, color-font-secondary);
+    }
+
     .positions {
       padding-top: 14px;
 

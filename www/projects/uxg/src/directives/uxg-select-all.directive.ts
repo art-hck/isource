@@ -1,40 +1,52 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { FormArray, NgControl } from "@angular/forms";
+import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormGroup, NgControl } from "@angular/forms";
 import { UxgCheckboxComponent } from "../components/uxg-checkbox/uxg-checkbox.component";
+import { merge, Subscription } from "rxjs";
+import { filter, tap } from "rxjs/operators";
+import { pipeFromArray } from "rxjs/internal/util/pipe";
 
 @Directive({
   selector: '[uxgSelectAllFor]'
 })
-export class UxgSelectAllDirective implements OnInit {
+export class UxgSelectAllDirective implements OnInit, OnDestroy {
   @Input() uxgSelectAllFor: string;
+  subscription = new Subscription();
 
-  constructor(private component: UxgCheckboxComponent, private el: ElementRef, private ngControl: NgControl) {}
-
+  constructor(private component: UxgCheckboxComponent, private ngControl: NgControl) {}
 
   ngOnInit() {
-    const control = this.ngControl.control;
-    const childControls = (control.parent.get(this.uxgSelectAllFor) as FormArray).controls
-      .map(childControl => childControl.get(this.ngControl.name));
-
-    control.valueChanges.subscribe(() => {
-        childControls.forEach(
-          childControl => childControl.setValue(control.value, { emitEvent: false })
-        );
-        this.updateMixed(childControls);
-      }
+    const control: AbstractControl = this.ngControl.control;
+    const controlName = Object.keys(control.parent.controls).find(key => control.parent.get(key) === control);
+    const formArray: FormArray = control.parent.get(this.uxgSelectAllFor) as FormArray;
+    if (!formArray) { return; }
+    const childs: AbstractControl[] = formArray.controls.map(
+      (formGroup: FormGroup) => formGroup.controls[controlName]
     );
+    let subscribed = true;
+    if (!childs.length) { return; }
 
-    childControls.forEach(
-      childControl => childControl.valueChanges
-        .subscribe(() => {
-          control.setValue(childControls.filter(c => c.value).length > 0, { emitEvent: false });
-          this.updateMixed(childControls);
-        })
-    );
+    const pipes = (action: () => void) => [
+      filter(() => subscribed),
+      filter(() => !control.disabled),
+      tap(() => subscribed = false),
+      tap(action),
+      tap(() => this.component.isMixed = childs.length > childs.filter(c => c.value).length),
+      tap(() => subscribed = true)
+    ];
 
+    this.subscription.add(control.valueChanges
+      .pipe(
+        pipeFromArray(pipes(
+          () => childs.filter(c => !c.disabled).forEach(c => c.setValue(this.ngControl.value))
+        )))
+      .subscribe());
+
+    this.subscription.add(merge(...childs.map(c => c.valueChanges))
+      .pipe(pipeFromArray(pipes(() => control.setValue(childs.filter(c => c.value).length > 0))))
+      .subscribe());
   }
 
-  updateMixed(childControls) {
-    this.component.isMixed = childControls.length > childControls.filter(c => c.value).length;
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

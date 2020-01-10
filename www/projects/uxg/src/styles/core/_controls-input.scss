@@ -4,9 +4,11 @@
 .app-control {
   @at-root {
     textarea#{&}, input#{&} {
+      background: uxg($theme, color-control-input-bg);
       border: 1px solid uxg($theme, color-control-secondary);
       border-radius: uxg($theme, control-border-radius);
       cursor: text;
+      color: uxg($theme, color-font-primary);
       display: block;
       height: uxg($theme, control-height);
       padding: 10px;

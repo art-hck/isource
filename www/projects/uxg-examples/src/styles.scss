@@ -1,13 +1,35 @@
-@import "projects/uxg/src/styles/default-theme";
+@import "dark-theme";
+@import '~prismjs/themes/prism-tomorrow.css';
+
+@include core($theme, $statuses);
+
+html { scroll-behavior: smooth; }
 
 body {
-  max-width: 1280px;
-  padding: 40px;
-  margin: auto;
   overflow-y: scroll;
+  color: uxg($theme, color-font-primary);
+  background: uxg($theme, color-bg);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 *:focus {
   outline: 0;
 }
 
+a:link { text-decoration: none; }
+
+/* PrismJS change colors */
+.token.punctuation { color: inherit; }
+.token.tag {color: #FFC66D;}
+.token.attr-name {color: #a9b7c6}
+.token.attr-value {color: #629755}
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #2B2B2B;
+  border-radius: 4px;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+}

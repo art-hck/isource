@@ -20,6 +20,7 @@
   transition-property: background-color, color, border;
   transition-timing-function: ease;
   white-space: nowrap;
+  color: uxg($theme, color-font-primary);
 
   &:not(&-clear) {
     height: uxg($theme, control-height);
@@ -50,7 +51,6 @@
 
   &-secondary {
     background-color: uxg($theme, color-control-secondary);
-    color: uxg($theme, color-font-primary);
 
     &:not(:disabled):hover {
       background-color: uxg($theme, color-control-secondary-hover);
