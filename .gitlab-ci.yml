@@ -1,34 +1,24 @@
 stages:
   - build
-  - deploy
   - codestyle
 
-build-front:
+build staging:
   stage: build
   tags:
-    - gpnmarket-front-ci
+    - gpn-test-front
   script:
     - pwd | xargs /bin/bash /var/agent/front/01.sync.sh
     - /bin/bash /var/agent/front/02.npm_install.sh
     - /bin/bash /var/agent/front/03.ng_build_prod.sh
-    - exit 0
-  only:
-    - master
-
-deploy-staging:
-  stage: deploy
-  tags:
-    - gpnmarket-front-ci
-  script:
     - /bin/bash /var/agent/front/04.change_girs.sh
     - exit 0
   only:
-    - master
+    - dev
 
-codestyle-staging:
+codestyle staging:
   stage: codestyle
   tags:
-    - gpnmarket-front-ci
+    - gpn-test-front
   script:
     - cd www
     - npm i tslint --no-optional
@@ -36,3 +26,31 @@ codestyle-staging:
     - exit 0
   only:
     - merge_requests
+
+
+build preprod:
+  stage: build
+  tags:
+    - gpn-preprod-front
+  script:
+    - pwd | xargs /bin/bash /var/www/agent/front/01.sync.sh
+    - /bin/bash /var/www/agent/front/02.npm_install.sh
+    - /bin/bash /var/www/agent/front/03.ng_build.sh
+    - /bin/bash /var/www/agent/front/04.change_girs.sh
+    - exit 0
+  only:
+    - master
+
+build preprod:
+  stage: build
+  tags:
+    - gpn-prod-front
+  script:
+    - pwd | xargs /bin/bash /var/www/agent/front/01.sync.sh
+    - /bin/bash /var/www/agent/front/02.npm_install.sh
+    - /bin/bash /var/www/agent/front/03.ng_build.sh
+    - /bin/bash /var/www/agent/front/04.change_girs.sh
+    - exit 0
+  only:
+    - master
+  when: manual
