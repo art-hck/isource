@@ -7,11 +7,15 @@ import { UxgPopoverContentDirection } from "uxg";
 })
 export class UxgExamplePopoverComponent {
 
-  dir = UxgPopoverContentDirection;
-  readonly example = `<uxg-popover #popoverRef>
-  <button uxgButton icon primary (click)="popoverRef.show()">
-    <clr-icon shape="user"></clr-icon>
-  </button>
-  <div *uxgPopoverContent>Sample text</div>
+  PopoverContentDirection = UxgPopoverContentDirection;
+  direction = UxgPopoverContentDirection.bottomLeft;
+
+  readonly example = `<uxg-popover>
+  <button uxgPopoverTrigger uxgButton outline lg>Click me</button>
+  <div *uxgPopoverContent="direction">Sample text</div>
 </uxg-popover>`;
+
+  readonly example_1 = `export class FooComponent {
+  direction = UxgPopoverContentDirection.bottomLeft;
+}`;
 }

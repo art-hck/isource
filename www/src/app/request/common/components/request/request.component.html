@@ -9,14 +9,14 @@
           <div class="app-row clr-align-items-center">
             <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
             <uxg-popover #popover>
-              <button uxgButton link icon (click)="popover.show()">
+              <button uxgButton uxgPopoverTrigger link icon>
                 <clr-icon shape="app-triangle down"></clr-icon>
               </button>
-              <div *uxgPopoverContent (click)="popover.hide()">
-                <div><button uxgButton clear (click)="select('all')">Все</button></div>
-                <div><button uxgButton clear (click)="select('none')">Ни одного</button></div>
-                <div><button uxgButton clear (click)="select('groups')">Группы</button></div>
-                <div><button uxgButton clear (click)="select('positions')">Вне групп</button></div>
+              <div *uxgPopoverContent>
+                <div><button uxgButton clear (click)="select('all'); popover.hide()">Все</button></div>
+                <div><button uxgButton clear (click)="select('none'); popover.hide()">Ни одного</button></div>
+                <div><button uxgButton clear (click)="select('groups'); popover.hide()">Группы</button></div>
+                <div><button uxgButton clear (click)="select('positions'); popover.hide()">Вне групп</button></div>
               </div>
             </uxg-popover>
           </div>

@@ -13,23 +13,23 @@ export class UxgExampleInputComponent {
       <span *ngIf="e.invalid">Неверные имя пользователя или пароль.</span>
     </div>
 
-    <!-- username input -->
+    <!-- Username input -->
     <div class="app-control-wrap">
       <input #user uxgInput lg type="text" formControlName="user"/>
       <label class="app-control-label" (click)="user.focus()">Почта</label>
 
-      <!-- username errors -->
+      <!-- Username errors -->
       <div class="app-control-error" *ngIf="form.get('user').errors as e">
         <span *ngIf="e.required">Обязательное поле</span>
         <span *ngIf="e.email">Неверная почта</span>
       </div>
     </div>
 
-    <!-- password input -->
+    <!-- Password input -->
     <div class="app-control-wrap">
       <input uxgInput type="password" lg formControlName="password" placeholder="Пароль"/>
 
-      <!-- password errors -->
+      <!-- Password errors -->
       <ng-container *ngIf="form.get('password').errors as e">
 
         <uxg-popover #errorPopover class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
@@ -53,7 +53,7 @@ export class UxgExampleInputComponent {
       </ng-container>
     </div>
 
-    <!-- footer -->
+    <!-- Footer -->
     <div class="app-row app-align-items-center">
       <uxg-switcher label="Запомнить меня" labelAlign="right" formControlName="rememberMe"></uxg-switcher>
       <div class="app-col"></div>
