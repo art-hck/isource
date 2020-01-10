@@ -1,15 +1,15 @@
-<form [formGroup]="form" *ngIf="positions && request">
+<form [formGroup]="form">
   <div class="app-row">
 
     <!-- Контролы управления позициями -->
     <div class="app-col app-table app-no-border">
       <div class="app-row clr-align-items-end">
-        <!-- Царь-чекбокс  -->
+        <!-- Царь-чекбокс -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <div class="app-row clr-align-items-center">
-            <uxg-checkbox formControlName="checked" [isMixed]="isMixedChecked"></uxg-checkbox>
+            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
             <div class="app-dropdown">
-              <button class="app-btn app-btn-clear app-btn-link">
+              <button uxgButton clear link>
                 <clr-icon shape="app-triangle down"></clr-icon>
               </button>
             </div>
@@ -18,29 +18,23 @@
 
         <!-- Назначиь ответственного -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isSeniorBackoffice()">
-          <button class="app-btn app-btn-clear app-btn-link"
-                  [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
             <clr-icon shape="app-user" size="16"></clr-icon>
             <span>Назначить</span>
           </button>
-          <app-request-add-responsible-modal #addResponsibleModal [request]="request" [positions]="checkedPositions" (success)="addResponsible.emit($event)">
-          </app-request-add-responsible-modal>
         </div>
 
         <!-- Добавить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
-          <button class="app-btn app-btn-clear app-btn-link"
-                  [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
           </button>
-          <app-request-add-group-modal #addGroupModal [request]="request" [positions]="checkedPositions" (success)="addGroup.emit($event)">
-          </app-request-add-group-modal>
         </div>
 
         <!-- Переместить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
-          <button class="app-btn app-btn-clear app-btn-link" [disabled]="true">
+          <button uxgButton clear link [disabled]="true">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
           </button>
@@ -50,13 +44,13 @@
         <div class="app-col app-basis-auto clr-flex-grow-0">
 
           <!-- Новая позиция  -->
-          <button class="app-btn app-btn-secondary app-btn-icon-text" [disabled]="true">
+          <button uxgButton secondary iconText (click)="addPositionModal.open()">
             <clr-icon shape="app-plus"></clr-icon>
             <span>Новая позиция</span>
           </button>
 
           <!-- Фильтр  -->
-          <button class="app-btn app-btn-secondary app-btn-icon-text" [disabled]="true">
+          <button uxgButton secondary iconText [disabled]="true">
             <clr-icon shape="app-sort2"></clr-icon>
             <span>Фильтр</span>
           </button>
@@ -68,45 +62,20 @@
   <div class="app-row">
 
     <!-- Список позиций -->
-    <div class="app-col app-table positions">
-      <ng-container *ngFor="let position of positions; index as i;" formArrayName="positions">
-        <ng-container formGroupName="{{i}}" *ngIf="formPositions.controls[i]">
+    <div class="app-col app-table">
+      <ng-container *ngFor="let formGroup of formPositions.controls">
+        <!-- Позиция -->
+        <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
+          <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
+            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
+          </a>
+        </ng-container>
 
-          <!-- Позиция -->
-          <ng-container *ngIf="asPosition(position) as position">
-            <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
-              <ng-container *ngTemplateOutlet="positionItem; context: {
-                position: position,
-                formControl: formPositions.controls[i]
-              }"></ng-container>
-            </a>
-          </ng-container>
-
-          <!-- Группа -->
-          <ng-container *ngIf="asGroup(position) as group">
-            <div (click)="navigateToPosition(group, $event)" class="app-row app-row-group">
-              <div class="app-col clr-flex-grow-0">
-                <uxg-checkbox formControlName="checked"></uxg-checkbox>
-              </div>
-              <div class="app-col">
-                <div class="item-title group-title">
-                  <span>Группа: </span>
-                  <b>{{ group.name ||"Без имени" }} </b>
-                  <span class="app-ghost-color">({{group.positions.length}})</span>
-                </div>
-
-                <!-- Позиции группы -->
-                <ng-container formArrayName="positions">
-                  <div class="app-row app-row-group-positions" *ngFor="let groupPositions of group.positions; index as j" >
-                    <ng-container formGroupName="{{j}}" *ngTemplateOutlet="positionItem; context:{
-                        position: groupPositions,
-                        formControl: asFormArray(formPositions.controls[i].get('positions')).controls[j]
-                    }"></ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-          </ng-container>
+        <!-- Группа -->
+        <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
+          <a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start">
+            <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
+          </a>
         </ng-container>
       </ng-container>
     </div>
@@ -119,9 +88,9 @@
 </form>
 
 <!-- Шаблон позиции -->
-<ng-template #positionItem let-position="position" let-formControl="formControl">
+<ng-template #positionItem let-position="position" let-formGroup="formGroup">
   <div class="app-col clr-flex-grow-0">
-    <uxg-checkbox [formControl]="formControl.get('checked')"></uxg-checkbox>
+    <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
   <div class="app-col app-bold item-title">
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
@@ -146,4 +115,61 @@
     </ng-template>
   </div>
 </ng-template>
+
+<!-- Шаблон группы -->
+<ng-template #groupItem let-group="group" let-formGroup="formGroup" let-isFolded="true">
+  <div class="app-col clr-flex-grow-0">
+    <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
+  </div>
+
+  <div class="app-col">
+    <div class="app-row">
+      <div class="app-col item-title">
+        <span class="app-secondary-color">Группа: </span>
+        <b>{{ group.name ||"Без имени" }} </b>
+        <span class="app-ghost-color">({{group.positions.length}})</span>
+      </div>
+      <div class="app-col" [style.max-width.px]="460">
+        <!-- @TODO Implement -->
+        2 как можно скорее | 01.01.2020 — ...
+      </div>
+      <div class="app-col app-row clr-flex-grow-0">
+        <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="isFolded ? 'up':'down'"
+            (click)="isFolded = !isFolded; $event.preventDefault(); $event.stopPropagation();"></clr-icon>
+      </div>
+    </div>
+
+    <!-- Позиции группы -->
+    <div class="positions" *ngIf="!isFolded">
+      <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
+        <div class="app-row">
+          <ng-container *ngTemplateOutlet="positionItem; context:{
+              position: childformGroup.get('position').value,
+              formGroup: childformGroup
+          }"></ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<app-request-add-position-modal
+  #addPositionModal
+  [request]="request"
+  (success)="addPosition.emit($event)">
+</app-request-add-position-modal>
+
+<app-request-add-responsible-modal
+  #addResponsibleModal
+  [request]="request"
+  [positions]="checkedPositions"
+  (success)="addResponsible.emit($event)">
+</app-request-add-responsible-modal>
+
+<app-request-add-group-modal
+  #addGroupModal
+  [request]="request"
+  [positions]="checkedPositions"
+  (success)="addGroup.emit($event)">
+</app-request-add-group-modal>
 

@@ -15,23 +15,16 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
   templateUrl: './request.component.html',
   styleUrls: ['./request.component.scss']
 })
-export class RequestComponent implements OnInit, OnDestroy {
+export class RequestComponent implements OnInit {
   requestId: Uuid;
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
   @Output() addGroup = new EventEmitter();
+  @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
-  subscription = new Subscription();
 
-  form = new FormGroup({
-    checked: new FormControl(false),
-    positions: new FormArray([])
-  });
-
-  get isMixedChecked(): boolean {
-    return this.checkedPositions.length > 0 && this.checkedPositions.length < this.formPositionsFlat.length;
-  }
+  form: FormGroup;
 
   get checkedPositions(): RequestPosition[] {
     return this.formPositionsFlat
@@ -59,25 +52,14 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
-    private user: UserInfoService
+    public user: UserInfoService
   ) {
   }
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-
-    // Иницилизация позиций в форме
-    this.positions.forEach(position => this.formPositionPush(position));
-
+    this.form = this.positionsToForm(this.positions);
     this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
-
-    this.subscription.add(
-      this.form.get('checked').valueChanges.subscribe(checked =>
-        this.formPositions.controls.forEach(
-          formGroup => formGroup.get("checked").setValue(checked)
-        )
-      )
-    );
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {
@@ -99,52 +81,22 @@ export class RequestComponent implements OnInit, OnDestroy {
     return this.router.createUrlTree([position.id], { relativeTo: this.route });
   }
 
-  private formPositionPush(position): void {
-    const formGroup = this.positionToFormGroup(position);
-
-    this.formPositions.push(formGroup);
-
-    if (this.asGroup(position)) {
-      this.asGroup(position).positions.forEach(_position => {
-        (formGroup.get('positions') as FormArray).push(this.positionToFormGroup(_position));
-      });
-    }
-  }
-
-  private positionToFormGroup(position): FormGroup {
-    const checkedControl = new FormControl(false);
-
+  private positionsToForm(positions: RequestPositionList[], position?: RequestPositionList) {
     const formGroup = new FormGroup({
-      position: new FormControl(position),
-      checked: checkedControl,
-      positions: new FormArray([])
+      checked: new FormControl(false),
+      positions: new FormArray(
+        positions.map(p => this.positionsToForm(this.asGroup(p) ? this.asGroup(p).positions : [], p))
+      )
     });
 
-    this.subscription.add(checkedControl.valueChanges
-      .subscribe(checked => {
-        setTimeout(() => {
-          const parentFormGroup = formGroup.parent.parent;
-          const checkedCount = parentFormGroup.get("positions").value.filter(value => value.checked);
-
-          parentFormGroup.get("checked").setValue(
-            checkedCount.length > 0, { emitEvent: false }
-          );
-        });
-
-        // Царь-чекбокс для групп
-        (formGroup.get("positions") as FormArray).controls
-          .forEach(_formGroup => _formGroup.get("checked").setValue(checked));
-      }
-    ));
+    if (position) {
+      formGroup.addControl("position", new FormControl(position));
+    }
 
     return formGroup;
   }
 
   asFormArray(control: AbstractControl) {
     return control as FormArray;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }
