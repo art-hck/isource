@@ -1,0 +1,39 @@
+<ng-container class="load-block"
+              *ngIf="!contragents">
+  <span class="spinner spinner-md"></span>
+</ng-container>
+
+<div class="search" *ngIf="showAll">
+  <input #contragentSearchInput
+         type="text"
+         placeholder="Введите наименование контрагента.."
+         autocomplete="off"
+         [value]="contragentSearchValue"
+         (input)="onContragentSearchInputChange($event.target.value)" />
+</div>
+
+
+<div class="contragents-list">
+  <ng-container *ngFor="let contragent of getContragents() | contragentSearchFilter: getContragentSearchInputValue();">
+    <clr-checkbox-wrapper>
+      <input type="checkbox"
+             clrCheckbox
+             [checked]="checkIfContragentIsChecked(contragent.id)"
+             (input)="onContragentSelected($event.target.value)"
+             value="{{ contragent.id }}" />
+      <label>{{ contragent.shortName }}</label>
+    </clr-checkbox-wrapper>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="
+    contragents &&
+    limit > 0 &&
+    limit < contragents.length && !showAll ||
+    (showAll && limit < ( getContragents() | contragentSearchFilter: getContragentSearchInputValue() ).length)">
+
+  <div class="show-all" (click)="showAll = !showAll">
+    <a>{{ showAll ? 'Свернуть' : 'Показать всех' }}</a>
+  </div>
+
+</ng-container>

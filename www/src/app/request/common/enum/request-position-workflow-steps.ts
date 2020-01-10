@@ -63,7 +63,8 @@ export const RequestPositionWorkflowStepsGroupsInfo: RequestPositionWorkflowStep
     statuses: RequestPositionWorkflowStepsGroups.DRAFT,
     positions: [],
     shortName: "Черновик",
-    hasActions: false
+    hasActions: false,
+    color: "#b3b3b3"
   },
   {
     url: "new",

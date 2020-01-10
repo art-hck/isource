@@ -15,6 +15,8 @@ import { TechnicalProposalsStatuses } from "../../enum/technical-proposals-statu
 })
 export class RequestTechnicalProposalsComponent {
 
+  @Input() filters: any;
+
   request: Request;
   @Input() technicalProposals: TechnicalProposal[];
 

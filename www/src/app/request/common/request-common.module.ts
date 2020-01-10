@@ -11,7 +11,6 @@ import { ContractUploadDocumentComponent } from "./components/contract-upload-do
 import { CreateRequestComponent } from "./components/create-request/create-request.component";
 import { CreateRequestFormComponent } from './components/create-request-form/create-request-form.component';
 import { CreateRequestFreeFormComponent } from './components/create-request-free-form/create-request-free-form.component';
-import { CustomerListNamesFilterComponent } from "./components/request-list/customer-list-names-filter/customer-list-names-filter.component";
 import { DeliveryMonitorComponent } from './components/delivery-monitor/delivery-monitor.component';
 import { DeliveryMonitorService } from "./services/delivery-monitor.service";
 import { DesignDocumentationComponent } from "./components/design-documentation/design-documentation.component";
@@ -34,11 +33,9 @@ import { RequestDashboardComponent } from './components/request-dashboard/reques
 import { RequestFilterCustomerListComponent } from './components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
 import { RequestInfoComponent } from "./components/request-info/request-info.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
+import { RequestTpFilterComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter.component";
 import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
 import { RequestListFilterSectionComponent } from "./components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
-import { RequestListNumberFilterComponent } from "./components/request-list/request-list-number-filter/request-list-number-filter.component";
-import { RequestListPositionStatusesFilterComponent } from "./components/request-list/request-list-position-statuses-filter/request-list-position-statuses-filter.component";
-import { RequestListStatusesFilterComponent } from "./components/request-list/request-list-statuses-filter/request-list-statuses-filter.component";
 import { RequestPositionComponent } from './components/request-position/request-position.component';
 import { RequestPositionListComponent } from './components/request-position-list/request-position-list.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
@@ -52,6 +49,9 @@ import { SharedModule } from "../../shared/shared.module";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
+import { RequestTpFilterContragentListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
+import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
+import { RequestTpFilterSectionComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-section/request-tp-filter-section.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -62,7 +62,6 @@ const RequestCommonModuleDeclarations = [
   CreateRequestComponent,
   CreateRequestFormComponent,
   CreateRequestFreeFormComponent,
-  CustomerListNamesFilterComponent,
   DeliveryMonitorComponent,
   DesignDocumentationComponent,
   DigitalInspectorComponent,
@@ -82,13 +81,14 @@ const RequestCommonModuleDeclarations = [
   RequestComponent,
   RequestDashboardComponent,
   RequestFilterCustomerListComponent,
+  RequestTpFilterContragentListComponent,
+  RequestTpFilterStatusesListComponent,
   RequestInfoComponent,
   RequestListComponent,
+  RequestTpFilterComponent,
+  RequestTpFilterSectionComponent,
   RequestListFilterComponent,
   RequestListFilterSectionComponent,
-  RequestListNumberFilterComponent,
-  RequestListPositionStatusesFilterComponent,
-  RequestListStatusesFilterComponent,
   RequestPositionComponent,
   RequestPositionFormComponent,
   RequestPositionListComponent,
