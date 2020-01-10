@@ -114,9 +114,7 @@
           <br/>
         </ng-container>
 
-        <ng-container *ngIf="position.isShmrRequired ||
-                             position.isPnrRequired ||
-                             position.isInspectionControlRequired">
+        <ng-container *ngIf="getRelatedServicesList(position)">
           <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
           <div class="app-bold"> {{ getRelatedServicesList(position) }}</div>
           <br/>

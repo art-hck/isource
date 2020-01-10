@@ -43,19 +43,16 @@ export class RequestPositionComponent implements OnInit {
   }
 
   getRelatedServicesList(position: RequestPosition): string {
-    const relatedServices = [];
+    const relatedServices = {
+      "ШМР": position.isShmrRequired,
+      "ПНР": position.isPnrRequired,
+      "Инспекционный контроль": position.isInspectionControlRequired
+    };
 
-    if (position.isShmrRequired) {
-      relatedServices.push('ШМР');
-    }
-    if (position.isPnrRequired) {
-      relatedServices.push('ПНР');
-    }
-    if (position.isInspectionControlRequired) {
-      relatedServices.push('Инспекционный контроль');
-    }
-
-    return relatedServices.join(', ');
+    return Object.keys(relatedServices)
+      .filter(key => relatedServices[key])
+      .reduce((arr, key) => arr = [...arr, key], [])
+      .join(', ');
   }
 }
 
