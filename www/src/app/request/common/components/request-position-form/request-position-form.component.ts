@@ -104,7 +104,7 @@ export class RequestPositionFormComponent implements OnInit {
     if (this.position.id) {
       submit$ = this.editRequestService.updateRequestPosition(this.position.id, this.form.value);
     } else {
-      submit$ = this.createRequestService.addRequestPosition(this.reqeustId, this.form.value)
+      submit$ = this.createRequestService.addRequestPosition(this.reqeustId, [this.form.value])
         .pipe(map(positions => positions[0]));
     }
 
