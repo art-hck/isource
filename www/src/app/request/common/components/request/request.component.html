@@ -8,11 +8,17 @@
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <div class="app-row clr-align-items-center">
             <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
-            <div class="app-dropdown">
-              <button uxgButton clear link>
+            <uxg-popover #popover>
+              <button uxgButton link icon (click)="popover.show()">
                 <clr-icon shape="app-triangle down"></clr-icon>
               </button>
-            </div>
+              <div *uxgPopoverContent (click)="popover.hide()">
+                <div><button uxgButton clear (click)="select('all')">Все</button></div>
+                <div><button uxgButton clear (click)="select('none')">Ни одного</button></div>
+                <div><button uxgButton clear (click)="select('groups')">Группы</button></div>
+                <div><button uxgButton clear (click)="select('positions')">Вне групп</button></div>
+              </div>
+            </uxg-popover>
           </div>
         </div>
 
