@@ -1,6 +1,11 @@
 @import "../uxg";
 
 @mixin grid($theme) {
+.app-main {
+  max-width: uxg($theme, content-width);
+  margin: auto;
+}
+
 .app-row {
   display: flex;
   flex-wrap: wrap;
@@ -16,7 +21,8 @@
   }
 
   &-aside {
-    max-width: 280px;
+    @extend .app-col;
+    max-width: uxg($theme, aside-width);
 
     & + * {
       margin-left: 20px;
@@ -31,15 +37,30 @@
   border-radius: 8px;
   padding: 17px 20px;
 
-  &-clickable:hover {
-    background: uxg($theme, color-bg);
+  hr {
+    border-top:1px uxg($theme, color-border) dotted;
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    margin-bottom: 0;
+    margin-top: 0;
   }
+
+  &:not(.app-row) + & {
+    margin-top: 2em;
+  }
+
 }
 
 .app-table {
   &:not(.app-no-border) > .app-row {
     @extend .app-card;
     padding: 17px 6px;
+
+    &-clickable:hover {
+      cursor: pointer;
+      background: uxg($theme, color-bg);
+    }
   }
 
   & > .app-row {

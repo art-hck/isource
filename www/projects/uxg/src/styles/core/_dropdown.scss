@@ -73,20 +73,21 @@
       background: uxg($theme, color-default);
       border: 1px uxg($theme, color-control-primary) solid;
       border-radius: 4px;
+      box-sizing: border-box;
       left: 0;
       overflow: hidden;
       position: absolute;
       z-index: 999999;
 
       &:not(&-up) {
-        border-top-color: transparent;
+        border-top: none;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         transform-origin: top;
       }
 
       &-up {
-        border-bottom-color: transparent;
+        border-bottom: none;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         transform-origin: bottom;

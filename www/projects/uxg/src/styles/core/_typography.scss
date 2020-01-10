@@ -4,22 +4,24 @@
 h1 {
   font-size: uxg($theme, font-size-xxl);
   font-weight: bold;
-  margin-bottom: 24px;
+  margin: 0 0 24px;
 }
 
 h2 {
   font-size: uxg($theme, font-size-xl);
   font-weight: bold;
-  margin-bottom: 14px;
+  margin: 0 0 14px;
 }
 
 h3 {
   font-size: uxg($theme, font-size-l);
   font-weight: bold;
+  margin: 0;
 }
 
 body, h4, input {
   font-size: uxg($theme, font-size-m);
+  margin: 0;
 }
 
 small {
@@ -36,6 +38,10 @@ a:visited {
 
   &.app-link-no-color {
     color: unset;
+
+    &:hover {
+      color: unset;
+    }
   }
 }
 

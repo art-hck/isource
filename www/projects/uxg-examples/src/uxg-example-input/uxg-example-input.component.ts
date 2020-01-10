@@ -25,7 +25,7 @@ export class UxgExampleInputComponent {
     <span *ngIf="e.pattern">Заглавные и строчные буквы и цифры.</span>
   </div>
 
-  <div class="app-row clr-align-items-center">
+  <div class="app-row app-align-items-center">
     <uxg-switcher label="Запомнить меня" labelAlign="right" formControlName="rememberMe"></uxg-switcher>
     <div class="app-btn-group">
       <button uxgButton outline lg icon type="button" (click)="form.reset()">

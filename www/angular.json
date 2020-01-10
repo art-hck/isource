@@ -157,17 +157,17 @@
             "aot": false,
             "styles": [
               "./node_modules/@clr/icons/clr-icons.min.css",
-              "./node_modules/@clr/ui/clr-ui.min.css",
               "projects/uxg-examples/src/styles.scss"
             ],
+            "assets": ["projects/uxg-examples/src/pluginIcon.svg"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/uxg-examples/src/environments/environment.ts",
-                  "with": "projects/uxg-examples/src/environments/environment.prod.ts"
+                  "replace": "projects/uxg-examples/src/environment.ts",
+                  "with": "projects/uxg-examples/src/environment.prod.ts"
                 }
               ],
               "optimization": true,

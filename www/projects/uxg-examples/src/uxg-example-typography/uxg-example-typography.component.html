@@ -1,151 +1,161 @@
-<div class="card">
-  <div class="card-header">Typography</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <h1>H1 title</h1>
-    <h2>H2 title</h2>
-    <h3>H3 title</h3>
-    <h4>H4 title</h4>
-    <p>Paragraph</p>
-    <small>small text</small>
+<div class="app-row">
+  <div class="app-col">
+    <div class="app-card" id="headers">
+      <h2>Typography</h2>
+
+      <br/>
+      <div class="headers">
+        <div class="border"><h1>Sample h1 title</h1></div>
+        <br/>
+        <div class="border"><h2>Sample h2 title</h2></div>
+        <br/>
+        <div class="border"><h3>Sample h3 title</h3></div>
+        <br/>
+        <div class="border"><h4>Sample h4 title</h4></div>
+        <br/>
+        <div class="border">
+          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+        <br/>
+      </div>
+
+      <p>Primary font color</p>
+      <p class="app-secondary-color">Secondary font color</p>
+      <p class="app-ghost-color">Ghost font color</p>
+      <p><small>small text</small></p>
+      <p><a routerLink="." (click)="$event.preventDefault()">Simple link</a></p>
+      <p class="app-success-color app-row app-align-items-center">
+        <clr-icon shape="app-check"></clr-icon>
+        <span>Success font color</span>
+      </p>
+      <p class="app-warning-color app-row app-align-items-center">
+        <clr-icon shape="app-info"></clr-icon>
+        <span>Warning font color</span>
+      </p>
+      <p class="app-alert-color app-row app-align-items-center">
+        <clr-icon shape="app-warning"></clr-icon>
+        <span>Alert font color</span>
+      </p>
+      <br/>
+      <h2>Sources</h2>
+      <ngx-prism language="html">{{example1}}</ngx-prism>
+    </div>
+
+    <div class="app-card" id="layout-with-aside">
+      <h2>Layout with aside</h2>
+
+      <h3>Main container</h3>
+      <div class="app-main border">
+        Main container
+      </div>
+      <br/>
+      <h3>Example with right aside</h3>
+      <div class="app-row">
+        <div class="app-col border">Сontent</div>
+        <div class="app-col-aside border">Aside</div>
+      </div>
+      <br/>
+      <h3>Example with left aside</h3>
+      <div class="app-row">
+        <div class="app-col-aside border">Aside</div>
+        <div class="app-col border">Сontent</div>
+      </div>
+      <br/>
+      <h3>Example with both asides</h3>
+      <div class="app-row">
+        <div class="app-col-aside border">Aside</div>
+        <div class="app-col border">Сontent</div>
+        <div class="app-col-aside border">Aside</div>
+      </div>
+      <br/>
+      <h2>Sources</h2>
+      <ngx-prism language="html">{{example2}}</ngx-prism>
+    </div>
+
+    <div class="app-card" id="table">
+      <h2>Table</h2>
+      <div class="border">
+        <div class="app-row">
+          <div class="app-col app-bold">ID</div>
+          <div class="app-col app-bold">Name</div>
+          <div class="app-col app-bold">Age</div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">1</div>
+          <div class="app-col">Mike</div>
+          <div class="app-col">21</div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">2</div>
+          <div class="app-col">Jhon</div>
+          <div class="app-col">24</div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">3</div>
+          <div class="app-col">Alice</div>
+          <div class="app-col">19</div>
+        </div>
+      </div>
+      <br/>
+      <h2>Sources</h2>
+      <ngx-prism language="html">{{example3}}</ngx-prism>
+    </div>
+
+    <div class="app-card" id="stylized-table">
+      <h2>Stylized table</h2>
+
+      <div class="app-table" [class.app-no-border]="!gridWithBorder">
+        <div class="app-row app-row-clickable">
+          <div class="app-col">1</div>
+          <div class="app-col">Mike</div>
+          <div class="app-col">21</div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">2</div>
+          <div class="app-col">Jhon</div>
+          <div class="app-col">24</div>
+        </div>
+        <div class="app-row">
+          <div class="app-col">3</div>
+          <div class="app-col">Alice</div>
+          <div class="app-col">19</div>
+        </div>
+      </div>
+      <br/>
+      <div class="app-row app-align-items-center">
+        <uxg-checkbox class="app-control" [(ngModel)]="gridWithBorder" #gridWithBorderRef></uxg-checkbox>
+        <label (click)="gridWithBorderRef.check($event)">&nbsp;With Border</label>
+      </div>
+      <br/>
+      <h2>Sources</h2>
+      <ngx-prism [cd]="{ code: true }" language="html" [code]="example4"></ngx-prism>
+    </div>
+
+    <div class="app-card" id="breadbcrumbs">
+      <h2>Breadcrumbs</h2>
+
+      <br/>
+      <uxg-breadcrumbs [breadcrumbs]="breadcrumbsService.breadcrumbs"></uxg-breadcrumbs>
+      <br/>
+      <h2>Sources</h2>
+      <br/>
+      <h3>Template: </h3>
+      <ngx-prism language="html">{{example6}}</ngx-prism>
+      <br/>
+      <h3>Component: </h3>
+      <ngx-prism language="javascript">{{example6_1}}</ngx-prism>
+    </div>
   </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <uxg-code language="html">{{example1}}</uxg-code>
+
+  <div class="app-col-aside">
+    <div class="sticky" [style.padding-top.px]="17">
+      <h3>Navigation</h3>
+      <p><a routerLink="." fragment="headers" uxgRouterLinkActive="app-bold">Headers</a></p>
+      <p><a routerLink="." fragment="layout-with-aside" uxgRouterLinkActive="app-bold">Layout with aside</a></p>
+      <p><a routerLink="." fragment="table" uxgRouterLinkActive="app-bold">Table</a></p>
+      <p><a routerLink="." fragment="stylized-table" uxgRouterLinkActive="app-bold">Stylized table</a></p>
+      <p><a routerLink="." fragment="breadbcrumbs" uxgRouterLinkActive="app-bold">Breadcrumbs</a></p>
+    </div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-header">Layout with aside</div>
-  <div class="card-block">
-    <div class="card-title">Example with right aside</div>
-    <div class="app-row">
-      <div class="app-col" style="border:1px #ccc dotted">Main column</div>
-      <div class="app-col app-col-aside" style="border:1px #ccc dotted">Aside column</div>
-    </div>
-  </div>
-
-  <div class="card-block">
-    <div class="card-title">Example with left aside</div>
-    <div class="app-row">
-      <div class="app-col app-col-aside" style="border:1px #ccc dotted">Aside column</div>
-      <div class="app-col" style="border:1px #ccc dotted">Main column</div>
-    </div>
-  </div>
-
-  <div class="card-block">
-    <div class="card-title">Example with both asides</div>
-    <div class="app-row">
-      <div class="app-col app-col-aside" style="border:1px #ccc dotted">Aside column</div>
-      <div class="app-col" style="border:1px #ccc dotted">Main column</div>
-      <div class="app-col app-col-aside" style="border:1px #ccc dotted">Aside column</div>
-    </div>
-  </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <uxg-code language="html">{{example2}}</uxg-code>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">Table grid</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <div class="app-row">
-      <div class="app-col app-bold">ID</div>
-      <div class="app-col app-bold">Name</div>
-      <div class="app-col app-bold">Age</div>
-    </div>
-    <div class="app-row">
-      <div class="app-col">1</div>
-      <div class="app-col">Mike</div>
-      <div class="app-col">21</div>
-    </div>
-    <div class="app-row">
-      <div class="app-col">2</div>
-      <div class="app-col">Jhon</div>
-      <div class="app-col">24</div>
-    </div>
-    <div class="app-row">
-      <div class="app-col">3</div>
-      <div class="app-col">Alice</div>
-      <div class="app-col">19</div>
-    </div>
-
-  </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <uxg-code language="html">{{example3}}</uxg-code>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">Stylized grid</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <div class="app-table">
-      <div class="app-row">
-        <div class="app-col">1</div>
-        <div class="app-col">Mike</div>
-        <div class="app-col">21</div>
-      </div>
-      <div class="app-row">
-        <div class="app-col">2</div>
-        <div class="app-col">Jhon</div>
-        <div class="app-col">24</div>
-      </div>
-      <div class="app-row">
-        <div class="app-col">3</div>
-        <div class="app-col">Alice</div>
-        <div class="app-col">19</div>
-      </div>
-    </div>
-  </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <uxg-code language="html">{{example4}}</uxg-code>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">No border stylized grid</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <div class="app-table app-no-border">
-      <div class="app-row">
-        <div class="app-col">1</div>
-        <div class="app-col">Mike</div>
-        <div class="app-col">21</div>
-      </div>
-      <div class="app-row">
-        <div class="app-col">2</div>
-        <div class="app-col">Jhon</div>
-        <div class="app-col">24</div>
-      </div>
-      <div class="app-row">
-        <div class="app-col">3</div>
-        <div class="app-col">Alice</div>
-        <div class="app-col">19</div>
-      </div>
-    </div>
-  </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <uxg-code language="html">{{example5}}</uxg-code>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header">Breadcrumbs</div>
-  <div class="card-block">
-    <div class="card-title">Example</div>
-    <uxg-breadcrumbs [breadcrumbs]="breadcrumbsService.breadcrumbs"></uxg-breadcrumbs>
-  </div>
-  <div class="card-block">
-    <div class="card-title">Sources</div>
-    <div>Template: </div>
-    <uxg-code language="html">{{example6}}</uxg-code>
-    <div>Component: </div>
-    <uxg-code language="javascript">{{example6_1}}</uxg-code>
-  </div>
-</div>

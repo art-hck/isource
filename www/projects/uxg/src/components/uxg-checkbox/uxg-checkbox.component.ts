@@ -44,4 +44,7 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
     this.writeValue(this.el.nativeElement.checked);
   }
 
+  asHTMLInputElement(el) {
+    return el as HTMLInputElement;
+  }
 }

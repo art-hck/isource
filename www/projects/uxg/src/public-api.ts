@@ -12,6 +12,9 @@ export * from './components/uxg-checkbox/uxg-checkbox.component';
 export * from './components/uxg-breadcrumbs/uxg-breadcrumbs.service';
 export * from './components/uxg-breadcrumbs/uxg-breadcrumbs';
 export * from './components/uxg-breadcrumbs/uxg-breadcrumbs.component';
+export * from './components/uxg-radio/uxg-radio-item.component';
+export * from './components/uxg-tree/uxg-tree.component';
+
 
 export * from './directives/uxg-tab.directive';
 export * from './directives/uxg-input.directive';
