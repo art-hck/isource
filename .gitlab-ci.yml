@@ -41,7 +41,7 @@ build preprod:
   only:
     - master
 
-build preprod:
+build prod:
   stage: build
   tags:
     - gpn-prod-front
