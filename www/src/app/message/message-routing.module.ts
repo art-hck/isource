@@ -7,7 +7,21 @@ const routes: Routes = [
   {
     path: '',
     component: MessagesViewComponent,
-    data: { title: "Сообщения", hideTitle: true, hideBreadcrumbs: true }
+    data: { title: "Сообщения", hideTitle: true, hideBreadcrumbs: true, noContainerPadding: true },
+    children: [
+      {
+        path: 'request/:request-id',
+        data: { title: "Сообщения", hideTitle: true, hideBreadcrumbs: true, noContainerPadding: true },
+        children: [
+          {
+            path: 'position/:position-id',
+          },
+          {
+            path: 'group/:position-id',
+          }
+        ]
+      }
+    ]
   }
 ];
 
