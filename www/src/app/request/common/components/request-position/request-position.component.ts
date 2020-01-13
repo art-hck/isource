@@ -41,6 +41,19 @@ export class RequestPositionComponent implements OnInit {
   isAfterManufacturing(position: RequestPosition): boolean {
     return this.positionStatusService.isStatusAfter(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
   }
+
+  getRelatedServicesList(position: RequestPosition): string {
+    const relatedServices = {
+      "ШМР": position.isShmrRequired,
+      "ПНР": position.isPnrRequired,
+      "Инспекционный контроль": position.isInspectionControlRequired
+    };
+
+    return Object.keys(relatedServices)
+      .filter(key => relatedServices[key])
+      .reduce((arr, key) => arr = [...arr, key], [])
+      .join(', ');
+  }
 }
 
 export class DateWithDocuments { date: string; documents: RequestDocument[]; }
