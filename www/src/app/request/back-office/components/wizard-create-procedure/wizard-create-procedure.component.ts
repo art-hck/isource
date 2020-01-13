@@ -226,7 +226,7 @@ export class WizardCreateProcedureComponent implements OnInit {
     this.procedureBasicDataForm = this.formBuilder.group({
       procedureTitle: ['', Validators.required],
       dishonestSuppliersForbidden: [false],
-      dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate]],
+      dateEndRegistration: ['', [Validators.required, CustomValidators.futureDate()]],
     });
   }
 

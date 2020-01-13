@@ -632,6 +632,7 @@ export class AddOffersComponent implements OnInit {
   openProcedureProlongateModal(procedureId) {
     this.prolongationProcedureId = procedureId;
     this.showProcedureProlongateModal = true;
+    this.procedureEndDateForm.reset();
   }
 
 }
