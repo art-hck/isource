@@ -104,9 +104,8 @@
         <div class="app-bold">{{ position.startPrice | currency: position.currency }}</div>
         <br/>
 
-        <!-- @TODO: not implemented -->
         <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
-        <div class="app-bold">ГОСТ 10667-90</div>
+        <div class="app-bold">{{ position.productionDocument }}</div>
         <br/>
 
         <ng-container *ngIf="position.isDesignRequired">
@@ -115,10 +114,12 @@
           <br/>
         </ng-container>
 
-        <!-- @TODO: not implemented -->
-        <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
-        <div class="app-bold">Необходимы ПНР и ШМР</div>
-        <br/>
+        <ng-container *ngIf="getRelatedServicesList(position)">
+          <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
+          <div class="app-bold"> {{ getRelatedServicesList(position) }}</div>
+          <br/>
+        </ng-container>
+
 
         <ng-container *ngIf="position.comments">
           <div class="app-ghost-color">Комментарии</div>
