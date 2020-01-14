@@ -1,3 +1,12 @@
 .breadcrumbs {
   margin-bottom: 30px;
 }
+
+.content-area.no-padding {
+  padding: 0;
+}
+
+.content-area.no-padding .container {
+  max-width: 100%;
+  padding: 0;
+}
