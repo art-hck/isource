@@ -37,7 +37,7 @@ const routes: Routes = [
           {
             path: 'commercial-proposals',
             component: RequestCommercialProposalsComponent,
-            data: { title: "Технические предложения" }
+            data: { title: "Коммерческие предложения" }
           },
           {
             path: ':position-id',
