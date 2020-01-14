@@ -89,6 +89,7 @@ export class RequestListViewComponent implements OnInit {
   onDatagridStateChange(state: DatagridStateAndFilter): void {
     this.currentDatagridState = state;
     this.composeFilters();
+    this.getRequestStatusCount('backoffice');
 
     this.getRequestListForBackoffice(state.startFrom, state.pageSize, this.filters);
   }
