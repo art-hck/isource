@@ -3,7 +3,12 @@
   <div>
     <uxg-tabs class="app-tabs-border">
       <ng-container *ngFor="let item of menu">
-        <uxg-tab-title #rla="routerLinkActive" routerLinkActive [active]="rla.isActive" [routerLink]="item.path">
+        <uxg-tab-title
+          #rla="routerLinkActive"
+          routerLinkActive
+          [active]="rla.isActive"
+          [routerLinkActiveOptions]="{exact: true}"
+          [routerLink]="item.path">
           {{ item.title }}
         </uxg-tab-title>
       </ng-container>

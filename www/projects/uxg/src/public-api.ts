@@ -14,6 +14,9 @@ export * from './components/uxg-breadcrumbs/uxg-breadcrumbs';
 export * from './components/uxg-breadcrumbs/uxg-breadcrumbs.component';
 export * from './components/uxg-radio/uxg-radio-item.component';
 export * from './components/uxg-tree/uxg-tree.component';
+export * from './components/uxg-popover/uxg-popover-direction-enum';
+export * from './components/uxg-popover/uxg-popover.component';
+export * from './components/uxg-popover/uxg-popover.directive';
 
 
 export * from './directives/uxg-tab.directive';

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input }
 
 @Component({
   selector: 'uxg-tab-title',
-  templateUrl: './uxg-tab-title.component.html',
+  template: `<ng-content></ng-content>`,
 })
 export class UxgTabTitleComponent {
 
