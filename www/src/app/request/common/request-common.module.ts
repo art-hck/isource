@@ -48,6 +48,7 @@ import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
+import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
 import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
 import { RequestTpFilterContragentListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
 import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
@@ -93,6 +94,7 @@ const RequestCommonModuleDeclarations = [
   RequestPositionFormComponent,
   RequestPositionListComponent,
   RequestTechnicalProposalsComponent,
+  RequestCommercialProposalsComponent,
   RequestViewComponent,
   SearchFilterPipe
 
