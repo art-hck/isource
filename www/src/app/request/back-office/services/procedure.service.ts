@@ -13,15 +13,25 @@ import { PublishProcedureInfo } from '../models/publish-procedure-info';
 import { map } from 'rxjs/operators';
 import { PublishProcedureResult } from '../models/publish-procedure-result';
 import { PublishProcedureRequest } from '../models/publish-procedure-request';
+import { CreateProcedureRequest } from "../models/create-procedure-request";
 
 @Injectable()
 export class ProcedureService {
 
   constructor(
     protected api: HttpClient,
-  ) {
+  ) {}
+
+  createProcedure(requestId: Uuid, body: CreateProcedureRequest): Observable<PublishProcedureResult> {
+    const url = `requests/backoffice/${requestId}/create-procedure`;
+
+    return this.api.post<PublishProcedureResult>(url, body);
   }
 
+  /**
+   * @deprecated
+   * Подготовку тела запроса недопустимо производить в сервсисе. Выпилить вместе со старым интерфейсом
+   */
   publishProcedure(request: PublishProcedureRequest): Observable<PublishProcedureResult> {
     const publishProcedureInfo = request.procedureInfo;
 

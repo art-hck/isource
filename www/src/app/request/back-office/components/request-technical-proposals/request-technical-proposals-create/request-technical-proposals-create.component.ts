@@ -27,7 +27,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     return this.form.get("positions").value.filter(pos => pos.manufacturer_name).length === 0;
   }
 
-  constructor(private fb: FormBuilder, private technicalProposalsService: TechnicalProposalsService) { }
+  constructor(private fb: FormBuilder, private technicalProposalsService: TechnicalProposalsService) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -49,9 +49,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges
-      .pipe(tap(() => console.log(this.form)) )
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
-
   }
 
   ngAfterViewInit() {

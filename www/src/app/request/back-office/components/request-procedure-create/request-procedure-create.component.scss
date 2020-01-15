@@ -1,0 +1,54 @@
+@import "projects/uxg/src/styles/index";
+
+.scrollable {
+  max-height: calc(70vh - 230px);
+  overflow-y: scroll;
+  padding: 0 15px;
+  margin: 0px -22px 0 -15px;
+  @include scrollbar($theme);
+}
+
+.divider {
+  margin: 0;
+}
+
+.app-wizzard > .app-col:not(:last-child) {
+  margin-right: 10px;
+
+  &-item {
+    width: 40px;
+    height: 40px;
+    border: 2px solid;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    font-size: uxg($theme, font-size-xl);
+    font-weight: bold;
+    position: relative;
+
+    & ~ div {
+      margin-left: .5em;
+    }
+
+    &.active {
+      color: uxg($theme, color-primary);
+
+      ~ div {
+        color: uxg($theme, color-font-primary);
+      }
+    }
+
+    .completed {
+      position: absolute;
+      right: -1px;
+      top: -2px;
+      color: uxg($theme, color-primary);
+
+      ::ng-deep svg {
+        stroke: #fff;
+        stroke-width: 6px;
+        paint-order: stroke;
+      }
+    }
+  }
+}

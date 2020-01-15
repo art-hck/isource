@@ -53,7 +53,7 @@
     <br/>
     <div class="app-row clr-justify-content-end">
       <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
-      <button uxgButton lg primary [disabled]="form.invalid">Всё готово</button>
+      <button uxgButton lg primary [disabled]="form.invalid">{{ submitLabel || "Всё готово" }}</button>
     </div>
   </ng-container>
 

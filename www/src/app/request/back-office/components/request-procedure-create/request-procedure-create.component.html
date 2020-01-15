@@ -1,0 +1,130 @@
+<div class="app-wizzard app-row app-ghost-color app-align-items-center">
+  <ng-container *ngFor="let step of wizzard; index as i">
+    <div *ngIf="i > 0" class="app-col app-grow-0 app-basis-auto"><clr-icon shape="app-arrow right"></clr-icon></div>
+    <div class="app-col app-grow-0 app-basis-auto">
+      <div class="app-row app-align-items-center">
+        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)">
+          <clr-icon *ngIf="step.completed" class="completed" shape="app-check"></clr-icon>
+          {{ i + 1 }}
+        </div>
+        <div>{{ step.label }}</div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<br/>
+<br/>
+
+<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()">
+  <!-- Select positions -->
+  <app-request-technical-proposals-create-positions
+    *uxgWizzardStep="'positions'"
+    submitLabel="Продолжить"
+    formControlName="positions"
+    [request]="request"
+    (cancel)="complete.emit()"
+    (ngModelChange)="wizzard.next()"
+  ></app-request-technical-proposals-create-positions>
+
+  <!-- General -->
+  <div *uxgWizzardStep="'general'" formGroupName="general">
+    <div class="app-secondary-color">
+      Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
+      создать техническое предложение от одного контрагента.
+    </div>
+    <br/>
+    <br/>
+    <h3>Общие сведения</h3>
+    <div class="app-control-wrap">
+      <input #nameControlRef uxgInput type="text" lg formControlName="procedureTitle"/>
+      <label class="app-control-label" (click)="nameControlRef.focus()">Наименование закупки</label>
+      <div class="app-control-error" *ngIf="form.get('general').get('procedureTitle').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
+      </div>
+    </div>
+
+    <div class="app-row app-align-items-center">
+      <uxg-checkbox class="app-control" #verificationRequired formControlName="dishonestSuppliersForbidden"></uxg-checkbox>
+      <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
+        участников закупки в реестре недобросовестных поставщиков ФАС</label>
+    </div>
+    <br/>
+    <div class="app-row app-align-items-center">
+      <div class="app-col-aside">
+        <div class="app-control-wrap">
+          <input #dateEndRegistration uxgInput lg formControlName="dateEndRegistration">
+          <label class="app-control-label" (click)="dateEndRegistration.focus()" >Прием заявок до (дд.мм.гггг)</label>
+          <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+            <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+          </label>
+          <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
+            <span>Неверная дата</span>
+          </div>
+        </div>
+        <clr-date-container #datepicker class="hidden-datepicker">
+          <input clrDate formControlName="dateEndRegistration" />
+        </clr-date-container>
+      </div>
+      <div class="app-col app-secondary-color">
+        Заявки будут приниматься до <b>23:59</b> указанной даты
+      </div>
+    </div>
+
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
+      <button type="button" uxgButton primary lg [disabled]="form.get('general').invalid" (click)="wizzard.next()">Продолжить</button>
+    </div>
+
+  </div>
+
+  <!-- Properties -->
+  <div *uxgWizzardStep="'properties'">
+    <h3>Свойства процедуры</h3>
+    <br/>
+    <hr class="divider"/>
+    <div class="scrollable">
+      <app-request-procedure-create-properties formControlName="properties"></app-request-procedure-create-properties>
+    </div>
+    <hr class="divider"/>
+    <br/>
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
+      <button type="button" uxgButton primary lg (click)="wizzard.next()" [disabled]="form.get('properties').invalid">Продолжить</button>
+    </div>
+  </div>
+
+  <!-- Contragents -->
+  <div *uxgWizzardStep="'contragents'">
+    <hr class="divider"/>
+    <br/>
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
+      <button type="button" uxgButton primary lg [disabled]="form.get('privateAccessContragents').invalid" (click)="wizzard.next()">Продолжить</button>
+    </div>
+  </div>
+
+  <!-- Documents -->
+  <div *uxgWizzardStep="'documents'" formGroupName="documents">
+    <div class="app-secondary-color">Ниже вы можете выбрать те документы заявки, которые могут быть прикреплены к процедуре</div>
+    <br/>
+    <br/>
+    <div class="app-row app-align-items-center">
+      <h3 class="app-col">Документы процедуры</h3>
+      <button type="button" uxgButton secondary iconText disabled="" title="Not implemented">
+        <clr-icon shape="app-upload"></clr-icon> Загрузить документы
+      </button>
+    </div>
+    <br/>
+    <hr class="divider"/>
+    <div class="scrollable">
+      <app-request-procedure-create-documents [documents]="documents" formControlName="procedureLotDocuments">
+      </app-request-procedure-create-documents>
+    </div>
+    <hr class="divider"/>
+    <br/>
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
+      <button uxgButton primary lg [disabled]="form.invalid">Создать процедуру</button>
+    </div>
+  </div>
+</form>

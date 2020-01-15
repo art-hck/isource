@@ -21,6 +21,7 @@ import { RequestPosition } from "../../../../common/models/request-position";
 })
 export class RequestTechnicalProposalsCreatePositionsComponent implements OnInit, ControlValueAccessor {
   @Input() request: Request;
+  @Input() submitLabel: string;
   @Output() cancel = new EventEmitter();
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -66,7 +67,7 @@ export class RequestTechnicalProposalsCreatePositionsComponent implements OnInit
 
   createFormGroupPosition(position: RequestPositionList) {
     return this.fb.group({
-      checked: false,
+      checked: this.value && !!this.value.find(positionWithMan => positionWithMan.position.id === position.id),
       manufacturer_name: null,
       position: position
     });
