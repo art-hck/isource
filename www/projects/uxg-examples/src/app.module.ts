@@ -18,6 +18,7 @@ import { PrismModule } from "@ngx-prism/core";
 import { ClarityIcons } from "@clr/icons";
 import '@clr/icons/shapes/all-shapes';
 import { UxgExampleHomeComponent } from './uxg-example-home/uxg-example-home.component';
+import { UxgExamplePopoverComponent } from './uxg-example-popover/uxg-example-popover.component';
 
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -32,7 +33,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgExampleInputComponent,
     UxgExampleTypographyComponent,
     UxgRouterLinkActiveDirective,
-    UxgExampleHomeComponent
+    UxgExampleHomeComponent,
+    UxgExamplePopoverComponent
   ],
   imports: [
     BrowserModule,

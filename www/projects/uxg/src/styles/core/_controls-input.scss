@@ -73,13 +73,13 @@
 
     & ~ &-icon {
       position: absolute;
-      top: 0;
+      top: 50%;
       right: 0;
-      height: 100%;
       margin: 0 10px;
       display: flex;
       align-items: center;
       color: uxg($theme, color-font-ghost);
+      transform: translateY(-50%);
 
       &-error {
         @extend .app-control-icon;

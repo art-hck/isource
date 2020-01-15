@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, InjectionToken, Input, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, InjectionToken, Input, OnDestroy, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
 import { UxgDropdownItemDirective } from "../../directives/uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
@@ -12,7 +12,7 @@ import { DOCUMENT, isPlatformBrowser } from "@angular/common";
     multi: true
   }]
 })
-export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, AfterViewChecked, ControlValueAccessor {
+export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterViewChecked, ControlValueAccessor {
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
@@ -24,7 +24,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
   @Input() direction: "up" | "down";
 
   public value = null;
-  public isHidden = true;
+  private _isHidden = true;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
 
@@ -52,6 +52,21 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   get selected(): UxgDropdownItemDirective | null {
     return this.items ? this.items.find(item => item.value === this.value) : null;
+  }
+
+  get isHidden(): boolean {
+    return this._isHidden;
+  }
+
+  set isHidden(value: boolean) {
+    if (isPlatformBrowser(this.platformId)) {
+      if (value) {
+        window.removeEventListener('scroll', this.hideOnScrollOutside, true);
+      } else {
+        window.addEventListener('scroll', this.hideOnScrollOutside, true);
+      }
+    }
+    this._isHidden = value;
   }
 
   constructor(
@@ -101,12 +116,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
     });
   }
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener('scroll', this.hideOnScrollOutside, true);
-    }
-  }
-
   @HostListener('document:click', ['$event.target'])
   clickOut(targetElement) {
     if (!this.isHidden && !this.isInside(targetElement)) {
@@ -149,7 +158,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnInit, OnDestroy, A
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId)) {
-      window.removeEventListener('scroll', this.hideOnScrollOutside, true);
       this.itemsWrapper.remove();
     }
   }
