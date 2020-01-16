@@ -1,0 +1,16 @@
+.search {
+  padding-bottom: 24px;
+}
+
+.contragents-list {
+  max-height: 320px;
+  overflow: auto;
+
+  & .clr-checkbox-wrapper {
+    padding-bottom: 10px;
+  }
+}
+
+.show-all {
+  margin-top: 10px;
+}
