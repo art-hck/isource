@@ -20,6 +20,7 @@ import { RequestTechnicalProposalsCreateComponent } from './components/request-t
 import { RequestTechnicalProposalsCreatePositionsComponent } from './components/request-technical-proposals/request-technical-proposals-create-positions/request-technical-proposals-create-positions.component';
 import { RequestTechnicalProposalsCreateManufacturerComponent } from './components/request-technical-proposals/request-technical-proposals-create-manufacturer/request-technical-proposals-create-manufacturer.component';
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
+import { RequestCommercialProposalsCreateComponent } from './components/request-commercial-proposals/request-commercial-proposals-create/request-commercial-proposals-create.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { RequestCommercialProposalsComponent } from './components/request-commer
     RequestTechnicalProposalsCreateComponent,
     RequestTechnicalProposalsCreatePositionsComponent,
     RequestTechnicalProposalsCreateManufacturerComponent,
-    RequestCommercialProposalsComponent
+    RequestCommercialProposalsComponent,
+    RequestCommercialProposalsCreateComponent
 
   ],
   imports: [

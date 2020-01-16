@@ -1,0 +1,97 @@
+@import "projects/uxg/src/styles/index";
+
+form.cp-creation-form {
+  margin-bottom: 16px;
+}
+
+::ng-deep .cp-creation-modal .modal-dialog.modal-lg {
+  width: 765px;
+}
+
+div.documents {
+  margin-bottom: 30px;
+}
+
+.position-name {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  margin-bottom: 15px;
+}
+
+input[type=file] {
+  display: none;
+}
+
+input.app-control-large {
+  height: 40px;
+}
+
+.error-message {
+  bottom: 0;
+  padding: 2px 0;
+  position: absolute;
+  color: #EB5757;
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+span.document-description,
+span.requirement-text {
+  color: rgba(0, 0, 0, 0.6);
+
+  span.red-text {
+
+  }
+}
+
+// Скрываем стандартое поле ввода Clarity
+.hidden-datepicker {
+  input[clrDate] { display: none; }
+
+  &::ng-deep {
+    input[clrDate] + button,
+    .clr-validate-icon { display: none; }
+
+    .clr-input-wrapper { height: 0; }
+
+    .datepicker {
+      margin-top: -1.25rem;
+    }
+  }
+}
+
+small {
+  margin-bottom: 17px;
+  display: block;
+}
+
+.documents {
+  & > .app-row > .app-col {
+    width: 25%;
+    min-width: 310px;
+    padding: 0 20px 12px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+  }
+
+  &-title {
+    padding: 0 12px;
+    overflow: hidden;
+    flex-grow: 1;
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  button {
+    min-height: auto;
+  }
+}

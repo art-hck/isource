@@ -29,3 +29,9 @@
     <span class="spinner spinner-md"></span>
   </div>
 </ng-template>
+
+<app-request-commercial-proposals-create
+  *ngIf="showForm"
+  (visibleChange)="showForm = $event"
+  (create)="addCommercialProposal($event)">
+</app-request-commercial-proposals-create>
