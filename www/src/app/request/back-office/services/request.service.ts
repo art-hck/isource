@@ -38,8 +38,8 @@ export class RequestService {
     );
   }
 
-  getRequestPosition(id: Uuid): Observable<RequestPosition> {
-    const url = `requests/positions/${id}/info`;
+  getRequestPosition(requestId: Uuid, positionId: Uuid): Observable<RequestPosition> {
+    const url = `requests/backoffice/${requestId}/positions/${positionId}/info`;
     return this.api.get<RequestPosition>(url);
   }
 
