@@ -11,6 +11,7 @@ import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps as PositionStatuses } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-request-position-form',
@@ -55,6 +56,7 @@ export class RequestPositionFormComponent implements OnInit {
     private statusService: RequestPositionStatusService,
     private createRequestService: CreateRequestService,
     private editRequestService: EditRequestService,
+    private userInfoService: UserInfoService
   ) {}
 
   ngOnInit() {
@@ -114,5 +116,9 @@ export class RequestPositionFormComponent implements OnInit {
       this.position = position;
       this.form.enable();
     }));
+  }
+
+  canNotEditField() {
+    return !this.userInfoService.isCustomer();
   }
 }

@@ -17,3 +17,7 @@ textarea { height: 80px; }
     }
   }
 }
+
+::ng-deep textarea[readonly].comments {
+  background: #e5e8ef;
+}
