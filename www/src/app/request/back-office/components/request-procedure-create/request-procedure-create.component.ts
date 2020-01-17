@@ -6,6 +6,12 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { CreateProcedureRequest } from "../../models/create-procedure-request";
+import { finalize } from "rxjs/operators";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { TechnicalProposalsService } from "../../services/technical-proposals.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-technical-proposals-procedure-create',
@@ -15,12 +21,15 @@ import { CreateProcedureRequest } from "../../models/create-procedure-request";
 export class RequestProcedureCreateComponent implements OnInit {
   @Input() request: Request;
   @Output() complete = new EventEmitter();
+  contragents$: Observable<ContragentList[]>;
+  positions$: Observable<RequestPosition[]>;
+
   form: FormGroup;
   wizzard: UxgWizzard;
-  loading: boolean;
+  isLoading: boolean;
 
   get documents() {
-    const positions = this.form.get("positions").value.map(_positions => _positions.position) as RequestPosition[];
+    const positions = this.form.get("positions").value as RequestPosition[];
     return positions.reduce((documents: [], position) => [...documents, ...position.documents], []);
   }
 
@@ -28,9 +37,15 @@ export class RequestProcedureCreateComponent implements OnInit {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
+    private technicalProposalsService: TechnicalProposalsService,
+    private contragentService: ContragentService,
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit() {
+    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id);
+    this.contragents$ = this.contragentService.getContragentList();
+
     this.wizzard = this.wb.create({
       positions: "Выбор позиций",
       general: "Общие сведения",
@@ -46,7 +61,7 @@ export class RequestProcedureCreateComponent implements OnInit {
         dishonestSuppliersForbidden: false,
         prolongateEndRegistration: 10, // Продление времени приема заявок на участие (минут)
       }),
-      positions: [[]],
+      positions: [[], [Validators.required]],
       properties: null,
       privateAccessContragents: [[]],
       documents: this.fb.group({
@@ -57,31 +72,55 @@ export class RequestProcedureCreateComponent implements OnInit {
 
     this.form.get("properties").valueChanges
       .subscribe(properties => {
+        if (!properties.publicAccess) {
+          this.form.get("privateAccessContragents").setValidators([Validators.required, Validators.minLength(2)]);
+        } else {
+          this.form.get("privateAccessContragents").clearValidators();
+        }
+
         this.wizzard.get("contragents").disable(properties.publicAccess);
       });
   }
-
 
   submit() {
     if (this.form.invalid) {
       return;
     }
 
-    this.loading = true;
+    this.isLoading = true;
     this.form.disable();
 
     const body: CreateProcedureRequest = {
       ...this.form.get("general").value,
       ...this.form.get("documents").value,
       ...this.form.get("properties").value,
-      positions: this.form.get("positions").value.map(position => position.position.id),
-      privateAccessContragents: this.form.get("privateAccessContragents").value,
+      positions: this.form.get("positions").value.map(position => position.id),
+      privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
     };
 
-    this.procedureService.createProcedure(this.request.id, body).subscribe(data => {
-      this.loading = false;
-      this.form.enable();
-      this.complete.emit();
-    });
+    this.procedureService.createProcedure(this.request.id, body).pipe(
+      finalize(() => {
+        this.form.enable();
+        this.isLoading = false;
+      })
+    ).subscribe(
+      data => {
+        this.complete.emit();
+        this.notificationService.toast(`Процедура <b>${ data.procedureId }</b> успешно создана`);
+      },
+      err => this.notificationService.toast(
+        err.error && err.error.detail || "Ошибка при создании процедуры",
+        "error", 0)
+    );
   }
+
+  filterPositions(q: string, position: RequestPosition): boolean {
+    return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  filterContragents(q: string, contragent: ContragentList): boolean {
+    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.kpp.indexOf(q.toLowerCase()) >= 0;
+  }
+
+  trackById = (item: RequestPosition | ContragentList) => item.id;
 }

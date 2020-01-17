@@ -1,38 +1,28 @@
 @import "projects/uxg/src/styles/index";
-
-.item {
-  &-title {
-    line-height: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &-quantity {
-    flex-grow: .15; // 15% width
-    max-width: 100px;
-  }
-
-  &-date {
-    max-width: 120px;
-    text-align: right;
-  }
-}
-
 hr {
   border:none;
   margin: 0;
   border-bottom: 1px uxg($theme, color-divider) solid;
 }
 
+.search {
+  width: 280px;
+  margin-left: .5em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
 .app-table {
-  max-height: calc(70vh - 270px);
   overflow: auto;
   padding: 5px 15px;
   margin: 0px -22px 0 -15px;
   @include scrollbar($theme);
 
-  & > .app-row {
+  &::ng-deep > .app-row {
     padding: 8px 0;
 
     & > .app-col {

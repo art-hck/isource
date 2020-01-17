@@ -3,7 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, V
 import { Request } from "../../../../common/models/request";
 import { fromEvent, merge, Observable } from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
-import { auditTime, flatMap, map, tap } from "rxjs/operators";
+import { auditTime, flatMap, map } from "rxjs/operators";
+import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
@@ -18,6 +19,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
   isLoading: boolean;
   form: FormGroup;
+  positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -47,13 +49,16 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       this.form.get('positions').updateValueAndValidity({ emitEvent: false });
     });
 
+    this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
+      .pipe(map(positions => positions.map(position => ({position, manufacturer_name: null}))));
+
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
   }
 
   ngAfterViewInit() {
-    // // @TODO: uxg-autocomplete!
+    // @TODO: uxg-autocomplete!
     merge(
       this.form.get("contragent").valueChanges,
       fromEvent(this.contragentName.nativeElement, "blur"),
@@ -79,7 +84,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
   submit(isDraft = false) {
     if (this.form.invalid) {
-      // return;
+      return;
     }
     this.isLoading = true;
     this.form.disable();
@@ -141,4 +146,10 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     return control.value.length === control.value
       .filter(pos => pos.manufacturer_name).length ? null : { manufacturer_name_error: true };
   }
+
+  positionsWithManufacturerFilter(q: string, posWithMan: PositionWithManufacturerName) {
+    return posWithMan.position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  trackByPositionId = (item: PositionWithManufacturerName) => item.position.id;
 }

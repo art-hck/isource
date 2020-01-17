@@ -17,7 +17,6 @@ import { TechnicalProposalsService } from "./services/technical-proposals.servic
 import { WizardCreateProcedureComponent } from './components/wizard-create-procedure/wizard-create-procedure.component';
 import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 import { RequestTechnicalProposalsCreateComponent } from './components/request-technical-proposals/request-technical-proposals-create/request-technical-proposals-create.component';
-import { RequestTechnicalProposalsCreatePositionsComponent } from './components/request-technical-proposals/request-technical-proposals-create-positions/request-technical-proposals-create-positions.component';
 import { RequestTechnicalProposalsCreateManufacturerComponent } from './components/request-technical-proposals/request-technical-proposals-create-manufacturer/request-technical-proposals-create-manufacturer.component';
 import { RequestProcedureCreateComponent } from './components/request-procedure-create/request-procedure-create.component';
 import { RequestProcedureCreatePropertiesComponent } from './components/request-procedure-create/request-procedure-create-properties/request-procedure-create-properties.component';
@@ -35,7 +34,6 @@ import { RequestProcedureCreateDocumentsComponent } from "./components/request-p
     RequestPositionComponent,
     RequestTechnicalProposalsComponent,
     RequestTechnicalProposalsCreateComponent,
-    RequestTechnicalProposalsCreatePositionsComponent,
     RequestTechnicalProposalsCreateManufacturerComponent,
     RequestProcedureCreateComponent,
     RequestProcedureCreatePropertiesComponent,

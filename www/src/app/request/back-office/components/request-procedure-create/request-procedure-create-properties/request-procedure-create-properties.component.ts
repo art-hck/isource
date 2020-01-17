@@ -1,5 +1,6 @@
-import { AfterContentInit, Component, forwardRef, OnInit } from '@angular/core';
+import { AfterContentInit, Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { startWith } from "rxjs/operators";
 
 @Component({
   selector: 'app-request-procedure-create-properties',
@@ -10,7 +11,7 @@ import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from 
     multi: true
   }]
 })
-export class RequestProcedureCreatePropertiesComponent implements OnInit, AfterContentInit, ControlValueAccessor {
+export class RequestProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -18,32 +19,27 @@ export class RequestProcedureCreatePropertiesComponent implements OnInit, AfterC
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit() {
-    this.form = this.fb.group({
-      manualEndRegistration: false, // Досрочное завершение приема заявок на участие
-      positionsRequiredAll: false, // Обязательная подача предложений на все позиции
-      positionsAnalogs: false, // Разрешается прием аналогов
-      positionsAllowAnalogsOnly: false, // Возможность подачи аналогов без основного предложения
-      positionsEntireVolume: false, // Заявка подается на весь закупаемый объем
-      positionsSuppliersVisibility: 'NameHidden', // Отображение наименований участников
-      positionsBestPriceType: 'LowerStartPrice', // Ограничение на подачу цен
-      positionsApplicsVisibility: 'PriceAndRating', // Отображение цен
-      publicAccess: true // Доступ к процедуре
-    });
-
-  }
-
   ngAfterContentInit() {
-    this.writeValue(this.form.value);
-    this.onChange(this.form.value);
+    this.form = this.fb.group({
+      manualEndRegistration: this.default("manualEndRegistration", false),
+      positionsRequiredAll: this.default("positionsRequiredAll", false),
+      positionsAnalogs: this.default("positionsAnalogs", false),
+      positionsAllowAnalogsOnly: this.default("positionsAllowAnalogsOnly", false),
+      positionsEntireVolume: this.default("positionsEntireVolume", false),
+      positionsSuppliersVisibility: this.default("positionsSuppliersVisibility", 'NameHidden'),
+      positionsBestPriceType: this.default("positionsBestPriceType", 'LowerStartPrice'),
+      positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating'),
+      publicAccess: this.default("publicAccess", true)
+    });
 
-    this.form.valueChanges.subscribe(value => {
+    this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
       this.writeValue(value);
-      this.onChange(this.form.value);
+      this.onChange(value);
     });
   }
 
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
-  writeValue(value): void { this.value = value; }
+  default = (k, v) => (this.value && this.value[k]) === null ? v : this.value[k];
+  registerOnChange = (fn: any) => this.onChange = fn;
+  registerOnTouched = (fn: any) => this.onTouched = fn;
+  writeValue = (value) => this.value = value;
 }

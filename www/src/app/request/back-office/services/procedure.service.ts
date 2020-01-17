@@ -31,6 +31,7 @@ export class ProcedureService {
   /**
    * @deprecated
    * Подготовку тела запроса недопустимо производить в сервсисе. Выпилить вместе со старым интерфейсом
+   * Используйте createProcedure
    */
   publishProcedure(request: PublishProcedureRequest): Observable<PublishProcedureResult> {
     const publishProcedureInfo = request.procedureInfo;
