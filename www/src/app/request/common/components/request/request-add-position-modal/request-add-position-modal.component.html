@@ -13,7 +13,7 @@
     <ng-container *uxgTab="manual">
       <app-request-position-form
         *ngIf="!!modal && modal._open"
-        [reqeustId]="request.id"
+        [requestId]="request.id"
         (cancel)="close()"
         (positionChange)="success.emit($event); modal.close()"
       ></app-request-position-form>
