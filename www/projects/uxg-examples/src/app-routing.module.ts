@@ -8,6 +8,7 @@ import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status
 import { UxgExampleTabsComponent } from "./uxg-example-tabs/uxg-example-tabs.component";
 import { UxgExampleIconsComponent } from "./uxg-example-icons/uxg-example-icons.component";
 import { UxgExampleHomeComponent } from "./uxg-example-home/uxg-example-home.component";
+import { UxgExamplePopoverComponent } from "./uxg-example-popover/uxg-example-popover.component";
 
 
 const routes: Routes = [
@@ -45,6 +46,11 @@ const routes: Routes = [
     path: "tab",
     component: UxgExampleTabsComponent,
     data: { title: 'Tabs' }
+  },
+  {
+    path: "popover",
+    component: UxgExamplePopoverComponent,
+    data: { title: 'Popover' }
   },
   {
     path: "icon",

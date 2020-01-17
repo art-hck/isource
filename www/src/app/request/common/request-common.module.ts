@@ -53,6 +53,7 @@ import { RequestAddPositionModalComponent } from "./components/request/request-a
 import { RequestTpFilterContragentListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
 import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 import { RequestTpFilterSectionComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-section/request-tp-filter-section.component";
+import { RequestCpFilterComponent } from "./components/request-commercial-proposals/request-cp-filter/request-cp-filter.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -86,6 +87,7 @@ const RequestCommonModuleDeclarations = [
   RequestTpFilterStatusesListComponent,
   RequestInfoComponent,
   RequestListComponent,
+  RequestCpFilterComponent,
   RequestTpFilterComponent,
   RequestTpFilterSectionComponent,
   RequestListFilterComponent,

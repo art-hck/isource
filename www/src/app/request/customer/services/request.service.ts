@@ -45,8 +45,8 @@ export class RequestService {
     );
   }
 
-  getRequestPosition(id: Uuid) {
-    const url = `requests/positions/${id}/info`;
+  getRequestPosition(requestId: Uuid, positionId: Uuid) {
+    const url = `requests/customer/${requestId}/positions/${positionId}/info`;
     return this.api.get<RequestPosition>(url);
   }
 

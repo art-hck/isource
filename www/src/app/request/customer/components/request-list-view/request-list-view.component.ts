@@ -89,6 +89,7 @@ export class RequestListViewComponent implements OnInit {
   onDatagridStateChange(state: DatagridStateAndFilter): void {
     this.currentDatagridState = state;
     this.composeFilters();
+    this.getRequestStatusCount('customer');
 
     this.getRequestListForCustomer(state.startFrom, state.pageSize, this.filters);
   }

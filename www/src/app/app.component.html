@@ -2,7 +2,7 @@
   <app-nav></app-nav>
 
   <div class="content-container">
-    <div class="content-area">
+    <div class="content-area" [ngClass]="{ 'no-padding': noContainerPadding }">
       <div class="container">
         <div class="breadcrumbs" *ngIf="!isBreadcrumbsHidden">
           <uxg-breadcrumbs [breadcrumbs]="bc.breadcrumbs"></uxg-breadcrumbs>
