@@ -1,0 +1,31 @@
+<ng-container *ngIf="(request$ | async) as request; else loading">
+  <div class="app-row">
+    <div class="app-col">
+
+      <div class="app-row">
+        <div class="app-col app-table app-no-border">
+          <div class="app-row clr-justify-content-end">
+            <div class="app-col app-basis-auto clr-flex-grow-0">
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="app-col app-col-aside">
+      <!-- TODO Create commercial proposals filters
+        <app-request-tp-list-filter (filters)="onFiltersSubmit($event)"></app-request-tp-list-filter>
+      -->
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>

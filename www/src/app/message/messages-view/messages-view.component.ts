@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { fromEvent, Observable } from "rxjs";
 import { MessageService } from "../messages/message.service";
 import { Page } from "../../core/models/page";
@@ -12,6 +18,7 @@ import { Uuid } from "../../cart/models/uuid";
 import { tap, map, publishReplay, refCount, debounceTime } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-message-messages-view',
@@ -22,8 +29,13 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
   @ViewChild('requestsSearchField', { static: false }) requestsSearchField: ElementRef;
 
+  requestId: Uuid;
+  positionId: Uuid;
+
   requests$: Observable<Page<RequestsList>>;
   requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
+
+  requestEntities: RequestsList[];
 
   selectedRequest: RequestListItem;
   selectedRequestsItem: RequestPositionList;
@@ -40,11 +52,13 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private messageService: MessageService,
-    private user: UserInfoService
+    private user: UserInfoService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
-  protected static getContextType(item: (RequestGroup | RequestPosition)) {
+  protected static getContextType(item: (RequestPositionList | RequestGroup | RequestPosition)) {
     if (item instanceof RequestPosition) {
       return MessageContextTypes.REQUEST_POSITION;
     } else if (item instanceof RequestGroup) {
@@ -52,7 +66,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  protected static getContextId(item: (RequestGroup | RequestPosition)) {
+  protected static getContextId(item: (RequestPositionList | RequestGroup | RequestPosition)) {
     // Костыль, т.к. у нас есть еще и черновики, которые приходят со своим id
     return item instanceof RequestPosition && !!item.sourceRequestPositionId ?
       item.sourceRequestPositionId :
@@ -60,14 +74,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.getRouteData();
+
     this.requests$ = this.messageService
       .getRequests(this.user.getUserRole(), 0, 1000, [], null)
       .pipe(
         tap((page: Page<RequestsList>) => {
           if (page.entities.length > 0) {
-            this.onRequestClick(page.entities[0].request);
+            this.requestEntities = page.entities;
+            this.jumpToRequestOrPosition();
           }
-        })
+        }),
+        publishReplay(1),
+        refCount()
       );
   }
 
@@ -78,6 +97,42 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     ).subscribe(
       (event: Event) => this.onRequestFilterChange(event)
     );
+  }
+
+  getRouteData() {
+    if (this.route.snapshot.children[0]) {
+      this.requestId = this.route.snapshot.children[0].params['request-id'];
+
+      this.positionId = this.route.snapshot.children[0].children[0] ?
+        this.route.snapshot.children[0].children[0].params['position-id'] :
+        null;
+    }
+  }
+
+  jumpToRequestOrPosition(): void {
+    if (this.positionId && this.requestId) {
+      // Выбор заявки в списке
+      const requestToSelect = this.requestEntities.filter(
+        request => request.request.id === this.requestId
+      );
+      this.onRequestClick(requestToSelect[0].request);
+
+      // Выбор позиции в списке
+      this.requestsItems$.subscribe(requestItems => {
+        const requestItemToSelect = Object.values(requestItems).filter(
+          requestItem => requestItem.id === this.positionId
+        );
+        this.onRequestItemClick(requestItemToSelect[0]);
+      });
+    } else if (this.requestId) {
+      // Выбор заявки в списке
+      const requestToSelect = this.requestEntities.filter(
+        request => request.request.id === this.requestId
+      );
+      this.onRequestClick(requestToSelect[0].request);
+    } else {
+      this.onRequestClick(this.requestEntities[0].request);
+    }
   }
 
   onRequestClick(request: RequestListItem) {
@@ -96,11 +151,34 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     this.onRequestContextClick();
   }
 
-  onRequestItemClick(item: (RequestGroup | RequestPosition)) {
+  onRequestItemClick(item: (RequestPositionList | RequestGroup | RequestPosition)) {
     this.selectedRequestsItem = item;
+    const requestItemType = this.getRequestEntityUrlNameByType(this.selectedRequestsItem.entityType);
 
     this.contextType = MessagesViewComponent.getContextType(item);
     this.contextId = MessagesViewComponent.getContextId(item);
+
+    this.router.navigate(
+      ['messages/request/' + this.selectedRequest.id + '/' + requestItemType + '/' + this.selectedRequestsItem.id],
+      { replaceUrl: true}
+    );
+  }
+
+  /**
+   * Функция преобразовывает тип элемента внутри заявки в представление для ссылки
+   * (.../position/... или .../group/...)
+   *
+   * @param entityType
+   */
+  getRequestEntityUrlNameByType(entityType): string {
+    switch (entityType) {
+      case 'POSITION':
+        return 'position';
+      case 'GROUP':
+        return 'group';
+      default:
+        return 'position';
+    }
   }
 
   onRequestContextClick() {
@@ -108,6 +186,11 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
+
+    this.router.navigate(
+      ['messages/request/' + this.selectedRequest.id],
+      { replaceUrl: true}
+    );
   }
 
   getMessageHeader() {

@@ -11,6 +11,7 @@ import { DesignDocumentationComponent } from "../common/components/design-docume
 import { ContractComponent } from "../common/components/contract/contract.component";
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
+import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
 
 const routes: Routes = [
   {
@@ -32,6 +33,11 @@ const routes: Routes = [
             path: 'technical-proposals',
             component: RequestTechnicalProposalsComponent,
             data: { title: "Технические предложения" }
+          },
+          {
+            path: 'commercial-proposals',
+            component: RequestCommercialProposalsComponent,
+            data: { title: "Коммерческие предложения" }
           },
           {
             path: ':position-id',
