@@ -53,12 +53,12 @@
             <div class="clr-col-7">
               <div class="app-control-wrap">
                 <input (input)="checkQuantity(position, $event.target.value)"
-                    #quantity uxgInput lg formControlName="quantity" />
+                       #quantity uxgInput lg formControlName="quantity" />
                 <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+              </div>
 
-                <div class="app-control-error">
-                  <span>Меньше необходимого</span>
-                </div>
+              <div class="warning-label" *ngIf="quantityNotEnough">
+                <span>Меньше необходимого</span>
               </div>
             </div>
 
@@ -73,15 +73,16 @@
 
         <div class="clr-col-3">
           <div class="app-control-wrap">
-            <input #deliveryDate uxgInput lg formControlName="deliveryDate">
+            <input (ngModelChange)="checkDeliveryDate(position, $event)"
+                   #deliveryDate uxgInput lg formControlName="deliveryDate">
             <label class="app-control-label" (click)="deliveryDate.focus()">Сроки доставки</label>
             <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
+          </div>
 
-            <div class="app-control-error">
-              <span>Позже запрашиваемой даты</span>
-            </div>
+          <div class="warning-label" *ngIf="dateIsLaterThanNeeded">
+            <span>Позже запрашиваемой даты</span>
           </div>
 
           <clr-date-container #datepicker class="hidden-datepicker">

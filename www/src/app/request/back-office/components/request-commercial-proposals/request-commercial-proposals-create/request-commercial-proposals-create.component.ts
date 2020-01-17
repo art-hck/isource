@@ -6,6 +6,7 @@ import { OffersService } from "../../../services/offers.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../../../common/models/request-offer-position";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',
@@ -193,6 +194,9 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   newCommercialProposalModalOpen = true;
   newCommercialProposalForm: FormGroup;
 
+  quantityNotEnough = false;
+  dateIsLaterThanNeeded = false;
+
   selectedContragentId: Uuid;
 
   get formDocuments() {
@@ -278,7 +282,6 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   isSupplierOfferExist(positionWithOffers: any, supplierId: Uuid): boolean {
     if (!supplierId) {
-      // this.newCommercialProposalForm.setErrors({ supplier_already_exists: false });
       return false;
     }
 
@@ -289,22 +292,30 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
     }
 
     if (ids.indexOf(supplierId) !== -1) {
-      // this.newCommercialProposalForm.setErrors({ supplier_already_exists: true });
-      // console.log(this.newCommercialProposalForm);
       return true;
     } else {
-      // this.newCommercialProposalForm.setErrors({ supplier_already_exists: null });
-      // console.log(this.newCommercialProposalForm);
       return false;
     }
   }
 
 
   checkQuantity(position, value) {
-    const lower = value < position.startPrice;
+    if (!value || value === '') {
+      this.quantityNotEnough = false;
+    } else {
+      this.quantityNotEnough = value < position.startPrice;
+    }
+  }
 
-    console.log('lower? — ' + lower);
-    return lower;
+  checkDeliveryDate(position, enteredDate) {
+    if (!moment(enteredDate, 'DD.MM.YYYY', true).isValid()) {
+      this.dateIsLaterThanNeeded = false;
+    } else {
+      const controlDate = moment(moment(position.deliveryDate).format('DD.MM.YYYY'), 'DD.MM.YYYY');
+      const validationDate = moment(enteredDate, 'DD.MM.YYYY');
+
+      this.dateIsLaterThanNeeded = controlDate.isBefore(validationDate);
+    }
   }
 
 }

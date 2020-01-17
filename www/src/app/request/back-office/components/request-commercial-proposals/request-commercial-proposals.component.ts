@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { map } from "rxjs/operators";
-import { Observable } from "rxjs";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 
 @Component({ templateUrl: './request-commercial-proposals.component.html' })
