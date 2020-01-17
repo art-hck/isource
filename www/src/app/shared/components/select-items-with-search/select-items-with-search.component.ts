@@ -35,11 +35,10 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, Aft
     return this.formItems.controls.filter(control => control.get("checked").value);
   }
 
-  constructor(private fb: FormBuilder) {
-    this.trackBy = this.trackBy || (item => JSON.stringify(item));
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngAfterContentInit() {
+    this.trackBy = this.trackBy || (item => JSON.stringify(item));
     this.form = this.fb.group({
       search: "",
       checked: false,
