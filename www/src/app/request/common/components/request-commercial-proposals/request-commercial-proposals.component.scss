@@ -1,0 +1,103 @@
+@import "projects/uxg/src/styles/index";
+
+.linked-offer {
+  min-width: 280px;
+  max-width: 280px;
+  height: 130px;
+  margin: 10px 20px 0 0;
+  border-radius: 4px;
+  border: 1px solid #E3EEFF;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: uxg($theme, color-bg);
+  }
+}
+
+.add-offer {
+  display: flex;
+  justify-content: center;
+  color: uxg($theme, color-font-link);
+}
+
+.action-bar {
+  padding-left: 0;
+}
+
+.check-all {
+  padding-left: 0;
+}
+
+.position-card {
+  background-color: #F4F6FB;
+  margin: 0 -30px 10px -30px;
+  padding: 10px 30px 20px 30px;
+  .app-col {
+    padding: 10px 0;
+
+    &:first-child {
+      padding-left: 0;
+      padding-right: 6px;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .position-title {
+      font-weight: 500;
+    }
+
+    .divide {
+      padding: 0 10px;
+    }
+
+    &.linked-offer {
+      padding: 16px;
+
+      .app-col {
+        padding: 0;
+
+        .winner {
+          margin-right: -16px;
+        }
+      }
+
+      h3 {
+        margin-bottom: 10px;
+      }
+
+      p {
+        margin: 0;
+
+        &.delivery-date {
+          padding-bottom: 10px;
+        }
+      }
+
+      span.supplier {
+        font-weight: 200;
+      }
+
+      .icon-status {
+        text-align: right;
+      }
+    }
+
+    &.status {
+      font-weight: 800;
+      text-align: right;
+
+      clr-icon {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.actions {
+  text-align: right;
+}
+
+
