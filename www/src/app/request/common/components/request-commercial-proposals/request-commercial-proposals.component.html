@@ -1,0 +1,115 @@
+<form [formGroup]="form" (ngSubmit)="submit(formPositions.controls)">
+  <div class="app-row">
+    <div class="app-col app-table app-no-border">
+      <div class="app-row action-bar">
+        <div class="check-all">
+          <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
+        </div>
+        <div class="app-col app-basis-auto clr-flex-grow-1 actions">
+
+          <!-- Создать процедуру  -->
+          <button type="button" uxgButton secondary iconText [disabled]="true">
+            <clr-icon shape="app-plus"></clr-icon>
+            <span>Создать процедуру</span>
+          </button>
+
+          <!-- Новое КП  -->
+          <button type="button" uxgButton secondary iconText [disabled]="true">
+            <clr-icon shape="app-plus"></clr-icon>
+            <span>Создать КП из шаблона</span>
+          </button>
+
+          <!-- Фильтр -->
+          <button type="button" uxgButton secondary iconText [disabled]="true">
+            <clr-icon shape="app-sort2"></clr-icon>
+            <span>Фильтр</span>
+          </button>
+
+          <button uxgButton primary iconText>
+            <span>Отправить на согласование</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
+      <ng-container *ngIf="positionControl.value.position as position" formArrayName="positions">
+        <div class="position-card">
+      <div class="app-row" formGroupName="{{i}}">
+        <div class="app-col clr-flex-grow-0">
+          <uxg-checkbox formControlName="checked"></uxg-checkbox>
+        </div>
+        <div class="app-col">
+          <span class="position-title">{{position.name}}</span>
+          <span class="divide app-ghost-color">|</span>
+          <span class="app-secondary-color">{{position.quantity}} </span>
+          <span class="app-ghost-color">{{position.measureUnit}}</span>
+          <span class="divide app-ghost-color">|</span>
+          <span class="app-secondary-color" *ngIf="position.deliveryDate; else ASAP">
+        {{position.deliveryDate | date :'shortDate'}}
+      </span>
+          <ng-template #ASAP>
+            <span class="position-delivery-date">как можно скорее</span>
+          </ng-template>
+        </div>
+        <div class="app-col app-col-aside status app-ghost-color">
+       <span *ngIf="positionIsSentForAgreement(position)">
+         <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
+          <span *ngIf="positionCanBeSelected(position)">
+        <clr-icon shape="app-doc"></clr-icon>Черновик
+      </span>
+          <span class="app-success-color" *ngIf="positionWithWinner(position)">
+        <clr-icon shape="app-check"></clr-icon>Выбран победитель
+      </span>
+        </div>
+      </div>
+      <div class="app-row">
+        <div class="app-col card linked-offer add-offer" *ngIf="positionCanBeSelected(position)">
+          <clr-icon shape="app-plus"></clr-icon>
+        </div>
+        <ng-container
+          *ngFor="let linkedOffer of position.linkedOffers">
+          <div class="app-col linked-offer">
+            <div class="app-row">
+              <div class="app-col">
+                <h3>{{linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}</h3>
+              </div>
+              <div class="app-col app-col-aside app-ghost-color icon-status">
+                <div *ngIf="positionWithWinner(position) && !linkedOffer.isWinner">
+                  <clr-icon shape="app-check"></clr-icon>
+                </div>
+                <div *ngIf="positionIsSentForAgreement(position)">
+                  <clr-icon shape="app-lock"></clr-icon>
+                </div>
+                <div class="winner" *ngIf="linkedOffer.isWinner">
+                  <img src="../../../../../assets/images/winner.svg">
+                </div>
+              </div>
+            </div>
+            <p>
+              <span [ngClass]="{'app-error-color' : linkedOffer.quantity < position.quantity }">{{linkedOffer.quantity}} </span>
+              <span class="app-ghost-color">{{linkedOffer.measureUnit}}</span>
+              <span class="divide app-ghost-color">|</span>
+              <span class="app-ghost-color">
+            {{linkedOffer.priceWithVat / linkedOffer.quantity | currency: 'RUB' :'symbol':"1.0-2"}}/
+                {{linkedOffer.measureUnit}}</span>
+            </p>
+            <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
+              {{linkedOffer.deliveryDate | date: 'shortDate'}}
+              <span class="app-ghost-color"> доставка</span></p>
+            <span class="supplier">
+        <app-contragent-info-link
+          [contragent]="findSupplier(linkedOffer.supplierContragentId)">
+        </app-contragent-info-link>
+        </span>
+          </div>
+
+        </ng-container>
+      </div>
+        </div>
+    </ng-container>
+    </ng-container>
+
+</form>
