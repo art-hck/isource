@@ -121,3 +121,13 @@ svg {
 .requests-list-datagrid clr-dg-footer.datagrid-footer {
   background-color: transparent;
 }
+
+.alert-actions {
+  margin: 0!important;
+}
+.alert-action {
+  border: 1px solid #fff;
+}
+::ng-deep .alert-app-level .alert-icon-wrapper {
+  margin: 0!important;
+}

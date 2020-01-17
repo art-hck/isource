@@ -81,6 +81,17 @@ export class RequestComponent implements OnInit {
     return this.router.createUrlTree([position.id], { relativeTo: this.route });
   }
 
+  select(type: "all" | "none" | "groups" | "positions") {
+    if (["all", "none"].indexOf(type) >= 0) {
+      this.form.get("checked").setValue(type === "all");
+    }
+    if (["groups", "positions"].indexOf(type) >= 0) {
+      this.formPositions.controls
+        .filter(c => this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups"))
+        .forEach(formGroup => formGroup.get("checked").setValue(true));
+    }
+  }
+
   private positionsToForm(positions: RequestPositionList[], position?: RequestPositionList) {
     const formGroup = new FormGroup({
       checked: new FormControl(false),

@@ -5,7 +5,7 @@
   display: none;
 
   & + .app-control-radio {
-    background-color: uxg($theme, color-default);
+    background-color: uxg($theme, color-control-input-bg);
     border: 1px uxg($theme, color-soft) solid;
     border-radius: 50%;
     box-sizing: border-box;
