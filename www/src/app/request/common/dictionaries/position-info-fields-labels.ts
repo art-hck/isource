@@ -12,4 +12,4 @@ PositionInfoFieldsLabels[PositionInfoFields.PRODUCTION_DOCUMENT] = 'Докуме
 PositionInfoFieldsLabels[PositionInfoFields.QUANTITY] = 'Количество';
 PositionInfoFieldsLabels[PositionInfoFields.START_PRICE] = 'Начальная максимальная цена';
 PositionInfoFieldsLabels[PositionInfoFields.RELATED_SERVICES] = 'Необходимость сопутствующих услуг';
-PositionInfoFieldsLabels[PositionInfoFields.COMMENTS] = 'Комментарии';
+PositionInfoFieldsLabels[PositionInfoFields.COMMENTS] = 'Дополнительные требования';
