@@ -7,7 +7,7 @@ import {RequestService} from "../../services/request.service";
 import {OffersService} from "../../services/offers.service";
 import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../../common/models/request-position";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 
 @Component({templateUrl: './request-commercial-proposals.component.html'})
@@ -19,6 +19,8 @@ export class RequestCommercialProposalsComponent implements OnInit {
   requestPositions: RequestPosition[] = [];
   requestPositions$: Observable<RequestPosition[]>;
   suppliers: ContragentList[] = [];
+
+  subscription = new Subscription();
 
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
@@ -51,9 +53,13 @@ export class RequestCommercialProposalsComponent implements OnInit {
   }
 
   sendForAgreement(requestId: Uuid, selectedRequestPositions: RequestPosition[]) {
-    this.offersService.publishRequestOffers(requestId, selectedRequestPositions).subscribe(
+    this.subscription.add(this.offersService.publishRequestOffers(requestId, selectedRequestPositions).subscribe(
       () => {
         this.updatePositionsAndSuppliers();
-      });
+      }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
