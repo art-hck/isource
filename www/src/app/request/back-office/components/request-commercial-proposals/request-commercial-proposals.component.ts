@@ -9,8 +9,6 @@ import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../../common/models/request-position";
 import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
-import { map } from "rxjs/operators";
-import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 
 @Component({templateUrl: './request-commercial-proposals.component.html'})
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
@@ -24,8 +22,9 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   subscription = new Subscription();
 
-  commercialProposals$: Observable<RequestOfferPosition[]>;
-  showForm = true;
+  showForm = false;
+
+  currentRequestPosition: RequestPosition;
 
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
@@ -36,9 +35,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
 
-
   ngOnInit() {
-
     this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
@@ -65,10 +62,13 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  addCommercialProposal(commercialProposal) {
-    this.commercialProposals$ = this.commercialProposals$.pipe(
-      map(commercialProposals => [commercialProposal, ...commercialProposals])
-    );
+  addCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+  }
+
+  showAddOfferModal(position: RequestPosition): void {
+    this.currentRequestPosition = position;
+    this.showForm = true;
   }
 
   ngOnDestroy() {

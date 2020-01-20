@@ -1,12 +1,12 @@
-<clr-modal #newCommercialProposalModal
+<clr-modal [(clrModalOpen)]="addOfferModalOpen"
+           [clrModalClosable]="false"
            class="cp-creation-modal"
-           [(clrModalOpen)]="newCommercialProposalModalOpen"
            [clrModalSize]="'lg'">
   <h2 class="modal-title">Добавить новое коммерческое предложение</h2>
 
   <div class="modal-body">
 
-    <span class="position-name">{{ position.name }}</span>
+    <span class="position-name">{{ position?.name }}</span>
 
     <form class="cp-creation-form" [formGroup]="newCommercialProposalForm" (ngSubmit)="submit()">
 
@@ -29,7 +29,12 @@
 
         <div class="clr-col-3">
           <div class="app-control-wrap">
-            <input #priceWithVat uxgInput lg formControlName="priceWithVat"/>
+            <input #priceWithVat
+                   class="hidden-arrows"
+                   min="0"
+                   type="number"
+                   (keypress)="filterEnteredText($event)"
+                   uxgInput lg formControlName="priceWithVat"/>
             <label class="app-control-label" (click)="priceWithVat.focus()">Цена за единицу</label>
           </div>
         </div>
@@ -52,8 +57,12 @@
           <div class="clr-row">
             <div class="clr-col-7">
               <div class="app-control-wrap">
-                <input (input)="checkQuantity(position, $event.target.value)"
-                       #quantity uxgInput lg formControlName="quantity" />
+                <input #quantity
+                       (input)="checkQuantity(position, $event.target.value)"
+                       class="hidden-arrows"
+                       type="number"
+                       (keypress)="filterEnteredText($event)"
+                        uxgInput lg formControlName="quantity" />
                 <label class="app-control-label" (click)="quantity.focus()">Количество</label>
               </div>
 
@@ -159,9 +168,6 @@
       </ng-container>
 
 
-
-
-
       <div class="clr-row">
         <div class="clr-col">
           <span class="requirement-text">
@@ -171,14 +177,13 @@
 
         <div class="clr-col">
           <div class="app-row clr-justify-content-end">
-            <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
+            <button type="button" uxgButton lg secondary (click)="onModalClose()">Отмена</button>
             <button uxgButton lg primary [disabled]="newCommercialProposalForm.invalid">Добавить</button>
           </div>
         </div>
       </div>
 
     </form>
-
 
   </div>
 </clr-modal>

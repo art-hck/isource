@@ -14,7 +14,7 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   positionId: Uuid;
   position$: Observable<RequestPosition>;
-  subsription = new Subscription();
+  subscription = new Subscription();
   statuses = Object.entries(RequestPositionWorkflowStepLabels);
 
   constructor(
@@ -52,12 +52,12 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     data.position.statusLabel = data.status.label;
     data.position.status = data.status.value;
 
-    this.subsription.add(
+    this.subscription.add(
       this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
     );
   }
 
   ngOnDestroy() {
-    this.subsription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }

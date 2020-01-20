@@ -24,6 +24,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   @Input() requestPositions: RequestPosition[] = [];
   @Input() suppliers: ContragentList[];
   @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
+  @Output() onAddOffer = new EventEmitter<RequestPosition>();
 
   supplier: ContragentList;
 
@@ -93,5 +94,9 @@ export class RequestCommercialProposalsComponent implements OnInit {
   submit(controls: AbstractControl[]) {
     const selectedPositions = controls.filter(control => control.get('checked').value).map(control => control.get('position').value);
     this.sentForAgreement.emit({requestId: this.requestId, selectedPositions: selectedPositions});
+  }
+
+  newCommercialProposal(position) {
+    this.onAddOffer.emit(position);
   }
 }
