@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {pluck, tap} from "rxjs/operators";
 import {Request} from "../../../common/models/request";
 import {UxgBreadcrumbsService} from "uxg";
@@ -11,7 +11,7 @@ import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 
 @Component({templateUrl: './request-commercial-proposals.component.html'})
-export class RequestCommercialProposalsComponent implements OnInit {
+export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
   request$: Observable<Request>;
