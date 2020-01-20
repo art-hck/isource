@@ -78,7 +78,7 @@
   <div class="app-col app-col-aside">
     <div class="app-row">
       <div class="app-col">
-        <h3>Общая информация о позиции</h3>
+        <h3 class="sector-title">Общая информация о позиции</h3>
 
         <div class="app-ghost-color">Наименование МТР</div>
         <div class="app-bold">{{ position.name }}</div>
@@ -138,7 +138,7 @@
           <div class="modal-body">
             <app-request-position-form
               *ngIf="edit._open"
-              [reqeustId]="requestId"
+              [requestId]="requestId"
               [(position)]="position"
               (cancel)="edit.close()"
               (positionChange)="positionChange.emit($event); edit.close()"

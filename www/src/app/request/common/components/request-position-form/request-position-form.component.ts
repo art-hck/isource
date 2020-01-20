@@ -20,7 +20,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 })
 
 export class RequestPositionFormComponent implements OnInit {
-  @Input() reqeustId: Uuid;
+  @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
@@ -34,7 +34,7 @@ export class RequestPositionFormComponent implements OnInit {
     { value: PositionCurrency.CHF, label: "Фр." },
   ];
 
-  readonly disabedFieldsAfterStatus = {
+  readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
       ['name', 'comments', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
@@ -77,7 +77,7 @@ export class RequestPositionFormComponent implements OnInit {
       startPrice: [p.startPrice, Validators.min(1)]
     });
 
-    Object.entries(this.disabedFieldsAfterStatus)
+    Object.entries(this.disabledFieldsAfterStatus)
       .filter(([status, controlNames]) =>
         !this.statusService.isStatusPrevious(this.position.status, status as PositionStatuses))
       .forEach(([status, controlNames]) =>
@@ -104,7 +104,7 @@ export class RequestPositionFormComponent implements OnInit {
     if (this.position.id) {
       submit$ = this.editRequestService.updateRequestPosition(this.position.id, this.form.value);
     } else {
-      submit$ = this.createRequestService.addRequestPosition(this.reqeustId, [this.form.value])
+      submit$ = this.createRequestService.addRequestPosition(this.requestId, [this.form.value])
         .pipe(map(positions => positions[0]));
     }
 
