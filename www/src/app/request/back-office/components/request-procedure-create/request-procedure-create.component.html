@@ -4,8 +4,8 @@
     <div *ngIf="i > 0" class="app-col app-grow-0 app-basis-auto"><clr-icon shape="app-arrow right"></clr-icon></div>
     <div class="app-col app-grow-0 app-basis-auto">
       <div class="app-row app-align-items-center">
-        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)">
-          <clr-icon *ngIf="step.completed" class="completed" shape="app-check"></clr-icon>
+        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)" [class.completed]="step.completed">
+          <clr-icon *ngIf="getStepIcon(step)" class="app-wizzard-item-icon" [attr.shape]="getStepIcon(step)"></clr-icon>
           {{ i + 1 }}
         </div>
         <div>{{ step.label }}</div>
@@ -16,10 +16,10 @@
 <br/>
 <br/>
 
-<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()">
+<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="complete.emit()">
   <!-- Select positions -->
   <ng-container *ngIf="(positions$ | async) as positions; else loading">
-    <div *uxgWizzardStep="'positions'">
+    <div *uxgWizzardStep="'positions'; valid: form.get('positions').valid">
       <div class="app-secondary-color">
         Выберите все необходимые позиции или группы позиций в заявке, по которым вы хотите создать процедуру на
         Электронной торговой площадке Газпромбанка
@@ -51,16 +51,16 @@
           </div>
         </ng-template>
       </select-items-with-search>
-      <br/>
-      <div class="app-row app-justify-content-end">
-        <button type="button" uxgButton secondary lg (click)="complete.emit()">Отмена</button>
-        <button type="button" uxgButton primary lg (click)="wizzard.next()" [disabled]="form.get('positions').invalid">Продолжить</button>
-      </div>
     </div>
   </ng-container>
+  <ng-template #loading>
+    <div *uxgWizzardStep="'positions'; valid: form.get('positions').valid" class="text-center">
+      <span class="spinner spinner-md"></span>
+    </div>
+  </ng-template>
 
   <!-- General -->
-  <div *uxgWizzardStep="'general'" formGroupName="general">
+  <div *uxgWizzardStep="'general'; valid: form.get('general').valid" formGroupName="general">
     <div class="app-secondary-color">
       Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
       создать техническое предложение от одного контрагента.
@@ -99,36 +99,28 @@
         </div>
       </div>
       <div class="app-col app-secondary-color">
-        Заявки будут приниматься до <b>23:59</b> указанной даты
+        <div class="app-control-wrap">
+          <input #timeControlRef uxgInput lg formControlName="timeEndRegistration" [textMask]="mask"/>
+          <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+        </div>
       </div>
     </div>
-
-    <div class="app-row app-justify-content-end">
-      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
-      <button type="button" uxgButton primary lg [disabled]="form.get('general').invalid" (click)="wizzard.next()">Продолжить</button>
-    </div>
-
   </div>
 
   <!-- Properties -->
-  <div *uxgWizzardStep="'properties'">
+  <div *uxgWizzardStep="'properties'; valid: form.get('properties').valid">
     <h3>Свойства процедуры</h3>
     <br/>
     <hr class="divider"/>
     <div class="scrollable">
-      <app-request-procedure-create-properties formControlName="properties"></app-request-procedure-create-properties>
+      <app-request-procedure-create-properties [action]="action" formControlName="properties"></app-request-procedure-create-properties>
     </div>
     <hr class="divider"/>
-    <br/>
-    <div class="app-row app-justify-content-end">
-      <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
-      <button type="button" uxgButton primary lg (click)="wizzard.next()" [disabled]="form.get('properties').invalid">Продолжить</button>
-    </div>
   </div>
 
   <!-- Contragents -->
   <ng-container *ngIf="(contragents$ | async) as contragents">
-    <div *uxgWizzardStep="'contragents'">
+    <div *uxgWizzardStep="'contragents'; valid: form.get('privateAccessContragents').valid">
       <div class="app-secondary-color">
         Выберите всех необходимых контрагентов, которых вы хотите пригласить к участию в процедуре. Другие контрагенты не
         будут видеть процедуру и не смогут в ней участвовать.
@@ -157,20 +149,14 @@
               <span class="app-ghost-color">КПП: </span>
               <span>{{ contragent.kpp | splitNumber }}</span>
             </div>
-
           </div>
         </ng-template>
       </select-items-with-search>
-      <br/>
-      <div class="app-row app-justify-content-end">
-        <button type="button" uxgButton secondary lg (click)="wizzard.previous()">Назад</button>
-        <button type="button" uxgButton primary lg (click)="wizzard.next()" [disabled]="form.get('privateAccessContragents').invalid">Продолжить</button>
-      </div>
     </div>
   </ng-container>
 
   <!-- Documents -->
-  <div *uxgWizzardStep="'documents'" formGroupName="documents">
+  <div *uxgWizzardStep="'documents'; valid: form.valid" formGroupName="documents">
     <div class="app-secondary-color">Ниже вы можете выбрать те документы заявки, которые могут быть прикреплены к процедуре</div>
     <br/>
     <br/>
@@ -187,19 +173,16 @@
       </app-request-procedure-create-documents>
     </div>
     <hr class="divider"/>
-    <br/>
-    <div class="app-row app-justify-content-end">
-      <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
-        <span *ngIf="isLoading" class="spinner spinner-inline"></span>
-        <button type="button" uxgButton secondary lg [disabled]="form.disabled" (click)="wizzard.previous()">Назад</button>
-        <button uxgButton primary lg [disabled]="form.disabled || form.invalid">Создать процедуру</button>
-      </div>
+  </div>
+
+  <br/>
+  <div class="app-row app-justify-content-end">
+    <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+      <span *ngIf="isLoading" class="spinner spinner-inline"></span>
+      <button *uxgWizzardButton="'cancel'" type="button" uxgButton secondary lg>Отмена</button>
+      <button *uxgWizzardButton="'prev'" type="button" uxgButton secondary lg>Назад</button>
+      <button *uxgWizzardButton="'next'" type="button" uxgButton primary lg >Продолжить</button>
+      <button *uxgWizzardButton="'end'" uxgButton primary lg >Создать процедуру</button>
     </div>
   </div>
 </form>
-
-<ng-template #loading>
-  <div class="text-center">
-    <span class="spinner spinner-md"></span>
-  </div>
-</ng-template>
