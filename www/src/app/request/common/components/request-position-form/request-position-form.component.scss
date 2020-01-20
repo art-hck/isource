@@ -2,18 +2,12 @@
 uxg-checkbox + label { margin-left: .5em; }
 textarea { height: 80px; }
 
-// Скрываем стандартое поле ввода Clarity
-.hidden-datepicker {
-  input[clrDate] { display: none; }
-
-  &::ng-deep {
-    input[clrDate] + button,
-    .clr-validate-icon { display: none; }
-
-    .clr-input-wrapper { height: 0; }
-
-    .datepicker {
-      margin-top: -1.25rem;
-    }
-  }
+.input-label {
+  color: #666666;
+  cursor: default;
+  height: 18px;
+  display: table;
+  font-size: 11px;
+  line-height: 18px;
+  padding-top: 3px;
 }

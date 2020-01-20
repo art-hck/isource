@@ -1,7 +1,7 @@
 import { Component, ContentChild, ElementRef, HostBinding, HostListener, Input, OnInit } from "@angular/core";
 import { Observable, Subject, Subscription, timer } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
-import { UxgPopoverTriggerDirective } from "./uxg-popover.directive";
+import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
 
 @Component({
   selector: 'uxg-popover',

@@ -36,7 +36,3 @@ export class UxgPopoverContentDirective implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 }
-
-@Directive({ selector: '[uxgPopoverTrigger]' })
-export class UxgPopoverTriggerDirective {
-}
