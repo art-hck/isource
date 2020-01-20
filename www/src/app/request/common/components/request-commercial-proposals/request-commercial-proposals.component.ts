@@ -23,7 +23,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   @Input() requestPositions: RequestPosition[] = [];
   @Input() suppliers: ContragentList[];
-  @Output() sentForAgreement = new EventEmitter<{requestId: Uuid, selectedPositions: RequestPosition[]}>();
+  @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
 
   supplier: ContragentList;
 
@@ -62,6 +62,10 @@ export class RequestCommercialProposalsComponent implements OnInit {
     );
   }
 
+  canAddOffer(requestPosition: RequestPosition): boolean {
+    return requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION;
+  }
+
   positionIsSentForAgreement(requestPosition: RequestPosition): boolean {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }
@@ -86,7 +90,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
     return this.supplier;
   }
 
-  submit(controls: FormGroup[]) {
+  submit(controls: AbstractControl[]) {
     const selectedPositions = controls.filter(control => control.get('checked').value).map(control => control.get('position').value);
     this.sentForAgreement.emit({requestId: this.requestId, selectedPositions: selectedPositions});
   }

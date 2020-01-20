@@ -1,8 +1,8 @@
 <ng-container *ngIf="(request$ | async) as request; else loading">
       <app-request-commercial-proposals
-        *ngIf="(requestPositions$ | async) as requestPositions"
-        [requestPositions]="requestPositions"
-        [suppliers]="suppliers"
+        *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers"
+        [requestPositions]="positionsWithOffers.positions"
+        [suppliers]="positionsWithOffers.suppliers"
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
       ></app-request-commercial-proposals>
 </ng-container>
