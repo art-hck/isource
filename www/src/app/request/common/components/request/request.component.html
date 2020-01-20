@@ -3,7 +3,7 @@
 
     <!-- Контролы управления позициями -->
     <div class="app-col app-table app-no-border">
-      <div class="app-row clr-align-items-end">
+      <div class="app-row app-align-items-center">
         <!-- Царь-чекбокс -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <div class="app-row clr-align-items-center">
@@ -44,6 +44,22 @@
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
           </button>
+        </div>
+
+        <div class="app-col app-basis-auto clr-flex-grow-0">
+          <uxg-popover #more>
+            <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
+            <div *uxgPopoverContent (click)="more.hide()">
+              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить статус</button></div>
+              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>
+              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>
+              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить КП</button></div>
+              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить РКД</button></div>
+              <div><button uxgButton clear disabled>Изменить базис</button></div>
+              <div><button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button></div>
+              <div><button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button></div>
+            </div>
+          </uxg-popover>
         </div>
 
         <div class="app-col"></div>
@@ -123,12 +139,12 @@
 </ng-template>
 
 <!-- Шаблон группы -->
-<ng-template #groupItem let-group="group" let-formGroup="formGroup" let-isFolded="true">
+<ng-template #groupItem let-group="group" let-formGroup="formGroup">
   <div class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
 
-  <div class="app-col">
+  <div class="app-col" *ngIf="formGroup.get('folded') as folded">
     <div class="app-row">
       <div class="app-col item-title">
         <span class="app-secondary-color">Группа: </span>
@@ -140,13 +156,13 @@
         2 как можно скорее | 01.01.2020 — ...
       </div>
       <div class="app-col app-row clr-flex-grow-0">
-        <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="isFolded ? 'up':'down'"
-            (click)="isFolded = !isFolded; $event.preventDefault(); $event.stopPropagation();"></clr-icon>
+        <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="folded.value ? 'down' : 'up'"
+            (click)="folded.setValue(!folded.value); $event.preventDefault(); $event.stopPropagation();"></clr-icon>
       </div>
     </div>
 
     <!-- Позиции группы -->
-    <div class="positions" *ngIf="!isFolded">
+    <div class="positions" *ngIf="!folded.value">
       <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
         <div class="app-row">
           <ng-container *ngTemplateOutlet="positionItem; context:{

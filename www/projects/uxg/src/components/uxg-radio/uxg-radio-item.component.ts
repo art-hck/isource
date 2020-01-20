@@ -16,6 +16,7 @@ export class UxgRadioItemComponent implements ControlValueAccessor {
   @Input() disabled = false;
   @Input() value = null;
   @Input() name;
+  @Input() formControlName;
   @ViewChild('radio', { static: false }) el: ElementRef;
   public onTouched: (value) => void;
   public onChange: (value) => void;

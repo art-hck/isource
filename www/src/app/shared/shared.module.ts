@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from "./components/card/card.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ClarityModule } from '@clr/angular';
 import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
@@ -17,11 +17,14 @@ import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 import { DragFileUploadDirective } from './directives/drag-file-upload.directive';
 import { UxgModule } from "uxg";
 import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
+import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
+import { SplitNumberPipe } from './pipes/split-number.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ClarityModule,
     CustomComponentsModule,
     UxgModule,
@@ -55,7 +58,9 @@ import { ContragentAutocompleteComponent } from './components/contragent-autocom
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
     ControlInvalidClassDirective,
-    DragFileUploadDirective
+    DragFileUploadDirective,
+    SelectItemsWithSearchComponent,
+    SplitNumberPipe,
   ],
   exports: [
     CommonModule,
@@ -78,7 +83,9 @@ import { ContragentAutocompleteComponent } from './components/contragent-autocom
     CountdownTimerPipe,
 
     ControlInvalidClassDirective,
-    DragFileUploadDirective
+    DragFileUploadDirective,
+    SelectItemsWithSearchComponent,
+    SplitNumberPipe,
   ]
 })
 export class SharedModule {

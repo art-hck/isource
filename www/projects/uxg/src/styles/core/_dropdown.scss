@@ -98,25 +98,7 @@
       }
     }
 
-    /* total width */
-    &::-webkit-scrollbar {
-      width: 16px;
-    }
-
-    /* scrollbar itself */
-    &::-webkit-scrollbar-thumb {
-      background-color: uxg($theme, color-soft);
-      border: 5px solid uxg($theme, color-default);
-      border-radius: 16px;
-      transition: border 500ms;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      border-width: 4px;
-    }
-
-    /* set button(top and bottom of the scrollbar) */
-    &::-webkit-scrollbar-button { display: none }
+    @include scrollbar($theme);
 
     &-item[disabled]:not([disabled=false]) {
       cursor: default;

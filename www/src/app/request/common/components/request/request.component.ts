@@ -86,15 +86,22 @@ export class RequestComponent implements OnInit {
       this.form.get("checked").setValue(type === "all");
     }
     if (["groups", "positions"].indexOf(type) >= 0) {
-      this.formPositions.controls
-        .filter(c => this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups"))
-        .forEach(formGroup => formGroup.get("checked").setValue(true));
+      this.formPositions.controls.forEach(c => c.get("checked").setValue(
+        this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups")
+      ));
     }
+  }
+
+  toggleGroups(folded: boolean) {
+    this.formPositions.controls
+      .filter(c => this.asFormArray(c.get("positions")).controls.length > 0)
+      .forEach(c => c.get("folded").setValue(folded));
   }
 
   private positionsToForm(positions: RequestPositionList[], position?: RequestPositionList) {
     const formGroup = new FormGroup({
       checked: new FormControl(false),
+      folded: new FormControl(false),
       positions: new FormArray(
         positions.map(p => this.positionsToForm(this.asGroup(p) ? this.asGroup(p).positions : [], p))
       )

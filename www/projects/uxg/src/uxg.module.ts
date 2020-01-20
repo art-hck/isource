@@ -19,7 +19,9 @@ import { UxgSelectAllDirective } from "./directives/uxg-select-all.directive";
 import { UxgRadioItemComponent } from "./components/uxg-radio/uxg-radio-item.component";
 import { UxgTreeComponent, UxgTreeNodeDirective, UxgTreeWrapDirective } from './components/uxg-tree/uxg-tree.component';
 import { UxgPopoverComponent } from "./components/uxg-popover/uxg-popover.component";
-import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover.directive";
+import { UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover-trigger.directive";
+import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover-content.directive";
+import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./compon
     UxgPopoverComponent,
     UxgPopoverContentDirective,
     UxgPopoverTriggerDirective,
+    UxgWizzardDirective,
+    UxgWizzardStepDirective,
   ],
   exports: [
     UxgCheckboxComponent,
@@ -73,6 +77,8 @@ import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./compon
     UxgPopoverComponent,
     UxgPopoverContentDirective,
     UxgPopoverTriggerDirective,
+    UxgWizzardDirective,
+    UxgWizzardStepDirective,
   ],
 })
 export class UxgModule {

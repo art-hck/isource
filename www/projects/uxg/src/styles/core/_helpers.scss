@@ -19,8 +19,10 @@
 .app-grow-0 { flex-grow: 0;}
 .app-grow-1 { flex-grow: 1;}
 .app-align-items-center { align-items: center; }
+.app-align-items-end { align-items: flex-end; }
 .app-justify-content-between { justify-content: space-between; }
 .app-justify-content-center { justify-content: center; }
+.app-justify-content-end { justify-content: flex-end; }
 
 // Paddings
 .padding-3xs{ padding: uxg($theme, padding-3xs); }
