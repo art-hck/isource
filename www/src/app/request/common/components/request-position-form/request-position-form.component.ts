@@ -98,6 +98,10 @@ export class RequestPositionFormComponent implements OnInit {
     form.get('currency').setValue(PositionCurrency.RUB);
     form.get('currency').disable();
 
+    if (!this.userInfoService.isCustomer()) {
+      form.get('comments').disable();
+    }
+
     this.form = form;
   }
 
@@ -118,7 +122,4 @@ export class RequestPositionFormComponent implements OnInit {
     }));
   }
 
-  canNotEditField() {
-    return !this.userInfoService.isCustomer();
-  }
 }
