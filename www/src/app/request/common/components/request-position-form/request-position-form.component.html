@@ -143,16 +143,18 @@
       </div>
     </div>
     <div class="app-col">
-      <h3>Комментарий <span class="app-ghost-color" style="font-weight: normal">(не обязательно)</span></h3>
+      <h3>Дополнительные требования <span class="app-ghost-color" style="font-weight: normal">(необязательно)</span></h3>
       <br/>
       <!-- comment -->
-      <textarea uxgInput formControlName="comments"></textarea>
+      <textarea class="comments"
+                uxgInput
+                formControlName="comments"></textarea>
     </div>
   </div>
   <br/>
   <div class="app-row">
     <div class="app-col">
-      Все поля, кроме начальной максимальной цены и комментария, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
+      Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
