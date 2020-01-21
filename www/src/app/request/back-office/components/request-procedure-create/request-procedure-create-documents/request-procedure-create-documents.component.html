@@ -1,0 +1,21 @@
+<ng-container [formGroup]="form">
+  <br/>
+  <div class="app-documents app-documents-grid" *ngIf="formDocuments.controls.length; else empty">
+    <div *ngFor="let formGroup of formDocuments.controls; index as i" [formGroup]="formGroup">
+      <uxg-checkbox formControlName="checked"></uxg-checkbox>
+
+      <ng-template #document let-document="document">
+        <div class="app-documents-item">
+          <document-icon class="app-documents-item-icon" [name]="document.filename" size="m"></document-icon>
+          <div>{{ document.filename }}</div>
+        </div>
+      </ng-template>
+
+      <ng-container *ngTemplateOutlet="document; context:{document: formGroup.get('document').value}"></ng-container>
+    </div>
+  </div>
+  <ng-template #empty>
+    <div class="app-ghost-color text-center">Не загружено ни одного документа</div>
+  </ng-template>
+  <br/>
+</ng-container>

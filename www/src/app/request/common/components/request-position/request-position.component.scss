@@ -45,3 +45,7 @@
   max-height: 100vh;
   overflow: visible;
 }
+
+::ng-deep h3.sector-title {
+  margin: 0 0 16px 0;
+}

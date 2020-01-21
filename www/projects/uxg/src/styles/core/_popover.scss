@@ -12,7 +12,7 @@ $contentOffset: $arrOffset + $arrWidth;
   position: relative;
   z-index: 1;
 
-  &.app-popover .app-popover-content {
+  & .app-popover-content {
     background: uxg($theme, color-popover-bg);
     border-radius: uxg($theme, control-border-radius);
     box-shadow: 0 0 16px rgba(black, 0.1), 0 4px 12px rgba(black, 0.1);

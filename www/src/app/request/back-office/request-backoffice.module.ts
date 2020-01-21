@@ -17,9 +17,12 @@ import { TechnicalProposalsService } from "./services/technical-proposals.servic
 import { WizardCreateProcedureComponent } from './components/wizard-create-procedure/wizard-create-procedure.component';
 import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 import { RequestTechnicalProposalsCreateComponent } from './components/request-technical-proposals/request-technical-proposals-create/request-technical-proposals-create.component';
-import { RequestTechnicalProposalsCreatePositionsComponent } from './components/request-technical-proposals/request-technical-proposals-create-positions/request-technical-proposals-create-positions.component';
 import { RequestTechnicalProposalsCreateManufacturerComponent } from './components/request-technical-proposals/request-technical-proposals-create-manufacturer/request-technical-proposals-create-manufacturer.component';
+import { RequestProcedureCreateComponent } from './components/request-procedure-create/request-procedure-create.component';
+import { RequestProcedureCreatePropertiesComponent } from './components/request-procedure-create/request-procedure-create-properties/request-procedure-create-properties.component';
+import { RequestProcedureCreateDocumentsComponent } from "./components/request-procedure-create/request-procedure-create-documents/request-procedure-create-documents.component";
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
+import { RequestCommercialProposalsCreateComponent } from './components/request-commercial-proposals/request-commercial-proposals-create/request-commercial-proposals-create.component';
 
 @NgModule({
   declarations: [
@@ -33,9 +36,12 @@ import { RequestCommercialProposalsComponent } from './components/request-commer
     RequestPositionComponent,
     RequestTechnicalProposalsComponent,
     RequestTechnicalProposalsCreateComponent,
-    RequestTechnicalProposalsCreatePositionsComponent,
     RequestTechnicalProposalsCreateManufacturerComponent,
-    RequestCommercialProposalsComponent
+    RequestProcedureCreateComponent,
+    RequestProcedureCreatePropertiesComponent,
+    RequestProcedureCreateDocumentsComponent,
+    RequestCommercialProposalsComponent,
+    RequestCommercialProposalsCreateComponent
 
   ],
   imports: [

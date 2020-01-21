@@ -51,13 +51,15 @@
   </div>
 
   <!-- paymentTerms -->
-  <div>
-    <label>Способ оплаты</label>
-    <uxg-dropdown placeholder="Способ оплаты" formControlName="paymentTerms">
-      <div uxgDropdownItem value="30 банковских дней по факту поставки">30 банковских дней по факту поставки</div>
-      <div uxgDropdownItem value="60 банковских дней по факту поставки">60 банковских дней по факту поставки</div>
-      <div uxgDropdownItem value="90 банковских дней по факту поставки">90 банковских дней по факту поставки</div>
-    </uxg-dropdown>
+  <div class="app-row">
+    <div class="app-col">
+      <label class="input-label">Условия оплаты</label>
+      <uxg-dropdown placeholder="Условия оплаты" formControlName="paymentTerms">
+        <div uxgDropdownItem value="30 дней по факту поставки">30 банковских дней по факту поставки</div>
+        <div uxgDropdownItem value="60 дней по факту поставки">60 банковских дней по факту поставки</div>
+        <div uxgDropdownItem value="90 дней по факту поставки">90 банковских дней по факту поставки</div>
+      </uxg-dropdown>
+    </div>
   </div>
 
   <br/>
@@ -72,6 +74,7 @@
         </div>
       </div>
     </div>
+
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <div class="app-control-wrap">
         <input #measureUnit uxgInput lg formControlName="measureUnit"/>
@@ -81,6 +84,7 @@
         </div>
       </div>
     </div>
+
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
       <div class="app-control-wrap">
         <input #startPrice uxgInput lg formControlName="startPrice"/>
@@ -90,8 +94,9 @@
         </div>
       </div>
     </div>
+
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
-      <label>Валюта</label>
+      <label class="input-label">Валюта</label>
       <uxg-dropdown placeholder="Валюта" formControlName="currency">
         <ng-container *ngFor="let currency of currencies">
           <div uxgDropdownItem [value]="currency.value">{{ currency.label }}</div>
@@ -121,6 +126,7 @@
     <!-- isShmrRequired | isPnrRequired | isInspectionControlRequired -->
     <div class="app-col">
       <h3>Необходимость сопутствующих услуг</h3>
+      <br/>
       <div class="app-row">
         <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
           <uxg-checkbox class="app-control" #shmr formControlName="isShmrRequired"></uxg-checkbox>
@@ -138,6 +144,7 @@
     </div>
     <div class="app-col">
       <h3>Дополнительные требования <span class="app-ghost-color" style="font-weight: normal">(необязательно)</span></h3>
+      <br/>
       <!-- comment -->
       <textarea class="comments"
                 uxgInput
