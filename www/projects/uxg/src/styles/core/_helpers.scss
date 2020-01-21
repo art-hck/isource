@@ -21,6 +21,7 @@
 .app-align-items-center { align-items: center; }
 .app-justify-content-between { justify-content: space-between; }
 .app-justify-content-center { justify-content: center; }
+.app-justify-content-end { justify-content: flex-end; }
 
 // Paddings
 .padding-3xs{ padding: uxg($theme, padding-3xs); }
