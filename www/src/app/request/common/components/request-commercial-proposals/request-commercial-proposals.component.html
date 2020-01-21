@@ -63,7 +63,9 @@
           </div>
         </div>
         <div class="app-row">
-          <div class="app-col card linked-offer add-offer" *ngIf="canAddOffer(position)">
+          <div class="app-col card linked-offer add-offer"
+               *ngIf="canAddOffer(position)"
+               (click)="newCommercialProposal(position)">
             <clr-icon shape="app-plus"></clr-icon>
           </div>
           <ng-container
