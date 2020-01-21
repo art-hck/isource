@@ -4,7 +4,7 @@ form.cp-creation-form {
   margin-bottom: 16px;
 }
 
-::ng-deep .cp-creation-modal .modal-dialog.modal-lg {
+:host ::ng-deep .cp-creation-modal .modal-dialog.modal-lg {
   width: 765px;
 }
 
@@ -13,9 +13,6 @@ div.documents {
 }
 
 .position-name {
-  display: block;
-  font-weight: 500;
-  font-size: 14px;
   line-height: 18px;
   margin-bottom: 15px;
 }
@@ -26,16 +23,6 @@ input[type=file] {
 
 input.app-control-large {
   height: 40px;
-}
-
-.error-message {
-  bottom: 0;
-  padding: 2px 0;
-  position: absolute;
-  color: #EB5757;
-  display: block;
-  font-size: 11px;
-  font-weight: bold;
 }
 
 .warning-label {
@@ -57,22 +44,6 @@ span.requirement-text {
 
   span.red-text {
 
-  }
-}
-
-// Скрываем стандартое поле ввода Clarity
-.hidden-datepicker {
-  input[clrDate] { display: none; }
-
-  &::ng-deep {
-    input[clrDate] + button,
-    .clr-validate-icon { display: none; }
-
-    .clr-input-wrapper { height: 0; }
-
-    .datepicker {
-      margin-top: -1.25rem;
-    }
   }
 }
 

@@ -14,8 +14,18 @@
   </div>
 </ng-template>
 
-<app-request-commercial-proposals-create
-  [position]="currentRequestPosition"
-  [(addOfferModalOpen)]="showForm"
-  (addOffer)="addCommercialProposal()">
-</app-request-commercial-proposals-create>
+<clr-modal #requestCommercialProposalModal
+           class="cp-creation-modal"
+           [(clrModalOpen)]="showForm"
+           [clrModalSize]="'lg'">
+  <h2 class="modal-title">Добавить новое коммерческое предложение</h2>
+
+  <div class="modal-body">
+    <app-request-commercial-proposals-create
+            *ngIf="requestCommercialProposalModal._open"
+            (cancel)="requestCommercialProposalModal.close()"
+            [position]="currentRequestPosition"
+            (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()">
+    </app-request-commercial-proposals-create>
+  </div>
+</clr-modal>

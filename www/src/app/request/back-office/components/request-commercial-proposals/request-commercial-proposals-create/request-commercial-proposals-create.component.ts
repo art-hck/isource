@@ -1,11 +1,20 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { fromEvent, merge, Observable } from "rxjs";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { fromEvent, merge, Subscription } from "rxjs";
 import { auditTime } from "rxjs/operators";
 import { OffersService } from "../../../services/offers.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
-import { RequestOfferPosition } from "../../../../common/models/request-offer-position";
 import * as moment from "moment";
 
 @Component({
@@ -13,7 +22,7 @@ import * as moment from "moment";
   templateUrl: './request-commercial-proposals-create.component.html',
   styleUrls: ['./request-commercial-proposals-create.component.scss']
 })
-export class RequestCommercialProposalsCreateComponent implements OnInit, AfterViewInit {
+export class RequestCommercialProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() position: RequestPosition;
 
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -21,18 +30,20 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   @Output() cancel = new EventEmitter();
 
   @Input() addOfferModalOpen = false;
-  @Output() addOfferModalOpenChange = new EventEmitter<boolean>();
 
   @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
 
   isLoading: boolean;
 
   newCommercialProposalForm: FormGroup;
+  newCommercialProposalFormHelper: FormGroup;
 
   quantityNotEnough = false;
   dateIsLaterThanNeeded = false;
 
   selectedContragentId: Uuid;
+
+  subscription = new Subscription();
 
   get formDocuments() {
     return this.newCommercialProposalForm.get('documents') as FormArray;
@@ -45,9 +56,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   ngOnInit() {
     this.newCommercialProposalForm = this.formBuilder.group({
-      contragentName: [null, Validators.required],
       supplierContragentId: [null, Validators.required],
-      contragent: [null, Validators.required],
       priceWithVat: [null, [Validators.required, Validators.min(1)]],
       currency: ['RUB', Validators.required],
       quantity: [null, [Validators.required, Validators.min(1)]],
@@ -56,24 +65,35 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       paymentTerms: ['30 дней по факту поставки', Validators.required],
       documents: this.formBuilder.array([]),
     });
+
+    this.newCommercialProposalFormHelper = this.formBuilder.group({
+      contragentName: [null, Validators.required],
+      contragent: [null, [Validators.required, (control) => this.supplierOfferExists(control)]],
+    });
   }
 
   ngAfterViewInit() {
     // // @TODO: uxg-autocomplete!
     merge(
-      this.newCommercialProposalForm.get("contragent").valueChanges,
+      this.newCommercialProposalFormHelper.get("contragent").valueChanges,
       fromEvent(this.contragentName.nativeElement, "blur"),
     )
       .pipe(auditTime(100))
       .subscribe(() => {
-        const value = this.newCommercialProposalForm.get("contragent").value;
+        const value = this.newCommercialProposalFormHelper.get("contragent").value;
 
-        this.newCommercialProposalForm.get("contragentName").setValue(value ? value[0].shortName : null, { emitEvent: false });
-        this.newCommercialProposalForm.get("contragentName").updateValueAndValidity();
+        this.newCommercialProposalFormHelper.get("contragentName").setValue(value ? value[0].shortName : null, { emitEvent: false });
+        this.newCommercialProposalFormHelper.get("contragentName").updateValueAndValidity();
 
         this.selectedContragentId = value ? value[0].id : null;
         this.newCommercialProposalForm.get("supplierContragentId").setValue(value ? value[0].id : null, { emitEvent: false });
         this.newCommercialProposalForm.get("supplierContragentId").updateValueAndValidity();
+
+        if (this.newCommercialProposalFormHelper.get("contragent").errors) {
+          this.newCommercialProposalFormHelper.get("contragentName").setErrors({ supplierOfferExist: true });
+        } else {
+          this.newCommercialProposalForm.updateValueAndValidity();
+        }
       });
   }
 
@@ -92,22 +112,10 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
     this.isLoading = true;
     this.newCommercialProposalForm.disable();
 
-    const body = <RequestOfferPosition>{
-      supplierContragentId: this.newCommercialProposalForm.get("supplierContragentId").value,
-      priceWithVat: this.newCommercialProposalForm.get("priceWithVat").value,
-      currency: this.newCommercialProposalForm.get("currency").value,
-      quantity: this.newCommercialProposalForm.get("quantity").value,
-      measureUnit: this.newCommercialProposalForm.get("measureUnit").value,
-      deliveryDate: this.newCommercialProposalForm.get("deliveryDate").value,
-      paymentTerms: this.newCommercialProposalForm.get("paymentTerms").value,
-      documents: this.newCommercialProposalForm.get("documents").value,
-    };
+    const body = this.newCommercialProposalForm.value;
 
     // Отправляем КП
-    const cp$: Observable<any> = this.offersService.addOffer(this.position.request.id, this.position.id, body);
-
-    cp$.subscribe(tp => {
-      this.onModalClose();
+    this.offersService.addOffer(this.position.request.id, this.position.id, body).subscribe(tp => {
       this.addOffer.emit(tp);
     });
   }
@@ -120,26 +128,21 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   /**
    * Функция проверяет, добавлено ли уже КП от выбранного поставщика
    *
-   * @param positionWithOffers
-   * @param supplierId
+   * @param control
    */
-  isSupplierOfferExist(positionWithOffers: any, supplierId: Uuid): boolean {
-    if (!supplierId) {
-      return false;
+  supplierOfferExists(control: FormControl): any {
+    if (!control.value || !this.position) {
+      return null;
     }
 
     const ids = [];
 
-    for (const linkedOffer of positionWithOffers.linkedOffers) {
+    for (const linkedOffer of this.position.linkedOffers) {
       ids.push(linkedOffer.supplierContragentId);
     }
 
-    if (ids.indexOf(supplierId) !== -1) {
-      this.newCommercialProposalForm.setErrors({ supplierOfferExist: true });
-      return true;
-    } else {
-      this.newCommercialProposalForm.setErrors(null);
-      return false;
+    if (ids.indexOf(control.value[0].id) !== -1) {
+      return { supplierOfferExist: true };
     }
   }
 
@@ -153,7 +156,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
     if (!value || value === '') {
       this.quantityNotEnough = false;
     } else {
-      this.quantityNotEnough = value < position.startPrice;
+      this.quantityNotEnough = value < position.quantity;
     }
   }
 
@@ -174,22 +177,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
     }
   }
 
-  onModalClose(): void {
-    this.addOfferModalOpenChange.emit(false);
-
-    this.newCommercialProposalForm.reset({
-      contragentName: null,
-      supplierContragentId: null,
-      contragent: null,
-      priceWithVat: null,
-      currency: 'RUB',
-      quantity: null,
-      measureUnit: null,
-      deliveryDate: null,
-      paymentTerms: '30 дней по факту поставки',
-      documents: this.formBuilder.array([]),
-    });
-
-    this.newCommercialProposalForm.enable();
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
