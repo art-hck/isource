@@ -4,7 +4,7 @@
         [requestPositions]="positionsWithOffers.positions"
         [suppliers]="positionsWithOffers.suppliers"
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
-        (onAddOffer)="showAddOfferModal($event);"
+        (addOffer)="showAddOfferModal($event);"
       ></app-request-commercial-proposals>
 </ng-container>
 
@@ -17,5 +17,5 @@
 <app-request-commercial-proposals-create
   [position]="currentRequestPosition"
   [(addOfferModalOpen)]="showForm"
-  (onAddOffer)="addCommercialProposal($event)">
+  (addOffer)="addCommercialProposal($event)">
 </app-request-commercial-proposals-create>

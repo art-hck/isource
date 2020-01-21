@@ -17,7 +17,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   @Input() position: RequestPosition;
 
   @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() onAddOffer = new EventEmitter();
+  @Output() addOffer = new EventEmitter();
   @Output() cancel = new EventEmitter();
 
   @Input() addOfferModalOpen = false;
@@ -108,7 +108,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
     cp$.subscribe(tp => {
       this.onModalClose();
-      this.onAddOffer.emit(tp);
+      this.addOffer.emit(tp);
     });
   }
 
