@@ -33,7 +33,25 @@
 
   <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
     <ng-container *ngIf="positionControl.value.position as position" formArrayName="positions">
-      <div class="position-card">
+      <div class="position-card" #positionCard [ngClass]="{'fixedHeight': !isFolded[i]}">
+        <div class="app-row" *ngIf="positionHasFinishedProcedure(position)">
+          <div class="app-col">
+            <span class="procedure-name">
+             <b>Процедура №{{ position.procedureId }}</b>
+           </span>
+          </div>
+           <div class="app-col app-col-aside status">
+              <span class="offer-status app-success-color">
+            <clr-icon shape="app-check"></clr-icon>Завершена
+          </span>
+             <button type="button" uxgButton secondary iconText [disabled]="true">
+               Уторговать
+             </button>
+             <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
+               <b>Показать на ЭТП ГПБ</b>
+             </a>
+           </div>
+        </div>
         <div class="app-row" formGroupName="{{i}}">
           <div class="app-col clr-flex-grow-0">
             <uxg-checkbox formControlName="checked" [disabled]="!positionCanBeSelected(position)"></uxg-checkbox>
@@ -52,14 +70,23 @@
             </ng-template>
           </div>
           <div class="app-col app-col-aside status app-ghost-color">
-       <span *ngIf="positionIsSentForAgreement(position)">
-         <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
-            <span *ngIf="positionCanBeSelected(position)">
-        <clr-icon shape="app-doc"></clr-icon>Черновик
-      </span>
-            <span class="app-success-color" *ngIf="positionWithWinner(position)">
+       <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
+         <clr-icon shape="app-waiting"></clr-icon> На согласовании
+       </span>
+            <span class="offer-status" *ngIf="positionCanBeSelected(position)">
+              <clr-icon shape="app-doc"></clr-icon>Черновик
+            </span>
+            <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
         <clr-icon shape="app-check"></clr-icon>Выбран победитель
       </span>
+            <button uxgButton primary type="button" *ngIf="availableCancelPublishOffers(position)"
+                    (click)="onCancelPublishOffers(position)">
+              Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+            </button>
+            <button uxgButton link icon type="button" *ngIf="isOverflow(positionCard) || isFolded[i]" (click)="isFolded[i] = !isFolded[i]">
+              <clr-icon shape="app-chevron"
+                        [dir]="isFolded[i] ? 'up':'down'"></clr-icon>
+            </button>
           </div>
         </div>
         <div class="app-row">
@@ -68,7 +95,7 @@
                (click)="newCommercialProposal(position)">
             <clr-icon shape="app-plus"></clr-icon>
           </div>
-          <ng-container
+          <div [ngClass]="{'fixedHeight': !isFolded[i]}"
             *ngFor="let linkedOffer of position.linkedOffers">
             <div class="app-col linked-offer">
               <div class="app-row">
@@ -108,7 +135,7 @@
         </span>
             </div>
 
-          </ng-container>
+          </div>
         </div>
       </div>
     </ng-container>
