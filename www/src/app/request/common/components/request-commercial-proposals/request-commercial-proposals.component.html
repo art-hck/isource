@@ -73,7 +73,7 @@
             <div class="app-col linked-offer">
               <div class="app-row">
                 <div class="app-col">
-                  <h3>{{linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}</h3>
+                  <h3>{{linkedOffer.priceWithVat * linkedOffer.quantity | currency: 'RUB' :'symbol':"1.0-2"}}</h3>
                 </div>
                 <div class="app-col app-col-aside app-ghost-color icon-status">
                   <div *ngIf="positionWithWinner(position) && !linkedOffer.isWinner">
@@ -95,7 +95,7 @@
                 <span class="app-ghost-color">{{linkedOffer.measureUnit}}</span>
                 <span class="divide app-ghost-color">|</span>
                 <span class="app-ghost-color">
-            {{linkedOffer.priceWithVat / linkedOffer.quantity | currency: 'RUB' :'symbol':"1.0-2"}}/
+            {{ linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}/
                   {{linkedOffer.measureUnit}}</span>
               </p>
               <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
