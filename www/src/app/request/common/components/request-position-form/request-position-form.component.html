@@ -98,9 +98,7 @@
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <label class="input-label">Валюта</label>
       <uxg-dropdown placeholder="Валюта" formControlName="currency">
-        <ng-container *ngFor="let currency of currencies">
-          <div uxgDropdownItem [value]="currency.value">{{ currency.label }}</div>
-        </ng-container>
+        <div uxgDropdownItem [value]="currency.value" *ngFor="let currency of currencies">{{ currency.label }}</div>
       </uxg-dropdown>
     </div>
   </div>

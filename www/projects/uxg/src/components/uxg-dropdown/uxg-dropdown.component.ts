@@ -1,7 +1,10 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, InjectionToken, Input, OnDestroy, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
-import { UxgDropdownItemDirective } from "../../directives/uxg-dropdown-item.directive";
+import { UxgDropdownItemDirective } from "./uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
+import { flatMap, mergeAll } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { UxgDropdownItemData } from "./uxg-dropdown-item-data";
 
 @Component({
   selector: 'uxg-dropdown',
@@ -27,6 +30,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   private _isHidden = true;
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
+  public subscription = new Subscription();
 
   get itemsWrapper(): HTMLDivElement | null {
     return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
@@ -100,8 +104,11 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   ngAfterViewInit() {
     this.document.body.appendChild(this.itemsWrapper);
 
-    this.items.forEach(item => {
-      item.onSelect.subscribe(data => {
+    this.subscription.add(this.items.changes.pipe(
+      flatMap(items => items.map(item => item.onSelect)),
+      mergeAll<UxgDropdownItemData>()
+    )
+      .subscribe(data => {
         this.writeValue(data.value);
         this.select.emit({value: data.value, label: data.label});
 
@@ -112,8 +119,8 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
         if (this.hideAfterSelect) {
           this.isHidden = true;
         }
-      });
-    });
+      })
+    );
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -160,5 +167,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
     if (isPlatformBrowser(this.platformId)) {
       this.itemsWrapper.remove();
     }
+
+    this.subscription.unsubscribe();
   }
 }
