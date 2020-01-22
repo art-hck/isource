@@ -16,6 +16,7 @@ import { OffersService } from "../../../services/offers.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
+import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',
@@ -61,7 +62,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       currency: ['RUB', Validators.required],
       quantity: [null, [Validators.required, Validators.min(1)]],
       measureUnit: [null, Validators.required],
-      deliveryDate: [null, Validators.required],
+      deliveryDate: [null, [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: ['30 дней по факту поставки', Validators.required],
       documents: this.formBuilder.array([]),
     });

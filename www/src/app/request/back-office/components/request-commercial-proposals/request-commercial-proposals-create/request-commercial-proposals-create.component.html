@@ -78,6 +78,7 @@
     <div class="clr-col-3">
       <div class="app-control-wrap">
         <input (ngModelChange)="checkDeliveryDate(position, $event)"
+               appFormControlInvalidClass="invalid"
                #deliveryDate uxgInput lg formControlName="deliveryDate">
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки доставки</label>
         <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
@@ -85,7 +86,7 @@
         </label>
       </div>
 
-      <div class="warning-label" *ngIf="dateIsLaterThanNeeded">
+      <div class="warning-label" *ngIf="dateIsLaterThanNeeded && !newCommercialProposalForm.get('deliveryDate').invalid">
         <span>Позже запрашиваемой даты</span>
       </div>
 
