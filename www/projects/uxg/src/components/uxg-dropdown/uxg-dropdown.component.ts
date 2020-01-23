@@ -2,7 +2,7 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentC
 import { UxgDropdownItemDirective } from "./uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { flatMap, mergeAll } from "rxjs/operators";
+import { flatMap, mergeAll, startWith } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { UxgDropdownItemData } from "./uxg-dropdown-item-data";
 
@@ -105,6 +105,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
     this.document.body.appendChild(this.itemsWrapper);
 
     this.subscription.add(this.items.changes.pipe(
+      startWith(this.items),
       flatMap(items => items.map(item => item.onSelect)),
       mergeAll<UxgDropdownItemData>()
     )
