@@ -15,12 +15,10 @@ export const AppConfig: GpnmarketConfigInterface = {
   procedure: {
     url: 'https://demo2.etpgpb.ru/#com/procedure/edit/id/',
   },
-  features: {
-    customerRequest: { roles: [UserRole.CUSTOMER] },
-    createRequest: { roles: [UserRole.CUSTOMER] },
-    backofficeRequest: { roles: [UserRole.BACKOFFICE] },
-    catalog: { disabled: true, roles: [UserRole.CUSTOMER] },
-    registration: { disabled: true },
-    deliveryMonitor: { disabled: false, roles: [UserRole.BACKOFFICE] },
-  }
+  disabledFeatures: [
+    "registration",
+    "deliveryMonitor",
+    "catalog",
+    "backofficeRequest"
+  ],
 };

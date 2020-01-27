@@ -19,7 +19,5 @@ export interface GpnmarketConfigInterface {
   procedure: {
     url: string
   };
-  features: {
-    [key: string]: Feature
-  };
+  disabledFeatures: string[];
 }
