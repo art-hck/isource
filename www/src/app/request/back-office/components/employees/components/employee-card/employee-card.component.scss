@@ -1,0 +1,26 @@
+.info-field {
+  margin-bottom: 15px;
+}
+
+.info-field label {
+  margin-bottom: 5px;
+}
+
+.info-field span {
+  font-size: 14px;
+  color: #2B2B2B;
+  text-transform: initial;
+  font-weight: 400;
+}
+
+.download-report-button {
+  float: right;
+}
+
+::ng-deep .download-report-button.btn span {
+  padding: 0;
+}
+
+.clr-control-label {
+  text-transform: initial;
+}

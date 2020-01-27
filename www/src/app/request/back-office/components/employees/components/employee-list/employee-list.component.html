@@ -1,0 +1,40 @@
+<clr-datagrid class="employee-list-datagrid">
+
+  <clr-dg-column class="request-number clr-col">
+    Имя сотрудника
+  </clr-dg-column>
+
+  <clr-dg-column class="request-published clr-col-4">
+    E-mail
+  </clr-dg-column>
+
+  <clr-dg-column class="request-completed clr-col-2">
+    Телефон
+  </clr-dg-column>
+
+  <clr-dg-column class="customer-name clr-col-auto">
+    Заявок/позиций
+  </clr-dg-column>
+
+
+  <clr-dg-row *ngFor="let employee of employees; let i = index">
+
+    <clr-dg-cell class="request-number clr-col">
+      <b>{{ employee.name}}</b>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="published clr-col-4">
+      <a href="mailto:{{ employee.email}}">{{ employee.email}}</a>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="completed clr-col-2">
+      {{ employee.phone}}
+    </clr-dg-cell>
+
+    <clr-dg-cell class="customer-name clr-col-auto">
+      {{ employee.requestsCount }}/{{ employee.positionsCount }}
+    </clr-dg-cell>
+
+  </clr-dg-row>
+
+</clr-datagrid>

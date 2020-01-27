@@ -29,6 +29,23 @@ export const Menu: { [key in UserRole]: MenuModel[] } = {
       children: []
     }
   ],
+  [UserRole.SENIOR_BACKOFFICE]: [
+    {
+      text: 'Заявки',
+      path: 'requests/backoffice',
+      children: []
+    },
+    {
+      text: 'Контрагенты',
+      path: 'contragents',
+      children: []
+    },
+    {
+      text: 'Сотрудники',
+      path: 'employees',
+      children: []
+    }
+  ],
   [UserRole.BACKOFFICE]: [
     {
       text: 'Заявки',

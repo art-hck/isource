@@ -12,10 +12,12 @@ import { AuthService } from "../../auth/services/auth.service";
 })
 export class NavComponent {
 
+  // todo Здесь SwitchCase не подходит, т.к. пользователь может иметь 2 роли одновременно
   get menu(): MenuModel[] {
     switch (true) {
       case this.user.isSupplier(): return Menu.supplier;
       case this.user.isCustomer(): return Menu.customer;
+      case this.user.isSeniorBackoffice(): return Menu.seniorBackoffice;
       case this.user.isBackOffice(): return Menu.backoffice;
     }
   }

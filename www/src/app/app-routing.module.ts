@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
+  { path: 'employees', loadChildren: () => import('./request/back-office/components/employees/employees.module').then(m => m.EmployeesModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: '**', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } }
 ];

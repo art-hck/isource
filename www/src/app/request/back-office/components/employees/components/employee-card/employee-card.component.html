@@ -1,0 +1,72 @@
+<div class="app-row">
+
+  <div class="employee-card-content">
+
+    <clr-datagrid class="employee-list-datagrid">
+
+      <clr-dg-row *ngFor="let request of getEmployeeRequests()">
+
+        <clr-dg-cell class="request-number clr-col">
+          <b>{{ request.number }}</b>
+        </clr-dg-cell>
+
+
+        <clr-dg-cell class="published clr-col-4">
+          {{ request.supplier }}
+        </clr-dg-cell>
+
+
+        <clr-dg-cell class="completed clr-col-2">
+          {{ request.name }}
+        </clr-dg-cell>
+
+
+        <clr-dg-cell class="customer-name clr-col-auto">
+
+          <div class="pie-chart" *ngIf="!checkIfFreeFormRequest(request.request.type)">
+            <svg width="20" height="20" class="chart">
+              <circle r="10" cx="10" cy="10" class="pie"/>
+              <circle r="10" cx="10" cy="10" class="pie" [attr.stroke-dashoffset]="calcPieChart(request)"/>
+            </svg>
+            <div>
+          <span [ngClass]="{ 'light-grey' : request.requestData.completedPositionsCount === 0}">
+            {{ request.requestData.completedPositionsCount}}
+          </span>
+              <span class="light-grey"> из</span> {{ request.requestData.positionsCount }}
+            </div>
+          </div>
+
+        </clr-dg-cell>
+
+      </clr-dg-row>
+
+    </clr-datagrid>
+
+  </div>
+
+
+  <!-- Сайдбар с информацией -->
+  <div class="app-col app-col-aside">
+    <div class="app-row">
+      <div class="app-col">
+        <h3 class="sector-title">Информация о сотруднике</h3>
+
+        <div class="app-ghost-color">E-mail</div>
+        <div>{{ employee.email }}</div>
+        <br/>
+
+        <div class="app-ghost-color">Телефон</div>
+        <div>{{ employee.phone }}</div>
+        <br/>
+
+        <div class="app-ghost-color">Последняя активность</div>
+        <div>{{ employee.lastActivity }}</div>
+        <br/>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
