@@ -21,11 +21,17 @@ export class UserInfoService {
     firstName: 'firstName',
     lastName: 'lastName',
     middleName: 'middleName',
-    isSupplier: 'isSupplier',
+
     isCustomer: 'isCustomer',
     isBackOffice: 'isBackOffice',
+    isSupplier: 'isSupplier',
+    isAdmin: 'isAdmin',
+
+    isCustomerBuyer: 'isCustomerBuyer',
+
+    isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
-    isRegularBackoffice: 'isRegularBackoffice',
+
     isContragentCreator: 'isContragentCreator'
   };
 
@@ -57,10 +63,6 @@ export class UserInfoService {
     return this.getUserInfo().firstName + ' ' + this.getUserInfo().lastName;
   }
 
-  public isSupplier(): boolean {
-    return this.getUserInfo().isSupplier;
-  }
-
   public isCustomer(): boolean {
     return this.getUserInfo().isCustomer;
   }
@@ -69,12 +71,28 @@ export class UserInfoService {
     return this.getUserInfo().isBackOffice;
   }
 
+  public isSupplier(): boolean {
+    return this.getUserInfo().isSupplier;
+  }
+
+  public isAdmin(): boolean {
+    return this.getUserInfo().isAdmin;
+  }
+
+  public isCustomerBuyer(): boolean {
+    return this.getUserInfo().isCustomerBuyer;
+  }
+
+  public isBackofficeBuyer(): boolean {
+    return this.getUserInfo().isBackofficeBuyer;
+  }
+
   public isSeniorBackoffice(): boolean {
     return this.getUserInfo().isSeniorBackoffice;
   }
 
-  public isRegularBackoffice(): boolean {
-    return this.getUserInfo().isRegularBackoffice;
+  public isContragentCreator(): boolean {
+    return this.getUserInfo().isContragentCreator;
   }
 
   public getUserRole(): string {
