@@ -50,7 +50,7 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
   createFormGroupPosition(value: PositionWithManufacturerName) {
     return this.fb.group({
       position: value.position,
-      manufacturer_name: [value.manufacturer_name, Validators.required]
+      manufacturer_name: [value.manufacturer_name || value.position.name, Validators.required]
     });
   }
 

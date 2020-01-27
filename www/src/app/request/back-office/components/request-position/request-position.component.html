@@ -4,7 +4,7 @@
     [(position)]="position"
     [statuses]="statuses"
     (changeStatus)="changeStatus($event)"
-    (positionChange)="router.navigate(['..', position.id], {relativeTo: route})"
+    (positionChange)="updateData($event)"
   >
   </app-request-position>
 </ng-container>

@@ -23,7 +23,7 @@
               </a>
             </li>
 
-            <li *ngIf="featureService.available('catalog')" class="nav-item">
+            <li *ngIf="featureService.available('catalog', user.roles)" class="nav-item">
               <a *ngIf="cartStoreService.getCount() > 0; else emptyCart" [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
                 <img src="../../../assets/images/cart.svg">
                 <cart-widget class="cart-widget-margin"></cart-widget>
