@@ -279,12 +279,11 @@
       <div class="app-col"><span class="app-secondary-color">КПП:</span> 554 765 890</div>
     </div>
     <div class="app-row app-secondary-color">
-      Если данные введены верно, то вы можете зарегистрировать контрагента самостоятельно, или скореектируйте данные на
-      прошлом экране, нажав на кнопку «Отмена».
+      Если данные введены верно, то Вы можете обратиться к администраторам проекта, чтобы конрагент был зарегестрирован,
+      или скореектируйте данные на прошлом экране.
     </div>
-    <div class="app-row app-justify-content-between">
-      <button uxgButton secondary lg class="app-col app-basis-auto app-grow-0" type="button" (click)="contragentNotFound.close()">Отмена</button>
-      <button uxgButton primary lg class="app-col" (click)="onChangeStep()">Зарегистрировать конграгента</button>
+    <div class="app-row app-justify-content-end">
+      <button uxgButton primary lg (click)="contragentNotFound.close()">Всё понятно</button>
     </div>
   </div>
 </clr-modal>
