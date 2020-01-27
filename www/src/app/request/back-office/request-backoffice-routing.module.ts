@@ -23,6 +23,8 @@ const routes: Routes = [
   },
   {
     path: ':id',
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "backofficeRequest" },
     children: [
       {
         path: 'new',

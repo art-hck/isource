@@ -11,7 +11,7 @@ export class FeatureService {
   constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {}
 
   private get disabledFeatures(): string[] {
-    return this.appConfig.disabledFeatures;
+     return this.appConfig.disabledFeatures || [];
   }
 
   getFeature(featureName: string): Feature {

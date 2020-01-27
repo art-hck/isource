@@ -21,6 +21,8 @@ const routes: Routes = [
   },
   {
     path: ':id',
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "customerRequest" },
     children: [
       {
         path: 'new',
