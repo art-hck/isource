@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { CartStoreService } from "../../cart/services/cart-store.service";
 import { AuthService } from "../../auth/services/auth.service";
+import { FeatureService } from "../services/feature.service";
 
 @Component({
   selector: 'app-nav',
@@ -13,11 +14,7 @@ import { AuthService } from "../../auth/services/auth.service";
 export class NavComponent {
 
   get menu(): MenuModel[] {
-    switch (true) {
-      case this.user.isSupplier(): return Menu.supplier;
-      case this.user.isCustomer(): return Menu.customer;
-      case this.user.isBackOffice(): return Menu.backoffice;
-    }
+    return Menu.filter(item => !item.feature || this.featureService.available(item.feature, this.user.roles));
   }
 
   get isMenuHidden(): boolean {
@@ -32,7 +29,8 @@ export class NavComponent {
     private router: Router,
     public auth: AuthService,
     public user: UserInfoService,
-    public cartStoreService: CartStoreService
+    public cartStoreService: CartStoreService,
+    private featureService: FeatureService
   ) {}
 
   getUserBriefInfo(user: UserInfoService): string {

@@ -1,3 +1,5 @@
+import { Feature } from "../models/feature";
+
 /**
  * Интерфейс главного конфига приложения
  */
@@ -16,5 +18,8 @@ export interface GpnmarketConfigInterface {
   };
   procedure: {
     url: string
+  };
+  features: {
+    [key: string]: Feature
   };
 }
