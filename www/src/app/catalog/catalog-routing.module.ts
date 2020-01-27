@@ -4,11 +4,14 @@ import { CategoryViewComponent } from "./components/category-view/category-view.
 import { SearchViewComponent } from "./components/search-view/search-view.component";
 import { CatalogComponent } from "./components/catalog/catalog.component";
 import { PositionViewComponent } from "./components/position-view/position-view.component";
+import { CanActivateFeatureGuard } from "../core/can-activate-feature.guard";
 
 const routes: Routes = [
   {
     path: '',
     component: CatalogComponent,
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "catalog" },
     children: [
       {
         path: '',

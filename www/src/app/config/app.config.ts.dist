@@ -15,4 +15,9 @@ export const AppConfig: GpnmarketConfigInterface = {
   procedure: {
     url: 'https://demo2.etpgpb.ru/#com/procedure/edit/id/',
   },
+  disabledFeatures: [
+    "registration",
+    "deliveryMonitor",
+    "catalog"
+  ],
 };

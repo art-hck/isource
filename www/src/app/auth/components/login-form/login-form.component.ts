@@ -7,6 +7,7 @@ import { UserInfoService } from "../../../user/service/user-info.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { switchMap } from "rxjs/operators";
 import { ActivationErrorCode } from "../../enum/activation-error-code";
+import { FeatureService } from "../../../core/services/feature.service";
 
 @Component({
   selector: 'app-login-form',
@@ -26,6 +27,7 @@ export class LoginFormComponent implements OnDestroy {
     private authService: AuthService,
     private user: UserInfoService,
     private formBuilder: FormBuilder,
+    private featureService: FeatureService,
   ) {
     this.authForm = this.formBuilder.group({
       'email': ['', [Validators.required, CustomValidators.email]],

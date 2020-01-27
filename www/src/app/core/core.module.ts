@@ -13,6 +13,7 @@ import { ClarityModule } from '@clr/angular';
 import { ItemsdictionaryHttpClient } from "./services/itemsdictionary-http-client.service";
 import { NsiHttpClient } from "./services/nsi-http-client.service";
 import { NsiService } from "./services/nsi.service";
+import { FeatureService } from "./services/feature.service";
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { NsiService } from "./services/nsi.service";
     AccessGuard,
     ItemsdictionaryHttpClient,
     NsiHttpClient,
-    NsiService
+    NsiService,
+    FeatureService
   ],
 })
 
