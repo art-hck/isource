@@ -23,11 +23,11 @@ export class LoginFormComponent implements OnDestroy {
 
   constructor(
     public router: Router,
+    public featureService: FeatureService,
     private route: ActivatedRoute,
     private authService: AuthService,
     private user: UserInfoService,
     private formBuilder: FormBuilder,
-    private featureService: FeatureService,
   ) {
     this.authForm = this.formBuilder.group({
       'email': ['', [Validators.required, CustomValidators.email]],
