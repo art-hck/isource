@@ -18,7 +18,6 @@ export const AppConfig: GpnmarketConfigInterface = {
   disabledFeatures: [
     "registration",
     "deliveryMonitor",
-    "catalog",
-    "backofficeRequest"
+    "catalog"
   ],
 };
