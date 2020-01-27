@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
-  <li *ngFor="let document of documents">
+  <li class="document-item" *ngFor="let document of documents">
     <document-icon [name]="document.name" [size]="documentIconSize.small"></document-icon>
     <div>{{ document.name }}</div>
     <button type="button" class="btn btn-link" (click)="removeDocument(document)">
