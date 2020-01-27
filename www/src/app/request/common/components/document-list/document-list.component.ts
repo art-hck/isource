@@ -11,6 +11,8 @@ export class DocumentListComponent implements OnInit {
 
   @Input() documents: RequestDocument[];
 
+  @Input() enableUpload = true;
+
   @Output() fileSelected = new EventEmitter<File[]>();
 
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
