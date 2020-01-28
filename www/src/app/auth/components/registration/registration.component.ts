@@ -85,9 +85,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.subscription.add(
       this.contragentService.contragentExists(inn, kpp).pipe(
-        tap(contragent => this.contragentForm.get('name').setValue(contragent.shortName)),
         tap(contragent => contragent ? this.contragentFound.open() : this.contragentNotFound.open()),
         filter(contragent => !!contragent),
+        tap(contragent => this.contragentForm.get('name').setValue(contragent.shortName)),
         tap(contragent => this.form.get('joinContragent').get('id').setValue(contragent.id)),
         finalize(() => {
           this.isLoading = false;
