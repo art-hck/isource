@@ -2,6 +2,6 @@
   <app-request-position
     [requestId]="requestId"
     [(position)]="position"
-    (positionChange)="router.navigate(['..', position.id], {relativeTo: route})"
+    (positionChange)="updateData($event)"
   ></app-request-position>
 </ng-container>

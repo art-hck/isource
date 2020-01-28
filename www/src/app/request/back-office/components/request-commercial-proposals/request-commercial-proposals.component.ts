@@ -22,6 +22,10 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   subscription = new Subscription();
 
+  showForm = false;
+
+  currentRequestPosition: RequestPosition;
+
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
               private requestService: RequestService,
@@ -32,7 +36,6 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
@@ -59,7 +62,17 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
       }));
   }
 
+  addCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+  }
+
+  showAddOfferModal(position: RequestPosition): void {
+    this.currentRequestPosition = position;
+    this.showForm = true;
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
 }

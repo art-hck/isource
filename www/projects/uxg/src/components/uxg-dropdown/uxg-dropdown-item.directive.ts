@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input } from '@angular/core';
+import { UxgDropdownItemData } from "./uxg-dropdown-item-data";
 
 @Directive({
   selector: '[uxgDropdownItem]'
@@ -8,7 +9,7 @@ export class UxgDropdownItemDirective {
   @Input() disabled = false;
   @Input() value = null;
 
-  onSelect = new EventEmitter();
+  onSelect = new EventEmitter<UxgDropdownItemData>();
 
   get label(): string | null {
     return this.el.nativeElement.innerText || null;

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AvailableGuiService } from '@stdlib-ng/core';
 import { UserInfo } from "../models/user-info";
+import { UserRole } from "../models/user-role";
 
 const USER_INFO_KEY = 'UserInfo';
 
@@ -28,6 +29,34 @@ export class UserInfoService {
     isRegularBackoffice: 'isRegularBackoffice',
     isContragentCreator: 'isContragentCreator'
   };
+
+  /* @TODO лучше если бэк будет присылать список ролей массивом */
+  get roles(): UserRole[] {
+    const roles: UserRole[] = [];
+    if (this.getUserInfo()) {
+      if (this.isBackOffice()) {
+        roles.push(UserRole.BACKOFFICE);
+      }
+
+      if (this.isCustomer()) {
+        roles.push(UserRole.CUSTOMER);
+      }
+
+      if (this.isSeniorBackoffice()) {
+        roles.push(UserRole.SENIOR_BACKOFFICE);
+      }
+
+      if (this.isRegularBackoffice()) {
+        roles.push(UserRole.REGULAR_BACKOFFICE);
+      }
+
+      if (this.isSupplier()) {
+        roles.push(UserRole.SUPPLIER);
+      }
+    }
+
+    return roles;
+  }
 
   constructor(
     protected gui: AvailableGuiService

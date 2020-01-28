@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { Observable, Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { tap } from "rxjs/operators";
+import { mapTo, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -14,7 +14,7 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   positionId: Uuid;
   position$: Observable<RequestPosition>;
-  subsription = new Subscription();
+  subscription = new Subscription();
   statuses = Object.entries(RequestPositionWorkflowStepLabels);
 
   constructor(
@@ -38,6 +38,10 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
       .pipe(tap(position => this.setPageInfo(position)));
   }
 
+  updateData(position: RequestPosition) {
+    this.position$ = this.position$.pipe(mapTo(position));
+  }
+
   setPageInfo(position: RequestPosition) {
     this.title.setTitle(position.name);
 
@@ -52,12 +56,12 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     data.position.statusLabel = data.status.label;
     data.position.status = data.status.value;
 
-    this.subsription.add(
+    this.subscription.add(
       this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
     );
   }
 
   ngOnDestroy() {
-    this.subsription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }

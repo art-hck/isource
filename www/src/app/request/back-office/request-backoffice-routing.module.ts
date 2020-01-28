@@ -12,15 +12,19 @@ import { ContractComponent } from "../common/components/contract/contract.compon
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 const routes: Routes = [
   {
     path: '',
     component: BackofficeRequestsList,
-    data: { title: "Заявки" }
+    canActivate: [CanActivateFeatureGuard],
+    data: { title: "Заявки", feature: "backofficeRequest" }
   },
   {
     path: ':id',
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "backofficeRequest" },
     children: [
       {
         path: 'new',

@@ -1,6 +1,6 @@
 <div class="dashboard-block">
   <div class="clr-row">
-    <div class="clr-col-8">
+    <div class="clr-col-10">
       <div class="request-positions-stats clr-col card">
         <div class="clr-row clr-justify-content-between">
           <div class="clr-col-auto positions-stats-item"
@@ -75,17 +75,20 @@
         </div>
       </div>
     </div>
-    <div class="clr-col-4">
+    <div class="clr-col-2">
       <div class="request-info-items clr-col card">
         <div class="clr-row clr-justify-content-between">
-          <div class="clr-col-6 info-stats-item" [ngClass]="{'not-clickable' : newActivitiesCount === 0 }">
-            <span class="stats-items-title">Новых событий</span>
-            <div class="stats-items-content">
-              <span class="items-count">{{ newActivitiesCount }}</span>
-            </div>
-          </div>
-          <div class="clr-col-6 info-stats-item"
-               (click)="requestDocumentsModalOpened = true"
+
+<!-- TODO временно скрыто -->
+<!--          <div class="clr-col-6 info-stats-item" [ngClass]="{'not-clickable' : newActivitiesCount === 0 }">-->
+<!--            <span class="stats-items-title">Новых событий</span>-->
+<!--            <div class="stats-items-content">-->
+<!--              <span class="items-count">{{ newActivitiesCount }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <div class="clr-col info-stats-item"
+               (click)="requestDocumentsCount > 0 ? (requestDocumentsModalOpened = true) : false"
                [ngClass]="{'not-clickable' : requestDocumentsCount === 0 }">
             <span class="stats-items-title">Документы заявки</span>
 
@@ -104,7 +107,9 @@
   <h3 class="modal-title">Документы заявки</h3>
 
   <div class="modal-body">
-    <app-document-list [documents]="request.documents">
+    <app-document-list
+            [documents]="request.documents"
+            [enableUpload]="false">
     </app-document-list>
   </div>
 </clr-modal>

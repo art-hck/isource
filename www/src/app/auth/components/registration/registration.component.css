@@ -37,11 +37,15 @@ h2 {
   padding: 0 25px;
 }
 
+.btn:not(:first-child) {
+  margin-left: 1em;
+}
+
 textarea {
   width: 100%;
 }
 
-h3 {
+.card h3 {
   margin-top: 30px;
   margin-bottom: 10px;
 }
@@ -90,4 +94,16 @@ h3 {
 
 ::ng-deep ngx-dadata.invalid input {
   border: 1px solid red !important;
+}
+
+.modal-body .app-row:not(:last-child) {
+  margin-bottom: 24px
+}
+
+:host ::ng-deep .modal-dialog.modal-sm {
+  width: 420px
+}
+
+:host ::ng-deep .modal-dialog.modal-sm h2 {
+  margin: 0
 }

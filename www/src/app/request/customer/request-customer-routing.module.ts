@@ -10,15 +10,19 @@ import { DesignDocumentationComponent } from "../common/components/design-docume
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 const routes: Routes = [
   {
     path: '',
     component: CustomerRequestsList,
-    data: { title: "Заявки" }
+    canActivate: [CanActivateFeatureGuard],
+    data: { title: "Заявки", feature: "customerRequest" }
   },
   {
     path: ':id',
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "customerRequest" },
     children: [
       {
         path: 'new',

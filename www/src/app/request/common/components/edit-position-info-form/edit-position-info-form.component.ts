@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-edit-position-info-form',
@@ -27,7 +28,8 @@ export class EditPositionInfoFormComponent implements OnInit {
     private editRequestService: EditRequestService,
     private createRequestService: CreateRequestService,
     private notificationService: NotificationService,
-    private positionStatusService: RequestPositionStatusService
+    private positionStatusService: RequestPositionStatusService,
+    private userInfoService: UserInfoService
   ) {
   }
 
@@ -93,6 +95,10 @@ export class EditPositionInfoFormComponent implements OnInit {
 
     this.setAccessForFormFields(itemForm);
 
+    if (!this.userInfoService.isCustomer()) {
+      itemForm.get('comments').disable();
+    }
+
     return itemForm;
   }
 
@@ -138,8 +144,8 @@ export class EditPositionInfoFormComponent implements OnInit {
       this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
     )) {
       itemForm.get('name').disable();
-      itemForm.get('deliveryDate').disable();
       itemForm.get('isDeliveryDateAsap').disable();
+      itemForm.get('deliveryDate').disable();
       itemForm.get('productionDocument').disable();
       itemForm.get('measureUnit').disable();
     }

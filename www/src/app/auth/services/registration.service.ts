@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { UserRegistration } from "../../user/models/user-registration";
 import { ContragentRegistration } from "../../contragent/models/contragent-registration";
 import { Observable } from "rxjs";
+import { ContragentShortInfo } from "../../contragent/models/contragent-short-info";
+import { RegistrationRequest } from "../models/registration-request";
 
 @Injectable()
 export class RegistrationService {
@@ -11,42 +13,8 @@ export class RegistrationService {
     protected api: HttpClient
   ) {}
 
-  registration(userRegistration: UserRegistration, contragentRegistration: ContragentRegistration) {
-    return this.api.post(
-      `registration`,
-      {
-        username: userRegistration.email,
-        password: userRegistration.password,
-        firstName: userRegistration.firstName,
-        lastName: userRegistration.lastName,
-        middleName: userRegistration.secondName,
-        phone: userRegistration.phone.toString(),
-        contragent: {
-          fullName: contragentRegistration.fullName,
-          shortName: contragentRegistration.shortName,
-          inn: contragentRegistration.inn.toString(),
-          kpp: contragentRegistration.kpp.toString(),
-          ogrn: contragentRegistration.ogrn.toString(),
-          taxAuthorityRegistrationDate: contragentRegistration.checkedDate,
-          email: contragentRegistration.contragentEmail,
-          phone: contragentRegistration.contragentPhone.toString(),
-        },
-        contragentAddress: {
-          country: contragentRegistration.country,
-          region: contragentRegistration.area,
-          city: contragentRegistration.city,
-          address: contragentRegistration.address,
-          postIndex: contragentRegistration.index.toString(),
-          locality: contragentRegistration.town
-        },
-        contragentBankRequisite: {
-          account: contragentRegistration.bankAccount.toString(),
-          correspondentAccount: contragentRegistration.corrAccount.toString(),
-          bik: contragentRegistration.bik.toString(),
-          name: contragentRegistration.bankName,
-          address: contragentRegistration.bankAddress
-        }
-      });
+  registration(body: RegistrationRequest) {
+    return this.api.post("registration", body);
   }
 
   /**
@@ -54,8 +22,8 @@ export class RegistrationService {
    * @param inn
    * @param kpp
    */
-  contragentExists(inn: string, kpp: string): Observable<boolean> {
-    return this.api.post<boolean>('check-contragent-exists', {
+  contragentExists(inn: string, kpp: string): Observable<ContragentShortInfo> {
+    return this.api.post<ContragentShortInfo>('check-contragent-exists', {
       inn: inn,
       kpp: kpp
     });
