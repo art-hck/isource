@@ -5,6 +5,8 @@ import { ContragentList } from "../models/contragent-list";
 import { ContragentInfo } from "../models/contragent-info";
 import { Uuid } from "../../cart/models/uuid";
 import { saveAs } from 'file-saver/src/FileSaver';
+import { ContragentShortInfo } from "../models/contragent-short-info";
+import { ContragentRegistrationRequest } from "../models/contragent-registration-request";
 
 @Injectable()
 export class ContragentService {
@@ -45,5 +47,13 @@ export class ContragentService {
         }
         alert(msg);
       });
+  }
+
+  contragentExists(inn: string, kpp: string): Observable<ContragentShortInfo> {
+    return this.api.post<ContragentShortInfo>('contragents/check-exists', { inn: inn, kpp: kpp });
+  }
+
+  registration(body: ContragentRegistrationRequest) {
+    return this.api.post<ContragentShortInfo>("contragents/registration", body);
   }
 }
