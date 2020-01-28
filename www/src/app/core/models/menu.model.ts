@@ -38,6 +38,7 @@ export const Menu: MenuModel[] = [
   {
     text: 'Сотрудники',
     path: 'employees',
+    feature: 'employees',
     children: []
   }
 ];
