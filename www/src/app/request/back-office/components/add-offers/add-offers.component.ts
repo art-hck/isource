@@ -132,7 +132,7 @@ export class AddOffersComponent implements OnInit {
     });
 
     this.procedureEndDateForm = this.formBuilder.group({
-      procedureEndDate: ['', [Validators.required, CustomValidators.futureDate()]]
+      procedureEndDate: ['', [Validators.required, CustomValidators.currentOrFutureDate()]]
     });
   }
 
