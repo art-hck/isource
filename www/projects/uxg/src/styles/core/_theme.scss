@@ -87,6 +87,7 @@ $statuses: (
   // временное решение для истории
   ACCEPTED: #fb6a9e,
   REVIEW: #fb6a9e,
+  DECLINED: #fb6a9e,
 
   PROPOSALS_PREPARATION: #f38b00, // Подготовка КП
   RESULTS_AGREEMENT: #f38b00, // Выбор победителя
@@ -96,6 +97,8 @@ $statuses: (
   // временное решение для истории
   ON_APPROVAL: #f2c94c,
   IN_PROGRESS: #f2c94c,
+  REJECTED: #f2c94c,
+  APPROVED: #f2c94c,
 
   CONTRACTED: #f2c94c, // Законтрактовано
   RKD_AGREEMENT: #56b9f2, // Согласование РКД
