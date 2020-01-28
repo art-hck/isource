@@ -144,7 +144,7 @@ export class EditPositionInfoFormComponent implements OnInit {
       this.requestPosition.status, RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
     )) {
       itemForm.get('name').disable();
-      itemForm.get('isDeliveryDateAsap').disable();
+      itemForm.get('isDeliveryDateAsap').disable({ emitEvent: false });
       itemForm.get('deliveryDate').disable();
       itemForm.get('productionDocument').disable();
       itemForm.get('measureUnit').disable();
