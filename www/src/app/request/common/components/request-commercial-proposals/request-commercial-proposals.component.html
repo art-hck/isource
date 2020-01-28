@@ -33,7 +33,7 @@
 
   <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
     <ng-container *ngIf="positionControl.value.position as position" formArrayName="positions">
-      <div class="position-card" #positionCard [ngClass]="{'fixedHeight': !isFolded[i]}">
+      <div class="position-card">
         <div class="app-row" *ngIf="positionHasFinishedProcedure(position)">
           <div class="app-col">
             <span class="procedure-name">
@@ -51,6 +51,24 @@
                <b>Показать на ЭТП ГПБ</b>
              </a>
            </div>
+        </div>
+        <div class="app-row" *ngIf="positionHasProcedure(position)">
+          <div class="app-col">
+            <span class="procedure-name">
+             <b>Процедура №{{ position.procedureId }}</b>
+           </span>
+          </div>
+          <div class="app-col app-col-aside status">
+              <span class="offer-status app-ghost-color">
+            <clr-icon shape="app-waiting"></clr-icon>Идет процедура
+          </span>
+            <button type="button" uxgButton secondary iconText [disabled]="true">
+              Продлить
+            </button>
+            <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
+              <b>Показать на ЭТП ГПБ</b>
+            </a>
+          </div>
         </div>
         <div class="app-row" formGroupName="{{i}}">
           <div class="app-col clr-flex-grow-0">
@@ -83,13 +101,13 @@
                     (click)="onCancelPublishOffers(position)">
               Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
             </button>
-            <button uxgButton link icon type="button" *ngIf="isOverflow(positionCard) || isFolded[i]" (click)="isFolded[i] = !isFolded[i]">
-              <clr-icon shape="app-chevron"
-                        [dir]="isFolded[i] ? 'up':'down'"></clr-icon>
+            <button uxgButton link icon type="button"
+                    *ngIf="isOverflow(positionCard) || isFolded[i]" (click)="isFolded[i] = !isFolded[i]">
+              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>
             </button>
           </div>
         </div>
-        <div class="app-row">
+        <div class="app-row" #positionCard [ngClass]="{'fixedHeight': !isFolded[i]}">
           <div class="app-col card linked-offer add-offer"
                *ngIf="canAddOffer(position)"
                (click)="newCommercialProposal(position)">
@@ -127,7 +145,12 @@
               </p>
               <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
                 {{linkedOffer.deliveryDate | date: 'shortDate'}}
-                <span class="app-ghost-color"> доставка</span></p>
+                <span class="app-ghost-color"> доставка</span>
+                <ng-container *ngIf="linkedOffer.documents.length">
+                <span class="divide app-ghost-color">|</span>
+                  <span class="app-ghost-color">{{linkedOffer.documents.length}} документ</span>
+                </ng-container>
+              </p>
               <span class="supplier">
         <app-contragent-info-link
           [contragent]="findSupplier(linkedOffer.supplierContragentId)">

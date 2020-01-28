@@ -119,6 +119,10 @@ export class RequestCommercialProposalsComponent implements OnInit {
       && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
   }
 
+  positionHasProcedure(requestPosition: RequestPosition): boolean {
+    return requestPosition.hasProcedure;
+  }
+
   positionHasFinishedProcedure(requestPosition: RequestPosition): boolean {
     return requestPosition.procedureEndDate && !requestPosition.hasProcedure;
   }
