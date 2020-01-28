@@ -1,8 +1,17 @@
 import { UserRole } from "../../user/models/user-role";
 import { Feature } from "./feature";
 
-export const FeatureList: { [key: string]: Feature } = {
-  registration : {},
+export interface IFeatureList {
+  registration;
+  customerRequest;
+  createRequest;
+  catalog;
+  backofficeRequest;
+  deliveryMonitor;
+}
+
+export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
+  registration: {},
   customerRequest: {
     roles: [UserRole.CUSTOMER]
   },

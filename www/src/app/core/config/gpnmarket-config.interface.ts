@@ -1,5 +1,4 @@
-import { Feature } from "../models/feature";
-
+import { IFeatureList } from "../models/feature-list";
 /**
  * Интерфейс главного конфига приложения
  */
@@ -19,5 +18,5 @@ export interface GpnmarketConfigInterface {
   procedure: {
     url: string
   };
-  disabledFeatures: string[];
+  disabledFeatures: Extract<keyof IFeatureList, string>[];
 }
