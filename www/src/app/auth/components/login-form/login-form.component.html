@@ -41,7 +41,7 @@
       <a (click)="router.navigateByUrl('auth/forgot-password')">Забыли пароль?</a>
     </div>
 
-    <div class="clr-col-auto" *ngIf="!featureService.available('registration')">
+    <div class="clr-col-auto" *ngIf="featureService.available('registration')">
       <a (click)="router.navigateByUrl('registration')">Регистрация</a>
     </div>
   </div>
