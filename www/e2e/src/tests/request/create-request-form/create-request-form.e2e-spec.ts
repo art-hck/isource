@@ -20,11 +20,11 @@ describe('Создание заявки вручную при заполнени
     login.logout();
   });
 
-  it('Нажать на пункт меню Индивидуальная заявка', () => {
+  it('Нажать на пункт меню Создать заявку', () => {
     CreateRequestFormPage.individualRequestLink().click();
     browser.wait(EC.visibilityOf(CreateRequestFormPage.individualRequestTitle()));
     expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/create');
-    expect(CreateRequestFormPage.individualRequestTitle().getText()).toEqual('Индивидуальная заявка');
+    expect(CreateRequestFormPage.individualRequestTitle().getText()).toEqual('Создать заявку');
   });
 
   it('Нажать на вкладку Заполнить вручную', () => {

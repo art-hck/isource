@@ -19,7 +19,7 @@ export const Menu: MenuModel[] = [
     children: []
   },
   {
-    text: 'Индивидуальная заявка',
+    text: 'Создать заявку',
     path: 'requests/create',
     feature: 'createRequest',
     children: []
