@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, ViewChild, ElementRef } from '@angular/core';
 import { Okei } from '../../models/okei';
 import { OkeiService } from '../../services/okei.service';
 import { Observable, Subject } from 'rxjs';
@@ -21,6 +21,8 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
   @Input() resultsCount = 10;
 
   @Output() change = new EventEmitter<string|null>();
+
+  @ViewChild('okeiName', {static: false}) inputValue: ElementRef;
 
   public isOpen = false;
   public onInputSubject = new Subject<string>();
@@ -86,6 +88,10 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: (value: string|null) => void): void {
     this.onTouched = fn;
+  }
+
+  focus(): void {
+    this.inputValue.nativeElement.focus();
   }
 
 }

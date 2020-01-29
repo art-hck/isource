@@ -53,8 +53,11 @@
         </div>
         <div class="clr-col-3">
           <label class="clr-control-label" for="measureUnit">Единицы измерения</label>
-          <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
-                 [class.invalid]="isFieldValid('measureUnit')">
+          <app-okei-selector name="measureUnit"
+                             id="measureUnit"
+                             formControlName="measureUnit"
+                             [class.invalid]="isFieldValid('measureUnit')">
+          </app-okei-selector>
         </div>
         <div class="clr-col-2">
           <label class="clr-control-label" for="deliveryDate">Срок поставки</label>
