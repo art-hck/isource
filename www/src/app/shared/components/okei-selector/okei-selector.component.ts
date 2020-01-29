@@ -8,7 +8,6 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 @Component({
   selector: 'app-okei-selector',
   templateUrl: './okei-selector.component.html',
-  styleUrls: ['./okei-selector.component.scss'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OkeiSelectorComponent), multi: true}
   ]
@@ -19,6 +18,7 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
   @Input() minLength = 0;
   @Input() debounceTime = 100;
   @Input() resultsCount = 10;
+  @Input() disabled = false;
 
   @Output() change = new EventEmitter<string|null>();
 
@@ -90,8 +90,17 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
     this.onTouched = fn;
   }
 
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = true;
+  }
+
   focus(): void {
     this.inputValue.nativeElement.focus();
   }
 
+  onBlur(): void {
+    if (this.inputValue.nativeElement.value !== this.value) {
+      this.inputValue.nativeElement.value = this.value;
+    }
+  }
 }
