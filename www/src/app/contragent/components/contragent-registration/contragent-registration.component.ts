@@ -129,6 +129,8 @@ export class ContragentRegistrationComponent implements OnInit {
       ).subscribe(
         contragent => {
           this.contragentCreated.emit(contragent);
+          this.form.reset();
+          this.autofillAlertShown = false;
           this.notificationService.toast("Контрагент успешно создан!");
         },
         (err) => {
