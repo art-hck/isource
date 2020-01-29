@@ -51,7 +51,7 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
   search(items: Okei[], value: string, resultsCount: number): Okei[] {
     // TODO: 2020-01-28 Учитывать полное совпадение, поднимать такие результаты наверх
     const valueLowerCase = value.toLowerCase();
-    let res = items.filter((item) => {
+    const res = items.filter((item) => {
       return (
         item.name.toLowerCase().indexOf(valueLowerCase) >= 0 ||
         (
