@@ -1,8 +1,5 @@
 <div class="app-control-wrap">
-  <!-- TODO: 2020-01-28 Узнать для чего было указано uxgInput в input-е -->
-  <!-- <input #okeiName uxgInput lg (input)="onInput($event)"/> -->
-  <input #okeiName lg (input)="onInput($event.target.value)" [value]="value ? value.symbol : ''"/>
-  <label class="app-control-label" (click)="okeiName.focus()">Наименование контрагента</label>
+  <input #okeiName uxgInput lg (input)="onInput($event)" [value]="value ? value : ''"/>
   <ng-container *ngIf="(okeiFiltredData$ | async) as okeiItems">
     <clr-dropdown>
       <clr-dropdown-menu *clrIfOpen="okeiItems.length > 0 && isOpen">

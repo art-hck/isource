@@ -1,26 +1,31 @@
-import { Component, OnInit, Input, forwardRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { Okei } from '../../models/okei';
 import { OkeiService } from '../../services/okei.service';
 import { Observable, Subject } from 'rxjs';
 import { publishReplay, refCount, filter, debounceTime, tap, flatMap, map } from 'rxjs/operators';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-okei-selector',
   templateUrl: './okei-selector.component.html',
   styleUrls: ['./okei-selector.component.scss'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OkeiSelectorComponent), multi: true}
+  ]
 })
-export class OkeiSelectorComponent implements OnInit {
+export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
 
-  @Input() value: Okei|null = null;
+  @Input() value: string|null = null;
   @Input() minLength = 0;
   @Input() debounceTime = 100;
   @Input() resultsCount = 10;
 
-  @Output() change = new EventEmitter<Okei|null>();
+  @Output() change = new EventEmitter<string|null>();
 
   public isOpen = false;
   public onInputSubject = new Subject<string>();
+  public onChange: (value: string|null) => void;
+  public onTouched: (value: string|null) => void;
 
   public okeiFullData$: Observable<Okei[]>;
   public okeiFiltredData$: Observable<Okei[]>;
@@ -58,12 +63,29 @@ export class OkeiSelectorComponent implements OnInit {
 
   select(okei: Okei|null): void {
     this.isOpen = false;
-    this.value = okei;
-    this.change.emit(okei);
+    const value = okei ? okei.symbol : null;
+    this.writeValue(value);
+    this.change.emit(value);
+    if (this.onChange) {
+      this.onChange(value);
+    }
   }
 
-  onInput(value: string): void {
+  onInput(event: Event): void {
+    const value = event.target['value'];
     this.onInputSubject.next(value);
+  }
+
+  writeValue(value: string|null): void {
+    this.value = value;
+  }
+
+  registerOnChange(fn: (value: string|null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: (value: string|null) => void): void {
+    this.onTouched = fn;
   }
 
 }
