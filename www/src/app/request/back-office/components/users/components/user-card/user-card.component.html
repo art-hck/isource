@@ -1,10 +1,10 @@
 <div class="app-row">
 
-  <div class="employee-card-content">
+  <div class="user-card-content">
 
-    <clr-datagrid class="employee-list-datagrid">
+    <clr-datagrid class="user-list-datagrid">
 
-      <clr-dg-row *ngFor="let request of getEmployeeRequests()">
+      <clr-dg-row *ngFor="let request of getUserRequests()">
 
         <clr-dg-cell class="request-number clr-col">
           <b>{{ request.number }}</b>
@@ -52,15 +52,15 @@
         <h3 class="sector-title">Информация о сотруднике</h3>
 
         <div class="app-ghost-color">E-mail</div>
-        <div>{{ employee.email }}</div>
+        <div>{{ user.email }}</div>
         <br/>
 
         <div class="app-ghost-color">Телефон</div>
-        <div>{{ employee.phone }}</div>
+        <div>{{ user.phone }}</div>
         <br/>
 
         <div class="app-ghost-color">Последняя активность</div>
-        <div>{{ employee.lastActivity }}</div>
+        <div>{{ user.lastActivity }}</div>
         <br/>
 
       </div>

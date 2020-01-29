@@ -6,19 +6,19 @@
         <clr-tab>
           <button clrTabLink id="link1">
             Закупщики
-            <ng-container *ngIf="purchasersCount; else employeesCountLoader">
+            <ng-container *ngIf="purchasersCount; else usersCountLoader">
               <span class="light-grey">({{ purchasersCount }})</span>
             </ng-container>
 
-            <ng-template #employeesCountLoader>
+            <ng-template #usersCountLoader>
               <span class="staff-count-loader spinner spinner-md"></span>
             </ng-template>
           </button>
 
           <clr-tab-content id="content1" *clrIfActive="true">
-            <app-employee-list
-                    [employees]="getEmployeeList('purchasers')">
-            </app-employee-list>
+            <app-user-list
+                    [users]="getUserList('purchasers')">
+            </app-user-list>
           </clr-tab-content>
 
         </clr-tab>
@@ -26,20 +26,20 @@
         <clr-tab>
           <button clrTabLink>
             Менеджеры
-            <ng-container *ngIf="managersCount; else statusCountLoader">
+            <ng-container *ngIf="managersCount; else usersCountLoader">
               <span class="light-grey">({{ managersCount }})</span>
             </ng-container>
 
-            <ng-template #statusCountLoader>
+            <ng-template #usersCountLoader>
               <span class="staff-count-loader spinner spinner-md"></span>
             </ng-template>
           </button>
 
           <clr-tab-content *clrIfActive>
 
-            <app-employee-list
-                    [employees]="getEmployeeList('managers')">
-            </app-employee-list>
+            <app-user-list
+                    [users]="getUserList('managers')">
+            </app-user-list>
 
           </clr-tab-content>
         </clr-tab>

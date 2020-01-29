@@ -8,7 +8,7 @@ export interface IFeatureList {
   catalog;
   backofficeRequest;
   deliveryMonitor;
-  employees;
+  users;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -28,7 +28,7 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   deliveryMonitor: {
     roles: [UserRole.BACKOFFICE]
   },
-  employees: {
+  users: {
     roles: [UserRole.BACKOFFICE]
   }
 };

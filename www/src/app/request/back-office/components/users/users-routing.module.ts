@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EmployeeListViewComponent } from "./components/employee-list-view/employee-list-view.component";
-import { EmployeeCardViewComponent } from "./components/employee-card-view/employee-card-view.component";
+import { UserListViewComponent } from "./components/user-list-view/user-list-view.component";
+import { UserCardViewComponent } from "./components/user-card-view/user-card-view.component";
 
 const routes: Routes = [
   {
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'list',
-    component: EmployeeListViewComponent,
+    component: UserListViewComponent,
     data: { title: "Сотрудники" }
   },
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
     children: [
       {
         path: 'info',
-        component: EmployeeCardViewComponent
+        component: UserCardViewComponent
       }
     ]
   }
@@ -29,5 +29,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EmployeesRoutingModule {
+export class UsersRoutingModule {
 }

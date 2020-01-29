@@ -42,7 +42,6 @@ import { RequestCommercialProposalsCreateComponent } from './components/request-
     RequestProcedureCreateDocumentsComponent,
     RequestCommercialProposalsComponent,
     RequestCommercialProposalsCreateComponent
-
   ],
   imports: [
     RequestBackofficeRoutingModule,
