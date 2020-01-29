@@ -160,7 +160,8 @@
             </clr-tab-content>
           </clr-tab>
 
-          <clr-tab>
+          <!-- TODO Временно скрыл вкладку у сотрудников бэкофиса-->
+          <clr-tab *ngIf="isCustomerView">
             <button clrTabLink>Коммерческие предложения</button>
             <clr-tab-content *clrIfActive>
               <app-offers [requestPosition]="requestPosition"
@@ -182,6 +183,7 @@
               </div>
             </clr-tab-content>
           </clr-tab>
+
 
           <clr-tab *ngIf="canViewManufacturingAndDeliveryMonitor(requestPosition)">
             <button clrTabLink>Изготовление и доставка</button>
