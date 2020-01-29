@@ -237,8 +237,10 @@
               </div>
               <div class="clr-col-8">
                 <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>
-                <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
-                       [class.invalid]="isFieldValid('measureUnit')">
+                <app-okei-selector #measureUnit
+                                   formControlName="measureUnit"
+                                   [class.invalid]="isFieldValid('measureUnit')">
+                </app-okei-selector>
               </div>
             </div>
             <div class="clr-row w-100">
