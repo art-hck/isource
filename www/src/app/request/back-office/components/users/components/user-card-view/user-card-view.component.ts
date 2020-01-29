@@ -36,10 +36,10 @@ export class UserCardViewComponent implements OnInit {
   getUserInfo(userId: Uuid): void {
     this.contragent$ = this.staffService.getUserInfo(userId).pipe(
       tap(user => {
-        this.title.setTitle(user.name);
+        this.title.setTitle(user.user.fullName);
         this.bc.breadcrumbs = [
           {label: "Сотрудники", link: "/users/list"},
-          {label: this.title.getTitle(), link: `/users/${user.id}/info`}
+          {label: this.title.getTitle(), link: `/users/${user.user.id}/info`}
         ];
       })
     );

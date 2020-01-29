@@ -19,20 +19,20 @@
 
   <clr-dg-row *ngFor="let user of users; let i = index">
 
-    <clr-dg-cell class="request-number clr-col">
-      <b>{{ user.name}}</b>
+    <clr-dg-cell class="user-full-name clr-col">
+      <b>{{ user.user.fullName}}</b>
     </clr-dg-cell>
 
-    <clr-dg-cell class="published clr-col-4">
-      <a href="mailto:{{ user.email}}">{{ user.email}}</a>
+    <clr-dg-cell class="user-email clr-col-4">
+      <a href="mailto:{{ user.user.username }}">{{ user.user.username }}</a>
     </clr-dg-cell>
 
     <clr-dg-cell class="completed clr-col-2">
-      {{ user.phone}}
+      {{ user.user.phone }}
     </clr-dg-cell>
 
     <clr-dg-cell class="customer-name clr-col-auto">
-      {{ user.requestsCount }}/{{ user.positionsCount }}
+      {{ user.reqCount }}/{{ user.posCount }}
     </clr-dg-cell>
 
   </clr-dg-row>

@@ -3,6 +3,7 @@ import { UsersService } from "../../services/users.service";
 import { UserList } from "../../models/user-list";
 import { Observable } from "rxjs";
 import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
+import { UserListItem } from "../../models/user-list-item";
 
 @Component({
   selector: 'app-user-list-view',
@@ -16,90 +17,96 @@ export class UserListViewComponent implements OnInit {
   users$: Observable<UserList[]>;
 
 
-  users = {
-    purchasers: [
-      {
+  customers = [
+    {
         "user": {
           "id": "ffb02f77-66a1-44ac-b19d-64596239f3e4",
           "username": "testbackoffice@mail.ru",
-          "firstName": null,
-          "lastName": null,
-          "middleName": null,
-          "fullName": " ",
-          "shortName": " "
+          "phone": "+7 916 961-63-83",
+          "firstName": "Владислав",
+          "lastName": "Цыплухин",
+          "middleName": "Пресс-секретаревич",
+          "fullName": "Цыплухин Владислав Пресс-секретаревич",
+          "shortName": "Цыплухин В. П."
         },
-        "poscount": 4,
-        "reqcount": 1
+        "posCount": 7,
+        "reqCount": 12
       },
-      {
-        "user": {
-          "id": "18313c38-78f0-4819-bd79-c41444305134",
-          "username": "gareev.ar@gazprom-neft.ru",
-          "firstName": "Афхат",
-          "lastName": "Гареев",
-          "middleName": "Рамилевич",
-          "fullName": "Гареев Афхат Рамилевич",
-          "shortName": "Гареев А. Р."
-        },
-        "poscount": 0,
-        "reqcount": 0
+    {
+      "user": {
+        "id": "18313c38-78f0-4819-bd79-c41444305134",
+        "username": "gareev.ar@gazprom-neft.ru",
+        "phone": "+7 905 238-13-42",
+        "firstName": "Афхат",
+        "lastName": "Гареев",
+        "middleName": "Рамилевич",
+        "fullName": "Гареев Афхат Рамилевич",
+        "shortName": "Гареев А. Р."
       },
-      {
-        "user": {
-          "id": "6aa64e48-a55e-4056-a48d-10a16044f695",
-          "username": "potapovdv.gpns@mail.ru",
-          "firstName": "Дмитрий",
-          "lastName": "Потапов",
-          "middleName": "Владимирович",
-          "fullName": "Потапов Дмитрий Владимирович",
-          "shortName": "Потапов Д. В."
-        },
-        "posCount": 0,
-        "reqCount": 0
-      }
-    ],
-    managers: [
-      {
-        "user": {
-          "id": "ffb02f77-66a1-44ac-b19d-64596239f3e4",
-          "username": "testbackoffice@mail.ru",
-          "firstName": null,
-          "lastName": null,
-          "middleName": null,
-          "fullName": " ",
-          "shortName": " "
-        },
-        "poscount": 4,
-        "reqcount": 1
+      "posCount": 13,
+      "reqCount": 64
+    },
+    {
+      "user": {
+      "id": "6aa64e48-a55e-4056-a48d-10a16044f695",
+        "username": "potapovdv.gpns@mail.ru",
+        "phone": "+7 925 538-83-82",
+        "firstName": "Дмитрий",
+        "lastName": "Потапов",
+        "middleName": "Владимирович",
+        "fullName": "Потапов Дмитрий Владимирович",
+        "shortName": "Потапов Д. В."
+    },
+      "posCount": 0,
+      "reqCount": 0
+    }
+  ];
+
+  backoffice = [
+    {
+      "user": {
+        "id": "ffb02f77-66a1-44ac-b19d-64596239f3e4",
+        "username": "testbackoffice@mail.ru",
+        "phone": "+7 916 961-63-83",
+        "firstName": "Владислав",
+        "lastName": "Цыплухин",
+        "middleName": "Пресс-секретаревич",
+        "fullName": "Цыплухин Владислав Пресс-секретаревич",
+        "shortName": "Цыплухин В. П."
       },
-      {
-        "user": {
-          "id": "18313c38-78f0-4819-bd79-c41444305134",
-          "username": "gareev.ar@gazprom-neft.ru",
-          "firstName": "Афхат",
-          "lastName": "Гареев",
-          "middleName": "Рамилевич",
-          "fullName": "Гареев Афхат Рамилевич",
-          "shortName": "Гареев А. Р."
-        },
-        "poscount": 0,
-        "reqcount": 0
+      "posCount": 7,
+      "reqCount": 12
+    },
+    {
+      "user": {
+        "id": "18313c38-78f0-4819-bd79-c41444305134",
+        "username": "gareev.ar@gazprom-neft.ru",
+        "phone": "+7 905 238-13-42",
+        "firstName": "Афхат",
+        "lastName": "Гареев",
+        "middleName": "Рамилевич",
+        "fullName": "Гареев Афхат Рамилевич",
+        "shortName": "Гареев А. Р."
       },
-      {
-        "user": {
-          "id": "6aa64e48-a55e-4056-a48d-10a16044f695",
-          "username": "potapovdv.gpns@mail.ru",
-          "firstName": "Дмитрий",
-          "lastName": "Потапов",
-          "middleName": "Владимирович",
-          "fullName": "Потапов Дмитрий Владимирович",
-          "shortName": "Потапов Д. В."
-        },
-        "posCount": 0,
-        "reqCount": 0
-      }
-    ],
-  };
+      "posCount": 13,
+      "reqCount": 64
+    },
+    {
+      "user": {
+        "id": "6aa64e48-a55e-4056-a48d-10a16044f695",
+        "username": "potapovdv.gpns@mail.ru",
+        "phone": "+7 925 538-83-82",
+        "firstName": "Дмитрий",
+        "lastName": "Потапов",
+        "middleName": "Владимирович",
+        "fullName": "Потапов Дмитрий Владимирович",
+        "shortName": "Потапов Д. В."
+      },
+      "posCount": 0,
+      "reqCount": 0
+    }
+  ];
+
 
   purchasersCount: number;
   managersCount: number;
@@ -109,15 +116,20 @@ export class UserListViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUserList('purchasers');
+    this.getUserList('customers');
 
-    this.purchasersCount = this.users.purchasers.length;
-    this.managersCount = this.users.managers.length;
+    this.purchasersCount = this.customers.length;
+    this.managersCount = this.backoffice.length;
   }
 
-  getUserList(type): UserList[] {
-    // this.users$ = this.usersService.getUserList();
-    return this.users[type];
+  getUserList(type): UserListItem[] {
+    // this.users$ = this.usersService.getUserList(type);
+
+    if (type === 'customers') {
+      return this.customers;
+    } else if (type === 'backoffice') {
+      return this.backoffice;
+    }
   }
 
 }

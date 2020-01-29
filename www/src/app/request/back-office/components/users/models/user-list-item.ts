@@ -2,13 +2,14 @@ import { Uuid } from "../../../../../cart/models/uuid";
 
 export class UserListItem {
   user: UserInfo;
-  poscount: number;
-  reqcount: number;
+  posCount: number;
+  reqCount: number;
 }
 
 class UserInfo {
   id: Uuid;
   username: string;
+  phone: string;
   firstName: string;
   lastName: string;
   middleName: string;
