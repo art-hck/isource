@@ -100,14 +100,11 @@
 
 
     <div class="clr-col-6">
-      <clr-input-container>
-        <label>Ед. измерения <b class="required-star">*</b></label>
-        <app-okei-selector name="measureUnit"
-                           formControlName="measureUnit"
-                           value="{{requestPosition.measureUnit}}"
-                           [class.invalid]="isFieldValid('measureUnit')">
-        </app-okei-selector>
-      </clr-input-container>
+      <label>Ед. измерения <b class="required-star">*</b></label>
+      <app-okei-selector id="measureUnit"
+                         formControlName="measureUnit"
+                         [class.invalid]="isFieldValid('measureUnit')">
+      </app-okei-selector>
     </div>
 
 
