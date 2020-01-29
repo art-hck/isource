@@ -2,9 +2,11 @@
 
   <div class="clr-row clr-align-items-center clr-justify-content-between">
     <div class="clr-col">
-      <button uxgButton primary iconText (click)="modal.open()">
-        <clr-icon size="16" shape="app-plus"></clr-icon>
-        <span>Новый контрагент</span>
+      <button uxgButton primary iconText
+        *ngIf="featureService.available('createContragent', userInfoService.roles)"
+        (click)="modal.open()">
+          <clr-icon size="16" shape="app-plus"></clr-icon>
+          <span>Новый контрагент</span>
       </button>
     </div>
 
