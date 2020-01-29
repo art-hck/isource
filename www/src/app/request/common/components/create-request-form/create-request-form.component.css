@@ -47,7 +47,8 @@ label.clr-control-label {
 
 .isDeliveryAsap {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  padding-top: 33px;
   font-size: 14px;
 }
 
