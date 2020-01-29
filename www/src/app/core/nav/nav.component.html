@@ -37,9 +37,7 @@
               <clr-dropdown class="btn-user">
                 <button class="nav-icon" clrDropdownTrigger>
                 <span class="avatar">
-                 <img *ngIf="user.isCustomer()" src="../../../assets/images/avatar_ludmila.jpg"/>
-                 <img *ngIf="user.isBackOffice()" src="../../../assets/images/avatar_nitshe.jpg"/>
-                 <img *ngIf="!user.isBackOffice() && !user.isCustomer()" src="../../../assets/images/avatar.svg"/>
+                 <img src="../../../assets/images/avatar.svg"/>
                 </span>
                   <div class="user-info-block">
                     <p class="user-name">{{ user.getShortUserFio() }}</p>
