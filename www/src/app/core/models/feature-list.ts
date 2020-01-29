@@ -8,6 +8,7 @@ export interface IFeatureList {
   catalog;
   backofficeRequest;
   deliveryMonitor;
+  createContragent;
   users;
 }
 
@@ -28,7 +29,10 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   deliveryMonitor: {
     roles: [UserRole.BACKOFFICE]
   },
+  createContragent: {
+    roles: [UserRole.BACKOFFICE]
+  },
   users: {
     roles: [UserRole.BACKOFFICE]
-  }
+  },
 };

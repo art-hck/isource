@@ -19,6 +19,7 @@ import { UxgModule } from "uxg";
 import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
+import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
     DragFileUploadDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
+    OkeiSelectorComponent,
   ],
   exports: [
     CommonModule,
@@ -75,6 +77,7 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
     DocumentUploadListComponent,
     DocumentIconComponent,
     ContragentAutocompleteComponent,
+    OkeiSelectorComponent,
 
     PluralizePipe,
     BytesToSizePipe,

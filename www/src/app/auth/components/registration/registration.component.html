@@ -1,28 +1,7 @@
 <div class="container">
-  <h2 class="regHeader" *ngIf="!nextForm">Регистрация пользователя</h2>
-  <h2 class="regHeader" *ngIf="nextForm">Регистрация контрагента</h2>
+  <h2 class="regHeader">Регистрация пользователя</h2>
   <div class="card">
-
-    <div class="alert alert-info autofill-alert" *ngIf="autofillAlertShown && nextForm">
-      <div class="alert-items">
-        <div class="alert-item static">
-            <div class="alert-icon-wrapper">
-              <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
-            </div>
-            <span class="alert-text">
-                <span>
-                  Пожалуйста, проверьте и дополните введённую информацию перед завершением регистрации.
-                </span>
-            </span>
-        </div>
-      </div>
-
-      <button type="button" class="close" aria-label="Close" (click)="autofillAlertShown = false">
-        <clr-icon aria-hidden="true" shape="close"></clr-icon>
-      </button>
-    </div>
-
-    <form [formGroup]="userRegistrationForm" class="form" *ngIf="!nextForm" (ngSubmit)="userFormSubmit()">
+    <form [formGroup]="form" class="form" (ngSubmit)="submit()">
       <div class="form-block">
         <div class="clr-form-control">
           <h3>Личная информация</h3>
@@ -73,176 +52,25 @@
           </div>
 
           <h3>Контрагент</h3>
-          <div class="clr-row w-100" [formGroup]="contragentRegistrationForm">
-            <ng-container formGroupName="contragent">
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="inn">ИНН</label>
-                <ngx-dadata [config]="configParty"
-                            (selected)="onPartySuggestionSelected($event)"
-                            formControlName="inn"
-                            appFormControlInvalidClass="invalid"></ngx-dadata>
-              </div>
+          <div class="clr-row w-100" [formGroup]="contragentForm">
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="inn">ИНН</label>
+              <input id="inn" type="text" formControlName="inn" appFormControlInvalidClass="invalid"/>
+            </div>
 
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="kpp2">КПП</label>
-                <input id="kpp2" type="text" formControlName="kpp" appFormControlInvalidClass="invalid"/>
-              </div>
-            </ng-container>
+            <div class="clr-col-4">
+              <label class="clr-control-label" for="kpp2">КПП</label>
+              <input id="kpp2" type="text" formControlName="kpp" appFormControlInvalidClass="invalid"/>
+            </div>
           </div>
-
 
           <div class="card-footer app-row app-align-items-center app-justify-content-end">
             <div>
               <span *ngIf="isLoading" class="spinner spinner-inline"></span>
             </div>
-            <button class="btn btn-primary next" [disabled]="disableChangeStep">Далее</button>
+            <button class="btn btn-primary next" [disabled]="form.invalid || contragentForm.invalid">Регистрация</button>
           </div>
         </div>
-      </div>
-    </form>
-
-    <form [formGroup]="contragentRegistrationForm" class="form" *ngIf="nextForm">
-      <div class="form-block">
-        <div class="clr-form-control">
-          <ng-container formGroupName="contragent">
-            <div class="clr-row w-100">
-              <div class="clr-col-12">
-                <label class="clr-control-label" for="fullName">Краткое наименование</label>
-                <ngx-dadata
-                        [config]="configParty"
-                        (selected)="onPartySuggestionSelected($event)"
-                        id="shortName"
-                        formControlName="shortName"
-                        appFormControlInvalidClass="invalid"></ngx-dadata>
-              </div>
-            </div>
-
-            <div class="clr-row w-100">
-              <div class="clr-col-12">
-                <label class="clr-control-label" for="shortName">Полное наименование</label>
-                <input id="fullName" type="text" formControlName="fullName"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-
-            <div class="clr-row w-100">
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="inn">ИНН</label>
-                <ngx-dadata #innInputElRef
-                        [config]="configParty"
-                        (selected)="onPartySuggestionSelected($event)"
-                        id="inn"
-                        formControlName="inn"
-                        appFormControlInvalidClass="invalid"></ngx-dadata>
-              </div>
-
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="kpp">КПП</label>
-                <input id="kpp" type="text" formControlName="kpp" appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="ogrn">ОГРН/ОГРНИП</label>
-                <input id="ogrn" type="text" formControlName="ogrn" appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-
-            <div class="clr-row w-100">
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="taxAuthorityRegistrationDate">Дата регистрации</label>
-                <input id="taxAuthorityRegistrationDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="taxAuthorityRegistrationDate"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="contragentEmail">Email</label>
-                <input id="contragentEmail" type="text" formControlName="email"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="contragentPhone">Телефон</label>
-                <input id="contragentPhone" type="text" formControlName="phone"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-          </ng-container>
-          <ng-container formGroupName="contragentAddress">
-            <h3>Юридический адрес</h3>
-            <div class="clr-row w-100">
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="country">Страна</label>
-                <input id="country" type="text" formControlName="country"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="region">Регион/область</label>
-                <input id="region" type="text" formControlName="region" appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="city">Город/район</label>
-                <input id="city" type="text" formControlName="city" appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-            <div class="clr-row w-100">
-              <div class="clr-col-2">
-                <label class="clr-control-label" for="postIndex">Почтовый индекс</label>
-                <input id="postIndex" type="text" formControlName="postIndex"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-5">
-                <label class="clr-control-label" for="town">Населенный пункт</label>
-                <input id="town" type="text" formControlName="locality" appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-5">
-                <label class="clr-control-label" for="address">Адрес</label>
-                <input id="address" type="text" formControlName="address"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-          </ng-container>
-          <ng-container formGroupName="contragentBankRequisite">
-            <h3>Банковские реквизиты</h3>
-            <div class="clr-row w-100">
-
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="bik">БИК</label>
-                <ngx-dadata #bikInputElRef
-                        [config]="configBank"
-                        (selected)="onBankSuggestionSelected($event)"
-                        id="bik"
-                        formControlName="bik"
-                        appFormControlInvalidClass="invalid"></ngx-dadata>
-              </div>
-
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
-                <input id="bankAccount" type="text" formControlName="account"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-
-              <div class="clr-col-4">
-                <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
-                <input id="corrAccount" type="text" formControlName="correspondentAccount"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-            <div class="clr-row w-100">
-              <div class="clr-col-6">
-                <label class="clr-control-label" for="bankName">Наименование банка</label>
-                <input id="bankName" type="text" formControlName="name"
-                       appFormControlInvalidClass="invalid"/>
-              </div>
-              <div class="clr-col-6">
-                <label class="clr-control-label" for="bankAddress">Адрес банка</label>
-                <input id="bankAddress" type="text" formControlName="address" appFormControlInvalidClass="invalid"/>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button type="button" class="btn btn-link" (click)="onChangeStep()">Назад</button>
-        <button type="button" class="btn btn-primary"
-                [disabled]="contragentRegistrationForm.invalid"
-                (click)="onRegistration()">Зарегистрировать</button>
       </div>
     </form>
   </div>
@@ -252,19 +80,19 @@
   <div class="modal-title">
     <h3>Найден контрагент с такими данными</h3>
   </div>
-  <div class="modal-body">
-    <h2>ООО «Меридиан»</h2>
+  <div class="modal-body" *ngIf="contragentForm.value as contragent">
+    <h2>{{contragent.name}} </h2>
     <div class="app-row">
-      <div class="app-col"><span class="app-secondary-color">ИНН:</span> 123 456 789 0</div>
-      <div class="app-col"><span class="app-secondary-color">КПП:</span> 554 765 890</div>
+      <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
+      <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
     </div>
     <div class="app-row app-secondary-color">
-      Если это ваша организация нажмите кнопку: «Зарегистрироваться», чтобы звершить процесс регистрации. Если нет, то
-      проверьте правильность ввода ИНН и КПП на прошлом экране, нажав кнопку: «Отмена».
+      Если это ваша организация нажмите кнопку: «Зарегистрироваться», чтобы завершить процесс регистрации. Если нет, то
+      проверьте правильность ввода ИНН и КПП, нажав кнопку: «Отмена».
     </div>
     <div class="app-row app-justify-content-between">
       <button class="app-col" uxgButton secondary lg type="button" (click)="contragentFound.close()">Отмена</button>
-      <button class="app-col" uxgButton primary lg (click)="onRegistration();">Зарегистрироваться</button>
+      <button class="app-col" uxgButton primary lg (click)="register();">Зарегистрироваться</button>
     </div>
   </div>
 </clr-modal>
@@ -273,18 +101,17 @@
   <div class="modal-title">
     <h3>Контрагент с такими данными не найден</h3>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="contragentForm.value as contragent">
     <div class="app-row">
-      <div class="app-col"><span class="app-secondary-color">ИНН:</span> 123 456 789 0</div>
-      <div class="app-col"><span class="app-secondary-color">КПП:</span> 554 765 890</div>
+      <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
+      <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
     </div>
     <div class="app-row app-secondary-color">
-      Если данные введены верно, то вы можете зарегистрировать контрагента самостоятельно, или скореектируйте данные на
-      прошлом экране, нажав на кнопку «Отмена».
+      Если данные введены верно, то Вы можете обратиться к администраторам проекта, чтобы конрагент был зарегистрирован,
+      или скорректируйте данные.
     </div>
-    <div class="app-row app-justify-content-between">
-      <button uxgButton secondary lg class="app-col app-basis-auto app-grow-0" type="button" (click)="contragentNotFound.close()">Отмена</button>
-      <button uxgButton primary lg class="app-col" (click)="onChangeStep()">Зарегистрировать конграгента</button>
+    <div class="app-row app-justify-content-end">
+      <button uxgButton primary lg (click)="contragentNotFound.close()">Всё понятно</button>
     </div>
   </div>
 </clr-modal>
