@@ -18,11 +18,11 @@ export class UxgWizzardStep<S> {
   }
 
   get valid(): boolean {
-    return this.info.valid;
+    return !this.info.validator || this.info.validator();
   }
 
   get invalid(): boolean {
-    return !this.info.valid;
+    return !this.valid;
   }
 
   complete = () => this.info.completed = true;
@@ -35,8 +35,6 @@ export class UxgWizzardStep<S> {
 
   toggle = (state: boolean) => this.info.hidden = !state;
 
-  validate = (isValid: boolean) => this.info.valid = isValid;
-
   toString = (): S => this.step;
 }
 
@@ -45,5 +43,5 @@ export class UxgWizzardStepInfo {
   completed?: boolean;
   disabled?: boolean;
   hidden?: boolean;
-  valid?: boolean;
+  validator?: () => boolean;
 }

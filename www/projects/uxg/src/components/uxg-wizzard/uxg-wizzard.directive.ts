@@ -12,8 +12,10 @@ export class UxgWizzardDirective {
 @Directive({ selector: '[uxgWizzardStep]' })
 export class UxgWizzardStepDirective implements DoCheck {
   @Input() uxgWizzardStep: UxgWizzardStep<any> | string;
-  @Input() uxgWizzardStepValid = true;
   private created = false;
+  private get isCurrent() {
+    return this.host.uxgWizzard.current === this.uxgWizzardStep || this.host.uxgWizzard.current.toString() === this.uxgWizzardStep;
+  }
 
   constructor(
     private host: UxgWizzardDirective,
@@ -22,9 +24,7 @@ export class UxgWizzardStepDirective implements DoCheck {
   }
 
   ngDoCheck() {
-    if (this.host.uxgWizzard.current === this.uxgWizzardStep || this.host.uxgWizzard.current.toString() === this.uxgWizzardStep) {
-      this.host.uxgWizzard.get(this.uxgWizzardStep.toString()).validate(this.uxgWizzardStepValid);
-
+    if (this.isCurrent) {
       if (!this.created) {
         this.created = true;
         this.viewContainer.createEmbeddedView(this.templateRef);

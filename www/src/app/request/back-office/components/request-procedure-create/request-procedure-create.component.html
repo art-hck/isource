@@ -19,7 +19,7 @@
 <form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="complete.emit()">
   <!-- Select positions -->
   <ng-container *ngIf="(positions$ | async) as positions; else loading">
-    <div *uxgWizzardStep="'positions'; valid: form.get('positions').valid">
+    <div *uxgWizzardStep="'positions'">
       <div class="app-secondary-color">
         Выберите все необходимые позиции или группы позиций в заявке, по которым вы хотите создать процедуру на
         Электронной торговой площадке Газпромбанка
@@ -54,13 +54,13 @@
     </div>
   </ng-container>
   <ng-template #loading>
-    <div *uxgWizzardStep="'positions'; valid: form.get('positions').valid" class="text-center">
+    <div *uxgWizzardStep="'positions'" class="text-center">
       <span class="spinner spinner-md"></span>
     </div>
   </ng-template>
 
   <!-- General -->
-  <div *uxgWizzardStep="'general'; valid: form.get('general').valid" formGroupName="general">
+  <div *uxgWizzardStep="'general'" formGroupName="general">
     <div class="app-secondary-color">
       Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
       создать техническое предложение от одного контрагента.
@@ -108,7 +108,7 @@
   </div>
 
   <!-- Properties -->
-  <div *uxgWizzardStep="'properties'; valid: form.get('properties').valid">
+  <div *uxgWizzardStep="'properties'">
     <h3>Свойства процедуры</h3>
     <br/>
     <hr class="divider"/>
@@ -120,7 +120,7 @@
 
   <!-- Contragents -->
   <ng-container *ngIf="(contragents$ | async) as contragents">
-    <div *uxgWizzardStep="'contragents'; valid: form.get('privateAccessContragents').valid">
+    <div *uxgWizzardStep="'contragents'">
       <div class="app-secondary-color">
         Выберите всех необходимых контрагентов, которых вы хотите пригласить к участию в процедуре. Другие контрагенты не
         будут видеть процедуру и не смогут в ней участвовать.
@@ -156,7 +156,7 @@
   </ng-container>
 
   <!-- Documents -->
-  <div *uxgWizzardStep="'documents'; valid: form.valid" formGroupName="documents">
+  <div *uxgWizzardStep="'documents'" formGroupName="documents">
     <div class="app-secondary-color">Ниже вы можете выбрать те документы заявки, которые могут быть прикреплены к процедуре</div>
     <br/>
     <br/>
@@ -179,10 +179,10 @@
   <div class="app-row app-justify-content-end">
     <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
-      <button *uxgWizzardButton="'cancel'" type="button" uxgButton secondary lg>Отмена</button>
-      <button *uxgWizzardButton="'prev'" type="button" uxgButton secondary lg>Назад</button>
-      <button *uxgWizzardButton="'next'" type="button" uxgButton primary lg >Продолжить</button>
-      <button *uxgWizzardButton="'end'" uxgButton primary lg >Создать процедуру</button>
+      <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
+      <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>
+      <button uxgWizzardButton="next" type="button" uxgButton primary lg >Продолжить</button>
+      <button uxgWizzardButton="end" uxgButton primary lg >Создать процедуру</button>
     </div>
   </div>
 </form>

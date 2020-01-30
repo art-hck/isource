@@ -56,11 +56,11 @@ export class RequestProcedureCreateComponent implements OnInit {
     this.contragents$ = this.contragentService.getContragentList();
 
     this.wizzard = this.wb.create({
-      positions: { label: "Выбор позиций", disabled: this.action !== "create" },
-      general: "Общие сведения",
+      positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
+      general: ["Общие сведения", () => this.form.get('general').valid ],
       properties: { label: "Свойства", disabled: this.action === 'prolong' },
-      contragents: { label: "Контрагенты", hidden: true },
-      documents: "Документы",
+      contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
+      documents: ["Документы", () => this.form.valid],
     });
 
     this.form = this.fb.group({
