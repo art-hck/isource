@@ -10,6 +10,7 @@ export interface IFeatureList {
   deliveryMonitor;
   createContragent;
   contractGeneration;
+  createProcedure;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -33,6 +34,9 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
     roles: [UserRole.BACKOFFICE]
   },
   contractGeneration: {
+    roles: [UserRole.BACKOFFICE]
+  },
+  createProcedure: {
     roles: [UserRole.BACKOFFICE]
   }
 };
