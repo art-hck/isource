@@ -10,6 +10,25 @@
         <h1 *ngIf="!isTitleHidden">{{ titleService.getTitle() }}</h1>
 
         <router-outlet></router-outlet>
+
+
+        <div class="footer">
+          <div class="clr-row clr-align-items-center">
+            <div class="clr-col">
+              <span class="gray">© Marketplace, 2020</span>
+            </div>
+
+            <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForCustomer', user.roles)">
+              <div class="file-block">
+                <div class="file-icon"></div>
+                <span class="file-link">
+                  <a href="assets/GPN_Marketpleys_Rukovodstvo_zakazchika_30.01.2020.docx">Скачать инструкцию (5,2 Мб)</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

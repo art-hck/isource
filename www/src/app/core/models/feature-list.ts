@@ -11,6 +11,7 @@ export interface IFeatureList {
   createContragent;
   contractGeneration;
   createProcedure;
+  instructionsFileForCustomer;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -22,6 +23,9 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
     roles: [UserRole.CUSTOMER]
   },
   catalog: {
+    roles: [UserRole.CUSTOMER]
+  },
+  instructionsFileForCustomer: {
     roles: [UserRole.CUSTOMER]
   },
   backofficeRequest: {
