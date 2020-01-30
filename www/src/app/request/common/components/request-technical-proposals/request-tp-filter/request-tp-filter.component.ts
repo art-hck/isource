@@ -108,7 +108,8 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     });
 
     // Убираем из массива дублирующихся контрагентов
-    this.contragents = [...new Set(this.contragents)];
+    this.contragents = this.contragents.filter((value, index, array) =>
+      !array.filter((v, i) => JSON.stringify(value) === JSON.stringify(v) && i < index).length);
   }
 
   getAgreementStateList(): void {
@@ -117,7 +118,8 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
     });
 
     // Убираем из массива дублирующиеся статусы
-    this.tpStatuses = [...new Set(this.tpStatuses)];
+    this.tpStatuses = this.tpStatuses.filter((value, index, array) =>
+      !array.filter((v, i) => JSON.stringify(value) === JSON.stringify(v) && i < index).length);
   }
 
   /**

@@ -31,32 +31,32 @@ export class CustomValidators {
   // Используется для валидации КПП и БИК
   protected static nineDigits(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\d{9}$/);
+    const valid = String(value).match(/^\d{9}$/);
     return valid ? null : {field: true};
 }
 
   // Используется для валидации банковского и корреспонденского счета
   static twentyDigits(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\d{20}$/);
+    const valid = String(value).match(/^\d{20}$/);
     return valid ? null : {field: true};
   }
 
   static index(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\d{6}$/);
+    const valid = String(value).match(/^\d{6}$/);
     return valid ? null : {field: true};
   }
 
   static ogrn(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^(\d{13}|\d{15})$/);
+    const valid = String(value).match(/^(\d{13}|\d{15})$/);
     return valid ? null : {field: true};
   }
 
   static inn(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^(\d{10}|\d{12})$/);
+    const valid = String(value).match(/^(\d{10}|\d{12})$/);
     return valid ? null : {field: true};
   }
 
@@ -152,6 +152,15 @@ export class CustomValidators {
       const controlDate = moment(control.value, 'DD.MM.YYYY');
       const validationDate = moment(new Date(), 'DD.MM.YYYY');
       return controlDate.isAfter(validationDate) ? null : { 'field': true };
+    };
+  }
+
+  static currentOrFutureDate(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const controlDate = moment(control.value, 'DD.MM.YYYY');
+      const validationDate = moment(moment(new Date()).format('DD.MM.YYYY'), 'DD.MM.YYYY');
+
+      return controlDate.isSameOrAfter(validationDate) ? null : { 'notCurrentOrFutureDate': true };
     };
   }
 

@@ -52,7 +52,6 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
   selectedTechnicalProposalPositionsIds = [];
   showAddTechnicalProposalModal = false;
-  uploadedFiles: File[] = [];
 
   loaders = {
     addTechnicalProposal: false,
@@ -122,7 +121,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
    */
   onShowAddTechnicalProposalModal(): void {
     this.selectedTechnicalProposalPositionsIds = [];
-    this.uploadedFiles = [];
+    this.documentsForm.get('documents').setValue([]);
 
     const technicalProposal = new TechnicalProposal();
     technicalProposal.id = null;
@@ -149,7 +148,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     this.contragentSearchFieldValue = technicalProposal.supplierContragent.shortName;
 
     this.selectedTechnicalProposalPositionsIds = [];
-    this.uploadedFiles = [];
+    this.documentsForm.get('documents').setValue([]);
 
     this.technicalProposal.positions.map(e => {
       this.selectedTechnicalProposalPositionsIds.push(e.position.id);
@@ -298,7 +297,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.technicalProposalsService.addTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
-        if (!this.uploadedFiles.length) {
+        if (!this.documentsForm.get('documents').value.length) {
           this.getTechnicalProposals();
           return;
         }
@@ -361,7 +360,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
 
     this.technicalProposalsService.updateTechnicalProposal(this.requestId, technicalProposal).subscribe(
       (tpData: TechnicalProposal) => {
-        if (!this.uploadedFiles.length) {
+        if (!this.documentsForm.get('documents').value.length) {
           this.getTechnicalProposals();
           return;
         }
@@ -497,7 +496,7 @@ export class AddTechnicalProposalsComponent implements OnInit {
     // Если ТП уже в процессе рассмотрения, проверяем только
     // наличие выбранных документов для загрузки
     if (this.tpIsOnReview(technicalProposal)) {
-      return this.uploadedFiles.length > 0;
+      return this.documentsForm.get('documents').value.length > 0;
     } else {
       // Если ТП ещё не рассматривалось заказчиком,
       // проверяем, выбраны ли позиции или заполнено ли поле наименования

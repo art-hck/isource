@@ -40,6 +40,11 @@
           display: block;
         }
       }
+
+      &:disabled {
+        color: uxg($theme, color-font-ghost);
+        cursor: default;
+      }
     }
 
     &:focus, &.app-control-label-shown {

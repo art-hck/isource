@@ -1,67 +1,47 @@
 <div class="container">
-  <h2 class="regHeader" *ngIf="!nextForm">Регистрация пользователя</h2>
-  <h2 class="regHeader" *ngIf="nextForm">Регистрация контрагента</h2>
+  <h2 class="regHeader">Регистрация пользователя</h2>
   <div class="card">
-
-    <div class="alert alert-info autofill-alert" *ngIf="autofillAlertShown">
-      <div class="alert-items">
-        <div class="alert-item static">
-            <div class="alert-icon-wrapper">
-              <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
-            </div>
-            <span class="alert-text">
-                <span>
-                  Пожалуйста, проверьте и дополните введённую информацию перед завершением регистрации.
-                </span>
-            </span>
-        </div>
-      </div>
-
-      <button type="button" class="close" aria-label="Close" (click)="autofillAlertShown = false">
-        <clr-icon aria-hidden="true" shape="close"></clr-icon>
-      </button>
-    </div>
-
-    <form [formGroup]="userRegistrationForm" class="form" *ngIf="!nextForm">
+    <form [formGroup]="form" class="form" (ngSubmit)="submit()">
       <div class="form-block">
         <div class="clr-form-control">
+          <h3>Личная информация</h3>
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="email">Email</label>
-              <input id="email" type="text" formControlName="email" [class.invalid]="isUserFieldValid('email')"/>
+              <input type="text" formControlName="username" appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="password">Пароль</label>
               <input type="password" id="password" formControlName="password"
-                     [class.invalid]="isUserFieldValid('password')">
+                     appFormControlInvalidClass="invalid">
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="confirmedPassword">Подтверждение пароля</label>
               <input type="password" id="confirmedPassword" formControlName="confirmedPassword"
-                     [class.invalid]="isUserFieldValid('confirmedPassword')">
+                     appFormControlInvalidClass="invalid">
             </div>
           </div>
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="lastName">Фамилия</label>
               <input id="lastName" type="text" formControlName="lastName"
-                     [class.invalid]="isUserFieldValid('lastName')"/>
+                     appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="firstName">Имя</label>
               <input id="firstName" type="text" formControlName="firstName"
-                     [class.invalid]="isUserFieldValid('firstName')"/>
+                     appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="secondName">Отчество</label>
-              <input id="secondName" type="text" formControlName="secondName"
-                     [class.invalid]="isUserFieldValid('secondName')"/>
+              <input id="secondName" type="text" formControlName="middleName"
+                     appFormControlInvalidClass="invalid"/>
             </div>
           </div>
           <div class="clr-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
-              <input id="phone" type="text" formControlName="phone" [class.invalid]="isUserFieldValid('phone')"/>
+              <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-6 agreement">
               <clr-checkbox-wrapper>
@@ -70,157 +50,68 @@
               </clr-checkbox-wrapper>
             </div>
           </div>
-          <div class="card-footer">
-            <button type="button" class="btn btn-primary next" [disabled]="userRegistrationForm.invalid"
-                    (click)="onChangeStep()">Далее
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
 
-    <form [formGroup]="contragentRegistrationForm" class="form" *ngIf="nextForm">
-      <div class="form-block">
-        <div class="clr-form-control">
-
-          <div class="clr-row w-100">
-            <div class="clr-col-12">
-              <label class="clr-control-label" for="fullName">Краткое наименование</label>
-              <ngx-dadata #shortNameInputElRef
-                      [config]="configParty"
-                      (selected)="onPartySuggestionSelected($event)"
-                      id="shortName"
-                      formControlName="shortName"
-                      [class.invalid]="isContragentFieldValid('shortName')"></ngx-dadata>
-            </div>
-          </div>
-
-          <div class="clr-row w-100">
-            <div class="clr-col-12">
-              <label class="clr-control-label" for="shortName">Полное наименование</label>
-              <input id="fullName" type="text" formControlName="fullName"
-                     [class.invalid]="isContragentFieldValid('fullName')"/>
-            </div>
-          </div>
-
-          <div class="clr-row w-100">
+          <h3>Контрагент</h3>
+          <div class="clr-row w-100" [formGroup]="contragentForm">
             <div class="clr-col-4">
               <label class="clr-control-label" for="inn">ИНН</label>
-              <ngx-dadata #innInputElRef
-                      [config]="configParty"
-                      (selected)="onPartySuggestionSelected($event)"
-                      id="inn"
-                      formControlName="inn"
-                      [class.invalid]="isContragentFieldValid('inn')"></ngx-dadata>
-              <div class="app-control-error" *ngIf="contragentExists()">
-                <span>Контрагент с данными ИНН и КПП уже зарегистрирован в системе</span>
-              </div>
+              <input id="inn" type="text" formControlName="inn" appFormControlInvalidClass="invalid"/>
             </div>
 
             <div class="clr-col-4">
-              <label class="clr-control-label" for="kpp">КПП</label>
-              <input id="kpp" type="text" formControlName="kpp" [class.invalid]="isContragentFieldValid('kpp')"/>
-            </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="ogrn">ОГРН/ОГРНИП</label>
-              <input id="ogrn" type="text" formControlName="ogrn" [class.invalid]="isContragentFieldValid('ogrn')"/>
+              <label class="clr-control-label" for="kpp2">КПП</label>
+              <input id="kpp2" type="text" formControlName="kpp" appFormControlInvalidClass="invalid"/>
             </div>
           </div>
 
-          <div class="clr-row w-100">
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="checkedDate">Дата регистрации</label>
-              <input id="checkedDate" placeholder="ДД.ММ.ГГГГ" type="date" clrDate formControlName="checkedDate"
-                     [class.invalid]="isContragentFieldValid('checkedDate')"/>
+          <div class="card-footer app-row app-align-items-center app-justify-content-end">
+            <div>
+              <span *ngIf="isLoading" class="spinner spinner-inline"></span>
             </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="contragentEmail">Email</label>
-              <input id="contragentEmail" type="text" formControlName="contragentEmail"
-                     [class.invalid]="isContragentFieldValid('contragentEmail')"/>
-            </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="contragentPhone">Телефон</label>
-              <input id="contragentPhone" type="text" formControlName="contragentPhone"
-                     [class.invalid]="isContragentFieldValid('contragentPhone')"/>
-            </div>
-          </div>
-          <h3>Юридический адрес</h3>
-          <div class="clr-row w-100">
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="country">Страна</label>
-              <input id="country" type="text" formControlName="country"
-                     [class.invalid]="isContragentFieldValid('country')"/>
-            </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="area">Регион/область</label>
-              <input id="area" type="text" formControlName="area" [class.invalid]="isContragentFieldValid('area')"/>
-            </div>
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="city">Город/район</label>
-              <input id="city" type="text" formControlName="city" [class.invalid]="isContragentFieldValid('city')"/>
-            </div>
-          </div>
-          <div class="clr-row w-100">
-            <div class="clr-col-2">
-              <label class="clr-control-label" for="index">Почтовый индекс</label>
-              <input id="index" type="text" formControlName="index"
-                     [class.invalid]="isContragentFieldValid('index')"/>
-            </div>
-            <div class="clr-col-5">
-              <label class="clr-control-label" for="town">Населенный пункт</label>
-              <input id="town" type="text" formControlName="town" [class.invalid]="isContragentFieldValid('town')"/>
-            </div>
-            <div class="clr-col-5">
-              <label class="clr-control-label" for="address">Адрес</label>
-              <input id="address" type="text" formControlName="address"
-                     [class.invalid]="isContragentFieldValid('address')"/>
-            </div>
-          </div>
-          <h3>Банковские реквизиты</h3>
-          <div class="clr-row w-100">
-
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="bik">БИК</label>
-              <ngx-dadata #bikInputElRef
-                      [config]="configBank"
-                      (selected)="onBankSuggestionSelected($event)"
-                      id="bik"
-                      formControlName="bik"
-                      [class.invalid]="isContragentFieldValid('bik')"></ngx-dadata>
-            </div>
-
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="bankAccount">Расчетный счет</label>
-              <input id="bankAccount" type="text" formControlName="bankAccount"
-                     [class.invalid]="isContragentFieldValid('bankAccount')"/>
-            </div>
-
-            <div class="clr-col-4">
-              <label class="clr-control-label" for="corrAccount">Корреспондентский счет</label>
-              <input id="corrAccount" type="text" formControlName="corrAccount"
-                     [class.invalid]="isContragentFieldValid('corrAccount')"/>
-            </div>
-          </div>
-          <div class="clr-row w-100">
-            <div class="clr-col-6">
-              <label class="clr-control-label" for="bankName">Наименование банка</label>
-              <input id="bankName" type="text" formControlName="bankName"
-                     [class.invalid]="isContragentFieldValid('bankName')"/>
-            </div>
-            <div class="clr-col-6">
-              <label class="clr-control-label" for="bankAddress">Адрес банка</label>
-              <input id="bankAddress" type="text" formControlName="bankAddress"
-                     [class.invalid]="isContragentFieldValid('bankAddress')"/>
-            </div>
+            <button class="btn btn-primary next" [disabled]="form.invalid || contragentForm.invalid">Регистрация</button>
           </div>
         </div>
-      </div>
-      <div class="card-footer">
-        <button type="button" class="btn btn-link" (click)="onChangeStep()">Назад</button>
-        <button type="button" class="btn btn-primary"
-                [disabled]="contragentRegistrationForm.invalid"
-                (click)="onRegistration()">Зарегистрировать</button>
       </div>
     </form>
   </div>
 </div>
+
+<clr-modal #contragentFound clrModalSize="sm">
+  <div class="modal-title">
+    <h3>Найден контрагент с такими данными</h3>
+  </div>
+  <div class="modal-body" *ngIf="contragentForm.value as contragent">
+    <h2>{{contragent.name}} </h2>
+    <div class="app-row">
+      <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
+      <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
+    </div>
+    <div class="app-row app-secondary-color">
+      Если это ваша организация нажмите кнопку: «Зарегистрироваться», чтобы завершить процесс регистрации. Если нет, то
+      проверьте правильность ввода ИНН и КПП, нажав кнопку: «Отмена».
+    </div>
+    <div class="app-row app-justify-content-between">
+      <button class="app-col" uxgButton secondary lg type="button" (click)="contragentFound.close()">Отмена</button>
+      <button class="app-col" uxgButton primary lg (click)="register();">Зарегистрироваться</button>
+    </div>
+  </div>
+</clr-modal>
+
+<clr-modal #contragentNotFound clrModalSize="sm">
+  <div class="modal-title">
+    <h3>Контрагент с такими данными не найден</h3>
+  </div>
+  <div class="modal-body" *ngIf="contragentForm.value as contragent">
+    <div class="app-row">
+      <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
+      <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
+    </div>
+    <div class="app-row app-secondary-color">
+      Если данные введены верно, то Вы можете обратиться к администраторам проекта, чтобы конрагент был зарегистрирован,
+      или скорректируйте данные.
+    </div>
+    <div class="app-row app-justify-content-end">
+      <button uxgButton primary lg (click)="contragentNotFound.close()">Всё понятно</button>
+    </div>
+  </div>
+</clr-modal>

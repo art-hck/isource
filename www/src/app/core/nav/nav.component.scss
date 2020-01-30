@@ -1,3 +1,5 @@
+@import "projects/uxg/src/styles/index";
+
 nav a[hidden] {
     display: none;
 }
@@ -45,6 +47,15 @@ nav a.active {
 
   a {
     color: #000000;
+    &:after {
+      content: "Альфа";
+      font-size: 11px;
+      color: uxg($theme, color-font-ghost);
+      font-weight: normal;
+      vertical-align: super;
+      position: relative;
+      top: -5px;
+    }
   }
 }
 
