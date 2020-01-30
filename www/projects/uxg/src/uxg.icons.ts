@@ -35,7 +35,6 @@ enum UxgIcons {
   AppUserIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M8 7C9.65685 7 11 5.15685 11 3.5C11 1.84315 10.5 0 8 0C5.5 0 5 1.84315 5 3.5C5 5.15685 6.34315 7 8 7Z" /><path d="M8 9C2.55556 9 1 10 1 15L15 15C15 10 13.4444 9 8 9Z" /></svg>',
   AppWarningIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M0.784314 13.5294C0.429057 14.1955 0.911746 15 1.66667 15H14.3333C15.0883 15 15.5709 14.1955 15.2157 13.5294L8.88235 1.65441C8.50588 0.948529 7.49412 0.948529 7.11765 1.65441L0.784314 13.5294ZM9 13H7V11H9V13ZM9 9H7V5H9V9Z" /></svg>',
   AppWaitingIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6 4H7V7.35255L10.0589 8.72458L9.64969 9.637L6 8V4Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14 7C14 10.866 10.866 14 7 14C3.13401 14 0 10.866 0 7C0 3.13401 3.13401 0 7 0C10.866 0 14 3.13401 14 7ZM12 7C12 9.76142 9.76142 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7Z" /></svg>',
-  AppLockIcon = '<svg viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 4V5H4V4C4 2.89543 4.89543 2 6 2C7.10457 2 8 2.89543 8 4ZM12 7C12 5.89543 11.1046 5 10 5V4C10 1.79086 8.20914 0 6 0C3.79086 0 2 1.79086 2 4V5C0.895431 5 0 5.89543 0 7V12C0 13.1046 0.895431 14 2 14H10C11.1046 14 12 13.1046 12 12V7ZM7 10V7H5V10H7Z" /></svg>'
 }
 
 export const UxgIconShapesSources: IconShapeSources[] = [
@@ -73,5 +72,4 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-user": UxgIcons.AppUserIcon },
   {"app-warning": UxgIcons.AppWarningIcon },
   {"app-waiting": UxgIcons.AppWaitingIcon},
-  {"app-lock": UxgIcons.AppLockIcon}
 ];
