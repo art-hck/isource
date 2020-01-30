@@ -18,6 +18,7 @@ export const AppConfig: GpnmarketConfigInterface = {
   disabledFeatures: [
     "deliveryMonitor",
     "catalog",
-    "contractGeneration"
+    "contractGeneration",
+    "createProcedure"
   ],
 };
