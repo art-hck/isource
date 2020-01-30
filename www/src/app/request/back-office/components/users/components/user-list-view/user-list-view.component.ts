@@ -4,6 +4,7 @@ import { UserList } from "../../models/user-list";
 import { Observable } from "rxjs";
 import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
 import { UserListItem } from "../../models/user-list-item";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: 'app-user-list-view',
@@ -12,10 +13,7 @@ import { UserListItem } from "../../models/user-list-item";
 })
 export class UserListViewComponent implements OnInit {
 
-  currentDatagridState: DatagridStateAndFilter;
-
   users$: Observable<UserList[]>;
-
 
   customers = [
     {
@@ -67,15 +65,15 @@ export class UserListViewComponent implements OnInit {
       "user": {
         "id": "ffb02f77-66a1-44ac-b19d-64596239f3e4",
         "username": "testbackoffice@mail.ru",
-        "phone": "+7 916 961-63-83",
-        "firstName": "Владислав",
-        "lastName": "Цыплухин",
-        "middleName": "Пресс-секретаревич",
-        "fullName": "Цыплухин Владислав Пресс-секретаревич",
-        "shortName": "Цыплухин В. П."
+        "phone": "+7 911 921-33-63",
+        "firstName": "Андрей",
+        "lastName": "Круассан",
+        "middleName": "Гвоздь",
+        "fullName": "Андрей Круассан Гвоздь",
+        "shortName": "Круассан А. Г."
       },
-      "posCount": 7,
-      "reqCount": 12
+      "posCount": 4,
+      "reqCount": 13
     },
     {
       "user": {
@@ -88,8 +86,8 @@ export class UserListViewComponent implements OnInit {
         "fullName": "Гареев Афхат Рамилевич",
         "shortName": "Гареев А. Р."
       },
-      "posCount": 13,
-      "reqCount": 64
+      "posCount": 7,
+      "reqCount": 34
     },
     {
       "user": {
@@ -102,14 +100,13 @@ export class UserListViewComponent implements OnInit {
         "fullName": "Потапов Дмитрий Владимирович",
         "shortName": "Потапов Д. В."
       },
-      "posCount": 0,
-      "reqCount": 0
+      "posCount": 64,
+      "reqCount": 128
     }
   ];
 
-
-  purchasersCount: number;
-  managersCount: number;
+  customersCount: number;
+  backofficeCount: number;
 
   constructor(
     protected usersService: UsersService
@@ -118,12 +115,12 @@ export class UserListViewComponent implements OnInit {
   ngOnInit() {
     this.getUserList('customers');
 
-    this.purchasersCount = this.customers.length;
-    this.managersCount = this.backoffice.length;
+    this.customersCount = this.customers.length;
+    this.backofficeCount = this.backoffice.length;
   }
 
   getUserList(type): UserListItem[] {
-    // this.users$ = this.usersService.getUserList(type);
+    this.users$ = this.usersService.getUserList(type);
 
     if (type === 'customers') {
       return this.customers;
