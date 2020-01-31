@@ -11,12 +11,13 @@
   padding: 0;
 }
 
+.container {
+  min-height: calc(100% - 68px);
+}
 
 .footer {
-  display: block;
-  height: 28px;
-  width: 100%;
-  margin-top: 80px;
+  padding-top: 40px;
+  line-height: 10px;
 }
 
 .footer > div {

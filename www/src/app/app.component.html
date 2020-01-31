@@ -11,34 +11,36 @@
 
         <router-outlet></router-outlet>
 
+      </div>
 
-        <div class="footer" *ngIf="!noContainerPadding">
-          <div class="clr-row clr-align-items-center">
-            <div class="clr-col">
-              <span class="gray">© Marketplace, 2020</span>
-            </div>
 
-            <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForCustomer', user.roles)">
-              <div class="file-block">
-                <div class="file-icon"></div>
-                <span class="file-link">
+      <div class="footer" *ngIf="!noContainerPadding">
+        <div class="clr-row clr-align-items-center">
+          <div class="clr-col">
+            <span class="gray">© Marketplace, 2020</span>
+          </div>
+
+          <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForCustomer', user.roles)">
+            <div class="file-block">
+              <div class="file-icon"></div>
+              <span class="file-link">
                   <a href="assets/GPN_Marketpleys_Rukovodstvo_zakazchika_31.01.2020.pdf">Скачать инструкцию</a>
                 </span>
-              </div>
             </div>
+          </div>
 
-            <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForBackoffice', user.roles)">
-              <div class="file-block">
-                <div class="file-icon"></div>
-                <span class="file-link">
+          <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForBackoffice', user.roles)">
+            <div class="file-block">
+              <div class="file-icon"></div>
+              <span class="file-link">
                   <a href="assets/GPN_Marketpleys_Rukovodstvo_sotrudnika_bek-ofisa_31.01.2020.pdf">Скачать инструкцию</a>
                 </span>
-              </div>
             </div>
           </div>
         </div>
-
       </div>
+
     </div>
   </div>
+
 </div>
