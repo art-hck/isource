@@ -8,7 +8,7 @@
             <div class="app-col app-basis-auto clr-flex-grow-0">
 
               <!-- Создать процедуру  -->
-              <button uxgButton secondary iconText [disabled]="true">
+              <button uxgButton secondary iconText (click)="procedureModal.open()">
                 <clr-icon shape="app-plus"></clr-icon>
                 <span>Создать процедуру</span>
               </button>
@@ -31,6 +31,15 @@
       ></app-request-technical-proposals-create>
 
       <app-request-technical-proposals [technicalProposals]="technicalProposals$ | async"></app-request-technical-proposals>
+
+      <clr-modal clrModalSize="lg" #procedureModal>
+        <h2 class="modal-title">Создание новой процедуры</h2>
+        <div class="modal-body" [style.overflow]="'visible'">
+          <app-request-technical-proposals-procedure-create
+            *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
+          </app-request-technical-proposals-procedure-create>
+        </div>
+      </clr-modal>
     </div>
 
     <div class="app-col app-col-aside">

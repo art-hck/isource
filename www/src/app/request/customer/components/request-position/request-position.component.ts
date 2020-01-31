@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { Observable } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { tap } from "rxjs/operators";
+import { mapTo, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -31,8 +31,12 @@ export class RequestPositionComponent implements OnInit {
   getData() {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.positionId = this.route.snapshot.paramMap.get('position-id');
-    this.position$ = this.requestService.getRequestPosition(this.positionId)
+    this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId)
       .pipe(tap(position => this.setPageInfo(position)));
+  }
+
+  updateData(position: RequestPosition) {
+    this.position$ = this.position$.pipe(mapTo(position));
   }
 
   setPageInfo(position: RequestPosition) {

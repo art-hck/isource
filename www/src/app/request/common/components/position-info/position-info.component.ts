@@ -15,6 +15,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-position-workflow-order';
 import { RequestPositionDraftService } from "../../services/request-position-draft.service";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-position-info',
@@ -52,7 +53,8 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     private editRequestService: EditRequestService,
     private customerRequestService: CustomerRequestService,
     private notificationService: NotificationService,
-    private requestPositionDraftService: RequestPositionDraftService
+    private requestPositionDraftService: RequestPositionDraftService,
+    private featureService: FeatureService
   ) {
   }
 
@@ -163,7 +165,7 @@ export class PositionInfoComponent implements OnInit, AfterViewInit {
     const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
       requestPosition.status
     );
-    return currentStatusIndex >= deliveryStatusIndex;
+    return currentStatusIndex >= deliveryStatusIndex && this.featureService.available('deliveryMonitor');
   }
 
   canUploadManufacturing(requestPosition: RequestPosition): boolean {

@@ -1,3 +1,15 @@
+<clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" [(clrAlertClosed)]="hideNeedUpdate">
+  <clr-alert-item>
+    <span class="alert-text">
+         Список заявок был изменен
+    </span>
+
+    <div class="alert-actions">
+      <button class="btn alert-action" (click)="onUpdateList()">Обновить список</button>
+    </div>
+  </clr-alert-item>
+</clr-alert>
+
 <clr-datagrid class="requests-list-datagrid" (clrDgRefresh)="refresh($event)"
               [clrDgLoading]="datagridLoader">
   <clr-dg-column class="request-number clr-col-1">

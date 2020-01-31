@@ -2,6 +2,12 @@
 
   <div class="clr-row clr-align-items-center clr-justify-content-between">
     <div class="clr-col">
+      <button uxgButton primary iconText
+        *ngIf="featureService.available('createContragent', userInfoService.roles)"
+        (click)="modal.open()">
+          <clr-icon size="16" shape="app-plus"></clr-icon>
+          <span>Новый контрагент</span>
+      </button>
     </div>
 
     <div class="clr-col-auto">
@@ -19,3 +25,9 @@
   </app-contragent-list>
 
 </div>
+
+<clr-modal #modal [clrModalSize]="'xl'">
+  <div class="modal-body">
+    <app-contragent-registration (contragentCreated)="getContragentList(); modal.close();"></app-contragent-registration>
+  </div>
+</clr-modal>

@@ -87,6 +87,31 @@ small {
   }
 }
 
+.select-list {
+  &-positions {
+    max-height: calc(70vh - 186px);
+  }
+
+  &-item {
+    &-title {
+      line-height: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &-quantity {
+      flex-grow: .15; // 15% width
+      max-width: 100px;
+    }
+
+    &-date {
+      max-width: 120px;
+      text-align: right;
+    }
+  }
+}
+
 @keyframes host-show {
   0% {
     transform: scaleY(0);

@@ -1,0 +1,31 @@
+<ng-container *ngIf="(request$ | async) as request; else loading">
+      <app-request-commercial-proposals
+        *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers"
+        [requestPositions]="positionsWithOffers.positions"
+        [suppliers]="positionsWithOffers.suppliers"
+        (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
+        (addOffer)="showAddOfferModal($event);"
+      ></app-request-commercial-proposals>
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>
+
+<clr-modal #requestCommercialProposalModal
+           class="cp-creation-modal"
+           [(clrModalOpen)]="showForm"
+           [clrModalSize]="'lg'">
+  <h2 class="modal-title">Добавить новое коммерческое предложение</h2>
+
+  <div class="modal-body">
+    <app-request-commercial-proposals-create
+            *ngIf="requestCommercialProposalModal._open"
+            (cancel)="requestCommercialProposalModal.close()"
+            [position]="currentRequestPosition"
+            (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()">
+    </app-request-commercial-proposals-create>
+  </div>
+</clr-modal>

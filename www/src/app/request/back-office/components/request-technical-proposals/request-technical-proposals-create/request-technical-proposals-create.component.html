@@ -151,12 +151,46 @@
     <clr-modal #positionsModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Выбор позиций для технического предложения</h2>
       <div class="modal-body">
-        <app-request-technical-proposals-create-positions
-          [request]="request"
-          (cancel)="positionsModal.close()"
-          (ngModelChange)="positionsModal.close()"
-          formControlName="positions"
-        ></app-request-technical-proposals-create-positions>
+        <div class="app-secondary-color">
+          Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
+          создать техническое предложение от одного контрагента.
+        </div>
+        <br/>
+        <br/>
+        <ng-container *ngIf="(positionsWithManufacturer$ | async) as positionsWithManufacturer">
+          <select-items-with-search #positionsSearch
+            placeholder="Наименование позиции или группы"
+            formControlName="positions"
+            class="select-list select-list-positions"
+            [liveUpdate]="false"
+            [items]="positionsWithManufacturer"
+            (ngModelChange)="positionsModal.close()"
+            [filterFn]="positionsWithManufacturerFilter"
+            [trackBy]="trackByPositionId"
+          >
+            <ng-template let-formGroup="formGroup" let-positionWithMan="item">
+              <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
+                <div class="app-col clr-flex-grow-0">
+                  <uxg-checkbox formControlName="checked"></uxg-checkbox>
+                </div>
+                <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
+                <div class="app-col select-list-item-quantity">
+                  <span>{{ position.quantity }} </span>
+                  <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+                </div>
+                <div class="app-col select-list-item-date">
+                  <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+                  <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+                </div>
+              </div>
+            </ng-template>
+          </select-items-with-search>
+          <br/>
+          <div class="app-row clr-justify-content-end">
+            <button type="button" uxgButton lg secondary (click)="positionsModal.close()">Отмена</button>
+            <button uxgButton lg primary (click)="positionsSearch.submit()">Всё готово</button>
+          </div>
+        </ng-container>
       </div>
     </clr-modal>
 

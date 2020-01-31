@@ -2,7 +2,7 @@
   class="app-control"
   type="radio"
   #radio
-  [name]="name"
+  [name]="name || formControlName"
   [disabled]="disabled"
   [value]="value"
   [ngModel]="mainValue"

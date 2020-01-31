@@ -38,7 +38,8 @@
               Отправить на согласование
             </button>
 
-            <button class="btn btn-primary add-offers-btn send-offers"
+            <button *ngIf="featureService.available('createProcedure')"
+                    class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
                     [clrLoading]="loaders.creatingProcedure">
               <b>Создать процедуру</b>
@@ -237,8 +238,10 @@
               </div>
               <div class="clr-col-8">
                 <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>
-                <input type="text" name="measureUnit" id="measureUnit" formControlName="measureUnit"
-                       [class.invalid]="isFieldValid('measureUnit')">
+                <app-okei-selector #measureUnit
+                                   formControlName="measureUnit"
+                                   [class.invalid]="isFieldValid('measureUnit')">
+                </app-okei-selector>
               </div>
             </div>
             <div class="clr-row w-100">

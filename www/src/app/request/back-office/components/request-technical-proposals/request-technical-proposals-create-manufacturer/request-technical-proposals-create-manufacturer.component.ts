@@ -5,7 +5,7 @@ import { PositionWithManufacturerName } from "../../../models/position-with-manu
 @Component({
   selector: 'app-request-technical-proposals-create-manufacturer',
   templateUrl: './request-technical-proposals-create-manufacturer.component.html',
-  styleUrls: ['../request-technical-proposals-create-positions/request-technical-proposals-create-positions.component.scss'],
+  styleUrls: ['request-technical-proposals-create-manufacturer.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => RequestTechnicalProposalsCreateManufacturerComponent),
@@ -50,7 +50,7 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
   createFormGroupPosition(value: PositionWithManufacturerName) {
     return this.fb.group({
       position: value.position,
-      manufacturer_name: [value.manufacturer_name, Validators.required]
+      manufacturer_name: [value.manufacturer_name || value.position.name, Validators.required]
     });
   }
 

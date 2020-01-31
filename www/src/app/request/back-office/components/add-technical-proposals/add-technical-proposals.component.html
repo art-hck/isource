@@ -17,7 +17,8 @@
             </button>
           </div>
 
-          <div class="clr-col-auto">
+          <div *ngIf="featureService.available('createProcedure')"
+               class="clr-col-auto">
             <button class="btn btn-primary send-offers"
                     (click)="createProcedureWizard.open()"
                     [clrLoading]="creatingProcedureLoader">
@@ -160,7 +161,7 @@
 
       <div class="clr-row">
         <div class="clr-col-12">
-          <label for="supplierName">
+          <label>
             <span class="supplier-name-label">Наименование поставщика</span>
           </label>
 
@@ -182,7 +183,7 @@
             <form [formGroup]="documentsForm" class="form tp-documents-list">
               <app-document-upload-list
                   (fileSelected)="onDocumentSelected($event, documentsForm)"
-                  [documents]="uploadedFiles"
+                  [documents]="documentsForm.get('documents').value"
               ></app-document-upload-list>
             </form>
           </div>
@@ -195,8 +196,8 @@
               ></app-document-simple-list>
 
               <app-document-upload-list
-                      (fileSelected)="onDocumentSelected($event, documentsForm)"
-                      [documents]="uploadedFiles"
+                  (fileSelected)="onDocumentSelected($event, documentsForm)"
+                  [documents]="documentsForm.get('documents').value"
               ></app-document-upload-list>
             </form>
           </ng-template>
@@ -210,7 +211,7 @@
         </div>
 
         <div class="clr-col-12">
-          <div class="card-block" style="padding: 10px 0 15px 0">
+          <div class="card-block">
 
             <ng-container class="load-block"
                           *ngIf="!(technicalProposalsPositions && technicalProposalsPositions.length > 0)">

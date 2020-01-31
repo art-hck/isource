@@ -23,7 +23,7 @@
         <span class="app-ghost-color">Сообщений: </span>
         <span>5</span>
         &nbsp;
-        <a routerLink="/messages">
+        <a routerLink="/messages/request/{{ position.request.id }}/position/{{ position.id }}">
           <span class="app-secondary-color">
             <clr-icon shape="app-comment"></clr-icon>
             <span>Перейти к чату по позиции</span>
@@ -78,7 +78,7 @@
   <div class="app-col app-col-aside">
     <div class="app-row">
       <div class="app-col">
-        <h3>Общая информация о позиции</h3>
+        <h3 class="sector-title">Общая информация о позиции</h3>
 
         <div class="app-ghost-color">Наименование МТР</div>
         <div class="app-bold">{{ position.name }}</div>
@@ -104,9 +104,8 @@
         <div class="app-bold">{{ position.startPrice | currency: position.currency }}</div>
         <br/>
 
-        <!-- @TODO: not implemented -->
         <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
-        <div class="app-bold">ГОСТ 10667-90</div>
+        <div class="app-bold">{{ position.productionDocument }}</div>
         <br/>
 
         <ng-container *ngIf="position.isDesignRequired">
@@ -115,13 +114,15 @@
           <br/>
         </ng-container>
 
-        <!-- @TODO: not implemented -->
-        <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
-        <div class="app-bold">Необходимы ПНР и ШМР</div>
-        <br/>
+        <ng-container *ngIf="getRelatedServicesList(position)">
+          <div class="app-ghost-color">Необходимость сопутствующих услуг</div>
+          <div class="app-bold"> {{ getRelatedServicesList(position) }}</div>
+          <br/>
+        </ng-container>
+
 
         <ng-container *ngIf="position.comments">
-          <div class="app-ghost-color">Комментарии</div>
+          <div class="app-ghost-color">Дополнительные требования</div>
           <div class="app-bold">{{ position.comments }}</div>
         </ng-container>
 
@@ -137,7 +138,7 @@
           <div class="modal-body">
             <app-request-position-form
               *ngIf="edit._open"
-              [reqeustId]="requestId"
+              [requestId]="requestId"
               [(position)]="position"
               (cancel)="edit.close()"
               (positionChange)="positionChange.emit($event); edit.close()"

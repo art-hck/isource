@@ -13,6 +13,7 @@ import { RequestOfferPosition } from "../../models/request-offer-position";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { UxgBreadcrumbsService } from "uxg";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-contract',
@@ -37,6 +38,7 @@ export class ContractComponent implements OnInit {
     private requestService: RequestService,
     private contractService: ContractService,
     private userInfoService: UserInfoService,
+    private featureService: FeatureService,
     protected getContragentService: ContragentService,
   ) {
   }

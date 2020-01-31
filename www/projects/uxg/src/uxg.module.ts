@@ -9,7 +9,7 @@ import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
 import { UxgPositionStatusComponent } from './components/uxg-position-status/uxg-position-status.component';
 import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.component';
 import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
-import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
+import { UxgDropdownItemDirective } from './components/uxg-dropdown/uxg-dropdown-item.directive';
 import { UxgInputDirective } from './directives/uxg-input.directive';
 import { UxgButtonDirective } from './directives/uxg-button.directive';
 import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
@@ -19,7 +19,9 @@ import { UxgSelectAllDirective } from "./directives/uxg-select-all.directive";
 import { UxgRadioItemComponent } from "./components/uxg-radio/uxg-radio-item.component";
 import { UxgTreeComponent, UxgTreeNodeDirective, UxgTreeWrapDirective } from './components/uxg-tree/uxg-tree.component';
 import { UxgPopoverComponent } from "./components/uxg-popover/uxg-popover.component";
-import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover.directive";
+import { UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover-trigger.directive";
+import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover-content.directive";
+import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./compon
     UxgPopoverComponent,
     UxgPopoverContentDirective,
     UxgPopoverTriggerDirective,
+    UxgWizzardDirective,
+    UxgWizzardStepDirective,
   ],
   exports: [
     UxgCheckboxComponent,
@@ -73,6 +77,8 @@ import { UxgPopoverContentDirective, UxgPopoverTriggerDirective } from "./compon
     UxgPopoverComponent,
     UxgPopoverContentDirective,
     UxgPopoverTriggerDirective,
+    UxgWizzardDirective,
+    UxgWizzardStepDirective,
   ],
 })
 export class UxgModule {
