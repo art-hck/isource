@@ -60,11 +60,14 @@
             </ng-container>
           </div>
         </div>
-        <div class="clr-row" *ngIf="isShowGenerateContractButton(contract)">
+
+        <div class="clr-row"
+             *ngIf="isShowGenerateContractButton(contract) && featureService.available('contractGeneration')">
           <div class="clr-col">
             <button class="btn btn-primary" (click)="onGenerateContract(request, contract)"> Создать типовой договор </button>
           </div>
         </div>
+
       </div>
       <div class="card-block" *ngIf="contract.documents.length > 0 || getAttachedFiles(contract).length > 0">
         <div class="card-text">
