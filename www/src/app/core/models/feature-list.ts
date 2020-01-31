@@ -12,6 +12,7 @@ export interface IFeatureList {
   contractGeneration;
   createProcedure;
   instructionsFileForCustomer;
+  instructionsFileForBackoffice;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -42,5 +43,8 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   },
   createProcedure: {
     roles: [UserRole.BACKOFFICE]
-  }
+  },
+  instructionsFileForBackoffice: {
+    roles: [UserRole.BACKOFFICE]
+  },
 };
