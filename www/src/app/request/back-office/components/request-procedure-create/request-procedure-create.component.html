@@ -4,7 +4,7 @@
     <div *ngIf="i > 0" class="app-col app-grow-0 app-basis-auto"><clr-icon shape="app-arrow right"></clr-icon></div>
     <div class="app-col app-grow-0 app-basis-auto">
       <div class="app-row app-align-items-center">
-        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)" [class.completed]="step.completed">
+        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)" [class.completed]="step.completed" (click)="wizzard.current = step">
           <clr-icon *ngIf="getStepIcon(step)" class="app-wizzard-item-icon" [attr.shape]="getStepIcon(step)"></clr-icon>
           {{ i + 1 }}
         </div>
@@ -31,23 +31,31 @@
         formControlName="positions"
         placeholder="Наименование позиции или группы"
         [filterFn]="filterPositions"
+        [disabledFn]="disabledPositions"
         [trackBy]="trackById"
         [items]="positions"
       >
         <ng-template let-formGroup="formGroup" let-position="item">
-          <div class="app-row select-list-item" [formGroup]="formGroup">
+          <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
             <div class="app-col clr-flex-grow-0">
               <uxg-checkbox formControlName="checked"></uxg-checkbox>
             </div>
             <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
-            <div class="app-col select-list-item-quantity">
-              <span>{{ position.quantity }} </span>
-              <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
-            </div>
-            <div class="app-col select-list-item-date">
-              <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-              <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
-            </div>
+            <ng-container *ngIf="!formGroup.disabled">
+              <div class="app-col select-list-item-quantity">
+                <span>{{ position.quantity }} </span>
+                <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+              </div>
+              <div class="app-col app-grow-0 app-basis-auto select-list-item-date">
+                <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+                <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="formGroup.disabled">
+              <div class="app-col app-grow-0 app-basis-auto">
+                <span>Участвует в процедуре</span>
+              </div>
+            </ng-container>
           </div>
         </ng-template>
       </select-items-with-search>
@@ -98,7 +106,7 @@
           </div>
         </div>
       </div>
-      <div class="app-col app-secondary-color">
+      <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
         <div class="app-control-wrap">
           <input #timeControlRef uxgInput lg formControlName="timeEndRegistration" [textMask]="mask"/>
           <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>

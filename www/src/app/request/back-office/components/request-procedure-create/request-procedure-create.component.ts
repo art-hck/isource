@@ -83,10 +83,13 @@ export class RequestProcedureCreateComponent implements OnInit {
     if (this.action === 'prolong') {
       this.wizzard.get("positions").disable();
       this.wizzard.get("properties").disable();
+      this.form.get("positions").disable();
+      this.form.get("properties").disable();
     }
 
     if (this.action === 'bargain') {
       this.wizzard.get("positions").disable();
+      this.form.get("positions").disable();
     }
 
     this.form.get("properties").valueChanges
@@ -142,6 +145,10 @@ export class RequestProcedureCreateComponent implements OnInit {
 
   filterPositions(q: string, position: RequestPosition): boolean {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  disabledPositions(position: RequestPosition): boolean {
+    return position.hasProcedure;
   }
 
   filterContragents(q: string, contragent: ContragentList): boolean {
