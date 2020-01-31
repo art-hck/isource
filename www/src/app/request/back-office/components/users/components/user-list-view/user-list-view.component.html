@@ -17,7 +17,7 @@
 
           <clr-tab-content id="content1" *clrIfActive="true">
             <app-user-list
-                    [users]="getUserList('customers')">
+                    [users]="getUserList('backoffice')">
             </app-user-list>
           </clr-tab-content>
 
@@ -38,7 +38,7 @@
           <clr-tab-content *clrIfActive>
 
             <app-user-list
-                    [users]="getUserList('backoffice')">
+                    [users]="(users$ | async)">
             </app-user-list>
 
           </clr-tab-content>

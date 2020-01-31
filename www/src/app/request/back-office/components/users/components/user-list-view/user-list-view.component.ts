@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
 import { UserListItem } from "../../models/user-list-item";
 import { map } from "rxjs/operators";
+import { ContragentList } from "../../../../../../contragent/models/contragent-list";
 
 @Component({
   selector: 'app-user-list-view',
@@ -13,7 +14,7 @@ import { map } from "rxjs/operators";
 })
 export class UserListViewComponent implements OnInit {
 
-  users$: Observable<UserList[]>;
+  users$: Observable<UserListItem[]>;
 
   customers = [
     {
@@ -113,20 +114,14 @@ export class UserListViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUserList('customers');
+    this.getUserList('backoffice');
 
     this.customersCount = this.customers.length;
     this.backofficeCount = this.backoffice.length;
   }
 
-  getUserList(type): UserListItem[] {
+  getUserList(type): void {
     this.users$ = this.usersService.getUserList(type);
-
-    if (type === 'customers') {
-      return this.customers;
-    } else if (type === 'backoffice') {
-      return this.backoffice;
-    }
   }
 
 }

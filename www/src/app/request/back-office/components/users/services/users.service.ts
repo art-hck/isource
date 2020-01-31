@@ -15,9 +15,8 @@ export class UsersService {
   ) {
   }
 
-  getUserList(type): Observable<UserList[]> {
-    console.log('asdasdasd');
-    return this.api.post<UserList[]>(`user`, { type });
+  getUserList(type): Observable<UserListItem[]> {
+    return this.api.post<UserListItem[]>(`requests/${type}/users`, {});
   }
 
   getUserInfo(id: Uuid): Observable<UserListItem> {
