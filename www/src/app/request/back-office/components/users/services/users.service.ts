@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   getUserList(type): Observable<UserListItem[]> {
-    return this.api.post<UserListItem[]>(`requests/${type}/users`, {});
+    return this.api.post<UserListItem[]>(`requests/backoffice/users`, { role: type });
   }
 
   getUserInfo(id: Uuid): Observable<UserListItem> {

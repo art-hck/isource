@@ -4,28 +4,9 @@
     <div class="clr-col-12 clr-col-xxl-9">
       <clr-tabs>
         <clr-tab>
+
           <button clrTabLink id="link1">
             Закупщики
-            <ng-container *ngIf="customersCount; else usersCountLoader">
-              <span class="light-grey">({{ customersCount }})</span>
-            </ng-container>
-
-            <ng-template #usersCountLoader>
-              <span class="staff-count-loader spinner spinner-md"></span>
-            </ng-template>
-          </button>
-
-          <clr-tab-content id="content1" *clrIfActive="true">
-            <app-user-list
-                    [users]="getUserList('backoffice')">
-            </app-user-list>
-          </clr-tab-content>
-
-        </clr-tab>
-
-        <clr-tab>
-          <button clrTabLink>
-            Менеджеры
             <ng-container *ngIf="backofficeCount; else usersCountLoader">
               <span class="light-grey">({{ backofficeCount }})</span>
             </ng-container>
@@ -35,12 +16,31 @@
             </ng-template>
           </button>
 
-          <clr-tab-content *clrIfActive>
-
+          <clr-tab-content id="content1" *clrIfActive="true">
             <app-user-list
-                    [users]="(users$ | async)">
+                    [users]="backoffice">
             </app-user-list>
+          </clr-tab-content>
 
+        </clr-tab>
+
+
+        <clr-tab>
+          <button clrTabLink>
+            Менеджеры
+            <ng-container *ngIf="seniorBackofficeCount; else usersCountLoader">
+              <span class="light-grey">({{ seniorBackofficeCount }})</span>
+            </ng-container>
+
+            <ng-template #usersCountLoader>
+              <span class="user-count-loader spinner spinner-md"></span>
+            </ng-template>
+          </button>
+
+          <clr-tab-content *clrIfActive>
+            <app-user-list
+                    [users]="seniorBackoffice">
+            </app-user-list>
           </clr-tab-content>
         </clr-tab>
       </clr-tabs>
