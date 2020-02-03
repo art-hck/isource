@@ -5,7 +5,6 @@ import { Uuid } from "../../../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
-import { tap } from "rxjs/operators";
 import { UserListRequestPosition } from "../../../../../common/models/user-list-request-position";
 
 @Component({
