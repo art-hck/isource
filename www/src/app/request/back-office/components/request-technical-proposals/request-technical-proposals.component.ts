@@ -45,13 +45,17 @@ export class RequestTechnicalProposalsComponent implements OnInit {
     );
   }
 
+  /**
+   * @TODO uncomment when backend return technicalProposal data
+   */
   addTechnicalProposal(technicalProposal) {
-    this.technicalProposals$ = this.technicalProposals$.pipe(
-      map(technicalProposals => {
-        technicalProposals.unshift(technicalProposal);
-        return technicalProposals;
-      })
-    );
+    this.getTechnicalProposals();
+    // this.technicalProposals$ = this.technicalProposals$.pipe(
+    //   map(technicalProposals => {
+    //     technicalProposals.unshift(technicalProposal);
+    //     return technicalProposals;
+    //   })
+    // );
   }
 
   updateTechnicalProposal(technicalProposal) {

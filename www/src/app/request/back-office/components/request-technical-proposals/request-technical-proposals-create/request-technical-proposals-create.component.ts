@@ -92,6 +92,9 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     e.target.value = '';
   }
 
+  /**
+   * @TODO Remove ALL pipes mapTo(...) when backend fix
+   */
   submit(publish = true): void {
     if (this.form.invalid) {
       return;
@@ -130,7 +133,6 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     }
 
     // Проставляем заводские наименования.
-    // @TODO Отправлять весь массив а не по одному элементу, как только будет бэк!
     this.form.get("positions").value
       .filter(positionWithMan => positionWithMan.manufacturingName)
       .map(positionWithMan => ({
@@ -149,7 +151,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     if (publish) {
       tp$ = tp$.pipe(flatMap(
         tp => this.technicalProposalsService.sendToAgreement(this.request.id, tp)
-          .pipe(mapTo(tp)) // @TODO Remove pipe when backend fix
+          .pipe(mapTo(tp))
       ));
     }
 
