@@ -27,6 +27,9 @@
   border-radius: 8px;
 }
 
+.card-block {
+  padding: 10px 0 15px 0
+}
 
 ::ng-deep .technical-proposals .send-offers.btn span {
   padding: 0;
@@ -54,6 +57,7 @@
 span.supplier-name {
   font-size: 17px;
   line-height: 100%;
+  max-width: 600px;
 }
 
 span.supplier-name-label, span.positions-list-label {

@@ -38,7 +38,7 @@ export class RequestPositionFormComponent implements OnInit {
   readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
-      ['name', 'comments', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
+      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
     // Вырубаем ПНР после подготвки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
       ['isShmrRequired', 'isPnrRequired'],

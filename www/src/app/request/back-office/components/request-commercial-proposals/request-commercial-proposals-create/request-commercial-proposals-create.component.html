@@ -37,10 +37,10 @@
     <div class="clr-col">
       <div class="app-control-wrap">
         <uxg-dropdown class="app-dropdown" formControlName="currency" placeholder="Валюта...">
-          <div uxgDropdownItem value="RUB">RUB</div>
-          <div uxgDropdownItem value="USD" disabled>USD</div>
-          <div uxgDropdownItem value="EUR" disabled>EUR</div>
-          <div uxgDropdownItem value="CHF" disabled>CHF</div>
+          <div uxgDropdownItem value="RUB">Руб.</div>
+          <div uxgDropdownItem value="USD" disabled>Дол.</div>
+          <div uxgDropdownItem value="EUR" disabled>Евр.</div>
+          <div uxgDropdownItem value="CHF" disabled>Фр.</div>
         </uxg-dropdown>
       </div>
     </div>
@@ -68,7 +68,7 @@
 
         <div class="clr-col-5">
           <div class="app-control-wrap">
-            <input #measureUnit uxgInput lg formControlName="measureUnit"/>
+            <app-okei-selector #measureUnit formControlName="measureUnit"></app-okei-selector>
             <label class="app-control-label" (click)="measureUnit.focus()">Ед. измерения</label>
           </div>
         </div>
@@ -78,6 +78,7 @@
     <div class="clr-col-3">
       <div class="app-control-wrap">
         <input (ngModelChange)="checkDeliveryDate(position, $event)"
+               appFormControlInvalidClass="invalid"
                #deliveryDate uxgInput lg formControlName="deliveryDate">
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки доставки</label>
         <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
@@ -85,7 +86,7 @@
         </label>
       </div>
 
-      <div class="warning-label" *ngIf="dateIsLaterThanNeeded">
+      <div class="warning-label" *ngIf="dateIsLaterThanNeeded && !newCommercialProposalForm.get('deliveryDate').invalid">
         <span>Позже запрашиваемой даты</span>
       </div>
 

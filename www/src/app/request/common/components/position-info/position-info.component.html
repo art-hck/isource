@@ -160,28 +160,30 @@
             </clr-tab-content>
           </clr-tab>
 
-          <clr-tab>
-            <button clrTabLink>Коммерческие предложения</button>
-            <clr-tab-content *clrIfActive>
-              <app-offers [requestPosition]="requestPosition"
-                          [isCustomerView]="isCustomerView"
-                          [requestId]="requestId">
-              </app-offers>
+          <!-- TODO Временно скрыл вкладку КП -->
+          <!--          <clr-tab>-->
+          <!--            <button clrTabLink>Коммерческие предложения</button>-->
+          <!--            <clr-tab-content *clrIfActive>-->
+          <!--              <app-offers [requestPosition]="requestPosition"-->
+          <!--                          [isCustomerView]="isCustomerView"-->
+          <!--                          [requestId]="requestId">-->
+          <!--              </app-offers>-->
 
-              <div class="submit">
-                <button class="btn btn-primary"
-                        [swal]="publishOffersDialog"
-                        *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>
-                </button>
-                <swal
-                  #publishOffersDialog
-                  text="Отправить коммерческие предложения на согласование?"
-                  [showCancelButton]="true"
-                  (confirm)="onConfirmPublishOffers(requestPosition)">
-                </swal>
-              </div>
-            </clr-tab-content>
-          </clr-tab>
+          <!--              <div class="submit">-->
+          <!--                <button class="btn btn-primary"-->
+          <!--                        [swal]="publishOffersDialog"-->
+          <!--                        *ngIf="canPublish(requestPosition)"><b>Отправить на согласование</b>-->
+          <!--                </button>-->
+          <!--                <swal-->
+          <!--                  #publishOffersDialog-->
+          <!--                  text="Отправить коммерческие предложения на согласование?"-->
+          <!--                  [showCancelButton]="true"-->
+          <!--                  (confirm)="onConfirmPublishOffers(requestPosition)">-->
+          <!--                </swal>-->
+          <!--              </div>-->
+          <!--            </clr-tab-content>-->
+          <!--          </clr-tab>-->
+
 
           <clr-tab *ngIf="canViewManufacturingAndDeliveryMonitor(requestPosition)">
             <button clrTabLink>Изготовление и доставка</button>

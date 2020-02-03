@@ -19,7 +19,7 @@
   </div>
 </ng-container>
 
-<div class="right-align-button">
+<div class="right-align-button" *ngIf="enableUpload">
   <label for="document-list-upload" class="file-upload-label"><a>Загрузить</a></label>
   <input #uploadEl
          type="file"

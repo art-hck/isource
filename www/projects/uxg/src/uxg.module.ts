@@ -9,7 +9,7 @@ import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
 import { UxgPositionStatusComponent } from './components/uxg-position-status/uxg-position-status.component';
 import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.component';
 import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
-import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
+import { UxgDropdownItemDirective } from './components/uxg-dropdown/uxg-dropdown-item.directive';
 import { UxgInputDirective } from './directives/uxg-input.directive';
 import { UxgButtonDirective } from './directives/uxg-button.directive';
 import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';

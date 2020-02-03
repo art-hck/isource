@@ -1,30 +1,18 @@
-<clr-datagrid class="contragent-list-datagrid clr-row" [clrDgLoading]="!contragents">
-  <clr-dg-column class="clr-col-6 contragent-name">
-    Наименование контрагента
-  </clr-dg-column>
+<div class="app-table app-no-border">
+  <div class="app-row">
+    <small class="app-col app-ghost-color">НАИМЕНОВАНИЕ КОНТРАГЕНТА</small>
+    <small class="app-col app-ghost-color" [style.flex-grow]="0.5">ИНН</small>
+    <small class="app-col app-ghost-color" [style.flex-grow]="0.5">КПП</small>
+  </div>
+</div>
 
-  <clr-dg-column class="clr-col-3 contragent-inn">
-    ИНН
-  </clr-dg-column>
+<div class="app-table">
+  <div class="app-row" *ngFor="let contragent of contragents | contragentSearchFilter: searchValue">
+    <div class="app-col">
+      <a target="_blank" href="/contragents/{{ contragent.id }}/info">{{contragent.shortName}}</a>
+    </div>
 
-  <clr-dg-column class="clr-col-3 contragent-kpp">
-    КПП
-  </clr-dg-column>
-
-
-  <clr-dg-row *clrDgItems="let contragent of contragents | contragentSearchFilter: searchValue">
-
-      <clr-dg-cell class="clr-col-6 contragent-name">
-        <a target="_blank" href="/contragents/{{ contragent.id }}/info">{{contragent.shortName}}</a>
-      </clr-dg-cell>
-
-      <clr-dg-cell class="clr-col-3 contragent-inn">
-        {{contragent.inn}}
-      </clr-dg-cell>
-
-      <clr-dg-cell class="clr-col-3 contragent-kpp">
-        {{contragent.kpp}}
-      </clr-dg-cell>
-
-  </clr-dg-row>
-</clr-datagrid>
+    <div class="app-col" [style.flex-grow]="0.5">{{contragent.inn}}</div>
+    <div class="app-col" [style.flex-grow]="0.5">{{contragent.kpp}}</div>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import {by, element} from "protractor";
 
 export class CreateRequestFormPage {
   public static individualRequestLink() {
-    return element(by.linkText('Индивидуальная заявка'));
+    return element(by.linkText('Создать заявку'));
   }
 
   public static individualRequestTitle() {
