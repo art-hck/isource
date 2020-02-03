@@ -79,8 +79,8 @@
             <br/>
 
             <div class="app-ghost-color">E-mail</div>
-            <div>{{ user.username }}</div>
-            <br/>
+            <div><a href="mailto:{{ user.username }}">{{ user.username }}</a></div>
+            <br/>mailto:
 
             <div class="app-ghost-color">Телефон</div>
             <div>{{ user.phone ? user.phone : 'не указан' }}</div>
