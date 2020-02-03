@@ -42,7 +42,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   users: {
     roles: [UserRole.BACKOFFICE]
   },
-  },
   contractGeneration: {
     roles: [UserRole.BACKOFFICE]
   },
