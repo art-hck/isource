@@ -1,7 +1,5 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {TechnicalProposal} from "../../models/technical-proposal";
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {RequestPosition} from "../../models/request-position";
-import {RequestOfferPosition} from "../../models/request-offer-position";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
 import * as moment from "moment";
@@ -10,7 +8,6 @@ import {AbstractControl, FormArray, FormBuilder, FormGroup} from "@angular/forms
 import {CustomValidators} from "../../../../shared/forms/custom.validators";
 import {RequestPositionList} from "../../models/request-position-list";
 import {ActivatedRoute, Route} from "@angular/router";
-import {ClrLoadingState} from "@clr/angular";
 import {GpnmarketConfigInterface} from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 
@@ -59,8 +56,13 @@ export class RequestCommercialProposalsComponent implements OnInit {
       positions: this.fb.array([], CustomValidators.oneOrMoreSelected)
     });
 
-    this.requestPositions.map(position => this.formPositions.push(
-      this.createFormGroupPosition(position)));
+    this.requestPositions.map(position => {
+      const formGroup = this.createFormGroupPosition(position);
+      this.formPositions.push(formGroup);
+      if (!this.positionCanBeSelected(position)) {
+        formGroup.disable();
+      }
+    });
   }
 
   createFormGroupPosition(position: RequestPositionList) {
@@ -148,5 +150,27 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   isOverflow(positionCard: HTMLElement) {
     return positionCard.scrollHeight > positionCard.clientHeight + 30;
+  }
+
+  /**
+   * Функция возвращает надпись с количеством документов
+   *
+   * @param count
+   */
+  getDocumentCountLabel(count: number): string {
+    const cases = [2, 0, 1, 1, 1, 2];
+    const strings = ['документ', 'документа', 'документов'];
+
+    const documentsString = strings[
+      ( count % 100 > 4 && count % 100 < 20 ) ?
+        2 :
+        cases[
+          (count % 10 < 5) ?
+            count % 10 :
+            5
+          ]
+      ];
+
+    return count + ' ' + documentsString;
   }
 }
