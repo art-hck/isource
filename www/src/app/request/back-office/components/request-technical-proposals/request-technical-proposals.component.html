@@ -30,10 +30,12 @@
         (create)="addTechnicalProposal($event)"
       ></app-request-technical-proposals-create>
 
-        <app-request-technical-proposal
+        <app-request-backoffice-technical-proposal
           *ngFor="let technicalProposal of technicalProposals"
+          [request]="request"
           [technicalProposal]="technicalProposal"
-        ></app-request-technical-proposal>
+          (update)="updateTechnicalProposal($event)"
+        ></app-request-backoffice-technical-proposal>
 
       <clr-modal clrModalSize="lg" #procedureModal>
         <h2 class="modal-title">Создание новой процедуры</h2>

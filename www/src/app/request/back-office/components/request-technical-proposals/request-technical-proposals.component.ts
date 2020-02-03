@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from '@angular/core';
-import { map, tap } from "rxjs/operators";
+import { map, publishReplay, refCount, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -40,13 +40,29 @@ export class RequestTechnicalProposalsComponent implements OnInit {
 
   getTechnicalProposals(filters = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
-      tap(technicalProposals => this.showForm = technicalProposals.length === 0)
+      tap(technicalProposals => this.showForm = technicalProposals.length === 0),
+      publishReplay(1), refCount()
     );
   }
 
   addTechnicalProposal(technicalProposal) {
     this.technicalProposals$ = this.technicalProposals$.pipe(
-      map(technicalProposals => [technicalProposal, ...technicalProposals])
+      map(technicalProposals => {
+        technicalProposals.unshift(technicalProposal);
+        return technicalProposals;
+      })
+    );
+  }
+
+  updateTechnicalProposal(technicalProposal) {
+    this.technicalProposals$ = this.technicalProposals$.pipe(
+      map(technicalProposals => {
+        const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
+        technicalProposals[i] = technicalProposal;
+
+        return technicalProposals;
+      }),
+      publishReplay(1), refCount()
     );
   }
 }

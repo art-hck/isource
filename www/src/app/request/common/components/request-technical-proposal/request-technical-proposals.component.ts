@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TechnicalProposal } from "../../models/technical-proposal";
 import { TechnicalProposalsStatusesLabels } from "../../dictionaries/technical-proposals-statuses-labels";
 import { TechnicalProposalPositionStatus } from "../../enum/technical-proposal-position-status";
@@ -14,11 +14,12 @@ import { FeatureService } from "../../../../core/services/feature.service";
 export class RequestTechnicalProposalComponent {
 
   @Input() technicalProposal: TechnicalProposal;
+  @Output() edit = new EventEmitter<boolean>();
   isFolded: boolean;
 
   constructor(
-    private featureService: FeatureService,
-    private userInfoService: UserInfoService
+    public featureService: FeatureService,
+    public userInfoService: UserInfoService
   ) {
   }
 
@@ -32,9 +33,8 @@ export class RequestTechnicalProposalComponent {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
   }
 
-  isTpEditable(tp: TechnicalProposal): boolean {
-    return tp.positions
-      .filter(() => this.featureService.available('editTechnicalProposal', this.userInfoService.roles))
+  editDisabled(tp: TechnicalProposal): boolean {
+    return !tp.positions
       .filter(() => tp.status !== TechnicalProposalsStatuses.SENT_TO_REVIEW)
       .some((position) => this.editableStatuses.indexOf(position.status) >= 0);
   }

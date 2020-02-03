@@ -25,7 +25,10 @@
             <clr-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
             <b>{{ tpStatusLabel(technicalProposal) }}</b>
           </div>
-          <button uxgButton link icon [disabled]="!isTpEditable(technicalProposal)">
+          <button uxgButton link icon
+                  *ngIf="featureService.available('editTechnicalProposal', userInfoService.roles)"
+                  (click)="edit.emit(true)"
+                  [disabled]="editDisabled(technicalProposal)">
             <clr-icon shape="app-pen"></clr-icon>
           </button>
           <button uxgButton link icon (click)="isFolded = !isFolded">
