@@ -25,13 +25,15 @@ export class UserListViewComponent implements OnInit {
   }
 
   getUserList(type) {
-    this.usersService.getUserList(type).subscribe((user) => {
+    const subscription = this.usersService.getUserList(type).subscribe((user) => {
       (type === 'BACKOFFICE') ?
         this.backoffice = user :
         this.seniorBackoffice = user;
 
       this.backofficeCount = this.backoffice.length;
       this.seniorBackofficeCount = this.seniorBackoffice.length;
+
+      subscription.unsubscribe();
     });
   }
 

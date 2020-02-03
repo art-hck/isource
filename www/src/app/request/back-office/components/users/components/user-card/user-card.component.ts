@@ -39,7 +39,7 @@ export class UserCardComponent implements OnInit {
   }
 
   getUserInfo(userId: Uuid): void {
-    this.usersService.getUserInfo(userId).subscribe((userCardInfo) => {
+    const subscription = this.usersService.getUserInfo(userId).subscribe((userCardInfo) => {
       this.requestList = userCardInfo.requests;
       this.positionsList = userCardInfo.positions;
       this.user = userCardInfo.user;
@@ -51,6 +51,8 @@ export class UserCardComponent implements OnInit {
 
       this.requestCount = this.requestList ? (this.requestList.length || 0) : null;
       this.positionCount = this.positionsList ? this.positionsList.length : 0;
+
+      subscription.unsubscribe();
     });
   }
 
