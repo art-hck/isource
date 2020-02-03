@@ -4,8 +4,10 @@
     width: 350px;
 }
 
+
 :host ::ng-deep .staff-list .nav {
     box-shadow: none;
+    padding-left: 20px;
 }
 
 .user-count-loader {

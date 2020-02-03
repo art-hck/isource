@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { UserList } from "../models/user-list";
+import { UserInfo } from "../models/user-info";
 import { Uuid } from "../../../../../cart/models/uuid";
-import { UserListItem } from "../models/user-list-item";
+import { UserItem } from "../models/user-item";
 
 @Injectable()
 export class UsersService {
@@ -15,11 +15,11 @@ export class UsersService {
   ) {
   }
 
-  getUserList(type): Observable<UserListItem[]> {
-    return this.api.post<UserListItem[]>(`requests/backoffice/users`, { role: type });
+  getUserList(type): Observable<UserItem[]> {
+    return this.api.post<UserItem[]>(`requests/backoffice/users`, { role: type });
   }
 
-  getUserInfo(id: Uuid): Observable<UserListItem> {
-    return this.api.get<UserListItem>(`user/${id}/info`);
+  getUserInfo(id: Uuid): Observable<UserInfo> {
+    return this.api.get<UserInfo>(`requests/backoffice/users/${id}`);
   }
 }

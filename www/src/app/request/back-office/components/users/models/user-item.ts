@@ -1,6 +1,6 @@
 import { Uuid } from "../../../../../cart/models/uuid";
 
-export class UserListItem {
+export class UserItem {
   user: UserInfo;
   posCount: number;
   reqCount: number;

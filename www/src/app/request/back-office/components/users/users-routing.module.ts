@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserListViewComponent } from "./components/user-list-view/user-list-view.component";
-import { UserCardViewComponent } from "./components/user-card-view/user-card-view.component";
+import { UserCardComponent } from "./components/user-card/user-card.component";
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
     children: [
       {
         path: 'info',
-        component: UserCardViewComponent
+        component: UserCardComponent
       }
     ]
   }

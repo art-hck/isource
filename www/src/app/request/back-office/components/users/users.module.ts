@@ -6,7 +6,8 @@ import { SharedModule } from "../../../../shared/shared.module";
 import { UserListViewComponent } from "./components/user-list-view/user-list-view.component";
 import { UsersService } from "./services/users.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
-import { UserCardViewComponent } from "./components/user-card-view/user-card-view.component";
+import { UserCardRequestListComponent } from './components/user-card/user-card-request-list/user-card-request-list.component';
+import { UserCardPositionListComponent } from './components/user-card/user-card-position-list/user-card-position-list.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { UserCardViewComponent } from "./components/user-card-view/user-card-vie
     UserListViewComponent,
     UserListComponent,
     UserCardComponent,
-    UserCardViewComponent
+    UserCardRequestListComponent,
+    UserCardPositionListComponent
   ],
   providers: [
     UsersService,

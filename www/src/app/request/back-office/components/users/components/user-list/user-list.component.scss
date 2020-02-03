@@ -2,27 +2,6 @@
   outline: 0;
 }
 
-//::ng-deep .user-list-datagrid .datagrid .datagrid-row:hover {
-//  cursor: default;
-//  background: initial;
-//}
-
-::ng-deep .user-list-datagrid {
-  margin-bottom: 50px;
-}
-::ng-deep .user-list-datagrid .datagrid {
-  overflow: visible;
-}
-::ng-deep .user-list-datagrid .datagrid-table {
-  overflow: visible;
-}
-::ng-deep .user-list-datagrid .datagrid-header {
-  top: -50px;
-}
-
-
-
-::ng-deep .user-list-datagrid .datagrid .datagrid-header {
-  padding: 0;
-  z-index: 5;
+.requests-positions-count {
+  min-width: 200px;
 }

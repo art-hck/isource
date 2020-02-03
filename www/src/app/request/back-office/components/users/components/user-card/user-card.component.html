@@ -1,72 +1,95 @@
-<div class="app-row">
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
 
-  <div class="user-card-content">
+<ng-container *ngIf="user; else loading">
 
-    <clr-datagrid class="user-list-datagrid">
+    <h1>{{ user.fullName }}</h1>
 
-      <clr-dg-row *ngFor="let request of getUserRequests()">
+    <div class="clr-row">
 
-        <clr-dg-cell class="request-number clr-col">
-          <b>{{ request.number }}</b>
-        </clr-dg-cell>
+      <div class="clr-col-9 user-card-content">
 
+        <clr-tabs>
+          <clr-tab>
 
-        <clr-dg-cell class="published clr-col-4">
-          {{ request.supplier }}
-        </clr-dg-cell>
+            <button clrTabLink id="link1">
+              Заявки
+              <ng-container *ngIf="requestList; else userCardCountLoader">
+                <span class="light-grey">({{ requestList.length }})</span>
+              </ng-container>
 
+              <ng-template #userCardCountLoader>
+                <span class="user-card-count-loader spinner spinner-md"></span>
+              </ng-template>
+            </button>
 
-        <clr-dg-cell class="completed clr-col-2">
-          {{ request.name }}
-        </clr-dg-cell>
+            <clr-tab-content id="content1" *clrIfActive="true">
+              <ng-container *ngIf="requestList.length > 0; else emptyRequestList">
+                <app-user-card-request-list
+                        [requests]="requestList">
+                </app-user-card-request-list>
+              </ng-container>
 
+              <ng-template #emptyRequestList>
+                <span class="empty-list">Список заявок пуст</span>
+              </ng-template>
+            </clr-tab-content>
 
-        <clr-dg-cell class="customer-name clr-col-auto">
-
-          <div class="pie-chart" *ngIf="!checkIfFreeFormRequest(request.request.type)">
-            <svg width="20" height="20" class="chart">
-              <circle r="10" cx="10" cy="10" class="pie"/>
-              <circle r="10" cx="10" cy="10" class="pie" [attr.stroke-dashoffset]="calcPieChart(request)"/>
-            </svg>
-            <div>
-          <span [ngClass]="{ 'light-grey' : request.requestData.completedPositionsCount === 0}">
-            {{ request.requestData.completedPositionsCount}}
-          </span>
-              <span class="light-grey"> из</span> {{ request.requestData.positionsCount }}
-            </div>
-          </div>
-
-        </clr-dg-cell>
-
-      </clr-dg-row>
-
-    </clr-datagrid>
-
-  </div>
+          </clr-tab>
 
 
-  <!-- Сайдбар с информацией -->
-  <div class="app-col app-col-aside">
-    <div class="app-row">
-      <div class="app-col">
-        <h3 class="sector-title">Информация о сотруднике</h3>
+          <clr-tab>
+            <button clrTabLink>
+              Позиции
+              <ng-container *ngIf="positionsList; else userCardCountLoader">
+                <span class="light-grey">({{ positionsList.length }})</span>
+              </ng-container>
 
-        <div class="app-ghost-color">E-mail</div>
-        <div>{{ user.email }}</div>
-        <br/>
+              <ng-template #userCardCountLoader>
+                <span class="user-card-count-loader spinner spinner-md"></span>
+              </ng-template>
+            </button>
 
-        <div class="app-ghost-color">Телефон</div>
-        <div>{{ user.phone }}</div>
-        <br/>
+            <clr-tab-content *clrIfActive>
+              <ng-container *ngIf="positionsList.length > 0; else emptyPositionsList">
+                <app-user-card-position-list
+                        [positions]="positionsList">
+                </app-user-card-position-list>
+              </ng-container>
 
-        <div class="app-ghost-color">Последняя активность</div>
-        <div>{{ user.lastActivity }}</div>
-        <br/>
+              <ng-template #emptyPositionsList>
+                <span class="empty-list">Список позиций пуст</span>
+              </ng-template>
+            </clr-tab-content>
+
+          </clr-tab>
+        </clr-tabs>
 
       </div>
+
+      <!-- Сайдбар с информацией -->
+      <div class="clr-col-3">
+        <div class="app-row user-info-card">
+          <div class="app-col">
+            <h3 class="sector-title">Информация о сотруднике</h3>
+
+            <div class="app-ghost-color">ФИО</div>
+            <div>{{ user.fullName }}</div>
+            <br/>
+
+            <div class="app-ghost-color">E-mail</div>
+            <div>{{ user.username }}</div>
+            <br/>
+
+            <div class="app-ghost-color">Телефон</div>
+            <div>{{ user.phone ? user.phone : 'не указан' }}</div>
+            <br/>
+
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-</div>
-
-
+</ng-container>

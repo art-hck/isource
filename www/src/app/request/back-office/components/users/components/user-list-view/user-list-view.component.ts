@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from "../../services/users.service";
-import { UserList } from "../../models/user-list";
+import { UserInfo } from "../../models/user-info";
 import { Observable } from "rxjs";
 import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
-import { UserListItem } from "../../models/user-list-item";
+import { UserItem } from "../../models/user-item";
 import { map, publishReplay, refCount } from "rxjs/operators";
 import { ContragentList } from "../../../../../../contragent/models/contragent-list";
 
@@ -14,8 +14,8 @@ import { ContragentList } from "../../../../../../contragent/models/contragent-l
 })
 export class UserListViewComponent implements OnInit {
 
-  backoffice: UserListItem[] = [];
-  seniorBackoffice: UserListItem[] = [];
+  backoffice: UserItem[] = [];
+  seniorBackoffice: UserItem[] = [];
 
   backofficeCount: number;
   seniorBackofficeCount: number;

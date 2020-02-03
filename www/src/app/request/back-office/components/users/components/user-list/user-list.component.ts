@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from "@angular/router";
 import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
-import { UserListItem } from "../../models/user-list-item";
+import { UserItem } from "../../models/user-item";
 import { Uuid } from "../../../../../../cart/models/uuid";
 
 @Component({
@@ -14,7 +14,7 @@ export class UserListComponent implements OnInit {
   @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
 
   @Input() searchValue: string;
-  @Input() users: UserListItem[];
+  @Input() users: UserItem[];
 
   constructor(
     protected router: Router,
@@ -24,6 +24,6 @@ export class UserListComponent implements OnInit {
   }
 
   onRowClick(userId: Uuid): void {
-    this.router.navigateByUrl(`/user/${userId}/info`);
+    this.router.navigateByUrl(`/users/${userId}/info`);
   }
 }
