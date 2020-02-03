@@ -1,5 +1,5 @@
 <ng-container *ngIf="(request$ | async) as request; else loading">
-  <div class="app-row">
+  <div class="app-row" *ngIf="(technicalProposals$ | async) as technicalProposals">
     <div class="app-col">
 
       <div class="app-row">
@@ -30,7 +30,10 @@
         (create)="addTechnicalProposal($event)"
       ></app-request-technical-proposals-create>
 
-      <app-request-technical-proposals [technicalProposals]="technicalProposals$ | async"></app-request-technical-proposals>
+        <app-request-technical-proposal
+          *ngFor="let technicalProposal of technicalProposals"
+          [technicalProposal]="technicalProposal"
+        ></app-request-technical-proposal>
 
       <clr-modal clrModalSize="lg" #procedureModal>
         <h2 class="modal-title">Создание новой процедуры</h2>
@@ -43,7 +46,7 @@
     </div>
 
     <div class="app-col app-col-aside">
-      <app-request-tp-list-filter (filters)="onFiltersSubmit($event)"></app-request-tp-list-filter>
+      <app-request-tp-list-filter [technicalProposals]="technicalProposals" (filters)="getTechnicalProposals($event)"></app-request-tp-list-filter>
     </div>
   </div>
 </ng-container>

@@ -1,23 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
 import { ActivatedRoute } from "@angular/router";
-import { UxgBreadcrumbsService } from "uxg";
-import { map, publishReplay, refCount, tap } from "rxjs/operators";
-import { Request } from "../../../common/models/request";
+import { Component, OnInit } from '@angular/core';
+import { map, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
+import { TechnicalProposalsService } from "../../services/technical-proposals.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({ templateUrl: './request-technical-proposals.component.html' })
 export class RequestTechnicalProposalsComponent implements OnInit {
-
-  @Input() resultsCount: number;
-
-  filters = {};
   requestId: Uuid;
-  request$: Observable<Request>;
   technicalProposals$: Observable<TechnicalProposal[]>;
+  request$: Observable<Request>;
   showForm = false;
 
   constructor(
@@ -35,21 +31,16 @@ export class RequestTechnicalProposalsComponent implements OnInit {
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/backoffice" },
           { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}/new` },
-          {
-            label: 'Согласование технических предложений',
-            link: `/requests/backoffice/${this.requestId}/new/technical-proposals`
-          }
+          { label: 'Согласование технических предложений', link: `/requests/backoffice/${this.requestId}/new/technical-proposals` }
         ];
-      })
-    );
+      }));
 
-    this.onFiltersSubmit();
+    this.getTechnicalProposals();
   }
 
-  onFiltersSubmit(filters = {}) {
+  getTechnicalProposals(filters = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
-      tap(technicalProposals => this.showForm = technicalProposals.length === 0),
-      publishReplay(1), refCount()
+      tap(technicalProposals => this.showForm = technicalProposals.length === 0)
     );
   }
 

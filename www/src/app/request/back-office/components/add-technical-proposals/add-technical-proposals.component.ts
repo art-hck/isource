@@ -11,7 +11,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { SupplierSelectComponent } from "../supplier-select/supplier-select.component";
-import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
+import { TechnicalProposalPositionStatus } from 'src/app/request/common/enum/technical-proposal-position-status';
 import { TechnicalProposalPosition } from 'src/app/request/common/models/technical-proposal-position';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
@@ -70,8 +70,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
   requestPositions$: Observable<RequestPositionList[]>;
 
   protected editableStatuses = [
-    TechnicalProposalPositionStatuses.NEW.valueOf(),
-    TechnicalProposalPositionStatuses.EDITED.valueOf()
+    TechnicalProposalPositionStatus.NEW.valueOf(),
+    TechnicalProposalPositionStatus.EDITED.valueOf()
   ];
 
   constructor(

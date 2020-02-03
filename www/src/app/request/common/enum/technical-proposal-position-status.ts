@@ -1,4 +1,4 @@
-export enum TechnicalProposalPositionStatuses {
+export enum TechnicalProposalPositionStatus {
   NEW      = 'NEW',
   EDITED   = 'EDITED',
   REVIEW   = 'REVIEW',
