@@ -38,7 +38,8 @@
               Отправить на согласование
             </button>
 
-            <button class="btn btn-primary add-offers-btn send-offers"
+            <button *ngIf="featureService.available('createProcedure')"
+                    class="btn btn-primary add-offers-btn send-offers"
                     (click)="onCreateProcedureWizardOpen()"
                     [clrLoading]="loaders.creatingProcedure">
               <b>Создать процедуру</b>

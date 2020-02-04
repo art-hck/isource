@@ -29,6 +29,7 @@ import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
 import { WizardCreateProcedureComponent } from '../wizard-create-procedure/wizard-create-procedure.component';
 import { ClrLoadingState } from "@clr/angular";
 import { UxgBreadcrumbsService } from "uxg";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-add-offers',
@@ -98,6 +99,7 @@ export class AddOffersComponent implements OnInit {
     private procedureService: ProcedureService,
     private notificationService: NotificationService,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private featureService: FeatureService,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
     this.appConfig = appConfig;

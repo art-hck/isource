@@ -29,6 +29,7 @@ import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/t
 import * as moment from "moment";
 import { ClrLoadingState } from "@clr/angular";
 import { UxgBreadcrumbsService } from "uxg";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-add-technical-proposals',
@@ -84,7 +85,8 @@ export class AddTechnicalProposalsComponent implements OnInit {
     private technicalProposalsService: TechnicalProposalsService,
     private getContragentService: ContragentService,
     private procedureService: ProcedureService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private featureService: FeatureService,
   ) {
   }
 
