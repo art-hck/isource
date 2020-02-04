@@ -71,7 +71,7 @@
                 </button>
 
                 <ng-template #sentForReview>
-                  <p class="sent-label">{{ tpStatusLabel(technicalProposal) }}</p>
+                  <p class="status-default status-{{ technicalProposal.status }}">{{ tpStatusLabel(technicalProposal) }}</p>
                 </ng-template>
               </div>
             </div>
