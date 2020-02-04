@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, forwardRef } from '@angular/core';
+import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { startWith } from "rxjs/operators";
 
@@ -12,6 +12,7 @@ import { startWith } from "rxjs/operators";
   }]
 })
 export class RequestProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
+  @Input() action: "create" | "prolong" | "bargain" = "create";
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -31,6 +32,11 @@ export class RequestProcedureCreatePropertiesComponent implements AfterContentIn
       positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating'),
       publicAccess: this.default("publicAccess", true)
     });
+
+    if (this.action === 'bargain') {
+      ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume']
+        .forEach(k => this.form.get(k).disable());
+    }
 
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
       this.writeValue(value);

@@ -2,6 +2,8 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import {TechnicalProposalPosition} from "../../common/models/technical-proposal-position";
+import { TechnicalProposal } from "../../common/models/technical-proposal";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -11,9 +13,9 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid) {
+  getTechnicalProposalsList(requestId: Uuid): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
-    return this.api.get(url);
+    return this.api.get<TechnicalProposal[]>(url);
   }
 
   acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {

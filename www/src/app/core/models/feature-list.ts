@@ -9,6 +9,7 @@ export interface IFeatureList {
   backofficeRequest;
   deliveryMonitor;
   createContragent;
+  editTechnicalProposal;
   contractGeneration;
   createProcedure;
   instructionsFileForCustomer;
@@ -45,6 +46,9 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
     roles: [UserRole.BACKOFFICE]
   },
   instructionsFileForBackoffice: {
+    roles: [UserRole.BACKOFFICE]
+  },
+  editTechnicalProposal: {
     roles: [UserRole.BACKOFFICE]
   },
 };

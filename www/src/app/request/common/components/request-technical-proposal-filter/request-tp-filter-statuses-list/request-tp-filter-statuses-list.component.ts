@@ -1,7 +1,7 @@
-import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Uuid } from "../../../../../../cart/models/uuid";
-import { TechnicalProposalsStatusesLabels } from "../../../../dictionaries/technical-proposals-statuses-labels";
+import { Uuid } from "../../../../../cart/models/uuid";
+import { TechnicalProposalsStatusesLabels } from "../../../dictionaries/technical-proposals-statuses-labels";
 
 @Component({
   selector: 'app-request-tp-filter-statuses-list',
