@@ -78,10 +78,27 @@ span.supplier-name-label, span.positions-list-label {
     }
   }
 
-  & p.sent-label {
+  /** Цвета лейблов статусов */
+  & p.status-default {
     font-weight: bold;
+    color: #666;
+  }
+  & p.status-NEW {
+    color: blue;
+  }
+  & p.status-SENT_TO_REVIEW {
+    color: #f38b00;
+  }
+  & p.status-ACCEPTED {
     color: #388E3C;
   }
+  & p.status-PARTIALLY_ACCEPTED {
+    color: #fb6a9e;
+  }
+  & p.status-CANCELED {
+    color: red;
+  }
+  /** /Цвета лейблов статусов */
 }
 
 .positions-list th {

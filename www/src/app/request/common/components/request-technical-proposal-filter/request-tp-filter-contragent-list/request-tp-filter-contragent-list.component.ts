@@ -1,7 +1,7 @@
 import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Uuid } from "../../../../../../cart/models/uuid";
-import { ContragentList } from "../../../../../../contragent/models/contragent-list";
+import { Uuid } from "../../../../../cart/models/uuid";
+import { ContragentList } from "../../../../../contragent/models/contragent-list";
 
 @Component({
   selector: 'app-request-tp-filter-contragent-list',

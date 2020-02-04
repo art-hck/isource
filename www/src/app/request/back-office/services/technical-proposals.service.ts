@@ -4,6 +4,7 @@ import {Uuid} from "../../../cart/models/uuid";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
+import { TechnicalProposalCreateRequest } from "../models/technical-proposal-create-request";
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -25,14 +26,14 @@ export class TechnicalProposalsService {
     return this.api.get<RequestPosition[]>(url);
   }
 
-  addTechnicalProposal(requestId: Uuid, technicalProposal) {
+  addTechnicalProposal(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
     const url = `requests/backoffice/${requestId}/technical-proposals/create`;
     return this.api.post<TechnicalProposal>(url, technicalProposal);
   }
 
-  updateTechnicalProposal(requestId: Uuid, technicalProposal) {
+  updateTechnicalProposal(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
     const url = `requests/backoffice/${requestId}/technical-proposals/edit`;
-    return this.api.post(url, technicalProposal);
+    return this.api.post<TechnicalProposal>(url, technicalProposal);
   }
 
   uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData) {

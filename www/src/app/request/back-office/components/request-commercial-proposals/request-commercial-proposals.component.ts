@@ -9,6 +9,7 @@ import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../../common/models/request-position";
 import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
+import {ClrLoadingState} from "@clr/angular";
 
 @Component({templateUrl: './request-commercial-proposals.component.html'})
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
@@ -44,7 +45,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
           {label: "Заявки", link: "/requests/backoffice"},
           {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}/new`},
           {
-            label: 'Согласование технических предложений',
+            label: 'Согласование коммерческих предложений',
             link: `/requests/backoffice/${this.requestId}/new/technical-proposals`
           }
         ];
@@ -66,6 +67,15 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   addCommercialProposal(): void {
     this.updatePositionsAndSuppliers();
+  }
+
+  onCancelPublishOffers(requestPosition: RequestPosition) {
+    this.offersService.cancelPublishRequestOffers(this.requestId, requestPosition).subscribe(
+      (updatedRequestPosition: RequestPosition) => {
+        Object.assign(requestPosition, updatedRequestPosition);
+        this.updatePositionsAndSuppliers();
+      }
+    );
   }
 
   editCommercialProposal(): void {

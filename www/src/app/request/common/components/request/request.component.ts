@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, of, Subscription } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
@@ -9,19 +9,26 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { RequestService } from "../../../customer/services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../core/services/feature.service";
+import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { UxgPopoverComponent } from "uxg";
 
 @Component({
   selector: 'app-request',
   templateUrl: './request.component.html',
   styleUrls: ['./request.component.scss']
 })
-export class RequestComponent implements OnInit {
+export class RequestComponent implements OnInit, AfterViewInit {
   requestId: Uuid;
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
+  @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
+  @Output() publish = new EventEmitter<Request>();
+  @ViewChild('publishPopover', {static: false}) publishPopoverRef: UxgPopoverComponent;
   flatPositions$: Observable<RequestPosition[]>;
 
   form: FormGroup;
@@ -48,11 +55,24 @@ export class RequestComponent implements OnInit {
       .filter(formGroup => this.asPosition(formGroup.get("position").value));
   }
 
+  get isDraft(): boolean {
+    return this.request.status === RequestWorkflowSteps.DRAFT || this.draftPositions.length > 0;
+  }
+
+  get draftPositions(): RequestPositionList[] {
+    return this.positions.filter(function getDraftRecursive(position) {
+      const isDraft: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.DRAFT;
+      const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getDraftRecursive).length > 0;
+      return isDraft || isGroupHasDrafts;
+    });
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
-    public user: UserInfoService
+    public user: UserInfoService,
+    public featureService: FeatureService
   ) {
   }
 
@@ -60,6 +80,12 @@ export class RequestComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.form = this.positionsToForm(this.positions);
     this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
+  }
+
+  ngAfterViewInit() {
+    if (this.publishPopoverRef) {
+      this.publishPopoverRef.show();
+    }
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {

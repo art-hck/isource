@@ -4,6 +4,7 @@
         [requestPositions]="positionsWithOffers.positions"
         [suppliers]="positionsWithOffers.suppliers"
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
+        (cancelOffer)="onCancelPublishOffers($event)"
         (addOffer)="showAddOfferModal($event)"
         (editOffer)="showEditOfferModal($event)"
       ></app-request-commercial-proposals>
@@ -26,7 +27,8 @@
             *ngIf="requestCommercialProposalModal._open"
             (cancel)="requestCommercialProposalModal.close()"
             [position]="currentRequestPosition"
-            (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()">
+            (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()"
+    >
     </app-request-commercial-proposals-create>
   </div>
 </clr-modal>

@@ -3,8 +3,10 @@
     <app-request
       [positions]="positions"
       [request]="request"
+      (addPosition)="getPositions()"
       (addGroup)="getPositions()"
       (addResponsible)="getPositions()"
+      (publish)="publish($event)"
     ></app-request>
   </ng-container>
 </ng-container>

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map } from "rxjs/operators";
-import { Observable, Subscription } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
+import { Observable, of, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { EditRequestService } from "../../services/edit-request.service";
@@ -23,6 +23,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 export class RequestPositionFormComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
+  @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   form: FormGroup;
@@ -35,6 +36,9 @@ export class RequestPositionFormComponent implements OnInit {
     { value: PositionCurrency.CHF, label: "Фр." },
   ];
 
+  readonly approveRequiredFields = [
+    'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
+  ];
   readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
@@ -49,6 +53,11 @@ export class RequestPositionFormComponent implements OnInit {
     [PositionStatuses.MANUFACTURING]:
       ['isDesignRequired']
   };
+
+  get isDraft(): boolean {
+    return this.approveRequiredFields
+      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) && !!this.onDrafted;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -113,6 +122,10 @@ export class RequestPositionFormComponent implements OnInit {
       submit$ = this.createRequestService.addRequestPosition(this.requestId, [this.form.value])
         .pipe(map(positions => positions[0]));
     }
+
+    submit$ = submit$.pipe(flatMap(position =>
+      position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
+    ));
 
     this.form.disable();
     this.subscription.add(submit$.subscribe(position => {

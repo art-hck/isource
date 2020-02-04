@@ -5,6 +5,7 @@
     [statuses]="statuses"
     (changeStatus)="changeStatus($event)"
     (positionChange)="updateData($event)"
+    [onDrafted]="publish"
   >
   </app-request-position>
 </ng-container>
