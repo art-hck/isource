@@ -33,7 +33,7 @@ import { RequestDashboardComponent } from './components/request-dashboard/reques
 import { RequestFilterCustomerListComponent } from './components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
 import { RequestInfoComponent } from "./components/request-info/request-info.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
-import { RequestTpFilterComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter.component";
+import { RequestTpFilterComponent } from "./components/request-technical-proposal-filter/request-tp-filter.component";
 import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
 import { RequestListFilterSectionComponent } from "./components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
 import { RequestPositionComponent } from './components/request-position/request-position.component';
@@ -47,12 +47,12 @@ import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filte
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { RequestPositionFormComponent } from "./components/request-position-form/request-position-form.component";
-import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
+import { RequestTechnicalProposalComponent } from "./components/request-technical-proposal/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
 import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
-import { RequestTpFilterContragentListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
-import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
-import { RequestTpFilterSectionComponent } from "./components/request-technical-proposals/request-tp-filter/request-tp-filter-section/request-tp-filter-section.component";
+import { RequestTpFilterContragentListComponent } from "./components/request-technical-proposal-filter/request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
+import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposal-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
+import { RequestTpFilterSectionComponent } from "./components/request-technical-proposal-filter/request-tp-filter-section/request-tp-filter-section.component";
 import { RequestCpFilterComponent } from "./components/request-commercial-proposals/request-cp-filter/request-cp-filter.component";
 
 const RequestCommonModuleDeclarations = [
@@ -95,7 +95,7 @@ const RequestCommonModuleDeclarations = [
   RequestPositionComponent,
   RequestPositionFormComponent,
   RequestPositionListComponent,
-  RequestTechnicalProposalsComponent,
+  RequestTechnicalProposalComponent,
   RequestCommercialProposalsComponent,
   RequestViewComponent,
   SearchFilterPipe

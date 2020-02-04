@@ -1,8 +1,10 @@
+import { IFeatureList } from "./feature-list";
+
 export interface MenuModel {
   text: string;
   path: string;
   children: Array<MenuModel>;
-  feature?: string;
+  feature?: keyof IFeatureList;
 }
 
 export const Menu: MenuModel[] = [

@@ -1,6 +1,5 @@
 export class UxgWizzardStep<S> {
-  constructor(private step: S, private info: UxgWizzardStepInfo) {
-  }
+  constructor(private step: S, private info: UxgWizzardStepInfo) {}
 
   get label(): string {
     return this.info.label;
@@ -14,25 +13,35 @@ export class UxgWizzardStep<S> {
     return this.info.disabled;
   }
 
-  complete(): void {
-    this.info.completed = true;
+  get hidden(): boolean {
+    return this.info.hidden;
   }
 
-  reset() {
-    this.info.completed = false;
+  get valid(): boolean {
+    return !this.info.validator || this.info.validator();
   }
 
-  disable(disabled: boolean): void {
-    this.info.disabled = disabled;
+  get invalid(): boolean {
+    return !this.valid;
   }
 
-  toString(): S {
-    return this.step;
-  }
+  complete = () => this.info.completed = true;
+
+  reset = () => this.info.completed = false;
+
+  disable = () => this.info.disabled = true;
+
+  enable = () => this.info.disabled = false;
+
+  toggle = (state: boolean) => this.info.hidden = !state;
+
+  toString = (): S => this.step;
 }
 
 export class UxgWizzardStepInfo {
   label: string;
   completed?: boolean;
   disabled?: boolean;
+  hidden?: boolean;
+  validator?: () => boolean;
 }

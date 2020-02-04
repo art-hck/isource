@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { RequestsListFilter } from "../../../models/requests-list/requests-list-filter";
+import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
 import { debounceTime, filter, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { RequestTpFilterContragentListComponent } from "./request-tp-filter-contragent-list/request-tp-filter-contragent-list.component";
-import { ContragentService } from "../../../../../contragent/services/contragent.service";
-import { ContragentList } from "../../../../../contragent/models/contragent-list";
-import { TechnicalProposalsService } from "../../../../back-office/services/technical-proposals.service";
-import { Uuid } from "../../../../../cart/models/uuid";
-import { TechnicalProposal } from "../../../models/technical-proposal";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { TechnicalProposalsService } from "../../../back-office/services/technical-proposals.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { TechnicalProposal } from "../../models/technical-proposal";
 import { RequestTpFilterStatusesListComponent } from "./request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 
 @Component({
@@ -29,13 +29,13 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
 
   @Input() backofficeView: boolean;
   @Input() resultsCount: number;
+  @Input() technicalProposals: TechnicalProposal[] = [];
 
   private subscription: Subscription = new Subscription();
 
   requestId: Uuid;
   contragents: ContragentList[] = [];
   tpStatuses = [];
-  technicalProposals: TechnicalProposal[] = [];
 
   requestTpListFilterForm: FormGroup;
 
@@ -93,12 +93,8 @@ export class RequestTpFilterComponent implements OnInit, OnDestroy {
   }
 
   getTechnicalProposals(): void {
-    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, {}).subscribe((res) => {
-      this.technicalProposals = res;
-
-      this.getContragentList();
-      this.getAgreementStateList();
-    });
+    this.getContragentList();
+    this.getAgreementStateList();
   }
 
 

@@ -1,5 +1,4 @@
-<!-- Карточка ТП -->
-<div class="app-table tp-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
+<div class="app-table tp-card">
   <div class="app-row">
     <div class="app-col">
       <div class="tp-header">
@@ -12,9 +11,7 @@
             </h3>
           </ng-container>
 
-          <ng-template #noContragent>
-            <span>Отсутствует наименование контрагента</span>
-          </ng-template>
+          <ng-template #noContragent><span>Отсутствует наименование контрагента</span></ng-template>
         </div>
 
         <div class="app-col app-col-aside status">
@@ -22,26 +19,24 @@
                            'declined': technicalProposal.status === 'DECLINED',
                            'draft': technicalProposal.status === 'NEW',
                            'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
-            <clr-icon shape="app-check"
-                      *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
-            <clr-icon shape="app-cross"
-                      *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
-            <clr-icon shape="app-doc"
-                      *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
-            <clr-icon shape="app-warning"
-                      *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
+            <clr-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
+            <clr-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
+            <clr-icon shape="app-doc" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
+            <clr-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
             <b>{{ tpStatusLabel(technicalProposal) }}</b>
           </div>
-          <button uxgButton link icon [disabled]="!isTpEditable(technicalProposal)">
+          <button uxgButton link icon
+                  *ngIf="featureService.available('editTechnicalProposal', userInfoService.roles)"
+                  (click)="edit.emit(true)"
+                  [disabled]="editDisabled(technicalProposal)">
             <clr-icon shape="app-pen"></clr-icon>
           </button>
-          <button uxgButton link icon (click)="isFolded[i] = !isFolded[i]">
-            <clr-icon shape="app-chevron"
-                      [dir]="isFolded[i] ? 'up':'down'"></clr-icon>
+          <button uxgButton link icon (click)="isFolded = !isFolded">
+            <clr-icon shape="app-chevron" [dir]="isFolded ? 'up':'down'"></clr-icon>
           </button>
         </div>
       </div>
-      <div class="extendable-block" *ngIf="!isFolded[i]">
+      <div class="extendable-block" *ngIf="!isFolded">
 
         <!-- Секция докуметов ТП -->
         <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
@@ -56,7 +51,7 @@
           </div>
         </div>
 
-        <!-- Секция списка позици й ТП -->
+        <!-- Секция списка позиций ТП -->
         <hr>
         <div class="app-row position-list section">
           <div class="app-col upper-label">Наименование позиции</div>
