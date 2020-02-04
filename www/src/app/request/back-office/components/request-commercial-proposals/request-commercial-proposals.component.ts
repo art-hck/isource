@@ -42,7 +42,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
           { label: "Заявки", link: "/requests/backoffice" },
           { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
           {
-            label: 'Согласование технических предложений',
+            label: 'Согласование коммерческих предложений',
             link: `/requests/backoffice/${this.requestId}/technical-proposals`
           }
         ];
@@ -64,6 +64,15 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   addCommercialProposal(): void {
     this.updatePositionsAndSuppliers();
+  }
+
+  onCancelPublishOffers(requestPosition: RequestPosition) {
+    this.offersService.cancelPublishRequestOffers(this.requestId, requestPosition).subscribe(
+      (updatedRequestPosition: RequestPosition) => {
+        Object.assign(requestPosition, updatedRequestPosition);
+        this.updatePositionsAndSuppliers();
+      }
+    );
   }
 
   showAddOfferModal(position: RequestPosition): void {
