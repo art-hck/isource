@@ -25,6 +25,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   @Input() suppliers: ContragentList[];
   @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
   @Output() addOffer = new EventEmitter<RequestPosition>();
+  @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
 
   supplier: ContragentList;
 
@@ -98,5 +99,9 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   newCommercialProposal(position) {
     this.addOffer.emit(position);
+  }
+
+  editCommercialProposal(position, linkedOffer) {
+    this.editOffer.emit({position, linkedOffer});
   }
 }

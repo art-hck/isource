@@ -23,8 +23,10 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
 
   showForm = false;
+  showEditForm = false;
 
   currentRequestPosition: RequestPosition;
+  selectedLinkedOffer: any;
 
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
@@ -66,9 +68,22 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.updatePositionsAndSuppliers();
   }
 
+  editCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+  }
+
   showAddOfferModal(position: RequestPosition): void {
     this.currentRequestPosition = position;
     this.showForm = true;
+  }
+
+  showEditOfferModal(data): void {
+    this.currentRequestPosition = data.position;
+    this.selectedLinkedOffer = data.linkedOffer;
+
+    console.log(this.selectedLinkedOffer);
+
+    this.showEditForm = true;
   }
 
   ngOnDestroy() {

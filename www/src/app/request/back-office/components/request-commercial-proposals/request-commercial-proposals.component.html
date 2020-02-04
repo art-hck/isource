@@ -4,7 +4,8 @@
         [requestPositions]="positionsWithOffers.positions"
         [suppliers]="positionsWithOffers.suppliers"
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
-        (addOffer)="showAddOfferModal($event);"
+        (addOffer)="showAddOfferModal($event)"
+        (editOffer)="showEditOfferModal($event)"
       ></app-request-commercial-proposals>
 </ng-container>
 
@@ -27,5 +28,24 @@
             [position]="currentRequestPosition"
             (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()">
     </app-request-commercial-proposals-create>
+  </div>
+</clr-modal>
+
+
+
+<clr-modal #requestCommercialProposalEditModal
+           class="cp-edit-modal"
+           [(clrModalOpen)]="showEditForm"
+           [clrModalSize]="'lg'">
+  <h2 class="modal-title">Редактирование коммерческого предложения</h2>
+
+  <div class="modal-body">
+    <app-request-commercial-proposals-edit
+            *ngIf="requestCommercialProposalEditModal._open"
+            (cancel)="requestCommercialProposalEditModal.close()"
+            [position]="currentRequestPosition"
+            [selectedOffer]="selectedLinkedOffer"
+            (editOffer)="editCommercialProposal(); requestCommercialProposalEditModal.close()">
+    </app-request-commercial-proposals-edit>
   </div>
 </clr-modal>
