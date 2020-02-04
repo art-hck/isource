@@ -32,8 +32,4 @@ export class CanActivateFeatureGuard implements CanActivate {
 
     return true;
   }
-
-  canActivateChild(childRoute: ActivatedRouteSnapshot) {
-    return this.canActivate(childRoute);
-  }
 }

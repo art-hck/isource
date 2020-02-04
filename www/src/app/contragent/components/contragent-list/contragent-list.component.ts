@@ -1,6 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
-import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 
 @Component({

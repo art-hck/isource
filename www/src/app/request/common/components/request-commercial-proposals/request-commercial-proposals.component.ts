@@ -1,15 +1,13 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {TechnicalProposal} from "../../models/technical-proposal";
-import {RequestPosition} from "../../models/request-position";
-import {RequestOfferPosition} from "../../models/request-offer-position";
-import {ContragentList} from "../../../../contragent/models/contragent-list";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RequestPosition } from "../../models/request-position";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
 import * as moment from "moment";
-import {Uuid} from "../../../../cart/models/uuid";
-import {AbstractControl, FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {CustomValidators} from "../../../../shared/forms/custom.validators";
-import {RequestPositionList} from "../../models/request-position-list";
-import {ActivatedRoute, Route} from "@angular/router";
+import { Uuid } from "../../../../cart/models/uuid";
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { RequestPositionList } from "../../models/request-position-list";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-request-commercial-proposals',
