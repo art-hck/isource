@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UsersService } from "../../services/users.service";
-import { UserInfo, UserInfoRequestItem } from "../../models/user-info";
+import { UserInfo, UserInfoBrief, UserInfoRequestItem } from "../../models/user-info";
 import { Uuid } from "../../../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
@@ -18,7 +18,7 @@ export class UserCardComponent implements OnInit {
 
   userId: Uuid;
 
-  user: any;
+  user: UserInfoBrief;
 
   requestList: UserInfoRequestItem[];
   positionsList: UserListRequestPosition[];
