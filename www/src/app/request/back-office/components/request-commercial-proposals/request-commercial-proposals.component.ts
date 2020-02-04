@@ -40,10 +40,10 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
       tap(request => {
         this.bc.breadcrumbs = [
           {label: "Заявки", link: "/requests/backoffice"},
-          {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}/new`},
+          {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}`},
           {
             label: 'Согласование технических предложений',
-            link: `/requests/backoffice/${this.requestId}/new/technical-proposals`
+            link: `/requests/backoffice/${this.requestId}/technical-proposals`
           }
         ];
       })
