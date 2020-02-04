@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ClrModal } from "@clr/angular";
 import { Request } from "../../../models/request";
 
@@ -10,6 +10,7 @@ export class RequestAddPositionModalComponent {
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;
   @Input() request: Request;
   @Output() success = new EventEmitter();
+  @Output() uploadFromTemplate = new EventEmitter();
 
   open() {
     this.modal.open();

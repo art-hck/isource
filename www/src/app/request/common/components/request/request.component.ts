@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, of, Subscription } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
@@ -22,6 +22,7 @@ export class RequestComponent implements OnInit {
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
+  @Output() uploadFromTemplate = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
 
   form: FormGroup;
