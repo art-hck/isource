@@ -13,6 +13,7 @@ enum UxgIcons {
   AppDocIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M3.83333 1C3.375 1 3.00833 1.39375 3.00833 1.875L3 14.125C3 14.6062 3.36667 15 3.83333 15H12.1667C12.625 15 13 14.6062 13 14.125V5.375L8.83333 1H3.83333ZM9 5V2L12 5H9Z"/></svg>',
   AppGroupIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6 2H4V4L2 4V6H4V8H6V6H8V4L6 4V2Z"/><rect x="8" y="9" width="2" height="6" transform="rotate(-90 8 9)"/><rect x="8" y="12" width="2" height="6" transform="rotate(-90 8 12)"/><rect x="8" y="15" width="2" height="6" transform="rotate(-90 8 15)"/></svg>',
   AppHamburgerIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14 5H2V3H14V5Z"/><path d="M14 9H2V7H14V9Z"/><path d="M2 13H14V11H2V13Z"/></svg>',
+  AppLockIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10,5v1H6V5c0-1.1,0.9-2,2-2S10,3.9,10,5zM14,8c0-1.1-0.9-2-2-2V5c0-2.2-1.8-4-4-4C5.8,1,4,2.8,4,5v1C2.9,6,2,6.9,2,8v5c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2V8z M9,11V8H7v3H9z"/></svg>',
   AppLogoutIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5H5V19H19V16H21V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V8H19V5ZM19.4497 11.9497L14.5 7L13.0858 8.41421L15.6716 11H7V13H15.5711L13.0858 15.4853L14.5 16.8995L18.0355 13.364L19.4497 11.9497Z"/></svg>',
   AppInfoIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 13C10.7614 13 13 10.7614 13 8C13 5.23858 10.7614 3 8 3C5.23858 3 3 5.23858 3 8C3 10.7614 5.23858 13 8 13ZM8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15ZM9 4V6H7V4H9ZM9 12V7H7V12H9Z"/></svg>',
   AppKebabIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5C8.33 5 9 4.33 9 3.5C9 2.67 8.33 2 7.5 2C6.67 2 6 2.67 6 3.5C6 4.33 6.67 5 7.5 5ZM7.5 7C6.67 7 6 7.67 6 8.5C6 9.33 6.67 10 7.5 10C8.33 10 9 9.33 9 8.5C9 7.67 8.33 7 7.5 7ZM7.5 12C6.67 12 6 12.67 6 13.5C6 14.33 6.67 15 7.5 15C8.33 15 9 14.33 9 13.5C9 12.67 8.33 12 7.5 12Z"/></svg>',
@@ -34,7 +35,6 @@ enum UxgIcons {
   AppUserIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M8 7C9.65685 7 11 5.15685 11 3.5C11 1.84315 10.5 0 8 0C5.5 0 5 1.84315 5 3.5C5 5.15685 6.34315 7 8 7Z" /><path d="M8 9C2.55556 9 1 10 1 15L15 15C15 10 13.4444 9 8 9Z" /></svg>',
   AppWarningIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M0.784314 13.5294C0.429057 14.1955 0.911746 15 1.66667 15H14.3333C15.0883 15 15.5709 14.1955 15.2157 13.5294L8.88235 1.65441C8.50588 0.948529 7.49412 0.948529 7.11765 1.65441L0.784314 13.5294ZM9 13H7V11H9V13ZM9 9H7V5H9V9Z" /></svg>',
   AppWaitingIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6 4H7V7.35255L10.0589 8.72458L9.64969 9.637L6 8V4Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14 7C14 10.866 10.866 14 7 14C3.13401 14 0 10.866 0 7C0 3.13401 3.13401 0 7 0C10.866 0 14 3.13401 14 7ZM12 7C12 9.76142 9.76142 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7Z" /></svg>',
-  AppLockIcon = '<svg viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 4V5H4V4C4 2.89543 4.89543 2 6 2C7.10457 2 8 2.89543 8 4ZM12 7C12 5.89543 11.1046 5 10 5V4C10 1.79086 8.20914 0 6 0C3.79086 0 2 1.79086 2 4V5C0.895431 5 0 5.89543 0 7V12C0 13.1046 0.895431 14 2 14H10C11.1046 14 12 13.1046 12 12V7ZM7 10V7H5V10H7Z" /></svg>'
 }
 
 export const UxgIconShapesSources: IconShapeSources[] = [
@@ -50,6 +50,7 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-doc": UxgIcons.AppDocIcon },
   {"app-group": UxgIcons.AppGroupIcon },
   {"app-hamburger": UxgIcons.AppHamburgerIcon },
+  {"app-lock": UxgIcons.AppLockIcon },
   {"app-logout": UxgIcons.AppLogoutIcon },
   {"app-info": UxgIcons.AppInfoIcon },
   {"app-kebab": UxgIcons.AppKebabIcon },
@@ -71,5 +72,4 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-user": UxgIcons.AppUserIcon },
   {"app-warning": UxgIcons.AppWarningIcon },
   {"app-waiting": UxgIcons.AppWaitingIcon},
-  {"app-lock": UxgIcons.AppLockIcon}
 ];
