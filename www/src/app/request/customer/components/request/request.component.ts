@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
@@ -11,10 +11,11 @@ import { UxgBreadcrumbsService } from "uxg";
 @Component({
   templateUrl: './request.component.html'
 })
-export class RequestComponent implements OnInit {
+export class RequestComponent implements OnInit, OnDestroy {
 
   request$: Observable<Request>;
   positions$: Observable<RequestPositionList[]>;
+  subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -45,4 +46,12 @@ export class RequestComponent implements OnInit {
     this.positions$ = this.requestService.getRequestPositions(requestId);
   }
 
+  publish(request: Request) {
+    this.subscription.add(this.requestService
+      .publishRequest(request.id).subscribe(() => this.getPositions()));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

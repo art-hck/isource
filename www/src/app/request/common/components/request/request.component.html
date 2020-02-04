@@ -76,6 +76,21 @@
             <clr-icon shape="app-sort2"></clr-icon>
             <span>Фильтр</span>
           </button>
+
+          <ng-container *ngIf="isDraft && featureService.available('publishRequest', user.roles)">
+            <uxg-popover #publishPopover>
+              <button uxgButton primary iconText  (click)="publish.emit(request)">
+                <clr-icon shape="app-publish"></clr-icon>
+                <span>Опубликовать</span>
+              </button>
+              <div *uxgPopoverContent="'app-popover-content-top-right'" (click)="publishPopover.hide()">
+                <p>В заявке <b>{{ draftPositions.length }}</b>
+                  {{ draftPositions.length | pluralize : false : 'неопубликованная позиция' : 'неопубликованные позиции' : 'неопубликованных позиций'}}
+                  со статусом <b>черновик</b>
+                </p>
+              </div>
+            </uxg-popover>
+          </ng-container>
         </div>
       </div>
     </div>

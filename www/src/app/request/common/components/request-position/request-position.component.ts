@@ -6,6 +6,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestDocument } from "../../models/request-document";
 import * as moment from "moment";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-position',
@@ -16,6 +17,7 @@ export class RequestPositionComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition;
   @Input() statuses: [string, string][];
+  @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() changeStatus = new EventEmitter<{ status, position }>();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   datesWithDocuments: DateWithDocuments[];

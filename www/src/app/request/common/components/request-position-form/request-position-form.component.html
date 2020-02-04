@@ -158,7 +158,8 @@
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
-      <button uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
+      <button *ngIf="!isDraft" uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
+      <button *ngIf="isDraft" uxgButton primary lg [disabled]="form.invalid">Отправить на согласование</button>
     </div>
   </div>
 </form>
