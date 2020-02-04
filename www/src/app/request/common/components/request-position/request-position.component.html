@@ -142,6 +142,7 @@
               [(position)]="position"
               (cancel)="edit.close()"
               (positionChange)="positionChange.emit($event); edit.close()"
+              [onDrafted]="onDrafted"
             ></app-request-position-form>
           </div>
         </clr-modal>

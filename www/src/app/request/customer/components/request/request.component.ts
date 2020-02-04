@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
@@ -14,10 +14,11 @@ import { Uuid } from "../../../../cart/models/uuid";
 @Component({
   templateUrl: './request.component.html'
 })
-export class RequestComponent implements OnInit {
+export class RequestComponent implements OnInit, OnDestroy {
 
   request$: Observable<Request>;
   positions$: Observable<RequestPositionList[]>;
+  subscription = new Subscription();
   requestId: Uuid;
 
   constructor(
@@ -49,6 +50,11 @@ export class RequestComponent implements OnInit {
     this.positions$ = this.requestService.getRequestPositions(this.requestId);
   }
 
+  publish(request: Request) {
+    this.subscription.add(this.requestService
+      .publishRequest(request.id).subscribe(() => this.getPositions()));
+  }
+
   uploadFromTemplate(requestData: { files: File[], requestName: string }) {
     this.positions$ = this.createRequestPositionService
       .addCustomerRequestPositionsFromExcel(this.requestId, requestData.files).pipe(
@@ -60,5 +66,9 @@ export class RequestComponent implements OnInit {
         }),
         switchMap(() => this.requestService.getRequestPositions(this.requestId))
       );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { Observable, Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { mapTo, tap } from "rxjs/operators";
+import { mapTo, switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -60,6 +60,12 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
       this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
     );
   }
+
+  // @TODO На данном этапе публикуем сразу всю заявку, ждём попозиционный бэк
+  publish = (position: RequestPosition) => this.requestService
+    .publishRequest(this.requestId)
+    // После публикации получаем актуальную инфу о позиции
+    .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
