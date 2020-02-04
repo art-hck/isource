@@ -1,23 +1,22 @@
 import {RequestPositionWorkflowSteps} from "../enum/request-position-workflow-steps";
 
-const labels: {[key: string]: string} = {};
+export const RequestPositionWorkflowStepLabels: {[key: string]: string} = {
+  [RequestPositionWorkflowSteps.DRAFT]: 'Черновик',
+  [RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL]: 'На согласовании заказчика',
+  [RequestPositionWorkflowSteps.NEW]: 'Новая',
+  [RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION]: 'Подготовка ТП',
+  [RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT]: 'Согласование ТП',
+  [RequestPositionWorkflowSteps.PROPOSALS_PREPARATION]: 'Подготовка КП',
+  [RequestPositionWorkflowSteps.RESULTS_AGREEMENT]: 'Выбор победителя',
+  [RequestPositionWorkflowSteps.WINNER_SELECTED]: 'Выбран победитель',
+  [RequestPositionWorkflowSteps.CONTRACT_AGREEMENT]: 'Согласование договора',
+  [RequestPositionWorkflowSteps.CONTRACT_SIGNING]: 'Подписание договора',
+  [RequestPositionWorkflowSteps.CONTRACTED]: 'Законтрактовано',
+  [RequestPositionWorkflowSteps.RKD_AGREEMENT]: 'Согласование РКД',
+  [RequestPositionWorkflowSteps.MANUFACTURING]: 'Изготовление',
+  [RequestPositionWorkflowSteps.DELIVERY]: 'Доставка',
+  [RequestPositionWorkflowSteps.DELIVERED]: 'Поставлено',
+  [RequestPositionWorkflowSteps.PAID]: 'Оплачено',
+  [RequestPositionWorkflowSteps.COMPLETED]: 'Завершено',
+};
 
-labels[RequestPositionWorkflowSteps.DRAFT] = 'Черновик';
-labels[RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL] = 'На согласовании заказчика';
-labels[RequestPositionWorkflowSteps.NEW] = 'Новая';
-labels[RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION] = 'Подготовка ТП';
-labels[RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT] = 'Согласование ТП';
-labels[RequestPositionWorkflowSteps.PROPOSALS_PREPARATION] = 'Подготовка КП';
-labels[RequestPositionWorkflowSteps.RESULTS_AGREEMENT] = 'Выбор победителя';
-labels[RequestPositionWorkflowSteps.WINNER_SELECTED] = 'Выбран победитель';
-labels[RequestPositionWorkflowSteps.CONTRACT_AGREEMENT] = 'Согласование договора';
-labels[RequestPositionWorkflowSteps.CONTRACT_SIGNING] = 'Подписание договора';
-labels[RequestPositionWorkflowSteps.CONTRACTED] = 'Законтрактовано';
-labels[RequestPositionWorkflowSteps.RKD_AGREEMENT] = 'Согласование РКД';
-labels[RequestPositionWorkflowSteps.MANUFACTURING] = 'Изготовление';
-labels[RequestPositionWorkflowSteps.DELIVERY] = 'Доставка';
-labels[RequestPositionWorkflowSteps.DELIVERED] = 'Поставлено';
-labels[RequestPositionWorkflowSteps.PAID] = 'Оплачено';
-labels[RequestPositionWorkflowSteps.COMPLETED] = 'Завершено';
-
-export const RequestPositionWorkflowStepLabels: {[key: string]: string} = labels;
