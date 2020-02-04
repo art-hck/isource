@@ -10,6 +10,7 @@ export interface IFeatureList {
   deliveryMonitor;
   createContragent;
   editTechnicalProposal;
+  publishRequest;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -34,5 +35,8 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   },
   editTechnicalProposal: {
     roles: [UserRole.BACKOFFICE]
-  }
+  },
+  publishRequest: {
+    roles: [UserRole.CUSTOMER]
+  },
 };
