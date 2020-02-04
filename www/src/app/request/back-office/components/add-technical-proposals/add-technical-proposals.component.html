@@ -17,7 +17,8 @@
             </button>
           </div>
 
-          <div class="clr-col-auto">
+          <div *ngIf="featureService.available('createProcedure')"
+               class="clr-col-auto">
             <button class="btn btn-primary send-offers"
                     (click)="createProcedureWizard.open()"
                     [clrLoading]="creatingProcedureLoader">
@@ -70,7 +71,7 @@
                 </button>
 
                 <ng-template #sentForReview>
-                  <p class="sent-label">{{ tpStatusLabel(technicalProposal) }}</p>
+                  <p class="status-default status-{{ technicalProposal.status }}">{{ tpStatusLabel(technicalProposal) }}</p>
                 </ng-template>
               </div>
             </div>

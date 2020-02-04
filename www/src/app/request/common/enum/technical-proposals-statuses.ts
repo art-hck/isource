@@ -2,4 +2,6 @@ export enum TechnicalProposalsStatuses {
   NEW = 'NEW',
   SENT_TO_REVIEW = 'SENT_TO_REVIEW',
   ACCEPTED = 'ACCEPTED',
+  PARTIALLY_ACCEPTED = 'PARTIALLY_ACCEPTED',
+  CANCELED = 'CANCELED'
 }
