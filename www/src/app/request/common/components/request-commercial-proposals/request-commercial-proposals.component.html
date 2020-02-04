@@ -96,13 +96,13 @@
                     (click)="onCancelPublishOffers(position)">
               Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
             </button>
-            <button uxgButton link icon type="button"
-                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">
-              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>
-            </button>
+<!--            <button uxgButton link icon type="button"-->
+<!--                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">-->
+<!--              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>-->
+<!--            </button>-->
           </div>
         </div>
-        <div class="app-row" #positionCard [ngClass]="{'fixedHeight': !isFolded[i]}">
+        <div class="app-row" #positionCard>
           <div class="app-col card linked-offer add-offer"
                *ngIf="canAddOffer(position)"
                (click)="newCommercialProposal(position)">
@@ -141,7 +141,9 @@
                 <span class="app-ghost-color"> доставка</span>
                 <ng-container *ngIf="linkedOffer.documents.length">
                   <span class="divide app-ghost-color">|</span>
-                  <span class="app-ghost-color">{{getDocumentCountLabel(linkedOffer.documents.length)}}</span>
+                  <span class="app-ghost-color">
+                    {{linkedOffer.documents.length}} {{linkedOffer.documents.length | pluralize : false : 'документ' : 'документа' : 'документов'}}
+                  </span>
                 </ng-container>
               </p>
               <span class="supplier">
