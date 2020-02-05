@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import {DocumentIconSize} from "../../enums/document-icon-size";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { DocumentIconSize } from "../../enums/document-icon-size";
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер

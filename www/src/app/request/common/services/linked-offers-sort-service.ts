@@ -1,4 +1,3 @@
-import { RequestPosition } from '../models/request-position';
 import { RequestOfferPosition } from '../models/request-offer-position';
 
 export class LinkedOffersSortService {

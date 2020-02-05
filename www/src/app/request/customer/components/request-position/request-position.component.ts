@@ -44,8 +44,8 @@ export class RequestPositionComponent implements OnInit {
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/customer` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}/new` },
-      { label: position.name, link: `/requests/customer/${this.requestId}/new/${position.id}` }
+      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}` },
+      { label: position.name, link: `/requests/customer/${this.requestId}/${position.id}` }
     ];
   }
 }

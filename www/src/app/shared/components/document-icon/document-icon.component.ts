@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {DocumentIconSize} from "../../enums/document-icon-size";
-import {DocumentExtension} from "../../enums/document-extensions";
+import { Component, Input } from '@angular/core';
+import { DocumentIconSize } from "../../enums/document-icon-size";
+import { DocumentExtension } from "../../enums/document-extensions";
 
 @Component({
- selector: 'document-icon',
- templateUrl: 'document-icon.component.html'
+  selector: 'document-icon',
+  templateUrl: 'document-icon.component.html'
 })
 export class DocumentIconComponent {
   @Input() name = "";

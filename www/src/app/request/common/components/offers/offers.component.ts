@@ -13,8 +13,6 @@ import { RequestPositionWorkflowStatuses } from '../../dictionaries/request-posi
 import { RequestService } from "../../../customer/services/request.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { Observable } from "rxjs";
-import { publishReplay, refCount } from "rxjs/operators";
 
 @Component({
   selector: 'app-offers',

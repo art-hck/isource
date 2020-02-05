@@ -47,8 +47,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/backoffice` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/backoffice/${this.requestId}/new`},
-      { label: position.name, link: `/requests/backoffice/${this.requestId}/new/${position.id}` }
+      { label: `Заявка №${position.request.number}`, link: `/requests/backoffice/${this.requestId}`},
+      { label: position.name, link: `/requests/backoffice/${this.requestId}/${position.id}` }
     ];
   }
 

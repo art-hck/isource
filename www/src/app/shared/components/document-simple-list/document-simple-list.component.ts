@@ -2,8 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { Guid } from "guid-typescript";
 import { DocumentsService } from "../../../request/common/services/documents.service";
-import { Uuid } from "../../../cart/models/uuid";
-import {DocumentIconSize} from "../../enums/document-icon-size";
+import { DocumentIconSize } from "../../enums/document-icon-size";
 
 /**
  * Компонент для отображение списка документов и загрузки новых документов в этот список

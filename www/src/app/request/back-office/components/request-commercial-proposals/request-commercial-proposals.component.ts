@@ -10,7 +10,7 @@ import {RequestPosition} from "../../../common/models/request-position";
 import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
 
-@Component({templateUrl: './request-commercial-proposals.component.html'})
+@Component({ templateUrl: './request-commercial-proposals.component.html' })
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
@@ -40,11 +40,11 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
-          {label: "Заявки", link: "/requests/backoffice"},
-          {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}/new`},
+          { label: "Заявки", link: "/requests/backoffice" },
+          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
           {
             label: 'Согласование коммерческих предложений',
-            link: `/requests/backoffice/${this.requestId}/new/technical-proposals`
+            link: `/requests/backoffice/${this.requestId}/technical-proposals`
           }
         ];
       })

@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { Observable, Subject } from "rxjs";
@@ -10,7 +10,7 @@ import { debounceTime, filter, flatMap, map, publishReplay, refCount, tap } from
   templateUrl: './contragent-autocomplete.component.html',
   styleUrls: ['./contragent-autocomplete.component.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContragentAutocompleteComponent), multi: true}
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContragentAutocompleteComponent), multi: true }
   ]
 })
 export class ContragentAutocompleteComponent implements ControlValueAccessor {

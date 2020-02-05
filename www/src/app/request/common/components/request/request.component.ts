@@ -28,6 +28,7 @@ export class RequestComponent implements OnInit, AfterViewInit {
   @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
   @Output() publish = new EventEmitter<Request>();
+  @Output() uploadFromTemplate = new EventEmitter();
   @ViewChild('publishPopover', {static: false}) publishPopoverRef: UxgPopoverComponent;
   flatPositions$: Observable<RequestPosition[]>;
 

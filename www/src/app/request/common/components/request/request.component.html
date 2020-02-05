@@ -193,20 +193,20 @@
 <app-request-add-position-modal
   #addPositionModal
   [request]="request"
-  (success)="addPosition.emit($event)">
-</app-request-add-position-modal>
+  (success)="addPosition.emit($event)"
+  (uploadFromTemplate)="uploadFromTemplate.emit($event)"
+></app-request-add-position-modal>
 
 <app-request-add-responsible-modal
   #addResponsibleModal
   [request]="request"
   [positions]="checkedPositions"
-  (success)="addResponsible.emit($event)">
-</app-request-add-responsible-modal>
+  (success)="addResponsible.emit($event)"
+></app-request-add-responsible-modal>
 
 <app-request-add-group-modal
   #addGroupModal
   [request]="request"
   [positions]="checkedPositions"
-  (success)="addGroup.emit($event)">
-</app-request-add-group-modal>
-
+  (success)="addGroup.emit($event)"
+></app-request-add-group-modal>
