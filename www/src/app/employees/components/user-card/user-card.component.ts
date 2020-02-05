@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UsersService } from "../../services/users.service";
 import { UserInfo, UserInfoBrief, UserInfoRequestItem } from "../../models/user-info";
-import { Uuid } from "../../../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
-import { UserListRequestPosition } from "../../../../../common/models/user-list-request-position";
+import { Uuid } from "../../../cart/models/uuid";
+import { UserListRequestPosition } from "../../../request/common/models/user-list-request-position";
 
 @Component({
   selector: 'app-user-card',

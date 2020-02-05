@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from "@angular/router";
-import { DatagridStateAndFilter } from "../../../../../common/models/datagrid-state-and-filter";
 import { UserItem } from "../../models/user-item";
-import { Uuid } from "../../../../../../cart/models/uuid";
+import { DatagridStateAndFilter } from "../../../request/common/models/datagrid-state-and-filter";
+import { Uuid } from "../../../cart/models/uuid";
 
 @Component({
   selector: 'app-user-list',

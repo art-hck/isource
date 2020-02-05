@@ -1,6 +1,6 @@
-import { RequestListItem } from "../../../../common/models/requests-list/requests-list-item";
-import { Uuid } from "../../../../../cart/models/uuid";
-import { UserListRequestPosition } from "../../../../common/models/user-list-request-position";
+import { Uuid } from "../../cart/models/uuid";
+import { UserListRequestPosition } from "../../request/common/models/user-list-request-position";
+import { RequestListItem } from "../../request/common/models/requests-list/requests-list-item";
 
 export class UserInfo {
   requests: UserInfoRequestItem[];

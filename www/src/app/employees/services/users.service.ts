@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { UserInfo } from "../models/user-info";
-import { Uuid } from "../../../../../cart/models/uuid";
 import { UserItem } from "../models/user-item";
+import { Uuid } from "../../cart/models/uuid";
 
 @Injectable()
 export class UsersService {

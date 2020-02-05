@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UserInfoRequestItem } from "../../../models/user-info";
-import { RequestsList } from "../../../../../../common/models/requests-list/requests-list";
 import { Router } from "@angular/router";
+import { RequestsList } from "../../../../request/common/models/requests-list/requests-list";
 
 @Component({
   selector: 'app-user-card-request-list',

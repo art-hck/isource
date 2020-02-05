@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
-  { path: 'users', loadChildren: () => import('./request/back-office/components/users/users.module').then(m => m.UsersModule)},
+  { path: 'users', loadChildren: () => import('./employees/users.module').then(m => m.UsersModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: 'not-found', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } },
   { path: 'forbidden', component: ForbiddenComponent, data: { title: "403 - Доступ запрещен" } },

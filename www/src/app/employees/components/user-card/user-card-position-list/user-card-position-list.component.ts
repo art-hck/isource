@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserListRequestPosition } from "../../../../../../common/models/user-list-request-position";
 import { Router } from "@angular/router";
+import { UserListRequestPosition } from "../../../../request/common/models/user-list-request-position";
 
 @Component({
   selector: 'app-user-card-position-list',

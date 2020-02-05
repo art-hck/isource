@@ -1,4 +1,4 @@
-import { Uuid } from "../../../../../cart/models/uuid";
+import { Uuid } from "../../cart/models/uuid";
 
 export class UserItem {
   user: UserInfo;
