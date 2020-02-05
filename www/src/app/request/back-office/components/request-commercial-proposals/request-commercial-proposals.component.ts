@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {pluck, tap} from "rxjs/operators";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {tap} from "rxjs/operators";
 import {Request} from "../../../common/models/request";
 import {UxgBreadcrumbsService} from "uxg";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -9,7 +9,6 @@ import {Uuid} from "../../../../cart/models/uuid";
 import {RequestPosition} from "../../../common/models/request-position";
 import {Observable, Subscription} from "rxjs";
 import {ContragentList} from "../../../../contragent/models/contragent-list";
-import {ClrLoadingState} from "@clr/angular";
 
 @Component({templateUrl: './request-commercial-proposals.component.html'})
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
@@ -18,7 +17,6 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   request$: Observable<Request>;
   requestPositionsWithOffers$: Observable<any>;
   requestPositions: RequestPosition[] = [];
-  requestPositions$: Observable<RequestPosition[]>;
   suppliers: ContragentList[] = [];
 
   subscription = new Subscription();
@@ -65,10 +63,6 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  addCommercialProposal(): void {
-    this.updatePositionsAndSuppliers();
-  }
-
   onCancelPublishOffers(requestPosition: RequestPosition) {
     this.offersService.cancelPublishRequestOffers(this.requestId, requestPosition).subscribe(
       (updatedRequestPosition: RequestPosition) => {
@@ -78,20 +72,26 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     );
   }
 
+  addCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+    this.showForm = false;
+  }
+
   editCommercialProposal(): void {
     this.updatePositionsAndSuppliers();
+    this.showEditForm = false;
   }
 
   showAddOfferModal(position: RequestPosition): void {
     this.currentRequestPosition = position;
+    this.selectedLinkedOffer = null;
+
     this.showForm = true;
   }
 
   showEditOfferModal(data): void {
     this.currentRequestPosition = data.position;
     this.selectedLinkedOffer = data.linkedOffer;
-
-    console.log(this.selectedLinkedOffer);
 
     this.showEditForm = true;
   }

@@ -141,27 +141,37 @@
   <br/>
 
   <!-- document list -->
-  <ng-container *ngIf="formDocuments && formDocuments.controls.length">
+  <ng-container *ngIf="formDocuments.controls.length || defaultCPValue('documents').length">
     <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
     <div class="documents">
       <div class="app-row">
+        <div class="app-col" *ngFor="let document of defaultCPValue('documents')">
+          <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
+        </div>
         <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
-          <document-icon [name]="document.value.name"></document-icon>
+          <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
+        </div>
+
+        <ng-template #documentRef let-document="document" let-i="i">
+          <document-icon [name]="document.name || document.filename"></document-icon>
           <div class="documents-title">
-            <div>{{ document.value.name }}</div>
-            <div *ngIf="document.value.size > 0" class="app-secondary-color">
-              {{document.value.size | bytesToSize : 2}}
+            <div>{{ document.name|| document.filename }}</div>
+            <div *ngIf="document.size > 0" class="app-secondary-color">
+              {{document.size | bytesToSize : 2}}
             </div>
           </div>
-          <div class="clr-align-self-start" *ngIf="!newCommercialProposalForm.get('documents').disabled">
+          <div class="clr-align-self-start" *ngIf="!newCommercialProposalForm.get('documents').disabled && i >= 0">
             <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
               <clr-icon shape="app-trash"></clr-icon>
             </button>
           </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </ng-container>
+
+
+
 
 
   <div class="clr-row">
@@ -176,7 +186,7 @@
         <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
         <button uxgButton lg primary
                 [disabled]="newCommercialProposalForm.invalid || newCommercialProposalFormHelper.invalid">
-          Добавить
+          {{ editMode ? 'Сохранить' : 'Добавить' }}
         </button>
       </div>
     </div>

@@ -24,7 +24,6 @@ import { RequestProcedureCreateDocumentsComponent } from "./components/request-p
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
 import { RequestCommercialProposalsCreateComponent } from './components/request-commercial-proposals/request-commercial-proposals-create/request-commercial-proposals-create.component';
 import { RequestTechnicalProposalComponent } from "./components/request-technical-proposal/request-technical-proposal.component";
-import { RequestCommercialProposalsEditComponent } from './components/request-commercial-proposals/request-commercial-proposals-edit/request-commercial-proposals-edit.component';
 
 @NgModule({
   declarations: [
@@ -44,8 +43,7 @@ import { RequestCommercialProposalsEditComponent } from './components/request-co
     RequestProcedureCreateDocumentsComponent,
     RequestTechnicalProposalComponent,
     RequestCommercialProposalsComponent,
-    RequestCommercialProposalsCreateComponent,
-    RequestCommercialProposalsEditComponent
+    RequestCommercialProposalsCreateComponent
 
   ],
   imports: [

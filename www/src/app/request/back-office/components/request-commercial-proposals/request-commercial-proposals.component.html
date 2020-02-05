@@ -6,8 +6,8 @@
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
         (cancelOffer)="onCancelPublishOffers($event)"
         (addOffer)="showAddOfferModal($event)"
-        (editOffer)="showEditOfferModal($event)"
-      ></app-request-commercial-proposals>
+        (editOffer)="showEditOfferModal($event)">
+      </app-request-commercial-proposals>
 </ng-container>
 
 <ng-template #loading>
@@ -18,36 +18,29 @@
 
 <clr-modal #requestCommercialProposalModal
            class="cp-creation-modal"
-           [(clrModalOpen)]="showForm"
+           [(clrModalOpen)]="showForm || showEditForm"
+           [clrModalClosable]="false"
            [clrModalSize]="'lg'">
-  <h2 class="modal-title">Добавить новое коммерческое предложение</h2>
+  <h2 class="modal-title">
+    {{
+      showForm ?
+      'Новое коммерческое предложение' :
+      'Редактирование коммерческого предложения'
+    }}
+  </h2>
 
   <div class="modal-body">
     <app-request-commercial-proposals-create
             *ngIf="requestCommercialProposalModal._open"
-            (cancel)="requestCommercialProposalModal.close()"
             [position]="currentRequestPosition"
-            (addOffer)="addCommercialProposal(); requestCommercialProposalModal.close()"
-    >
+            [commercialProposal]="selectedLinkedOffer"
+
+            [editMode]="showEditForm"
+
+            (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
+            (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
+
+            (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
     </app-request-commercial-proposals-create>
-  </div>
-</clr-modal>
-
-
-
-<clr-modal #requestCommercialProposalEditModal
-           class="cp-edit-modal"
-           [(clrModalOpen)]="showEditForm"
-           [clrModalSize]="'lg'">
-  <h2 class="modal-title">Редактирование коммерческого предложения</h2>
-
-  <div class="modal-body">
-    <app-request-commercial-proposals-edit
-            *ngIf="requestCommercialProposalEditModal._open"
-            (cancel)="requestCommercialProposalEditModal.close()"
-            [position]="currentRequestPosition"
-            [selectedOffer]="selectedLinkedOffer"
-            (editOffer)="editCommercialProposal(); requestCommercialProposalEditModal.close()">
-    </app-request-commercial-proposals-edit>
   </div>
 </clr-modal>
