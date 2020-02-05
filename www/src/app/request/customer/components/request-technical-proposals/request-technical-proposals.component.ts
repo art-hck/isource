@@ -29,8 +29,8 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       tap(request => {
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/customer" },
-          { label: `Заявка №${request.number}`, link: `/requests/customer/${request.id}/new` },
-          { label: 'Согласование технических предложений', link: `/requests/customer/${this.requestId}/new/technical-proposals` }
+          { label: `Заявка №${request.number}`, link: `/requests/customer/${request.id}` },
+          { label: 'Согласование технических предложений', link: `/requests/customer/${this.requestId}/technical-proposals` }
         ];
       }));
 
