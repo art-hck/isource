@@ -34,12 +34,9 @@
             *ngIf="requestCommercialProposalModal._open"
             [position]="currentRequestPosition"
             [commercialProposal]="selectedLinkedOffer"
-
             [editMode]="showEditForm"
-
             (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
             (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
-
             (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
     </app-request-commercial-proposals-create>
   </div>

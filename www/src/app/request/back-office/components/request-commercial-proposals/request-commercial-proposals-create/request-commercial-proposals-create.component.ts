@@ -30,16 +30,11 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   @Input() addOfferModalOpen = false;
   @Input() editMode = false;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
-
   @Output() create = new EventEmitter();
   @Output() edit = new EventEmitter();
-
   @Output() cancel = new EventEmitter();
 
   @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
-
-  isLoading: boolean;
 
   newCommercialProposalForm: FormGroup;
   newCommercialProposalFormHelper: FormGroup;
@@ -62,6 +57,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   ngOnInit() {
     this.newCommercialProposalForm = this.formBuilder.group({
+      id: [this.defaultCPValue('id', null)],
       supplierContragentId: [this.defaultCPValue('supplierContragentId'), Validators.required],
       priceWithVat: [this.defaultPriceWithVat, [Validators.required, Validators.min(1)]],
       currency: [this.defaultCurrency, Validators.required],
@@ -124,7 +120,6 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   }
 
   submit() {
-    this.isLoading = true;
     this.newCommercialProposalForm.disable();
 
     const body = this.newCommercialProposalForm.value;
