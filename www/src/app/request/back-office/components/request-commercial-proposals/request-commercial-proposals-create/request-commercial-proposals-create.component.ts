@@ -59,12 +59,12 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
     this.newCommercialProposalForm = this.formBuilder.group({
       id: [this.defaultCPValue('id', null)],
       supplierContragentId: [this.defaultCPValue('supplierContragentId'), Validators.required],
-      priceWithVat: [this.defaultPriceWithVat, [Validators.required, Validators.min(1)]],
-      currency: [this.defaultCurrency, Validators.required],
-      quantity: [this.defaultQuantity, [Validators.required, Validators.min(1)]],
-      measureUnit: [this.defaultMeasureUnit, Validators.required],
+      priceWithVat: [this.defaultCPValue('priceWithVat', this.position.startPrice || null), [Validators.required, Validators.min(1)]],
+      currency: [this.defaultCPValue('currency', this.position.currency || null), Validators.required],
+      quantity: [this.defaultCPValue('quantity', this.position.quantity || null), [Validators.required, Validators.min(1)]],
+      measureUnit: [this.defaultCPValue('measureUnit', this.position.measureUnit || null), Validators.required],
       deliveryDate: [this.defaultDeliveryDate, [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: [this.defaultPaymentTerms, Validators.required],
+      paymentTerms: [this.defaultCPValue('paymentTerms', this.position.paymentTerms || null), Validators.required],
       documents: this.formBuilder.array([]),
     });
 
@@ -191,31 +191,6 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
       this.dateIsLaterThanNeeded = controlDate.isBefore(validationDate);
     }
-  }
-
-  private get defaultPriceWithVat() {
-    const defaultPriceWithVat = this.defaultCPValue('priceWithVat', this.position.startPrice);
-    return defaultPriceWithVat ? defaultPriceWithVat : null;
-  }
-
-  private get defaultCurrency() {
-    const defaultCurrency = this.defaultCPValue('currency', this.position.currency);
-    return defaultCurrency ? defaultCurrency : null;
-  }
-
-  private get defaultQuantity() {
-    const defaultQuantity = this.defaultCPValue('quantity', this.position.quantity);
-    return defaultQuantity ? defaultQuantity : null;
-  }
-
-  private get defaultMeasureUnit() {
-    const defaultMeasureUnit = this.defaultCPValue('measureUnit', this.position.measureUnit);
-    return defaultMeasureUnit ? defaultMeasureUnit : null;
-  }
-
-  private get defaultPaymentTerms() {
-    const defaultPaymentTerms = this.defaultCPValue('paymentTerms', this.position.paymentTerms);
-    return defaultPaymentTerms ? defaultPaymentTerms : null;
   }
 
   private get defaultDeliveryDate() {
