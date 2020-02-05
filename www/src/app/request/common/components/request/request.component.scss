@@ -64,3 +64,22 @@
     padding-right: 6px;
   }
 }
+
+// @TODO Выпилить после реализации попозиционного согласования
+.notification-bar {
+  width: 100%;
+  background: #F0F6FC;
+  position: absolute;
+  left: 0;
+  top: 64px;
+  .container {
+    padding: 1em 0;
+
+    > .app-row {
+      justify-content: center;
+      .app-col {
+        flex-basis: 50%;
+      }
+    }
+  }
+}

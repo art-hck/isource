@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
@@ -14,11 +14,10 @@ import { Uuid } from "../../../../cart/models/uuid";
 @Component({
   templateUrl: './request.component.html'
 })
-export class RequestComponent implements OnInit, OnDestroy {
+export class RequestComponent implements OnInit {
 
   request$: Observable<Request>;
   positions$: Observable<RequestPositionList[]>;
-  subscription = new Subscription();
   requestId: Uuid;
 
   constructor(
@@ -32,27 +31,46 @@ export class RequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
+    this.request$ = this.getRequest();
+    this.positions$ = this.getPositions();
+  }
 
-    this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
+  getRequest() {
+    return this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.title.setTitle(request.name || "Заявка №" + request.id);
 
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/customer" },
-          { label: this.title.getTitle(), link: "/requests/customer/" + request.id }
+          { label: `Заявка №${request.number}`, link: "/requests/customer/" + request.id }
         ];
       })
     );
-    this.getPositions();
   }
 
   getPositions() {
-    this.positions$ = this.requestService.getRequestPositions(this.requestId);
+    return this.requestService.getRequestPositions(this.requestId);
   }
 
   publish(request: Request) {
-    this.subscription.add(this.requestService
-      .publishRequest(request.id).subscribe(() => this.getPositions()));
+    this.request$ = this.requestService.publishRequest(request.id).pipe(
+        switchMap(() => this.getRequest()),
+        tap(() => this.positions$ = this.getPositions())
+      );
+  }
+
+  reject(request: Request) {
+    this.request$ = this.requestService.rejectRequest(request.id, "").pipe(
+      switchMap(() => this.getRequest()),
+      tap(() => this.positions$ = this.getPositions())
+    );
+  }
+
+  approve(request: Request) {
+    this.request$ = this.requestService.approveRequest(request.id).pipe(
+      switchMap(() => this.getRequest()),
+      tap(() => this.positions$ = this.getPositions())
+    );
   }
 
   uploadFromTemplate(requestData: { files: File[], requestName: string }) {
@@ -64,11 +82,7 @@ export class RequestComponent implements OnInit, OnDestroy {
           );
           return null;
         }),
-        switchMap(() => this.requestService.getRequestPositions(this.requestId))
+        switchMap(() => this.getPositions())
       );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }
