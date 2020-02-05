@@ -56,7 +56,11 @@ export class RequestPositionFormComponent implements OnInit {
 
   get isDraft(): boolean {
     return this.approveRequiredFields
-      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) && !!this.onDrafted;
+      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
+  }
+
+  get needApprove(): boolean {
+    return (this.isDraft || !this.position.id) && !!this.onDrafted;
   }
 
   constructor(

@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { Observable, Subscription } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { mapTo, switchMap, tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -39,7 +39,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
   }
 
   updateData(position: RequestPosition) {
-    this.position$ = this.position$.pipe(mapTo(position));
+    this.setPageInfo(position);
+    this.position$ = of(position);
   }
 
   setPageInfo(position: RequestPosition) {
@@ -61,8 +62,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     );
   }
 
-  // @TODO На данном этапе публикуем сразу всю заявку, ждём попозиционный бэк
-  publish = (position: RequestPosition) => this.requestService
+  // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
+  sendOnApprove = (position: RequestPosition) => this.requestService
     .publishRequest(this.requestId)
     // После публикации получаем актуальную инфу о позиции
     .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))

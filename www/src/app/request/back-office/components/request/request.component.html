@@ -3,6 +3,7 @@
     <app-request
       [positions]="positions"
       [request]="request"
+      [onDrafted]="sendOnApprove"
       (addPosition)="getPositions()"
       (addGroup)="getPositions()"
       (addResponsible)="getPositions()"

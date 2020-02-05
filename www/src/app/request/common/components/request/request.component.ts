@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Observable, of } from "rxjs";
 import { Request } from "../../models/request";
@@ -19,7 +19,7 @@ import { UxgPopoverComponent } from "uxg";
   templateUrl: './request.component.html',
   styleUrls: ['./request.component.scss']
 })
-export class RequestComponent implements OnInit, AfterViewInit {
+export class RequestComponent implements OnInit {
   requestId: Uuid;
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
@@ -27,9 +27,10 @@ export class RequestComponent implements OnInit, AfterViewInit {
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
-  @Output() publish = new EventEmitter<Request>();
+  @Output() publish = new EventEmitter();
+  @Output() reject = new EventEmitter();
+  @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
-  @ViewChild('publishPopover', {static: false}) publishPopoverRef: UxgPopoverComponent;
   flatPositions$: Observable<RequestPosition[]>;
 
   form: FormGroup;
@@ -61,10 +62,22 @@ export class RequestComponent implements OnInit, AfterViewInit {
   }
 
   get draftPositions(): RequestPositionList[] {
-    return this.positions.filter(function getDraftRecursive(position) {
+    return this.positions.filter(function getRecursive(position) {
       const isDraft: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.DRAFT;
-      const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getDraftRecursive).length > 0;
+      const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
       return isDraft || isGroupHasDrafts;
+    });
+  }
+
+  get isOnApproval(): boolean {
+    return this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0;
+  }
+
+  get hasOnApprovalPositions(): RequestPositionList[] {
+    return this.positions.filter(function getRecursive(position) {
+      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL;
+      const isGroupHasOnApproval: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
+      return isOnApproval || isGroupHasOnApproval;
     });
   }
 
@@ -81,12 +94,6 @@ export class RequestComponent implements OnInit, AfterViewInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.form = this.positionsToForm(this.positions);
     this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
-  }
-
-  ngAfterViewInit() {
-    if (this.publishPopoverRef) {
-      this.publishPopoverRef.show();
-    }
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {
