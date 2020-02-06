@@ -20,11 +20,12 @@
                    placeholder="Наименование заявки.."/>
           </ng-container>
 
-          <span class="gray">
-            Вы можете загрузить необходимый список позиций, заполнив <a [href]="templateUrl">шаблон</a>
+          <span class="app-secondary-color">
+            Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
+            и загрузить файл в систему.
           </span>
 
-          <app-document-upload-list (fileSelected)="onChangeFilesList($event)"></app-document-upload-list>
+          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
         </div>
       </div>
     </div>
@@ -34,7 +35,10 @@
     <button class="btn btn-primary"
             type="button"
             (click)="onSendClick()"
-            [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">Отправить
+            [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
+      <span *ngIf="showRequestName; else addPositions">Отправить</span>
+      <ng-template #addPositions>Добавить</ng-template>
+
     </button>
   </div>
 </div>
