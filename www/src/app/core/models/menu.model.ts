@@ -39,8 +39,8 @@ export const Menu: MenuModel[] = [
   },
   {
     text: 'Сотрудники',
-    path: 'users',
-    feature: 'users',
+    path: 'employees',
+    feature: 'employees',
     children: []
   }
 ];

@@ -8,10 +8,6 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'employees',
-  },
-  {
-    path: 'employees',
     component: UserListViewComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Сотрудники" }

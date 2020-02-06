@@ -45,8 +45,8 @@ export class UserCardComponent implements OnInit {
       this.user = userCardInfo.user;
 
       this.bc.breadcrumbs = [
-        { label: "Сотрудники", link: "/users" },
-        { label: userCardInfo.user.fullName, link: `/users/${userCardInfo.user.id}/info` }
+        { label: "Сотрудники", link: "/employees" },
+        { label: userCardInfo.user.fullName, link: `/employees/${userCardInfo.user.id}/info` }
       ];
 
       this.requestCount = this.requestList ? (this.requestList.length || 0) : null;

@@ -24,6 +24,6 @@ export class UserListComponent implements OnInit {
   }
 
   onRowClick(userId: Uuid): void {
-    this.router.navigateByUrl(`/users/${userId}/info`);
+    this.router.navigateByUrl(`/employees/${userId}/info`);
   }
 }
