@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from "@angular/router";
 import { UserListRequestPosition } from "../../../../request/common/models/user-list-request-position";
 
@@ -7,7 +7,7 @@ import { UserListRequestPosition } from "../../../../request/common/models/user-
   templateUrl: './user-card-position-list.component.html',
   styleUrls: ['./user-card-position-list.component.scss']
 })
-export class UserCardPositionListComponent implements OnInit {
+export class UserCardPositionListComponent {
 
   @Input() positions: UserListRequestPosition[];
 
@@ -15,7 +15,8 @@ export class UserCardPositionListComponent implements OnInit {
     protected router: Router
   ) { }
 
-  ngOnInit() {
+  onRowClick(position: UserListRequestPosition): void {
+    this.router.navigateByUrl(`/requests/backoffice/${position.requestId}/${position.id}`);
   }
 
 }
