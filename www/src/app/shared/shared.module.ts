@@ -20,6 +20,7 @@ import { ContragentAutocompleteComponent } from './components/contragent-autocom
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
+import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     OkeiSelectorComponent,
+    TemplateUploadComponent,
   ],
   exports: [
     CommonModule,
@@ -78,6 +80,7 @@ import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.
     DocumentIconComponent,
     ContragentAutocompleteComponent,
     OkeiSelectorComponent,
+    TemplateUploadComponent,
 
     PluralizePipe,
     BytesToSizePipe,

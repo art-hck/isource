@@ -10,6 +10,9 @@ import {RequestPositionList} from "../../models/request-position-list";
 import {ActivatedRoute, Route} from "@angular/router";
 import {GpnmarketConfigInterface} from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
+import {OffersService} from "../../../back-office/services/offers.service";
+import {Request} from "../../models/request";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-request-commercial-proposals',
@@ -21,14 +24,17 @@ export class RequestCommercialProposalsComponent implements OnInit {
   form: FormGroup;
   requestId: Uuid;
   appConfig: GpnmarketConfigInterface;
+  files: File[] = [];
 
   isFolded = [];
 
+  @Input() request: Request;
   @Input() requestPositions: RequestPosition[] = [];
   @Input() suppliers: ContragentList[];
   @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
   @Output() addOffer = new EventEmitter<RequestPosition>();
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
+  @Output() addOffersTemplate = new EventEmitter<File[]>();
 
   supplier: ContragentList;
 
@@ -44,6 +50,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+  private offersService: OffersService,
   @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
     this.appConfig = appConfig;
   }
@@ -150,5 +157,17 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   isOverflow(positionCard: HTMLElement) {
     return positionCard.scrollHeight > positionCard.clientHeight + 30;
+  }
+
+  onDownloadOffersTemplate(): void {
+    this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendOffersTemplateFilesClick() {
+    this.addOffersTemplate.emit(this.files);
   }
 }

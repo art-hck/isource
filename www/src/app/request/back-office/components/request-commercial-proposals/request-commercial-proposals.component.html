@@ -3,9 +3,11 @@
         *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers"
         [requestPositions]="positionsWithOffers.positions"
         [suppliers]="positionsWithOffers.suppliers"
+        [request]="request"
         (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
         (cancelOffer)="onCancelPublishOffers($event)"
         (addOffer)="showAddOfferModal($event);"
+        (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
       ></app-request-commercial-proposals>
 </ng-container>
 
