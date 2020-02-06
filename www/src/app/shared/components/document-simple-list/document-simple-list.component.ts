@@ -24,13 +24,13 @@ export class DocumentSimpleListComponent implements OnInit {
   @Input() enableUpload = true;
   @Input() gridable = false;
   @Input() limit = 0;
+  @Input() size: DocumentIconSize = DocumentIconSize.medium;
 
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
 
   uploadInputId: Guid;
-  documentIconSize = DocumentIconSize;
   showAll = false;
 
   constructor(
