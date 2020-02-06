@@ -31,8 +31,8 @@ export class RequestComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.getRequest();
-    this.positions$ = this.getPositions();
+    this.updateRequest();
+    this.updatePositions();
   }
 
   getRequest() {
@@ -52,24 +52,32 @@ export class RequestComponent implements OnInit {
     return this.requestService.getRequestPositions(this.requestId);
   }
 
+  updateRequest() {
+    this.request$ = this.getRequest();
+  }
+
+  updatePositions() {
+    this.positions$ = this.getPositions();
+  }
+
   publish(request: Request) {
     this.request$ = this.requestService.publishRequest(request.id).pipe(
         switchMap(() => this.getRequest()),
-        tap(() => this.positions$ = this.getPositions())
+        tap(() => this.updatePositions())
       );
   }
 
   reject(request: Request) {
     this.request$ = this.requestService.rejectRequest(request.id, "").pipe(
       switchMap(() => this.getRequest()),
-      tap(() => this.positions$ = this.getPositions())
+      tap(() => this.updatePositions())
     );
   }
 
   approve(request: Request) {
     this.request$ = this.requestService.approveRequest(request.id).pipe(
       switchMap(() => this.getRequest()),
-      tap(() => this.positions$ = this.getPositions())
+      tap(() => this.updatePositions())
     );
   }
 

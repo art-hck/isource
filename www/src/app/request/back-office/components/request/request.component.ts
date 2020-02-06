@@ -32,8 +32,8 @@ export class RequestComponent implements OnInit {
 
   ngOnInit() {
     this.requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.getRequest();
-    this.positions$ = this.getPositions();
+    this.updateRequest();
+    this.updatePositions();
   }
 
   getRequest() {
@@ -53,6 +53,14 @@ export class RequestComponent implements OnInit {
     return this.requestService.getRequestPositions(this.requestId);
   }
 
+  updateRequest() {
+    this.request$ = this.getRequest();
+  }
+
+  updatePositions() {
+    this.positions$ = this.getPositions();
+  }
+
   uploadFromTemplate(requestData: { files: File[], requestName: string }) {
     this.positions$ = this.createRequestPositionService
       .addBackofficeRequestPositionsFromExcel(this.requestId, requestData.files).pipe(
@@ -67,7 +75,7 @@ export class RequestComponent implements OnInit {
   }
 
   // @TODO На данном этапе публикуем сразу всю заявку, ждём попозиционный бэк
-  sendOnApprove = (position: RequestPosition) => this.requestService
+  sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.requestService
     .publishRequest(this.requestId)
     // После публикации получаем актуальную инфу о позиции
     .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))

@@ -4,9 +4,9 @@
       [positions]="positions"
       [request]="request"
       [onDrafted]="sendOnApprove"
-      (addPosition)="getPositions()"
-      (addGroup)="getPositions()"
-      (addResponsible)="getPositions()"
+      (addPosition)="updatePositions()"
+      (addGroup)="updatePositions()"
+      (addResponsible)="updatePositions()"
       (uploadFromTemplate)="uploadFromTemplate($event)"
     ></app-request>
   </ng-container>

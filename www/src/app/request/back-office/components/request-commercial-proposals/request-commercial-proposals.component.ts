@@ -18,14 +18,15 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   request$: Observable<Request>;
   requestPositionsWithOffers$: Observable<any>;
   requestPositions: RequestPosition[] = [];
-  requestPositions$: Observable<RequestPosition[]>;
   suppliers: ContragentList[] = [];
 
   subscription = new Subscription();
 
   showForm = false;
+  showEditForm = false;
 
   currentRequestPosition: RequestPosition;
+  selectedLinkedOffer: any;
 
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
@@ -63,10 +64,6 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  addCommercialProposal(): void {
-    this.updatePositionsAndSuppliers();
-  }
-
   onCancelPublishOffers(requestPosition: RequestPosition) {
     this.offersService.cancelPublishRequestOffers(this.requestId, requestPosition).subscribe(
       (updatedRequestPosition: RequestPosition) => {
@@ -76,9 +73,28 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     );
   }
 
+  addCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+    this.showForm = false;
+  }
+
+  editCommercialProposal(): void {
+    this.updatePositionsAndSuppliers();
+    this.showEditForm = false;
+  }
+
   showAddOfferModal(position: RequestPosition): void {
     this.currentRequestPosition = position;
+    this.selectedLinkedOffer = null;
+
     this.showForm = true;
+  }
+
+  showEditOfferModal(data): void {
+    this.currentRequestPosition = data.position;
+    this.selectedLinkedOffer = data.linkedOffer;
+
+    this.showEditForm = true;
   }
 
   ngOnDestroy() {

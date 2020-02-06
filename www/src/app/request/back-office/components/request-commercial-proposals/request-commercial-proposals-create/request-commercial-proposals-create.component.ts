@@ -17,6 +17,7 @@ import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
+import { CommercialProposal } from "../../../../common/models/commercial-proposal";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',
@@ -25,16 +26,15 @@ import { CustomValidators } from "../../../../../shared/forms/custom.validators"
 })
 export class RequestCommercialProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() position: RequestPosition;
+  @Input() commercialProposal: CommercialProposal;
+  @Input() addOfferModalOpen = false;
+  @Input() editMode = false;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() addOffer = new EventEmitter();
+  @Output() create = new EventEmitter();
+  @Output() edit = new EventEmitter();
   @Output() cancel = new EventEmitter();
 
-  @Input() addOfferModalOpen = false;
-
   @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
-
-  isLoading: boolean;
 
   newCommercialProposalForm: FormGroup;
   newCommercialProposalFormHelper: FormGroup;
@@ -57,13 +57,14 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   ngOnInit() {
     this.newCommercialProposalForm = this.formBuilder.group({
-      supplierContragentId: [null, Validators.required],
-      priceWithVat: [null, [Validators.required, Validators.min(1)]],
-      currency: ['RUB', Validators.required],
-      quantity: [null, [Validators.required, Validators.min(1)]],
-      measureUnit: [null, Validators.required],
-      deliveryDate: [null, [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: ['30 дней по факту поставки', Validators.required],
+      id: [this.defaultCPValue('id', null)],
+      supplierContragentId: [this.defaultCPValue('supplierContragentId'), Validators.required],
+      priceWithVat: [this.defaultCPValue('priceWithVat', this.position.startPrice || null), [Validators.required, Validators.min(1)]],
+      currency: [this.defaultCPValue('currency', this.position.currency || null), Validators.required],
+      quantity: [this.defaultCPValue('quantity', this.position.quantity || null), [Validators.required, Validators.min(1)]],
+      measureUnit: [this.defaultCPValue('measureUnit', this.position.measureUnit || null), Validators.required],
+      deliveryDate: [this.defaultDeliveryDate, [Validators.required, CustomValidators.futureDate()]],
+      paymentTerms: [this.defaultCPValue('paymentTerms', this.position.paymentTerms || null), Validators.required],
       documents: this.formBuilder.array([]),
     });
 
@@ -71,6 +72,15 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       contragentName: [null, Validators.required],
       contragent: [null, [Validators.required, (control) => this.supplierOfferExists(control)]],
     });
+
+    if (this.commercialProposal) {
+      const contragentName = this.commercialProposal.supplierContragentName;
+      this.newCommercialProposalFormHelper.get("contragentName").setValue(contragentName, { emitEvent: false });
+
+      this.newCommercialProposalFormHelper.get("contragentName").disable();
+      this.newCommercialProposalFormHelper.get("contragent").disable();
+      this.newCommercialProposalForm.get("supplierContragentId").disable();
+    }
   }
 
   ngAfterViewInit() {
@@ -110,15 +120,20 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   }
 
   submit() {
-    this.isLoading = true;
     this.newCommercialProposalForm.disable();
 
     const body = this.newCommercialProposalForm.value;
 
     // Отправляем КП
-    this.offersService.addOffer(this.position.request.id, this.position.id, body).subscribe(tp => {
-      this.addOffer.emit(tp);
-    });
+    if (!this.editMode) {
+      this.offersService.addOffer(this.position.request.id, this.position.id, body).subscribe(cp => {
+        this.create.emit(cp);
+      });
+    } else {
+      this.offersService.editOffer(this.position.request.id, this.position.id, body).subscribe(cp => {
+        this.edit.emit(cp);
+      });
+    }
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {
@@ -177,6 +192,13 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       this.dateIsLaterThanNeeded = controlDate.isBefore(validationDate);
     }
   }
+
+  private get defaultDeliveryDate() {
+    const deliveryDate = this.defaultCPValue('deliveryDate', this.position.deliveryDate);
+    return deliveryDate ? moment(new Date(deliveryDate)).format('DD.MM.YYYY') : null;
+  }
+
+  defaultCPValue = (field: keyof CommercialProposal, defaultValue: any = "") => this.commercialProposal && this.commercialProposal[field] || defaultValue;
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

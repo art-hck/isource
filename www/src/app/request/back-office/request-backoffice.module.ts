@@ -40,7 +40,6 @@ import { RequestTechnicalProposalComponent } from "./components/request-technica
     RequestTechnicalProposalComponent,
     RequestCommercialProposalsComponent,
     RequestCommercialProposalsCreateComponent
-
   ],
   imports: [
     RequestBackofficeRoutingModule,

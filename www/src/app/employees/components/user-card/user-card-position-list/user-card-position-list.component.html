@@ -1,0 +1,34 @@
+<clr-datagrid class="positions-list-datagrid">
+
+  <clr-dg-row *ngFor="let position of positions">
+    <clr-dg-cell class="position-request-number clr-col-1 clr-align-self-center">
+      <b>{{ position.requestNumber }}</b>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="position-name clr-col clr-align-self-center">
+      <b>{{ position.name }}</b>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="position-quantity clr-col-2 clr-align-self-center">
+      {{ position.quantity }} <span class="gray">{{ position.measureUnit }}</span>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="position-delivery-date clr-col-2 clr-align-self-center">
+      <span *ngIf="position.isDeliveryDateAsap">
+        Как можно скорее
+      </span>
+
+      <span *ngIf="!position.isDeliveryDateAsap">
+       {{ position.deliveryDate | date:'dd.MM.yyyy' }}
+      </span>
+    </clr-dg-cell>
+
+    <clr-dg-cell class="position-status clr-col-2 clr-align-self-center"
+                 [ngClass]="{ 'bold-text' : position.status.name === 'NEW' }">
+      <uxg-position-status  [label]="position.status.label" [status]="position.status.name">
+      </uxg-position-status>
+    </clr-dg-cell>
+
+  </clr-dg-row>
+
+</clr-datagrid>

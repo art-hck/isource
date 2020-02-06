@@ -35,6 +35,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   @Output() addOffer = new EventEmitter<RequestPosition>();
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
   @Output() addOffersTemplate = new EventEmitter<File[]>();
+  @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
 
   supplier: ContragentList;
 
@@ -121,6 +122,10 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   newCommercialProposal(position) {
     this.addOffer.emit(position);
+  }
+
+  editCommercialProposal(position, linkedOffer) {
+    this.editOffer.emit({position, linkedOffer});
   }
 
   availableCancelPublishOffers(requestPosition: RequestPosition) {

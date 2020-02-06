@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Observable, of } from "rxjs";
 import { Request } from "../../models/request";
@@ -12,7 +12,6 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { UxgPopoverComponent } from "uxg";
 
 @Component({
   selector: 'app-request',

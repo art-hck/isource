@@ -13,4 +13,13 @@ export class CommercialProposal {
   positions: TechnicalProposalPosition[];
   status: string;
   statusChangedDate: Date;
+
+  supplierContragentName: string;
+  supplierContragentId: Uuid;
+  priceWithVat: string;
+  paymentTerms: string;
+  deliveryDate: string;
+  measureUnit: string;
+  quantity: string;
+  currency: string;
 }
