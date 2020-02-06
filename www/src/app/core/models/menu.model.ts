@@ -36,5 +36,11 @@ export const Menu: MenuModel[] = [
     text: 'Контрагенты',
     path: 'contragents',
     children: []
+  },
+  {
+    text: 'Сотрудники',
+    path: 'employees',
+    feature: 'employees',
+    children: []
   }
 ];

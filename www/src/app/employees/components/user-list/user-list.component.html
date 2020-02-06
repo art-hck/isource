@@ -1,0 +1,49 @@
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
+
+<ng-container *ngIf="users; else loading">
+
+  <clr-datagrid class="user-list-datagrid">
+
+    <clr-dg-column class="request-number clr-col">
+      Имя сотрудника
+    </clr-dg-column>
+
+    <clr-dg-column class="request-published clr-col-4">
+      E-mail
+    </clr-dg-column>
+
+    <clr-dg-column class="phone clr-col-2">
+      Телефон
+    </clr-dg-column>
+
+    <clr-dg-column class="requests-positions-count clr-col-1">
+      Заявок/позиций
+    </clr-dg-column>
+
+
+    <clr-dg-row *ngFor="let user of users"
+                (click)="onRowClick(user.user.id)">
+
+      <clr-dg-cell class="user-full-name clr-col">
+        <b>{{ user.user.fullName}}</b>
+      </clr-dg-cell>
+
+      <clr-dg-cell class="user-email clr-col-4">
+        <a href="mailto:{{ user.user.username }}">{{ user.user.username }}</a>
+      </clr-dg-cell>
+
+      <clr-dg-cell class="phone clr-col-2">
+        {{ user.user.phone || 'не указан' }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="requests-positions-count clr-col-1">
+        {{ user.reqCount }}<span class="gray">/</span>{{ user.posCount }}
+      </clr-dg-cell>
+
+    </clr-dg-row>
+
+  </clr-datagrid>
+
+</ng-container>
