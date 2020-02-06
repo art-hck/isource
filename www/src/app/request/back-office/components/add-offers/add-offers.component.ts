@@ -503,7 +503,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   onSendOffersTemplateFilesClick(): void {
-    this.offersService.addOffersFromExcel(this.request, this.files).subscribe((data: any) => {
+    this.offersService.addOffersFromExcel(this.request.id, this.files).subscribe((data: any) => {
       Swal.fire({
         width: 400,
         html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +

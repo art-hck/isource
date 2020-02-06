@@ -1,0 +1,36 @@
+<div class="app-row">
+  <div class="app-col app-bold">
+    <div class="upload-area" hoverClass="upload-area-hover" (appOnDropFile)="addDocument($event)">
+      <div>Перетащите заполненный шаблон сюда</div>
+    </div>
+  </div>
+
+  <div class="app-col app-row clr-justify-content-between clr-flex-column">
+    <div class="app-secondary-color">
+      Вы можете перетащить заполненный шаблон в окно слева, или нажать на кнопку ниже, и выбрать нужный файл в окне проводника
+    </div>
+    <div>
+      <button type="button" uxgButton secondary (click)="uploadEl.click()">Загрузить заполненный шаблон
+      </button>
+      <input #uploadEl type="file" multiple (change)="addDocument($event.target.files)"/>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="documents.length !== 0">
+  <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+  <div class="documents">
+    <div class="app-row">
+      <div class="app-col" *ngFor="let document of documents">
+        <document-icon [name]="document.name"></document-icon>
+        <div class="documents-title">
+          <div>{{ document.name }}</div>
+        </div>
+        <div class="clr-align-self-start">
+          <button type="button" uxgButton link icon clear (click)="removeDocument(document)">
+            <clr-icon shape="app-trash" size="12"></clr-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
