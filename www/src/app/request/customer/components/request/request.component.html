@@ -3,9 +3,9 @@
     <app-request
       [positions]="positions"
       [request]="request"
-      (addPosition)="getPositions()"
-      (addGroup)="getPositions()"
-      (addResponsible)="getPositions()"
+      (addPosition)="updatePositions()"
+      (addGroup)="updatePositions()"
+      (addResponsible)="updatePositions()"
       (publish)="publish(request)"
       (reject)="reject(request)"
       (approve)="approve(request)"
