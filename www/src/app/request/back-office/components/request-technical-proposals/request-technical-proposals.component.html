@@ -30,19 +30,22 @@
         (create)="addTechnicalProposal($event)"
       ></app-request-technical-proposals-create>
 
-        <app-request-backoffice-technical-proposal
-          *ngFor="let technicalProposal of technicalProposals"
-          [request]="request"
-          [technicalProposal]="technicalProposal"
-          (update)="updateTechnicalProposal($event)"
-        ></app-request-backoffice-technical-proposal>
+      <app-request-backoffice-technical-proposal
+        *ngFor="let technicalProposal of technicalProposals"
+        [request]="request"
+        [technicalProposal]="technicalProposal"
+        (update)="updateTechnicalProposal($event)"
+      ></app-request-backoffice-technical-proposal>
 
       <clr-modal clrModalSize="lg" #procedureModal>
         <h2 class="modal-title">Создание новой процедуры</h2>
         <div class="modal-body" [style.overflow]="'visible'">
-          <app-request-technical-proposals-procedure-create
-            *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
-          </app-request-technical-proposals-procedure-create>
+        <app-request-procedure-create
+          [publicAccess]="true"
+          [positions]="positions$ | async"
+          [contragents]="contragents$ | async"
+          *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
+        </app-request-procedure-create>
         </div>
       </clr-modal>
     </div>

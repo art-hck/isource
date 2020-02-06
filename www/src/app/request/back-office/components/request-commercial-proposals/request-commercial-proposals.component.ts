@@ -17,8 +17,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   request$: Observable<Request>;
   requestPositionsWithOffers$: Observable<any>;
-  requestPositions: RequestPosition[] = [];
-  suppliers: ContragentList[] = [];
+  contragents$: Observable<ContragentList[]>;
 
   subscription = new Subscription();
 
@@ -95,6 +94,10 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.selectedLinkedOffer = data.linkedOffer;
 
     this.showEditForm = true;
+  }
+
+  updateContragents(positions: RequestPosition[]) {
+    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions);
   }
 
   ngOnDestroy() {

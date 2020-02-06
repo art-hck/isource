@@ -9,23 +9,22 @@ import { CreateProcedureRequest } from "../../models/create-procedure-request";
 import { finalize } from "rxjs/operators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { TechnicalProposalsService } from "../../services/technical-proposals.service";
-import { Observable } from "rxjs";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
-  selector: 'app-request-technical-proposals-procedure-create',
+  selector: 'app-request-procedure-create',
   templateUrl: './request-procedure-create.component.html',
   styleUrls: ['./request-procedure-create.component.scss']
 })
 export class RequestProcedureCreateComponent implements OnInit {
   @Input() procedure;
   @Input() request: Request;
+  @Input() positions: RequestPosition[];
+  @Input() contragents: ContragentList[];
   @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() publicAccess = true;
   @Output() complete = new EventEmitter();
-  contragents$: Observable<ContragentList[]>;
-  positions$: Observable<RequestPosition[]>;
+  @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
 
   form: FormGroup;
   wizzard: UxgWizzard;
@@ -46,15 +45,10 @@ export class RequestProcedureCreateComponent implements OnInit {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
-    private technicalProposalsService: TechnicalProposalsService,
-    private contragentService: ContragentService,
     private notificationService: NotificationService,
   ) {}
 
   ngOnInit() {
-    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id);
-    this.contragents$ = this.contragentService.getContragentList();
-
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
       general: ["Общие сведения", () => this.form.get('general').valid ],
@@ -91,6 +85,9 @@ export class RequestProcedureCreateComponent implements OnInit {
       this.wizzard.get("positions").disable();
       this.form.get("positions").disable();
     }
+
+    this.form.get("positions").valueChanges
+      .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
     this.form.get("properties").valueChanges
       .subscribe(properties => {

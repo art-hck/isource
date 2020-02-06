@@ -559,7 +559,7 @@ export class AddOffersComponent implements OnInit {
     this.wizard.open();
     this.wizard.setContragentLoader((procedureBasicDataPage: ProcedureBasicDataPage) => {
       return this.offersService.getContragentsWithTp(
-        this.request,
+        this.requestId,
         procedureBasicDataPage.selectedProcedurePositions
       );
     });
@@ -582,7 +582,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   protected updateContragentsWithTp(): void {
-    const contragentsWithTpData = this.offersService.getContragentsWithTp(this.request, this.requestPositions);
+    const contragentsWithTpData = this.offersService.getContragentsWithTp(this.requestId, this.requestPositions);
     const subscription = contragentsWithTpData.subscribe(
       (data: ContragentList[]) => {
         this.contragentsWithTp = data;

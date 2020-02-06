@@ -10,8 +10,10 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { ActivatedRoute } from "@angular/router";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
-import {OffersService} from "../../../back-office/services/offers.service";
-import {Request} from "../../models/request";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../core/services/feature.service";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { Request } from "../../models/request";
 import Swal from "sweetalert2";
 
 @Component({
@@ -36,6 +38,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
   @Output() addOffersTemplate = new EventEmitter<File[]>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
+  @Output() createProcedure = new EventEmitter();
 
   supplier: ContragentList;
 
@@ -51,8 +54,10 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-  private offersService: OffersService,
-  @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
+    private offersService: OffersService,
+    public featureService: FeatureService,
+    public user: UserInfoService,
+    @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
     this.appConfig = appConfig;
   }
 

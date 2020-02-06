@@ -1,15 +1,30 @@
-<ng-container *ngIf="(request$ | async) as request; else loading">
-      <app-request-commercial-proposals
-        *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers"
-        [requestPositions]="positionsWithOffers.positions"
-        [suppliers]="positionsWithOffers.suppliers"
-        [request]="request"
-        (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
-        (cancelOffer)="onCancelPublishOffers($event)"
-        (addOffer)="showAddOfferModal($event);"
-        (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
-        (editOffer)="showEditOfferModal($event)">
-      </app-request-commercial-proposals>
+<ng-container *ngIf="(request$ | async) as request; else loading;">
+  <ng-container *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers">
+    <app-request-commercial-proposals
+      [requestPositions]="positionsWithOffers.positions"
+      [suppliers]="positionsWithOffers.suppliers"
+      [request]="request"
+      (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
+      (cancelOffer)="onCancelPublishOffers($event)"
+      (addOffer)="showAddOfferModal($event)"
+      (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
+      (editOffer)="showEditOfferModal($event)"
+      (createProcedure)="procedureModal.open()"
+    ></app-request-commercial-proposals>
+
+    <clr-modal clrModalSize="lg" #procedureModal>
+      <h2 class="modal-title">Создание новой процедуры</h2>
+      <div class="modal-body" [style.overflow]="'visible'">
+        <app-request-procedure-create
+          [publicAccess]="false"
+          [positions]="positionsWithOffers.positions"
+          [contragents]="contragents$ | async"
+          (updateSelectedPositions)="updateContragents($event)"
+          *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
+        </app-request-procedure-create>
+      </div>
+    </clr-modal>
+  </ng-container>
 </ng-container>
 
 <ng-template #loading>
