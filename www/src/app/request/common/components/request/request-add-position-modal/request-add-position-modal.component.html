@@ -3,19 +3,25 @@
   <div class="modal-body">
 
     <uxg-tabs>
-      <uxg-tab-title #template disabled title="Not implemented">Загрузить из шаблона</uxg-tab-title>
+      <uxg-tab-title #template>Загрузить из шаблона</uxg-tab-title>
       <uxg-tab-title #manual [active]="true">Заполнить вручную</uxg-tab-title>
     </uxg-tabs>
 
     <ng-container *uxgTab="template">
-      <!-- @TODO Implement! -->
+      <!-- @TODO Implement new design! -->
+      <app-add-from-excel
+        (submit)="uploadFromTemplate.emit($event); close()"
+        [templateUrl]="'assets/RequestTemplate.xlsx'">
+      </app-add-from-excel>
+
     </ng-container>
     <ng-container *uxgTab="manual">
       <app-request-position-form
         *ngIf="!!modal && modal._open"
         [requestId]="request.id"
         (cancel)="close()"
-        (positionChange)="success.emit($event); modal.close()"
+        (positionChange)="success.emit($event); close()"
+        [onDrafted]="onDrafted"
       ></app-request-position-form>
     </ng-container>
 

@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { Observable, Subscription } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { mapTo, tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -39,7 +39,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
   }
 
   updateData(position: RequestPosition) {
-    this.position$ = this.position$.pipe(mapTo(position));
+    this.setPageInfo(position);
+    this.position$ = of(position);
   }
 
   setPageInfo(position: RequestPosition) {
@@ -47,8 +48,8 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/backoffice` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/backoffice/${this.requestId}/new`},
-      { label: position.name, link: `/requests/backoffice/${this.requestId}/new/${position.id}` }
+      { label: `Заявка №${position.request.number}`, link: `/requests/backoffice/${this.requestId}`},
+      { label: position.name, link: `/requests/backoffice/${this.requestId}/${position.id}` }
     ];
   }
 
@@ -60,6 +61,12 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
       this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
     );
   }
+
+  // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
+  sendOnApprove = (position: RequestPosition) => this.requestService
+    .publishRequest(this.requestId)
+    // После публикации получаем актуальную инфу о позиции
+    .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

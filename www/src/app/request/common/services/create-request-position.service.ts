@@ -1,7 +1,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import { Observable } from 'rxjs';
-import {Request} from "../models/request";
+import { Uuid } from "../../../cart/models/uuid";
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +13,16 @@ export class CreateRequestPositionService {
   ) {
   }
 
-  addCustomerRequestPositionsFromExcel(request: Request, files: File[]): Observable<any> {
+  addCustomerRequestPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
     return this.api.post(
-      `requests/customer/${request.id}/add-positions/from-excel`,
+      `requests/customer/${requestId}/add-positions/from-excel`,
       this.convertModelToFormData(files, null, 'files')
     );
   }
 
-  addBackofficeRequestPositionsFromExcel(request: Request, files: File[]): Observable<any> {
+  addBackofficeRequestPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
     return this.api.post(
-        `requests/backoffice/${request.id}/add-positions/from-excel`,
+        `requests/backoffice/${requestId}/add-positions/from-excel`,
         this.convertModelToFormData(files, null, 'files')
     );
   }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";

@@ -3,8 +3,6 @@ import { RequestCommonModule } from "../common/request-common.module";
 import { RequestBackofficeRoutingModule } from "./request-backoffice-routing.module";
 
 import { AddOffersComponent } from "./components/add-offers/add-offers.component";
-import { AddTechnicalProposalsComponent } from './components/add-technical-proposals/add-technical-proposals.component';
-import { BackOfficeRequestViewComponent } from './components/back-office-request-view/back-office-request-view.component';
 import { DesignDocumentationService } from "./services/design-documentation.service";
 import { OffersService } from "./services/offers.service";
 import { ProcedureService } from "./services/procedure.service";
@@ -28,8 +26,6 @@ import { RequestTechnicalProposalComponent } from "./components/request-technica
 @NgModule({
   declarations: [
     AddOffersComponent,
-    AddTechnicalProposalsComponent,
-    BackOfficeRequestViewComponent,
     RequestComponent,
     RequestListViewComponent,
     SupplierSelectComponent,

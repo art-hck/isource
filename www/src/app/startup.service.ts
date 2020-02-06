@@ -1,6 +1,5 @@
 import { AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { Injectable } from "@angular/core";
-import { interval } from "rxjs/internal/observable/interval";
 import { UserInfoService } from "./user/service/user-info.service";
 
 /**

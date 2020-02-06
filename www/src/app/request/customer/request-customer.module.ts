@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommercialProposalsComponent } from './components/commercial-proposals/commercial-proposals.component';
-import { CustomerRequestViewComponent } from './components/customer-request-view/customer-request-view.component';
 import { QualityComponent } from "./components/quality/quality.component";
 import { QualityService } from "./services/quality.service";
 import { RequestCommonModule } from "../common/request-common.module";
@@ -20,7 +19,6 @@ import { RequestCommercialProposalsComponent } from './components/request-commer
     CommercialProposalsComponent,
     CustomerRequestComponent,
     CustomerRequestListViewComponent,
-    CustomerRequestViewComponent,
     QualityComponent,
     RequestPositionComponent,
     TechnicalProposalsComponent,

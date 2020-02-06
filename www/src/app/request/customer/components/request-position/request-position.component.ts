@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
-import { mapTo, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -36,7 +36,8 @@ export class RequestPositionComponent implements OnInit {
   }
 
   updateData(position: RequestPosition) {
-    this.position$ = this.position$.pipe(mapTo(position));
+    this.setPageInfo(position);
+    this.position$ = of(position);
   }
 
   setPageInfo(position: RequestPosition) {
@@ -44,8 +45,8 @@ export class RequestPositionComponent implements OnInit {
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/customer` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}/new` },
-      { label: position.name, link: `/requests/customer/${this.requestId}/new/${position.id}` }
+      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}` },
+      { label: position.name, link: `/requests/customer/${this.requestId}/${position.id}` }
     ];
   }
 }
