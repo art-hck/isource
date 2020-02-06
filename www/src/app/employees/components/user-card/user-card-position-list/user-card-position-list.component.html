@@ -1,6 +1,6 @@
 <clr-datagrid class="positions-list-datagrid">
 
-  <clr-dg-row *ngFor="let position of positions">
+  <clr-dg-row *ngFor="let position of positions" (click)="onRowClick(position)">
     <clr-dg-cell class="position-request-number clr-col-1 clr-align-self-center">
       <b>{{ position.requestNumber }}</b>
     </clr-dg-cell>
