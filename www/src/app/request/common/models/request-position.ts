@@ -38,6 +38,7 @@ export class RequestPosition extends RequestPositionList {
   linkedOffers: RequestOfferPosition[];
   hasProcedure: boolean;
   procedureId: string;
+  procedureTitle: string;
   procedureStartDate?: Date;
   procedureEndDate?: Date;
   isDraftEntity: boolean;

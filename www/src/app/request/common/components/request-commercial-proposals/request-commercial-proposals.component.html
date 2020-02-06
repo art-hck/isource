@@ -13,8 +13,8 @@
             </button>
           </ng-container>
 
-          <!-- Новое КП  -->
-          <button type="button" uxgButton secondary iconText [disabled]="true">
+          <!-- Добавить КП  из шаблона -->
+          <button type="button" uxgButton secondary iconText (click)="uploadCommercialProposals.open()">
             <clr-icon shape="app-plus"></clr-icon>
             <span>Создать КП из шаблона</span>
           </button>
@@ -39,12 +39,12 @@
         <div class="app-row" *ngIf="positionHasFinishedProcedure(position)">
           <div class="app-col">
             <span class="procedure-name">
-             <b>Процедура №{{ position.procedureId }}</b>
+             <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
            </span>
           </div>
           <div class="app-col app-col-aside status">
               <span class="offer-status app-success-color">
-            <clr-icon shape="app-check"></clr-icon>Завершена
+            <clr-icon shape="app-check"></clr-icon>Завершена {{ position.procedureEndDate | date :'shortDate' }}
           </span>
             <button type="button" uxgButton secondary iconText [disabled]="true">
               Уторговать
@@ -57,12 +57,12 @@
         <div class="app-row" *ngIf="positionHasProcedure(position)">
           <div class="app-col">
             <span class="procedure-name">
-             <b>Процедура №{{ position.procedureId }}</b>
+             <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
            </span>
           </div>
           <div class="app-col app-col-aside status">
               <span class="offer-status app-ghost-color">
-            <clr-icon shape="app-waiting"></clr-icon>Идет процедура
+            <clr-icon shape="app-waiting"></clr-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }}
           </span>
             <button type="button" uxgButton secondary iconText [disabled]="true">
               Продлить
@@ -158,3 +158,25 @@
     </ng-container>
   </ng-container>
 </form>
+<!-- Модальное окно загрузки КП из шаблона -->
+<clr-modal #uploadCommercialProposals clrModalSize="lg">
+  <h2 class="modal-title"><b>Загрузить коммерческое предложение из шаблона</b></h2>
+  <div class="modal-body">
+    <p class="app-secondary-color">Вы можете загрузить коммерческие предложения списком, если заполните шаблон xls таблицы (
+    <span class="file-link">
+      <a (click)="onDownloadOffersTemplate()"><b>скачать шаблон</b></a></span>), и загрузить файл в систему.</p>
+
+<app-template-upload #templateUpload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+      <div class="modal-footer">
+        <button uxgButton secondary lg (click)="uploadCommercialProposals.close(); templateUpload.clear()" type="button">Отмена</button>
+        <button uxgButton primary lg (click)="onSendOffersTemplateFilesClick(); templateUpload.clear()"
+                [disabled]="this.files.length === 0">Загрузить</button>
+      </div>
+
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
+  </div>
+</clr-modal>

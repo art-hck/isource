@@ -9,6 +9,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
 import { Observable, Subscription } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
+import Swal from "sweetalert2";
 
 @Component({ templateUrl: './request-commercial-proposals.component.html' })
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
@@ -103,4 +104,31 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  onSendOffersTemplateFilesClick(files: File[]): void {
+    this.offersService.addOffersFromExcel(this.requestId, files).subscribe((data: any) => {
+      Swal.fire({
+        width: 400,
+        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
+          '<button id="submit" class="btn btn-primary">' +
+          'ОК' + '</button>',
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          const content = Swal.getContent();
+          const $ = content.querySelector.bind(content);
+
+          const submit = $('#submit');
+          submit.addEventListener('click', () => {
+            this.updatePositionsAndSuppliers();
+            Swal.close();
+          });
+        }
+      });
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
+  }
 }

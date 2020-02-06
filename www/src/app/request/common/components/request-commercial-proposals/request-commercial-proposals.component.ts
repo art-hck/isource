@@ -12,6 +12,9 @@ import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-conf
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
+import { OffersService } from "../../../back-office/services/offers.service";
+import { Request } from "../../models/request";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-request-commercial-proposals',
@@ -23,14 +26,17 @@ export class RequestCommercialProposalsComponent implements OnInit {
   form: FormGroup;
   requestId: Uuid;
   appConfig: GpnmarketConfigInterface;
+  files: File[] = [];
 
   isFolded = [];
 
+  @Input() request: Request;
   @Input() requestPositions: RequestPosition[] = [];
   @Input() suppliers: ContragentList[];
   @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
   @Output() addOffer = new EventEmitter<RequestPosition>();
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
+  @Output() addOffersTemplate = new EventEmitter<File[]>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
   @Output() createProcedure = new EventEmitter();
 
@@ -48,6 +54,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private offersService: OffersService,
     public featureService: FeatureService,
     public user: UserInfoService,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
@@ -160,5 +167,17 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   isOverflow(positionCard: HTMLElement) {
     return positionCard.scrollHeight > positionCard.clientHeight + 30;
+  }
+
+  onDownloadOffersTemplate(): void {
+    this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendOffersTemplateFilesClick() {
+    this.addOffersTemplate.emit(this.files);
   }
 }

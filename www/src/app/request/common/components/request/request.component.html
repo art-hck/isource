@@ -125,9 +125,10 @@
 
         <!-- Группа -->
         <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
-          <a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start">
+          <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start"-->
+          <div class="app-row app-link-no-color app-row-group clr-align-items-start">
             <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
-          </a>
+          </div>
         </ng-container>
       </ng-container>
     </div>
@@ -181,10 +182,10 @@
         <b>{{ group.name ||"Без имени" }} </b>
         <span class="app-ghost-color">({{group.positions.length}})</span>
       </div>
-      <div class="app-col" [style.max-width.px]="460">
-        <!-- @TODO Implement -->
+      <!-- @TODO Implement -->
+      <!--div class="app-col" [style.max-width.px]="460">
         2 как можно скорее | 01.01.2020 — ...
-      </div>
+      </div-->
       <div class="app-col app-row clr-flex-grow-0">
         <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="folded.value ? 'down' : 'up'"
             (click)="folded.setValue(!folded.value); $event.preventDefault(); $event.stopPropagation();"></clr-icon>

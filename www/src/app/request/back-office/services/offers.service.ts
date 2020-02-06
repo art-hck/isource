@@ -79,9 +79,9 @@ export class OffersService {
       });
   }
 
-  addOffersFromExcel(request: Request, files: File[]): Observable<any> {
+  addOffersFromExcel(requestId: Uuid, files: File[]): Observable<any> {
     return this.api.post(
-      `requests/backoffice/${request.id}/add-offers-from-excel`,
+      `requests/backoffice/${requestId}/add-offers-from-excel`,
       this.convertModelToFormData(files, null, 'files')
     );
   }
