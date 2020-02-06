@@ -6,7 +6,7 @@
   text-align: left;
 }
 
-.from-excel-request-content span {
+.app-secondary-color {
   line-height: 1.5;
   display: block;
   padding-bottom: 10px;
@@ -28,10 +28,7 @@
   box-shadow: 0 0 0 0;
   border-radius: 0;
   margin-bottom: 0;
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
-  border-bottom: 1px solid #d7d7d7;
+  border: 0;
 }
 
 ::ng-deep label.file-upload-label  {

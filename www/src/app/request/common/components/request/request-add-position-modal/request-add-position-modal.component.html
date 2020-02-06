@@ -8,12 +8,10 @@
     </uxg-tabs>
 
     <ng-container *uxgTab="template">
-      <!-- @TODO Implement new design! -->
       <app-add-from-excel
         (submit)="uploadFromTemplate.emit($event); close()"
         [templateUrl]="'assets/RequestTemplate.xlsx'">
       </app-add-from-excel>
-
     </ng-container>
     <ng-container *uxgTab="manual">
       <app-request-position-form
