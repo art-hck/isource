@@ -1,15 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { RequestPosition } from "../../common/models/request-position";
-import { ProcedureInfo } from "../models/procedure-info";
-import { ProcedureProperties } from "../models/procedure-properties";
-import { RequestDocument } from "../../common/models/request-document";
-import { ContragentList } from "../../../contragent/models/contragent-list";
 import { RequestOfferPosition } from "../../common/models/request-offer-position";
 import { Observable } from "rxjs";
 import { Request } from "../../common/models/request";
-import { PublishProcedureInfo } from '../models/publish-procedure-info';
 import { map } from 'rxjs/operators';
 import { PublishProcedureResult } from '../models/publish-procedure-result';
 import { PublishProcedureRequest } from '../models/publish-procedure-request';

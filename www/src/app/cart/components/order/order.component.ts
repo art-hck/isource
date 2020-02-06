@@ -3,7 +3,7 @@ import { CartStoreService } from '../../services/cart-store.service';
 import { OrderFormInfo } from '../../models/order-form-info';
 import { Router } from '@angular/router';
 import { CartService } from "../../services/cart.service";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { Subscription } from "rxjs";
 import { ClrLoadingState } from "@clr/angular";

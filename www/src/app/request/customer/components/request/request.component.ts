@@ -1,57 +1,88 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
 import { ActivatedRoute } from "@angular/router";
-import { tap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
+import { CreateRequestPositionService } from "../../../common/services/create-request-position.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   templateUrl: './request.component.html'
 })
-export class RequestComponent implements OnInit, OnDestroy {
+export class RequestComponent implements OnInit {
 
   request$: Observable<Request>;
   positions$: Observable<RequestPositionList[]>;
-  subscription = new Subscription();
+  requestId: Uuid;
 
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
+    private createRequestPositionService: CreateRequestPositionService,
     private bc: UxgBreadcrumbsService,
+    private notificationService: NotificationService,
     private title: Title
   ) {}
 
   ngOnInit() {
-    const requestId = this.route.snapshot.paramMap.get('id');
+    this.requestId = this.route.snapshot.paramMap.get('id');
+    this.request$ = this.getRequest();
+    this.positions$ = this.getPositions();
+  }
 
-    this.request$ = this.requestService.getRequestInfo(requestId).pipe(
+  getRequest() {
+    return this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.title.setTitle(request.name || "Заявка №" + request.id);
 
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/customer" },
-          { label: this.title.getTitle(), link: "/requests/customer/" + request.id }
+          { label: `Заявка №${request.number}`, link: "/requests/customer/" + request.id }
         ];
       })
     );
-    this.getPositions();
   }
 
   getPositions() {
-    const requestId = this.route.snapshot.paramMap.get('id');
-
-    this.positions$ = this.requestService.getRequestPositions(requestId);
+    return this.requestService.getRequestPositions(this.requestId);
   }
 
   publish(request: Request) {
-    this.subscription.add(this.requestService
-      .publishRequest(request.id).subscribe(() => this.getPositions()));
+    this.request$ = this.requestService.publishRequest(request.id).pipe(
+        switchMap(() => this.getRequest()),
+        tap(() => this.positions$ = this.getPositions())
+      );
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  reject(request: Request) {
+    this.request$ = this.requestService.rejectRequest(request.id, "").pipe(
+      switchMap(() => this.getRequest()),
+      tap(() => this.positions$ = this.getPositions())
+    );
+  }
+
+  approve(request: Request) {
+    this.request$ = this.requestService.approveRequest(request.id).pipe(
+      switchMap(() => this.getRequest()),
+      tap(() => this.positions$ = this.getPositions())
+    );
+  }
+
+  uploadFromTemplate(requestData: { files: File[], requestName: string }) {
+    this.positions$ = this.createRequestPositionService
+      .addCustomerRequestPositionsFromExcel(this.requestId, requestData.files).pipe(
+        catchError((e) => {
+          this.notificationService.toast(
+            'Ошибка в шаблоне' + (e && e.error && e.error.detail || ""), "error"
+          );
+          return null;
+        }),
+        switchMap(() => this.getPositions())
+      );
   }
 }

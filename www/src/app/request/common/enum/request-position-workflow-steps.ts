@@ -103,7 +103,7 @@ export const RequestPositionWorkflowStepsGroupsInfo: RequestPositionWorkflowStep
     color: "#56b9f2"
   },
   {
-    url: "contract",
+    url: "contracts",
     label: "Договор",
     statuses: RequestPositionWorkflowStepsGroups.CONTRACT,
     positions: [],

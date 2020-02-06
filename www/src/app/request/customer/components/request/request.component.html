@@ -6,7 +6,10 @@
       (addPosition)="getPositions()"
       (addGroup)="getPositions()"
       (addResponsible)="getPositions()"
-      (publish)="publish($event)"
+      (publish)="publish(request)"
+      (reject)="reject(request)"
+      (approve)="approve(request)"
+      (uploadFromTemplate)="uploadFromTemplate($event)"
     ></app-request>
   </ng-container>
 </ng-container>

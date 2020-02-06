@@ -1,3 +1,21 @@
+<!-- @TODO Выпилить после реализации попозиционного согласования -->
+<div class="notification-bar" *ngIf="featureService.allowed('approveRequest', user.roles) && (isOnApproval || isDraft)">
+  <div class="container">
+      <div class="app-row">
+      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
+        <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
+        <button uxgButton secondary  (click)="publish.emit()">Опубликовать все</button>
+
+      </div>
+      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
+        <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
+        <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
+        <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <form [formGroup]="form">
   <div class="app-row">
 
@@ -23,23 +41,35 @@
         </div>
 
         <!-- Назначиь ответственного -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isSeniorBackoffice()">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestResponsible', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
             <clr-icon shape="app-user" size="16"></clr-icon>
             <span>Назначить</span>
           </button>
+          <app-request-add-responsible-modal
+            #addResponsibleModal
+            [request]="request"
+            [positions]="checkedPositions"
+            (success)="addResponsible.emit($event)"
+          ></app-request-add-responsible-modal>
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestGroup', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
           </button>
+          <app-request-add-group-modal
+            #addGroupModal
+            [request]="request"
+            [positions]="checkedPositions"
+            (success)="addGroup.emit($event)"
+          ></app-request-add-group-modal>
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
           <button uxgButton clear link [disabled]="true">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
@@ -76,21 +106,6 @@
             <clr-icon shape="app-sort2"></clr-icon>
             <span>Фильтр</span>
           </button>
-
-          <ng-container *ngIf="isDraft && featureService.available('publishRequest', user.roles)">
-            <uxg-popover #publishPopover>
-              <button uxgButton primary iconText  (click)="publish.emit(request)">
-                <clr-icon shape="app-publish"></clr-icon>
-                <span>Опубликовать</span>
-              </button>
-              <div *uxgPopoverContent="'app-popover-content-top-right'" (click)="publishPopover.hide()">
-                <p>В заявке <b>{{ draftPositions.length }}</b>
-                  {{ draftPositions.length | pluralize : false : 'неопубликованная позиция' : 'неопубликованные позиции' : 'неопубликованных позиций'}}
-                  со статусом <b>черновик</b>
-                </p>
-              </div>
-            </uxg-popover>
-          </ng-container>
         </div>
       </div>
     </div>
@@ -193,20 +208,7 @@
 <app-request-add-position-modal
   #addPositionModal
   [request]="request"
-  (success)="addPosition.emit($event)">
-</app-request-add-position-modal>
-
-<app-request-add-responsible-modal
-  #addResponsibleModal
-  [request]="request"
-  [positions]="checkedPositions"
-  (success)="addResponsible.emit($event)">
-</app-request-add-responsible-modal>
-
-<app-request-add-group-modal
-  #addGroupModal
-  [request]="request"
-  [positions]="checkedPositions"
-  (success)="addGroup.emit($event)">
-</app-request-add-group-modal>
-
+  [onDrafted]="onDrafted"
+  (success)="addPosition.emit($event)"
+  (uploadFromTemplate)="uploadFromTemplate.emit($event)"
+></app-request-add-position-modal>

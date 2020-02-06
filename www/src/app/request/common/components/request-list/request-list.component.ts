@@ -19,7 +19,6 @@ import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
 import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { EventTypes } from "../../../../websocket/event-types";
-import { Message } from "../../models/message";
 import { SubscriptionLike } from "rxjs";
 
 @Component({
