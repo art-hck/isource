@@ -104,6 +104,7 @@
         </div>
         <div class="app-row" #positionCard>
           <div class="app-col card linked-offer add-offer"
+               [class.clickable]="isLinkedOfferClickable(position)"
                *ngIf="canAddOffer(position)"
                (click)="newCommercialProposal(position)">
             <clr-icon shape="app-plus"></clr-icon>
@@ -146,8 +147,8 @@
                   </span>
                 </ng-container>
               </p>
-              <span class="supplier">
-              <app-contragent-info-link [contragent]="findSupplier(linkedOffer.supplierContragentId)"></app-contragent-info-link>
+              <span class="supplier" (click)="preventParentClick($event)">
+                <app-contragent-info-link [contragent]="findSupplier(linkedOffer.supplierContragentId)"></app-contragent-info-link>
               </span>
             </div>
           </div>

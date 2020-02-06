@@ -96,7 +96,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   }
 
   positionWithWinner(requestPosition: RequestPosition): boolean {
-    return requestPosition.status === RequestPositionWorkflowSteps.WINNER_SELECTED;
+    return requestPosition.linkedOffers.some(linkedOffer => linkedOffer.isWinner === true);
   }
 
   correctDeliveryDate(linkedOfferDeliveryDate: string, requestPositionDeliveryDate: string): boolean {
@@ -124,8 +124,21 @@ export class RequestCommercialProposalsComponent implements OnInit {
     this.addOffer.emit(position);
   }
 
-  editCommercialProposal(position, linkedOffer) {
+  isLinkedOfferClickable(position): boolean {
+    return (!this.positionWithWinner(position) && !this.positionIsSentForAgreement(position));
+  }
+
+  editCommercialProposal(position, linkedOffer): void {
+    if (!this.isLinkedOfferClickable(position)) {
+      return;
+    }
+
     this.editOffer.emit({position, linkedOffer});
+  }
+
+  preventParentClick(ev): void {
+    ev.preventDefault();
+    ev.stopPropagation();
   }
 
   availableCancelPublishOffers(requestPosition: RequestPosition) {
