@@ -6,10 +6,12 @@
         <div class="app-col app-basis-auto clr-flex-grow-1 actions">
 
           <!-- Создать процедуру  -->
-          <button type="button" uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-plus"></clr-icon>
-            <span>Создать процедуру</span>
-          </button>
+          <ng-container *ngIf="featureService.available('createProcedure', user.roles)">
+            <button type="button" uxgButton secondary iconText (click)="createProcedure.emit()">
+              <clr-icon shape="app-plus"></clr-icon>
+              <span>Создать процедуру</span>
+            </button>
+          </ng-container>
 
           <!-- Новое КП  -->
           <button type="button" uxgButton secondary iconText [disabled]="true">

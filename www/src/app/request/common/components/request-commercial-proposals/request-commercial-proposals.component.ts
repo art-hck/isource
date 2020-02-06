@@ -10,6 +10,8 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { ActivatedRoute } from "@angular/router";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-commercial-proposals',
@@ -30,6 +32,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   @Output() addOffer = new EventEmitter<RequestPosition>();
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
+  @Output() createProcedure = new EventEmitter();
 
   supplier: ContragentList;
 
@@ -45,6 +48,8 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    public featureService: FeatureService,
+    public user: UserInfoService,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
     this.appConfig = appConfig;
   }

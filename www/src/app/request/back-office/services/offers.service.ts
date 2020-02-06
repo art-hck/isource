@@ -86,11 +86,11 @@ export class OffersService {
     );
   }
 
-  getContragentsWithTp(request: Request, requestPositions: RequestPosition[]): Observable<ContragentList[]> {
+  getContragentsWithTp(requestId: Uuid, requestPositions: RequestPosition[]): Observable<ContragentList[]> {
     const ids = requestPositions.map(item => item.id);
 
     return this.api.post(
-      `requests/backoffice/${request.id}/contragents-with-tp`,
+      `requests/backoffice/${requestId}/contragents-with-tp`,
       {positions: ids}
     ).pipe(map((data) => {
       return data as ContragentList[];

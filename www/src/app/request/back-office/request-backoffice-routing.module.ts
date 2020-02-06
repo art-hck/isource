@@ -25,26 +25,12 @@ const routes: Routes = [
     data: { feature: "backofficeRequest" },
     children: [
       {
-        path: 'new',
-        children: [
-          {
-            path: 'commercial-proposals',
-            component: RequestCommercialProposalsComponent,
-            data: { title: "Коммерческие предложения" }
-          },
-          {
-            path: ':position-id',
-            component: RequestPositionComponent
-          }
-        ]
-      },
-      {
         path: '',
         component: BackOfficeRequestComponent,
       },
       {
         path: 'commercial-proposals',
-        component: AddOffersComponent,
+        component: RequestCommercialProposalsComponent,
         data: { title: "Коммерческие предложения" }
       },
       {

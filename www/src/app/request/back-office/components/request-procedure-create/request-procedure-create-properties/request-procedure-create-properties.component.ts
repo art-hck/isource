@@ -13,6 +13,7 @@ import { startWith } from "rxjs/operators";
 })
 export class RequestProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
   @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() publicAccess = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -30,12 +31,16 @@ export class RequestProcedureCreatePropertiesComponent implements AfterContentIn
       positionsSuppliersVisibility: this.default("positionsSuppliersVisibility", 'NameHidden'),
       positionsBestPriceType: this.default("positionsBestPriceType", 'LowerStartPrice'),
       positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating'),
-      publicAccess: this.default("publicAccess", true)
+      publicAccess: this.default("publicAccess", this.publicAccess)
     });
 
     if (this.action === 'bargain') {
       ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume']
         .forEach(k => this.form.get(k).disable());
+    }
+
+    if (!this.publicAccess) {
+      this.form.get('publicAccess').disable();
     }
 
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {

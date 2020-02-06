@@ -8,19 +8,25 @@ import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({ templateUrl: './request-technical-proposals.component.html' })
 export class RequestTechnicalProposalsComponent implements OnInit {
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
   request$: Observable<Request>;
+  positions$: Observable<RequestPosition[]>;
+  contragents$: Observable<ContragentList[]>;
   showForm = false;
 
   constructor(
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
-    private technicalProposalsService: TechnicalProposalsService
+    private technicalProposalsService: TechnicalProposalsService,
+    private contragentService: ContragentService,
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -36,6 +42,8 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       }));
 
     this.getTechnicalProposals();
+    this.getTechnicalProposalsPositions();
+    this.getTechnicalProposalsContragents();
   }
 
   getTechnicalProposals(filters = {}) {
@@ -43,6 +51,14 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
+  }
+
+  getTechnicalProposalsPositions() {
+    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
+  }
+
+  getTechnicalProposalsContragents() {
+    this.contragents$ = this.contragentService.getContragentList();
   }
 
   /**
