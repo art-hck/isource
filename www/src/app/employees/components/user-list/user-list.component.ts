@@ -26,4 +26,17 @@ export class UserListComponent implements OnInit {
   onRowClick(userId: Uuid): void {
     this.router.navigateByUrl(`/employees/${userId}/info`);
   }
+
+  /**
+   * Функция предотвращает открытие карточки сотрудника при клике на его эл. почту
+   *
+   * @param ev
+   * @param email
+   */
+  mailto(ev, email): void {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      window.open('mailto:' + email);
+  }
 }
