@@ -31,7 +31,7 @@
       </clr-dg-cell>
 
       <clr-dg-cell class="user-email clr-col-4">
-        <a href="mailto:{{ user.user.username }}">{{ user.user.username }}</a>
+        <a (click)="mailto($event, user.user.username)" href="mailto:{{ user.user.username }}">{{ user.user.username }}</a>
       </clr-dg-cell>
 
       <clr-dg-cell class="phone clr-col-2">
