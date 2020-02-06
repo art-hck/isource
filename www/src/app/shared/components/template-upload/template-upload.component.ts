@@ -9,14 +9,13 @@ export class TemplateUploadComponent implements OnInit {
 
   documents: File[] = [];
 
+  @Output() fileSelected = new EventEmitter<File[]>();
+  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+
   constructor() { }
 
   ngOnInit() {
   }
-
-  @Output() fileSelected = new EventEmitter<File[]>();
-
-  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
 
   addDocument(files: FileList) {
     this.documents = [...this.documents, ...Array.from(files)];
