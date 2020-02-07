@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestPositionList } from "../../../common/models/request-position-list";
 import { RequestService } from "../../services/request.service";
@@ -88,7 +88,7 @@ export class RequestComponent implements OnInit {
           this.notificationService.toast(
             'Ошибка в шаблоне' + (e && e.error && e.error.detail || ""), "error"
           );
-          return null;
+          return of(null);
         }),
         switchMap(() => this.getPositions())
       );
