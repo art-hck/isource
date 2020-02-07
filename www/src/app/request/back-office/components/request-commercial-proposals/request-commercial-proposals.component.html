@@ -16,12 +16,14 @@
       <h2 class="modal-title">Создание новой процедуры</h2>
       <div class="modal-body" [style.overflow]="'visible'">
         <app-request-procedure-create
-          [publicAccess]="false"
+          *ngIf="procedureModal._open"
+          [request]="request"
           [positions]="positionsWithOffers.positions"
           [contragents]="contragents$ | async"
+          [publicAccess]="false"
           (updateSelectedPositions)="updateContragents($event)"
-          *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
-        </app-request-procedure-create>
+          (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
+        ></app-request-procedure-create>
       </div>
     </clr-modal>
   </ng-container>

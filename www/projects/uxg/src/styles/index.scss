@@ -13,7 +13,8 @@
   "core/breadcrumbs",
   "core/helpers",
   "core/popover",
-  "core/scrollbar";
+  "core/scrollbar",
+  "core/wizzard";
 
 @mixin core($theme: (), $statuses: ()) {
 
@@ -29,4 +30,5 @@
   @include breadcrumbs($theme);
   @include helpers($theme);
   @include popover($theme);
+  @include wizzard($theme);
 }
