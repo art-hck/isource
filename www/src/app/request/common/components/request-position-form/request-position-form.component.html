@@ -80,8 +80,6 @@
         <app-okei-selector #measureUnit
                            formControlName="measureUnit">
         </app-okei-selector>
-        <label class="app-control-label" (click)="measureUnit.focus()">Ед. измерения</label>
-
         <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
