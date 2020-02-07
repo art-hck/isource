@@ -27,6 +27,32 @@
       </div>
     </clr-modal>
   </ng-container>
+
+  <clr-modal
+    #requestCommercialProposalModal
+    class="cp-creation-modal"
+    [(clrModalOpen)]="showForm || showEditForm"
+    [clrModalClosable]="false"
+    [clrModalSize]="'lg'"
+  >
+    <h2 class="modal-title">
+      {{ showForm ? 'Новое коммерческое предложение' : 'Редактирование коммерческого предложения'}}
+    </h2>
+
+    <div class="modal-body">
+      <app-request-commercial-proposals-create
+        *ngIf="requestCommercialProposalModal._open"
+        [position]="currentRequestPosition"
+        [commercialProposal]="selectedLinkedOffer"
+        [editMode]="showEditForm"
+        [request]="request"
+        (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
+        (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
+        (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
+      </app-request-commercial-proposals-create>
+    </div>
+  </clr-modal>
+
 </ng-container>
 
 <ng-template #loading>
@@ -35,28 +61,3 @@
   </div>
 </ng-template>
 
-<clr-modal #requestCommercialProposalModal
-           class="cp-creation-modal"
-           [(clrModalOpen)]="showForm || showEditForm"
-           [clrModalClosable]="false"
-           [clrModalSize]="'lg'">
-  <h2 class="modal-title">
-    {{
-      showForm ?
-      'Новое коммерческое предложение' :
-      'Редактирование коммерческого предложения'
-    }}
-  </h2>
-
-  <div class="modal-body">
-    <app-request-commercial-proposals-create
-            *ngIf="requestCommercialProposalModal._open"
-            [position]="currentRequestPosition"
-            [commercialProposal]="selectedLinkedOffer"
-            [editMode]="showEditForm"
-            (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
-            (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
-            (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
-    </app-request-commercial-proposals-create>
-  </div>
-</clr-modal>
