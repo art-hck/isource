@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from '@angular/core';
-import { map, publishReplay, refCount, tap } from "rxjs/operators";
+import { mapTo, publishReplay, refCount, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -51,6 +51,12 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
+  }
+
+  filter(filters: {}) {
+    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
+      this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
+    });
   }
 
   getTechnicalProposalsPositions() {
