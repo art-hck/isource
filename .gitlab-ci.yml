@@ -39,7 +39,7 @@ build preprod:
     - /bin/bash /var/www/agent/front/04.change_girs.sh
     - exit 0
   only:
-    - realease
+    - release
 
 build prod:
   stage: build
