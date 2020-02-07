@@ -14,7 +14,7 @@ import { Subscription } from "rxjs";
   }]
 })
 export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnChanges, AfterContentInit, OnDestroy {
-  @Input() items: any[];
+  @Input() items: any[] = [];
   @Input() placeholder = "";
   @Input() trackBy: (item) => any;
   @Input() filterFn: (q, item) => boolean;
@@ -60,6 +60,10 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   }
 
   setFormItems() {
+    if (!this.items) {
+      return;
+    }
+
     this.items
       .filter(() => this.form)
       .forEach(item => {
