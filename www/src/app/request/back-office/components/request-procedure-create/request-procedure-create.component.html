@@ -1,64 +1,49 @@
-<!-- Steps -->
-<div class="app-wizzard app-row app-ghost-color app-align-items-center">
-  <ng-container *ngFor="let step of wizzard; index as i">
-    <div *ngIf="i > 0" class="app-col app-grow-0 app-basis-auto"><clr-icon shape="app-arrow right"></clr-icon></div>
-    <div class="app-col app-grow-0 app-basis-auto">
-      <div class="app-row app-align-items-center">
-        <div class="app-wizzard-item" [class.active]="wizzard.isCurrent(step)" [class.completed]="step.completed" (click)="wizzard.current = step">
-          <clr-icon *ngIf="getStepIcon(step)" class="app-wizzard-item-icon" [attr.shape]="getStepIcon(step)"></clr-icon>
-          {{ i + 1 }}
-        </div>
-        <div>{{ step.label }}</div>
-      </div>
-    </div>
-  </ng-container>
-</div>
-<br/>
-<br/>
-
 <form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="complete.emit()">
+  <uxg-wizzard-steps [wizzard]="wizzard"></uxg-wizzard-steps>
+  <br/>
+  <br/>
   <!-- Select positions -->
   <div *uxgWizzardStep="'positions'">
-      <div class="app-secondary-color">
-        Выберите все необходимые позиции или группы позиций в заявке, по которым вы хотите создать процедуру на
-        Электронной торговой площадке Газпромбанка
-      </div>
-      <br/>
-      <br/>
-      <select-items-with-search
-        class="select-list select-list-positions"
-        formControlName="positions"
-        placeholder="Наименование позиции или группы"
-        [filterFn]="filterPositions"
-        [disabledFn]="disabledPositions"
-        [trackBy]="trackById"
-        [items]="positions"
-      >
-        <ng-template let-formGroup="formGroup" let-position="item">
-          <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
-            <div class="app-col clr-flex-grow-0">
-              <uxg-checkbox formControlName="checked"></uxg-checkbox>
-            </div>
-            <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
-            <ng-container *ngIf="!formGroup.disabled">
-              <div class="app-col select-list-item-quantity">
-                <span>{{ position.quantity }} </span>
-                <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
-              </div>
-              <div class="app-col app-grow-0 app-basis-auto select-list-item-date">
-                <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-                <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="formGroup.disabled">
-              <div class="app-col app-grow-0 app-basis-auto">
-                <span>Участвует в процедуре</span>
-              </div>
-            </ng-container>
-          </div>
-        </ng-template>
-      </select-items-with-search>
+    <div class="app-secondary-color">
+      Выберите все необходимые позиции или группы позиций в заявке, по которым вы хотите создать процедуру на
+      Электронной торговой площадке Газпромбанка
     </div>
+    <br/>
+    <br/>
+    <select-items-with-search
+      class="select-list select-list-positions"
+      formControlName="positions"
+      placeholder="Наименование позиции или группы"
+      [filterFn]="filterPositions"
+      [disabledFn]="disabledPositions"
+      [trackBy]="trackById"
+      [items]="positions"
+    >
+      <ng-template let-formGroup="formGroup" let-position="item">
+        <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
+          <div class="app-col clr-flex-grow-0">
+            <uxg-checkbox formControlName="checked"></uxg-checkbox>
+          </div>
+          <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
+          <ng-container *ngIf="!formGroup.disabled">
+            <div class="app-col select-list-item-quantity">
+              <span>{{ position.quantity }} </span>
+              <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+            </div>
+            <div class="app-col app-grow-0 app-basis-auto select-list-item-date">
+              <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+              <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="formGroup.disabled">
+            <div class="app-col app-grow-0 app-basis-auto">
+              <span>Участвует в процедуре</span>
+            </div>
+          </ng-container>
+        </div>
+      </ng-template>
+    </select-items-with-search>
+  </div>
 
   <!-- General -->
   <div *uxgWizzardStep="'general'" formGroupName="general">

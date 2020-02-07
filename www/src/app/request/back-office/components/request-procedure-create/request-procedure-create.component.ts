@@ -149,7 +149,7 @@ export class RequestProcedureCreateComponent implements OnInit {
   }
 
   filterContragents(q: string, contragent: ContragentList): boolean {
-    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.kpp.indexOf(q.toLowerCase()) >= 0;
+    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;

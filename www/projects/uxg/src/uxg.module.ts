@@ -23,6 +23,7 @@ import { UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover
 import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover-content.directive";
 import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
 import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-button.directive";
+import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-steps.component";
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-
     UxgWizzardDirective,
     UxgWizzardStepDirective,
     UxgWizzardButtonDirective,
+    UxgWizzardStepsComponent
   ],
   exports: [
     UxgCheckboxComponent,
@@ -82,6 +84,7 @@ import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-
     UxgWizzardDirective,
     UxgWizzardStepDirective,
     UxgWizzardButtonDirective,
+    UxgWizzardStepsComponent
   ],
 })
 export class UxgModule {

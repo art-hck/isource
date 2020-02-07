@@ -41,11 +41,13 @@
         <h2 class="modal-title">Создание новой процедуры</h2>
         <div class="modal-body" [style.overflow]="'visible'">
         <app-request-procedure-create
+          *ngIf="procedureModal._open"
+          [request]="request"
           [publicAccess]="true"
           [positions]="positions$ | async"
           [contragents]="contragents$ | async"
-          *ngIf="procedureModal._open" [request]="request" (complete)="procedureModal.close()">
-        </app-request-procedure-create>
+          (complete)="procedureModal.close()"
+        ></app-request-procedure-create>
         </div>
       </clr-modal>
     </div>
