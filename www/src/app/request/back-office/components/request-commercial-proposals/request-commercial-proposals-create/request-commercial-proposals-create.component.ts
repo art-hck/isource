@@ -1,16 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { fromEvent, merge, Subscription } from "rxjs";
+import { fromEvent, merge, Observable, Subscription } from "rxjs";
 import { auditTime } from "rxjs/operators";
 import { OffersService } from "../../../services/offers.service";
 import { RequestPosition } from "../../../../common/models/request-position";
@@ -18,6 +8,8 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 import { CommercialProposal } from "../../../../common/models/commercial-proposal";
+import { ContragentList } from "../../../../../contragent/models/contragent-list";
+import { Request } from "../../../../common/models/request";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',
@@ -25,6 +17,7 @@ import { CommercialProposal } from "../../../../common/models/commercial-proposa
   styleUrls: ['./request-commercial-proposals-create.component.scss']
 })
 export class RequestCommercialProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() request: Request;
   @Input() position: RequestPosition;
   @Input() commercialProposal: CommercialProposal;
   @Input() addOfferModalOpen = false;
@@ -45,6 +38,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   selectedContragentId: Uuid;
 
   subscription = new Subscription();
+  contragents$: Observable<ContragentList[]>;
 
   get formDocuments() {
     return this.newCommercialProposalForm.get('documents') as FormArray;
@@ -56,6 +50,8 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   ) { }
 
   ngOnInit() {
+    this.contragents$ = this.offersService.getContragentsWithTp(this.request.id, [this.position]);
+
     this.newCommercialProposalForm = this.formBuilder.group({
       id: [this.defaultCPValue('id', null)],
       supplierContragentId: [this.defaultCPValue('supplierContragentId'), Validators.required],

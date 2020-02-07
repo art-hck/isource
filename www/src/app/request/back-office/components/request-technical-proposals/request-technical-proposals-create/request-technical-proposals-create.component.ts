@@ -7,6 +7,8 @@ import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
 import { TechnicalProposal } from "../../../../common/models/technical-proposal";
 import { TechnicalProposalCreateRequest } from "../../../models/technical-proposal-create-request";
+import { ContragentService } from "../../../../../contragent/services/contragent.service";
+import { ContragentList } from "../../../../../contragent/models/contragent-list";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
@@ -24,6 +26,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   isLoading: boolean;
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
+  contragents$: Observable<ContragentList[]>;
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -37,7 +40,11 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     return !!this.technicalProposal;
   }
 
-  constructor(private fb: FormBuilder, private technicalProposalsService: TechnicalProposalsService) {}
+  constructor(
+    private fb: FormBuilder,
+    private technicalProposalsService: TechnicalProposalsService,
+    private contragentService: ContragentService
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -61,6 +68,8 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
     this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
       .pipe(map(positions => positions.map(position => ({position, manufacturingName: null}))));
+
+    this.contragents$ = this.contragentService.getContragentList();
 
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges

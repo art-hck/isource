@@ -27,7 +27,8 @@
           <input #contragentName uxgInput lg (input)="autocomplete.onInput.next($event.target.value)"
                  formControlName="contragentName"/>
           <label class="app-control-label" (click)="contragentName.focus()">Наименование контрагента</label>
-          <app-contragent-autocomplete #autocomplete formControlName="contragent"></app-contragent-autocomplete>
+          <app-contragent-autocomplete #autocomplete formControlName="contragent" [contragentsFullList]="contragents$ | async">
+          </app-contragent-autocomplete>
         </div>
       </div>
       <div class="app-col app-secondary-color">
