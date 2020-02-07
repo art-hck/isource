@@ -44,6 +44,10 @@ export class RequestPositionComponent implements OnInit {
     return this.positionStatusService.isStatusAfter(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
   }
 
+  isBeforeManufacturing(position: RequestPosition) {
+    return this.positionStatusService.isStatusPrevious(position.status, RequestPositionWorkflowSteps.MANUFACTURING);
+  }
+
   getRelatedServicesList(position: RequestPosition): string {
     const relatedServices = {
       "ШМР": position.isShmrRequired,

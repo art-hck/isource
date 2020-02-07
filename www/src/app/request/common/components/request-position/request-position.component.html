@@ -124,9 +124,10 @@
         <ng-container *ngIf="position.comments">
           <div class="app-ghost-color">Дополнительные требования</div>
           <div class="app-bold">{{ position.comments }}</div>
+          <br/>
         </ng-container>
 
-        <div>
+        <div *ngIf="isBeforeManufacturing(position)">
           <button uxgButton secondary (click)="edit.open()">
             <clr-icon shape="app-pen"></clr-icon>
             <span>Редактировать</span>
