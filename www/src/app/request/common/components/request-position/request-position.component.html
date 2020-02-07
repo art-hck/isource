@@ -10,12 +10,14 @@
         <span class="app-ghost-color">{{ position.createdDate | date : "hh:mm" }}</span>
       </div>
 
-      <div class="app-col separator"></div>
+      <ng-container *ngIf="position.group">
+        <div class="app-col separator"></div>
 
-      <div class="app-col">
-        <span class="app-ghost-color">Группа: </span>
-        <a routerLink="/">Насосное оборудование 1</a>
-      </div>
+        <div class="app-col">
+          <span class="app-ghost-color">Группа: </span>
+          <span class="group-name" [title]="position.group.name">{{ position.group.name }}</span>
+        </div>
+      </ng-container>
 
       <div class="app-col separator"></div>
 

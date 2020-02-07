@@ -101,7 +101,7 @@
 
   .nav { /* Высота меню навигации в хедере и цвет нижней линии */
     height: 64px;
-    box-shadow: inset 0 -1px 0 #ececec;
+    box-shadow: inset 0 0 0 #ececec;
 
     .nav-link {
       &.active {
