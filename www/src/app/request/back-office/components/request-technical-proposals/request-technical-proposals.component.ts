@@ -74,15 +74,19 @@ export class RequestTechnicalProposalsComponent implements OnInit {
     // );
   }
 
+  /**
+   * @TODO uncomment when backend return technicalProposal data
+   */
   updateTechnicalProposal(technicalProposal) {
-    this.technicalProposals$ = this.technicalProposals$.pipe(
-      map(technicalProposals => {
-        const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
-        technicalProposals[i] = technicalProposal;
-
-        return technicalProposals;
-      }),
-      publishReplay(1), refCount()
-    );
+    this.getTechnicalProposals();
+    // this.technicalProposals$ = this.technicalProposals$.pipe(
+    //   map(technicalProposals => {
+    //     const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
+    //     technicalProposals[i] = technicalProposal;
+    //
+    //     return technicalProposals;
+    //   }),
+    //   publishReplay(1), refCount()
+    // );
   }
 }
