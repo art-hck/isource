@@ -60,7 +60,7 @@ const routes: Routes = [
       {
         path: 'commercial-proposals',
         component: CommercialProposalsComponent,
-        data: { title: "Коммерческие предложения" }
+        data: { title: "Коммерческие предложения", noFooter: true }
       },
       {
         path: 'design-documentation',
