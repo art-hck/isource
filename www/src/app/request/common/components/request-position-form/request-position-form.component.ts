@@ -121,15 +121,17 @@ export class RequestPositionFormComponent implements OnInit {
   submit() {
     let submit$: Observable<RequestPosition>;
 
-    // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
-    const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
-      return this.position[key].toString() === value.toString();
-    });
+    if (this.position.id) {
+      // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
+      const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
+        return this.position[key].toString() === value.toString();
+      });
 
-    // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
-    if (positionInfoNotChanged) {
-      this.cancel.emit();
-      return;
+      // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
+      if (positionInfoNotChanged) {
+        this.cancel.emit();
+        return;
+      }
     }
 
     if (this.position.id) {
