@@ -69,12 +69,13 @@
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
-          <button uxgButton clear link [disabled]="true">
-            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
-            <span>Переместить</span>
-          </button>
-        </div>
+<!--        TODO Нереализованная фича, временно скрыл кнопку -->
+<!--        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">-->
+<!--          <button uxgButton clear link [disabled]="true">-->
+<!--            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>-->
+<!--            <span>Переместить</span>-->
+<!--          </button>-->
+<!--        </div>-->
 
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <uxg-popover #more>
@@ -102,10 +103,11 @@
           </button>
 
           <!-- Фильтр  -->
-          <button uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-sort2"></clr-icon>
-            <span>Фильтр</span>
-          </button>
+<!--          TODO Нереализованная фича, временно скрыл кнопку -->
+<!--          <button uxgButton secondary iconText [disabled]="true">-->
+<!--            <clr-icon shape="app-sort2"></clr-icon>-->
+<!--            <span>Фильтр</span>-->
+<!--          </button>-->
         </div>
       </div>
     </div>
