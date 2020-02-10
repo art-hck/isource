@@ -1,28 +1,20 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-template-upload',
   templateUrl: './template-upload.component.html',
   styleUrls: ['./template-upload.component.scss']
 })
-export class TemplateUploadComponent implements OnInit {
+export class TemplateUploadComponent {
 
   documents: File[] = [];
 
   @Output() fileSelected = new EventEmitter<File[]>();
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  addDocument(files: FileList) {
-    this.documents = [...this.documents, ...Array.from(files)];
+  addDocument(files: File[]) {
+    this.documents.push(...files);
     this.onChangeDocuments();
-
-    // очищаем, чтобы можно было снова загрузить тот же файл
-    this.uploadElRef.nativeElement.value = '';
   }
 
   removeDocument(document: File) {

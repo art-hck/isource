@@ -8,6 +8,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPositionWorkflowStepLabels } from "../../../common/dictionaries/request-position-workflow-step-labels";
+import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({ templateUrl: './request-position.component.html' })
 export class RequestPositionComponent implements OnInit, OnDestroy {
@@ -60,6 +61,14 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
     );
+  }
+
+  uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
+    this.requestService.uploadDocuments(position, files)
+      .subscribe((documents: RequestDocument[]) => {
+        position.documents.push(...documents);
+        this.position$ = of(position);
+      });
   }
 
   // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк

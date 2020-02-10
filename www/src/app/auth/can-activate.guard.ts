@@ -21,7 +21,7 @@ export class CanActivateGuard implements CanActivate {
     }
 
     if (this.user.isCustomer()) {
-      this.router.navigateByUrl("/requests/customer");
+      this.router.navigateByUrl("/dashboard");
       return false;
     } else if (this.user.isBackOffice()) {
       this.router.navigateByUrl("/requests/backoffice");

@@ -76,6 +76,22 @@
           </button>
         </div>
 
+        <!-- Отклонить -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0">
+            <clr-icon shape="app-cross"></clr-icon>
+            <span>Отклонить</span>
+          </button>
+        </div>
+
+        <!-- Согласовать -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0">
+            <clr-icon shape="app-check"></clr-icon>
+            <span>Согласовать</span>
+          </button>
+        </div>
+
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
@@ -142,7 +158,7 @@
 
 <!-- Шаблон позиции -->
 <ng-template #positionItem let-position="position" let-formGroup="formGroup">
-  <div class="app-col clr-flex-grow-0">
+  <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
   <div class="app-col app-bold item-title">
@@ -171,7 +187,7 @@
 
 <!-- Шаблон группы -->
 <ng-template #groupItem let-group="group" let-formGroup="formGroup">
-  <div class="app-col clr-flex-grow-0">
+  <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
 

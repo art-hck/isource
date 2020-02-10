@@ -40,14 +40,16 @@
       <clr-modal clrModalSize="lg" #procedureModal>
         <h2 class="modal-title">Создание новой процедуры</h2>
         <div class="modal-body" [style.overflow]="'visible'">
-        <app-request-procedure-create
-          *ngIf="procedureModal._open"
-          [request]="request"
-          [publicAccess]="true"
-          [positions]="positions$ | async"
-          [contragents]="contragents$ | async"
-          (complete)="procedureModal.close()"
-        ></app-request-procedure-create>
+        <ng-container *ngIf="(positions$ | async) as positions">
+          <app-request-procedure-create
+            *ngIf="procedureModal._open"
+            [request]="request"
+            [publicAccess]="true"
+            [positions]="positions"
+            [contragents]="contragents$ | async"
+            (complete)="procedureModal.close()"
+          ></app-request-procedure-create>
+        </ng-container>
         </div>
       </clr-modal>
     </div>

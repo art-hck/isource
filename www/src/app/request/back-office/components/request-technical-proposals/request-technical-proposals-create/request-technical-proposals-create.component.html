@@ -42,7 +42,7 @@
     <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
     <div class="app-row">
       <div class="app-col app-bold">
-        <div class="upload-area" hoverClass="upload-area-hover" (appOnDropFile)="filesDropped($event)">
+        <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="filesSelected($event)">
           <div>Перетащите документы сюда</div>
         </div>
       </div>
@@ -54,10 +54,11 @@
         </div>
         <div>
           <button
-            type="button" uxgButton secondary (click)="inputFile.click()"
-            [disabled]="form.get('documents').disabled">Выбрать документы
-          </button>
-          <input #inputFile type="file" multiple (change)="filesSelected($event)"/>
+            type="button" uxgButton secondary appUploadFile
+            [disabled]="form.get('documents').disabled"
+            [multiple]="true"
+            (select)="filesSelected($event)"
+          >Выбрать документы</button>
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ import { DocumentIconSize } from "../../enums/document-icon-size";
   templateUrl: './document-simple-list.component.html',
   styleUrls: ['./document-simple-list.component.scss']
 })
-export class DocumentSimpleListComponent implements OnInit {
+export class DocumentSimpleListComponent {
 
   @Input() documents: RequestDocument[] = [];
 
@@ -29,18 +29,11 @@ export class DocumentSimpleListComponent implements OnInit {
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
-
-  uploadInputId: Guid;
   showAll = false;
 
   constructor(
     private documentsService: DocumentsService
-  ) {
-    this.uploadInputId = Guid.create();
-  }
-
-  ngOnInit() {
-  }
+  ) {}
 
   onDeleteDocument(document: RequestDocument) {
     this.delete.emit(document);
@@ -53,8 +46,8 @@ export class DocumentSimpleListComponent implements OnInit {
     this.documentsService.downloadFile(document);
   }
 
-  onChangeDocuments(files: FileList) {
-    this.selected.emit(Array.from(files));
+  onChangeDocuments(files: File[]) {
+    this.selected.emit(files);
 
     // очищаем, чтобы можно было снова загрузить тот же файл
     this.uploadElRef.nativeElement.value = '';

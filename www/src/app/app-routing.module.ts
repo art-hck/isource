@@ -10,6 +10,7 @@ const routes: Routes = [
     canActivate: [CanActivateGuard],
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
   { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},

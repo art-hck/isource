@@ -293,10 +293,9 @@
                         <clr-icon shape="check"></clr-icon>
                         <span> Согласовать</span>
                       </div>
-                      <label clrDropdownItem>
+                      <label clrDropdownItem appUploadFile (select)="reject(designDocumentation, $event)">
                         <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
                         <span> Приложить замечания</span>
-                        <input type="file" (change)="reject(designDocumentation, $event.target.files[0])">
                       </label>
                     </clr-dropdown-menu>
 
@@ -316,7 +315,7 @@
                 <br/><br/>
 
                 <app-document-simple-list
-                  [documents]="getRemark(designDocumentation)[0].documents"
+                  [documents]="getRemark(designDocumentation).documents"
                   [enableUpload]="false"
                 ></app-document-simple-list>
               </div>
