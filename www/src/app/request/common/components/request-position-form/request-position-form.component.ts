@@ -132,9 +132,7 @@ export class RequestPositionFormComponent implements OnInit {
         this.cancel.emit();
         return;
       }
-    }
 
-    if (this.position.id) {
       submit$ = this.editRequestService.updateRequestPosition(this.position.id, this.form.value);
     } else {
       submit$ = this.createRequestService.addRequestPosition(this.requestId, [this.form.value])
