@@ -1,2 +1,34 @@
-<div class="app-card" [style.height.px]="600"></div>
-
+<div class="zoom">
+  <button uxgButton primary icon (click)="map.zoomIn()"><clr-icon shape="app-plus"></clr-icon></button>
+  <button uxgButton primary icon (click)="map.zoomOut()"><clr-icon shape="app-minus"></clr-icon></button>
+</div>
+<div class="annotation app-row">
+  <div class="app-col">
+    <div><b>Общий статус обеспечения</b></div>
+    <br/>
+    <div class="app-row">
+      <div class="app-col app-row app-align-items-center">
+        <div class="square square-success"></div>
+        <div>Высокий <span class="app-ghost-color">(60-100%)</span></div>
+      </div>
+      <div class="app-col app-row app-align-items-center">
+        <div class="square square-warning"></div>
+        <div>Средний <span class="app-ghost-color">(30-59%)</span></div>
+      </div>
+      <div class="app-col app-row app-align-items-center">
+        <div class="square square-invalid"></div>
+        <div>Низкий <span class="app-ghost-color">(0-29%)</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="app-col">
+    <div><b>Условние обозначения</b></div>
+    <div class="app-row ">
+      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Предприятие</div>
+      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Строительная площадка</div>
+      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Морская платформа</div>
+      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Разработка месторождения</div>
+    </div>
+  </div>
+</div>
+<div class="app-card" #mapRef [style.height.px]="600"></div>

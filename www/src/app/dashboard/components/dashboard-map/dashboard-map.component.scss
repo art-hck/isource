@@ -1,0 +1,48 @@
+@import "projects/uxg/src/styles/index";
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.zoom {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 450;
+
+  button {
+    display: block;
+    margin: 0;
+
+    &:first-child {
+      margin-bottom: 1em;
+    }
+  }
+}
+
+.annotation {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(#fff, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 450;
+  padding: 20px;
+}
+
+.square {
+  width: 16px;
+  height: 16px;
+  margin-right: .5em;
+
+  &-success {background-color: uxg($theme, color-font-success);}
+  &-warning {background-color: uxg($theme, color-font-warning); }
+  &-invalid {background-color: uxg($theme, color-control-invalid);}
+}
+
+.legend {
+  margin: 1em 1em 0 0;
+
+  clr-icon {color: uxg($theme, color-font-link);}
+}
