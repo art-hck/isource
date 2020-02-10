@@ -182,10 +182,9 @@ export class ContractComponent implements OnInit {
   onSignContract(contract: Contract) {
     this.contractService.sign(contract.id).subscribe(
       (data: Contract) => {
-        contract = data;
+        contract.status = ContractStatus.SIGNED;
       }
     );
-    contract.status = ContractStatus.SIGNED;
   }
 
   /**
