@@ -90,15 +90,10 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     });
   }
 
-  filesDropped(files: FileList): void {
-    Array.from(files).forEach(
+  filesSelected(files: File[]): void {
+    files.forEach(
       file => this.formDocuments.push(this.fb.control(file))
     );
-  }
-
-  filesSelected(e): void {
-    this.filesDropped(e.target.files);
-    e.target.value = '';
   }
 
   /**

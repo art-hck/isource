@@ -89,8 +89,8 @@ export class ContractComponent implements OnInit {
   }
 
   // Прикрепление (не загрузка) файла к контракту
-  public attachFileToContract(files: FileList, contract: Contract): void {
-    this.attachedFiles = [...this.attachedFiles, {file: files[0], contract: contract}];
+  public attachFileToContract([file]: File[], contract: Contract): void {
+    this.attachedFiles = [...this.attachedFiles, {file, contract}];
   }
 
   public removeFile(contract: Contract) {

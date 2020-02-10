@@ -142,7 +142,11 @@ export class RequestComponent implements OnInit {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
+      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT ) {
+        formGroup.get("checked").disable();
+      }
     }
+
 
     return formGroup;
   }

@@ -104,15 +104,9 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       });
   }
 
-  filesDropped(files: FileList): void {
-    Array.from(files).forEach(
-      file => this.formDocuments.push(this.formBuilder.control(file))
-    );
-  }
-
-  filesSelected(e) {
-    this.filesDropped(e.target.files);
-    e.target.value = '';
+  filesSelected(files: File[]): void {
+    files.map(file => this.formBuilder.control(file))
+      .forEach(control => this.formDocuments.push(control));
   }
 
   submit() {

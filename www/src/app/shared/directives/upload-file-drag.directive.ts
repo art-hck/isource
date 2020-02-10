@@ -1,10 +1,10 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
-  selector: '[appOnDropFile]'
+  selector: '[appUploadFile][dropFile]'
 })
-export class DragFileUploadDirective {
-  @Output() appOnDropFile = new EventEmitter();
+export class UploadFileDragDirective {
+  @Output() dropFile = new EventEmitter<File[]>();
   @Input() hoverClass = "hover";
 
   constructor(private el: ElementRef) {}
@@ -29,6 +29,6 @@ export class DragFileUploadDirective {
     e.stopPropagation();
     this.el.nativeElement.classList.remove(this.hoverClass);
 
-    this.appOnDropFile.emit(e.dataTransfer.files);
+    this.dropFile.emit(Array.from(e.dataTransfer.files));
   }
 }
