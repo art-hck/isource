@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
@@ -33,6 +34,8 @@ export class RequestComponent implements OnInit {
   flatPositions$: Observable<RequestPosition[]>;
 
   form: FormGroup;
+
+  requestIsOutdated = false;
 
   get checkedPositions(): RequestPosition[] {
     return this.formPositionsFlat
@@ -93,6 +96,7 @@ export class RequestComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.form = this.positionsToForm(this.positions);
     this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
+    this.checkIfRequestIsOutdated();
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {
@@ -149,5 +153,9 @@ export class RequestComponent implements OnInit {
 
   asFormArray(control: AbstractControl) {
     return control as FormArray;
+  }
+
+  checkIfRequestIsOutdated(): void {
+    this.requestIsOutdated = moment(this.request.createdDate).isBefore(moment().subtract(2, 'weeks'));
   }
 }
