@@ -96,11 +96,21 @@
         <div class="app-col"></div>
         <div class="app-col app-basis-auto clr-flex-grow-0">
 
-          <!-- Новая позиция  -->
-          <button uxgButton secondary iconText (click)="addPositionModal.open()">
-            <clr-icon shape="app-plus"></clr-icon>
-            <span>Новая позиция</span>
-          </button>
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary iconText
+                    uxgPopoverTrigger
+                    [disabled]="requestIsOutdated" (click)="addPositionModal.open()">
+              <clr-icon shape="app-plus"></clr-icon>
+              <span>Новая позиция</span>
+            </button>
+
+            <ng-container *ngIf="requestIsOutdated">
+              <div *uxgPopoverContent (click)="more.hide()">
+                <div>Заявке больше двух недель.</div>
+                <div>Добавление новых позиций недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
 
           <!-- Фильтр  -->
 <!--          TODO Нереализованная фича, временно скрыл кнопку -->

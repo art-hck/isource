@@ -86,7 +86,7 @@ export class RequestPositionFormComponent implements OnInit {
       isPnrRequired: [p.isPnrRequired],
       isShmrRequired: [p.isShmrRequired],
       measureUnit: [p.measureUnit, Validators.required],
-      paymentTerms: [p.paymentTerms, Validators.required],
+      paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
       quantity: [p.quantity, [Validators.required, Validators.min(1)]],
       startPrice: [p.startPrice, Validators.min(1)]
