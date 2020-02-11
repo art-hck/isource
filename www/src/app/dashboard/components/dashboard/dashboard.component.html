@@ -1,10 +1,10 @@
 <div class="app-row">
-  <div class="app-col">
+  <div class="app-col" *ngIf="(agreements$ | async) as agreements">
     <div class="app-row app-align-items-center">
       <h2 class="app-col">Согласования</h2>
-      <div><a routerLink="/requests/customer/agreements"><b>Все согласования</b></a></div>
+      <div><a routerLink="/requests/customer/agreements"><b>Все согласования ({{ agreements.totalCount }})</b></a></div>
     </div>
-    <app-agreements [agreements]="agreements$ | async"></app-agreements>
+    <app-agreements [agreements]="agreements"></app-agreements>
   </div>
 </div>
 <br/>
