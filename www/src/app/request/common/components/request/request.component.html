@@ -78,7 +78,7 @@
 <!--          </button>-->
 <!--        </div>-->
 
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
             <div *uxgPopoverContent (click)="more.hide()">
