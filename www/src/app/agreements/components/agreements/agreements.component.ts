@@ -12,7 +12,7 @@ export class AgreementsComponent {
   readonly labels = {
     [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: {
       label: "Рассмотреть ТП",
-      path: "commercial-proposals"
+      path: "technical-proposals"
     },
     [PositionStatus.RKD_AGREEMENT]: {
       label: "Рассмотреть РКД",
