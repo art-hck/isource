@@ -5,7 +5,9 @@
 <br/>
 <div class="app-card" [style.height.px]="444">
   <div *uxgTab="status">
-    status stat not implemented
+    <div class="pie-chart">
+      <canvas #chart width="340" height="320"></canvas>
+    </div>
   </div>
 
   <div *uxgTab="money">
