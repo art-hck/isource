@@ -2,7 +2,7 @@
   <clr-dropdown>
     <clr-dropdown-menu *clrIfOpen="contragents.length > 0 && isOpen">
       <div clrDropdownItem *ngFor="let contragent of contragents;" (click)="select(contragent)">
-        {{contragent.shortName}}
+        {{ contragent.shortName }}
       </div>
     </clr-dropdown-menu>
   </clr-dropdown>

@@ -13,11 +13,12 @@
                  (input)="autocomplete.onInput.next($event.target.value)"
                  formControlName="contragentName">
           <label class="app-control-label" (click)="contragentName.focus()">Наименование контрагента</label>
+
           <app-contragent-autocomplete
             [contragentsFullList]="contragents$ | async"
             #autocomplete
-            formControlName="contragent"
-          ></app-contragent-autocomplete>
+            formControlName="contragent">
+          </app-contragent-autocomplete>
 
           <div class="app-control-error">
             <span>Коммерческое предложение от выбранного поставщика уже добавлено</span>
