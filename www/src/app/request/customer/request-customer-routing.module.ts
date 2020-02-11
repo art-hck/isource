@@ -10,6 +10,7 @@ import { RequestPositionComponent } from "./components/request-position/request-
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
+import { RequestAgreementsComponent } from "./components/request-agreements/request-agreements.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,11 @@ const routes: Routes = [
     component: CustomerRequestsList,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", feature: "customerRequest" }
+  },
+  {
+    path: 'agreements',
+    component: RequestAgreementsComponent,
+    data: { title: "Согласования" }
   },
   {
     path: ':id',

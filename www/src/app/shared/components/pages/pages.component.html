@@ -1,0 +1,9 @@
+<div class="app-pages" *ngIf="pages(total).length > 1">
+  <a
+    *ngFor="let page of pages(total)"
+    class="app-pages-item"
+    routerLink="."
+    [class.app-pages-item-current]="page === current"
+    [queryParams]="{page: page}">{{ page }}
+  </a>
+</div>

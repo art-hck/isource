@@ -2,9 +2,9 @@
   <div class="app-col">
     <div class="app-row app-align-items-center">
       <h2 class="app-col">Согласования</h2>
-      <div><a routerLink="."><b>Все согласования</b></a></div>
+      <div><a routerLink="/requests/customer/agreements"><b>Все согласования</b></a></div>
     </div>
-    <app-dashboard-approval></app-dashboard-approval>
+    <app-agreements [agreements]="agreements$ | async"></app-agreements>
   </div>
 </div>
 <br/>

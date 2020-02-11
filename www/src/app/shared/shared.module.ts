@@ -22,12 +22,15 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
+import { PagesComponent } from './components/pages/pages.component';
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     ClarityModule,
     CustomComponentsModule,
     UxgModule,
@@ -67,6 +70,7 @@ import { UploadFileDirective } from "./directives/upload-file.directive";
     OkeiSelectorComponent,
     TemplateUploadComponent,
     UploadFileDirective,
+    PagesComponent,
   ],
   exports: [
     CommonModule,
@@ -95,6 +99,7 @@ import { UploadFileDirective } from "./directives/upload-file.directive";
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     UploadFileDirective,
+    PagesComponent,
   ]
 })
 export class SharedModule {
