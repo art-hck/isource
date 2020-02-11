@@ -22,7 +22,7 @@ export class AgreementsComponent {
       label: "Рассмотреть договор",
       path: "contracts"
     },
-    [PositionStatus.PROPOSALS_PREPARATION]: {
+    [PositionStatus.RESULTS_AGREEMENT]: {
       label: "Рассмотреть КП",
       path: "commercial-proposals"
     },

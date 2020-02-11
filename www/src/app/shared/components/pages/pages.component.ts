@@ -24,8 +24,8 @@ export class PagesComponent implements OnInit {
     );
   }
 
-  pages(total: number): number[] {
-    let pages = (new Array(Math.ceil(total / this.pageSize))).fill(null).map((v, i) => i + 1);
+  get pages(): number[] {
+    let pages = (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1);
     pages = pages.filter(page => page >= this.current - 3 && page <= this.current + 3);
     return pages;
   }

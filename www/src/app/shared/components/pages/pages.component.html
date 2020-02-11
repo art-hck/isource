@@ -1,6 +1,6 @@
-<div class="app-pages" *ngIf="pages(total).length > 1">
+<div class="app-pages" *ngIf="pages.length > 1">
   <a
-    *ngFor="let page of pages(total)"
+    *ngFor="let page of pages"
     class="app-pages-item"
     routerLink="."
     [class.app-pages-item-current]="page === current"
