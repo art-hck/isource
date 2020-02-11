@@ -4,6 +4,7 @@
       [positions]="positions"
       [request]="request"
       [onDrafted]="sendOnApprove"
+      (publish)="publish(request)"
       (addPosition)="updatePositions()"
       (addGroup)="updatePositions()"
       (addResponsible)="updatePositions()"

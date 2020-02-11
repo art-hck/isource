@@ -1,17 +1,18 @@
 <!-- @TODO Выпилить после реализации попозиционного согласования -->
-<div class="notification-bar" *ngIf="featureService.allowed('approveRequest', user.roles) && (isOnApproval || isDraft)">
+<div class="notification-bar" *ngIf="isOnApproval || isDraft">
   <div class="container">
       <div class="app-row">
       <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
         <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
         <button uxgButton secondary  (click)="publish.emit()">Опубликовать все</button>
-
       </div>
-      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
-        <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
-        <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
-        <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
-      </div>
+        <ng-container *ngIf="featureService.allowed('approveRequest', user.roles)">
+          <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
+            <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
+            <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
+            <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
+          </div>
+        </ng-container>
     </div>
   </div>
 </div>

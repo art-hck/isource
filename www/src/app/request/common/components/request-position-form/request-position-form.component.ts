@@ -43,13 +43,20 @@ export class RequestPositionFormComponent implements OnInit {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
       ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
-    // Вырубаем ПНР после подготвки КП
+
+    // Вырубаем «ПНР» после подготвки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
       ['isShmrRequired', 'isPnrRequired'],
-    // Вырубаем инспекционный контроль после подписания договора
+
+    // Вырубаем «Условия оплаты» после выбора победителя (начиная с «Выбран победитель»)
+    [PositionStatuses.WINNER_SELECTED]:
+      ['paymentTerms'],
+
+    // Вырубаем «Инспекционный контроль» после подписания договора
     [PositionStatuses.CONTRACT_SIGNING]:
       ['isInspectionControlRequired'],
-    // Вырубаем РКД после изготовления
+
+    // Вырубаем «РКД» после изготовления
     [PositionStatuses.MANUFACTURING]:
       ['isDesignRequired']
   };

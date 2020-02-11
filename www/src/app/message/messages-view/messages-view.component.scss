@@ -229,3 +229,11 @@
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.24);
 }
 
+.no-messages {
+  color: #999999;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
