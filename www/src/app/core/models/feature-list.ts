@@ -24,7 +24,7 @@ export interface IFeatureList {
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
-  dashboard: {},
+  dashboard: { roles: [UserRole.CUSTOMER] },
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
