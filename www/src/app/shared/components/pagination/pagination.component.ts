@@ -4,11 +4,11 @@ import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'app-pages',
-  templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.scss']
+  selector: 'app-pagination',
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.scss']
 })
-export class PagesComponent implements OnInit {
+export class PaginationComponent implements OnInit {
   @Input() total;
   @Input() pageSize;
   @Input() paramName = "page";

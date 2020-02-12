@@ -22,7 +22,7 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
-import { PagesComponent } from './components/pages/pages.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 
 @NgModule({
@@ -70,7 +70,7 @@ import { RouterModule } from "@angular/router";
     OkeiSelectorComponent,
     TemplateUploadComponent,
     UploadFileDirective,
-    PagesComponent,
+    PaginationComponent,
   ],
   exports: [
     CommonModule,
@@ -99,7 +99,7 @@ import { RouterModule } from "@angular/router";
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     UploadFileDirective,
-    PagesComponent,
+    PaginationComponent,
   ]
 })
 export class SharedModule {
