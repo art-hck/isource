@@ -1,0 +1,9 @@
+<ng-container *ngIf="(agreements$ | async) as agreements;">
+  <div [class.loading]="isLoading">
+    <app-agreements [agreements]="agreements"></app-agreements>
+  </div>
+</ng-container>
+
+<br/>
+
+<app-pagination [total]="total$ | async" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
