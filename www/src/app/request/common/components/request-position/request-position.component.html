@@ -152,7 +152,8 @@
 
             <ng-container *ngIf="position.isEditingByAnotherUser">
               <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
-                <div>Позиция редактируется другим пользователем.</div>
+                <div>Позиция находится на согласовании.</div>
+                <div>Редактирование недоступно.</div>
               </div>
             </ng-container>
           </uxg-popover>
