@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Agreements } from "../../../dashboard/models/Agreements";
 import { RequestPositionWorkflowSteps as PositionStatus } from "../../../request/common/enum/request-position-workflow-steps";
+import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Component({
   selector: 'app-agreements',
@@ -26,5 +27,18 @@ export class AgreementsComponent {
       label: "Рассмотреть КП",
       path: "commercial-proposals"
     },
+
+    [PositionStatus.ON_CUSTOMER_APPROVAL]: {
+      label: "Рассмотреть позицию"
+    },
   };
+
+  getRouterLink(position: RequestPosition): any[] {
+    const routerLink = ['/requests/customer', position.request.id];
+
+    if (this.labels[position.status] && this.labels[position.status].path) {
+      routerLink.push(this.labels[position.status].path);
+    }
+    return routerLink;
+  }
 }

@@ -22,8 +22,8 @@
         </uxg-position-status>
       </div>
       <div class="app-col action">
-        <a [routerLink]="['/requests/customer', position.request.id, labels[position.status].path]">
-          {{labels[position.status].label }}
+        <a [routerLink]="getRouterLink(position)">
+          {{labels[position.status]?.label }}
         </a>
       </div>
     </div>
