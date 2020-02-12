@@ -12,6 +12,7 @@ import { RequestPositionStatusService } from "../../services/request-position-st
 import { RequestPositionWorkflowSteps as PositionStatuses } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-request-position-form',
@@ -124,7 +125,14 @@ export class RequestPositionFormComponent implements OnInit {
     if (this.position.id) {
       // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
       const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
-        return this.position[key].toString() === value.toString();
+        let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
+        const updatedInfo = value === null ? value : value.toString();
+
+        if (key === 'deliveryDate') {
+          positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+        }
+
+        return positionInfo === updatedInfo;
       });
 
       // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
