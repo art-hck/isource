@@ -27,7 +27,6 @@ export class AgreementsComponent {
       label: "Рассмотреть КП",
       path: "commercial-proposals"
     },
-
     [PositionStatus.ON_CUSTOMER_APPROVAL]: {
       label: "Рассмотреть позицию"
     },
