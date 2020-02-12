@@ -118,4 +118,11 @@
   min-width: 550px;
 }
 
+span.measure-unit {
+  max-width: 40px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: text-bottom;
+  text-overflow: ellipsis;
+}
 
