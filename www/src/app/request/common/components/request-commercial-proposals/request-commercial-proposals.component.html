@@ -133,11 +133,12 @@
                 </div>
               </div>
               <p>
-                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity}} </span>
-                <span class="app-ghost-color">{{linkedOffer.measureUnit}}</span>
-                <span class="divide app-ghost-color">|</span>
+                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity | number:"1.0-2"}} </span>
+                <span class="app-ghost-color measure-unit">{{linkedOffer.measureUnit}}</span>
+                  <span class="divide app-ghost-color">|</span>
                 <span class="app-ghost-color">{{linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}/
-                  {{linkedOffer.measureUnit}}</span>
+                  <span class="measure-unit">{{linkedOffer.measureUnit}}</span>
+                </span>
               </p>
               <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
                 {{linkedOffer.deliveryDate | date: 'shortDate'}}
