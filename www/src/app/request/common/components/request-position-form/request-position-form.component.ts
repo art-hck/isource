@@ -95,8 +95,8 @@ export class RequestPositionFormComponent implements OnInit {
       measureUnit: [p.measureUnit, Validators.required],
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
-      quantity: [p.quantity, [Validators.required, Validators.min(1)]],
-      startPrice: [p.startPrice, Validators.min(1)]
+      quantity: [p.quantity, [Validators.required, Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]]
     });
 
     Object.entries(this.disabledFieldsAfterStatus)
@@ -124,6 +124,11 @@ export class RequestPositionFormComponent implements OnInit {
 
     this.form = form;
   }
+
+  logForm() {
+    console.log(this.form);
+  }
+
 
   submit() {
     let submit$: Observable<RequestPosition>;
