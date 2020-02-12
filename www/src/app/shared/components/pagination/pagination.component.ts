@@ -1,32 +1,31 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AgreementsService } from "../../../agreements/services/agreements.service";
-import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs/operators";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Observable, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnInit, OnDestroy {
   @Input() total;
   @Input() pageSize;
-  @Input() paramName = "page";
+  @Input() pages$: Observable<number>;
   @Output() change = new EventEmitter<number>();
   current: number;
-
-  constructor(private agreementsService: AgreementsService, private route: ActivatedRoute) {}
+  private subscription = new Subscription();
 
   ngOnInit() {
-    this.route.queryParams
-      .pipe(map(params => +params[this.paramName] || 1))
-      .subscribe(current => this.change.emit(this.current = current)
-    );
+    this.subscription
+      .add(this.pages$.subscribe(page => this.change.emit(this.current = page || 1)));
   }
 
   get pages(): number[] {
     let pages = (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1);
     pages = pages.filter(page => page >= this.current - 3 && page <= this.current + 3);
     return pages;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
