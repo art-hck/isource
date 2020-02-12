@@ -125,11 +125,6 @@ export class RequestPositionFormComponent implements OnInit {
     this.form = form;
   }
 
-  logForm() {
-    console.log(this.form);
-  }
-
-
   submit() {
     let submit$: Observable<RequestPosition>;
 
