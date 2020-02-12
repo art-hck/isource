@@ -141,10 +141,22 @@
         </ng-container>
 
         <div *ngIf="isBeforeManufacturing(position)">
-          <button uxgButton secondary (click)="edit.open()">
-            <clr-icon shape="app-pen"></clr-icon>
-            <span>Редактировать</span>
-          </button>
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary
+                    uxgPopoverTrigger
+                    (click)="edit.open()"
+                    [disabled]="position.isEditingByAnotherUser">
+              <clr-icon shape="app-pen"></clr-icon>
+              <span>Редактировать</span>
+            </button>
+
+            <ng-container *ngIf="position.isEditingByAnotherUser">
+              <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
+                <div>Позиция находится на согласовании.</div>
+                <div>Редактирование недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
         </div>
 
         <clr-modal #edit [clrModalStaticBackdrop]="false" clrModalSize="lg">
