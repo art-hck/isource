@@ -77,6 +77,13 @@
         <h4>{{dateWithDocs.date}}</h4>
         <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="dateWithDocs.documents"></app-document-simple-list>
       </div>
+      <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
+        <br/>
+        <h2 class="text-center" [style.opacity]="0.1">
+          <clr-icon shape="app-doc" size="270"></clr-icon><br/>
+          К позиции пока не загружено ни <br/> одного документа
+        </h2>
+      </ng-container>
     </ng-container>
     <ng-container *uxgTab="offersTab">
       <app-offers [requestPosition]="position" [requestId]="requestId" [isCustomerView]="user.isCustomer()"></app-offers>

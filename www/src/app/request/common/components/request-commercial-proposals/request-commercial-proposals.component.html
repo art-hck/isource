@@ -91,7 +91,7 @@
             <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
            <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
             <span class="offer-status" *ngIf="positionCanBeSelected(position)">
-                <clr-icon shape="app-doc"></clr-icon>Черновик</span>
+                <clr-icon shape="app-doc" class="is-solid"></clr-icon>Черновик</span>
             <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
               <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
             <button uxgButton primary type="button" *ngIf="availableCancelPublishOffers(position)"
