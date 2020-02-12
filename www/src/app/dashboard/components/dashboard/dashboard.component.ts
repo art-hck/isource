@@ -13,6 +13,6 @@ export class DashboardComponent implements OnInit {
   constructor(private agreementsService: AgreementsService) {}
 
   ngOnInit() {
-    this.agreements$ = this.agreementsService.getAgreements(0, 5);
+    this.agreements$ = this.agreementsService.getDashboardAgreements();
   }
 }

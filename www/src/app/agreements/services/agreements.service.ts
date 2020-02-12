@@ -12,4 +12,9 @@ export class AgreementsService {
     const url = `requests/customer/agreements`;
     return this.api.post<Agreements>(url, {startFrom, pageSize});
   }
+
+  getDashboardAgreements(): Observable<Agreements> {
+    const url = `requests/customer/dashboard/agreements`;
+    return this.api.post<Agreements>(url, null);
+  }
 }
