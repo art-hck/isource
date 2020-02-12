@@ -8,7 +8,7 @@ export class AgreementsService {
 
   constructor(private api: HttpClient) {}
 
-  getAgreements(startFrom: number = 1, pageSize: number = 10): Observable<Agreements> {
+  getAgreements(startFrom: number = 0, pageSize: number = 20): Observable<Agreements> {
     const url = `requests/customer/agreements`;
     return this.api.post<Agreements>(url, {startFrom, pageSize});
   }
