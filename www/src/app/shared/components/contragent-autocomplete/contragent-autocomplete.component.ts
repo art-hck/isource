@@ -32,18 +32,6 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
   constructor(
     protected getContragentService: ContragentService,
   ) {
-
-    // if (this.contragentsFullList && this.contragentsFullList.length === 0) {
-    //   this.getContragentService.getContragentList().pipe(
-    //     map(contragents => {
-    //       this.contragentsFullList = contragents;
-    //       console.log(this.contragentsFullList);
-    //     }),
-    //     publishReplay(1),
-    //     refCount()
-    //   );
-    // }
-
     this.contragents$ = this.onInput.pipe(
       filter(value => value.length >= this.minLength),
       debounceTime(this.debounceTime),
