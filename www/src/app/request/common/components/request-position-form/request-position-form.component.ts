@@ -43,15 +43,15 @@ export class RequestPositionFormComponent implements OnInit {
   readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
-      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
+      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'],
 
-    // Вырубаем «ПНР» после подготвки КП
+    // Вырубаем «ПНР» и стоимость после подготвки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
-      ['isShmrRequired', 'isPnrRequired'],
+      ['isShmrRequired', 'isPnrRequired', 'startPrice'],
 
     // Вырубаем «Условия оплаты» после выбора победителя (начиная с «Выбран победитель»)
     [PositionStatuses.WINNER_SELECTED]:
-      ['paymentTerms'],
+      ['paymentTerms', 'deliveryBasis', 'quantity'],
 
     // Вырубаем «Инспекционный контроль» после подписания договора
     [PositionStatuses.CONTRACT_SIGNING]:

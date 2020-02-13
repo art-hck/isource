@@ -147,7 +147,7 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeManufacturing(position)">
+        <div *ngIf="isBeforeManufacturing(position) || user.isCustomer()">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger
