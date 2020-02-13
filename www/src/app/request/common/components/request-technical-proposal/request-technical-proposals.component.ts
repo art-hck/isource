@@ -45,14 +45,14 @@ export class RequestTechnicalProposalComponent {
 
   availableCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
     return technicalProposal.status === TechnicalProposalsStatuses.SENT_TO_REVIEW
-      && this.getDurationChangeStatus(technicalProposal) < this.durationCancelPublish;
+      && this.getStatusChangeDuration(technicalProposal) < this.durationCancelPublish;
   }
 
   /**
    * Возвращает время в секундах, которое прошло с момента смены статуса ТП
    * @param technicalProposal
    */
-  protected getDurationChangeStatus(technicalProposal: TechnicalProposal): number {
+  protected getStatusChangeDuration(technicalProposal: TechnicalProposal): number {
     return moment().diff(moment(technicalProposal.statusChangedDate), 'seconds');
   }
 

@@ -148,7 +148,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   availableCancelPublishOffers(requestPosition: RequestPosition) {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT
-      && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
+      && this.getStatusChangeDuration(requestPosition) < this.durationCancelPublish;
   }
 
   positionHasProcedure(requestPosition: RequestPosition): boolean {
@@ -170,7 +170,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
    * Возвращает время в секундах, которое прошло с момента смены статуса КП
    * @param requestPosition
    */
-  protected getDurationChangeStatus(requestPosition: RequestPosition): number {
+  protected getStatusChangeDuration(requestPosition: RequestPosition): number {
     return moment().diff(moment(requestPosition.statusChangedDate), 'seconds');
   }
 
