@@ -9,6 +9,7 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { RequestService } from "../../../customer/services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { PermissionType } from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-request',
@@ -23,6 +24,7 @@ export class RequestComponent implements OnInit {
   @Output() addPosition = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
+  permissionType = PermissionType;
 
   form: FormGroup;
 

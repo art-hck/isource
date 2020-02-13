@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AvailableGuiService } from '@stdlib-ng/core';
 import { UserInfo } from "../models/user-info";
+import {Permission} from "../../auth/models/permission";
 
 const USER_INFO_KEY = 'UserInfo';
 
@@ -32,7 +33,9 @@ export class UserInfoService {
     isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
 
-    isContragentCreator: 'isContragentCreator'
+    isContragentCreator: 'isContragentCreator',
+
+    permissions: 'permissions'
   };
 
   constructor(
@@ -61,6 +64,23 @@ export class UserInfoService {
       return '';
     }
     return this.getUserInfo().firstName + ' ' + this.getUserInfo().lastName;
+  }
+
+  public getPermissions(): Permission[] {
+    if (!this.getUserInfo()) {
+      return [];
+    }
+    return this.getUserInfo().permissions;
+  }
+
+  public hasPermission(permissionType: string): boolean {
+    for (const permission of this.getPermissions()) {
+      if (permission.permission === permissionType) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public isCustomer(): boolean {
