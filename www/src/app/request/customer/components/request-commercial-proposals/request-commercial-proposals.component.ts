@@ -17,7 +17,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   ngOnInit() {
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/customer` },
-      { label: 'Заявка', link: `/requests/customer/${this.requestId}/new` },
+      { label: 'Заявка', link: `/requests/customer/${this.requestId}` },
       { label: 'Согласование коммерческих предложений', link: `/requests/customer/${this.requestId}/new/commercial-proposals` }
     ];
   }

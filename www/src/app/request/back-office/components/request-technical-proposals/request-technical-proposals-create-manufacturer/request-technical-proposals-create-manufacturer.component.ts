@@ -50,7 +50,7 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
   createFormGroupPosition(value: PositionWithManufacturerName) {
     return this.fb.group({
       position: value.position,
-      manufacturer_name: [value.manufacturer_name, Validators.required]
+      manufacturingName: [value.manufacturingName || value.position.name, Validators.required]
     });
   }
 
@@ -61,6 +61,6 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
   }
 
   get pristineCount() {
-    return this.formPositions.controls.filter(c => !c.get('manufacturer_name').value).length;
+    return this.formPositions.controls.filter(c => !c.get('manufacturingName').value).length;
   }
 }

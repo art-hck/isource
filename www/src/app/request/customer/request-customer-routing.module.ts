@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommercialProposalsComponent } from "./components/commercial-proposals/commercial-proposals.component";
-import { CustomerRequestViewComponent } from "./components/customer-request-view/customer-request-view.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
 import { RequestListViewComponent as CustomerRequestsList } from "./components/request-list-view/request-list-view.component";
 import { TechnicalProposalsComponent } from "./components/technical-proposals/technical-proposals.component";
@@ -10,23 +9,29 @@ import { DesignDocumentationComponent } from "../common/components/design-docume
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
+import { RequestAgreementsComponent } from "./components/request-agreements/request-agreements.component";
 
 const routes: Routes = [
   {
     path: '',
     component: CustomerRequestsList,
-    data: { title: "Заявки" }
+    canActivate: [CanActivateFeatureGuard],
+    data: { title: "Заявки", feature: "customerRequest" }
+  },
+  {
+    path: 'agreements',
+    component: RequestAgreementsComponent,
+    data: { title: "Согласования" }
   },
   {
     path: ':id',
+    canActivate: [CanActivateFeatureGuard],
+    data: { feature: "customerRequest" },
     children: [
       {
         path: 'new',
         children: [
-          {
-            path: "",
-            component: CustomerRequestComponent,
-          },
           {
             path: 'technical-proposals',
             component: RequestTechnicalProposalsComponent,
@@ -37,15 +42,11 @@ const routes: Routes = [
             component: RequestCommercialProposalsComponent,
             data: { title: "Коммерческие предложения" }
           },
-          {
-            path: ':position-id',
-            component: RequestPositionComponent
-          }
         ]
       },
       {
         path: '',
-        component: CustomerRequestViewComponent,
+        component: CustomerRequestComponent,
       },
       {
         path: 'contracts',
@@ -65,12 +66,16 @@ const routes: Routes = [
       {
         path: 'commercial-proposals',
         component: CommercialProposalsComponent,
-        data: { title: "Коммерческие предложения" }
+        data: { title: "Коммерческие предложения", noFooter: true }
       },
       {
         path: 'design-documentation',
         component: DesignDocumentationComponent,
         data: { title: "Рабочая конструкторская документация" }
+      },
+      {
+        path: ':position-id',
+        component: RequestPositionComponent
       }
     ]
   },

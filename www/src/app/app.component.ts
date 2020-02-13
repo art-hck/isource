@@ -9,6 +9,7 @@ import { UserInfoService } from "./user/service/user-info.service";
 import { CartStoreService } from "./cart/services/cart-store.service";
 import { Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
+import { FeatureService } from "./core/services/feature.service";
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   isBreadcrumbsHidden: boolean;
   noContainerPadding: boolean;
+  noFooter: boolean;
   _isTitleHidden: boolean;
 
   get isTitleHidden() {
@@ -29,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private featureService: FeatureService,
     private user: UserInfoService,
     private titleService: Title,
     private router: Router,
@@ -51,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
         tap(data => {
           this.isBreadcrumbsHidden = data.hideBreadcrumbs;
           this.noContainerPadding = data.noContainerPadding;
+          this.noFooter = data.noFooter;
           this._isTitleHidden = data.hideTitle;
           this.bc.breadcrumbs = [];
         }),

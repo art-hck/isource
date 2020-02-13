@@ -7,12 +7,11 @@ import { RequestService } from "../../services/request.service";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
 import { NotificationService } from "../../../../shared/services/notification.service";
-import { TechnicalProposalPositionStatuses } from 'src/app/request/common/enum/technical-proposal-position-statuses';
+import { TechnicalProposalPositionStatus } from 'src/app/request/common/enum/technical-proposal-position-status';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { TechnicalProposalsStatuses } from "../../../common/enum/technical-proposals-statuses";
 import { UxgBreadcrumbsService } from "uxg";
-import { RequestPosition } from "../../../common/models/request-position";
 
 @Component({
   selector: 'app-technical-proposals',
@@ -51,7 +50,7 @@ export class TechnicalProposalsComponent implements OnInit {
         this.request = request;
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/customer/" },
-          { label: `Заявка №${this.request.number }`, link: "/requests/customer/" + this.request.id }
+          { label: `Заявка №${this.request.number}`, link: "/requests/customer/" + this.request.id }
         ];
       }
     );
@@ -135,7 +134,7 @@ export class TechnicalProposalsComponent implements OnInit {
 
   isPositionSelectorAvailable(tpPosition: TechnicalProposalPosition): boolean {
     const selectorAvailableStatues = [
-      TechnicalProposalPositionStatuses.REVIEW.valueOf()
+      TechnicalProposalPositionStatus.REVIEW.valueOf()
     ];
     return selectorAvailableStatues.indexOf(tpPosition.status) >= 0;
   }

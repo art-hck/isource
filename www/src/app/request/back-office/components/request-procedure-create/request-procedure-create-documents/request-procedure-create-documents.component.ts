@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, forwardRef, Input, OnInit } from '@angular/core';
+import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { RequestDocument } from "../../../../common/models/request-document";
 import { Uuid } from "../../../../../cart/models/uuid";

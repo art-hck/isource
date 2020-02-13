@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { Observable, Subject } from "rxjs";
@@ -10,7 +10,7 @@ import { debounceTime, filter, flatMap, map, publishReplay, refCount, tap } from
   templateUrl: './contragent-autocomplete.component.html',
   styleUrls: ['./contragent-autocomplete.component.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContragentAutocompleteComponent), multi: true}
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContragentAutocompleteComponent), multi: true }
   ]
 })
 export class ContragentAutocompleteComponent implements ControlValueAccessor {
@@ -21,24 +21,20 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
   @Input() minLength = 0;
   @Input() display = 10;
   @Input() debounceTime = 100;
+  @Input() contragentsFullList: ContragentList[];
 
   public onTouched: (value: ContragentList[]) => void;
   public onInput = new Subject<string>();
   public onChange: (value: ContragentList[]) => void;
   public isOpen: boolean;
-  // @TODO Получать с бэкенда не всех контрагентов, а сразу отфильтрованных
-  public contragentsFullList$: Observable<ContragentList[]>;
   public contragents$: Observable<ContragentList[]>;
 
-  constructor(private contragentService: ContragentService) {
-    this.contragentsFullList$ = this.contragentService.getContragentList().pipe(publishReplay(1), refCount());
+  constructor() {
     this.contragents$ = this.onInput.pipe(
       filter(value => value.length >= this.minLength),
       debounceTime(this.debounceTime),
       tap(() => this.isOpen = true),
-      flatMap(value => this.contragentsFullList$.pipe(map(
-        contragents => this.search(contragents, value, this.display)
-      )))
+      map(value => this.search(this.contragentsFullList, value, this.display)),
     );
   }
 

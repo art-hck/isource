@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnInit } from '@angular/core';
 import { Title } from "@angular/platform-browser";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
 import { tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -35,13 +35,18 @@ export class RequestPositionComponent implements OnInit {
       .pipe(tap(position => this.setPageInfo(position)));
   }
 
+  updateData(position: RequestPosition) {
+    this.setPageInfo(position);
+    this.position$ = of(position);
+  }
+
   setPageInfo(position: RequestPosition) {
     this.title.setTitle(position.name);
 
     this.bc.breadcrumbs = [
       { label: 'Заявки', link: `/requests/customer` },
-      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}/new` },
-      { label: position.name, link: `/requests/customer/${this.requestId}/new/${position.id}` }
+      { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}` },
+      { label: position.name, link: `/requests/customer/${this.requestId}/${position.id}` }
     ];
   }
 }

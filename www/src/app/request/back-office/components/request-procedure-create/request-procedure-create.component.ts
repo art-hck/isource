@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UxgWizzard, UxgWizzardBuilder } from "uxg";
+import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -9,24 +9,32 @@ import { CreateProcedureRequest } from "../../models/create-procedure-request";
 import { finalize } from "rxjs/operators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { TechnicalProposalsService } from "../../services/technical-proposals.service";
-import { Observable } from "rxjs";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
-  selector: 'app-request-technical-proposals-procedure-create',
+  selector: 'app-request-procedure-create',
   templateUrl: './request-procedure-create.component.html',
   styleUrls: ['./request-procedure-create.component.scss']
 })
 export class RequestProcedureCreateComponent implements OnInit {
+  @Input() procedure;
   @Input() request: Request;
+  @Input() positions: RequestPosition[];
+  @Input() contragents: ContragentList[];
+  @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() publicAccess = true;
   @Output() complete = new EventEmitter();
-  contragents$: Observable<ContragentList[]>;
-  positions$: Observable<RequestPosition[]>;
+  @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
 
   form: FormGroup;
   wizzard: UxgWizzard;
   isLoading: boolean;
+
+  mask: TextMaskConfig = {
+    mask: value => [/[0-2]/, value[0] === "1" ? /[0-9]/ : /[0-3]/, ' ', ':', ' ', /[0-5]/, /\d/],
+    guide: false,
+    keepCharPositions: true
+  };
 
   get documents() {
     const positions = this.form.get("positions").value as RequestPosition[];
@@ -37,38 +45,49 @@ export class RequestProcedureCreateComponent implements OnInit {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
-    private technicalProposalsService: TechnicalProposalsService,
-    private contragentService: ContragentService,
     private notificationService: NotificationService,
   ) {}
 
   ngOnInit() {
-    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id);
-    this.contragents$ = this.contragentService.getContragentList();
-
     this.wizzard = this.wb.create({
-      positions: "Выбор позиций",
-      general: "Общие сведения",
-      properties: "Свойства",
-      contragents: { label: "Контрагенты", disabled: true },
-      documents: "Документы",
+      positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
+      general: ["Общие сведения", () => this.form.get('general').valid ],
+      properties: { label: "Свойства", disabled: this.action === 'prolong' },
+      contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
+      documents: ["Документы", () => this.form.valid],
     });
 
     this.form = this.fb.group({
-      general: this.fb.group({
-        procedureTitle: ["", [Validators.required, Validators.minLength(3)]],
-        dateEndRegistration: ["", CustomValidators.futureDate()],
-        dishonestSuppliersForbidden: false,
-        prolongateEndRegistration: 10, // Продление времени приема заявок на участие (минут)
-      }),
       positions: [[], [Validators.required]],
+      general: this.fb.group({
+        procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
+        dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.futureDate()],
+        timeEndRegistration: [this.defaultProcedureValue("timeEndRegistration"), [Validators.required, Validators.pattern(/[0-9]{2} : [0-9]{2}/)]],
+        dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
+        prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 10), // Продление времени приема заявок на участие (минут)
+      }),
       properties: null,
-      privateAccessContragents: [[]],
+      privateAccessContragents: [ this.defaultProcedureValue("privateAccessContragents", []) ],
       documents: this.fb.group({
-        procedureDocuments: [[]], // Документы, относящиеся к заявке
-        procedureLotDocuments: [[]], // Документы, относящиеся к позицям
+        procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к заявке
+        procedureLotDocuments: [ this.defaultProcedureValue("procedureLotDocuments", []) ], // Документы, относящиеся к позицям
       })
     });
+
+    if (this.action === 'prolong') {
+      this.wizzard.get("positions").disable();
+      this.wizzard.get("properties").disable();
+      this.form.get("positions").disable();
+      this.form.get("properties").disable();
+    }
+
+    if (this.action === 'bargain') {
+      this.wizzard.get("positions").disable();
+      this.form.get("positions").disable();
+    }
+
+    this.form.get("positions").valueChanges
+      .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
     this.form.get("properties").valueChanges
       .subscribe(properties => {
@@ -78,7 +97,7 @@ export class RequestProcedureCreateComponent implements OnInit {
           this.form.get("privateAccessContragents").clearValidators();
         }
 
-        this.wizzard.get("contragents").disable(properties.publicAccess);
+        this.wizzard.get("contragents").toggle(!properties.publicAccess);
       });
   }
 
@@ -114,13 +133,25 @@ export class RequestProcedureCreateComponent implements OnInit {
     );
   }
 
+  getStepIcon<S>(stepInfo: UxgWizzardStep<S>) {
+    switch (true) {
+      case stepInfo.disabled: return 'app-lock';
+      case stepInfo.completed: return 'app-check';
+    }
+  }
+
   filterPositions(q: string, position: RequestPosition): boolean {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
+  disabledPositions(position: RequestPosition): boolean {
+    return position.hasProcedure;
+  }
+
   filterContragents(q: string, contragent: ContragentList): boolean {
-    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.kpp.indexOf(q.toLowerCase()) >= 0;
+    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;
+  defaultProcedureValue = (field: string, defaultValue: any = "") => this.procedure && this.procedure[field] || defaultValue;
 }

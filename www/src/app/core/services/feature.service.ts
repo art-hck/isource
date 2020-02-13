@@ -1,0 +1,40 @@
+import { Inject, Injectable } from '@angular/core';
+import { GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
+import { Feature } from "../models/feature";
+import { UserRole } from "../../user/models/user-role";
+import { FeatureList, IFeatureList } from "../models/feature-list";
+
+@Injectable()
+export class FeatureService {
+
+  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {}
+
+  private get disabledFeatures(): (keyof IFeatureList)[] {
+     return this.appConfig.disabledFeatures || [];
+  }
+
+  getFeature(featureName: keyof IFeatureList): Feature {
+    if (FeatureList.hasOwnProperty(featureName)) {
+      return FeatureList[featureName];
+    } else {
+      throw new Error(`Feature ${featureName} does not exist`);
+    }
+  }
+
+  disabled(featureName: keyof IFeatureList): boolean {
+    return this.getFeature(featureName).disabled || this.disabledFeatures.indexOf(featureName) >= 0;
+  }
+
+  allowed(featureName: keyof IFeatureList, roles: UserRole[]): boolean {
+    const featureRoles = this.getFeature(featureName).roles;
+    const rolesMatch = this.getFeature(featureName).rolesMatch;
+
+    return !featureRoles || featureRoles
+      .filter(role => roles.indexOf(role) >= 0).length > (rolesMatch === 'full' ? featureRoles.length : 0);
+  }
+
+  available(featureName: keyof IFeatureList, roles?: UserRole[]): boolean {
+    return !this.disabled(featureName) && (!roles || this.allowed(featureName, roles));
+  }
+}

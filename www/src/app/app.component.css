@@ -10,3 +10,35 @@
   max-width: 100%;
   padding: 0;
 }
+
+.content-area.no-footer .footer {
+  display: none;
+}
+
+.container {
+  min-height: calc(100% - 68px);
+}
+
+.footer {
+  padding-top: 40px;
+  line-height: 10px;
+}
+
+.footer > div {
+  height: 100%;
+}
+
+.file-icon {
+  display: inline-block;
+  background: url('/assets/images/file-formats/pdf-s.svg') no-repeat;
+  width: 21px;
+  height: 28px;
+}
+
+span.file-link {
+  height: 28px;
+  display: inline-block;
+  line-height: 28px;
+  vertical-align: top;
+  margin-left: 10px;
+}

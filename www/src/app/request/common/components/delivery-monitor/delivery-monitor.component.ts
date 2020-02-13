@@ -9,7 +9,6 @@ import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consig
 import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 import { Uuid } from "../../../../cart/models/uuid";
-import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 import { InspectorInfo } from "../../models/inspector-info";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
@@ -103,7 +102,7 @@ export class DeliveryMonitorComponent implements OnInit {
   getDeliveryMonitorInfo(): void {
     this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
-      .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
+      .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.consignments ));
   }
 
   getInspectorStagesInfo(): void {
@@ -145,7 +144,6 @@ export class DeliveryMonitorComponent implements OnInit {
 
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
   }
-
 
   deliveryMonitorInfoCanBeShown() {
     const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(

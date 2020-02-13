@@ -1,0 +1,32 @@
+<div class="app-row">
+  <div class="app-col" *ngIf="(agreements$ | async) as agreements">
+    <div class="app-row app-align-items-center">
+      <h2 class="app-col">Согласования</h2>
+      <div><a routerLink="/requests/customer/agreements"><b>Все согласования ({{ agreements.totalCount }})</b></a></div>
+    </div>
+    <app-agreements [agreements]="agreements"></app-agreements>
+  </div>
+</div>
+<br/>
+<br/>
+<div class="app-row">
+  <div class="app-col">
+    <div class="app-row app-align-items-center">
+      <h2 class="app-col">Последние уведомления</h2>
+      <div><a routerLink="."><b>Все уведомления</b></a></div>
+    </div>
+    <app-dashboard-notification></app-dashboard-notification>
+  </div>
+  <div class="app-col">
+    <h2>Статистика</h2>
+    <app-dashboard-statistic></app-dashboard-statistic>
+  </div>
+</div>
+<br/>
+<br/>
+<div class="app-row">
+  <div class="app-col">
+    <h2>Общий статус</h2>
+    <app-dashboard-map></app-dashboard-map>
+  </div>
+</div>

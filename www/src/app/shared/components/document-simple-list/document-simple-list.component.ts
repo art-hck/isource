@@ -2,8 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { Guid } from "guid-typescript";
 import { DocumentsService } from "../../../request/common/services/documents.service";
-import { Uuid } from "../../../cart/models/uuid";
-import {DocumentIconSize} from "../../enums/document-icon-size";
+import { DocumentIconSize } from "../../enums/document-icon-size";
 
 /**
  * Компонент для отображение списка документов и загрузки новых документов в этот список
@@ -15,7 +14,7 @@ import {DocumentIconSize} from "../../enums/document-icon-size";
   templateUrl: './document-simple-list.component.html',
   styleUrls: ['./document-simple-list.component.scss']
 })
-export class DocumentSimpleListComponent implements OnInit {
+export class DocumentSimpleListComponent {
 
   @Input() documents: RequestDocument[] = [];
 
@@ -25,23 +24,16 @@ export class DocumentSimpleListComponent implements OnInit {
   @Input() enableUpload = true;
   @Input() gridable = false;
   @Input() limit = 0;
+  @Input() size: DocumentIconSize = DocumentIconSize.medium;
 
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
-
-  uploadInputId: Guid;
-  documentIconSize = DocumentIconSize;
   showAll = false;
 
   constructor(
     private documentsService: DocumentsService
-  ) {
-    this.uploadInputId = Guid.create();
-  }
-
-  ngOnInit() {
-  }
+  ) {}
 
   onDeleteDocument(document: RequestDocument) {
     this.delete.emit(document);
@@ -54,8 +46,8 @@ export class DocumentSimpleListComponent implements OnInit {
     this.documentsService.downloadFile(document);
   }
 
-  onChangeDocuments(files: FileList) {
-    this.selected.emit(Array.from(files));
+  onChangeDocuments(files: File[]) {
+    this.selected.emit(files);
 
     // очищаем, чтобы можно было снова загрузить тот же файл
     this.uploadElRef.nativeElement.value = '';

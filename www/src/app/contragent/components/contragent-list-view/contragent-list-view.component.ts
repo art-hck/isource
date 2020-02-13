@@ -1,7 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
+import { FeatureService } from "../../../core/services/feature.service";
+import { UserInfoService } from "../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-contragent-list-view',
@@ -14,7 +16,9 @@ export class ContragentListViewComponent implements OnInit {
   contragents$: Observable<ContragentList[]>;
 
   constructor(
-    protected getContragentService: ContragentService
+    protected getContragentService: ContragentService,
+    public featureService: FeatureService,
+    public userInfoService: UserInfoService
   ) { }
 
   ngOnInit() {

@@ -8,9 +8,15 @@ import { ContragentService } from "./services/contragent.service";
 import { ContragentInfoComponent } from './components/contragent-info/contragent-info.component';
 import { ContragentInfoLinkComponent } from './components/contragent-info-link/contragent-info-link.component';
 import { ContragentInfoViewComponent } from "./components/contragent-info-view/contragent-info-view.component";
+import { ContragentRegistrationComponent } from './components/contragent-registration/contragent-registration.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgxDadataModule } from "@kolkov/ngx-dadata";
 
 @NgModule({
   imports: [
+    FormsModule,
+    NgxDadataModule,
+    ReactiveFormsModule,
     SharedModule,
     CommonModule,
     ContragentRoutingModule
@@ -21,6 +27,7 @@ import { ContragentInfoViewComponent } from "./components/contragent-info-view/c
     ContragentInfoComponent,
     ContragentInfoViewComponent,
     ContragentInfoLinkComponent,
+    ContragentRegistrationComponent,
   ],
   providers: [
     ContragentService,

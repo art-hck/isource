@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommercialProposalsComponent } from './components/commercial-proposals/commercial-proposals.component';
-import { CustomerRequestViewComponent } from './components/customer-request-view/customer-request-view.component';
 import { QualityComponent } from "./components/quality/quality.component";
 import { QualityService } from "./services/quality.service";
 import { RequestCommonModule } from "../common/request-common.module";
@@ -13,6 +12,8 @@ import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
+import { RequestAgreementsComponent } from './components/request-agreements/request-agreements.component';
+import { AgreementsModule } from "../../agreements/agreements.module";
 
 
 @NgModule({
@@ -20,14 +21,15 @@ import { RequestCommercialProposalsComponent } from './components/request-commer
     CommercialProposalsComponent,
     CustomerRequestComponent,
     CustomerRequestListViewComponent,
-    CustomerRequestViewComponent,
     QualityComponent,
     RequestPositionComponent,
     TechnicalProposalsComponent,
     RequestTechnicalProposalsComponent,
-    RequestCommercialProposalsComponent
+    RequestCommercialProposalsComponent,
+    RequestAgreementsComponent
   ],
   imports: [
+    AgreementsModule,
     RequestCustomerRoutingModule,
     RequestCommonModule,
   ],

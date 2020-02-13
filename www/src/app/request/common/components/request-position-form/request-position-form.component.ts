@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map } from "rxjs/operators";
-import { Observable, Subscription } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
+import { Observable, of, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { EditRequestService } from "../../services/edit-request.service";
@@ -11,6 +11,7 @@ import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
 import { RequestPositionWorkflowSteps as PositionStatuses } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-request-position-form',
@@ -22,6 +23,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 export class RequestPositionFormComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
+  @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   form: FormGroup;
@@ -34,10 +36,13 @@ export class RequestPositionFormComponent implements OnInit {
     { value: PositionCurrency.CHF, label: "Фр." },
   ];
 
+  readonly approveRequiredFields = [
+    'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
+  ];
   readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
-      ['name', 'comments', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
+      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
     // Вырубаем ПНР после подготвки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
       ['isShmrRequired', 'isPnrRequired'],
@@ -49,12 +54,22 @@ export class RequestPositionFormComponent implements OnInit {
       ['isDesignRequired']
   };
 
+  get isDraft(): boolean {
+    return this.approveRequiredFields
+      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
+  }
+
+  get needApprove(): boolean {
+    return (this.isDraft || !this.position.id) && !!this.onDrafted;
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private statusService: RequestPositionStatusService,
     private createRequestService: CreateRequestService,
     private editRequestService: EditRequestService,
+    private userInfoService: UserInfoService
   ) {}
 
   ngOnInit() {
@@ -96,6 +111,10 @@ export class RequestPositionFormComponent implements OnInit {
     form.get('currency').setValue(PositionCurrency.RUB);
     form.get('currency').disable();
 
+    if (!this.userInfoService.isCustomer()) {
+      form.get('comments').disable();
+    }
+
     this.form = form;
   }
 
@@ -108,6 +127,10 @@ export class RequestPositionFormComponent implements OnInit {
         .pipe(map(positions => positions[0]));
     }
 
+    submit$ = submit$.pipe(flatMap(position =>
+      position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
+    ));
+
     this.form.disable();
     this.subscription.add(submit$.subscribe(position => {
       this.positionChange.emit(position);
@@ -115,4 +138,5 @@ export class RequestPositionFormComponent implements OnInit {
       this.form.enable();
     }));
   }
+
 }

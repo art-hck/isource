@@ -11,3 +11,8 @@ textarea { height: 80px; }
   line-height: 18px;
   padding-top: 3px;
 }
+
+::ng-deep textarea[disabled].comments {
+  background: #e5e8ef;
+}
+

@@ -10,12 +10,14 @@
         <span class="app-ghost-color">{{ position.createdDate | date : "hh:mm" }}</span>
       </div>
 
-      <div class="app-col separator"></div>
+      <ng-container *ngIf="position.group">
+        <div class="app-col separator"></div>
 
-      <div class="app-col">
-        <span class="app-ghost-color">Группа: </span>
-        <a routerLink="/">Насосное оборудование 1</a>
-      </div>
+        <div class="app-col">
+          <span class="app-ghost-color">Группа: </span>
+          <span class="group-name" [title]="position.group.name">{{ position.group.name }}</span>
+        </div>
+      </ng-container>
 
       <div class="app-col separator"></div>
 
@@ -46,7 +48,7 @@
 <div class="app-row">
 
   <!-- Табы -->
-  <div class="app-col app-table app-no-border actions">
+  <div class="app-col">
     <uxg-tabs class="app-tabs-border">
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
@@ -55,11 +57,21 @@
       <uxg-tab-title #productionTab disabled>Изготовление</uxg-tab-title>
       <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
-
+    <br/>
     <ng-container *uxgTab="historyTab">
       <app-position-info-history  [requestPosition]="position"></app-position-info-history>
     </ng-container>
     <ng-container *uxgTab="docTab">
+      <div class="app-row">
+        <div class="app-col">
+          <h3>Все документы позиции</h3>
+        </div>
+        <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({ files: $event, position: position })"
+                [multiple]="true">
+          <clr-icon shape="app-upload"></clr-icon>
+          <span>Загрузить документы</span>
+        </button>
+      </div>
       <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
         <h4>{{dateWithDocs.date}}</h4>
         <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="dateWithDocs.documents"></app-document-simple-list>
@@ -122,11 +134,12 @@
 
 
         <ng-container *ngIf="position.comments">
-          <div class="app-ghost-color">Комментарии</div>
+          <div class="app-ghost-color">Дополнительные требования</div>
           <div class="app-bold">{{ position.comments }}</div>
+          <br/>
         </ng-container>
 
-        <div>
+        <div *ngIf="isBeforeManufacturing(position)">
           <button uxgButton secondary (click)="edit.open()">
             <clr-icon shape="app-pen"></clr-icon>
             <span>Редактировать</span>
@@ -142,6 +155,7 @@
               [(position)]="position"
               (cancel)="edit.close()"
               (positionChange)="positionChange.emit($event); edit.close()"
+              [onDrafted]="onDrafted"
             ></app-request-position-form>
           </div>
         </clr-modal>

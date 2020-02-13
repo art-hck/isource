@@ -6,6 +6,7 @@ import { ForgotPasswordFormComponent } from "./components/forgot-password-form/f
 import { LoginFormComponent } from "./components/login-form/login-form.component";
 import { ChangePasswordFormComponent } from "./components/change-password-form/change-password-form.component";
 import { ActivationFormComponent } from "./components/activation-form/activation-form.component";
+import { CanActivateFeatureGuard } from "../core/can-activate-feature.guard";
 
 const routes: Routes = [
   {
@@ -38,7 +39,8 @@ const routes: Routes = [
   {
     path: 'registration',
     component: RegistrationComponent,
-    data: { title: "Регистрация" }
+    canActivate: [ CanActivateFeatureGuard ],
+    data: { title: "Регистрация", feature: 'registration' }
   },
   {
     path: 'activate',

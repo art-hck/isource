@@ -3,8 +3,11 @@
     <app-request
       [positions]="positions"
       [request]="request"
-      (addGroup)="getPositions()"
-      (addResponsible)="getPositions()"
+      [onDrafted]="sendOnApprove"
+      (addPosition)="updatePositions()"
+      (addGroup)="updatePositions()"
+      (addResponsible)="updatePositions()"
+      (uploadFromTemplate)="uploadFromTemplate($event)"
     ></app-request>
   </ng-container>
 </ng-container>

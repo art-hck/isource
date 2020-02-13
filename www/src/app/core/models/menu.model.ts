@@ -1,51 +1,46 @@
-import { UserRole } from "../../user/models/user-role";
+import { IFeatureList } from "./feature-list";
 
 export interface MenuModel {
   text: string;
   path: string;
   children: Array<MenuModel>;
+  feature?: keyof IFeatureList;
 }
 
-export const Menu: { [key in UserRole]: MenuModel[] } = {
-  [UserRole.CUSTOMER]: [
-    {
-      text: 'Заявки',
-      path: 'requests/customer',
-      children: []
-    },
-    {
-      text: 'Индивидуальная заявка',
-      path: 'requests/create',
-      children: []
-    },
-    {
-      text: 'Каталог',
-      path: 'catalog',
-      children: []
-    },
-    {
-      text: 'Контрагенты',
-      path: 'contragents',
-      children: []
-    }
-  ],
-  [UserRole.BACKOFFICE]: [
-    {
-      text: 'Заявки',
-      path: 'requests/backoffice',
-      children: []
-    },
-    {
-      text: 'Контрагенты',
-      path: 'contragents',
-      children: []
-    }
-  ],
-  [UserRole.SUPPLIER]: [
-    {
-      text: 'Заявки',
-      path: 'requests/backoffice',
-      children: []
-    }
-  ]
-};
+export const Menu: MenuModel[] = [
+  {
+    text: 'Заявки',
+    path: 'requests/customer',
+    feature: 'customerRequest',
+    children: []
+  },
+  {
+    text: 'Заявки',
+    path: 'requests/backoffice',
+    feature: 'backofficeRequest',
+    children: []
+  },
+  {
+    text: 'Создать заявку',
+    path: 'requests/create',
+    feature: 'createRequest',
+    children: []
+  },
+  {
+    text: 'Каталог',
+    path: 'catalog',
+    feature: 'catalog',
+    children: []
+  },
+  {
+    text: 'Контрагенты',
+    path: 'contragents',
+    children: []
+  },
+  {
+    text: 'Сотрудники',
+    path: 'employees',
+    feature: 'employees',
+    children: []
+  }
+];

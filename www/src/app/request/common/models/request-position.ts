@@ -5,6 +5,7 @@ import {RequestPositionList} from "./request-position-list";
 import {RequestOfferPosition} from "./request-offer-position";
 import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
 import { User } from "../../../user/models/user";
+import { RequestGroup } from "./request-group";
 
 export class RequestPosition extends RequestPositionList {
   /**
@@ -14,6 +15,7 @@ export class RequestPosition extends RequestPositionList {
   number: number;
   type: string;
   groupId: Uuid;
+  group: RequestGroup;
   userId: Uuid;
   contragentId: Uuid;
   productionDocument: string;
@@ -38,6 +40,7 @@ export class RequestPosition extends RequestPositionList {
   linkedOffers: RequestOfferPosition[];
   hasProcedure: boolean;
   procedureId: string;
+  procedureTitle: string;
   procedureStartDate?: Date;
   procedureEndDate?: Date;
   isDraftEntity: boolean;

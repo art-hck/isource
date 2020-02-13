@@ -29,6 +29,7 @@ import { UxgIconShapesSources, UxgModule } from "uxg";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { ClarityIcons } from "@clr/icons";
+import { AgreementsModule } from "./agreements/agreements.module";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -40,6 +41,7 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 @NgModule({
   declarations: [ AppComponent ],
   imports: [
+    AgreementsModule,
     AuthModule,
     BrowserModule,
     ClarityModule,

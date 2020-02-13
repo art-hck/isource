@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import {DocumentIconSize} from "../../enums/document-icon-size";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { DocumentIconSize } from "../../enums/document-icon-size";
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -23,8 +23,8 @@ export class DocumentUploadListComponent {
 
   public documentIconSize = DocumentIconSize;
 
-  addDocument(files: FileList) {
-    this.documents = [...this.documents, ...Array.from(files)];
+  addDocument(files: File[]) {
+    this.documents.push(...files);
     this.onChangeDocuments();
 
     // очищаем, чтобы можно было снова загрузить тот же файл

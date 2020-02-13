@@ -1,4 +1,4 @@
-.gridable {
+  .gridable {
   display: flex;
   flex-wrap: wrap;
 
@@ -8,10 +8,6 @@
     padding: 10px 10px 10px 0;
     box-sizing: border-box;
   }
-}
-
-.file-upload {
-  display: none;
 }
 
 .document {
@@ -39,7 +35,6 @@
     flex-grow: 1;
 
     .title {
-      font-size: 1.2em;
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -57,7 +52,6 @@
 
 .more {
   color: #666;
-  font-size: 1.2em;
   margin: 10px 0;
   cursor: pointer;
 }
@@ -71,6 +65,16 @@
 
 li:hover .btn-delete{
   display: block;
+}
+
+ul:not(.small) {
+  .title, .more {
+    font-size: 1.2em;
+  }
+}
+
+.small .description {
+  font-size: 11px;
 }
 
 @keyframes show-btn {

@@ -1,0 +1,94 @@
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
+
+<ng-container *ngIf="user; else loading">
+
+    <h1>{{ user.fullName }}</h1>
+
+    <div class="clr-row">
+
+      <div class="clr-col-9 user-card-content">
+
+        <clr-tabs>
+          <clr-tab>
+
+            <button clrTabLink id="link1">
+              Заявки
+              <ng-container *ngIf="requestList; else userCardCountLoader">
+                <span class="light-grey">({{ requestList.length }})</span>
+              </ng-container>
+
+              <ng-template #userCardCountLoader>
+                <span class="user-card-count-loader spinner spinner-md"></span>
+              </ng-template>
+            </button>
+
+            <clr-tab-content id="content1" *clrIfActive="true">
+              <ng-container *ngIf="requestList.length > 0; else emptyRequestList">
+                <app-user-card-request-list
+                        [requests]="requestList">
+                </app-user-card-request-list>
+              </ng-container>
+
+              <ng-template #emptyRequestList>
+                <span class="empty-list">Список заявок пуст</span>
+              </ng-template>
+            </clr-tab-content>
+
+          </clr-tab>
+
+
+          <clr-tab>
+            <button clrTabLink>
+              Позиции
+              <ng-container *ngIf="positionsList; else userCardCountLoader">
+                <span class="light-grey">({{ positionsList.length }})</span>
+              </ng-container>
+
+              <ng-template #userCardCountLoader>
+                <span class="user-card-count-loader spinner spinner-md"></span>
+              </ng-template>
+            </button>
+
+            <clr-tab-content *clrIfActive>
+              <ng-container *ngIf="positionsList.length > 0; else emptyPositionsList">
+                <app-user-card-position-list
+                        [positions]="positionsList">
+                </app-user-card-position-list>
+              </ng-container>
+
+              <ng-template #emptyPositionsList>
+                <span class="empty-list">Список позиций пуст</span>
+              </ng-template>
+            </clr-tab-content>
+
+          </clr-tab>
+        </clr-tabs>
+
+      </div>
+
+      <!-- Сайдбар с информацией -->
+      <div class="clr-col-3">
+        <div class="app-row user-info-card">
+          <div class="app-col">
+            <h3 class="sector-title">Информация о сотруднике</h3>
+
+            <div class="app-ghost-color">ФИО</div>
+            <div>{{ user.fullName }}</div>
+            <br/>
+
+            <div class="app-ghost-color">E-mail</div>
+            <div><a href="mailto:{{ user.username }}">{{ user.username }}</a></div>
+            <br/>
+
+            <div class="app-ghost-color">Телефон</div>
+            <div>{{ user.phone ? user.phone : 'не указан' }}</div>
+            <br/>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</ng-container>

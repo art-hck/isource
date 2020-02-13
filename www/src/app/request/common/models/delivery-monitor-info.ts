@@ -23,8 +23,8 @@ export class DeliveryMonitorInfo {
   };
   contractAnnex: {
     consignee: DeliveryMonitorCompany;
-    consignments: DeliveryMonitorConsignment[];
   };
+  consignments: DeliveryMonitorConsignment[];
 }
 
 export class InspectorStage {

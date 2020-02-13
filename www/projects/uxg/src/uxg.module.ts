@@ -9,7 +9,7 @@ import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
 import { UxgPositionStatusComponent } from './components/uxg-position-status/uxg-position-status.component';
 import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.component';
 import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
-import { UxgDropdownItemDirective } from './directives/uxg-dropdown-item.directive';
+import { UxgDropdownItemDirective } from './components/uxg-dropdown/uxg-dropdown-item.directive';
 import { UxgInputDirective } from './directives/uxg-input.directive';
 import { UxgButtonDirective } from './directives/uxg-button.directive';
 import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
@@ -22,6 +22,8 @@ import { UxgPopoverComponent } from "./components/uxg-popover/uxg-popover.compon
 import { UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover-trigger.directive";
 import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover-content.directive";
 import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
+import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-button.directive";
+import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-steps.component";
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-w
     UxgPopoverTriggerDirective,
     UxgWizzardDirective,
     UxgWizzardStepDirective,
+    UxgWizzardButtonDirective,
+    UxgWizzardStepsComponent
   ],
   exports: [
     UxgCheckboxComponent,
@@ -79,6 +83,8 @@ import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-w
     UxgPopoverTriggerDirective,
     UxgWizzardDirective,
     UxgWizzardStepDirective,
+    UxgWizzardButtonDirective,
+    UxgWizzardStepsComponent
   ],
 })
 export class UxgModule {

@@ -1,11 +1,10 @@
-<ul class="list-unstyled" [class.gridable]="gridable">
+<ul class="list-unstyled" [class.gridable]="gridable" [class.small]="size === 's'">
   <li class="document" [class.awaiting]="document.id === null" *ngFor="let document of getDocuments()">
-      <document-icon (click)="onDownloadDocument(document)" [name]="document.filename" [size]="documentIconSize.medium"></document-icon>
+      <document-icon (click)="onDownloadDocument(document)" [name]="document.filename" [size]="size"></document-icon>
       <div (click)="onDownloadDocument(document)" title="{{ document.filename }}">
         <div class="title">{{ document.filename }}</div>
         <div class="description">
-          <span *ngIf="document.size > 0">{{document.size | bytesToSize : 2}}</span>
-          <span *ngIf="document.created">
+        <span *ngIf="document.created">
           <ng-container *ngIf="document.id === null">будет скорректирован до</ng-container>
             {{document.created  | date :' d MMMM y '}}
         </span>
@@ -38,12 +37,6 @@
   </ng-container>
 
   <div class="form-group" *ngIf="enableUpload">
-    <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
-    <input #uploadEl
-           type="file"
-           id="{{ uploadInputId }}"
-           class="file-upload"
-           multiple
-           (change)="onChangeDocuments($event.target.files)">
+    <a appUploadFile (select)="onChangeDocuments($event)" [multiple]="true">{{ uploadLabel }}</a>
   </div>
 </ul>

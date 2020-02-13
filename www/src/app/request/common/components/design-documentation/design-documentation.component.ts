@@ -251,7 +251,7 @@ export class DesignDocumentationComponent implements OnInit {
       });
   }
 
-  reject(designDocumentationList: DesignDocumentationList, file?: File) {
+  reject(designDocumentationList: DesignDocumentationList, [file]: File[]) {
     const subscription = this.designDocumentationService
       .reject(this.requestId, designDocumentationList.id, file)
       .subscribe((_designDocumentationList: DesignDocumentationList) => {
@@ -268,8 +268,8 @@ export class DesignDocumentationComponent implements OnInit {
     }
   }
 
-  getRemark(designDocumentation: DesignDocumentationList) {
-    return designDocumentation.designDocs.filter(designDoc => designDoc.type === DesignDocumentationType.REMARK);
+  getRemark(designDocumentation: DesignDocumentationList): DesignDocumentation {
+    return designDocumentation.designDocs.find(designDoc => designDoc.type === DesignDocumentationType.REMARK);
   }
 
   getAwaitingDoc(designDocumentation: DesignDocumentation): RequestDocument {

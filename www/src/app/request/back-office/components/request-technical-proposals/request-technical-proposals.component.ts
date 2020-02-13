@@ -1,30 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
 import { ActivatedRoute } from "@angular/router";
-import { UxgBreadcrumbsService } from "uxg";
-import { map, publishReplay, refCount, tap } from "rxjs/operators";
-import { Request } from "../../../common/models/request";
+import { Component, OnInit } from '@angular/core';
+import { mapTo, publishReplay, refCount, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
+import { TechnicalProposalsService } from "../../services/technical-proposals.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { UxgBreadcrumbsService } from "uxg";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({ templateUrl: './request-technical-proposals.component.html' })
 export class RequestTechnicalProposalsComponent implements OnInit {
-
-  @Input() resultsCount: number;
-
-  filters = {};
   requestId: Uuid;
-  request$: Observable<Request>;
   technicalProposals$: Observable<TechnicalProposal[]>;
+  request$: Observable<Request>;
+  positions$: Observable<RequestPosition[]>;
+  contragents$: Observable<ContragentList[]>;
   showForm = false;
 
   constructor(
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
-    private technicalProposalsService: TechnicalProposalsService
+    private technicalProposalsService: TechnicalProposalsService,
+    private contragentService: ContragentService,
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -34,28 +36,63 @@ export class RequestTechnicalProposalsComponent implements OnInit {
       tap(request => {
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/backoffice" },
-          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}/new` },
-          {
-            label: 'Согласование технических предложений',
-            link: `/requests/backoffice/${this.requestId}/new/technical-proposals`
-          }
+          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
+          { label: 'Согласование технических предложений', link: `/requests/backoffice/${this.requestId}/technical-proposals` }
         ];
-      })
-    );
+      }));
 
-    this.onFiltersSubmit();
+    this.getTechnicalProposals();
+    this.getTechnicalProposalsPositions();
+    this.getTechnicalProposalsContragents();
   }
 
-  onFiltersSubmit(filters = {}) {
+  getTechnicalProposals(filters = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
       tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
   }
 
+  filter(filters: {}) {
+    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
+      this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
+    });
+  }
+
+  getTechnicalProposalsPositions() {
+    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
+  }
+
+  getTechnicalProposalsContragents() {
+    this.contragents$ = this.contragentService.getContragentList();
+  }
+
+  /**
+   * @TODO uncomment when backend return technicalProposal data
+   */
   addTechnicalProposal(technicalProposal) {
-    this.technicalProposals$ = this.technicalProposals$.pipe(
-      map(technicalProposals => [technicalProposal, ...technicalProposals])
-    );
+    this.getTechnicalProposals();
+    // this.technicalProposals$ = this.technicalProposals$.pipe(
+    //   map(technicalProposals => {
+    //     technicalProposals.unshift(technicalProposal);
+    //     return technicalProposals;
+    //   })
+    // );
+  }
+
+  /**
+   * @TODO uncomment when backend return technicalProposal data
+   */
+  updateTechnicalProposal(technicalProposal) {
+    this.getTechnicalProposals();
+    // this.technicalProposals$ = this.technicalProposals$.pipe(
+    //   map(technicalProposals => {
+    //     const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
+    //     technicalProposals[i] = technicalProposal;
+    //
+    //     return technicalProposals;
+    //   }),
+    //   publishReplay(1), refCount()
+    // );
   }
 }

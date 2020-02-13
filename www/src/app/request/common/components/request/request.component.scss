@@ -31,7 +31,7 @@
   &-group {
     background: #F0F6FA;
     border-left: 4px #B2D0FF solid;
-    cursor: pointer;
+    //cursor: pointer;
     padding-left: 2px;
 
     &:hover {
@@ -62,5 +62,24 @@
 
   & > .app-col:first-child {
     padding-right: 6px;
+  }
+}
+
+// @TODO Выпилить после реализации попозиционного согласования
+.notification-bar {
+  width: 100%;
+  background: #F0F6FC;
+  position: absolute;
+  left: 0;
+  top: 64px;
+  .container {
+    padding: 1em 0;
+
+    > .app-row {
+      justify-content: center;
+      .app-col {
+        flex-basis: 50%;
+      }
+    }
   }
 }

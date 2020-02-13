@@ -4,11 +4,17 @@
     <!-- page title -->
     <div class="app-row">
       <div class="app-col">
-        <h3>Новое техническое предложение</h3>
+        <h3 *ngIf="!isEditing">Новое техническое предложение</h3>
+        <h3 *ngIf="isEditing">Редактирование технического предлдожения</h3>
+      </div>
+      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">
+        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
+          <clr-icon shape="app-trash"></clr-icon>
+        </button>
       </div>
       <div class="app-col clr-flex-grow-0">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
-          <clr-icon shape="app-trash"></clr-icon>
+          <clr-icon shape="app-cross"></clr-icon>
         </button>
       </div>
     </div>
@@ -21,7 +27,8 @@
           <input #contragentName uxgInput lg (input)="autocomplete.onInput.next($event.target.value)"
                  formControlName="contragentName"/>
           <label class="app-control-label" (click)="contragentName.focus()">Наименование контрагента</label>
-          <app-contragent-autocomplete #autocomplete formControlName="contragent"></app-contragent-autocomplete>
+          <app-contragent-autocomplete #autocomplete formControlName="contragent" [contragentsFullList]="contragents$ | async">
+          </app-contragent-autocomplete>
         </div>
       </div>
       <div class="app-col app-secondary-color">
@@ -35,7 +42,7 @@
     <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
     <div class="app-row">
       <div class="app-col app-bold">
-        <div class="upload-area" hoverClass="upload-area-hover" (appOnDropFile)="filesDropped($event)">
+        <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="filesSelected($event)">
           <div>Перетащите документы сюда</div>
         </div>
       </div>
@@ -47,10 +54,11 @@
         </div>
         <div>
           <button
-            type="button" uxgButton secondary (click)="inputFile.click()"
-            [disabled]="form.get('documents').disabled">Выбрать документы
-          </button>
-          <input #inputFile type="file" multiple (change)="filesSelected($event)"/>
+            type="button" uxgButton secondary appUploadFile
+            [disabled]="form.get('documents').disabled"
+            [multiple]="true"
+            (select)="filesSelected($event)"
+          >Выбрать документы</button>
         </div>
       </div>
     </div>
@@ -58,24 +66,31 @@
     <br/>
 
     <!-- document list -->
-    <ng-container *ngIf="formDocuments.controls.length">
+    <ng-container *ngIf="formDocuments.controls.length || defaultTPValue('documents').length">
       <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
       <div class="documents">
         <div class="app-row">
+          <div class="app-col" *ngFor="let document of defaultTPValue('documents')">
+            <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
+          </div>
           <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
-            <document-icon [name]="document.value.name"></document-icon>
+            <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
+          </div>
+
+          <ng-template #documentRef let-document="document" let-i="i">
+            <document-icon [name]="document.name || document.filename"></document-icon>
             <div class="documents-title">
-              <div>{{ document.value.name }}</div>
-              <div *ngIf="document.value.size > 0" class="app-secondary-color">
-                {{document.value.size | bytesToSize : 2}}
+              <div>{{ document.name|| document.filename }}</div>
+              <div *ngIf="document.size > 0" class="app-secondary-color">
+                {{document.size | bytesToSize : 2}}
               </div>
             </div>
-            <div class="clr-align-self-start" *ngIf="!form.get('documents').disabled">
+            <div class="clr-align-self-start" *ngIf="!form.get('documents').disabled && i>=0">
               <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
                 <clr-icon shape="app-trash"></clr-icon>
               </button>
             </div>
-          </div>
+          </ng-template>
         </div>
       </div>
     </ng-container>
@@ -118,7 +133,7 @@
           {{positionWithName.position.name}}
         </div>
         <div class="app-col">
-          <ng-container *ngIf="positionWithName.manufacturer_name as name; else manufactureError">
+          <ng-container *ngIf="positionWithName.manufacturingName as name; else manufactureError">
             <span class="app-secondary-color">{{ name }}</span>
           </ng-container>
           <ng-template #manufactureError>
@@ -140,8 +155,8 @@
       <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
         <button
-          type="button" uxgButton secondary (click)="submit(true)"
-          [disabled]="form.disabled || form.invalid">Сохранить черновик
+          type="button" uxgButton secondary (click)="submit(false)"
+          [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>
         <button uxgButton primary [disabled]="form.disabled || form.invalid" >Отправить на согласование</button>
       </div>

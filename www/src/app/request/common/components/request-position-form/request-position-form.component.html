@@ -74,11 +74,12 @@
         </div>
       </div>
     </div>
-
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
+    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="140">
       <div class="app-control-wrap">
-        <input #measureUnit uxgInput lg formControlName="measureUnit"/>
-        <label class="app-control-label" (click)="measureUnit.focus()">Ед. измерения</label>
+
+        <app-okei-selector #measureUnit
+                           formControlName="measureUnit">
+        </app-okei-selector>
         <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
@@ -98,9 +99,7 @@
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <label class="input-label">Валюта</label>
       <uxg-dropdown placeholder="Валюта" formControlName="currency">
-        <ng-container *ngFor="let currency of currencies">
-          <div uxgDropdownItem [value]="currency.value">{{ currency.label }}</div>
-        </ng-container>
+        <div uxgDropdownItem [value]="currency.value" *ngFor="let currency of currencies">{{ currency.label }}</div>
       </uxg-dropdown>
     </div>
   </div>
@@ -143,20 +142,23 @@
       </div>
     </div>
     <div class="app-col">
-      <h3>Комментарий <span class="app-ghost-color" style="font-weight: normal">(не обязательно)</span></h3>
+      <h3>Дополнительные требования <span class="app-ghost-color" style="font-weight: normal">(необязательно)</span></h3>
       <br/>
       <!-- comment -->
-      <textarea uxgInput formControlName="comments"></textarea>
+      <textarea class="comments"
+                uxgInput
+                formControlName="comments"></textarea>
     </div>
   </div>
   <br/>
   <div class="app-row">
     <div class="app-col">
-      Все поля, кроме начальной максимальной цены и комментария, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
+      Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
-      <button uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
+      <button *ngIf="!needApprove" uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
+      <button *ngIf="needApprove" uxgButton primary lg [disabled]="form.invalid">Отправить на согласование</button>
     </div>
   </div>
 </form>
