@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {tap} from "rxjs/operators";
-import {Request} from "../../../common/models/request";
-import {UxgBreadcrumbsService} from "uxg";
-import {ActivatedRoute, Router} from "@angular/router";
-import {RequestService} from "../../services/request.service";
-import {OffersService} from "../../services/offers.service";
-import {Uuid} from "../../../../cart/models/uuid";
-import {RequestPosition} from "../../../common/models/request-position";
-import {Observable, Subscription} from "rxjs";
-import {ContragentList} from "../../../../contragent/models/contragent-list";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { tap } from "rxjs/operators";
+import { Request } from "../../../common/models/request";
+import { UxgBreadcrumbsService } from "uxg";
+import { ActivatedRoute, Router } from "@angular/router";
+import { RequestService } from "../../services/request.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
+import { Uuid } from "../../../../cart/models/uuid";
+import { RequestPosition } from "../../../common/models/request-position";
+import { Observable, Subscription } from "rxjs";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
 import Swal from "sweetalert2";
 
-@Component({templateUrl: './request-commercial-proposals.component.html'})
+@Component({ templateUrl: './request-commercial-proposals.component.html' })
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
@@ -30,7 +30,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
               private requestService: RequestService,
-              protected offersService: OffersService,
+              protected offersService: CommercialProposalsService,
               protected router: Router
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
@@ -40,8 +40,8 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
-          {label: "Заявки", link: "/requests/backoffice"},
-          {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}`},
+          { label: "Заявки", link: "/requests/backoffice" },
+          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
           {
             label: 'Согласование коммерческих предложений',
             link: `/requests/backoffice/${this.requestId}/technical-proposals`

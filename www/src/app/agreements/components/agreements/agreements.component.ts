@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Agreements } from "../../../dashboard/models/Agreements";
 import { RequestPositionWorkflowSteps as PositionStatus } from "../../../request/common/enum/request-position-workflow-steps";
 import { RequestPosition } from "../../../request/common/models/request-position";
 
@@ -9,7 +8,8 @@ import { RequestPosition } from "../../../request/common/models/request-position
   styleUrls: ['./agreements.component.scss']
 })
 export class AgreementsComponent {
-  @Input() agreements: Agreements;
+  @Input() positions: RequestPosition[];
+  @Input() total: number;
   readonly labels = {
     [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: {
       label: "Рассмотреть ТП",

@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
 @Injectable()
-export class OffersService {
+export class CommercialProposalsService {
 
   constructor(
     protected api: HttpClient,
