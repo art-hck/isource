@@ -57,10 +57,48 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   }
 
   sendForAgreement(requestId: Uuid, selectedRequestPositions: RequestPosition[]) {
-    this.subscription.add(this.offersService.publishRequestOffers(requestId, selectedRequestPositions).subscribe(
-      () => {
-        this.updatePositionsAndSuppliers();
-      }));
+    let alertWidth = 340;
+    let htmlTemplate = '<p class="text-alert warning-msg">Отправить на согласование?</p>' +
+      '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+      '<button id="cancel" class="btn btn-link">Отменить</button>';
+
+    if (selectedRequestPositions.some(requestPosition => requestPosition.hasProcedure === true)) {
+      alertWidth = 500;
+      htmlTemplate = '<p class="text-alert warning-msg">' +
+        'Процедура сбора коммерческих предложений по позиции ещё не завершена. ' +
+        '<br>' +
+        'Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>' +
+        '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+        '<button id="cancel" class="btn btn-link">Отменить</button>';
+    }
+
+    Swal.fire({
+      width: alertWidth,
+      html: htmlTemplate,
+      showConfirmButton: false,
+
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+
+        submit.addEventListener('click', () => {
+          const subscription = this.offersService.publishRequestOffers(this.requestId, selectedRequestPositions).subscribe(
+            () => {
+              this.updatePositionsAndSuppliers();
+              subscription.unsubscribe();
+            }, () => {
+            }
+          );
+          Swal.close();
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
   }
 
   onCancelPublishOffers(requestPosition: RequestPosition) {
