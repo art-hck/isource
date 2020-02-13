@@ -94,14 +94,16 @@
                 <clr-icon shape="app-doc"></clr-icon>Черновик</span>
             <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
               <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
-            <button uxgButton primary type="button" *ngIf="availableCancelPublishOffers(position)"
+            <button uxgButton primary type="button"
+                    class="fixedWidth"
+                    *ngIf="availableCancelPublishOffers(position)"
                     (click)="onCancelPublishOffers(position)">
               Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
             </button>
-<!--            <button uxgButton link icon type="button"-->
-<!--                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">-->
-<!--              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>-->
-<!--            </button>-->
+            <!--            <button uxgButton link icon type="button"-->
+            <!--                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">-->
+            <!--              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>-->
+            <!--            </button>-->
           </div>
         </div>
         <div class="app-row" #positionCard>
@@ -164,15 +166,16 @@
   <h2 class="modal-title"><b>Загрузить коммерческое предложение из шаблона</b></h2>
   <div class="modal-body">
     <p class="app-secondary-color">Вы можете загрузить коммерческие предложения списком, если заполните шаблон xls таблицы (
-    <span class="file-link">
+      <span class="file-link">
       <a (click)="onDownloadOffersTemplate()"><b>скачать шаблон</b></a></span>), и загрузить файл в систему.</p>
 
-<app-template-upload #templateUpload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
-      <div class="modal-footer">
-        <button uxgButton secondary lg (click)="uploadCommercialProposals.close(); templateUpload.clear()" type="button">Отмена</button>
-        <button uxgButton primary lg (click)="onSendOffersTemplateFilesClick(); templateUpload.clear()"
-                [disabled]="this.files.length === 0">Загрузить</button>
-      </div>
+    <app-template-upload #templateUpload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+    <div class="modal-footer">
+      <button uxgButton secondary lg (click)="uploadCommercialProposals.close(); templateUpload.clear()" type="button">Отмена</button>
+      <button uxgButton primary lg (click)="onSendOffersTemplateFilesClick(); templateUpload.clear()"
+              [disabled]="this.files.length === 0">Загрузить
+      </button>
+    </div>
 
     <ng-template #loading>
       <div class="text-center">

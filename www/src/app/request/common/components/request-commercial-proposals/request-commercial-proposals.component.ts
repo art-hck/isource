@@ -167,7 +167,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   }
 
   /**
-   * Возвращает время в секундах, которое прошло с момента смены статуса ТП
+   * Возвращает время в секундах, которое прошло с момента смены статуса КП
    * @param requestPosition
    */
   protected getDurationChangeStatus(requestPosition: RequestPosition): number {

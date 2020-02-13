@@ -35,6 +35,7 @@
         [request]="request"
         [technicalProposal]="technicalProposal"
         (update)="updateTechnicalProposal($event)"
+        (cancelTechnicalProposal)="onCancelPublishTechnicalProposal($event)"
       ></app-request-backoffice-technical-proposal>
 
       <clr-modal clrModalSize="lg" #procedureModal>
