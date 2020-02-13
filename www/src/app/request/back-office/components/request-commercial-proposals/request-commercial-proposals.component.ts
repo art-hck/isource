@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { tap } from "rxjs/operators";
-import { Request } from "../../../common/models/request";
-import { UxgBreadcrumbsService } from "uxg";
-import { ActivatedRoute, Router } from "@angular/router";
-import { RequestService } from "../../services/request.service";
-import { OffersService } from "../../services/offers.service";
-import { Uuid } from "../../../../cart/models/uuid";
-import { RequestPosition } from "../../../common/models/request-position";
-import { Observable, Subscription } from "rxjs";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {tap} from "rxjs/operators";
+import {Request} from "../../../common/models/request";
+import {UxgBreadcrumbsService} from "uxg";
+import {ActivatedRoute, Router} from "@angular/router";
+import {RequestService} from "../../services/request.service";
+import {OffersService} from "../../services/offers.service";
+import {Uuid} from "../../../../cart/models/uuid";
+import {RequestPosition} from "../../../common/models/request-position";
+import {Observable, Subscription} from "rxjs";
+import {ContragentList} from "../../../../contragent/models/contragent-list";
 import Swal from "sweetalert2";
 
-@Component({ templateUrl: './request-commercial-proposals.component.html' })
+@Component({templateUrl: './request-commercial-proposals.component.html'})
 export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
 
   requestId: Uuid;
@@ -40,8 +40,8 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
     this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/backoffice" },
-          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
+          {label: "Заявки", link: "/requests/backoffice"},
+          {label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}`},
           {
             label: 'Согласование коммерческих предложений',
             link: `/requests/backoffice/${this.requestId}/technical-proposals`
@@ -57,10 +57,48 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   }
 
   sendForAgreement(requestId: Uuid, selectedRequestPositions: RequestPosition[]) {
-    this.subscription.add(this.offersService.publishRequestOffers(requestId, selectedRequestPositions).subscribe(
-      () => {
-        this.updatePositionsAndSuppliers();
-      }));
+    let alertWidth = 340;
+    let htmlTemplate = '<p class="text-alert warning-msg">Отправить на согласование?</p>' +
+      '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+      '<button id="cancel" class="btn btn-link">Отменить</button>';
+
+    if (selectedRequestPositions.some(requestPosition => requestPosition.hasProcedure === true)) {
+      alertWidth = 500;
+      htmlTemplate = '<p class="text-alert warning-msg">' +
+        'Процедура сбора коммерческих предложений по позиции ещё не завершена. ' +
+        '<br>' +
+        'Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>' +
+        '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
+        '<button id="cancel" class="btn btn-link">Отменить</button>';
+    }
+
+    Swal.fire({
+      width: alertWidth,
+      html: htmlTemplate,
+      showConfirmButton: false,
+
+      onBeforeOpen: () => {
+        const content = Swal.getContent();
+        const $ = content.querySelector.bind(content);
+
+        const submit = $('#submit');
+        const cancel = $('#cancel');
+
+        submit.addEventListener('click', () => {
+          const subscription = this.offersService.publishRequestOffers(this.requestId, selectedRequestPositions).subscribe(
+            () => {
+              this.updatePositionsAndSuppliers();
+              subscription.unsubscribe();
+            }, () => {
+            }
+          );
+          Swal.close();
+        });
+        cancel.addEventListener('click', () => {
+          Swal.close();
+        });
+      }
+    });
   }
 
   onCancelPublishOffers(requestPosition: RequestPosition) {
