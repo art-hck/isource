@@ -86,6 +86,24 @@
             <span class="light-grey">—</span>
           </ng-template>
         </div>
+
+
+        <!-- Секция отмены отправки на согласование -->
+<ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal)">
+        <hr>
+        <div class="app-row section">
+          <div class="app-col">
+            Вы можете отозвать отправленное на согласование заказчику ТП в течение ограниченного времени (таймер на кнопке).
+          </div>
+          <div class="app-col status">
+            <button uxgButton primary type="button"
+                    class="fixedWidth"
+                    (click)="onCancelPublishTechicalProposal(technicalProposal)">
+              Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+            </button>
+          </div>
+        </div>
+</ng-container>
       </div>
     </div>
   </div>

@@ -95,4 +95,13 @@ export class RequestTechnicalProposalsComponent implements OnInit {
     //   publishReplay(1), refCount()
     // );
   }
+
+  onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
+    const subscription = this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal).subscribe(
+      () => {
+        this.getTechnicalProposals();
+        subscription.unsubscribe();
+      }
+    );
+  }
 }
