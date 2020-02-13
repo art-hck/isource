@@ -15,7 +15,7 @@
       <div class="app-col name"><b>{{position.name}}</b></div>
       <div class="app-col date">
         <span>{{ position.createdDate | date : "dd.MM.yyyy" }} </span>
-        <span class="app-ghost-color">{{ position.createdDate | date : "hh:mm" }}</span>
+        <span class="app-ghost-color">{{ position.createdDate | date : "HH:mm" }}</span>
       </div>
       <div class="app-col status">
         <uxg-position-status [label]="position.statusLabel" [status]="position.status">
