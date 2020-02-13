@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Agreements } from "../../dashboard/models/Agreements";
+import { AgreementsResponse } from "../models/agreements-response";
 import { Observable } from "rxjs";
 
 @Injectable()
@@ -8,13 +8,13 @@ export class AgreementsService {
 
   constructor(private api: HttpClient) {}
 
-  getAgreements(startFrom: number = 0, pageSize: number = 20): Observable<Agreements> {
+  getAgreements(startFrom: number = 0, pageSize: number = 20): Observable<AgreementsResponse> {
     const url = `requests/customer/agreements`;
-    return this.api.post<Agreements>(url, {startFrom, pageSize});
+    return this.api.post<AgreementsResponse>(url, {startFrom, pageSize});
   }
 
-  getDashboardAgreements(): Observable<Agreements> {
+  getDashboardAgreements(): Observable<AgreementsResponse> {
     const url = `requests/customer/dashboard/agreements`;
-    return this.api.post<Agreements>(url, null);
+    return this.api.post<AgreementsResponse>(url, null);
   }
 }

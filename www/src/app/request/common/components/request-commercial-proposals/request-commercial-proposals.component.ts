@@ -12,7 +12,7 @@ import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-conf
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
-import { OffersService } from "../../../back-office/services/offers.service";
+import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
 import Swal from "sweetalert2";
 
@@ -54,7 +54,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private offersService: OffersService,
+    private offersService: CommercialProposalsService,
     public featureService: FeatureService,
     public user: UserInfoService,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {

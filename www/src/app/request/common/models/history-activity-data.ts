@@ -1,9 +1,10 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
 
 export class ActivityData {
-  newStatus?: string;
+  newStatus?: RequestPositionWorkflowSteps;
   newStatusLabel?: string;
-  oldStatus?: string;
+  oldStatus?: RequestPositionWorkflowSteps;
   oldStatusLabel?: string;
   newValues?: Object;
   oldValues?: Object;

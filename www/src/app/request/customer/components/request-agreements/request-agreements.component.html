@@ -1,8 +1,6 @@
-<ng-container *ngIf="(agreements$ | async) as agreements;">
-  <div [class.loading]="isLoading">
-    <app-agreements [agreements]="agreements"></app-agreements>
-  </div>
-</ng-container>
+<div *ngIf="(agreements$ | async) as agreements;" [class.loading]="isLoading">
+  <app-agreements [positions]="agreements.entities" [total]="agreements.totalCount"></app-agreements>
+</div>
 
 <br/>
 
