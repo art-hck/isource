@@ -19,7 +19,7 @@
       <a class="app-pages-item" routerLink="." [queryParams]="{page: fullPages.length}">{{fullPages.length}}</a>
     </ng-container>
   </div>
-  <div [style.margin-left.px]="50">
+  <div *ngIf="pages.length > 0">
     <span class="app-ghost-color">На странице</span> {{firstItem}} - {{ lastItem }} <span class="app-ghost-color">из</span> {{total}}
   </div>
 </div>
