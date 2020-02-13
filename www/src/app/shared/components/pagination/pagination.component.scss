@@ -1,5 +1,6 @@
 .app-pages {
   display: flex;
+  flex-wrap: wrap;
 
   &-item {
     width: 32px;

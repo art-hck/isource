@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, O
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { fromEvent, merge, Observable, Subscription } from "rxjs";
 import { auditTime } from "rxjs/operators";
-import { OffersService } from "../../../services/offers.service";
+import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
@@ -46,7 +46,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   constructor(
     private formBuilder: FormBuilder,
-    protected offersService: OffersService,
+    protected offersService: CommercialProposalsService,
   ) { }
 
   ngOnInit() {

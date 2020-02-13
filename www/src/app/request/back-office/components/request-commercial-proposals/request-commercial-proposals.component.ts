@@ -4,7 +4,7 @@ import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService } from "uxg";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
-import { OffersService } from "../../services/offers.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
 import { Observable, Subscription } from "rxjs";
@@ -30,7 +30,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
               private requestService: RequestService,
-              protected offersService: OffersService,
+              protected offersService: CommercialProposalsService,
               protected router: Router
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');

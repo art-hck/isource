@@ -1,0 +1,32 @@
+@import "projects/uxg/src/styles/index";
+
+.app-notification {
+  padding: 1em 0;
+
+  &-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: relative;
+    margin-right: .5em;
+
+    @each $status, $color in $statuses {
+      &.#{$status} {
+        background-color: $color;
+      }
+    }
+
+    &:after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border-radius: 50%;
+    }
+  }
+}

@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
   { path: 'employees', loadChildren: () => import('./employees/users.module').then(m => m.UsersModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
+  { path: 'notifications', loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'not-found', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } },
   { path: 'forbidden', component: ForbiddenComponent, data: { title: "403 - Доступ запрещен" } },
   { path: '**', redirectTo: '/not-found' }

@@ -4,7 +4,7 @@ import { RequestBackofficeRoutingModule } from "./request-backoffice-routing.mod
 
 import { AddOffersComponent } from "./components/add-offers/add-offers.component";
 import { DesignDocumentationService } from "./services/design-documentation.service";
-import { OffersService } from "./services/offers.service";
+import { CommercialProposalsService } from "./services/commercial-proposals.service";
 import { ProcedureService } from "./services/procedure.service";
 import { RequestComponent } from './components/request/request.component';
 import { RequestListViewComponent } from './components/request-list-view/request-list-view.component';
@@ -47,7 +47,7 @@ import { RequestTechnicalProposalComponent } from "./components/request-technica
   ],
   providers: [
     DesignDocumentationService,
-    OffersService,
+    CommercialProposalsService,
     ProcedureService,
     RequestService,
     SupplierSelectComponent,
