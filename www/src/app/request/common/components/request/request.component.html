@@ -100,12 +100,12 @@
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
-                    [disabled]="requestIsOutdated" (click)="addPositionModal.open()">
+                    [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
               <clr-icon shape="app-plus"></clr-icon>
               <span>Новая позиция</span>
             </button>
 
-            <ng-container *ngIf="requestIsOutdated">
+            <ng-container *ngIf="request.isOlderTwoWeeks">
               <div *uxgPopoverContent (click)="more.hide()">
                 <div>Заявке больше двух недель.</div>
                 <div>Добавление новых позиций недоступно.</div>
