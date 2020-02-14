@@ -216,7 +216,7 @@
         2 как можно скорее | 01.01.2020 — ...
       </div-->
       <div class="app-col app-row clr-flex-grow-0">
-        <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="folded.value ? 'down' : 'up'"
+        <clr-icon class="app-accordion-title-icon" shape="app-chevron" [attr.dir]="folded.value ? 'down' : 'up'"
             (click)="folded.setValue(!folded.value); $event.preventDefault(); $event.stopPropagation();"></clr-icon>
       </div>
     </div>
