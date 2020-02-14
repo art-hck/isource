@@ -77,14 +77,6 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     // После публикации получаем актуальную инфу о позиции
     .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
 
-  uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
-    this.requestService.uploadDocuments(position, files)
-      .subscribe((documents: RequestDocument[]) => {
-        position.documents.push(...documents);
-        this.position$ = of(position);
-      });
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

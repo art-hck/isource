@@ -22,7 +22,6 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
-import { UploadFileDirective } from "./directives/upload-file.directive";
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 
