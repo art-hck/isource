@@ -7,13 +7,13 @@
         <div class="app-notification-icon-bottom" [ngClass]="notification.data.oldStatus"></div>
       </div>
     </div>
-    <div class="app-col app-grow-0 app-basis-auto">{{ notification.createdDate | date: 'd LLLL yyyy в H:mm' }}</div>
+    <div class="app-col app-grow-0 app-basis-auto">{{ notification.createdDate | date: 'd LLLL yyyy в HH:mm' }}</div>
     <div class="app-col content">
       <div class="app-bold">{{notification.typeLabel}}</div>
       <div class="app-row app-align-items-center" *ngIf="notification?.data?.newStatus">
-        <uxg-position-status [status]="notification.data.newStatus" [label]="notification.data.newStatusLabel"></uxg-position-status>
-        <clr-icon shape="app-arrow right" class="app-ghost-color"></clr-icon>
         <uxg-position-status [status]="notification.data.oldStatus" [label]="notification.data.oldStatusLabel"></uxg-position-status>
+        <clr-icon shape="app-arrow right" class="app-ghost-color"></clr-icon>
+        <uxg-position-status [status]="notification.data.newStatus" [label]="notification.data.newStatusLabel"></uxg-position-status>
       </div>
       <div class="app-secondary-color">
         <span *ngIf="notification.request">Заявка № {{notification.request.number}} {{notification.request.name}}</span>
