@@ -12,7 +12,7 @@ import { ActivatedRoute } from "@angular/router";
 export class NotificationsComponent implements OnInit, OnDestroy {
   notifications$: Observable<NotificationsResponse>;
   total$: Observable<number>;
-  pageSize = 5;
+  pageSize = 10;
   isLoading = false;
   subscription = new Subscription();
   pages$: Observable<number>;

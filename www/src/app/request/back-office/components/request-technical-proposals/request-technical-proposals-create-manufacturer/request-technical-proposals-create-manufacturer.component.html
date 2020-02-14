@@ -16,9 +16,9 @@
     </div>
     <hr/>
     <br/>
-    <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
-      <ng-container *ngIf="positionControl.get('position').value as position" formArrayName="positions">
-        <div class="app-row" formGroupName="{{i}}">
+    <ng-container *ngFor="let formGroup of formPositions.controls; index as i">
+      <ng-container *ngIf="formGroup.get('position').value as position">
+        <div class="app-row" [formGroup]="formGroup">
           <div class="app-col app-bold item-title">{{ position.name }}</div>
           <div class="app-col"><input type="text" uxgInput formControlName="manufacturingName"/></div>
         </div>

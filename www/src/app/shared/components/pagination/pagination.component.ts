@@ -34,8 +34,8 @@ export class PaginationComponent implements OnInit, OnDestroy {
 
   get pages(): number[] {
     return this.fullPages
-      .filter(page => page >= this.current - Math.min(this.leftSiblingCount, this.siblingCount))
-      .filter(page => page <= this.current + Math.min(this.rightSiblingCount, this.siblingCount));
+      .filter(page => page >= this.current - Math.min(this.leftSiblingCount, this.siblingCount) - this.siblingCount + Math.min(this.rightSiblingCount, this.siblingCount))
+      .filter(page => page <= this.current + Math.min(this.rightSiblingCount, this.siblingCount) + this.siblingCount - (Math.min(this.leftSiblingCount, this.siblingCount)));
   }
 
   get firstItem() {
