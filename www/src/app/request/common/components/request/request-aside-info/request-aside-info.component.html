@@ -32,7 +32,7 @@
   <div class="app-accordion-title" (click)="isInfoTabVisible = !isInfoTabVisible">
     <h3>Общая инф. по заявке</h3>
     <clr-icon class="app-accordion-title-icon" shape="app-chevron"
-              [dir]="isInfoTabVisible ? 'up':'down'"></clr-icon>
+              [attr.dir]="isInfoTabVisible ? 'up':'down'"></clr-icon>
   </div>
   <div class="app-accordion-body" *ngIf="isInfoTabVisible">
     <div class="app-section">
@@ -67,7 +67,7 @@
   <div class="app-accordion-title" (click)="isStatTabVisible = !isStatTabVisible">
     <div>Статистика</div>
     <clr-icon class="app-accordion-title-icon" shape="app-chevron"
-              [dir]="isStatTabVisible ? 'up':'down'"></clr-icon>
+              [attr.dir]="isStatTabVisible ? 'up':'down'"></clr-icon>
   </div>
   <div class="app-accordion-body" *ngIf="isStatTabVisible">
     <div class="app-section">
