@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { Contract } from "../../models/contract";
 import { FormControl, FormGroup } from "@angular/forms";
 import { RequestDocument } from "../../models/request-document";

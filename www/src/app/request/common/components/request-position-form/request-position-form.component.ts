@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map } from "rxjs/operators";
-import { Observable, Subscription } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
+import { Observable, of, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { EditRequestService } from "../../services/edit-request.service";
@@ -12,6 +12,7 @@ import { RequestPositionStatusService } from "../../services/request-position-st
 import { RequestPositionWorkflowSteps as PositionStatuses } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-request-position-form',
@@ -23,6 +24,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 export class RequestPositionFormComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
+  @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   form: FormGroup;
@@ -35,20 +37,39 @@ export class RequestPositionFormComponent implements OnInit {
     { value: PositionCurrency.CHF, label: "Фр." },
   ];
 
+  readonly approveRequiredFields = [
+    'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
+  ];
   readonly disabledFieldsAfterStatus = {
     // Вырубаем поля после Согласования ТП
     [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
-      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument', 'startPrice'],
-    // Вырубаем ПНР после подготвки КП
+      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'],
+
+    // Вырубаем «ПНР» и стоимость после подготвки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
-      ['isShmrRequired', 'isPnrRequired'],
-    // Вырубаем инспекционный контроль после подписания договора
+      ['isShmrRequired', 'isPnrRequired', 'startPrice'],
+
+    // Вырубаем «Условия оплаты» после выбора победителя (начиная с «Выбран победитель»)
+    [PositionStatuses.WINNER_SELECTED]:
+      ['paymentTerms', 'deliveryBasis', 'quantity'],
+
+    // Вырубаем «Инспекционный контроль» после подписания договора
     [PositionStatuses.CONTRACT_SIGNING]:
       ['isInspectionControlRequired'],
-    // Вырубаем РКД после изготовления
+
+    // Вырубаем «РКД» после изготовления
     [PositionStatuses.MANUFACTURING]:
       ['isDesignRequired']
   };
+
+  get isDraft(): boolean {
+    return this.approveRequiredFields
+      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
+  }
+
+  get needApprove(): boolean {
+    return (this.isDraft || !this.position.id) && !!this.onDrafted;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,10 +94,10 @@ export class RequestPositionFormComponent implements OnInit {
       isPnrRequired: [p.isPnrRequired],
       isShmrRequired: [p.isShmrRequired],
       measureUnit: [p.measureUnit, Validators.required],
-      paymentTerms: [p.paymentTerms, Validators.required],
+      paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
-      quantity: [p.quantity, [Validators.required, Validators.min(1)]],
-      startPrice: [p.startPrice, Validators.min(1)]
+      quantity: [p.quantity, [Validators.required, Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]]
     });
 
     Object.entries(this.disabledFieldsAfterStatus)
@@ -107,12 +128,35 @@ export class RequestPositionFormComponent implements OnInit {
 
   submit() {
     let submit$: Observable<RequestPosition>;
+
     if (this.position.id) {
+      // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
+      const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
+        let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
+        const updatedInfo = value === null ? value : value.toString();
+
+        if (key === 'deliveryDate') {
+          positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+        }
+
+        return positionInfo === updatedInfo;
+      });
+
+      // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
+      if (positionInfoNotChanged) {
+        this.cancel.emit();
+        return;
+      }
+
       submit$ = this.editRequestService.updateRequestPosition(this.position.id, this.form.value);
     } else {
       submit$ = this.createRequestService.addRequestPosition(this.requestId, [this.form.value])
         .pipe(map(positions => positions[0]));
     }
+
+    submit$ = submit$.pipe(flatMap(position =>
+      position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
+    ));
 
     this.form.disable();
     this.subscription.add(submit$.subscribe(position => {

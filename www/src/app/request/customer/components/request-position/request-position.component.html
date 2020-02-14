@@ -1,7 +1,8 @@
 <ng-container *ngIf="(position$ | async) as position">
   <app-request-position
     [requestId]="requestId"
-    [(position)]="position"
+    [position]="position"
     (positionChange)="updateData($event)"
+    (uploadDocuments)="uploadDocuments($event)"
   ></app-request-position>
 </ng-container>

@@ -1,1 +1,19 @@
-<app-request-technical-proposals></app-request-technical-proposals>
+<ng-container *ngIf="(request$ | async) as request; else loading">
+<div class="app-row" *ngIf="(technicalProposals$ | async) as technicalProposals; else loading">
+  <div class="app-col">
+    <app-request-technical-proposal
+      *ngFor="let technicalProposal of technicalProposals"
+      [technicalProposal]="technicalProposal"
+    ></app-request-technical-proposal>
+  </div>
+
+  <div class="app-col app-col-aside">
+    <app-request-tp-list-filter [technicalProposals]="technicalProposals" (filters)="getTechnicalProposals()"></app-request-tp-list-filter>
+  </div>
+</div>
+</ng-container>
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CreateRequestService } from "../../services/create-request.service";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2";

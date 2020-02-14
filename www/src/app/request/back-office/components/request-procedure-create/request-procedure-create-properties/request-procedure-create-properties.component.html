@@ -1,9 +1,5 @@
 <ng-container [formGroup]="form">
   <p class="app-row clr-align-items-center">
-    <uxg-checkbox class="app-control" formControlName="manualEndRegistration" #manualEndRegistration></uxg-checkbox>
-    <label (click)="manualEndRegistration.check($event)"> &nbsp; Досрочное завершение приема заявок на участие</label>
-  </p>
-  <p class="app-row clr-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsRequiredAll" #positionsRequiredAll></uxg-checkbox>
     <label (click)="positionsRequiredAll.check($event)"> &nbsp; Обязательная подача предложений на все позиции</label>
   </p>

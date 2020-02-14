@@ -7,10 +7,29 @@ import { UxgWizzard } from "./uxg-wizzard";
 })
 export class UxgWizzardBuilder {
 
-  create<S>(stepsConfig: {[key: string]: (UxgWizzardStepInfo | string)}, current?: S): UxgWizzard<S> {
-    return new UxgWizzard<S>(Object.entries(stepsConfig)
-      .map(([step, info]) => new UxgWizzardStep<S>(
-        step as any as S, typeof info === 'string' ? { label: info } : info
-      )), current);
+  create<S>(stepsConfig: UxgWizzardStepConfig, current?: S): UxgWizzard<S> {
+    const steps: UxgWizzardStep<S>[] = Object.entries(stepsConfig)
+      .map(([step, config]) => {
+        return new UxgWizzardStep<S>(step as any, this.createStepInfo(config));
+      });
+
+    return new UxgWizzard<S>(steps, current);
+  }
+
+  createStepInfo = (config: UxgWizzardStepInfoConfig): UxgWizzardStepInfo => {
+    if (typeof config === 'string') {
+      return { label: config };
+    } else if (Array.isArray(config)) {
+      const [label, validator] = config;
+      return { label, validator };
+    } else {
+      return config;
+    }
   }
 }
+
+export interface UxgWizzardStepConfig {
+  [key: string]: UxgWizzardStepInfoConfig;
+}
+
+export type UxgWizzardStepInfoConfig = UxgWizzardStepInfo | string | [string, () => boolean];

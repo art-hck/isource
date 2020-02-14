@@ -9,7 +9,6 @@ import { DeliveryMonitorConsignment } from "../../models/delivery-monitor-consig
 import { DeliveryMonitorStatus } from "../../enum/delivery-monitor-status";
 import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor-status-labels";
 import { Uuid } from "../../../../cart/models/uuid";
-import { DeliveryMonitorCargo } from '../../models/delivery-monitor-cargo';
 import { InspectorInfo } from "../../models/inspector-info";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";

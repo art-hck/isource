@@ -40,11 +40,15 @@
       }
     }
 
-    .completed {
+    &.completed &-icon {
+      color: uxg($theme, color-primary);
+    }
+
+    &-icon {
+      overflow: visible;
       position: absolute;
       right: -1px;
       top: -2px;
-      color: uxg($theme, color-primary);
 
       ::ng-deep svg {
         stroke: #fff;

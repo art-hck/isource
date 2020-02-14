@@ -1,0 +1,53 @@
+@import "projects/uxg/src/styles/index";
+
+input[type=file] {
+  display: none;
+}
+
+.upload-area {
+  align-items: center;
+  background: uxg($theme, color-list-hover);
+  color: rgba(uxg($theme, color-control-primary), .3);
+  font-size: uxg($theme, font-size-l);
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  border: 2px transparent solid;
+  transition: border 200ms, color 200ms;
+  border-radius: 4px;
+  margin-right: 20px;
+
+  &-hover {
+    border-color: uxg($theme, color-border);
+    color: rgba(uxg($theme, color-control-primary), 1);
+  }
+}
+
+small {
+  margin: 24px 0 17px 0;
+  display: block;
+}
+
+.documents {
+  & > .app-row > .app-col {
+    width: 25%;
+    min-width: 260px;
+    padding: 0 20px 12px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+  }
+
+  &-title {
+    padding: 0 12px;
+    overflow: hidden;
+    flex-grow: 1;
+
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

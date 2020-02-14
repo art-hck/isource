@@ -237,7 +237,7 @@
                        [class.invalid]="isFieldValid('quantity')">
               </div>
               <div class="clr-col-8">
-                <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>
+                <label class="clr-control-label" (click)="measureUnit.focus()">Единицы измерения <b class="required-star">*</b></label>
                 <app-okei-selector #measureUnit
                                    formControlName="measureUnit"
                                    [class.invalid]="isFieldValid('measureUnit')">

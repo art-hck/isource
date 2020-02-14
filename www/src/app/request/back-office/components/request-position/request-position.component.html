@@ -5,6 +5,8 @@
     [statuses]="statuses"
     (changeStatus)="changeStatus($event)"
     (positionChange)="updateData($event)"
+    (uploadDocuments)="uploadDocuments($event)"
+    [onDrafted]="sendOnApprove"
   >
   </app-request-position>
 </ng-container>

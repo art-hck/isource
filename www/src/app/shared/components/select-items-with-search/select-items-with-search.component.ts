@@ -1,5 +1,5 @@
-import { AfterContentInit, Component, ContentChild, EventEmitter, forwardRef, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
-import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AfterContentInit, Component, ContentChild, forwardRef, Input, OnChanges, OnDestroy, TemplateRef } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { CustomValidators } from "../../forms/custom.validators";
 import { Subscription } from "rxjs";
 
@@ -13,11 +13,12 @@ import { Subscription } from "rxjs";
     multi: true
   }]
 })
-export class SelectItemsWithSearchComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
-  @Input() items: any[];
+export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnChanges, AfterContentInit, OnDestroy {
+  @Input() items: any[] = [];
   @Input() placeholder = "";
   @Input() trackBy: (item) => any;
   @Input() filterFn: (q, item) => boolean;
+  @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
   @ContentChild(TemplateRef, {static: false}) rowTplRef: TemplateRef<any>;
 
@@ -45,18 +46,48 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, Aft
       items: this.fb.array([], CustomValidators.oneOrMoreSelected)
     });
 
-    this.items.forEach(item => this.formItems.push(
-      this.fb.group({
-        checked: this.value && !!this.value.find(_item => this.trackBy(_item) === this.trackBy(item)),
-        item: item
-      })
-    ));
+    this.setFormItems();
 
     if (this.liveUpdate) {
       this.subscription.add(
         this.form.valueChanges.subscribe(() => this.submit())
       );
     }
+  }
+
+  ngOnChanges() {
+    this.setFormItems();
+  }
+
+  setFormItems() {
+    if (!this.items) {
+      return;
+    }
+
+    this.items
+      .filter(() => this.form)
+      .forEach(item => {
+        let formItem: AbstractControl;
+        formItem = this.formItems.controls
+          .find(formGroup => this.trackBy(formGroup.get('item').value) === this.trackBy(item));
+
+        if (formItem) {
+          formItem.get('item').setValue(item);
+        } else {
+          formItem = this.fb.group({
+            checked: this.value && !!this.value.find(_item => this.trackBy(_item) === this.trackBy(item)),
+            item: item
+          });
+
+          this.formItems.push(formItem);
+        }
+
+        if (this.disabledFn && this.disabledFn(item)) {
+          formItem.disable();
+        } else if (formItem.disabled) {
+          formItem.enable();
+        }
+      });
   }
 
   submit() {

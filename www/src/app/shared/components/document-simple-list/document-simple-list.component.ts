@@ -2,8 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { Guid } from "guid-typescript";
 import { DocumentsService } from "../../../request/common/services/documents.service";
-import { Uuid } from "../../../cart/models/uuid";
-import {DocumentIconSize} from "../../enums/document-icon-size";
+import { DocumentIconSize } from "../../enums/document-icon-size";
 
 /**
  * Компонент для отображение списка документов и загрузки новых документов в этот список
@@ -25,13 +24,13 @@ export class DocumentSimpleListComponent implements OnInit {
   @Input() enableUpload = true;
   @Input() gridable = false;
   @Input() limit = 0;
+  @Input() size: DocumentIconSize = DocumentIconSize.medium;
 
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
   @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
 
   uploadInputId: Guid;
-  documentIconSize = DocumentIconSize;
   showAll = false;
 
   constructor(

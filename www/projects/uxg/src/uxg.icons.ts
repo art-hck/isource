@@ -10,9 +10,10 @@ enum UxgIcons {
   AppCheckIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6.79874 10.4172L3.12384 7.07922L1.77912 8.55966L6.99376 13.2962L14.733 4.07301L13.2009 2.78744L6.79874 10.4172Z"/></svg>',
   AppChevronIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.00002 6.40582L3.70291 10.7029L2.2887 9.28872L8.00002 3.57739L13.7113 9.28872L12.2971 10.7029L8.00002 6.40582Z" /></svg>',
   AppCrossIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M13.6568 3.75735L12.2426 2.34314L8 6.58577L3.75737 2.34314L2.34316 3.75735L6.58579 7.99998L2.34314 12.2426L3.75735 13.6568L8 9.4142L12.2427 13.6568L13.6569 12.2426L9.41422 7.99998L13.6568 3.75735Z"/></svg>',
-  AppDocIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M3.83333 1C3.375 1 3.00833 1.39375 3.00833 1.875L3 14.125C3 14.6062 3.36667 15 3.83333 15H12.1667C12.625 15 13 14.6062 13 14.125V5.375L8.83333 1H3.83333ZM9 5V2L12 5H9Z"/></svg>',
+  AppDocIcon = '<svg class="has-solid" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path class="clr-i-solid" d="M3.83333 1C3.375 1 3.00833 1.39375 3.00833 1.875L3 14.125C3 14.6062 3.36667 15 3.83333 15H12.1667C12.625 15 13 14.6062 13 14.125V5.375L8.83333 1H3.83333ZM9 5V2L12 5H9Z"/><path class="clr-i-outline" fill-rule="evenodd" clip-rule="evenodd" d="M4 1H8.82452L13 5.36125V14.0667C13 14.5821 12.5523 15 12 15H4C3.44772 15 3 14.5821 3 14.0667V1.93333C3 1.41787 3.44772 1 4 1ZM9.19952 2.33995L11.5643 5.01125H9.82452C9.47935 5.01125 9.19952 4.75008 9.19952 4.42792V2.33995ZM4 1.7H8.44952V4.42792C8.44952 5.13668 9.06513 5.71125 9.82452 5.71125H12.25V14.0667C12.25 14.1955 12.1381 14.3 12 14.3H4C3.86193 14.3 3.75 14.1955 3.75 14.0667V1.93333C3.75 1.80447 3.86193 1.7 4 1.7ZM5.25 12.2C5.04289 12.2 4.875 12.3567 4.875 12.55C4.875 12.7433 5.04289 12.9 5.25 12.9H10.75C10.9571 12.9 11.125 12.7433 11.125 12.55C11.125 12.3567 10.9571 12.2 10.75 12.2H5.25ZM4.875 9.75C4.875 9.5567 5.04289 9.4 5.25 9.4H10.75C10.9571 9.4 11.125 9.5567 11.125 9.75C11.125 9.9433 10.9571 10.1 10.75 10.1H5.25C5.04289 10.1 4.875 9.9433 4.875 9.75ZM5.25 10.8C5.04289 10.8 4.875 10.9567 4.875 11.15C4.875 11.3433 5.04289 11.5 5.25 11.5H10.75C10.9571 11.5 11.125 11.3433 11.125 11.15C11.125 10.9567 10.9571 10.8 10.75 10.8H5.25ZM4.875 8.35C4.875 8.1567 5.04289 8 5.25 8H10.75C10.9571 8 11.125 8.1567 11.125 8.35C11.125 8.5433 10.9571 8.7 10.75 8.7H5.25C5.04289 8.7 4.875 8.5433 4.875 8.35ZM5.25 6.6C5.04289 6.6 4.875 6.7567 4.875 6.95C4.875 7.1433 5.04289 7.3 5.25 7.3H9.5C9.70711 7.3 9.875 7.1433 9.875 6.95C9.875 6.7567 9.70711 6.6 9.5 6.6H5.25Z"/></svg>',
   AppGroupIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6 2H4V4L2 4V6H4V8H6V6H8V4L6 4V2Z"/><rect x="8" y="9" width="2" height="6" transform="rotate(-90 8 9)"/><rect x="8" y="12" width="2" height="6" transform="rotate(-90 8 12)"/><rect x="8" y="15" width="2" height="6" transform="rotate(-90 8 15)"/></svg>',
   AppHamburgerIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14 5H2V3H14V5Z"/><path d="M14 9H2V7H14V9Z"/><path d="M2 13H14V11H2V13Z"/></svg>',
+  AppLockIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10,5v1H6V5c0-1.1,0.9-2,2-2S10,3.9,10,5zM14,8c0-1.1-0.9-2-2-2V5c0-2.2-1.8-4-4-4C5.8,1,4,2.8,4,5v1C2.9,6,2,6.9,2,8v5c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2V8z M9,11V8H7v3H9z"/></svg>',
   AppLogoutIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5H5V19H19V16H21V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V8H19V5ZM19.4497 11.9497L14.5 7L13.0858 8.41421L15.6716 11H7V13H15.5711L13.0858 15.4853L14.5 16.8995L18.0355 13.364L19.4497 11.9497Z"/></svg>',
   AppInfoIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 13C10.7614 13 13 10.7614 13 8C13 5.23858 10.7614 3 8 3C5.23858 3 3 5.23858 3 8C3 10.7614 5.23858 13 8 13ZM8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15ZM9 4V6H7V4H9ZM9 12V7H7V12H9Z"/></svg>',
   AppKebabIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5C8.33 5 9 4.33 9 3.5C9 2.67 8.33 2 7.5 2C6.67 2 6 2.67 6 3.5C6 4.33 6.67 5 7.5 5ZM7.5 7C6.67 7 6 7.67 6 8.5C6 9.33 6.67 10 7.5 10C8.33 10 9 9.33 9 8.5C9 7.67 8.33 7 7.5 7ZM7.5 12C6.67 12 6 12.67 6 13.5C6 14.33 6.67 15 7.5 15C8.33 15 9 14.33 9 13.5C9 12.67 8.33 12 7.5 12Z"/></svg>',
@@ -22,6 +23,7 @@ enum UxgIcons {
   AppPenIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14 5L11 2L9.58578 3.41422L12.5858 6.41422L14 5Z"/><path d="M11.8787 7.12132L8.87868 4.12132L2 11V14H5L11.8787 7.12132Z"/></svg>',
   AppPhotoIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14 1H2C1.45 1 1 1.45 1 2V14C1 14.55 1.45 15 2 15H14C14.55 15 15 14.55 15 14V2C15 1.45 14.55 1 14 1ZM3 12L5 9L7 11L10 7L13 12H3Z"/></svg>',
   AppPlusIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M9 2H7V7H2V9H7V14H9V9H14V7H9V2Z"/></svg>',
+  AppPublishIcon = '<svg viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 3H12V7H14V3C14 1.89543 13.1046 1 12 1H4C2.89543 1 2 1.89543 2 3V13C2 14.1046 2.89543 15 4 15H5V13H4L4 3ZM16.0711 11.4142L14.6569 10L11.8284 12.8284L10.4142 11.4142L9 12.8284L10.4142 14.2426L11.8284 15.6569L11.8284 15.6569L13.2426 14.2426L16.0711 11.4142ZM11 5H5V6H11V5ZM5 7H11V8H5V7ZM8 9H5V10H8V9Z"/></svg>',
   AppRingIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 6C4 3.79086 5.79086 2 8 2C10.2091 2 12 3.79086 12 6V9C12.5523 9 13 9.44772 13 10C13 10.5523 12.5523 11 12 11H4C3.44772 11 3 10.5523 3 10C3 9.44772 3.44772 9 4 9V6Z"/><path d="M8 14C9.10457 14 10 13.1046 10 12H6C6 13.1046 6.89543 14 8 14Z"/></svg>',
   AppSearchIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7 2C4.23858 2 2 4.23858 2 7C2 9.76142 4.23858 12 7 12C8.01905 12 8.9669 11.6951 9.75732 11.1717L12.9999 14.4142L14.4141 13L11.1716 9.75746C11.6951 8.96702 12 8.01911 12 7C12 4.23858 9.76142 2 7 2ZM4 7C4 5.34315 5.34315 4 7 4C8.65685 4 10 5.34315 10 7C10 8.65685 8.65685 10 7 10C5.34315 10 4 8.65685 4 7Z"/></svg>',
   AppTriangleIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 6L4 10H12L8 6Z"/></svg>',
@@ -34,7 +36,6 @@ enum UxgIcons {
   AppUserIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M8 7C9.65685 7 11 5.15685 11 3.5C11 1.84315 10.5 0 8 0C5.5 0 5 1.84315 5 3.5C5 5.15685 6.34315 7 8 7Z" /><path d="M8 9C2.55556 9 1 10 1 15L15 15C15 10 13.4444 9 8 9Z" /></svg>',
   AppWarningIcon = '<svg viewBox="0 0 16 16"  xmlns="http://www.w3.org/2000/svg"><path d="M0.784314 13.5294C0.429057 14.1955 0.911746 15 1.66667 15H14.3333C15.0883 15 15.5709 14.1955 15.2157 13.5294L8.88235 1.65441C8.50588 0.948529 7.49412 0.948529 7.11765 1.65441L0.784314 13.5294ZM9 13H7V11H9V13ZM9 9H7V5H9V9Z" /></svg>',
   AppWaitingIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6 4H7V7.35255L10.0589 8.72458L9.64969 9.637L6 8V4Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14 7C14 10.866 10.866 14 7 14C3.13401 14 0 10.866 0 7C0 3.13401 3.13401 0 7 0C10.866 0 14 3.13401 14 7ZM12 7C12 9.76142 9.76142 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7Z" /></svg>',
-  AppLockIcon = '<svg viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 4V5H4V4C4 2.89543 4.89543 2 6 2C7.10457 2 8 2.89543 8 4ZM12 7C12 5.89543 11.1046 5 10 5V4C10 1.79086 8.20914 0 6 0C3.79086 0 2 1.79086 2 4V5C0.895431 5 0 5.89543 0 7V12C0 13.1046 0.895431 14 2 14H10C11.1046 14 12 13.1046 12 12V7ZM7 10V7H5V10H7Z" /></svg>'
 }
 
 export const UxgIconShapesSources: IconShapeSources[] = [
@@ -50,6 +51,7 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-doc": UxgIcons.AppDocIcon },
   {"app-group": UxgIcons.AppGroupIcon },
   {"app-hamburger": UxgIcons.AppHamburgerIcon },
+  {"app-lock": UxgIcons.AppLockIcon },
   {"app-logout": UxgIcons.AppLogoutIcon },
   {"app-info": UxgIcons.AppInfoIcon },
   {"app-kebab": UxgIcons.AppKebabIcon },
@@ -59,6 +61,7 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-pen": UxgIcons.AppPenIcon },
   {"app-photo": UxgIcons.AppPhotoIcon },
   {"app-plus": UxgIcons.AppPlusIcon },
+  {"app-publish": UxgIcons.AppPublishIcon },
   {"app-ring": UxgIcons.AppRingIcon },
   {"app-search": UxgIcons.AppSearchIcon },
   {"app-triangle": UxgIcons.AppTriangleIcon },
@@ -71,5 +74,4 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-user": UxgIcons.AppUserIcon },
   {"app-warning": UxgIcons.AppWarningIcon },
   {"app-waiting": UxgIcons.AppWaitingIcon},
-  {"app-lock": UxgIcons.AppLockIcon}
 ];

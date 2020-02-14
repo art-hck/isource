@@ -30,3 +30,5 @@ export * from './components/uxg-wizzard/uxg-wizzard';
 export * from './components/uxg-wizzard/uxg-wizzard-step';
 export * from './components/uxg-wizzard/uxg-wizzard.builder';
 export * from './components/uxg-wizzard/uxg-wizzard.directive';
+export * from './components/uxg-wizzard/uxg-wizzard-button.directive';
+export * from './components/uxg-wizzard/uxg-wizzard-steps.component';

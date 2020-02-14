@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { RequestPosition } from "../../models/request-position";
 import { History } from "../../models/history";
 import { RequestPositionHistoryService } from "../../services/request-position-history.service";

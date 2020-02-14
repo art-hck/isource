@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommercialProposalsComponent } from "./components/commercial-proposals/commercial-proposals.component";
-import { CustomerRequestViewComponent } from "./components/customer-request-view/customer-request-view.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
 import { RequestListViewComponent as CustomerRequestsList } from "./components/request-list-view/request-list-view.component";
 import { TechnicalProposalsComponent } from "./components/technical-proposals/technical-proposals.component";
@@ -28,10 +27,6 @@ const routes: Routes = [
         path: 'new',
         children: [
           {
-            path: "",
-            component: CustomerRequestComponent,
-          },
-          {
             path: 'technical-proposals',
             component: RequestTechnicalProposalsComponent,
             data: { title: "Технические предложения" }
@@ -41,15 +36,11 @@ const routes: Routes = [
             component: RequestCommercialProposalsComponent,
             data: { title: "Коммерческие предложения" }
           },
-          {
-            path: ':position-id',
-            component: RequestPositionComponent
-          }
         ]
       },
       {
         path: '',
-        component: CustomerRequestViewComponent,
+        component: CustomerRequestComponent,
       },
       {
         path: 'contracts',
@@ -69,12 +60,16 @@ const routes: Routes = [
       {
         path: 'commercial-proposals',
         component: CommercialProposalsComponent,
-        data: { title: "Коммерческие предложения" }
+        data: { title: "Коммерческие предложения", noFooter: true }
       },
       {
         path: 'design-documentation',
         component: DesignDocumentationComponent,
         data: { title: "Рабочая конструкторская документация" }
+      },
+      {
+        path: ':position-id',
+        component: RequestPositionComponent
       }
     ]
   },

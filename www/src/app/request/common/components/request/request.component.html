@@ -1,3 +1,22 @@
+<!-- @TODO Выпилить после реализации попозиционного согласования -->
+<div class="notification-bar" *ngIf="isOnApproval || isDraft">
+  <div class="container">
+      <div class="app-row">
+      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
+        <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
+        <button uxgButton secondary  (click)="publish.emit()">Опубликовать все</button>
+      </div>
+        <ng-container *ngIf="featureService.allowed('approveRequest', user.roles)">
+          <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
+            <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
+            <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
+            <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
+          </div>
+        </ng-container>
+    </div>
+  </div>
+</div>
+
 <form [formGroup]="form">
   <div class="app-row">
 
@@ -23,30 +42,43 @@
         </div>
 
         <!-- Назначиь ответственного -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isSeniorBackoffice()">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestResponsible', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
             <clr-icon shape="app-user" size="16"></clr-icon>
             <span>Назначить</span>
           </button>
+          <app-request-add-responsible-modal
+            #addResponsibleModal
+            [request]="request"
+            [positions]="checkedPositions"
+            (success)="addResponsible.emit($event)"
+          ></app-request-add-responsible-modal>
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestGroup', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
           </button>
+          <app-request-add-group-modal
+            #addGroupModal
+            [request]="request"
+            [positions]="checkedPositions"
+            (success)="addGroup.emit($event)"
+          ></app-request-add-group-modal>
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
-          <button uxgButton clear link [disabled]="true">
-            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
-            <span>Переместить</span>
-          </button>
-        </div>
+<!--        TODO Нереализованная фича, временно скрыл кнопку -->
+<!--        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">-->
+<!--          <button uxgButton clear link [disabled]="true">-->
+<!--            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>-->
+<!--            <span>Переместить</span>-->
+<!--          </button>-->
+<!--        </div>-->
 
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
             <div *uxgPopoverContent (click)="more.hide()">
@@ -65,17 +97,28 @@
         <div class="app-col"></div>
         <div class="app-col app-basis-auto clr-flex-grow-0">
 
-          <!-- Новая позиция  -->
-          <button uxgButton secondary iconText (click)="addPositionModal.open()">
-            <clr-icon shape="app-plus"></clr-icon>
-            <span>Новая позиция</span>
-          </button>
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary iconText
+                    uxgPopoverTrigger
+                    [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
+              <clr-icon shape="app-plus"></clr-icon>
+              <span>Новая позиция</span>
+            </button>
+
+            <ng-container *ngIf="request.isOlderTwoWeeks">
+              <div *uxgPopoverContent (click)="more.hide()">
+                <div>Заявке больше двух недель.</div>
+                <div>Добавление новых позиций недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
 
           <!-- Фильтр  -->
-          <button uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-sort2"></clr-icon>
-            <span>Фильтр</span>
-          </button>
+<!--          TODO Нереализованная фича, временно скрыл кнопку -->
+<!--          <button uxgButton secondary iconText [disabled]="true">-->
+<!--            <clr-icon shape="app-sort2"></clr-icon>-->
+<!--            <span>Фильтр</span>-->
+<!--          </button>-->
         </div>
       </div>
     </div>
@@ -95,9 +138,10 @@
 
         <!-- Группа -->
         <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
-          <a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start">
+          <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start"-->
+          <div class="app-row app-link-no-color app-row-group clr-align-items-start">
             <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
-          </a>
+          </div>
         </ng-container>
       </ng-container>
     </div>
@@ -151,10 +195,10 @@
         <b>{{ group.name ||"Без имени" }} </b>
         <span class="app-ghost-color">({{group.positions.length}})</span>
       </div>
-      <div class="app-col" [style.max-width.px]="460">
-        <!-- @TODO Implement -->
+      <!-- @TODO Implement -->
+      <!--div class="app-col" [style.max-width.px]="460">
         2 как можно скорее | 01.01.2020 — ...
-      </div>
+      </div-->
       <div class="app-col app-row clr-flex-grow-0">
         <clr-icon class="app-accordion-title-icon" shape="app-chevron" [dir]="folded.value ? 'down' : 'up'"
             (click)="folded.setValue(!folded.value); $event.preventDefault(); $event.stopPropagation();"></clr-icon>
@@ -178,20 +222,7 @@
 <app-request-add-position-modal
   #addPositionModal
   [request]="request"
-  (success)="addPosition.emit($event)">
-</app-request-add-position-modal>
-
-<app-request-add-responsible-modal
-  #addResponsibleModal
-  [request]="request"
-  [positions]="checkedPositions"
-  (success)="addResponsible.emit($event)">
-</app-request-add-responsible-modal>
-
-<app-request-add-group-modal
-  #addGroupModal
-  [request]="request"
-  [positions]="checkedPositions"
-  (success)="addGroup.emit($event)">
-</app-request-add-group-modal>
-
+  [onDrafted]="onDrafted"
+  (success)="addPosition.emit($event)"
+  (uploadFromTemplate)="uploadFromTemplate.emit($event)"
+></app-request-add-position-modal>

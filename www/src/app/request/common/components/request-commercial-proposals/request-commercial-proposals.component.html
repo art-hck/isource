@@ -6,13 +6,15 @@
         <div class="app-col app-basis-auto clr-flex-grow-1 actions">
 
           <!-- Создать процедуру  -->
-          <button type="button" uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-plus"></clr-icon>
-            <span>Создать процедуру</span>
-          </button>
+          <ng-container *ngIf="featureService.available('createProcedure', user.roles)">
+            <button type="button" uxgButton secondary iconText (click)="createProcedure.emit()">
+              <clr-icon shape="app-plus"></clr-icon>
+              <span>Создать процедуру</span>
+            </button>
+          </ng-container>
 
-          <!-- Новое КП  -->
-          <button type="button" uxgButton secondary iconText [disabled]="true">
+          <!-- Добавить КП  из шаблона -->
+          <button type="button" uxgButton secondary iconText (click)="uploadCommercialProposals.open()">
             <clr-icon shape="app-plus"></clr-icon>
             <span>Создать КП из шаблона</span>
           </button>
@@ -34,9 +36,45 @@
   <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
     <ng-container *ngIf="positionControl.value.position as position" formArrayName="positions">
       <div class="position-card">
+        <div class="app-row" *ngIf="positionHasFinishedProcedure(position)">
+          <div class="app-col">
+            <span class="procedure-name">
+             <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
+           </span>
+          </div>
+          <div class="app-col app-col-aside status">
+              <span class="offer-status app-success-color">
+            <clr-icon shape="app-check"></clr-icon>Завершена {{ position.procedureEndDate | date :'shortDate' }}
+          </span>
+            <button type="button" uxgButton secondary iconText [disabled]="true">
+              Уторговать
+            </button>
+            <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
+              <b>Показать на ЭТП ГПБ</b>
+            </a>
+          </div>
+        </div>
+        <div class="app-row" *ngIf="positionHasProcedure(position)">
+          <div class="app-col">
+            <span class="procedure-name">
+             <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
+           </span>
+          </div>
+          <div class="app-col app-col-aside status">
+              <span class="offer-status app-ghost-color">
+            <clr-icon shape="app-waiting"></clr-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }})
+          </span>
+            <button type="button" uxgButton secondary iconText [disabled]="true">
+              Продлить
+            </button>
+            <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
+              <b>Показать на ЭТП ГПБ</b>
+            </a>
+          </div>
+        </div>
         <div class="app-row" formGroupName="{{i}}">
           <div class="app-col clr-flex-grow-0">
-            <uxg-checkbox formControlName="checked" [disabled]="!positionCanBeSelected(position)"></uxg-checkbox>
+            <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col">
             <span class="position-title">{{position.name}}</span>
@@ -44,33 +82,37 @@
             <span class="app-secondary-color">{{position.quantity}} </span>
             <span class="app-ghost-color">{{position.measureUnit}}</span>
             <span class="divide app-ghost-color">|</span>
-            <span class="app-secondary-color" *ngIf="position.deliveryDate; else ASAP">
-        {{position.deliveryDate | date :'shortDate'}}
-      </span>
+            <span class="app-secondary-color" *ngIf="position.deliveryDate; else ASAP">{{position.deliveryDate | date :'shortDate'}}</span>
             <ng-template #ASAP>
               <span class="position-delivery-date">как можно скорее</span>
             </ng-template>
           </div>
           <div class="app-col app-col-aside status app-ghost-color">
-       <span *ngIf="positionIsSentForAgreement(position)">
-         <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
-            <span *ngIf="positionCanBeSelected(position)">
-        <clr-icon shape="app-doc"></clr-icon>Черновик
-      </span>
-            <span class="app-success-color" *ngIf="positionWithWinner(position)">
-        <clr-icon shape="app-check"></clr-icon>Выбран победитель
-      </span>
+            <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
+           <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
+            <span class="offer-status" *ngIf="positionCanBeSelected(position)">
+                <clr-icon shape="app-doc" class="is-solid"></clr-icon>Черновик</span>
+            <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
+              <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
+            <button uxgButton primary type="button" *ngIf="availableCancelPublishOffers(position)"
+                    (click)="onCancelPublishOffers(position)">
+              Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+            </button>
+<!--            <button uxgButton link icon type="button"-->
+<!--                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">-->
+<!--              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>-->
+<!--            </button>-->
           </div>
         </div>
-        <div class="app-row">
+        <div class="app-row" #positionCard>
           <div class="app-col card linked-offer add-offer"
+               [class.clickable]="isLinkedOfferClickable(position)"
                *ngIf="canAddOffer(position)"
                (click)="newCommercialProposal(position)">
             <clr-icon shape="app-plus"></clr-icon>
           </div>
-          <ng-container
-            *ngFor="let linkedOffer of position.linkedOffers">
-            <div class="app-col linked-offer">
+          <div *ngFor="let linkedOffer of position.linkedOffers">
+            <div class="app-col linked-offer" (click)="editCommercialProposal(position, linkedOffer)">
               <div class="app-row">
                 <div class="app-col">
                   <h3>{{linkedOffer.priceWithVat * linkedOffer.quantity | currency: 'RUB' :'symbol':"1.0-2"}}</h3>
@@ -91,27 +133,52 @@
                 </div>
               </div>
               <p>
-                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity}} </span>
-                <span class="app-ghost-color">{{linkedOffer.measureUnit}}</span>
-                <span class="divide app-ghost-color">|</span>
-                <span class="app-ghost-color">
-            {{ linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}/
-                  {{linkedOffer.measureUnit}}</span>
+                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity | number:"1.0-2"}} </span>
+                <span class="app-ghost-color measure-unit">{{linkedOffer.measureUnit}}</span>
+                  <span class="divide app-ghost-color">|</span>
+                <span class="app-ghost-color">{{linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}/
+                  <span class="measure-unit">{{linkedOffer.measureUnit}}</span>
+                </span>
               </p>
               <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
                 {{linkedOffer.deliveryDate | date: 'shortDate'}}
-                <span class="app-ghost-color"> доставка</span></p>
-              <span class="supplier">
-        <app-contragent-info-link
-          [contragent]="findSupplier(linkedOffer.supplierContragentId)">
-        </app-contragent-info-link>
-        </span>
+                <span class="app-ghost-color"> доставка</span>
+                <ng-container *ngIf="linkedOffer.documents.length">
+                  <span class="divide app-ghost-color">|</span>
+                  <span class="app-ghost-color">
+                    {{linkedOffer.documents.length}} {{linkedOffer.documents.length | pluralize : false : 'документ' : 'документа' : 'документов'}}
+                  </span>
+                </ng-container>
+              </p>
+              <span class="supplier" (click)="preventParentClick($event)">
+                <app-contragent-info-link [contragent]="findSupplier(linkedOffer.supplierContragentId)"></app-contragent-info-link>
+              </span>
             </div>
-
-          </ng-container>
+          </div>
         </div>
       </div>
     </ng-container>
   </ng-container>
-
 </form>
+<!-- Модальное окно загрузки КП из шаблона -->
+<clr-modal #uploadCommercialProposals clrModalSize="lg">
+  <h2 class="modal-title"><b>Загрузить коммерческое предложение из шаблона</b></h2>
+  <div class="modal-body">
+    <p class="app-secondary-color">Вы можете загрузить коммерческие предложения списком, если заполните шаблон xls таблицы (
+    <span class="file-link">
+      <a (click)="onDownloadOffersTemplate()"><b>скачать шаблон</b></a></span>), и загрузить файл в систему.</p>
+
+<app-template-upload #templateUpload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+      <div class="modal-footer">
+        <button uxgButton secondary lg (click)="uploadCommercialProposals.close(); templateUpload.clear()" type="button">Отмена</button>
+        <button uxgButton primary lg (click)="onSendOffersTemplateFilesClick(); templateUpload.clear()"
+                [disabled]="this.files.length === 0">Загрузить</button>
+      </div>
+
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
+  </div>
+</clr-modal>

@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -503,7 +503,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   onSendOffersTemplateFilesClick(): void {
-    this.offersService.addOffersFromExcel(this.request, this.files).subscribe((data: any) => {
+    this.offersService.addOffersFromExcel(this.request.id, this.files).subscribe((data: any) => {
       Swal.fire({
         width: 400,
         html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
@@ -559,7 +559,7 @@ export class AddOffersComponent implements OnInit {
     this.wizard.open();
     this.wizard.setContragentLoader((procedureBasicDataPage: ProcedureBasicDataPage) => {
       return this.offersService.getContragentsWithTp(
-        this.request,
+        this.requestId,
         procedureBasicDataPage.selectedProcedurePositions
       );
     });
@@ -582,7 +582,7 @@ export class AddOffersComponent implements OnInit {
   }
 
   protected updateContragentsWithTp(): void {
-    const contragentsWithTpData = this.offersService.getContragentsWithTp(this.request, this.requestPositions);
+    const contragentsWithTpData = this.offersService.getContragentsWithTp(this.requestId, this.requestPositions);
     const subscription = contragentsWithTpData.subscribe(
       (data: ContragentList[]) => {
         this.contragentsWithTp = data;

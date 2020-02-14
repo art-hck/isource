@@ -3,8 +3,6 @@ import { RequestCommonModule } from "../common/request-common.module";
 import { RequestBackofficeRoutingModule } from "./request-backoffice-routing.module";
 
 import { AddOffersComponent } from "./components/add-offers/add-offers.component";
-import { AddTechnicalProposalsComponent } from './components/add-technical-proposals/add-technical-proposals.component';
-import { BackOfficeRequestViewComponent } from './components/back-office-request-view/back-office-request-view.component';
 import { DesignDocumentationService } from "./services/design-documentation.service";
 import { OffersService } from "./services/offers.service";
 import { ProcedureService } from "./services/procedure.service";
@@ -23,12 +21,11 @@ import { RequestProcedureCreatePropertiesComponent } from './components/request-
 import { RequestProcedureCreateDocumentsComponent } from "./components/request-procedure-create/request-procedure-create-documents/request-procedure-create-documents.component";
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
 import { RequestCommercialProposalsCreateComponent } from './components/request-commercial-proposals/request-commercial-proposals-create/request-commercial-proposals-create.component';
+import { RequestTechnicalProposalComponent } from "./components/request-technical-proposal/request-technical-proposal.component";
 
 @NgModule({
   declarations: [
     AddOffersComponent,
-    AddTechnicalProposalsComponent,
-    BackOfficeRequestViewComponent,
     RequestComponent,
     RequestListViewComponent,
     SupplierSelectComponent,
@@ -40,9 +37,9 @@ import { RequestCommercialProposalsCreateComponent } from './components/request-
     RequestProcedureCreateComponent,
     RequestProcedureCreatePropertiesComponent,
     RequestProcedureCreateDocumentsComponent,
+    RequestTechnicalProposalComponent,
     RequestCommercialProposalsComponent,
     RequestCommercialProposalsCreateComponent
-
   ],
   imports: [
     RequestBackofficeRoutingModule,

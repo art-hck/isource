@@ -5,7 +5,6 @@ import { Subscription } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
-import { NotificationService } from "../../../shared/services/notification.service";
 
 @Component({
   selector: 'app-change-password-form',

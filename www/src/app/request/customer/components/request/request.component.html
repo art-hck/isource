@@ -3,8 +3,13 @@
     <app-request
       [positions]="positions"
       [request]="request"
-      (addGroup)="getPositions()"
-      (addResponsible)="getPositions()"
+      (addPosition)="updatePositions()"
+      (addGroup)="updatePositions()"
+      (addResponsible)="updatePositions()"
+      (publish)="publish(request)"
+      (reject)="reject(request)"
+      (approve)="approve(request)"
+      (uploadFromTemplate)="uploadFromTemplate($event)"
     ></app-request>
   </ng-container>
 </ng-container>
