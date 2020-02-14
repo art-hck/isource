@@ -43,6 +43,7 @@ export class UserInfoService {
   get roles(): UserRole[] {
     const roles: UserRole[] = [];
     if (this.getUserInfo()) {
+      // Устанавливаем системные роли
       if (this.isBackOffice()) {
         roles.push(UserRole.BACKOFFICE);
       }
@@ -51,16 +52,30 @@ export class UserInfoService {
         roles.push(UserRole.CUSTOMER);
       }
 
+      if (this.isSupplier()) {
+        roles.push(UserRole.SUPPLIER);
+      }
+
+      if (this.isAdmin()) {
+        roles.push(UserRole.ADMIN);
+      }
+
+      // Устанавливаем пользовательские роли
+      // ВАЖНО! Новый функционал желательно не завязывать на польз. роли, а лучше использовать permissions
+      if (this.isCustomerBuyer()) {
+        roles.push(UserRole.CUSTOMER_BUYER);
+      }
+
+      if (this.isBackofficeBuyer()) {
+        roles.push(UserRole.BACKOFFICE_BUYER);
+      }
+
       if (this.isSeniorBackoffice()) {
         roles.push(UserRole.SENIOR_BACKOFFICE);
       }
 
-      if (this.isRegularBackoffice()) {
-        roles.push(UserRole.REGULAR_BACKOFFICE);
-      }
-
-      if (this.isSupplier()) {
-        roles.push(UserRole.SUPPLIER);
+      if (this.isContragentCreator()) {
+        roles.push(UserRole.CONTRAGENT_CREATOR);
       }
     }
 
