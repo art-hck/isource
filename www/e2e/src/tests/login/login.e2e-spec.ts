@@ -1,36 +1,37 @@
 import { LoginPage } from '../../pages/login.po';
-import { browser, protractor } from "protractor";
+import {browser, by, element, protractor} from "protractor";
 import { Login, Role } from "./login";
 
 const loginData = require("../../test-data/login-data");
 
-describe('Логин', () => {
+fdescribe('Логин', async () => {
 
   const EC = protractor.ExpectedConditions;
   const login = new Login();
 
-  beforeEach(() => {
-    browser.get(browser.baseUrl);
+  beforeEach(async () => {
+    await browser.get(browser.baseUrl);
   });
 
-  it('Отображение страница логина', () => {
-    expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать в');
-    expect(LoginPage.reqLink().getText()).toEqual(('Нет аккаунта? Зарегистрироваться'));
+  it('Отображение страница логина', async () => {
+    expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать');
+    expect(LoginPage.reqLink().getText()).toEqual(('Регистрация'));
+    expect(LoginPage.forgotPasswordLink().getText()).toEqual('Забыли пароль?');
     expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/auth/login');
   });
 
-  it('Успешный логин бэкофисом', () => {
+  fit('Успешный логин бэкофисом', async () => {
 
     login.login(Role.BACKOFFICE);
-    browser.wait(EC.visibilityOf(LoginPage.requestListTitle()));
-    expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/backoffice');
+    //await browser.wait(EC.visibilityOf(element(by.tagName('h1'))));
+    expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + '/requests/backoffice');
     expect(LoginPage.menuItems().getText()).toEqual(loginData.backoffice.menuItems);
     expect(LoginPage.usernameButton().getText()).toEqual(browser.params.login.backoffice.user);
   });
 
   it('Успешный выход бэкофисом', () => {
     login.logout();
-    expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать в');
+    expect(LoginPage.welcomeMessage().getText()).toEqual('Добро пожаловать');
   });
 
   it('Успешный логин заказчиком', () => {
