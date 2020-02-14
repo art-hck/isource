@@ -91,7 +91,7 @@
             <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
            <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
             <span class="offer-status" *ngIf="positionCanBeSelected(position)">
-                <clr-icon shape="app-doc"></clr-icon>Черновик</span>
+                <clr-icon shape="app-doc" class="is-solid"></clr-icon>Черновик</span>
             <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
               <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
             <button uxgButton primary type="button"
@@ -135,11 +135,12 @@
                 </div>
               </div>
               <p>
-                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity}} </span>
-                <span class="app-ghost-color">{{linkedOffer.measureUnit}}</span>
-                <span class="divide app-ghost-color">|</span>
+                <span [class.app-error-color]="linkedOffer.quantity < position.quantity">{{linkedOffer.quantity | number:"1.0-2"}} </span>
+                <span class="app-ghost-color measure-unit">{{linkedOffer.measureUnit}}</span>
+                  <span class="divide app-ghost-color">|</span>
                 <span class="app-ghost-color">{{linkedOffer.priceWithVat | currency: 'RUB' :'symbol':"1.0-2"}}/
-                  {{linkedOffer.measureUnit}}</span>
+                  <span class="measure-unit">{{linkedOffer.measureUnit}}</span>
+                </span>
               </p>
               <p class="delivery-date" [ngClass]="{'app-error-color' : !correctDeliveryDate(linkedOffer.deliveryDate, position.deliveryDate) }">
                 {{linkedOffer.deliveryDate | date: 'shortDate'}}

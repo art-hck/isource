@@ -57,8 +57,8 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
     if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
       this.form.reset();
       const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
-      const sendedMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom = true));
-      const newMessages$ = merge(receivedMessages$, sendedMessages$);
+      const sentMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom = true));
+      const newMessages$ = merge(receivedMessages$, sentMessages$);
 
       this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
         tap(() => this.scrollToBottom = true),

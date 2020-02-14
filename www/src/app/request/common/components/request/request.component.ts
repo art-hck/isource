@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
@@ -142,7 +143,7 @@ export class RequestComponent implements OnInit {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
-      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT ) {
+      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ) {
         formGroup.get("checked").disable();
       }
     }

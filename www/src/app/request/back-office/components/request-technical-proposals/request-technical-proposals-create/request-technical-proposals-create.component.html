@@ -98,7 +98,7 @@
     <hr/>
 
     <div class="app-secondary-color">
-      Вы можете либо приложить необходимые документы, либо заполнить все заводсике наименования, либо приложить
+      Вы можете либо приложить необходимые документы, либо заполнить все заводские наименования, либо приложить
       документы и заполнить все заводские наименования.
     </div>
 
@@ -181,6 +181,7 @@
             [items]="positionsWithManufacturer"
             (ngModelChange)="positionsModal.close()"
             [filterFn]="positionsWithManufacturerFilter"
+            [disabledFn]="positionSelectDisabled"
             [trackBy]="trackByPositionId"
           >
             <ng-template let-formGroup="formGroup" let-positionWithMan="item">
@@ -215,6 +216,7 @@
         <app-request-technical-proposals-create-manufacturer
           (cancel)="manufacturerModal.close()"
           (ngModelChange)="manufacturerModal.close()"
+          [disabledFn]="positionManufacturerNameDisabled"
           formControlName="positions"
         ></app-request-technical-proposals-create-manufacturer>
       </div>

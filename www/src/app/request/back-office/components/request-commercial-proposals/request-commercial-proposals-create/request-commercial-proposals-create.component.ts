@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { fromEvent, merge, Observable, Subscription } from "rxjs";
-import { auditTime } from "rxjs/operators";
+import { fromEvent, merge, Observable, of, Subscription } from "rxjs";
+import { auditTime, mergeMap } from "rxjs/operators";
 import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
@@ -10,6 +10,7 @@ import { CustomValidators } from "../../../../../shared/forms/custom.validators"
 import { CommercialProposal } from "../../../../common/models/commercial-proposal";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
 import { Request } from "../../../../common/models/request";
+import { ContragentService } from "../../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',
@@ -47,10 +48,17 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
   constructor(
     private formBuilder: FormBuilder,
     protected offersService: CommercialProposalsService,
+    private contragentService: ContragentService
   ) { }
 
   ngOnInit() {
-    this.contragents$ = this.offersService.getContragentsWithTp(this.request.id, [this.position]);
+    this.contragents$ = this.offersService.getContragentsWithTp(this.request.id, [this.position]).pipe(mergeMap((contragents) => {
+      if (contragents.length === 0) {
+        return this.contragentService.getContragentList();
+      } else {
+        return of(contragents);
+      }
+    }));
 
     this.newCommercialProposalForm = this.formBuilder.group({
       id: [this.defaultCPValue('id', null)],

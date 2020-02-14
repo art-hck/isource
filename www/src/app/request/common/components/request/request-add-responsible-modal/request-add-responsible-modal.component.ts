@@ -23,7 +23,7 @@ export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
   regularBackofficeUsers$: Observable<User[]>;
 
   form = new FormGroup({
-    user: new FormControl("", Validators.required)
+    user: new FormControl(null, Validators.required)
   });
 
   constructor(private userService: UserService, private requestService: RequestService) {}

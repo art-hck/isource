@@ -61,6 +61,13 @@ export class RequestComponent implements OnInit {
     this.positions$ = this.getPositions();
   }
 
+  publish(request: Request) {
+    this.request$ = this.requestService.publishRequest(request.id).pipe(
+      switchMap(() => this.getRequest()),
+      tap(() => this.updatePositions())
+    );
+  }
+
   uploadFromTemplate(requestData: { files: File[], requestName: string }) {
     this.positions$ = this.createRequestPositionService
       .addBackofficeRequestPositionsFromExcel(this.requestId, requestData.files).pipe(

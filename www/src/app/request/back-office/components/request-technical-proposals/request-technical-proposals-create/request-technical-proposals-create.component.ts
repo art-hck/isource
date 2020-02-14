@@ -9,6 +9,9 @@ import { TechnicalProposal } from "../../../../common/models/technical-proposal"
 import { TechnicalProposalCreateRequest } from "../../../models/technical-proposal-create-request";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
+import { TechnicalProposalPositionStatus } from "../../../../common/enum/technical-proposal-position-status";
+import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
+import { RequestPosition } from "../../../../common/models/request-position";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
@@ -54,6 +57,10 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       documents: this.fb.array([]),
       positions: [this.defaultTPValue('positions', []), Validators.required]
     });
+
+    if (this.isEditing) {
+      this.form.get('contragentName').disable();
+    }
 
     this.form.valueChanges.subscribe(() => {
       const docsCount = this.formDocuments.value.length + this.defaultTPValue('documents').length;
@@ -138,10 +145,14 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
     // Проставляем заводские наименования.
     this.form.get("positions").value
-      .filter(positionWithMan => positionWithMan.manufacturingName)
-      .map(positionWithMan => ({
-        position: {id: positionWithMan.position.id},
-        manufacturingName: positionWithMan.manufacturingName
+      .filter(({manufacturingName}) => manufacturingName)
+      .filter(({position, manufacturingName}) => {
+        const tpPosition = this.findTpPosition(position);
+        return !tpPosition || tpPosition.manufacturingName !== manufacturingName;
+      })
+      .map(({position, manufacturingName}) => ({
+        position: {id: position.id},
+        manufacturingName
       }))
       .forEach(data => {
         tp$ = tp$.pipe(flatMap(
@@ -174,11 +185,25 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     return posWithMan.position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
+  private findTpPosition(position: RequestPosition): TechnicalProposalPosition {
+    return this.technicalProposal && this.technicalProposal.positions.find(tpp => tpp.positionId === position.id);
+  }
+
   private get supplierContragent() {
     const supplierContragent = this.defaultTPValue('supplierContragent', null);
     return supplierContragent ? [supplierContragent] : null;
   }
 
-  trackByPositionId = (item: PositionWithManufacturerName) => item.position.id;
+  trackByPositionId = ({position}: PositionWithManufacturerName) => position.id;
   defaultTPValue = (field: keyof TechnicalProposal, defaultValue: any = "") => this.technicalProposal && this.technicalProposal[field] || defaultValue;
+
+  positionSelectDisabled = ({position}: PositionWithManufacturerName) => {
+    const tpPosition = this.findTpPosition(position);
+    return tpPosition && tpPosition.status !== TechnicalProposalPositionStatus.NEW;
+  }
+
+  positionManufacturerNameDisabled = ({position}: PositionWithManufacturerName) => {
+    const tpPosition = this.findTpPosition(position);
+    return tpPosition && tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED;
+  }
 }

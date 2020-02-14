@@ -18,8 +18,9 @@
         <div class="app-col">
           <div class="app-control-wrap">
             <input #deliveryDate uxgInput lg formControlName="deliveryDate">
-            <label class="app-control-label" (click)="deliveryDate.focus()" >Срок поставки</label>
-            <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+            <label class="app-control-label" (click)="deliveryDate.focus()">Срок поставки</label>
+            <label class="app-control-icon"
+                   (click)="form.get('deliveryDate').enabled ? datepicker.toggleDatepicker($event) : false">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
             <div class="app-control-error" *ngIf="form.get('deliveryDate').errors as e">

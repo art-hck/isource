@@ -2,8 +2,8 @@ import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { Observable, Subject } from "rxjs";
+import { debounceTime, filter, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { ContragentService } from "../../../contragent/services/contragent.service";
-import { debounceTime, filter, flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-contragent-autocomplete',
@@ -29,7 +29,9 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
   public isOpen: boolean;
   public contragents$: Observable<ContragentList[]>;
 
-  constructor() {
+  constructor(
+    protected getContragentService: ContragentService,
+  ) {
     this.contragents$ = this.onInput.pipe(
       filter(value => value.length >= this.minLength),
       debounceTime(this.debounceTime),

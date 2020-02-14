@@ -1,17 +1,18 @@
 <!-- @TODO Выпилить после реализации попозиционного согласования -->
-<div class="notification-bar" *ngIf="featureService.allowed('approveRequest', user.roles) && (isOnApproval || isDraft)">
+<div class="notification-bar" *ngIf="isOnApproval || isDraft">
   <div class="container">
       <div class="app-row">
       <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
         <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
         <button uxgButton secondary  (click)="publish.emit()">Опубликовать все</button>
-
       </div>
-      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
-        <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
-        <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
-        <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
-      </div>
+        <ng-container *ngIf="featureService.allowed('approveRequest', user.roles)">
+          <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
+            <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
+            <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
+            <button uxgButton primary  (click)="approve.emit()">Согласовать все</button>
+          </div>
+        </ng-container>
     </div>
   </div>
 </div>
@@ -69,12 +70,13 @@
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
-          <button uxgButton clear link [disabled]="true">
-            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
-            <span>Переместить</span>
-          </button>
-        </div>
+<!--        TODO Нереализованная фича, временно скрыл кнопку -->
+<!--        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">-->
+<!--          <button uxgButton clear link [disabled]="true">-->
+<!--            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>-->
+<!--            <span>Переместить</span>-->
+<!--          </button>-->
+<!--        </div>-->
 
         <!-- Отклонить -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
@@ -92,7 +94,7 @@
           </button>
         </div>
 
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
             <div *uxgPopoverContent (click)="more.hide()">
@@ -111,17 +113,28 @@
         <div class="app-col"></div>
         <div class="app-col app-basis-auto clr-flex-grow-0">
 
-          <!-- Новая позиция  -->
-          <button uxgButton secondary iconText (click)="addPositionModal.open()">
-            <clr-icon shape="app-plus"></clr-icon>
-            <span>Новая позиция</span>
-          </button>
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary iconText
+                    uxgPopoverTrigger
+                    [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
+              <clr-icon shape="app-plus"></clr-icon>
+              <span>Новая позиция</span>
+            </button>
+
+            <ng-container *ngIf="request.isOlderTwoWeeks">
+              <div *uxgPopoverContent (click)="more.hide()">
+                <div>Заявке больше двух недель.</div>
+                <div>Добавление новых позиций недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
 
           <!-- Фильтр  -->
-          <button uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-sort2"></clr-icon>
-            <span>Фильтр</span>
-          </button>
+<!--          TODO Нереализованная фича, временно скрыл кнопку -->
+<!--          <button uxgButton secondary iconText [disabled]="true">-->
+<!--            <clr-icon shape="app-sort2"></clr-icon>-->
+<!--            <span>Фильтр</span>-->
+<!--          </button>-->
         </div>
       </div>
     </div>
