@@ -163,5 +163,6 @@
 </div>
 
 <app-new-request-modal #newRequestModal
+                       (cancel)="newRequestModal.close()"
                        (uploadFromTemplate)="onSendExcelFile($event)">
 </app-new-request-modal>

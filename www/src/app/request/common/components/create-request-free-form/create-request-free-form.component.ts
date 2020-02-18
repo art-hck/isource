@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { FreeFormRequestItem } from "../../models/free-form-request-item";
-import { CreateRequestService } from "../../services/create-request.service";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {FreeFormRequestItem} from "../../models/free-form-request-item";
+import {CreateRequestService} from "../../services/create-request.service";
 import Swal from "sweetalert2";
+import {RequestService} from "../../../customer/services/request.service";
 
 @Component({
   selector: 'app-create-request-free-form',
@@ -12,6 +13,8 @@ import Swal from "sweetalert2";
 })
 export class CreateRequestFreeFormComponent implements OnInit {
 
+  @Output() cancel = new EventEmitter();
+
   freeFormRequestDataForm: FormGroup;
   requestItem: FreeFormRequestItem;
   requestName = "";
@@ -19,8 +22,10 @@ export class CreateRequestFreeFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private createRequestService: CreateRequestService,
+    private requestService: RequestService,
     protected router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.freeFormRequestDataForm = this.formBuilder.group({
@@ -42,25 +47,27 @@ export class CreateRequestFreeFormComponent implements OnInit {
     this.requestItem = this.freeFormRequestDataForm.value;
     return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(
       (data: any) => {
-        Swal.fire({
-          width: 400,
-          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
-            '<button id="submit" class="btn btn-primary">' +
-            'ОК' + '</button>',
-          showConfirmButton: false,
-          onBeforeOpen: () => {
-            const content = Swal.getContent();
-            const $ = content.querySelector.bind(content);
+        this.requestService.publishRequest(data.id).subscribe(
+          () => {
+            Swal.fire({
+              width: 400,
+              html: '<p class="text-alert">' + 'Заявка опубликована</br></br>' + '</p>' +
+                '<button id="submit" class="btn btn-primary">' +
+                'ОК' + '</button>',
+              showConfirmButton: false,
+              onBeforeOpen: () => {
+                const content = Swal.getContent();
+                const $ = content.querySelector.bind(content);
 
-            const submit = $('#submit');
-            submit.addEventListener('click', () => {
-              this.router.navigateByUrl(`requests/customer/${data.id}`);
-              Swal.close();
+                const submit = $('#submit');
+                submit.addEventListener('click', () => {
+                  this.router.navigateByUrl(`requests/customer/${data.id}`);
+                  Swal.close();
+                });
+              }
             });
-          }
-        });
-      }
-    );
+          });
+      });
   }
 
   checkCanSendRequest(value: any): boolean {
@@ -68,5 +75,10 @@ export class CreateRequestFreeFormComponent implements OnInit {
       return !((value.documents.length === 0) || value.name.trim().length === 0);
     }
     return false;
+  }
+
+  onCancel() {
+    this.freeFormRequestDataForm.reset();
+    this.cancel.emit();
   }
 }

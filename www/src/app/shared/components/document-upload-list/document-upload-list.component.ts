@@ -14,8 +14,8 @@ import { DocumentIconSize } from "../../enums/document-icon-size";
 export class DocumentUploadListComponent {
 
   @Input() documents: File[] = [];
-
   @Input() uploadLabel = 'Выбрать документ';
+  @Input() freeForm = false;
 
   @Output() fileSelected = new EventEmitter<File[]>();
 

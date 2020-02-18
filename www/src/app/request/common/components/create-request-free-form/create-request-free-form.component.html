@@ -4,55 +4,49 @@
     <div class="card">
       <div class="card-block">
         <div class="card-text">
+          <input uxgInput type="text"
+                 lg
+                 class="request-name-input"
+                 [class.required]="!requestName.length"
+                 id="request-name"
+                 value="{{ requestName }}"
+                 formControlName="name"
+                 (input)="onRequestNameChange($event.target.value)"
+                 placeholder="Наименование заявки"/>
 
-            <label for="request-name">
-              Введите наименование заявки <b class="required-star">*</b>:
-            </label>
-
-            <input type="text"
-                   class="request-name-input"
-                   [class.required]="!requestName.length"
-                   id="request-name"
-                   value="{{ requestName }}"
-                   formControlName="name"
-                   (input)="onRequestNameChange($event.target.value)"
-                   placeholder="Наименование заявки.." />
-
-            <span class="gray">
-              Загрузите сюда опросный лист или другой документ,
-              который поможет нам понять какое оборудование или услуга вам нужны
+          <span class="app-secondary-color">
+              Загрузите сюда опросный лист или другой документ, который поможет нам понять какое оборудование или услуга вам нужны
             </span>
-
-
-            <div class="form-group">
-              <app-document-upload-list
-                (fileSelected)="onFreeFormDocumentSelected($event, freeFormRequestDataForm)">
-              </app-document-upload-list>
+          <div class="form-group">
+            <app-document-upload-list #uploadDocuments
+              [freeForm]="true"
+              (fileSelected)="onFreeFormDocumentSelected($event, freeFormRequestDataForm)">
+            </app-document-upload-list>
+          </div>
+          <div class="form-group comment-block">
+            <div class="comment-label">
+              <h3>Комментарий</h3><span class="app-ghost-color">(необязательно, если нужно дополнить опросный лист)</span>
             </div>
-
-
-            <div class="form-group comment-block">
-              <label for="comment-block-textarea">
-                Напишите комментарий в произвольной форме, если вам нужно дополнить опросный лист.
-              </label>
-              <textarea id="comment-block-textarea"
-                        rows="5"
-                        placeholder="Комментарий"
-                        formControlName="comments">
+            <textarea id="comment-block-textarea"
+                      rows="3"
+                      placeholder="Текст комментария"
+                      formControlName="comments">
               </textarea>
-            </div>
-
+          </div>
         </div>
       </div>
     </div>
   </form>
 
   <div class="submit">
+    <button type="button" uxgButton lg secondary
+            (click)="onCancel(); uploadDocuments.clear()">Отмена
+    </button>
     <button type="button"
-            class="btn btn-primary"
+            uxgButton lg primary=""
             (click)="onSendFreeFormRequest()"
             [disabled]="!checkCanSendRequest(freeFormRequestDataForm.value)">
-      Отправить
+      Опубликовать
     </button>
   </div>
 </div>
