@@ -1,0 +1,24 @@
+version: '2'
+services:
+  angular:
+    build:
+      context: .
+      dockerfile: docker/angular/Dockerfile.autotests
+    container_name: angular-release
+    tty: true
+    stdin_open: true
+    expose:
+      - 4200
+    environment:
+      BO_USERMAIL: $BACKOFFICE_USERMAIL
+      BO_PASSWORD: $BACKOFFICE_USERPASS
+      BO_USER: $BACKOFFICE_USER
+      CU_USERMAIL: $CUSTOMER_USERMAIL
+      CU_PASSWORD: $CUSTOMER_USERPASS
+      CU_USER: $CUSTOMER_USER
+    networks:
+      - release-network
+
+networks:
+  release-network:
+    external: true
