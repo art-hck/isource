@@ -7,6 +7,9 @@ import { RequestsListFilter } from "../../../common/models/requests-list/request
 import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
+import Swal from "sweetalert2";
+import {Router} from "@angular/router";
+import {CreateRequestService} from "../../../common/services/create-request.service";
 
 @Component({
   selector: 'app-request-list-view',
@@ -33,7 +36,9 @@ export class RequestListViewComponent implements OnInit {
   requestStatusCount: RequestStatusCount;
 
   constructor(
-    protected getRequestService: GetRequestsService
+    protected router: Router,
+    protected getRequestService: GetRequestsService,
+    protected createRequestService: CreateRequestService
   ) { }
 
   ngOnInit() {
@@ -130,5 +135,34 @@ export class RequestListViewComponent implements OnInit {
 
   onShowResults() {
     this.filterModalOpened = false;
+  }
+
+  onSendExcelFile(requestData: { files: File[], requestName: string }): void {
+    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName)
+      .subscribe((data: any) => {
+        Swal.fire({
+          width: 400,
+          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
+            '<button id="submit" class="btn btn-primary">' +
+            'ОК' + '</button>',
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            const content = Swal.getContent();
+            const $ = content.querySelector.bind(content);
+
+            const submit = $('#submit');
+            submit.addEventListener('click', () => {
+              this.router.navigateByUrl(`requests/customer/${data.id}`);
+              Swal.close();
+            });
+          }
+        });
+      }, (error: any) => {
+        let msg = 'Ошибка в шаблоне';
+        if (error && error.error && error.error.detail) {
+          msg = `${msg}: ${error.error.detail}`;
+        }
+        alert(msg);
+      });
   }
 }

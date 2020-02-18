@@ -14,6 +14,7 @@ import { RequestTechnicalProposalsComponent } from './components/request-technic
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
 import { RequestAgreementsComponent } from './components/request-agreements/request-agreements.component';
 import { AgreementsModule } from "../../agreements/agreements.module";
+import { NewRequestModalComponent } from './components/new-request-modal/new-request-modal.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { AgreementsModule } from "../../agreements/agreements.module";
     TechnicalProposalsComponent,
     RequestTechnicalProposalsComponent,
     RequestCommercialProposalsComponent,
-    RequestAgreementsComponent
+    RequestAgreementsComponent,
+    NewRequestModalComponent
   ],
   imports: [
     AgreementsModule,
