@@ -42,7 +42,9 @@
         </div>
 
         <!-- Назначиь ответственного -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestResponsible', user.roles)">
+        <div class="app-col app-basis-auto clr-flex-grow-0"
+             *ngIf="user.isBackOffice() &&
+             user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
             <clr-icon shape="app-user" size="16"></clr-icon>
             <span>Назначить</span>
@@ -188,7 +190,10 @@
     <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
   </div>
   <div class="app-col item-status">
-    <ng-container *ngIf="user.isSeniorBackoffice() && position.responsibleUser as user; else status">
+    <ng-container
+      *ngIf="user.isBackOffice() &&
+      user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS) &&
+      position.responsibleUser as user; else status">
       {{ position.responsibleUser.shortName }}
     </ng-container>
     <ng-template #status>

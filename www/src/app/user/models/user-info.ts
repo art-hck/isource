@@ -1,5 +1,6 @@
-import {Uuid} from "../../cart/models/uuid";
+import { Uuid } from "../../cart/models/uuid";
 import { Contragent } from "../../core/models/contragent";
+import { Permission } from "../../auth/models/permission";
 
 export class UserInfo {
   id: Uuid;
@@ -9,12 +10,15 @@ export class UserInfo {
   firstName: string;
   lastName: string;
   middleName: string;
-  isSupplier: boolean;
   isCustomer: boolean;
   isBackOffice: boolean;
+  isSupplier: boolean;
+  isAdmin: boolean;
+  isCustomerBuyer: boolean;
+  isBackofficeBuyer: boolean;
   isSeniorBackoffice: boolean;
-  isRegularBackoffice: boolean;
   isContragentCreator: boolean;
+  permissions: Permission[];
 }
 
 

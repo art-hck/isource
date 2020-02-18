@@ -13,6 +13,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { PermissionType } from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-request',
@@ -32,6 +33,7 @@ export class RequestComponent implements OnInit {
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
+  permissionType = PermissionType;
 
   form: FormGroup;
 
