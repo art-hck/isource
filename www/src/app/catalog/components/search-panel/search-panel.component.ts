@@ -9,8 +9,8 @@ import { DOCUMENT } from "@angular/common";
 })
 export class SearchPanelComponent {
 
-  @Input() searchText: string;
-  @Output() searchTextChange = new EventEmitter<string>();
+  searchText: string;
+  //@Output() searchTextChange = new EventEmitter<string>();
 
   categoriesOpened = false;
 
@@ -21,12 +21,12 @@ export class SearchPanelComponent {
   }
 
   onSearch() {
-    this.searchTextChange.emit(this.searchText);
+    //this.searchTextChange.emit(this.searchText);
   }
 
   onResetClick() {
     this.searchText = '';
-    this.searchTextChange.emit(this.searchText);
+    //this.searchTextChange.emit(this.searchText);
   }
 
   onResize() {
