@@ -5,25 +5,29 @@
         <div class="card-text">
 
           <ng-container *ngIf="showRequestName">
-            <label for="request-name">
-              Введите наименование заявки <b class="required-star">*</b>:
-            </label>
 
-            <input [(ngModel)]="requestName"
+            <input uxgInput [(ngModel)]="requestName"
                    [ngModelOptions]="{ standalone: true }"
                    type="text"
+                   lg
                    class="request-name-input"
                    [class.required]="!requestName.length"
                    id="request-name"
                    value="{{ requestName }}"
                    (input)="onRequestNameChange($event.target.value)"
-                   placeholder="Наименование заявки.."/>
+                   placeholder="Наименование заявки"/>
           </ng-container>
 
-          <span class="app-secondary-color">
+          <span class="app-secondary-color" *ngIf="!showRequestName; else newRequest">
             Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
-            и загрузить файл в систему.
+            и загрузите файлы в систему.
           </span>
+          <ng-template #newRequest>
+            <span class="app-secondary-color">
+              Вы можете создать заявку с помощью шаблона, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
+            и загрузите файлы в систему.
+            </span>
+          </ng-template>
 
           <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
         </div>
@@ -32,13 +36,12 @@
   </form>
 
   <div class="submit">
-    <button class="btn btn-primary"
+    <button uxgButton primary lg
             type="button"
             (click)="onSendClick()"
             [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
-      <span *ngIf="showRequestName; else addPositions">Отправить</span>
+      <span *ngIf="showRequestName; else addPositions">Создать черновик</span>
       <ng-template #addPositions>Добавить</ng-template>
-
     </button>
   </div>
 </div>

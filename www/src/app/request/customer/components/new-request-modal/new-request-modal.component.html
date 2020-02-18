@@ -1,0 +1,20 @@
+<clr-modal [clrModalStaticBackdrop]="false" clrModalSize="lg">
+  <h2 class="modal-title"><b>Создать новую заявку</b></h2>
+  <div class="modal-body">
+
+    <uxg-tabs>
+      <uxg-tab-title #template [active]="true">Загрузить из шаблона</uxg-tab-title>
+      <uxg-tab-title #manual>Произвольная заявка</uxg-tab-title>
+    </uxg-tabs>
+
+    <ng-container *uxgTab="template">
+      <app-add-from-excel (submit)="uploadFromTemplate.emit($event); close()"
+                          [templateUrl]="'assets/RequestTemplate.xlsx'"
+                          [showRequestName]="true">
+      </app-add-from-excel>
+    </ng-container>
+    <ng-container *uxgTab="manual">
+    </ng-container>
+
+  </div>
+</clr-modal>
