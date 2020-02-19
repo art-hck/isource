@@ -1,4 +1,4 @@
-<ng-container *ngIf="freeForm; else uploadList">
+<ng-container *ngIf="dragAndDropAvailable; else uploadList">
   <div class="app-row">
     <div class="app-col app-bold">
       <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="addDocument($event)">
