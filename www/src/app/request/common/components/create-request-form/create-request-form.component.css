@@ -114,3 +114,8 @@ label.request-name-label {
 .request-name-input.ng-touched.required {
   border-color: #FF2519;
 }
+
+.card {
+  padding: 20px;
+  text-align: start;
+}

@@ -152,7 +152,7 @@
     </div>
   </div>
   <br/>
-  <div class="app-row">
+  <div class="app-row" *ngIf="!isNewRequest">
     <div class="app-col">
       Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>

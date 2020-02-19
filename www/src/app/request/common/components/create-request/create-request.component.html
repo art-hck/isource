@@ -1,30 +1,3 @@
 <div class="container">
-  <clr-tabs class="individual-request-tabs">
-
-    <clr-tab>
-      <button clrTabLink>Загрузить xls-шаблон</button>
-      <clr-tab-content *clrIfActive="true">
-        <app-add-from-excel
-          (submit)="onSendExcelFile($event)"
-          [templateUrl]="'assets/RequestTemplate.xlsx'"
-          [showRequestName]="true">
-        </app-add-from-excel>
-      </clr-tab-content>
-    </clr-tab>
-
-    <clr-tab>
-      <button clrTabLink>Произвольная заявка</button>
-      <clr-tab-content *clrIfActive>
-        <app-create-request-free-form></app-create-request-free-form>
-      </clr-tab-content>
-    </clr-tab>
-
-    <clr-tab>
-      <button clrTabLink>Заполнить вручную</button>
-      <clr-tab-content *clrIfActive>
-        <app-create-request-form></app-create-request-form>
-      </clr-tab-content>
-    </clr-tab>
-
-  </clr-tabs>
+  <app-create-request-form></app-create-request-form>
 </div>

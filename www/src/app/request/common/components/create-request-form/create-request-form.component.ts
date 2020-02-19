@@ -3,12 +3,12 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  OnInit,
+  OnInit, ViewChild,
 } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
-  FormBuilder,
+  FormBuilder, FormControl,
   FormGroup,
   ValidationErrors,
   ValidatorFn,
@@ -16,8 +16,9 @@ import {
 } from "@angular/forms";
 import * as moment from "moment";
 import Swal from "sweetalert2";
-import { CreateRequestService } from "../../services/create-request.service";
-import { Router } from "@angular/router";
+import {CreateRequestService} from "../../services/create-request.service";
+import {Router} from "@angular/router";
+import {RequestPositionFormComponent} from "../request-position-form/request-position-form.component";
 
 @Component({
   selector: 'app-create-request-form',
@@ -30,6 +31,8 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
   formShow = [];
   requestName = "";
 
+  @ViewChild(RequestPositionFormComponent, {static: false}) requestPositionFormComponent: RequestPositionFormComponent;
+
   get itemForm() {
     return this.requestDataForm.get('itemForm') as FormArray;
   }
@@ -40,13 +43,25 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
     private cdRef: ChangeDetectorRef,
     protected router: Router
   ) {
+    // this.requestDataForm = this.formBuilder.group({
+    //     'name': [''],
+    //     'itemForm': this.formBuilder.array([
+    //       this.addItemFormGroup()
+    //     ])
+    //   }
+    // );
+
     this.requestDataForm = this.formBuilder.group({
-        'name': [''],
-        'itemForm': this.formBuilder.array([
-          this.addItemFormGroup()
-        ])
-      }
-    );
+      'name': [''],
+      'itemForm': this.formBuilder.array([
+        this.addItemFormGroup()
+      ])
+    })
+  }
+
+  ngAfterViewInit() {
+    this.requestDataForm.addControl('form', this.requestPositionFormComponent.form);
+    this.requestPositionFormComponent.form.setParent(this.requestDataForm);
   }
 
   ngAfterViewChecked() {
@@ -57,9 +72,10 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
   ngOnInit() {
   }
 
-  ngAfterViewInit(): void {
-    this.expandForm(0);
-  }
+  //
+  // ngAfterViewInit(): void {
+  //   this.expandForm(0);
+  // }
 
   onRequestNameChange(value) {
     this.requestName = value.trim();
@@ -145,7 +161,7 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
     const newFormIndex = this.itemForm.controls.length - 1;
 
     // закрываем все вкладки
-    this.formShow.forEach(function(item, i, arr) {
+    this.formShow.forEach(function (item, i, arr) {
       arr[i] = false;
     });
 

@@ -25,6 +25,7 @@ export class RequestPositionFormComponent implements OnInit {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
+  @Input() isNewRequest = false;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   form: FormGroup;
