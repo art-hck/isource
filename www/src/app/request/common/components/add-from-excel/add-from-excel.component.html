@@ -5,7 +5,6 @@
         <div class="card-text">
 
           <ng-container *ngIf="showRequestName">
-
             <input uxgInput [(ngModel)]="requestName"
                    [ngModelOptions]="{ standalone: true }"
                    type="text"
@@ -29,13 +28,18 @@
             </span>
           </ng-template>
 
-          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+          <app-template-upload #uploadTemplate
+                               (fileSelected)="onChangeFilesList($event)">
+          </app-template-upload>
         </div>
       </div>
     </div>
   </form>
 
   <div class="submit">
+    <button type="button" uxgButton lg secondary
+            (click)="onCancelClick(); uploadTemplate.clear()">Отмена
+    </button>
     <button uxgButton primary lg
             type="button"
             (click)="onSendClick()"

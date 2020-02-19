@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 
 @Component({
   selector: 'app-add-from-excel',
@@ -10,12 +10,15 @@ export class AddFromExcelComponent implements OnInit {
   @Input() templateUrl: string;
   @Input() showRequestName = false;
 
+  @Output() cancel = new EventEmitter();
+
   @Output() submit = new EventEmitter<{ files: File[], requestName: string }>();
 
   requestName = "";
   files: File[] = [];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
@@ -31,6 +34,11 @@ export class AddFromExcelComponent implements OnInit {
     };
 
     this.submit.emit(requestData);
+  }
+
+  onCancelClick(): void {
+    this.requestName = '';
+    this.cancel.emit();
   }
 
   onChangeFilesList(files: File[]): void {

@@ -4,16 +4,19 @@
 <a href="/requests/create">Заполнить вручную</a>
     <uxg-tabs>
       <uxg-tab-title #template [active]="true">Загрузить из шаблона</uxg-tab-title>
-      <uxg-tab-title #manual>Произвольная заявка</uxg-tab-title>
+      <uxg-tab-title #freeForm>Произвольная заявка</uxg-tab-title>
     </uxg-tabs>
 
     <ng-container *uxgTab="template">
       <app-add-from-excel (submit)="uploadFromTemplate.emit($event); close()"
+                          (cancel)="cancel.emit()"
                           [templateUrl]="'assets/RequestTemplate.xlsx'"
                           [showRequestName]="true">
       </app-add-from-excel>
     </ng-container>
-    <ng-container *uxgTab="manual">
+    <ng-container *uxgTab="freeForm">
+      <app-create-request-free-form
+        (cancel)="cancel.emit()"></app-create-request-free-form>
     </ng-container>
 
   </div>
