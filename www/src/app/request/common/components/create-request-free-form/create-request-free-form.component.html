@@ -19,7 +19,7 @@
             </span>
           <div class="form-group">
             <app-document-upload-list #uploadDocuments
-              [freeForm]="true"
+              [dragAndDropAvailable]="true"
               (fileSelected)="onFreeFormDocumentSelected($event, freeFormRequestDataForm)">
             </app-document-upload-list>
           </div>
