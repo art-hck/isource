@@ -4,7 +4,7 @@
       <div class="card-block">
         <div class="card-text">
 
-          <ng-container *ngIf="showRequestName">
+          <ng-container *ngIf="newRequest">
             <input uxgInput [(ngModel)]="requestName"
                    [ngModelOptions]="{ standalone: true }"
                    type="text"
@@ -17,7 +17,7 @@
                    placeholder="Наименование заявки"/>
           </ng-container>
 
-          <span class="app-secondary-color" *ngIf="!showRequestName; else newRequest">
+          <span class="app-secondary-color" *ngIf="!newRequest; else newRequest">
             Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
             и загрузите файлы в систему.
           </span>
@@ -43,14 +43,13 @@
     <button uxgButton secondary lg
             type="button"
             (click)="onSaveClick()"
-            [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
-      <span *ngIf="showRequestName; else addPositions">Создать черновик</span>
-      <ng-template #addPositions>Добавить</ng-template>
+            [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
+      <span>{{buttonLabel}}</span>
     </button>
-      <button uxgButton primary lg *ngIf="showRequestName"
+      <button uxgButton primary lg *ngIf="newRequest"
               type="button"
               (click)="onPublishClick()"
-              [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
+              [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
         <span>Опубликовать</span>
     </button>
   </div>

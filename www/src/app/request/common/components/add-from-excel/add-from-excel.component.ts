@@ -8,7 +8,8 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 export class AddFromExcelComponent implements OnInit {
 
   @Input() templateUrl: string;
-  @Input() showRequestName = false;
+  @Input() newRequest = false;
+  @Input() buttonLabel = 'Добавить';
 
   @Output() cancel = new EventEmitter();
 

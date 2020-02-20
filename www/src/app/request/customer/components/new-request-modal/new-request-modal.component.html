@@ -12,7 +12,8 @@
                           (publish)="publishFromTemplate.emit($event); close()"
                           (cancel)="cancel.emit()"
                           [templateUrl]="'assets/RequestTemplate.xlsx'"
-                          [showRequestName]="true">
+                          [newRequest]="true"
+                          [buttonLabel]="'Сохранить черновик'">
       </app-add-from-excel>
     </ng-container>
     <ng-container *uxgTab="freeForm">
