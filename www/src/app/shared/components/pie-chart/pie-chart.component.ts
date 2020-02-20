@@ -46,6 +46,14 @@ export class PieChartComponent implements OnChanges {
       currentAngle = nextAngle;
     });
 
+    // рисуем засереную диаграму, если нет данных
+    if (total === 0) {
+      cx.beginPath();
+      cx.arc(this.radius, this.radius, this.radius, 0, 2 * Math.PI);
+      cx.fillStyle = '#eee';
+      cx.fill();
+    }
+
     cx.beginPath();
     cx.arc(this.radius, this.radius, this.radius - this.radius / 2.5, 0, Math.PI * 2);
     cx.fillStyle = "#fff";
