@@ -11,6 +11,7 @@ export class NewRequestModalComponent implements OnInit {
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;
 
   @Output() uploadFromTemplate = new EventEmitter();
+  @Output() publishFromTemplate = new EventEmitter();
   @Output() cancel = new EventEmitter();
 
   constructor() { }

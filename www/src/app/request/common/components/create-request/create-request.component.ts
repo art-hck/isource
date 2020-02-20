@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { CreateRequestService } from "../../services/create-request.service";
-import { Router } from "@angular/router";
+import {Component} from '@angular/core';
+import {CreateRequestService} from "../../services/create-request.service";
+import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {RequestService} from "../../../customer/services/request.service";
 
 @Component({
   selector: 'app-create-request',

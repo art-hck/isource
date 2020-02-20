@@ -246,4 +246,5 @@
   [onDrafted]="onDrafted"
   (success)="addPosition.emit($event)"
   (uploadFromTemplate)="uploadFromTemplate.emit($event)"
+  (cancel)="addPositionModal.close()"
 ></app-request-add-position-modal>

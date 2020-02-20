@@ -1,15 +1,16 @@
-import { Component, OnInit, Output, ViewChild } from '@angular/core';
-import { GetRequestsService } from "../../../common/services/get-requests.service";
-import { RequestsList } from "../../../common/models/requests-list/requests-list";
-import { Page } from "../../../../core/models/page";
-import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
-import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
-import { RequestWorkflowSteps } from "../../../common/enum/request-workflow-steps";
-import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
-import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
+import {GetRequestsService} from "../../../common/services/get-requests.service";
+import {RequestsList} from "../../../common/models/requests-list/requests-list";
+import {Page} from "../../../../core/models/page";
+import {DatagridStateAndFilter} from "../../../common/models/datagrid-state-and-filter";
+import {RequestsListFilter} from "../../../common/models/requests-list/requests-list-filter";
+import {RequestWorkflowSteps} from "../../../common/enum/request-workflow-steps";
+import {RequestListFilterComponent} from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
+import {RequestStatusCount} from "../../../common/models/requests-list/request-status-count";
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
 import {CreateRequestService} from "../../../common/services/create-request.service";
+import {RequestService} from "../../services/request.service";
 
 @Component({
   selector: 'app-request-list-view',
@@ -19,7 +20,7 @@ import {CreateRequestService} from "../../../common/services/create-request.serv
 export class RequestListViewComponent implements OnInit {
 
   @ViewChild(RequestListFilterComponent, {static: false})
-             requestListFilterComponent: RequestListFilterComponent;
+  requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
   currentStatus: string;
@@ -38,8 +39,10 @@ export class RequestListViewComponent implements OnInit {
   constructor(
     protected router: Router,
     protected getRequestService: GetRequestsService,
-    protected createRequestService: CreateRequestService
-  ) { }
+    protected createRequestService: CreateRequestService,
+    protected requestService: RequestService
+  ) {
+  }
 
   ngOnInit() {
     this.currentStatus = RequestWorkflowSteps.IN_PROGRESS;
@@ -50,7 +53,7 @@ export class RequestListViewComponent implements OnInit {
    * Здесь происходит объединение фильтров из правой панели и фильтров по статусам
    */
   composeFilters(): void {
-    const statusTab = { 'requestListStatusesFilter': [this.currentStatus] };
+    const statusTab = {'requestListStatusesFilter': [this.currentStatus]};
     this.filters = {...this.currentFilters, ...statusTab};
   }
 
@@ -164,5 +167,38 @@ export class RequestListViewComponent implements OnInit {
         }
         alert(msg);
       });
+  }
+
+  onPublishExcelFile(requestData: { files: File[], requestName: string }): void {
+    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName)
+      .subscribe((data: any) => {
+          this.requestService.publishRequest(data.id).subscribe(
+            () => {
+              Swal.fire({
+                width: 400,
+                html: '<p class="text-alert">' + 'Заявка опубликована</br></br>' + '</p>' +
+                  '<button id="submit" class="btn btn-primary">' +
+                  'ОК' + '</button>',
+                showConfirmButton: false,
+                onBeforeOpen: () => {
+                  const content = Swal.getContent();
+                  const $ = content.querySelector.bind(content);
+
+                  const submit = $('#submit');
+                  submit.addEventListener('click', () => {
+                    this.router.navigateByUrl(`requests/customer/${data.id}`);
+                    Swal.close();
+                  });
+                }
+              });
+            });
+        },
+        (error: any) => {
+          let msg = 'Ошибка в шаблоне';
+          if (error && error.error && error.error.detail) {
+            msg = `${msg}: ${error.error.detail}`;
+          }
+          alert(msg);
+        });
   }
 }

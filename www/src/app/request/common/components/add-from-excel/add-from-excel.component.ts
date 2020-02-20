@@ -8,11 +8,13 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 export class AddFromExcelComponent implements OnInit {
 
   @Input() templateUrl: string;
-  @Input() showRequestName = false;
+  @Input() newRequest = false;
+  @Input() buttonLabel = 'Добавить';
 
   @Output() cancel = new EventEmitter();
 
   @Output() submit = new EventEmitter<{ files: File[], requestName: string }>();
+  @Output() publish = new EventEmitter<{ files: File[], requestName: string }>();
 
   requestName = "";
   files: File[] = [];
@@ -27,7 +29,7 @@ export class AddFromExcelComponent implements OnInit {
     this.requestName = value.trim();
   }
 
-  onSendClick(): void {
+  onSaveClick(): void {
     const requestData = {
       files: this.files,
       requestName: this.requestName
@@ -35,6 +37,17 @@ export class AddFromExcelComponent implements OnInit {
 
     this.submit.emit(requestData);
   }
+
+  onPublishClick(): void {
+    const requestData = {
+      files: this.files,
+      requestName: this.requestName
+    };
+
+    this.publish.emit(requestData);
+  }
+
+
 
   onCancelClick(): void {
     this.requestName = '';
