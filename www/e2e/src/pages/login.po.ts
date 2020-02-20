@@ -2,19 +2,23 @@ import { by, element } from 'protractor';
 
 export class LoginPage {
   public static welcomeMessage() {
-    return element(by.className('welcome'));
+    return element(by.className('welcome-msg'));
   }
 
   public static reqLink() {
-    return element(by.className('signup'));
+    return element(by.className('registration'));
+  }
+
+  public static forgotPasswordLink() {
+    return element(by.className('forgot-password'));
   }
 
   public static usernameInput() {
-    return element(by.name('username'));
+    return element(by.className('email'));
   }
 
   public static passwordInput() {
-    return element(by.name('password'));
+    return element(by.className('password'));
   }
 
   public static loginButton() {
@@ -22,7 +26,7 @@ export class LoginPage {
   }
 
   public static requestListTitle() {
-    return element(by.className('newRequest'));
+    return element(by.tagName('h1'));
   }
 
   public static usernameButton() {
