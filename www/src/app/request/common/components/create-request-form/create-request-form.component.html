@@ -1,201 +1,214 @@
 <div class="app-row">
   <div class="app-col">
+    <div class="submit">
+      <button uxgButton secondary type="button"
+              (click)="onSubmit()">
+        Сохранить черновик
+      </button>
+      <button uxgButton primary type="button"
+              (click)="onSubmit()">
+        Опубликовать
+      </button>
+    </div>
     <form [formGroup]="requestDataForm" class="create-request-form">
       <div class="card">
         <h3>Наименование заявки</h3>
-        <input type="text"
-               class="request-name-input"
-               [class.required]="!requestName.length"
-               id="request-name"
-               formControlName="name"
-               value="{{ requestName }}"
-               (input)="onRequestNameChange($event.target.value)"
-               placeholder="Наименование заявки"/>
+        <div class="app-control-wrap">
+          <input uxgInput lg type="text"
+                 [class.required]="!requestName.length"
+                 id="request-name"
+                 formControlName="name"
+                 value="{{ requestName }}"
+                 (input)="onRequestNameChange($event.target.value)"
+                 placeholder="Наименование заявки"/>
+        </div>
       </div>
 
 
-        <div formArrayName="itemForm">
+      <div formArrayName="itemForm">
 
-          <ng-container *ngFor="let item of itemForm.controls; let i=index">
-            <div class="card">
+        <ng-container *ngFor="let item of itemForm.controls; let i=index">
+          <div class="card">
             <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
                     title="Удалить из списка">
               <clr-icon shape="times" size="24"></clr-icon>
             </button>
             <h3>Новая позиция</h3>
             <app-request-position-form
-            [isNewRequest] = "true"></app-request-position-form>
-              <div class="clr-row">
-                              <div class="app-col">
-                                <h3>Документы позиции</h3>
-                                <app-document-upload-list (fileSelected)="onDocumentSelected($event, item)"
-                                                          [documents]="item.get('documents').value">
-                                </app-document-upload-list>
-                              </div>
-                            </div>
-<!--            <div class="app-row">-->
-<!--              <div class="app-col">-->
-<!--                <input type="text" id="name" formControlName="name" placeholder="Наименование МТР"-->
-<!--                       [class.invalid]="isFieldInvalid(i, 'name')">-->
-<!--              </div>-->
-<!--              <div class="app-col">-->
-<!--                <input id="deliveryDate" placeholder="Срок поставки" type="date" clrDate-->
-<!--                       formControlName="deliveryDate"-->
-<!--                       [class.invalid]="isFieldInvalid(i, 'deliveryDate')"/>-->
-<!--              </div>-->
-<!--              <div class="app-col">-->
-<!--                <clr-checkbox-wrapper>-->
-<!--                  <input type="checkbox" clrCheckbox name="isDeliveryDateAsap" id="isDeliveryDateAsap"-->
-<!--                         formControlName="isDeliveryDateAsap"-->
-<!--                         [class.invalid]="isFieldInvalid(i, 'isDeliveryDateAsap')">-->
-<!--                  <label>как можно скорее</label>-->
-<!--                </clr-checkbox-wrapper>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="app-row">-->
-<!--              <div class="app-col">-->
-<!--                <input type="text" id="deliveryBasis" formControlName="deliveryBasis"-->
-<!--                       placeholder="Базис поставки (пункт, до которого требуется доставка)"-->
-<!--                       [class.invalid]="isFieldInvalid(i, 'deliveryBasis')">-->
-<!--              </div>-->
-<!--              <div class="app-col">-->
-<!--                <input type="text" id="delivery"-->
-<!--                       placeholder="Грузополучатель"-->
-<!--                       disabled>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="app-row">-->
-<!--              <div class="app-col">-->
-<!--                <label class="clr-control-label" for="paymentTerms">Условия оплаты <b class="required-star">*</b></label>-->
-<!--                <select clrSelect-->
-<!--                        name="paymentTerms"-->
-<!--                        id="paymentTerms"-->
-<!--                        formControlName="paymentTerms"-->
-<!--                        [class.invalid]="isFieldInvalid(i, 'paymentTerms')">-->
-<!--                  <option value="30 дней по факту поставки">-->
-<!--                    30 дней по факту поставки-->
-<!--                  </option>-->
-<!--                  <option value="60 дней по факту поставки">-->
-<!--                    60 дней по факту поставки-->
-<!--                  </option>-->
-<!--                </select>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col-3">-->
-<!--                <label class="clr-control-label" for="quantity">Количество <b class="required-star">*</b></label>-->
-<!--                <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"-->
-<!--                       step="0.01" class="hidden-arrows text-right price"-->
-<!--                       [class.invalid]="isFieldInvalid(i, 'quantity')">-->
-<!--              </div>-->
-<!--              <div class="clr-col-3">-->
-<!--                <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>-->
-<!--                <app-okei-selector id="measureUnit"-->
-<!--                                   formControlName="measureUnit"-->
-<!--                                   [class.invalid]="isFieldInvalid(i, 'measureUnit')">-->
-<!--                </app-okei-selector>-->
-<!--              </div>-->
-<!--              <div class="clr-col-3">-->
+              [isNewRequest]="true"></app-request-position-form>
+            <div class="app-row">
+              <div class="app-col">
+                <h3>Документы позиции</h3>
+                <br>
+                <app-document-upload-list (fileSelected)="onDocumentSelected($event, item)"
+                                          [documents]="item.get('documents').value"
+                                          [dragAndDropAvailable]="true">
+                </app-document-upload-list>
+              </div>
+            </div>
+            <!--            <div class="app-row">-->
+            <!--              <div class="app-col">-->
+            <!--                <input type="text" id="name" formControlName="name" placeholder="Наименование МТР"-->
+            <!--                       [class.invalid]="isFieldInvalid(i, 'name')">-->
+            <!--              </div>-->
+            <!--              <div class="app-col">-->
+            <!--                <input id="deliveryDate" placeholder="Срок поставки" type="date" clrDate-->
+            <!--                       formControlName="deliveryDate"-->
+            <!--                       [class.invalid]="isFieldInvalid(i, 'deliveryDate')"/>-->
+            <!--              </div>-->
+            <!--              <div class="app-col">-->
+            <!--                <clr-checkbox-wrapper>-->
+            <!--                  <input type="checkbox" clrCheckbox name="isDeliveryDateAsap" id="isDeliveryDateAsap"-->
+            <!--                         formControlName="isDeliveryDateAsap"-->
+            <!--                         [class.invalid]="isFieldInvalid(i, 'isDeliveryDateAsap')">-->
+            <!--                  <label>как можно скорее</label>-->
+            <!--                </clr-checkbox-wrapper>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="app-row">-->
+            <!--              <div class="app-col">-->
+            <!--                <input type="text" id="deliveryBasis" formControlName="deliveryBasis"-->
+            <!--                       placeholder="Базис поставки (пункт, до которого требуется доставка)"-->
+            <!--                       [class.invalid]="isFieldInvalid(i, 'deliveryBasis')">-->
+            <!--              </div>-->
+            <!--              <div class="app-col">-->
+            <!--                <input type="text" id="delivery"-->
+            <!--                       placeholder="Грузополучатель"-->
+            <!--                       disabled>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="app-row">-->
+            <!--              <div class="app-col">-->
+            <!--                <label class="clr-control-label" for="paymentTerms">Условия оплаты <b class="required-star">*</b></label>-->
+            <!--                <select clrSelect-->
+            <!--                        name="paymentTerms"-->
+            <!--                        id="paymentTerms"-->
+            <!--                        formControlName="paymentTerms"-->
+            <!--                        [class.invalid]="isFieldInvalid(i, 'paymentTerms')">-->
+            <!--                  <option value="30 дней по факту поставки">-->
+            <!--                    30 дней по факту поставки-->
+            <!--                  </option>-->
+            <!--                  <option value="60 дней по факту поставки">-->
+            <!--                    60 дней по факту поставки-->
+            <!--                  </option>-->
+            <!--                </select>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col-3">-->
+            <!--                <label class="clr-control-label" for="quantity">Количество <b class="required-star">*</b></label>-->
+            <!--                <input type="number" id="quantity" name="quantity" formControlName="quantity" min="0"-->
+            <!--                       step="0.01" class="hidden-arrows text-right price"-->
+            <!--                       [class.invalid]="isFieldInvalid(i, 'quantity')">-->
+            <!--              </div>-->
+            <!--              <div class="clr-col-3">-->
+            <!--                <label class="clr-control-label" for="measureUnit">Единицы измерения <b class="required-star">*</b></label>-->
+            <!--                <app-okei-selector id="measureUnit"-->
+            <!--                                   formControlName="measureUnit"-->
+            <!--                                   [class.invalid]="isFieldInvalid(i, 'measureUnit')">-->
+            <!--                </app-okei-selector>-->
+            <!--              </div>-->
+            <!--              <div class="clr-col-3">-->
 
-<!--              </div>-->
-<!--              <div class="clr-col-3 isDeliveryAsap">-->
-<!--                <clr-checkbox-wrapper>-->
-<!--                  <input type="checkbox" clrCheckbox formControlName="isDesignRequired">-->
-<!--                  <label>Требуется РКД</label>-->
-<!--                </clr-checkbox-wrapper>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <label class="clr-control-label" for="productionDocument">-->
-<!--              Документ, в соответствии с которым необходимо изготовление-->
-<!--              (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.) <b class="required-star">*</b>-->
-<!--            </label>-->
-<!--            <input type="text" id="productionDocument" formControlName="productionDocument"-->
-<!--                   [class.invalid]="isFieldInvalid(i, 'productionDocument')">-->
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col">-->
+            <!--              </div>-->
+            <!--              <div class="clr-col-3 isDeliveryAsap">-->
+            <!--                <clr-checkbox-wrapper>-->
+            <!--                  <input type="checkbox" clrCheckbox formControlName="isDesignRequired">-->
+            <!--                  <label>Требуется РКД</label>-->
+            <!--                </clr-checkbox-wrapper>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <label class="clr-control-label" for="productionDocument">-->
+            <!--              Документ, в соответствии с которым необходимо изготовление-->
+            <!--              (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.) <b class="required-star">*</b>-->
+            <!--            </label>-->
+            <!--            <input type="text" id="productionDocument" formControlName="productionDocument"-->
+            <!--                   [class.invalid]="isFieldInvalid(i, 'productionDocument')">-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col">-->
 
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col">-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col">-->
 
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col-3">-->
-<!--                <label class="clr-control-label" for="startPrice">Начальная максимальная цена</label>-->
-<!--                <input type="number"-->
-<!--                       id="startPrice"-->
-<!--                       name="startPrice"-->
-<!--                       formControlName="startPrice"-->
-<!--                       min="0.1"-->
-<!--                       step="0.01" class="hidden-arrows text-right price"-->
-<!--                       [class.invalid]="isFieldInvalid(i, 'startPrice')">-->
-<!--              </div>-->
-<!--              <div class="clr-col-3">-->
-<!--                <label class="clr-control-label" for="currency">Валюта</label>-->
-<!--                <select clrSelect-->
-<!--                        name="currency"-->
-<!--                        id="currency"-->
-<!--                        formControlName="currency">-->
-<!--                  <option value="RUB">-->
-<!--                    RUB-->
-<!--                  </option>-->
-<!--                  <option value="USD" disabled>-->
-<!--                    USD-->
-<!--                  </option>-->
-<!--                  <option value="EUR" disabled>-->
-<!--                    EUR-->
-<!--                  </option>-->
-<!--                  <option value="CHF" disabled>-->
-<!--                    CHF-->
-<!--                  </option>-->
-<!--                </select>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col-3">-->
+            <!--                <label class="clr-control-label" for="startPrice">Начальная максимальная цена</label>-->
+            <!--                <input type="number"-->
+            <!--                       id="startPrice"-->
+            <!--                       name="startPrice"-->
+            <!--                       formControlName="startPrice"-->
+            <!--                       min="0.1"-->
+            <!--                       step="0.01" class="hidden-arrows text-right price"-->
+            <!--                       [class.invalid]="isFieldInvalid(i, 'startPrice')">-->
+            <!--              </div>-->
+            <!--              <div class="clr-col-3">-->
+            <!--                <label class="clr-control-label" for="currency">Валюта</label>-->
+            <!--                <select clrSelect-->
+            <!--                        name="currency"-->
+            <!--                        id="currency"-->
+            <!--                        formControlName="currency">-->
+            <!--                  <option value="RUB">-->
+            <!--                    RUB-->
+            <!--                  </option>-->
+            <!--                  <option value="USD" disabled>-->
+            <!--                    USD-->
+            <!--                  </option>-->
+            <!--                  <option value="EUR" disabled>-->
+            <!--                    EUR-->
+            <!--                  </option>-->
+            <!--                  <option value="CHF" disabled>-->
+            <!--                    CHF-->
+            <!--                  </option>-->
+            <!--                </select>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col-12">-->
-<!--                <label class="clr-control-label nopadding" for="relatedServices">-->
-<!--                  Необходимость сопутствующих услуг (ШМР, ПНР, Инспекционный контроль)-->
-<!--                </label>-->
-<!--              </div>-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col-12">-->
+            <!--                <label class="clr-control-label nopadding" for="relatedServices">-->
+            <!--                  Необходимость сопутствующих услуг (ШМР, ПНР, Инспекционный контроль)-->
+            <!--                </label>-->
+            <!--              </div>-->
 
 
-<!--              <div class="clr-col-auto">-->
-<!--                <clr-checkbox-wrapper>-->
-<!--                  <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>-->
-<!--                  <label class="clr-control-label nopadding">ШМР</label>-->
-<!--                </clr-checkbox-wrapper>-->
-<!--              </div>-->
+            <!--              <div class="clr-col-auto">-->
+            <!--                <clr-checkbox-wrapper>-->
+            <!--                  <input type="checkbox" formControlName="isShmrRequired" clrCheckbox>-->
+            <!--                  <label class="clr-control-label nopadding">ШМР</label>-->
+            <!--                </clr-checkbox-wrapper>-->
+            <!--              </div>-->
 
-<!--              <div class="clr-col-auto">-->
-<!--                <clr-checkbox-wrapper>-->
-<!--                  <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>-->
-<!--                  <label class="clr-control-label nopadding">ПНР</label>-->
-<!--                </clr-checkbox-wrapper>-->
-<!--              </div>-->
+            <!--              <div class="clr-col-auto">-->
+            <!--                <clr-checkbox-wrapper>-->
+            <!--                  <input type="checkbox" formControlName="isPnrRequired" clrCheckbox>-->
+            <!--                  <label class="clr-control-label nopadding">ПНР</label>-->
+            <!--                </clr-checkbox-wrapper>-->
+            <!--              </div>-->
 
-<!--              <div class="clr-col-auto">-->
-<!--                <clr-checkbox-wrapper>-->
-<!--                  <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>-->
-<!--                  <label class="clr-control-label nopadding">Инспекционный контроль</label>-->
-<!--                </clr-checkbox-wrapper>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="clr-row">-->
-<!--              <div class="clr-col">-->
-<!--                <label class="clr-control-label" for="comments">Дополнительные требования</label>-->
-<!--                <textarea type="textarea" id="comments" name="comments" formControlName="comments">-->
-<!--                    </textarea>-->
+            <!--              <div class="clr-col-auto">-->
+            <!--                <clr-checkbox-wrapper>-->
+            <!--                  <input type="checkbox" formControlName="isInspectionControlRequired" clrCheckbox>-->
+            <!--                  <label class="clr-control-label nopadding">Инспекционный контроль</label>-->
+            <!--                </clr-checkbox-wrapper>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--            <div class="clr-row">-->
+            <!--              <div class="clr-col">-->
+            <!--                <label class="clr-control-label" for="comments">Дополнительные требования</label>-->
+            <!--                <textarea type="textarea" id="comments" name="comments" formControlName="comments">-->
+            <!--                    </textarea>-->
 
-<!--              </div>-->
-<!--            </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
             <!--              </clr-accordion-panel>-->
-            </div>
-          </ng-container>
-        </div>
+          </div>
+        </ng-container>
+      </div>
       <div class="card">
         <div class="addNext">
           <button uxgButton secondary (click)="onAddNext()">
@@ -205,20 +218,35 @@
         </div>
       </div>
       <div class="submit">
-        <button type="button"
-                class="btn btn-primary btn-send"
-                (click)="onSubmit()"
-                >
-          Отправить
+        <button uxgButton secondary type="button"
+                (click)="onSubmit()">
+          Сохранить черновик
+        </button>
+        <button uxgButton primary type="button"
+                (click)="onSubmit()">
+          Опубликовать
         </button>
       </div>
     </form>
   </div>
   <div class="app-col app-col-aside">
     <h3>Общая инф. по заявке</h3>
-    <span class="app-ghost-color">Заказчик</span>
-    <span class="app-ghost-color">Контактное лицо</span>
-    <span class="app-ghost-color">Документы заявки</span>
+    <br>
+    <div class="app-section">
+      <div class="app-ghost-color">Заказчик</div>
+      {{ user.getUserInfo().contragent.shortName }}
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Контактное лицо</div>
+      Вы, {{ user.getShortUserFio() }}
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Документы заявки</div>
+      <button uxgButton secondary class="download-docs" disabled>
+        <clr-icon shape="app-upload"></clr-icon>
+        <span>Загрузить документы</span>
+      </button>
+    </div>
   </div>
 </div>
 

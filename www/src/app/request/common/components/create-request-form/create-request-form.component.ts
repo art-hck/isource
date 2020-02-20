@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 import {CreateRequestService} from "../../services/create-request.service";
 import {Router} from "@angular/router";
 import {RequestPositionFormComponent} from "../request-position-form/request-position-form.component";
+import {UserInfoService} from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-create-request-form',
@@ -41,7 +42,8 @@ export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterV
     private createRequestService: CreateRequestService,
     private formBuilder: FormBuilder,
     private cdRef: ChangeDetectorRef,
-    protected router: Router
+    protected router: Router,
+    public user: UserInfoService
   ) {
     // this.requestDataForm = this.formBuilder.group({
     //     'name': [''],
