@@ -21,7 +21,7 @@
                            'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
             <clr-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
             <clr-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
-            <clr-icon shape="app-doc" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
+            <clr-icon shape="app-doc" class="is-solid" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
             <clr-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
             <b>{{ tpStatusLabel(technicalProposal) }}</b>
           </div>
@@ -32,7 +32,7 @@
             <clr-icon shape="app-pen"></clr-icon>
           </button>
           <button uxgButton link icon (click)="isFolded = !isFolded">
-            <clr-icon shape="app-chevron" [dir]="isFolded ? 'up':'down'"></clr-icon>
+            <clr-icon shape="app-chevron" [attr.dir]="isFolded ? 'up':'down'"></clr-icon>
           </button>
         </div>
       </div>
@@ -86,6 +86,24 @@
             <span class="light-grey">—</span>
           </ng-template>
         </div>
+
+
+        <!-- Секция отмены отправки на согласование -->
+<ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal)">
+        <hr>
+        <div class="app-row section">
+          <div class="app-col">
+            Вы можете отозвать отправленное на согласование заказчику ТП в течение ограниченного времени (таймер на кнопке).
+          </div>
+          <div class="app-col status">
+            <button uxgButton primary type="button"
+                    class="fixedWidth"
+                    (click)="onCancelPublishTechicalProposal(technicalProposal)">
+              Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+            </button>
+          </div>
+        </div>
+</ng-container>
       </div>
     </div>
   </div>

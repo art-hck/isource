@@ -12,6 +12,9 @@ import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "
 import { RequestPositionComponent } from "./components/request-position/request-position.component";
 import { RequestTechnicalProposalsComponent } from './components/request-technical-proposals/request-technical-proposals.component';
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
+import { RequestAgreementsComponent } from './components/request-agreements/request-agreements.component';
+import { AgreementsModule } from "../../agreements/agreements.module";
+import { NewRequestModalComponent } from './components/new-request-modal/new-request-modal.component';
 
 
 @NgModule({
@@ -23,9 +26,12 @@ import { RequestCommercialProposalsComponent } from './components/request-commer
     RequestPositionComponent,
     TechnicalProposalsComponent,
     RequestTechnicalProposalsComponent,
-    RequestCommercialProposalsComponent
+    RequestCommercialProposalsComponent,
+    RequestAgreementsComponent,
+    NewRequestModalComponent
   ],
   imports: [
+    AgreementsModule,
     RequestCustomerRoutingModule,
     RequestCommonModule,
   ],

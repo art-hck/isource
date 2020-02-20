@@ -1,3 +1,24 @@
-<div class="app-card" [style.height.px]="500">
-  notification not implemented
+<div class="app-card">
+  <ng-container *ngIf="notifications; else loading">
+    <div class="app-notification" *ngFor="let notification of notifications">
+      <div class="app-row">
+        <div class="app-notification-icon" [ngClass]="notification?.data?.newStatus || notification.status"></div>
+        <div class="app-col">
+          <div class="app-bold">{{ notification.typeLabel }}</div>
+          <div class="app-secondary-color">
+            {{ notification.createdDate | date: 'd LLLL в H:mm' }} |
+            <span *ngIf="notification.request">Заявка № {{notification.request.number}}</span>
+            <span *ngIf="notification.request && notification.requestPosition"> | </span>
+            <span *ngIf="notification.requestPosition">{{ notification.requestPosition.name }}</span>
+          </div>
+          <div class="app-ghost-color" *ngIf="notification?.user?.fullName">{{notification?.user?.fullName}}</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    <div class="text-center">
+      <span class="spinner spinner-md"></span>
+    </div>
+  </ng-template>
 </div>

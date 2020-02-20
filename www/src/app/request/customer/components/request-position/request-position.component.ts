@@ -7,6 +7,7 @@ import { tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
+import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({ templateUrl: './request-position.component.html' })
 export class RequestPositionComponent implements OnInit {
@@ -48,5 +49,13 @@ export class RequestPositionComponent implements OnInit {
       { label: `Заявка №${position.request.number}`, link: `/requests/customer/${this.requestId}` },
       { label: position.name, link: `/requests/customer/${this.requestId}/${position.id}` }
     ];
+  }
+
+  uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
+    this.requestService.uploadDocuments(position, files)
+      .subscribe((documents: RequestDocument[]) => {
+        position.documents.push(...documents);
+        this.position$ = of(position);
+      });
   }
 }

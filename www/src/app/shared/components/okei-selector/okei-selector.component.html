@@ -1,4 +1,8 @@
-<input #okeiName uxgInput [disabled]="disabled" (input)="onInput($event)" [value]="value ? value : ''" (blur)="onBlur()"/>
+<input #okeiName uxgInput lg [disabled]="disabled"
+       (input)="onInput($event)"
+       [value]="value ? value : ''"
+       (blur)="onBlur()"
+placeholder="Ед. измерения"/>
 <ng-container *ngIf="(okeiFiltredData$ | async) as okeiItems">
   <clr-dropdown>
     <clr-dropdown-menu *clrIfOpen="okeiItems.length > 0 && isOpen">

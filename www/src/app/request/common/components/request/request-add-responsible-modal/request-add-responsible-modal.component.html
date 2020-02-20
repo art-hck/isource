@@ -10,7 +10,7 @@
 
       <div class="modal-footer">
         <button uxgButton secondary lg (click)="this.close()" type="button">Отмена</button>
-        <button uxgButton primary lg>Назначить</button>
+        <button uxgButton primary lg [disabled]="form.invalid">Назначить</button>
       </div>
     </form>
     <ng-template #loading>

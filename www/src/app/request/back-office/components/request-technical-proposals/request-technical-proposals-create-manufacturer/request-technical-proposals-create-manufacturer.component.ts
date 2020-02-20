@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
 
@@ -14,6 +14,7 @@ import { PositionWithManufacturerName } from "../../../models/position-with-manu
 })
 export class RequestTechnicalProposalsCreateManufacturerComponent implements OnInit, ControlValueAccessor {
   @Output() cancel = new EventEmitter();
+  @Input() disabledFn: (item) => boolean;
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -47,11 +48,17 @@ export class RequestTechnicalProposalsCreateManufacturerComponent implements OnI
     }
   }
 
-  createFormGroupPosition(value: PositionWithManufacturerName) {
-    return this.fb.group({
-      position: value.position,
-      manufacturingName: [value.manufacturingName || value.position.name, Validators.required]
+  createFormGroupPosition({manufacturingName, position}) {
+    const form = this.fb.group({
+      position: position,
+      manufacturingName: [manufacturingName || position.name, Validators.required]
     });
+
+    if (this.disabledFn && this.disabledFn({position})) {
+      form.disable();
+    }
+
+    return form;
   }
 
   submit(controls: AbstractControl[]) {

@@ -69,6 +69,12 @@ export class ContractService {
     return this.api.post<Contract>(url, null);
   }
 
+  sign(contractId: Uuid) {
+    const url = `requests/backoffice/contracts/${contractId}/sign`;
+
+    return this.api.post<Contract>(url, null);
+  }
+
   generateContract(requestId: Uuid, contractId: Uuid) {
     const fileName = 'Договор.docx';
     this.api.post(

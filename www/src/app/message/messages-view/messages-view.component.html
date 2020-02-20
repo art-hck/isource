@@ -4,11 +4,12 @@
       <li>
         <input #requestsSearchField
                type="text"
-               placeholder="Поиск по заявкам..">
+               placeholder="Поиск по заявкам">
         <div class="loader" *ngIf="requestListSearchLoader">
           <span class="spinner spinner-md delivery-monitor-loader"></span>
         </div>
       </li>
+
       <li *ngFor="let request of (requests$ | async)?.entities"
           (click)="onRequestClick(request.request)"
           [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
@@ -40,7 +41,7 @@
         <ul class="list-unstyled">
           <li class="search-bar">
             <input type="text"
-                   placeholder="Поиск по позициям и группам.."
+                   placeholder="Поиск по позициям и группам"
                    (input)="onRequestItemFilterChange($event)">
           </li>
 
@@ -94,10 +95,17 @@
 
       </div>
     </div>
+
     <div class="messages-list-content">
-      <app-message-messages [contextId]="contextId"
-                            [contextType]="contextType">
-      </app-message-messages>
+      <ng-container *ngIf="(requests$ | async)?.entities.length !== 0; else noMessages">
+        <app-message-messages [contextId]="contextId"
+                              [contextType]="contextType">
+        </app-message-messages>
+      </ng-container>
+
+      <ng-template #noMessages>
+        <div class="no-messages">Сообщений нет</div>
+      </ng-template>
     </div>
   </div>
 </div>

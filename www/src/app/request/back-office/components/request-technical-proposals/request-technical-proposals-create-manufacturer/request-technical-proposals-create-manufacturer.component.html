@@ -11,14 +11,14 @@
       </div>
       <div class="app-col app-row clr-justify-content-between">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
-        <small class="app-secondary-color">Остаталось заполнить: <b>{{ pristineCount }}</b></small>
+        <small class="app-secondary-color">Осталось заполнить: <b>{{ pristineCount }}</b></small>
       </div>
     </div>
     <hr/>
     <br/>
-    <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
-      <ng-container *ngIf="positionControl.get('position').value as position" formArrayName="positions">
-        <div class="app-row" formGroupName="{{i}}">
+    <ng-container *ngFor="let formGroup of formPositions.controls; index as i">
+      <ng-container *ngIf="formGroup.get('position').value as position">
+        <div class="app-row" [formGroup]="formGroup">
           <div class="app-col app-bold item-title">{{ position.name }}</div>
           <div class="app-col"><input type="text" uxgInput formControlName="manufacturingName"/></div>
         </div>

@@ -61,10 +61,15 @@
           </div>
         </div>
 
-        <div class="clr-row"
-             *ngIf="isShowGenerateContractButton(contract) && featureService.available('contractGeneration')">
-          <div class="clr-col">
+        <div class="clr-row">
+          <div class="clr-col"
+               *ngIf="isShowGenerateContractButton(contract) && featureService.available('contractGeneration')">
             <button class="btn btn-primary" (click)="onGenerateContract(request, contract)"> Создать типовой договор </button>
+          </div>
+
+          <div class="clr-col"
+               *ngIf="isShowSignContractButton(contract) && featureService.available('contractGeneration')">
+            <button class="btn btn-primary" (click)="onSignContract(contract)"> Подтвердить подписание договора </button>
           </div>
         </div>
 
