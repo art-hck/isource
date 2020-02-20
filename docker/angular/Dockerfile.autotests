@@ -1,0 +1,17 @@
+ARG NODE_VERSION=10
+FROM node:$NODE_VERSION
+
+WORKDIR /home/www
+ADD www ./
+
+RUN apt update && apt install -y gettext-base && \
+    cp src/app/config/app.config.ts.dist src/app/config/app.config.ts && \
+    sed -i -e 's/gpnmarket.gpb.local/localhost:4200/g' e2e/protractor.conf.js.dist && \
+    echo "10.2.1.43 gitlab.etpgpb.loc" >> /etc/hosts && \
+    npm i npm@latest -g && \
+    npm install --global @angular/cli forever && \
+    npm install
+
+COPY docker/angular/entrypoint-autotests.sh /usr/local/bin/entrypoint.sh
+RUN chmod +sx /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
