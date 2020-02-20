@@ -26,7 +26,7 @@ exports.config = {
   },
   onPrepare() {
     browser.baseUrl = baseUrl;
-    
+
     let AllureReporter = require('jasmine-allure-reporter');
     jasmine.getEnv().addReporter(new AllureReporter({
       resultsDir: 'e2e/allure-results'
@@ -39,14 +39,14 @@ exports.config = {
   params: {
     login: {
       backoffice: {
-        username: 'testbackoffice@mail.ru',
+        username: 'testseniorbackoffice@mail.ru',
         password: 'password',
-        user: 'username'
+        user: 'Петров Николай	Васильевич'
       },
       customer: {
-        username: 'customer@mail.ru',
+        username: 'smu36@mail.ru',
         password: 'password',
-        user: 'username'
+        user: 'Вишневская Ольга Сергеевна'
       }
     }
   }
