@@ -17,11 +17,11 @@
                    placeholder="Наименование заявки"/>
           </ng-container>
 
-          <span class="app-secondary-color" *ngIf="!newRequest; else newRequest">
+          <span class="app-secondary-color" *ngIf="!newRequest; else newRequestTemplate">
             Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
             и загрузите файлы в систему.
           </span>
-          <ng-template #newRequest>
+          <ng-template #newRequestTemplate>
             <span class="app-secondary-color">
               Вы можете создать заявку с помощью шаблона, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
             и загрузите файлы в систему.
@@ -46,12 +46,14 @@
             [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
       <span>{{buttonLabel}}</span>
     </button>
-      <button uxgButton primary lg *ngIf="newRequest"
+    <ng-container *ngIf="newRequest">
+      <button uxgButton primary lg
               type="button"
               (click)="onPublishClick()"
               [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
         <span>Опубликовать</span>
-    </button>
+      </button>
+    </ng-container>
   </div>
 </div>
 

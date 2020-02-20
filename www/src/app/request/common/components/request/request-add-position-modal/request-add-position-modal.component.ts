@@ -14,6 +14,7 @@ export class RequestAddPositionModalComponent {
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() success = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
+  @Output() cancel = new EventEmitter();
 
   open() {
     this.modal.open();
