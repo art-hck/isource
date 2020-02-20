@@ -10,7 +10,8 @@ RUN apt update && apt install -y gettext-base && \
     echo "10.2.1.43 gitlab.etpgpb.loc" >> /etc/hosts && \
     npm i npm@latest -g && \
     npm install --global @angular/cli forever && \
-    npm install
+    npm install && \
+    npm run build
 
 COPY docker/angular/entrypoint-autotests.sh /usr/local/bin/entrypoint.sh
 RUN chmod +sx /usr/local/bin/entrypoint.sh
