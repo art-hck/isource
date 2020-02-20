@@ -7,6 +7,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { RequestDocument } from "../../models/request-document";
 import * as moment from "moment";
 import { Observable } from "rxjs";
+import { UxgPopoverContentDirection } from "uxg";
 
 @Component({
   selector: 'app-request-position',
@@ -23,6 +24,7 @@ export class RequestPositionComponent implements DoCheck {
   @Output() uploadDocuments = new EventEmitter<{ files: File[], position: RequestPosition }>();
   datesWithDocuments: DateWithDocuments[];
   iterableDiffer: IterableDiffer<any>;
+  PopoverContentDirection = UxgPopoverContentDirection;
 
   constructor(
     private positionStatusService: RequestPositionStatusService,

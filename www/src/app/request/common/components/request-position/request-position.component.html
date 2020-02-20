@@ -66,6 +66,7 @@
         <div class="app-col">
           <h3>Все документы позиции</h3>
         </div>
+
         <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({ files: $event, position: position })"
                 [multiple]="true">
           <clr-icon shape="app-upload"></clr-icon>
@@ -76,6 +77,13 @@
         <h4>{{dateWithDocs.date}}</h4>
         <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="dateWithDocs.documents"></app-document-simple-list>
       </div>
+      <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
+        <br/>
+        <h2 class="text-center" [style.opacity]="0.1">
+          <clr-icon shape="app-doc" size="270"></clr-icon><br/>
+          К позиции пока не загружено ни <br/> одного документа
+        </h2>
+      </ng-container>
     </ng-container>
     <ng-container *uxgTab="offersTab">
       <app-offers [requestPosition]="position" [requestId]="requestId" [isCustomerView]="user.isCustomer()"></app-offers>
@@ -139,11 +147,23 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeManufacturing(position)">
-          <button uxgButton secondary (click)="edit.open()">
-            <clr-icon shape="app-pen"></clr-icon>
-            <span>Редактировать</span>
-          </button>
+        <div *ngIf="isBeforeManufacturing(position) || user.isCustomer()">
+          <uxg-popover #more [openOnHover]="true">
+            <button uxgButton secondary
+                    uxgPopoverTrigger
+                    (click)="edit.open()"
+                    [disabled]="position.isEditingByAnotherUser">
+              <clr-icon shape="app-pen"></clr-icon>
+              <span>Редактировать</span>
+            </button>
+
+            <ng-container *ngIf="position.isEditingByAnotherUser">
+              <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
+                <div>Позиция находится на согласовании.</div>
+                <div>Редактирование недоступно.</div>
+              </div>
+            </ng-container>
+          </uxg-popover>
         </div>
 
         <clr-modal #edit [clrModalStaticBackdrop]="false" clrModalSize="lg">

@@ -29,7 +29,7 @@
 
   <ng-container *ngIf="limit > 0 && limit < documents.length">
     <div class="more" (click)="showAll = !showAll">
-      <clr-icon shape="angle" [dir]="showAll ? 'up' : 'down'"></clr-icon>
+      <clr-icon shape="angle" [attr.dir]="showAll ? 'up' : 'down'"></clr-icon>
       <span *ngIf="!showAll"> Еще {{ documents.length - limit | pluralize: "документ" : "документа" : "документов"}}</span>
       <span *ngIf="showAll"> Скрыть</span>
 

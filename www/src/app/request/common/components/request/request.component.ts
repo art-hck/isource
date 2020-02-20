@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
@@ -12,6 +13,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
 import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { PermissionType } from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-request',
@@ -31,6 +33,7 @@ export class RequestComponent implements OnInit {
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
   flatPositions$: Observable<RequestPosition[]>;
+  permissionType = PermissionType;
 
   form: FormGroup;
 
@@ -142,7 +145,7 @@ export class RequestComponent implements OnInit {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
-      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_AGREEMENT ) {
+      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ) {
         formGroup.get("checked").disable();
       }
     }

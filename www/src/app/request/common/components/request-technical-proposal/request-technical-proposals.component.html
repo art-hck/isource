@@ -21,7 +21,7 @@
                            'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
             <clr-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
             <clr-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
-            <clr-icon shape="app-doc" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
+            <clr-icon shape="app-doc" class="is-solid" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
             <clr-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
             <b>{{ tpStatusLabel(technicalProposal) }}</b>
           </div>
@@ -32,7 +32,7 @@
             <clr-icon shape="app-pen"></clr-icon>
           </button>
           <button uxgButton link icon (click)="isFolded = !isFolded">
-            <clr-icon shape="app-chevron" [dir]="isFolded ? 'up':'down'"></clr-icon>
+            <clr-icon shape="app-chevron" [attr.dir]="isFolded ? 'up':'down'"></clr-icon>
           </button>
         </div>
       </div>

@@ -92,7 +92,7 @@
     </div>
     <div class="app-row app-justify-content-between">
       <button class="app-col" uxgButton secondary lg type="button" (click)="contragentFound.close()">Отмена</button>
-      <button class="app-col" uxgButton primary lg (click)="register();">Зарегистрироваться</button>
+      <button class="app-col" uxgButton primary lg [disabled]="registrationProcessing" (click)="register();">Зарегистрироваться</button>
     </div>
   </div>
 </clr-modal>
