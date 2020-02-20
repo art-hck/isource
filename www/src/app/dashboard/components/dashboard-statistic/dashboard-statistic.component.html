@@ -1,6 +1,7 @@
 <uxg-tabs>
   <uxg-tab-title #status [active]="true">По статусам</uxg-tab-title>
-  <uxg-tab-title #money>В деньгах</uxg-tab-title>
+  <!-- todo не показываем эту вкладку пока не реализуем
+  <uxg-tab-title #money>В деньгах</uxg-tab-title>-->
 </uxg-tabs>
 <br/>
 <div class="app-card" [style.height.px]="444">
@@ -8,7 +9,8 @@
     <app-pie-chart [items]="pieChartItems"></app-pie-chart>
   </div>
 
+  <!--
   <div *uxgTab="money">
     money stat not implemented
-  </div>
+  </div>-->
 </div>
