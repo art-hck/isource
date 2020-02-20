@@ -22,6 +22,7 @@ import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { UploadFileDirective } from "./directives/upload-file.directive";
     OkeiSelectorComponent,
     TemplateUploadComponent,
     UploadFileDirective,
+    PieChartComponent,
   ],
   exports: [
     CommonModule,
@@ -95,6 +97,7 @@ import { UploadFileDirective } from "./directives/upload-file.directive";
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     UploadFileDirective,
+    PieChartComponent,
   ]
 })
 export class SharedModule {

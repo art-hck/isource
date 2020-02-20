@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DashboardService } from "../../services/dashboard.service";
+import {
+  RequestPositionWorkflowSteps,
+  RequestPositionWorkflowStepsGroupsInfo
+} from "../../../request/common/enum/request-position-workflow-steps";
+import { PieChartItem } from "../../../shared/models/pie-chart-item";
 
 @Component({
   selector: 'app-dashboard-statistic',
@@ -6,51 +12,37 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class DashboardStatisticComponent implements OnInit {
 
-  @ViewChild('chart', { static: false }) set chart(el: ElementRef) {
-    if (!el) {
-      return;
-    }
+  pieChartItems: PieChartItem[] = [];
 
-    const statusCounters: [number, string, string][] = [
-      [21, "21%", "#FB6A9E"],
-      [21, "21%", "#ED9254"],
-      [12, "12%", "#56B9F2"],
-      [20, "20%", "#9B51E0"],
-      [26, "26%", "#20B55F"]
-    ];
-    const cx = el.nativeElement.getContext('2d');
-    const R = 120; // Радиус
-    const total = 100;
+  constructor(
+    protected dashboardService: DashboardService
+  ) {
+  }
 
-    cx.canvas.width = R * 2;
-    cx.canvas.height = R * 2;
+  ngOnInit(): void {
+    this.dashboardService.getPositionStatusStatistic()
+      .subscribe((statistics: Array<{status: string, count: number}>) => {
+        const statusCounters = this.getStatusCounters(statistics);
 
-    let currentAngle = 1.5 * Math.PI;
+        this.pieChartItems = statusCounters.map((counter) => {
+          const countStatistic =  counter.statistics.reduce((sum, item) => sum + item.count, 0);
+          return new PieChartItem({
+            count: countStatistic,
+            label: counter.label,
+            color: counter.color
+          });
+        });
+      });
+  }
 
-    statusCounters.forEach(([percent, label, color]) => {
-      const nextAngle = currentAngle + (percent / total) * 2 * Math.PI;
-      const halfAngle = currentAngle + (percent / total / 2) * 2 * Math.PI;
-      cx.beginPath();
-
-      cx.arc(R, R, R, currentAngle, nextAngle);
-      cx.lineTo(R, R);
-      cx.fillStyle = color;
-      cx.fill();
-      cx.closePath();
-
-      currentAngle = nextAngle;
-    });
-
-    cx.beginPath();
-    cx.arc(R, R, R - 44, 0, Math.PI * 2);
-    cx.fillStyle = "#fff";
-    cx.fill();
-    cx.closePath();
-
-    cx.beginPath();
-    cx.moveTo(R, R);
-    cx.lineTo(0, 0);
-    cx.stroke();
-    cx.closePath();
+  private getStatusCounters(statistics: Array<{status: string, count: number}>) {
+    return RequestPositionWorkflowStepsGroupsInfo
+      .filter(statusCounter => statusCounter.color)
+      .map(statusCounter => ({
+        ...statusCounter,
+        statistics: statistics.filter((statistic) => {
+          return statusCounter.statuses.indexOf(<RequestPositionWorkflowSteps> statistic.status) >= 0;
+        })
+      }));
   }
 }

@@ -5,9 +5,7 @@
 <br/>
 <div class="app-card" [style.height.px]="444">
   <div *uxgTab="status">
-    <div class="pie-chart">
-      <canvas #chart width="340" height="320"></canvas>
-    </div>
+    <app-pie-chart [items]="pieChartItems"></app-pie-chart>
   </div>
 
   <div *uxgTab="money">
