@@ -40,12 +40,19 @@
     <button type="button" uxgButton lg secondary
             (click)="onCancelClick(); uploadTemplate.clear()">Отмена
     </button>
-    <button uxgButton primary lg
+    <button uxgButton secondary lg
             type="button"
-            (click)="onSendClick()"
+            (click)="onSaveClick()"
             [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
       <span *ngIf="showRequestName; else addPositions">Создать черновик</span>
       <ng-template #addPositions>Добавить</ng-template>
     </button>
+      <button uxgButton primary lg *ngIf="showRequestName"
+              type="button"
+              (click)="onPublishClick()"
+              [disabled]="files.length === 0 || (showRequestName && requestName.trim().length === 0)">
+        <span>Опубликовать</span>
+    </button>
   </div>
 </div>
+
