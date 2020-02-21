@@ -108,6 +108,10 @@ small {
   }
 }
 
+.dragAndDropArea {
+  margin: 20px 0 10px 0;
+}
+
 @keyframes host-show {
   0% {
     transform: scaleY(0);
