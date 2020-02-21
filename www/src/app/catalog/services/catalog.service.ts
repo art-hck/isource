@@ -6,6 +6,7 @@ import { CatalogCategory } from "../models/catalog-category";
 import { Uuid } from "../../cart/models/uuid";
 import { tap } from "rxjs/operators";
 import { CatalogCategoryAttribute } from "../models/catalog-category-attribute";
+import { SearchResults } from "../models/search-results";
 
 @Injectable()
 export class CatalogService {
@@ -22,8 +23,13 @@ export class CatalogService {
     return this.api.post<CatalogPosition[]>(`catalog/list`, body);
   }
 
-  searchPositionsByName(name: string, filters?: {}): Observable<CatalogPosition[]> {
-    const body = {name, filters};
+  search(query: string, count?: number): Observable<SearchResults> {
+    const body = {query, count};
+    return this.api.post<SearchResults>(`catalog/search`, body);
+  }
+
+  searchPositionsByName(name: string, filters?: {}, count?: number): Observable<CatalogPosition[]> {
+    const body = {name, filters, count};
     return this.api.post<CatalogPosition[]>(`catalog/find`, body);
   }
 

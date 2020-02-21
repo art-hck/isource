@@ -17,7 +17,7 @@
            name="searchName"
            class="input-search"
            [(ngModel)]="searchText"
-           (keyup.enter)="onSearch()"/>
+           (input)="onShowSearchSuggestions()"/>
     <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
       <img src="../../../../assets/images/delete.svg">
     </button>
@@ -25,10 +25,15 @@
             [disabled]="!searchText">
       <clr-icon shape="search" size="17"></clr-icon>
     </button>
-    <div class="search-dropdown">
-      <div class="search-item">123</div>
-      <div class="search-item">123</div>
-      <div class="search-item">123</div>
+    <div class="search-dropdown" *ngIf="showSearchResults">
+      <ng-container *ngIf="(searchResults$ | async) as searchResults">
+        <div class="search-item category"
+          *ngFor="let category of searchResults.categories"
+          (click)="onCategoryClick(category)">{{ category.name }}</div>
+        <div class="search-item position"
+          *ngFor="let position of searchResults.positions"
+             (click)="onPositionClick(position)">{{ position.name }}</div>
+      </ng-container>
     </div>
   </div>
   <a class="new-request" [routerLink]="'/requests/create'">Не нашли, что искали?</a>
