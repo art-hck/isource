@@ -5,7 +5,7 @@
     <div class="app-row">
       <div class="app-col">
         <h3 *ngIf="!isEditing">Новое техническое предложение</h3>
-        <h3 *ngIf="isEditing">Редактирование технического предлдожения</h3>
+        <h3 *ngIf="isEditing">Редактирование технического предложения</h3>
       </div>
       <div class="app-col clr-flex-grow-0" *ngIf="isEditing">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
@@ -58,7 +58,8 @@
             [disabled]="form.get('documents').disabled"
             [multiple]="true"
             (select)="filesSelected($event)"
-          >Выбрать документы</button>
+          >Выбрать документы
+          </button>
         </div>
       </div>
     </div>
@@ -80,7 +81,7 @@
           <ng-template #documentRef let-document="document" let-i="i">
             <document-icon [name]="document.name || document.filename"></document-icon>
             <div class="documents-title">
-              <div>{{ document.name|| document.filename }}</div>
+              <div>{{ document.name || document.filename }}</div>
               <div *ngIf="document.size > 0" class="app-secondary-color">
                 {{document.size | bytesToSize : 2}}
               </div>
@@ -96,12 +97,23 @@
     </ng-container>
 
     <hr/>
-
+    <br>
+    <div class="app-row">
+      <div class="app-col">
+        <button type="button" uxgButton secondary
+                (click)="uloadTemplateModal.open()"
+                [disabled]="!form.get('contragent').value">Загрузить из шаблона
+        </button>
+      </div>
+      <div class="app-col app-secondary-color">
+        Чтобы загрузить позиции и заводские наименования из шаблона нужно выбрать поставщика выше
+      </div>
+    </div>
+    <br>
     <div class="app-secondary-color">
       Вы можете либо приложить необходимые документы, либо заполнить все заводские наименования, либо приложить
       документы и заполнить все заводские наименования.
     </div>
-
     <br/>
     <br/>
 
@@ -158,7 +170,7 @@
           type="button" uxgButton secondary (click)="submit(false)"
           [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>
-        <button uxgButton primary [disabled]="form.disabled || form.invalid" >Отправить на согласование</button>
+        <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
       </div>
     </div>
 
@@ -174,15 +186,15 @@
         <br/>
         <ng-container *ngIf="(positionsWithManufacturer$ | async) as positionsWithManufacturer">
           <select-items-with-search #positionsSearch
-            placeholder="Наименование позиции или группы"
-            formControlName="positions"
-            class="select-list select-list-positions"
-            [liveUpdate]="false"
-            [items]="positionsWithManufacturer"
-            (ngModelChange)="positionsModal.close()"
-            [filterFn]="positionsWithManufacturerFilter"
-            [disabledFn]="positionSelectDisabled"
-            [trackBy]="trackByPositionId"
+                                    placeholder="Наименование позиции или группы"
+                                    formControlName="positions"
+                                    class="select-list select-list-positions"
+                                    [liveUpdate]="false"
+                                    [items]="positionsWithManufacturer"
+                                    (ngModelChange)="positionsModal.close()"
+                                    [filterFn]="positionsWithManufacturerFilter"
+                                    [disabledFn]="positionSelectDisabled"
+                                    [trackBy]="trackByPositionId"
           >
             <ng-template let-formGroup="formGroup" let-positionWithMan="item">
               <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
@@ -219,6 +231,23 @@
           [disabledFn]="positionManufacturerNameDisabled"
           formControlName="positions"
         ></app-request-technical-proposals-create-manufacturer>
+      </div>
+    </clr-modal>
+
+    <clr-modal #uloadTemplateModal [clrModalSize]="'lg'">
+      <h2 class="modal-title"><b>Загрузить позиции и заводские наименования из шаблона</b></h2>
+      <div class="modal-body">
+        <div class="app-secondary-color">
+          Вы можете загрузить позиции и заводские наименования списком, если заполните шаблон xls таблицы (<a (click)="onDownloadTemplate()"><b>скачать
+          шаблон</b></a>), и загрузите файл в систему.
+        </div>
+        <div class="dragAndDropArea">
+          <app-template-upload></app-template-upload>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" uxgButton secondary lg (click)="uloadTemplateModal.close()">Отмена</button>
+        <button uxgButton primary lg>Загрузить</button>
       </div>
     </clr-modal>
 
