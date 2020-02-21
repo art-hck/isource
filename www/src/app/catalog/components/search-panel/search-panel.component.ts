@@ -5,7 +5,7 @@ import { CatalogPosition } from "../../models/catalog-position";
 import { CatalogService } from "../../services/catalog.service";
 import { Observable } from "rxjs";
 import { SearchResults } from "../../models/search-results";
-import {CatalogCategory} from "../../models/catalog-category";
+import { CatalogCategory } from "../../models/catalog-category";
 
 @Component({
   selector: 'app-catalog-search-panel',
