@@ -44,7 +44,7 @@ export class SearchPanelComponent {
   }
 
   onShowSearchSuggestions() {
-    this.searchResults$ = this.catalogService.search(this.searchText, 20);
+    this.searchResults$ = this.catalogService.searchSuggestions(this.searchText, 10, 10);
     this.showSearchResults = true;
   }
 

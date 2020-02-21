@@ -23,9 +23,9 @@ export class CatalogService {
     return this.api.post<CatalogPosition[]>(`catalog/list`, body);
   }
 
-  search(query: string, count?: number): Observable<SearchResults> {
-    const body = {query, count};
-    return this.api.post<SearchResults>(`catalog/search`, body);
+  searchSuggestions(query: string, countCategories?: number, countPositions?: number): Observable<SearchResults> {
+    const body = {query, countCategories, countPositions};
+    return this.api.post<SearchResults>(`catalog/search-suggestions`, body);
   }
 
   searchPositionsByName(name: string, filters?: {}, count?: number): Observable<CatalogPosition[]> {
