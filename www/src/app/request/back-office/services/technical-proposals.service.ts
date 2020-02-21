@@ -59,7 +59,7 @@ export class TechnicalProposalsService {
 
   downloadTemplate(requestId: Uuid, contragentId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
-    return this.api.post(url,{supplierContragentId: contragentId}, {responseType: 'blob'})
+    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'})
   .subscribe(data => {
       saveAs(data, `RequestTechnicalProposalsTemplate.xlsx`);
     });
