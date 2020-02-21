@@ -4,10 +4,10 @@ import { RequestPositionWorkflowStepGroupInfo, RequestPositionWorkflowStepsGroup
 
 @Component({
   selector: 'app-request-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss']
+  templateUrl: './request-pie-chart.component.html',
+  styleUrls: ['./request-pie-chart.component.scss']
 })
-export class PieChartComponent implements OnInit {
+export class RequestPieChartComponent implements OnInit {
 
   @Input() positions: RequestPosition[];
   @ViewChild('chart', {static: true}) chart: ElementRef;
