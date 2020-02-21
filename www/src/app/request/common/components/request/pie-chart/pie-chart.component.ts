@@ -3,7 +3,7 @@ import { RequestPosition } from "../../../models/request-position";
 import { RequestPositionWorkflowStepGroupInfo, RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
 
 @Component({
-  selector: 'app-pie-chart',
+  selector: 'app-request-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
