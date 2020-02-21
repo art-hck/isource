@@ -186,16 +186,16 @@
         <br/>
         <ng-container *ngIf="(positionsWithManufacturer$ | async) as positionsWithManufacturer">
           <select-items-with-search
-                                    #positionsSearch
-                                    placeholder="Наименование позиции или группы"
-                                    formControlName="positions"
-                                    class="select-list select-list-positions"
-                                    [liveUpdate]="false"
-                                    [items]="positionsWithManufacturer"
-                                    (ngModelChange)="positionsModal.close()"
-                                    [filterFn]="positionsWithManufacturerFilter"
-                                    [disabledFn]="positionSelectDisabled"
-                                    [trackBy]="trackByPositionId"
+            #positionsSearch
+            placeholder="Наименование позиции или группы"
+            formControlName="positions"
+            class="select-list select-list-positions"
+            [liveUpdate]="false"
+            [items]="positionsWithManufacturer"
+            (ngModelChange)="positionsModal.close()"
+            [filterFn]="positionsWithManufacturerFilter"
+            [disabledFn]="positionSelectDisabled"
+            [trackBy]="trackByPositionId"
           >
             <ng-template let-formGroup="formGroup" let-positionWithMan="item">
               <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
