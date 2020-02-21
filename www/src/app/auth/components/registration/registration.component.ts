@@ -22,6 +22,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   form: FormGroup;
   contragentForm: FormGroup;
   isLoading = false;
+  registrationProcessing = false;
   subscription = new Subscription();
 
   constructor(
@@ -61,6 +62,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
     const body: RegistrationRequest = this.form.value;
 
+    this.registrationProcessing = true;
+
     this.subscription.add(this.registrationService.registration(body).subscribe(
       () => {
         this.contragentFound.close();
@@ -73,8 +76,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           showConfirmButton: false,
           onBeforeOpen: () => Swal.getContent().querySelector('#submit').addEventListener('click', () => Swal.close())
         });
+
+        this.registrationProcessing = false;
       },
-      msg => alert('Ошибка регистрации! ' + msg.error.detail)
+      msg => {
+        alert('Ошибка регистрации! ' + msg.error.detail);
+        this.registrationProcessing = false;
+      }
     ));
   }
 

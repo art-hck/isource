@@ -20,8 +20,9 @@ import { ContragentAutocompleteComponent } from './components/contragent-autocom
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
-import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
+import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 
@@ -68,9 +69,11 @@ import { RouterModule } from "@angular/router";
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     OkeiSelectorComponent,
+    UploadFileDirective,
     TemplateUploadComponent,
     UploadFileDirective,
     PaginationComponent,
+    PieChartComponent,
   ],
   exports: [
     CommonModule,
@@ -100,6 +103,7 @@ import { RouterModule } from "@angular/router";
     SplitNumberPipe,
     UploadFileDirective,
     PaginationComponent,
+    PieChartComponent,
   ]
 })
 export class SharedModule {

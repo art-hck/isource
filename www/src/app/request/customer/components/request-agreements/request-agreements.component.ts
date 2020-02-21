@@ -1,24 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subscription } from "rxjs";
-import { Agreements } from "../../../../dashboard/models/Agreements";
+import { AgreementsResponse } from "../../../../agreements/models/agreements-response";
 import { AgreementsService } from "../../../../agreements/services/agreements.service";
 import { finalize, map, publishReplay, refCount } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: 'app-request-agreements',
   templateUrl: './request-agreements.component.html',
   styleUrls: ['./request-agreements.component.scss']
 })
 export class RequestAgreementsComponent implements OnInit, OnDestroy {
-  agreements$: Observable<Agreements>;
+  agreements$: Observable<AgreementsResponse>;
   total$: Observable<number>;
   pageSize = 20;
   isLoading = false;
   subscription = new Subscription();
   pages$: Observable<number>;
 
-  constructor(private agreementsService: AgreementsService, private route: ActivatedRoute) {}
+  constructor(private agreementsService: AgreementsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.pages$ = this.route.queryParams.pipe(map(params => +params["page"]));

@@ -1,14 +1,17 @@
 import { LoginPage } from "../../pages/login.po";
-import { browser } from "protractor";
+import {browser, by, element, protractor} from "protractor";
 
 export enum Role {
   CUSTOMER = 'customer',
   BACKOFFICE = 'backoffice'
 }
 
+const EC = protractor.ExpectedConditions;
+
 export class Login {
   username: string;
   password: string;
+
 
   login(role: Role) {
     if (role === Role.CUSTOMER) {

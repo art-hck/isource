@@ -18,7 +18,6 @@ export interface IFeatureList {
   instructionsFileForBackoffice;
   publishRequest;
   approveRequest;
-  addRequestResponsible;
   addRequestGroup;
   moveRequestGroup;
 }
@@ -40,7 +39,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   editTechnicalProposal: { roles: [UserRole.BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
   approveRequest: { roles: [UserRole.CUSTOMER] },
-  addRequestResponsible: { roles: [UserRole.SENIOR_BACKOFFICE] },
   addRequestGroup: { roles: [UserRole.BACKOFFICE] },
   moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
 };

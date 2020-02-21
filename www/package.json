@@ -39,7 +39,7 @@
     "ng2-nouislider": "^1.8.2",
     "nouislider": "^14.0.3",
     "rxjs": "^6.5.3",
-    "stdlib-ng": "git+ssh://git@gitlab.etpgpb.loc:newetp-stdlib/stdlib-ng.git#gpn_market-173",
+    "stdlib-ng": "git+http://stdlib-ng-token:paqRDyd6S7EejgxVQKAX@gitlab.etpgpb.loc/newetp-stdlib/stdlib-ng.git#gpn_market-173",
     "sweetalert2": "^8.18.6",
     "text-mask-addons": "^3.8.0",
     "tslib": "^1.10.0",
@@ -78,6 +78,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.etpgpb.loc:newetp-stdlib/stdlib-ng.git"
+    "url": "git+http://stdlib-ng-token:paqRDyd6S7EejgxVQKAX@gitlab.etpgpb.loc/newetp-stdlib/stdlib-ng.git"
   }
 }

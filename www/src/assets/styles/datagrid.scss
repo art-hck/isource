@@ -14,11 +14,12 @@
 
   .datagrid-row { /* Цвет разделительных линий между строками */
     border-top: 1px solid gray;
+    transition: background-color 0.3s ease;
 
     &:hover { /* Цвет фона и курсор при наведении на строку */
       background-color: #F0F6FA;
       cursor: pointer;
-      transition: background-color 0.5s ease;
+      transition: background-color 0.05s ease;
     }
     &:focus { /* Убираем обводку при клике на строку */
       outline: 0;

@@ -5,7 +5,7 @@
 >
   <div class="app-dropdown-handler-title">{{ selected?.label || placeholder }}</div>
   <div class="app-dropdown-handler-icon">
-    <clr-icon shape="app-triangle" [dir]="isHidden ? 'down':'up'"></clr-icon>
+    <clr-icon shape="app-triangle" [attr.dir]="isHidden ? 'down':'up'"></clr-icon>
   </div>
 </div>
 <div #itemsWrapper

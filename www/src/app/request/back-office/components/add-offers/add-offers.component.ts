@@ -8,7 +8,7 @@ import { RequestOfferPosition } from "../../../common/models/request-offer-posit
 import { RequestPositionWorkflowSteps } from '../../../common/enum/request-position-workflow-steps';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { OffersService } from "../../services/offers.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { RequestDocument } from "../../../common/models/request-document";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import * as moment from "moment";
@@ -92,7 +92,7 @@ export class AddOffersComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private formBuilder: FormBuilder,
-    protected offersService: OffersService,
+    protected offersService: CommercialProposalsService,
     protected router: Router,
     private getContragentService: ContragentService,
     private documentsService: DocumentsService,

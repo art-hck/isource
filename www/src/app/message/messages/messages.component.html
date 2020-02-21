@@ -34,7 +34,7 @@
 
 
   <div class="new-message">
-    <button (click)="documentUploadList.open()" type="button" class="btn btn-link btn-add-file text-muted">
+    <button appUploadFile (select)="form.get('files').setValue($event)" type="button" class="btn btn-link btn-add-file text-muted">
       <clr-icon shape="paperclip" size="32"></clr-icon>
     </button>
 
@@ -54,9 +54,8 @@
 
       <div class="document-upload-list-wrap">
         <app-document-upload-list
-            #documentUploadList
             [uploadLabel]="''"
-            (fileSelected)="form.get('files').setValue($event)"
+            [documents]="form.get('files').value"
         ></app-document-upload-list>
       </div>
     </form>

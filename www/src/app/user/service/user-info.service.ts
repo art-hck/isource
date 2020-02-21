@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AvailableGuiService } from '@stdlib-ng/core';
 import { UserInfo } from "../models/user-info";
 import { UserRole } from "../models/user-role";
+import { Permission } from "../../auth/models/permission";
 
 const USER_INFO_KEY = 'UserInfo';
 
@@ -22,18 +23,27 @@ export class UserInfoService {
     firstName: 'firstName',
     lastName: 'lastName',
     middleName: 'middleName',
-    isSupplier: 'isSupplier',
+
     isCustomer: 'isCustomer',
     isBackOffice: 'isBackOffice',
+    isSupplier: 'isSupplier',
+    isAdmin: 'isAdmin',
+
+    isCustomerBuyer: 'isCustomerBuyer',
+
+    isBackofficeBuyer: 'isBackofficeBuyer',
     isSeniorBackoffice: 'isSeniorBackoffice',
-    isRegularBackoffice: 'isRegularBackoffice',
-    isContragentCreator: 'isContragentCreator'
+
+    isContragentCreator: 'isContragentCreator',
+
+    permissions: 'permissions'
   };
 
   /* @TODO лучше если бэк будет присылать список ролей массивом */
   get roles(): UserRole[] {
     const roles: UserRole[] = [];
     if (this.getUserInfo()) {
+      // Устанавливаем системные роли
       if (this.isBackOffice()) {
         roles.push(UserRole.BACKOFFICE);
       }
@@ -42,16 +52,30 @@ export class UserInfoService {
         roles.push(UserRole.CUSTOMER);
       }
 
+      if (this.isSupplier()) {
+        roles.push(UserRole.SUPPLIER);
+      }
+
+      if (this.isAdmin()) {
+        roles.push(UserRole.ADMIN);
+      }
+
+      // Устанавливаем пользовательские роли
+      // ВАЖНО! Новый функционал желательно не завязывать на польз. роли, а лучше использовать permissions
+      if (this.isCustomerBuyer()) {
+        roles.push(UserRole.CUSTOMER_BUYER);
+      }
+
+      if (this.isBackofficeBuyer()) {
+        roles.push(UserRole.BACKOFFICE_BUYER);
+      }
+
       if (this.isSeniorBackoffice()) {
         roles.push(UserRole.SENIOR_BACKOFFICE);
       }
 
-      if (this.isRegularBackoffice()) {
-        roles.push(UserRole.REGULAR_BACKOFFICE);
-      }
-
-      if (this.isSupplier()) {
-        roles.push(UserRole.SUPPLIER);
+      if (this.isContragentCreator()) {
+        roles.push(UserRole.CONTRAGENT_CREATOR);
       }
     }
 
@@ -86,8 +110,21 @@ export class UserInfoService {
     return this.getUserInfo().firstName + ' ' + this.getUserInfo().lastName;
   }
 
-  public isSupplier(): boolean {
-    return this.getUserInfo().isSupplier;
+  public getPermissions(): Permission[] {
+    if (!this.getUserInfo()) {
+      return [];
+    }
+    return this.getUserInfo().permissions;
+  }
+
+  public hasPermission(permissionType: string): boolean {
+    for (const permission of this.getPermissions()) {
+      if (permission.permission === permissionType) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public isCustomer(): boolean {
@@ -98,12 +135,28 @@ export class UserInfoService {
     return this.getUserInfo().isBackOffice;
   }
 
+  public isSupplier(): boolean {
+    return this.getUserInfo().isSupplier;
+  }
+
+  public isAdmin(): boolean {
+    return this.getUserInfo().isAdmin;
+  }
+
+  public isCustomerBuyer(): boolean {
+    return this.getUserInfo().isCustomerBuyer;
+  }
+
+  public isBackofficeBuyer(): boolean {
+    return this.getUserInfo().isBackofficeBuyer;
+  }
+
   public isSeniorBackoffice(): boolean {
     return this.getUserInfo().isSeniorBackoffice;
   }
 
-  public isRegularBackoffice(): boolean {
-    return this.getUserInfo().isRegularBackoffice;
+  public isContragentCreator(): boolean {
+    return this.getUserInfo().isContragentCreator;
   }
 
   public getUserRole(): string {

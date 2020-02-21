@@ -109,6 +109,10 @@
   overflow: hidden;
 }
 
+.fixedWidth {
+  min-width: 135px;
+}
+
 .offer-status {
   padding-right: 20px;
 }
@@ -118,4 +122,11 @@
   min-width: 550px;
 }
 
+span.measure-unit {
+  max-width: 40px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: text-bottom;
+  text-overflow: ellipsis;
+}
 
