@@ -185,7 +185,8 @@
         <br/>
         <br/>
         <ng-container *ngIf="(positionsWithManufacturer$ | async) as positionsWithManufacturer">
-          <select-items-with-search #positionsSearch
+          <select-items-with-search
+                                    #positionsSearch
                                     placeholder="Наименование позиции или группы"
                                     formControlName="positions"
                                     class="select-list select-list-positions"
