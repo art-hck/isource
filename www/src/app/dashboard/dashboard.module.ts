@@ -7,6 +7,7 @@ import { DashboardStatisticComponent } from './components/dashboard-statistic/da
 import { DashboardNotificationComponent } from './components/dashboard-notification/dashboard-notification.component';
 import { SharedModule } from "../shared/shared.module";
 import { AgreementsModule } from "../agreements/agreements.module";
+import { DashboardService } from "./services/dashboard.service";
 
 @NgModule({
   declarations: [DashboardComponent, DashboardMapComponent, DashboardStatisticComponent, DashboardNotificationComponent],
@@ -15,6 +16,10 @@ import { AgreementsModule } from "../agreements/agreements.module";
     SharedModule,
     CommonModule,
     DashboardRoutingModule
-  ]
+  ],
+  providers: [
+    DashboardService,
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {
+}
