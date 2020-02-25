@@ -257,7 +257,7 @@
 
 <!-- Модальное окно для смена статуса группы позиций -->
 <clr-modal #changeStatusModal>
-  <h3 class="modal-title"> Сменить статус позиций </h3>
+  <h3 class="modal-title"> Сменить статус позиций <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>
   <div class="modal-body">
     <app-positions-status-change
       #positionsStatusChange
