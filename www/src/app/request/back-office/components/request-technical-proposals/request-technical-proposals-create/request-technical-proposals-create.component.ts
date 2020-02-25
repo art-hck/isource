@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
 import {fromEvent, merge, Observable, Subscription} from "rxjs";
@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
   templateUrl: './request-technical-proposals-create.component.html',
   styleUrls: ['./request-technical-proposals-create.component.scss']
 })
-export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit {
+export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
