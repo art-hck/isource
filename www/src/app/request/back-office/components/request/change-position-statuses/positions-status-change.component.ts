@@ -17,7 +17,6 @@ export class PositionsStatusChangeComponent implements OnInit {
   @Output() changeStatus = new EventEmitter<string>();
   @Input()
   set status(value: string) {
-    console.log(value);
     this._status = value;
     this.newStatus = value;
   }
