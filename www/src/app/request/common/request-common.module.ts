@@ -19,7 +19,7 @@ import { GoodCardComponent } from './components/delivery-monitor/good-card/good-
 import { GroupService } from "./services/group.service";
 import { MessagesComponent } from './components/messages/messages.component';
 import { OffersComponent as BackofficeOffersComponent } from './components/offers/offers.component';
-import { PieChartComponent } from './components/request/pie-chart/pie-chart.component';
+import { RequestPieChartComponent } from './components/request/request-pie-chart/request-pie-chart.component';
 import { PositionInfoHistoryComponent } from './components/position-info-history/position-info-history.component';
 import { RequestAddGroupModalComponent } from "./components/request/request-add-group-modal/request-add-group-modal.component";
 import { RequestAddResponsibleModalComponent } from './components/request/request-add-responsible-modal/request-add-responsible-modal.component';
@@ -61,7 +61,7 @@ const RequestCommonModuleDeclarations = [
   DigitalInspectorComponent,
   GoodCardComponent,
   MessagesComponent,
-  PieChartComponent,
+  RequestPieChartComponent,
   PositionInfoHistoryComponent,
   PositionSearchFilterPipe,
   RequestAddGroupModalComponent,

@@ -47,7 +47,8 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     private fb: FormBuilder,
     private technicalProposalsService: TechnicalProposalsService,
     private contragentService: ContragentService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -70,7 +71,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
           [Validators.required, this.positionsValidator]
       );
 
-      this.form.get('positions').updateValueAndValidity({ emitEvent: false });
+      this.form.get('positions').updateValueAndValidity({emitEvent: false});
     });
 
     this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
@@ -94,7 +95,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
         const value = this.form.get("contragent").value;
         this.form.get("contragentName").setValue(value ? value[0].shortName : null, {emitEvent: false});
         this.form.get("contragentName").updateValueAndValidity();
-    });
+      });
   }
 
   filesSelected(files: File[]): void {
@@ -126,7 +127,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     if (!this.isEditing) {
       tp$ = this.technicalProposalsService.addTechnicalProposal(this.request.id, body);
     } else {
-      body = { id: this.form.get("id").value, ...body };
+      body = {id: this.form.get("id").value, ...body};
       tp$ = this.technicalProposalsService.updateTechnicalProposal(this.request.id, body);
     }
 
@@ -178,7 +179,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
   positionsValidator(control: AbstractControl): ValidationErrors | null {
     return control.value.length === control.value
-      .filter(pos => pos.manufacturingName).length ? null : { manufacturer_name_error: true };
+      .filter(pos => pos.manufacturingName).length ? null : {manufacturer_name_error: true};
   }
 
   positionsWithManufacturerFilter(q: string, posWithMan: PositionWithManufacturerName) {
@@ -205,5 +206,10 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   positionManufacturerNameDisabled = ({position}: PositionWithManufacturerName) => {
     const tpPosition = this.findTpPosition(position);
     return tpPosition && tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED;
+  }
+
+  onDownloadTemplate() {
+    const contragentId = this.form.get("contragent").value[0].id;
+    this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
   }
 }

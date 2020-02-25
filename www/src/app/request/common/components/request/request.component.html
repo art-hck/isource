@@ -146,6 +146,12 @@
 
     <!-- Список позиций -->
     <div class="app-col app-table">
+      <ng-container *ngIf="formPositions.controls.length === 0">
+        <h2 class="text-center" [style.opacity]="0.1">
+          <clr-icon shape="add-text" size="270"></clr-icon><br/>
+          К заявке пока не добавлено ни <br/> одной позиции
+        </h2>
+      </ng-container>
       <ng-container *ngFor="let formGroup of formPositions.controls">
         <!-- Позиция -->
         <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
@@ -246,4 +252,5 @@
   [onDrafted]="onDrafted"
   (success)="addPosition.emit($event)"
   (uploadFromTemplate)="uploadFromTemplate.emit($event)"
+  (cancel)="addPositionModal.close()"
 ></app-request-add-position-modal>

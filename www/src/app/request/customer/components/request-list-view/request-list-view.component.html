@@ -164,5 +164,6 @@
 
 <app-new-request-modal #newRequestModal
                        (cancel)="newRequestModal.close()"
-                       (uploadFromTemplate)="onSendExcelFile($event)">
+                       (uploadFromTemplate)="onSendExcelFile($event)"
+                      (publishFromTemplate)="onPublishExcelFile($event)">
 </app-new-request-modal>

@@ -50,12 +50,16 @@
     <div class="app-section">
       <div class="app-ghost-color">Контактное лицо</div>
       <a target="_blank" href="mailto:{{request.contragent.email }}">
-        {{ request.contragent.directorFullName }}
+        {{ request.user.lastName }} {{ request.user.firstName }}
       </a>
     </div>
     <div class="app-section" *ngIf="request.documents.length">
       <div class="app-ghost-color">Документы заявки</div>
       <app-document-simple-list [documents]="request.documents" [enableUpload]="false" [size]="'s'"></app-document-simple-list>
+    </div>
+    <div class="app-section" *ngIf="request.comment">
+      <div class="app-ghost-color">Комментарий</div>
+      {{ request.comment }}
     </div>
   </div>
 </div>
@@ -71,7 +75,7 @@
   </div>
   <div class="app-accordion-body" *ngIf="isStatTabVisible">
     <div class="app-section">
-      <app-pie-chart [positions]="positions"></app-pie-chart>
+      <app-request-pie-chart [positions]="positions"></app-request-pie-chart>
     </div>
   </div>
 </div>
