@@ -22,6 +22,7 @@ import { RequestProcedureCreateDocumentsComponent } from "./components/request-p
 import { RequestCommercialProposalsComponent } from './components/request-commercial-proposals/request-commercial-proposals.component';
 import { RequestCommercialProposalsCreateComponent } from './components/request-commercial-proposals/request-commercial-proposals-create/request-commercial-proposals-create.component';
 import { RequestTechnicalProposalComponent } from "./components/request-technical-proposal/request-technical-proposal.component";
+import { RequestPositionChangeStatusService } from "./services/request-position-change-status.service";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { RequestTechnicalProposalComponent } from "./components/request-technica
     RequestService,
     SupplierSelectComponent,
     TechnicalProposalsService,
+    RequestPositionChangeStatusService
   ]
 })
 export class RequestBackofficeModule {

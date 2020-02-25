@@ -100,7 +100,7 @@
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
             <div *uxgPopoverContent (click)="more.hide()">
-              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить статус</button></div>
+              <div><button uxgButton clear *ngIf="user.isBackOffice()" [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">Сменить статус</button></div>
               <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>
               <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>
               <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить КП</button></div>
@@ -254,3 +254,25 @@
   (uploadFromTemplate)="uploadFromTemplate.emit($event)"
   (cancel)="addPositionModal.close()"
 ></app-request-add-position-modal>
+
+<!-- Модальное окно для смена статуса группы позиций -->
+<clr-modal #changeStatusModal>
+  <h3 class="modal-title"> Сменить статус позиций </h3>
+  <div class="modal-body">
+    <app-positions-status-change
+      #positionsStatusChange
+      [positions]="checkedPositions"
+      [status]="checkedPositions[0]?.status"
+      (changeStatus)="onChangePositionStatuses(); changeStatusModal.close()">
+    </app-positions-status-change>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="changeStatusModal.close()">Отмена</button>
+    <button type="button" class="btn btn-primary"
+            [disabled]="!positionsStatusChange.valid()"
+            [clrLoading]="positionsStatusChange.loading"
+            (click)="positionsStatusChange.onChangeBtn()">
+      Сменить
+    </button>
+  </div>
+</clr-modal>
