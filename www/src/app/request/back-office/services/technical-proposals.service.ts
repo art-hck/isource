@@ -65,6 +65,13 @@ export class TechnicalProposalsService {
     });
   }
 
+  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}> {
+    return this.api.post<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}>(
+      `requests/backoffice/${requestId}/technical-proposals/upload-excel`,
+      this.convertModelToFormData(files, null, 'files')
+    );
+  }
+
 
   /**
    * Функция для преобразования формы в FormData, при котором можно отправлять файлы

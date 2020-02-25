@@ -7,11 +7,12 @@
         <h3 *ngIf="!isEditing">Новое техническое предложение</h3>
         <h3 *ngIf="isEditing">Редактирование технического предложения</h3>
       </div>
-      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">
-        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
-          <clr-icon shape="app-trash"></clr-icon>
-        </button>
-      </div>
+      <!-- Пока не реализовано на бэка -->
+<!--      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">-->
+<!--        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">-->
+<!--          <clr-icon shape="app-trash"></clr-icon>-->
+<!--        </button>-->
+<!--      </div>-->
       <div class="app-col clr-flex-grow-0">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
           <clr-icon shape="app-cross"></clr-icon>
@@ -101,7 +102,7 @@
     <div class="app-row">
       <div class="app-col">
         <button type="button" uxgButton secondary
-                (click)="uloadTemplateModal.open()"
+                (click)="uploadTemplateModal.open()"
                 [disabled]="!form.get('contragent').value">Загрузить из шаблона
         </button>
       </div>
@@ -235,7 +236,7 @@
       </div>
     </clr-modal>
 
-    <clr-modal #uloadTemplateModal [clrModalSize]="'lg'">
+    <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
       <h2 class="modal-title"><b>Загрузить позиции и заводские наименования из шаблона</b></h2>
       <div class="modal-body">
         <div class="app-secondary-color">
@@ -243,12 +244,12 @@
           шаблон</b></a>), и загрузите файл в систему.
         </div>
         <div class="dragAndDropArea">
-          <app-template-upload></app-template-upload>
+          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" uxgButton secondary lg (click)="uloadTemplateModal.close()">Отмена</button>
-        <button uxgButton primary lg>Загрузить</button>
+        <button type="button" uxgButton secondary lg (click)="uploadTemplateModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions(); uploadTemplateModal.close()">Загрузить</button>
       </div>
     </clr-modal>
 

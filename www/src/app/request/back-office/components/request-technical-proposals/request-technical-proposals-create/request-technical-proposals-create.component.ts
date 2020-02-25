@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
-import { fromEvent, merge, Observable } from "rxjs";
+import {fromEvent, merge, Observable, Subscription} from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
 import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
@@ -12,13 +12,14 @@ import { ContragentList } from "../../../../../contragent/models/contragent-list
 import { TechnicalProposalPositionStatus } from "../../../../common/enum/technical-proposal-position-status";
 import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../../common/models/request-position";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
   templateUrl: './request-technical-proposals-create.component.html',
   styleUrls: ['./request-technical-proposals-create.component.scss']
 })
-export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit {
+export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
@@ -30,6 +31,8 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
   contragents$: Observable<ContragentList[]>;
+  files: File[] = [];
+  subscription = new Subscription();
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -211,5 +214,40 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   onDownloadTemplate() {
     const contragentId = this.form.get("contragent").value[0].id;
     this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendTemplatePositions(): void {
+    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
+      this.create.emit(data.requestTechnicalProposal);
+      Swal.fire({
+        width: 400,
+        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
+          '<button id="submit" class="btn btn-primary">' +
+          'ОК' + '</button>',
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          const content = Swal.getContent();
+          const $ = content.querySelector.bind(content);
+          const submit = $('#submit');
+          submit.addEventListener('click', () => {
+            Swal.close();
+          });
+        }
+      });
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
