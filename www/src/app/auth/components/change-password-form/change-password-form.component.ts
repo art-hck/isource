@@ -5,6 +5,8 @@ import { Subscription } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
+import { RestorationErrorCode } from "../../enum/restoration-error-code";
+import { RestorationResponse } from "../../models/restoration-response";
 
 @Component({
   selector: 'app-change-password-form',
@@ -17,10 +19,13 @@ export class ChangePasswordFormComponent implements OnInit {
 
   code: string;
   errorMsg: string;
+  errorCode: string;
 
   loadingState = <ClrLoadingState>0;
   clrLoadingState = ClrLoadingState;
   subscription = new Subscription();
+
+  restorationErrorCode = RestorationErrorCode;
 
   passwordChangeForm = new FormGroup({
       code: new FormControl(null),
@@ -86,8 +91,14 @@ export class ChangePasswordFormComponent implements OnInit {
 
     this.subscription.add(
       this.authService.changePasswordByCode(password, code).subscribe(
-        () => {
-          this.loadingState = ClrLoadingState.SUCCESS;
+        (response: RestorationResponse) => {
+          if (response.error) {
+            this.errorCode = response.error.code;
+            this.errorMsg = response.error.detail;
+            this.loadingState = ClrLoadingState.ERROR;
+          } else {
+            this.loadingState = ClrLoadingState.SUCCESS;
+          }
         },
         (data) => {
           this.errorMsg = data.error.detail;
