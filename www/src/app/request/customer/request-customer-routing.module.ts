@@ -22,7 +22,8 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateRequestComponent
+    component: CreateRequestComponent,
+    data: { title: "Создание заявки вручную", feature: "createRequest" }
   },
   {
     path: 'agreements',
