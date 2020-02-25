@@ -21,12 +21,6 @@ export const Menu: MenuModel[] = [
     children: []
   },
   {
-    text: 'Создать заявку',
-    path: 'requests/create',
-    feature: 'createRequest',
-    children: []
-  },
-  {
     text: 'Каталог',
     path: 'catalog',
     feature: 'catalog',

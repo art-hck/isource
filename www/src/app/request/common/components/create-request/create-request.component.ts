@@ -1,20 +1,28 @@
-import {Component} from '@angular/core';
-import {CreateRequestService} from "../../services/create-request.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { CreateRequestService } from "../../services/create-request.service";
+import { Router } from "@angular/router";
 import Swal from "sweetalert2";
-import {RequestService} from "../../../customer/services/request.service";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-create-request',
   templateUrl: './create-request.component.html',
   styleUrls: ['./create-request.component.css']
 })
-export class CreateRequestComponent {
+export class CreateRequestComponent implements OnInit {
 
   constructor(
     private createRequestService: CreateRequestService,
+    private bc: UxgBreadcrumbsService,
     protected router: Router
   ) {
+  }
+
+  ngOnInit() {
+    this.bc.breadcrumbs = [
+      { label: "Заявки", link: "/requests/customer" },
+      { label: `Заполнить вручную`, link: "/requests/customer/create" }
+    ];
   }
 
   onSendExcelFile(requestData: { files: File[], requestName: string }): void {
