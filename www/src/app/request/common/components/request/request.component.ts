@@ -157,4 +157,19 @@ export class RequestComponent implements OnInit {
   asFormArray(control: AbstractControl) {
     return control as FormArray;
   }
+
+  canChangeStatuses() {
+    let firstStatus = null;
+    return this.checkedPositions.length && this.checkedPositions.every((item: RequestPosition) => {
+      if (firstStatus === null) {
+        firstStatus = item.status;
+      }
+      return item.status === firstStatus;
+    });
+  }
+
+  onChangePositionStatuses() {
+    // todo после этой эмита обновляются все позиции. Потом переделать на редакс.
+    this.addPosition.emit();
+  }
 }
