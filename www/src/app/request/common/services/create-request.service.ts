@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import { Observable } from 'rxjs';
 import { Uuid } from 'src/app/cart/models/uuid';
 import { RequestPosition } from "../models/request-position";
+import { Request } from "../models/request";
 
 
 @Injectable()
@@ -13,15 +14,10 @@ export class CreateRequestService {
   ) {
   }
 
-  addRequest(requestName: string, requestItem: Array<any>) {
-    const data = {
-      name: requestName,
-      positions: requestItem,
-    };
+  addRequest(name: string, positions: Array<any>): Observable<Request> {
+    const requestData = this.convertModelToFormData({ name, positions }, null, '');
 
-    const requestData = this.convertModelToFormData(data, null, '');
-
-    return this.api.post(`requests/customer/add-request/manual`, requestData);
+    return this.api.post<Request>(`requests/customer/add-request/manual`, requestData);
   }
 
   addRequestPosition(requestId: Uuid, requestItem: Array<any>):  Observable<Array<RequestPosition>> {

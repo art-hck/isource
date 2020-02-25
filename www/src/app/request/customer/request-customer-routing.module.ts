@@ -19,12 +19,10 @@ const routes: Routes = [
     component: CustomerRequestsList,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", feature: "customerRequest" },
-    children: [{
-        path: 'create',
-        component: CreateRequestComponent
-        // canActivate: [CanActivateFeatureGuard],
-        // data: { title: "Создать заявку", feature: "createRequest" }
-    }]
+  },
+  {
+    path: 'create',
+    component: CreateRequestComponent
   },
   {
     path: 'agreements',

@@ -26,9 +26,6 @@ export class DocumentUploadListComponent {
   addDocument(files: File[]) {
     this.documents.push(...files);
     this.onChangeDocuments();
-
-    // очищаем, чтобы можно было снова загрузить тот же файл
-    this.uploadElRef.nativeElement.value = '';
   }
 
   removeDocument(document: File) {
