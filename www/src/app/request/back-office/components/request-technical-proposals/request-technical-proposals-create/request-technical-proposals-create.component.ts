@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
-import { fromEvent, merge, Observable } from "rxjs";
+import {fromEvent, merge, Observable, Subscription} from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
 import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
@@ -32,6 +32,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
   contragents$: Observable<ContragentList[]>;
   files: File[] = [];
+  subscription = new Subscription();
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -220,7 +221,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   }
 
   onSendTemplatePositions(): void {
-    this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
+    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
       this.create.emit(data.requestTechnicalProposal);
       Swal.fire({
         width: 400,
@@ -243,6 +244,10 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
         msg = `${msg}: ${error.error.detail}`;
       }
       alert(msg);
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
