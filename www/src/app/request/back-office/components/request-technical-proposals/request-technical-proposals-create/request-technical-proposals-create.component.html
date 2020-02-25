@@ -243,12 +243,12 @@
           шаблон</b></a>), и загрузите файл в систему.
         </div>
         <div class="dragAndDropArea">
-          <app-template-upload></app-template-upload>
+          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" uxgButton secondary lg (click)="uloadTemplateModal.close()">Отмена</button>
-        <button uxgButton primary lg>Загрузить</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions()">Загрузить</button>
       </div>
     </clr-modal>
 

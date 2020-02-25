@@ -12,6 +12,7 @@ import { ContragentList } from "../../../../../contragent/models/contragent-list
 import { TechnicalProposalPositionStatus } from "../../../../common/enum/technical-proposal-position-status";
 import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../../common/models/request-position";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
@@ -30,6 +31,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
   contragents$: Observable<ContragentList[]>;
+  files: File[] = [];
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -211,5 +213,36 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   onDownloadTemplate() {
     const contragentId = this.form.get("contragent").value[0].id;
     this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendTemplatePositions(files: File[]): void {
+    this.technicalProposalsService.addPositionsFromExcel(this.request.id, files).subscribe((data: any) => {
+      Swal.fire({
+        width: 400,
+        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
+          '<button id="submit" class="btn btn-primary">' +
+          'ОК' + '</button>',
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          const content = Swal.getContent();
+          const $ = content.querySelector.bind(content);
+
+          const submit = $('#submit');
+          submit.addEventListener('click', () => {
+            Swal.close();
+          });
+        }
+      });
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 }
