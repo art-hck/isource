@@ -219,8 +219,9 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     this.files = files;
   }
 
-  onSendTemplatePositions(files: File[]): void {
-    this.technicalProposalsService.addPositionsFromExcel(this.request.id, files).subscribe((data: any) => {
+  onSendTemplatePositions(): void {
+    this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
+      this.create.emit(data.requestTechnicalProposal);
       Swal.fire({
         width: 400,
         html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
@@ -230,7 +231,6 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
         onBeforeOpen: () => {
           const content = Swal.getContent();
           const $ = content.querySelector.bind(content);
-
           const submit = $('#submit');
           submit.addEventListener('click', () => {
             Swal.close();

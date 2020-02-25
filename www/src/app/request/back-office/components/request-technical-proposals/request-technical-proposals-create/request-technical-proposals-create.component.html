@@ -7,11 +7,12 @@
         <h3 *ngIf="!isEditing">Новое техническое предложение</h3>
         <h3 *ngIf="isEditing">Редактирование технического предложения</h3>
       </div>
-      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">
-        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
-          <clr-icon shape="app-trash"></clr-icon>
-        </button>
-      </div>
+      <!-- Пока не реализовано на бэка -->
+<!--      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">-->
+<!--        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">-->
+<!--          <clr-icon shape="app-trash"></clr-icon>-->
+<!--        </button>-->
+<!--      </div>-->
       <div class="app-col clr-flex-grow-0">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
           <clr-icon shape="app-cross"></clr-icon>
@@ -248,7 +249,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" uxgButton secondary lg (click)="uloadTemplateModal.close()">Отмена</button>
-        <button uxgButton primary lg (click)="onSendTemplatePositions()">Загрузить</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions(); uloadTemplateModal.close()">Загрузить</button>
       </div>
     </clr-modal>
 
