@@ -22,7 +22,7 @@ import { ProcedureBasicDataPage } from '../../models/procedure-basic-data-page';
  *   #createProcedureWizard
  *   [request]="request"
  *   [requestPositions$]="requestPositions$"
- *   [contragents$]="contragentList$"         <!-- <=== явное указание списка конрагентов -->
+ *   [contragents$]="contragentList$"         <!-- <=== явное указание списка контрагентов -->
  *   [allowOpenedProcedure]="true"
  *   (publishProcedure)="onPublishProcedure($event)"
  * >
