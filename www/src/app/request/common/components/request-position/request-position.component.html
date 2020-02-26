@@ -109,7 +109,12 @@
         <br/>
 
         <div class="app-ghost-color">Необходимый срок поставки</div>
-        <div class="app-bold">{{ position.deliveryDate | date : "dd.MM.yyyy" }}</div>
+        <div class="app-bold">
+          <ng-container *ngIf="!position.isDeliveryDateAsap; else asap">
+            {{ position.deliveryDate | date : "dd.MM.yyyy" }}
+          </ng-container>
+          <ng-template #asap>Как можно скорее</ng-template>
+        </div>
         <br/>
 
         <div class="app-ghost-color">Базис поставки</div>
