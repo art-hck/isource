@@ -38,7 +38,7 @@ e2e preprod:
     - docker exec -i angular-release bash -c "envsubst < e2e/protractor.conf.js.dist > e2e/protractor.conf.js"
     - docker exec -i angular-release ng e2e --port 4202
   only:
-    - release
+    - /^release-.*$/
   when: manual
 
 e2e prod:
@@ -65,7 +65,7 @@ build preprod:
     - /bin/bash /var/www/agent/front/04.change_girs.sh
     - exit 0
   only:
-    - release
+    - /^release-.*$/
 
 build prod:
   stage: build
