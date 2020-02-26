@@ -1,9 +1,9 @@
 <ng-container *ngIf="(contragents$ | async) as contragents">
-  <clr-dropdown>
-    <clr-dropdown-menu *clrIfOpen="contragents.length > 0 && isOpen">
-      <div clrDropdownItem *ngFor="let contragent of contragents;" (click)="select(contragent)">
+  <div #dropdown class="dropdown open" [style.display]="'block'" *ngIf="contragents.length > 0 && isOpen">
+    <div class="dropdown-menu">
+      <div class="dropdown-item" *ngFor="let contragent of contragents;" (click)="select(contragent)">
         {{ contragent.shortName }}
       </div>
-    </clr-dropdown-menu>
-  </clr-dropdown>
+    </div>
+  </div>
 </ng-container>
