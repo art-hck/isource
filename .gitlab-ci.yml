@@ -1,7 +1,7 @@
 stages:
   - build
   - codestyle
-  - e2e
+#  - e2e
 
 build staging:
   stage: build
