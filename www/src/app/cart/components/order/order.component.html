@@ -12,9 +12,11 @@
       <div class="clr-row clr-align-items-center">
         <div class="clr-col clr-flex-grow-0">
           <div style="position:relative">
-            <input formControlName="deliveryDate" type="text" clrDate
-                   placeholder="Выберите дату"
-                   appFormControlInvalidClass="invalid"/>
+            <clr-date-container>
+              <input clrDate formControlName="deliveryDate" type="text" placeholder="Выберите дату"
+                appFormControlInvalidClass="invalid"
+              />
+            </clr-date-container>
           </div>
         </div>
         <div class="clr-col">
