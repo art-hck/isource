@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Okei } from '../../models/okei';
 import { OkeiService } from '../../services/okei.service';
 import { Observable, Subject } from 'rxjs';
@@ -23,6 +23,7 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
   @Output() change = new EventEmitter<string|null>();
 
   @ViewChild('okeiName', {static: false}) inputValue: ElementRef;
+  @ViewChild('dropdown', {static: false}) dropdown: ElementRef;
 
   public isOpen = false;
   public onInputSubject = new Subject<string>();
@@ -32,7 +33,9 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
   public okeiFullData$: Observable<Okei[]>;
   public okeiFiltredData$: Observable<Okei[]>;
 
-  constructor(private okeiService: OkeiService) {
+  constructor(private okeiService: OkeiService) {}
+
+  ngOnInit() {
     this.okeiFullData$ = this.okeiService.getOkeiList().pipe(publishReplay(1), refCount());
     this.okeiFiltredData$ = this.onInputSubject.pipe(
       filter((value) => value.length >= this.minLength),
@@ -45,8 +48,6 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
       })
     );
   }
-
-  ngOnInit() {}
 
   search(items: Okei[], value: string, resultsCount: number): Okei[] {
     // TODO: 2020-01-28 Учитывать полное совпадение, поднимать такие результаты наверх
@@ -78,29 +79,24 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
     this.onInputSubject.next(value);
   }
 
-  writeValue(value: string|null): void {
-    this.value = value;
-  }
-
-  registerOnChange(fn: (value: string|null) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: (value: string|null) => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = true;
-  }
+  writeValue = value => this.value = value;
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  setDisabledState = disabled => this.disabled = disabled;
 
   focus(): void {
     this.inputValue.nativeElement.focus();
   }
 
-  onBlur(): void {
-    if (this.inputValue.nativeElement.value !== this.value) {
-      this.inputValue.nativeElement.value = this.value;
+  @HostListener('document:click', ['$event'])
+  onBlur(e: Event) {
+    if (!this.inputValue.nativeElement.contains(e.target)) {
+      if (this.inputValue.nativeElement.value !== this.value) {
+        this.inputValue.nativeElement.value = this.value;
+        if (this.dropdown && !this.dropdown.nativeElement.contains(e.target)) {
+          this.isOpen = false;
+        }
+      }
     }
   }
 }
