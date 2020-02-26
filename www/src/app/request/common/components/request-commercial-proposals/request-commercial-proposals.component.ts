@@ -73,7 +73,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
       const formGroup = this.createFormGroupPosition(position);
       this.formPositions.push(formGroup);
       if (!this.positionCanBeSelected(position)) {
-        formGroup.disable();
+        formGroup.get('checked').disable();
       }
     });
   }
