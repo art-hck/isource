@@ -55,7 +55,7 @@ export class SupplierSelectComponent implements OnInit {
       searchContragent: [null, Validators.required]
     });
 
-    // если из инпута еще не пришли данные, то пытаемся загрузить весь список конрагентов
+    // если из инпута еще не пришли данные, то пытаемся загрузить весь список контрагентов
     if (!this.inputContragents.length) {
       this.getAllContragentList();
     }

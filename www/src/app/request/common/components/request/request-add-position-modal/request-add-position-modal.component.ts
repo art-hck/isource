@@ -6,7 +6,8 @@ import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-add-position-modal',
-  templateUrl: './request-add-position-modal.component.html'
+  templateUrl: './request-add-position-modal.component.html',
+  styleUrls: ['./request-add-position-modal.component.scss']
 })
 export class RequestAddPositionModalComponent {
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;

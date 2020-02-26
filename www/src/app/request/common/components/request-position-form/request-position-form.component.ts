@@ -123,7 +123,9 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
       .forEach(([status, controlNames]) =>
         controlNames.forEach(controlName => form.get(controlName).disable()));
 
-    form.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
+    form.get('isDeliveryDateAsap').valueChanges
+      .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
+      .subscribe(checked => {
       if (checked) {
         form.get('deliveryDate').reset();
         form.get('deliveryDate').disable();
