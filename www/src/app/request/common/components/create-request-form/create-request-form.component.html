@@ -60,13 +60,14 @@
 
 <ng-template #actions>
   <div class="submit">
-    <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center app-justify-content-end">
-      <div>
-        <span *ngIf="isLoading" class="spinner spinner-inline"></span>
+    <div class="app-row app-align-items-center">
+      <div class="app-col"><span class="app-ghost-color">Заполнено позиций: </span> {{ validPositions.length }}</div>
+      <div class="app-row app-align-items-center">
+        <div><span *ngIf="isLoading" class="spinner spinner-inline"></span></div>
+        <button uxgButton secondary type="button" (click)="submit(false)"
+          [disabled]="form.disabled || form.invalid">Сохранить черновик</button>
+        <button uxgButton primary [disabled]="form.disabled || form.invalid" >Опубликовать</button>
       </div>
-      <button uxgButton secondary type="button" (click)="submit(false)"
-        [disabled]="form.disabled || form.invalid">Сохранить черновик</button>
-      <button uxgButton primary [disabled]="form.disabled || form.invalid" >Опубликовать</button>
     </div>
   </div>
 </ng-template>

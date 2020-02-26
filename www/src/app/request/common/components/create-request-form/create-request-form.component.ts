@@ -22,6 +22,10 @@ export class CreateRequestFormComponent implements OnInit, OnDestroy {
     return this.form.get('positions') as FormArray;
   }
 
+  get validPositions() {
+    return this.formPositions.controls.filter(control => control.valid);
+  }
+
   constructor(
     private createRequestService: CreateRequestService,
     private requestService: RequestService,
@@ -34,8 +38,9 @@ export class CreateRequestFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.formBuilder.group({
       'name': [null, Validators.required],
-      'positions': this.formBuilder.array([null], Validators.required)
+      'positions': this.formBuilder.array([], Validators.required)
     });
+    this.pushPosition();
   }
 
   pushPosition() {
