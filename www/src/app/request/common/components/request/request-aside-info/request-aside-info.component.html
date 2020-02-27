@@ -48,10 +48,14 @@
       <div>{{ request.contragent.shortName }}</div>
     </div>
     <div class="app-section">
-      <div class="app-ghost-color">Контактное лицо</div>
-      <a target="_blank" href="mailto:{{request.contragent.email }}">
-        {{ request.user.lastName }} {{ request.user.firstName }}
+      <div class="app-ghost-color">Контактное лицо (e-mail)</div>
+      <a target="_blank" href="mailto:{{request.user.email }}">
+        {{ request.user.lastName }} {{ request.user.firstName }} {{ request.user.middleName }}
       </a>
+    </div>
+    <div class="app-section">
+      <div class="app-ghost-color">Телефон контактного лица</div>
+      {{ request.user.phone | phone }}
     </div>
     <div class="app-section" *ngIf="request.documents.length">
       <div class="app-ghost-color">Документы заявки</div>

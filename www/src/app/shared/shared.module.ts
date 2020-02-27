@@ -25,6 +25,7 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
+import { PhonePipe } from './pipes/phone.pipe';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { RouterModule } from "@angular/router";
     UploadFileDirective,
     PaginationComponent,
     PieChartComponent,
+    PhonePipe,
   ],
   exports: [
     CommonModule,
@@ -104,6 +106,7 @@ import { RouterModule } from "@angular/router";
     UploadFileDirective,
     PaginationComponent,
     PieChartComponent,
+    PhonePipe,
   ]
 })
 export class SharedModule {
