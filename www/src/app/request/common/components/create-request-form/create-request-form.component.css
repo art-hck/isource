@@ -70,10 +70,6 @@ textarea {
   width: 100%;
 }
 
-.submit {
-  text-align: right;
-}
-
 .btn-link {
   color: #999999;
   font-weight: 600;
@@ -136,6 +132,6 @@ label.request-name-label {
   margin: 10px 0 0 0;
 }
 
-.submit button:last-child {
-  margin-right: 20px;
+.submit {
+  padding: 0 20px;
 }
