@@ -44,7 +44,7 @@ export class RequestCommercialProposalsComponent implements OnInit, OnDestroy {
           { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
           {
             label: 'Согласование коммерческих предложений',
-            link: `/requests/backoffice/${this.requestId}/technical-proposals`
+            link: `/requests/backoffice/${this.requestId}/commercial-proposals`
           }
         ];
       })
