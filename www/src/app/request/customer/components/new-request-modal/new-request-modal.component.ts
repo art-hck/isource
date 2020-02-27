@@ -3,21 +3,15 @@ import {ClrModal} from "@clr/angular";
 
 @Component({
   selector: 'app-new-request-modal',
-  templateUrl: './new-request-modal.component.html',
-  styleUrls: ['./new-request-modal.component.scss']
+  templateUrl: './new-request-modal.component.html'
 })
-export class NewRequestModalComponent implements OnInit {
+export class NewRequestModalComponent {
 
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;
 
   @Output() uploadFromTemplate = new EventEmitter();
   @Output() publishFromTemplate = new EventEmitter();
   @Output() cancel = new EventEmitter();
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   open() {
     this.modal.open();
