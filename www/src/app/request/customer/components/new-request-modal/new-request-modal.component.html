@@ -1,13 +1,17 @@
 <clr-modal [clrModalStaticBackdrop]="false" clrModalSize="lg">
   <h2 class="modal-title"><b>Создать новую заявку</b></h2>
   <div class="modal-body">
-    <a class="manual-link" [routerLink]="'/requests/customer/create'">
-      <b><span>Заполнить вручную</span><clr-icon shape="arrow right"></clr-icon></b>
-    </a>
-    <uxg-tabs>
-      <uxg-tab-title #template [active]="true">Загрузить из шаблона</uxg-tab-title>
-      <uxg-tab-title #freeForm>Произвольная заявка</uxg-tab-title>
-    </uxg-tabs>
+    <div class="app-row app-align-items-center">
+      <div class="app-col">
+        <uxg-tabs>
+          <uxg-tab-title #template [active]="true">Загрузить из шаблона</uxg-tab-title>
+          <uxg-tab-title #freeForm>Произвольная заявка</uxg-tab-title>
+        </uxg-tabs>
+      </div>
+      <a [routerLink]="'/requests/customer/create'">
+        <b><span>Заполнить вручную</span><clr-icon shape="arrow right"></clr-icon></b>
+      </a>
+    </div>
 
     <ng-container *uxgTab="template">
       <app-add-from-excel (submit)="uploadFromTemplate.emit($event); close()"
