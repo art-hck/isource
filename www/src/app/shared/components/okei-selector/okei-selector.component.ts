@@ -90,13 +90,18 @@ export class OkeiSelectorComponent implements OnInit, ControlValueAccessor {
 
   @HostListener('document:click', ['$event'])
   onBlur(e: Event) {
-    if (!this.inputValue.nativeElement.contains(e.target)) {
-      if (this.inputValue.nativeElement.value !== this.value) {
-        this.inputValue.nativeElement.value = this.value;
-        if (this.dropdown && !this.dropdown.nativeElement.contains(e.target)) {
-          this.isOpen = false;
-        }
-      }
+    const el = this.inputValue.nativeElement;
+
+    if (el.contains(e.target) || !this.dropdown) {
+      return;
+    }
+
+    if (el.value !== this.value) {
+      el.value = this.value;
+    }
+
+    if (!this.dropdown.nativeElement.contains(e.target)) {
+      this.isOpen = false;
     }
   }
 }
