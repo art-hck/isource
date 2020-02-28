@@ -6,8 +6,8 @@
   </div>
 
   <div class="app-col" *ngIf="showLabel">
-    <div class="app-row" *ngFor="let item of items">
-      <div class="count" [class.app-ghost-color]="item.count === 0">
+    <div class="legend" *ngFor="let item of items">
+      <div class="legend-item" [class.app-ghost-color]="item.count === 0">
         {{ item.count }}
       </div>
       <div [style.color]="item.color">{{ item.label }}</div>
