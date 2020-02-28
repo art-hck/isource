@@ -41,22 +41,6 @@
           </div>
         </div>
 
-        <!-- Назначиь ответственного -->
-        <div class="app-col app-basis-auto clr-flex-grow-0"
-             *ngIf="user.isBackOffice() &&
-             user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
-          <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">
-            <clr-icon shape="app-user" size="16"></clr-icon>
-            <span>Назначить</span>
-          </button>
-          <app-request-add-responsible-modal
-            #addResponsibleModal
-            [request]="request"
-            [positions]="checkedPositions"
-            (success)="addResponsible.emit($event)"
-          ></app-request-add-responsible-modal>
-        </div>
-
         <!-- Добавить в группу -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestGroup', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
@@ -71,41 +55,66 @@
           ></app-request-add-group-modal>
         </div>
 
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+          <uxg-popover #status [openOnHover]="true">
+          <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">
+            <clr-icon shape="app-circle-arrow"></clr-icon>
+            <span>Сменить статус</span>
+          </button>
+          <div *uxgPopoverContent>
+            <div>Вы можете изменить статус нескольких позиций сразу,</div>
+            <div>если все позиции находятся в одном статусе.</div>
+          </div>
+          </uxg-popover>
+        </div>
+
         <!-- Переместить в группу -->
-<!--        TODO Нереализованная фича, временно скрыл кнопку -->
-<!--        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">-->
-<!--          <button uxgButton clear link [disabled]="true">-->
-<!--            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>-->
-<!--            <span>Переместить</span>-->
-<!--          </button>-->
-<!--        </div>-->
+        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
+        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
+          <button uxgButton clear link [disabled]="true">
+            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
+            <span>Переместить</span>
+          </button>
+        </div>-->
 
         <!-- Отклонить -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
+        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0">
             <clr-icon shape="app-cross"></clr-icon>
             <span>Отклонить</span>
           </button>
-        </div>
+        </div>-->
 
         <!-- Согласовать -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
+        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0">
             <clr-icon shape="app-check"></clr-icon>
             <span>Согласовать</span>
           </button>
-        </div>
+        </div>-->
 
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link><clr-icon shape="app-kebab"></clr-icon></button>
             <div *uxgPopoverContent (click)="more.hide()">
-              <div><button uxgButton clear *ngIf="user.isBackOffice()" [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">Сменить статус</button></div>
-              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>
-              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>
-              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить КП</button></div>
-              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить РКД</button></div>
-              <div><button uxgButton clear disabled>Изменить базис</button></div>
+
+              <!-- Назначиь ответственного -->
+              <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
+                <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
+                <app-request-add-responsible-modal
+                  #addResponsibleModal
+                  [request]="request"
+                  [positions]="checkedPositions"
+                  (success)="addResponsible.emit($event)"
+                ></app-request-add-responsible-modal>
+              </div>
+<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>-->
+<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>-->
+<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить КП</button></div>-->
+<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить РКД</button></div>-->
+<!--              <div><button uxgButton clear disabled>Изменить базис</button></div>-->
               <div><button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button></div>
               <div><button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button></div>
             </div>
