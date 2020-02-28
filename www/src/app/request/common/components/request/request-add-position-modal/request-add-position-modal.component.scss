@@ -1,6 +1,7 @@
 @import "projects/uxg/src/styles/index";
 
 .modal-body {
-  max-height: 100vh;
-  overflow: visible;
+  margin-right: -15px;
+  padding-right: 15px;
+  @include scrollbar($theme);
 }

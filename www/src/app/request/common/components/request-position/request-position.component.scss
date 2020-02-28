@@ -1,3 +1,5 @@
+@import "projects/uxg/src/styles/index";
+
 .dashboard {
   margin-top: -17px;
   margin-bottom: 50px;
@@ -52,8 +54,9 @@
 }
 
 .modal-body {
-  max-height: 100vh;
-  overflow: visible;
+  margin-right: -15px;
+  padding-right: 15px;
+  @include scrollbar($theme);
 }
 
 ::ng-deep h3.sector-title {
