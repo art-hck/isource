@@ -1,6 +1,12 @@
 @import "projects/uxg/src/styles/index";
 
-.count {
-  width: 40px;
-  font-weight: 500;
+.legend {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 1em;
+
+  &-item {
+    width: 40px;
+    font-weight: 500;
+  }
 }
