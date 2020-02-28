@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
-import {fromEvent, merge, Observable, Subscription} from "rxjs";
+import { fromEvent, merge, Observable, Subscription } from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
 import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
@@ -13,6 +13,7 @@ import { TechnicalProposalPositionStatus } from "../../../../common/enum/technic
 import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../../common/models/request-position";
 import Swal from "sweetalert2";
+import { TechnicalProposalsStatuses } from "../../../../common/enum/technical-proposals-statuses";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
@@ -62,7 +63,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       positions: [this.defaultTPValue('positions', []), Validators.required]
     });
 
-    if (this.isEditing) {
+    if (this.isEditing && this.technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
       this.form.get('contragentName').disable();
     }
 
