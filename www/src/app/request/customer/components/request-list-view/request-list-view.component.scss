@@ -8,11 +8,6 @@
     display: none;
   }
 
-  .new-request-button {
-    position: absolute;
-    margin-left: -420px;
-  }
-
   .filter {
     display: block;
   }
@@ -70,7 +65,9 @@
     box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.15);
     float: left;
     cursor: pointer;
-    transition: all 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .close-btn:hover {
@@ -111,15 +108,6 @@
     display: block;
     transition: margin 0.3s ease-out;
   }
-
-  .new-request-button {
-    position: absolute;
-    margin-left: -140px;
-  }
-
-  .filter-button {
-    margin-right: 20px;
-  }
 }
 
 .counter-bubble {
@@ -153,9 +141,11 @@
   padding: 0 0 0 4px;
 }
 
-.filter-button {
+.request-list {
+  position: relative;
+}
+
+.action-buttons {
   position: absolute;
-  margin-left: -30px;
-  margin-top: 0;
-  line-height: 18px;
+  right: 30px;
 }
