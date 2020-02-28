@@ -4,6 +4,18 @@
     <!-- name -->
     <input #name uxgInput lg formControlName="name">
     <label class="app-control-label" (click)="name.focus()">Наименование МТР</label>
+
+    <ng-container *ngIf="showSearchResults">
+      <ng-container *ngIf="(searchResults$ | async) as searchResults">
+        <div class="search-dropdown"
+          *ngIf="searchResults.length">
+          <div class="search-item"
+            *ngFor="let suggestion of searchResults"
+            (click)="onSuggestionClick(suggestion)">{{ suggestion }}</div>
+        </div>
+      </ng-container>
+    </ng-container>
+
     <div class="app-control-error" *ngIf="form.get('name').errors as e">
       <span *ngIf="e.required">Обязательное поле</span>
     </div>
