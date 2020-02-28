@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, HostListener, Input, OnInit, Output } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
 import { flatMap, map, startWith } from "rxjs/operators";
@@ -12,6 +12,7 @@ import { RequestPositionStatusService } from "../../services/request-position-st
 import { RequestPositionWorkflowSteps as PositionStatuses } from "../../enum/request-position-workflow-steps";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
 
 @Component({
@@ -87,13 +88,32 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     return (this.isDraft || !this.position.id) && !!this.onDrafted;
   }
 
+  showSearchResults = false;
+  searchResults$: Observable<string[]>;
+
+  private wasInside = false;
+
+  @HostListener('click')
+  clickInside() {
+    this.wasInside = true;
+  }
+
+  @HostListener('document:click')
+  clickOut() {
+    if (!this.wasInside) {
+      this.showSearchResults = false;
+    }
+    this.wasInside = false;
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private statusService: RequestPositionStatusService,
     private createRequestService: CreateRequestService,
     private editRequestService: EditRequestService,
-    private userInfoService: UserInfoService
+    private userInfoService: UserInfoService,
+    private normPositionService: NormPositionService
   ) {}
 
   ngOnInit() {
@@ -123,6 +143,10 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
       .forEach(([status, controlNames]) =>
         controlNames.forEach(controlName => form.get(controlName).disable()));
 
+    form.get('name').valueChanges.subscribe(value => {
+      this.onShowSearchSuggestions(value);
+    });
+
     form.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
       if (checked) {
         form.get('deliveryDate').reset();
@@ -149,6 +173,14 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     });
   }
 
+  onShowSearchSuggestions(query: string) {
+    this.searchResults$ = this.normPositionService.searchSuggestions(query);
+    this.showSearchResults = true;
+  }
+
+  onSuggestionClick(suggestion: string) {
+    this.form.get('name').setValue(suggestion);
+  }
 
   submit() {
     let submit$: Observable<RequestPosition>;
