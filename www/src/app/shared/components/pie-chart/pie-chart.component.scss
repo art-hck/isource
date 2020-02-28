@@ -4,3 +4,7 @@
   width: 40px;
   font-weight: 500;
 }
+
+.app-col + .app-col {
+  margin-left: 1em;
+}
