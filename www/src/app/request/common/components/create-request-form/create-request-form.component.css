@@ -70,11 +70,6 @@ textarea {
   width: 100%;
 }
 
-.submit {
-  text-align: right;
-  width: 1000px;
-}
-
 .btn-link {
   color: #999999;
   font-weight: 600;
@@ -113,4 +108,30 @@ label.request-name-label {
 }
 .request-name-input.ng-touched.required {
   border-color: #FF2519;
+}
+
+.card {
+  padding: 20px 20px 40px 20px;
+  text-align: start;
+}
+
+.addNext {
+  text-align: center;
+}
+
+.card.addNext {
+  padding-bottom: 20px;
+}
+
+.app-col-aside {
+  padding-top: 50px;
+  text-align: start;
+}
+
+.download-docs {
+  margin: 10px 0 0 0;
+}
+
+.submit {
+  padding: 0 20px;
 }

@@ -1,6 +1,6 @@
 <div class="app-row">
   <div class="app-col app-bold">
-    <div class="upload-area" hoverClass="upload-area-hover" (appOnDropFile)="addDocument($event)">
+    <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="addDocument($event)">
       <div>Перетащите заполненный шаблон сюда</div>
     </div>
   </div>
@@ -10,9 +10,7 @@
       Вы можете перетащить заполненный шаблон в окно слева, или нажать на кнопку ниже, и выбрать нужный файл в окне проводника
     </div>
     <div>
-      <button type="button" uxgButton secondary (click)="uploadEl.click()">Загрузить заполненный шаблон
-      </button>
-      <input #uploadEl type="file" multiple (change)="addDocument($event.target.files)"/>
+      <button type="button" uxgButton secondary appUploadFile (select)="addDocument($event)" [multiple]="true">Загрузить заполненный шаблон</button>
     </div>
   </div>
 </div>

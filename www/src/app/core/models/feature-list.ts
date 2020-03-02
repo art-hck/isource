@@ -2,6 +2,7 @@ import { UserRole } from "../../user/models/user-role";
 import { Feature } from "./feature";
 
 export interface IFeatureList {
+  dashboard;
   registration;
   customerRequest;
   createRequest;
@@ -17,12 +18,12 @@ export interface IFeatureList {
   instructionsFileForBackoffice;
   publishRequest;
   approveRequest;
-  addRequestResponsible;
   addRequestGroup;
   moveRequestGroup;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
+  dashboard: { roles: [UserRole.CUSTOMER] },
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
@@ -38,7 +39,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   editTechnicalProposal: { roles: [UserRole.BACKOFFICE] },
   publishRequest: { roles: [UserRole.CUSTOMER] },
   approveRequest: { roles: [UserRole.CUSTOMER] },
-  addRequestResponsible: { roles: [UserRole.SENIOR_BACKOFFICE] },
   addRequestGroup: { roles: [UserRole.BACKOFFICE] },
   moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
 };

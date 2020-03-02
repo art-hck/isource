@@ -1,6 +1,4 @@
-input#file_upload {
-  display: none;
-}
+@import "projects/uxg/src/styles/index";
 
 .btn.btn-link {
   margin: 0;
@@ -19,3 +17,28 @@ li.document-item {
     margin: 5px 10px;
   }
 }
+
+.upload-area {
+  align-items: center;
+  background: uxg($theme, color-list-hover);
+  color: rgba(uxg($theme, color-control-primary), .3);
+  font-size: uxg($theme, font-size-l);
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  border: 2px transparent solid;
+  transition: border 200ms, color 200ms;
+  border-radius: 4px;
+  margin-right: 20px;
+
+  &-hover {
+    border-color: uxg($theme, color-border);
+    color: rgba(uxg($theme, color-control-primary), 1);
+  }
+}
+
+small {
+  margin: 24px 0 17px 0;
+  display: block;
+}
+

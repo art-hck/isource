@@ -19,7 +19,7 @@ import { GoodCardComponent } from './components/delivery-monitor/good-card/good-
 import { GroupService } from "./services/group.service";
 import { MessagesComponent } from './components/messages/messages.component';
 import { OffersComponent as BackofficeOffersComponent } from './components/offers/offers.component';
-import { PieChartComponent } from './components/request/pie-chart/pie-chart.component';
+import { RequestPieChartComponent } from './components/request/request-pie-chart/request-pie-chart.component';
 import { PositionInfoHistoryComponent } from './components/position-info-history/position-info-history.component';
 import { RequestAddGroupModalComponent } from "./components/request/request-add-group-modal/request-add-group-modal.component";
 import { RequestAddResponsibleModalComponent } from './components/request/request-add-responsible-modal/request-add-responsible-modal.component';
@@ -46,6 +46,7 @@ import { RequestTpFilterContragentListComponent } from "./components/request-tec
 import { RequestTpFilterStatusesListComponent } from "./components/request-technical-proposal-filter/request-tp-filter-statuses-list/request-tp-filter-statuses-list.component";
 import { RequestTpFilterSectionComponent } from "./components/request-technical-proposal-filter/request-tp-filter-section/request-tp-filter-section.component";
 import { RequestCpFilterComponent } from "./components/request-commercial-proposals/request-cp-filter/request-cp-filter.component";
+import { PositionsStatusChangeComponent } from "../back-office/components/request/change-position-statuses/positions-status-change.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -61,10 +62,11 @@ const RequestCommonModuleDeclarations = [
   DigitalInspectorComponent,
   GoodCardComponent,
   MessagesComponent,
-  PieChartComponent,
+  RequestPieChartComponent,
   PositionInfoHistoryComponent,
   PositionSearchFilterPipe,
   RequestAddGroupModalComponent,
+  PositionsStatusChangeComponent,
   RequestAddResponsibleModalComponent,
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,

@@ -6,10 +6,6 @@
   transform-origin: top;
 }
 
-input[type=file] {
-  display: none;
-}
-
 .upload-area {
   align-items: center;
   background: uxg($theme, color-list-hover);
@@ -110,6 +106,10 @@ small {
       text-align: right;
     }
   }
+}
+
+.dragAndDropArea {
+  margin: 20px 0 10px 0;
 }
 
 @keyframes host-show {

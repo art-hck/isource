@@ -10,13 +10,25 @@ import { RequestPositionComponent } from "./components/request-position/request-
 import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
 import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
+import { RequestAgreementsComponent } from "./components/request-agreements/request-agreements.component";
+import {CreateRequestComponent} from "../common/components/create-request/create-request.component";
 
 const routes: Routes = [
   {
     path: '',
     component: CustomerRequestsList,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", feature: "customerRequest" }
+    data: { title: "Заявки", feature: "customerRequest" },
+  },
+  {
+    path: 'create',
+    component: CreateRequestComponent,
+    data: { title: "Создание заявки вручную", feature: "createRequest" }
+  },
+  {
+    path: 'agreements',
+    component: RequestAgreementsComponent,
+    data: { title: "Согласования" }
   },
   {
     path: ':id',

@@ -9,6 +9,7 @@ export class RequestPositionList extends BaseModel {
   id: Uuid|null;
   entityType?: string;
   createdDate: string;
+  updatedDate: string;
   request: Request;
   name: string;
 }

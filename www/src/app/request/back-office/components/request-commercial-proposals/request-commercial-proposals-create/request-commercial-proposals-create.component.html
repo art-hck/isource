@@ -85,7 +85,7 @@
                [class.invalid]="newCommercialProposalForm.get('deliveryDate').invalid"
                appFormControlInvalidClass="invalid"
                #deliveryDate uxgInput lg formControlName="deliveryDate">
-        <label class="app-control-label" (click)="deliveryDate.focus()">Сроки доставки</label>
+        <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
         <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
           <clr-icon shape="app-calendar-big" size="24"></clr-icon>
         </label>
@@ -124,12 +124,7 @@
   <div class="form-row clr-row">
     <div class="clr-col-auto">
       <div class="app-control-wrap">
-        <div>
-          <button type="button" uxgButton secondary (click)="inputFile.click()">
-            Выбрать документы
-          </button>
-          <input #inputFile type="file" multiple (change)="filesSelected($event)"/>
-        </div>
+        <button type="button" uxgButton secondary appUploadFile (select)="filesSelected($event)" [multiple]="true">Выбрать документы</button>
       </div>
     </div>
 

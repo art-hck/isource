@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
-import { OffersService } from "../../../back-office/services/offers.service";
+import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { ActivatedRoute } from "@angular/router";
 import { RequestOfferPosition } from "../../models/request-offer-position";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -34,7 +34,7 @@ export class OffersComponent implements OnInit {
   showAddOfferForm = false;
 
   constructor(
-    protected offersService: OffersService,
+    protected offersService: CommercialProposalsService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private customerRequestService: RequestService,
@@ -107,8 +107,10 @@ export class OffersComponent implements OnInit {
   }
 
   canAddOffer() {
-    return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
+    // todo пока временно скрыл кнопку "Добавить КП". В дальнейшем нужно полностью выпилить возможно добавления
+    return false;
+    // return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+    //   || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
   canChoiceWinner() {

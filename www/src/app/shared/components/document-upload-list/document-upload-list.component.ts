@@ -14,8 +14,8 @@ import { DocumentIconSize } from "../../enums/document-icon-size";
 export class DocumentUploadListComponent {
 
   @Input() documents: File[] = [];
-
   @Input() uploadLabel = 'Выбрать документ';
+  @Input() dragAndDropAvailable = false;
 
   @Output() fileSelected = new EventEmitter<File[]>();
 
@@ -23,12 +23,9 @@ export class DocumentUploadListComponent {
 
   public documentIconSize = DocumentIconSize;
 
-  addDocument(files: FileList) {
-    this.documents = [...this.documents, ...Array.from(files)];
+  addDocument(files: File[]) {
+    this.documents.push(...files);
     this.onChangeDocuments();
-
-    // очищаем, чтобы можно было снова загрузить тот же файл
-    this.uploadElRef.nativeElement.value = '';
   }
 
   removeDocument(document: File) {

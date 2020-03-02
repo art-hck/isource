@@ -63,12 +63,6 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
     );
   }
 
-  // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
-  sendOnApprove = (position: RequestPosition) => this.requestService
-    .publishRequest(this.requestId)
-    // После публикации получаем актуальную инфу о позиции
-    .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
-
   uploadDocuments({files, position}: {files: File[], position: RequestPosition}) {
     this.requestService.uploadDocuments(position, files)
       .subscribe((documents: RequestDocument[]) => {
@@ -76,6 +70,12 @@ export class RequestPositionComponent implements OnInit, OnDestroy {
         this.position$ = of(position);
       });
   }
+
+  // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
+  sendOnApprove = (position: RequestPosition) => this.requestService
+    .publishRequest(this.requestId)
+    // После публикации получаем актуальную инфу о позиции
+    .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

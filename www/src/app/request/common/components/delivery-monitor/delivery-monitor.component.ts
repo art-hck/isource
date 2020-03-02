@@ -102,7 +102,7 @@ export class DeliveryMonitorComponent implements OnInit {
   getDeliveryMonitorInfo(): void {
     this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
-      .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.contractAnnex.consignments ));
+      .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.consignments ));
   }
 
   getInspectorStagesInfo(): void {
@@ -144,7 +144,6 @@ export class DeliveryMonitorComponent implements OnInit {
 
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
   }
-
 
   deliveryMonitorInfoCanBeShown() {
     const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(

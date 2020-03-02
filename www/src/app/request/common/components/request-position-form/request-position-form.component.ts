@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { DatePipe } from "@angular/common";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { flatMap, map } from "rxjs/operators";
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
+import { flatMap, map, startWith } from "rxjs/operators";
 import { Observable, of, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -18,17 +18,33 @@ import * as moment from 'moment';
   selector: 'app-request-position-form',
   templateUrl: './request-position-form.component.html',
   styleUrls: ['./request-position-form.component.scss'],
-  providers: [DatePipe]
+  providers: [
+    DatePipe,
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RequestPositionFormComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => RequestPositionFormComponent),
+      multi: true,
+    }
+  ]
 })
 
-export class RequestPositionFormComponent implements OnInit {
+export class RequestPositionFormComponent implements OnInit, ControlValueAccessor, Validator  {
   @Input() requestId: Uuid;
   @Input() position: RequestPosition = new RequestPosition();
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
+  @Input() isNewRequest = false;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   form: FormGroup;
   subscription = new Subscription();
+  onTouched: (value) => void;
+  onChange: (value) => void;
+  value;
 
   readonly currencies = [
     { value: PositionCurrency.RUB, label: "Руб." },
@@ -97,7 +113,8 @@ export class RequestPositionFormComponent implements OnInit {
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
       quantity: [p.quantity, [Validators.required, Validators.pattern("^[0-9]+$"), Validators.min(1)]],
-      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]]
+      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      documents: [[]]
     });
 
     Object.entries(this.disabledFieldsAfterStatus)
@@ -106,7 +123,9 @@ export class RequestPositionFormComponent implements OnInit {
       .forEach(([status, controlNames]) =>
         controlNames.forEach(controlName => form.get(controlName).disable()));
 
-    form.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
+    form.get('isDeliveryDateAsap').valueChanges
+      .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
+      .subscribe(checked => {
       if (checked) {
         form.get('deliveryDate').reset();
         form.get('deliveryDate').disable();
@@ -124,7 +143,14 @@ export class RequestPositionFormComponent implements OnInit {
     }
 
     this.form = form;
+    this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
+      this.writeValue(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
   }
+
 
   submit() {
     let submit$: Observable<RequestPosition>;
@@ -166,4 +192,8 @@ export class RequestPositionFormComponent implements OnInit {
     }));
   }
 
+  registerOnChange = (fn: any) => this.onChange = fn;
+  registerOnTouched = (fn: any) => this.onTouched = fn;
+  writeValue = (value) => this.value = value;
+  validate = () => this.form.invalid ? {invalid: true} : null;
 }

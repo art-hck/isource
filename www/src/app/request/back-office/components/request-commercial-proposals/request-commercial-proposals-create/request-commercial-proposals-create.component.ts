@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, O
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { fromEvent, merge, Observable, of, Subscription } from "rxjs";
 import { auditTime, mergeMap } from "rxjs/operators";
-import { OffersService } from "../../../services/offers.service";
+import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { RequestPosition } from "../../../../common/models/request-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import * as moment from "moment";
@@ -47,7 +47,7 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
 
   constructor(
     private formBuilder: FormBuilder,
-    protected offersService: OffersService,
+    protected offersService: CommercialProposalsService,
     private contragentService: ContragentService
   ) { }
 
@@ -112,15 +112,9 @@ export class RequestCommercialProposalsCreateComponent implements OnInit, AfterV
       });
   }
 
-  filesDropped(files: FileList): void {
-    Array.from(files).forEach(
-      file => this.formDocuments.push(this.formBuilder.control(file))
-    );
-  }
-
-  filesSelected(e) {
-    this.filesDropped(e.target.files);
-    e.target.value = '';
+  filesSelected(files: File[]): void {
+    files.map(file => this.formBuilder.control(file))
+      .forEach(control => this.formDocuments.push(control));
   }
 
   submit() {

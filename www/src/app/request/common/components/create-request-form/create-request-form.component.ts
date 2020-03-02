@@ -1,190 +1,79 @@
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from "@angular/forms";
-import * as moment from "moment";
-import Swal from "sweetalert2";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CreateRequestService } from "../../services/create-request.service";
 import { Router } from "@angular/router";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { finalize, flatMap, mapTo } from "rxjs/operators";
+import { RequestService } from "../../../customer/services/request.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-create-request-form',
   templateUrl: './create-request-form.component.html',
   styleUrls: ['./create-request-form.component.css']
 })
-export class CreateRequestFormComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  requestDataForm: FormGroup;
-  // тут храним список открытых форм
-  formShow = [];
-  requestName = "";
+export class CreateRequestFormComponent implements OnInit, OnDestroy {
+  form: FormGroup;
+  subscription = new Subscription();
+  isLoading = false;
 
-  get itemForm() {
-    return this.requestDataForm.get('itemForm') as FormArray;
+  get formPositions() {
+    return this.form.get('positions') as FormArray;
+  }
+
+  get validPositions() {
+    return this.formPositions.controls.filter(control => control.valid);
   }
 
   constructor(
     private createRequestService: CreateRequestService,
+    private requestService: RequestService,
     private formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef,
-    protected router: Router
-  ) {
-    this.requestDataForm = this.formBuilder.group({
-        'name': [''],
-        'itemForm': this.formBuilder.array([
-          this.addItemFormGroup()
-        ])
-      }
-    );
-  }
-
-  ngAfterViewChecked() {
-    // костыль, чтобы не валилась ошибка в консоль
-    this.cdRef.detectChanges();
-  }
+    private router: Router,
+    public user: UserInfoService,
+    public notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit(): void {
-    this.expandForm(0);
-  }
-
-  onRequestNameChange(value) {
-    this.requestName = value.trim();
-  }
-
-  expandForm(i): void {
-    setTimeout(() => {
-      this.formShow[i] = true;
+    this.form = this.formBuilder.group({
+      'name': [null, Validators.required],
+      'positions': this.formBuilder.array([], Validators.required)
     });
+    this.pushPosition();
   }
 
-  addItemFormGroup(): FormGroup {
-    const itemForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      productionDocument: ['', [Validators.required]],
-      quantity: [null, [Validators.required, Validators.min(1)]],
-      measureUnit: ['', [Validators.required]],
-      deliveryDate: ['', [Validators.required, this.dateMinimum()]],
-      isDeliveryDateAsap: [false],
-      deliveryBasis: ['', [Validators.required]],
-      paymentTerms: ['30 дней по факту поставки', [Validators.required]],
-      startPrice: [null, [Validators.min(1)]],
-      currency: ['RUB'],
-      isShmrRequired: [false],
-      isPnrRequired: [false],
-      isInspectionControlRequired: [false],
-      comments: [''],
-      documents: [[]],
-      isDesignRequired: [false]
-    });
-    itemForm.get('isDeliveryDateAsap').valueChanges.subscribe(checked => {
-      itemForm.get('deliveryDate').reset();
-      if (checked) {
-        itemForm.get('deliveryDate').disable();
-      } else {
-        itemForm.get('deliveryDate').enable();
+  pushPosition() {
+    this.formPositions.push(this.formBuilder.control(null, Validators.required));
+  }
+
+  submit(publish = true) {
+    const {name, positions} = this.form.value;
+    let request$ = this.createRequestService.addRequest(name, positions)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+        this.form.enable();
+      }));
+
+    if (publish) {
+      request$ = request$.pipe(
+        flatMap(request => this.requestService.publishRequest(request.id).pipe(mapTo(request)))
+      );
+    }
+
+    this.isLoading = true;
+    this.form.disable();
+
+    this.subscription.add(
+    request$.subscribe(
+      data => {
+        this.notificationService.toast(publish ? "Заявка опубликована" : "Черновик заявки создан");
+        this.router.navigate(["requests/customer", data.id]);
       }
-    });
-
-    return itemForm;
+    ));
   }
 
-  /**
-   * Возвращает валидно ли поле в форме
-   * @param i
-   * @param field
-   */
-  isFieldInvalid(i, field: string) {
-    return this.itemForm.at(i).get(field).errors
-      && (this.itemForm.at(i).get(field).touched || this.itemForm.at(i).get(field).dirty);
-  }
-
-  /**
-   * Возвращает валидны ли поля в форме, которые уже заполнялись пользователем
-   * @param form
-   */
-  isInvalidForm(form) {
-    let isInvalid = false;
-    Object.keys(form.controls).forEach(key => {
-      isInvalid = isInvalid
-        || (form.get(key).invalid && (form.get(key).touched || form.get(key).dirty));
-    });
-    return isInvalid;
-  }
-
-  dateMinimum(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const controlDate = moment(control.value, 'DD.MM.YYYY');
-      const validationDate = moment(new Date(), 'DD.MM.YYYY');
-
-      return controlDate.isAfter(validationDate) ? null : {
-        'date-minimum': {
-          'date-minimum': validationDate,
-          'actual': controlDate.format('DD.MM.YYYY')
-        }
-      };
-    };
-  }
-
-  onAddNext() {
-    this.itemForm.push(this.addItemFormGroup());
-
-    const newFormIndex = this.itemForm.controls.length - 1;
-
-    // закрываем все вкладки
-    this.formShow.forEach(function(item, i, arr) {
-      arr[i] = false;
-    });
-
-    this.expandForm(newFormIndex);
-  }
-
-  deleteItem(i): void {
-    this.formShow.splice(i, 1);
-    this.itemForm.removeAt(i);
-  }
-
-  onSubmit() {
-    return this.createRequestService.addRequest(
-      this.requestDataForm.value['name'],
-      this.requestDataForm.value['itemForm']
-    ).subscribe(
-      (data: any) => {
-        Swal.fire({
-          width: 400,
-          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
-            '<button id="submit" class="btn btn-primary">' +
-            'ОК' + '</button>',
-          showConfirmButton: false,
-          onBeforeOpen: () => {
-            const content = Swal.getContent();
-            const $ = content.querySelector.bind(content);
-
-            const submit = $('#submit');
-            submit.addEventListener('click', () => {
-              this.router.navigateByUrl(`requests/customer/${data.id}`);
-              Swal.close();
-            });
-          }
-        });
-      }
-    );
-  }
-
-  onDocumentSelected(documents: File[], form) {
-    form.get('documents').setValue(documents);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

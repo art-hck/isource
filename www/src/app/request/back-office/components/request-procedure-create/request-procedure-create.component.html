@@ -11,6 +11,7 @@
     <br/>
     <br/>
     <select-items-with-search
+      *ngIf="positions else loading"
       class="select-list select-list-positions"
       formControlName="positions"
       placeholder="Наименование позиции или группы"
@@ -43,6 +44,11 @@
         </div>
       </ng-template>
     </select-items-with-search>
+    <ng-template #loading>
+      <div *uxgWizzardStep="'positions'" class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
   </div>
 
   <!-- General -->
@@ -117,9 +123,10 @@
     <br/>
     <br/>
     <select-items-with-search
+      *ngIf="contragents"
       class="select-list select-list-contragents"
       formControlName="privateAccessContragents"
-      placeholder="Наименование конрагента или ИНН"
+      placeholder="Наименование контрагента или ИНН"
       [filterFn]="filterContragents"
       [trackBy]="trackById"
       [items]="contragents"

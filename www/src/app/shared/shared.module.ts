@@ -14,20 +14,25 @@ import { SafeStylePipe } from "./pipes/safe-style-pipe";
 import { ContragentSearchFilterPipe } from "./pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
-import { DragFileUploadDirective } from './directives/drag-file-upload.directive';
+import { UploadFileDragDirective } from './directives/upload-file-drag.directive';
 import { UxgModule } from "uxg";
 import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
 import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import { RouterModule } from "@angular/router";
+import { PhonePipe } from './pipes/phone.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     ClarityModule,
     CustomComponentsModule,
     UxgModule,
@@ -61,12 +66,16 @@ import { TemplateUploadComponent } from './components/template-upload/template-u
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
     ControlInvalidClassDirective,
-    DragFileUploadDirective,
+    UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     OkeiSelectorComponent,
     UploadFileDirective,
     TemplateUploadComponent,
+    UploadFileDirective,
+    PaginationComponent,
+    PieChartComponent,
+    PhonePipe,
   ],
   exports: [
     CommonModule,
@@ -91,10 +100,13 @@ import { TemplateUploadComponent } from './components/template-upload/template-u
     CountdownTimerPipe,
 
     ControlInvalidClassDirective,
-    DragFileUploadDirective,
+    UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
     UploadFileDirective,
+    PaginationComponent,
+    PieChartComponent,
+    PhonePipe,
   ]
 })
 export class SharedModule {

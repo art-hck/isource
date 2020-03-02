@@ -1,9 +1,5 @@
 @import "projects/uxg/src/styles/index";
 
-input[type=file] {
-  display: none;
-}
-
 .upload-area {
   align-items: center;
   background: uxg($theme, color-list-hover);

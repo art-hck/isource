@@ -37,12 +37,6 @@
   </ng-container>
 
   <div class="form-group" *ngIf="enableUpload">
-    <label for="{{ uploadInputId }}" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
-    <input #uploadEl
-           type="file"
-           id="{{ uploadInputId }}"
-           class="file-upload"
-           multiple
-           (change)="onChangeDocuments($event.target.files)">
+    <a appUploadFile (select)="onChangeDocuments($event)" [multiple]="true">{{ uploadLabel }}</a>
   </div>
 </ul>

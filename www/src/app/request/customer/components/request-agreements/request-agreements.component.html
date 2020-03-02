@@ -1,0 +1,7 @@
+<div *ngIf="(agreements$ | async) as agreements;" [class.loading]="isLoading">
+  <app-agreements [positions]="agreements.entities" [total]="agreements.totalCount"></app-agreements>
+</div>
+
+<br/>
+
+<app-pagination [total]="total$ | async" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>

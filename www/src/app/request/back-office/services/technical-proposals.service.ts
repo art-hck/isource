@@ -5,6 +5,7 @@ import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalProposalCreateRequest } from "../models/technical-proposal-create-request";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable()
 export class TechnicalProposalsService {
@@ -54,6 +55,21 @@ export class TechnicalProposalsService {
   cancelSendToAgreement(requestId: Uuid, technicalProposal: TechnicalProposal): Observable<TechnicalProposal> {
     const url = `requests/backoffice/${requestId}/technical-proposals/${technicalProposal.id}/cancel-send-to-agreement`;
     return this.api.post<TechnicalProposal>(url, technicalProposal);
+  }
+
+  downloadTemplate(requestId: Uuid, contragentId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
+    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'})
+  .subscribe(data => {
+      saveAs(data, `RequestTechnicalProposalsTemplate.xlsx`);
+    });
+  }
+
+  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}> {
+    return this.api.post<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}>(
+      `requests/backoffice/${requestId}/technical-proposals/upload-excel`,
+      this.convertModelToFormData(files, null, 'files')
+    );
   }
 
 

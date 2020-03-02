@@ -1,0 +1,16 @@
+<div class="app-row">
+  <div class="app-col">
+    <div class="pie-chart">
+      <canvas #chart></canvas>
+    </div>
+  </div>
+
+  <div class="app-col" *ngIf="showLabel">
+    <div class="legend" *ngFor="let item of items">
+      <div class="legend-item" [class.app-ghost-color]="item.count === 0">
+        {{ item.count }}
+      </div>
+      <div [style.color]="item.color">{{ item.label }}</div>
+    </div>
+  </div>
+</div>

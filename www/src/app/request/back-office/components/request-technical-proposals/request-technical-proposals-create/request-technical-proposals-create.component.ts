@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
-import { fromEvent, merge, Observable } from "rxjs";
+import { fromEvent, merge, Observable, Subscription } from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
 import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
@@ -12,13 +12,15 @@ import { ContragentList } from "../../../../../contragent/models/contragent-list
 import { TechnicalProposalPositionStatus } from "../../../../common/enum/technical-proposal-position-status";
 import { TechnicalProposalPosition } from "../../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../../common/models/request-position";
+import Swal from "sweetalert2";
+import { TechnicalProposalsStatuses } from "../../../../common/enum/technical-proposals-statuses";
 
 @Component({
   selector: 'app-request-technical-proposals-create',
   templateUrl: './request-technical-proposals-create.component.html',
   styleUrls: ['./request-technical-proposals-create.component.scss']
 })
-export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit {
+export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
@@ -30,6 +32,8 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
   contragents$: Observable<ContragentList[]>;
+  files: File[] = [];
+  subscription = new Subscription();
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -47,7 +51,8 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     private fb: FormBuilder,
     private technicalProposalsService: TechnicalProposalsService,
     private contragentService: ContragentService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -58,7 +63,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       positions: [this.defaultTPValue('positions', []), Validators.required]
     });
 
-    if (this.isEditing) {
+    if (this.isEditing && this.technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
       this.form.get('contragentName').disable();
     }
 
@@ -70,7 +75,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
           [Validators.required, this.positionsValidator]
       );
 
-      this.form.get('positions').updateValueAndValidity({ emitEvent: false });
+      this.form.get('positions').updateValueAndValidity({emitEvent: false});
     });
 
     this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
@@ -94,18 +99,13 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
         const value = this.form.get("contragent").value;
         this.form.get("contragentName").setValue(value ? value[0].shortName : null, {emitEvent: false});
         this.form.get("contragentName").updateValueAndValidity();
-    });
+      });
   }
 
-  filesDropped(files: FileList): void {
-    Array.from(files).forEach(
+  filesSelected(files: File[]): void {
+    files.forEach(
       file => this.formDocuments.push(this.fb.control(file))
     );
-  }
-
-  filesSelected(e): void {
-    this.filesDropped(e.target.files);
-    e.target.value = '';
   }
 
   /**
@@ -131,7 +131,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     if (!this.isEditing) {
       tp$ = this.technicalProposalsService.addTechnicalProposal(this.request.id, body);
     } else {
-      body = { id: this.form.get("id").value, ...body };
+      body = {id: this.form.get("id").value, ...body};
       tp$ = this.technicalProposalsService.updateTechnicalProposal(this.request.id, body);
     }
 
@@ -183,7 +183,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
   positionsValidator(control: AbstractControl): ValidationErrors | null {
     return control.value.length === control.value
-      .filter(pos => pos.manufacturingName).length ? null : { manufacturer_name_error: true };
+      .filter(pos => pos.manufacturingName).length ? null : {manufacturer_name_error: true};
   }
 
   positionsWithManufacturerFilter(q: string, posWithMan: PositionWithManufacturerName) {
@@ -210,5 +210,45 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   positionManufacturerNameDisabled = ({position}: PositionWithManufacturerName) => {
     const tpPosition = this.findTpPosition(position);
     return tpPosition && tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED;
+  }
+
+  onDownloadTemplate() {
+    const contragentId = this.form.get("contragent").value[0].id;
+    this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendTemplatePositions(): void {
+    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
+      this.create.emit(data.requestTechnicalProposal);
+      Swal.fire({
+        width: 400,
+        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
+          '<button id="submit" class="btn btn-primary">' +
+          'ОК' + '</button>',
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          const content = Swal.getContent();
+          const $ = content.querySelector.bind(content);
+          const submit = $('#submit');
+          submit.addEventListener('click', () => {
+            Swal.close();
+          });
+        }
+      });
+    }, (error: any) => {
+      let msg = 'Ошибка в шаблоне';
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

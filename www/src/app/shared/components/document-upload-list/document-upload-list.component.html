@@ -1,3 +1,24 @@
+<ng-container *ngIf="dragAndDropAvailable; else uploadList">
+  <div class="app-row">
+    <div class="app-col app-bold">
+      <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="addDocument($event)">
+        <div>Перетащите сюда документ</div>
+      </div>
+    </div>
+
+    <div class="app-col app-row clr-justify-content-between clr-flex-column">
+      <div class="app-secondary-color">
+        Вы можете перетащить нужный документ в окно слева, или нажать на кнопку ниже, и выбрать необходимые файлы в окне проводника
+      </div>
+      <div>
+        <button type="button" uxgButton secondary appUploadFile (select)="addDocument($event)" [multiple]="true">{{uploadLabel}}</button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="documents.length !== 0">
+    <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+  </ng-container>
+</ng-container>
 <ul class="list-unstyled">
   <li class="document-item" *ngFor="let document of documents">
     <document-icon [name]="document.name" [size]="documentIconSize.small"></document-icon>
@@ -6,13 +27,9 @@
       <clr-icon shape="times"></clr-icon>
     </button>
   </li>
-
+<ng-template #uploadList>
   <div class="form-group">
-    <label *ngIf="uploadLabel" for="file_upload" class="file-upload-label"><a>{{ uploadLabel }}</a></label>
-    <input type="file"
-           #uploadEl
-           id="file_upload"
-           multiple
-           (change)="addDocument($event.target.files)">
+    <a appUploadFile (select)="addDocument($event)" [multiple]="true">{{ uploadLabel }}</a>
   </div>
+</ng-template>
 </ul>

@@ -1,6 +1,7 @@
 stages:
   - build
   - codestyle
+#  - e2e
 
 build staging:
   stage: build
@@ -27,6 +28,31 @@ codestyle staging:
   only:
     - merge_requests
 
+#e2e preprod:
+#  stage: e2e
+#  tags:
+#    - gpn-test-front
+#  script:
+#    - docker-compose -f dc-e2e-release.yml build --no-cache
+#    - docker-compose -f dc-e2e-release.yml up -d
+#    - docker exec -i angular-release bash -c "envsubst < e2e/protractor.conf.js.dist > e2e/protractor.conf.js"
+#    - docker exec -i angular-release ng e2e --port 4202
+#  only:
+#    - /^release-.*$/
+#  when: manual
+#
+#e2e prod:
+#  stage: e2e
+#  tags:
+#    - gpn-test-front
+#  script:
+#    - docker-compose -f dc-e2e-master.yml build --no-cache
+#    - docker-compose -f dc-e2e-master.yml up -d
+#    - docker exec -i angular-master bash -c "envsubst < e2e/protractor.conf.js.dist > e2e/protractor.conf.js"
+#    - docker exec -i angular-master ng e2e --port 4202
+#  only:
+#    - master
+#  when: manual
 
 build preprod:
   stage: build
@@ -39,7 +65,7 @@ build preprod:
     - /bin/bash /var/www/agent/front/04.change_girs.sh
     - exit 0
   only:
-    - release
+    - /^release-.*$/i
 
 build prod:
   stage: build

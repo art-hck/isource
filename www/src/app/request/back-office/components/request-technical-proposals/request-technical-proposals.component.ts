@@ -11,6 +11,7 @@ import { UxgBreadcrumbsService } from "uxg";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({ templateUrl: './request-technical-proposals.component.html' })
 export class RequestTechnicalProposalsComponent implements OnInit {
@@ -27,6 +28,7 @@ export class RequestTechnicalProposalsComponent implements OnInit {
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
     private contragentService: ContragentService,
+    public featureService: FeatureService
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -94,5 +96,14 @@ export class RequestTechnicalProposalsComponent implements OnInit {
     //   }),
     //   publishReplay(1), refCount()
     // );
+  }
+
+  onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
+    const subscription = this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal).subscribe(
+      () => {
+        this.getTechnicalProposals();
+        subscription.unsubscribe();
+      }
+    );
   }
 }

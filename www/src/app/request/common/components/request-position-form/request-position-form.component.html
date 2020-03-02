@@ -143,16 +143,28 @@
       </div>
     </div>
     <div class="app-col">
-      <h3>Дополнительные требования <span class="app-ghost-color" style="font-weight: normal">(необязательно)</span></h3>
+      <h3>Дополнительные требования <span class="app-ghost-color" [style.font-weight]="'normal'">(необязательно)</span></h3>
       <br/>
       <!-- comment -->
-      <textarea class="comments"
-                uxgInput
-                formControlName="comments"></textarea>
+      <textarea class="comments" uxgInput formControlName="comments"></textarea>
     </div>
   </div>
   <br/>
-  <div class="app-row">
+
+  <div class="app-row" *ngIf="isNewRequest">
+    <div class="app-col">
+      <h3>Документы позиции</h3>
+      <br>
+      <app-document-upload-list
+        (fileSelected)="form.get('documents').setValue($event)"
+        [documents]="form.get('documents').value"
+        [dragAndDropAvailable]="true">
+      </app-document-upload-list>
+    </div>
+  </div>
+  <br/>
+
+  <div class="app-row" *ngIf="!isNewRequest">
     <div class="app-col">
       Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>

@@ -1,0 +1,12 @@
+@import "projects/uxg/src/styles/index";
+
+.legend {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 1em;
+
+  &-item {
+    width: 40px;
+    font-weight: 500;
+  }
+}

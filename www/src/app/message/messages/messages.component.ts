@@ -18,7 +18,6 @@ import { MessageService } from "./message.service";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { Uuid } from "../../cart/models/uuid";
 import { WebsocketService } from "../../websocket/websocket.service";
-import { DocumentUploadListComponent } from "../../shared/components/document-upload-list/document-upload-list.component";
 
 @Component({
   selector: 'app-message-messages',
@@ -30,7 +29,6 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
   @Input() contextId: Uuid;
   @Input() contextType: string;
   @ViewChild('messagesList', { static: false }) private messagesList: ElementRef;
-  @ViewChild('documentUploadList', { static: false }) private documentUploadList: DocumentUploadListComponent;
 
   public messages$: Observable<Message[]>;
   public form = new FormGroup({
@@ -107,7 +105,6 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
 
     this.outgoingMessagesSubject.next(message);
     this.form.reset();
-    this.documentUploadList.clear();
     this.subscription.add(
       this.messageService.addMessage(text, this.contextType, this.contextId, files)
         .subscribe(_message => {

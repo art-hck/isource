@@ -26,7 +26,10 @@ export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
     user: new FormControl(null, Validators.required)
   });
 
-  constructor(private userService: UserService, private requestService: RequestService) {}
+  constructor(
+    private userService: UserService,
+    private requestService: RequestService
+  ) {}
 
   ngOnInit() {
     this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers();

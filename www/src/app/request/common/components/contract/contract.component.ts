@@ -89,8 +89,8 @@ export class ContractComponent implements OnInit {
   }
 
   // Прикрепление (не загрузка) файла к контракту
-  public attachFileToContract(files: FileList, contract: Contract): void {
-    this.attachedFiles = [...this.attachedFiles, {file: files[0], contract: contract}];
+  public attachFileToContract([file]: File[], contract: Contract): void {
+    this.attachedFiles = [...this.attachedFiles, {file, contract}];
   }
 
   public removeFile(contract: Contract) {
@@ -175,12 +175,35 @@ export class ContractComponent implements OnInit {
   }
 
   /**
+   * Помечает договор как подписанный
+   * @param request
+   * @param contract
+   */
+  onSignContract(contract: Contract) {
+    this.contractService.sign(contract.id).subscribe(
+      (data: Contract) => {
+        contract.status = ContractStatus.SIGNED;
+      }
+    );
+  }
+
+  /**
    * Нужно ли отображать кнопку скачивания шаблона договора
    * @param contract
    */
   isShowGenerateContractButton(contract: Contract) {
-    return contract.status !== ContractStatus.APPROVED &&
-      (this.userInfoService.isBackOffice() || this.userInfoService.isSeniorBackoffice());
+    return ([
+      ContractStatus.APPROVED.valueOf(),
+      ContractStatus.SIGNED.valueOf()
+    ].indexOf(contract.status) === -1) && this.userInfoService.isBackOffice();
+  }
+
+  /**
+   * Нужно ли отображать кнопку подписания договора
+   * @param contract
+   */
+  isShowSignContractButton(contract: Contract) {
+    return contract.status === ContractStatus.APPROVED && this.userInfoService.isBackOffice();
   }
 }
 

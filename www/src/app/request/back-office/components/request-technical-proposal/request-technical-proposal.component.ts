@@ -10,5 +10,6 @@ export class RequestTechnicalProposalComponent {
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
   @Output() update = new EventEmitter<TechnicalProposal>();
+  @Output() cancelTechnicalProposal = new EventEmitter<TechnicalProposal>();
   editing: boolean;
 }

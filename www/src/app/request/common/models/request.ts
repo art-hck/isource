@@ -1,9 +1,9 @@
 import {Uuid} from "../../../cart/models/uuid";
-import {UserRegistration} from "../../../user/models/user-registration";
 import {RequestDocument} from "./request-document";
 import { BaseModel } from "../../../core/models/base-model";
 import { DashboardInfo } from "./dashboard-info";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { User } from "../../../user/models/user";
 
 export class Request extends BaseModel {
   contragent: ContragentInfo;
@@ -14,7 +14,7 @@ export class Request extends BaseModel {
   number: number;
   status: string;
   statusLabel: string;
-  user: UserRegistration;
+  user: User;
   documents?: RequestDocument[];
   comment?: string;
   type?: string;

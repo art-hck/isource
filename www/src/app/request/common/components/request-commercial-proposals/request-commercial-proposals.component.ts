@@ -12,7 +12,7 @@ import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-conf
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
-import { OffersService } from "../../../back-office/services/offers.service";
+import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
 import Swal from "sweetalert2";
 
@@ -54,7 +54,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private offersService: OffersService,
+    private offersService: CommercialProposalsService,
     public featureService: FeatureService,
     public user: UserInfoService,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
@@ -73,7 +73,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
       const formGroup = this.createFormGroupPosition(position);
       this.formPositions.push(formGroup);
       if (!this.positionCanBeSelected(position)) {
-        formGroup.disable();
+        formGroup.get('checked').disable();
       }
     });
   }
@@ -148,7 +148,7 @@ export class RequestCommercialProposalsComponent implements OnInit {
 
   availableCancelPublishOffers(requestPosition: RequestPosition) {
     return requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT
-      && this.getDurationChangeStatus(requestPosition) < this.durationCancelPublish;
+      && this.getStatusChangeDuration(requestPosition) < this.durationCancelPublish;
   }
 
   positionHasProcedure(requestPosition: RequestPosition): boolean {
@@ -167,10 +167,10 @@ export class RequestCommercialProposalsComponent implements OnInit {
   }
 
   /**
-   * Возвращает время в секундах, которое прошло с момента смены статуса ТП
+   * Возвращает время в секундах, которое прошло с момента смены статуса КП
    * @param requestPosition
    */
-  protected getDurationChangeStatus(requestPosition: RequestPosition): number {
+  protected getStatusChangeDuration(requestPosition: RequestPosition): number {
     return moment().diff(moment(requestPosition.statusChangedDate), 'seconds');
   }
 
