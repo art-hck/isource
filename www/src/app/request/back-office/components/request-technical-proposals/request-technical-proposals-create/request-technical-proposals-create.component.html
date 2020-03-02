@@ -218,7 +218,8 @@
           <br/>
           <div class="app-row clr-justify-content-end">
             <button type="button" uxgButton lg secondary (click)="positionsModal.close()">Отмена</button>
-            <button uxgButton lg primary (click)="positionsSearch.submit()">Всё готово</button>
+            <button uxgButton lg primary (click)="positionsSearch.submit()"
+                    [disabled]="!positionsSearch.checkedFormItems.length">Всё готово</button>
           </div>
         </ng-container>
       </div>
@@ -228,6 +229,7 @@
       <h2 class="modal-title">Заполнение заводских наименований</h2>
       <div class="modal-body">
         <app-request-technical-proposals-create-manufacturer
+          *ngIf="manufacturerModal._open"
           (cancel)="manufacturerModal.close()"
           (ngModelChange)="manufacturerModal.close()"
           [disabledFn]="positionManufacturerNameDisabled"

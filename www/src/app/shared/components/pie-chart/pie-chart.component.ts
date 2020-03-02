@@ -9,7 +9,7 @@ import { PieChartItem } from "../../models/pie-chart-item";
 export class PieChartComponent implements OnChanges {
 
   @Input() items: PieChartItem[] = [];
-  @Input() radius = 150;
+  @Input() radius = 120;
   @Input() showLabel = true;
   @Input() showTotal = true;
 

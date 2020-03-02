@@ -2,7 +2,7 @@
   <h2 class="modal-title">Создать группу <span class="app-ghost-color">({{ positions.length }})</span></h2>
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
-      <p class="app-secondary-color">Вы можете создавать группы из любых позиций с одинаковым статусом.</p>
+      <p class="app-secondary-color">Вы можете создавать группы из любых позиций с любым статусом.</p>
       <label class="app-ghost-color">Название группы</label>
       <input class="app-control" type="text" formControlName="name"/>
       <div class="modal-footer">

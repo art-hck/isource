@@ -155,12 +155,10 @@
       </div>
     </div>
     <div class="app-col">
-      <h3>Дополнительные требования <span class="app-ghost-color" style="font-weight: normal">(необязательно)</span></h3>
+      <h3>Дополнительные требования <span class="app-ghost-color" [style.font-weight]="'normal'">(необязательно)</span></h3>
       <br/>
       <!-- comment -->
-      <textarea class="comments"
-                uxgInput
-                formControlName="comments"></textarea>
+      <textarea class="comments" uxgInput formControlName="comments"></textarea>
     </div>
   </div>
   <br/>

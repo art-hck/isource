@@ -6,7 +6,7 @@
         <div class="app-col app-basis-auto clr-flex-grow-1 actions">
 
           <!-- Создать процедуру  -->
-          <ng-container *ngIf="featureService.available('createProcedure', user.roles)">
+          <ng-container *ngIf="featureService.authorize('createProcedure')">
             <button type="button" uxgButton secondary iconText (click)="createProcedure.emit()">
               <clr-icon shape="app-plus"></clr-icon>
               <span>Создать процедуру</span>

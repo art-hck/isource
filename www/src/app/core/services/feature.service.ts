@@ -4,11 +4,15 @@ import { APP_CONFIG } from '@stdlib-ng/core';
 import { Feature } from "../models/feature";
 import { UserRole } from "../../user/models/user-role";
 import { FeatureList, IFeatureList } from "../models/feature-list";
+import { UserInfoService } from "../../user/service/user-info.service";
 
 @Injectable()
 export class FeatureService {
 
-  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {}
+  constructor(
+    @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
+    protected user: UserInfoService
+  ) {}
 
   private get disabledFeatures(): (keyof IFeatureList)[] {
      return this.appConfig.disabledFeatures || [];
@@ -36,5 +40,9 @@ export class FeatureService {
 
   available(featureName: keyof IFeatureList, roles?: UserRole[]): boolean {
     return !this.disabled(featureName) && (!roles || this.allowed(featureName, roles));
+  }
+
+  authorize(permission: keyof IFeatureList) {
+    this.available(permission, this.user.roles);
   }
 }

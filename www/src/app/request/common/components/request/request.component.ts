@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
@@ -72,7 +71,8 @@ export class RequestComponent implements OnInit {
   }
 
   get isOnApproval(): boolean {
-    return this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0;
+    return this.featureService.allowed('approveRequest', this.user.roles) &&
+      (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
   }
 
   get hasOnApprovalPositions(): RequestPositionList[] {
