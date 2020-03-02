@@ -6,11 +6,15 @@
   </div>
 
   <div class="app-col" *ngIf="showLabel">
-    <div class="legend" *ngFor="let item of items">
-      <div class="legend-item" [class.app-ghost-color]="item.count === 0">
-        {{ item.count }}
-      </div>
-      <div [style.color]="item.color">{{ item.label }}</div>
-    </div>
+    <table class="label-table" >
+      <tr *ngFor="let item of items">
+        <th [class.app-ghost-color]="item.count === 0">
+          {{ item.count }}<span class="app-ghost-color" *ngIf="item.count">{{ measure }}</span>
+        </th>
+        <th>
+          <span [style.color]="item.color">{{ item.label }}</span>
+        </th>
+      </tr>
+    </table>
   </div>
 </div>

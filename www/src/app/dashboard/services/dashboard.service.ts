@@ -12,4 +12,9 @@ export class DashboardService {
     const url = `requests/customer/dashboard/statistics/position-statuses`;
     return this.api.post<any>(url, {});
   }
+
+  getPositionMoneyStatistic(): Observable<Array<{status: string, price: number}>> {
+    const url = `requests/customer/dashboard/statistics/position-prices`;
+    return this.api.post<any>(url, {});
+  }
 }

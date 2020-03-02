@@ -9,6 +9,7 @@ import { PieChartItem } from "../../models/pie-chart-item";
 export class PieChartComponent implements OnChanges {
 
   @Input() items: PieChartItem[] = [];
+  @Input() measure = '';
   @Input() radius = 120;
   @Input() showLabel = true;
   @Input() showTotal = true;
@@ -65,7 +66,7 @@ export class PieChartComponent implements OnChanges {
       cx.font = "lighter " + Math.round(this.radius / 5) + "px sans-serif";
       cx.fillText("Всего", this.radius, this.radius);
       cx.fillStyle = "#777";
-      cx.fillText(String(total), this.radius, this.radius + Math.round(this.radius / 5));
+      cx.fillText(String(total) + this.measure, this.radius, this.radius + Math.round(this.radius / 5));
     }
   }
 }

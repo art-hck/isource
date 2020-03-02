@@ -6,7 +6,17 @@
   margin-left: 1em;
 
   &-item {
-    width: 40px;
+    min-width: 40px;
     font-weight: 500;
   }
+}
+
+.label-table {
+  border: 0;
+  margin-left: 1em;
+  text-align: left;
+}
+
+.label-table tr th:first-child {
+  padding-right: 10px;
 }

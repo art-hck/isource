@@ -1,16 +1,14 @@
 <uxg-tabs>
   <uxg-tab-title #status [active]="true">По статусам</uxg-tab-title>
-  <!-- todo не показываем эту вкладку пока не реализуем
-  <uxg-tab-title #money>В деньгах</uxg-tab-title>-->
+  <uxg-tab-title #prices>В деньгах</uxg-tab-title>
 </uxg-tabs>
 <br/>
 <div class="app-card" [style.height.px]="390">
   <div *uxgTab="status">
-    <app-pie-chart [items]="pieChartItems"></app-pie-chart>
+    <app-pie-chart [items]="statusStatisticPieChartItems"></app-pie-chart>
   </div>
 
-  <!--
-  <div *uxgTab="money">
-    money stat not implemented
-  </div>-->
+  <div *uxgTab="prices">
+    <app-pie-chart [items]="pricesStatisticPieChartItems" [measure]="'₽'"></app-pie-chart>
+  </div>
 </div>
