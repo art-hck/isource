@@ -103,12 +103,6 @@
               <!-- Назначиь ответственного -->
               <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                 <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
-                <app-request-add-responsible-modal
-                  #addResponsibleModal
-                  [request]="request"
-                  [positions]="checkedPositions"
-                  (success)="addResponsible.emit($event)"
-                ></app-request-add-responsible-modal>
               </div>
 <!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>-->
 <!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>-->
@@ -263,6 +257,14 @@
   (uploadFromTemplate)="uploadFromTemplate.emit($event)"
   (cancel)="addPositionModal.close()"
 ></app-request-add-position-modal>
+
+<!-- Модальное окно для назначения ответственного -->
+<app-request-add-responsible-modal
+  #addResponsibleModal
+  [request]="request"
+  [positions]="checkedPositions"
+  (success)="addResponsible.emit($event)"
+></app-request-add-responsible-modal>
 
 <!-- Модальное окно для смена статуса группы позиций -->
 <clr-modal #changeStatusModal>
