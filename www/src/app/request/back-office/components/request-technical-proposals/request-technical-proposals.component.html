@@ -8,7 +8,9 @@
             <div class="app-col app-basis-auto clr-flex-grow-0">
 
               <!-- Создать процедуру  -->
-              <button uxgButton secondary iconText (click)="procedureModal.open()">
+              <button uxgButton secondary iconText
+                      *ngIf="featureService.authorize('createProcedure')"
+                      (click)="procedureModal.open()" >
                 <clr-icon shape="app-plus"></clr-icon>
                 <span>Создать процедуру</span>
               </button>
