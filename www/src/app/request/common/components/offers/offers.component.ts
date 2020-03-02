@@ -107,8 +107,10 @@ export class OffersComponent implements OnInit {
   }
 
   canAddOffer() {
-    return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-      || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
+    // todo пока временно скрыл кнопку "Добавить КП". В дальнейшем нужно полностью выпилить возможно добавления
+    return false;
+    // return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
+    //   || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
   }
 
   canChoiceWinner() {
