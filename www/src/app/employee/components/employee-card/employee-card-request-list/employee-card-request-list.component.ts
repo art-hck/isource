@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { UserInfoRequestItem } from "../../../models/user-info";
+import { EmployeeInfoRequestItem } from "../../../models/employee-info";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-user-card-request-list',
-  templateUrl: './user-card-request-list.component.html',
-  styleUrls: ['./user-card-request-list.component.scss']
+  selector: 'app-employee-card-request-list',
+  templateUrl: './employee-card-request-list.component.html',
+  styleUrls: ['./employee-card-request-list.component.scss']
 })
-export class UserCardRequestListComponent {
+export class EmployeeCardRequestListComponent {
 
-  @Input() requests: UserInfoRequestItem[];
+  @Input() requests: EmployeeInfoRequestItem[];
 
   constructor(
     protected router: Router,
@@ -20,7 +20,7 @@ export class UserCardRequestListComponent {
     return (65 - (65 * completedItems) / 100);
   }
 
-  onRowClick(request: UserInfoRequestItem): void {
+  onRowClick(request: EmployeeInfoRequestItem): void {
     this.router.navigateByUrl(`/requests/backoffice/${request.request.id}`);
   }
 

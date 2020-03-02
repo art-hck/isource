@@ -1,30 +1,25 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from "@angular/router";
-import { UserItem } from "../../models/user-item";
+import { EmployeeItem } from "../../models/employee-item";
 import { DatagridStateAndFilter } from "../../../request/common/models/datagrid-state-and-filter";
 import { Uuid } from "../../../cart/models/uuid";
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  selector: 'app-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.scss']
 })
-export class UserListComponent implements OnInit {
+export class EmployeeListComponent {
 
   @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
 
   @Input() searchValue: string;
-  @Input() users: UserItem[];
+  @Input() employees: EmployeeItem[];
 
-  constructor(
-    protected router: Router,
-  ) { }
+  constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
-
-  onRowClick(userId: Uuid): void {
-    this.router.navigateByUrl(`/employees/${userId}/info`);
+  onRowClick(employeeId: Uuid): void {
+    this.router.navigateByUrl(`/employees/${employeeId}/info`);
   }
 
   /**

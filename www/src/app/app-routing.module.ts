@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
   { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
   { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
-  { path: 'employees', loadChildren: () => import('./employees/users.module').then(m => m.UsersModule)},
+  { path: 'employees', loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: 'notifications', loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'not-found', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } },
