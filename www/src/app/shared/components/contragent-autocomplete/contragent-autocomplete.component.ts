@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, ElementRef, forwardRef, HostListener, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { Observable, Subject } from "rxjs";
@@ -22,6 +22,7 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
   @Input() display = 10;
   @Input() debounceTime = 100;
   @Input() contragentsFullList: ContragentList[];
+  @ViewChild('dropdown', {static: false}) dropdown: ElementRef;
 
   public onTouched: (value: ContragentList[]) => void;
   public onInput = new Subject<string>();
@@ -33,9 +34,9 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
     protected getContragentService: ContragentService,
   ) {
     this.contragents$ = this.onInput.pipe(
-      filter(value => value.length >= this.minLength),
       debounceTime(this.debounceTime),
-      tap(() => this.isOpen = true),
+      tap(value => this.isOpen = value.length >= this.minLength),
+      filter(value => value.length >= this.minLength),
       map(value => this.search(this.contragentsFullList, value, this.display)),
     );
   }
@@ -67,5 +68,12 @@ export class ContragentAutocompleteComponent implements ControlValueAccessor {
     this.isOpen = false;
     this.writeValue([...this.multiple && this.value ? this.value : [], contragent]);
     this.onChange(this.value);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onBlur(e: Event) {
+    if (this.dropdown && !this.dropdown.nativeElement.contains(e.target)) {
+      this.isOpen = false;
+    }
   }
 }
