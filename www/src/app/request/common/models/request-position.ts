@@ -50,4 +50,5 @@ export class RequestPosition extends RequestPositionList {
   sourceRequestPositionId?: Uuid;
   responsibleUser?: User;
   acceptedTpCount?: number;
+  nameTemplate?: string;
 }

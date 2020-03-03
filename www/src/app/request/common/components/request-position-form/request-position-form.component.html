@@ -5,6 +5,8 @@
     <input #name uxgInput lg formControlName="name">
     <label class="app-control-label" (click)="name.focus()">Наименование МТР</label>
 
+    <small *ngIf="this.position.nameTemplate">{{ this.position.nameTemplate }}</small>
+
     <ng-container *ngIf="showSearchResults">
       <ng-container *ngIf="(searchResults$ | async) as searchResults">
         <div class="search-dropdown"
