@@ -184,6 +184,7 @@
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
   <div class="app-col app-bold item-title">
+    <clr-icon shape="help-info" [title]="position.nameTemplate" *ngIf="position.nameTemplate"></clr-icon>
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
       {{ position.name }}
     </a>
