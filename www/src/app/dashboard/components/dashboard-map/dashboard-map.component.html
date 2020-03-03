@@ -31,4 +31,34 @@
     </div>
   </div>
 </div>
-<div class="app-card" #mapRef [style.height.px]="600"></div>
+<div appDashboardMap class="app-card"
+     [center]="[57.30208668581665, 67.80538384664513]"
+     [style.height.px]="600"
+     [scrollWheelZoom]="false"
+     [zoom]="5"
+     [zoomControl]="false"
+     (initMap)="initMap($event)"
+>
+  <ng-container *ngFor="let markerData of markersData">
+    <ng-container *ngIf="(markerData?.coords$ | async) as coords">
+      <div appDashboardMapMarker [type]="getPointType(markerData)" [coords]="coords"
+           [iconSize]="[100, 42]" [iconAnchor]="[0,0]" (initMarker)="markersGroup.addLayer($event)"
+      >
+        <clr-icon shape="map-basis" class="dashboard-map-marker-icon" size="42"></clr-icon>
+        <div>
+          <div class="dashboard-map-marker-percent">{{markerData.progress}}%</div>
+          <div class="dashboard-map-marker-title">{{markerData.title}}</div>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let contragent of markerData?.contragents">
+        <div appDashboardMapMarker type="contragent" *ngIf="(contragent?.coords$ | async) as contragentCoords"
+             [iconSize]="[27, 37]" [coords]="contragentCoords" [iconAnchor]="[13.5, 37]"
+             (initMarker)="addContragentMarker($event, [coords, contragentCoords])"
+        >
+          <clr-icon shape="map-contragent" class="dashboard-map-marker-icon" size="37"></clr-icon>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>
