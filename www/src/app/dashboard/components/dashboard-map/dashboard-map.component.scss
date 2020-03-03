@@ -48,3 +48,36 @@
 
   clr-icon {color: uxg($theme, color-font-link);}
 }
+
+$pointTypes: (err: #EB5757, warn: #F2C94C, succ: #20B55F, contragent: #2585F5);
+
+.dashboard-map-marker {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  &-icon {
+    flex-shrink: 0;
+    color: #b2d0ff;
+  }
+
+  &-percent {
+    color: #fff;
+    padding: 1px 6px;
+    width: 42px;
+    text-align: center;
+  }
+
+  &-title {
+    color: #000;
+    white-space: nowrap;
+  }
+
+  @each $type, $color in $pointTypes {
+    &-#{$type} {
+      color: $color;
+      .dashboard-map-marker-icon { color: $color }
+      .dashboard-map-marker-percent { background: $color }
+    }
+  }
+}
