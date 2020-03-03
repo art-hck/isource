@@ -19,6 +19,7 @@ import { ClarityIcons } from "@clr/icons";
 import '@clr/icons/shapes/all-shapes';
 import { UxgExampleHomeComponent } from './uxg-example-home/uxg-example-home.component';
 import { UxgExamplePopoverComponent } from './uxg-example-popover/uxg-example-popover.component';
+import { UxgExampleWizzardComponent } from "./uxg-example-wizzard/uxg-example-wizzard.component";
 
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
@@ -34,7 +35,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgExampleTypographyComponent,
     UxgRouterLinkActiveDirective,
     UxgExampleHomeComponent,
-    UxgExamplePopoverComponent
+    UxgExamplePopoverComponent,
+    UxgExampleWizzardComponent
   ],
   imports: [
     BrowserModule,

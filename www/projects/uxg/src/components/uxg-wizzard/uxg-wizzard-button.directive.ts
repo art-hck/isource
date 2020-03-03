@@ -11,7 +11,7 @@ export class UxgWizzardButtonDirective {
     return ["end", "next"].indexOf(this.uxgWizzardButton) < 0 ? false : this.host.uxgWizzard.isCurrentInvalid;
   }
 
-  @HostBinding('hidden') get hidden() {
+  @HostBinding('class.app-wizzard-button-hidden') get hidden() {
     switch (this.uxgWizzardButton) {
       case "cancel": return !this.host.uxgWizzard.isFirst;
       case "prev": return this.host.uxgWizzard.isFirst;
