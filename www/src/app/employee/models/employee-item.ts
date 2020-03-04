@@ -1,12 +1,12 @@
 import { Uuid } from "../../cart/models/uuid";
 
-export class UserItem {
-  user: UserInfo;
+export class EmployeeItem {
+  user: EmployeeInfo;
   posCount: number;
   reqCount: number;
 }
 
-class UserInfo {
+class EmployeeInfo {
   id: Uuid;
   username: string;
   phone: string;

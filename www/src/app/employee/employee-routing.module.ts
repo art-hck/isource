@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserListViewComponent } from "./components/user-list-view/user-list-view.component";
-import { UserCardComponent } from "./components/user-card/user-card.component";
+import { EmployeeListViewComponent } from "./components/employee-list-view/employee-list-view.component";
+import { EmployeeCardComponent } from "./components/employee-card/employee-card.component";
 import { CanActivateFeatureGuard } from "../core/can-activate-feature.guard";
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: UserListViewComponent,
+    component: EmployeeListViewComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Сотрудники" }
   },
@@ -17,7 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: 'info',
-        component: UserCardComponent,
+        component: EmployeeCardComponent,
         canActivate: [CanActivateFeatureGuard],
       }
     ]
@@ -28,5 +28,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UsersRoutingModule {
+export class EmployeeRoutingModule {
 }

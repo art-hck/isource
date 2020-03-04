@@ -8,7 +8,7 @@ export class DashboardService {
   constructor(protected api: HttpClient) {
   }
 
-  getPositionStatusStatistic(): Observable<Array<{status: string, count: number}>> {
+  getPositionStatusStatistic(): Observable<{status: string, count: number}[]> {
     const url = `requests/customer/dashboard/statistics/position-statuses`;
     return this.api.post<{status: string, count: number}[]>(url, {});
   }

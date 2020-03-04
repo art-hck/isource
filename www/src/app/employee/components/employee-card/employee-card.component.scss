@@ -1,4 +1,4 @@
-.user-info-card {
+.employee-info-card {
   padding-top: 42px;
 
   & .sector-title {
@@ -10,12 +10,12 @@
   text-transform: initial;
 }
 
-:host ::ng-deep .user-card-content .nav {
+:host ::ng-deep .employee-card-content .nav {
   box-shadow: none;
   padding-left: 20px;
 }
 
-.user-card-count-loader {
+.employee-card-count-loader {
   width: 12px;
   height: 12px;
   min-width: 12px;
