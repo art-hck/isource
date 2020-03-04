@@ -24,10 +24,8 @@
   <div class="app-col">
     <div><b>Условные обозначения</b></div>
     <div class="app-row ">
-      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Предприятие</div>
-      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Строительная площадка</div>
-      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Морская платформа</div>
-      <div class="legend"><clr-icon shape="app-info"></clr-icon> -  Разработка месторождения</div>
+      <div class="legend"><clr-icon shape="map-basis"></clr-icon> - Базис поставки</div>
+      <div class="legend"><clr-icon shape="map-contragent"></clr-icon> - Контрагент</div>
     </div>
   </div>
 </div>
@@ -39,26 +37,27 @@
      [zoomControl]="false"
      (initMap)="initMap($event)"
 >
-  <ng-container *ngFor="let markerData of markersData">
-    <ng-container *ngIf="(markerData?.coords$ | async) as coords">
-      <div appDashboardMapMarker [type]="getPointType(markerData)" [coords]="coords"
-           [iconSize]="[100, 42]" [iconAnchor]="[0,0]" (initMarker)="markersGroup.addLayer($event)"
-      >
-        <clr-icon shape="map-basis" class="dashboard-map-marker-icon" size="42"></clr-icon>
-        <div>
-          <div class="dashboard-map-marker-percent">{{markerData.progress}}%</div>
-          <div class="dashboard-map-marker-title">{{markerData.title}}</div>
-        </div>
+</div>
+<div [hidden]="true">
+  <ng-container *ngFor="let markerData of markersData$ | async">
+    <div appDashboardMapMarker *ngIf="markerData?.coords" [type]="getPointType(markerData)" [coords]="markerData?.coords"
+         [iconSize]="[100, 42]" [iconAnchor]="[0,0]" (initMarker)="markersGroup.addLayer($event)"
+    >
+      <clr-icon shape="map-basis" class="dashboard-map-marker-icon" size="42"></clr-icon>
+      <div>
+        <div class="dashboard-map-marker-percent">{{markerData.progress}}%</div>
+        <div class="dashboard-map-marker-title">{{markerData.title}}</div>
       </div>
+    </div>
 
-      <ng-container *ngFor="let contragent of markerData?.contragents">
-        <div appDashboardMapMarker type="contragent" *ngIf="(contragent?.coords$ | async) as contragentCoords"
-             [iconSize]="[27, 37]" [coords]="contragentCoords" [iconAnchor]="[13.5, 37]"
-             (initMarker)="addContragentMarker($event, [coords, contragentCoords])"
-        >
-          <clr-icon shape="map-contragent" class="dashboard-map-marker-icon" size="37"></clr-icon>
-        </div>
-      </ng-container>
+    <ng-container *ngFor="let contragent of markerData?.contragents">
+      <div appDashboardMapMarker type="contragent"
+           *ngIf="contragent?.coords && markerData?.coords"
+           [iconSize]="[27, 37]" [coords]="contragent?.coords" [iconAnchor]="[13.5, 37]"
+           (initMarker)="addContragentMarker($event, [markerData?.coords, contragent?.coords])"
+      >
+        <clr-icon shape="map-contragent" class="dashboard-map-marker-icon" size="37"></clr-icon>
+      </div>
     </ng-container>
   </ng-container>
 </div>
