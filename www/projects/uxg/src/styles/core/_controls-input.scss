@@ -19,7 +19,7 @@
         height: uxg($theme, control-height-l);
       }
 
-      &:not(.invalid):focus {
+      &:not(.invalid):not(.app-dropdown-handler):focus {
         border-color: uxg($theme, color-control-primary);
       }
 
@@ -32,12 +32,24 @@
         transform-origin: top;
       }
 
+      &.warning, &.invalid {
+        & ~ .app-control-error,
+        & ~ .app-control-icon-error > * { display: block; }
+      }
+
+      &.warning {
+        border-color: uxg($theme, color-control-warning);
+
+        & ~ .app-control-error, & ~ .app-control-icon-error {
+          color: uxg($theme, color-control-warning);
+        }
+      }
+
       &.invalid {
         border-color: uxg($theme, color-control-invalid);
 
-        & ~ .app-control-error,
-        & ~ .app-control-icon-error > * {
-          display: block;
+        & ~ .app-control-error, & ~ .app-control-icon-error {
+          color: uxg($theme, color-control-invalid);
         }
       }
 
@@ -88,7 +100,6 @@
 
       &-error {
         @extend .app-control-icon;
-        color: uxg($theme, color-control-invalid);
 
         & > * {
           display: none;
@@ -103,7 +114,6 @@
   }
 
   &-error > * {
-    color: uxg($theme, color-control-invalid);
     display: block;
     font-size: uxg($theme, font-size-s);
     font-weight: bold;

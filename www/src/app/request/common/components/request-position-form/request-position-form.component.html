@@ -1,27 +1,19 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
 
-  <div class="app-control-wrap">
-    <!-- name -->
-    <input #name uxgInput lg formControlName="name">
-    <label class="app-control-label" (click)="name.focus()">Наименование МТР</label>
-
-    <small *ngIf="this.position.nameTemplate">{{ this.position.nameTemplate }}</small>
-
-    <ng-container *ngIf="showSearchResults">
-      <ng-container *ngIf="(searchResults$ | async) as searchResults">
-        <div class="search-dropdown"
-          *ngIf="searchResults.length">
-          <div class="search-item"
-            *ngFor="let suggestion of searchResults"
-            (click)="onSuggestionClick(suggestion)">{{ suggestion }}</div>
-        </div>
-      </ng-container>
+  <uxg-dropdown-input #nameRef formControlName="name" placeholder="Наименование МТР" [lg]="true" [warning]="!!position.nameTemplate">
+    <div class="app-dropdown-items-header app-ghost-color">ВОЗМОЖНЫЕ ВАРИАНТЫ</div>
+    <ng-container *ngIf="(searchResults$ | async) as searchResults">
+      <div uxgDropdownItem *ngFor="let suggestion of searchResults" [value]="suggestion">{{ suggestion }}</div>
     </ng-container>
-
-    <div class="app-control-error" *ngIf="form.get('name').errors as e">
-      <span *ngIf="e.required">Обязательное поле</span>
-    </div>
-  </div>
+    <ng-template #errors>
+      <div class="app-control-error" *ngIf="position.nameTemplate && !form.get('name').errors">
+        <span>Возможно отсутствует доп. информация</span>
+      </div>
+      <div class="app-control-error" *ngIf="form.get('name').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
+      </div>
+    </ng-template>
+  </uxg-dropdown-input>
 
 
   <div class="app-row">

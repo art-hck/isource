@@ -9,6 +9,7 @@ import { UxgExampleTabsComponent } from "./uxg-example-tabs/uxg-example-tabs.com
 import { UxgExampleIconsComponent } from "./uxg-example-icons/uxg-example-icons.component";
 import { UxgExampleHomeComponent } from "./uxg-example-home/uxg-example-home.component";
 import { UxgExamplePopoverComponent } from "./uxg-example-popover/uxg-example-popover.component";
+import { UxgExampleWizzardComponent } from "./uxg-example-wizzard/uxg-example-wizzard.component";
 
 
 const routes: Routes = [
@@ -51,6 +52,11 @@ const routes: Routes = [
     path: "popover",
     component: UxgExamplePopoverComponent,
     data: { title: 'Popover' }
+  },
+  {
+    path: "wizzard",
+    component: UxgExampleWizzardComponent,
+    data: { title: 'Wizzard' }
   },
   {
     path: "icon",

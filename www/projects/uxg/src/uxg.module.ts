@@ -24,6 +24,7 @@ import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover
 import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
 import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-button.directive";
 import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-steps.component";
+import { UxgDropdownInputComponent } from "./components/uxg-dropdown-input/uxg-dropdown-input.component";
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-s
     UxgCheckboxComponent,
     UxgDropdownComponent,
     UxgDropdownItemDirective,
+    UxgDropdownInputComponent,
     UxgPositionStatusComponent,
     UxgSwitcherComponent,
     UxgTabDirective,
@@ -64,6 +66,7 @@ import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-s
     UxgCheckboxComponent,
     UxgDropdownComponent,
     UxgDropdownItemDirective,
+    UxgDropdownInputComponent,
     UxgPositionStatusComponent,
     UxgSwitcherComponent,
     UxgTabDirective,
