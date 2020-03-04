@@ -5,15 +5,16 @@ import {
   RequestPositionWorkflowStepsGroupsInfo
 } from "../../../request/common/enum/request-position-workflow-steps";
 import { PieChartItem } from "../../../shared/models/pie-chart-item";
+import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-dashboard-statistic',
   templateUrl: './dashboard-statistic.component.html'
 })
 export class DashboardStatisticComponent implements OnInit {
-
-  statusStatisticPieChartItems: PieChartItem[] = [];
-  pricesStatisticPieChartItems: PieChartItem[] = [];
+  statusStatisticPieChartItems$: Observable<PieChartItem[]>;
+  pricesStatisticPieChartItems$: Observable<PieChartItem[]>;
 
   constructor(
     protected dashboardService: DashboardService
@@ -21,23 +22,29 @@ export class DashboardStatisticComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dashboardService.getPositionStatusStatistic()
-      .subscribe((statistics: Array<{ status: string, count: number }>) => {
-        const statusCounters = this.getStatusCounters(statistics);
+    this.statusStatisticPieChartItems$ = this.dashboardService.getPositionStatusStatistic()
+      .pipe(
+        map((statistics: Array<{ status: string, count: number }>) => {
+            const statusCounters = this.getStatusCounters(statistics);
 
-        this.statusStatisticPieChartItems = this.prepareStatistic(statusCounters);
-      });
+            return this.prepareStatistic(statusCounters);
+          }
+        )
+      );
 
-    this.dashboardService.getPositionMoneyStatistic()
-      .subscribe((statistics: Array<{ status: string, price: number }>) => {
-        // немного меняем формат, чтобы передать в функцию подстчета в группах статусов
-        const prepareStatistic = statistics.map(item => {
-          return {status: item.status, count: +item.price};
-        });
-        const statusCounters = this.getStatusCounters(prepareStatistic);
+    this.pricesStatisticPieChartItems$ = this.dashboardService.getPositionMoneyStatistic()
+      .pipe(
+        map((statistics: Array<{ status: string, price: number }>) => {
+            // немного меняем формат, чтобы передать в функцию подстчета в группах статусов
+            const prepareStatistic = statistics.map(item => {
+              return {status: item.status, count: +item.price};
+            });
+            const statusCounters = this.getStatusCounters(prepareStatistic);
 
-        this.pricesStatisticPieChartItems = this.prepareStatistic(statusCounters);
-      });
+            return this.prepareStatistic(statusCounters);
+          }
+        )
+      );
   }
 
   /**
@@ -68,9 +75,10 @@ export class DashboardStatisticComponent implements OnInit {
    * @param statusCounters
    * @param measure
    */
-  private prepareStatistic(statusCounters, measure: string = '') {
-      return statusCounters.map((counter) => {
+  private prepareStatistic(statusCounters, measure: string = ''): PieChartItem[] {
+    return statusCounters.map((counter) => {
       const countStatistic = counter.statistics.reduce((sum, item) => sum + item.count, 0);
+
       return new PieChartItem({
         count: countStatistic,
         label: counter.label + measure,

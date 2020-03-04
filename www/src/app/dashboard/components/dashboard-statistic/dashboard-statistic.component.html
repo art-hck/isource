@@ -5,10 +5,10 @@
 <br/>
 <div class="app-card" [style.height.px]="390">
   <div *uxgTab="status">
-    <app-pie-chart [items]="statusStatisticPieChartItems"></app-pie-chart>
+    <app-pie-chart [items]="statusStatisticPieChartItems$ | async"></app-pie-chart>
   </div>
 
   <div *uxgTab="prices">
-    <app-pie-chart [items]="pricesStatisticPieChartItems" [measure]="'₽'"></app-pie-chart>
+    <app-pie-chart [items]="pricesStatisticPieChartItems$ | async" [measure]="'₽'"></app-pie-chart>
   </div>
 </div>

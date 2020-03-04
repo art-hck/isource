@@ -1,22 +1,11 @@
 @import "projects/uxg/src/styles/index";
 
-.legend {
-  display: flex;
-  flex-wrap: nowrap;
-  margin-left: 1em;
-
-  &-item {
-    min-width: 40px;
-    font-weight: 500;
-  }
-}
-
 .label-table {
   border: 0;
   margin-left: 1em;
   text-align: left;
-}
 
-.label-table tr th:first-child {
-  padding-right: 10px;
+  tr th:first-child {
+    padding-right: 10px;
+  }
 }

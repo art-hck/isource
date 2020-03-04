@@ -24,6 +24,8 @@ export class PieChartComponent implements OnChanges {
   }
 
   drawChart(): void {
+    this.items = this.items || [];
+
     const cx = this.chart.nativeElement.getContext('2d');
     const total = this.items.reduce(
       (sum, item) => sum + item.count, 0
