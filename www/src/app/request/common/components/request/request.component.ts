@@ -26,6 +26,7 @@ export class RequestComponent implements OnInit {
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
+  @Output() changeStatus = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
@@ -150,7 +151,6 @@ export class RequestComponent implements OnInit {
       }
     }
 
-
     return formGroup;
   }
 
@@ -159,17 +159,13 @@ export class RequestComponent implements OnInit {
   }
 
   canChangeStatuses() {
-    let firstStatus = null;
-    return this.checkedPositions.length && this.checkedPositions.every((item: RequestPosition) => {
-      if (firstStatus === null) {
-        firstStatus = item.status;
-      }
-      return item.status === firstStatus;
-    });
+    return this.checkedPositions.length && this.checkedPositions.every(
+      position => position.status === this.checkedPositions[0].status
+    );
   }
 
   onChangePositionStatuses() {
     // todo после этой эмита обновляются все позиции. Потом переделать на редакс.
-    this.addPosition.emit();
+    this.changeStatus.emit();
   }
 }
