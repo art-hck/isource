@@ -40,7 +40,7 @@
 </div>
 <div [hidden]="true">
   <ng-container *ngFor="let markerData of markersData$ | async">
-    <div appDashboardMapMarker [type]="getPointType(markerData)" [coords]="markerData?.coords"
+    <div appDashboardMapMarker *ngIf="markerData?.coords" [type]="getPointType(markerData)" [coords]="markerData?.coords"
          [iconSize]="[100, 42]" [iconAnchor]="[0,0]" (initMarker)="markersGroup.addLayer($event)"
     >
       <clr-icon shape="map-basis" class="dashboard-map-marker-icon" size="42"></clr-icon>
@@ -52,6 +52,7 @@
 
     <ng-container *ngFor="let contragent of markerData?.contragents">
       <div appDashboardMapMarker type="contragent"
+           *ngIf="contragent?.coords && markerData?.coords"
            [iconSize]="[27, 37]" [coords]="contragent?.coords" [iconAnchor]="[13.5, 37]"
            (initMarker)="addContragentMarker($event, [markerData?.coords, contragent?.coords])"
       >
