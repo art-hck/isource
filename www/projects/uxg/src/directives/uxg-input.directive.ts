@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Optional } from '@angular/core';
 import { AbstractControl, NgControl } from "@angular/forms";
 import { Subscription } from "rxjs";
 
@@ -7,11 +7,13 @@ import { Subscription } from "rxjs";
 })
 export class UxgInputDirective implements OnInit {
   @Input() lg: boolean | string;
+  @Input() warning: boolean | string;
   @HostBinding('class.app-control') classInput = true;
   @HostBinding('class.app-control-large') get isLarge() { return this.is(this.lg); }
+  @HostBinding('class.warning') get isWarning() { return this.is(this.warning); }
   @HostBinding('class.app-control-label-shown')
   get labelShown() {
-    const value = this.ngControl.control.value;
+    const value = this.ngControl && this.ngControl.control.value;
     return value !== null && value.toString().length;
   }
 
@@ -19,24 +21,26 @@ export class UxgInputDirective implements OnInit {
   private wasBlured = false;
   private subscription: Subscription;
 
-  constructor(private el: ElementRef, private ngControl: NgControl) {
+  constructor(private el: ElementRef, @Optional() private ngControl: NgControl) {
   }
 
   ngOnInit() {
-    this.subscription = this.ngControl.valueChanges.subscribe(
-      () => this.validate(this.ngControl.control)
-    );
+    if (this.ngControl) {
+      this.subscription = this.ngControl.valueChanges.subscribe(
+        () => this.validate(this.ngControl.control)
+      );
 
-    const reset = this.ngControl.control.reset.bind(this.ngControl.control);
-    this.ngControl.control.reset = (value?: any, options?: Object) => {
-      this.wasBlured = false;
-      reset(value, options);
-    };
+      const reset = this.ngControl.control.reset.bind(this.ngControl.control);
+      this.ngControl.control.reset = (value?: any, options?: Object) => {
+        this.wasBlured = false;
+        reset(value, options);
+      };
+    }
   }
 
   @HostListener("blur")
   onBlur() {
-    if (!this.wasBlured && !this.ngControl.control.pristine) {
+    if (!this.wasBlured && this.ngControl && !this.ngControl.control.pristine) {
       this.wasBlured = true;
       this.validate(this.ngControl.control);
     }

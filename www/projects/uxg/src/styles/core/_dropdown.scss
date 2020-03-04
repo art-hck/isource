@@ -5,17 +5,19 @@
   display: block;
   flex-direction: column;
   position: relative;
-  z-index: 1;
 
 
-  &-handler, &-items-item {
-    cursor: pointer;
+  &-handler, &-items-item, &-items-header {
     height: 40px;
     line-height: 40px;
     overflow: hidden;
     padding: 0 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &-handler, &-items-item {
+    cursor: pointer;
   }
 
   &-items-item:hover {

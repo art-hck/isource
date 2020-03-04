@@ -18,4 +18,9 @@ export class DashboardService {
     const url = `requests/customer/basis-percents`;
     return this.api.get<DashboardMapMarkerItem[]>(url);
   }
+
+  getPositionMoneyStatistic(): Observable<Array<{status: string, price: number}>> {
+    const url = `requests/customer/dashboard/statistics/position-prices`;
+    return this.api.post<{status: string, price: number}[]>(url, {});
+  }
 }
