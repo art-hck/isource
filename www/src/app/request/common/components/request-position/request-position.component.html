@@ -52,9 +52,6 @@
     <uxg-tabs class="app-tabs-border">
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
-      <uxg-tab-title #technicalTab disabled>Технические предложения</uxg-tab-title>
-      <uxg-tab-title #offersTab>Коммерческие предложения</uxg-tab-title>
-      <uxg-tab-title #productionTab disabled>Изготовление</uxg-tab-title>
       <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
     <br/>
@@ -84,9 +81,6 @@
           К позиции пока не загружено ни <br/> одного документа
         </h2>
       </ng-container>
-    </ng-container>
-    <ng-container *uxgTab="offersTab">
-      <app-offers [requestPosition]="position" [requestId]="requestId" [isCustomerView]="user.isCustomer()"></app-offers>
     </ng-container>
     <ng-container *uxgTab="deliveryTab">
       <app-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-delivery-monitor>
