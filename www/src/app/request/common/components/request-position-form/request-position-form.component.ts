@@ -1,7 +1,7 @@
-import { Component, EventEmitter, forwardRef, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
-import { flatMap, map, startWith } from "rxjs/operators";
+import { debounceTime, filter, flatMap, map, startWith, tap } from "rxjs/operators";
 import { Observable, of, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -14,6 +14,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
+import { UxgDropdownInputComponent } from "uxg";
 
 @Component({
   selector: 'app-request-position-form',
@@ -41,6 +42,7 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   @Input() isNewRequest = false;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
+  @ViewChild('nameRef', { static: false }) nameDropdownInputRef: UxgDropdownInputComponent;
   form: FormGroup;
   subscription = new Subscription();
   onTouched: (value) => void;
@@ -143,9 +145,13 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
       .forEach(([status, controlNames]) =>
         controlNames.forEach(controlName => form.get(controlName).disable()));
 
-    form.get('name').valueChanges.subscribe(value => {
-      this.onShowSearchSuggestions(value);
-    });
+    this.searchResults$ = form.get('name').valueChanges
+      .pipe(
+        debounceTime(300),
+        flatMap(value => this.normPositionService.searchSuggestions(value)),
+        filter(suggestions => suggestions.length > 0),
+        tap(() => this.nameDropdownInputRef.toggle(true))
+      );
 
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
@@ -173,15 +179,6 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
         this.onChange(value);
       }
     });
-  }
-
-  onShowSearchSuggestions(query: string) {
-    this.searchResults$ = this.normPositionService.searchSuggestions(query);
-    this.showSearchResults = true;
-  }
-
-  onSuggestionClick(suggestion: string) {
-    this.form.get('name').setValue(suggestion);
   }
 
   submit() {

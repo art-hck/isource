@@ -1,4 +1,21 @@
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnDestroy, Output, QueryList, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  Output,
+  QueryList,
+  Renderer2, TemplateRef,
+  ViewChild, ViewContainerRef
+} from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
 import { flatMap, mergeAll, startWith } from "rxjs/operators";
 import { Subscription } from "rxjs";
@@ -15,6 +32,7 @@ import { UxgDropdownItemData } from "../uxg-dropdown/uxg-dropdown-item-data";
 })
 export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, AfterViewChecked, ControlValueAccessor, Validator {
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
+  @ContentChild('errors', {static: false, read: TemplateRef }) errors: TemplateRef<ElementRef>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
   @HostBinding('class.app-control-wrap') appControlWrap = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
@@ -39,7 +57,9 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
     return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
   }
 
-  constructor(private renderer: Renderer2, public el: ElementRef) {}
+  constructor(private renderer: Renderer2, public el: ElementRef,
+    private viewContainer: ViewContainerRef,
+  ) {}
 
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
@@ -54,7 +74,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   }
 
   ngAfterViewInit() {
-
+    console.log(this.errors);
     this.subscription.add(this.items.changes.pipe(
       startWith(this.items),
       flatMap(items => items.map(item => item.onSelect)),

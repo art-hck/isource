@@ -1,6 +1,5 @@
 <input #inputRef
        uxgInput
-       type="text"
        class="app-dropdown-handler"
        [warning]="warning"
        [lg]="lg"
@@ -11,7 +10,7 @@
        [class.active]="!isHidden"
 />
 <label *ngIf="placeholder" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
-
+<ng-container *ngTemplateOutlet="errors"></ng-container>
 <div #itemsWrapper class="app-dropdown-items-wrapper" [class.hidden]="isHidden">
   <div class="app-dropdown-items">
     <ng-content></ng-content>
