@@ -37,6 +37,8 @@
      [zoomControl]="false"
      (initMap)="initMap($event)"
 >
+</div>
+<div [hidden]="true">
   <ng-container *ngFor="let markerData of markersData$ | async">
     <div appDashboardMapMarker [type]="getPointType(markerData)" [coords]="markerData?.coords"
          [iconSize]="[100, 42]" [iconAnchor]="[0,0]" (initMarker)="markersGroup.addLayer($event)"
