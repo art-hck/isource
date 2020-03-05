@@ -7,9 +7,12 @@
     [warning]="!!position.nameTemplate && searchNameSuggestionsComplete !== false"
     (focus)="onFocusNameSubject$.next($event)"
   >
-    <div class="app-dropdown-items-header app-ghost-color">ВОЗМОЖНЫЕ ВАРИАНТЫ</div>
+    <div class="app-dropdown-items-header app-ghost-color" *ngIf="suggestLabel">{{suggestLabel}}</div>
     <ng-container *ngIf="(searchNameSuggestions$ | async) as searchResults">
-      <div uxgDropdownItem *ngFor="let suggestion of searchResults" [value]="suggestion">{{ suggestion }}</div>
+      <div uxgDropdownItem *ngFor="let suggestion of searchResults" [value]="suggestion">
+
+        {{ suggestion.replace(form.get('name').value, '') }}
+      </div>
     </ng-container>
     <ng-template #errors>
       <div class="app-control-error" *ngIf="position.nameTemplate && !form.get('name').errors">

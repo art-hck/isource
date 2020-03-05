@@ -93,6 +93,16 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     return (this.isDraft || !this.position.id) && !!this.onDrafted;
   }
 
+  get suggestLabel() {
+    const i = this.form.get('name').value.trim().split(' ').length;
+    const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
+    const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
+    if (i >= arr1.length) {
+      const label = [...arr1, ...arr2][i];
+      return label && label.slice(1, -1);
+    }
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private datePipe: DatePipe,
@@ -142,13 +152,13 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
       .subscribe(checked => {
-      if (checked) {
-        form.get('deliveryDate').reset();
-        form.get('deliveryDate').disable();
-      } else {
-        form.get('deliveryDate').enable();
-      }
-    });
+        if (checked) {
+          form.get('deliveryDate').reset();
+          form.get('deliveryDate').disable();
+        } else {
+          form.get('deliveryDate').enable();
+        }
+      });
 
     // @TODO Временное отключение валют
     form.get('currency').setValue(PositionCurrency.RUB);
