@@ -1,8 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
 
-  <uxg-dropdown-input #nameRef formControlName="name" placeholder="Наименование МТР" [lg]="true" [warning]="!!position.nameTemplate">
+  <uxg-dropdown-input
+    #nameRef
+    formControlName="name"
+    placeholder="Наименование МТР"
+    [lg]="true"
+    [warning]="!!position.nameTemplate && searchNameSuggestionsExist !== false"
+    (focus)="nameOnFocusSubject$.next()"
+  >
     <div class="app-dropdown-items-header app-ghost-color">ВОЗМОЖНЫЕ ВАРИАНТЫ</div>
-    <ng-container *ngIf="(searchResults$ | async) as searchResults">
+    <ng-container *ngIf="(searchNameSuggestions$ | async) as searchResults">
       <div uxgDropdownItem *ngFor="let suggestion of searchResults" [value]="suggestion">{{ suggestion }}</div>
     </ng-container>
     <ng-template #errors>

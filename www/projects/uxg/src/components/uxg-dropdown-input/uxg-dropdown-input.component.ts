@@ -74,7 +74,6 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   }
 
   ngAfterViewInit() {
-    console.log(this.errors);
     this.subscription.add(this.items.changes.pipe(
       startWith(this.items),
       flatMap(items => items.map(item => item.onSelect)),
