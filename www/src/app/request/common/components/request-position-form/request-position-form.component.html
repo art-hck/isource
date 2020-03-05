@@ -6,7 +6,7 @@
     placeholder="Наименование МТР"
     [lg]="true"
     [warning]="!!position.nameTemplate && searchNameSuggestionsExist !== false"
-    (focus)="nameOnFocusSubject$.next()"
+    (focus)="onFocusNameSubject$.next()"
   >
     <div class="app-dropdown-items-header app-ghost-color">ВОЗМОЖНЫЕ ВАРИАНТЫ</div>
     <ng-container *ngIf="(searchNameSuggestions$ | async) as searchResults">
