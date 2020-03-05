@@ -47,7 +47,7 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   subscription = new Subscription();
   searchNameSuggestions$: Observable<string[]>;
   onFocusNameSubject$ = new Subject();
-  searchNameSuggestionsExist: boolean;
+  searchNameSuggestionsComplete: boolean;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
@@ -132,16 +132,11 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
 
     this.searchNameSuggestions$ = merge(
       form.get('name').valueChanges,
-      this.onFocusNameSubject$.pipe(
-        mapTo(form.get('name').value),
-        filter(() => !!this.position.nameTemplate)
-      )
+      this.onFocusNameSubject$
     ).pipe(
       debounceTime(300),
       flatMap(value => this.normPositionService.searchSuggestions(value)),
-      tap(suggestions => this.searchNameSuggestionsExist = suggestions.length > 0),
-      filter(() => this.searchNameSuggestionsExist),
-      tap(() => this.nameDropdownInputRef.toggle(true))
+      tap(suggestions => this.searchNameSuggestionsComplete = suggestions.length > 0),
     );
 
     form.get('isDeliveryDateAsap').valueChanges

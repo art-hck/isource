@@ -1,12 +1,11 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
-
   <uxg-dropdown-input
     #nameRef
     formControlName="name"
     placeholder="Наименование МТР"
     [lg]="true"
-    [warning]="!!position.nameTemplate && searchNameSuggestionsExist !== false"
-    (focus)="onFocusNameSubject$.next()"
+    [warning]="!!position.nameTemplate && searchNameSuggestionsComplete !== false"
+    (focus)="onFocusNameSubject$.next($event)"
   >
     <div class="app-dropdown-items-header app-ghost-color">ВОЗМОЖНЫЕ ВАРИАНТЫ</div>
     <ng-container *ngIf="(searchNameSuggestions$ | async) as searchResults">
@@ -14,7 +13,7 @@
     </ng-container>
     <ng-template #errors>
       <div class="app-control-error" *ngIf="position.nameTemplate && !form.get('name').errors">
-        <span>Возможно отсутствует доп. информация</span>
+        <span>{{ position.nameTemplate}}</span>
       </div>
       <div class="app-control-error" *ngIf="form.get('name').errors as e">
         <span *ngIf="e.required">Обязательное поле</span>
@@ -88,16 +87,23 @@
         </div>
       </div>
     </div>
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="140">
-      <div class="app-control-wrap">
-
-        <app-okei-selector #measureUnit
-                           formControlName="measureUnit">
-        </app-okei-selector>
-        <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
-        </div>
-      </div>
+    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="200">
+      <uxg-dropdown-input appOkeiSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+                          [lg]="true" #okei="appOkeiSuggestions"
+      >
+        <ng-container *ngIf="(okei.okeiSuggestions$ | async) as okeiSuggestions">
+          <div uxgDropdownItem
+               *ngFor="let suggestion of okeiSuggestions"
+               [value]="suggestion.symbol | lowercase"
+               [attr.title]="suggestion.name | lowercase"
+          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
     </div>
 
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
