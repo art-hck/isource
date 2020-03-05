@@ -30,21 +30,21 @@ export class DashboardMapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.markersData$ = this.dashboardService.getBasisStatistic().pipe(
-      flatMap(data => from(data).pipe(
-        flatMap(item => this.getCoords$(item.address).pipe(map(coords => ({...item, coords})))),
-        flatMap(item => from(item.contragents).pipe(
-          flatMap(contragent => this.getCoords$(contragent.address).pipe(map(coords => ({...contragent, coords})))),
-          toArray(),
-          map(contragents => ({...item, contragents}))
-        )),
-        map(item => {
-          item.progress = (+item.progress).toString();
-          return item;
-        }),
-        toArray()
-      ))
-    );
+    // this.markersData$ = this.dashboardService.getBasisStatistic().pipe(
+    //   flatMap(data => from(data).pipe(
+    //     flatMap(item => this.getCoords$(item.address).pipe(map(coords => ({...item, coords})))),
+    //     flatMap(item => from(item.contragents).pipe(
+    //       flatMap(contragent => this.getCoords$(contragent.address).pipe(map(coords => ({...contragent, coords})))),
+    //       toArray(),
+    //       map(contragents => ({...item, contragents}))
+    //     )),
+    //     map(item => {
+    //       item.progress = (+item.progress).toString();
+    //       return item;
+    //     }),
+    //     toArray()
+    //   ))
+    // );
   }
 
   getCoords$(address: string): Observable<LatLngExpression> {
