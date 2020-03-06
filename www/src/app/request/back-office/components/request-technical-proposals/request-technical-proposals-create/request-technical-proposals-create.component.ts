@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
 import { Request } from "../../../../common/models/request";
-import { fromEvent, merge, Observable, Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { TechnicalProposalsService } from "../../../services/technical-proposals.service";
-import { auditTime, flatMap, map, mapTo } from "rxjs/operators";
+import { flatMap, map, mapTo, shareReplay } from "rxjs/operators";
 import { PositionWithManufacturerName } from "../../../models/position-with-manufacturer-name";
 import { TechnicalProposal } from "../../../../common/models/technical-proposal";
 import { TechnicalProposalCreateRequest } from "../../../models/technical-proposal-create-request";
@@ -20,14 +20,13 @@ import { TechnicalProposalsStatuses } from "../../../../common/enum/technical-pr
   templateUrl: './request-technical-proposals-create.component.html',
   styleUrls: ['./request-technical-proposals-create.component.scss']
 })
-export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RequestTechnicalProposalsCreateComponent implements OnInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() create = new EventEmitter<TechnicalProposal>();
   @Output() update = new EventEmitter<TechnicalProposal>();
-  @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
   isLoading: boolean;
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturerName[]>;
@@ -57,14 +56,13 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   ngOnInit() {
     this.form = this.fb.group({
       id: [this.defaultTPValue('id')],
-      contragentName: [this.defaultTPValue('name'), Validators.required],
-      contragent: [this.supplierContragent, Validators.required],
+      contragent: [this.defaultTPValue('supplierContragent', null), Validators.required],
       documents: this.fb.array([]),
       positions: [this.defaultTPValue('positions', []), Validators.required]
     });
 
     if (this.isEditing && this.technicalProposal.status !== TechnicalProposalsStatuses.NEW) {
-      this.form.get('contragentName').disable();
+      this.form.get('contragent').disable();
     }
 
     this.form.valueChanges.subscribe(() => {
@@ -81,25 +79,12 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
       .pipe(map(positions => positions.map(position => ({position, manufacturingName: null}))));
 
-    this.contragents$ = this.contragentService.getContragentList();
-
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
-  }
 
-  ngAfterViewInit() {
-    // @TODO: uxg-autocomplete!
-    merge(
-      this.form.get("contragent").valueChanges,
-      fromEvent(this.contragentName.nativeElement, "blur"),
-    )
-      .pipe(auditTime(100))
-      .subscribe(() => {
-        const value = this.form.get("contragent").value;
-        this.form.get("contragentName").setValue(value ? value[0].shortName : null, {emitEvent: false});
-        this.form.get("contragentName").updateValueAndValidity();
-      });
+    this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
+
   }
 
   filesSelected(files: File[]): void {
@@ -119,7 +104,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
     this.form.disable();
 
     let body: TechnicalProposalCreateRequest = {
-      contragentId: this.form.get("contragent").value[0].id,
+      contragentId: this.form.get("contragent").value.id,
       positions: this.form.get("positions").value.map(positionsWithMan => positionsWithMan.position.id),
     };
 
@@ -196,7 +181,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
 
   private get supplierContragent() {
     const supplierContragent = this.defaultTPValue('supplierContragent', null);
-    return supplierContragent ? [supplierContragent] : null;
+    return supplierContragent ? supplierContragent : null;
   }
 
   trackByPositionId = ({position}: PositionWithManufacturerName) => position.id;
@@ -213,7 +198,7 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
   }
 
   onDownloadTemplate() {
-    const contragentId = this.form.get("contragent").value[0].id;
+    const contragentId = this.form.get("contragent").value.id;
     this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
   }
 
@@ -246,6 +231,12 @@ export class RequestTechnicalProposalsCreateComponent implements OnInit, AfterVi
       }
       alert(msg);
     }));
+  }
+
+  getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
+  searchContragent = (query: string, contragents: ContragentList[]) => {
+    return contragents.filter(
+      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
 
   ngOnDestroy() {

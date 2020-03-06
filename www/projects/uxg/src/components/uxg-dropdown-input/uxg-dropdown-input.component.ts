@@ -28,6 +28,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   @Input() disabled: boolean;
   @Input() strictMode = false;
   @Input() warning = false;
+  @Input() displayByFn: (val: any) => string;
 
   public inputValue = null;
   public value = null;
@@ -35,7 +36,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public subscription = new Subscription();
-  public isCustomValue: boolean;
+  public isCustomValue = false;
 
   get itemsWrapper(): HTMLDivElement | null {
     return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
@@ -46,10 +47,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
   setDisabledState = (isDisabled: boolean) => this.disabled = isDisabled;
-  writeValue(value: any) {
-    this.value = value;
-    this.inputValue = null;
-  }
+  writeValue = (value: any) => this.value = value;
 
   ngAfterViewChecked() {
     this.renderer.setStyle(this.itemsWrapper, 'width', this.el.nativeElement.offsetWidth + "px");
@@ -65,8 +63,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
       .subscribe(data => {
         this.isCustomValue = false;
         this.writeValue(data.value);
-        this.inputValue = data.displayValue || data.value || data.label;
-        this.select.emit({ value: data.value, label: data.label, displayValue: data.displayValue });
+        this.select.emit({ value: data.value, label: data.label });
 
         if (this.onChange) {
           this.onChange(data.value);
@@ -113,7 +110,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.strictMode && !this.inputValue) {
+    if (this.strictMode && this.isCustomValue) {
       return {"not_from_list": true};
     }
   }
