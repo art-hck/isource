@@ -8,6 +8,7 @@ export class UxgDropdownItemDirective {
   @HostBinding('class.app-dropdown-items-item') classItem = true;
   @Input() disabled = false;
   @Input() value = null;
+  @Input() displayValue = null;
 
   onSelect = new EventEmitter<UxgDropdownItemData>();
 
@@ -20,7 +21,7 @@ export class UxgDropdownItemDirective {
   @HostListener('click')
   click() {
     if (this.disabled === false) {
-      this.onSelect.emit({value: this.value, label: this.label});
+      this.onSelect.emit({value: this.value, label: this.label, displayValue: this.displayValue});
     }
   }
 }

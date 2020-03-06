@@ -6,7 +6,7 @@
        [value]="inputValue || value"
        [disabled]="disabled"
        (input)="input($event)"
-       (focus)="focus.emit()"
+       (focus)="focus.emit(inputValue || value)"
        [class.active]="!isHidden"
 />
 <label *ngIf="placeholder" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>

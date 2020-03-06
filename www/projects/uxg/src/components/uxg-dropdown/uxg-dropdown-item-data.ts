@@ -1,4 +1,5 @@
 export class UxgDropdownItemData {
-  value: any;
+  value;
+  displayValue;
   label: string;
 }

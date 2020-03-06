@@ -1,8 +1,8 @@
-import { Component, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
-import { debounceTime, filter, flatMap, map, startWith, tap } from "rxjs/operators";
-import { Observable, of, Subscription } from "rxjs";
+import { debounceTime, filter, flatMap, map, mapTo, startWith, tap } from "rxjs/operators";
+import { merge, Observable, of, Subject, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { EditRequestService } from "../../services/edit-request.service";
@@ -45,6 +45,9 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   @ViewChild('nameRef', { static: false }) nameDropdownInputRef: UxgDropdownInputComponent;
   form: FormGroup;
   subscription = new Subscription();
+  searchNameSuggestions$: Observable<string[]>;
+  onFocusNameSubject$ = new Subject();
+  searchNameSuggestionsComplete: boolean;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
@@ -90,22 +93,14 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     return (this.isDraft || !this.position.id) && !!this.onDrafted;
   }
 
-  showSearchResults = false;
-  searchResults$: Observable<string[]>;
-
-  private wasInside = false;
-
-  @HostListener('click')
-  clickInside() {
-    this.wasInside = true;
-  }
-
-  @HostListener('document:click')
-  clickOut() {
-    if (!this.wasInside) {
-      this.showSearchResults = false;
+  get suggestLabel() {
+    const i = this.form.get('name').value.trim().split(' ').length;
+    const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
+    const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
+    if (i >= arr1.length) {
+      const label = [...arr1, ...arr2][i];
+      return label && label.slice(1, -1);
     }
-    this.wasInside = false;
   }
 
   constructor(
@@ -140,29 +135,30 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     });
 
     Object.entries(this.disabledFieldsAfterStatus)
-      .filter(([status, controlNames]) =>
+      .filter(([status]) =>
         !this.statusService.isStatusPrevious(this.position.status, status as PositionStatuses))
       .forEach(([status, controlNames]) =>
         controlNames.forEach(controlName => form.get(controlName).disable()));
 
-    this.searchResults$ = form.get('name').valueChanges
-      .pipe(
-        debounceTime(300),
-        flatMap(value => this.normPositionService.searchSuggestions(value)),
-        filter(suggestions => suggestions.length > 0),
-        tap(() => this.nameDropdownInputRef.toggle(true))
-      );
+    this.searchNameSuggestions$ = merge(
+      form.get('name').valueChanges,
+      this.onFocusNameSubject$
+    ).pipe(
+      debounceTime(300),
+      flatMap(value => this.normPositionService.searchSuggestions(value)),
+      tap(suggestions => this.searchNameSuggestionsComplete = suggestions.length > 0),
+    );
 
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
       .subscribe(checked => {
-      if (checked) {
-        form.get('deliveryDate').reset();
-        form.get('deliveryDate').disable();
-      } else {
-        form.get('deliveryDate').enable();
-      }
-    });
+        if (checked) {
+          form.get('deliveryDate').reset();
+          form.get('deliveryDate').disable();
+        } else {
+          form.get('deliveryDate').enable();
+        }
+      });
 
     // @TODO Временное отключение валют
     form.get('currency').setValue(PositionCurrency.RUB);

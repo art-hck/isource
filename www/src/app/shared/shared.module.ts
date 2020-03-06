@@ -26,6 +26,7 @@ import { TemplateUploadComponent } from './components/template-upload/template-u
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
+import { OkeiSuggestionsDirective } from './directives/okei-suggestions.directive';
 import { HumanDatePipe } from './pipes/human-date.pipe';
 
 @NgModule({
@@ -78,6 +79,7 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     PieChartComponent,
     PhonePipe,
     HumanDatePipe,
+    OkeiSuggestionsDirective,
   ],
   exports: [
     CommonModule,
@@ -109,6 +111,7 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    OkeiSuggestionsDirective,
     HumanDatePipe,
   ]
 })
