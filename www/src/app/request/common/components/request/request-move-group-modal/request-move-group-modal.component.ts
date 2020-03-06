@@ -7,21 +7,23 @@ import { GroupWithPositions } from "../../../models/groupWithPositions";
 import { Request } from "../../../models/request";
 import { RequestPosition } from "../../../models/request-position";
 import { Subscription } from "rxjs";
+import { RequestGroup } from "../../../models/request-group";
 
 @Component({
-  selector: 'app-request-add-group-modal',
-  templateUrl: 'request-add-group-modal.component.html'
+  selector: 'app-request-move-group-modal',
+  templateUrl: 'request-move-group-modal.component.html'
 })
-export class RequestAddGroupModalComponent implements OnDestroy {
+export class RequestMoveGroupModalComponent implements OnDestroy {
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
+  @Input() groups: RequestGroup[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<GroupWithPositions>();
   subscription = new Subscription();
   isLoading: boolean;
 
   form = new FormGroup({
-    name: new FormControl("", Validators.required)
+    group: new FormControl(false, c => c.value === false ? { "error": true } : null)
   });
 
   constructor(private groupService: GroupService) {}
@@ -36,13 +38,13 @@ export class RequestAddGroupModalComponent implements OnDestroy {
 
   submit() {
     this.isLoading = true;
+
     this.subscription.add(
-      this.groupService.saveGroup(this.request.id, this.form.get('name').value).pipe(
-        flatMap(requestGroup => this.groupService.addPositionsInGroup(
-          this.request.id,
-          requestGroup.id,
-          this.positions.map(position => position.id)
-        )),
+      this.groupService.addPositionsInGroup(
+        this.request.id,
+        this.form.get('group').value.id,
+        this.positions.map(position => position.id)
+      ).pipe(
         finalize(() => {
           this.isLoading = false;
           this.form.reset();
