@@ -94,12 +94,14 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   }
 
   get suggestLabel() {
-    const i = this.form.get('name').value.trim().split(' ').length;
-    const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
-    const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
-    if (i >= arr1.length) {
-      const label = [...arr1, ...arr2][i];
-      return label && label.slice(1, -1);
+    if (this.form.get('name').value && this.position.nameTemplate) {
+      const i = this.form.get('name').value.trim().split(' ').length;
+      const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
+      const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
+      if (i >= arr1.length) {
+        const label = [...arr1, ...arr2][i];
+        return label && label.slice(1, -1);
+      }
     }
   }
 
@@ -145,6 +147,7 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
       this.onFocusNameSubject$
     ).pipe(
       debounceTime(300),
+      filter(value => value && value.length > 0),
       flatMap(value => this.normPositionService.searchSuggestions(value)),
       tap(suggestions => this.searchNameSuggestionsComplete = suggestions.length > 0),
     );
