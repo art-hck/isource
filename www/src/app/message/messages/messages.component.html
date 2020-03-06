@@ -17,7 +17,7 @@
             </app-document-simple-list>
           </div>
 
-          <div class="message-date"> {{ getMessageDate(message.createdDate) }} </div>
+          <div class="message-date"> {{ message.createdDate | humanDate }} </div>
         </div>
       </div>
       <div class="text-center" *ngIf="messages.length === 0">
