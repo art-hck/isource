@@ -8,12 +8,12 @@
   <div class="app-col" *ngIf="showLabel">
     <table class="label-table">
       <tr *ngFor="let item of items">
-        <th [class.app-ghost-color]="item.count === 0">
-          {{ item.count }}<span class="app-ghost-color" *ngIf="item.count">{{ measure }}</span>
-        </th>
-        <th>
+        <td [class.app-ghost-color]="item.count === 0" class="count-label">
+          {{ item.count }} <span class="app-ghost-color" >{{ measure }}</span>
+        </td>
+        <td>
           <span [style.color]="item.color">{{ item.label }}</span>
-        </th>
+        </td>
       </tr>
     </table>
   </div>

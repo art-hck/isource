@@ -49,9 +49,7 @@
     <uxg-tabs class="app-tabs-border">
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
-      <uxg-tab-title #technicalTab disabled>Технические предложения</uxg-tab-title>
-      <uxg-tab-title #offersTab>Коммерческие предложения</uxg-tab-title>
-      <uxg-tab-title #productionTab disabled>Изготовление</uxg-tab-title>
+      <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length">Коммерческие предложения</uxg-tab-title>
       <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
     <br/>

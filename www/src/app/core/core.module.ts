@@ -15,6 +15,7 @@ import { NsiHttpClient } from "./services/nsi-http-client.service";
 import { NsiService } from "./services/nsi.service";
 import { FeatureService } from "./services/feature.service";
 import { AuthInterceptor } from "./interceptor/auth.interceptor";
+import { MessageModule } from "../message/message.module";
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { AuthInterceptor } from "./interceptor/auth.interceptor";
     HttpClientModule,
     RouterModule,
     CartModule,
-    ClarityModule
+    ClarityModule,
+    MessageModule
   ],
   exports: [
     NavComponent

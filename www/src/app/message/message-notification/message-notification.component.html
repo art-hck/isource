@@ -1,0 +1,23 @@
+<div class="notification-container" *ngIf="open">
+  <button class="close" type="button" (click)="$event.preventDefault(); open = false;">
+    <clr-icon shape="close" size="20" role="none"></clr-icon>
+  </button>
+
+  <div class="user-container">
+    <div class="avatar"><img src="../../../assets/images/avatar.svg"></div>
+    <div class="user-info">
+      <span class="user-name">{{ message?.user.shortName }}</span><br>
+      <span class="sub-name app-ghost-color">{{ getSubName() }}</span>
+    </div>
+  </div>
+
+  <div class="message" (click)="onContainerClick()">
+    <div class="message-body">
+      {{ message?.message }}
+    </div>
+
+    <div class="message-date app-ghost-color">
+      {{ message?.createdDate | humanDate }}
+    </div>
+  </div>
+</div>

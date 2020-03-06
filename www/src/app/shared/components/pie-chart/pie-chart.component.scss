@@ -4,8 +4,14 @@
   border: 0;
   margin-left: 1em;
   text-align: left;
+  font-weight: 500;
 
-  tr th:first-child {
+  tr td:first-child {
     padding-right: 10px;
+  }
+
+  .count-label {
+    text-align: right;
+    white-space: nowrap;
   }
 }

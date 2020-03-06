@@ -27,6 +27,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
 import { OkeiSuggestionsDirective } from './directives/okei-suggestions.directive';
+import { HumanDatePipe } from './pipes/human-date.pipe';
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import { OkeiSuggestionsDirective } from './directives/okei-suggestions.directiv
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    HumanDatePipe,
     OkeiSuggestionsDirective,
   ],
   exports: [
@@ -110,6 +112,7 @@ import { OkeiSuggestionsDirective } from './directives/okei-suggestions.directiv
     PieChartComponent,
     PhonePipe,
     OkeiSuggestionsDirective,
+    HumanDatePipe,
   ]
 })
 export class SharedModule {
