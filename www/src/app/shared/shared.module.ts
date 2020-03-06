@@ -26,6 +26,7 @@ import { TemplateUploadComponent } from './components/template-upload/template-u
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
+import { HumanDatePipe } from './pipes/human-date.pipe';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { PhonePipe } from './pipes/phone.pipe';
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    HumanDatePipe,
   ],
   exports: [
     CommonModule,
@@ -107,6 +109,7 @@ import { PhonePipe } from './pipes/phone.pipe';
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    HumanDatePipe,
   ]
 })
 export class SharedModule {

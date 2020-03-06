@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import {
   AfterViewChecked,
   Component,
@@ -79,16 +78,6 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
     return message.user.id === this.userInfoService.getUserInfo().id;
   }
 
-  /**
-   * Если дата сегодняшняя, то возвращает время, иначе дату без времени
-   * @param createdDate
-   */
-  public getMessageDate(createdDate: string): string {
-    return moment(new Date()).isSame(createdDate, 'date') ?
-      moment(createdDate).format('HH:mm') :
-      moment(createdDate).format('YYYY.MM.DD');
-  }
-
   public submit(): void {
     if (this.form.invalid) {
       return;
@@ -100,7 +89,10 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
       user: this.userInfoService.getUserInfo(),
       message: text,
       isSending: true,
-      documents: []
+      documents: [],
+      contextId: null,
+      contextType: null,
+      requestId: null
     };
 
     this.outgoingMessagesSubject.next(message);
