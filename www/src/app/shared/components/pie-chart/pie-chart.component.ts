@@ -68,7 +68,21 @@ export class PieChartComponent implements OnChanges {
       cx.font = "lighter " + Math.round(this.radius / 5) + "px sans-serif";
       cx.fillText("Всего", this.radius, this.radius);
       cx.fillStyle = "#777";
-      cx.fillText(String(total) + this.measure, this.radius, this.radius + Math.round(this.radius / 5));
+      cx.fillText(this.getHumanNumber(total) + ' ' + this.measure, this.radius, this.radius + Math.round(this.radius / 5));
     }
+  }
+
+  getHumanNumber(value) {
+    if (value >= Math.pow(10, 9)) {
+      return Math.floor(value / (10 ** 9)) + ' млрд';
+    }
+    if (value >= Math.pow(10, 6)) {
+      return Math.floor(value / (10 ** 6)) + ' млн';
+    }
+    if (value >= Math.pow(10, 3)) {
+      return Math.floor(value / (10 ** 3)) + ' тыс';
+    }
+
+    return value;
   }
 }
