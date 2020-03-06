@@ -73,13 +73,13 @@ export class PieChartComponent implements OnChanges {
   }
 
   getHumanNumber(value) {
-    if (value >= Math.pow(10, 9)) {
+    if (value >= 10 ** 9) {
       return Math.floor(value / (10 ** 9)) + ' млрд';
     }
-    if (value >= Math.pow(10, 6)) {
+    if (value >= 10 ** 6) {
       return Math.floor(value / (10 ** 6)) + ' млн';
     }
-    if (value >= Math.pow(10, 3)) {
+    if (value >= 10 ** 3) {
       return Math.floor(value / (10 ** 3)) + ' тыс';
     }
 
