@@ -9,7 +9,7 @@
     <table class="label-table">
       <tr *ngFor="let item of items">
         <td [class.app-ghost-color]="item.count === 0" class="count-label">
-          {{ item.count }} <span class="app-ghost-color" >{{ measure }}</span>
+          {{ item.count | number }} <span class="app-ghost-color" >{{ measure }}</span>
         </td>
         <td>
           <span [style.color]="item.color">{{ item.label }}</span>
