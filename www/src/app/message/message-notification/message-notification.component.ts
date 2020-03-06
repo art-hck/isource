@@ -51,7 +51,14 @@ export class MessageNotificationComponent implements OnInit {
 
   onContainerClick() {
     this.open = false;
-    this.router.navigateByUrl(this.getChatUrl(this.message));
+
+    // todo не смог разобраться как поменять контекст, если уже находимся на странице чата
+    // todo поэтому обновляем в этом случае всю страницу
+    if (this.router.url.substr(0, 9) === '/messages') {
+      window.location.href = this.getChatUrl(this.message);
+    } else {
+      this.router.navigateByUrl(this.getChatUrl(this.message));
+    }
   }
 
   getChatUrl(message: Message): string {
