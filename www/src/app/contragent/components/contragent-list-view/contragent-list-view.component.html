@@ -11,11 +11,20 @@
     </div>
 
     <div class="clr-col-auto">
-      <input class="contragent-search-field"
-             type="text"
-             placeholder="Введите наименование контрагента или ИНН.."
-             [value]="customerSearchValue"
-             (input)="onCustomerSearchInputChange($event.target.value)"/>
+      <div class="input-group">
+        <input class="contragent-search-field"
+               type="text"
+               placeholder="Введите наименование контрагента или ИНН..."
+               [value]="customerSearchValue"
+               (input)="onCustomerSearchInputChange($event.target.value)"/>
+        <button type="button"
+                class="btn btn-icon btn-link btn-clear"
+                aria-label="Очистить фильтр"
+                [disabled]="!this.customerSearchValue.length"
+                (click)="onClearFilterClick()">
+          <clr-icon shape="times"></clr-icon>
+        </button>
+      </div>
     </div>
   </div>
 
