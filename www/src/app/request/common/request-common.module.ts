@@ -47,6 +47,7 @@ import { RequestTpFilterStatusesListComponent } from "./components/request-techn
 import { RequestTpFilterSectionComponent } from "./components/request-technical-proposal-filter/request-tp-filter-section/request-tp-filter-section.component";
 import { RequestCpFilterComponent } from "./components/request-commercial-proposals/request-cp-filter/request-cp-filter.component";
 import { PositionsStatusChangeComponent } from "../back-office/components/request/change-position-statuses/positions-status-change.component";
+import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
 
 const RequestCommonModuleDeclarations = [
   AddFromExcelComponent,
@@ -84,7 +85,8 @@ const RequestCommonModuleDeclarations = [
   RequestPositionFormComponent,
   RequestTechnicalProposalComponent,
   RequestCommercialProposalsComponent,
-  SearchFilterPipe
+  SearchFilterPipe,
+  RequestMoveGroupModalComponent
 
 ];
 

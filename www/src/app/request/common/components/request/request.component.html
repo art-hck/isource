@@ -53,6 +53,22 @@
           ></app-request-add-group-modal>
         </div>
 
+        <!-- Переместить в группу -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
+          <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0" (click)="moveGroupModal.open()">
+            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
+            <span>Переместить</span>
+          </button>
+          <app-request-move-group-modal
+            #moveGroupModal
+            [request]="request"
+            [groups]="groups"
+            [positions]="checkedPositions"
+            (success)="addGroup.emit($event)"
+          ></app-request-move-group-modal>
+        </div>
+
+        <!-- Групповая смена статус -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
           <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">
@@ -65,15 +81,6 @@
           </div>
           </uxg-popover>
         </div>
-
-        <!-- Переместить в группу -->
-        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
-          <button uxgButton clear link [disabled]="true">
-            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
-            <span>Переместить</span>
-          </button>
-        </div>-->
 
         <!-- Отклонить -->
         <!-- TODO Нереализованная фича, временно скрыл кнопку -->

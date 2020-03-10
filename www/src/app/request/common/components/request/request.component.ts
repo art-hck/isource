@@ -48,6 +48,10 @@ export class RequestComponent implements OnInit {
     return this.form.get('positions') as FormArray;
   }
 
+  get groups(): RequestGroup[] {
+    return this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
+  }
+
   get formPositionsFlat() {
     return this.formPositions.controls
       .reduce((arr, formGroup) => {
