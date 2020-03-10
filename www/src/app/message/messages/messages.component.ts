@@ -74,6 +74,10 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
     }
   }
 
+  public setFiles(files: File[]) {
+    this.form.get("files").setValue([...this.form.get("files").value || [], ...files]);
+  }
+
   public isOwnMessage(message: Message) {
     return message.user.id === this.userInfoService.getUserInfo().id;
   }
