@@ -8,7 +8,7 @@ import { UserInfoService } from "../../../user/service/user-info.service";
 @Component({
   selector: 'app-contragent-list-view',
   templateUrl: './contragent-list-view.component.html',
-  styleUrls: ['./contragent-list-view.component.css']
+  styleUrls: ['./contragent-list-view.component.scss']
 })
 export class ContragentListViewComponent implements OnInit {
 
@@ -33,4 +33,7 @@ export class ContragentListViewComponent implements OnInit {
     this.contragents$ = this.getContragentService.getContragentList();
   }
 
+  onClearFilterClick() {
+    this.customerSearchValue = '';
+  }
 }
