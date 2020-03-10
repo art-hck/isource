@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
+import { ContragentShortInfo } from "../../models/contragent-short-info";
 
 @Component({
   selector: 'app-contragent-info-link',
@@ -10,7 +11,7 @@ import { ContragentService } from "../../services/contragent.service";
 })
 export class ContragentInfoLinkComponent implements OnInit {
 
-  @Input() contragent: ContragentInfo;
+  @Input() contragent: ContragentInfo | ContragentShortInfo;
   @Input() contragentId: Uuid;
   @Input() contragentName: string;
 

@@ -31,13 +31,13 @@
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
               <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
                 {{contragent.shortName || contragent.fullName}}
-                <span class="app-ghost-color">{{contragent.inn}} / {{contragent.kpp}}</span>
+                <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
               </div>
             </ng-container>
             <ng-template #errors>
               <div class="app-control-error" *ngIf="form.get('contragent').errors as e">
                 <span *ngIf="e.required">Обязательное поле</span>
-                <span *ngIf="!e.required && e.not_from_list">Выберите контрагента из списка</span>
+                <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
               </div>
             </ng-template>
           </uxg-dropdown-input>

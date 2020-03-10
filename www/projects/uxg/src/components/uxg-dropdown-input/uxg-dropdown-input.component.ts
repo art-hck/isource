@@ -110,8 +110,8 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.strictMode && this.isCustomValue) {
-      return {"not_from_list": true};
+    if (this.strictMode && this.isCustomValue && control.value) {
+      return {"notFromList": true};
     }
   }
 

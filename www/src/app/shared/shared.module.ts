@@ -16,10 +16,8 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 import { UploadFileDragDirective } from './directives/upload-file-drag.directive';
 import { UxgModule } from "uxg";
-import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
-import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
@@ -61,7 +59,6 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
-    ContragentAutocompleteComponent,
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
@@ -71,7 +68,6 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
-    OkeiSelectorComponent,
     UploadFileDirective,
     TemplateUploadComponent,
     UploadFileDirective,
@@ -93,8 +89,6 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
-    ContragentAutocompleteComponent,
-    OkeiSelectorComponent,
     TemplateUploadComponent,
 
     PluralizePipe,

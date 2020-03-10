@@ -4,27 +4,25 @@
 
   <div class="form-row clr-row">
     <div class="clr-col-6">
-      <div [formGroup]="newCommercialProposalFormHelper">
-        <div class="app-control-wrap">
-          <!-- @TODO uxg-autocomplete! -->
-          <input #contragentName uxgInput lg
-                 [class.invalid]="newCommercialProposalFormHelper.get('contragentName').invalid &&
-                 newCommercialProposalFormHelper.get('contragentName').touched"
-                 (input)="autocomplete.onInput.next($event.target.value)"
-                 formControlName="contragentName">
-          <label class="app-control-label" (click)="contragentName.focus()">Наименование контрагента</label>
-
-          <app-contragent-autocomplete
-            [contragentsFullList]="contragents$ | async"
-            #autocomplete
-            formControlName="contragent">
-          </app-contragent-autocomplete>
-
-          <div class="app-control-error">
-            <span>Коммерческое предложение от выбранного поставщика уже добавлено</span>
+      <uxg-dropdown-input
+        [formControl]="supplierContragentControl"
+         placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
+        [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+      >
+        <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
+          <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
+              {{ getContragentName(contragent) }}
+              <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
           </div>
-        </div>
-      </div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="supplierContragentControl.errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
+            <span *ngIf="e.supplierOfferExist">Коммерческое предложение от выбранного поставщика уже добавлено</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
     </div>
 
     <div class="clr-col-3">
@@ -57,42 +55,50 @@
       <div class="clr-row">
         <div class="clr-col-7">
           <div class="app-control-wrap">
-            <input #quantity
-                   (input)="checkQuantity(position, $event.target.value)"
-                   class="hidden-arrows"
-                   type="number"
-                   (keypress)="filterEnteredText($event)"
+            <input #quantity [warning]="quantityValidator() !== null" (keypress)="filterEnteredText($event)"
                    uxgInput lg formControlName="quantity" />
             <label class="app-control-label" (click)="quantity.focus()">Количество</label>
-          </div>
-
-          <div class="warning-label" *ngIf="quantityNotEnough">
-            <span>Меньше необходимого</span>
+            <div class="app-control-error" *ngIf="quantityValidator()">
+              <span>Меньше необходимого</span>
+            </div>
+            <div class="app-control-error" *ngIf="newCommercialProposalForm.get('quantity').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+            </div>
           </div>
         </div>
 
         <div class="clr-col-5">
-          <div class="app-control-wrap">
-            <app-okei-selector #measureUnit formControlName="measureUnit"></app-okei-selector>
-          </div>
+          <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+                              [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #okei="appSuggestions"
+          >
+            <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+              <div uxgDropdownItem
+                   *ngFor="let suggestion of okeiSuggestions"
+                   [value]="suggestion.symbol | lowercase"
+                   [attr.title]="suggestion.name | lowercase"
+              >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+            </ng-container>
+            <ng-template #errors>
+              <div class="app-control-error" *ngIf="newCommercialProposalForm.get('measureUnit').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+              </div>
+            </ng-template>
+          </uxg-dropdown-input>
         </div>
       </div>
     </div>
 
     <div class="clr-col-3">
       <div class="app-control-wrap">
-        <input (ngModelChange)="checkDeliveryDate(position, $event)"
-               [class.invalid]="newCommercialProposalForm.get('deliveryDate').invalid"
-               appFormControlInvalidClass="invalid"
+        <input [warning]="deliveryDateValidator() !== null"
                #deliveryDate uxgInput lg formControlName="deliveryDate">
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
         <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
           <clr-icon shape="app-calendar-big" size="24"></clr-icon>
         </label>
-      </div>
-
-      <div class="warning-label" *ngIf="dateIsLaterThanNeeded && !newCommercialProposalForm.get('deliveryDate').invalid">
-        <span>Позже запрашиваемой даты</span>
+        <div class="app-control-error" *ngIf="deliveryDateValidator()">
+          <span>Позже запрашиваемой даты</span>
+        </div>
       </div>
 
       <clr-date-container #datepicker class="hidden-datepicker">
@@ -180,8 +186,7 @@
     <div class="clr-col">
       <div class="app-row clr-justify-content-end">
         <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
-        <button uxgButton lg primary
-                [disabled]="newCommercialProposalForm.invalid || newCommercialProposalFormHelper.invalid">
+        <button uxgButton lg primary [disabled]="newCommercialProposalForm.invalid || supplierContragentControl.invalid">
           {{ editMode ? 'Сохранить' : 'Добавить' }}
         </button>
       </div>
