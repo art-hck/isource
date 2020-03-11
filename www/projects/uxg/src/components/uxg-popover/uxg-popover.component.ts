@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, HostBinding, HostListener, Input, OnInit } from "@angular/core";
+import { Component, ContentChild, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subject, Subscription, timer } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
@@ -7,7 +7,7 @@ import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
   selector: 'uxg-popover',
   template: '<ng-content></ng-content>'
 })
-export class UxgPopoverComponent implements OnInit {
+export class UxgPopoverComponent implements OnInit, OnDestroy {
   public changeState$: Observable<boolean>;
   @HostBinding('class.app-popover') classPopover = true;
   @ContentChild(UxgPopoverTriggerDirective, {static: false, read: ElementRef}) triggerEl: ElementRef;
@@ -21,6 +21,11 @@ export class UxgPopoverComponent implements OnInit {
 
   ngOnInit() {
     this.changeState$ = this.changeState.asObservable().pipe(distinctUntilChanged());
+
+    if (this.openOnHover && !/iPad/i.test(navigator.userAgent)) {
+      this.el.nativeElement.addEventListener('mouseenter', this.mouseenter);
+      this.el.nativeElement.addEventListener('mouseleave', this.mouseleave);
+    }
   }
 
   show() {
@@ -51,13 +56,11 @@ export class UxgPopoverComponent implements OnInit {
     }
   }
 
-  @HostListener('mouseenter')
-  mouseenter() {
-    if (this.openOnHover) { this.show(); }
-  }
+  mouseenter = () => this.show();
+  mouseleave = () => this.hide();
 
-  @HostListener('mouseleave')
-  mouseleave() {
-    if (this.openOnHover) { this.hide(); }
+  ngOnDestroy() {
+    this.el.nativeElement.removeEventListener('mouseenter', this.mouseenter);
+    this.el.nativeElement.removeEventListener('mouseleave', this.mouseleave);
   }
 }
