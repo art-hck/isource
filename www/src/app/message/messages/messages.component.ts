@@ -1,5 +1,4 @@
 import {
-  AfterViewChecked,
   Component,
   ElementRef,
   Input,
@@ -23,7 +22,7 @@ import { WebsocketService } from "../../websocket/websocket.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy {
+export class MessagesComponent implements OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
   @Input() contextType: string;
@@ -37,7 +36,6 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
 
   private subscription = new Subscription();
   private outgoingMessagesSubject = new Subject();
-  private scrollToBottom: boolean;
 
   constructor(
     private messageService: MessageService,
@@ -53,12 +51,12 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
       this.form.reset();
-      const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
-      const sentMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom = true));
+      const receivedMessages$ = this.wsService.on<any>(this.wsEvent).pipe(tap(() => this.scrollToBottom()));
+      const sentMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom()));
       const newMessages$ = merge(receivedMessages$, sentMessages$);
 
       this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
-        tap(() => this.scrollToBottom = true),
+        tap(() => this.scrollToBottom()),
         expand(messages => newMessages$.pipe(
           take(1),
           map(message => [...messages, message]),
@@ -67,11 +65,8 @@ export class MessagesComponent implements AfterViewChecked, OnChanges, OnDestroy
     }
   }
 
-  ngAfterViewChecked() {
-    if (this.scrollToBottom) {
-      this.scrollToBottom = false;
-      this.messagesList.nativeElement.scrollTop = this.messagesList.nativeElement.scrollHeight;
-    }
+  scrollToBottom() {
+    this.messagesList.nativeElement.scrollTop = this.messagesList.nativeElement.scrollHeight;
   }
 
   public setFiles(files: File[]) {
