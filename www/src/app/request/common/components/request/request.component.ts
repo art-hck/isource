@@ -173,6 +173,6 @@ export class RequestComponent implements OnInit {
     return position.status === RequestPositionWorkflowSteps.DRAFT ||
       position.status === RequestPositionWorkflowSteps.NEW ||
       position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ||
-      position.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
+      position.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION;
   }
 }
