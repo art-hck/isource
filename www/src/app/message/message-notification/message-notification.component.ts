@@ -16,7 +16,7 @@ export class MessageNotificationComponent implements OnInit {
   open = false;
   message: Message;
 
-  protected durations = 5000;
+  protected durations = 8000;
 
   private timerSubscription = new Subscription();
 
