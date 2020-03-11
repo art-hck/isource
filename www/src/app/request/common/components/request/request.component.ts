@@ -1,18 +1,18 @@
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, of } from "rxjs";
-import { Request } from "../../models/request";
-import { RequestGroup } from "../../models/request-group";
-import { RequestPosition } from "../../models/request-position";
-import { RequestPositionList } from "../../models/request-position-list";
-import { RequestService } from "../../../customer/services/request.service";
-import { Uuid } from "../../../../cart/models/uuid";
-import { UserInfoService } from "../../../../user/service/user-info.service";
-import { FeatureService } from "../../../../core/services/feature.service";
-import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
-import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { PermissionType } from "../../../../auth/enum/permission-type";
+import {ActivatedRoute, Router, UrlTree} from "@angular/router";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
+import {Observable, of} from "rxjs";
+import {Request} from "../../models/request";
+import {RequestGroup} from "../../models/request-group";
+import {RequestPosition} from "../../models/request-position";
+import {RequestPositionList} from "../../models/request-position-list";
+import {RequestService} from "../../../customer/services/request.service";
+import {Uuid} from "../../../../cart/models/uuid";
+import {UserInfoService} from "../../../../user/service/user-info.service";
+import {FeatureService} from "../../../../core/services/feature.service";
+import {RequestWorkflowSteps} from "../../enum/request-workflow-steps";
+import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import {PermissionType} from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-request',
@@ -167,5 +167,12 @@ export class RequestComponent implements OnInit {
   onChangePositionStatuses() {
     // todo после этой эмита обновляются все позиции. Потом переделать на редакс.
     this.changeStatus.emit();
+  }
+
+  isEditable(position: RequestPosition) {
+    return position.status === RequestPositionWorkflowSteps.DRAFT ||
+      position.status === RequestPositionWorkflowSteps.NEW ||
+      position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ||
+      position.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION
   }
 }
