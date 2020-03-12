@@ -57,6 +57,9 @@
            (initMarker)="addContragentMarker($event, [markerData?.coords, contragent?.coords])"
       >
         <clr-icon shape="map-contragent" class="dashboard-map-marker-icon" size="37"></clr-icon>
+        <div>
+          <div class="dashboard-map-marker-title">{{contragent.name}}</div>
+        </div>
       </div>
     </ng-container>
   </ng-container>
