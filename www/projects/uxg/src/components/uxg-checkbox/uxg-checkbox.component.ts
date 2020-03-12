@@ -27,6 +27,8 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
   writeValue = (value: boolean | null) => this.value = value;
 
   check(ev) {
+    if (this.disabled) { return; }
+
     this.el.nativeElement.checked = !this.el.nativeElement.checked;
     ev.preventDefault();
     ev.stopPropagation();
