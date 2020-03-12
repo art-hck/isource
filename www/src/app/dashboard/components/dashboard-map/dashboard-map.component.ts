@@ -36,7 +36,7 @@ export class DashboardMapComponent implements OnInit {
       flatMap(data => from(data).pipe(
         flatMap(item => this.getCoords$(item.address).pipe(map(([coords, title]) => ({...item, coords, title: title || item.title})))),
         flatMap(item => from(item.contragents).pipe(
-          flatMap(contragent => this.getCoords$(contragent.address).pipe(map(([coords]) => ({...contragent, coords})))),
+          flatMap(contragent => this.getCoords$(contragent.address).pipe(map(([coords, title]) => ({...contragent, coords, name: title || contragent.name})))),
           toArray(),
           map(contragents => ({...item, contragents}))
         )),

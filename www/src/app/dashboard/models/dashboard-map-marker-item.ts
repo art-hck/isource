@@ -8,5 +8,6 @@ export interface DashboardMapMarkerItem {
   contragents?: {
     coords?: LatLngExpression;
     address: string;
+    name: string;
   }[];
 }
