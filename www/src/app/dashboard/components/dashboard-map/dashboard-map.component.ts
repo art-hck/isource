@@ -34,9 +34,9 @@ export class DashboardMapComponent implements OnInit {
   ngOnInit() {
     this.markersData$ = this.dashboardService.getBasisStatistic().pipe(
       flatMap(data => from(data).pipe(
-        flatMap(item => this.getCoords$(item.address).pipe(map(coords => ({...item, coords})))),
+        flatMap(item => this.getCoords$(item.address).pipe(map(([coords, title]) => ({...item, coords, title: title || item.title})))),
         flatMap(item => from(item.contragents).pipe(
-          flatMap(contragent => this.getCoords$(contragent.address).pipe(map(coords => ({...contragent, coords})))),
+          flatMap(contragent => this.getCoords$(contragent.address).pipe(map(([coords]) => ({...contragent, coords})))),
           toArray(),
           map(contragents => ({...item, contragents}))
         )),
@@ -49,20 +49,20 @@ export class DashboardMapComponent implements OnInit {
     );
   }
 
-  getCoordsFromCache$(address): Observable<LatLngExpression> {
-    const [, coords] = DashboardMapBasisMock.find(([_address]) => address.indexOf(_address) !== -1) || [null, null];
+  getCoordsFromCache$(address): Observable<[LatLngExpression, string]> {
+    const [, coords, title] = DashboardMapBasisMock.find(([_address]) => address.indexOf(_address) !== -1) || [null, null, null];
     if (coords) {
-      return of(coords);
+      return of([coords, title]);
     } else {
       return this.noCacheLimit-- > 0 ? throwError("Address not cached") : EMPTY;
     }
   }
 
-  getCoords$(address: string): Observable<LatLngExpression> {
+  getCoords$(address: string): Observable<[LatLngExpression, string]> {
     return this.getCoordsFromCache$(address).pipe(
       catchError(() => this.dashboardMapService.search(address).pipe(
         filter(foundAddresses => foundAddresses.length > 0),
-        map(foundAddresses => [+foundAddresses[0].lat, +foundAddresses[0].lon] as LatLngExpression)
+        map(foundAddresses => [([+foundAddresses[0].lat, +foundAddresses[0].lon]), null] as [LatLngExpression, string]),
       )),
     );
   }
