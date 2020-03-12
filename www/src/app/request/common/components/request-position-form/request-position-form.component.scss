@@ -37,3 +37,13 @@ textarea { height: 80px; }
   cursor: pointer;
 }
 
+.success ::ng-deep {
+  .app-control {
+    border-color: #0EA04B;
+  }
+
+  .app-control-icon-error > * {
+    display: block;
+    color: #0EA04B;
+  }
+}
