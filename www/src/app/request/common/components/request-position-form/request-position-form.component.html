@@ -4,6 +4,7 @@
     formControlName="name"
     placeholder="Наименование МТР"
     [lg]="true"
+    [class.success]="!!position.nameTemplate && searchNameSuggestionsComplete === false"
     [warning]="!!position.nameTemplate && searchNameSuggestionsComplete !== false"
     (focus)="onFocusNameSubject$.next($event)"
   >
@@ -15,6 +16,9 @@
       </div>
     </ng-container>
     <ng-template #errors>
+      <div class="app-control-icon-error" *ngIf="!!position.nameTemplate && searchNameSuggestionsComplete === false">
+        <clr-icon shape="app-check" size="16"></clr-icon>
+      </div>
       <div class="app-control-error" *ngIf="position.nameTemplate && !form.get('name').errors">
         <span>{{ position.nameTemplate}}</span>
       </div>
