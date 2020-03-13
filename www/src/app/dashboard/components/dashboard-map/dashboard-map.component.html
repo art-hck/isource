@@ -31,7 +31,7 @@
 </div>
 <div appDashboardMap class="app-card"
      [center]="[57.30208668581665, 67.80538384664513]"
-     [style.height.px]="600"
+     [style.height.px]="700"
      [scrollWheelZoom]="false"
      [zoom]="5"
      [zoomControl]="false"
@@ -57,6 +57,9 @@
            (initMarker)="addContragentMarker($event, [markerData?.coords, contragent?.coords])"
       >
         <clr-icon shape="map-contragent" class="dashboard-map-marker-icon" size="37"></clr-icon>
+        <div>
+          <div class="dashboard-map-marker-title">{{contragent.name}}</div>
+        </div>
       </div>
     </ng-container>
   </ng-container>

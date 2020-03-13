@@ -225,7 +225,7 @@
   </div>
   <div class="app-col item-actions">
 
-    <ng-container *ngIf="position.nameTemplate">
+    <ng-container *ngIf="position.nameTemplate && isEditable(position)">
       <uxg-popover [openOnHover]="true" [hideDelay]="100" >
         <clr-icon uxgPopoverTrigger shape="app-warning" class="app-warning-color"></clr-icon>
         <div *uxgPopoverContent="'app-popover-content-top-right'">Скорее всего наименование позиции нуждается в редактировании</div>

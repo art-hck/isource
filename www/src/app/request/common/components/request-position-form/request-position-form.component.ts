@@ -153,7 +153,10 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     );
 
     form.get('isDeliveryDateAsap').valueChanges
-      .pipe(startWith(<{}>form.get('isDeliveryDateAsap').value))
+      .pipe(
+        startWith(<{}>form.get('isDeliveryDateAsap').value),
+        filter(() => form.get('isDeliveryDateAsap').enabled)
+      )
       .subscribe(checked => {
         if (checked) {
           form.get('deliveryDate').reset();

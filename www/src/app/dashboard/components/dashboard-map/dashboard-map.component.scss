@@ -55,6 +55,7 @@ $pointTypes: (err: #EB5757, warn: #F2C94C, succ: #20B55F, contragent: #2585F5);
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  cursor: default;
 
   &-icon {
     flex-shrink: 0;
