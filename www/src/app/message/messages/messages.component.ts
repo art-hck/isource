@@ -1,11 +1,12 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   Input,
   OnChanges,
-  OnDestroy,
+  OnDestroy, QueryList,
   SimpleChanges,
-  ViewChild
+  ViewChild, ViewChildren
 } from '@angular/core';
 import { expand, map, take, tap } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -22,11 +23,16 @@ import { WebsocketService } from "../../websocket/websocket.service";
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnChanges, OnDestroy {
+export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
   @Input() contextType: string;
-  @ViewChild('messagesList', { static: false }) private messagesList: ElementRef;
+  @ViewChild('scrollContainer', { static: false }) private scrollContainerEl: ElementRef;
+  @ViewChildren('messagesList') messagesList: QueryList<any>;
+
+  private scrollContainer: any;
+  /**  Для первой загрузки быстро перематываем сообщения, дальше делаем плавную перемотку */
+  private firstScroll = true;
 
   public messages$: Observable<Message[]>;
   public form = new FormGroup({
@@ -48,25 +54,27 @@ export class MessagesComponent implements OnChanges, OnDestroy {
     return MessageContextToEventTypesMap[this.contextType] + '.' + this.contextId;
   }
 
+  ngAfterViewInit() {
+    this.scrollContainer = this.scrollContainerEl.nativeElement;
+    // после каждого обновления списка элементов делаем скролл вниз
+    this.messagesList.changes.subscribe(() => this.onItemElementsChanged());
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
       this.form.reset();
-      const receivedMessages$ = this.wsService.on<any>(this.wsEvent).pipe(tap(() => this.scrollToBottom()));
-      const sentMessages$ = this.outgoingMessagesSubject.pipe(tap(() => this.scrollToBottom()));
+      const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
+      const sentMessages$ = this.outgoingMessagesSubject;
       const newMessages$ = merge(receivedMessages$, sentMessages$);
 
       this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
-        tap(() => this.scrollToBottom()),
+        tap(() => this.firstScroll = true),
         expand(messages => newMessages$.pipe(
           take(1),
           map(message => [...messages, message]),
         ))
       );
     }
-  }
-
-  scrollToBottom() {
-    this.messagesList.nativeElement.scrollTop = this.messagesList.nativeElement.scrollHeight;
   }
 
   public setFiles(files: File[]) {
@@ -108,5 +116,23 @@ export class MessagesComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  private onItemElementsChanged(): void {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom(): void {
+    this.scrollContainer.scroll({
+      top: this.scrollContainer.scrollHeight,
+      left: 0,
+      // новые сообщения перематываем плавно
+      behavior: this.firstScroll ? 'auto' : 'smooth'
+    });
+
+    // включаем плавную перемотку
+    if (this.firstScroll) {
+      this.firstScroll = false;
+    }
   }
 }
