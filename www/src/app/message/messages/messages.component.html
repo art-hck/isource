@@ -1,7 +1,7 @@
 <div class="wrapper">
-  <div #messagesList class="messages-list">
+  <div #scrollContainer class="messages-list">
     <ng-container *ngIf="(messages$ | async) as messages; else loading">
-      <div class="message" [class.sending]="message.isSending" *ngFor="let message of messages">
+      <div #messagesList class="message" [class.sending]="message.isSending" *ngFor="let message of messages">
 
         <div class="message-body"
              [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
