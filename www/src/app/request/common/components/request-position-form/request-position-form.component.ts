@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
-import { debounceTime, filter, flatMap, map, mapTo, startWith, tap } from "rxjs/operators";
+import { debounceTime, filter, flatMap, map, shareReplay, startWith, tap } from "rxjs/operators";
 import { merge, Observable, of, Subject, Subscription } from "rxjs";
 import { CreateRequestService } from "../../services/create-request.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -15,6 +15,8 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
 import { UxgDropdownInputComponent } from "uxg";
+import { OkeiService } from "../../../../shared/services/okei.service";
+import { Okei } from "../../../../shared/models/okei";
 
 @Component({
   selector: 'app-request-position-form',
@@ -47,6 +49,7 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   subscription = new Subscription();
   searchNameSuggestions$: Observable<string[]>;
   onFocusNameSubject$ = new Subject();
+  okeiList$: Observable<Okei[]>;
   searchNameSuggestionsComplete: boolean;
   onTouched: (value) => void;
   onChange: (value) => void;
@@ -112,7 +115,8 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
     private createRequestService: CreateRequestService,
     private editRequestService: EditRequestService,
     private userInfoService: UserInfoService,
-    private normPositionService: NormPositionService
+    private normPositionService: NormPositionService,
+    private okeiService: OkeiService
   ) {}
 
   ngOnInit() {
@@ -181,6 +185,7 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
         this.onChange(value);
       }
     });
+    this.okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
   }
 
   submit() {
@@ -227,4 +232,9 @@ export class RequestPositionFormComponent implements OnInit, ControlValueAccesso
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
   validate = () => this.form.invalid ? {invalid: true} : null;
+  searchOkei = (query, okei: Okei[]) => {
+    return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
+        (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
+    ).slice(0, 5);
+  }
 }

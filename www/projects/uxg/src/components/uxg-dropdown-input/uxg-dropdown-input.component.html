@@ -3,7 +3,7 @@
        class="app-dropdown-handler"
        [warning]="warning"
        [lg]="lg"
-       [value]="inputValue || value"
+       [value]="(value && displayByFn && displayByFn(value)) || value"
        [disabled]="disabled"
        (input)="input($event)"
        (focus)="focus.emit(inputValue || value)"

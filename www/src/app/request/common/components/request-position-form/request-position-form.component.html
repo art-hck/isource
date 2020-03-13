@@ -95,10 +95,10 @@
       </div>
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="200">
-      <uxg-dropdown-input appOkeiSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
-                          [lg]="true" #okei="appOkeiSuggestions"
+      <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+        [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #sug="appSuggestions"
       >
-        <ng-container *ngIf="(okei.okeiSuggestions$ | async) as okeiSuggestions">
+        <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
           <div uxgDropdownItem
                *ngFor="let suggestion of okeiSuggestions"
                [value]="suggestion.symbol | lowercase"

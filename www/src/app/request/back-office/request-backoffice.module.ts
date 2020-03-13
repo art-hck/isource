@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RequestCommonModule } from "../common/request-common.module";
 import { RequestBackofficeRoutingModule } from "./request-backoffice-routing.module";
 
-import { AddOffersComponent } from "./components/add-offers/add-offers.component";
 import { DesignDocumentationService } from "./services/design-documentation.service";
 import { CommercialProposalsService } from "./services/commercial-proposals.service";
 import { ProcedureService } from "./services/procedure.service";
@@ -26,7 +25,6 @@ import { RequestPositionChangeStatusService } from "./services/request-position-
 
 @NgModule({
   declarations: [
-    AddOffersComponent,
     RequestComponent,
     RequestListViewComponent,
     SupplierSelectComponent,

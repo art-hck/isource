@@ -106,13 +106,6 @@ export class OffersComponent implements OnInit {
     this.showAddOfferForm = !this.showAddOfferForm;
   }
 
-  canAddOffer() {
-    // todo пока временно скрыл кнопку "Добавить КП". В дальнейшем нужно полностью выпилить возможно добавления
-    return false;
-    // return (this.requestPosition.status === RequestPositionWorkflowSteps.PROPOSALS_PREPARATION
-    //   || this.requestPosition.status === RequestPositionWorkflowSteps.NEW) && !this.isCustomerView;
-  }
-
   canChoiceWinner() {
     return this.requestPosition.status === RequestPositionWorkflowSteps.RESULTS_AGREEMENT;
   }

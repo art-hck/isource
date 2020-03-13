@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { RequestListViewComponent } from "./components/request-list-view/request-list-view.component";
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
-import { AddOffersComponent } from "./components/add-offers/add-offers.component";
 
 import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
 import { ContractComponent } from "../common/components/contract/contract.component";
