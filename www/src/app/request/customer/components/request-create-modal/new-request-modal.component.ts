@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {ClrModal} from "@clr/angular";
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { ClrModal } from "@clr/angular";
 
 @Component({
   selector: 'app-new-request-modal',

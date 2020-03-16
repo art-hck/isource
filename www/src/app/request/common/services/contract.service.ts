@@ -8,15 +8,13 @@ import { RequestPosition } from "../models/request-position";
 import { RequestDocument } from "../models/request-document";
 import { Request } from "../models/request";
 import { ContractCreate } from "../models/requests-list/contract-create";
-import { ContragentService } from "../../../contragent/services/contragent.service";
-import { DesignDocumentationService } from "../../back-office/services/design-documentation.service";
 import { Uuid } from "../../../cart/models/uuid";
 import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable()
 export class ContractService {
 
-  constructor(protected api: HttpClient, private contragentService: ContragentService, private designDocumentationService: DesignDocumentationService) {
+  constructor(protected api: HttpClient) {
   }
 
   create(request: Request, contragent: ContragentList, positions: RequestPosition[]): Observable<Contract> {

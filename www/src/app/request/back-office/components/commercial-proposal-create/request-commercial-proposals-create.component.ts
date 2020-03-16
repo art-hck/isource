@@ -2,16 +2,16 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { iif, Observable, of, Subscription } from "rxjs";
 import { mergeMap, shareReplay } from "rxjs/operators";
-import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
-import { RequestPosition } from "../../../../common/models/request-position";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
+import { RequestPosition } from "../../../common/models/request-position";
 import * as moment from "moment";
-import { CustomValidators } from "../../../../../shared/forms/custom.validators";
-import { CommercialProposal } from "../../../../common/models/commercial-proposal";
-import { ContragentList } from "../../../../../contragent/models/contragent-list";
-import { Request } from "../../../../common/models/request";
-import { ContragentService } from "../../../../../contragent/services/contragent.service";
-import { OkeiService } from "../../../../../shared/services/okei.service";
-import { Okei } from "../../../../../shared/models/okei";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { CommercialProposal } from "../../../common/models/commercial-proposal";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { Request } from "../../../common/models/request";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { OkeiService } from "../../../../shared/services/okei.service";
+import { Okei } from "../../../../shared/models/okei";
 
 @Component({
   selector: 'app-request-commercial-proposals-create',

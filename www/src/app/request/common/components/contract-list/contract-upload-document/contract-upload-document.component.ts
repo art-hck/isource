@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, SimpleChanges } from '@angular/core';
-import { Contract } from "../../models/contract";
+import { Contract } from "../../../models/contract";
 import { FormControl, FormGroup } from "@angular/forms";
-import { RequestDocument } from "../../models/request-document";
+import { RequestDocument } from "../../../models/request-document";
 import { finalize } from "rxjs/operators";
 import { ClrLoadingState } from "@clr/angular";
-import { ContractService } from "../../services/contract.service";
-import { Request } from "../../models/request";
+import { ContractService } from "../../../services/contract.service";
+import { Request } from "../../../models/request";
 
 @Component({
   selector: 'app-contract-upload-document',

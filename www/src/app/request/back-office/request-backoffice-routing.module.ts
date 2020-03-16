@@ -4,11 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { RequestListViewComponent } from "./components/request-list-view/request-list-view.component";
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
 
-import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
-import { ContractComponent } from "../common/components/contract/contract.component";
-import { RequestPositionComponent } from "./components/request-position/request-position.component";
-import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
-import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { DesignDocumentationComponent } from "../common/components/design-documentation-list/design-documentation.component";
+import { ContractComponent } from "../common/components/contract-list/contract.component";
+import { RequestPositionComponent } from "./components/position/request-position.component";
+import { RequestTechnicalProposalsComponent } from "./components/technical-proposal-list/request-technical-proposals.component";
+import { RequestCommercialProposalsComponent } from "./components/commercial-proposal-list/request-commercial-proposals.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 const routes: Routes = [

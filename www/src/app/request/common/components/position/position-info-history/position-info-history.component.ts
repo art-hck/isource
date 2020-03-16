@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import { RequestPosition } from "../../models/request-position";
-import { History } from "../../models/history";
-import { RequestPositionHistoryService } from "../../services/request-position-history.service";
+import { RequestPosition } from "../../../models/request-position";
+import { History } from "../../../models/history";
+import { RequestPositionHistoryService } from "../../../services/request-position-history.service";
 import * as moment from "moment";
-import { PositionHistoryTypes } from "../../enum/position-history-types";
-import { Uuid } from "../../../../cart/models/uuid";
-import { PositionInfoFieldsLabels } from "../../dictionaries/position-info-fields-labels";
-import { ContragentInfo } from "../../../../contragent/models/contragent-info";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { PositionHistoryTypes } from "../../../enum/position-history-types";
+import { Uuid } from "../../../../../cart/models/uuid";
+import { PositionInfoFieldsLabels } from "../../../dictionaries/position-info-fields-labels";
+import { ContragentInfo } from "../../../../../contragent/models/contragent-info";
+import { ContragentService } from "../../../../../contragent/services/contragent.service";
 
 @Component({
   selector: 'app-position-info-history',

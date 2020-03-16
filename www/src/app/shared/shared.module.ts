@@ -26,6 +26,7 @@ import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
 import { SuggestionsDirective } from "./directives/suggestions.directive";
 import { HumanDatePipe } from './pipes/human-date.pipe';
+import { AddFromExcelComponent } from "./components/add-from-excel/add-from-excel.component";
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     PieChartComponent,
     PhonePipe,
     HumanDatePipe,
-    SuggestionsDirective
+    SuggestionsDirective,
+    AddFromExcelComponent
   ],
   exports: [
     CommonModule,
@@ -107,6 +109,7 @@ import { HumanDatePipe } from './pipes/human-date.pipe';
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    AddFromExcelComponent
   ]
 })
 export class SharedModule {

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CommercialProposalsComponent } from "./components/commercial-proposals/commercial-proposals.component";
+import { CommercialProposalsComponent } from "./components/commercial-proposal-list-old/commercial-proposals.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
-import { RequestListViewComponent as CustomerRequestsList } from "./components/request-list-view/request-list-view.component";
-import { TechnicalProposalsComponent } from "./components/technical-proposals/technical-proposals.component";
-import { ContractComponent } from "../common/components/contract/contract.component";
-import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
-import { RequestPositionComponent } from "./components/request-position/request-position.component";
-import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
-import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { RequestListViewComponent as CustomerRequestsList } from "./components/request-list/request-list-view.component";
+import { TechnicalProposalsComponent } from "./components/technical-proposal-list-deprecated/technical-proposals.component";
+import { ContractComponent } from "../common/components/contract-list/contract.component";
+import { DesignDocumentationComponent } from "../common/components/design-documentation-list/design-documentation.component";
+import { RequestPositionComponent } from "./components/position/request-position.component";
+import { RequestTechnicalProposalsComponent } from "./components/technical-proposal-list/request-technical-proposals.component";
+import { RequestCommercialProposalsComponent } from "./components/commercial-proposal-list/request-commercial-proposals.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
-import { RequestAgreementsComponent } from "./components/request-agreements/request-agreements.component";
-import {CreateRequestComponent} from "../common/components/create-request/create-request.component";
+import { RequestAgreementsComponent } from "./components/agreements/request-agreements.component";
+import { CreateRequestFormComponent } from "../common/components/request-form/create-request-form.component";
 
 const routes: Routes = [
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateRequestComponent,
+    component: CreateRequestFormComponent,
     data: { title: "Создание заявки вручную", feature: "createRequest" }
   },
   {
