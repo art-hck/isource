@@ -21,6 +21,8 @@ import { CommercialProposalCreateComponent } from './components/commercial-propo
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
+import { TechnicalCommercialProposalFormComponent } from "./components/technical-commercial-proposal-form/technical-commercial-proposal-form.component";
+import { TechnicalCommercialProposalsService } from "./services/technical-commercial-proposals.service";
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { TechnicalCommercialProposalListComponent } from './components/technical
     CommercialProposalListComponent,
     CommercialProposalCreateComponent,
     TechnicalCommercialProposalListComponent,
+    TechnicalCommercialProposalFormComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
@@ -48,7 +51,8 @@ import { TechnicalCommercialProposalListComponent } from './components/technical
     ProcedureService,
     RequestService,
     TechnicalProposalsService,
-    PositionService
+    PositionService,
+    TechnicalCommercialProposalsService,
   ]
 })
 export class RequestBackofficeModule {

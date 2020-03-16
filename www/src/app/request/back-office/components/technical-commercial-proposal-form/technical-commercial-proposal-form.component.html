@@ -1,0 +1,65 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="app-card">
+
+    <!-- page title -->
+    <div class="app-row">
+      <div class="app-col">
+        <h3 *ngIf="!isEditing">Новое технико-коммерческое предложение</h3>
+        <h3 *ngIf="isEditing">Редактирование технико-коммерческого предложения</h3>
+      </div>
+
+      <div class="app-col clr-flex-grow-0" *ngIf="closable">
+        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
+          <clr-icon shape="app-cross"></clr-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- contragent -->
+    <div class="app-row clr-align-items-center">
+      <div class="app-col">
+        <div class="app-control-wrap">
+          <uxg-dropdown-input
+            formControlName="contragent" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
+            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+          >
+            <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
+              <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
+                {{contragent.shortName || contragent.fullName}}
+                <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
+              </div>
+            </ng-container>
+            <ng-template #errors>
+              <div class="app-control-error" *ngIf="form.get('contragent').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+                <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
+              </div>
+            </ng-template>
+          </uxg-dropdown-input>
+        </div>
+      </div>
+      <div class="app-col app-secondary-color">
+        Начните вводить наименование контрагента или его ИНН и система предложит вам варианты
+      </div>
+    </div>
+
+    <hr/>
+
+    <br/>
+    <!-- footer -->
+    <div class="app-row clr-align-items-center">
+      <div class="app-col app-secondary-color">
+        Черновики технико-коммерческих предложений видны только сотрудникам бэкофиса, но не заказчику
+      </div>
+      <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+        <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
+        <button
+          type="button" uxgButton secondary (click)="submit(false)"
+          [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
+        </button>
+        <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
+      </div>
+    </div>
+
+  </div>
+</form>
