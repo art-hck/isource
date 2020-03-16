@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import { RequestPositionWorkflowSteps as WorkflowSteps } from "../enum/request-position-workflow-steps";
+import { PositionStatus as WorkflowSteps } from "../enum/position-status";
 
 @Injectable()
 export class RequestPositionStatusService {

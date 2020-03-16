@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
-import { RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
 import { Request } from "../../../models/request";
+import { PositionStatusesGroupsInfo } from "../../../dictionaries/position-statuses-groups-info";
 
 @Component({
   selector: 'app-request-aside-info',
@@ -15,7 +15,7 @@ export class RequestAsideInfoComponent {
   isStatTabVisible: boolean;
 
   getStatusCounters(positions: RequestPosition[]) {
-    return RequestPositionWorkflowStepsGroupsInfo.filter(statusCounter => (
+    return PositionStatusesGroupsInfo.filter(statusCounter => (
       statusCounter.hasActions
     )).map(statusCounter => ({
         ...statusCounter,

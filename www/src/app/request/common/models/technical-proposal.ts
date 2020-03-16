@@ -2,7 +2,7 @@ import {Uuid} from "../../../cart/models/uuid";
 import { TechnicalProposalPosition } from "./technical-proposal-position";
 import { RequestDocument } from "./request-document";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
-import { TechnicalProposalsStatuses } from "../enum/technical-proposals-statuses";
+import { TechnicalProposalsStatus } from "../enum/technical-proposals-status";
 
 export class TechnicalProposal {
   id: Uuid;
@@ -12,6 +12,6 @@ export class TechnicalProposal {
   updatedDate: Date;
   documents: RequestDocument[];
   positions: TechnicalProposalPosition[];
-  status: TechnicalProposalsStatuses;
+  status: TechnicalProposalsStatus;
   statusChangedDate: Date;
 }

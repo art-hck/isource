@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from "../../services/dashboard.service";
-import {
-  RequestPositionWorkflowSteps,
-  RequestPositionWorkflowStepsGroupsInfo
-} from "../../../request/common/enum/request-position-workflow-steps";
+import { PositionStatus } from "../../../request/common/enum/position-status";
 import { PieChartItem } from "../../../shared/models/pie-chart-item";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { PositionStatusesGroupsInfo } from "../../../request/common/dictionaries/position-statuses-groups-info";
 
 @Component({
   selector: 'app-dashboard-statistic',
@@ -54,7 +52,7 @@ export class DashboardStatisticComponent implements OnInit {
   private getStatusCounters(
     statistics: Array<{ status: string, count: number }>
   ) {
-    return RequestPositionWorkflowStepsGroupsInfo
+    return PositionStatusesGroupsInfo
       .filter(statusCounter => statusCounter.color)
       .filter(statusCounter => {
         // выбираем только те группы статусов, по которым пришел хоть один статус из статистики
@@ -65,7 +63,7 @@ export class DashboardStatisticComponent implements OnInit {
       .map(statusCounter => ({
         ...statusCounter,
         statistics: statistics.filter((statistic) => {
-          return statusCounter.statuses.indexOf(<RequestPositionWorkflowSteps>statistic.status) >= 0;
+          return statusCounter.statuses.indexOf(<PositionStatus>statistic.status) >= 0;
         })
       }));
   }

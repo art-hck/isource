@@ -4,10 +4,8 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../common/models/request-offer-position";
 import { Observable } from "rxjs";
 import { Request } from "../../common/models/request";
-import { map } from 'rxjs/operators';
-import { PublishProcedureResult } from '../models/publish-procedure-result';
-import { PublishProcedureRequest } from '../models/publish-procedure-request';
-import { CreateProcedureRequest } from "../models/create-procedure-request";
+import { ProcedureCreateResponse } from '../models/procedure-create-response';
+import { ProcedureCreateRequest } from "../models/procedure-create-request";
 
 @Injectable()
 export class ProcedureService {
@@ -16,57 +14,10 @@ export class ProcedureService {
     protected api: HttpClient,
   ) {}
 
-  createProcedure(requestId: Uuid, body: CreateProcedureRequest): Observable<PublishProcedureResult> {
+  createProcedure(requestId: Uuid, body: ProcedureCreateRequest): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
 
-    return this.api.post<PublishProcedureResult>(url, body);
-  }
-
-  /**
-   * @deprecated
-   * Подготовку тела запроса недопустимо производить в сервсисе. Выпилить вместе со старым интерфейсом
-   * Используйте createProcedure
-   */
-  publishProcedure(request: PublishProcedureRequest): Observable<PublishProcedureResult> {
-    const publishProcedureInfo = request.procedureInfo;
-
-    const id = publishProcedureInfo.requestId;
-    const requestPositions = publishProcedureInfo.selectedProcedurePositions;
-    const procedureDocuments = publishProcedureInfo.selectedProcedureDocuments;
-    const procedureLotDocuments = publishProcedureInfo.selectedProcedureLotDocuments;
-    const procedurePrivateAccessContragents = publishProcedureInfo.selectedPrivateAccessContragents;
-    const procedureInfo = publishProcedureInfo.procedureInfo;
-    const procedureProperties = publishProcedureInfo.procedureProperties;
-
-    const url = `requests/backoffice/${id}/create-procedure`;
-
-    const positionIds = requestPositions.map(item => item.id);
-    const procedureDocumentIds = procedureDocuments.map(item => item.id);
-    const procedureLotDocumentIds = procedureLotDocuments.map(item => item.id);
-    const procedurePrivateAccessContragentIds = procedurePrivateAccessContragents.map(item => item.id);
-
-    return this.api.post(url, {
-      procedureTitle: procedureInfo.procedureTitle,
-      dateEndRegistration: procedureInfo.dateEndRegistration,
-      summingupDate: procedureInfo.summingupDate,
-      dishonestSuppliersForbidden: procedureInfo.dishonestSuppliersForbidden,
-      positions: positionIds,
-      manualEndRegistration: procedureProperties.manualEndRegistration,
-      positionsAllowAnalogsOnly: procedureProperties.positionsAllowAnalogsOnly,
-      positionsAnalogs: procedureProperties.positionsAnalogs,
-      positionsApplicsVisibility: procedureProperties.positionsApplicsVisibility,
-      positionsBestPriceType: procedureProperties.positionsBestPriceType,
-      positionsEntireVolume: procedureProperties.positionsEntireVolume,
-      positionsRequiredAll: procedureProperties.positionsRequiredAll,
-      positionsSuppliersVisibility: procedureProperties.positionsSuppliersVisibility,
-      prolongateEndRegistration: procedureProperties.prolongateEndRegistration,
-      procedureDocuments: procedureDocumentIds,
-      procedureLotDocuments: procedureLotDocumentIds,
-      privateAccessContragents: procedurePrivateAccessContragentIds,
-      getTPFilesOnImport: request.getTPFilesOnImport
-    }).pipe(map((data) => {
-      return data as PublishProcedureResult;
-    }));
+    return this.api.post<ProcedureCreateResponse>(url, body);
   }
 
   /**

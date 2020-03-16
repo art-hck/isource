@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
-import { RequestPositionWorkflowSteps } from "../../common/enum/request-position-workflow-steps";
+import { PositionStatus } from "../../common/enum/position-status";
 import { User } from "../../../user/models/user";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { RequestDocument } from "../../common/models/request-document";
@@ -72,7 +72,7 @@ export class RequestService {
 
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
     const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
-    return this.api.post<{status: RequestPositionWorkflowSteps, statusLabel: string}>(url, {
+    return this.api.post<{status: PositionStatus, statusLabel: string}>(url, {
       status: status
     });
   }

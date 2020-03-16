@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import {Router} from "@angular/router";
-import {RequestTypes} from "../../enum/request-types";
+import {RequestType} from "../../enum/request-type";
 import { ClrDatagridStateInterface } from "@clr/angular";
 import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
-import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
+import { RequestStatus } from "../../enum/request-status";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { EventTypes } from "../../../../websocket/event-types";
 import { SubscriptionLike } from "rxjs";
@@ -37,7 +37,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() customerNameColumnShow = false;
   @Input() requests: RequestsList[];
   @Input() totalItems: number;
-  @Input() requestStatus: RequestWorkflowSteps;
+  @Input() requestStatus: RequestStatus;
 
   @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
   currentDatagridState: ClrDatagridStateInterface;
@@ -47,7 +47,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   hideNeedUpdate = true;
   wsSubscription: SubscriptionLike;
 
-  requestWorkflowSteps = RequestWorkflowSteps;
+  requestWorkflowSteps = RequestStatus;
 
   constructor(
     protected router: Router,
@@ -93,7 +93,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   checkIfFreeFormRequest(type: string) {
-    return type === RequestTypes.FREE_FORM;
+    return type === RequestType.FREE_FORM;
   }
 
   refresh(state: ClrDatagridStateInterface): void {

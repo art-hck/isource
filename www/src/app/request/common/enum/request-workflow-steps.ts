@@ -1,7 +1,0 @@
-export enum RequestWorkflowSteps {
-  DRAFT = 'DRAFT',
-  ON_CUSTOMER_APPROVAL = 'ON_CUSTOMER_APPROVAL',
-  NEW = 'NEW',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED'
-}

@@ -10,7 +10,7 @@ import { ContractService } from "../../services/contract.service";
 import { finalize } from "rxjs/operators";
 
 @Component({
-  selector: 'app-contract-create',
+  selector: 'app-request-contract-create',
   templateUrl: './contract-create.component.html',
   styleUrls: ['./contract-create.component.scss']
 })

@@ -11,9 +11,7 @@ import { CreateRequestPositionService } from "../../../common/services/create-re
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { Uuid } from "../../../../cart/models/uuid";
 
-@Component({
-  templateUrl: './request.component.html'
-})
+@Component({templateUrl: './request.component.html'})
 export class RequestComponent implements OnInit {
 
   request$: Observable<Request>;

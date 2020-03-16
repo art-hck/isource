@@ -6,35 +6,35 @@ import { DesignDocumentationService } from "./services/design-documentation.serv
 import { CommercialProposalsService } from "./services/commercial-proposals.service";
 import { ProcedureService } from "./services/procedure.service";
 import { RequestComponent } from './components/request/request.component';
-import { RequestListViewComponent } from './components/request-list-view/request-list-view.component';
-import { RequestPositionComponent } from "./components/position/request-position.component";
+import { RequestListComponent } from './components/request-list/request-list.component';
+import { PositionComponent } from "./components/position/position.component";
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
-import { RequestTechnicalProposalsComponent } from './components/technical-proposal-list/request-technical-proposals.component';
-import { RequestTechnicalProposalsCreateComponent } from './components/technical-proposal-list/technical-proposal-list-create/request-technical-proposals-create.component';
-import { RequestTechnicalProposalsCreateManufacturerComponent } from './components/technical-proposal-list/technical-proposal-list-create-manufacturer/request-technical-proposals-create-manufacturer.component';
-import { RequestProcedureCreateComponent } from './components/procedure-create/request-procedure-create.component';
-import { RequestProcedureCreatePropertiesComponent } from './components/procedure-create/procedure-create-properties/request-procedure-create-properties.component';
-import { RequestProcedureCreateDocumentsComponent } from "./components/procedure-create/procedure-create-documents/request-procedure-create-documents.component";
-import { RequestCommercialProposalsComponent } from './components/commercial-proposal-list/request-commercial-proposals.component';
-import { RequestCommercialProposalsCreateComponent } from './components/commercial-proposal-create/request-commercial-proposals-create.component';
-import { RequestTechnicalProposalComponent } from "./components/technical-proposal/request-technical-proposal.component";
-import { RequestPositionChangeStatusService } from "./services/request-position-change-status.service";
+import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
+import { TechnicalProposalCreateComponent } from './components/technical-proposal-create/technical-proposal-create.component';
+import { TechnicalProposalCreateManufacturerComponent } from './components/technical-proposal-create/technical-proposal-create-manufacturer/technical-proposal-create-manufacturer.component';
+import { ProcedureCreateComponent } from './components/procedure-create/procedure-create.component';
+import { ProcedureCreatePropertiesComponent } from './components/procedure-create/procedure-create-properties/procedure-create-properties.component';
+import { ProcedureCreateDocumentsComponent } from "./components/procedure-create/procedure-create-documents/procedure-create-documents.component";
+import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
+import { CommercialProposalCreateComponent } from './components/commercial-proposal-create/commercial-proposal-create.component';
+import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
+import { PositionService } from "./services/position.service";
 
 @NgModule({
   declarations: [
     RequestComponent,
-    RequestListViewComponent,
-    RequestPositionComponent,
-    RequestTechnicalProposalsComponent,
-    RequestTechnicalProposalsCreateComponent,
-    RequestTechnicalProposalsCreateManufacturerComponent,
-    RequestProcedureCreateComponent,
-    RequestProcedureCreatePropertiesComponent,
-    RequestProcedureCreateDocumentsComponent,
-    RequestTechnicalProposalComponent,
-    RequestCommercialProposalsComponent,
-    RequestCommercialProposalsCreateComponent
+    RequestListComponent,
+    PositionComponent,
+    TechnicalProposalListComponent,
+    TechnicalProposalCreateComponent,
+    TechnicalProposalCreateManufacturerComponent,
+    ProcedureCreateComponent,
+    ProcedureCreatePropertiesComponent,
+    ProcedureCreateDocumentsComponent,
+    TechnicalProposalComponent,
+    CommercialProposalListComponent,
+    CommercialProposalCreateComponent
   ],
   imports: [
     RequestBackofficeRoutingModule,
@@ -46,7 +46,7 @@ import { RequestPositionChangeStatusService } from "./services/request-position-
     ProcedureService,
     RequestService,
     TechnicalProposalsService,
-    RequestPositionChangeStatusService
+    PositionService
   ]
 })
 export class RequestBackofficeModule {

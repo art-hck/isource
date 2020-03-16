@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CommercialProposalsComponent } from "./components/commercial-proposal-list-old/commercial-proposals.component";
+import { CommercialProposalListOldComponent } from "./components/commercial-proposal-list-old/commercial-proposal-list-old.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
-import { RequestListViewComponent as CustomerRequestsList } from "./components/request-list/request-list-view.component";
-import { TechnicalProposalsComponent } from "./components/technical-proposal-list-deprecated/technical-proposals.component";
-import { ContractComponent } from "../common/components/contract-list/contract.component";
-import { DesignDocumentationComponent } from "../common/components/design-documentation-list/design-documentation.component";
-import { RequestPositionComponent } from "./components/position/request-position.component";
-import { RequestTechnicalProposalsComponent } from "./components/technical-proposal-list/request-technical-proposals.component";
-import { RequestCommercialProposalsComponent } from "./components/commercial-proposal-list/request-commercial-proposals.component";
+import { RequestListComponent as CustomerRequestsList } from "./components/request-list/request-list.component";
+import { TechnicalProposalListDeprecatedComponent } from "./components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component";
+import { ContractListComponent } from "../common/components/contract-list/contract-list.component";
+import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
+import { PositionComponent } from "./components/position/position.component";
+import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
+import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
-import { RequestAgreementsComponent } from "./components/agreements/request-agreements.component";
-import { CreateRequestFormComponent } from "../common/components/request-form/create-request-form.component";
+import { AgreementsComponent } from "./components/agreements/agreements.component";
+import { RequestFormComponent } from "../common/components/request-form/request-form.component";
 
 const routes: Routes = [
   {
@@ -22,12 +22,12 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateRequestFormComponent,
+    component: RequestFormComponent,
     data: { title: "Создание заявки вручную", feature: "createRequest" }
   },
   {
     path: 'agreements',
-    component: RequestAgreementsComponent,
+    component: AgreementsComponent,
     data: { title: "Согласования" }
   },
   {
@@ -40,12 +40,12 @@ const routes: Routes = [
         children: [
           {
             path: 'technical-proposals',
-            component: RequestTechnicalProposalsComponent,
+            component: TechnicalProposalListComponent,
             data: { title: "Технические предложения" }
           },
           {
             path: 'commercial-proposals',
-            component: RequestCommercialProposalsComponent,
+            component: CommercialProposalListComponent,
             data: { title: "Коммерческие предложения" }
           },
         ]
@@ -56,32 +56,32 @@ const routes: Routes = [
       },
       {
         path: 'contracts',
-        component: ContractComponent,
+        component: ContractListComponent,
         data: { title: "На рассмотрении договора" }
       },
       {
         path: 'contract',
-        component: ContractComponent,
+        component: ContractListComponent,
         data: { title: "Согласование договора" }
       },
       {
         path: 'technical-proposals',
-        component: TechnicalProposalsComponent,
+        component: TechnicalProposalListDeprecatedComponent,
         data: { title: "Технические предложения" }
       },
       {
         path: 'commercial-proposals',
-        component: CommercialProposalsComponent,
+        component: CommercialProposalListOldComponent,
         data: { title: "Коммерческие предложения", noFooter: true }
       },
       {
         path: 'design-documentation',
-        component: DesignDocumentationComponent,
+        component: DesignDocumentationListComponent,
         data: { title: "Рабочая конструкторская документация" }
       },
       {
         path: ':position-id',
-        component: RequestPositionComponent
+        component: PositionComponent
       }
     ]
   },
