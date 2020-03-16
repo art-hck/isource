@@ -43,6 +43,6 @@ export class FeatureService {
   }
 
   authorize(permission: keyof IFeatureList) {
-    this.available(permission, this.user.roles);
+    return this.available(permission, this.user.roles);
   }
 }
