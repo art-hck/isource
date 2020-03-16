@@ -50,6 +50,15 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     color: "#f38b00"
   },
   {
+    url: "technical-commercial-proposals",
+    label: "Технико-коммерческие предложения",
+    statuses: PositionStatusGroups.TECHNICAL_COMMERCIAL_PROPOSALS,
+    positions: [],
+    shortName: "ТКП",
+    hasActions: true,
+    color: "#EE64E8"
+  },
+  {
     url: "design-documentation",
     label: "РКД",
     statuses: PositionStatusGroups.RKD,
