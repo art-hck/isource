@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
-import { RequestPositionWorkflowStepGroupInfo, RequestPositionWorkflowStepsGroupsInfo } from "../../../enum/request-position-workflow-steps";
+import { PositionStatusesGroupInfo, PositionStatusesGroupsInfo } from "../../../dictionaries/position-statuses-groups-info";
 
 @Component({
   selector: 'app-request-pie-chart',
@@ -11,7 +11,7 @@ export class RequestPieChartComponent implements OnInit {
 
   @Input() positions: RequestPosition[];
   @ViewChild('chart', {static: true}) chart: ElementRef;
-  statusCounters: RequestPositionWorkflowStepGroupInfo[];
+  statusCounters: PositionStatusesGroupInfo[];
 
   ngOnInit() {
     this.statusCounters = this.getStatusCounters(this.positions);
@@ -37,7 +37,7 @@ export class RequestPieChartComponent implements OnInit {
   }
 
   private getStatusCounters(positions: RequestPosition[]) {
-    return RequestPositionWorkflowStepsGroupsInfo
+    return PositionStatusesGroupsInfo
       .filter(statusCounter => statusCounter.color)
       .map(statusCounter => ({
         ...statusCounter,

@@ -3,7 +3,7 @@ import { RequestDocument } from "./request-document";
 import { ManufacturingDocument } from './manufacturing-document';
 import {RequestPositionList} from "./request-position-list";
 import {RequestOfferPosition} from "./request-offer-position";
-import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
+import { PositionStatus } from "../enum/position-status";
 import { User } from "../../../user/models/user";
 import { RequestGroup } from "./request-group";
 
@@ -31,7 +31,7 @@ export class RequestPosition extends RequestPositionList {
   isPnrRequired: boolean;
   isInspectionControlRequired: boolean;
   comments: string;
-  status: RequestPositionWorkflowSteps;
+  status: PositionStatus;
   statusLabel: string;
   statusChangedDate: string;
   statusExpectedDate: string;

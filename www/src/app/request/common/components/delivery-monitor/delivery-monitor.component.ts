@@ -12,11 +12,11 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { InspectorInfo } from "../../models/inspector-info";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NotificationService } from "../../../../shared/services/notification.service";
-import { RequestPositionWorkflowStatuses } from "../../dictionaries/request-position-workflow-order";
-import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
+import { PositionStatuses } from "../../dictionaries/position-statuses";
+import { PositionStatus } from "../../enum/position-status";
 
 @Component({
-  selector: 'app-delivery-monitor',
+  selector: 'app-request-delivery-monitor',
   templateUrl: './delivery-monitor.component.html',
   styleUrls: ['./delivery-monitor.component.scss']
 })
@@ -146,10 +146,8 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   deliveryMonitorInfoCanBeShown() {
-    const deliveryStatusIndex = RequestPositionWorkflowStatuses.indexOf(
-      RequestPositionWorkflowSteps.DELIVERY.valueOf()
-    );
-    const currentStatusIndex = RequestPositionWorkflowStatuses.indexOf(
+    const deliveryStatusIndex = PositionStatuses.indexOf(PositionStatus.DELIVERY);
+    const currentStatusIndex = PositionStatuses.indexOf(
       this.requestPositionValue.status
     );
     return currentStatusIndex >= deliveryStatusIndex;

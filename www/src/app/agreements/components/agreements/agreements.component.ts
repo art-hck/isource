@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RequestPositionWorkflowSteps as PositionStatus } from "../../../request/common/enum/request-position-workflow-steps";
+import { PositionStatus } from "../../../request/common/enum/position-status";
 import { RequestPosition } from "../../../request/common/models/request-position";
 
 @Component({

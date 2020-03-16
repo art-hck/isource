@@ -2,6 +2,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestDocument } from "./request-document";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { Winner } from "./winner";
+import { ContractStatus } from "../enum/сontract-status";
 
 export class Contract {
   id: Uuid;
@@ -14,13 +15,4 @@ export class Contract {
   winners: Winner[];
   documents: RequestDocument[];
   status: ContractStatus;
-}
-
-export enum ContractStatus {
-  NEW = 'NEW',
-  ON_APPROVAL = 'ON_APPROVAL',
-  REJECTED = 'REJECTED',
-  APPROVED = 'APPROVED',
-  SIGNED = 'SIGNED',
-  ARCHIVE = 'ARCHIVE'
 }

@@ -10,8 +10,8 @@ import {RequestService} from "../../../customer/services/request.service";
 import {Uuid} from "../../../../cart/models/uuid";
 import {UserInfoService} from "../../../../user/service/user-info.service";
 import {FeatureService} from "../../../../core/services/feature.service";
-import {RequestWorkflowSteps} from "../../enum/request-workflow-steps";
-import {RequestPositionWorkflowSteps} from "../../enum/request-position-workflow-steps";
+import {RequestStatus} from "../../enum/request-status";
+import {PositionStatus} from "../../enum/position-status";
 import {PermissionType} from "../../../../auth/enum/permission-type";
 
 @Component({
@@ -64,12 +64,12 @@ export class RequestComponent implements OnInit {
   }
 
   get isDraft(): boolean {
-    return this.request.status === RequestWorkflowSteps.DRAFT || this.draftPositions.length > 0;
+    return this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
   }
 
   get draftPositions(): RequestPositionList[] {
     return this.positions.filter(function getRecursive(position) {
-      const isDraft: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.DRAFT;
+      const isDraft: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.DRAFT;
       const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
       return isDraft || isGroupHasDrafts;
     });
@@ -77,12 +77,12 @@ export class RequestComponent implements OnInit {
 
   get isOnApproval(): boolean {
     return this.featureService.allowed('approveRequest', this.user.roles) &&
-      (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+      (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
   }
 
   get hasOnApprovalPositions(): RequestPositionList[] {
     return this.positions.filter(function getRecursive(position) {
-      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL;
+      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.ON_CUSTOMER_APPROVAL;
       const isGroupHasOnApproval: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
       return isOnApproval || isGroupHasOnApproval;
     });
@@ -150,7 +150,7 @@ export class RequestComponent implements OnInit {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
-      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ) {
+      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== PositionStatus.ON_CUSTOMER_APPROVAL ) {
         formGroup.get("checked").disable();
       }
     }
@@ -174,9 +174,9 @@ export class RequestComponent implements OnInit {
   }
 
   isEditable(position: RequestPosition) {
-    return position.status === RequestPositionWorkflowSteps.DRAFT ||
-      position.status === RequestPositionWorkflowSteps.NEW ||
-      position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ||
-      position.status === RequestPositionWorkflowSteps.TECHNICAL_PROPOSALS_PREPARATION;
+    return position.status === PositionStatus.DRAFT ||
+      position.status === PositionStatus.NEW ||
+      position.status === PositionStatus.ON_CUSTOMER_APPROVAL ||
+      position.status === PositionStatus.TECHNICAL_PROPOSALS_PREPARATION;
   }
 }

@@ -1,0 +1,58 @@
+<div class="request-tp-filter">
+
+  <div class="filter-header clr-row clr-justify-content-between">
+    <div class="clr-col">
+      <span class="title">Фильтр</span>
+    </div>
+
+    <div class="clr-col-auto" *ngIf="formIsFilled()">
+      <span class="reset" (click)="resetFilter()">Сбросить все</span>
+    </div>
+  </div>
+
+
+  <div class="filter-body">
+
+    <form [formGroup]="requestTpListFilterForm">
+
+      <app-request-tp-filter-section
+              class="filter-section"
+              [label]="'Наименование позиции'">
+
+        <input type="text"
+               placeholder="Введите наименование позиции.."
+               formControlName="positionName" />
+
+      </app-request-tp-filter-section>
+
+
+      <app-request-tp-filter-section
+              class="filter-section"
+              [label]="'Контрагент'">
+
+        <app-request-technical-proposal-filter-contragent-list
+                [contragents]="contragents"
+                [limit]="5"
+                formControlName="contragents">
+        </app-request-technical-proposal-filter-contragent-list>
+
+      </app-request-tp-filter-section>
+
+
+      <app-request-tp-filter-section
+              class="filter-section"
+              [label]="'Согласование'">
+
+        <app-request-tp-filter-statuses-list
+                [tpStatuses]="tpStatuses"
+                formControlName="tpStatus">
+        </app-request-tp-filter-statuses-list>
+
+      </app-request-tp-filter-section>
+
+    </form>
+
+  </div>
+
+</div>
+
