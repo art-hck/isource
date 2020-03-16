@@ -12,6 +12,7 @@ import { CommercialProposalListComponent } from "./components/commercial-proposa
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { AgreementsComponent } from "./components/agreements/agreements.component";
 import { RequestFormComponent } from "../common/components/request-form/request-form.component";
+import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 
 const routes: Routes = [
   {
@@ -73,6 +74,11 @@ const routes: Routes = [
         path: 'commercial-proposals',
         component: CommercialProposalListOldComponent,
         data: { title: "Коммерческие предложения", noFooter: true }
+      },
+      {
+        path: 'technical-commercial-proposals',
+        component: TechnicalCommercialProposalListComponent,
+        data: { title: "Технико-коммерческие предложения" }
       },
       {
         path: 'design-documentation',

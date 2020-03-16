@@ -20,6 +20,7 @@ import { CommercialProposalListComponent } from './components/commercial-proposa
 import { CommercialProposalCreateComponent } from './components/commercial-proposal-create/commercial-proposal-create.component';
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
+import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PositionService } from "./services/position.service";
     ProcedureCreateDocumentsComponent,
     TechnicalProposalComponent,
     CommercialProposalListComponent,
-    CommercialProposalCreateComponent
+    CommercialProposalCreateComponent,
+    TechnicalCommercialProposalListComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,

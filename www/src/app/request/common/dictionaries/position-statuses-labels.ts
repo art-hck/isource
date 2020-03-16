@@ -6,6 +6,8 @@ export const PositionStatusesLabels: { [key in PositionStatus]: string } = {
   [PositionStatus.NEW]: 'Новая',
   [PositionStatus.TECHNICAL_PROPOSALS_PREPARATION]: 'Подготовка ТП',
   [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: 'Согласование ТП',
+  [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION]: 'Подготовка ТКП',
+  [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]: 'Согласование ТКП',
   [PositionStatus.PROPOSALS_PREPARATION]: 'Подготовка КП',
   [PositionStatus.RESULTS_AGREEMENT]: 'Выбор победителя',
   [PositionStatus.WINNER_SELECTED]: 'Выбран победитель',

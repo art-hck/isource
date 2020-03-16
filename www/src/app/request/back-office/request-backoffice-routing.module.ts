@@ -10,6 +10,7 @@ import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
+import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 
 const routes: Routes = [
   {
@@ -41,6 +42,11 @@ const routes: Routes = [
         path: 'technical-proposals',
         component: TechnicalProposalListComponent,
         data: { title: "Технические предложения" }
+      },
+      {
+        path: 'technical-commercial-proposals',
+        component: TechnicalCommercialProposalListComponent,
+        data: { title: "Технико-коммерческие предложения" }
       },
       {
         path: 'design-documentation',

@@ -13,6 +13,7 @@ import { CommercialProposalListComponent } from './components/commercial-proposa
 import { AgreementsComponent } from './components/agreements/agreements.component';
 import { AgreementsModule } from "../../agreements/agreements.module";
 import { RequestCreateModalComponent } from './components/request-create-modal/request-create-modal.component';
+import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { RequestCreateModalComponent } from './components/request-create-modal/r
     TechnicalProposalListComponent,
     CommercialProposalListComponent,
     AgreementsComponent,
-    RequestCreateModalComponent
+    RequestCreateModalComponent,
+    TechnicalCommercialProposalListComponent,
   ],
   imports: [
     AgreementsModule,

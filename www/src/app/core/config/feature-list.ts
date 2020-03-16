@@ -1,5 +1,5 @@
 import { UserRole } from "../../user/models/user-role";
-import { Feature } from "./feature";
+import { Feature } from "../models/feature";
 
 export interface IFeatureList {
   dashboard;
