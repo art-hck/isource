@@ -27,4 +27,5 @@ export class EmployeeInfoBrief {
   phone: string;
   shortName: string;
   username: string;
+  position: string;
 }

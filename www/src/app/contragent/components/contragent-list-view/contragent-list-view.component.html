@@ -1,16 +1,6 @@
 <div class="container">
-
-  <div class="clr-row clr-align-items-center clr-justify-content-between">
-    <div class="clr-col">
-      <button uxgButton primary iconText
-        *ngIf="featureService.available('createContragent', userInfoService.roles)"
-        (click)="modal.open()">
-          <clr-icon size="16" shape="app-plus"></clr-icon>
-          <span>Новый контрагент</span>
-      </button>
-    </div>
-
-    <div class="clr-col-auto">
+  <div class="app-row">
+    <div class="app-col">
       <div class="input-group">
         <input class="contragent-search-field"
                type="text"
@@ -26,11 +16,20 @@
         </button>
       </div>
     </div>
+
+    <div class="app-col action">
+      <button uxgButton secondary iconText
+              *ngIf="featureService.available('createContragent', userInfoService.roles)"
+              (click)="modal.open()">
+        <clr-icon size="16" shape="app-plus"></clr-icon>
+        <span>Новый контрагент</span>
+      </button>
+    </div>
   </div>
 
   <app-contragent-list
-          [searchValue]="customerSearchValue"
-          [contragents]="(contragents$ | async)">
+    [searchValue]="customerSearchValue"
+    [contragents]="(contragents$ | async)">
   </app-contragent-list>
 
 </div>

@@ -12,15 +12,5 @@ export class ContragentInfoComponent {
   @Input() contragent: ContragentInfo;
 
   constructor(
-    protected contragentService: ContragentService
   ) { }
-
-  onDownloadPrimaInformReport(): void {
-    this.contragentService.downloadPrimaInformReport(this.contragent);
-  }
-
-  getLoaderState() {
-    return this.contragentService.loading;
-  }
-
 }
