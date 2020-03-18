@@ -34,6 +34,6 @@ export class EmployeeService {
       "middleName": employee.middleName,
       "phone": employee.phone,
       "position": employee.position
-    })
+    });
   }
 }
