@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({
-  selector: 'proposal-documents',
-  templateUrl: 'proposal-documents.component.html',
-  styleUrls: ['proposal-documents.component.scss'],
+  selector: 'proposal-form-documents',
+  templateUrl: 'proposal-form-documents.component.html',
+  styleUrls: ['proposal-form-documents.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProposalDocumentsComponent {
+export class ProposalFormDocumentsComponent {
   @Input() documents: RequestDocument[];
   @Input() files: File[];
   @Input() disabled: boolean;

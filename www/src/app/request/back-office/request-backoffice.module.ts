@@ -12,7 +12,7 @@ import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
 import { TechnicalProposalFormComponent } from './components/technical-proposal-form/technical-proposal-form.component';
-import { TechnicalProposalFormManufacturerComponent } from './components/technical-proposal-form/technical-proposal-form-manufacturer/technical-proposal-form-manufacturer.component';
+import { TechnicalProposalFormManufacturerComponent } from './components/proposal-form-manufacturer/technical-proposal-form-manufacturer.component';
 import { ProcedureCreateComponent } from './components/procedure-create/procedure-create.component';
 import { ProcedureCreatePropertiesComponent } from './components/procedure-create/procedure-create-properties/procedure-create-properties.component';
 import { ProcedureCreateDocumentsComponent } from "./components/procedure-create/procedure-create-documents/procedure-create-documents.component";
@@ -26,7 +26,7 @@ import { TechnicalCommercialProposalService } from "./services/technical-commerc
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposalFilterComponent } from "./components/technical-commercial-proposal-filter/technical-commercial-proposal-filter.component";
-import { ProposalDocumentsComponent } from "./components/proposal-documents/proposal-documents.component";
+import { ProposalFormDocumentsComponent } from "./components/proposal-form-documents/proposal-form-documents.component";
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { ProposalDocumentsComponent } from "./components/proposal-documents/prop
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
     TechnicalCommercialProposalFilterComponent,
-    ProposalDocumentsComponent
+    ProposalFormDocumentsComponent
   ],
   imports: [
     RequestBackofficeRoutingModule,

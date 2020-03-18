@@ -8,7 +8,7 @@ import { shareReplay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { proposalManufacturerValidator } from "../technical-proposal-form/technical-proposal-form-manufacturer/technical-proposal-form-manufacturer.validator";
+import { proposalManufacturerValidator } from "../proposal-form-manufacturer/technical-proposal-form-manufacturer.validator";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',

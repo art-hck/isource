@@ -51,13 +51,13 @@
     <hr/>
 
     <!-- documents -->
-    <proposal-documents
+    <proposal-form-documents
       [documents]="defaultTPValue('documents')"
       [files]="formDocuments.value"
       [disabled]="form.get('documents').disabled"
       (select)="filesSelected($event)"
       (remove)="formDocuments.removeAt($event)"
-    ></proposal-documents>
+    ></proposal-form-documents>
 
 
     <hr/>

@@ -76,12 +76,12 @@
     <hr/>
 
     <div class="section">
-      <proposal-documents
+      <proposal-form-documents
         [documents]="technicalCommercialProposal?.documents || []"
         [files]="formFiles.value"
         (remove)="formFiles.removeAt($event)"
         (select)="filesSelected($event)"
-      ></proposal-documents>
+      ></proposal-form-documents>
     </div>
 
     <hr/>
