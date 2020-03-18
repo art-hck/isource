@@ -191,13 +191,13 @@
     <clr-modal #manufacturerModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Заполнение заводских наименований</h2>
       <div class="modal-body">
-        <app-request-technical-proposals-form-manufacturer
+        <app-request-proposal-form-manufacturer
           *ngIf="manufacturerModal._open"
           (cancel)="manufacturerModal.close()"
           (ngModelChange)="manufacturerModal.close()"
           [disabledFn]="positionManufacturerNameDisabled"
           formControlName="positions"
-        ></app-request-technical-proposals-form-manufacturer>
+        ></app-request-proposal-form-manufacturer>
       </div>
     </clr-modal>
 

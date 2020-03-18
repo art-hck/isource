@@ -2,16 +2,16 @@ import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@ang
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'app-request-technical-proposals-form-manufacturer',
-  templateUrl: './technical-proposal-form-manufacturer.component.html',
-  styleUrls: ['technical-proposal-form-manufacturer.component.scss'],
+  selector: 'app-request-proposal-form-manufacturer',
+  templateUrl: './proposal-form-manufacturer.component.html',
+  styleUrls: ['proposal-form-manufacturer.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => TechnicalProposalFormManufacturerComponent),
+    useExisting: forwardRef(() => ProposalFormManufacturerComponent),
     multi: true
   }]
 })
-export class TechnicalProposalFormManufacturerComponent implements OnInit, ControlValueAccessor {
+export class ProposalFormManufacturerComponent implements OnInit, ControlValueAccessor {
   @Output() cancel = new EventEmitter();
   @Input() disabledFn: (item) => boolean;
   public onTouched: (value) => void;

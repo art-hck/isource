@@ -8,7 +8,11 @@ import { shareReplay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { proposalManufacturerValidator } from "../proposal-form-manufacturer/technical-proposal-form-manufacturer.validator";
+import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
+import { PositionWithManufacturer } from "../../models/position-with-manufacturer";
+import { RequestPosition } from "../../../common/models/request-position";
+import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
+import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -95,6 +99,10 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
     ).subscribe(() => this.visibleChange.emit(false));
   }
 
+  private findPosition(position: RequestPosition): TechnicalCommercialProposalPosition {
+    return this.technicalCommercialProposal && this.technicalCommercialProposal.positions.find(tcpp => tcpp.position.id === position.id);
+  }
+
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
   searchContragent = (query: string, contragents: ContragentList[]) => {
     return contragents.filter(
@@ -102,4 +110,10 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   }
 
   defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;
+
+  positionManufacturerNameDisabled = ({position}: PositionWithManufacturer) => {
+    const tcpPosition = this.findPosition(position);
+    return position && tcpPosition.status !== TechnicalCommercialProposalPositionStatus.NEW;
+  }
+
 }

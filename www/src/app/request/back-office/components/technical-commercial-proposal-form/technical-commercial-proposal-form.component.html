@@ -54,11 +54,15 @@
         <div class="app-row">
           <div class="app-col">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Наименование позиции</small></div>
-            <div><button uxgButton secondary>Выбрать позиции</button></div>
+            <div><button type="button" uxgButton secondary>Выбрать позиции</button></div>
           </div>
           <div class="app-col">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование</small></div>
-            <div><button uxgButton secondary>Заполнить наименования</button></div>
+            <div>
+              <button type="button" uxgButton secondary (click)="manufacturerModal.open()">
+                Заполнить наименования
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -69,7 +73,7 @@
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Цена за ед.</small></div>
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Срок пост.</small></div>
         </div>
-        <div><button uxgButton secondary class="wide-button">Заполнить параметры</button></div>
+        <div><button type="button" uxgButton secondary class="wide-button">Заполнить параметры</button></div>
       </div>
     </div>
 
@@ -100,5 +104,22 @@
         <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
       </div>
     </div>
+
+    <!-- modals -->
+    <clr-modal #manufacturerModal [clrModalSize]="'lg'">
+      <h2 class="modal-title">Заполнение заводских наименований</h2>
+      <div class="modal-body">
+        <app-request-proposal-form-manufacturer
+          *ngIf="manufacturerModal._open"
+          (cancel)="manufacturerModal.close()"
+          (ngModelChange)="manufacturerModal.close()"
+          [disabledFn]="positionManufacturerNameDisabled"
+          formControlName="positions"
+        ></app-request-proposal-form-manufacturer>
+      </div>
+    </clr-modal>
+
   </div>
 </form>
+
+

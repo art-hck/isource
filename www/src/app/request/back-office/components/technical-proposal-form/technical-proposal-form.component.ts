@@ -14,7 +14,7 @@ import { TechnicalProposalPosition } from "../../../common/models/technical-prop
 import { RequestPosition } from "../../../common/models/request-position";
 import Swal from "sweetalert2";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
-import { proposalManufacturerValidator } from "../proposal-form-manufacturer/technical-proposal-form-manufacturer.validator";
+import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
