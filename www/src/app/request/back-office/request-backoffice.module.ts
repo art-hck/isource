@@ -11,13 +11,13 @@ import { PositionComponent } from "./components/position/position.component";
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
-import { TechnicalProposalCreateComponent } from './components/technical-proposal-create/technical-proposal-create.component';
-import { TechnicalProposalCreateManufacturerComponent } from './components/technical-proposal-create/technical-proposal-create-manufacturer/technical-proposal-create-manufacturer.component';
+import { TechnicalProposalFormComponent } from './components/technical-proposal-form/technical-proposal-form.component';
+import { TechnicalProposalFormManufacturerComponent } from './components/technical-proposal-form/technical-proposal-form-manufacturer/technical-proposal-form-manufacturer.component';
 import { ProcedureCreateComponent } from './components/procedure-create/procedure-create.component';
 import { ProcedureCreatePropertiesComponent } from './components/procedure-create/procedure-create-properties/procedure-create-properties.component';
 import { ProcedureCreateDocumentsComponent } from "./components/procedure-create/procedure-create-documents/procedure-create-documents.component";
 import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
-import { CommercialProposalCreateComponent } from './components/commercial-proposal-create/commercial-proposal-create.component';
+import { CommercialProposalFormComponent } from './components/commercial-proposal-form/commercial-proposal-form.component';
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
@@ -26,6 +26,7 @@ import { TechnicalCommercialProposalService } from "./services/technical-commerc
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposalFilterComponent } from "./components/technical-commercial-proposal-filter/technical-commercial-proposal-filter.component";
+import { ProposalDocumentsComponent } from "./components/proposal-documents/proposal-documents.component";
 
 @NgModule({
   declarations: [
@@ -33,17 +34,18 @@ import { TechnicalCommercialProposalFilterComponent } from "./components/technic
     RequestListComponent,
     PositionComponent,
     TechnicalProposalListComponent,
-    TechnicalProposalCreateComponent,
-    TechnicalProposalCreateManufacturerComponent,
+    TechnicalProposalFormComponent,
+    TechnicalProposalFormManufacturerComponent,
     ProcedureCreateComponent,
     ProcedureCreatePropertiesComponent,
     ProcedureCreateDocumentsComponent,
     TechnicalProposalComponent,
     CommercialProposalListComponent,
-    CommercialProposalCreateComponent,
+    CommercialProposalFormComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
     TechnicalCommercialProposalFilterComponent,
+    ProposalDocumentsComponent
   ],
   imports: [
     RequestBackofficeRoutingModule,

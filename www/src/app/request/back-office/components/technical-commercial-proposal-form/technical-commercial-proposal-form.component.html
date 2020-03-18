@@ -76,9 +76,12 @@
     <hr/>
 
     <div class="section">
-      <div class="title"><small class="app-uppercase app-ghost-color app-bold">Документы предложения</small></div>
-      <app-document-upload-list [dragAndDropAvailable]="true" [documents]="form.get('documents').value">
-      </app-document-upload-list>
+      <proposal-documents
+        [documents]="technicalCommercialProposal?.documents || []"
+        [files]="formFiles.value"
+        (remove)="formFiles.removeAt($event)"
+        (select)="filesSelected($event)"
+      ></proposal-documents>
     </div>
 
     <hr/>

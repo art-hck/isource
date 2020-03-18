@@ -1,0 +1,57 @@
+<!-- upload documents -->
+<small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
+<div class="app-row">
+  <div class="app-col app-bold">
+    <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="select.emit($event)">
+      <div>Перетащите документы сюда</div>
+    </div>
+  </div>
+
+  <div class="app-col app-row clr-justify-content-between clr-flex-column">
+    <div class="app-secondary-color">
+      Вы можете перетащить документы в окно слева, или нажать на кнопку ниже, и выбрать необходимые документы в
+      проводнике
+    </div>
+    <div>
+      <button
+        type="button" uxgButton secondary appUploadFile
+        [disabled]="disabled"
+        [multiple]="true"
+        (select)="select.emit($event)"
+      >Выбрать документы
+      </button>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<!-- document list -->
+<ng-container *ngIf="documents.length || files.length">
+  <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+  <div class="documents">
+    <div class="app-row">
+      <div class="app-col" *ngFor="let document of documents">
+        <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
+      </div>
+      <div class="app-col" *ngFor="let files of files; index as i">
+        <ng-container *ngTemplateOutlet="documentRef; context: {document: files, i:i}"></ng-container>
+      </div>
+
+      <ng-template #documentRef let-document="document" let-i="i">
+        <document-icon [name]="document.name || document.filename"></document-icon>
+        <div class="documents-title">
+          <div>{{ document.name || document.filename }}</div>
+          <div *ngIf="document.size > 0" class="app-secondary-color">
+            {{document.size | bytesToSize : 2}}
+          </div>
+        </div>
+        <div class="clr-align-self-start" *ngIf="!disabled && i>=0">
+          <button type="button" uxgButton link icon clear (click)="remove.emit(i)">
+            <clr-icon shape="app-trash"></clr-icon>
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-container>

@@ -14,13 +14,14 @@ import { TechnicalProposalPosition } from "../../../common/models/technical-prop
 import { RequestPosition } from "../../../common/models/request-position";
 import Swal from "sweetalert2";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
+import { proposalManufacturerValidator } from "./technical-proposal-form-manufacturer/technical-proposal-form-manufacturer.validator";
 
 @Component({
-  selector: 'app-request-technical-proposals-create',
-  templateUrl: './technical-proposal-create.component.html',
-  styleUrls: ['./technical-proposal-create.component.scss']
+  selector: 'app-request-technical-proposals-form',
+  templateUrl: './technical-proposal-form.component.html',
+  styleUrls: ['./technical-proposal-form.component.scss']
 })
-export class TechnicalProposalCreateComponent implements OnInit, OnDestroy {
+export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
@@ -70,7 +71,7 @@ export class TechnicalProposalCreateComponent implements OnInit, OnDestroy {
       this.form.get('positions').setValidators(
         docsCount > 0 && this.isManufacturerPristine ?
           [Validators.required] :
-          [Validators.required, this.positionsValidator]
+          [Validators.required, proposalManufacturerValidator]
       );
 
       this.form.get('positions').updateValueAndValidity({emitEvent: false});
@@ -164,11 +165,6 @@ export class TechnicalProposalCreateComponent implements OnInit, OnDestroy {
       this.visibleChange.emit(false);
       this.isEditing ? this.update.emit(tp) : this.create.emit(tp);
     });
-  }
-
-  positionsValidator(control: AbstractControl): ValidationErrors | null {
-    return control.value.length === control.value
-      .filter(pos => pos.manufacturingName).length ? null : {manufacturer_name_error: true};
   }
 
   positionsWithManufacturerFilter(q: string, posWithMan: PositionWithManufacturer) {

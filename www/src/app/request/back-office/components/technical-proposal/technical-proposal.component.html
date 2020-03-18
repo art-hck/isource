@@ -5,10 +5,10 @@
   (cancelTechnicalProposal)="cancelTechnicalProposal.emit($event)"
 ></app-request-technical-proposal>
 
-<app-request-technical-proposals-create
+<app-request-technical-proposals-form
   *ngIf="editing"
   [technicalProposal]="technicalProposal"
   [request]="request"
   (update)="update.emit($event)"
   (visibleChange)="editing = $event"
-></app-request-technical-proposals-create>
+></app-request-technical-proposals-form>

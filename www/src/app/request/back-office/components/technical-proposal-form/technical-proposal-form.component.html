@@ -50,63 +50,15 @@
 
     <hr/>
 
-    <!-- upload documents -->
-    <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
-    <div class="app-row">
-      <div class="app-col app-bold">
-        <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="filesSelected($event)">
-          <div>Перетащите документы сюда</div>
-        </div>
-      </div>
+    <!-- documents -->
+    <proposal-documents
+      [documents]="defaultTPValue('documents')"
+      [files]="formDocuments.value"
+      [disabled]="form.get('documents').disabled"
+      (select)="filesSelected($event)"
+      (remove)="formDocuments.removeAt($event)"
+    ></proposal-documents>
 
-      <div class="app-col app-row clr-justify-content-between clr-flex-column">
-        <div class="app-secondary-color">
-          Вы можете перетащить документы в окно слева, или нажать на кнопку ниже, и выбрать необходимые документы в
-          проводнике
-        </div>
-        <div>
-          <button
-            type="button" uxgButton secondary appUploadFile
-            [disabled]="form.get('documents').disabled"
-            [multiple]="true"
-            (select)="filesSelected($event)"
-          >Выбрать документы
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <br/>
-
-    <!-- document list -->
-    <ng-container *ngIf="formDocuments.controls.length || defaultTPValue('documents').length">
-      <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
-      <div class="documents">
-        <div class="app-row">
-          <div class="app-col" *ngFor="let document of defaultTPValue('documents')">
-            <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
-          </div>
-          <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
-            <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
-          </div>
-
-          <ng-template #documentRef let-document="document" let-i="i">
-            <document-icon [name]="document.name || document.filename"></document-icon>
-            <div class="documents-title">
-              <div>{{ document.name || document.filename }}</div>
-              <div *ngIf="document.size > 0" class="app-secondary-color">
-                {{document.size | bytesToSize : 2}}
-              </div>
-            </div>
-            <div class="clr-align-self-start" *ngIf="!form.get('documents').disabled && i>=0">
-              <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
-                <clr-icon shape="app-trash"></clr-icon>
-              </button>
-            </div>
-          </ng-template>
-        </div>
-      </div>
-    </ng-container>
 
     <hr/>
     <br>
@@ -239,13 +191,13 @@
     <clr-modal #manufacturerModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Заполнение заводских наименований</h2>
       <div class="modal-body">
-        <app-request-technical-proposals-create-manufacturer
+        <app-request-technical-proposals-form-manufacturer
           *ngIf="manufacturerModal._open"
           (cancel)="manufacturerModal.close()"
           (ngModelChange)="manufacturerModal.close()"
           [disabledFn]="positionManufacturerNameDisabled"
           formControlName="positions"
-        ></app-request-technical-proposals-create-manufacturer>
+        ></app-request-technical-proposals-form-manufacturer>
       </div>
     </clr-modal>
 
