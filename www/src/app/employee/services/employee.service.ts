@@ -25,7 +25,7 @@ export class EmployeeService {
 
   createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
     return this.api.post(`registration`, {
-      "joinContragent":{
+      "joinContragent": {
         "id": contragentId
       },
       "username": employee.username,
@@ -33,7 +33,7 @@ export class EmployeeService {
       "lastName": employee.lastName,
       "middleName": employee.middleName,
       "phone": employee.phone,
-      "position":employee.position
+      "position": employee.position
     })
   }
 }
