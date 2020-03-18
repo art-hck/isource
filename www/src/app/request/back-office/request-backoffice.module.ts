@@ -25,6 +25,7 @@ import { TechnicalCommercialProposalFormComponent } from "./components/technical
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
+import { TechnicalCommercialProposalFilterComponent } from "./components/technical-commercial-proposal-filter/technical-commercial-proposal-filter.component";
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { TechnicalCommercialProposalState } from "./states/technical-commercial-
     CommercialProposalCreateComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
+    TechnicalCommercialProposalFilterComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,

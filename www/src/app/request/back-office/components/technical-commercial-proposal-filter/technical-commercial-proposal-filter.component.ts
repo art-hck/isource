@@ -13,11 +13,11 @@ import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 
 @Component({
-  templateUrl: './technical-commercial-proposal-list.component.html',
-  styleUrls: ['technical-commercial-proposal-list.component.scss'],
+  selector: 'technical-commercial-proposal-filter',
+  templateUrl: './technical-commercial-proposal-filter.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalListComponent implements OnInit {
+export class TechnicalCommercialProposalFilterComponent implements OnInit {
 
   @Select(TechnicalCommercialProposalState.getList)
   technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;

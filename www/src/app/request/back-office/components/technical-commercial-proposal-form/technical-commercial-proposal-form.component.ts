@@ -20,6 +20,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   @Input() request: Request;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
   @Input() closable = true;
+  @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   isLoading: boolean;
   form: FormGroup;
