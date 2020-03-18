@@ -40,7 +40,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       id: [this.defaultValue('id', null)],
-      contragent: [this.defaultValue('supplierContragent', null), Validators.required],
+      supplier: [this.defaultValue('supplier', null), Validators.required],
+      positions: [this.defaultValue('positions', []), Validators.required],
+      documents: [this.defaultValue('documents', []), Validators.required],
     });
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
@@ -67,5 +69,5 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
       c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
 
-  defaultValue = (field: keyof TechnicalProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;
+  defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;
 }

@@ -12,6 +12,23 @@
   }
 }
 
+.section {
+  margin: 32px 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.title {
+  margin-bottom: 13px;
+}
+
+.wide-button {
+  width: 100%;
+  min-width: 100%;
+}
+
 @keyframes host-show {
   0% {
     transform: scaleY(0);

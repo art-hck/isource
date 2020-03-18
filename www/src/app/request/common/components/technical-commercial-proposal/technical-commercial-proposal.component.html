@@ -18,7 +18,7 @@
       </div>
 
     </ng-container>
-    <button uxgButton icon link (click)="edit.emit()">
+    <button uxgButton icon link (click)="edit.emit()" [disabled]="proposal.status!=='DRAFT'">
       <clr-icon shape="app-pen"></clr-icon>
     </button>
     <button uxgButton icon link (click)="folded = !folded">
