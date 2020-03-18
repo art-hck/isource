@@ -30,10 +30,10 @@
         [request]="request"
         [closable]="technicalCommercialProposals.length > 0"
         (visibleChange)="showForm = $event"
-        (create)="getTechnicalCommercialProposals()"
       ></app-technical-commercial-proposal-form>
 
-      <app-technical-commercial-proposal-list>
+      <app-technical-commercial-proposal-list
+        [technicalCommercialProposals]="technicalCommercialProposals">
       </app-technical-commercial-proposal-list>
 
       <clr-modal clrModalSize="lg" #procedureModal>

@@ -22,7 +22,9 @@ import { TechnicalProposalComponent } from "./components/technical-proposal/tech
 import { PositionService } from "./services/position.service";
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
 import { TechnicalCommercialProposalFormComponent } from "./components/technical-commercial-proposal-form/technical-commercial-proposal-form.component";
-import { TechnicalCommercialProposalsService } from "./services/technical-commercial-proposals.service";
+import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
+import { NgxsModule } from "@ngxs/store";
+import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 
 @NgModule({
   declarations: [
@@ -43,6 +45,9 @@ import { TechnicalCommercialProposalsService } from "./services/technical-commer
   ],
   imports: [
     RequestBackofficeRoutingModule,
+    NgxsModule.forFeature([
+      TechnicalCommercialProposalState
+    ]),
     RequestCommonModule
   ],
   providers: [
@@ -52,7 +57,7 @@ import { TechnicalCommercialProposalsService } from "./services/technical-commer
     RequestService,
     TechnicalProposalsService,
     PositionService,
-    TechnicalCommercialProposalsService,
+    TechnicalCommercialProposalService,
   ]
 })
 export class RequestBackofficeModule {

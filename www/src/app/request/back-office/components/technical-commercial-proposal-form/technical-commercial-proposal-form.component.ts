@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -7,20 +7,20 @@ import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { shareReplay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalsService } from "../../services/technical-commercial-proposals.service";
+import { Store } from "@ngxs/store";
+import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
   templateUrl: './technical-commercial-proposal-form.component.html',
   styleUrls: ['./technical-commercial-proposal-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalFormComponent implements OnInit {
   @Input() request: Request;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
   @Input() closable = true;
   @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() create = new EventEmitter<TechnicalCommercialProposal>();
-  @Output() update = new EventEmitter<TechnicalCommercialProposal>();
   isLoading: boolean;
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
@@ -32,12 +32,13 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private contragentService: ContragentService,
-    private technicalCommercialProposalsService: TechnicalCommercialProposalsService
+    private store: Store
   ) {
   }
 
   ngOnInit() {
     this.form = this.fb.group({
+      id: [this.defaultValue('id', null)],
       contragent: [this.defaultValue('supplierContragent', null), Validators.required],
     });
 
@@ -50,11 +51,13 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
     }
     this.isLoading = true;
     this.form.disable();
-    this.technicalCommercialProposalsService.create().subscribe(technicalCommercialProposal => {
-      this.visibleChange.emit(false);
-      this.isEditing ? this.update.emit(technicalCommercialProposal) : this.create.emit(technicalCommercialProposal);
-    });
+    Object.keys(this.form.value).forEach(key => this.form.value[key] == null && delete this.form.value[key]);
 
+    this.store.dispatch(
+      this.form.value.id ?
+        new TechnicalCommercialProposals.Update(this.request.id, this.form.value) :
+        new TechnicalCommercialProposals.Create(this.request.id, this.form.value)
+    ).subscribe(() => this.visibleChange.emit(false));
   }
 
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;

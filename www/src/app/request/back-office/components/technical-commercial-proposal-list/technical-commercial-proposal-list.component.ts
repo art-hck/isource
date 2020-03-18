@@ -1,21 +1,27 @@
 import { ActivatedRoute } from "@angular/router";
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { shareReplay, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalsService } from "../../services/technical-commercial-proposals.service";
+import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { Select, Store } from "@ngxs/store";
+import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 
-@Component({templateUrl: './technical-commercial-proposal-list.component.html'})
+@Component({
+  templateUrl: './technical-commercial-proposal-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
 export class TechnicalCommercialProposalListComponent implements OnInit {
 
+  @Select(TechnicalCommercialProposalState.getList)
+  technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
   requestId: Uuid;
   request$: Observable<Request>;
-  technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
   showForm = false;
 
   constructor(
@@ -23,7 +29,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit {
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
     private featureService: FeatureService,
-    private technicalCommercialProposalsService: TechnicalCommercialProposalsService,
+    private store: Store,
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -39,18 +45,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit {
       })
     );
 
-    this.technicalCommercialProposals$ = this.technicalCommercialProposalsService.getList().pipe(
-      tap(technicalCommercialProposals => this.showForm = technicalCommercialProposals.length === 0),
-      shareReplay(1)
-    );
-
-    this.getTechnicalCommercialProposals();
-  }
-
-  getTechnicalCommercialProposals() {
-    this.technicalCommercialProposals$ = this.technicalCommercialProposalsService.getList().pipe(
-      tap(technicalCommercialProposals => this.showForm = technicalCommercialProposals.length === 0),
-      shareReplay(1)
-    );
+    this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
   }
 }
