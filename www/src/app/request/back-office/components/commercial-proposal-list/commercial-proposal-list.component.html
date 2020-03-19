@@ -40,7 +40,7 @@
     </h2>
 
     <div class="modal-body">
-      <app-request-commercial-proposal-create
+      <app-request-commercial-proposal-form
         *ngIf="requestCommercialProposalModal._open"
         [position]="currentRequestPosition"
         [commercialProposal]="selectedLinkedOffer"
@@ -49,7 +49,7 @@
         (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
         (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
         (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
-      </app-request-commercial-proposal-create>
+      </app-request-commercial-proposal-form>
     </div>
   </clr-modal>
 

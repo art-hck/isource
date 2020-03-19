@@ -1,6 +1,6 @@
 import { PositionInfoField } from "../enum/position-info-field";
 
-export const PositionInfoFieldsLabels: {[key in PositionInfoField]: string} = {
+export const PositionInfoFieldsLabels: Record<PositionInfoField, string> = {
   [PositionInfoField.CURRENCY]: 'Валюта',
   [PositionInfoField.DELIVERY_BASIS]: 'Базис поставки',
   [PositionInfoField.DELIVERY_DATE]: 'Дата поставки',

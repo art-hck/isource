@@ -1,0 +1,64 @@
+@import "../../../../../../projects/uxg/src/styles/index";
+
+:host {
+  display: block;
+  animation: host-show 200ms;
+  transform-origin: top;
+}
+
+.app-card {
+  .app-col:not(:last-child) {
+    padding-right: 24px;
+  }
+}
+
+.section {
+  margin: 32px 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.title {
+  margin-bottom: 13px;
+}
+
+.wide-button {
+  width: 100%;
+  min-width: 100%;
+}
+
+.modal-body {
+  overflow: visible;
+}
+
+.select-list {
+  &-positions {
+    max-height: calc(70vh - 130px);
+  }
+
+  &-item {
+    &-quantity {
+      flex-grow: .15; // 15% width
+      max-width: 100px;
+    }
+
+    &-date {
+      max-width: 120px;
+      text-align: right;
+    }
+  }
+}
+
+@keyframes host-show {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
