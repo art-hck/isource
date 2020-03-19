@@ -65,7 +65,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   addEmployee(employee: EmployeeInfoBrief) {
     this.subscription.add(this.employeeService.createEmployee(this.contragentId, employee).subscribe(
-      employee => {
+      (employee) => {
         this.employeesList$ = this.employeesList$.pipe(
           map(employeeList => [employee, ...employeeList])
         );
