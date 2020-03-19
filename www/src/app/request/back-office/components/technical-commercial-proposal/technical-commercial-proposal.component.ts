@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { getCurrencySymbol } from "@angular/common";
 import { Request } from "../../../common/models/request";

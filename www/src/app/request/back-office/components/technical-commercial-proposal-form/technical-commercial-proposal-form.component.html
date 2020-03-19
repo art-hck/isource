@@ -4,8 +4,8 @@
     <!-- page title -->
     <div class="app-row">
       <div class="app-col">
-        <h3 *ngIf="!isEditing">Новое технико-коммерческое предложение</h3>
-        <h3 *ngIf="isEditing">Редактирование технико-коммерческого предложения</h3>
+        <h3 *ngIf="!technicalCommercialProposal">Новое технико-коммерческое предложение</h3>
+        <h3 *ngIf="technicalCommercialProposal">Редактирование технико-коммерческого предложения</h3>
       </div>
 
       <div class="app-col clr-flex-grow-0" *ngIf="closable">
@@ -57,9 +57,9 @@
             <div>
               <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
             </div>
-            <p *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold">
+            <div *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold position-info-item">
               {{ proposalPosition.position.name }}
-            </p>
+            </div>
           </div>
           <div class="app-col" [style.overflow]="'hidden'">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование</small></div>
@@ -68,14 +68,14 @@
                 Заполнить наименования
               </button>
             </div>
-            <p *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold">
+            <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
               <ng-container *ngIf="proposalPosition.manufacturingName as name; else manufactureError">{{ name }}</ng-container>
               <ng-template #manufactureError>
-                <ng-container *ngIf="!isManufacturerPristine && control.hasError('manufacturer_name_error')">
-                  <span class="app-error-color">Необходимо заполнить!</span>
+                <ng-container *ngIf="manufacturerValidator(control, false) && control.hasError('manufacturer_name_error')">
+                  <span class="app-error-color app-bold">Необходимо заполнить!</span>
                 </ng-container>
               </ng-template>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -86,7 +86,37 @@
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Цена за ед.</small></div>
           <div class="app-col"><small class="app-uppercase app-ghost-color app-bold">Срок пост.</small></div>
         </div>
-        <div><button type="button" uxgButton secondary class="wide-button">Заполнить параметры</button></div>
+        <div>
+          <button type="button" uxgButton secondary class="wide-button" (click)="parametersModal.open()"
+                  [disabled]="!control.value?.length">
+            Заполнить параметры
+          </button>
+        </div>
+
+        <div class="position-info-item app-row" *ngFor="let pos of control.value">
+          <ng-container *ngIf="pos.priceWithVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
+            <div class="app-col">
+              {{ pos.quantity * pos.priceWithVat | number:'1.0-2' }}
+              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
+            </div>
+            <div class="app-col">
+              {{ pos.quantity }}
+              <span class="app-ghost-color">{{ pos.measureUnit }}</span>
+            </div>
+            <div class="app-col">
+              {{ pos.priceWithVat | number:'1.0-2' }}
+              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
+            </div>
+            <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
+          </ng-container>
+          <ng-template #parameterError>
+            <ng-container *ngIf="parametersValidator(control, false) && control.hasError('parameters_error')">
+              <span class="app-error-color app-bold">Необходимо заполнить!</span>
+            </ng-container>
+          </ng-template>
+        </div>
+
+
       </div>
     </div>
 
@@ -97,7 +127,7 @@
         [documents]="technicalCommercialProposal?.documents || []"
         [files]="formFiles.value"
         (remove)="formFiles.removeAt($event)"
-        (select)="filesSelected($event)"
+        (select)="formFilesPush($event)"
       ></proposal-form-documents>
     </div>
 
@@ -112,7 +142,7 @@
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
           type="button" uxgButton secondary (click)="submit(false)"
-          [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
+          [disabled]="form.disabled || form.invalid">Сохранить {{technicalCommercialProposal ? 'изменения' : 'черновик'}}
         </button>
         <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
       </div>
@@ -175,6 +205,18 @@
           (ngModelChange)="manufacturerModal.close()"
           formControlName="positions"
         ></app-request-proposal-form-manufacturer>
+      </div>
+    </clr-modal>
+
+    <clr-modal #parametersModal [clrModalSize]="'lg'">
+      <h2 class="modal-title">Параметры ТКП по позициям</h2>
+      <div class="modal-body">
+        <app-technical-commercial-proposal-form-parameters
+          *ngIf="parametersModal._open"
+          formControlName="positions"
+          (ngModelChange)="parametersModal.close()"
+          (cancel)="parametersModal.close()"
+        ></app-technical-commercial-proposal-form-parameters>
       </div>
     </clr-modal>
   </div>
