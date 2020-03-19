@@ -36,7 +36,10 @@ export class PositionComponent implements OnInit, OnDestroy {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.positionId = this.route.snapshot.paramMap.get('position-id');
     this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId)
-      .pipe(tap(position => {this.setPageInfo(position); this.updateAvailableStatuses(position)}));
+      .pipe(tap(position => {
+        this.setPageInfo(position);
+        this.updateAvailableStatuses(position);
+      }));
   }
 
   updateData(position: RequestPosition) {
