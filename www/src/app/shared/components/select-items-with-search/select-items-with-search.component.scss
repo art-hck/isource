@@ -18,8 +18,8 @@ form {
 
 .app-table {
   overflow: auto;
-  padding: 5px 15px;
-  margin: 0px -22px 0 -15px;
+  padding: 5px 22px;
+  margin: 0px -22px 0 -22px;
   @include scrollbar($theme);
 
   &::ng-deep > .app-row {

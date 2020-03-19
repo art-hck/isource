@@ -48,4 +48,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit {
 
     this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
   }
+
+  trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
 }

@@ -1,43 +1,119 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { tap } from "rxjs/operators";
+import { map, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
+import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
+import Publish = TechnicalCommercialProposals.Publish;
+import Create = TechnicalCommercialProposals.Create;
+import Fetch = TechnicalCommercialProposals.Fetch;
+import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import Update = TechnicalCommercialProposals.Update;
+import { of } from "rxjs";
 
-@State<TechnicalCommercialProposal[]>({
+export type ProposalsStateStatus = "fetching" | "updating" | "pristine" | "received";
+
+export interface TechnicalCommercialProposalStateModel {
+  proposals: TechnicalCommercialProposal[];
+  proposalsStateStatus: ProposalsStateStatus;
+  availablePositions: TechnicalCommercialProposalPosition[];
+}
+
+type Context = StateContext<TechnicalCommercialProposalStateModel>;
+
+@State<TechnicalCommercialProposalStateModel>({
   name: 'TechnicalCommercialProposals',
-  defaults: null
+  defaults: { proposals: null, availablePositions: null, proposalsStateStatus: "pristine" }
 })
 export class TechnicalCommercialProposalState {
-  constructor(private technicalCommercialProposalService: TechnicalCommercialProposalService) {}
+  constructor(private rest: TechnicalCommercialProposalService) {}
 
   @Selector()
-  static getList(technicalCommercialProposals: TechnicalCommercialProposal[]) {
-    return technicalCommercialProposals;
+  static getList({proposals}: TechnicalCommercialProposalStateModel) {
+    return proposals;
   }
 
-  @Action(TechnicalCommercialProposals.Fetch)
-  fetch(ctx: StateContext<TechnicalCommercialProposal[]>, {requestId}: TechnicalCommercialProposals.Fetch) {
-    if (ctx.getState()) { return; }
-    return this.technicalCommercialProposalService.list(requestId)
-      .pipe(tap(technicalCommercialProposals => ctx.setState(technicalCommercialProposals)));
+  @Selector()
+  static availablePositions({availablePositions}: TechnicalCommercialProposalStateModel) {
+    return availablePositions;
   }
 
-  @Action(TechnicalCommercialProposals.Create)
-  create(
-    ctx: StateContext<TechnicalCommercialProposal[]>,
-    { requestId, payload }: TechnicalCommercialProposals.Create) {
-    return this.technicalCommercialProposalService.create(requestId, payload)
-      .pipe(tap(technicalCommercialProposal => ctx.setState(insertItem(technicalCommercialProposal))));
+  @Selector()
+  static status({proposalsStateStatus}: TechnicalCommercialProposalStateModel) {
+    return proposalsStateStatus;
   }
 
-  @Action(TechnicalCommercialProposals.Update)
-  update(
-    ctx: StateContext<TechnicalCommercialProposal[]>,
-    { requestId, payload }: TechnicalCommercialProposals.Update) {
-    return this.technicalCommercialProposalService.update(requestId, payload)
-      .pipe(tap(technicalCommercialProposal => ctx.setState(
-        updateItem(tcp => tcp.id === payload.id, patch(payload)))));
+  @Action(Fetch)
+  fetch(ctx: Context, {requestId}: Fetch) {
+    if (ctx.getState().proposals) { return; }
+    ctx.setState(patch({ proposalsStateStatus: "pending" as ProposalsStateStatus }));
+    return this.rest.list(requestId)
+      .pipe(tap(proposals => {
+        ctx.setState(patch({proposals, proposalsStateStatus: "received" as ProposalsStateStatus}));
+      }));
+  }
+
+  @Action(FetchAvailablePositions)
+  fetchAvailablePositions({setState}: Context, {requestId}: FetchAvailablePositions) {
+    return this.rest.availablePositions(requestId).pipe(
+      map(positions => positions.map(position => ({
+        position,
+        manufacturingName: null,
+        priceWithVat: null,
+        currency: null,
+        quantity: null,
+        measureUnit: null,
+        deliveryDate: null,
+      }))),
+      tap(availablePositions => setState(patch({ availablePositions })))
+    );
+  }
+
+  @Action(Create)
+  create(ctx: Context, action: Create) {
+    ctx.setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    return this.rest.create(action.requestId, action.payload).pipe(
+      tap(proposal => ctx.setState(patch({
+        proposals: insertItem(proposal),
+        proposalsStateStatus: "received" as ProposalsStateStatus
+      }))),
+      mergeMap(proposal => {
+        if (action.publish) {
+          return ctx.dispatch(new Publish(action.requestId, proposal));
+        } else {
+          return of(proposal);
+        }
+      }),
+  );
+  }
+
+  @Action(Update)
+  update(ctx: Context, action: Update) {
+    ctx.setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    return this.rest.update(action.requestId, action.payload).pipe(
+      tap(proposal => ctx.setState(patch({
+        proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
+        proposalsStateStatus: "received" as ProposalsStateStatus
+      }))),
+      mergeMap(proposal => {
+        if (action.publish) {
+          return ctx.dispatch(new Publish(action.requestId, proposal));
+        } else {
+          return of(proposal);
+        }
+      }),
+    );
+  }
+
+  @Action(Publish)
+  publish({setState}: Context, {requestId, proposal}: Publish) {
+    setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    return this.rest.publish(requestId, proposal).pipe(
+      tap((_proposal) => setState(patch({
+        proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
+        proposalsStateStatus: "received" as ProposalsStateStatus
+      })))
+    );
   }
 }

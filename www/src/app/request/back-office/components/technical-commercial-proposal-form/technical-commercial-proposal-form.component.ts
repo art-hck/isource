@@ -6,13 +6,13 @@ import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { shareReplay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
-import { PositionWithManufacturer } from "../../models/position-with-manufacturer";
-import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
+import { ProposalsStateStatus, TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import Update = TechnicalCommercialProposals.Update;
+import Create = TechnicalCommercialProposals.Create;
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -26,7 +26,10 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   @Input() closable = true;
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
-  isLoading: boolean;
+  @Select(TechnicalCommercialProposalState.status)
+  status$: Observable<ProposalsStateStatus>;
+  @Select(TechnicalCommercialProposalState.availablePositions)
+  availablePositions$: Observable<TechnicalCommercialProposalPosition[]>;
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
 
@@ -59,13 +62,8 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
       files: this.fb.array([]),
     });
 
-    // Если документов нет, нужно приложить файлы
-    if (!this.form.get('documents').value.length) {
-      this.formFiles.setValidators(Validators.required);
-    }
-
     this.form.valueChanges.subscribe(() => {
-      const docsCount = this.formFiles.value.length + this.defaultValue('documents').length;
+      const docsCount = this.formFiles.value.length + this.form.get('documents').value.length;
       this.form.get('positions').setValidators(
         docsCount > 0 && this.isManufacturerPristine ?
           [Validators.required] :
@@ -75,7 +73,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
       this.form.get('positions').updateValueAndValidity({emitEvent: false});
     });
 
+    // Workaround sync with multiple elements per one formControl
+    this.form.get('positions').valueChanges
+      .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
+
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
+    this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
   }
 
   filesSelected(files: File[]): void {
@@ -88,32 +91,27 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.isLoading = true;
+
     this.form.disable();
     Object.keys(this.form.value).forEach(key => this.form.value[key] == null && delete this.form.value[key]);
 
-    this.store.dispatch(
-      this.form.value.id ?
-        new TechnicalCommercialProposals.Update(this.request.id, this.form.value) :
-        new TechnicalCommercialProposals.Create(this.request.id, this.form.value)
+    this.store.dispatch(this.form.value.id ?
+        new Update(this.request.id, this.form.value, publish) :
+        new Create(this.request.id, this.form.value, publish)
     ).subscribe(() => this.visibleChange.emit(false));
   }
 
-  private findPosition(position: RequestPosition): TechnicalCommercialProposalPosition {
-    return this.technicalCommercialProposal && this.technicalCommercialProposal.positions.find(tcpp => tcpp.position.id === position.id);
+  searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {
+    return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
-  getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-  searchContragent = (query: string, contragents: ContragentList[]) => {
+  searchContragent(query: string, contragents: ContragentList[]) {
     return contragents.filter(
       c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
 
   defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;
-
-  positionManufacturerNameDisabled = ({position}: PositionWithManufacturer) => {
-    const tcpPosition = this.findPosition(position);
-    return position && tcpPosition.status !== TechnicalCommercialProposalPositionStatus.NEW;
-  }
+  getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
+  trackByPositionId = ({position}: TechnicalCommercialProposalPosition) => position.id;
 
 }

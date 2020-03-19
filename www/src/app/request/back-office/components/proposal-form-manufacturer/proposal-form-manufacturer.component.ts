@@ -61,7 +61,10 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
   }
 
   submit(controls: AbstractControl[]) {
-    const value = controls.map(control => control.value);
+    const value = this.value.map(item => ({
+      ...item,
+      ...controls.find(c => c.value.position.id === item.position.id).value
+    }));
     this.writeValue(value);
     this.onChange(value);
   }

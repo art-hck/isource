@@ -9,6 +9,7 @@
 .app-uppercase { text-transform: uppercase; }
 .app-capitalize { text-transform: capitalize; }
 .app-lowercase { text-transform: lowercase; }
+.app-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 // Colors
 .app-primary-color { color: uxg($theme, color-font-primary); }

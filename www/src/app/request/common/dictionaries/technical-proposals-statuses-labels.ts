@@ -1,6 +1,6 @@
 import { TechnicalProposalsStatus } from "../enum/technical-proposals-status";
 
-export const TechnicalProposalsStatusesLabels: { [key in TechnicalProposalsStatus]: string } = {
+export const TechnicalProposalsStatusesLabels: Record<TechnicalProposalsStatus, string> = {
   [TechnicalProposalsStatus.NEW]: 'Черновик',
   [TechnicalProposalsStatus.SENT_TO_REVIEW]: 'На рассмотрении',
   [TechnicalProposalsStatus.ACCEPTED]: 'Согласовано',

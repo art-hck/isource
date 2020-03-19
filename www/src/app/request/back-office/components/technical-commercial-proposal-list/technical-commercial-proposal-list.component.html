@@ -1,84 +1,83 @@
 <ng-container *ngIf="(request$ | async) as request; else loading">
-  <ng-container *ngIf="(technicalCommercialProposals$ | async) as proposals">
-    <!-- actions -->
-    <div class="app-row">
-      <div class="app-col">
-        <div class="app-table app-no-border">
-            <div class="app-row clr-justify-content-end">
-              <div class="app-col app-basis-auto clr-flex-grow-0">
+  <!-- actions -->
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-table app-no-border">
+          <div class="app-row clr-justify-content-end">
+            <div class="app-col app-basis-auto clr-flex-grow-0">
 
-                <!-- Создать процедуру  -->
-                <button uxgButton secondary iconText [disabled]="true"
-                        *ngIf="featureService.authorize('createProcedure')"
-                        (click)="procedureModal.open()" >
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>Создать процедуру</span>
-                </button>
+              <!-- Создать процедуру  -->
+              <button uxgButton secondary iconText [disabled]="true"
+                      *ngIf="featureService.authorize('createProcedure')"
+                      (click)="procedureModal.open()" >
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>Создать процедуру</span>
+              </button>
 
-                <!-- Новое ТКП  -->
-                <button uxgButton secondary iconText (click)="showForm = true">
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>Новый контрагент</span>
-                </button>
+              <!-- Новое ТКП  -->
+              <button uxgButton secondary iconText (click)="showForm = true">
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>Новый контрагент</span>
+              </button>
 
-                <!-- Новое ТКП шаблона -->
-                <button uxgButton primary iconText [disabled]="true">
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>ТКП из шаблона</span>
-                </button>
+              <!-- Новое ТКП шаблона -->
+              <button uxgButton primary iconText [disabled]="true">
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>ТКП из шаблона</span>
+              </button>
 
-                <clr-modal clrModalSize="lg" #procedureModal>
-                  <h2 class="modal-title">Создание новой процедуры</h2>
-                  <div class="modal-body" [style.overflow]="'visible'">
-                    <!--ng-container *ngIf="(positions$ | async) as positions">
-                      <app-request-procedure-create
-                        *ngIf="procedureModal._open"
-                        [request]="request"
-                        [publicAccess]="true"
-                        [positions]="positions"
-                        [contragents]="contragents$ | async"
-                        (complete)="procedureModal.close()"
-                      ></app-request-procedure-create>
-                    </ng-container-->
-                  </div>
-                </clr-modal>
-              </div>
+              <clr-modal clrModalSize="lg" #procedureModal>
+                <h2 class="modal-title">Создание новой процедуры</h2>
+                <div class="modal-body" [style.overflow]="'visible'">
+                  <!--ng-container *ngIf="(positions$ | async) as positions">
+                    <app-request-procedure-create
+                      *ngIf="procedureModal._open"
+                      [request]="request"
+                      [publicAccess]="true"
+                      [positions]="positions"
+                      [contragents]="contragents$ | async"
+                      (complete)="procedureModal.close()"
+                    ></app-request-procedure-create>
+                  </ng-container-->
+                </div>
+              </clr-modal>
             </div>
           </div>
-      </div>
-      <div class="app-col app-col-aside"></div>
+        </div>
     </div>
+    <div class="app-col app-col-aside"></div>
+  </div>
 
-    <!-- list -->
-    <div class="app-row">
-      <div class="app-col app-technical-commercial-proposal-list">
+  <!-- list -->
+  <div class="app-row" *ngIf="(technicalCommercialProposals$ | async) as proposals">
+    <div class="app-col app-technical-commercial-proposal-list">
+      <app-technical-commercial-proposal-form
+        *ngIf="showForm"
+        [request]="request"
+        [closable]="proposals.length > 0"
+        [(visible)]="showForm"
+      ></app-technical-commercial-proposal-form>
+
+      <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId; let edit = false">
+        <app-technical-commercial-proposal
+          *ngIf="!edit"
+          [technicalCommercialProposal]="proposal"
+          (edit)="edit = true"
+        ></app-technical-commercial-proposal>
         <app-technical-commercial-proposal-form
-          *ngIf="showForm"
+          *ngIf="edit"
+          [technicalCommercialProposal]="proposal"
           [request]="request"
-          [closable]="proposals.length > 0"
-          [(visible)]="showForm"
+          [visible]="edit"
+          (visibleChange)="edit = $event"
         ></app-technical-commercial-proposal-form>
-
-        <ng-container *ngFor="let proposal of proposals; let edit = false">
-          <app-technical-commercial-proposal
-            *ngIf="!edit"
-            [technicalCommercialProposal]="proposal"
-            (edit)="edit = true"
-          ></app-technical-commercial-proposal>
-          <app-technical-commercial-proposal-form
-            *ngIf="edit"
-            [technicalCommercialProposal]="proposal"
-            [request]="request"
-            [(visible)]="edit"
-          ></app-technical-commercial-proposal-form>
-        </ng-container>
-      </div>
-
-      <div class="app-col app-col-aside">
-        <technical-commercial-proposal-filter></technical-commercial-proposal-filter>
-      </div>
+      </ng-container>
     </div>
-  </ng-container>
+
+    <div class="app-col app-col-aside">
+      <technical-commercial-proposal-filter></technical-commercial-proposal-filter>
+    </div>
+  </div>
 </ng-container>
 
 <ng-template #loading>

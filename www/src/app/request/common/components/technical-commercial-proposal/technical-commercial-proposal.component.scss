@@ -9,11 +9,6 @@ hr { margin: 14px 0; }
     padding-left: 0;
   }
 }
-.app-table > .app-row > * {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 .name,
 .manufacturing-name {
