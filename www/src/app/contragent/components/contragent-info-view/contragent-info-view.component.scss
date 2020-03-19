@@ -13,4 +13,20 @@ h3 {
 
 .action {
   justify-content: flex-end;
+  padding-bottom: 30px;
+}
+
+.edit {
+  text-align: right;
+}
+
+.employee-row {
+  padding: 17px 20px;
+  &:not(:last-child) {
+    border-bottom: 1px solid #b2d0ff;
+  }
+}
+
+.app-card {
+  padding: 0;
 }

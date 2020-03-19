@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Uuid } from "../../../cart/models/uuid";
-import { ActivatedRoute } from "@angular/router";
+import {Uuid} from "../../../cart/models/uuid";
+import {ActivatedRoute} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
-import { ContragentInfo } from "../../models/contragent-info";
-import { ContragentService } from "../../services/contragent.service";
-import { Title } from "@angular/platform-browser";
-import { tap } from "rxjs/operators";
-import { UxgBreadcrumbsService } from "uxg";
+import {ContragentInfo} from "../../models/contragent-info";
+import {ContragentService} from "../../services/contragent.service";
+import {Title} from "@angular/platform-browser";
+import {flatMap, map, shareReplay, tap} from "rxjs/operators";
+import {UxgBreadcrumbsService} from "uxg";
 import {EmployeeService} from "../../../employee/services/employee.service";
 import {EmployeeInfoBrief} from "../../../employee/models/employee-info";
 import {UserInfoService} from "../../../user/service/user-info.service";
@@ -20,6 +20,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
+  employeesList$: Observable<EmployeeInfoBrief[]>;
   subscription = new Subscription();
 
   constructor(
@@ -29,11 +30,13 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.contragentId = this.route.snapshot.paramMap.get('id');
     this.getContragentInfo(this.contragentId);
+    this.getContragentEmployeesList(this.contragentId);
   }
 
   getContragentInfo(contragentId: Uuid): void {
@@ -48,6 +51,10 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     );
   }
 
+  getContragentEmployeesList(contragentId: Uuid): void {
+    this.employeesList$ = this.employeeService.getEmployeesList(contragentId).pipe(shareReplay(1));
+  }
+
   onDownloadPrimaInformReport(): void {
     this.getContragentService.downloadPrimaInformReport(this.contragentId);
   }
@@ -57,7 +64,12 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   }
 
   addEmployee(employee: EmployeeInfoBrief) {
-    this.subscription.add(this.employeeService.createEmployee(this.contragentId, employee).subscribe());
+    this.subscription.add(this.employeeService.createEmployee(this.contragentId, employee).subscribe(
+      (data) => {
+        this.employeesList$ = this.employeesList$.pipe(
+          map(employeeList => [data, ...employeeList])
+        );
+      }));
   }
 
   ngOnDestroy() {

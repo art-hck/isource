@@ -5,7 +5,8 @@
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
   <div class="app-row action-bar">
     <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()" disabled>
-      <clr-icon shape="app-pen"></clr-icon>Редактировать контрагента
+      <clr-icon shape="app-pen"></clr-icon>
+      Редактировать контрагента
     </button>
     <button uxgButton primary
             [clrLoading]="getLoaderState()"
@@ -21,33 +22,58 @@
       </uxg-tabs>
       <br/>
       <ng-container *uxgTab="contragentInfoTab">
-          <app-contragent-info [contragent]="contragent">
-          </app-contragent-info>
+        <app-contragent-info [contragent]="contragent">
+        </app-contragent-info>
       </ng-container>
       <ng-container *uxgTab="employeesTab">
         <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
           <button uxgButton secondary (click)="createEmployeeModal.open()">
-            <clr-icon shape="app-plus"></clr-icon> Новый сотрудник
+            <clr-icon shape="app-plus"></clr-icon>
+            Новый сотрудник
           </button>
         </div>
-      </ng-container>
+        <ng-template #loading class="load-block">
+          <span class="spinner spinner-md"></span>
+        </ng-template>
 
+        <div class="app-row" *ngIf="(employeesList$ |async) as employeesList; else loading">
+          <div class="app-col">
+            <div class="app-card">
+              <div class="app-row employee-row" *ngFor="let employee of employeesList">
+                <div class="app-col">
+                  {{employee.lastName}} {{employee.firstName}} {{employee.middleName}}
+                </div>
+                <div class="app-col">
+                  {{employee.username}}
+                </div>
+                <div class="app-col">
+                  {{employee.phone}}
+                </div>
+                <div class="app-col edit" [style.max-width.px]="60">
+                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" disabled>
+                    <clr-icon shape="app-pen"></clr-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
     <div class="app-col app-col-aside">
       <ng-container *ngIf="(contragent$ | async) as contragent">
-      <h3>Контакты и ответственный</h3>
-      <div class="app-section">
-        <div class="app-ghost-color">Email контрагента</div>
-        <div>{{contragent.email}}</div>
-      </div>
-      <div class="app-section">
-        <div class="app-ghost-color">Телефон контрагента</div>
-        <div>{{contragent.phone}}</div>
-      </div>
-      <div class="app-section">
-        <div class="app-ghost-color">Ответственный менеджер БО</div>
-        <div>вапва</div>
-      </div>
+        <h3>Контакты и ответственный</h3>
+        <div class="app-section">
+          <div class="app-ghost-color">Email контрагента</div>
+          <div>{{contragent.email}}</div>
+        </div>
+        <div class="app-section">
+          <div class="app-ghost-color">Телефон контрагента</div>
+          <div>{{contragent.phone}}</div>
+        </div>
+        <div class="app-section">
+          <div class="app-ghost-color">Ответственный менеджер БО</div>
+        </div>
       </ng-container>
     </div>
   </div>
@@ -58,3 +84,5 @@
     </div>
   </clr-modal>
 </ng-container>
+
+
