@@ -72,7 +72,7 @@ export class RequestService {
 
   changeStatus(id: Uuid, positionId: Uuid, status: string) {
     const url = `requests/backoffice/${id}/positions/${positionId}/change-status`;
-    return this.api.post<{status: PositionStatus, statusLabel: string}>(url, {
+    return this.api.post<{status: PositionStatus, statusLabel: string, availableStatuses: string[]}>(url, {
       status: status
     });
   }
