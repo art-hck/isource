@@ -16,7 +16,7 @@
     white-space: nowrap;
   }
 
-  &-large {
+  &-large &-handler, &-items-item, &-items-header {
     height: uxg($theme, control-height-l);
     line-height: uxg($theme, control-height-l);
   }

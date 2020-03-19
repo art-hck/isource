@@ -74,7 +74,7 @@
   <div class="app-row">
     <div class="app-col">
       <label class="input-label">Условия оплаты</label>
-      <uxg-dropdown placeholder="Условия оплаты" formControlName="paymentTerms">
+      <uxg-dropdown lg placeholder="Условия оплаты" formControlName="paymentTerms">
         <div uxgDropdownItem value="30 дней по факту поставки">30 банковских дней по факту поставки</div>
         <div uxgDropdownItem value="60 дней по факту поставки">60 банковских дней по факту поставки</div>
         <div uxgDropdownItem value="90 дней по факту поставки">90 банковских дней по факту поставки</div>
@@ -125,8 +125,8 @@
 
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <label class="input-label">Валюта</label>
-      <uxg-dropdown placeholder="Валюта" formControlName="currency">
-        <div uxgDropdownItem [value]="currency.value" *ngFor="let currency of currencies">{{ currency.label }}</div>
+      <uxg-dropdown lg placeholder="Валюта" formControlName="currency">
+        <div uxgDropdownItem [value]="currency[1]" *ngFor="let currency of currencies">{{ currency[0] }}</div>
       </uxg-dropdown>
     </div>
   </div>

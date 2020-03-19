@@ -5,7 +5,7 @@
 
 <div class="app-col status">
   <div class="app-position-status-icon" [ngClass]="newStatus"></div>
-  <uxg-dropdown class="status-select" [(ngModel)]="newStatus">
+  <uxg-dropdown lg class="status-select" [(ngModel)]="newStatus">
     <div uxgDropdownItem *ngFor="let status of statuses" [value]="status[0]">{{ status[1] }}</div>
   </uxg-dropdown>
 </div>

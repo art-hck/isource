@@ -4,7 +4,7 @@
     <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
       <p class="app-secondary-color">Вы можете назначить позиции на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
       <br/>
-      <uxg-dropdown placeholder="Выберите на кого назначить" formControlName="user">
+      <uxg-dropdown lg placeholder="Выберите на кого назначить" formControlName="user">
         <div uxgDropdownItem [value]="user" *ngFor="let user of regularBackofficeUsers$ | async">{{ user.fullName || user.shortName }}</div>
       </uxg-dropdown>
 
