@@ -1,9 +1,9 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
 import {EmployeeInfo, EmployeeInfoBrief} from "../models/employee-info";
-import { EmployeeItem } from "../models/employee-item";
-import { Uuid } from "../../cart/models/uuid";
+import {EmployeeItem} from "../models/employee-item";
+import {Uuid} from "../../cart/models/uuid";
 
 @Injectable()
 export class EmployeeService {
@@ -16,7 +16,7 @@ export class EmployeeService {
   }
 
   getEmployeeList(type): Observable<EmployeeItem[]> {
-    return this.api.post<EmployeeItem[]>(`requests/backoffice/users`, { role: type });
+    return this.api.post<EmployeeItem[]>(`requests/backoffice/users`, {role: type});
   }
 
   getEmployeeInfo(id: Uuid): Observable<EmployeeInfo> {
@@ -24,7 +24,7 @@ export class EmployeeService {
   }
 
   createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
-    return this.api.post(`registration`, {
+    return this.api.post<EmployeeInfoBrief>(`registration`, {
       "joinContragent": {
         "id": contragentId
       },
@@ -34,6 +34,12 @@ export class EmployeeService {
       "middleName": employee.middleName,
       "phone": employee.phone,
       "position": employee.position
+    });
+  }
+
+  getEmployeesList(contragentId: Uuid): Observable<EmployeeInfoBrief[]> {
+    return this.api.post<EmployeeInfoBrief[]>(`users/employee-list`, {
+      "contragentId": contragentId
     });
   }
 }
