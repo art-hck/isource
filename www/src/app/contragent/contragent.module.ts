@@ -11,6 +11,7 @@ import { ContragentInfoViewComponent } from "./components/contragent-info-view/c
 import { ContragentRegistrationComponent } from './components/contragent-registration/contragent-registration.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
+import {EmployeeModule} from "../employee/employee.module";
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NgxDadataModule } from "@kolkov/ngx-dadata";
     ReactiveFormsModule,
     SharedModule,
     CommonModule,
-    ContragentRoutingModule
+    ContragentRoutingModule,
+    EmployeeModule
   ],
   declarations: [
     ContragentListViewComponent,

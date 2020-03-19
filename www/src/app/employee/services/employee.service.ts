@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { EmployeeInfo } from "../models/employee-info";
+import {EmployeeInfo, EmployeeInfoBrief} from "../models/employee-info";
 import { EmployeeItem } from "../models/employee-item";
 import { Uuid } from "../../cart/models/uuid";
 
@@ -21,5 +21,19 @@ export class EmployeeService {
 
   getEmployeeInfo(id: Uuid): Observable<EmployeeInfo> {
     return this.api.get<EmployeeInfo>(`requests/backoffice/users/${id}`);
+  }
+
+  createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
+    return this.api.post(`registration`, {
+      "joinContragent": {
+        "id": contragentId
+      },
+      "username": employee.username,
+      "firstName": employee.firstName,
+      "lastName": employee.lastName,
+      "middleName": employee.middleName,
+      "phone": employee.phone,
+      "position": employee.position
+    });
   }
 }

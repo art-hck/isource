@@ -3,8 +3,58 @@
 </ng-template>
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
-  <div class="contragent-info-content">
-    <app-contragent-info [contragent]="contragent">
-    </app-contragent-info>
+  <div class="app-row action-bar">
+    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()" disabled>
+      <clr-icon shape="app-pen"></clr-icon>Редактировать контрагента
+    </button>
+    <button uxgButton primary
+            [clrLoading]="getLoaderState()"
+            (click)="onDownloadPrimaInformReport()">
+      Отчет Прима-информ
+    </button>
   </div>
+  <div class="app-row content">
+    <div class="app-col">
+      <uxg-tabs class="app-tabs-border">
+        <uxg-tab-title #contragentInfoTab [active]="true">Информация о контрагенте</uxg-tab-title>
+        <uxg-tab-title #employeesTab [hidden]="user.isCustomer()">Сотрудники</uxg-tab-title>
+      </uxg-tabs>
+      <br/>
+      <ng-container *uxgTab="contragentInfoTab">
+          <app-contragent-info [contragent]="contragent">
+          </app-contragent-info>
+      </ng-container>
+      <ng-container *uxgTab="employeesTab">
+        <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
+          <button uxgButton secondary (click)="createEmployeeModal.open()">
+            <clr-icon shape="app-plus"></clr-icon> Новый сотрудник
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+    <div class="app-col app-col-aside">
+      <ng-container *ngIf="(contragent$ | async) as contragent">
+      <h3>Контакты и ответственный</h3>
+      <div class="app-section">
+        <div class="app-ghost-color">Email контрагента</div>
+        <div>{{contragent.email}}</div>
+      </div>
+      <div class="app-section">
+        <div class="app-ghost-color">Телефон контрагента</div>
+        <div>{{contragent.phone}}</div>
+      </div>
+      <div class="app-section">
+        <div class="app-ghost-color">Ответственный менеджер БО</div>
+        <div>вапва</div>
+      </div>
+      </ng-container>
+    </div>
+  </div>
+  <clr-modal #createEmployeeModal [clrModalSize]="'lg'">
+    <h2 class="modal-title">Добавить нового сотрудника {{contragent.shortName}}</h2>
+    <div class="modal-body">
+      <app-create-employee (cancel)="createEmployeeModal.close()" (addEmployee)="addEmployee($event); createEmployeeModal.close()"></app-create-employee>
+    </div>
+  </clr-modal>
 </ng-container>
