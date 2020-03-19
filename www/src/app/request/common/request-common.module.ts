@@ -44,7 +44,6 @@ import { RequestTpFilterSectionComponent } from "./components/technical-proposal
 import { CommercialProposalListFilterComponent } from "./components/commercial-proposal-list/commercial-proposal-list-filter/commercial-proposal-list-filter.component";
 import { PositionsStatusChangeComponent } from "../back-office/components/position-status-change/positions-status-change.component";
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
-import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 
 const RequestCommonModuleDeclarations = [
   BackofficeOffersComponent,
@@ -80,9 +79,7 @@ const RequestCommonModuleDeclarations = [
   RequestTechnicalProposalComponent,
   CommercialProposalListComponent,
   SearchFilterPipe,
-  RequestMoveGroupModalComponent,
-  TechnicalCommercialProposalComponent,
-
+  RequestMoveGroupModalComponent
 ];
 
 @NgModule({

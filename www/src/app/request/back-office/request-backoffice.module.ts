@@ -27,6 +27,7 @@ import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposalFilterComponent } from "./components/technical-commercial-proposal-filter/technical-commercial-proposal-filter.component";
 import { ProposalFormDocumentsComponent } from "./components/proposal-form-documents/proposal-form-documents.component";
+import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ProposalFormDocumentsComponent } from "./components/proposal-form-docum
     TechnicalProposalComponent,
     CommercialProposalListComponent,
     CommercialProposalFormComponent,
+    TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
     TechnicalCommercialProposalFilterComponent,

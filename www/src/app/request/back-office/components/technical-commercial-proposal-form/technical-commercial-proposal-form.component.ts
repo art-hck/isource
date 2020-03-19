@@ -13,6 +13,7 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { ProposalsStateStatus, TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
+import Publish = TechnicalCommercialProposals.Publish;
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -24,8 +25,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
   @Input() request: Request;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
   @Input() closable = true;
-  @Input() visible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() close = new EventEmitter();
   @Select(TechnicalCommercialProposalState.status)
   status$: Observable<ProposalsStateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
@@ -93,12 +93,24 @@ export class TechnicalCommercialProposalFormComponent implements OnInit {
     }
 
     this.form.disable();
-    Object.keys(this.form.value).forEach(key => this.form.value[key] == null && delete this.form.value[key]);
 
-    this.store.dispatch(this.form.value.id ?
-        new Update(this.request.id, this.form.value, publish) :
-        new Create(this.request.id, this.form.value, publish)
-    ).subscribe(() => this.visibleChange.emit(false));
+    if (this.form.pristine) {
+      if (publish) {
+        this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal))
+          .subscribe(() => this.close.emit());
+      } else {
+        this.close.emit();
+      }
+      return;
+    }
+
+    const value = { ...this.form.value };
+    Object.keys(value).forEach(key => value[key] == null && delete value[key]);
+
+    this.store.dispatch(value.id ?
+        new Update(this.request.id, value, publish) :
+        new Create(this.request.id, value, publish)
+    ).subscribe(() => this.close.emit());
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {

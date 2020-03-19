@@ -55,22 +55,14 @@
         *ngIf="showForm"
         [request]="request"
         [closable]="proposals.length > 0"
-        [(visible)]="showForm"
+        (close)="showForm = false"
       ></app-technical-commercial-proposal-form>
 
-      <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId; let edit = false">
+      <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId">
         <app-technical-commercial-proposal
-          *ngIf="!edit"
-          [technicalCommercialProposal]="proposal"
-          (edit)="edit = true"
-        ></app-technical-commercial-proposal>
-        <app-technical-commercial-proposal-form
-          *ngIf="edit"
-          [technicalCommercialProposal]="proposal"
           [request]="request"
-          [visible]="edit"
-          (visibleChange)="edit = $event"
-        ></app-technical-commercial-proposal-form>
+          [technicalCommercialProposal]="proposal"
+        ></app-technical-commercial-proposal>
       </ng-container>
     </div>
 

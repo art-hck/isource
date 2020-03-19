@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { TechnicalCommercialProposal } from "../../models/technical-commercial-proposal";
+import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { getCurrencySymbol } from "@angular/common";
+import { Request } from "../../../common/models/request";
 
 @Component({
   selector: 'app-technical-commercial-proposal',
@@ -9,8 +10,9 @@ import { getCurrencySymbol } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalComponent {
+  @Input() request: Request;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
-  @Output() edit = new EventEmitter();
+  state: "view" | "edit" = "view";
   folded = false;
   getCurrencySymbol = getCurrencySymbol;
 }

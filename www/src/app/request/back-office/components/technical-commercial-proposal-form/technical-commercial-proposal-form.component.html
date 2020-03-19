@@ -9,7 +9,7 @@
       </div>
 
       <div class="app-col clr-flex-grow-0" *ngIf="closable">
-        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
+        <button type="button" uxgButton icon link (click)="close.emit()">
           <clr-icon shape="app-cross"></clr-icon>
         </button>
       </div>
@@ -49,7 +49,7 @@
       Вы можете либо приложить необходимые документы, либо заполнить все заводсике наименования, либо приложить
       документы и заполнить все заводские наименования.
     </div>
-    <div class="app-row section">
+    <div class="app-row section" *ngIf="form.get('positions') as control">
       <div class="app-col">
         <div class="app-row">
           <div class="app-col" [style.overflow]="'hidden'">
@@ -57,19 +57,21 @@
             <div>
               <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
             </div>
-            <p *ngFor="let proposalPosition of form.get('positions').value" class="app-ellipsis app-bold">
+            <p *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold">
               {{ proposalPosition.position.name }}
             </p>
           </div>
           <div class="app-col" [style.overflow]="'hidden'">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование</small></div>
             <div>
-              <button type="button" uxgButton secondary (click)="manufacturerModal.open()">Заполнить наименования</button>
+              <button type="button" uxgButton secondary (click)="manufacturerModal.open()" [disabled]="!control.value?.length">
+                Заполнить наименования
+              </button>
             </div>
-            <p *ngFor="let proposalPosition of form.get('positions').value" class="app-ellipsis app-bold">
+            <p *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold">
               <ng-container *ngIf="proposalPosition.manufacturingName as name; else manufactureError">{{ name }}</ng-container>
               <ng-template #manufactureError>
-                <ng-container *ngIf="!isManufacturerPristine && form.get('positions').hasError('manufacturer_name_error')">
+                <ng-container *ngIf="!isManufacturerPristine && control.hasError('manufacturer_name_error')">
                   <span class="app-error-color">Необходимо заполнить!</span>
                 </ng-container>
               </ng-template>
