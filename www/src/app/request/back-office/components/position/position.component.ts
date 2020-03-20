@@ -16,7 +16,7 @@ export class PositionComponent implements OnInit, OnDestroy {
   positionId: Uuid;
   position$: Observable<RequestPosition>;
   subscription = new Subscription();
-  statuses = Object.entries(PositionStatusesLabels);
+  statuses = [];
 
   constructor(
     private router: Router,
@@ -36,12 +36,20 @@ export class PositionComponent implements OnInit, OnDestroy {
     this.requestId = this.route.snapshot.paramMap.get('id');
     this.positionId = this.route.snapshot.paramMap.get('position-id');
     this.position$ = this.requestService.getRequestPosition(this.requestId, this.positionId)
-      .pipe(tap(position => this.setPageInfo(position)));
+      .pipe(tap(position => {
+        this.setPageInfo(position);
+        this.updateAvailableStatuses(position);
+      }));
   }
 
   updateData(position: RequestPosition) {
     this.setPageInfo(position);
     this.position$ = of(position);
+  }
+
+  updateAvailableStatuses(position: RequestPosition) {
+    this.statuses = Object.entries(PositionStatusesLabels)
+      .filter(item => position.availableStatuses.indexOf(item[0]) >= 0);
   }
 
   setPageInfo(position: RequestPosition) {
@@ -58,8 +66,13 @@ export class PositionComponent implements OnInit, OnDestroy {
     data.position.statusLabel = data.status.label;
     data.position.status = data.status.value;
 
-    this.subscription.add(
-      this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe()
+    this.requestService.changeStatus(this.requestId, data.position.id, data.position.status).subscribe(
+      (response: any) => {
+        data.position.availableStatuses = response.availableStatuses;
+        this.updateAvailableStatuses(data.position);
+
+        this.position$ = of(data.position);
+      }
     );
   }
 

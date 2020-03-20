@@ -35,7 +35,11 @@
   <!-- Статус -->
   <div class="app-col app-col-aside status" *ngIf="user.isBackOffice() && statuses">
     <div class="app-position-status-icon" [ngClass]="position.status"></div>
-    <uxg-dropdown class="clr-flex-grow-1" [(ngModel)]="position.status" (select)="changeStatus.emit({status: $event, position: position})">
+    <uxg-dropdown
+      class="clr-flex-grow-1"
+      [placeholder]="position.statusLabel"
+      [disabled]="statuses.length === 0"
+      (select)="changeStatus.emit({status: $event, position: position})">
       <div uxgDropdownItem *ngFor="let status of statuses" [value]="status[0]">{{ status[1] }}</div>
     </uxg-dropdown>
   </div>
