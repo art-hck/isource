@@ -21,9 +21,11 @@ h3 {
 
 .employee-row {
   padding: 17px 20px;
+
   .app-col {
     align-self: center;
   }
+
   &:not(:last-child) {
     border-bottom: 1px solid #b2d0ff;
   }

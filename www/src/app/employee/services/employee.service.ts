@@ -39,7 +39,7 @@ export class EmployeeService {
 
   editEmployee(employee: EmployeeInfoBrief) {
     return this.api.post<EmployeeInfoBrief>(`users/edit`, {
-      "userId": '33b4b6c7-bc72-4aba-ab5d-93499722bf36',
+      "userId": employee.id,
       "username": employee.username,
       "firstName": employee.firstName,
       "lastName": employee.lastName,
