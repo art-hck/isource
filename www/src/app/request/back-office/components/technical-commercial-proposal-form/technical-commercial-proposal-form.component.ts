@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Request } from "../../../common/models/request";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable, Subject, throwError } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { shareReplay, takeUntil } from "rxjs/operators";
+import { catchError, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -14,6 +14,8 @@ import { TechnicalCommercialProposalState } from "../../states/technical-commerc
 import { getCurrencySymbol } from "@angular/common";
 import { technicalCommercialProposalFormParametersValidator } from "./technical-commercial-proposal-form-parameters/technical-commercial-proposal-form-parameters.validator";
 import { StateStatus } from "../../../common/models/state-status";
+import { NotificationService } from "../../../../shared/services/notification.service";
+import { RequestPosition } from "../../../common/models/request-position";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -32,7 +34,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   @Select(TechnicalCommercialProposalState.status)
   status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
-  availablePositions$: Observable<TechnicalCommercialProposalPosition[]>;
+  availablePositions$: Observable<RequestPosition[]>;
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
   readonly getCurrencySymbol = getCurrencySymbol;
@@ -43,27 +45,25 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   constructor(
     private fb: FormBuilder,
     private contragentService: ContragentService,
-    private store: Store
+    private store: Store,
+    private notificationService: NotificationService
   ) {
-  }
-
-  get formFiles() {
-    return this.form.get("files") as FormArray;
   }
 
   ngOnInit() {
     this.form = this.fb.group({
-      id: [this.defaultValue('id', null)],
       supplier: [this.defaultValue('supplier', null), Validators.required],
       documents: [this.defaultValue('documents', [])],
       positions: [this.defaultValue('positions', []), Validators.required],
-      files: this.fb.array([]),
+      files: [[]],
     });
 
-    this.form.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-      const docsCount = this.formFiles.value.length + this.form.get('documents').value.length;
+    if (this.technicalCommercialProposal) {
+      this.form.addControl("id", this.fb.control(this.defaultValue('id', null)));
+    }
+
+    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      const docsCount = this.form.get("files").value.length + this.form.get('documents').value.length;
       const validators = [Validators.required];
       const control = this.form.get('positions');
 
@@ -76,44 +76,49 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     });
 
     // Workaround sync with multiple elements per one formControl
-    this.form.get('positions').valueChanges
-      .pipe(takeUntil(this.destroy$))
+    this.form.get('positions').valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
   }
 
-  formFilesPush(files: File[]): void {
-    files.forEach(file => this.formFiles.push(this.fb.control(file)));
-  }
-
   submit(publish = true): void {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) { return; }
 
     this.form.disable();
 
     if (this.form.pristine) {
-      if (publish) {
-        this.store
-          .dispatch(new Publish(this.request.id, this.technicalCommercialProposal))
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(() => this.close.emit());
-      } else {
-        this.close.emit();
-      }
-      return;
+      publish ? this.publish() : this.close.emit();
+    } else {
+      this.save(this.form.value, publish);
     }
+  }
 
-    const value = { ...this.form.value };
-    Object.keys(value).forEach(key => value[key] == null && delete value[key]);
+  save(value, publish) {
+    const event = value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish);
+    this.store.dispatch(event).pipe(
+      takeUntil(this.destroy$),
+      catchError(({error}) => {
+        this.notificationService.toast(error && error.detail, "error");
+        this.form.enable();
+        return throwError(error);
+      }),
+      tap(() => this.notificationService.toast(`ТКП успешно ${publish ? "отправлено" : "сохранено"}`)),
+      tap(() => this.close.emit())
+    ).subscribe();
+  }
 
-    this.store
-      .dispatch(value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.close.emit());
+  publish() {
+    this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal)).pipe(
+      takeUntil(this.destroy$),
+      tap(() => this.notificationService.toast(`ТКП успешно отправлено`)),
+      tap(() => this.close.emit())
+    ).subscribe();
+  }
+
+  toProposalPosition(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
+    return positions.map(position => ({position}));
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {

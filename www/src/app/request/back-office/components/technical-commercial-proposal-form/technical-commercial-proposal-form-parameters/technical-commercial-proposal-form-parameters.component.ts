@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Output } from '@angular/core';
-import { ControlValueAccessor, FormArray, FormBuilder, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { shareReplay } from "rxjs/operators";
 import { OkeiService } from "../../../../../shared/services/okei.service";
@@ -8,6 +8,7 @@ import { CustomValidators } from "../../../../../shared/forms/custom.validators"
 import { DatePipe } from "@angular/common";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { PositionCurrency } from "../../../../common/enum/position-currency";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form-parameters',
@@ -46,11 +47,11 @@ export class TechnicalCommercialProposalFormParametersComponent implements After
         const form = this.fb.group({
           index: [index],
           name: [p.position.name, Validators.required],
-          priceWithVat: [p.priceWithVat, Validators.required],
-          quantity: [p.quantity, Validators.required],
-          measureUnit: [p.measureUnit, Validators.required],
-          currency: [p.currency || PositionCurrency.RUB, Validators.required],
-          deliveryDate: [this.parseDate(p.deliveryDate), CustomValidators.futureDate()],
+          priceWithVat: [p.priceWithVat || p.position.startPrice, Validators.required],
+          quantity: [p.quantity || p.position.quantity, Validators.required],
+          measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
+          currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
+          deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
         });
         // @TODO Временное отключение валют
         form.get('currency').disable();
@@ -79,6 +80,15 @@ export class TechnicalCommercialProposalFormParametersComponent implements After
     return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
       (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
     ).slice(0, 5);
+  }
+
+  isQuantityValid(form: AbstractControl) {
+    return form.get('quantity').value >= this.value[form.get('index').value].position.quantity;
+  }
+
+  isDateValid(form: AbstractControl) {
+    const date = this.value[form.get('index').value].position.deliveryDate;
+    return !date || moment(form.get('deliveryDate').value, 'DD.MM.YYYY').isSameOrAfter(moment(date));
   }
 
   registerOnChange = fn => this.onChange = fn;

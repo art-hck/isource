@@ -8,7 +8,7 @@
           <input uxgInput formControlName="priceWithVat" placeholder="Цена за единицу"/>
         </div>
         <div class="app-col">
-          <input uxgInput formControlName="quantity" placeholder="Количество"/>
+          <input uxgInput formControlName="quantity" placeholder="Количество" [warning]="!isQuantityValid(form)"/>
         </div>
         <div class="app-col">
 
@@ -30,7 +30,7 @@
         </div>
         <div class="app-col">
           <div style="position: relative">
-            <input #deliveryDateRef uxgInput formControlName="deliveryDate" placeholder="Дата">
+            <input uxgInput formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)">
             <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>

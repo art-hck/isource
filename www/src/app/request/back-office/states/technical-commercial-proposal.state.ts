@@ -1,7 +1,7 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { map, mergeMap, tap } from "rxjs/operators";
+import { catchError, map, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
@@ -10,19 +10,21 @@ import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import Update = TechnicalCommercialProposals.Update;
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
+import { RequestPosition } from "../../common/models/request-position";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
   proposalsStateStatus: StateStatus;
-  availablePositions: TechnicalCommercialProposalPosition[];
+  availablePositions: RequestPosition[];
 }
 
-type Context = StateContext<TechnicalCommercialProposalStateModel>;
+type Model = TechnicalCommercialProposalStateModel;
+type Context = StateContext<Model>;
 
-@State<TechnicalCommercialProposalStateModel>({
+@State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
   defaults: { proposals: null, availablePositions: null, proposalsStateStatus: "pristine" }
 })
@@ -31,17 +33,17 @@ export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService) {}
 
   @Selector()
-  static getList({proposals}: TechnicalCommercialProposalStateModel) {
+  static getList({proposals}: Model) {
     return proposals;
   }
 
   @Selector()
-  static availablePositions({availablePositions}: TechnicalCommercialProposalStateModel) {
+  static availablePositions({availablePositions}: Model) {
     return availablePositions;
   }
 
   @Selector()
-  static status({proposalsStateStatus}: TechnicalCommercialProposalStateModel) {
+  static status({proposalsStateStatus}: Model) {
     return proposalsStateStatus;
   }
 
@@ -58,15 +60,6 @@ export class TechnicalCommercialProposalState {
   @Action(FetchAvailablePositions)
   fetchAvailablePositions({setState}: Context, {requestId}: FetchAvailablePositions) {
     return this.rest.availablePositions(requestId).pipe(
-      map(positions => positions.map(position => ({
-        position,
-        manufacturingName: null,
-        priceWithVat: null,
-        currency: null,
-        quantity: null,
-        measureUnit: null,
-        deliveryDate: null,
-      }))),
       tap(availablePositions => setState(patch({ availablePositions })))
     );
   }
@@ -75,17 +68,15 @@ export class TechnicalCommercialProposalState {
   create(ctx: Context, action: Create) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
+      catchError(err => {
+        ctx.setState(patch({ proposalsStateStatus: "error" as StateStatus }));
+        return throwError(err);
+      }),
       tap(proposal => ctx.setState(patch({
         proposals: insertItem(proposal),
         proposalsStateStatus: "received" as StateStatus
       }))),
-      mergeMap(proposal => {
-        if (action.publish) {
-          return ctx.dispatch(new Publish(action.requestId, proposal));
-        } else {
-          return of(proposal);
-        }
-      }),
+      mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(action.requestId, proposal)) : of(proposal))
   );
   }
 
