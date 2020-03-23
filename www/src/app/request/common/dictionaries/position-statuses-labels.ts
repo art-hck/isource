@@ -1,4 +1,4 @@
-import {PositionStatus} from "../enum/position-status";
+import { PositionStatus } from "../enum/position-status";
 
 export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.DRAFT]: 'Черновик',
@@ -15,10 +15,13 @@ export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.CONTRACT_SIGNING]: 'Подписание договора',
   [PositionStatus.CONTRACTED]: 'Законтрактовано',
   [PositionStatus.RKD_AGREEMENT]: 'Согласование РКД',
+  [PositionStatus.RKD_APPROVED]: 'РКД согласована',
   [PositionStatus.MANUFACTURING]: 'Изготовление',
   [PositionStatus.DELIVERY]: 'Доставка',
   [PositionStatus.DELIVERED]: 'Поставлено',
+  [PositionStatus.RELATED_SERVICES_EXECUTION]: 'Оказание сопутствующих услуг',
   [PositionStatus.PAID]: 'Оплачено',
+  [PositionStatus.WARRANTY]: 'Гарантийные обязательства',
   [PositionStatus.COMPLETED]: 'Завершено',
 };
 

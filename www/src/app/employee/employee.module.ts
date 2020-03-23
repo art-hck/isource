@@ -8,25 +8,30 @@ import { EmployeeCardComponent } from './components/employee-card/employee-card.
 import { EmployeeCardRequestListComponent } from './components/employee-card/employee-card-request-list/employee-card-request-list.component';
 import { EmployeeCardPositionListComponent } from './components/employee-card/employee-card-position-list/employee-card-position-list.component';
 import { SharedModule } from "../shared/shared.module";
+import { CreateEmployeeComponent } from './components/create-employee/create-employee.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     SharedModule,
     CommonModule,
-    EmployeeRoutingModule
+    EmployeeRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [
     EmployeeListViewComponent,
     EmployeeListComponent,
     EmployeeCardComponent,
     EmployeeCardRequestListComponent,
-    EmployeeCardPositionListComponent
+    EmployeeCardPositionListComponent,
+    CreateEmployeeComponent
   ],
   providers: [
     EmployeeService,
   ],
-  exports: [
-    EmployeeCardComponent,
-  ]
+    exports: [
+        EmployeeCardComponent,
+        CreateEmployeeComponent,
+    ]
 })
 export class EmployeeModule { }

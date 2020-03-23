@@ -1,18 +1,55 @@
-<div class="app-table app-no-border">
-  <div class="app-row">
-    <small class="app-col app-ghost-color">НАИМЕНОВАНИЕ КОНТРАГЕНТА</small>
-    <small class="app-col app-ghost-color" [style.flex-grow]="0.5">ИНН</small>
-    <small class="app-col app-ghost-color" [style.flex-grow]="0.5">КПП</small>
-  </div>
-</div>
+<ng-template #loading class="load-block">
+  <span class="spinner spinner-md"></span>
+</ng-template>
 
-<div class="app-table">
-  <div class="app-row" *ngFor="let contragent of contragents | contragentSearchFilter: searchValue">
-    <div class="app-col">
-      <a target="_blank" href="/contragents/{{ contragent.id }}/info">{{contragent.shortName}}</a>
-    </div>
+<ng-container *ngIf="contragents; else loading">
 
-    <div class="app-col" [style.flex-grow]="0.5">{{contragent.inn}}</div>
-    <div class="app-col" [style.flex-grow]="0.5">{{contragent.kpp}}</div>
-  </div>
-</div>
+  <clr-datagrid class="employee-list-datagrid">
+
+    <clr-dg-column class="request-number clr-col">
+      Наименование контрагента
+    </clr-dg-column>
+
+    <clr-dg-column class="request-published clr-col-2">
+      ИНН
+    </clr-dg-column>
+
+    <clr-dg-column class="phone clr-col-2">
+      КПП
+    </clr-dg-column>
+
+    <clr-dg-column class="requests-positions-count clr-col-2">
+      e-mail
+    </clr-dg-column>
+
+    <clr-dg-column class="requests-positions-count clr-col-2">
+      Ответственный менеджер БО
+    </clr-dg-column>
+
+
+    <clr-dg-row *ngFor="let contragent of contragents" (click)="onRowClick(contragent.id)">
+
+      <clr-dg-cell class="employee-full-name clr-col">
+        <b>{{ contragent.shortName}}</b>
+      </clr-dg-cell>
+
+      <clr-dg-cell class="phone clr-col-2">
+        {{ contragent.inn }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="requests-positions-count clr-col-2">
+        {{ contragent.kpp }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="employee-email clr-col-2">
+        <a (click)="mailto($event, contragent.email)" href="mailto:{{ contragent.email }}">{{ contragent.email }}</a>
+      </clr-dg-cell>
+
+      <clr-dg-cell class="requests-positions-count clr-col-2">
+      </clr-dg-cell>
+
+    </clr-dg-row>
+
+  </clr-datagrid>
+
+</ng-container>

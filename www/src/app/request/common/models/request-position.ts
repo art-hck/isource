@@ -52,4 +52,5 @@ export class RequestPosition extends RequestPositionList {
   responsibleUserId?: Uuid;
   acceptedTpCount?: number;
   nameTemplate?: string;
+  availableStatuses?: string[];
 }

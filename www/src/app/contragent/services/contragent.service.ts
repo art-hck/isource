@@ -30,14 +30,14 @@ export class ContragentService {
     return this.api.get<ContragentInfo>(`contragents/${id}/info`);
   }
 
-  downloadPrimaInformReport(contragent: ContragentInfo) {
+  downloadPrimaInformReport(contragentId: Uuid) {
     this.loading = true;
     this.api.post(
-      `contragents/${contragent.id}/download-prima-inform-report`,
+      `contragents/${contragentId}/download-prima-inform-report`,
       {},
       {responseType: 'blob'})
       .subscribe(data => {
-        saveAs(data, `PrimaInformReport${contragent.id}.pdf`);
+        saveAs(data, `PrimaInformReport${contragentId}.pdf`);
         this.loading = false;
       }, (error: any) => {
         let msg = 'Ошибка при получении отчета';
