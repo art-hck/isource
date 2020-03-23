@@ -3,7 +3,7 @@
 </ng-template>
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
-  <div class="app-row action-bar">
+  <div class="app-row action">
     <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()" disabled>
       <clr-icon shape="app-pen"></clr-icon>
       Редактировать контрагента
@@ -36,7 +36,7 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
-        <div class="app-row" *ngIf="(employeesList$ |async) as employeesList; else loading">
+        <div class="app-row employee-list" *ngIf="(employeesList$ |async) as employeesList; else loading">
           <div class="app-col">
             <div class="app-card">
               <div class="app-row employee-row" *ngFor="let employee of employeesList">
@@ -50,7 +50,7 @@
                   {{employee.phone}}
                 </div>
                 <div class="app-col edit" [style.max-width.px]="60">
-                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" disabled>
+                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="onEditEmployee(employee); createEmployeeModal.open()">
                     <clr-icon shape="app-pen"></clr-icon>
                   </button>
                 </div>
@@ -78,9 +78,17 @@
     </div>
   </div>
   <clr-modal #createEmployeeModal [clrModalSize]="'lg'">
-    <h2 class="modal-title">Добавить нового сотрудника {{contragent.shortName}}</h2>
+    <h2 class="modal-title" *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника {{contragent.shortName}}</h2>
+    <ng-template #editEmployee>
+      <h2 class="modal-title">Редактировать сотрудника {{contragent.shortName}}</h2>
+    </ng-template>
     <div class="modal-body">
-      <app-create-employee (cancel)="createEmployeeModal.close()" (addEmployee)="addEmployee($event); createEmployeeModal.close()"></app-create-employee>
+      <app-create-employee
+        *ngIf="createEmployeeModal._open"
+        (cancel)="createEmployeeModal.close()"
+        (addEmployee)="addEmployee($event); createEmployeeModal.close()"
+        (editEmployee)="onClickEditEmployee($event); createEmployeeModal.close()"
+        [employee]="editedEmployee"></app-create-employee>
     </div>
   </clr-modal>
 </ng-container>

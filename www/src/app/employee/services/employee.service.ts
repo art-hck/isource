@@ -37,6 +37,18 @@ export class EmployeeService {
     });
   }
 
+  editEmployee(employee: EmployeeInfoBrief) {
+    return this.api.post<EmployeeInfoBrief>(`users/edit`, {
+      "userId": '33b4b6c7-bc72-4aba-ab5d-93499722bf36',
+      "username": employee.username,
+      "firstName": employee.firstName,
+      "lastName": employee.lastName,
+      "middleName": employee.middleName,
+      "phone": employee.phone,
+      "position": employee.position
+    });
+  }
+
   getEmployeesList(contragentId: Uuid): Observable<EmployeeInfoBrief[]> {
     return this.api.post<EmployeeInfoBrief[]>(`users/employee-list`, {
       "contragentId": contragentId

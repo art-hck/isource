@@ -5,7 +5,7 @@ import {Observable, Subscription} from "rxjs";
 import {ContragentInfo} from "../../models/contragent-info";
 import {ContragentService} from "../../services/contragent.service";
 import {Title} from "@angular/platform-browser";
-import {flatMap, map, shareReplay, tap} from "rxjs/operators";
+import {map, shareReplay, tap} from "rxjs/operators";
 import {UxgBreadcrumbsService} from "uxg";
 import {EmployeeService} from "../../../employee/services/employee.service";
 import {EmployeeInfoBrief} from "../../../employee/models/employee-info";
@@ -22,6 +22,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   contragent$: Observable<ContragentInfo>;
   employeesList$: Observable<EmployeeInfoBrief[]>;
   subscription = new Subscription();
+  editedEmployee: EmployeeInfoBrief;
 
   constructor(
     private bc: UxgBreadcrumbsService,
@@ -70,6 +71,23 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
           map(employeeList => [data, ...employeeList])
         );
       }));
+  }
+
+  onClickEditEmployee(employee: EmployeeInfoBrief) {
+    this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
+      (data) => {
+        this.employeesList$ = this.employeesList$.pipe(
+          map(employeeList => {
+            const index = employeeList.findIndex(_employee =>_employee.id === data.id);
+            employeeList[index] = data;
+            return employeeList;
+          })
+        )
+      }));
+  }
+
+  onEditEmployee(employee: EmployeeInfoBrief) {
+    this.editedEmployee = employee;
   }
 
   ngOnDestroy() {
