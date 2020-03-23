@@ -54,26 +54,13 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.form = this.fb.group({
       supplier: [this.defaultValue('supplier', null), Validators.required],
       documents: [this.defaultValue('documents', [])],
-      positions: [this.defaultValue('positions', []), Validators.required],
+      positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
       files: [[]],
     });
 
     if (this.technicalCommercialProposal) {
       this.form.addControl("id", this.fb.control(this.defaultValue('id', null)));
     }
-
-    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      const docsCount = this.form.get("files").value.length + this.form.get('documents').value.length;
-      const validators = [Validators.required];
-      const control = this.form.get('positions');
-
-      if (docsCount === 0 || this.manufacturerValidator(control, false) || this.parametersValidator(control, false)) {
-        validators.push(this.parametersValidator, this.manufacturerValidator);
-      }
-
-      this.form.get('positions').setValidators(validators);
-      this.form.get('positions').updateValueAndValidity({emitEvent: false});
-    });
 
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges.pipe(takeUntil(this.destroy$))
