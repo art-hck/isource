@@ -99,14 +99,16 @@
               </div>
               <div class="app-row">
                 <h2 class="app-col">
-                  {{data.proposalPosition.quantity}}
+                  <span [class.app-error-color]="!isQuantityValid(data.proposalPosition)">{{data.proposalPosition.quantity}}</span>
                   <span class="app-ghost-color">{{data.proposalPosition.measureUnit}}</span>
                 </h2>
                 <h2 class="app-col">
                   {{data.proposalPosition.priceWithVat | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
                 </h2>
-                <h2 class="app-col">{{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}</h2>
+                <h2 class="app-col" [class.app-error-color]="!isDateValid(data.proposalPosition)">
+                  {{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
+                </h2>
                 <h2 class="app-col">
                   {{data.proposalPosition.priceWithVat * data.proposalPosition.quantity | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
@@ -114,9 +116,11 @@
               </div>
             </div>
             <div class="app-row">
-              <div class="app-col app-success-color app-bold">
-                <div *ngIf="isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
-                <div *ngIf="isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
+              <div class="app-col app-bold">
+                <div class="app-success-color" *ngIf="isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
+                <div class="app-success-color" *ngIf="isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
+                <div class="app-error-color" *ngIf="!isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
+                <div class="app-error-color" *ngIf="!isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
               </div>
               <div>
                 <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
