@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { PositionService } from "../../services/position.service";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -9,7 +9,7 @@ import { NotificationService } from "../../../../shared/services/notification.se
   templateUrl: './positions-status-change.component.html',
   styleUrls: ['./positions-status-change.component.scss']
 })
-export class PositionsStatusChangeComponent implements OnChanges {
+export class PositionsStatusChangeComponent implements OnInit, OnChanges {
 
   protected _status: string;
 
@@ -45,7 +45,7 @@ export class PositionsStatusChangeComponent implements OnChanges {
   }
 
   updateAvailableStatuses(): void {
-    let intersection = this.getIntersectionOfAvailableStatuses();
+    const intersection = this.getIntersectionOfAvailableStatuses();
 
     this.statuses = Object.entries(PositionStatusesLabels)
       .filter(item => intersection.includes(item[0]));
@@ -58,7 +58,7 @@ export class PositionsStatusChangeComponent implements OnChanges {
 
     let intersection = this.positions[0].availableStatuses;
     for (let i = 1; i < this.positions.length; i++) {
-      intersection = this.positions[i].availableStatuses.filter(value => intersection.includes(value))
+      intersection = this.positions[i].availableStatuses.filter(value => intersection.includes(value));
     }
 
     return intersection;
