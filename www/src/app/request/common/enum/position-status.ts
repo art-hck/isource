@@ -13,9 +13,12 @@ export enum PositionStatus {
   CONTRACT_SIGNING = 'CONTRACT_SIGNING',           // Подписание договора
   CONTRACTED = 'CONTRACTED',                       // Законтрактовано
   RKD_AGREEMENT = 'RKD_AGREEMENT',                 // Согласование РКД
+  RKD_APPROVED = 'RKD_APPROVED',                   // РКД согласована
   MANUFACTURING = 'MANUFACTURING',                 // Изготовление
   DELIVERY = 'DELIVERY',                           // Доставка
   DELIVERED = 'DELIVERED',                         // Поставлено
+  RELATED_SERVICES_EXECUTION = 'RELATED_SERVICES_EXECUTION', // Оказание сопутствующих услуг
   PAID = 'PAID',                                   // Оплачено
+  WARRANTY = 'WARRANTY',                           // Гарантийные обязательства
   COMPLETED = 'COMPLETED',                         // Завершено
 }
