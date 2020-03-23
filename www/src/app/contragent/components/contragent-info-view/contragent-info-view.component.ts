@@ -82,7 +82,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
             employeeList[index] = data;
             return employeeList;
           })
-        )
+        );
       }));
   }
 
