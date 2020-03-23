@@ -10,12 +10,13 @@ import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { ProposalsStateStatus, TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
 import { technicalCommercialProposalFormParametersValidator } from "./technical-commercial-proposal-form-parameters/technical-commercial-proposal-form-parameters.validator";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
+import { StateStatus } from "../../../common/models/state-status";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -29,7 +30,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   @Input() closable = true;
   @Output() close = new EventEmitter();
   @Select(TechnicalCommercialProposalState.status)
-  status$: Observable<ProposalsStateStatus>;
+  status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
   availablePositions$: Observable<TechnicalCommercialProposalPosition[]>;
   form: FormGroup;

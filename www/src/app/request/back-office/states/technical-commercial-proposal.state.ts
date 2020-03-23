@@ -11,21 +11,22 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import Update = TechnicalCommercialProposals.Update;
 import { of } from "rxjs";
-
-export type ProposalsStateStatus = "fetching" | "updating" | "pristine" | "received";
+import { StateStatus } from "../../common/models/state-status";
+import { Injectable } from "@angular/core";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
-  proposalsStateStatus: ProposalsStateStatus;
+  proposalsStateStatus: StateStatus;
   availablePositions: TechnicalCommercialProposalPosition[];
 }
 
 type Context = StateContext<TechnicalCommercialProposalStateModel>;
 
 @State<TechnicalCommercialProposalStateModel>({
-  name: 'TechnicalCommercialProposals',
+  name: 'BackofficeTechnicalCommercialProposals',
   defaults: { proposals: null, availablePositions: null, proposalsStateStatus: "pristine" }
 })
+@Injectable()
 export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService) {}
 
@@ -45,12 +46,12 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Fetch)
-  fetch(ctx: Context, {requestId}: Fetch) {
+  fetch(ctx: Context, { requestId }: Fetch) {
     if (ctx.getState().proposals) { return; }
-    ctx.setState(patch({ proposalsStateStatus: "pending" as ProposalsStateStatus }));
+    ctx.setState(patch({ proposalsStateStatus: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
-        ctx.setState(patch({proposals, proposalsStateStatus: "received" as ProposalsStateStatus}));
+        ctx.setState(patch({ proposals, proposalsStateStatus: "received" as StateStatus }));
       }));
   }
 
@@ -72,11 +73,11 @@ export class TechnicalCommercialProposalState {
 
   @Action(Create)
   create(ctx: Context, action: Create) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
       tap(proposal => ctx.setState(patch({
         proposals: insertItem(proposal),
-        proposalsStateStatus: "received" as ProposalsStateStatus
+        proposalsStateStatus: "received" as StateStatus
       }))),
       mergeMap(proposal => {
         if (action.publish) {
@@ -90,11 +91,11 @@ export class TechnicalCommercialProposalState {
 
   @Action(Update)
   update(ctx: Context, action: Update) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.update(action.requestId, action.payload).pipe(
       tap(proposal => ctx.setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-        proposalsStateStatus: "received" as ProposalsStateStatus
+        proposalsStateStatus: "received" as StateStatus
       }))),
       mergeMap(proposal => {
         if (action.publish) {
@@ -108,11 +109,11 @@ export class TechnicalCommercialProposalState {
 
   @Action(Publish)
   publish({setState}: Context, {requestId, proposal}: Publish) {
-    setState(patch({ proposalsStateStatus: "updating" as ProposalsStateStatus }));
+    setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.publish(requestId, proposal).pipe(
       tap((_proposal) => setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
-        proposalsStateStatus: "received" as ProposalsStateStatus
+        proposalsStateStatus: "received" as StateStatus
       })))
     );
   }

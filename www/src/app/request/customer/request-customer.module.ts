@@ -14,6 +14,10 @@ import { AgreementsComponent } from './components/agreements/agreements.componen
 import { AgreementsModule } from "../../agreements/agreements.module";
 import { RequestCreateModalComponent } from './components/request-create-modal/request-create-modal.component';
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
+import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
+import { NgxsModule } from "@ngxs/store";
+import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
+import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 
 
 @NgModule({
@@ -28,15 +32,20 @@ import { TechnicalCommercialProposalListComponent } from './components/technical
     AgreementsComponent,
     RequestCreateModalComponent,
     TechnicalCommercialProposalListComponent,
+    TechnicalCommercialProposalComponent,
   ],
   imports: [
     AgreementsModule,
     RequestCustomerRoutingModule,
     RequestCommonModule,
+    NgxsModule.forFeature([
+      TechnicalCommercialProposalState
+    ]),
   ],
   providers: [
     CustomerRequestService,
-    CustomerTechnicalProposalsService
+    CustomerTechnicalProposalsService,
+    TechnicalCommercialProposalService
   ]
 })
 export class RequestCustomerModule {

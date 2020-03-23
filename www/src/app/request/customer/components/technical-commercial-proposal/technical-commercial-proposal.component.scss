@@ -1,0 +1,65 @@
+@import "projects/uxg/src/styles/index";
+
+.app-card {
+  margin-bottom: 24px;
+}
+
+hr {
+  margin: 21px 0;
+}
+
+.grid {
+  .data {
+    cursor: pointer;
+
+    .app-col + .app-col { padding-left: 20px }
+
+    &-body .app-col { padding-top: 14px }
+
+    .supplier, .manufacturing { cursor: auto; min-width: 110px }
+    .quantity, .price, .date, .total {
+      flex-basis: 110px;
+      flex-grow: .1;
+    }
+    .radio { max-width: 40px }
+    .status {
+      max-width: 60px;
+      text-align: center;
+    }
+  }
+
+  &.on-review {
+    .data {
+      &-head .app-col { padding-bottom: 14px }
+      &-body .app-col { padding: 17px 0 }
+      &-body-container:nth-child(odd) { background: #F4F6FB }
+    }
+  }
+
+  .data-body-container:nth-child(odd) {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+}
+
+.modal-body {
+  @include scrollbar($theme);
+  margin: 0 -30px;
+  padding: 0 30px;
+}
+
+.modal-section {
+  &-header {
+    margin: 16px 0 9px 0;
+  }
+}
+
+.modal-info {
+  margin: 24px -30px;
+  padding: 16px 30px;
+  background: #F4F6FB;
+
+  h2 {
+    font-weight: 500;
+  }
+}

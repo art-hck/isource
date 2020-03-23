@@ -4,19 +4,19 @@ import { TechnicalCommercialProposal } from "../../common/models/technical-comme
 export namespace TechnicalCommercialProposals {
   // Получить список ТКП
   export class Fetch {
-    static readonly type = '[Technical Commercial Proposals] Fetch';
+    static readonly type = '[Technical Commercial Proposals Backoffice] Fetch';
     constructor(public requestId: Uuid) {}
   }
 
   // Получить список доступных к добавлению позиций ТКП
   export class FetchAvailablePositions {
-    static readonly type = '[Technical Commercial Proposals] FetchAvailablePositions';
+    static readonly type = '[Technical Commercial Proposals Backoffice] FetchAvailablePositions';
     constructor(public requestId: Uuid) {}
   }
 
   // Создать ТКП
   export class Create {
-    static readonly type = '[Technical Commercial Proposals] Create';
+    static readonly type = '[Technical Commercial Proposals Backoffice] Create';
 
     constructor(
       public requestId: Uuid,
@@ -27,7 +27,7 @@ export namespace TechnicalCommercialProposals {
 
   // Редактировать ТКП
   export class Update {
-    static readonly type = '[Technical Commercial Proposals] Update';
+    static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
     constructor(
       public requestId: Uuid,
@@ -38,7 +38,7 @@ export namespace TechnicalCommercialProposals {
 
   // Отправить на согласование ТКП
   export class Publish {
-    static readonly type = '[Technical Commercial Proposals] Publish';
+    static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
     constructor(public requestId: Uuid, public proposal: TechnicalCommercialProposal) {}
   }
 }
