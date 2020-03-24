@@ -79,7 +79,9 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
         this.employeesList$ = this.employeesList$.pipe(
           map(employeeList => {
             const index = employeeList.findIndex(_employee => _employee.id === data.id);
-            if (index !== -1) employeeList[index] = data;
+            if (index !== -1) {
+              employeeList[index] = data;
+            }
             return employeeList;
           })
         );
