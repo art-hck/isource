@@ -53,7 +53,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
         const form = this.fb.group({
           index: [index],
           name: [p.position.name, Validators.required],
-          priceWithVat: [p.priceWithVat || p.position.startPrice, Validators.required],
+          priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, Validators.required],
           quantity: [p.quantity || p.position.quantity, Validators.required],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
@@ -77,7 +77,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
     const value = this.value
       .map((item, i) => ({...item, ...this.formArray.getRawValue().find(_item => _item.index === i)}))
       .map(item => {
-        const deliveryDate = (new Date(item.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1'))).toISOString();
+        const deliveryDate = item.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
         return { ...item, deliveryDate};
       });
 
@@ -95,12 +95,12 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   }
 
   isQuantityValid(form: AbstractControl) {
-    return form.get('quantity').value >= this.value[form.get('index').value].position.quantity;
+    return +form.get('quantity').value === +this.value[form.get('index').value].position.quantity;
   }
 
   isDateValid(form: AbstractControl) {
     const date = this.value[form.get('index').value].position.deliveryDate;
-    return !date || moment(form.get('deliveryDate').value, 'DD.MM.YYYY').isSameOrAfter(moment(date));
+    return !date || moment(form.get('deliveryDate').value, 'DD.MM.YYYY').isSameOrBefore(moment(date));
   }
 
   registerOnChange = fn => this.onChange = fn;

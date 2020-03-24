@@ -12,7 +12,7 @@
       <p class="app-bold">{{ form.get("name").value }}</p>
       <div class="app-row section">
         <div class="app-col">
-          <input uxgInput formControlName="priceWithVat" placeholder="Цена за единицу"/>
+          <input uxgInput formControlName="priceWithoutVat" placeholder="Цена за единицу"/>
         </div>
         <div class="app-col">
           <input uxgInput formControlName="quantity" placeholder="Количество" [warning]="!isQuantityValid(form)"/>

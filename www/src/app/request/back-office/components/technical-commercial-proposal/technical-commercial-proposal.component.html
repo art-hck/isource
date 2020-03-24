@@ -44,13 +44,13 @@
           <div class="app-col app-ellipsis name">{{item.position.name}}</div>
           <div class="app-col app-ellipsis manufacturing-name">{{item.manufacturingName}}</div>
           <div class="app-col total">
-            {{(item.priceWithVat * item.quantity) || null | number:'1.0-2'}}
+            {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
           <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
 
           <div class="app-col price">
-            {{item.priceWithVat | number:'1.0-2'}}
+            {{item.priceWithoutVat | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
           </div>
 

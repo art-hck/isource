@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="app-col price">
-            {{proposalPos.priceWithVat | number:'1.0-2'}}
+            {{proposalPos.priceWithoutVat | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
           </div>
           <div class="app-col date">
@@ -58,7 +58,7 @@
             </span>
           </div>
           <div class="app-col total">
-            {{proposalPos.priceWithVat * proposalPos.quantity | number:'1.0-2'}}
+            {{proposalPos.priceWithoutVat * proposalPos.quantity | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
           </div>
           <div class="app-col radio" *ngIf="!isReviewed">
@@ -112,14 +112,14 @@
                   <span class="app-ghost-color">{{data.proposalPosition.measureUnit}}</span>
                 </h2>
                 <h2 class="app-col">
-                  {{data.proposalPosition.priceWithVat | number:'1.0-2'}}
+                  {{data.proposalPosition.priceWithoutVat | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
                 </h2>
                 <h2 class="app-col" [class.app-error-color]="!isDateValid(data.proposalPosition)">
                   {{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
                 </h2>
                 <h2 class="app-col">
-                  {{data.proposalPosition.priceWithVat * data.proposalPosition.quantity | number:'1.0-2'}}
+                  {{data.proposalPosition.priceWithoutVat * data.proposalPosition.quantity | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
                 </h2>
               </div>

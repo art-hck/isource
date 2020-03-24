@@ -93,9 +93,9 @@
         </div>
 
         <div class="position-info-item app-row" *ngFor="let pos of control.value">
-          <ng-container *ngIf="pos.priceWithVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
+          <ng-container *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
             <div class="app-col">
-              {{ pos.quantity * pos.priceWithVat | number:'1.0-2' }}
+              {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
               <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
             </div>
             <div class="app-col">
@@ -103,7 +103,7 @@
               <span class="app-ghost-color">{{ pos.measureUnit }}</span>
             </div>
             <div class="app-col">
-              {{ pos.priceWithVat | number:'1.0-2' }}
+              {{ pos.priceWithoutVat | number:'1.0-2' }}
               <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
             </div>
             <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
