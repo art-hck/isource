@@ -62,7 +62,7 @@ export class ProcedureCreateComponent implements OnInit {
       positions: [[], [Validators.required]],
       general: this.fb.group({
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
-        dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.futureDate()],
+        dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.currentOrFutureDate()],
         timeEndRegistration: [this.defaultProcedureValue("timeEndRegistration"), [Validators.required, Validators.pattern(/[0-9]{2} : [0-9]{2}/)]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 10), // Продление времени приема заявок на участие (минут)
