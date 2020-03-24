@@ -1,18 +1,17 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { PositionWithManufacturer } from "../../../models/position-with-manufacturer";
 
 @Component({
-  selector: 'app-request-technical-proposals-create-manufacturer',
-  templateUrl: './technical-proposal-create-manufacturer.component.html',
-  styleUrls: ['technical-proposal-create-manufacturer.component.scss'],
+  selector: 'app-request-proposal-form-manufacturer',
+  templateUrl: './proposal-form-manufacturer.component.html',
+  styleUrls: ['proposal-form-manufacturer.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => TechnicalProposalCreateManufacturerComponent),
+    useExisting: forwardRef(() => ProposalFormManufacturerComponent),
     multi: true
   }]
 })
-export class TechnicalProposalCreateManufacturerComponent implements OnInit, ControlValueAccessor {
+export class ProposalFormManufacturerComponent implements OnInit, ControlValueAccessor {
   @Output() cancel = new EventEmitter();
   @Input() disabledFn: (item) => boolean;
   public onTouched: (value) => void;
@@ -62,7 +61,10 @@ export class TechnicalProposalCreateManufacturerComponent implements OnInit, Con
   }
 
   submit(controls: AbstractControl[]) {
-    const value = controls.map(control => control.value);
+    const value = this.value.map(item => ({
+      ...item,
+      ...controls.find(c => c.value.position.id === item.position.id).value
+    }));
     this.writeValue(value);
     this.onChange(value);
   }

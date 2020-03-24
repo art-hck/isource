@@ -1,0 +1,21 @@
+@import "../../../../../../../projects/uxg/src/styles/index";
+
+.parameters {
+  max-height: calc(70vh - 75px);
+  overflow-y: scroll;
+  padding-right: 6px;
+  margin-right: -22px;
+  @include scrollbar($theme);
+}
+.app-row {
+  margin-bottom: 24px;
+}
+
+.app-col:not(:first-child) {
+  padding-left: 20px;
+  max-width: 160px;
+}
+
+.divider {
+  margin: 0;
+}

@@ -17,7 +17,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
   @ContentChild('errors', {static: false, read: TemplateRef }) errors: TemplateRef<ElementRef>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
-  @HostBinding('class.app-control-wrap') appControlWrap = true;
+  @HostBinding('class.app-control-wrap') @Input() appControlWrap = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
   @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
   @Output() select = new EventEmitter();

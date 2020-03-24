@@ -14,11 +14,11 @@ import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 
 @Component({
-  selector: 'app-request-commercial-proposal-create',
-  templateUrl: './commercial-proposal-create.component.html',
-  styleUrls: ['./commercial-proposal-create.component.scss']
+  selector: 'app-request-commercial-proposal-form',
+  templateUrl: './commercial-proposal-form.component.html',
+  styleUrls: ['./commercial-proposal-form.component.scss']
 })
-export class CommercialProposalCreateComponent implements OnInit, OnDestroy {
+export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Input() request: Request;
   @Input() position: RequestPosition;
   @Input() commercialProposal: CommercialProposal;

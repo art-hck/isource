@@ -1,6 +1,6 @@
 import { PositionStatus } from "../enum/position-status";
 
-export const PositionStatusesLabels: { [key in PositionStatus]: string } = {
+export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.DRAFT]: 'Черновик',
   [PositionStatus.ON_CUSTOMER_APPROVAL]: 'На согласовании заказчика',
   [PositionStatus.NEW]: 'Новая',

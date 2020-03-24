@@ -5,6 +5,12 @@
 
 .app-bold { font-weight: bold; }
 
+// Text transformation
+.app-uppercase { text-transform: uppercase; }
+.app-capitalize { text-transform: capitalize; }
+.app-lowercase { text-transform: lowercase; }
+.app-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 // Colors
 .app-primary-color { color: uxg($theme, color-font-primary); }
 .app-ghost-color { color: uxg($theme, color-font-ghost); }
@@ -39,10 +45,11 @@
 .padding-6xl{ padding: uxg($theme, padding-6xl); }
 
 .divider {
-  background: uxg($theme, color-divider);
-  border: none;
+  border-top:1px uxg($theme, color-divider) solid;
+  border-bottom: none;
+  border-right: none;
+  border-left: none;
   display: block;
-  height: 1px;
   margin: 15px 0;
   width: 100%;
 }

@@ -8,8 +8,9 @@
        (input)="input($event)"
        (focus)="focus.emit(inputValue || value)"
        [class.active]="!isHidden"
+       [attr.placeholder]="!appControlWrap && placeholder || null"
 />
-<label *ngIf="placeholder" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
+<label *ngIf="placeholder && appControlWrap" class="app-control-label" (click)="inputRef.focus()">{{ placeholder }}</label>
 <ng-container *ngTemplateOutlet="errors"></ng-container>
 <div #itemsWrapper class="app-dropdown-items-wrapper" [class.hidden]="isHidden">
   <div class="app-dropdown-items">

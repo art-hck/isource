@@ -25,12 +25,12 @@
         </div>
       </div>
 
-      <app-request-technical-proposals-create
+      <app-request-technical-proposals-form
         *ngIf="showForm"
         [request]="request"
         (visibleChange)="showForm = $event"
         (create)="addTechnicalProposal($event)"
-      ></app-request-technical-proposals-create>
+      ></app-request-technical-proposals-form>
 
       <app-request-backoffice-technical-proposal
         *ngFor="let technicalProposal of technicalProposals"

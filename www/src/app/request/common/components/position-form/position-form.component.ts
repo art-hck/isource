@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { UxgDropdownInputComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
+import { CurrencyLabels } from "../../dictionaries/currency-labels";
 
 @Component({
   selector: 'app-request-position-form',
@@ -55,12 +56,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   onChange: (value) => void;
   value;
 
-  readonly currencies = [
-    { value: PositionCurrency.RUB, label: "Руб." },
-    { value: PositionCurrency.USD, label: "Дол." },
-    { value: PositionCurrency.EUR, label: "Евр." },
-    { value: PositionCurrency.CHF, label: "Фр." },
-  ];
+  readonly currencies = Object.entries(CurrencyLabels);
 
   readonly approveRequiredFields = [
     'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'

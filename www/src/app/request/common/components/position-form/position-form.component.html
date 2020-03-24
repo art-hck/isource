@@ -1,6 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
   <uxg-dropdown-input
     #nameRef
+    class="position-name"
     formControlName="name"
     placeholder="Наименование МТР"
     [lg]="true"
@@ -36,7 +37,7 @@
         <!-- deliveryDate -->
         <div class="app-col">
           <div class="app-control-wrap">
-            <input #deliveryDate uxgInput lg formControlName="deliveryDate">
+            <input #deliveryDate uxgInput lg class="delivery-date" formControlName="deliveryDate">
             <label class="app-control-label" (click)="deliveryDate.focus()">Срок поставки</label>
             <label class="app-control-icon"
                    (click)="form.get('deliveryDate').enabled ? datepicker.toggleDatepicker($event) : false">
@@ -52,7 +53,7 @@
         </div>
         <!-- isDeliveryDateAsap -->
         <div class="app-col app-row clr-align-items-center">
-          <uxg-checkbox class="app-control" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
+          <uxg-checkbox class="app-control asap" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
           <label (click)="isDeliveryDateAsap.check($event)"> Как можно скорее</label>
         </div>
       </div>
@@ -61,7 +62,7 @@
     <!-- deliveryBasis -->
     <div class="app-col">
       <div class="app-control-wrap">
-        <input #deliveryBasis uxgInput lg formControlName="deliveryBasis">
+        <input #deliveryBasis uxgInput lg class="delivery-basis" formControlName="deliveryBasis">
         <label class="app-control-label" (click)="deliveryBasis.focus()">Базис поставки (пункт, до которого требуется доставка)</label>
         <div class="app-control-error" *ngIf="form.get('deliveryBasis').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
@@ -74,7 +75,7 @@
   <div class="app-row">
     <div class="app-col">
       <label class="input-label">Условия оплаты</label>
-      <uxg-dropdown placeholder="Условия оплаты" formControlName="paymentTerms">
+      <uxg-dropdown lg placeholder="Условия оплаты" class="payment-terms" formControlName="paymentTerms">
         <div uxgDropdownItem value="30 дней по факту поставки">30 банковских дней по факту поставки</div>
         <div uxgDropdownItem value="60 дней по факту поставки">60 банковских дней по факту поставки</div>
         <div uxgDropdownItem value="90 дней по факту поставки">90 банковских дней по факту поставки</div>
@@ -87,7 +88,7 @@
   <div class="app-row">
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <div class="app-control-wrap">
-        <input #quantity uxgInput lg formControlName="quantity"/>
+        <input #quantity uxgInput lg class="quantity" formControlName="quantity"/>
         <label class="app-control-label" (click)="quantity.focus()">Количество</label>
         <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
@@ -95,7 +96,7 @@
       </div>
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="200">
-      <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+      <uxg-dropdown-input appSuggestions class="measure-units" formControlName="measureUnit" placeholder="Ед. измерения"
         [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #sug="appSuggestions"
       >
         <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
@@ -115,7 +116,7 @@
 
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
       <div class="app-control-wrap">
-        <input #startPrice uxgInput lg formControlName="startPrice"/>
+        <input #startPrice uxgInput lg class="start-price" formControlName="startPrice"/>
         <label class="app-control-label" (click)="startPrice.focus()">Начальная макс. цена (необязательно)</label>
         <div class="app-control-error" *ngIf="form.get('startPrice').errors as e">
           <span *ngIf="e.min">Значение должно быть больше 0</span>
@@ -125,8 +126,8 @@
 
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
       <label class="input-label">Валюта</label>
-      <uxg-dropdown placeholder="Валюта" formControlName="currency">
-        <div uxgDropdownItem [value]="currency.value" *ngFor="let currency of currencies">{{ currency.label }}</div>
+      <uxg-dropdown lg placeholder="Валюта" class="currency" formControlName="currency">
+        <div uxgDropdownItem [value]="currency[1]" *ngFor="let currency of currencies">{{ currency[0] }}</div>
       </uxg-dropdown>
     </div>
   </div>
@@ -134,7 +135,7 @@
   <div class="app-row">
     <div class="app-col">
       <div class="app-control-wrap">
-        <input #productionDocument uxgInput lg formControlName="productionDocument"/>
+        <input #productionDocument uxgInput lg class="prod-docs" formControlName="productionDocument"/>
         <label class="app-control-label" (click)="productionDocument.focus()">Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)</label>
         <div class="app-control-error" *ngIf="form.get('productionDocument').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
@@ -142,7 +143,7 @@
       </div>
     </div>
     <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
-      <uxg-checkbox class="app-control" #design formControlName="isDesignRequired"></uxg-checkbox>
+      <uxg-checkbox class="app-control" #design class="is-design-req" formControlName="isDesignRequired"></uxg-checkbox>
       <label (click)="design.check($event)">Требуется РКД</label>
     </div>
   </div>
@@ -155,15 +156,15 @@
       <br/>
       <div class="app-row">
         <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
-          <uxg-checkbox class="app-control" #shmr formControlName="isShmrRequired"></uxg-checkbox>
+          <uxg-checkbox class="app-control is-shmr-req" #shmr formControlName="isShmrRequired"></uxg-checkbox>
           <label (click)="shmr.check($event)">ШМР</label>
         </div>
         <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
-          <uxg-checkbox class="app-control" #pnr formControlName="isPnrRequired"></uxg-checkbox>
+          <uxg-checkbox class="app-control is-pnr-req" #pnr formControlName="isPnrRequired"></uxg-checkbox>
           <label (click)="pnr.check($event)">ПНР</label>
         </div>
         <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
-          <uxg-checkbox class="app-control" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
+          <uxg-checkbox class="app-control is-inspection-control-req" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
           <label (click)="inspection.check($event)">Инспекционный контроль</label>
         </div>
       </div>

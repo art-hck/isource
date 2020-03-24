@@ -1,0 +1,26 @@
+hr { margin: 14px 0; }
+
+.app-table > .app-row {
+  padding: 8px 0;
+
+  .app-col:first-child {
+    padding-left: 0;
+  }
+}
+
+.name,
+.manufacturing-name {
+  flex-grow: .3;
+}
+
+.total,
+.quantity,
+.price,
+.date {
+  min-width: 82px;
+  flex-grow: 0.1;
+}
+
+.status {
+  flex-basis: 40px;
+}
