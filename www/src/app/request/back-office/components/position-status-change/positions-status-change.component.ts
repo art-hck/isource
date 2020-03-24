@@ -3,6 +3,7 @@ import { PositionStatusesLabels } from "../../../common/dictionaries/position-st
 import { PositionService } from "../../services/position.service";
 import { RequestPosition } from "../../../common/models/request-position";
 import { NotificationService } from "../../../../shared/services/notification.service";
+import { PositionStatus } from "../../../common/enum/position-status";
 
 @Component({
   selector: 'app-positions-status-change',
@@ -64,7 +65,7 @@ export class PositionsStatusChangeComponent implements OnInit, OnChanges {
     return intersection;
   }
 
-  getStatusLabel(status: string): string {
+  getStatusLabel(status: PositionStatus): string {
     return PositionStatusesLabels[status];
   }
 
