@@ -1,4 +1,11 @@
 <form (ngSubmit)="submit()" >
+  <div class="paymentTerms">
+    <label class="input-label">Условия оплаты</label>
+    <uxg-dropdown placeholder="Условия оплаты" [formControl]="paymentTermsControl">
+      <div uxgDropdownItem *ngFor="let term of paymentTerms" [value]="term[0]">{{term[1]}}</div>
+    </uxg-dropdown>
+  </div>
+
   <div class="divider"></div>
   <div class="parameters">
     <ng-container *ngFor="let form of formArray?.controls" [formGroup]="form">

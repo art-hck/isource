@@ -1,7 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
-import { shareReplay } from "rxjs/operators";
+import { shareReplay, takeUntil } from "rxjs/operators";
 import { OkeiService } from "../../../../../shared/services/okei.service";
 import { Okei } from "../../../../../shared/models/okei";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
@@ -9,6 +9,9 @@ import { DatePipe } from "@angular/common";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { PositionCurrency } from "../../../../common/enum/position-currency";
 import * as moment from "moment";
+import { PaymentTerms } from "../../../../common/enum/payment-terms";
+import { PaymentTermsLabels } from "../../../../common/dictionaries/payment-terms-labels";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-technical-commercial-proposal-parameters-form',
@@ -24,7 +27,7 @@ import * as moment from "moment";
     }
   ]
 })
-export class TechnicalCommercialProposalParametersFormComponent implements AfterContentInit, ControlValueAccessor {
+export class TechnicalCommercialProposalParametersFormComponent implements AfterContentInit, ControlValueAccessor, OnDestroy {
   @Output() cancel = new EventEmitter();
   onTouched: (value) => void;
   onChange: (value) => void;
@@ -32,6 +35,9 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   formArray: FormArray;
   readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
   readonly currencies = Object.entries(CurrencyLabels);
+  readonly paymentTerms = Object.entries(PaymentTermsLabels);
+  readonly paymentTermsControl = this.fb.control(PaymentTerms.Days30);
+  destroy$ = new Subject();
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -52,13 +58,18 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
-          paymentTerms: [this.parseDate(p.paymentTerms || p.position.paymentTerms), CustomValidators.futureDate()],
+          paymentTerms: [this.parseDate(p.paymentTerms || p.position.paymentTerms), Validators.required],
         });
         // @TODO Временное отключение валют
         form.get('currency').disable();
         return form;
       })
     );
+
+    this.paymentTermsControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(paymentTerms => this.formArray.patchValue(this.formArray.value.fill({paymentTerms})));
+
     this.cd.detectChanges();
   }
 
@@ -104,5 +115,10 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
     } catch (e) {
       return date;
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

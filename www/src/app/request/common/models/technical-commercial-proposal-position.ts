@@ -22,4 +22,5 @@ export class TechnicalCommercialProposalPosition {
     status: TechnicalCommercialProposalPositionStatus;
     statusLabel: TechnicalCommercialProposalPositionStatusLabel;
     position: RequestPosition;
+    paymentTerms: string;
 }
