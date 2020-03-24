@@ -37,7 +37,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   readonly currencies = Object.entries(CurrencyLabels);
   readonly paymentTerms = Object.entries(PaymentTermsLabels);
   readonly paymentTermsControl = this.fb.control(PaymentTerms.Days30);
-  destroy$ = new Subject();
+  readonly destroy$ = new Subject();
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -58,7 +58,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
-          paymentTerms: [this.parseDate(p.paymentTerms || p.position.paymentTerms), Validators.required],
+          paymentTerms: [p.paymentTerms || p.position.paymentTerms, Validators.required],
         });
         // @TODO Временное отключение валют
         form.get('currency').disable();

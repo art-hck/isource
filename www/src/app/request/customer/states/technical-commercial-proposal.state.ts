@@ -1,6 +1,6 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -71,8 +71,8 @@ export class TechnicalCommercialProposalState {
   @Action(Approve)
   approve(ctx: Context, action: Approve) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
-    return this.rest.approve(action.requestId, action.proposalPosition).pipe(tap(() =>
-      ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus }))
+    return this.rest.approve(action.requestId, action.proposalPosition).pipe(
+      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus }))
     ));
   }
 

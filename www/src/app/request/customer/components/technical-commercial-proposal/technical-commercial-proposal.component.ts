@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
-import { Select, Store } from "@ngxs/store";
+import { Actions, Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
 import { getCurrencySymbol } from "@angular/common";
@@ -10,7 +10,7 @@ import { StateStatus } from "../../../common/models/state-status";
 import { Observable, Subject } from "rxjs";
 import { ClrModal } from "@clr/angular";
 import { FormControl } from "@angular/forms";
-import { takeUntil } from "rxjs/operators";
+import { finalize, takeUntil } from "rxjs/operators";
 import * as moment from "moment";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
@@ -33,6 +33,16 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   selectedProposalPosition = new FormControl(null);
   folded = false;
 
+  get isReviewed(): boolean {
+    return this.group.data.every(({ proposal }) => proposal.status === 'REVIEWED');
+  }
+
+  constructor(
+    private store: Store,
+    private actions: Actions,
+    private cd: ChangeDetectorRef
+  ) {}
+
   ngOnInit() {
     if (this.chooseBy$) {
       this.chooseBy$.pipe(takeUntil(this.destroy$)).subscribe((type) => {
@@ -43,6 +53,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
               const currValid = this.isValid(curr.proposalPosition);
               if (prevValid && !currValid) { return prev; }
               if (!prevValid && currValid) { return curr; }
+              if (!prevValid && !currValid) { return null; }
               return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr;
             });
           break;
@@ -52,6 +63,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
               const currValid = this.isValid(curr.proposalPosition);
               if (prevValid && !currValid) { return prev; }
               if (!prevValid && currValid) { return curr; }
+              if (!prevValid && !currValid) { return null; }
               return +new Date(prev.proposalPosition.deliveryDate) <= +new Date(curr.proposalPosition.deliveryDate)  ? prev : curr;
             });
           break;
@@ -59,31 +71,21 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.status$.pipe(takeUntil(this.destroy$)).subscribe(status => {
-      status !== "received" ? this.selectedProposalPosition.disable() : this.selectedProposalPosition.enable();
-    });
-
     // Workaround sync with multiple elements per one formControl
     this.selectedProposalPosition.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(v => this.selectedProposalPosition.setValue(v, {onlySelf: true, emitEvent: false}));
   }
 
-  get isReviewed() {
-    return this.group.data.every(({ proposal }) => proposal.status === 'REVIEWED');
-  }
-
-  constructor(private store: Store, public cd: ChangeDetectorRef) {}
-
   approve(proposalPosition: TechnicalCommercialProposalPosition) {
-    this.store.dispatch(new Approve(this.requestId, proposalPosition));
+    this.dispatchAction(new Approve(this.requestId, proposalPosition));
   }
 
   reject() {
-    this.store.dispatch(new Reject(this.requestId, this.group.position));
+    this.dispatchAction(new Reject(this.requestId, this.group.position));
   }
 
-  isValid(proposalPosition: TechnicalCommercialProposalPosition) {
+  isValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
     return this.isDateValid(proposalPosition) && this.isQuantityValid(proposalPosition);
   }
 
@@ -92,12 +94,26 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.quantity >= proposalPosition.position.quantity;
+    return proposalPosition.quantity === proposalPosition.position.quantity;
   }
 
-  private chooseBy(by: (p, c) => typeof p | typeof c) {
-    this.selectedProposalPosition.setValue(this.group.data.reduce(by).proposalPosition);
-    this.cd.detectChanges();
+  private dispatchAction(action) {
+    this.selectedProposalPosition.disable();
+    this.store.dispatch(action).pipe(
+      takeUntil(this.destroy$),
+      finalize(() => {
+        this.selectedProposalPosition.enable();
+        this.cd.detectChanges();
+      })
+    ).subscribe();
+  }
+
+  private chooseBy(by: (p, c) => typeof p | typeof c | null) {
+    const item = this.group.data.reduce(by);
+    if (item) {
+      this.selectedProposalPosition.setValue(item.proposalPosition);
+      this.cd.detectChanges();
+    }
   }
 
   ngOnDestroy() {

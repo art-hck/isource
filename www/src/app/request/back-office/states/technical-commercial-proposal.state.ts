@@ -1,19 +1,18 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { catchError, map, mergeMap, tap } from "rxjs/operators";
+import { catchError, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
-import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
+import { of, throwError } from "rxjs";
+import { StateStatus } from "../../common/models/state-status";
+import { Injectable } from "@angular/core";
+import { RequestPosition } from "../../common/models/request-position";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import Update = TechnicalCommercialProposals.Update;
-import { of, throwError } from "rxjs";
-import { StateStatus } from "../../common/models/state-status";
-import { Injectable } from "@angular/core";
-import { RequestPosition } from "../../common/models/request-position";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];

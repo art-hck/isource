@@ -162,7 +162,7 @@
             formControlName="positions"
             class="select-list select-list-positions"
             [liveUpdate]="false"
-            [items]="toProposalPosition(availablePositions)"
+            [items]="toProposalPositions(availablePositions)"
             (ngModelChange)="positionsModal.close()"
             [filterFn]="searchPosition"
             [trackBy]="trackByPositionId"

@@ -19,9 +19,9 @@
         </div>
 
       </ng-container>
-      <!--button uxgButton icon link (click)="state = 'edit'" [disabled]="proposal.status!=='DRAFT'">
+      <button uxgButton icon link (click)="state = 'edit'" [disabled]="proposal.status!=='DRAFT'">
         <clr-icon shape="app-pen"></clr-icon>
-      </button-->
+      </button>
       <button uxgButton icon link (click)="folded = !folded">
         <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
       </button>

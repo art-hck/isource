@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subject, throwError } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { catchError, shareReplay, takeUntil, tap } from "rxjs/operators";
+import { finalize, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -14,7 +14,6 @@ import { TechnicalCommercialProposalState } from "../../states/technical-commerc
 import { getCurrencySymbol } from "@angular/common";
 import { technicalCommercialProposalParametersFormValidator } from "./technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
-import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPosition } from "../../../common/models/request-position";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
@@ -32,23 +31,21 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   @Input() closable = true;
   @Output() close = new EventEmitter();
   @Select(TechnicalCommercialProposalState.status)
-  status$: Observable<StateStatus>;
+  readonly status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
-  availablePositions$: Observable<RequestPosition[]>;
-  form: FormGroup;
-  contragents$: Observable<ContragentList[]>;
+  readonly availablePositions$: Observable<RequestPosition[]>;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly destroy$ = new Subject();
+  form: FormGroup;
+  contragents$: Observable<ContragentList[]>;
 
   constructor(
     private fb: FormBuilder,
     private contragentService: ContragentService,
-    private store: Store,
-    private notificationService: NotificationService
-  ) {
-  }
+    private store: Store
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -72,39 +69,33 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   submit(publish = true): void {
     if (this.form.invalid) { return; }
-
+    let action$: Observable<any>;
     this.form.disable();
 
     if (this.form.pristine) {
-      publish ? this.publish() : this.close.emit();
+      publish ? action$ = this.publish() : this.close.emit();
     } else {
-      this.save(this.form.value, publish);
+      action$ = this.save(this.form.value, publish);
     }
+
+    action$.pipe(
+      takeUntil(this.destroy$),
+      tap(() => this.close.emit()),
+      finalize(() => this.form.enable())
+    ).subscribe();
   }
 
   save(value, publish) {
-    const event = value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish);
-    this.store.dispatch(event).pipe(
-      takeUntil(this.destroy$),
-      catchError(({error}) => {
-        this.notificationService.toast(error && error.detail, "error");
-        this.form.enable();
-        return throwError(error);
-      }),
-      tap(() => this.notificationService.toast(`ТКП успешно ${publish ? "отправлено" : "сохранено"}`)),
-      tap(() => this.close.emit())
-    ).subscribe();
+    return this.store.dispatch(
+      value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish)
+    );
   }
 
   publish() {
-    this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal)).pipe(
-      takeUntil(this.destroy$),
-      tap(() => this.notificationService.toast(`ТКП успешно отправлено`)),
-      tap(() => this.close.emit())
-    ).subscribe();
+    return this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal));
   }
 
-  toProposalPosition(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
+  toProposalPositions(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
     return positions.map(position => ({position}));
   }
 
