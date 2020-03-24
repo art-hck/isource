@@ -13,7 +13,6 @@ h3 {
 
 .action {
   justify-content: flex-end;
-  padding-bottom: 30px;
 }
 
 .edit {
@@ -22,6 +21,11 @@ h3 {
 
 .employee-row {
   padding: 17px 20px;
+
+  .app-col {
+    align-self: center;
+  }
+
   &:not(:last-child) {
     border-bottom: 1px solid #b2d0ff;
   }
@@ -29,4 +33,6 @@ h3 {
 
 .app-card {
   padding: 0;
+  margin-top: 30px;
 }
+
