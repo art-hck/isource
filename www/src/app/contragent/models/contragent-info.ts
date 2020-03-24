@@ -18,5 +18,6 @@ export class ContragentInfo {
   createdDate: Date;
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];
+  responsible: string;
 
 }

@@ -72,8 +72,7 @@
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="onCancel()">Отмена</button>
-      <button uxgButton primary lg [disabled]="form.invalid" *ngIf="!isEditing">Добавить</button>
-      <button uxgButton primary lg [disabled]="form.invalid" *ngIf="isEditing">Сохранить</button>
+      <button uxgButton primary lg [disabled]="form.invalid">{{isEditing ? "Сохранить" : "Добавить" }}</button>
     </div>
   </div>
 </form>

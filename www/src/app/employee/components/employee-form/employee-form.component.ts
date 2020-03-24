@@ -7,11 +7,11 @@ import {TechnicalProposalsStatus} from "../../../request/common/enum/technical-p
 import * as moment from "moment";
 
 @Component({
-  selector: 'app-create-employee',
-  templateUrl: './create-employee.component.html',
-  styleUrls: ['./create-employee.component.scss']
+  selector: 'app-employee-form',
+  templateUrl: './employee-form.component.html',
+  styleUrls: ['./employee-form.component.scss']
 })
-export class CreateEmployeeComponent implements OnInit {
+export class EmployeeFormComponent implements OnInit {
   @Input() employee: EmployeeInfoBrief;
   @Output() cancel = new EventEmitter();
   @Output() addEmployee = new EventEmitter<EmployeeInfoBrief>();
@@ -49,18 +49,13 @@ export class CreateEmployeeComponent implements OnInit {
   }
 
   onAddEmployee() {
-    const form = this.form.value;
-    if (this.isEditing) {
-      // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
-      if (this.form.pristine) {
-        this.cancel.emit();
-        return;
-      }
-      this.editEmployee.emit(form);
+    const value = this.form.value;
+    if (this.form.pristine) {
+      this.cancel.emit();
     } else {
-      this.addEmployee.emit(form);
+      this.isEditing ? this.editEmployee.emit(value) : this.addEmployee.emit(value);
+      this.form.reset();
     }
-    this.form.reset();
   }
 
   defaultEmployeeValue = (field: keyof EmployeeInfoBrief, defaultValue: any = "") => this.employee && this.employee[field] || defaultValue;

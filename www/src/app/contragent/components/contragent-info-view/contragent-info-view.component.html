@@ -36,7 +36,7 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
-        <div class="app-row employee-list" *ngIf="(employeesList$ |async) as employeesList; else loading">
+        <div class="app-row app-align-items-center" *ngIf="(employeesList$ |async) as employeesList; else loading">
           <div class="app-col">
             <div class="app-card">
               <div class="app-row employee-row" *ngFor="let employee of employeesList">
@@ -50,7 +50,7 @@
                   {{employee.phone}}
                 </div>
                 <div class="app-col edit" [style.max-width.px]="60">
-                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="onEditEmployee(employee); createEmployeeModal.open()">
+                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="editedEmployee = employee; createEmployeeModal.open()">
                     <clr-icon shape="app-pen"></clr-icon>
                   </button>
                 </div>
@@ -73,6 +73,7 @@
         </div>
         <div class="app-section">
           <div class="app-ghost-color">Ответственный менеджер БО</div>
+          <div>{{contragent.responsible}}</div>
         </div>
       </ng-container>
     </div>
@@ -83,12 +84,12 @@
       <h2 class="modal-title">Редактировать сотрудника {{contragent.shortName}}</h2>
     </ng-template>
     <div class="modal-body">
-      <app-create-employee
+      <app-employee-form
         *ngIf="createEmployeeModal._open"
         (cancel)="createEmployeeModal.close()"
         (addEmployee)="addEmployee($event); createEmployeeModal.close()"
-        (editEmployee)="onClickEditEmployee($event); createEmployeeModal.close()"
-        [employee]="editedEmployee"></app-create-employee>
+        (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
+        [employee]="editedEmployee"></app-employee-form>
     </div>
   </clr-modal>
 </ng-container>

@@ -73,21 +73,17 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
       }));
   }
 
-  onClickEditEmployee(employee: EmployeeInfoBrief) {
+  updateEmployeeListItem(employee: EmployeeInfoBrief) {
     this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
       (data) => {
         this.employeesList$ = this.employeesList$.pipe(
           map(employeeList => {
             const index = employeeList.findIndex(_employee => _employee.id === data.id);
-            employeeList[index] = data;
+            if (index !== -1) employeeList[index] = data;
             return employeeList;
           })
         );
       }));
-  }
-
-  onEditEmployee(employee: EmployeeInfoBrief) {
-    this.editedEmployee = employee;
   }
 
   ngOnDestroy() {

@@ -39,13 +39,8 @@ export class EmployeeService {
 
   editEmployee(employee: EmployeeInfoBrief) {
     return this.api.post<EmployeeInfoBrief>(`users/edit`, {
-      "userId": employee.id,
-      "username": employee.username,
-      "firstName": employee.firstName,
-      "lastName": employee.lastName,
-      "middleName": employee.middleName,
-      "phone": employee.phone,
-      "position": employee.position
+      userId: employee.id,
+      ...employee
     });
   }
 
