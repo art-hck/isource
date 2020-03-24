@@ -20,6 +20,8 @@
       <br/>
       <ng-container *uxgTab="sentToReview">
         <app-request-technical-commercial-proposal
+          #proposalsOnReview
+          [chooseBy$]="chooseBy$"
           *ngFor="let positionProposals of proposalsSentToReview$ | async; trackBy: trackByPositionId"
           [requestId]="requestId"
           [group]="positionProposals">
@@ -37,6 +39,19 @@
     <div class="app-col-aside"></div>
   </div>
 </ng-container>
+
+<div class="proposals-footer app-row app-align-items-center" #footer>
+  <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
+  <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
+  <div class="app-col"></div>
+  <h3 *ngIf="total > 0">
+    <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+    <span>{{total | number: "1.0-2"}}</span>
+    <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
+  </h3>
+  <button uxgButton secondary lg (click)="rejectAll()">Отклонить всё</button>
+  <button uxgButton primary lg (click)="approveAll()" [disabled]="!total">Согласовать всё</button>
+</div>
 
 <ng-template #placeholder>
   <div class="app-row">

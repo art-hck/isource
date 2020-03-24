@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { tap } from "rxjs/operators";
@@ -12,21 +12,36 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
 import { StateStatus } from "../../../common/models/state-status";
 import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
 import { FormBuilder } from "@angular/forms";
+import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
+import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
+import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
   styleUrls: ['technical-commercial-proposal-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalListComponent implements OnInit {
-
+export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
   requestId: Uuid;
   request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.getSentToReview)
-  proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
+  readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
   @Select(TechnicalCommercialProposalState.getReviewed)
-  proposalsReviewed$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
-  @Select(TechnicalCommercialProposalState.status) stateStatus$: Observable<StateStatus>;
+  readonly proposalsReviewed$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
+  @Select(TechnicalCommercialProposalState.status)
+  readonly stateStatus$: Observable<StateStatus>;
+  readonly chooseBy$ = new Subject<"date" | "price">();
+  readonly getCurrencySymbol = getCurrencySymbol;
+
+  get total() {
+    return this.proposalsOnReview && this.proposalsOnReview.reduce((total, curr) => {
+      const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposalPosition.value;
+      total += proposalPosition && proposalPosition.priceWithoutVat * proposalPosition.quantity;
+      return total;
+    }, 0);
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +67,25 @@ export class TechnicalCommercialProposalListComponent implements OnInit {
     this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
   }
 
+  ngAfterViewInit() {
+    document.querySelector('.main-container').append(this.footer.nativeElement);
+  }
+
+  approveAll() {
+    this.proposalsOnReview
+      .filter(component => component.selectedProposalPosition.value)
+      .forEach(component => component.approve(component.selectedProposalPosition.value));
+  }
+
+  rejectAll() {
+    this.proposalsOnReview.forEach(component => component.reject());
+  }
+
   trackByPositionId(i, item: TechnicalCommercialProposalGroupByPosition) {
     return item.position.id;
+  }
+
+  ngOnDestroy() {
+    this.footer.nativeElement.remove();
   }
 }
