@@ -29,7 +29,7 @@
         <div *ngIf="!isReviewed" class="app-col radio"></div>
         <div *ngIf="isReviewed" class="app-col status"><small class="app-uppercase app-ghost-color">Статус</small></div>
       </div>
-      <div class="data-body-container" *ngFor="let data of group.data; index as i">
+      <div class="data-body-container" *ngFor="let data of group.data; index as i; trackBy: trackByproposalPositionId">
         <div *ngIf="data.proposalPosition as proposalPos"
            (click)="proposalModal.open()"
            class="app-row app-link-no-color data data-body"
@@ -53,7 +53,6 @@
           <div class="app-col radio" *ngIf="!isReviewed">
             <uxg-radio-item
               (click)="$event.stopPropagation()"
-              class="app-control"
               [name]="group.position.id"
               [value]="proposalPos"
               [disabled]="(status$ | async) !== 'received'"
@@ -124,7 +123,7 @@
               </div>
               <div>
                 <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
-                <button uxgButton lg primary (click)="proposalModal.close(); approve(data.proposalPosition)">Выбрать</button>
+                <button uxgButton lg primary (click)="selectedProposalPosition = data.proposalPosition; proposalModal.close();">Выбрать</button>
               </div>
             </div>
           </div>

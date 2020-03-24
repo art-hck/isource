@@ -22,9 +22,11 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 export class TechnicalCommercialProposalListComponent implements OnInit {
   @Select(TechnicalCommercialProposalState.getList)
   technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
+  @Select(TechnicalCommercialProposalState.proposalsLength)
+  proposalsLength$: Observable<number>;
   requestId: Uuid;
   request$: Observable<Request>;
-  showForm = false;
+  showForm;
 
   constructor(
     private route: ActivatedRoute,

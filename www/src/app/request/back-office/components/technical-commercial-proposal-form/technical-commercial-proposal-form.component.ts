@@ -12,7 +12,7 @@ import { proposalManufacturerValidator } from "../proposal-form-manufacturer/pro
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
-import { technicalCommercialProposalFormParametersValidator } from "./technical-commercial-proposal-form-parameters/technical-commercial-proposal-form-parameters.validator";
+import { technicalCommercialProposalParametersFormValidator } from "./technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -38,7 +38,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly parametersValidator = technicalCommercialProposalFormParametersValidator;
+  readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly destroy$ = new Subject();
 

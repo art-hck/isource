@@ -28,7 +28,7 @@ export class TechnicalCommercialProposalComponent {
   folded = false;
 
   get isReviewed() {
-    return this.group.data[0].proposal.status === 'REVIEWED';
+    return this.group.data.every(({ proposal }) => proposal.status === 'REVIEWED');
   }
 
   constructor(private store: Store) {}
@@ -48,4 +48,6 @@ export class TechnicalCommercialProposalComponent {
   isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
     return proposalPosition.quantity >= proposalPosition.position.quantity;
   }
+
+  trackByproposalPositionId = (i, {proposalPosition}) => proposalPosition.id;
 }

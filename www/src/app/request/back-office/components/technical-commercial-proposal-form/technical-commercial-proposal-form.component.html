@@ -208,12 +208,12 @@
     <clr-modal #parametersModal [clrModalSize]="'lg'">
       <h2 class="modal-title">Параметры ТКП по позициям</h2>
       <div class="modal-body">
-        <app-technical-commercial-proposal-form-parameters
+        <app-technical-commercial-proposal-parameters-form
           *ngIf="parametersModal._open"
           formControlName="positions"
           (ngModelChange)="parametersModal.close()"
           (cancel)="parametersModal.close()"
-        ></app-technical-commercial-proposal-form-parameters>
+        ></app-technical-commercial-proposal-parameters-form>
       </div>
     </clr-modal>
   </div>

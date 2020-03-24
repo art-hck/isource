@@ -38,6 +38,11 @@ export class TechnicalCommercialProposalState {
   }
 
   @Selector()
+  static proposalsLength({proposals}: Model) {
+    return proposals.length;
+  }
+
+  @Selector()
   static availablePositions({availablePositions}: Model) {
     return availablePositions;
   }

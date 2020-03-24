@@ -11,20 +11,20 @@ import { PositionCurrency } from "../../../../common/enum/position-currency";
 import * as moment from "moment";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-form-parameters',
-  templateUrl: './technical-commercial-proposal-form-parameters.component.html',
-  styleUrls: ['./technical-commercial-proposal-form-parameters.component.scss'],
+  selector: 'app-technical-commercial-proposal-parameters-form',
+  templateUrl: './technical-commercial-proposal-parameters-form.component.html',
+  styleUrls: ['./technical-commercial-proposal-parameters-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     DatePipe,
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TechnicalCommercialProposalFormParametersComponent),
+      useExisting: forwardRef(() => TechnicalCommercialProposalParametersFormComponent),
       multi: true
     }
   ]
 })
-export class TechnicalCommercialProposalFormParametersComponent implements AfterContentInit, ControlValueAccessor {
+export class TechnicalCommercialProposalParametersFormComponent implements AfterContentInit, ControlValueAccessor {
   @Output() cancel = new EventEmitter();
   onTouched: (value) => void;
   onChange: (value) => void;
@@ -52,6 +52,7 @@ export class TechnicalCommercialProposalFormParametersComponent implements After
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
+          paymentTerms: [this.parseDate(p.paymentTerms || p.position.paymentTerms), CustomValidators.futureDate()],
         });
         // @TODO Временное отключение валют
         form.get('currency').disable();
