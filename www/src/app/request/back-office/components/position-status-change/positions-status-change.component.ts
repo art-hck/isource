@@ -65,7 +65,7 @@ export class PositionsStatusChangeComponent implements OnInit, OnChanges {
     return intersection;
   }
 
-  getStatusLabel(status: PositionStatus): string {
+  getStatusLabel(status: string): string {
     return PositionStatusesLabels[status];
   }
 
