@@ -11,6 +11,8 @@ import { TechnicalCommercialProposal } from "../../../common/models/technical-co
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import { RequestPosition } from "../../../common/models/request-position";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -18,7 +20,6 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit {
-
   @Select(TechnicalCommercialProposalState.getList)
   technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
   requestId: Uuid;
@@ -47,6 +48,17 @@ export class TechnicalCommercialProposalListComponent implements OnInit {
     );
 
     this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
+  }
+
+  getPositions(proposals: TechnicalCommercialProposal[]): RequestPosition[] {
+    return proposals
+      .map(proposal => proposal.positions.map(proposalPosition => proposalPosition.position))
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
+  getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
+    return proposals
+      .map(proposal => proposal.supplier);
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;

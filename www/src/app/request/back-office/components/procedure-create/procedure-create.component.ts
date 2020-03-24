@@ -10,6 +10,7 @@ import { finalize } from "rxjs/operators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -20,7 +21,7 @@ export class ProcedureCreateComponent implements OnInit {
   @Input() procedure;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
-  @Input() contragents: ContragentList[];
+  @Input() contragents: ContragentList[] | ContragentShortInfo[];
   @Input() action: "create" | "prolong" | "bargain" = "create";
   @Input() publicAccess = true;
   @Output() complete = new EventEmitter();
