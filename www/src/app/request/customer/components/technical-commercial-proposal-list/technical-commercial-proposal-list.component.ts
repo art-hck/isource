@@ -80,15 +80,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       filter(data => data.length > 0),
       map(data => ({...data[0], length: data.length}))
     ).subscribe(({result, action, length}) => {
-        const e = result.error as any;
-        let text = `По ${this.pluralize.transform(length, "позиции", "позициям", "позициям")} `;
-        text += action instanceof Approve ? "выбран победитель" : "отклонено предложение";
-        this.store.dispatch(new ToastActions.Push({
-          text: e && e.error.detail || text,
-          lifetime: 2000,
-          removeOnClick: true,
-          type: result.error ? "error" : "success"
-        }));
+      const e = result.error as any;
+      let text = `По ${this.pluralize.transform(length, "позиции", "позициям", "позициям")} `;
+      text += action instanceof Approve ? "выбран победитель" : "отклонено предложение";
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
+      );
     });
   }
 

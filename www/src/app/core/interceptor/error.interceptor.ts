@@ -11,7 +11,8 @@ import { tap } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { TokenService } from "@stdlib-ng/core";
 import { Router } from "@angular/router";
-import { NotificationService } from "../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
+import { ToastActions } from "../../shared/actions/toast.actions";
 
 /**
  * Исключение для запроса с success=false
@@ -31,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private token: TokenService,
     private router: Router,
-    private notification: NotificationService
+    private store: Store
   ) {
   }
 
@@ -48,7 +49,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       .pipe(
         tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse && 'success' in event.body && event.body.success === false) {
-              this.notification.toast(event.body.message || this.DEFAULT_ERROR_MSG, 'error', 5000);
+              this.store.dispatch(new ToastActions.Error(event.body.message || this.DEFAULT_ERROR_MSG, 5000));
               throw new ResponseSuccessError();
             }
           },
@@ -85,7 +86,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     if (err instanceof HttpErrorResponse && err.status === 422) {
-      this.notification.toast(err.error.detail || this.DEFAULT_ERROR_MSG, 'error', 5000);
+      this.store.dispatch(new ToastActions.Error(err.error.detail || this.DEFAULT_ERROR_MSG, 5000));
     }
 
     return throwError(err);

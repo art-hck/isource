@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { PositionService } from "../../services/position.service";
 import { RequestPosition } from "../../../common/models/request-position";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-positions-status-change',
@@ -30,7 +31,7 @@ export class PositionsStatusChangeComponent implements OnInit {
 
   constructor(
     private positionService: PositionService,
-    private notificationService: NotificationService,
+    private store: Store,
   ) {
   }
 
@@ -47,7 +48,7 @@ export class PositionsStatusChangeComponent implements OnInit {
       this.loading = false;
       this.changeStatus.emit(this.status);
     }, (error) => {
-      this.notificationService.toast('Ошибка смены статуса позиций', 'error');
+      this.store.dispatch(new ToastActions.Error('Ошибка смены статуса позиций'));
       this.loading = false;
     });
   }

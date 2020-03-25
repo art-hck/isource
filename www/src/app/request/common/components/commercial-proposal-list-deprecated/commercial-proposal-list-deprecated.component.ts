@@ -8,11 +8,12 @@ import { PositionStatus } from "../../enum/position-status";
 import { RequestPosition } from "../../models/request-position";
 import { RequestDocument } from "../../models/request-document";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { PositionStatuses } from '../../dictionaries/position-statuses';
 import { RequestService } from "../../../customer/services/request.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-request-commercial-proposal-list-deprecated',
@@ -38,7 +39,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private customerRequestService: RequestService,
-    private notificationService: NotificationService,
+    private store: Store,
     protected getContragentService: ContragentService,
   ) {
   }
@@ -114,7 +115,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
     this.offersService.uploadDocuments(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.documents.push(document));
-        this.notificationService.toast('Документ загружен');
+        this.store.dispatch(new ToastActions.Success('Документ загружен'));
       });
   }
 
@@ -122,7 +123,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
     this.offersService.uploadTechnicalProposals(offer, files)
       .subscribe((documents: RequestDocument[]) => {
         documents.forEach(document => offer.technicalProposals.push(document));
-        this.notificationService.toast('Документ загружен');
+        this.store.dispatch(new ToastActions.Success('Документ загружен'));
       });
   }
 
@@ -152,7 +153,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
         this.requestPosition.statusLabel = data.statusLabel;
         offerWinner.isWinner = true;
 
-        this.notificationService.toast('Победитель выбран');
+        this.store.dispatch(new ToastActions.Success('Победитель выбран'));
       }
     );
   }

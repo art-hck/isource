@@ -11,9 +11,10 @@ import { DeliveryMonitorStatusLabels } from "../../dictionaries/delivery-monitor
 import { Uuid } from "../../../../cart/models/uuid";
 import { InspectorInfo } from "../../models/inspector-info";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { PositionStatuses } from "../../dictionaries/position-statuses";
 import { PositionStatus } from "../../enum/position-status";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-request-delivery-monitor',
@@ -62,7 +63,7 @@ export class DeliveryMonitorComponent implements OnInit {
   });
 
   constructor(
-    private notificationService: NotificationService,
+    private store: Store,
     private deliveryMonitorService: DeliveryMonitorService
   ) { }
 
@@ -82,7 +83,7 @@ export class DeliveryMonitorComponent implements OnInit {
     this.shiftCount++;
 
     if (this.shiftCount === 5) {
-      this.notificationService.toast('Активация...', "warning");
+      this.store.dispatch(new ToastActions.Warning('Активация...'));
     }
 
     if (this.shiftCount === 10) {
@@ -219,19 +220,19 @@ export class DeliveryMonitorComponent implements OnInit {
 
   assignIdSubmit() {
     if (this.assignIdForm.invalid) {
-      this.notificationService.toast('Заполните поле!', "error");
+      this.store.dispatch(new ToastActions.Error('Заполните поле!'));
       return;
     }
 
     const formData = this.assignIdForm.value;
     this.assignIdForm.reset();
     this.deliveryMonitorService.assignNewGoodId(this.requestPosition.id, formData).subscribe();
-    this.notificationService.toast('Идентификатор товара заменён');
+    this.store.dispatch(new ToastActions.Success('Идентификатор товара заменён'));
   }
 
   newEventSubmit() {
     if (this.newEventForm.invalid) {
-      this.notificationService.toast('Заполните все поля!', "error");
+      this.store.dispatch(new ToastActions.Error('Заполните все поля!'));
       return;
     }
 
@@ -241,7 +242,7 @@ export class DeliveryMonitorComponent implements OnInit {
 
     this.newEventForm.reset();
     this.deliveryMonitorService.addInspectorStage(formData).subscribe();
-    this.notificationService.toast('Событие добавлено');
+    this.store.dispatch(new ToastActions.Success('Событие добавлено'));
     this.inspectorStages.push(formData);
   }
 
