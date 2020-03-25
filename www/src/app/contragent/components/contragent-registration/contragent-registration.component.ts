@@ -7,10 +7,14 @@ import * as moment from "moment";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
-import { Subscription } from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { finalize } from "rxjs/operators";
 import { ContragentShortInfo } from "../../models/contragent-short-info";
+import {UserService} from "../../../user/service/user.service";
+import {User} from "../../../user/models/user";
+import {EmployeeService} from "../../../employee/services/employee.service";
+import {EmployeeItem} from "../../../employee/models/employee-item";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -24,6 +28,7 @@ export class ContragentRegistrationComponent implements OnInit {
   configParty: DadataConfig;
   configBank: DadataConfig;
   isLoading = false;
+  seniorBackofficeUsers$: Observable<EmployeeItem[]>;
   subscription = new Subscription();
 
   constructor(
@@ -31,6 +36,7 @@ export class ContragentRegistrationComponent implements OnInit {
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
     private contragentService: ContragentService,
     private notificationService: NotificationService,
+    private employeeService: EmployeeService
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
@@ -52,8 +58,7 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        email: ['', [Validators.required, CustomValidators.email]],
-        phone: ['', [Validators.required, CustomValidators.phone]],
+        role: ['customer']
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -70,7 +75,14 @@ export class ContragentRegistrationComponent implements OnInit {
         name: ['', [Validators.required]],
         address: ['', [Validators.required]],
       }),
+      contragentContact: this.fb.group({
+        email: ['', CustomValidators.emailNotRequired],
+        phone: ['', CustomValidators.phoneNotRequired],
+        responsible: ['', Validators.required]
+      })
     });
+
+    this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
   }
 
   onPartySuggestionSelected(event): void {

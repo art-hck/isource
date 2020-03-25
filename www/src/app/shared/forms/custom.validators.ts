@@ -178,4 +178,18 @@ export class CustomValidators {
   static oneOrMoreSelected(control: FormArray): ValidationErrors {
     return control.controls.filter(formGroup => formGroup.get("checked").value).length > 0 ? null : { '': true };
   }
+
+  static emailNotRequired(control: FormControl): any {
+    if (control.value === '') {
+      return null;
+    }
+    return CustomValidators.email(control);
+  }
+
+  static phoneNotRequired(control: FormControl): any {
+    if (control.value === '') {
+      return null;
+    }
+    return CustomValidators.phone(control);
+  }
 }
