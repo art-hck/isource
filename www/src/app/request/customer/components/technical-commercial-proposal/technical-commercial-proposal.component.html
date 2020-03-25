@@ -29,7 +29,7 @@
         <div *ngIf="!isReviewed" class="app-col radio"></div>
         <div *ngIf="isReviewed" class="app-col status"><small class="app-uppercase app-ghost-color">Статус</small></div>
       </div>
-      <div class="data-body-container" *ngFor="let data of group.data; index as i">
+      <div class="data-body-container" *ngFor="let data of group.data; index as i; trackBy: trackByproposalPositionId">
         <div *ngIf="data.proposalPosition as proposalPos"
            (click)="proposalModal.open()"
            class="app-row app-link-no-color data data-body"
@@ -38,26 +38,35 @@
             <app-contragent-info-link (click)="$event.stopPropagation()" [contragent]="data.proposal.supplier"></app-contragent-info-link>
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
-          <div class="app-col quantity">{{proposalPos.quantity}}
-            <span class="app-ghost-color">{{proposalPos.measureUnit}}</span>
+          <div class="app-col quantity ">
+            <div [ngClass]="!isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
+              <div class="app-row app-align-items-center">
+                <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
+                <clr-icon shape="app-narrow-arrow"
+                  *ngIf="proposalPos.quantity != proposalPos.position.quantity"
+                  [attr.dir]="proposalPos.quantity > proposalPos.position.quantity ? 'up' : 'down'"></clr-icon>
+              </div>
+            </div>
           </div>
           <div class="app-col price">
-            {{proposalPos.priceWithVat | number:'1.0-2'}}
+            {{proposalPos.priceWithoutVat | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
           </div>
-          <div class="app-col date">{{proposalPos.deliveryDate | date:"dd.MM.yyyy"}}</div>
+          <div class="app-col date">
+            <span [ngClass]="!isDateValid(proposalPos) ? 'app-error-color app-bold' : ''">
+              {{proposalPos.deliveryDate | date:"dd.MM.yyyy"}}
+            </span>
+          </div>
           <div class="app-col total">
-            {{proposalPos.priceWithVat * proposalPos.quantity | number:'1.0-2'}}
+            {{proposalPos.priceWithoutVat * proposalPos.quantity | number:'1.0-2'}}
             <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
           </div>
           <div class="app-col radio" *ngIf="!isReviewed">
             <uxg-radio-item
-              (click)="$event.stopPropagation()"
-              class="app-control"
               [name]="group.position.id"
               [value]="proposalPos"
-              [disabled]="(status$ | async) !== 'received'"
-              [(ngModel)]="selectedProposalPosition"
+              [formControl]="selectedProposalPosition"
+              (click)="$event.stopPropagation()"
             ></uxg-radio-item>
           </div>
           <div class="app-col status" *ngIf="isReviewed">
@@ -103,14 +112,14 @@
                   <span class="app-ghost-color">{{data.proposalPosition.measureUnit}}</span>
                 </h2>
                 <h2 class="app-col">
-                  {{data.proposalPosition.priceWithVat | number:'1.0-2'}}
+                  {{data.proposalPosition.priceWithoutVat | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
                 </h2>
                 <h2 class="app-col" [class.app-error-color]="!isDateValid(data.proposalPosition)">
                   {{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
                 </h2>
                 <h2 class="app-col">
-                  {{data.proposalPosition.priceWithVat * data.proposalPosition.quantity | number:'1.0-2'}}
+                  {{data.proposalPosition.priceWithoutVat * data.proposalPosition.quantity | number:'1.0-2'}}
                   <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
                 </h2>
               </div>
@@ -124,7 +133,7 @@
               </div>
               <div>
                 <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
-                <button uxgButton lg primary (click)="proposalModal.close(); approve(data.proposalPosition)">Выбрать</button>
+                <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>
               </div>
             </div>
           </div>
@@ -140,7 +149,7 @@
         <button uxgButton secondary [disabled]="(status$ | async) !== 'received'" (click)="reject()">
           Отклонить все по позиции
         </button>
-        <button uxgButton primary [disabled]="!selectedProposalPosition || (status$ | async) !== 'received'" (click)="approve(selectedProposalPosition)">
+        <button uxgButton primary [disabled]="!selectedProposalPosition.value || (status$ | async) !== 'received'" (click)="approve(selectedProposalPosition.value)">
           Согласовать
         </button>
       </div>

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Request } from "../../../common/models/request";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { shareReplay, takeUntil } from "rxjs/operators";
+import { finalize, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -12,8 +12,9 @@ import { proposalManufacturerValidator } from "../proposal-form-manufacturer/pro
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
-import { technicalCommercialProposalFormParametersValidator } from "./technical-commercial-proposal-form-parameters/technical-commercial-proposal-form-parameters.validator";
+import { technicalCommercialProposalParametersFormValidator } from "./technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
+import { RequestPosition } from "../../../common/models/request-position";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -30,90 +31,72 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   @Input() closable = true;
   @Output() close = new EventEmitter();
   @Select(TechnicalCommercialProposalState.status)
-  status$: Observable<StateStatus>;
+  readonly status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
-  availablePositions$: Observable<TechnicalCommercialProposalPosition[]>;
-  form: FormGroup;
-  contragents$: Observable<ContragentList[]>;
+  readonly availablePositions$: Observable<RequestPosition[]>;
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly parametersValidator = technicalCommercialProposalFormParametersValidator;
+  readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly destroy$ = new Subject();
+  form: FormGroup;
+  contragents$: Observable<ContragentList[]>;
 
   constructor(
     private fb: FormBuilder,
     private contragentService: ContragentService,
     private store: Store
-  ) {
-  }
-
-  get formFiles() {
-    return this.form.get("files") as FormArray;
-  }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      id: [this.defaultValue('id', null)],
       supplier: [this.defaultValue('supplier', null), Validators.required],
       documents: [this.defaultValue('documents', [])],
-      positions: [this.defaultValue('positions', []), Validators.required],
-      files: this.fb.array([]),
+      positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
+      files: [[]],
     });
 
-    this.form.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-      const docsCount = this.formFiles.value.length + this.form.get('documents').value.length;
-      const validators = [Validators.required];
-      const control = this.form.get('positions');
-
-      if (docsCount === 0 || this.manufacturerValidator(control, false) || this.parametersValidator(control, false)) {
-        validators.push(this.parametersValidator, this.manufacturerValidator);
-      }
-
-      this.form.get('positions').setValidators(validators);
-      this.form.get('positions').updateValueAndValidity({emitEvent: false});
-    });
+    if (this.technicalCommercialProposal) {
+      this.form.addControl("id", this.fb.control(this.defaultValue('id', null)));
+    }
 
     // Workaround sync with multiple elements per one formControl
-    this.form.get('positions').valueChanges
-      .pipe(takeUntil(this.destroy$))
+    this.form.get('positions').valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
   }
 
-  formFilesPush(files: File[]): void {
-    files.forEach(file => this.formFiles.push(this.fb.control(file)));
-  }
-
   submit(publish = true): void {
-    if (this.form.invalid) {
-      return;
-    }
-
+    if (this.form.invalid) { return; }
+    let action$: Observable<any>;
     this.form.disable();
 
     if (this.form.pristine) {
-      if (publish) {
-        this.store
-          .dispatch(new Publish(this.request.id, this.technicalCommercialProposal))
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(() => this.close.emit());
-      } else {
-        this.close.emit();
-      }
-      return;
+      publish ? action$ = this.publish() : this.close.emit();
+    } else {
+      action$ = this.save(this.form.value, publish);
     }
 
-    const value = { ...this.form.value };
-    Object.keys(value).forEach(key => value[key] == null && delete value[key]);
+    action$.pipe(
+      takeUntil(this.destroy$),
+      tap(() => this.close.emit()),
+      finalize(() => this.form.enable())
+    ).subscribe();
+  }
 
-    this.store
-      .dispatch(value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.close.emit());
+  save(value, publish) {
+    return this.store.dispatch(
+      value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish)
+    );
+  }
+
+  publish() {
+    return this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal));
+  }
+
+  toProposalPositions(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
+    return positions.map(position => ({position}));
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {

@@ -3,6 +3,7 @@ import { IconShapeSources } from "@clr/icons/interfaces/icon-interfaces";
 enum UxgIcons {
   AppAttachIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M12 12C12 14.21 10.21 16 8 16C5.79 16 4 14.21 4 12V3C4 1.34 5.34 0 7 0C8.66 0 10 1.34 10 3V12C10 13.1 9.1 14 8 14C6.9 14 6 13.1 6 12V3H7V12C7 12.55 7.45 13 8 13C8.55 13 9 12.55 9 12V3C9 1.9 8.1 1 7 1C5.9 1 5 1.9 5 3V12C5 13.66 6.34 15 8 15C9.66 15 11 13.66 11 12V4H12V12Z"/></svg>',
   AppArrowIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7 5.40566L3.70279 8.70287L2.28857 7.28866L7.9999 1.57733L13.7112 7.28866L12.297 8.70287L9 5.40586V14H7V5.40566Z" /></svg>',
+  AppArrowNarrowIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 3L11 7H9V14H7V7H5L8 3Z"/></svg>\n',
   AppBasketIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M1 4V3H3.5L4.156 5H13.45C13.9495 5 14.2883 5.50815 14.0962 5.96923L12.3846 10.0769C12.1517 10.6359 11.6056 11 11 11H5.27069C4.53743 11 3.91165 10.4699 3.7911 9.7466L3 5H3.02588L3 4.99L2.7 4L1 4Z"/><path d="M7 13C7 13.5523 6.55228 14 6 14C5.44772 14 5 13.5523 5 13C5 12.4477 5.44772 12 6 12C6.55228 12 7 12.4477 7 13Z"/><path d="M10 14C10.5523 14 11 13.5523 11 13C11 12.4477 10.5523 12 10 12C9.44771 12 9 12.4477 9 13C9 13.5523 9.44771 14 10 14Z"/></svg>',
   AppCalendarIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M5 1C4.44772 1 4 1.44772 4 2V3H2C1.44772 3 1 3.44772 1 4V14C1 14.5523 1.44772 15 2 15H14C14.5523 15 15 14.5523 15 14V4C15 3.44772 14.5523 3 14 3H12V2C12 1.44772 11.5523 1 11 1C10.4477 1 10 1.44772 10 2V3H6V2C6 1.44772 5.55228 1 5 1ZM3 7H13V13H3V7Z"/></svg>',
   AppCalendarBigIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 12H12V17H17V12ZM16 1V3H8V1H6V3H5C3.89 3 3.01 3.9 3.01 5L3 19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1H16ZM19 19H5V8H19V19Z"/></svg>',
@@ -44,6 +45,7 @@ enum UxgIcons {
 export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-attach": UxgIcons.AppAttachIcon },
   {"app-arrow": UxgIcons.AppArrowIcon },
+  {"app-narrow-arrow": UxgIcons.AppArrowNarrowIcon },
   {"app-basket": UxgIcons.AppBasketIcon },
   {"app-calendar": UxgIcons.AppCalendarIcon },
   {"app-comment": UxgIcons.AppCommentIcon },

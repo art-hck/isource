@@ -7,12 +7,12 @@
             <div class="app-row clr-justify-content-end">
               <div class="app-col app-basis-auto clr-flex-grow-0">
 
-                <!-- Создать процедуру  -->
-                <button uxgButton secondary iconText (click)="procedureModal.open()"
+                <!-- Создать процедуру @TODO временно скрыто  -->
+                <!--button uxgButton secondary iconText (click)="procedureModal.open()"
                         *ngIf="featureService.authorize('createProcedure')">
                   <clr-icon shape="app-plus"></clr-icon>
                   <span>Создать процедуру</span>
-                </button>
+                </button-->
 
                 <!-- Новое ТКП  -->
                 <button uxgButton secondary iconText (click)="showForm = true">
@@ -36,7 +36,7 @@
     <div class="app-row">
       <div class="app-col app-technical-commercial-proposal-list">
         <app-technical-commercial-proposal-form
-          *ngIf="showForm"
+          *ngIf="(proposalsLength$ | async) === 0 || showForm"
           [request]="request"
           [closable]="proposals.length > 0"
           (close)="showForm = false"

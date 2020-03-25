@@ -20,23 +20,12 @@ export class UxgRadioItemComponent implements ControlValueAccessor {
   @ViewChild('radio', { static: false }) el: ElementRef;
   public onTouched: (value) => void;
   public onChange: (value) => void;
-  mainValue = null;
+  public mainValue;
 
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(disabled: boolean): void {
-    this.disabled = disabled;
-  }
-
-  writeValue(value): void {
-    this.mainValue = value;
-  }
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  setDisabledState = disabled => this.disabled = disabled;
+  writeValue = value => this.mainValue = value;
 
   select(e) {
     if (this.disabled !== false) { return; }
