@@ -42,7 +42,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.chooseBy$) {
-      this.chooseBy$.asObservable().pipe(takeUntil(this.destroy$), tap(type => {
+      this.chooseBy$.pipe(takeUntil(this.destroy$), tap(type => {
         switch (type) {
           case "price":
             this.chooseBy((prev, curr) => {
