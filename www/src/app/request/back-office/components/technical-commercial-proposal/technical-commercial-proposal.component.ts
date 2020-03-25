@@ -4,7 +4,7 @@ import { getCurrencySymbol } from "@angular/common";
 import { Request } from "../../../common/models/request";
 
 @Component({
-  selector: 'app-technical-commercial-proposal',
+  selector: 'app-request-technical-commercial-proposal',
   templateUrl: './technical-commercial-proposal.component.html',
   styleUrls: ['technical-commercial-proposal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,18 +1,19 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Request } from "../../../common/models/request";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { shareReplay } from "rxjs/operators";
+import { shareReplay, takeUntil } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { ProposalsStateStatus, TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
 import { technicalCommercialProposalFormParametersValidator } from "./technical-commercial-proposal-form-parameters/technical-commercial-proposal-form-parameters.validator";
+import { StateStatus } from "../../../common/models/state-status";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -29,7 +30,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   @Input() closable = true;
   @Output() close = new EventEmitter();
   @Select(TechnicalCommercialProposalState.status)
-  status$: Observable<ProposalsStateStatus>;
+  status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
   availablePositions$: Observable<TechnicalCommercialProposalPosition[]>;
   form: FormGroup;
@@ -37,7 +38,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = technicalCommercialProposalFormParametersValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
-  readonly subscription = new Subscription();
+  readonly destroy$ = new Subject();
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +60,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       files: this.fb.array([]),
     });
 
-    this.form.valueChanges.subscribe(() => {
+    this.form.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
       const docsCount = this.formFiles.value.length + this.form.get('documents').value.length;
       const validators = [Validators.required];
       const control = this.form.get('positions');
@@ -74,6 +77,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges
+      .pipe(takeUntil(this.destroy$))
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
@@ -93,10 +97,10 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
     if (this.form.pristine) {
       if (publish) {
-        this.subscription.add(this.store
+        this.store
           .dispatch(new Publish(this.request.id, this.technicalCommercialProposal))
-          .subscribe(() => this.close.emit())
-        );
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(() => this.close.emit());
       } else {
         this.close.emit();
       }
@@ -106,10 +110,10 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     const value = { ...this.form.value };
     Object.keys(value).forEach(key => value[key] == null && delete value[key]);
 
-    this.subscription.add(this.store
+    this.store
       .dispatch(value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish))
-      .subscribe(() => this.close.emit())
-    );
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.close.emit());
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {
@@ -126,6 +130,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   trackByPositionId = ({position}: TechnicalCommercialProposalPosition) => position.id;
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
