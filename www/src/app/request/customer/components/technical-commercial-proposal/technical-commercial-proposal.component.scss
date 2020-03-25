@@ -13,7 +13,7 @@ hr {
     .app-col + .app-col { padding-left: 20px }
 
     &-body .app-col { padding-top: 14px }
-    &-body-container { cursor: pointer }
+    &-body-container > div { cursor: pointer }
 
     .supplier, .manufacturing { min-width: 110px }
     .supplier > * { cursor: auto }

@@ -39,25 +39,23 @@
     <div class="app-col-aside"></div>
   </div>
 </ng-container>
-<div class="proposals-footer" #proposalsFooterRef [class.hidden]="(stateStatus$ | async) !== 'received' || !sentToReview?.active">
-  <ng-container *ngIf="(proposalsSentToReview$ | async)?.length">
-    <div class="proposals-footer-body app-row app-align-items-center">
-      <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
-      <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
-      <div class="app-col"></div>
-      <h3 *ngIf="total > 0">
-        <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-        <span>{{total | number: "1.0-2"}}</span>
-        <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
-      </h3>
-      <button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
-        Отклонить всё
-      </button>
-      <button uxgButton primary lg (click)="approveAll()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
-        Согласовать всё
-      </button>
-    </div>
-  </ng-container>
+<div class="proposals-footer" #proposalsFooterRef [class.hidden]="!sentToReview?.active">
+  <div class="proposals-footer-body app-row app-align-items-center">
+    <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
+    <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
+    <div class="app-col"></div>
+    <h3 *ngIf="total > 0">
+      <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+      <span>{{total | number: "1.0-2"}}</span>
+      <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
+    </h3>
+    <button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
+      Отклонить всё
+    </button>
+    <button uxgButton primary lg (click)="approveAll()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
+      Согласовать всё
+    </button>
+  </div>
 </div>
 <ng-template #placeholder>
   <div class="app-row">
