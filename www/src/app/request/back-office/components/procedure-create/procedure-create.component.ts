@@ -10,6 +10,7 @@ import { finalize } from "rxjs/operators";
 import { NotificationService } from "../../../../shared/services/notification.service";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -20,7 +21,7 @@ export class ProcedureCreateComponent implements OnInit {
   @Input() procedure;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
-  @Input() contragents: ContragentList[];
+  @Input() contragents: ContragentList[] | ContragentShortInfo[];
   @Input() action: "create" | "prolong" | "bargain" = "create";
   @Input() publicAccess = true;
   @Output() complete = new EventEmitter();
@@ -61,7 +62,7 @@ export class ProcedureCreateComponent implements OnInit {
       positions: [[], [Validators.required]],
       general: this.fb.group({
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
-        dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.futureDate()],
+        dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.currentOrFutureDate()],
         timeEndRegistration: [this.defaultProcedureValue("timeEndRegistration"), [Validators.required, Validators.pattern(/[0-9]{2} : [0-9]{2}/)]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 10), // Продление времени приема заявок на участие (минут)

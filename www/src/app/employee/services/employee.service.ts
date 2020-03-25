@@ -37,6 +37,13 @@ export class EmployeeService {
     });
   }
 
+  editEmployee(employee: EmployeeInfoBrief) {
+    return this.api.post<EmployeeInfoBrief>(`users/edit`, {
+      userId: employee.id,
+      ...employee
+    });
+  }
+
   getEmployeesList(contragentId: Uuid): Observable<EmployeeInfoBrief[]> {
     return this.api.post<EmployeeInfoBrief[]>(`users/employee-list`, {
       "contragentId": contragentId

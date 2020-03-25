@@ -14,7 +14,7 @@ export class TechnicalCommercialProposalPosition {
     manufacturingName: string;
     priceWithVat: number;
     priceWithoutVat: number;
-    vatPercent: number;
+    vatPercent: number | null;
     currency: PositionCurrency | null;
     quantity: number;
     measureUnit: string;
@@ -22,4 +22,5 @@ export class TechnicalCommercialProposalPosition {
     status: TechnicalCommercialProposalPositionStatus;
     statusLabel: TechnicalCommercialProposalPositionStatusLabel;
     position: RequestPosition;
+    paymentTerms: string;
 }

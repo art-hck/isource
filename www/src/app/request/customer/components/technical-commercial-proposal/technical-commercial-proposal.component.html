@@ -1,0 +1,158 @@
+<div class="app-card">
+  <!-- title -->
+  <div class="app-row app-align-items-center">
+    <h3 class="app-col">{{group.position.name}}</h3>
+    <div class="app-ghost-color app-bold" *ngIf="!isReviewed">
+      <clr-icon shape="app-waiting"></clr-icon>
+      <span>Необходимо рассмотреть</span>
+    </div>
+    <div class="app-success-color app-bold" *ngIf="isReviewed">
+      <clr-icon shape="app-check"></clr-icon>
+      <span>Выбран победитель</span>
+    </div>
+
+    <button uxgButton icon link (click)="folded = !folded">
+      <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
+    </button>
+  </div>
+
+  <ng-container *ngIf="!folded">
+    <div class="grid" [class.on-review]="!isReviewed">
+      <hr/>
+      <div class="app-row data data-head app-uppercase app-ghost-color app-bold section">
+        <div class="app-col app-ellipsis supplier"><small>Поставщик</small></div>
+        <div class="app-col app-ellipsis manufacturing"><small>Заводское наименование</small></div>
+        <div class="app-col app-ellipsis quantity"><small>Количество</small></div>
+        <div class="app-col app-ellipsis price"><small>Цена за ед.</small></div>
+        <div class="app-col app-ellipsis date"><small>Срок пост.</small></div>
+        <div class="app-col app-ellipsis total"><small>Cумма</small></div>
+        <div *ngIf="!isReviewed" class="app-col radio"></div>
+        <div *ngIf="isReviewed" class="app-col status"><small class="app-uppercase app-ghost-color">Статус</small></div>
+      </div>
+      <div class="data-body-container" *ngFor="let data of group.data; index as i; trackBy: trackByproposalPositionId">
+        <div *ngIf="data.proposalPosition as proposalPos"
+           (click)="proposalModal.open()"
+           class="app-row app-link-no-color data data-body"
+        >
+          <div class="app-col  app-ellipsis supplier">
+            <app-contragent-info-link (click)="$event.stopPropagation()" [contragent]="data.proposal.supplier"></app-contragent-info-link>
+          </div>
+          <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
+          <div class="app-col quantity ">
+            <div [ngClass]="!isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
+              <div class="app-row app-align-items-center">
+                <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
+                <clr-icon shape="app-narrow-arrow"
+                  *ngIf="proposalPos.quantity != proposalPos.position.quantity"
+                  [attr.dir]="proposalPos.quantity > proposalPos.position.quantity ? 'up' : 'down'"></clr-icon>
+              </div>
+            </div>
+          </div>
+          <div class="app-col price">
+            {{proposalPos.priceWithoutVat | number:'1.0-2'}}
+            <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
+          </div>
+          <div class="app-col date">
+            <span [ngClass]="!isDateValid(proposalPos) ? 'app-error-color app-bold' : ''">
+              {{proposalPos.deliveryDate | date:"dd.MM.yyyy"}}
+            </span>
+          </div>
+          <div class="app-col total">
+            {{proposalPos.priceWithoutVat * proposalPos.quantity | number:'1.0-2'}}
+            <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
+          </div>
+          <div class="app-col radio" *ngIf="!isReviewed">
+            <uxg-radio-item
+              [name]="group.position.id"
+              [value]="proposalPos"
+              [formControl]="selectedProposalPosition"
+              (click)="$event.stopPropagation()"
+            ></uxg-radio-item>
+          </div>
+          <div class="app-col status" *ngIf="isReviewed">
+            <clr-icon shape="app-check" [ngClass]="{
+              'app-success-color': proposalPos.status === '???',
+              'app-ghost-color': proposalPos.status !== '???'
+            }"></clr-icon>
+          </div>
+        </div>
+        <clr-modal #proposalModal clrModalSize="lg">
+          <h2 class="modal-title"><span class="app-bold">{{ data.proposalPosition.position.name }}</span></h2>
+          <div class="modal-body">
+            <ng-container *ngIf="data.proposal.documents.length">
+              <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>
+              <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="data.proposal.documents">
+              </app-document-simple-list>
+            </ng-container>
+            <small class="app-uppercase app-ghost-color app-bold">Параметры предложения</small>
+            <div class="modal-section">
+              <div class="app-row modal-section-header">
+                <div class="app-col app-ghost-color">Наименование контрагента</div>
+                <div class="app-col app-ghost-color">Заводское наименование</div>
+              </div>
+              <div class="app-row">
+                <div class="app-col app-bold">{{data.proposal.supplier.shortName}}</div>
+                <div class="app-col app-bold">{{data.proposalPosition.manufacturingName}}</div>
+              </div>
+            </div>
+            <div class="modal-section">
+              <div class="app-row modal-section-header app-ghost-color">Способ оплаты</div>
+              <div class="app-row app-bold">60 дней со дня поставки по факту оказания всех услуг</div>
+            </div>
+            <div class="modal-section modal-info">
+              <div class="app-row app-ghost-color">
+                <div class="app-col">Количество</div>
+                <div class="app-col">Цена за единицу</div>
+                <div class="app-col">Срок поставки</div>
+                <div class="app-col">Сумма</div>
+              </div>
+              <div class="app-row">
+                <h2 class="app-col">
+                  <span [class.app-error-color]="!isQuantityValid(data.proposalPosition)">{{data.proposalPosition.quantity}}</span>
+                  <span class="app-ghost-color">{{data.proposalPosition.measureUnit}}</span>
+                </h2>
+                <h2 class="app-col">
+                  {{data.proposalPosition.priceWithoutVat | number:'1.0-2'}}
+                  <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
+                </h2>
+                <h2 class="app-col" [class.app-error-color]="!isDateValid(data.proposalPosition)">
+                  {{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
+                </h2>
+                <h2 class="app-col">
+                  {{data.proposalPosition.priceWithoutVat * data.proposalPosition.quantity | number:'1.0-2'}}
+                  <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
+                </h2>
+              </div>
+            </div>
+            <div class="app-row">
+              <div class="app-col app-bold">
+                <div class="app-success-color" *ngIf="isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
+                <div class="app-success-color" *ngIf="isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
+                <div class="app-error-color" *ngIf="!isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
+                <div class="app-error-color" *ngIf="!isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
+              </div>
+              <div>
+                <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
+                <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>
+              </div>
+            </div>
+          </div>
+        </clr-modal>
+      </div>
+    </div>
+    <hr/>
+    <div class="app-row" *ngIf="!isReviewed">
+      <div class="app-col">
+        Вы можете оклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков
+      </div>
+      <div>
+        <button uxgButton secondary [disabled]="(status$ | async) !== 'received'" (click)="reject()">
+          Отклонить все по позиции
+        </button>
+        <button uxgButton primary [disabled]="!selectedProposalPosition.value || (status$ | async) !== 'received'" (click)="approve(selectedProposalPosition.value)">
+          Согласовать
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

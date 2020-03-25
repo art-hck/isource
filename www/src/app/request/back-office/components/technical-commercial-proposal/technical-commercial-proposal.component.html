@@ -1,0 +1,81 @@
+<ng-container *ngIf="technicalCommercialProposal as proposal" [ngSwitch]="state">
+  <div class="app-card" *ngSwitchCase="'view'">
+    <div class="app-row app-align-items-center">
+      <h3 class="app-col">
+        <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
+      </h3>
+      <ng-container [ngSwitch]="proposal.status">
+        <div class="app-ghost-color app-bold" *ngSwitchCase="'DRAFT'">
+          <clr-icon shape="app-doc" class="is-solid"></clr-icon>
+          Черновик
+        </div>
+        <div class="app-ghost-color app-bold" *ngSwitchCase="'SENT_TO_REVIEW'">
+          <clr-icon shape="app-waiting"></clr-icon>
+          На рассмотрении
+        </div>
+        <div class="app-success-color app-bold" *ngSwitchCase="'REVIEWED'">
+          <clr-icon shape="app-check"></clr-icon>
+          Рассмотрено
+        </div>
+
+      </ng-container>
+      <button uxgButton icon link (click)="state = 'edit'" [disabled]="proposal.status!=='DRAFT'">
+        <clr-icon shape="app-pen"></clr-icon>
+      </button>
+      <button uxgButton icon link (click)="folded = !folded">
+        <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
+      </button>
+    </div>
+
+    <ng-container *ngIf="!folded">
+      <div class="app-table app-no-border" *ngIf="proposal.positions.length">
+        <hr/>
+        <div class="app-row app-uppercase app-ghost-color app-bold">
+          <small class="app-col app-ellipsis name">Наименование позиции</small>
+          <small class="app-col app-ellipsis manufacturing-name">Заводское наименование</small>
+          <small class="app-col total">Cумма</small>
+          <small class="app-col quantity">Количество</small>
+          <small class="app-col price">Цена за ед.</small>
+          <small class="app-col date">Срок пост.</small>
+          <small class="status text-center">Статус</small>
+        </div>
+
+        <div class="app-row" *ngFor="let item of proposal.positions">
+          <div class="app-col app-ellipsis name">{{item.position.name}}</div>
+          <div class="app-col app-ellipsis manufacturing-name">{{item.manufacturingName}}</div>
+          <div class="app-col total">
+            {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
+            <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+          </div>
+          <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
+
+          <div class="app-col price">
+            {{item.priceWithoutVat | number:'1.0-2'}}
+            <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+          </div>
+
+          <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
+          <div class="status text-center"
+               [class.app-ghost-color]="item.status==='NEW'"
+               [class.app-success-color]="item.status==='???'"
+          >
+            <clr-icon [attr.shape]="item.status==='NEW' ? 'app-unknown' : 'app-check'"></clr-icon>
+          </div>
+        </div>
+      </div>
+
+      <ng-container  *ngIf="proposal.documents.length">
+        <hr/>
+        <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>
+        <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="proposal.documents">
+        </app-document-simple-list>
+      </ng-container>
+    </ng-container>
+  </div>
+  <app-technical-commercial-proposal-form
+    *ngSwitchCase="'edit'"
+    [technicalCommercialProposal]="proposal"
+    [request]="request"
+    (close)="state = 'view'"
+  ></app-technical-commercial-proposal-form>
+</ng-container>

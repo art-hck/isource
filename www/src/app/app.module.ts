@@ -32,6 +32,7 @@ import { ClarityIcons } from "@clr/icons";
 import { AgreementsModule } from "./agreements/agreements.module";
 import { MessageModule } from "./message/message.module";
 import { NgxsModule } from "@ngxs/store";
+import { environment } from "../environments/environment";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -59,7 +60,7 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     UxgModule,
     UserModule,
     MessageModule,
-    NgxsModule.forRoot(),
+    NgxsModule.forRoot([], { developmentMode: !environment.production }),
     WebsocketModule.config({
       url: AppConfig.endpoints.ws
     })

@@ -2,7 +2,7 @@
 <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
 <div class="app-row">
   <div class="app-col app-bold">
-    <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="select.emit($event)">
+    <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="selectFile($event)">
       <div>Перетащите документы сюда</div>
     </div>
   </div>
@@ -17,7 +17,7 @@
         type="button" uxgButton secondary appUploadFile
         [disabled]="disabled"
         [multiple]="true"
-        (select)="select.emit($event)"
+        (select)="selectFile($event)"
       >Выбрать документы
       </button>
     </div>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="clr-align-self-start" *ngIf="!disabled && i>=0">
-          <button type="button" uxgButton link icon clear (click)="remove.emit(i)">
+          <button type="button" uxgButton link icon clear (click)="removeFile(i)">
             <clr-icon shape="app-trash"></clr-icon>
           </button>
         </div>
