@@ -42,7 +42,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   getContragentInfo(contragentId: Uuid): void {
     this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
       tap(contragent => {
-        this.title.setTitle(contragent.fullName);
+        this.title.setTitle(contragent.shortName);
         this.bc.breadcrumbs = [
           {label: "Контрагенты", link: "/contragents/list"},
           {label: this.title.getTitle(), link: `/contragents/${contragent.id}/info`}

@@ -9,12 +9,16 @@ import { ContragentService } from "../../services/contragent.service";
 import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
 import {Observable, Subscription} from "rxjs";
 import { NotificationService } from "../../../shared/services/notification.service";
-import { finalize } from "rxjs/operators";
+import {finalize, tap} from "rxjs/operators";
 import { ContragentShortInfo } from "../../models/contragent-short-info";
 import {UserService} from "../../../user/service/user.service";
 import {User} from "../../../user/models/user";
 import {EmployeeService} from "../../../employee/services/employee.service";
 import {EmployeeItem} from "../../../employee/models/employee-item";
+import {Uuid} from "../../../cart/models/uuid";
+import {ActivatedRoute, Route} from "@angular/router";
+import {ContragentInfo} from "../../models/contragent-info";
+import {UxgBreadcrumbsService} from "uxg";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -30,13 +34,22 @@ export class ContragentRegistrationComponent implements OnInit {
   isLoading = false;
   seniorBackofficeUsers$: Observable<EmployeeItem[]>;
   subscription = new Subscription();
+  contragentId: Uuid;
+  contragent$: Observable<ContragentInfo>;
+
+  get isEditing(): boolean {
+    return !!this.contragentId;
+  }
 
   constructor(
     private fb: FormBuilder,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
     private contragentService: ContragentService,
     private notificationService: NotificationService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    protected route: ActivatedRoute,
+    private getContragentService: ContragentService,
+    private bc: UxgBreadcrumbsService
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
@@ -50,6 +63,8 @@ export class ContragentRegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.contragentId = this.route.snapshot.paramMap.get('id');
+
     this.form = this.fb.group({
       contragent: this.fb.group({
         fullName: ['', [Validators.required, CustomValidators.simpleText]],
@@ -83,6 +98,10 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
+
+    if (this.contragentId) {
+      this.getContragentInfo();
+    }
   }
 
   onPartySuggestionSelected(event): void {
@@ -149,6 +168,17 @@ export class ContragentRegistrationComponent implements OnInit {
           this.notificationService.toast('Ошибка регистрации! ' + err.error.detail, "error");
         }
       )
+    );
+  }
+
+  getContragentInfo(): void {
+    this.contragent$ = this.getContragentService.getContragentInfo(this.route.snapshot.paramMap.get('id')).pipe(
+      tap(contragent => {
+        this.bc.breadcrumbs = [
+          {label: "Контрагенты", link: "/contragents/list"},
+        //   {label: this.title.getTitle(), link: `/contragents/${contragentId}/info`}
+        ];
+      })
     );
   }
 }

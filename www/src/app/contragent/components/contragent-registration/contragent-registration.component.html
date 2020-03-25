@@ -2,24 +2,16 @@
   <div class="app-col">
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="app-card">
-        <div class="alert alert-info autofill-alert" *ngIf="autofillAlertShown">
-          <div class="alert-items">
-            <div class="alert-item static">
-              <div class="alert-icon-wrapper">
-                <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
-              </div>
-              <span class="alert-text">
-        <span>Пожалуйста, проверьте и дополните введённую информацию перед завершением регистрации.</span>
-      </span>
-            </div>
-          </div>
-
-          <button type="button" class="close" aria-label="Close" (click)="autofillAlertShown = false">
-            <clr-icon aria-hidden="true" shape="close"></clr-icon>
-          </button>
-        </div>
+        <ng-container *ngIf="!isEditing; else editHeader">
         <h2>Новый контрагент</h2>
-        <p class="app-secondary-color">В этом блоке все поля являются обязательными для заполнения.</p>
+        <p class="app-secondary-color">Начните вводить нименование контрагента, и если он появится в подсказках,
+          то после нажатия на него большинство полей будет заполнено автоматически, вам нужно будет их только <b>проверить</b>.
+          В этом блоке все поля являются обязательными для заполнения.</p>
+        </ng-container>
+        <ng-template #editHeader>
+          <h3>Общая информация</h3>
+          <p class="app-secondary-color">В этом блоке все поля являются обязательными для заполнения.</p>
+        </ng-template>
         <ng-container formGroupName="contragent">
           <div class="app-row">
             <div class="app-col">
@@ -159,7 +151,8 @@
         <br/>
 
         <h3>Банковские реквизиты</h3>
-        <p class="app-secondary-color">Все поля в этом блоке являются обязательными к заполнению.</p>
+        <p class="app-secondary-color">Введите БИК банка, и если он появится в подсказках, то после нажатия на него большинство полей будет
+          заполнено автоматически, вам нужно будет их только проверить. Все поля в этом блоке являются обязательными к заполнению.</p>
         <ng-container formGroupName="contragentBankRequisite">
           <div class="app-row">
             <div class="app-col">
