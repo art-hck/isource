@@ -3,9 +3,6 @@
 :host {
   background: rgba(#000, 0.8);
   display: block;
-  //display: flex;
-  //align-items: center;
-  //flex-direction: column;
   color: uxg($theme, color-default);
   animation: app-toast-show 300ms ease;
   transform-origin: bottom;
