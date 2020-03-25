@@ -58,11 +58,21 @@
   </div>
   <div class="app-row">
     <div class="app-col">
+      <uxg-dropdown disabled>
+        <div uxgDropdownItem>Закупщик</div>
+      </uxg-dropdown>
+
+    </div>
+    <div class="app-col">
+    </div>
+  </div>
+  <div class="app-row modal-footer">
+    <div class="app-col">
       Все поля, кроме отчества, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
     <div class="app-col clr-flex-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="onCancel()">Отмена</button>
-      <button uxgButton primary lg [disabled]="form.invalid">Добавить</button>
+      <button uxgButton primary lg [disabled]="form.invalid">{{isEditing ? "Сохранить" : "Добавить" }}</button>
     </div>
   </div>
 </form>

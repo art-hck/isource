@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { PositionService } from "../../services/position.service";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -10,7 +10,7 @@ import { Store } from "@ngxs/store";
   templateUrl: './positions-status-change.component.html',
   styleUrls: ['./positions-status-change.component.scss']
 })
-export class PositionsStatusChangeComponent implements OnInit {
+export class PositionsStatusChangeComponent implements OnInit, OnChanges {
 
   protected _status: string;
 
@@ -26,7 +26,7 @@ export class PositionsStatusChangeComponent implements OnInit {
   }
 
   newStatus: string;
-  statuses = Object.entries(PositionStatusesLabels);
+  statuses = [];
   loading = false;
 
   constructor(
@@ -37,6 +37,36 @@ export class PositionsStatusChangeComponent implements OnInit {
 
   ngOnInit(): void {
     this.newStatus = this.status;
+
+    this.updateAvailableStatuses();
+  }
+
+  ngOnChanges(): void {
+    this.updateAvailableStatuses();
+  }
+
+  updateAvailableStatuses(): void {
+    const intersection = this.getIntersectionOfAvailableStatuses();
+
+    this.statuses = Object.entries(PositionStatusesLabels)
+      .filter(item => intersection.includes(item[0]));
+  }
+
+  getIntersectionOfAvailableStatuses(): string[] {
+    if (!this.positions.length) {
+      return [];
+    }
+
+    let intersection = this.positions[0].availableStatuses;
+    for (let i = 1; i < this.positions.length; i++) {
+      intersection = this.positions[i].availableStatuses.filter(value => intersection.includes(value));
+    }
+
+    return intersection;
+  }
+
+  getStatusLabel(status: string): string {
+    return PositionStatusesLabels[status];
   }
 
   onChangeBtn() {

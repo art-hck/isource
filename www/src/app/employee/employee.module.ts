@@ -8,7 +8,7 @@ import { EmployeeCardComponent } from './components/employee-card/employee-card.
 import { EmployeeCardRequestListComponent } from './components/employee-card/employee-card-request-list/employee-card-request-list.component';
 import { EmployeeCardPositionListComponent } from './components/employee-card/employee-card-position-list/employee-card-position-list.component';
 import { SharedModule } from "../shared/shared.module";
-import { CreateEmployeeComponent } from './components/create-employee/create-employee.component';
+import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
@@ -24,14 +24,14 @@ import {ReactiveFormsModule} from "@angular/forms";
     EmployeeCardComponent,
     EmployeeCardRequestListComponent,
     EmployeeCardPositionListComponent,
-    CreateEmployeeComponent
+    EmployeeFormComponent
   ],
   providers: [
     EmployeeService,
   ],
     exports: [
         EmployeeCardComponent,
-        CreateEmployeeComponent,
+        EmployeeFormComponent,
     ]
 })
 export class EmployeeModule { }
