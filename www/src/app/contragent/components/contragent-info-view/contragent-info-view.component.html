@@ -22,7 +22,8 @@
       </uxg-tabs>
       <br/>
       <ng-container *uxgTab="contragentInfoTab">
-        <app-contragent-info [contragent]="contragent">
+        <app-contragent-info [contragent]="contragent"
+                            [modalView]="false">
         </app-contragent-info>
       </ng-container>
       <ng-container *uxgTab="employeesTab">
