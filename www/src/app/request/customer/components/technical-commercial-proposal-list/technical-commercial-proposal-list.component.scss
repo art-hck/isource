@@ -13,7 +13,18 @@
 }
 
 .proposals-footer {
-  background: #fff;
-  padding: 20px 60px;
-  border-top: 1px #ececec solid;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &-body {
+    background: #fff;
+    padding: 20px 60px;
+    border-top: 1px #ececec solid;
+    transition: 300ms 600ms margin;
+  }
+
+  &.hidden &-body {
+    transition-delay: 0ms;
+    margin-bottom: -81px;
+  }
 }

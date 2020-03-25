@@ -5,7 +5,7 @@ import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService } from "uxg";
+import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -26,6 +26,7 @@ import Reject = TechnicalCommercialProposals.Reject;
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
+  @ViewChild('sentToReview', { static: false }) sentToReview: UxgTabTitleComponent;
   @ViewChild('proposalsFooterRef', { static: false }) proposalsFooterRef: ElementRef;
   @Select(TechnicalCommercialProposalState.getSentToReview)
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
