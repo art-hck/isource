@@ -6,12 +6,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { TechnicalProposalPositionStatus } from 'src/app/request/common/enum/technical-proposal-position-status';
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 import { UxgBreadcrumbsService } from "uxg";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-request-technical-proposal-list-deprecated',
@@ -31,7 +32,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
     protected router: Router,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
-    private notificationService: NotificationService,
+    private store: Store,
     protected getContragentService: ContragentService
   ) {
   }
@@ -84,7 +85,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
         const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
           'Технические предложения для позиций согласованы' :
           'Техническое предложение для позиции согласовано';
-        this.notificationService.toast(toastText);
+        this.store.dispatch(new ToastActions.Success(toastText));
         this.selectedTechnicalProposalsPositions = [];
       }
     );
@@ -97,7 +98,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
         const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
           'Технические предложения для позиций отклонены' :
           'Техническое предложение для позиции отклонено';
-        this.notificationService.toast(toastText, 'error');
+        this.store.dispatch(new ToastActions.Error(toastText));
         this.selectedTechnicalProposalsPositions = [];
       }
     );

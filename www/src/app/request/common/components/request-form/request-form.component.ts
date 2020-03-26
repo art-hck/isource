@@ -3,10 +3,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CreateRequestService } from "../../services/create-request.service";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { finalize, flatMap, mapTo } from "rxjs/operators";
 import { RequestService } from "../../../customer/services/request.service";
 import { Subscription } from "rxjs";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-request-form',
@@ -32,7 +33,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     public user: UserInfoService,
-    public notificationService: NotificationService
+    public store: Store
   ) {}
 
   ngOnInit() {
@@ -67,7 +68,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     this.subscription.add(
     request$.subscribe(
       data => {
-        this.notificationService.toast(publish ? "Заявка опубликована" : "Черновик заявки создан");
+        this.store.dispatch(new ToastActions.Success(publish ? "Заявка опубликована" : "Черновик заявки создан"));
         this.router.navigate(["requests/customer", data.id]);
       }
     ));

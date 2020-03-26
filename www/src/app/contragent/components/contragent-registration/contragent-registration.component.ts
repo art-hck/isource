@@ -10,6 +10,9 @@ import { ContragentRegistrationRequest } from "../../models/contragent-registrat
 import { Observable, Subscription } from "rxjs";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { finalize, tap } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { ToastActions } from "../../../shared/actions/toast.actions";
+import { finalize } from "rxjs/operators";
 import { ContragentShortInfo } from "../../models/contragent-short-info";
 import { EmployeeService } from "../../../employee/services/employee.service";
 import { EmployeeItem } from "../../../employee/models/employee-item";
@@ -17,6 +20,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { ActivatedRoute, Route, Router } from "@angular/router";
 import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -48,6 +52,7 @@ export class ContragentRegistrationComponent implements OnInit {
     private fb: FormBuilder,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
     private contragentService: ContragentService,
+    private store: Store,
     private notificationService: NotificationService,
     private employeeService: EmployeeService,
     protected route: ActivatedRoute,
@@ -156,6 +161,7 @@ export class ContragentRegistrationComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+
     this.isLoading = true;
 
     const body: ContragentRegistrationRequest = this.form.getRawValue();
@@ -167,10 +173,10 @@ export class ContragentRegistrationComponent implements OnInit {
           contragent => {
             this.contragentCreated.emit(contragent);
             this.router.navigateByUrl(`contragents/list`);
-            this.notificationService.toast('Контрагент ' + contragent.shortName + ' успешно добавлен');
+            this.store.dispatch(new ToastActions.Success("Контрагент успешно создан!"));
           },
           (err) => {
-            this.notificationService.toast('Ошибка регистрации! ' + err.error.detail, "error");
+            this.store.dispatch(new ToastActions.Error('Ошибка регистрации! ' + err.error.detail));
           }
         )
       );

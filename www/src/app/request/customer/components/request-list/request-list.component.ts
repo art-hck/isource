@@ -1,16 +1,18 @@
-import {Component, OnInit, Output, ViewChild} from '@angular/core';
-import {GetRequestsService} from "../../../common/services/get-requests.service";
-import {RequestsList} from "../../../common/models/requests-list/requests-list";
-import {Page} from "../../../../core/models/page";
-import {DatagridStateAndFilter} from "../../../common/models/datagrid-state-and-filter";
-import {RequestsListFilter} from "../../../common/models/requests-list/requests-list-filter";
-import {RequestStatus} from "../../../common/enum/request-status";
-import {RequestListFilterComponent} from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
-import {RequestStatusCount} from "../../../common/models/requests-list/request-status-count";
-import Swal from "sweetalert2";
-import {Router} from "@angular/router";
-import {CreateRequestService} from "../../../common/services/create-request.service";
-import {RequestService} from "../../services/request.service";
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
+import { GetRequestsService } from "../../../common/services/get-requests.service";
+import { RequestsList } from "../../../common/models/requests-list/requests-list";
+import { Page } from "../../../../core/models/page";
+import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
+import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
+import { RequestStatus } from "../../../common/enum/request-status";
+import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
+import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
+import { Router } from "@angular/router";
+import { CreateRequestService } from "../../../common/services/create-request.service";
+import { RequestService } from "../../services/request.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
+import { catchError, flatMap, mapTo, tap } from "rxjs/operators";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -39,7 +41,8 @@ export class RequestListComponent implements OnInit {
     protected router: Router,
     protected getRequestService: GetRequestsService,
     protected createRequestService: CreateRequestService,
-    protected requestService: RequestService
+    protected requestService: RequestService,
+    protected store: Store
   ) {
   }
 
@@ -140,64 +143,23 @@ export class RequestListComponent implements OnInit {
   }
 
   onSendExcelFile(requestData: { files: File[], requestName: string }): void {
-    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName)
-      .subscribe((data: any) => {
-        Swal.fire({
-          width: 400,
-          html: '<p class="text-alert">' + 'Черновик заявки создан</br></br>' + '</p>' +
-            '<button id="submit" class="btn btn-primary">' +
-            'ОК' + '</button>',
-          showConfirmButton: false,
-          onBeforeOpen: () => {
-            const content = Swal.getContent();
-            const $ = content.querySelector.bind(content);
-
-            const submit = $('#submit');
-            submit.addEventListener('click', () => {
-              this.router.navigateByUrl(`requests/customer/${data.id}`);
-              Swal.close();
-            });
-          }
-        });
-      }, (error: any) => {
-        let msg = 'Ошибка в шаблоне';
-        if (error && error.error && error.error.detail) {
-          msg = `${msg}: ${error.error.detail}`;
-        }
-        alert(msg);
-      });
+    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
+      tap(() => this.store.dispatch(new ToastActions.Success("Черновик заявки создан"))),
+      tap(({id}) => this.router.navigateByUrl(`requests/customer/${id}`)),
+      catchError(({error}) => this.store.dispatch(
+        new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
+      ))
+    ).subscribe();
   }
 
   onPublishExcelFile(requestData: { files: File[], requestName: string }): void {
-    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName)
-      .subscribe((data: any) => {
-          this.requestService.publishRequest(data.id).subscribe(
-            () => {
-              Swal.fire({
-                width: 400,
-                html: '<p class="text-alert">' + 'Заявка опубликована</br></br>' + '</p>' +
-                  '<button id="submit" class="btn btn-primary">' +
-                  'ОК' + '</button>',
-                showConfirmButton: false,
-                onBeforeOpen: () => {
-                  const content = Swal.getContent();
-                  const $ = content.querySelector.bind(content);
-
-                  const submit = $('#submit');
-                  submit.addEventListener('click', () => {
-                    this.router.navigateByUrl(`requests/customer/${data.id}`);
-                    Swal.close();
-                  });
-                }
-              });
-            });
-        },
-        (error: any) => {
-          let msg = 'Ошибка в шаблоне';
-          if (error && error.error && error.error.detail) {
-            msg = `${msg}: ${error.error.detail}`;
-          }
-          alert(msg);
-        });
+    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
+      flatMap(data => this.requestService.publishRequest(data.id).pipe(mapTo(data))),
+      tap(() => this.store.dispatch(new ToastActions.Success("Заявка опубликована"))),
+      tap(({id}) => this.router.navigateByUrl(`requests/customer/${id}`)),
+      catchError(({error}) => this.store.dispatch(
+        new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
+      ))
+    ).subscribe();
   }
 }
