@@ -22,8 +22,9 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(body));
   }
 
-  update(requestId: Uuid, body: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
-    return of(body).pipe(this.delayPipe(300, 1200)) as Observable<TechnicalCommercialProposal>;
+  update(requestId: Uuid, proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
+    const url = `requests/backoffice/technical-commercial-proposals/${proposal.id}/edit`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
   publish(requestId: Uuid, proposal: TechnicalCommercialProposal) {
