@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Uuid} from "../../../cart/models/uuid";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {ContragentInfo} from "../../models/contragent-info";
 import {ContragentService} from "../../services/contragent.service";
@@ -31,6 +31,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
+    protected router: Router
   ) {
   }
 
@@ -43,7 +44,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   getContragentInfo(contragentId: Uuid): void {
     this.contragent$ = this.getContragentService.getContragentInfo(contragentId).pipe(
       tap(contragent => {
-        this.title.setTitle(contragent.fullName);
+        this.title.setTitle(contragent.shortName);
         this.bc.breadcrumbs = [
           {label: "Контрагенты", link: "/contragents/list"},
           {label: this.title.getTitle(), link: `/contragents/${contragent.id}/info`}

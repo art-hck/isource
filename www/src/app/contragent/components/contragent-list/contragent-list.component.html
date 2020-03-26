@@ -22,12 +22,15 @@
       e-mail
     </clr-dg-column>
 
-    <clr-dg-column class="requests-positions-count clr-col-2">
+    <clr-dg-column class="requests-positions-count clr-col-1">
       Ответственный менеджер БО
+    </clr-dg-column>
+    <clr-dg-column class="clr-col-1">
     </clr-dg-column>
 
 
-    <clr-dg-row *ngFor="let contragent of contragents" (click)="onRowClick(contragent.id)">
+    <clr-dg-row *ngFor="let contragent of contragents | contragentSearchFilter: searchValue"
+                (click)="router.navigateByUrl('/contragents/' + contragent.id + '/info')">
 
       <clr-dg-cell class="employee-full-name clr-col">
         <b>{{ contragent.shortName}}</b>
@@ -45,7 +48,13 @@
         <a (click)="mailto($event, contragent.email)" href="mailto:{{ contragent.email }}">{{ contragent.email }}</a>
       </clr-dg-cell>
 
-      <clr-dg-cell class="requests-positions-count clr-col-2">
+      <clr-dg-cell class="requests-positions-count clr-col-1">
+        {{ contragent.responsible?.shortName }}
+      </clr-dg-cell>
+      <clr-dg-cell class="edit clr-col-1">
+        <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
+          <clr-icon shape="app-pen"></clr-icon>
+        </button>
       </clr-dg-cell>
 
     </clr-dg-row>

@@ -4,7 +4,8 @@
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
   <div class="app-row action">
-    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()" disabled>
+    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
+            (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
       <clr-icon shape="app-pen"></clr-icon>
       Редактировать контрагента
     </button>
@@ -64,17 +65,17 @@
     <div class="app-col app-col-aside">
       <ng-container *ngIf="(contragent$ | async) as contragent">
         <h3>Контакты и ответственный</h3>
-        <div class="app-section">
+        <div class="app-section" *ngIf="contragent.email">
           <div class="app-ghost-color">Email контрагента</div>
           <div>{{contragent.email}}</div>
         </div>
         <div class="app-section">
-          <div class="app-ghost-color">Телефон контрагента</div>
+          <div class="app-ghost-color" *ngIf="contragent.phone">Телефон контрагента</div>
           <div>{{contragent.phone}}</div>
         </div>
         <div class="app-section">
           <div class="app-ghost-color">Ответственный менеджер БО</div>
-          <div>{{contragent.responsible}}</div>
+          <div>{{contragent.responsible.shortName}}</div>
         </div>
       </ng-container>
     </div>
