@@ -48,7 +48,7 @@
               </ng-container>
               <ng-template #innDisabled>
                 <div class="app-control-wrap">
-                  <input #inn uxgInput lg formControlName="inn" disabled/>
+                  <input #inn uxgInput lg formControlName="inn"/>
                   <label class="app-control-label" (click)="inn.focus()">ИНН</label>
                 </div>
               </ng-template>
@@ -91,9 +91,9 @@
               </clr-date-container>
             </div>
             <div class="app-col select-role">
-              <uxg-radio-item class="app-control" value="customer" formControlName="role" disabled></uxg-radio-item>
+              <uxg-radio-item class="app-control" value="customer" formControlName="role"></uxg-radio-item>
               <label>&nbsp;Заказчик</label>
-              <uxg-radio-item class="app-control" value="supplier" formControlName="role" disabled></uxg-radio-item>
+              <uxg-radio-item class="app-control" value="supplier" formControlName="role"></uxg-radio-item>
               <label>&nbsp;Поставщик</label>
             </div>
             <div class="app-col">
@@ -224,8 +224,10 @@
               </div>
             </div>
             <div class="app-col">
-              <uxg-dropdown lg [placeholder]="isEditing ? form.get('responsible')?.value : 'Выберите ответственного'" formControlName="responsible">
-                <div uxgDropdownItem [value]="user" *ngFor="let user of seniorBackofficeUsers$ | async">{{ user.user.fullName}}</div>
+              <uxg-dropdown [placeholder]="responsiblePlaceholder" lg formControlName="responsible" >
+                <div uxgDropdownItem [value]="user" *ngFor="let user of seniorBackofficeUsers$ | async">
+                  {{ user.user.fullName}}
+                </div>
               </uxg-dropdown>
             </div>
           </div>
