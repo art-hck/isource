@@ -187,7 +187,7 @@ export class ContragentRegistrationComponent implements OnInit {
             this.notificationService.toast('Ошибка редактирования! ' + err.error.detail, "error");
           }
         )
-      )
+      );
     }
   }
 
@@ -207,8 +207,8 @@ export class ContragentRegistrationComponent implements OnInit {
         this.form.get('contragentContact').patchValue(contragent);
         this.form.get('contragentContact').get('responsible').setValue(contragent.responsible);
         this.form.get('contragent').get('taxAuthorityRegistrationDate').patchValue(
-          moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'))
+          moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'));
       })
-    )
+    );
   }
 }

@@ -62,7 +62,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   }
 
   onEditClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/edit`)
+    this.router.navigateByUrl(`/contragents/${contragentId}/edit`);
   }
 
   getLoaderState() {

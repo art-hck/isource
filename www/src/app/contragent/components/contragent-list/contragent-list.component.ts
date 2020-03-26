@@ -39,6 +39,6 @@ export class ContragentListComponent implements OnInit {
   }
 
   onEditClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/edit`)
+    this.router.navigateByUrl(`/contragents/${contragentId}/edit`);
   }
 }
