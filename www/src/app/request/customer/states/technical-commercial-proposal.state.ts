@@ -72,15 +72,15 @@ export class TechnicalCommercialProposalState {
   approve(ctx: Context, action: Approve) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.approve(action.requestId, action.proposalPosition).pipe(
-      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus }))
-    ));
+      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+    );
   }
 
   @Action(Reject)
   reject(ctx: Context, action: Reject) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
-    return this.rest.reject(action.requestId, action.position).pipe(tap(() =>
-      ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus }))
-    ));
+    return this.rest.reject(action.requestId, action.position).pipe(
+      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+    );
   }
 }

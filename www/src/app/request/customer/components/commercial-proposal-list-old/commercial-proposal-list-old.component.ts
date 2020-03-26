@@ -7,12 +7,13 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { RequestDocument } from "../../../common/models/request-document";
 import * as moment from "moment";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PositionStatuses } from "../../../common/dictionaries/position-statuses";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-request-commercial-proposal-list-old',
@@ -42,7 +43,7 @@ export class CommercialProposalListOldComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router,
     private requestService: RequestService,
-    private notificationService: NotificationService
+    private store: Store
   ) { }
 
   ngOnInit() {
@@ -245,12 +246,12 @@ export class CommercialProposalListOldComponent implements OnInit {
   sendForAgreement(): void {
     this.requestService.sendForAgreement(this.requestId, this.selectedOffers).subscribe(
       () => {
-        this.notificationService.toast('Успешно согласовано');
+        this.store.dispatch(new ToastActions.Success('Успешно согласовано'));
         this.updatePositionsAndSuppliers();
         this.selectedOffers = {};
       },
       () => {
-        this.notificationService.toast('Не удалось согласовать предложения', 'error');
+        this.store.dispatch(new ToastActions.Error('Не удалось согласовать предложения'));
       }
     );
   }

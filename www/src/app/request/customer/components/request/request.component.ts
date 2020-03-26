@@ -8,8 +8,9 @@ import { catchError, switchMap, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
 import { CreateRequestPositionService } from "../../../common/services/create-request-position.service";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({templateUrl: './request.component.html'})
 export class RequestComponent implements OnInit {
@@ -23,7 +24,7 @@ export class RequestComponent implements OnInit {
     private requestService: RequestService,
     private createRequestPositionService: CreateRequestPositionService,
     private bc: UxgBreadcrumbsService,
-    private notificationService: NotificationService,
+    private store: Store,
     private title: Title
   ) {}
 
@@ -83,9 +84,9 @@ export class RequestComponent implements OnInit {
     this.positions$ = this.createRequestPositionService
       .addCustomerRequestPositionsFromExcel(this.requestId, requestData.files).pipe(
         catchError((e) => {
-          this.notificationService.toast(
-            'Ошибка в шаблоне' + (e && e.error && e.error.detail || ""), "error"
-          );
+          this.store.dispatch(new ToastActions.Error(
+            'Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")
+          ));
           return of(null);
         }),
         switchMap(() => this.getPositions())

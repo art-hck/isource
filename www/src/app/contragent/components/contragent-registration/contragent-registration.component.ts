@@ -8,9 +8,10 @@ import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
 import { Subscription } from "rxjs";
-import { NotificationService } from "../../../shared/services/notification.service";
+import { ToastActions } from "../../../shared/actions/toast.actions";
 import { finalize } from "rxjs/operators";
 import { ContragentShortInfo } from "../../models/contragent-short-info";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -30,7 +31,7 @@ export class ContragentRegistrationComponent implements OnInit {
     private fb: FormBuilder,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
     private contragentService: ContragentService,
-    private notificationService: NotificationService,
+    private store: Store,
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
@@ -131,10 +132,10 @@ export class ContragentRegistrationComponent implements OnInit {
           this.contragentCreated.emit(contragent);
           this.form.reset();
           this.autofillAlertShown = false;
-          this.notificationService.toast("Контрагент успешно создан!");
+          this.store.dispatch(new ToastActions.Success("Контрагент успешно создан!"));
         },
         (err) => {
-          this.notificationService.toast('Ошибка регистрации! ' + err.error.detail, "error");
+          this.store.dispatch(new ToastActions.Error('Ошибка регистрации! ' + err.error.detail));
         }
       )
     );

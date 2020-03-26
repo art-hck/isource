@@ -27,6 +27,10 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { SuggestionsDirective } from "./directives/suggestions.directive";
 import { HumanDatePipe } from './pipes/human-date.pipe';
 import { AddFromExcelComponent } from "./components/add-from-excel/add-from-excel.component";
+import { ToastComponent } from './components/toast-list/toast/toast.component';
+import { NgxsModule } from "@ngxs/store";
+import { ToastState } from "./states/toast.state";
+import { ToastListComponent } from "./components/toast-list/toast-list.component";
 
 @NgModule({
   imports: [
@@ -53,7 +57,10 @@ import { AddFromExcelComponent } from "./components/add-from-excel/add-from-exce
       cancelButtonText: 'Отмена',
       width: '16rem',
       reverseButtons: true
-    })
+    }),
+    NgxsModule.forFeature([
+      ToastState
+    ]),
   ],
   declarations: [
     CardComponent,
@@ -77,7 +84,9 @@ import { AddFromExcelComponent } from "./components/add-from-excel/add-from-exce
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
-    AddFromExcelComponent
+    AddFromExcelComponent,
+    ToastComponent,
+    ToastListComponent
   ],
   exports: [
     CommonModule,
@@ -109,7 +118,9 @@ import { AddFromExcelComponent } from "./components/add-from-excel/add-from-exce
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
-    AddFromExcelComponent
+    AddFromExcelComponent,
+    ToastComponent,
+    ToastListComponent
   ]
 })
 export class SharedModule {
