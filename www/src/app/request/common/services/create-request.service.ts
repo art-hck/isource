@@ -28,7 +28,7 @@ export class CreateRequestService {
   }
 
   addFreeFormRequest(requestItem: any) {
-    return this.api.post(
+    return this.api.post<Request>(
       `requests/customer/add-request/free-form`,
       this.convertModelToFormData(requestItem, null, 'request'));
   }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { auditTime, debounceTime, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -13,7 +13,7 @@ import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -39,8 +39,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private requestService: RequestService,
     private featureService: FeatureService,
     private store: Store,
-    private actions: Actions,
-    private notificationService: NotificationService,
+    private actions: Actions
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -63,10 +62,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe(({action, result}) => {
       const e = result.error as any;
-      this.notificationService.toast(
-        e && e.error.detail || (`ТКП успешно ${action instanceof Publish ? 'отправлено' : 'сохранено'}`),
-        result.error ? "error" : "success"
-      );
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) :
+        new ToastActions.Success(`ТКП успешно ${action instanceof Publish ? 'отправлено' : 'сохранено'}`));
     });
   }
 

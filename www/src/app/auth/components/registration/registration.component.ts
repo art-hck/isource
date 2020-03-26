@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { RegistrationService } from "../../services/registration.service";
@@ -9,6 +9,9 @@ import { ClrModal } from "@clr/angular";
 import { RegistrationRequest } from "../../models/registration-request";
 import { Subscription } from "rxjs";
 import { ContragentService } from "../../../contragent/services/contragent.service";
+import { Store } from "@ngxs/store";
+import { ToastActions } from "../../../shared/actions/toast.actions";
+import { Toast } from "../../../shared/models/toast";
 
 @Component({
   selector: 'app-registration',
@@ -18,6 +21,7 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 export class RegistrationComponent implements OnInit, OnDestroy {
   @ViewChild('contragentFound', { static: false }) contragentFound: ClrModal;
   @ViewChild('contragentNotFound', { static: false }) contragentNotFound: ClrModal;
+  @ViewChild('successRegister', { static: true }) successRegister: TemplateRef<any>;
 
   form: FormGroup;
   contragentForm: FormGroup;
@@ -29,7 +33,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private registrationService: RegistrationService,
     private contragentService: ContragentService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {
   }
 
@@ -67,15 +72,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.subscription.add(this.registrationService.registration(body).subscribe(
       () => {
         this.contragentFound.close();
+        this.store.dispatch(new ToastActions.Push({ template: this.successRegister }));
         this.router.navigateByUrl(`auth/login`);
-        Swal.fire({
-          width: 500,
-          html: `<p class="text-alert">Регистрация прошла успешно.</br></br>
-            На Вашу почту отправлено письмо со ссылкой для активации учётной записи.</br></br></p>
-            <button id="submit" class="btn btn-primary">ОК</button>`,
-          showConfirmButton: false,
-          onBeforeOpen: () => Swal.getContent().querySelector('#submit').addEventListener('click', () => Swal.close())
-        });
 
         this.registrationProcessing = false;
       },
@@ -84,6 +82,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.registrationProcessing = false;
       }
     ));
+  }
+
+  dismiss(toast: Toast) {
+    this.store.dispatch(new ToastActions.Remove(toast));
   }
 
   submit() {

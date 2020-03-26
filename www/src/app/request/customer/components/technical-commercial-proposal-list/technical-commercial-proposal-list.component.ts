@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestro
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { tap } from "rxjs/operators";
+import { bufferTime, filter, map, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -15,14 +15,16 @@ import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
-import { NotificationService } from "../../../../shared/services/notification.service";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
   styleUrls: ['technical-commercial-proposal-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
@@ -54,7 +56,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private requestService: RequestService,
     private store: Store,
     private actions: Actions,
-    private notificationService: NotificationService
+    private pluralize: PluralizePipe
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -72,13 +74,18 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
     this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
 
-    this.actions.pipe(ofActionCompleted(Approve, Reject))
-      .subscribe(({action, result}) => {
-        const e = result.error as any;
-        this.notificationService.toast(
-          e && e.error.detail || (`ТКП успешно ${action instanceof Approve ? 'рассмотрено' : 'отклонено'}`),
-          result.error ? "error" : "success"
-        );
+    this.actions.pipe(
+      ofActionCompleted(Approve, Reject),
+      bufferTime(2000),
+      filter(data => data.length > 0),
+      map(data => ({...data[0], length: data.length}))
+    ).subscribe(({result, action, length}) => {
+      const e = result.error as any;
+      let text = `По ${this.pluralize.transform(length, "позиции", "позициям", "позициям")} `;
+      text += action instanceof Approve ? "выбран победитель" : "отклонено предложение";
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
+      );
     });
   }
 
@@ -88,8 +95,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   approveAll() {
     this.proposalsOnReview
-      .filter(component => component.selectedProposalPosition.value)
-      .forEach(component => component.approve(component.selectedProposalPosition.value));
+      .filter(component => component.selectedProposalPosition.valid)
+      .forEach(component => component.approve());
   }
 
   rejectAll() {

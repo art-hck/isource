@@ -7,10 +7,11 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { ProcedureCreateRequest } from "../../models/procedure-create-request";
 import { finalize } from "rxjs/operators";
-import { NotificationService } from "../../../../shared/services/notification.service";
+import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -46,7 +47,7 @@ export class ProcedureCreateComponent implements OnInit {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
-    private notificationService: NotificationService,
+    private store: Store,
   ) {}
 
   ngOnInit() {
@@ -126,11 +127,11 @@ export class ProcedureCreateComponent implements OnInit {
     ).subscribe(
       data => {
         this.complete.emit();
-        this.notificationService.toast(`Процедура <b>${ data.procedureId }</b> успешно создана`);
+        this.store.dispatch(new ToastActions.Success(`Процедура <b>${ data.procedureId }</b> успешно создана`));
       },
-      err => this.notificationService.toast(
-        err.error && err.error.detail || "Ошибка при создании процедуры",
-        "error", 0)
+      err => this.store.dispatch(new ToastActions.Error(
+        err.error && err.error.detail || "Ошибка при создании процедуры"
+      ))
     );
   }
 

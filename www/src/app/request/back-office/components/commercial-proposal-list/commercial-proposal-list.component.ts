@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { tap } from "rxjs/operators";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { catchError, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService } from "uxg";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -9,11 +9,13 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
 import { Observable, Subscription } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
-import Swal from "sweetalert2";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
+import { ClrModal } from "@clr/angular";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
-
+  @ViewChild('confirmToast', { static: false }) confirmToast: ClrModal;
   requestId: Uuid;
   request$: Observable<Request>;
   requestPositionsWithOffers$: Observable<any>;
@@ -26,10 +28,16 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
 
   currentRequestPosition: RequestPosition;
   selectedLinkedOffer: any;
+  selectedPositions: RequestPosition[] = [];
+
+  get hasProsedure() {
+    return this.selectedPositions.some(requestPosition => requestPosition.hasProcedure === true);
+  }
 
   constructor(private bc: UxgBreadcrumbsService,
               private route: ActivatedRoute,
               private requestService: RequestService,
+              private store: Store,
               protected offersService: CommercialProposalsService,
               protected router: Router
   ) {
@@ -56,49 +64,11 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     this.requestPositionsWithOffers$ = this.requestService.getRequestPositionsWithOffers(this.requestId);
   }
 
-  sendForAgreement(requestId: Uuid, selectedRequestPositions: RequestPosition[]) {
-    let alertWidth = 340;
-    let htmlTemplate = '<p class="text-alert warning-msg">Отправить на согласование?</p>' +
-      '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
-      '<button id="cancel" class="btn btn-link">Отменить</button>';
-
-    if (selectedRequestPositions.some(requestPosition => requestPosition.hasProcedure === true)) {
-      alertWidth = 500;
-      htmlTemplate = '<p class="text-alert warning-msg">' +
-        'Процедура сбора коммерческих предложений по позиции ещё не завершена. ' +
-        '<br>' +
-        'Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>' +
-        '<button id="submit" class="btn btn-primary">Да, отправить</button>' +
-        '<button id="cancel" class="btn btn-link">Отменить</button>';
-    }
-
-    Swal.fire({
-      width: alertWidth,
-      html: htmlTemplate,
-      showConfirmButton: false,
-
-      onBeforeOpen: () => {
-        const content = Swal.getContent();
-        const $ = content.querySelector.bind(content);
-
-        const submit = $('#submit');
-        const cancel = $('#cancel');
-
-        submit.addEventListener('click', () => {
-          const subscription = this.offersService.publishRequestOffers(this.requestId, selectedRequestPositions).subscribe(
-            () => {
-              this.updatePositionsAndSuppliers();
-              subscription.unsubscribe();
-            }, () => {
-            }
-          );
-          Swal.close();
-        });
-        cancel.addEventListener('click', () => {
-          Swal.close();
-        });
-      }
-    });
+  publish() {
+    this.subscription.add(
+      this.offersService.publishRequestOffers(this.requestId, this.selectedPositions)
+      .subscribe(() => this.updatePositionsAndSuppliers())
+    );
   }
 
   onCancelPublishOffers(requestPosition: RequestPosition) {
@@ -143,30 +113,12 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   onSendOffersTemplateFilesClick(files: File[]): void {
-    this.offersService.addOffersFromExcel(this.requestId, files).subscribe((data: any) => {
-      Swal.fire({
-        width: 400,
-        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
-          '<button id="submit" class="btn btn-primary">' +
-          'ОК' + '</button>',
-        showConfirmButton: false,
-        onBeforeOpen: () => {
-          const content = Swal.getContent();
-          const $ = content.querySelector.bind(content);
-
-          const submit = $('#submit');
-          submit.addEventListener('click', () => {
-            this.updatePositionsAndSuppliers();
-            Swal.close();
-          });
-        }
-      });
-    }, (error: any) => {
-      let msg = 'Ошибка в шаблоне';
-      if (error && error.error && error.error.detail) {
-        msg = `${msg}: ${error.error.detail}`;
-      }
-      alert(msg);
-    });
+    this.offersService.addOffersFromExcel(this.requestId, files).pipe(
+      tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
+      tap(() => this.updatePositionsAndSuppliers()),
+      catchError(({error}) => this.store.dispatch(
+        new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
+      ))
+    ).subscribe();
   }
 }
