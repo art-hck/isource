@@ -29,7 +29,7 @@
     </clr-dg-column>
 
 
-    <clr-dg-row *ngFor="let contragent of contragents" (click)="onRowClick(contragent.id)">
+    <clr-dg-row *ngFor="let contragent of contragents | contragentSearchFilter: searchValue" (click)="onRowClick(contragent.id)">
 
       <clr-dg-cell class="employee-full-name clr-col">
         <b>{{ contragent.shortName}}</b>
