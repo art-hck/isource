@@ -43,6 +43,11 @@ export class ContragentRegistrationComponent implements OnInit {
     return !!this.contragentId;
   }
 
+  get responsiblePlaceholder() {
+    const responsible: User = this.form.get('contragentContact').get('responsible').value;
+    return responsible && responsible.fullName || 'Выберите ответственного';
+  }
+
   constructor(
     private fb: FormBuilder,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
@@ -101,10 +106,13 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
-    if (this.contragentId) {
+    if (this.isEditing) {
       this.getContragentInfo();
       this.form.get('contragent').get('ogrn').disable();
+      this.form.get('contragent').get('inn').disable();
     }
+
+    this.form.get('contragent').get('role').disable();
   }
 
   onPartySuggestionSelected(event): void {
@@ -203,7 +211,7 @@ export class ContragentRegistrationComponent implements OnInit {
       tap(contragent => {
         this.form.get('contragent').patchValue(contragent);
         this.form.get('contragentAddress').patchValue(contragent.addresses[0]);
-        this.form.get('contragentBankRequisite').patchValue(contragent.bankRequisites[0]);
+        this.form.get('contragentBankRequisite').patchValue(contragent.bankRequisites[0] || {});
         this.form.get('contragentContact').patchValue(contragent);
         this.form.get('contragentContact').get('responsible').setValue(contragent.responsible);
         this.form.get('contragent').get('taxAuthorityRegistrationDate').patchValue(
