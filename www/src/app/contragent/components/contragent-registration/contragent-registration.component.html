@@ -1,8 +1,8 @@
 <div class="app-row">
   <div class="app-col">
     <ng-container *ngIf="(contragent$ | async) as contragent">
-      <div class="last-edit" *ngIf="contragent.createdDate">
-        <span class="app-ghost-color">Последние изменения:  </span> {{ contragent.createdDate | date: 'shortDate' }}
+      <div class="last-edit" *ngIf="contragent.updatedDate">
+        <span class="app-ghost-color">Последние изменения:  </span> {{ contragent.updatedDate | date: 'shortDate' }}
       </div>
     </ng-container>
     <form [formGroup]="form" (ngSubmit)="submit()">

@@ -17,6 +17,7 @@ export class ContragentInfo {
   directorFullName?: string;
   phone: string;
   createdDate: Date;
+  updatedDate: Date;
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];
   responsible?: User;
