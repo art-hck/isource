@@ -1,12 +1,17 @@
 <div class="app-row">
   <div class="app-col">
+    <ng-container *ngIf="(contragent$ | async) as contragent">
+      <div class="last-edit" *ngIf="contragent.createdDate">
+        <span class="app-ghost-color">Последние изменения:  </span> {{ contragent.createdDate | date: 'shortDate' }}
+      </div>
+    </ng-container>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="app-card">
         <ng-container *ngIf="!isEditing; else editHeader">
-        <h2>Новый контрагент</h2>
-        <p class="app-secondary-color">Начните вводить нименование контрагента, и если он появится в подсказках,
-          то после нажатия на него большинство полей будет заполнено автоматически, вам нужно будет их только <b>проверить</b>.
-          В этом блоке все поля являются обязательными для заполнения.</p>
+          <h2>Новый контрагент</h2>
+          <p class="app-secondary-color">Начните вводить нименование контрагента, и если он появится в подсказках,
+            то после нажатия на него большинство полей будет заполнено автоматически, вам нужно будет их только <b>проверить</b>.
+            В этом блоке все поля являются обязательными для заполнения.</p>
         </ng-container>
         <ng-template #editHeader>
           <h3>Общая информация</h3>
@@ -35,10 +40,18 @@
 
           <div class="app-row">
             <div class="app-col">
-              <ngx-dadata [config]="configParty" (selected)="onPartySuggestionSelected($event)"
-                          formControlName="inn"
-                          placeholder="ИНН"
-                          appFormControlInvalidClass="invalid"></ngx-dadata>
+              <ng-container *ngIf="!isEditing; else innDisabled">
+                <ngx-dadata [config]="configParty" (selected)="onPartySuggestionSelected($event)"
+                            formControlName="inn"
+                            placeholder="ИНН"
+                            appFormControlInvalidClass="invalid"></ngx-dadata>
+              </ng-container>
+              <ng-template #innDisabled>
+                <div class="app-control-wrap">
+                  <input #inn uxgInput lg formControlName="inn" disabled/>
+                  <label class="app-control-label" (click)="inn.focus()">ИНН</label>
+                </div>
+              </ng-template>
             </div>
             <div class="app-col">
               <div class="app-control-wrap">
@@ -46,7 +59,6 @@
                 <label class="app-control-label" (click)="kpp.focus()">КПП</label>
                 <div class="app-control-error" *ngIf="form.get('contragent').get('kpp').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.kpp">Поле может содержать только 10 или 13 цифр</span>
                 </div>
               </div>
             </div>
@@ -56,7 +68,6 @@
                 <label class="app-control-label" (click)="ogrn.focus()">ОГРН/ОГРНИП</label>
                 <div class="app-control-error" *ngIf="form.get('contragent').get('ogrn').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.ogrn">Поле может содержать только 13 или 15 цифр</span>
                 </div>
               </div>
             </div>
@@ -73,7 +84,6 @@
                 </label>
                 <div class="app-control-error" *ngIf="form.get('contragent').get('taxAuthorityRegistrationDate').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.pastDate">Неверная дата</span>
                 </div>
               </div>
               <clr-date-container #datepicker class="hidden-datepicker">
@@ -103,7 +113,6 @@
                 <label class="app-control-label" (click)="postIndex.focus()">Почтовый индекс</label>
                 <div class="app-control-error" *ngIf="form.get('contragentAddress').get('postIndex').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.index">Поле может содержать только 6 цифр</span>
                 </div>
               </div>
             </div>
@@ -113,7 +122,6 @@
                 <label class="app-control-label" (click)="country.focus()">Страна</label>
                 <div class="app-control-error" *ngIf="form.get('contragentAddress').get('country').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.cyrillic">Поле может содержать только кириллицу</span>
                 </div>
               </div>
             </div>
@@ -129,7 +137,6 @@
                 <label class="app-control-label" (click)="city.focus()">Город/н.п.</label>
                 <div class="app-control-error" *ngIf="form.get('contragentAddress').get('city').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.cyrillic">Поле может содержать только кириллицу</span>
                 </div>
               </div>
             </div>
@@ -141,7 +148,6 @@
                 <label class="app-control-label" (click)="address.focus()">Адрес</label>
                 <div class="app-control-error" *ngIf="form.get('contragentAddress').get('address').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
-                  <span *ngIf="e.cyrillic">Поле может содержать только кириллицу</span>
                 </div>
               </div>
             </div>
@@ -218,7 +224,7 @@
               </div>
             </div>
             <div class="app-col">
-              <uxg-dropdown placeholder="Выберите ответственного" formControlName="responsible">
+              <uxg-dropdown lg [placeholder]="isEditing ? form.get('responsible')?.value : 'Выберите ответственного'" formControlName="responsible">
                 <div uxgDropdownItem [value]="user" *ngFor="let user of seniorBackofficeUsers$ | async">{{ user.user.fullName}}</div>
               </uxg-dropdown>
             </div>
@@ -230,7 +236,7 @@
         <div>
           <span *ngIf="isLoading" class="spinner spinner-inline"></span>
         </div>
-        <button uxgButton primary lg [disabled]="form.invalid && !isLoading">Добавить</button>
+        <button uxgButton primary lg [disabled]="form.invalid">{{isEditing ? "Сохранить" : "Добавить" }}</button>
       </div>
     </form>
   </div>

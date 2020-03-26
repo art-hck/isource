@@ -1,6 +1,7 @@
 import { Uuid } from "../../cart/models/uuid";
 import { ContragentInfoAddresses } from "./contragent-info-address";
 import { ContragentInfoBankRequisites } from "./contragent-info-bank-requisites";
+import {User} from "../../user/models/user";
 
 export class ContragentInfo {
   id: Uuid;
@@ -18,6 +19,6 @@ export class ContragentInfo {
   createdDate: Date;
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];
-  responsible: string;
+  responsible?: User;
 
 }

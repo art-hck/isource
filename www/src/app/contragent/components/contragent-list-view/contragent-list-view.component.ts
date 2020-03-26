@@ -4,6 +4,7 @@ import { ContragentList } from "../../models/contragent-list";
 import { Observable } from "rxjs";
 import { FeatureService } from "../../../core/services/feature.service";
 import { UserInfoService } from "../../../user/service/user-info.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-contragent-list-view',
@@ -18,7 +19,8 @@ export class ContragentListViewComponent implements OnInit {
   constructor(
     protected getContragentService: ContragentService,
     public featureService: FeatureService,
-    public userInfoService: UserInfoService
+    public userInfoService: UserInfoService,
+    protected router: Router
   ) { }
 
   ngOnInit() {
@@ -35,5 +37,9 @@ export class ContragentListViewComponent implements OnInit {
 
   onClearFilterClick() {
     this.customerSearchValue = '';
+  }
+
+  onAddContragent() {
+    this.router.navigateByUrl(`contragents/create`);
   }
 }

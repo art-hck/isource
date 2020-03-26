@@ -1,24 +1,26 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DadataConfig, DadataType } from "@kolkov/ngx-dadata";
-import { GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
-import { APP_CONFIG } from '@stdlib-ng/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {DadataConfig, DadataType} from "@kolkov/ngx-dadata";
+import {GpnmarketConfigInterface} from "../../../core/config/gpnmarket-config.interface";
+import {APP_CONFIG} from '@stdlib-ng/core';
 import * as moment from "moment";
-import { CustomValidators } from "../../../shared/forms/custom.validators";
-import { ContragentService } from "../../services/contragent.service";
-import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
+import {CustomValidators} from "../../../shared/forms/custom.validators";
+import {ContragentService} from "../../services/contragent.service";
+import {ContragentRegistrationRequest} from "../../models/contragent-registration-request";
 import {Observable, Subscription} from "rxjs";
-import { NotificationService } from "../../../shared/services/notification.service";
+import {NotificationService} from "../../../shared/services/notification.service";
 import {finalize, tap} from "rxjs/operators";
-import { ContragentShortInfo } from "../../models/contragent-short-info";
+import {ContragentShortInfo} from "../../models/contragent-short-info";
 import {UserService} from "../../../user/service/user.service";
 import {User} from "../../../user/models/user";
 import {EmployeeService} from "../../../employee/services/employee.service";
 import {EmployeeItem} from "../../../employee/models/employee-item";
 import {Uuid} from "../../../cart/models/uuid";
-import {ActivatedRoute, Route} from "@angular/router";
+import {ActivatedRoute, Route, Router} from "@angular/router";
 import {ContragentInfo} from "../../models/contragent-info";
 import {UxgBreadcrumbsService} from "uxg";
+import {Title} from "@angular/platform-browser";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -49,7 +51,8 @@ export class ContragentRegistrationComponent implements OnInit {
     private employeeService: EmployeeService,
     protected route: ActivatedRoute,
     private getContragentService: ContragentService,
-    private bc: UxgBreadcrumbsService
+    private bc: UxgBreadcrumbsService,
+    protected router: Router
   ) {
     this.configParty = {
       apiKey: appConfig.dadata.apiKey,
@@ -67,6 +70,7 @@ export class ContragentRegistrationComponent implements OnInit {
 
     this.form = this.fb.group({
       contragent: this.fb.group({
+        contragentId: [this.contragentId],
         fullName: ['', [Validators.required, CustomValidators.simpleText]],
         shortName: ['', [Validators.required, CustomValidators.simpleText]],
         inn: ['', [Validators.required, CustomValidators.inn]],
@@ -80,8 +84,7 @@ export class ContragentRegistrationComponent implements OnInit {
         region: ['', [Validators.required, CustomValidators.cyrillic]],
         city: ['', [Validators.required, CustomValidators.cyrillic]],
         address: ['', [Validators.required, CustomValidators.simpleText]],
-        postIndex: ['', [Validators.required, CustomValidators.index]],
-        locality: ['', CustomValidators.cyrillicNotRequired]
+        postIndex: ['', [Validators.required, CustomValidators.index]]
       }),
       contragentBankRequisite: this.fb.group({
         account: ['', [Validators.required, CustomValidators.bankAccount]],
@@ -98,9 +101,9 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.seniorBackofficeUsers$ = this.employeeService.getEmployeeList('SENIOR_BACKOFFICE');
-
     if (this.contragentId) {
       this.getContragentInfo();
+      this.form.get('contragent').get('ogrn').disable();
     }
   }
 
@@ -146,39 +149,66 @@ export class ContragentRegistrationComponent implements OnInit {
   }
 
   submit() {
+    console.log(this.form);
     if (this.form.invalid) {
       return;
     }
-
     this.isLoading = true;
 
-    const body: ContragentRegistrationRequest = this.form.value;
-
-    this.subscription.add(
-      this.contragentService.registration(body).pipe(
-        finalize(() => this.isLoading = false)
-      ).subscribe(
-        contragent => {
-          this.contragentCreated.emit(contragent);
-          this.form.reset();
-          this.autofillAlertShown = false;
-          this.notificationService.toast("Контрагент успешно создан!");
-        },
-        (err) => {
-          this.notificationService.toast('Ошибка регистрации! ' + err.error.detail, "error");
-        }
+    const body: ContragentRegistrationRequest = this.form.getRawValue();
+    if (!this.isEditing) {
+      this.subscription.add(
+        this.contragentService.registration(body).pipe(
+          finalize(() => this.isLoading = false)
+        ).subscribe(
+          contragent => {
+            this.contragentCreated.emit(contragent);
+            this.form.reset();
+            this.autofillAlertShown = false;
+            this.router.navigateByUrl(`contragents/list`);
+            this.notificationService.toast('Контрагент ' + contragent.shortName + ' успешно добавлен');
+          },
+          (err) => {
+            this.notificationService.toast('Ошибка регистрации! ' + err.error.detail, "error");
+          }
+        )
+      );
+    } else {
+      this.subscription.add(
+        this.contragentService.editContragent(this.contragentId, body).pipe(
+          finalize(() => this.isLoading = false)
+        ).subscribe(
+          contragent => {
+            this.form.reset();
+            this.notificationService.toast("Контрагент " + contragent.shortName + " успешно отредактирован!");
+            this.router.navigateByUrl(`contragents/list`);
+          },
+          (err) => {
+            this.notificationService.toast('Ошибка редактирования! ' + err.error.detail, "error");
+          }
+        )
       )
-    );
+    }
   }
 
   getContragentInfo(): void {
-    this.contragent$ = this.getContragentService.getContragentInfo(this.route.snapshot.paramMap.get('id')).pipe(
+    this.contragent$ = this.getContragentService.getContragentInfo(this.contragentId).pipe(
       tap(contragent => {
         this.bc.breadcrumbs = [
           {label: "Контрагенты", link: "/contragents/list"},
-        //   {label: this.title.getTitle(), link: `/contragents/${contragentId}/info`}
+          {label: contragent.shortName, link: `/contragents/${this.contragentId}/info`},
+          {label: "Редактировать", link: ''}
         ];
+      }),
+      tap(contragent => {
+        this.form.get('contragent').patchValue(contragent);
+        this.form.get('contragentAddress').patchValue(contragent.addresses[0]);
+        this.form.get('contragentBankRequisite').patchValue(contragent.bankRequisites[0]);
+        this.form.get('contragentContact').patchValue(contragent);
+        this.form.get('contragentContact').get('responsible').setValue(contragent.responsible);
+        this.form.get('contragent').get('taxAuthorityRegistrationDate').patchValue(
+          moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'))
       })
-    );
+    )
   }
 }

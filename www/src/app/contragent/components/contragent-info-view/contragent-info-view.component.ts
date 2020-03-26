@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Uuid} from "../../../cart/models/uuid";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
 import {ContragentInfo} from "../../models/contragent-info";
 import {ContragentService} from "../../services/contragent.service";
@@ -31,6 +31,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
+    protected router: Router
   ) {
   }
 
@@ -58,6 +59,10 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   onDownloadPrimaInformReport(): void {
     this.getContragentService.downloadPrimaInformReport(this.contragentId);
+  }
+
+  onEditClick(contragentId: Uuid): void {
+    this.router.navigateByUrl(`/contragents/${contragentId}/edit`)
   }
 
   getLoaderState() {
