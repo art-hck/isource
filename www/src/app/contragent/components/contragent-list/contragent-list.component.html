@@ -29,7 +29,8 @@
     </clr-dg-column>
 
 
-    <clr-dg-row *ngFor="let contragent of contragents | contragentSearchFilter: searchValue" (click)="onRowClick(contragent.id)">
+    <clr-dg-row *ngFor="let contragent of contragents | contragentSearchFilter: searchValue"
+                (click)="router.navigateByUrl('/contragents/' + contragent.id + '/info')">
 
       <clr-dg-cell class="employee-full-name clr-col">
         <b>{{ contragent.shortName}}</b>
@@ -51,7 +52,7 @@
         {{ contragent.responsible?.shortName }}
       </clr-dg-cell>
       <clr-dg-cell class="edit clr-col-1">
-        <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="onEditClick(contragent.id)">
+        <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
           <clr-icon shape="app-pen"></clr-icon>
         </button>
       </clr-dg-cell>

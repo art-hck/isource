@@ -1,26 +1,22 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DadataConfig, DadataType} from "@kolkov/ngx-dadata";
-import {GpnmarketConfigInterface} from "../../../core/config/gpnmarket-config.interface";
-import {APP_CONFIG} from '@stdlib-ng/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DadataConfig, DadataType } from "@kolkov/ngx-dadata";
+import { GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG } from '@stdlib-ng/core';
 import * as moment from "moment";
-import {CustomValidators} from "../../../shared/forms/custom.validators";
-import {ContragentService} from "../../services/contragent.service";
-import {ContragentRegistrationRequest} from "../../models/contragent-registration-request";
-import {Observable, Subscription} from "rxjs";
-import {NotificationService} from "../../../shared/services/notification.service";
-import {finalize, tap} from "rxjs/operators";
-import {ContragentShortInfo} from "../../models/contragent-short-info";
-import {UserService} from "../../../user/service/user.service";
-import {User} from "../../../user/models/user";
-import {EmployeeService} from "../../../employee/services/employee.service";
-import {EmployeeItem} from "../../../employee/models/employee-item";
-import {Uuid} from "../../../cart/models/uuid";
-import {ActivatedRoute, Route, Router} from "@angular/router";
-import {ContragentInfo} from "../../models/contragent-info";
-import {UxgBreadcrumbsService} from "uxg";
-import {Title} from "@angular/platform-browser";
-import Swal from "sweetalert2";
+import { CustomValidators } from "../../../shared/forms/custom.validators";
+import { ContragentService } from "../../services/contragent.service";
+import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
+import { Observable, Subscription } from "rxjs";
+import { NotificationService } from "../../../shared/services/notification.service";
+import { finalize, tap } from "rxjs/operators";
+import { ContragentShortInfo } from "../../models/contragent-short-info";
+import { EmployeeService } from "../../../employee/services/employee.service";
+import { EmployeeItem } from "../../../employee/models/employee-item";
+import { Uuid } from "../../../cart/models/uuid";
+import { ActivatedRoute, Route, Router } from "@angular/router";
+import { ContragentInfo } from "../../models/contragent-info";
+import { UxgBreadcrumbsService } from "uxg";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -94,8 +90,8 @@ export class ContragentRegistrationComponent implements OnInit {
         address: ['', [Validators.required]],
       }),
       contragentContact: this.fb.group({
-        email: ['', CustomValidators.emailNotRequired],
-        phone: ['', CustomValidators.phoneNotRequired],
+        email: ['', CustomValidators.emailOptional],
+        phone: ['', CustomValidators.phoneOptional],
         responsible: ['', Validators.required]
       })
     });
@@ -149,7 +145,6 @@ export class ContragentRegistrationComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.form);
     if (this.form.invalid) {
       return;
     }
@@ -163,8 +158,6 @@ export class ContragentRegistrationComponent implements OnInit {
         ).subscribe(
           contragent => {
             this.contragentCreated.emit(contragent);
-            this.form.reset();
-            this.autofillAlertShown = false;
             this.router.navigateByUrl(`contragents/list`);
             this.notificationService.toast('Контрагент ' + contragent.shortName + ' успешно добавлен');
           },
@@ -175,11 +168,10 @@ export class ContragentRegistrationComponent implements OnInit {
       );
     } else {
       this.subscription.add(
-        this.contragentService.editContragent(this.contragentId, body).pipe(
+        this.contragentService.editContragent(body).pipe(
           finalize(() => this.isLoading = false)
         ).subscribe(
           contragent => {
-            this.form.reset();
             this.notificationService.toast("Контрагент " + contragent.shortName + " успешно отредактирован!");
             this.router.navigateByUrl(`contragents/list`);
           },
@@ -197,7 +189,7 @@ export class ContragentRegistrationComponent implements OnInit {
         this.bc.breadcrumbs = [
           {label: "Контрагенты", link: "/contragents/list"},
           {label: contragent.shortName, link: `/contragents/${this.contragentId}/info`},
-          {label: "Редактировать", link: ''}
+          {label: "Редактировать", link: '`/contragents/${this.contragentId}/edit`'}
         ];
       }),
       tap(contragent => {

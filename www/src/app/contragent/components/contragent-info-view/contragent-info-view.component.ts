@@ -61,10 +61,6 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     this.getContragentService.downloadPrimaInformReport(this.contragentId);
   }
 
-  onEditClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/edit`);
-  }
-
   getLoaderState() {
     return this.getContragentService.loading;
   }

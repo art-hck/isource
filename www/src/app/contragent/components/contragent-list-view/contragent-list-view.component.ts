@@ -38,8 +38,4 @@ export class ContragentListViewComponent implements OnInit {
   onClearFilterClick() {
     this.customerSearchValue = '';
   }
-
-  onAddContragent() {
-    this.router.navigateByUrl(`contragents/create`);
-  }
 }

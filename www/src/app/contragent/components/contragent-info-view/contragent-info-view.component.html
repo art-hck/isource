@@ -4,7 +4,8 @@
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
   <div class="app-row action">
-    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()" (click)="onEditClick(contragent.id)">
+    <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
+            (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
       <clr-icon shape="app-pen"></clr-icon>
       Редактировать контрагента
     </button>

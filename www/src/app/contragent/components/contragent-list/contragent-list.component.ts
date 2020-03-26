@@ -33,12 +33,4 @@ export class ContragentListComponent implements OnInit {
 
     window.open('mailto:' + email);
   }
-
-  onRowClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/info`);
-  }
-
-  onEditClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/edit`);
-  }
 }
