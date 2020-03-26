@@ -87,12 +87,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   save(value, publish) {
     return this.store.dispatch(
-      value.id ? new Update(this.request.id, value, publish) : new Create(this.request.id, value, publish)
+      value.id ? new Update(value, publish) : new Create(this.request.id, value, publish)
     );
   }
 
   publish() {
-    return this.store.dispatch(new Publish(this.request.id, this.technicalCommercialProposal));
+    return this.store.dispatch(new Publish(this.technicalCommercialProposal));
   }
 
   toProposalPositions(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {

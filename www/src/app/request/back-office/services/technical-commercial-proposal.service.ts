@@ -22,13 +22,13 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(body));
   }
 
-  update(requestId: Uuid, proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
+  update(proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
     const url = `requests/backoffice/technical-commercial-proposals/${proposal.id}/edit`;
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
-  publish(requestId: Uuid, proposal: TechnicalCommercialProposal) {
-    const url = `requests/backoffice/technical-commercial-proposals/${proposal.id}/send-to-review`;
+  publish({id}: TechnicalCommercialProposal) {
+    const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);
   }
 

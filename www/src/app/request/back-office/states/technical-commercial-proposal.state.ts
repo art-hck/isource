@@ -80,21 +80,21 @@ export class TechnicalCommercialProposalState {
         proposals: insertItem(proposal),
         proposalsStateStatus: "received" as StateStatus
       }))),
-      mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(action.requestId, proposal)) : of(proposal))
+      mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
   );
   }
 
   @Action(Update)
-  update(ctx: Context, action: Update) {
+  update(ctx: Context, {publish, payload}: Update) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
-    return this.rest.update(action.requestId, action.payload).pipe(
+    return this.rest.update(payload).pipe(
       tap(proposal => ctx.setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
         proposalsStateStatus: "received" as StateStatus
       }))),
       mergeMap(proposal => {
-        if (action.publish) {
-          return ctx.dispatch(new Publish(action.requestId, proposal));
+        if (publish) {
+          return ctx.dispatch(new Publish(proposal));
         } else {
           return of(proposal);
         }
@@ -103,9 +103,9 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Publish)
-  publish({setState}: Context, {requestId, proposal}: Publish) {
+  publish({setState}: Context, {proposal}: Publish) {
     setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
-    return this.rest.publish(requestId, proposal).pipe(
+    return this.rest.publish(proposal).pipe(
       tap((_proposal) => setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
         proposalsStateStatus: "received" as StateStatus
