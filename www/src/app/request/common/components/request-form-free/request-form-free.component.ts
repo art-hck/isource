@@ -1,10 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
-import {FreeFormRequestItem} from "../../models/free-form-request-item";
-import {CreateRequestService} from "../../services/create-request.service";
-import Swal from "sweetalert2";
-import {RequestService} from "../../../customer/services/request.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { FreeFormRequestItem } from "../../models/free-form-request-item";
+import { CreateRequestService } from "../../services/create-request.service";
+import { RequestService } from "../../../customer/services/request.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-request-form-free',
@@ -23,6 +24,7 @@ export class RequestFormFreeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private createRequestService: CreateRequestService,
     private requestService: RequestService,
+    private store: Store,
     protected router: Router
   ) {
   }
@@ -45,28 +47,9 @@ export class RequestFormFreeComponent implements OnInit {
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(
-      (data: any) => {
-        this.requestService.publishRequest(data.id).subscribe(
-          () => {
-            Swal.fire({
-              width: 400,
-              html: '<p class="text-alert">' + 'Заявка опубликована</br></br>' + '</p>' +
-                '<button id="submit" class="btn btn-primary">' +
-                'ОК' + '</button>',
-              showConfirmButton: false,
-              onBeforeOpen: () => {
-                const content = Swal.getContent();
-                const $ = content.querySelector.bind(content);
-
-                const submit = $('#submit');
-                submit.addEventListener('click', () => {
-                  this.router.navigateByUrl(`requests/customer/${data.id}`);
-                  Swal.close();
-                });
-              }
-            });
-          });
+    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(({id}) => {
+        this.router.navigateByUrl(`requests/customer/${id}`);
+        this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
       });
   }
 

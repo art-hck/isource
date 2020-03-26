@@ -1,6 +1,6 @@
 <div class="container">
   <ng-container *ngComponentOutlet="toast.component"></ng-container>
-  <ng-container *ngTemplateOutlet="toast.template"></ng-container>
+  <ng-container *ngTemplateOutlet="toast.template; context: {$implicit: toast}"></ng-container>
   <ng-container *ngIf="toast.text">
     <div class="app-row app-align-items-center">
       <div>{{ toast.text }}</div>

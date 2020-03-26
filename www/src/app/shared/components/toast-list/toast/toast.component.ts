@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
 import { Toast } from "../../../models/toast";
 import { Store } from "@ngxs/store";
 import { ToastActions } from "../../../actions/toast.actions";
@@ -10,6 +10,7 @@ import Remove = ToastActions.Remove;
   selector: 'app-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastComponent {
   @Input() toast: Toast;
