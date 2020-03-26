@@ -30,7 +30,6 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
     constructor(
-      public requestId: Uuid,
       public payload: Partial<TechnicalCommercialProposal> & { id: Uuid },
       public publish: boolean
     ) {}
@@ -39,6 +38,6 @@ export namespace TechnicalCommercialProposals {
   // Отправить на согласование ТКП
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
-    constructor(public requestId: Uuid, public proposal: TechnicalCommercialProposal) {}
+    constructor(public proposal: TechnicalCommercialProposal) {}
   }
 }
