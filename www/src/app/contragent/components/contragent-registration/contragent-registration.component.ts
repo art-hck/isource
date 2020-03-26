@@ -8,11 +8,8 @@ import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentRegistrationRequest } from "../../models/contragent-registration-request";
 import { Observable, Subscription } from "rxjs";
-import { NotificationService } from "../../../shared/services/notification.service";
 import { finalize, tap } from "rxjs/operators";
-import { Subscription } from "rxjs";
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { finalize } from "rxjs/operators";
 import { ContragentShortInfo } from "../../models/contragent-short-info";
 import { EmployeeService } from "../../../employee/services/employee.service";
 import { EmployeeItem } from "../../../employee/models/employee-item";
@@ -21,6 +18,7 @@ import { ActivatedRoute, Route, Router } from "@angular/router";
 import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
+import {User} from "../../../user/models/user";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -53,7 +51,6 @@ export class ContragentRegistrationComponent implements OnInit {
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface,
     private contragentService: ContragentService,
     private store: Store,
-    private notificationService: NotificationService,
     private employeeService: EmployeeService,
     protected route: ActivatedRoute,
     private getContragentService: ContragentService,
@@ -173,7 +170,7 @@ export class ContragentRegistrationComponent implements OnInit {
           contragent => {
             this.contragentCreated.emit(contragent);
             this.router.navigateByUrl(`contragents/list`);
-            this.store.dispatch(new ToastActions.Success("Контрагент успешно создан!"));
+            this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно создан!"));
           },
           (err) => {
             this.store.dispatch(new ToastActions.Error('Ошибка регистрации! ' + err.error.detail));
@@ -186,11 +183,11 @@ export class ContragentRegistrationComponent implements OnInit {
           finalize(() => this.isLoading = false)
         ).subscribe(
           contragent => {
-            this.notificationService.toast("Контрагент " + contragent.shortName + " успешно отредактирован!");
+            this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно отредактирован!"));
             this.router.navigateByUrl(`contragents/list`);
           },
           (err) => {
-            this.notificationService.toast('Ошибка редактирования! ' + err.error.detail, "error");
+            this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
           }
         )
       );
@@ -211,7 +208,7 @@ export class ContragentRegistrationComponent implements OnInit {
         this.form.get('contragentAddress').patchValue(contragent.addresses[0]);
         this.form.get('contragentBankRequisite').patchValue(contragent.bankRequisites[0] || {});
         this.form.get('contragentContact').patchValue(contragent);
-        this.form.get('contragentContact').get('responsible').setValue(contragent.responsible);
+        this.form.get('contragentContact').get('responsible').patchValue(contragent.responsible);
         this.form.get('contragent').get('taxAuthorityRegistrationDate').patchValue(
           moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'));
       })
