@@ -75,6 +75,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   }
 
   updateEmployeeListItem(employee: EmployeeInfoBrief) {
+    this.editedEmployee = null;
     this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
       (data) => {
         this.employeesList$ = this.employeesList$.pipe(
