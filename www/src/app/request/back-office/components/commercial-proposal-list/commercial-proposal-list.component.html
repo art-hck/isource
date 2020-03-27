@@ -68,7 +68,7 @@
     <p>Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>
     <div class="app-row app-justify-content-end">
       <button uxgButton secondary lg (click)="confirmToast.close()">Отменить</button>
-      <button uxgButton primary lg (click)="publish()">Да, отправить</button>
+      <button uxgButton primary lg (click)="publish(); confirmToast.close()">Да, отправить</button>
     </div>
   </div>
 </clr-modal>
