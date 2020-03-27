@@ -57,7 +57,7 @@ export class ContragentService {
     return this.api.post<ContragentShortInfo>("contragents/registration", body);
   }
 
-  editContragent(body: ContragentRegistrationRequest) {
-    return this.api.post<ContragentShortInfo>("contragents/edit", body);
+  editContragent(contragentId: Uuid, body: ContragentRegistrationRequest) {
+    return this.api.post<ContragentShortInfo>(`contragents/${contragentId}/edit`, body);
   }
 }
