@@ -88,7 +88,7 @@
     <div class="modal-body">
       <app-employee-form
         *ngIf="createEmployeeModal._open"
-        (cancel)="createEmployeeModal.close()"
+        (cancel)="editedEmployee = null; createEmployeeModal.close()"
         (addEmployee)="addEmployee($event); createEmployeeModal.close()"
         (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
         [employee]="editedEmployee"></app-employee-form>
