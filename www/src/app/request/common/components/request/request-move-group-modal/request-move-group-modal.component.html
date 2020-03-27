@@ -2,7 +2,8 @@
   <h2 class="modal-title">Переместить позиции <span class="app-ghost-color">({{ positions.length }})</span></h2>
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
-      <p class="app-secondary-color">Вы можете переместить позиции в ранее созданные группы, перместить с созданием новой группы, или вынести позиции вне групп.</p>
+      <p class="app-secondary-color">Вы можете переместить позиции в ранее созданные группы, переместить с созданием новой группы, или вынести позиции вне
+        групп.</p>
       <uxg-dropdown lg formControlName="group" placeholder="Выберите куда переместить">
         <div uxgDropdownItem *ngFor="let group of groups" [value]="group">{{group.name || "Без имени"}}</div>
         <!--<div uxgDropdownItem [value]="null" class="app-secondary-color">Вынести вне группы/групп</div>-->

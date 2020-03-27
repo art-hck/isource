@@ -56,4 +56,8 @@ export class ContragentService {
   registration(body: ContragentRegistrationRequest) {
     return this.api.post<ContragentShortInfo>("contragents/registration", body);
   }
+
+  editContragent(body: ContragentRegistrationRequest) {
+    return this.api.post<ContragentShortInfo>("contragents/edit", body);
+  }
 }

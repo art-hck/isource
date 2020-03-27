@@ -4,7 +4,7 @@
       [requestPositions]="positionsWithOffers.positions"
       [suppliers]="positionsWithOffers.suppliers"
       [request]="request"
-      (sentForAgreement)="sendForAgreement($event.requestId, $event.selectedPositions)"
+      (sentForAgreement)="selectedPositions = $event.selectedPositions; confirmToast.open()"
       (cancelOffer)="onCancelPublishOffers($event)"
       (addOffer)="showAddOfferModal($event)"
       (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
@@ -60,4 +60,16 @@
     <span class="spinner spinner-md"></span>
   </div>
 </ng-template>
+
+<clr-modal #confirmToast>
+  <h2 class="modal-title" *ngIf="!hasProsedure">Отправить на согласование</h2>
+  <h2 class="modal-title" *ngIf="hasProsedure">Процедура сбора коммерческих предложений по позиции ещё не завершена</h2>
+  <div class="modal-body">
+    <p>Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>
+    <div class="app-row app-justify-content-end">
+      <button uxgButton secondary lg (click)="confirmToast.close()">Отменить</button>
+      <button uxgButton primary lg (click)="publish()">Да, отправить</button>
+    </div>
+  </div>
+</clr-modal>
 

@@ -1,18 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { delay, map } from "rxjs/operators";
+import { delay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Uuid } from "../../../cart/models/uuid";
-import { Guid } from "guid-typescript";
 import { RequestPosition } from "../../common/models/request-position";
-import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
-import { TechnicalCommercialProposalStatusLabel } from "../../common/enum/technical-commercial-proposal-status-label";
+import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
 
-  constructor(protected api: HttpClient) {}
+  constructor(protected api: HttpClient, private formDataService: FormDataService) {}
 
   list(requestId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals`;
@@ -20,22 +18,18 @@ export class TechnicalCommercialProposalService {
   }
 
   create(requestId: Uuid, body: Partial<TechnicalCommercialProposal>) {
-    return of({id: Guid.create().toString(), ...body}).pipe(this.delayPipe(300, 1200)) as Observable<TechnicalCommercialProposal>;
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/create`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(body));
   }
 
-  update(requestId: Uuid, body: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
-    return of(body).pipe(this.delayPipe(300, 1200)) as Observable<TechnicalCommercialProposal>;
+  update(proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
+    const url = `requests/backoffice/technical-commercial-proposals/${proposal.id}/edit`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
-  publish(requestId: Uuid, proposal: TechnicalCommercialProposal) {
-    return of(null).pipe(
-      this.delayPipe(1300, 2200),
-      map(() => ({
-        ...proposal,
-        status: TechnicalCommercialProposalStatus.SENT_TO_REVIEW,
-        statusLabel: TechnicalCommercialProposalStatusLabel.SENT_TO_REVIEW
-      }))
-    ) as Observable<TechnicalCommercialProposal>;
+  publish({id}: TechnicalCommercialProposal) {
+    const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
+    return this.api.get<TechnicalCommercialProposal>(url);
   }
 
   availablePositions(requestId: Uuid) {

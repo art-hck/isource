@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ContragentList } from "../../models/contragent-list";
 import { Router } from "@angular/router";
 import {Uuid} from "../../../cart/models/uuid";
+import {UserInfoService} from "../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-contragent-list',
@@ -15,6 +16,7 @@ export class ContragentListComponent implements OnInit {
 
   constructor(
     protected router: Router,
+    public user: UserInfoService
   ) { }
 
   ngOnInit() {
@@ -30,9 +32,5 @@ export class ContragentListComponent implements OnInit {
     ev.stopPropagation();
 
     window.open('mailto:' + email);
-  }
-
-  onRowClick(contragentId: Uuid): void {
-    this.router.navigateByUrl(`/contragents/${contragentId}/info`);
   }
 }

@@ -1,4 +1,5 @@
 import { Uuid } from "../../cart/models/uuid";
+import {User} from "../../user/models/user";
 
 export class ContragentList {
   id: Uuid|null;
@@ -14,6 +15,7 @@ export class ContragentList {
   directorFullName?: string;
   phone: string;
   createdDate: Date;
+  responsible?: User;
 
   constructor(params?: Partial<ContragentList>) {
     Object.assign(this, params);

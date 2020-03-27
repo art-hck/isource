@@ -12,7 +12,7 @@ export class RequestPosition extends RequestPositionList {
    * Значение null допустимо для позиций не сохранённых в базе данных
    */
 
-  number: number;
+  number?: number;
   type: string;
   groupId: Uuid;
   group: RequestGroup;
@@ -38,17 +38,18 @@ export class RequestPosition extends RequestPositionList {
   documents: RequestDocument[];
   manufacturingDocuments: ManufacturingDocument[];
   linkedOffers: RequestOfferPosition[];
-  hasProcedure: boolean;
-  procedureId: string;
-  procedureTitle: string;
+  hasProcedure?: boolean;
+  procedureId?: string;
+  procedureTitle?: string;
   procedureStartDate?: Date;
   procedureEndDate?: Date;
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
   isDesignRequired: boolean;
-  checked: boolean;
+  checked?: boolean;
   sourceRequestPositionId?: Uuid;
   responsibleUser?: User;
+  responsibleUserId?: Uuid;
   acceptedTpCount?: number;
   nameTemplate?: string;
   availableStatuses?: string[];

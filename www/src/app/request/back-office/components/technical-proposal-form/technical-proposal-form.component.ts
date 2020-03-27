@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Request } from "../../../common/models/request";
 import { Observable, Subscription } from "rxjs";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
-import { flatMap, map, mapTo, shareReplay } from "rxjs/operators";
+import { catchError, flatMap, map, mapTo, shareReplay, tap } from "rxjs/operators";
 import { PositionWithManufacturer } from "../../models/position-with-manufacturer";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { TechnicalProposalCreateRequest } from "../../models/technical-proposal-create-request";
@@ -12,9 +12,10 @@ import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TechnicalProposalPositionStatus } from "../../../common/enum/technical-proposal-position-status";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
 import { RequestPosition } from "../../../common/models/request-position";
-import Swal from "sweetalert2";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -50,6 +51,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private technicalProposalsService: TechnicalProposalsService,
+    private store: Store,
     private contragentService: ContragentService
   ) {
   }
@@ -203,30 +205,13 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   }
 
   onSendTemplatePositions(): void {
-    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).subscribe((data: any) => {
-      this.create.emit(data.requestTechnicalProposal);
-      Swal.fire({
-        width: 400,
-        html: '<p class="text-alert">' + 'Шаблон импортирован</br></br>' + '</p>' +
-          '<button id="submit" class="btn btn-primary">' +
-          'ОК' + '</button>',
-        showConfirmButton: false,
-        onBeforeOpen: () => {
-          const content = Swal.getContent();
-          const $ = content.querySelector.bind(content);
-          const submit = $('#submit');
-          submit.addEventListener('click', () => {
-            Swal.close();
-          });
-        }
-      });
-    }, (error: any) => {
-      let msg = 'Ошибка в шаблоне';
-      if (error && error.error && error.error.detail) {
-        msg = `${msg}: ${error.error.detail}`;
-      }
-      alert(msg);
-    }));
+    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).pipe(
+      tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
+      tap(({ requestTechnicalProposal }) => this.create.emit(requestTechnicalProposal)),
+      catchError(({ error }) => this.store.dispatch(
+        new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
+      ))
+    ).subscribe());
   }
 
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
