@@ -225,7 +225,7 @@
             </div>
             <div class="app-col">
               <uxg-dropdown [placeholder]="responsiblePlaceholder" lg formControlName="responsible" >
-                <div uxgDropdownItem [value]="user" *ngFor="let user of seniorBackofficeUsers$ | async">
+                <div uxgDropdownItem [value]="user.user" *ngFor="let user of seniorBackofficeUsers$ | async">
                   {{ user.user.fullName}}
                 </div>
               </uxg-dropdown>
