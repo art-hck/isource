@@ -66,6 +66,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
       })
     );
 
+    this.paymentTermsControl.setValue(this.value[0].paymentTerms || this.value[0].position.paymentTerms);
     this.paymentTermsControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(paymentTerms => this.formArray.patchValue(this.formArray.value.fill({paymentTerms})));
