@@ -3,7 +3,7 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR
 import { flatMap, mergeAll, startWith, tap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { UxgDropdownItemDirective } from "../uxg-dropdown/uxg-dropdown-item.directive";
-import { UxgDropdownItemData } from "../uxg-dropdown/uxg-dropdown-item-data";
+import { UxgDropdownItem } from "../uxg-dropdown/uxg-dropdown-item";
 
 @Component({
   selector: 'uxg-dropdown-input',
@@ -58,7 +58,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
       startWith(this.items),
       tap((items) => this.toggle(items.length > 0)),
       flatMap(items => items.map(item => item.onSelect)),
-      mergeAll<UxgDropdownItemData>()
+      mergeAll<UxgDropdownItem>()
     )
       .subscribe(data => {
         this.isCustomValue = false;

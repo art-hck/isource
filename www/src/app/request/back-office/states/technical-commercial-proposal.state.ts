@@ -8,6 +8,7 @@ import { of, throwError } from "rxjs";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
+import { Uuid } from "../../../cart/models/uuid";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
@@ -29,6 +30,8 @@ type Context = StateContext<Model>;
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
+  cache: { [reqeustId in Uuid]: TechnicalCommercialProposal[] } = {};
+
   constructor(private rest: TechnicalCommercialProposalService) {}
 
   @Selector()
@@ -53,11 +56,14 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
-    if (ctx.getState().proposals) { return; }
-    ctx.setState(patch({ proposalsStateStatus: "fetching" as StateStatus }));
+    if (this.cache[requestId]) {
+      return ctx.setState(patch({proposals: this.cache[requestId]}));
+    }
+    ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
         ctx.setState(patch({ proposals, proposalsStateStatus: "received" as StateStatus }));
+        this.cache[requestId] = proposals;
       }));
   }
 

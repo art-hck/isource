@@ -17,35 +17,5 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
   templateUrl: './technical-commercial-proposal-filter.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalFilterComponent implements OnInit {
-
-  @Select(TechnicalCommercialProposalState.getList)
-  technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
-  requestId: Uuid;
-  request$: Observable<Request>;
-  showForm = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private bc: UxgBreadcrumbsService,
-    private requestService: RequestService,
-    private featureService: FeatureService,
-    private store: Store,
-  ) {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-  }
-
-  ngOnInit() {
-    this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
-      tap(request => {
-        this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/backoffice" },
-          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
-          { label: 'Согласование технико-коммерческих предложений', link: `/requests/backoffice/${this.requestId}/technical-commercial-proposals` }
-        ];
-      })
-    );
-
-    this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
-  }
+export class TechnicalCommercialProposalFilterComponent {
 }

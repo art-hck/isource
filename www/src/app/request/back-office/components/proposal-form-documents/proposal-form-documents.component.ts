@@ -29,8 +29,8 @@ export class ProposalFormDocumentsComponent implements ControlValueAccessor {
 
   selectFile(files: File[]) {
     this.select.emit(files);
-    this.writeValue(files);
-    if (this.onChange) { this.onChange(files); }
+    this.writeValue([...this.files || [], ...files]);
+    if (this.onChange) { this.onChange(this.files); }
   }
 
   registerOnChange = fn => this.onChange = fn;

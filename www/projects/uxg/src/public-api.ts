@@ -8,7 +8,7 @@ export * from './components/uxg-position-status/uxg-position-status.component';
 export * from './components/uxg-position-status/uxg-position-status';
 export * from './components/uxg-dropdown/uxg-dropdown.component';
 export * from './components/uxg-dropdown/uxg-dropdown-item.directive';
-export * from './components/uxg-dropdown/uxg-dropdown-item-data';
+export * from './components/uxg-dropdown/uxg-dropdown-item';
 export * from './components/uxg-dropdown-input/uxg-dropdown-input.component';
 export * from './components/uxg-code/uxg-code.component';
 export * from './components/uxg-checkbox/uxg-checkbox.component';
