@@ -81,8 +81,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       map(data => ({...data[0], length: data.length}))
     ).subscribe(({result, action, length}) => {
       const e = result.error as any;
-      let text = `По ${this.pluralize.transform(length, "позиции", "позициям", "позициям")} `;
-      text += action instanceof Approve ? "выбран победитель" : "отклонено предложение";
+      const text = (action instanceof Approve ? 'По $0 выбран победитель' : "$1 отклонено")
+        .replace(/\$(\d)/g, (all, i) => [
+          this.pluralize.transform(length, "позиции", "позициям", "позициям"),
+          this.pluralize.transform(length, "предложение", "предложения", "предложений"),
+        ][i] || all);
+
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
