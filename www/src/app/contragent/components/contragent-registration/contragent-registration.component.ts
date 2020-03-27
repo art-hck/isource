@@ -73,7 +73,6 @@ export class ContragentRegistrationComponent implements OnInit {
 
     this.form = this.fb.group({
       contragent: this.fb.group({
-        contragentId: [this.contragentId],
         fullName: ['', [Validators.required, CustomValidators.simpleText]],
         shortName: ['', [Validators.required, CustomValidators.simpleText]],
         inn: ['', [Validators.required, CustomValidators.inn]],
@@ -179,7 +178,7 @@ export class ContragentRegistrationComponent implements OnInit {
       );
     } else {
       this.subscription.add(
-        this.contragentService.editContragent(body).pipe(
+        this.contragentService.editContragent(this.contragentId, body).pipe(
           finalize(() => this.isLoading = false)
         ).subscribe(
           contragent => {
