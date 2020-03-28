@@ -10,6 +10,8 @@ import {UxgBreadcrumbsService} from "uxg";
 import {EmployeeService} from "../../../employee/services/employee.service";
 import {EmployeeInfoBrief} from "../../../employee/models/employee-info";
 import {UserInfoService} from "../../../user/service/user-info.service";
+import {Store} from "@ngxs/store";
+import {ToastActions} from "../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-contragent-info-view',
@@ -31,7 +33,8 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
-    protected router: Router
+    protected router: Router,
+    private store: Store
   ) {
   }
 
@@ -71,10 +74,15 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
         this.employeesList$ = this.employeesList$.pipe(
           map(employeeList => [data, ...employeeList])
         );
+        this.store.dispatch(new ToastActions.Success("Сотрудник успешно создан!"));
+      },
+      (err) => {
+        this.store.dispatch(new ToastActions.Error('Ошибка создания! ' + err.error.detail));
       }));
   }
 
   updateEmployeeListItem(employee: EmployeeInfoBrief) {
+    this.editedEmployee = null;
     this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
       (data) => {
         this.employeesList$ = this.employeesList$.pipe(
@@ -86,6 +94,10 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
             return employeeList;
           })
         );
+        this.store.dispatch(new ToastActions.Success("Сотрудник успешно отредактирован!"));
+      },
+      (err) => {
+        this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
       }));
   }
 
