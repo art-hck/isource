@@ -45,7 +45,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   ngOnInit() {
     this.route.params.pipe(
-      takeUntil(this.destroy$),
       tap(({id}) => this.requestId = id),
       tap(({id}) => this.store.dispatch(new TechnicalCommercialProposals.Fetch(id))),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
@@ -55,7 +54,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
         { label: "Заявки", link: "/requests/backoffice" },
         { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
         { label: 'Согласование технико-коммерческих предложений', link: `/requests/backoffice/${this.requestId}/technical-commercial-proposals` }
-      ])
+      ]),
+      takeUntil(this.destroy$)
     ).subscribe();
 
     this.actions.pipe(

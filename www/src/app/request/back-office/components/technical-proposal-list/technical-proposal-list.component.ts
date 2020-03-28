@@ -38,7 +38,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(
-      takeUntil(this.destroy$),
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
@@ -52,7 +51,8 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
         this.getTechnicalProposals();
         this.getTechnicalProposalsPositions();
         this.getTechnicalProposalsContragents();
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 

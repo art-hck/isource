@@ -52,7 +52,6 @@ export class RequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(
-      takeUntil(this.destroy$),
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => this.store.dispatch([new Fetch(id), new FetchPositions(id)])),
       switchMap(() => this.request$),
@@ -60,7 +59,8 @@ export class RequestComponent implements OnInit, OnDestroy {
       tap(({id, number}) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/backoffice" },
         { label: `Заявка №${number}`, link: "/requests/backoffice/" + id }
-      ])
+      ]),
+      takeUntil(this.destroy$),
     ).subscribe();
   }
 

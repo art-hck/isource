@@ -46,7 +46,6 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(
-      takeUntil(this.destroy$),
       tap(({id}) => this.requestId = id),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(this.requestId))),
       switchMap(() => this.request$),
@@ -58,7 +57,8 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
           label: 'Согласование коммерческих предложений',
           link: `/requests/backoffice/${id}/commercial-proposals`
         }
-      ])
+      ]),
+      takeUntil(this.destroy$),
     ).subscribe();
 
     this.updatePositionsAndSuppliers();
@@ -118,12 +118,12 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
 
   onSendOffersTemplateFilesClick(files: File[]): void {
     this.offersService.addOffersFromExcel(this.requestId, files).pipe(
-      takeUntil(this.destroy$),
       tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
       tap(() => this.updatePositionsAndSuppliers()),
       catchError(({error}) => this.store.dispatch(
         new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
-      ))
+      )),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 }

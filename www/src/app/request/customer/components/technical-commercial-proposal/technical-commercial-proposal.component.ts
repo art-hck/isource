@@ -42,7 +42,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.chooseBy$) {
-      this.chooseBy$.pipe(takeUntil(this.destroy$), tap(type => {
+      this.chooseBy$.pipe(tap(type => {
         switch (type) {
           case "price":
             this.chooseBy((prev, curr) => prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr);
@@ -51,7 +51,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
             this.chooseBy((prev, curr) => +new Date(prev.proposalPosition.deliveryDate) <= +new Date(curr.proposalPosition.deliveryDate)  ? prev : curr);
           break;
         }
-      }))
+      }), takeUntil(this.destroy$))
       .subscribe(() => this.cd.detectChanges());
     }
 
@@ -85,8 +85,8 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   private dispatchAction(action) {
     this.selectedProposalPosition.disable();
     this.store.dispatch(action).pipe(
-      takeUntil(this.destroy$),
-      finalize(() => this.selectedProposalPosition.enable())
+      finalize(() => this.selectedProposalPosition.enable()),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 
