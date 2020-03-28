@@ -1,66 +1,53 @@
-import { Component, ContentChild, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subject, Subscription, timer } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
+import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subject, timer } from "rxjs";
+import { distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
 
 @Component({
   selector: 'uxg-popover',
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UxgPopoverComponent implements OnInit, OnDestroy {
-  public changeState$: Observable<boolean>;
   @HostBinding('class.app-popover') classPopover = true;
-  @ContentChild(UxgPopoverTriggerDirective, {static: false, read: ElementRef}) triggerEl: ElementRef;
+  @ContentChild(UxgPopoverTriggerDirective, {static: true, read: ElementRef}) triggerEl: ElementRef;
   @Input() openOnHover = false;
   @Input() openDelay = 0;
   @Input() hideDelay = 0;
-  private subscription = new Subscription();
-  private changeState = new Subject<boolean>();
+  private readonly changeState = new Subject<boolean>();
+  private readonly endTimer$ = new Subject();
+  public readonly changeState$ = this.changeState.asObservable().pipe(distinctUntilChanged());
+  readonly show = () => this.toggle(true, this.openDelay);
+  readonly hide = () => this.toggle(false, this.hideDelay);
 
   constructor(private el: ElementRef) {}
 
   ngOnInit() {
-    this.changeState$ = this.changeState.asObservable().pipe(distinctUntilChanged());
-
     if (this.openOnHover && !/iPad/i.test(navigator.userAgent)) {
-      this.el.nativeElement.addEventListener('mouseenter', this.mouseenter);
-      this.el.nativeElement.addEventListener('mouseleave', this.mouseleave);
+      this.el.nativeElement.addEventListener('mouseenter', this.show);
+      this.el.nativeElement.addEventListener('mouseleave', this.hide);
     }
-  }
-
-  show() {
-    this.subscription.unsubscribe();
-    this.subscription = timer(this.openDelay).subscribe(() => {
-      this.changeState.next(true);
-    });
-  }
-
-  hide() {
-    this.subscription.unsubscribe();
-    this.subscription = timer(this.hideDelay).subscribe(() => {
-      this.changeState.next(false);
-    });
   }
 
   @HostListener('click', ['$event.target'])
   click(target) {
-    if (this.triggerEl && this.triggerEl.nativeElement.contains(target)) {
-      this.show();
-    }
+    return this.triggerEl && this.triggerEl.nativeElement.contains(target) && this.show();
   }
 
   @HostListener('document:click', ['$event.target'])
   clickOut(target) {
-    if (this.triggerEl && !this.el.nativeElement.contains(target)) {
-      this.hide();
-    }
+    return this.triggerEl && !this.el.nativeElement.contains(target) && this.hide();
   }
 
-  mouseenter = () => this.show();
-  mouseleave = () => this.hide();
+  private toggle(state: boolean, delay: number) {
+    this.endTimer$.next();
+    return timer(delay).pipe(takeUntil(this.endTimer$)).subscribe(() => this.changeState.next(state));
+  }
 
   ngOnDestroy() {
-    this.el.nativeElement.removeEventListener('mouseenter', this.mouseenter);
-    this.el.nativeElement.removeEventListener('mouseleave', this.mouseleave);
+    this.el.nativeElement.removeEventListener('mouseenter', this.show);
+    this.el.nativeElement.removeEventListener('mouseleave', this.hide);
+    this.endTimer$.next();
+    this.endTimer$.complete();
   }
 }

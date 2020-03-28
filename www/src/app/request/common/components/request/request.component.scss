@@ -32,6 +32,10 @@
   }
 }
 
+.app-table.disabled {
+  opacity: .5;
+}
+
 .app-table > .app-row {
   &-group {
     background: #F0F6FA;

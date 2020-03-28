@@ -15,10 +15,12 @@ import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
-import Approve = TechnicalCommercialProposals.Approve;
-import Reject = TechnicalCommercialProposals.Reject;
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
+import { TechnicalCommercialProposalStatus } from "../../../common/enum/technical-commercial-proposal-status";
+import Approve = TechnicalCommercialProposals.Approve;
+import Reject = TechnicalCommercialProposals.Reject;
+import Fetch = TechnicalCommercialProposals.Fetch;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -30,9 +32,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
   @ViewChild('sentToReview', { static: false }) sentToReview: UxgTabTitleComponent;
   @ViewChild('proposalsFooterRef', { static: false }) proposalsFooterRef: ElementRef;
-  @Select(TechnicalCommercialProposalState.getSentToReview)
+  @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
-  @Select(TechnicalCommercialProposalState.getReviewed)
+  @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.REVIEWED))
   readonly proposalsReviewed$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
@@ -72,7 +74,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       })
     );
 
-    this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
+    this.store.dispatch(new Fetch(this.requestId));
 
     this.actions.pipe(
       ofActionCompleted(Approve, Reject),

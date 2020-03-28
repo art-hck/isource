@@ -8,13 +8,50 @@ import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
 import { Request } from "../../common/models/request";
 import { RequestDocument } from "../../common/models/request-document";
+import { FormDataService } from "../../../shared/services/form-data.service";
+import { Page } from "../../../core/models/page";
+import { RequestsList } from "../../common/models/requests-list/requests-list";
 
 @Injectable()
 export class RequestService {
 
   constructor(
-    protected api: HttpClient,
+    private api: HttpClient,
+    private formDataService: FormDataService
   ) {
+  }
+
+  getRequests(startFrom, pageSize, filters): Observable<Page<RequestsList>> {
+    const url = `requests/customer/list`;
+    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters });
+  }
+
+  addRequest(name: string, positions: Array<any>): Observable<Request> {
+    const requestData = this.formDataService.toFormData({ name, positions });
+
+    return this.api.post<Request>(`requests/customer/add-request/manual`, requestData);
+  }
+
+  requestStatusCount() {
+    const url = `requests/customer/counts-on-different-statuses`;
+    return this.api.get(url); // @TODO Typization!
+  }
+
+  addFreeFormRequest(request: Partial<Request>) {
+    return this.api.post<Request>(
+      `requests/customer/add-request/free-form`,
+      this.formDataService.toFormData({request}));
+  }
+
+  addRequestFromExcel(files: File[], requestName: string): Observable<any> {
+    const data = {
+      files: files,
+      name: requestName
+    };
+
+    const requestData = this.formDataService.toFormData(data);
+
+    return this.api.post(`requests/customer/add-request/from-excel`, requestData);
   }
 
   getRequestInfo(id: Uuid) {
@@ -53,18 +90,14 @@ export class RequestService {
   /**
    * Преобразует RequestPositionList в одноуровневый массив позиций без групп
    */
-  getRequestPositionsFlat(getRequestPositions$: Observable<RequestPositionList[]>): Observable<RequestPosition[]> {
-    return getRequestPositions$.pipe(map(
-      requestPositionsList =>
-        requestPositionsList.reduce(
-          function flatPositionList(arr, curr: RequestPositionList) {
-            if (curr instanceof RequestGroup) {
-              return [...arr, ...flatPositionList(curr.positions, null)];
-            } else {
-              return [...arr, curr].filter(Boolean);
-            }
-          }, [])
-    ));
+  getRequestPositionsFlat(requestPositionsList: RequestPositionList[]): RequestPosition[] {
+    return requestPositionsList.reduce(function flatPositionList(arr, curr: RequestPositionList) {
+      if (curr instanceof RequestGroup) {
+        return [...arr, ...flatPositionList(curr.positions, null)];
+      } else {
+        return [...arr, curr].filter(Boolean);
+      }
+    }, []);
   }
 
   getRequestPositionsWithOffers(id: Uuid): Observable<any> {
@@ -109,5 +142,10 @@ export class RequestService {
   sendForAgreement(requestId: Uuid, selectedOffers: object) {
     const url = `requests/customer/${requestId}/commercial-proposals/accept`;
     return this.api.post(url, selectedOffers);
+  }
+
+  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
+    const url = `requests/customer/${requestId}/add-positions/from-excel`;
+    return this.api.post(url, this.formDataService.toFormData({files}));
   }
 }

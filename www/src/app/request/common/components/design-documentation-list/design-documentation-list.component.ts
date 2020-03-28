@@ -69,7 +69,7 @@ export class DesignDocumentationListComponent implements OnInit {
     this.requestId = this.route.snapshot.paramMap.get('id');
 
     if (this.userInfoService.isBackOffice()) {
-      this.request$ = this.backofficeRequestService.getRequestInfo(this.requestId);
+      this.request$ = this.backofficeRequestService.getRequest(this.requestId);
     }
 
     if (this.userInfoService.isCustomer()) {
@@ -85,10 +85,6 @@ export class DesignDocumentationListComponent implements OnInit {
 
     this.getPositionList();
     this.getDesignDocumentationList();
-  }
-
-  onRequestClick(): void {
-    this.router.navigateByUrl(`requests/backoffice/${this.requestId}`).then(() => {});
   }
 
   onAddNext() {

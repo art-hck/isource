@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
-import { GetRequestsService } from "../../../common/services/get-requests.service";
+import { RequestService } from "../../services/request.service";
 import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestStatus } from "../../../common/enum/request-status";
@@ -31,9 +31,7 @@ export class RequestListComponent implements OnInit {
   requestWorkflowSteps = RequestStatus;
   requestStatusCount: RequestStatusCount;
 
-  constructor(
-    protected getRequestService: GetRequestsService
-  ) { }
+  constructor(private requestService: RequestService) {}
 
   ngOnInit() {
     this.currentStatus = RequestStatus.IN_PROGRESS;
@@ -94,7 +92,7 @@ export class RequestListComponent implements OnInit {
   }
 
   getRequestListForBackoffice(startFrom, pageSize, filters): void {
-    this.getRequestService.getRequests('backoffice', startFrom, pageSize, filters).subscribe(
+    this.requestService.getRequests(startFrom, pageSize, filters).subscribe(
       (data: Page<RequestsList>) => {
         this.requests = data.entities;
         this.totalItems = data.totalCount;
@@ -107,7 +105,7 @@ export class RequestListComponent implements OnInit {
    * @param role
    */
   getRequestStatusCount(role: string) {
-    this.getRequestService.requestStatusCount(role).subscribe(
+    this.requestService.requestStatusCount().subscribe(
       (requestStatusCount: RequestStatusCount) => {
         this.requestStatusCount = requestStatusCount;
       }

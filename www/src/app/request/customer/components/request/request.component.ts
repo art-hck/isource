@@ -7,7 +7,6 @@ import { ActivatedRoute } from "@angular/router";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
-import { CreateRequestPositionService } from "../../../common/services/create-request-position.service";
 import { Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
@@ -22,7 +21,6 @@ export class RequestComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private createRequestPositionService: CreateRequestPositionService,
     private bc: UxgBreadcrumbsService,
     private store: Store,
     private title: Title
@@ -81,15 +79,14 @@ export class RequestComponent implements OnInit {
   }
 
   uploadFromTemplate(requestData: { files: File[], requestName: string }) {
-    this.positions$ = this.createRequestPositionService
-      .addCustomerRequestPositionsFromExcel(this.requestId, requestData.files).pipe(
-        catchError((e) => {
-          this.store.dispatch(new ToastActions.Error(
-            'Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")
-          ));
-          return of(null);
-        }),
-        switchMap(() => this.getPositions())
-      );
+    this.positions$ = this.requestService.addPositionsFromExcel(this.requestId, requestData.files).pipe(
+      catchError((e) => {
+        this.store.dispatch(new ToastActions.Error(
+          'Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")
+        ));
+        return of(null);
+      }),
+      switchMap(() => this.getPositions())
+    );
   }
 }

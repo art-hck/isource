@@ -1,11 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { FreeFormRequestItem } from "../../models/free-form-request-item";
-import { CreateRequestService } from "../../services/create-request.service";
-import { RequestService } from "../../../customer/services/request.service";
+import { RequestService } from "../../services/request.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
+import { Request } from "../../../common/models/request";
 
 @Component({
   selector: 'app-request-form-free',
@@ -17,12 +16,11 @@ export class RequestFormFreeComponent implements OnInit {
   @Output() cancel = new EventEmitter();
 
   freeFormRequestDataForm: FormGroup;
-  requestItem: FreeFormRequestItem;
+  requestItem: Partial<Request>;
   requestName = "";
 
   constructor(
     private formBuilder: FormBuilder,
-    private createRequestService: CreateRequestService,
     private requestService: RequestService,
     private store: Store,
     protected router: Router
@@ -47,7 +45,7 @@ export class RequestFormFreeComponent implements OnInit {
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(({id}) => {
+    return this.requestService.addFreeFormRequest(this.requestItem).subscribe(({id}) => {
         this.router.navigateByUrl(`requests/customer/${id}`);
         this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
       });

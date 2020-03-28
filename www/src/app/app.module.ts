@@ -17,14 +17,10 @@ import { StartupService } from "./startup.service";
 import { CartStoreService as CartStoreService } from './cart/services/cart-store.service';
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
-import { CreateRequestService } from "./request/common/services/create-request.service";
 import { RegistrationService } from "./auth/services/registration.service";
-import { GetRequestsService } from "./request/common/services/get-requests.service";
-import { EditRequestService } from "./request/common/services/edit-request.service";
 import { HttpClientModule } from "@angular/common/http";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { WebsocketModule } from "./websocket/websocket.module";
-import { RequestPositionDraftService } from "./request/common/services/request-position-draft.service";
 import { UxgIconShapesSources, UxgModule } from "uxg";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
@@ -76,12 +72,8 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
       multi: true
     },
     AccessGuard,
-    CreateRequestService,
-    EditRequestService,
     RegistrationService,
-    GetRequestsService,
     CartStoreService,
-    RequestPositionDraftService,
     {provide: LOCALE_ID, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]

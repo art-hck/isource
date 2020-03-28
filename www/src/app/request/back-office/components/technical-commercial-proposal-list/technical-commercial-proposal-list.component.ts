@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -14,6 +14,8 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
 import { RequestPosition } from "../../../common/models/request-position";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { RequestState } from "../../states/request.state";
+import { RequestActions } from "../../actions/request.actions";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -24,13 +26,11 @@ import Publish = TechnicalCommercialProposals.Publish;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
-  @Select(TechnicalCommercialProposalState.getList)
-  readonly technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
-  @Select(TechnicalCommercialProposalState.proposalsLength)
-  readonly proposalsLength$: Observable<number>;
+  @Select(TechnicalCommercialProposalState.proposals) technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
+  @Select(TechnicalCommercialProposalState.proposalsLength) proposalsLength$: Observable<number>;
+  @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
-  request$: Observable<Request>;
   showForm: boolean;
 
   constructor(
@@ -41,21 +41,23 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private store: Store,
     private actions: Actions
   ) {
-    this.requestId = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit() {
-    this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
-      tap(request => {
-        this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/backoffice" },
-          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
-          { label: 'Согласование технико-коммерческих предложений', link: `/requests/backoffice/${this.requestId}/technical-commercial-proposals` }
-        ];
-      })
-    );
+    this.route.params.pipe(
+      takeUntil(this.destroy$),
+      tap(({id}) => this.requestId = id),
+      tap(({id}) => this.store.dispatch(new TechnicalCommercialProposals.Fetch(id))),
+      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      switchMap(() => this.request$),
+      filter(request => !!request),
+      tap(({id, number}) => this.bc.breadcrumbs = [
+        { label: "Заявки", link: "/requests/backoffice" },
+        { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
+        { label: 'Согласование технико-коммерческих предложений', link: `/requests/backoffice/${this.requestId}/technical-commercial-proposals` }
+      ])
+    ).subscribe();
 
-    this.store.dispatch(new TechnicalCommercialProposals.Fetch(this.requestId));
     this.actions.pipe(
       ofActionCompleted(Create, Update, Publish),
       throttleTime(1),

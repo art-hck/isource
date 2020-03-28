@@ -46,7 +46,7 @@ export class ContractListComponent implements OnInit {
 
   ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.requestService.getRequestInfo(requestId)
+    this.request$ = this.requestService.getRequest(requestId)
       .pipe(
         tap(request => {
           this.bc.breadcrumbs = [
