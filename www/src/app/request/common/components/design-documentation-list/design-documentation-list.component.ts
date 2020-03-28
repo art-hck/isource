@@ -73,7 +73,7 @@ export class DesignDocumentationListComponent implements OnInit {
     }
 
     if (this.userInfoService.isCustomer()) {
-      this.request$ = this.customerRequestService.getRequestInfo(this.requestId);
+      this.request$ = this.customerRequestService.getRequest(this.requestId);
     }
 
     this.request$ = this.request$.pipe(tap(request => {

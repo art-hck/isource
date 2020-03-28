@@ -21,6 +21,7 @@ export interface RequestStateStateModel {
   request: Request;
   positions: RequestPositionList[];
   status: StateStatus;
+  positionsStatus: StateStatus;
 }
 
 type Model = RequestStateStateModel;
@@ -28,7 +29,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeRequest',
-  defaults: { request: null, positions: null, status: "pristine" }
+  defaults: { request: null, positions: null, status: "pristine", positionsStatus: "pristine" }
 })
 @Injectable()
 export class RequestState {
@@ -39,13 +40,14 @@ export class RequestState {
   @Selector() static request({request}: Model) { return request; }
   @Selector() static positions({positions}: Model) { return positions; }
   @Selector() static status({status}: Model) { return status; }
+  @Selector() static positionsStatus({positionsStatus}: Model) { return positionsStatus; }
 
-  @Action(Fetch) fetch({setState}: Context, {requestId, useCache, resetState}: Fetch) {
+  @Action(Fetch) fetch({setState}: Context, {requestId, useCache, clearState}: Fetch) {
     if (this.cache[requestId] && useCache) {
       return setState(patch({request: this.cache[requestId]}));
     }
 
-    if (resetState) {
+    if (clearState) {
       setState(patch({ request: null, status: "fetching" as StateStatus }));
     }
 
@@ -60,23 +62,23 @@ export class RequestState {
     return dispatch(new Fetch(requestId, false, false));
   }
 
-  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, useCache, resetState}: FetchPositions) {
+  @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, useCache, clearState}: FetchPositions) {
     if (this.cachePositions[requestId] && useCache) {
       return setState(patch({positions: this.cachePositions[requestId]}));
     }
 
-    if (resetState) {
-      setState(patch({ positions: null, status: "fetching" as StateStatus }));
+    if (clearState) {
+      setState(patch({ positions: null, positionsStatus: "fetching" as StateStatus }));
     }
 
     return this.rest.getRequestPositions(requestId).pipe(
-      tap(positions => setState(patch({positions, status: "received" as StateStatus }))),
+      tap(positions => setState(patch({positions, positionsStatus: "received" as StateStatus }))),
       tap(positions => this.cachePositions[requestId] = positions)
     );
   }
 
   @Action(RefreshPositions) refreshPositions({setState, dispatch}: Context, {requestId}: RefreshPositions) {
-    setState(patch({ status: "updating" as StateStatus }));
+    setState(patch({ positionsStatus: "updating" as StateStatus }));
     return dispatch(new FetchPositions(requestId, false, false));
   }
 

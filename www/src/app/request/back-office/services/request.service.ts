@@ -19,14 +19,11 @@ import { RequestsList } from "../../common/models/requests-list/requests-list";
 @Injectable()
 export class RequestService {
 
-  protected role: string;
-
   constructor(
     protected api: HttpClient,
     public user: UserInfoService,
     public formDataService: FormDataService,
   ) {
-    this.role = user.isBackOffice() ? 'backoffice' : 'customer';
   }
 
   getRequests(startFrom, pageSize, filters): Observable<Page<RequestsList>> {
@@ -35,7 +32,7 @@ export class RequestService {
   }
 
   getRequest(id: Uuid) {
-    const url = `requests/${this.role}/${id}/info`;
+    const url = `requests/backoffice/${id}/info`;
     return this.api.post<Request>(url, {})
       .pipe(map(data => new Request(data)));
   }

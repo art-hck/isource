@@ -5,6 +5,7 @@
       [request]="request"
       [onDrafted]="sendOnApprove"
       [status]="status$ | async"
+      [positionsStatus]="positionsStatus$ | async"
       (publish)="store.dispatch(publish(requestId))"
       (addPosition)="store.dispatch(refreshPositions(requestId))"
       (addGroup)="store.dispatch(refreshPositions(requestId))"

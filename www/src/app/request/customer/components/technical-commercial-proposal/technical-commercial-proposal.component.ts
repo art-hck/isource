@@ -45,24 +45,10 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
       this.chooseBy$.pipe(takeUntil(this.destroy$), tap(type => {
         switch (type) {
           case "price":
-            this.chooseBy((prev, curr) => {
-              const prevValid = this.isValid(prev.proposalPosition);
-              const currValid = this.isValid(curr.proposalPosition);
-              if (prevValid && !currValid) { return prev; }
-              if (!prevValid && currValid) { return curr; }
-              if (!prevValid && !currValid) { return null; }
-              return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr;
-            });
+            this.chooseBy((prev, curr) => prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr);
           break;
           case "date":
-            this.chooseBy((prev, curr) => {
-              const prevValid = this.isValid(prev.proposalPosition);
-              const currValid = this.isValid(curr.proposalPosition);
-              if (prevValid && !currValid) { return prev; }
-              if (!prevValid && currValid) { return curr; }
-              if (!prevValid && !currValid) { return null; }
-              return +new Date(prev.proposalPosition.deliveryDate) <= +new Date(curr.proposalPosition.deliveryDate)  ? prev : curr;
-            });
+            this.chooseBy((prev, curr) => +new Date(prev.proposalPosition.deliveryDate) <= +new Date(curr.proposalPosition.deliveryDate)  ? prev : curr);
           break;
         }
       }))
@@ -88,7 +74,8 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
+    return proposalPosition.position.isDeliveryDateAsap ||
+      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
   }
 
   isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
@@ -104,7 +91,15 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   private chooseBy(by: (p, c) => typeof p | typeof c | null) {
-    const item = this.group.data.reduce(by);
+    const item = this.group.data.reduce((prev, curr) => {
+      const prevValid = prev && this.isValid(prev.proposalPosition);
+      const currValid = curr && this.isValid(curr.proposalPosition);
+      if (prevValid && !currValid) { return prev; }
+      if (!prevValid && currValid) { return curr; }
+      if (!prevValid && !currValid) { return null; }
+      return by(prev, curr);
+    });
+
     return item && this.selectedProposalPosition.setValue(item.proposalPosition);
   }
 

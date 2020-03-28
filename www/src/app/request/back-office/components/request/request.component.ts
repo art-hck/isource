@@ -30,6 +30,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
+  @Select(RequestState.positionsStatus) positionsStatus$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);

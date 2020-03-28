@@ -34,6 +34,8 @@ export class RequestComponent implements OnChanges {
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
+  @Input() status: StateStatus;
+  @Input() positionsStatus: StateStatus;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
@@ -42,7 +44,6 @@ export class RequestComponent implements OnChanges {
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
-  @Input() status: StateStatus;
   readonly permissionType = PermissionType;
   flatPositions: RequestPosition[];
   form: FormGroup;

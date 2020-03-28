@@ -3,7 +3,7 @@ import { Uuid } from "../../../cart/models/uuid";
 export namespace RequestActions {
   export class Fetch {
     static readonly type = '[Request] Fetch';
-    constructor(public requestId: Uuid, public useCache = true, public resetState = true) {}
+    constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
   }
 
   export class Refresh {
@@ -13,7 +13,7 @@ export namespace RequestActions {
 
   export class FetchPositions {
     static readonly type = '[Request] Fetch Positions';
-    constructor(public requestId: Uuid, public useCache = true, public resetState = true) {}
+    constructor(public requestId: Uuid, public useCache = true, public clearState = true) {}
   }
 
   export class RefreshPositions {

@@ -33,7 +33,7 @@ export class RequestComponent implements OnInit {
   }
 
   getRequest() {
-    return this.requestService.getRequestInfo(this.requestId).pipe(
+    return this.requestService.getRequest(this.requestId).pipe(
       tap(request => {
         this.title.setTitle(request.name || "Заявка №" + request.id);
 

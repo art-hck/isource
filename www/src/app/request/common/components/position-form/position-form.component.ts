@@ -17,6 +17,8 @@ import { UxgDropdownInputComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
+import { Store } from "@ngxs/store";
+import { RequestActions } from "../../../back-office/actions/request.actions";
 
 @Component({
   selector: 'app-request-position-form',
@@ -111,7 +113,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private positionService: RequestPositionService,
     private userInfoService: UserInfoService,
     private normPositionService: NormPositionService,
-    private okeiService: OkeiService
+    private okeiService: OkeiService,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -211,7 +214,12 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         .pipe(map(positions => positions[0]));
     }
 
-    submit$ = submit$.pipe(flatMap(position =>
+    submit$ = submit$.pipe(
+      tap(() => this.store.dispatch([
+        new RequestActions.Refresh(this.requestId),
+        new RequestActions.RefreshPositions(this.requestId),
+      ])),
+      flatMap(position =>
       position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
     ));
 

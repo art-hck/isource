@@ -54,7 +54,7 @@ export class RequestService {
     return this.api.post(`requests/customer/add-request/from-excel`, requestData);
   }
 
-  getRequestInfo(id: Uuid) {
+  getRequest(id: Uuid) {
     const url = `requests/customer/${id}/info`;
     return this.api.post(url, {}).pipe(
       map((data: Request) => {

@@ -112,7 +112,7 @@ export class CommercialProposalListOldComponent implements OnInit {
   }
 
   protected updateRequestInfo(): void {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
+    this.requestService.getRequest(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
 
