@@ -1,6 +1,6 @@
 <clr-modal [clrModalStaticBackdrop]="false" clrModalSize="lg">
   <h2 class="modal-title"><b>Добавить новую позицию</b></h2>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="modal && modal._open">
 
     <uxg-tabs>
       <uxg-tab-title #template>Загрузить из шаблона</uxg-tab-title>

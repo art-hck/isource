@@ -1,13 +1,5 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output
-} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, Output } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
@@ -45,7 +37,7 @@ export class RequestComponent implements OnChanges {
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
   readonly permissionType = PermissionType;
-  flatPositions: RequestPosition[];
+  flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
   checkedPositions: RequestPosition[] = [];
@@ -88,9 +80,9 @@ export class RequestComponent implements OnChanges {
     private statusService: RequestPositionStatusService,
     private cd: ChangeDetectorRef,
     public user: UserInfoService,
-    public featureService: FeatureService
-  ) {
-  }
+    public featureService: FeatureService,
+    public ngZone: NgZone,
+  ) {}
 
   ngOnChanges() {
     this.form = this.positionsToForm(this.positions);

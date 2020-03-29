@@ -271,22 +271,24 @@
 <!-- Модальное окно для смены статуса группы позиций -->
 <clr-modal #changeStatusModal>
   <h3 class="modal-title">Сменить статус позиций <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>
-  <div class="modal-body">
-    <app-positions-status-change
-      #positionsStatusChange
-      [positions]="checkedPositions"
-      [status]="checkedPositions[0]?.status"
-      (changeStatus)="changeStatus.emit(); changeStatusModal.close()">
-    </app-positions-status-change>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="changeStatusModal.close()">Отмена</button>
-    <button type="button" class="btn btn-primary"
-            [disabled]="!positionsStatusChange.valid()"
-            [clrLoading]="positionsStatusChange.loading"
-            (click)="positionsStatusChange.onChangeBtn()">
-      Сменить
-    </button>
+  <div class="modal-body" *ngIf="changeStatusModal._open">
+    <div class="app-section">
+      <app-positions-status-change
+        #positionsStatusChange
+        [positions]="checkedPositions"
+        [status]="checkedPositions[0]?.status"
+        (changeStatus)="changeStatus.emit(); changeStatusModal.close()">
+      </app-positions-status-change>
+    </div>
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="changeStatusModal.close()">Отмена</button>
+      <button type="button" uxgButton primary lg
+              [disabled]="!positionsStatusChange.valid()"
+              [clrLoading]="positionsStatusChange.loading"
+              (click)="positionsStatusChange.onChangeBtn()">
+        Сменить
+      </button>
+    </div>
   </div>
 </clr-modal>
 
