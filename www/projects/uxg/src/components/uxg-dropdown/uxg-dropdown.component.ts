@@ -33,7 +33,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
   private destroy$ = new Subject();
-  readonly coords: ClientRect = this.el.nativeElement.getBoundingClientRect;
 
   registerOnChange = fn => this.onChange = fn;
   registerOnTouched = fn => this.onTouched = fn;
@@ -44,6 +43,10 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
       this.ngZone.run(() => this.isHidden = true);
       this.cdr.markForCheck();
     }
+  }
+
+  get coords() {
+    return this.el.nativeElement.getBoundingClientRect();
   }
 
   get itemsWrapper(): HTMLDivElement | null {

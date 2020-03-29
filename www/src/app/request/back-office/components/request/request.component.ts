@@ -7,7 +7,6 @@ import { ActivatedRoute } from "@angular/router";
 import { switchMap, takeUntil, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
-import { RequestPositionService } from "../../../common/services/request-position.service";
 import { Select, Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -44,7 +43,6 @@ export class RequestComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private positionService: RequestPositionService,
     private bc: UxgBreadcrumbsService,
     private store: Store,
     private title: Title

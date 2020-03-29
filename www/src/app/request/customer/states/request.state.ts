@@ -15,6 +15,8 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import Approve = RequestActions.Approve;
+import Reject = RequestActions.Reject;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -27,7 +29,7 @@ type Model = RequestStateStateModel;
 type Context = StateContext<Model>;
 
 @State<Model>({
-  name: 'BackofficeRequest',
+  name: 'CustomerRequest',
   defaults: { request: null, positions: null, status: "pristine", positionsStatus: "pristine" }
 })
 @Injectable()
@@ -84,6 +86,18 @@ export class RequestState {
   @Action(Publish) publish({setState, dispatch}: Context, {requestId, refresh}: Publish) {
     return this.rest.publishRequest(requestId).pipe(
       switchMap(() => dispatch(refresh ? [new Refresh(requestId), new RefreshPositions(requestId)] : []))
+    );
+  }
+
+  @Action(Approve) approve({setState, dispatch}: Context, {requestId}: Approve) {
+    return this.rest.approveRequest(requestId).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(Reject) reject({setState, dispatch}: Context, {requestId}: Reject) {
+    return this.rest.rejectRequest(requestId, "").pipe(
+      switchMap(() => dispatch( [new Refresh(requestId), new RefreshPositions(requestId)]))
     );
   }
 

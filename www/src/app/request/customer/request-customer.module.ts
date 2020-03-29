@@ -20,6 +20,7 @@ import { TechnicalCommercialProposalState } from "./states/technical-commercial-
 import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { RequestFormFreeComponent } from "./components/request-form-free/request-form-free.component";
+import { RequestState } from "./states/request.state";
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { RequestFormFreeComponent } from "./components/request-form-free/request
     RequestCustomerRoutingModule,
     RequestCommonModule,
     NgxsModule.forFeature([
+      RequestState,
       TechnicalCommercialProposalState
     ]),
   ],
