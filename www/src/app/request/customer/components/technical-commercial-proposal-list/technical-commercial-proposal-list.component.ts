@@ -1,9 +1,9 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { bufferTime, filter, map, tap } from "rxjs/operators";
+import { bufferTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -21,6 +21,8 @@ import { TechnicalCommercialProposalStatus } from "../../../common/enum/technica
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
+import { RequestState } from "../../states/request.state";
+import { RequestActions } from "../../actions/request.actions";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -30,8 +32,13 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChild('sentToReview', { static: false }) sentToReview: UxgTabTitleComponent;
+  @ViewChild('sentToReview', { static: false }) set content(tab: UxgTabTitleComponent) {
+    this.isProposalsFooterHidden = !tab || !tab.active;
+    this.cd.detectChanges();
+  }
   @ViewChild('proposalsFooterRef', { static: false }) proposalsFooterRef: ElementRef;
+  @Select(RequestState.request)
+  readonly request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
   @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.REVIEWED))
@@ -40,8 +47,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly stateStatus$: Observable<StateStatus>;
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
+  readonly destroy$ = new Subject();
   requestId: Uuid;
-  request$: Observable<Request>;
+  isProposalsFooterHidden: boolean;
 
   get total() {
     return this.proposalsOnReview && this.proposalsOnReview.reduce((total, curr) => {
@@ -58,23 +66,24 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private requestService: RequestService,
     private store: Store,
     private actions: Actions,
-    private pluralize: PluralizePipe
-  ) {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-  }
+    private pluralize: PluralizePipe,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.request$ = this.requestService.getRequest(this.requestId).pipe(
-      tap(request => {
-        this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/customer" },
-          { label: `Заявка №${request.number}`, link: `/requests/customer/${request.id}` },
-          { label: 'Согласование технико-коммерческих предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals` }
-        ];
-      })
-    );
-
-    this.store.dispatch(new Fetch(this.requestId));
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({id}) => this.store.dispatch(new Fetch(id))),
+      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      switchMap(() => this.request$),
+      filter(request => !!request),
+      tap(({id, number}) => this.bc.breadcrumbs = [
+        { label: "Заявки", link: "/requests/customer" },
+        { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
+        { label: 'Согласование технико-коммерческих предложений', link: `/requests/customer/${id}/technical-commercial-proposals` }
+      ]),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
     this.actions.pipe(
       ofActionCompleted(Approve, Reject),
@@ -114,6 +123,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.proposalsFooterRef.nativeElement.remove();
   }
 }

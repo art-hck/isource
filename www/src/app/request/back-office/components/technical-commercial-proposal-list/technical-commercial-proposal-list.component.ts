@@ -19,6 +19,7 @@ import { RequestActions } from "../../actions/request.actions";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
+import Fetch = TechnicalCommercialProposals.Fetch;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -46,7 +47,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   ngOnInit() {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new TechnicalCommercialProposals.Fetch(id))),
+      tap(({id}) => this.store.dispatch(new Fetch(id))),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
       filter(request => !!request),
