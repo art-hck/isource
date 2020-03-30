@@ -25,7 +25,7 @@ export class TechnicalProposalListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
+    this.request$ = this.requestService.getRequest(this.requestId).pipe(
       tap(request => {
         this.bc.breadcrumbs = [
           { label: "Заявки", link: "/requests/customer" },

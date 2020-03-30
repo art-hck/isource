@@ -1,13 +1,14 @@
 import { Directive, ElementRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { UxgTabTitleComponent } from "../components/uxg-tab-title/uxg-tab-title.component";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
+import { startWith, takeUntil } from "rxjs/operators";
 
 @Directive({
   selector: '[uxgTab]'
 })
 export class UxgTabDirective implements OnDestroy {
 
-  subscription = new Subscription();
+  readonly destroy$ = new Subject();
 
   constructor(
     private element: ElementRef,
@@ -16,12 +17,8 @@ export class UxgTabDirective implements OnDestroy {
   ) {}
 
   @Input()
-  set uxgTab(tabTitle: UxgTabTitleComponent) {
-    this.subscription.add(
-      tabTitle.onToggle.subscribe((isVisible) => this.toggle(isVisible))
-    );
-
-    this.toggle(tabTitle.active);
+  set uxgTab({onToggle, active}: UxgTabTitleComponent) {
+      onToggle.pipe(startWith(active), takeUntil(this.destroy$)).subscribe((isVisible) => this.toggle(isVisible));
   }
 
   toggle(isVisible) {
@@ -33,6 +30,7 @@ export class UxgTabDirective implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

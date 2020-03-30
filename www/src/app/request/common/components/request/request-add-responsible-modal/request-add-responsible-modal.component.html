@@ -1,6 +1,6 @@
 <clr-modal>
   <h2 class="modal-title">Назначить позиции <span class="app-ghost-color">({{ positions.length }})</span></h2>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="modal && modal._open">
     <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
       <p class="app-secondary-color">Вы можете назначить позиции на закупщиков, у которых есть компетенции в соответствующих категориях МТР</p>
       <br/>

@@ -1,7 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
-import { Component, OnInit } from '@angular/core';
-import { mapTo, publishReplay, refCount, tap } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { filter, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
+import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
@@ -12,12 +12,16 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { FeatureService } from "../../../../core/services/feature.service";
+import { RequestActions } from "../../actions/request.actions";
+import { Select, Store } from "@ngxs/store";
+import { RequestState } from "../../states/request.state";
 
 @Component({ templateUrl: './technical-proposal-list.component.html' })
-export class TechnicalProposalListComponent implements OnInit {
+export class TechnicalProposalListComponent implements OnInit, OnDestroy {
+  @Select(RequestState.request) request$: Observable<Request>;
+  readonly destroy$ = new Subject();
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
-  request$: Observable<Request>;
   positions$: Observable<RequestPosition[]>;
   contragents$: Observable<ContragentList[]>;
   showForm = false;
@@ -28,24 +32,28 @@ export class TechnicalProposalListComponent implements OnInit {
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
     private contragentService: ContragentService,
-    public featureService: FeatureService
-  ) {
-    this.requestId = this.route.snapshot.paramMap.get('id');
-  }
+    public featureService: FeatureService,
+    public store: Store
+  ) {}
 
   ngOnInit() {
-    this.request$ = this.requestService.getRequestInfo(this.requestId).pipe(
-      tap(request => {
-        this.bc.breadcrumbs = [
-          { label: "Заявки", link: "/requests/backoffice" },
-          { label: `Заявка №${request.number}`, link: `/requests/backoffice/${request.id}` },
-          { label: 'Согласование технических предложений', link: `/requests/backoffice/${this.requestId}/technical-proposals` }
-        ];
-      }));
-
-    this.getTechnicalProposals();
-    this.getTechnicalProposalsPositions();
-    this.getTechnicalProposalsContragents();
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      switchMap(() => this.request$),
+      filter(request => !!request),
+      tap(({id, number}) => this.bc.breadcrumbs = [
+        { label: "Заявки", link: "/requests/backoffice" },
+        { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
+        { label: 'Согласование технических предложений', link: `/requests/backoffice/${id}/technical-proposals` }
+      ]),
+      tap(() => {
+        this.getTechnicalProposals();
+        this.getTechnicalProposalsPositions();
+        this.getTechnicalProposalsContragents();
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   getTechnicalProposals(filters = {}) {
@@ -105,5 +113,10 @@ export class TechnicalProposalListComponent implements OnInit {
         subscription.unsubscribe();
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

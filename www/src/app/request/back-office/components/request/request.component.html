@@ -4,12 +4,14 @@
       [positions]="positions"
       [request]="request"
       [onDrafted]="sendOnApprove"
-      (publish)="publish(request)"
-      (addPosition)="updatePositions()"
-      (addGroup)="updatePositions()"
-      (changeStatus)="updatePositions(); updateRequest()"
-      (addResponsible)="updatePositions()"
-      (uploadFromTemplate)="uploadFromTemplate($event)"
+      [status]="status$ | async"
+      [positionsStatus]="positionsStatus$ | async"
+      (publish)="store.dispatch(publish(requestId))"
+      (addPosition)="store.dispatch(refreshPositions(requestId))"
+      (addGroup)="store.dispatch(refreshPositions(requestId))"
+      (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
+      (addResponsible)="store.dispatch(refreshPositions(requestId))"
+      (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>
   </ng-container>
 </ng-container>

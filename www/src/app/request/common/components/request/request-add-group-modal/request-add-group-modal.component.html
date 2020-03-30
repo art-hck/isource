@@ -1,6 +1,6 @@
 <clr-modal>
   <h2 class="modal-title">Создать группу <span class="app-ghost-color">({{ positions.length }})</span></h2>
-  <div class="modal-body">
+  <div class="modal-body" *ngIf="modal && modal._open">
     <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
       <p class="app-secondary-color">Вы можете создавать группы из любых позиций с любым статусом.</p>
       <label class="app-ghost-color">Название группы</label>

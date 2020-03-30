@@ -11,22 +11,28 @@ import { PositionStatus } from "../../common/enum/position-status";
 import { User } from "../../../user/models/user";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { RequestDocument } from "../../common/models/request-document";
+import { FormDataService } from "../../../shared/services/form-data.service";
+import { Page } from "../../../core/models/page";
+import { RequestsList } from "../../common/models/requests-list/requests-list";
 
 
 @Injectable()
 export class RequestService {
 
-  protected role: string;
-
   constructor(
     protected api: HttpClient,
     public user: UserInfoService,
+    public formDataService: FormDataService,
   ) {
-    this.role = user.isBackOffice() ? 'backoffice' : 'customer';
   }
 
-  getRequestInfo(id: Uuid) {
-    const url = `requests/${this.role}/${id}/info`;
+  getRequests(startFrom, pageSize, filters): Observable<Page<RequestsList>> {
+    const url = `requests/backoffice/list`;
+    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters });
+  }
+
+  getRequest(id: Uuid) {
+    const url = `requests/backoffice/${id}/info`;
     return this.api.post<Request>(url, {})
       .pipe(map(data => new Request(data)));
   }
@@ -43,26 +49,14 @@ export class RequestService {
     return this.api.get<RequestPosition>(url);
   }
 
-  /**
-   * Преобразует RequestPositionList в одноуровневый массив позиций без групп
-   */
-  getRequestPositionsFlat(id: Uuid): Observable<RequestPosition[]> {
-    return this.getRequestPositions(id).pipe(map(
-      requestPositionsList =>
-        requestPositionsList.reduce(
-          function flatPositionList(arr, curr: RequestPositionList) {
-            if (curr instanceof RequestGroup) {
-              return [...arr, ...flatPositionList(curr.positions, null)];
-            } else {
-              return [...arr, curr].filter(Boolean);
-            }
-          }, [])
-    ));
-  }
-
   getRequestPositionsWithOffers(id: Uuid): Observable<any> {
     const url = `requests/backoffice/${id}/positions-with-offers`;
     return this.api.get<any>(url);
+  }
+
+  requestStatusCount() {
+    const url = `requests/backoffice/counts-on-different-statuses`;
+    return this.api.get(url); // @TODO Typization!
   }
 
   publishRequest(id: Uuid) {
@@ -94,6 +88,11 @@ export class RequestService {
     const url = `requests/backoffice/${id}/change-responsible-user`;
     const body = {user: user.id, positions: positions.map(position => position.id)};
     return this.api.post(url, body);
+  }
+
+  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
+    const url = `requests/backoffice/${requestId}/add-positions/from-excel`;
+    return this.api.post(url, this.formDataService.toFormData({ files })); // @TODO Typization!
   }
 
   private mapPositionList(requestPositionsList: RequestPositionList[]) {

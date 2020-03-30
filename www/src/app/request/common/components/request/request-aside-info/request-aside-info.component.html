@@ -4,7 +4,7 @@
   </div>
   <div class="app-accordion-body">
     <!-- Счетчики статусов -->
-    <ng-container *ngFor="let statusCounter of getStatusCounters(positions)">
+    <ng-container *ngFor="let statusCounter of statusCounters">
       <div [class.app-ghost-color]="!statusCounter.positions.length">
         <div class="app-row app-section app-bold">
           <div class="app-col">

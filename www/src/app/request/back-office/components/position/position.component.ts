@@ -9,6 +9,8 @@ import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { RequestDocument } from "../../../common/models/request-document";
+import { Store } from "@ngxs/store";
+import { RequestActions } from "../../actions/request.actions";
 
 @Component({ templateUrl: './position.component.html' })
 export class PositionComponent implements OnInit, OnDestroy {
@@ -23,6 +25,7 @@ export class PositionComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private title: Title,
+    private store: Store,
     private bc: UxgBreadcrumbsService
   ) {
     this.route.params.subscribe(() => this.getData());
@@ -40,6 +43,10 @@ export class PositionComponent implements OnInit, OnDestroy {
         this.setPageInfo(position);
         this.updateAvailableStatuses(position);
       }));
+    this.store.dispatch([
+      new RequestActions.Refresh(this.requestId),
+      new RequestActions.RefreshPositions(this.requestId),
+    ]);
   }
 
   updateData(position: RequestPosition) {
@@ -85,10 +92,10 @@ export class PositionComponent implements OnInit, OnDestroy {
   }
 
   // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
-  sendOnApprove = (position: RequestPosition) => this.requestService
-    .publishRequest(this.requestId)
-    // После публикации получаем актуальную инфу о позиции
-    .pipe(switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id)))
+  sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
+    .dispatch(new RequestActions.Publish(this.requestId, false)).pipe(
+      switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))
+    )
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

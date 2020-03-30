@@ -40,38 +40,25 @@
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('addRequestGroup', user.roles)">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.authorize('addRequestGroup')">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
           </button>
-          <app-request-add-group-modal
-            #addGroupModal
-            [request]="request"
-            [positions]="checkedPositions"
-            (success)="addGroup.emit($event)"
-          ></app-request-add-group-modal>
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.authorize('moveRequestGroup')">
           <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0" (click)="moveGroupModal.open()">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
           </button>
-          <app-request-move-group-modal
-            #moveGroupModal
-            [request]="request"
-            [groups]="groups"
-            [positions]="checkedPositions"
-            (success)="addGroup.emit($event)"
-          ></app-request-move-group-modal>
         </div>
 
         <!-- Групповая смена статус -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
-          <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">
+          <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses" (click)="changeStatusModal.open()">
             <clr-icon shape="app-circle-arrow"></clr-icon>
             <span>Сменить статус</span>
           </button>
@@ -148,32 +135,19 @@
   <div class="app-row">
 
     <!-- Список позиций -->
-    <div class="app-col app-table">
-      <ng-container *ngIf="formPositions.controls.length === 0">
+    <div class="app-col app-table" [class.disabled]="(status && status !== 'received') || positionsStatus && positionsStatus !=='received'">
+      <ng-container *ngIf="positions.length === 0">
         <h2 class="text-center" [style.opacity]="0.1">
           <clr-icon shape="add-text" size="270"></clr-icon><br/>
           К заявке пока не добавлено ни <br/> одной позиции
         </h2>
       </ng-container>
-      <ng-container *ngFor="let formGroup of formPositions.controls">
+      <ng-container *ngFor="let formGroup of formPositions.controls; trackBy: trackByFormPositionId">
         <!-- Позиция -->
         <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
           <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
-            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup, editPosition: editPosition }"></div>
+            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
           </a>
-          <!-- Модальное окно для редактирования позиции -->
-          <clr-modal #editPosition clrModalSize="lg">
-            <h2 class="modal-title"><b>Редактирование позиции</b></h2>
-            <div class="modal-body" *ngIf="editPosition._open">
-              <app-request-position-form
-                [requestId]="requestId"
-                [position]="position"
-                (cancel)="editPosition.close()"
-                (positionChange)="addPosition.emit($event); editPosition.close()"
-                [onDrafted]="onDrafted"
-              ></app-request-position-form>
-            </div>
-          </clr-modal>
         </ng-container>
 
         <!-- Группа -->
@@ -187,14 +161,14 @@
     </div>
 
     <!-- Правая колонка -->
-    <div class="app-col app-col-aside" *ngIf="(flatPositions$ | async) as flatPositions">
+    <div class="app-col app-col-aside">
       <app-request-aside-info [positions]="flatPositions" [request]="request"></app-request-aside-info>
     </div>
   </div>
 </form>
 
 <!-- Шаблон позиции -->
-<ng-template #positionItem let-position="position" let-formGroup="formGroup" let-editPosition="editPosition">
+<ng-template #positionItem let-position="position" let-formGroup="formGroup">
   <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
@@ -231,7 +205,7 @@
         <div *uxgPopoverContent="'app-popover-content-top-right'">Скорее всего наименование позиции нуждается в редактировании</div>
       </uxg-popover>
 
-      <button uxgButton link icon (click)="$event.stopPropagation(); editPosition.open();">
+      <button uxgButton link icon (click)="$event.stopPropagation(); editedPosition = position;">
         <clr-icon shape="app-pen"></clr-icon>
       </button>
     </ng-container>
@@ -265,7 +239,7 @@
 
     <!-- Позиции группы -->
     <div class="positions" *ngIf="!folded.value">
-      <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
+      <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls; trackBy: trackByFormPositionId">
         <div class="app-row">
           <ng-container *ngTemplateOutlet="positionItem; context:{
               position: childformGroup.get('position').value,
@@ -294,24 +268,54 @@
   (success)="addResponsible.emit($event)"
 ></app-request-add-responsible-modal>
 
-<!-- Модальное окно для смена статуса группы позиций -->
+<!-- Модальное окно для смены статуса группы позиций -->
 <clr-modal #changeStatusModal>
-  <h3 class="modal-title"> Сменить статус позиций <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>
-  <div class="modal-body">
-    <app-positions-status-change
-      #positionsStatusChange
-      [positions]="checkedPositions"
-      [status]="checkedPositions[0]?.status"
-      (changeStatus)="onChangePositionStatuses(); changeStatusModal.close()">
-    </app-positions-status-change>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="changeStatusModal.close()">Отмена</button>
-    <button type="button" class="btn btn-primary"
-            [disabled]="!positionsStatusChange.valid()"
-            [clrLoading]="positionsStatusChange.loading"
-            (click)="positionsStatusChange.onChangeBtn()">
-      Сменить
-    </button>
+  <h3 class="modal-title">Сменить статус позиций <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>
+  <div class="modal-body" *ngIf="changeStatusModal._open">
+    <div class="app-section">
+      <app-positions-status-change
+        #positionsStatusChange
+        [positions]="checkedPositions"
+        [status]="checkedPositions[0]?.status"
+        (changeStatus)="changeStatus.emit(); changeStatusModal.close()">
+      </app-positions-status-change>
+    </div>
+    <div class="app-row app-justify-content-end">
+      <button type="button" uxgButton secondary lg (click)="changeStatusModal.close()">Отмена</button>
+      <button type="button" uxgButton primary lg
+              [disabled]="!positionsStatusChange.valid()"
+              [clrLoading]="positionsStatusChange.loading"
+              (click)="positionsStatusChange.onChangeBtn()">
+        Сменить
+      </button>
+    </div>
   </div>
 </clr-modal>
+
+<!-- Модальное окно для редактирования позиции -->
+<clr-modal clrModalSize="lg" [clrModalOpen]="!!editedPosition">
+  <h2 class="modal-title"><b>Редактирование позиции</b></h2>
+  <div class="modal-body" *ngIf="editedPosition">
+    <app-request-position-form
+      [requestId]="request.id"
+      [position]="editedPosition"
+      (cancel)="editedPosition = null"
+      (positionChange)="addPosition.emit($event); editedPosition = null"
+      [onDrafted]="onDrafted"
+    ></app-request-position-form>
+  </div>
+</clr-modal>
+
+<app-request-add-group-modal #addGroupModal
+  [request]="request"
+  [positions]="checkedPositions"
+  (success)="addGroup.emit($event)"
+></app-request-add-group-modal>
+
+<app-request-move-group-modal
+  #moveGroupModal
+  [request]="request"
+  [groups]="groups"
+  [positions]="checkedPositions"
+  (success)="addGroup.emit($event)"
+></app-request-move-group-modal>

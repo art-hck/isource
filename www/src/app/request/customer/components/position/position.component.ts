@@ -8,6 +8,8 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { RequestService } from "../../services/request.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestDocument } from "../../../common/models/request-document";
+import { Store } from "@ngxs/store";
+import { RequestActions } from "../../actions/request.actions";
 
 @Component({ templateUrl: './position.component.html' })
 export class PositionComponent implements OnInit {
@@ -20,7 +22,8 @@ export class PositionComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private title: Title,
-    private bc: UxgBreadcrumbsService
+    private bc: UxgBreadcrumbsService,
+    private store: Store
   ) {
     this.route.params.subscribe(() => this.getData());
   }
@@ -39,6 +42,10 @@ export class PositionComponent implements OnInit {
   updateData(position: RequestPosition) {
     this.setPageInfo(position);
     this.position$ = of(position);
+    this.store.dispatch([
+      new RequestActions.Refresh(this.requestId),
+      new RequestActions.RefreshPositions(this.requestId),
+    ]);
   }
 
   setPageInfo(position: RequestPosition) {

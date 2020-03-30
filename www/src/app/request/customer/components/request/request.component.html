@@ -3,13 +3,13 @@
     <app-request
       [positions]="positions"
       [request]="request"
-      (addPosition)="updatePositions()"
-      (addGroup)="updatePositions()"
-      (addResponsible)="updatePositions()"
-      (publish)="publish(request)"
-      (reject)="reject(request)"
-      (approve)="approve(request)"
-      (uploadFromTemplate)="uploadFromTemplate($event)"
+      [status]="status$ | async"
+      [positionsStatus]="positionsStatus$ | async"
+      (publish)="store.dispatch(publish(requestId))"
+      (addPosition)="store.dispatch(refreshPositions(requestId))"
+      (reject)="store.dispatch(reject(requestId))"
+      (approve)="store.dispatch(approve(requestId))"
+      (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>
   </ng-container>
 </ng-container>

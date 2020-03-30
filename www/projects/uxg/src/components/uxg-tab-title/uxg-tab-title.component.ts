@@ -30,15 +30,15 @@ export class UxgTabTitleComponent {
   @HostListener("click")
   activate() {
     if (!this.active && !this.disabled) {
-      this.onToggle.emit(true);
       this.active = true;
+      this.onToggle.emit(true);
     }
   }
 
   deactivate() {
     if (this.active && !this.disabled) {
-      this.onToggle.emit(false);
       this.active = false;
+      this.onToggle.emit(false);
     }
   }
 }
