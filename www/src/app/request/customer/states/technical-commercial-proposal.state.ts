@@ -2,15 +2,15 @@ import { TechnicalCommercialProposal } from "../../common/models/technical-comme
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { patch } from "@ngxs/store/operators";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
+import { Uuid } from "../../../cart/models/uuid";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
-import { Uuid } from "../../../cart/models/uuid";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -32,12 +32,12 @@ export class TechnicalCommercialProposalState {
 
   @Selector()
   static getSentToReview({ proposals }: TechnicalCommercialProposalStateModel) {
-    return this.groupByPosition(proposals.filter(proposal => proposal.status === 'SENT_TO_REVIEW'));
+    return this.groupByPosition(proposals, true);
   }
 
   @Selector()
   static getReviewed({ proposals }: TechnicalCommercialProposalStateModel) {
-    return this.groupByPosition(proposals.filter(proposal => proposal.status === 'REVIEWED'));
+    return this.groupByPosition(proposals, false);
   }
 
   @Selector()
@@ -45,7 +45,7 @@ export class TechnicalCommercialProposalState {
     return proposalsStateStatus;
   }
 
-  static groupByPosition(proposals: TechnicalCommercialProposal[]): TechnicalCommercialProposalGroupByPosition[] {
+  static groupByPosition(proposals: TechnicalCommercialProposal[], isNew: boolean): TechnicalCommercialProposalGroupByPosition[] {
     return proposals.reduce(
       (group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
         proposal.positions.forEach(proposalPosition => {
@@ -58,7 +58,7 @@ export class TechnicalCommercialProposalState {
         });
         return group;
       }, []
-    );
+    ).filter(({data}) => data.every(({proposalPosition}) => proposalPosition.status === "NEW") === isNew);
   }
 
   @Action(Fetch)
@@ -78,6 +78,7 @@ export class TechnicalCommercialProposalState {
   approve(ctx: Context, action: Approve) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.approve(action.requestId, action.proposalPosition).pipe(
+      tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
       finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
     );
   }

@@ -56,10 +56,10 @@
 
           <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
           <div class="status text-center"
-               [class.app-ghost-color]="item.status==='NEW'"
-               [class.app-success-color]="item.status==='???'"
+               [class.app-ghost-color]="item.status !== 'APPROVED'"
+               [class.app-success-color]="item.status === 'APPROVED'"
           >
-            <clr-icon [attr.shape]="item.status==='NEW' ? 'app-unknown' : 'app-check'"></clr-icon>
+            <clr-icon [attr.shape]="item.status==='NEW' && !isReviewed ? 'app-unknown' : 'app-check'"></clr-icon>
           </div>
         </div>
       </div>

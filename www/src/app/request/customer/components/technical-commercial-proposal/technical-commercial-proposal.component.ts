@@ -31,7 +31,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   folded = false;
 
   get isReviewed(): boolean {
-    return this.group.data.every(({ proposal }) => proposal.status === 'REVIEWED');
+    return this.group.data.some(({ proposalPosition }) => proposalPosition.status !== "NEW");
   }
 
   constructor(
@@ -113,5 +113,5 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  trackByproposalPositionId = (i, {proposalPosition}) => proposalPosition.id;
+  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalGroupByPosition["data"][number]) => proposalPosition.id;
 }

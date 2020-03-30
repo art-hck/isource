@@ -49,9 +49,10 @@
       <span>{{total | number: "1.0-2"}}</span>
       <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
     </h3>
-    <button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
+    <!-- @TODO: Ждем реализацию на бэкенде -->
+    <!--<button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
       Отклонить всё
-    </button>
+    </button>-->
     <button uxgButton primary lg (click)="approveAll()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
       Согласовать всё
     </button>

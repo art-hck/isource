@@ -15,4 +15,8 @@ export class TechnicalCommercialProposalComponent {
   state: "view" | "edit" = "view";
   folded = false;
   getCurrencySymbol = getCurrencySymbol;
+
+  get isReviewed(): boolean {
+    return this.technicalCommercialProposal && this.technicalCommercialProposal.positions.some(({ status }) => status !== "NEW");
+  }
 }
