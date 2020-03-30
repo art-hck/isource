@@ -215,10 +215,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     }
 
     submit$ = submit$.pipe(
-      tap(() => this.store.dispatch([
-        new RequestActions.Refresh(this.requestId),
-        new RequestActions.RefreshPositions(this.requestId),
-      ])),
       flatMap(position =>
       position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
     ));

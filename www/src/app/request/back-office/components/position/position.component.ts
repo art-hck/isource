@@ -43,6 +43,10 @@ export class PositionComponent implements OnInit, OnDestroy {
         this.setPageInfo(position);
         this.updateAvailableStatuses(position);
       }));
+    this.store.dispatch([
+      new RequestActions.Refresh(this.requestId),
+      new RequestActions.RefreshPositions(this.requestId),
+    ]);
   }
 
   updateData(position: RequestPosition) {
