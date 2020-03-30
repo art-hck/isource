@@ -14,7 +14,7 @@ export class History {
   requestContractId?: Uuid;
   requestId: Uuid;
   requestOfferPositionId?: Uuid;
-  requestOfferPositionWinnerId?: Uuid;
+  requestPositionWinnerId?: Uuid;
   requestPositionId: Uuid;
   status?: string;
   statusLabel?: string;
