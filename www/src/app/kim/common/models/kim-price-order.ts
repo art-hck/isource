@@ -1,6 +1,6 @@
-import { Uuid } from "../../cart/models/uuid";
-import { ContragentShortInfo } from "../../contragent/models/contragent-short-info";
-import { PositionCurrency } from "../../request/common/enum/position-currency";
+import { Uuid } from "../../../cart/models/uuid";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
+import { PositionCurrency } from "../../../request/common/enum/position-currency";
 
 export class KimPriceOrder {
   id: Uuid;

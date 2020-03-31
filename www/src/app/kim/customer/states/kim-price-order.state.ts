@@ -1,17 +1,17 @@
 import { State, StateContext } from "@ngxs/store";
 import { Injectable } from "@angular/core";
-import { StateStatus } from "../../request/common/models/state-status";
+import { StateStatus } from "../../../request/common/models/state-status";
 
-export interface TradeRequestStateModel {
+export interface KimRequestStateModel {
   requests: [];
   status: StateStatus;
 }
 
-type Model = TradeRequestStateModel;
+type Model = KimRequestStateModel;
 type Context = StateContext<Model>;
 
 @State<Model>({
-  name: 'Trade',
+  name: 'Kim',
   defaults: { requests: null, status: "pristine" }
 })
 @Injectable()

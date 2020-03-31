@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from "@ngxs/store";
-import { TradeRequestActions } from "../../actions/kim-price-order.actions";
-import Fetch = TradeRequestActions.Fetch;
+import { KimRequestActions } from "../../actions/kim-price-order.actions";
+import Fetch = KimRequestActions.Fetch;
 
 @Component({
   templateUrl: './kim-price-order-list.component.html',

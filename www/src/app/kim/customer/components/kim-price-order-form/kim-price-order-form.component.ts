@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { KimPriceOrder } from "../../models/kim-price-order";
+import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { Store } from "@ngxs/store";
-import { TradeRequestActions } from "../../actions/kim-price-order.actions";
-import Create = TradeRequestActions.Create;
-import Update = TradeRequestActions.Update;
-import { Uuid } from "../../../cart/models/uuid";
+import { KimRequestActions } from "../../actions/kim-price-order.actions";
+import { Uuid } from "../../../../cart/models/uuid";
+import Create = KimRequestActions.Create;
+import Update = KimRequestActions.Update;
 
 @Component({
   selector: 'app-kim-price-order-form',
