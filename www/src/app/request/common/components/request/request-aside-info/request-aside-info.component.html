@@ -28,7 +28,7 @@
 <hr class="divider"/>
 
 <!-- Информация о заявке -->
-<div class="app-accordion">
+<div class="app-accordion request-info">
   <div class="app-accordion-title" (click)="isInfoTabVisible = !isInfoTabVisible">
     <h3>Общая инф. по заявке</h3>
     <clr-icon class="app-accordion-title-icon" shape="app-chevron"
@@ -37,25 +37,25 @@
   <div class="app-accordion-body" *ngIf="isInfoTabVisible">
     <div class="app-section">
       <div class="app-ghost-color">Заявка №</div>
-      <div class="app-bold">{{ request.number }}</div>
+      <div class="app-bold request-number">{{ request.number }}</div>
     </div>
     <div class="app-section">
       <div class="app-ghost-color">Статус заявки</div>
-      <div>{{ request.statusLabel }}</div>
+      <div class="request-status">{{ request.statusLabel }}</div>
     </div>
     <div class="app-section">
       <div class="app-ghost-color">Заказчик</div>
-      <div>{{ request.contragent.shortName }}</div>
+      <div class="contragent-name">{{ request.contragent.shortName }}</div>
     </div>
     <div class="app-section">
       <div class="app-ghost-color">Контактное лицо (e-mail)</div>
-      <a target="_blank" href="mailto:{{request.user.email }}">
+      <a target="_blank" class="contragent-contact" href="mailto:{{request.user.email }}">
         {{ request.user.lastName }} {{ request.user.firstName }} {{ request.user.middleName }}
       </a>
     </div>
     <div class="app-section">
       <div class="app-ghost-color">Телефон контактного лица</div>
-      {{ request.user.phone | phone }}
+      <div class="contragent-phone">{{ request.user.phone | phone }}</div>
     </div>
     <div class="app-section" *ngIf="request.documents.length">
       <div class="app-ghost-color">Документы заявки</div>

@@ -7,7 +7,7 @@
         <div class="app-card">
           <h3>Наименование заявки</h3>
           <div class="app-control-wrap">
-            <input #nameRef uxgInput type="text" lg class="request-name" formControlName="name"/>
+            <input #nameRef uxgInput type="text" lg class="request-name-input" formControlName="name"/>
             <label class="app-control-label" (click)="nameRef.focus()">Наименование заявки (обязательно)</label>
             <div class="app-control-error" *ngIf="form.get('name').errors as e">
               <span *ngIf="e.required">Обязательное поле</span>
