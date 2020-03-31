@@ -96,6 +96,7 @@
               <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                 <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
               </div>
+              <div><button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button></div>
               <div><button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button></div>
               <div><button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button></div>
             </div>
@@ -145,7 +146,10 @@
       <ng-container *ngFor="let formGroup of formPositions.controls; trackBy: trackByFormPositionId">
         <!-- Позиция -->
         <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
-          <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
+          <a [href]="getPositionUrl(position)"
+             (click)="navigateToPosition(position, $event)"
+             class="app-row app-link-no-color"
+             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT'}">
             <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
           </a>
         </ng-container>
@@ -268,6 +272,15 @@
   (success)="addResponsible.emit($event)"
 ></app-request-add-responsible-modal>
 
+<!-- Модальное окно для отмены позиции -->
+<clr-modal #cancelPositionModal>
+  <h3 class="modal-title">Отменить позиции <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>
+  <div class="modal-body">
+    <div class="app-section">
+  <app-position-cancel [positions]="checkedPositions" [requestId]="request.id" (close)="cancelPositionModal.close()"></app-position-cancel>
+    </div>
+  </div>
+</clr-modal>
 <!-- Модальное окно для смены статуса группы позиций -->
 <clr-modal #changeStatusModal>
   <h3 class="modal-title">Сменить статус позиций <span class="app-ghost-color">({{ checkedPositions?.length }})</span></h3>

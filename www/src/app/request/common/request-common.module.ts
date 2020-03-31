@@ -42,6 +42,7 @@ import { CommercialProposalListFilterComponent } from "./components/commercial-p
 import { PositionsStatusChangeComponent } from "../back-office/components/position-status-change/positions-status-change.component";
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
 import { RequestPositionService } from "./services/request-position.service";
+import {PositionCancelComponent} from "./components/position-cancel/position-cancel.component";
 
 const RequestCommonModuleDeclarations = [
   BackofficeOffersComponent,
@@ -75,18 +76,19 @@ const RequestCommonModuleDeclarations = [
   RequestTechnicalProposalComponent,
   CommercialProposalListComponent,
   SearchFilterPipe,
-  RequestMoveGroupModalComponent
+  RequestMoveGroupModalComponent,
+  PositionCancelComponent
 ];
 
 @NgModule({
   declarations: RequestCommonModuleDeclarations,
-  imports: [
-    RouterModule,
-    SharedModule,
-    ReactiveFormsModule,
-    TextMaskModule,
-    ContragentModule
-  ],
+    imports: [
+        RouterModule,
+        SharedModule,
+        ReactiveFormsModule,
+        TextMaskModule,
+        ContragentModule
+    ],
   providers: [
     ContragentService,
     ContractService,

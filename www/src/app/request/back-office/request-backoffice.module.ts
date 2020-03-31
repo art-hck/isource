@@ -33,43 +33,43 @@ import { Request } from "../common/models/request";
 import { RequestState } from "./states/request.state";
 
 @NgModule({
-  declarations: [
-    RequestComponent,
-    RequestListComponent,
-    PositionComponent,
-    TechnicalProposalListComponent,
-    TechnicalProposalFormComponent,
-    ProposalFormManufacturerComponent,
-    ProcedureCreateComponent,
-    ProcedureCreatePropertiesComponent,
-    ProcedureCreateDocumentsComponent,
-    TechnicalProposalComponent,
-    CommercialProposalListComponent,
-    CommercialProposalFormComponent,
-    TechnicalCommercialProposalComponent,
-    TechnicalCommercialProposalListComponent,
-    TechnicalCommercialProposalFormComponent,
-    TechnicalCommercialProposalFilterComponent,
-    ProposalFormDocumentsComponent,
-    TechnicalCommercialProposalParametersFormComponent
-  ],
-  imports: [
-    RequestBackofficeRoutingModule,
-    NgxsModule.forFeature([
-      RequestState,
-      TechnicalCommercialProposalState
-    ]),
-    RequestCommonModule
-  ],
-  providers: [
-    DesignDocumentationService,
-    CommercialProposalsService,
-    ProcedureService,
-    RequestService,
-    TechnicalProposalsService,
-    PositionService,
-    TechnicalCommercialProposalService,
-  ]
+    declarations: [
+        RequestComponent,
+        RequestListComponent,
+        PositionComponent,
+        TechnicalProposalListComponent,
+        TechnicalProposalFormComponent,
+        ProposalFormManufacturerComponent,
+        ProcedureCreateComponent,
+        ProcedureCreatePropertiesComponent,
+        ProcedureCreateDocumentsComponent,
+        TechnicalProposalComponent,
+        CommercialProposalListComponent,
+        CommercialProposalFormComponent,
+        TechnicalCommercialProposalComponent,
+        TechnicalCommercialProposalListComponent,
+        TechnicalCommercialProposalFormComponent,
+        TechnicalCommercialProposalFilterComponent,
+        ProposalFormDocumentsComponent,
+        TechnicalCommercialProposalParametersFormComponent
+    ],
+    imports: [
+        RequestBackofficeRoutingModule,
+        NgxsModule.forFeature([
+            RequestState,
+            TechnicalCommercialProposalState
+        ]),
+        RequestCommonModule
+    ],
+    providers: [
+        DesignDocumentationService,
+        CommercialProposalsService,
+        ProcedureService,
+        RequestService,
+        TechnicalProposalsService,
+        PositionService,
+        TechnicalCommercialProposalService,
+    ]
 })
 export class RequestBackofficeModule {
 }
