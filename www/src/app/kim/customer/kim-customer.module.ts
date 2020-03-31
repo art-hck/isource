@@ -8,6 +8,8 @@ import { KimCartComponent } from "./components/kim-cart/kim-cart.component";
 import { KimCatalogComponent } from "./components/kim-catalog/kim-catalog.component";
 import { KimPriceOrderService } from "./services/kim-price-order.service";
 import { KimCustomerRoutingModule } from "./kim-customer-routing.module";
+import { KimPriceOrderFormPositionsComponent } from './components/kim-price-order-form/form-positions/form-positions.component';
+import { KimPriceOrderFormPositionsParamsComponent } from './components/kim-price-order-form/form-positions-params/form-positions-params.component';
 
 
 @NgModule({
@@ -16,6 +18,8 @@ import { KimCustomerRoutingModule } from "./kim-customer-routing.module";
     KimPriceOrderListComponent,
     KimCartComponent,
     KimCatalogComponent,
+    KimPriceOrderFormPositionsComponent,
+    KimPriceOrderFormPositionsParamsComponent,
   ],
   providers: [
     KimPriceOrderService

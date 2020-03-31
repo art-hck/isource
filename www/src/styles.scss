@@ -47,6 +47,7 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 body {
   color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
+  min-width: 1000px;
 }
 
 h2 {
@@ -78,7 +79,7 @@ b.required-star {
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
-    padding: 10px 130px 30px 130px;
+    padding-top: 10px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }
