@@ -1,0 +1,22 @@
+<div #menu class="kim-menu">
+  <div class="container">
+    <uxg-tabs>
+      <uxg-tab-title #catalogTab disabled [class.app-bold]="catalogTab.active">Все товары портала</uxg-tab-title>
+      <uxg-tab-title
+        #priceOrderTab
+        routerLink="price-orders" routerLinkActive
+        [active]="rlaPriceOrders.isActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [class.app-bold]="priceOrderTab.active"
+        #rlaPriceOrders="routerLinkActive"
+      >Мои ценовые запросы</uxg-tab-title>
+      <uxg-tab-title #cartTab disabled [class.app-bold]="cartTab.active">
+        <div class="app-row app-align-items-center">
+          <clr-icon shape="app-basket"></clr-icon><span>Корзина торгового портала</span>
+        </div>
+      </uxg-tab-title>
+    </uxg-tabs>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

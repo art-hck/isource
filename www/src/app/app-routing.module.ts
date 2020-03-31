@@ -6,10 +6,7 @@ import { ForbiddenComponent } from "./pages/forbidden/forbidden.component";
 import { CanActivateGuard } from "./auth/can-activate.guard";
 
 const routes: Routes = [
-  { path: '',
-    canActivate: [CanActivateGuard],
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  },
+  { path: '', canActivate: [CanActivateGuard], loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
   { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
   { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
@@ -18,6 +15,7 @@ const routes: Routes = [
   { path: 'employees', loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: 'notifications', loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
+  { path: 'kim', loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
   { path: 'not-found', component: NotFoundComponent, data: { title: "404 - Страница не найдена" } },
   { path: 'forbidden', component: ForbiddenComponent, data: { title: "403 - Доступ запрещен" } },
   { path: '**', redirectTo: '/not-found' }

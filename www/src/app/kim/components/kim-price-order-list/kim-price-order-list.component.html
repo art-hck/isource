@@ -1,0 +1,24 @@
+<div class="app-row">
+  <div class="app-col">
+    <div class="app-row app-align-items-center">
+      <uxg-tabs class="app-col">
+        <uxg-tab-title #reviewTab [active]="true">Необходимо рассмотреть  <span class="app-ghost-color">(5)</span></uxg-tab-title>
+        <uxg-tab-title #progressTab>Запроссы а процессе <span class="app-ghost-color">(10)</span></uxg-tab-title>
+        <uxg-tab-title #reviewedTab>Рассмотренные <span class="app-ghost-color">(10)</span></uxg-tab-title>
+      </uxg-tabs>
+      <button uxgButton primary (click)="progressTab.activate(); showForm = true">Создать ценовой запрос</button>
+    </div>
+  </div>
+  <div class="app-col-aside"></div>
+</div>
+<div class="app-row content">
+  <div class="app-col">
+    <app-kim-price-order-form
+      *ngIf="progressTab.active && showForm"
+      (close)="showForm = false"
+    ></app-kim-price-order-form>
+  </div>
+  <div class="app-col-aside">
+    <h3>Фильтр</h3>
+  </div>
+</div>
