@@ -34,7 +34,7 @@ export class PositionCancelComponent implements OnInit {
     this.form = this.formBuilder.group({
       reason: ['', Validators.required],
       comment: ['']
-    })
+    });
   }
 
   submit() {
@@ -43,10 +43,10 @@ export class PositionCancelComponent implements OnInit {
     });
     this.positionService.changePositionsStatus(positionIds, 'NOT_RELEVANT', this.form.value).subscribe(() => {
       this.store.dispatch(new RefreshPositions(this.requestId));
-      positionIds.length == 1 ? this.store.dispatch(new ToastActions.Success('Позиция отменена')) :
+      positionIds.length === 1 ? this.store.dispatch(new ToastActions.Success('Позиция отменена')) :
         this.store.dispatch(new ToastActions.Success('Позиции отменены'));
     }, (error) => {
-      positionIds.length == 1 ? this.store.dispatch(new ToastActions.Error('Ошибка отмены позиции')) :
+      positionIds.length === 1 ? this.store.dispatch(new ToastActions.Error('Ошибка отмены позиции')) :
         this.store.dispatch(new ToastActions.Error('Ошибка отмены позиций'));
     });
     this.close.emit();
