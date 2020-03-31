@@ -11,7 +11,7 @@ export class PositionService {
   ) {
   }
 
-  changePositionsStatus(positionIds: Uuid[], newStatus: string, reason = null) {
+  changePositionsStatus(positionIds: Uuid[], newStatus: string, reason?) {
     const url = `requests/backoffice/positions/statuses/change`;
     return this.api.post<RequestPosition[]>(url, {
       positionIds: positionIds,
