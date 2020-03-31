@@ -36,8 +36,8 @@ export class ToastState {
 
     return timer(toast.lifetime).pipe(
       filter(() => toast.lifetime > 0),
-      takeUntil(this.holdUp$.pipe(filter(_toast => _toast === toast))),
-      switchMap(() => dispatch(new ToastActions.Remove(toast)))
+      switchMap(() => dispatch(new ToastActions.Remove(toast))),
+      takeUntil(this.holdUp$.pipe(filter(_toast => _toast === toast)))
     );
   }
 
@@ -57,8 +57,8 @@ export class ToastState {
   release({dispatch}: Context, {toast}: ToastActions.Release) {
     return timer(toast.lifetime).pipe(
       filter(() => toast.lifetime > 0),
-      takeUntil(this.holdUp$.pipe(filter(_toast => _toast === toast))),
-      switchMap(() => dispatch(new ToastActions.Remove(toast)))
+      switchMap(() => dispatch(new ToastActions.Remove(toast))),
+      takeUntil(this.holdUp$.pipe(filter(_toast => _toast === toast)))
     );
   }
 }

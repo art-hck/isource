@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { RequestService } from "../../../back-office/services/request.service";
+import { RequestService as BackofficeRequestService } from "../../../back-office/services/request.service";
+import { RequestService as CustomerRequestService } from "../../../customer/services/request.service";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
 import { flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
@@ -36,7 +37,8 @@ export class ContractListComponent implements OnInit {
     private bc: UxgBreadcrumbsService,
     private router: Router,
     private route: ActivatedRoute,
-    private requestService: RequestService,
+    private backofficeRequestService: BackofficeRequestService,
+    private customerRequestService: CustomerRequestService,
     private contractService: ContractService,
     private userInfoService: UserInfoService,
     private featureService: FeatureService,
@@ -46,8 +48,16 @@ export class ContractListComponent implements OnInit {
 
   ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
-    this.request$ = this.requestService.getRequestInfo(requestId)
-      .pipe(
+
+    if (this.userInfoService.isBackOffice()) {
+      this.request$ = this.backofficeRequestService.getRequest(requestId);
+    }
+
+    if (this.userInfoService.isCustomer()) {
+      this.request$ = this.customerRequestService.getRequest(requestId);
+    }
+
+    this.request$ = this.request$.pipe(
         tap(request => {
           this.bc.breadcrumbs = [
             { label: "Заявки", link: this.router.createUrlTree(["../.."], { relativeTo: this.route }).toString() },

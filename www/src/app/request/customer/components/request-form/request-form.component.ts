@@ -1,16 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CreateRequestService } from "../../services/create-request.service";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { Store } from "@ngxs/store";
 import { finalize, flatMap, mapTo } from "rxjs/operators";
-import { RequestService } from "../../../customer/services/request.service";
+import { RequestService } from "../../services/request.service";
 import { Subscription } from "rxjs";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
-  selector: 'app-request-form',
   templateUrl: './request-form.component.html',
   styleUrls: ['./request-form.component.scss']
 })
@@ -28,7 +26,6 @@ export class RequestFormComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private createRequestService: CreateRequestService,
     private requestService: RequestService,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -50,7 +47,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
 
   submit(publish = true) {
     const {name, positions} = this.form.value;
-    let request$ = this.createRequestService.addRequest(name, positions)
+    let request$ = this.requestService.addRequest(name, positions)
       .pipe(finalize(() => {
         this.isLoading = false;
         this.form.enable();

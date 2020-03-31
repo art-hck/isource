@@ -17,7 +17,7 @@ import Update = TechnicalCommercialProposals.Update;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
-  proposalsStateStatus: StateStatus;
+  status: StateStatus;
   availablePositions: RequestPosition[];
 }
 
@@ -26,7 +26,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, proposalsStateStatus: "pristine" }
+  defaults: { proposals: null, availablePositions: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
@@ -34,35 +34,20 @@ export class TechnicalCommercialProposalState {
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  @Selector()
-  static getList({proposals}: Model) {
-    return proposals;
-  }
-
-  @Selector()
-  static proposalsLength({proposals}: Model) {
-    return proposals.length;
-  }
-
-  @Selector()
-  static availablePositions({availablePositions}: Model) {
-    return availablePositions;
-  }
-
-  @Selector()
-  static status({proposalsStateStatus}: Model) {
-    return proposalsStateStatus;
-  }
+  @Selector() static proposals({proposals}: Model) { return proposals; }
+  @Selector() static proposalsLength({proposals}: Model) { return proposals.length; }
+  @Selector() static availablePositions({availablePositions}: Model) { return availablePositions; }
+  @Selector() static status({status}: Model) { return status; }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
     if (this.cache[requestId]) {
       return ctx.setState(patch({proposals: this.cache[requestId]}));
     }
-    ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
+    ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
-        ctx.setState(patch({ proposals, proposalsStateStatus: "received" as StateStatus }));
+        ctx.setState(patch({ proposals, status: "received" as StateStatus }));
         this.cache[requestId] = proposals;
       }));
   }
@@ -76,15 +61,15 @@ export class TechnicalCommercialProposalState {
 
   @Action(Create)
   create(ctx: Context, action: Create) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
       catchError(err => {
-        ctx.setState(patch({ proposalsStateStatus: "error" as StateStatus }));
+        ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
       }),
       tap(proposal => ctx.setState(patch({
         proposals: insertItem(proposal),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       }))),
       mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
   );
@@ -92,11 +77,11 @@ export class TechnicalCommercialProposalState {
 
   @Action(Update)
   update(ctx: Context, {publish, payload}: Update) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.update(payload).pipe(
       tap(proposal => ctx.setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       }))),
       mergeMap(proposal => {
         if (publish) {
@@ -110,11 +95,11 @@ export class TechnicalCommercialProposalState {
 
   @Action(Publish)
   publish({setState}: Context, {proposal}: Publish) {
-    setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    setState(patch({ status: "updating" as StateStatus }));
     return this.rest.publish(proposal).pipe(
       tap((_proposal) => setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       })))
     );
   }

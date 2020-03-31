@@ -1,6 +1,6 @@
 import '@clr/icons';
 import '@clr/icons/shapes/all-shapes';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
@@ -38,30 +38,29 @@ export class AppComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private cartStoreService: CartStoreService,
     private bc: UxgBreadcrumbsService,
+    private cd: ChangeDetectorRef,
   ) {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.activatedRoute),
-        map(route => {
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route;
-        }),
-        filter(route => route.outlet === "primary"),
-        mergeMap(route => route.data),
-        tap(data => {
-          this.isBreadcrumbsHidden = data.hideBreadcrumbs;
-          this.noContainerPadding = data.noContainerPadding;
-          this.noFooter = data.noFooter;
-          this._isTitleHidden = data.hideTitle;
-          this.bc.breadcrumbs = [];
-        }),
-        map(event => event["title"] || this.title)
-      ).subscribe((title) => {
-      this.titleService.setTitle(title);
-    });
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.activatedRoute),
+      map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      }),
+      filter(route => route.outlet === "primary"),
+      mergeMap(route => route.data),
+      tap(data => {
+        this.isBreadcrumbsHidden = data.hideBreadcrumbs;
+        this.noContainerPadding = data.noContainerPadding;
+        this.noFooter = data.noFooter;
+        this._isTitleHidden = data.hideTitle;
+        this.bc.breadcrumbs = [];
+        this.titleService.setTitle(data.title || this.title);
+        this.cd.detectChanges();
+      }),
+    ).subscribe();
   }
 
   ngOnInit() {

@@ -1,11 +1,10 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, Validators } from "@angular/forms";
 import { debounceTime, filter, flatMap, map, shareReplay, startWith, tap } from "rxjs/operators";
 import { merge, Observable, of, Subject, Subscription } from "rxjs";
-import { CreateRequestService } from "../../services/create-request.service";
+import { RequestPositionService } from "../../services/request-position.service";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { EditRequestService } from "../../services/edit-request.service";
 import { PositionCurrency } from "../../enum/position-currency";
 import { RequestPosition } from "../../models/request-position";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
@@ -18,6 +17,8 @@ import { UxgDropdownInputComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
+import { Store } from "@ngxs/store";
+import { RequestActions } from "../../../back-office/actions/request.actions";
 
 @Component({
   selector: 'app-request-position-form',
@@ -35,7 +36,8 @@ import { CurrencyLabels } from "../../dictionaries/currency-labels";
       useExisting: forwardRef(() => PositionFormComponent),
       multi: true,
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PositionFormComponent implements OnInit, ControlValueAccessor, Validator  {
@@ -108,11 +110,11 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private statusService: RequestPositionStatusService,
-    private createRequestService: CreateRequestService,
-    private editRequestService: EditRequestService,
+    private positionService: RequestPositionService,
     private userInfoService: UserInfoService,
     private normPositionService: NormPositionService,
-    private okeiService: OkeiService
+    private okeiService: OkeiService,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -206,13 +208,14 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         return;
       }
 
-      submit$ = this.editRequestService.updateRequestPosition(this.position.id, this.form.value);
+      submit$ = this.positionService.updatePosition(this.position.id, this.form.value);
     } else {
-      submit$ = this.createRequestService.addRequestPosition(this.requestId, [this.form.value])
+      submit$ = this.positionService.addPosition(this.requestId, [this.form.value])
         .pipe(map(positions => positions[0]));
     }
 
-    submit$ = submit$.pipe(flatMap(position =>
+    submit$ = submit$.pipe(
+      flatMap(position =>
       position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
     ));
 

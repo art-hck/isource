@@ -29,6 +29,8 @@ import { TechnicalCommercialProposalFilterComponent } from "./components/technic
 import { ProposalFormDocumentsComponent } from "./components/proposal-form-documents/proposal-form-documents.component";
 import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalParametersFormComponent } from './components/technical-commercial-proposal-form/technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.component';
+import { Request } from "../common/models/request";
+import { RequestState } from "./states/request.state";
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ import { TechnicalCommercialProposalParametersFormComponent } from './components
   imports: [
     RequestBackofficeRoutingModule,
     NgxsModule.forFeature([
+      RequestState,
       TechnicalCommercialProposalState
     ]),
     RequestCommonModule

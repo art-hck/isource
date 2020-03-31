@@ -46,7 +46,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
   }
 
   protected updateRequestInfo() {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
+    this.requestService.getRequest(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
         this.bc.breadcrumbs = [

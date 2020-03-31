@@ -79,9 +79,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     }
 
     action$.pipe(
-      takeUntil(this.destroy$),
       tap(() => this.close.emit()),
-      finalize(() => this.form.enable())
+      finalize(() => this.form.enable()),
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 

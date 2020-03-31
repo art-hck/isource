@@ -1,29 +1,33 @@
-import {ActivatedRoute, Router, UrlTree} from "@angular/router";
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
-import {Observable, of} from "rxjs";
-import {Request} from "../../models/request";
-import {RequestGroup} from "../../models/request-group";
-import {RequestPosition} from "../../models/request-position";
-import {RequestPositionList} from "../../models/request-position-list";
-import {RequestService} from "../../../customer/services/request.service";
-import {Uuid} from "../../../../cart/models/uuid";
-import {UserInfoService} from "../../../../user/service/user-info.service";
-import {FeatureService} from "../../../../core/services/feature.service";
-import {RequestStatus} from "../../enum/request-status";
-import {PositionStatus} from "../../enum/position-status";
-import {PermissionType} from "../../../../auth/enum/permission-type";
+import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, Output } from "@angular/core";
+import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
+import { Observable } from "rxjs";
+import { Request } from "../../models/request";
+import { RequestGroup } from "../../models/request-group";
+import { RequestPosition } from "../../models/request-position";
+import { RequestPositionList } from "../../models/request-position-list";
+import { RequestService } from "../../../customer/services/request.service";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../core/services/feature.service";
+import { RequestStatus } from "../../enum/request-status";
+import { PositionStatus } from "../../enum/position-status";
+import { PermissionType } from "../../../../auth/enum/permission-type";
+import { RequestPositionStatusService } from "../../services/request-position-status.service";
+import { StateStatus } from "../../models/state-status";
+import { debounceTime } from "rxjs/operators";
 
 @Component({
   selector: 'app-request',
   templateUrl: './request.component.html',
-  styleUrls: ['./request.component.scss']
+  styleUrls: ['./request.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestComponent implements OnInit {
-  requestId: Uuid;
+export class RequestComponent implements OnChanges {
   @Input() request: Request;
   @Input() positions: RequestPositionList[];
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
+  @Input() status: StateStatus;
+  @Input() positionsStatus: StateStatus;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
@@ -32,27 +36,21 @@ export class RequestComponent implements OnInit {
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
-  flatPositions$: Observable<RequestPosition[]>;
-  permissionType = PermissionType;
-
+  readonly permissionType = PermissionType;
+  flatPositions: RequestPosition[] = [];
   form: FormGroup;
-
-  get checkedPositions(): RequestPosition[] {
-    return this.formPositionsFlat
-      .filter(formGroup => formGroup.get("checked").value)
-      .map(formGroup => formGroup.get("position").value)
-    ;
-  }
+  editedPosition: RequestPosition;
+  checkedPositions: RequestPosition[] = [];
+  isDraft: boolean;
+  isOnApproval: boolean;
+  groups: RequestGroup[];
+  canChangeStatuses: boolean;
 
   get formPositions(): FormArray {
     return this.form.get('positions') as FormArray;
   }
 
-  get groups(): RequestGroup[] {
-    return this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
-  }
-
-  get formPositionsFlat() {
+  private get formPositionsFlat() {
     return this.formPositions.controls
       .reduce((arr, formGroup) => {
         if (formGroup && formGroup.get("positions").value.length > 0) {
@@ -63,11 +61,7 @@ export class RequestComponent implements OnInit {
       .filter(formGroup => this.asPosition(formGroup.get("position").value));
   }
 
-  get isDraft(): boolean {
-    return this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
-  }
-
-  get draftPositions(): RequestPositionList[] {
+  private get draftPositions(): RequestPositionList[] {
     return this.positions.filter(function getRecursive(position) {
       const isDraft: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.DRAFT;
       const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
@@ -75,32 +69,40 @@ export class RequestComponent implements OnInit {
     });
   }
 
-  get isOnApproval(): boolean {
-    return this.featureService.allowed('approveRequest', this.user.roles) &&
-      (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
-  }
-
-  get hasOnApprovalPositions(): RequestPositionList[] {
-    return this.positions.filter(function getRecursive(position) {
-      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.ON_CUSTOMER_APPROVAL;
-      const isGroupHasOnApproval: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
-      return isOnApproval || isGroupHasOnApproval;
-    });
+  private get hasOnApprovalPositions(): RequestPositionList[] {
+    return this.flatPositions.filter(position => position.status === PositionStatus.ON_CUSTOMER_APPROVAL);
   }
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
+    private statusService: RequestPositionStatusService,
+    private cd: ChangeDetectorRef,
     public user: UserInfoService,
-    public featureService: FeatureService
-  ) {
-  }
+    public featureService: FeatureService,
+    public ngZone: NgZone,
+  ) {}
 
-  ngOnInit() {
-    this.requestId = this.route.snapshot.paramMap.get('id');
+  ngOnChanges() {
     this.form = this.positionsToForm(this.positions);
-    this.flatPositions$ = this.requestService.getRequestPositionsFlat(of(this.positions));
+    this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
+    this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
+    this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
+    this.isOnApproval = this.featureService.authorize('approveRequest') &&
+      (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+
+    this.formPositions.valueChanges.pipe(debounceTime(10)).subscribe(value => {
+      this.checkedPositions = this.formPositionsFlat
+        .filter(formGroup => formGroup.get("checked").value)
+        .map(formGroup => formGroup.get("position").value)
+      ;
+
+      this.canChangeStatuses = this.checkedPositions.length && this.checkedPositions.every(
+        position => position.status === this.checkedPositions[0].status
+      );
+      this.cd.detectChanges();
+    });
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {
@@ -139,6 +141,14 @@ export class RequestComponent implements OnInit {
       .forEach(c => c.get("folded").setValue(folded));
   }
 
+  asFormArray(control: AbstractControl) {
+    return control as FormArray;
+  }
+
+  isEditable(position: RequestPosition): boolean {
+    return !this.statusService.isStatusAfter(position.status, PositionStatus.TECHNICAL_PROPOSALS_PREPARATION);
+  }
+
   private positionsToForm(positions: RequestPositionList[], position?: RequestPositionList) {
     const formGroup = new FormGroup({
       checked: new FormControl(false),
@@ -158,25 +168,5 @@ export class RequestComponent implements OnInit {
     return formGroup;
   }
 
-  asFormArray(control: AbstractControl) {
-    return control as FormArray;
-  }
-
-  canChangeStatuses() {
-    return this.checkedPositions.length && this.checkedPositions.every(
-      position => position.status === this.checkedPositions[0].status
-    );
-  }
-
-  onChangePositionStatuses() {
-    // todo после этой эмита обновляются все позиции. Потом переделать на редакс.
-    this.changeStatus.emit();
-  }
-
-  isEditable(position: RequestPosition) {
-    return position.status === PositionStatus.DRAFT ||
-      position.status === PositionStatus.NEW ||
-      position.status === PositionStatus.ON_CUSTOMER_APPROVAL ||
-      position.status === PositionStatus.TECHNICAL_PROPOSALS_PREPARATION;
-  }
+  trackByFormPositionId = (i, c: AbstractControl) => c.get("position").value.id;
 }
