@@ -33,6 +33,8 @@
   flex-basis: 200px;
 }
 
+uxg-checkbox + label { margin-left: .5em; }
+
 @keyframes host-show {
   0% {
     transform: scaleY(0);

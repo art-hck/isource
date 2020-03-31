@@ -31,7 +31,7 @@ export class KimPriceOrderFormPositionsParamsComponent implements ControlValueAc
   getFormPosition(position?: KimPriceOrderPosition): FormGroup {
     const form = this.fb.group({
       controlId: [null],
-      maxPrice: [null, [Validators.min(1), Validators.pattern(/\d+/)]],
+      maxPrice: [null, [Validators.min(1), Validators.pattern(/^\d+$/)]],
       comment: [null]
     });
     form.patchValue(position || {});

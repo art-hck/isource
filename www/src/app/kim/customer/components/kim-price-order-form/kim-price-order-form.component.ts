@@ -8,6 +8,7 @@ import { KimPriceOrderType } from "../../../common/enum/kim-price-order-type";
 import { PaymentTermsLabels } from "../../../../request/common/dictionaries/payment-terms-labels";
 import Create = KimRequestActions.Create;
 import Update = KimRequestActions.Update;
+import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-order-type-labels";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -21,6 +22,7 @@ export class KimPriceOrderFormComponent implements OnInit {
   form: FormGroup;
   readonly filesControl = new FormControl([]);
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
+  readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly formRegions = () => this.form.get('regions') as FormArray;
 
   constructor(private fb: FormBuilder, private store: Store) { }

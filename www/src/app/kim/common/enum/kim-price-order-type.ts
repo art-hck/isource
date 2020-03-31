@@ -1,4 +1,4 @@
 export enum KimPriceOrderType {
-  STANDART = 1,
-  SINGLE_SIPPLIER = 2
+  STANDART = "1",
+  SINGLE_SIPPLIER = "2"
 }

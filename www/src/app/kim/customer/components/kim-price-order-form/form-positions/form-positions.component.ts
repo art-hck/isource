@@ -34,7 +34,7 @@ export class KimPriceOrderFormPositionsComponent implements ControlValueAccessor
       controlId: Guid.create().toString(),
       name: [null, Validators.required],
       okpd2: [null, Validators.required],
-      quantity: [null, [Validators.required, Validators.min(1), Validators.pattern(/\d+/)]],
+      quantity: [null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
       okei: [null, Validators.required],
     });
     form.patchValue(position || {});
