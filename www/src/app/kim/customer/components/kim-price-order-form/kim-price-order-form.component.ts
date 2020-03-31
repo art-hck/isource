@@ -6,6 +6,7 @@ import { KimRequestActions } from "../../actions/kim-price-order.actions";
 import { Uuid } from "../../../../cart/models/uuid";
 import Create = KimRequestActions.Create;
 import Update = KimRequestActions.Update;
+import { KimPriceOrderType } from "../../../common/enum/kim-price-order-type";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -18,13 +19,25 @@ export class KimPriceOrderFormComponent implements OnInit {
   @Output() close = new EventEmitter();
   form: FormGroup;
   readonly formPositions = () => this.form.get('positions') as FormArray;
+  readonly formRegions = () => this.form.get('regions') as FormArray;
 
   constructor(private fb: FormBuilder, private store: Store) { }
 
   ngOnInit() {
     this.form = this.fb.group({
       id: null,
-      name: [null, Validators.required] ,
+      name: ["", Validators.required],
+      regions: this.fb.array([this.fb.control("")], Validators.required),
+      deliveryAddress: ["", Validators.required],
+      deliveryConditions: ["", Validators.required],
+      dateResponse: ["", Validators.required],
+      dateDelivery: ["", Validators.required],
+      type: [KimPriceOrderType.STANDART, Validators.required],
+      forSmallBusiness: false,
+      forProducer: false,
+      forAuthorizedDealer: false,
+      russianProduction: false,
+      denyMaxPricePosition: false,
       positions: this.fb.array((this.kimPriceOrder && this.kimPriceOrder.positions || [null]).map(position => this.getFormPosition(position)), Validators.required)
     });
 

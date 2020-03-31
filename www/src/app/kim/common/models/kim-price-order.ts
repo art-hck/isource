@@ -1,25 +1,23 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
-import { PositionCurrency } from "../../../request/common/enum/position-currency";
+import { KimPriceOrderType } from "../enum/kim-price-order-type";
+import { KimPriceOrderStatus } from "../enum/kim-price-order-status";
+import { KimPriceOrderPosition } from "./kim-price-order-position";
 
 export class KimPriceOrder {
   id: Uuid;
   name: string;
+  regions: string[]; // из ОКАТО
   deliveryAddress: string;
   deliveryConditions: string;
-  dateResponse: string;
-  dateDelivery: string;
+  dateResponse: string; // +3 дня с текущей даты
+  dateDelivery: string; // после dateResponse
   dateCreate: string;
-  expires: string;
-  positions: {
-    name: string
-    proposals?: {
-      contagent: ContragentShortInfo,
-      quantity: number,
-      price: number
-      currency: PositionCurrency,
-      deliveryDate: string,
-      status: "NEW" | "APPROVED" | "REJECTED"
-    }[];
-  }[];
+  type: KimPriceOrderType;
+  status: KimPriceOrderStatus;
+  forSmallBusiness: boolean;
+  forProducer: boolean;
+  forAuthorizedDealer: boolean;
+  russianProduction: boolean;
+  denyMaxPricePosition: boolean;
+  positions: KimPriceOrderPosition[];
 }

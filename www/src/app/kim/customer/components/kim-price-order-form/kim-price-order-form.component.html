@@ -7,12 +7,35 @@
     </button>
   </div>
 
+  <!-- name -->
+  <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('name'), label: 'Имя ценового запроса'}"></ng-container>
 
-  <div class="app-control-wrap">
-    <input #nameRef uxgInput lg formControlName="name"/>
-    <label class="app-control-label" (click)="nameRef.focus()">Имя ценового запроса</label>
-    <div class="app-control-error" *ngIf="form.get('name').errors as e">
-      <span *ngIf="e.required">Обязательное поле</span>
+  <div class="app-row">
+    <div class="app-col">
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: formRegions().controls[0], label: 'Регион'}">
+      </ng-container>
+    </div>
+    <div class="app-col">
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('deliveryAddress'), label: 'Адрес'}">
+      </ng-container>
+    </div>
+  </div>
+  <div class="app-row">
+    <div class="app-col">
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('deliveryConditions'), label: 'Условия оплаты и доставки'}">
+      </ng-container>
+    </div>
+    <div class="app-col">
+      <div class="app-row">
+        <div class="app-col">
+          <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('dateResponse'), label: 'Дата предоставления ответа на запрос'}">
+          </ng-container>
+        </div>
+        <div class="app-col">
+          <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('dateDelivery'), label: 'Предполагаемая дата поставки'}">
+          </ng-container>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -36,3 +59,14 @@
     <button uxgButton secondary type="button" (click)="formPositions().push(getFormPosition())">Добавить позицию</button>
   </div>
 </form>
+
+
+<ng-template #controlInput let-control="control" let-label="label">
+  <div class="app-control-wrap">
+    <input #controlRef uxgInput lg [formControl]="control"/>
+    <label class="app-control-label" (click)="controlRef.focus()">{{label}}</label>
+    <div class="app-control-error" *ngIf="control.errors as e">
+      <span *ngIf="e.required">Обязательное поле</span>
+    </div>
+  </div>
+</ng-template>

@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
-import { RequestDocument } from "../../../common/models/request-document";
+import { RequestDocument } from "../../../request/common/models/request-document";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
-  selector: 'proposal-form-documents',
-  templateUrl: 'proposal-form-documents.component.html',
-  styleUrls: ['proposal-form-documents.component.scss'],
+  selector: 'app-documents-form-control',
+  templateUrl: 'documents-form-control.component.html',
+  styleUrls: ['documents-form-control.component.scss'],
   providers: [
-    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ProposalFormDocumentsComponent), multi: true}
+    {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DocumentsFormControlComponent), multi: true}
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProposalFormDocumentsComponent implements ControlValueAccessor {
+export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() documents: RequestDocument[];
   @Input() files: File[];
   @Input() disabled: boolean;
