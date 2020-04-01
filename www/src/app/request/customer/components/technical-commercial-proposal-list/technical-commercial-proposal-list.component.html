@@ -5,17 +5,17 @@
       <div class="app-row">
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReview [active]="true" >
-            <ng-container *ngIf="(proposalsSentToReview$ | async)?.length as sentToReviewCount">
-              Необходимо рассмотреть ({{sentToReviewCount}})
+            <ng-container *ngIf="(proposalsSentToReview$ | async) as proposalsSentToReview">
+              Необходимо рассмотреть ({{proposalsSentToReview?.length}})
             </ng-container>
           </uxg-tab-title>
           <uxg-tab-title #reviewed>
-            <ng-container *ngIf="(proposalsReviewed$ | async)?.length as reviewedCount">
-              Рассмотренные ({{ reviewedCount }})
+            <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
+              Рассмотренные ({{ proposalsReviewed?.length }})
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
-        <button uxgButton secondary>Фильтр</button>
+        <!-- <button uxgButton secondary>Фильтр</button> -->
       </div>
       <br/>
       <ng-container *uxgTab="sentToReview">
@@ -26,6 +26,14 @@
           [requestId]="requestId"
           [group]="positionProposals">
         </app-request-technical-commercial-proposal>
+
+        <div *ngIf="(proposalsSentToReview$ | async).length === 0">
+          <h1 class="text-center" [style.opacity]="0.1">
+            <br/>
+            <clr-icon shape="app-publish" size="270"></clr-icon><br/>
+            Все технико-коммерческие предложения рассмотрены
+          </h1>
+        </div>
       </ng-container>
 
       <ng-container *uxgTab="reviewed">
@@ -49,9 +57,10 @@
       <span>{{total | number: "1.0-2"}}</span>
       <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
     </h3>
-    <button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
+    <!-- @TODO: Ждем реализацию на бэкенде -->
+    <!--<button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
       Отклонить всё
-    </button>
+    </button>-->
     <button uxgButton primary lg (click)="approveAll()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
       Согласовать всё
     </button>

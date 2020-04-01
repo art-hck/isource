@@ -2,16 +2,16 @@ import { TechnicalCommercialProposal } from "../../common/models/technical-comme
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
 import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { patch } from "@ngxs/store/operators";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
 import { Uuid } from "../../../cart/models/uuid";
+import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
-import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -38,7 +38,7 @@ export class TechnicalCommercialProposalState {
         .filter(proposal => proposal.status === status)
         .reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
           proposal.positions.forEach(proposalPosition => {
-            const item = group.find(_item => _item.position.id === proposalPosition.position.id);
+            const item = group.find(({position}) => position.id === proposalPosition.position.id);
             if (item) {
               item.data.push({ proposal, proposalPosition });
             } else {
@@ -47,6 +47,7 @@ export class TechnicalCommercialProposalState {
           });
           return group;
         }, [])
+        .filter(({data}) => data.every(({proposalPosition}) => proposalPosition.status === "NEW") === (status === "SENT_TO_REVIEW"))
     );
   }
 
@@ -72,6 +73,7 @@ export class TechnicalCommercialProposalState {
   approve(ctx: Context, action: Approve) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.approve(action.requestId, action.proposalPosition).pipe(
+      tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
       finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
     );
   }

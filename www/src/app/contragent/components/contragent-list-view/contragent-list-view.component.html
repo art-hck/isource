@@ -19,7 +19,7 @@
 
     <div class="app-col action">
       <button uxgButton secondary iconText
-              *ngIf="featureService.available('createContragent', userInfoService.roles)"
+              *ngIf="userInfoService.isSeniorBackoffice()"
               (click)="router.navigateByUrl('contragents/create')">
         <clr-icon size="16" shape="app-plus"></clr-icon>
         <span>Новый контрагент</span>
