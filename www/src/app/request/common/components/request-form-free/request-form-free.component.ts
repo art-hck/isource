@@ -53,21 +53,19 @@ export class RequestFormFreeComponent implements OnInit {
           () => {
             this.router.navigateByUrl(`requests/customer/${data.id}`);
             this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
-            });
           });
-      }
-
-checkCanSendRequest(value: any): boolean
-{
-  if (value.documents && value.name) {
-    return !((value.documents.length === 0) || value.name.trim().length === 0);
+      });
   }
-  return false;
-}
 
-onCancel()
-{
-  this.freeFormRequestDataForm.reset();
-  this.cancel.emit();
-}
+  checkCanSendRequest(value: any): boolean {
+    if (value.documents && value.name) {
+      return !((value.documents.length === 0) || value.name.trim().length === 0);
+    }
+    return false;
+  }
+
+  onCancel() {
+    this.freeFormRequestDataForm.reset();
+    this.cancel.emit();
+  }
 }
