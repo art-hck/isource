@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { FreeFormRequestItem } from "../../models/free-form-request-item";
-import { CreateRequestService } from "../../services/create-request.service";
-import { RequestService } from "../../../customer/services/request.service";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { Store } from "@ngxs/store";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {FreeFormRequestItem} from "../../models/free-form-request-item";
+import {CreateRequestService} from "../../services/create-request.service";
+import {RequestService} from "../../../customer/services/request.service";
+import {ToastActions} from "../../../../shared/actions/toast.actions";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-request-form-free',
@@ -47,21 +47,27 @@ export class RequestFormFreeComponent implements OnInit {
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(({id}) => {
-        this.router.navigateByUrl(`requests/customer/${id}`);
-        this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
-      });
-  }
+    return this.createRequestService.addFreeFormRequest(this.requestItem).subscribe(
+      (data: any) => {
+        this.requestService.publishRequest(data.id).subscribe(
+          () => {
+            this.router.navigateByUrl(`requests/customer/${data.id}`);
+            this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
+            });
+          });
+      }
 
-  checkCanSendRequest(value: any): boolean {
-    if (value.documents && value.name) {
-      return !((value.documents.length === 0) || value.name.trim().length === 0);
-    }
-    return false;
+checkCanSendRequest(value: any): boolean
+{
+  if (value.documents && value.name) {
+    return !((value.documents.length === 0) || value.name.trim().length === 0);
   }
+  return false;
+}
 
-  onCancel() {
-    this.freeFormRequestDataForm.reset();
-    this.cancel.emit();
-  }
+onCancel()
+{
+  this.freeFormRequestDataForm.reset();
+  this.cancel.emit();
+}
 }
