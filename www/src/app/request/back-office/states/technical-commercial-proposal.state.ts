@@ -69,6 +69,7 @@ export class TechnicalCommercialProposalState {
 
   @Action(FetchAvailablePositions)
   fetchAvailablePositions({setState}: Context, {requestId}: FetchAvailablePositions) {
+    setState(patch({ availablePositions: null }));
     return this.rest.availablePositions(requestId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
     );
