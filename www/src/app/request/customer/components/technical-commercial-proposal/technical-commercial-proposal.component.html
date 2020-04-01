@@ -71,8 +71,8 @@
           </div>
           <div class="app-col status" *ngIf="isReviewed">
             <clr-icon shape="app-check" [ngClass]="{
-              'app-success-color': proposalPos.status === '???',
-              'app-ghost-color': proposalPos.status !== '???'
+              'app-success-color': proposalPos.status === 'APPROVED',
+              'app-ghost-color': proposalPos.status !== 'APPROVED'
             }"></clr-icon>
           </div>
         </div>
@@ -146,9 +146,10 @@
         Вы можете оклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков
       </div>
       <div>
-        <button uxgButton secondary [disabled]="selectedProposalPosition.disabled" (click)="reject()">
+        <!-- @TODO: Ждем реализацию на бэкенде -->
+        <!--<button uxgButton secondary [disabled]="selectedProposalPosition.disabled" (click)="reject()">
           Отклонить все по позиции
-        </button>
+        </button>-->
         <button uxgButton primary [disabled]="selectedProposalPosition.invalid || selectedProposalPosition.disabled" (click)="approve()">
           Согласовать
         </button>
