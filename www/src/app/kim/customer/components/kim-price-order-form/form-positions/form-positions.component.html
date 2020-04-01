@@ -6,7 +6,28 @@
 
       <div class="app-col app-row app-align-items-center">
         <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('quantity'), label: 'Кол-во', sm: true}"></ng-container>
-        <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('okei'), label: 'Ед. имзм.', sm: true}"></ng-container>
+
+        <div class="app-col app-col-m">
+          <uxg-dropdown-input appSuggestions formControlName="okei" placeholder="Ед. изм."
+                              [$]="okeiList$" [searchFn]="searchOkei" #okei="appSuggestions"
+          >
+            <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+              <div uxgDropdownItem
+                   *ngFor="let suggestion of okeiSuggestions"
+                   [value]="suggestion.code | lowercase"
+                   [attr.title]="suggestion.name | lowercase"
+              >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+            </ng-container>
+            <ng-template #errors>
+              <div class="app-control-error" *ngIf="formGroup.get('okei').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+              </div>
+            </ng-template>
+          </uxg-dropdown-input>
+        </div>
+
+
+<!--        <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('okei'), label: 'Ед. имзм.', sm: true}"></ng-container>-->
         <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('okpd2'), label: 'OКПД2', sm: true}"></ng-container>
         <div><button uxgButton link lg icon type="button" (click)="formArray.removeAt(i)"><clr-icon shape="app-trash"></clr-icon></button>
         </div>

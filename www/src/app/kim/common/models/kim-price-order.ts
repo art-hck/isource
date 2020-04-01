@@ -2,11 +2,12 @@ import { Uuid } from "../../../cart/models/uuid";
 import { KimPriceOrderType } from "../enum/kim-price-order-type";
 import { KimPriceOrderStatus } from "../enum/kim-price-order-status";
 import { KimPriceOrderPosition } from "./kim-price-order-position";
+import { OkatoRegionCode } from "../../../shared/models/okato-region";
 
 export class KimPriceOrder {
   id: Uuid;
   name: string;
-  regions: string[]; // из ОКАТО
+  regions: OkatoRegionCode[]; // из ОКАТО
   deliveryAddress: string;
   deliveryConditions: string;
   dateResponse: string; // +3 дня с текущей даты
