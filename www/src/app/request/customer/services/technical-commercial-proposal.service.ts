@@ -21,11 +21,7 @@ export class TechnicalCommercialProposalService {
   approve(requestId: Uuid, proposalPosition: TechnicalCommercialProposalPosition) {
     const url = `requests/customer/technical-commercial-proposal-positions/${proposalPosition.id}/choose-winner`;
     proposalPosition.status = TechnicalCommercialProposalPositionStatus.APPROVED;
-    return this.api.post<null>(url, { requestPositionId: proposalPosition.position.id }).pipe(
-      switchMap(() => this.list(requestId).pipe(
-        map(proposals => proposals.find(proposal => proposal.id === proposalPosition.proposalId))
-      ))
-    );
+    return this.api.post<TechnicalCommercialProposal>(url, { requestPositionId: proposalPosition.position.id });
   }
 
   reject(requestId: Uuid, position: RequestPosition) {
