@@ -49,7 +49,7 @@ export class TechnicalCommercialProposalState {
           });
           return group;
         }, [])
-        .filter(({data}) => data.every(({proposalPosition}) => proposalPosition.status === "NEW") === (status === "SENT_TO_REVIEW");
+        .filter(({data}) => data.every(({proposalPosition}) => proposalPosition.status === "NEW") === (status === "SENT_TO_REVIEW"))
     );
   }
 
