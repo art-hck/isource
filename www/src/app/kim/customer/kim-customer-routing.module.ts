@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { KimPriceOrderListComponent } from "./components/kim-price-order-list/kim-price-order-list.component";
+import { PriceOrderListComponent } from "./components/price-order-list/price-order-list.component";
 import { Routes } from "../../core/models/routes";
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: "price-orders",
-    component: KimPriceOrderListComponent,
+    component: PriceOrderListComponent,
     data: { title: "Мои ценовые запросы" }
   },
   // {

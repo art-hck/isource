@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
-  templateUrl: './kim-catalog.component.html',
-  styleUrls: ['./kim-catalog.component.scss'],
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KimCatalogComponent implements OnInit {
+export class CartComponent implements OnInit {
 
   constructor() { }
 

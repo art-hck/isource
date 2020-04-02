@@ -1,7 +1,7 @@
 import { KimPriceOrder } from "../../common/models/kim-price-order";
 import { Uuid } from "../../../cart/models/uuid";
 
-export namespace KimRequestActions {
+export namespace PriceOrderActions {
   export class Fetch {
     static readonly type = '[Kim Customer] Fetch';
   }

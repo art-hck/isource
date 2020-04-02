@@ -10,10 +10,10 @@ import { OkatoService } from "../../../../../shared/services/okpd2.service";
   selector: 'app-kim-price-order-form-positions-params',
   templateUrl: './form-positions-params.component.html',
   styleUrls: ['./form-positions-params.component.scss'],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => KimPriceOrderFormPositionsParamsComponent), multi: true }],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PriceOrderFormPositionsParamsComponent), multi: true }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KimPriceOrderFormPositionsParamsComponent implements ControlValueAccessor, AfterViewInit, OnInit {
+export class PriceOrderFormPositionsParamsComponent implements ControlValueAccessor, AfterViewInit, OnInit {
   @Output() cancel = new EventEmitter();
   formArray: FormArray;
   value?: (KimPriceOrderPosition & {controlId: Uuid})[];
@@ -25,8 +25,6 @@ export class KimPriceOrderFormPositionsParamsComponent implements ControlValueAc
   writeValue = (value) => this.value = value;
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
   searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query) >= 0 || item.code === query).slice(0, 20);
-  getOkpd2Name = ({name}: Okpd2Item) => name;
-
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okatoService: OkatoService) {}
 

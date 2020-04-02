@@ -15,13 +15,12 @@
               placeholder="OКПД2"
               [$]="okpd2List$"
               [searchFn]="searchOkpd2"
-              [displayByFn]="getOkpd2Name"
               #okpd2="appSuggestions"
               [strictMode]="true"
               [appControlWrap]="false"
             >
               <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
-                <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.code">{{suggestion.name }}</div>
+                <div uxgDropdownItem [value]="suggestion.code" [attr.title]="suggestion.code">{{suggestion.name }}</div>
               </ng-container>
             </uxg-dropdown-input>
           </div>

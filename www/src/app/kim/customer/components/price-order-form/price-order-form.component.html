@@ -18,11 +18,12 @@
         <uxg-dropdown-input
           lg
           appSuggestions
-          [formControl]="formRegions().at(0)"
+          formControlName="regions"
           placeholder="Регион"
           [$]="regions$"
           [searchFn]="searchRegions"
           [displayByFn]="getRegionName"
+          [transformValueFn]="getRegionCode"
           #regions="appSuggestions"
           [strictMode]="true"
         >
@@ -30,7 +31,7 @@
             <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">{{suggestion.name }}</div>
           </ng-container>
           <ng-template #errors>
-            <div class="app-control-error" *ngIf="formRegions().at(0).errors as e">
+            <div class="app-control-error" *ngIf="form.get('regions').errors as e">
               <span *ngIf="e.required">Обязательное поле</span>
               <span *ngIf="e.notFromList">Выберите регион из списка</span>
             </div>
@@ -54,9 +55,79 @@
       </div>
       <div class="app-col">
         <div class="app-row">
-          <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('dateResponse'), label: 'Дата предоставления ответа на запрос'}"></ng-container>
-          <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('dateDelivery'), label: 'Предполагаемая дата поставки'}"></ng-container>
+
+          <!-- dateResponse -->
+          <div class="app-col" *ngIf="form.get('dateResponse') as dateResponseControl">
+            <div class="app-control-wrap">
+              <input #dateResponse uxgInput lg [formControl]="dateResponseControl">
+              <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
+              <label class="app-control-icon"
+                     (click)="form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
+                <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+              </label>
+              <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
+                <span>Неверная дата</span>
+              </div>
+            </div>
+            <clr-date-container #datepicker class="hidden-datepicker">
+              <input clrDate [formControl]="dateResponseControl" />
+            </clr-date-container>
+          </div>
+
+          <!-- dateDelivery -->
+          <div class="app-col" *ngIf="form.get('dateDelivery') as dateDeliveryControl">
+            <div class="app-control-wrap">
+              <input #dateDelivery uxgInput lg [formControl]="dateDeliveryControl">
+              <label class="app-control-label" (click)="dateDelivery.focus()">Предполагаемая дата поставки</label>
+              <label class="app-control-icon"
+                     (click)="form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
+                <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+              </label>
+              <div class="app-control-error" *ngIf="dateDeliveryControl.errors as e">
+                <span>Неверная дата</span>
+              </div>
+            </div>
+            <clr-date-container #datepicker class="hidden-datepicker">
+              <input clrDate formControlName="dateDelivery" />
+            </clr-date-container>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="section app-row">
+    <div class="app-col">
+      <div class="app-row position-info-item app-ghost-color app-uppercase app-bold">
+        <small class="app-col app-ellipsis">Наименование позиции</small>
+        <small class="app-col-sm app-ellipsis">Количество</small>
+      </div>
+
+      <div><button uxgButton secondary type="button" (click)="addPositionsModal.open()">Добавить позиции</button></div>
+
+      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
+        <div class="app-col app-ellipsis app-bold">{{position.name}}</div>
+        <div class="app-col-sm app-ellipsis">{{position.quantity}} <span class="app-ghost-color">{{position.okei}}</span></div>
+      </div>
+    </div>
+    <div class="app-col">
+      <div class="app-row position-info-item app-uppercase app-ghost-color app-bold">
+        <small class="app-col-sm app-ellipsis">ОКПД2</small>
+        <small class="app-col-m app-ellipsis">Максимальная цена</small>
+        <small class="app-col app-ellipsis">Комментарий</small>
+      </div>
+
+      <div>
+        <button uxgButton secondary type="button"
+                [disabled]="form.get('positions').invalid"
+                (click)="paramsPositionsModal.open()">Заполнить параметры</button>
+      </div>
+      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
+        <div class="app-col-sm app-ellipsis">{{position.okpd2?.code}}</div>
+        <div class="app-col-m app-ellipsis">{{position?.maxPrice | currency: 'RUB' :"symbol":"1.0-2"}}</div>
+        <div class="app-col app-ellipsis">{{position?.comment}}</div>
       </div>
     </div>
   </div>
@@ -101,44 +172,6 @@
     </div>
   </div>
 
-  <hr/>
-
-  <div class="section app-row">
-    <div class="app-col">
-      <div class="app-row position-info-item app-ghost-color app-uppercase app-bold">
-        <small class="app-col app-ellipsis">Наименование позиции</small>
-        <small class="app-col-sm app-ellipsis">Количество</small>
-      </div>
-
-      <div><button uxgButton secondary type="button" (click)="addPositionsModal.open()">Добавить позиции</button></div>
-
-      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
-        <div class="app-col app-ellipsis app-bold">{{position.name}}</div>
-        <div class="app-col-sm app-ellipsis">{{position.quantity}} <span class="app-ghost-color">{{position.okei}}</span></div>
-      </div>
-    </div>
-    <div class="app-col">
-      <div class="app-row position-info-item app-uppercase app-ghost-color app-bold">
-        <small class="app-col-sm app-ellipsis">ОКПД2</small>
-        <small class="app-col-m app-ellipsis">Максимальная цена</small>
-        <small class="app-col app-ellipsis">Комментарий</small>
-      </div>
-
-      <div>
-        <button uxgButton secondary type="button"
-          [disabled]="form.get('positions').invalid"
-          (click)="paramsPositionsModal.open()">Заполнить параметры</button>
-      </div>
-      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
-        <div class="app-col-sm app-ellipsis">{{position.okpd2?.code}}</div>
-        <div class="app-col-m app-ellipsis">{{position?.maxPrice | currency: 'RUB' :"symbol":"1.0-2"}}</div>
-        <div class="app-col app-ellipsis">{{position?.comment}}</div>
-      </div>
-    </div>
-  </div>
-
-  <hr/>
-  <div class="section"><app-documents-form-control [formControl]="filesControl"></app-documents-form-control></div>
 
   <div class="app-row app-justify-content-end app-section">
     <button uxgButton secondary type="button" (click)="close.emit()">Отмена</button>

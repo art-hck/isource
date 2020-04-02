@@ -29,9 +29,11 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   @Input() strictMode = false;
   @Input() warning = false;
   @Input() displayByFn: (val: any) => string;
+  @Input() transformValueFn: (val: any) => any;
 
   public inputValue = null;
   public value = null;
+  public originValue = null;
   public isHidden = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -62,11 +64,14 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
     )
       .subscribe(data => {
         this.isCustomValue = false;
-        this.writeValue(data.value);
-        this.select.emit({ value: data.value, label: data.label });
+        const value = this.transformValueFn && this.transformValueFn(data.value) || data.value;
+        this.originValue = data.value;
+
+        this.writeValue(value);
+        this.select.emit({ value, label: data.label });
 
         if (this.onChange) {
-          this.onChange(data.value);
+          this.onChange(value);
         }
 
         if (this.hideAfterSelect) {

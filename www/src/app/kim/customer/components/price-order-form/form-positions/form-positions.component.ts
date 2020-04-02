@@ -11,10 +11,10 @@ import { OkeiService } from "../../../../../shared/services/okei.service";
   selector: 'app-kim-price-order-form-positions',
   templateUrl: './form-positions.component.html',
   styleUrls: ['./form-positions.component.scss'],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => KimPriceOrderFormPositionsComponent), multi: true }],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PriceOrderFormPositionsComponent), multi: true }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KimPriceOrderFormPositionsComponent implements ControlValueAccessor, AfterViewInit {
+export class PriceOrderFormPositionsComponent implements ControlValueAccessor, AfterViewInit {
   @Output() cancel = new EventEmitter();
   formArray: FormArray;
   value?: (KimPriceOrderPosition & {controlId: Uuid})[];
