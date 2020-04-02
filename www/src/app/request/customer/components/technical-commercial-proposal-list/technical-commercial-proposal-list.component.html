@@ -61,7 +61,7 @@
     <!--<button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
       Отклонить всё
     </button>-->
-    <button uxgButton primary lg (click)="approveAll()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
+    <button uxgButton primary lg (click)="approveMultiple()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
       Согласовать всё
     </button>
   </div>

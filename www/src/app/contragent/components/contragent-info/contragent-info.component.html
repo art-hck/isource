@@ -20,7 +20,7 @@
         <span>{{ contragent.shortName || '—' }}</span>
       </div>
 
-        <div class="clr-col-8 app-section">
+        <div class="clr-col-8 app-section app-ellipsis">
           <div class="app-ghost-color">Полное наименование</div>
           <span>{{ contragent.fullName || '—' }}</span>
         </div>
@@ -85,12 +85,12 @@
           <span>{{ contragent.addresses[0]?.postIndex || '—' }}</span>
         </div>
 
-        <div class="clr-col-4 app-section">
+        <div class="clr-col-4 app-section app-ellipsis">
           <div class="app-ghost-color">Населенный пункт</div>
           <span>{{ contragent.addresses[0]?.locality || '—' }}</span>
         </div>
 
-        <div class="clr-col-4 app-section">
+        <div class="clr-col-4 app-section app-ellipsis">
           <div class="app-ghost-color">Адрес</div>
           <span>{{ contragent.addresses[0]?.address || '—' }}</span>
         </div>
@@ -124,7 +124,7 @@
           <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.name : '—' }}</span>
         </div>
 
-        <div class="clr-col-auto app-section">
+        <div class="clr-col-auto app-section app-ellipsis">
           <div class="app-ghost-color">Адрес банка</div>
           <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.address : '—' }}</span>
         </div>
