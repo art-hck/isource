@@ -1,12 +1,12 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { User } from "../../../user/models/user";
 import { ActivityData } from "./history-activity-data";
-import { PositionHistoryTypes } from "../enum/position-history-types";
-import { RequestPositionWorkflowSteps } from "../enum/request-position-workflow-steps";
+import { PositionHistoryType } from "../enum/position-history-type";
+import { PositionStatus } from "../enum/position-status";
 
 export class History {
   createdDate: string;
-  type: PositionHistoryTypes;
+  type: PositionHistoryType;
   typeLabel: string;
   data: ActivityData;
   documentId?: string;
@@ -14,7 +14,7 @@ export class History {
   requestContractId?: Uuid;
   requestId: Uuid;
   requestOfferPositionId?: Uuid;
-  requestOfferPositionWinnerId?: Uuid;
+  requestPositionWinnerId?: Uuid;
   requestPositionId: Uuid;
   status?: string;
   statusLabel?: string;
@@ -27,6 +27,6 @@ export class History {
   requestPosition?: {
     id: Uuid
     name: string
-    status: RequestPositionWorkflowSteps
+    status: PositionStatus
   };
 }

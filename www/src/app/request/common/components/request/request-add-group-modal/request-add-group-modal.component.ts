@@ -38,7 +38,11 @@ export class RequestAddGroupModalComponent implements OnDestroy {
     this.isLoading = true;
     this.subscription.add(
       this.groupService.saveGroup(this.request.id, this.form.get('name').value).pipe(
-        flatMap(requestGroup => this.groupService.addPositionsInGroup(this.request.id, requestGroup.id, this.positions)),
+        flatMap(requestGroup => this.groupService.addPositionsInGroup(
+          this.request.id,
+          requestGroup.id,
+          this.positions.map(position => position.id)
+        )),
         finalize(() => {
           this.isLoading = false;
           this.form.reset();

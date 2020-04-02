@@ -1,0 +1,196 @@
+<div class="app-bold position-name">{{ position?.name }}</div>
+
+<form class="cp-creation-form" [formGroup]="newCommercialProposalForm" (ngSubmit)="submit()">
+
+  <div class="form-row clr-row">
+    <div class="clr-col-6">
+      <uxg-dropdown-input
+        [formControl]="supplierContragentControl"
+         placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
+        [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+      >
+        <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
+          <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
+              {{ getContragentName(contragent) }}
+              <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
+          </div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="supplierContragentControl.errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
+            <span *ngIf="e.supplierOfferExist">Коммерческое предложение от выбранного поставщика уже добавлено</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
+    </div>
+
+    <div class="clr-col-3">
+      <div class="app-control-wrap">
+        <input #priceWithVat
+               class="hidden-arrows"
+               min="0"
+               type="number"
+               (keypress)="filterEnteredText($event)"
+               uxgInput lg formControlName="priceWithVat"/>
+        <label class="app-control-label" (click)="priceWithVat.focus()">Цена за единицу</label>
+      </div>
+    </div>
+
+    <div class="clr-col">
+      <div class="app-control-wrap">
+        <uxg-dropdown lg class="app-dropdown" formControlName="currency" placeholder="Валюта...">
+          <div uxgDropdownItem value="RUB">Руб.</div>
+          <div uxgDropdownItem value="USD" disabled>Дол.</div>
+          <div uxgDropdownItem value="EUR" disabled>Евр.</div>
+          <div uxgDropdownItem value="CHF" disabled>Фр.</div>
+        </uxg-dropdown>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-row clr-row">
+    <div class="clr-col-6">
+      <div class="clr-row">
+        <div class="clr-col-7">
+          <div class="app-control-wrap">
+            <input #quantity [warning]="quantityValidator() !== null" (keypress)="filterEnteredText($event)"
+                   uxgInput lg formControlName="quantity" />
+            <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+            <div class="app-control-error" *ngIf="quantityValidator()">
+              <span>Меньше необходимого</span>
+            </div>
+            <div class="app-control-error" *ngIf="newCommercialProposalForm.get('quantity').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-5">
+          <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+                              [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #okei="appSuggestions"
+          >
+            <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+              <div uxgDropdownItem
+                   *ngFor="let suggestion of okeiSuggestions"
+                   [value]="suggestion.symbol | lowercase"
+                   [attr.title]="suggestion.name | lowercase"
+              >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+            </ng-container>
+            <ng-template #errors>
+              <div class="app-control-error" *ngIf="newCommercialProposalForm.get('measureUnit').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+              </div>
+            </ng-template>
+          </uxg-dropdown-input>
+        </div>
+      </div>
+    </div>
+
+    <div class="clr-col-3">
+      <div class="app-control-wrap">
+        <input [warning]="deliveryDateValidator() !== null"
+               #deliveryDate uxgInput lg formControlName="deliveryDate">
+        <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
+        <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+          <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+        </label>
+        <div class="app-control-error" *ngIf="deliveryDateValidator()">
+          <span>Позже запрашиваемой даты</span>
+        </div>
+      </div>
+
+      <clr-date-container #datepicker class="hidden-datepicker">
+        <input clrDate formControlName="deliveryDate" />
+      </clr-date-container>
+    </div>
+  </div>
+
+  <div class="form-row clr-row">
+    <div class="clr-col">
+      <div class="app-control-wrap">
+        <uxg-dropdown lg class="app-dropdown" formControlName="paymentTerms" placeholder="Условия оплаты...">
+          <div uxgDropdownItem value="30 дней по факту поставки">
+            30 дней со дня поставки по факту оказания всех услуг
+          </div>
+
+          <div uxgDropdownItem value="60 дней по факту поставки">
+            60 дней со дня поставки по факту оказания всех услуг
+          </div>
+
+          <div uxgDropdownItem value="30 дней по факту поставки">
+            90 дней со дня поставки по факту оказания всех услуг
+          </div>
+        </uxg-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row clr-row">
+    <div class="clr-col-auto">
+      <div class="app-control-wrap">
+        <button type="button" uxgButton secondary appUploadFile (select)="filesSelected($event)" [multiple]="true">Выбрать документы</button>
+      </div>
+    </div>
+
+    <div class="clr-col">
+      <div class="app-control-wrap">
+        <span class="document-description">
+          Прикладываемый/ые документы относятся к полному КП контрагента, и отображаются для всех КП по позициям от этого контрагента.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+
+  <!-- document list -->
+  <ng-container *ngIf="formDocuments.controls.length || defaultCPValue('documents').length">
+    <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
+    <div class="documents">
+      <div class="app-row">
+        <div class="app-col" *ngFor="let document of defaultCPValue('documents')">
+          <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
+        </div>
+        <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
+          <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
+        </div>
+
+        <ng-template #documentRef let-document="document" let-i="i">
+          <document-icon [name]="document.name || document.filename"></document-icon>
+          <div class="documents-title">
+            <div>{{ document.name|| document.filename }}</div>
+            <div *ngIf="document.size > 0" class="app-secondary-color">
+              {{document.size | bytesToSize : 2}}
+            </div>
+          </div>
+          <div class="clr-align-self-start" *ngIf="!newCommercialProposalForm.get('documents').disabled && i >= 0">
+            <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
+              <clr-icon shape="app-trash"></clr-icon>
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <div class="clr-row">
+    <div class="clr-col">
+      <span class="requirement-text">
+        Все поля являются <span class="red-text">обязательными</span> к заполнению! Документы прикладывать не обязательно.
+      </span>
+    </div>
+
+    <div class="clr-col">
+      <div class="app-row clr-justify-content-end">
+        <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
+        <button uxgButton lg primary [disabled]="newCommercialProposalForm.invalid || supplierContragentControl.invalid">
+          {{ editMode ? 'Сохранить' : 'Добавить' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</form>

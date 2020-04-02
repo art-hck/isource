@@ -10,17 +10,17 @@ import { ContragentService } from "../../services/contragent.service";
 export class ContragentInfoComponent {
 
   @Input() contragent: ContragentInfo;
+  @Input() modalView = true;
 
   constructor(
-    protected contragentService: ContragentService
+    private getContragentService: ContragentService
   ) { }
 
   onDownloadPrimaInformReport(): void {
-    this.contragentService.downloadPrimaInformReport(this.contragent);
+    this.getContragentService.downloadPrimaInformReport(this.contragent.id);
   }
 
   getLoaderState() {
-    return this.contragentService.loading;
+    return this.getContragentService.loading;
   }
-
 }

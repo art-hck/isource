@@ -1,0 +1,79 @@
+@import "../../../../../../projects/uxg/src/styles/index";
+
+:host {
+  display: block;
+  animation: host-show 200ms;
+  transform-origin: top;
+}
+
+.app-card {
+  margin-bottom: 24px;
+
+  .app-col:not(:last-child) {
+    padding-right: 24px;
+  }
+}
+
+.positions {
+  padding: 8px 0;
+
+  .app-col {
+    @extend .positions;
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px uxg($theme, color-border) dotted;
+  margin: 14px 0;
+}
+
+small {
+  margin-bottom: 17px;
+  display: block;
+}
+
+.modal-body {
+  overflow: visible;
+}
+
+.select-list {
+  &-positions {
+    max-height: calc(70vh - 186px);
+  }
+
+  &-item {
+    &-title {
+      line-height: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &-quantity {
+      flex-grow: .15; // 15% width
+      max-width: 100px;
+    }
+
+    &-date {
+      max-width: 120px;
+      text-align: right;
+    }
+  }
+}
+
+.dragAndDropArea {
+  margin: 20px 0 10px 0;
+}
+
+@keyframes host-show {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

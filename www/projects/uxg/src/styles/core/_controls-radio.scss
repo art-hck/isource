@@ -66,9 +66,10 @@
   &:disabled {
     cursor: not-allowed;
     & + .app-control-radio {
-      border-color: uxg($theme, color-soft);
       background: uxg($theme, color-control-disabled);
+      border-color: uxg($theme, color-soft);
       cursor: default;
+      transition: none;
 
       &:before {
         display: none;

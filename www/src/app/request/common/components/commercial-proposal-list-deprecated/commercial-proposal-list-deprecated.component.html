@@ -1,0 +1,74 @@
+<div class="cards clr-row" *ngIf="requestPosition.linkedOffers.length !== 0">
+  <ng-container *ngFor="let linkedOffer of requestPosition.linkedOffers">
+
+    <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
+      <div class="card" [class.winner]="linkedOffer.isWinner">
+        <div class="card-header">
+          <app-contragent-info-link [contragent]="linkedOffer.supplierContragent"></app-contragent-info-link>
+          <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
+        </div>
+        <div class="card-block">
+          <div class="clr-row">
+            <div class="clr-col">Цена</div>
+            <div class="clr-col">{{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}</div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">Количество</div>
+            <div class="clr-col">{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">Дата поставки</div>
+            <div class="clr-col">{{linkedOffer.deliveryDate | date :'shortDate'}}</div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">Условия оплаты</div>
+            <div class="clr-col">{{linkedOffer.paymentTerms}}</div>
+          </div>
+          <div class="clr-row" *ngIf="isCustomerView && canChoiceWinner()">
+            <div class="clr-col"></div>
+            <div class="clr-col">
+              <button (click)="onChoiceWinner(linkedOffer)" class="btn btn-sm btn-primary-outline">Выбрать победителя
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-block" *ngIf="linkedOffer.technicalProposals.length > 0 || canUploadTp()">
+          <div class="card-title">Технические предложения</div>
+          <app-document-simple-list
+            [enableUpload]="canUploadTp()"
+            [documents]="linkedOffer.technicalProposals"
+            (selected)="onUploadTechnicalProposals($event, linkedOffer)"
+          ></app-document-simple-list>
+        </div>
+        <div class="card-block" *ngIf="linkedOffer.documents.length > 0 || canUploadKp()">
+          <div class="card-title">Коммерческие предложения</div>
+          <app-document-simple-list
+            [enableUpload]="canUploadKp()"
+            [documents]="linkedOffer.documents"
+            (selected)="onUploadDocuments($event, linkedOffer)"
+          ></app-document-simple-list>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="!requestPosition.linkedOffers || requestPosition.linkedOffers.length === 0">
+  <div class="clr-row no-offers">
+    <p>Коммерческие предложения по позиции отсутствуют</p>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="contragent">
+  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
+    <h3 class="modal-title">{{ contragent.shortName }}</h3>
+
+    <div class="modal-body">
+      <app-contragent-info
+        [contragent]="contragent">
+      </app-contragent-info>
+    </div>
+  </clr-modal>
+</ng-container>
+

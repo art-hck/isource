@@ -1,6 +1,9 @@
 import {Uuid} from "../../../cart/models/uuid";
 import { RequestDocument } from "./request-document";
 import { RequestPosition } from "./request-position";
+import { ContragentList } from "../../../contragent/models/contragent-list";
+import { Contragent } from "../../../core/models/contragent";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 
 export class RequestOfferPosition {
   comments?: string;
@@ -20,6 +23,7 @@ export class RequestOfferPosition {
   requestPositionId?: Uuid;
   supplierContragentId?: Uuid;
   supplierContragentName?: string;
+  supplierContragent?: ContragentShortInfo;
   userId?: Uuid;
   vatPercent: number;
   isMinPrice?: boolean;

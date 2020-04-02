@@ -8,9 +8,19 @@ import { DashboardNotificationComponent } from './components/dashboard-notificat
 import { SharedModule } from "../shared/shared.module";
 import { AgreementsModule } from "../agreements/agreements.module";
 import { DashboardService } from "./services/dashboard.service";
+import { DashboardMapService } from "./services/dashboard-map.service";
+import { DashboardMapDirective } from './directive/dashboard-map.directive';
+import { DashboardMapMarkerDirective } from "./directive/dashboard-map-marker.directive";
 
 @NgModule({
-  declarations: [DashboardComponent, DashboardMapComponent, DashboardStatisticComponent, DashboardNotificationComponent],
+  declarations: [
+    DashboardComponent,
+    DashboardMapComponent,
+    DashboardStatisticComponent,
+    DashboardNotificationComponent,
+    DashboardMapDirective,
+    DashboardMapMarkerDirective,
+  ],
   imports: [
     AgreementsModule,
     SharedModule,
@@ -19,6 +29,7 @@ import { DashboardService } from "./services/dashboard.service";
   ],
   providers: [
     DashboardService,
+    DashboardMapService
   ],
 })
 export class DashboardModule {

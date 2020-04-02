@@ -1,9 +1,0 @@
-<ng-container *ngIf="(contragents$ | async) as contragents">
-  <div #dropdown class="dropdown open" [style.display]="'block'" *ngIf="contragents.length > 0 && isOpen">
-    <div class="dropdown-menu">
-      <div class="dropdown-item" *ngFor="let contragent of contragents;" (click)="select(contragent)">
-        {{ contragent.shortName }}
-      </div>
-    </div>
-  </div>
-</ng-container>

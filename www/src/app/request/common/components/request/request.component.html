@@ -53,6 +53,22 @@
           ></app-request-add-group-modal>
         </div>
 
+        <!-- Переместить в группу -->
+        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
+          <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0" (click)="moveGroupModal.open()">
+            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
+            <span>Переместить</span>
+          </button>
+          <app-request-move-group-modal
+            #moveGroupModal
+            [request]="request"
+            [groups]="groups"
+            [positions]="checkedPositions"
+            (success)="addGroup.emit($event)"
+          ></app-request-move-group-modal>
+        </div>
+
+        <!-- Групповая смена статус -->
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
           <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses()" (click)="changeStatusModal.open()">
@@ -65,15 +81,6 @@
           </div>
           </uxg-popover>
         </div>
-
-        <!-- Переместить в группу -->
-        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('moveRequestGroup', user.roles)">
-          <button uxgButton clear link [disabled]="true">
-            <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
-            <span>Переместить</span>
-          </button>
-        </div>-->
 
         <!-- Отклонить -->
         <!-- TODO Нереализованная фича, временно скрыл кнопку -->
@@ -102,11 +109,6 @@
               <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                 <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
               </div>
-<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Сменить тип процесса</button></div>-->
-<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить ТП</button></div>-->
-<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить КП</button></div>-->
-<!--              <div><button uxgButton clear disabled *ngIf="user.isBackOffice()">Загрузить РКД</button></div>-->
-<!--              <div><button uxgButton clear disabled>Изменить базис</button></div>-->
               <div><button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button></div>
               <div><button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button></div>
             </div>
@@ -157,8 +159,21 @@
         <!-- Позиция -->
         <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
           <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-row app-link-no-color">
-            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
+            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup, editPosition: editPosition }"></div>
           </a>
+          <!-- Модальное окно для редактирования позиции -->
+          <clr-modal #editPosition clrModalSize="lg">
+            <h2 class="modal-title"><b>Редактирование позиции</b></h2>
+            <div class="modal-body" *ngIf="editPosition._open">
+              <app-request-position-form
+                [requestId]="requestId"
+                [position]="position"
+                (cancel)="editPosition.close()"
+                (positionChange)="addPosition.emit($event); editPosition.close()"
+                [onDrafted]="onDrafted"
+              ></app-request-position-form>
+            </div>
+          </clr-modal>
         </ng-container>
 
         <!-- Группа -->
@@ -179,7 +194,7 @@
 </form>
 
 <!-- Шаблон позиции -->
-<ng-template #positionItem let-position="position" let-formGroup="formGroup">
+<ng-template #positionItem let-position="position" let-formGroup="formGroup" let-editPosition="editPosition">
   <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
     <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
@@ -208,6 +223,21 @@
       </uxg-position-status>
     </ng-template>
   </div>
+  <div class="app-col item-actions">
+
+    <ng-container *ngIf="position.nameTemplate && isEditable(position)">
+      <uxg-popover [openOnHover]="true" [hideDelay]="100" >
+        <clr-icon uxgPopoverTrigger shape="app-warning" class="app-warning-color"></clr-icon>
+        <div *uxgPopoverContent="'app-popover-content-top-right'">Скорее всего наименование позиции нуждается в редактировании</div>
+      </uxg-popover>
+
+      <button uxgButton link icon (click)="$event.stopPropagation(); editPosition.open();">
+        <clr-icon shape="app-pen"></clr-icon>
+      </button>
+    </ng-container>
+
+  </div>
+
 </ng-template>
 
 <!-- Шаблон группы -->

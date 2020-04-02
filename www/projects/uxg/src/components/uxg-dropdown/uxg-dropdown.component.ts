@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { flatMap, mergeAll, startWith } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { UxgDropdownItemData } from "./uxg-dropdown-item-data";
+import { UxgDropdownItem } from "./uxg-dropdown-item";
 
 @Component({
   selector: 'uxg-dropdown',
@@ -19,8 +19,10 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
+  @HostBinding('class.app-dropdown-large') get isLarge() { return this.is(this.lg); }
   @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
   @Output() select = new EventEmitter();
+  @Input() lg: boolean | string;
   @Input() hideAfterSelect = true;
   @Input() placeholder = "";
   @Input() disabled: boolean;
@@ -107,7 +109,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
     this.subscription.add(this.items.changes.pipe(
       startWith(this.items),
       flatMap(items => items.map(item => item.onSelect)),
-      mergeAll<UxgDropdownItemData>()
+      mergeAll<UxgDropdownItem>()
     )
       .subscribe(data => {
         this.writeValue(data.value);

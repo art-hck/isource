@@ -21,7 +21,8 @@ $theme: (
    */
   color-control-primary: #2585f5,
   color-control-primary-hover: #1a71d8,
-  color-control-invalid: #EB5757,
+  color-control-invalid: #eb5757,
+  color-control-warning: #ffa10a,
   color-control-disabled: #e8e8e8, // 10% black
   color-control-secondary: #e5e8ef,
   color-control-secondary-hover: #d0d4de,
@@ -88,6 +89,10 @@ $statuses: (
   ACCEPTED: #fb6a9e,
   REVIEW: #fb6a9e,
   DECLINED: #fb6a9e,
+
+  TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION: #EE64E8, // Подготовка ТКП
+  TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT: #EE64E8, // Согласование ТКП
+  TCP_WINNER_SELECTED: #EE64E8, // Выбран победитель ТКП
 
   PROPOSALS_PREPARATION: #f38b00, // Подготовка КП
   // временное решение для истории

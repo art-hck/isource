@@ -1,7 +1,7 @@
 <div class="wrapper">
-  <div #messagesList class="messages-list">
+  <div #scrollContainer class="messages-list">
     <ng-container *ngIf="(messages$ | async) as messages; else loading">
-      <div class="message" [class.sending]="message.isSending" *ngFor="let message of messages">
+      <div #messagesList class="message" [class.sending]="message.isSending" *ngFor="let message of messages">
 
         <div class="message-body"
              [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
@@ -17,7 +17,7 @@
             </app-document-simple-list>
           </div>
 
-          <div class="message-date"> {{ getMessageDate(message.createdDate) }} </div>
+          <div class="message-date"> {{ message.createdDate | humanDate }} </div>
         </div>
       </div>
       <div class="text-center" *ngIf="messages.length === 0">
@@ -34,7 +34,7 @@
 
 
   <div class="new-message">
-    <button appUploadFile (select)="form.get('files').setValue($event)" type="button" class="btn btn-link btn-add-file text-muted">
+    <button appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn btn-link btn-add-file text-muted">
       <clr-icon shape="paperclip" size="32"></clr-icon>
     </button>
 
@@ -56,6 +56,7 @@
         <app-document-upload-list
             [uploadLabel]="''"
             [documents]="form.get('files').value"
+            (fileSelected)="form.get('files').setValue($event)"
         ></app-document-upload-list>
       </div>
     </form>

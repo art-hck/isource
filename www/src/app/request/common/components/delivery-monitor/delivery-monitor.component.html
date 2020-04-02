@@ -3,10 +3,10 @@
 </ng-template>
 
 <ng-container *ngIf="(deliveryMonitorInfo$ | async ) as deliveryMonitorInfo; else loading">
-  <app-good-card
+  <app-request-delivery-monitor-good-card
           [requestPosition]="requestPosition"
           [deliveryMonitorInfo]="deliveryMonitorInfo">
-  </app-good-card>
+  </app-request-delivery-monitor-good-card>
 
   <ng-container *ngIf="deliveryMonitorInfoCanBeShown()">
     <clr-accordion class="delivery-timeline-block" [clrAccordionMultiPanel]="true">
@@ -187,7 +187,7 @@
     </clr-accordion>
   </ng-container>
 
-  <app-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-digital-inspector>
+  <app-request-delivery-monitor-digital-inspector [inspectorStages]="inspectorStages" [position]="requestPosition"></app-request-delivery-monitor-digital-inspector>
 </ng-container>
 
 

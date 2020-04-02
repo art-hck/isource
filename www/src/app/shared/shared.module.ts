@@ -16,16 +16,21 @@ import { ControlInvalidClassDirective } from "./directives/control-invalid-class
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 import { UploadFileDragDirective } from './directives/upload-file-drag.directive';
 import { UxgModule } from "uxg";
-import { ContragentAutocompleteComponent } from './components/contragent-autocomplete/contragent-autocomplete.component';
 import { SelectItemsWithSearchComponent } from "./components/select-items-with-search/select-items-with-search.component";
 import { SplitNumberPipe } from './pipes/split-number.pipe';
-import { OkeiSelectorComponent } from './components/okei-selector/okei-selector.component';
 import { UploadFileDirective } from "./directives/upload-file.directive";
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { TemplateUploadComponent } from './components/template-upload/template-upload.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { RouterModule } from "@angular/router";
 import { PhonePipe } from './pipes/phone.pipe';
+import { SuggestionsDirective } from "./directives/suggestions.directive";
+import { HumanDatePipe } from './pipes/human-date.pipe';
+import { AddFromExcelComponent } from "./components/add-from-excel/add-from-excel.component";
+import { ToastComponent } from './components/toast-list/toast/toast.component';
+import { NgxsModule } from "@ngxs/store";
+import { ToastState } from "./states/toast.state";
+import { ToastListComponent } from "./components/toast-list/toast-list.component";
 
 @NgModule({
   imports: [
@@ -52,14 +57,16 @@ import { PhonePipe } from './pipes/phone.pipe';
       cancelButtonText: 'Отмена',
       width: '16rem',
       reverseButtons: true
-    })
+    }),
+    NgxsModule.forFeature([
+      ToastState
+    ]),
   ],
   declarations: [
     CardComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
-    ContragentAutocompleteComponent,
     PluralizePipe,
     BytesToSizePipe,
     SafeStylePipe,
@@ -69,13 +76,17 @@ import { PhonePipe } from './pipes/phone.pipe';
     UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
-    OkeiSelectorComponent,
     UploadFileDirective,
     TemplateUploadComponent,
     UploadFileDirective,
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    HumanDatePipe,
+    SuggestionsDirective,
+    AddFromExcelComponent,
+    ToastComponent,
+    ToastListComponent
   ],
   exports: [
     CommonModule,
@@ -89,8 +100,6 @@ import { PhonePipe } from './pipes/phone.pipe';
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
-    ContragentAutocompleteComponent,
-    OkeiSelectorComponent,
     TemplateUploadComponent,
 
     PluralizePipe,
@@ -107,6 +116,11 @@ import { PhonePipe } from './pipes/phone.pipe';
     PaginationComponent,
     PieChartComponent,
     PhonePipe,
+    HumanDatePipe,
+    SuggestionsDirective,
+    AddFromExcelComponent,
+    ToastComponent,
+    ToastListComponent
   ]
 })
 export class SharedModule {

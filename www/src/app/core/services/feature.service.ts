@@ -3,7 +3,7 @@ import { GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
 import { APP_CONFIG } from '@stdlib-ng/core';
 import { Feature } from "../models/feature";
 import { UserRole } from "../../user/models/user-role";
-import { FeatureList, IFeatureList } from "../models/feature-list";
+import { FeatureList, IFeatureList } from "../config/feature-list";
 import { UserInfoService } from "../../user/service/user-info.service";
 
 @Injectable()
@@ -43,6 +43,6 @@ export class FeatureService {
   }
 
   authorize(permission: keyof IFeatureList) {
-    this.available(permission, this.user.roles);
+    return this.available(permission, this.user.roles);
   }
 }

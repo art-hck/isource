@@ -8,7 +8,7 @@ export class RequestContract {
   lotId: Uuid;
   requestId: Uuid;
   requestOfferPositionId: Uuid;
-  requestOfferPositionWinnerId: Uuid;
+  requestPositionWinnerId: Uuid;
   requestPositionId: Uuid;
   supplierContragentId: Uuid;
   comments?: string;

@@ -1,12 +1,17 @@
 @import "projects/uxg/src/styles/index";
 
-.legend {
-  display: flex;
-  flex-wrap: nowrap;
+.label-table {
+  border: 0;
   margin-left: 1em;
+  text-align: left;
+  font-weight: 500;
 
-  &-item {
-    width: 40px;
-    font-weight: 500;
+  tr td:first-child {
+    padding-right: 10px;
+  }
+
+  .count-label {
+    text-align: right;
+    white-space: nowrap;
   }
 }

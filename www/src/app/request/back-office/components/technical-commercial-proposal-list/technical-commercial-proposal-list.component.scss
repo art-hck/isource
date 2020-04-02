@@ -1,0 +1,13 @@
+@import "../../../../../../projects/uxg/src/styles/index";
+
+.app-technical-commercial-proposal-list > *:not(:last-child) {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.placeholder {
+  height: 160px;
+  background: #F2F2F2;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}

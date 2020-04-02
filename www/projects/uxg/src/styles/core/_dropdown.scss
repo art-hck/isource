@@ -5,17 +5,24 @@
   display: block;
   flex-direction: column;
   position: relative;
-  z-index: 1;
 
 
-  &-handler, &-items-item {
-    cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+  &-handler, &-items-item, &-items-header {
+    height: uxg($theme, control-height);
+    line-height: uxg($theme, control-height);
     overflow: hidden;
     padding: 0 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &-large &-handler, &-items-item, &-items-header {
+    height: uxg($theme, control-height-l);
+    line-height: uxg($theme, control-height-l);
+  }
+
+  &-handler, &-items-item {
+    cursor: pointer;
   }
 
   &-items-item:hover {

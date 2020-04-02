@@ -1,16 +1,16 @@
-import { PositionInfoFields } from "../enum/position-info-fields";
+import { PositionInfoField } from "../enum/position-info-field";
 
-export const PositionInfoFieldsLabels: {[key: string]: string} = {
-  [PositionInfoFields.CURRENCY]: 'Валюта',
-  [PositionInfoFields.DELIVERY_BASIS]: 'Базис поставки',
-  [PositionInfoFields.DELIVERY_DATE]: 'Дата поставки',
-  [PositionInfoFields.IS_DELIVERY_DATE_ASAP]: 'Срочная поставка',
-  [PositionInfoFields.MEASURE_UNIT]: 'Единица измерения',
-  [PositionInfoFields.NAME]: 'Наименование позиции',
-  [PositionInfoFields.PRODUCTION_DOCUMENT]: 'Документ изготовления',
-  [PositionInfoFields.QUANTITY]: 'Количество',
-  [PositionInfoFields.START_PRICE]: 'Начальная максимальная цена',
-  [PositionInfoFields.RELATED_SERVICES]: 'Необходимость сопутствующих услуг',
-  [PositionInfoFields.COMMENTS]: 'Дополнительные требования',
+export const PositionInfoFieldsLabels: Record<PositionInfoField, string> = {
+  [PositionInfoField.CURRENCY]: 'Валюта',
+  [PositionInfoField.DELIVERY_BASIS]: 'Базис поставки',
+  [PositionInfoField.DELIVERY_DATE]: 'Дата поставки',
+  [PositionInfoField.IS_DELIVERY_DATE_ASAP]: 'Срочная поставка',
+  [PositionInfoField.MEASURE_UNIT]: 'Единица измерения',
+  [PositionInfoField.NAME]: 'Наименование позиции',
+  [PositionInfoField.PRODUCTION_DOCUMENT]: 'Документ изготовления',
+  [PositionInfoField.QUANTITY]: 'Количество',
+  [PositionInfoField.START_PRICE]: 'Начальная максимальная цена',
+  [PositionInfoField.RELATED_SERVICES]: 'Необходимость сопутствующих услуг',
+  [PositionInfoField.COMMENTS]: 'Дополнительные требования',
 };
 

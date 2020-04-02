@@ -1,0 +1,75 @@
+<ng-container *ngIf="(request$ | async) as request; else loading;">
+  <ng-container *ngIf="(requestPositionsWithOffers$ | async) as positionsWithOffers">
+    <app-request-commercial-proposal-list
+      [requestPositions]="positionsWithOffers.positions"
+      [suppliers]="positionsWithOffers.suppliers"
+      [request]="request"
+      (sentForAgreement)="selectedPositions = $event.selectedPositions; confirmToast.open()"
+      (cancelOffer)="onCancelPublishOffers($event)"
+      (addOffer)="showAddOfferModal($event)"
+      (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
+      (editOffer)="showEditOfferModal($event)"
+      (createProcedure)="procedureModal.open()"
+    ></app-request-commercial-proposal-list>
+
+    <clr-modal clrModalSize="lg" #procedureModal>
+      <h2 class="modal-title">Создание новой процедуры</h2>
+      <div class="modal-body" [style.overflow]="'visible'">
+        <app-request-procedure-create
+          *ngIf="procedureModal._open"
+          [request]="request"
+          [positions]="positionsWithOffers.positions"
+          [contragents]="contragents$ | async"
+          [publicAccess]="false"
+          (updateSelectedPositions)="updateContragents($event)"
+          (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
+        ></app-request-procedure-create>
+      </div>
+    </clr-modal>
+  </ng-container>
+
+  <clr-modal
+    #requestCommercialProposalModal
+    class="cp-creation-modal"
+    [(clrModalOpen)]="showForm || showEditForm"
+    [clrModalClosable]="false"
+    [clrModalSize]="'lg'"
+  >
+    <h2 class="modal-title">
+      {{ showForm ? 'Новое коммерческое предложение' : 'Редактирование коммерческого предложения'}}
+    </h2>
+
+    <div class="modal-body">
+      <app-request-commercial-proposal-form
+        *ngIf="requestCommercialProposalModal._open"
+        [position]="currentRequestPosition"
+        [commercialProposal]="selectedLinkedOffer"
+        [editMode]="showEditForm"
+        [request]="request"
+        (create)="addCommercialProposal(); requestCommercialProposalModal.close()"
+        (edit)="editCommercialProposal(); requestCommercialProposalModal.close()"
+        (cancel)="requestCommercialProposalModal.close(); showEditForm = false; showForm = false;">
+      </app-request-commercial-proposal-form>
+    </div>
+  </clr-modal>
+
+</ng-container>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>
+
+<clr-modal #confirmToast>
+  <h2 class="modal-title" *ngIf="!hasProsedure">Отправить на согласование</h2>
+  <h2 class="modal-title" *ngIf="hasProsedure">Процедура сбора коммерческих предложений по позиции ещё не завершена</h2>
+  <div class="modal-body">
+    <p>Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</p>
+    <div class="app-row app-justify-content-end">
+      <button uxgButton secondary lg (click)="confirmToast.close()">Отменить</button>
+      <button uxgButton primary lg (click)="publish(); confirmToast.close()">Да, отправить</button>
+    </div>
+  </div>
+</clr-modal>
+

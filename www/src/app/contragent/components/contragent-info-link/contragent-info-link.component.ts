@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
+import { Observable } from "rxjs";
+import { shareReplay } from "rxjs/operators";
+import { ContragentShortInfo } from "../../models/contragent-short-info";
 
 @Component({
   selector: 'app-contragent-info-link',
@@ -10,51 +13,21 @@ import { ContragentService } from "../../services/contragent.service";
 })
 export class ContragentInfoLinkComponent implements OnInit {
 
-  @Input() contragent: ContragentInfo;
-  @Input() contragentId: Uuid;
-  @Input() contragentName: string;
+  @Input() contragent: ContragentInfo | ContragentShortInfo;
 
-  contragentInfo: ContragentInfo;
-  contragentInfoModalOpened = false;
+  contragentInfo$: Observable<ContragentInfo>;
+  isModalOpened = false;
 
-  constructor(
-    protected getContragentService: ContragentService
-  ) { }
+  constructor(private contragentService: ContragentService) { }
 
   ngOnInit() {
-    if (this.contragent) {
-      this.contragentId = this.contragent.id;
-      this.contragentName = this.contragent.shortName;
-    } else {
-      this.getContragentName(this.contragentId);
-    }
-  }
-
-  getContragentName(contragentId: Uuid) {
-    const subscription = this.getContragentService
-      .getContragentInfo(contragentId)
-      .subscribe(contragentInfo => {
-        this.contragentName = contragentInfo.shortName;
-        subscription.unsubscribe();
-      });
+    this.contragentInfo$ = this.contragentService.getContragentInfo(this.contragent.id)
+      .pipe(shareReplay(1));
   }
 
   showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
     // При клике не даём открыться ссылке из href, вместо этого показываем модальное окно
     event.preventDefault();
-
-    this.contragentInfoModalOpened = true;
-
-    if (!this.contragentInfo || this.contragentId !== contragentId) {
-      this.contragentInfo = null;
-
-      const subscription = this.getContragentService
-        .getContragentInfo(contragentId)
-        .subscribe(contragentInfo => {
-          this.contragentInfo = contragentInfo;
-          subscription.unsubscribe();
-        });
-    }
+    this.isModalOpened = true;
   }
-
 }

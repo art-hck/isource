@@ -1,18 +1,18 @@
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
-import { Observable, of } from "rxjs";
-import { Request } from "../../models/request";
-import { RequestGroup } from "../../models/request-group";
-import { RequestPosition } from "../../models/request-position";
-import { RequestPositionList } from "../../models/request-position-list";
-import { RequestService } from "../../../customer/services/request.service";
-import { Uuid } from "../../../../cart/models/uuid";
-import { UserInfoService } from "../../../../user/service/user-info.service";
-import { FeatureService } from "../../../../core/services/feature.service";
-import { RequestWorkflowSteps } from "../../enum/request-workflow-steps";
-import { RequestPositionWorkflowSteps } from "../../enum/request-position-workflow-steps";
-import { PermissionType } from "../../../../auth/enum/permission-type";
+import {ActivatedRoute, Router, UrlTree} from "@angular/router";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
+import {Observable, of} from "rxjs";
+import {Request} from "../../models/request";
+import {RequestGroup} from "../../models/request-group";
+import {RequestPosition} from "../../models/request-position";
+import {RequestPositionList} from "../../models/request-position-list";
+import {RequestService} from "../../../customer/services/request.service";
+import {Uuid} from "../../../../cart/models/uuid";
+import {UserInfoService} from "../../../../user/service/user-info.service";
+import {FeatureService} from "../../../../core/services/feature.service";
+import {RequestStatus} from "../../enum/request-status";
+import {PositionStatus} from "../../enum/position-status";
+import {PermissionType} from "../../../../auth/enum/permission-type";
 
 @Component({
   selector: 'app-request',
@@ -26,6 +26,7 @@ export class RequestComponent implements OnInit {
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() addGroup = new EventEmitter();
   @Output() addPosition = new EventEmitter();
+  @Output() changeStatus = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
@@ -47,6 +48,10 @@ export class RequestComponent implements OnInit {
     return this.form.get('positions') as FormArray;
   }
 
+  get groups(): RequestGroup[] {
+    return this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
+  }
+
   get formPositionsFlat() {
     return this.formPositions.controls
       .reduce((arr, formGroup) => {
@@ -59,12 +64,12 @@ export class RequestComponent implements OnInit {
   }
 
   get isDraft(): boolean {
-    return this.request.status === RequestWorkflowSteps.DRAFT || this.draftPositions.length > 0;
+    return this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
   }
 
   get draftPositions(): RequestPositionList[] {
     return this.positions.filter(function getRecursive(position) {
-      const isDraft: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.DRAFT;
+      const isDraft: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.DRAFT;
       const isGroupHasDrafts: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
       return isDraft || isGroupHasDrafts;
     });
@@ -72,12 +77,12 @@ export class RequestComponent implements OnInit {
 
   get isOnApproval(): boolean {
     return this.featureService.allowed('approveRequest', this.user.roles) &&
-      (this.request.status === RequestWorkflowSteps.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+      (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
   }
 
   get hasOnApprovalPositions(): RequestPositionList[] {
     return this.positions.filter(function getRecursive(position) {
-      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL;
+      const isOnApproval: boolean = position instanceof RequestPosition &&  position.status === PositionStatus.ON_CUSTOMER_APPROVAL;
       const isGroupHasOnApproval: boolean = position instanceof RequestGroup && position.positions.filter(getRecursive).length > 0;
       return isOnApproval || isGroupHasOnApproval;
     });
@@ -145,11 +150,10 @@ export class RequestComponent implements OnInit {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
-      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== RequestPositionWorkflowSteps.ON_CUSTOMER_APPROVAL ) {
+      if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== PositionStatus.ON_CUSTOMER_APPROVAL ) {
         formGroup.get("checked").disable();
       }
     }
-
 
     return formGroup;
   }
@@ -159,17 +163,20 @@ export class RequestComponent implements OnInit {
   }
 
   canChangeStatuses() {
-    let firstStatus = null;
-    return this.checkedPositions.length && this.checkedPositions.every((item: RequestPosition) => {
-      if (firstStatus === null) {
-        firstStatus = item.status;
-      }
-      return item.status === firstStatus;
-    });
+    return this.checkedPositions.length && this.checkedPositions.every(
+      position => position.status === this.checkedPositions[0].status
+    );
   }
 
   onChangePositionStatuses() {
     // todo после этой эмита обновляются все позиции. Потом переделать на редакс.
-    this.addPosition.emit();
+    this.changeStatus.emit();
+  }
+
+  isEditable(position: RequestPosition) {
+    return position.status === PositionStatus.DRAFT ||
+      position.status === PositionStatus.NEW ||
+      position.status === PositionStatus.ON_CUSTOMER_APPROVAL ||
+      position.status === PositionStatus.TECHNICAL_PROPOSALS_PREPARATION;
   }
 }

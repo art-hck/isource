@@ -21,6 +21,7 @@
               <a [routerLink]="'messages'" routerLinkActive="link-active" class="nav-icon message-icon">
                 <img src="../../../assets/images/messages.svg">
               </a>
+              <app-message-notification></app-message-notification>
             </li>
 
             <li *ngIf="featureService.available('catalog', user.roles)" class="nav-item">

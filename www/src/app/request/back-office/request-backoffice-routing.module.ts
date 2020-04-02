@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RequestListViewComponent } from "./components/request-list-view/request-list-view.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
-import { AddOffersComponent } from "./components/add-offers/add-offers.component";
 
-import { DesignDocumentationComponent } from "../common/components/design-documentation/design-documentation.component";
-import { ContractComponent } from "../common/components/contract/contract.component";
-import { RequestPositionComponent } from "./components/request-position/request-position.component";
-import { RequestTechnicalProposalsComponent } from "./components/request-technical-proposals/request-technical-proposals.component";
-import { RequestCommercialProposalsComponent } from "./components/request-commercial-proposals/request-commercial-proposals.component";
+import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
+import { ContractListComponent } from "../common/components/contract-list/contract-list.component";
+import { PositionComponent } from "./components/position/position.component";
+import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
+import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
+import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: RequestListViewComponent,
+    component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", feature: "backofficeRequest" }
   },
@@ -30,27 +30,32 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
-        component: RequestCommercialProposalsComponent,
+        component: CommercialProposalListComponent,
         data: { title: "Коммерческие предложения" }
       },
       {
         path: 'contracts',
-        component: ContractComponent,
+        component: ContractListComponent,
         data: { title: "Согласование договора" }
       },
       {
         path: 'technical-proposals',
-        component: RequestTechnicalProposalsComponent,
+        component: TechnicalProposalListComponent,
         data: { title: "Технические предложения" }
       },
       {
+        path: 'technical-commercial-proposals',
+        component: TechnicalCommercialProposalListComponent,
+        data: { title: "Технико-коммерческие предложения" }
+      },
+      {
         path: 'design-documentation',
-        component: DesignDocumentationComponent,
+        component: DesignDocumentationListComponent,
         data: { title: "Рабочая конструкторская документация" }
       },
       {
         path: ':position-id',
-        component: RequestPositionComponent
+        component: PositionComponent
       }
     ]
   },

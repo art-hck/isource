@@ -13,13 +13,6 @@ export class GetRequestsService {
   ) {
   }
 
-  /**
-   * @param role
-   * @param startFrom
-   * @param pageSize
-   * @param filters
-   * @param sort
-   */
   getRequests(role, startFrom, pageSize, filters): Observable<Page<RequestsList>> {
     return this.api.post<Page<RequestsList>>(`requests/${role}/list`, {
       startFrom: startFrom,
