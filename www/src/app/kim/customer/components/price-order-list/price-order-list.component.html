@@ -2,9 +2,15 @@
   <div class="app-col">
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
-        <uxg-tab-title #reviewTab [active]="false">Необходимо рассмотреть  <span class="app-ghost-color">(5)</span></uxg-tab-title>
-        <uxg-tab-title #progressTab [active]="true">Запросы а процессе <span class="app-ghost-color">(10)</span></uxg-tab-title>
-        <uxg-tab-title #reviewedTab>Рассмотренные <span class="app-ghost-color">(10)</span></uxg-tab-title>
+        <uxg-tab-title #reviewTab [disabled]="!reviewTabCount" [active]="reviewTabCount > 0">
+          Необходимо рассмотреть  <span class="app-ghost-color" *ngIf="reviewTabCount as cnt">({{cnt}})</span>
+        </uxg-tab-title>
+        <uxg-tab-title #progressTab [active]="reviewTabCount === 0">
+          Запросы а процессе <span class="app-ghost-color" *ngIf="progressTabCount as cnt">({{cnt}})</span>
+        </uxg-tab-title>
+        <uxg-tab-title #reviewedTab [disabled]="!reviewedTabCount">
+          Рассмотренные <span class="app-ghost-color" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
+        </uxg-tab-title>
       </uxg-tabs>
       <button uxgButton primary (click)="progressTab.activate(); showForm = true">Создать ценовой запрос</button>
       <button class="filter-button" uxgButton secondary (click)="showFilter = !showFilter">Фильтр</button>

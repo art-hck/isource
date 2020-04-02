@@ -13,6 +13,9 @@ import Fetch = PriceOrderActions.Fetch;
 export class PriceOrderListComponent implements OnInit {
   showForm = true;
   showFilter = false;
+  reviewTabCount = 0;
+  progressTabCount = 0;
+  reviewedTabCount = 0;
   constructor(private store: Store) { }
 
   ngOnInit() {
