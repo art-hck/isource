@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Uuid} from "../../../cart/models/uuid";
-import {RequestPosition} from "../../common/models/request-position";
-import {HttpClient} from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Uuid } from "../../../cart/models/uuid";
+import { RequestPosition } from "../../common/models/request-position";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class PositionService {
