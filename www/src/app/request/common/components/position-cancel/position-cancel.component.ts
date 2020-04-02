@@ -49,7 +49,7 @@ export class PositionCancelComponent implements OnInit {
       this.positionService.changePositionsStatus(positionIds, newStatus, role, this.form.value).subscribe(() => {
         this.user.isCustomer() ? this.store.dispatch(new CustomerRefreshPositions(this.requestId)) :
           this.store.dispatch(new BackofficeRefreshPositions(this.requestId));
-          new ToastActions.Success(positionIds.length === 1 ? 'Позиция отменена' : 'Позиции отменены');
+        this.store.dispatch(new ToastActions.Success(positionIds.length === 1 ? 'Позиция отменена' : 'Позиции отменены'));
       }, () => {
         this.store.dispatch(new ToastActions.Error(positionIds.length === 1 ? 'Ошибка отмены позиции' : 'Ошибка отмены позиций'));
       });
