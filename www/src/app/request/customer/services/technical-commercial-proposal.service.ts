@@ -20,7 +20,6 @@ export class TechnicalCommercialProposalService {
 
   approve(requestId: Uuid, proposalPosition: TechnicalCommercialProposalPosition) {
     const url = `requests/customer/technical-commercial-proposal-positions/${proposalPosition.id}/choose-winner`;
-    proposalPosition.status = TechnicalCommercialProposalPositionStatus.APPROVED;
     return this.api.post<TechnicalCommercialProposal>(url, { requestPositionId: proposalPosition.position.id });
   }
 
