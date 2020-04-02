@@ -56,9 +56,10 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
-    if (this.cache[requestId]) {
-      return ctx.setState(patch({proposals: this.cache[requestId]}));
-    }
+    // Временно выпилил кеш
+    // if (this.cache[requestId]) {
+    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
+    // }
     ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {

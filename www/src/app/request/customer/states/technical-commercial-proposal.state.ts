@@ -1,6 +1,6 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, tap } from "rxjs/operators";
+import { concatAll, finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -8,9 +8,11 @@ import { TechnicalCommercialProposalService } from "../services/technical-commer
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
 import { Uuid } from "../../../cart/models/uuid";
+import { from } from "rxjs";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
+import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -63,9 +65,10 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
-    if (this.cache[requestId]) {
-      return ctx.setState(patch({proposals: this.cache[requestId]}));
-    }
+    // Временно выпилил кеш
+    // if (this.cache[requestId]) {
+    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
+    // }
     ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
@@ -87,6 +90,16 @@ export class TechnicalCommercialProposalState {
   reject(ctx: Context, action: Reject) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return this.rest.reject(action.requestId, action.position).pipe(
+      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+    );
+  }
+
+  @Action(ApproveMultiple)
+  approveAll(ctx: Context, action: ApproveMultiple) {
+    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    return from(action.proposalPositions.map(pos => this.rest.approve(action.requestId, pos))).pipe(
+      concatAll(),
+      tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
       finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
     );
   }
