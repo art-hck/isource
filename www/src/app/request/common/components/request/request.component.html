@@ -97,7 +97,7 @@
 
         <!-- Отмена позиции заказчиком -->
         <div class="app-colapp-basis-auto clr-flex-grow-0" *ngIf="user.isCustomer()">
-            <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="changeStatusModal.open()">Отменить</button>
+          <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
         </div>
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>

@@ -6,8 +6,11 @@ import {ToastActions} from "../../../../shared/actions/toast.actions";
 import {PositionService} from "../../../back-office/services/position.service";
 import {Store} from "@ngxs/store";
 import {Uuid} from "../../../../cart/models/uuid";
-import {RequestActions} from "../../../back-office/actions/request.actions";
-import RefreshPositions = RequestActions.RefreshPositions;
+import {RequestActions as BackofficeRequestActions} from "../../../back-office/actions/request.actions";
+import BackofficeRefreshPositions = BackofficeRequestActions.RefreshPositions;
+import {RequestActions as CustomerRequestActions} from "../../../customer/actions/request.actions";
+import CustomerRefreshPositions = CustomerRequestActions.RefreshPositions;
+import {UserInfoService} from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-position-cancel',
@@ -26,7 +29,8 @@ export class PositionCancelComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private positionService: PositionService,
-    private store: Store
+    private store: Store,
+    private user: UserInfoService
   ) { }
 
   ngOnInit() {
@@ -34,19 +38,22 @@ export class PositionCancelComponent implements OnInit {
       reason: ['', Validators.required],
       comment: ['']
     });
+    if (this.user.isCustomer()) {
+      this.form.disable();
+    }
   }
 
   submit() {
     const positionIds = this.positions.map(({id}: RequestPosition) => id);
-    this.positionService.changePositionsStatus(positionIds, 'NOT_RELEVANT', this.form.value).subscribe(() => {
-      this.store.dispatch([
-        new RefreshPositions(this.requestId),
-        new ToastActions.Success(positionIds.length === 1 ? 'Позиция отменена' : 'Позиции отменены')
-      ]);
-    }, (error) => {
-      this.store.dispatch(new ToastActions.Error(positionIds.length === 1 ? 'Ошибка отмены позиции' : 'Ошибка отмены позиций'));
-    });
-    this.close.emit();
-    this.form.reset();
-  }
+    const [newStatus, role] = this.user.isCustomer() ? ['CANCELED', 'customer'] : ['NOT_RELEVANT', 'backoffice'];
+      this.positionService.changePositionsStatus(positionIds, newStatus, role, this.form.value).subscribe(() => {
+        this.user.isCustomer() ? this.store.dispatch(new CustomerRefreshPositions(this.requestId)) :
+          this.store.dispatch(new BackofficeRefreshPositions(this.requestId));
+          new ToastActions.Success(positionIds.length === 1 ? 'Позиция отменена' : 'Позиции отменены');
+      }, (error) => {
+        this.store.dispatch(new ToastActions.Error(positionIds.length === 1 ? 'Ошибка отмены позиции' : 'Ошибка отмены позиций'));
+      });
+      this.close.emit();
+      this.form.reset();
+    }
 }

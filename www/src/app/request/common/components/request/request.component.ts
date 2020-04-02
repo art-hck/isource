@@ -160,9 +160,6 @@ export class RequestComponent implements OnChanges {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
-      // if (this.user.isCustomer() && this.asPosition(position) && this.asPosition(position).status !== PositionStatus.ON_CUSTOMER_APPROVAL ) {
-      //   formGroup.get("checked").disable();
-      // }
     }
 
     return formGroup;
