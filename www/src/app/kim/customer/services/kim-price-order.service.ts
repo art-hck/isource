@@ -12,26 +12,3 @@ export class KimPriceOrderService {
     return this.api.post(url, this.formDataService.toFormData(body));
   }
 }
-
-interface Body {
-  name: string;
-  deliveryAddress: string;
-  deliveryConditions: string;
-  quantity?: number;
-  dateResponse?: string;
-  dateDelivery?: string;
-  isForSmallBusiness: boolean;
-  isForProducer: boolean;
-  isForAuthorizedDealer: boolean;
-  isRussianProduction: boolean;
-  isDenyMaxPricePosition: boolean;
-  regions: string;
-  positions: {
-    name: string
-    okpd2: string
-    okei: string
-    quantity: number
-    maxPrice?: number
-    comments?: string
-  }[]
-}

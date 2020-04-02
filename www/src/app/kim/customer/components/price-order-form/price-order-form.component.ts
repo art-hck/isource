@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { Store } from "@ngxs/store";
 import { PriceOrderActions } from "../../actions/price-order.actions";
@@ -10,6 +10,7 @@ import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-
 import { Observable } from "rxjs";
 import { OkatoRegion } from "../../../../shared/models/okato-region";
 import { OkatoService } from "../../../../shared/services/okpd2.service";
+import { PriceOrderFormValidator } from "./price-order-form.validator";
 import Create = PriceOrderActions.Create;
 import Update = PriceOrderActions.Update;
 
@@ -28,7 +29,9 @@ export class PriceOrderFormComponent implements OnInit {
   readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly getRegionName = ({name}) => name;
   readonly getRegionCode = ({code}) => code;
-  readonly searchRegions = (query: string, items: OkatoRegion[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
+  readonly searchRegions = (query: string, items: OkatoRegion[]) => {
+    return items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
+  }
 
   constructor(private fb: FormBuilder, private store: Store, private okatoService: OkatoService) { }
 
@@ -47,7 +50,7 @@ export class PriceOrderFormComponent implements OnInit {
       forAuthorizedDealer: false,
       russianProduction: false,
       denyMaxPricePosition: false,
-      positions: [null, Validators.required]
+      positions: [null, [Validators.required, PriceOrderFormValidator.positions]]
     });
 
     this.form.get('type').disable();

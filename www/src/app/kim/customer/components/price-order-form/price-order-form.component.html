@@ -121,11 +121,11 @@
 
       <div>
         <button uxgButton secondary type="button"
-                [disabled]="form.get('positions').invalid"
+                [disabled]="!form.get('positions').value?.length"
                 (click)="paramsPositionsModal.open()">Заполнить параметры</button>
       </div>
       <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
-        <div class="app-col-sm app-ellipsis">{{position.okpd2?.code}}</div>
+        <div class="app-col-sm app-ellipsis">{{position.okpd2}}</div>
         <div class="app-col-m app-ellipsis">{{position?.maxPrice | currency: 'RUB' :"symbol":"1.0-2"}}</div>
         <div class="app-col app-ellipsis">{{position?.comment}}</div>
       </div>
@@ -181,16 +181,16 @@
 
 <clr-modal clrModalSize="lg" #addPositionsModal>
   <h2 class="modal-title">Добавление позиций к ЦЗ</h2>
-  <div class="modal-body" *ngIf="addPositionsModal._open">
-    <app-kim-price-order-form-positions [formControl]="form.get('positions')" (cancel)="addPositionsModal.close()">
+  <div class="modal-body" *ngIf="addPositionsModal._open" [formGroup]="form">
+    <app-kim-price-order-form-positions formControlName="positions" (cancel)="addPositionsModal.close()">
     </app-kim-price-order-form-positions>
   </div>
 </clr-modal>
 
 <clr-modal clrModalSize="lg" #paramsPositionsModal>
   <h2 class="modal-title">Дополнительная информация о позициях</h2>
-  <div class="modal-body" *ngIf="paramsPositionsModal._open">
-    <app-kim-price-order-form-positions-params [formControl]="form.get('positions')" (cancel)="paramsPositionsModal.close()">
+  <div class="modal-body" *ngIf="paramsPositionsModal._open" [formGroup]="form">
+    <app-kim-price-order-form-positions-params formControlName="positions" (cancel)="paramsPositionsModal.close()">
     </app-kim-price-order-form-positions-params>
   </div>
 </clr-modal>
