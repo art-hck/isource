@@ -98,7 +98,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     document.querySelector('.main-container').append(this.proposalsFooterRef.nativeElement);
   }
 
-  approveAll() {
+  approveMultiple() {
     this.store.dispatch(new ApproveMultiple(
       this.requestId,
       this.proposalsOnReview

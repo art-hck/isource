@@ -95,7 +95,7 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(ApproveMultiple)
-  approveAll(ctx: Context, action: ApproveMultiple) {
+  approveMultiple(ctx: Context, action: ApproveMultiple) {
     ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
     return from(action.proposalPositions.map(pos => this.rest.approve(action.requestId, pos))).pipe(
       concatAll(),
