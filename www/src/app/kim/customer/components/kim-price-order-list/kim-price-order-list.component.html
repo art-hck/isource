@@ -3,7 +3,7 @@
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
         <uxg-tab-title #reviewTab [active]="false">Необходимо рассмотреть  <span class="app-ghost-color">(5)</span></uxg-tab-title>
-        <uxg-tab-title #progressTab [active]="true">Запроссы а процессе <span class="app-ghost-color">(10)</span></uxg-tab-title>
+        <uxg-tab-title #progressTab [active]="true">Запросы а процессе <span class="app-ghost-color">(10)</span></uxg-tab-title>
         <uxg-tab-title #reviewedTab>Рассмотренные <span class="app-ghost-color">(10)</span></uxg-tab-title>
       </uxg-tabs>
       <button uxgButton primary (click)="progressTab.activate(); showForm = true">Создать ценовой запрос</button>

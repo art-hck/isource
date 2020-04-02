@@ -8,7 +8,7 @@
         <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('quantity'), label: 'Кол-во', sm: true}"></ng-container>
 
         <div class="app-col app-col-m">
-          <uxg-dropdown-input appSuggestions formControlName="okei" placeholder="Ед. изм."
+          <uxg-dropdown-input appSuggestions formControlName="okei" placeholder="Ед. измерения"
                               [$]="okeiList$" [searchFn]="searchOkei" #okei="appSuggestions"
           >
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
@@ -25,10 +25,6 @@
             </ng-template>
           </uxg-dropdown-input>
         </div>
-
-
-<!--        <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('okei'), label: 'Ед. имзм.', sm: true}"></ng-container>-->
-        <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('okpd2'), label: 'OКПД2', sm: true}"></ng-container>
         <div><button uxgButton link lg icon type="button" (click)="formArray.removeAt(i)"><clr-icon shape="app-trash"></clr-icon></button>
         </div>
       </div>

@@ -7,7 +7,28 @@
     <div *ngFor="let formGroup of formArray?.controls; index as i">
       <p class="app-bold">{{ value[i]?.name }}</p>
       <div class="app-row section" [formGroup]="asFormGroup(formGroup)">
-        <div class="app-col app-col-m"><input uxgInput placeholder="Максимальная цена" formControlName="maxPrice"/></div>
+        <div class="app-col app-row">
+          <div class="app-col">
+            <uxg-dropdown-input
+              appSuggestions
+              formControlName="okpd2"
+              placeholder="OКПД2"
+              [$]="okpd2List$"
+              [searchFn]="searchOkpd2"
+              [displayByFn]="getOkpd2Name"
+              #okpd2="appSuggestions"
+              [strictMode]="true"
+              [appControlWrap]="false"
+            >
+              <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
+                <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.code">{{suggestion.name }}</div>
+              </ng-container>
+            </uxg-dropdown-input>
+          </div>
+          <div class="app-col">
+            <input uxgInput placeholder="Максимальная цена" formControlName="maxPrice"/>
+          </div>
+        </div>
         <div class="app-col"><input uxgInput placeholder="Комментарий" formControlName="comment"/></div>
       </div>
     </div>

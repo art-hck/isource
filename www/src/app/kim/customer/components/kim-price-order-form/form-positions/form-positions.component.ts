@@ -1,21 +1,5 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  forwardRef,
-  Output
-} from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  NG_VALUE_ACCESSOR,
-  Validators
-} from "@angular/forms";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { KimPriceOrderPosition } from "../../../../common/models/kim-price-order-position";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { Guid } from "guid-typescript";
@@ -58,7 +42,6 @@ export class KimPriceOrderFormPositionsComponent implements ControlValueAccessor
     const form = this.fb.group({
       controlId: Guid.create().toString(),
       name: [null, Validators.required],
-      okpd2: [null, Validators.required],
       quantity: [null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
       okei: [null, Validators.required],
     });

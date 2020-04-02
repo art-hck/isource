@@ -1,8 +1,8 @@
 export class OkatoRegion {
-  id: number;
+  id?: number;
   code: OkatoRegionCode;
   name: string;
-  parentCode: OkatoRegionCode;
+  parentCode?: OkatoRegionCode;
 }
 
 export type OkatoRegionCode = string;
