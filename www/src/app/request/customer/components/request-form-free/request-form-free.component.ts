@@ -5,7 +5,7 @@ import {RequestService } from "../../services/request.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
-import { flatMap } from "rxjs/operators";
+import { flatMap, mapTo } from "rxjs/operators";
 
 @Component({
   selector: 'app-request-form-free',
@@ -47,7 +47,7 @@ export class RequestFormFreeComponent implements OnInit {
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
     return this.requestService.addFreeFormRequest(this.requestItem)
-      .pipe(flatMap(({id}) => this.requestService.publishRequest(id)))
+      .pipe(flatMap((request) => this.requestService.publishRequest(request.id).pipe(mapTo(request))))
       .subscribe(({id}) => {
         this.router.navigateByUrl(`requests/customer/${id}`);
         this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
