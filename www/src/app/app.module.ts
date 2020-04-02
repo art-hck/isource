@@ -29,6 +29,7 @@ import { AgreementsModule } from "./agreements/agreements.module";
 import { MessageModule } from "./message/message.module";
 import { NgxsModule } from "@ngxs/store";
 import { SharedModule } from "./shared/shared.module";
+import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 
 export function startupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
@@ -58,6 +59,7 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     MessageModule,
     SharedModule,
     NgxsModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     WebsocketModule.config({
       url: AppConfig.endpoints.ws
     })

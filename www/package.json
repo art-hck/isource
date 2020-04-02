@@ -54,6 +54,7 @@
     "@angular/compiler-cli": "~8.2.12",
     "@angular/language-service": "~8.2.12",
     "@ngx-prism/core": "^2.0.1",
+    "@ngxs/devtools-plugin": "^3.6.2",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.8",
     "@types/leaflet": "^1.5.8",
