@@ -71,8 +71,8 @@
           </div>
           <div class="app-col status" *ngIf="isReviewed">
             <clr-icon shape="app-check" [ngClass]="{
-              'app-success-color': proposalPos.status === '???',
-              'app-ghost-color': proposalPos.status !== '???'
+              'app-success-color': proposalPos.status === 'APPROVED',
+              'app-ghost-color': proposalPos.status !== 'APPROVED'
             }"></clr-icon>
           </div>
         </div>
@@ -131,28 +131,34 @@
                 <div class="app-error-color" *ngIf="!isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
                 <div class="app-error-color" *ngIf="!isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
               </div>
-              <div>
+              <div *ngIf="!isReviewed">
                 <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
                 <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>
+              </div>
+              <div *ngIf="isReviewed">
+                <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>
               </div>
             </div>
           </div>
         </clr-modal>
       </div>
     </div>
-    <hr/>
-    <div class="app-row" *ngIf="!isReviewed">
-      <div class="app-col">
-        Вы можете оклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков
+    <ng-container *ngIf="!isReviewed">
+      <hr/>
+      <div class="app-row">
+        <div class="app-col">
+          Вы можете оклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков
+        </div>
+        <div>
+          <!-- @TODO: Ждем реализацию на бэкенде -->
+          <!--<button uxgButton secondary [disabled]="selectedProposalPosition.disabled" (click)="reject()">
+            Отклонить все по позиции
+          </button>-->
+          <button uxgButton primary [disabled]="selectedProposalPosition.invalid || selectedProposalPosition.disabled" (click)="approve()">
+            Согласовать
+          </button>
+        </div>
       </div>
-      <div>
-        <button uxgButton secondary [disabled]="selectedProposalPosition.disabled" (click)="reject()">
-          Отклонить все по позиции
-        </button>
-        <button uxgButton primary [disabled]="selectedProposalPosition.invalid || selectedProposalPosition.disabled" (click)="approve()">
-          Согласовать
-        </button>
-      </div>
-    </div>
+    </ng-container>
   </ng-container>
 </div>

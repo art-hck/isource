@@ -73,7 +73,7 @@
           <div class="app-ghost-color" *ngIf="contragent.phone">Телефон контрагента</div>
           <div>{{contragent.phone}}</div>
         </div>
-        <div class="app-section">
+        <div class="app-section" *ngIf="contragent.responsible">
           <div class="app-ghost-color">Ответственный менеджер БО</div>
           <div>{{contragent.responsible.shortName}}</div>
         </div>
