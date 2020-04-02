@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import {Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[appUploadFile][select]'
@@ -8,12 +8,14 @@ export class UploadFileDirective implements OnInit {
   @Input() multiple: boolean;
   inputEl: HTMLInputElement;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnInit() {
     this.inputEl = this.renderer.createElement("input");
     this.inputEl.setAttribute("type", "file");
     this.inputEl.multiple = this.multiple;
+    this.renderer.setStyle(this.inputEl, "display", "none");
+    this.renderer.insertBefore(this.el.nativeElement.parentNode, this.inputEl, this.el.nativeElement);
     this.renderer.listen(this.inputEl, "change", this.onFileSelected);
   }
 
