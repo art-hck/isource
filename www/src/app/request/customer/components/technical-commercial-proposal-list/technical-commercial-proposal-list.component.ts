@@ -19,6 +19,7 @@ import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
+import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -97,10 +98,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     document.querySelector('.main-container').append(this.proposalsFooterRef.nativeElement);
   }
 
-  approveAll() {
-    this.proposalsOnReview
-      .filter(component => component.selectedProposalPosition.valid)
-      .forEach(component => component.approve());
+  approveMultiple() {
+    this.store.dispatch(new ApproveMultiple(
+      this.requestId,
+      this.proposalsOnReview
+        .filter(({selectedProposalPosition}) => selectedProposalPosition.valid)
+        .map(({selectedProposalPosition}) => selectedProposalPosition.value)
+    ));
   }
 
   rejectAll() {
