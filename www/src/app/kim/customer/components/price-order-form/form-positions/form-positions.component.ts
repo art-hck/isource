@@ -26,6 +26,7 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
+  keyOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
   searchOkei = (query, okei: Okei[]) => (q => okei
     .filter(({name, symbol}) => name.toLowerCase().indexOf(q) >= 0 || (symbol && symbol.toLowerCase().indexOf(q) >= 0))
     .slice(0, 5)
@@ -35,7 +36,7 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
 
   ngAfterViewInit() {
     this.formArray = this.fb.array((this.value || [null]).map(p => this.getFormPosition(p)), Validators.required);
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 
   getFormPosition(position?: KimPriceOrderPosition): FormGroup {

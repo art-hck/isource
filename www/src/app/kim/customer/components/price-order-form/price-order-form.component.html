@@ -18,14 +18,13 @@
         <uxg-dropdown-input
           lg
           appSuggestions
+          strictMode
           formControlName="regions"
           placeholder="Регион"
           [$]="regions$"
           [searchFn]="searchRegions"
           [displayByFn]="getRegionName"
-          [transformValueFn]="getRegionCode"
           #regions="appSuggestions"
-          [strictMode]="true"
         >
           <ng-container *ngFor="let suggestion of regions.suggestions$ | async">
             <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">{{suggestion.name }}</div>
@@ -43,6 +42,35 @@
     </div>
 
     <div class="app-row">
+      <div class="app-col app-row">
+
+        <!-- dateResponse -->
+        <div class="app-col" *ngIf="form.get('dateResponse') as dateResponseControl">
+          <div class="app-control-wrap">
+            <input #dateResponse uxgInput lg [formControl]="dateResponseControl">
+            <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
+            <label class="app-control-icon"
+                   (click)="form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
+              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            </label>
+            <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.expired">Не менее трёх рабочих дней с момента создания</span>
+            </div>
+          </div>
+          <clr-date-container #datepicker class="hidden-datepicker">
+            <input clrDate [formControl]="dateResponseControl" />
+          </clr-date-container>
+        </div>
+        <div class="app-col">
+          <div class="app-col app-col-sm">
+            <div class="app-control-wrap">
+              <input #timeControlRef uxgInput lg [formControl]="time" [textMask]="mask"/>
+              <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="app-col">
         <uxg-dropdown-input formControlName="deliveryConditions" placeholder="Условия оплаты и доставки" lg>
           <div uxgDropdownItem *ngFor="let term of paymentTermsLabels" [value]="term[0]">{{ term[1] }}</div>
@@ -53,46 +81,29 @@
           </ng-template>
         </uxg-dropdown-input>
       </div>
-      <div class="app-col">
-        <div class="app-row">
-
-          <!-- dateResponse -->
-          <div class="app-col" *ngIf="form.get('dateResponse') as dateResponseControl">
-            <div class="app-control-wrap">
-              <input #dateResponse uxgInput lg [formControl]="dateResponseControl">
-              <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
-              <label class="app-control-icon"
-                     (click)="form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
-                <clr-icon shape="app-calendar-big" size="24"></clr-icon>
-              </label>
-              <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
-                <span>Неверная дата</span>
-              </div>
-            </div>
-            <clr-date-container #datepicker class="hidden-datepicker">
-              <input clrDate [formControl]="dateResponseControl" />
-            </clr-date-container>
-          </div>
-
-          <!-- dateDelivery -->
-          <div class="app-col" *ngIf="form.get('dateDelivery') as dateDeliveryControl">
-            <div class="app-control-wrap">
-              <input #dateDelivery uxgInput lg [formControl]="dateDeliveryControl">
-              <label class="app-control-label" (click)="dateDelivery.focus()">Предполагаемая дата поставки</label>
-              <label class="app-control-icon"
-                     (click)="form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
-                <clr-icon shape="app-calendar-big" size="24"></clr-icon>
-              </label>
-              <div class="app-control-error" *ngIf="dateDeliveryControl.errors as e">
-                <span>Неверная дата</span>
-              </div>
-            </div>
-            <clr-date-container #datepicker class="hidden-datepicker">
-              <input clrDate formControlName="dateDelivery" />
-            </clr-date-container>
+    </div>
+    <div class="app-row">
+      <!-- dateDelivery -->
+      <div class="app-col" *ngIf="form.get('dateDelivery') as dateDeliveryControl">
+        <div class="app-control-wrap">
+          <input #dateDelivery uxgInput lg [formControl]="dateDeliveryControl" appKimDateIsAfter="dateResponse">
+          <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
+          <label class="app-control-icon"
+                 (click)="form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
+            <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+          </label>
+          <div class="app-control-error" *ngIf="dateDeliveryControl.errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.expired">Не может быть раньше даты предоставления ответа</span>
           </div>
         </div>
+        <clr-date-container #datepicker class="hidden-datepicker">
+          <input clrDate formControlName="dateDelivery" />
+        </clr-date-container>
       </div>
+      <div class="app-col"></div>
+      <div class="app-col"></div>
+      <div class="app-col"></div>
     </div>
   </div>
 
@@ -145,26 +156,26 @@
       <div class="app-row">
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forAuthorizedDealer></uxg-checkbox>
+            <uxg-checkbox class="app-control" #forAuthorizedDealer formControlName="forAuthorizedDealer"></uxg-checkbox>
             <label (click)="forAuthorizedDealer.check($event)">Официальный дилер</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #russianProduction></uxg-checkbox>
+            <uxg-checkbox class="app-control" #russianProduction formControlName="russianProduction"></uxg-checkbox>
             <label (click)="russianProduction.check($event)">Российское производство</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #denyMaxPricePosition></uxg-checkbox>
+            <uxg-checkbox class="app-control" #denyMaxPricePosition formControlName="denyMaxPricePosition"></uxg-checkbox>
             <label (click)="denyMaxPricePosition.check($event)">Запрет превышения цены</label>
           </p>
         </div>
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forSmallBusiness></uxg-checkbox>
+            <uxg-checkbox class="app-control" #forSmallBusiness formControlName="forSmallBusiness"></uxg-checkbox>
             <label (click)="forSmallBusiness.check($event)">Малый бизнес</label>
           </p>
 
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forProducer></uxg-checkbox>
+            <uxg-checkbox class="app-control" #forProducer formControlName="forProducer"></uxg-checkbox>
             <label (click)="forProducer.check($event)">Производитель</label>
           </p>
         </div>

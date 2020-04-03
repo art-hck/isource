@@ -32,6 +32,7 @@ import { NgxsModule } from "@ngxs/store";
 import { ToastState } from "./states/toast.state";
 import { ToastListComponent } from "./components/toast-list/toast-list.component";
 import { DocumentsFormControlComponent } from "./components/documents-form-control/documents-form-control.component";
+import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directive";
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { DocumentsFormControlComponent } from "./components/documents-form-contr
     AddFromExcelComponent,
     ToastComponent,
     ToastListComponent,
-    DocumentsFormControlComponent
+    DocumentsFormControlComponent,
+    AppDateIsAfterDirective,
   ],
   exports: [
     CommonModule,
@@ -123,7 +125,8 @@ import { DocumentsFormControlComponent } from "./components/documents-form-contr
     SuggestionsDirective,
     AddFromExcelComponent,
     ToastComponent,
-    ToastListComponent
+    ToastListComponent,
+    AppDateIsAfterDirective,
   ]
 })
 export class SharedModule {

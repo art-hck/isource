@@ -34,7 +34,7 @@ export class PriceOrderFormPositionsParamsComponent implements ControlValueAcces
 
   ngAfterViewInit() {
     this.formArray = this.fb.array((this.value || [null]).map(p => this.getFormPosition(p)));
-    this.cd.markForCheck();
+    this.cd.detectChanges();
   }
 
   getFormPosition(position?: KimPriceOrderPosition): FormGroup {

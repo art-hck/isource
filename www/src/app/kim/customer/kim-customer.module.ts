@@ -10,6 +10,7 @@ import { KimPriceOrderService } from "./services/kim-price-order.service";
 import { KimCustomerRoutingModule } from "./kim-customer-routing.module";
 import { PriceOrderFormPositionsComponent } from './components/price-order-form/form-positions/form-positions.component';
 import { PriceOrderFormPositionsParamsComponent } from './components/price-order-form/form-positions-params/form-positions-params.component';
+import { TextMaskModule } from "angular2-text-mask";
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { PriceOrderFormPositionsParamsComponent } from './components/price-order
     KimCustomerRoutingModule,
     NgxsModule.forFeature([
       PriceOrderState
-    ])
+    ]),
+    TextMaskModule
   ]
 })
 export class KimCustomerModule { }

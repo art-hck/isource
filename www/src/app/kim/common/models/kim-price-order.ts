@@ -7,11 +7,11 @@ import { OkatoRegionCode } from "../../../shared/models/okato-region";
 export class KimPriceOrder {
   id: Uuid;
   name: string;
-  regions: OkatoRegionCode[]; // из ОКАТО
+  regions: OkatoRegionCode;
   deliveryAddress: string;
   deliveryConditions: string;
-  dateResponse: string; // +3 дня с текущей даты
-  dateDelivery: string; // после dateResponse
+  dateResponse: string;
+  dateDelivery: string;
   dateCreate: string;
   type: KimPriceOrderType;
   status: KimPriceOrderStatus;
