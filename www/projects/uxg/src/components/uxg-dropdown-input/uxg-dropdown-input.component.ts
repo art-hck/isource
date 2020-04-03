@@ -1,10 +1,10 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit, Output, QueryList, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
 import { flatMap, mergeAll, startWith, takeUntil, tap } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { UxgDropdownItemDirective } from "../uxg-dropdown/uxg-dropdown-item.directive";
 import { UxgDropdownItem } from "../uxg-dropdown/uxg-dropdown-item";
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: 'uxg-dropdown-input',
@@ -21,6 +21,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   @HostBinding('class.app-control-wrap') @Input() appControlWrap = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
   @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
+  @ViewChild('inputRef', { static: false }) inputRef: ElementRef;
   @Output() select = new EventEmitter();
   @Output() focus = new EventEmitter();
   @Input() hideAfterSelect = true;
@@ -30,14 +31,63 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   @Input() strictMode = false;
   @Input() warning = false;
   @Input() displayByFn: (value) => string;
+  @Input() direction: "up" | "down";
 
   public inputValue = null;
   public value = null;
-  public isHidden = true;
+  private _isHidden = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public isNotFromList = false;
   public destroy$ = new Subject();
+
+  private get focusedIndex() {
+    return this.items.toArray().findIndex(item => item.isFocus);
+  }
+
+  get coords() {
+    return this.inputRef.nativeElement.getBoundingClientRect();
+  }
+
+  get windowHeight() {
+    return isPlatformBrowser(this.platformId) ? window.innerHeight : 0;
+  }
+
+  get scrollTop() {
+    return isPlatformBrowser(this.platformId) ? window.pageYOffset : null;
+  }
+
+  get isDirectionUp() {
+    if (this.itemsWrapper) {
+      return this.direction === "up" || this.windowHeight < this.coords.bottom + this.itemsWrapper.offsetHeight;
+    }
+  }
+
+  get itemsWrapper(): HTMLDivElement | null {
+    return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
+  }
+
+  get isHidden(): boolean {
+    return this._isHidden;
+  }
+
+  set isHidden(value: boolean) {
+    if (isPlatformBrowser(this.platformId)) {
+      if (value) {
+        window.removeEventListener('scroll', this.updatePositionOnScroll, true);
+      } else {
+        window.addEventListener('scroll', this.updatePositionOnScroll, true);
+      }
+    }
+    this._isHidden = value;
+  }
+
+  private keysActions: Record<KeyboardEvent["key"], () => void> = {
+    'Enter': () => this.focusedIndex !== -1 && this.items.toArray()[this.focusedIndex].click(),
+    'Escape': () => this.toggle(false),
+    'ArrowDown': () => this.focusedIndex < this.items.length - 1 && this.items.toArray()[this.focusedIndex + 1].focus(),
+    'ArrowUp': () => this.focusedIndex > 0 && this.items.toArray()[this.focusedIndex - 1].focus()
+  };
 
   registerOnChange = fn => this.onChange = fn;
   registerOnTouched = fn => this.onTouched = fn;
@@ -50,12 +100,23 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
     }
   }
 
-  get itemsWrapper(): HTMLDivElement | null {
-    return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
+  keyDown = (e: KeyboardEvent) => {
+    if (!this.isHidden && this.isInside(e.target) && this.keysActions[e.key]) {
+      e.preventDefault();
+      this.ngZone.run(() => this.keysActions[e.key]());
+      this.cd.detectChanges();
+    }
+  }
+
+  updatePositionOnScroll = (e) => {
+    if (!this.isHidden && !this.isInside(e.target)) {
+      this.setPosition(this.itemsWrapper, this.isDirectionUp);
+    }
   }
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>,
     private renderer: Renderer2,
     private ngZone: NgZone,
     private cd: ChangeDetectorRef,
@@ -63,13 +124,17 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
+    this.ngZone.runOutsideAngular(() => this.document.addEventListener('keydown', this.keyDown));
   }
 
+
   ngAfterViewChecked() {
-    this.renderer.setStyle(this.itemsWrapper, 'width', this.el.nativeElement.offsetWidth + "px");
+    this.setPosition(this.itemsWrapper, this.isDirectionUp);
   }
 
   ngAfterViewInit() {
+    this.document.body.appendChild(this.itemsWrapper);
+
     this.items.changes.pipe(
       startWith(this.items),
       tap((items) => this.toggle(this.value && items.length > 0)),
@@ -85,6 +150,13 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
         if (this.hideAfterSelect) { this.toggle(false); }
       });
 
+    this.items.changes.pipe(
+      startWith(this.items),
+      flatMap(items => items.map((item: UxgDropdownItemDirective) => item.onFocus)),
+      mergeAll<UxgDropdownItem>(),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.items.forEach(({blur}) => blur()));
+
     this.focus.pipe(takeUntil(this.destroy$)).subscribe(value => this.toggle(this.items.length > 0));
   }
 
@@ -97,6 +169,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
   input(e: Event) {
     const value = (e.target as HTMLInputElement).value;
     this.isNotFromList = true;
+    this.items.forEach(({blur}) => blur());
     this.writeValue(value);
 
     if (this.onChange) {
@@ -110,6 +183,21 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
     return this.el.nativeElement.contains(targetElement) || this.itemsWrapper.contains(targetElement);
   }
 
+  private setPosition(el, isDirectionUp: boolean = false): void {
+    if (isDirectionUp) {
+      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.scrollTop - this.coords.bottom + this.inputRef.nativeElement.offsetHeight - 2) + "px");
+      this.renderer.removeStyle(el, 'top');
+    } else {
+      this.renderer.setStyle(el, 'top', (this.coords.top + this.scrollTop + this.inputRef.nativeElement.offsetHeight - 1) + "px");
+      this.renderer.removeStyle(el, 'bottom');
+    }
+
+    this.renderer.setStyle(el, 'width', this.inputRef.nativeElement.offsetWidth + "px");
+    this.renderer.setStyle(el, 'left', this.coords.left + "px");
+
+    this.cd.detectChanges();
+  }
+
   validate(control: AbstractControl): ValidationErrors | null {
     if (this.strictMode !== false && this.isNotFromList && control.value) {
       return {"notFromList": true};
@@ -118,6 +206,11 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnDestroy() {
     this.document.removeEventListener('click', this.clickOut);
+    this.document.removeEventListener('keydown', this.keyDown);
+    if (isPlatformBrowser(this.platformId)) {
+      this.itemsWrapper.remove();
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }

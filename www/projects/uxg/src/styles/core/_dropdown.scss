@@ -25,7 +25,7 @@
     cursor: pointer;
   }
 
-  &-items-item:hover {
+  &-items-item:hover, &-items-item.focus {
     background: uxg($theme, color-list-hover);
   }
 
