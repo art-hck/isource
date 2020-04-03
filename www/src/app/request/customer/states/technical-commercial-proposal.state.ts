@@ -37,7 +37,6 @@ export class TechnicalCommercialProposalState {
     return createSelector(
       [TechnicalCommercialProposalState],
       ({proposals}: Model) => proposals
-        .filter(proposal => proposal.status === status)
         .reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
           proposal.positions.forEach(proposalPosition => {
             const item = group.find(({position}) => position.id === proposalPosition.position.id);

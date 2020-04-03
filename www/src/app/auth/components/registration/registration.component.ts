@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
-import Swal from "sweetalert2";
 import { filter, finalize, tap } from "rxjs/operators";
 import { ClrModal } from "@clr/angular";
 import { RegistrationRequest } from "../../models/registration-request";
