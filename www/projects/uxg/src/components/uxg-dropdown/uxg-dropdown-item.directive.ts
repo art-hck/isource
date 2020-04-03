@@ -26,10 +26,14 @@ export class UxgDropdownItemDirective {
     this.cd.detectChanges();
   }
 
+  get label(): string | null {
+    return this.el.nativeElement.innerText || null;
+  }
+
   @HostListener('click')
   click() {
     if (this.disabled === false) {
-      this.onSelect.emit({value: this.value, label: this.el.nativeElement.innerText || null});
+      this.onSelect.emit({value: this.value, label: this.label});
     }
   }
 }
