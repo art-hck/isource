@@ -2,15 +2,15 @@
   <div class="app-secondary-color">Добавьте все необходимые позиции, по которым вы хотите создать ценовой запрос</div>
   <div *ngFor="let formGroup of formArray?.controls; index as i" >
     <div class="app-row" [formGroup]="asFormGroup(formGroup)">
-      <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('name'), label: 'Имя позиции', sm: true}"></ng-container>
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('name'), label: 'Наименование МТР', sm: true}"></ng-container>
 
       <div class="app-col app-row app-align-items-center">
         <ng-container *ngTemplateOutlet="controlInput; context: {control: formGroup.get('quantity'), label: 'Кол-во', sm: true}"></ng-container>
 
         <div class="app-col app-col-m">
           <uxg-dropdown-input appSuggestions strictMode formControlName="okei" placeholder="Ед. измерения"
-                              [$]="okeiList$" [searchFn]="searchOkei" #okei="appSuggestions"
-                              [displayByFn]="keyOkeiSymbol"
+                              [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions"
+                              [displayByFn]="getOkeiSymbol"
           >
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
               <div uxgDropdownItem
