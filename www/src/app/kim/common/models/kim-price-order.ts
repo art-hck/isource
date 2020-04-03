@@ -6,6 +6,7 @@ import { OkatoRegionCode } from "../../../shared/models/okato-region";
 
 export class KimPriceOrder {
   id: Uuid;
+  nsiId: number;
   name: string;
   regions: OkatoRegionCode;
   deliveryAddress: string;
