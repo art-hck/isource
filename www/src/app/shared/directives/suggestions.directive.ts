@@ -24,7 +24,7 @@ export class SuggestionsDirective implements OnInit {
           this.dropdownInputComponent.toggle(false);
         }
       }),
-      filter(value => value.length >= this.minLength && this.dropdownInputComponent.isCustomValue),
+      filter(value => value.length >= this.minLength && this.dropdownInputComponent.isNotFromList),
       flatMap(value => this.$.pipe(map(data => this.searchFn && this.searchFn(value, data)))),
       tap(() => this.dropdownInputComponent.toggle(true))
     );

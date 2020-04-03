@@ -1,9 +1,6 @@
 export class Okpd2Item {
+  id?: number;
   code: string;
-  id: number;
-  leaf: boolean;
   name: string;
-  nds_percent: string;
-  parent_code: string;
-  path: string;
+  parent_code?: string;
 }

@@ -74,7 +74,7 @@ export class TechnicalCommercialProposalState {
         status: "received" as StateStatus
       }))),
       mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
-  );
+    );
   }
 
   @Action(Update)

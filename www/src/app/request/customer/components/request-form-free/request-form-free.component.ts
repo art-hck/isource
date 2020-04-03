@@ -46,9 +46,9 @@ export class RequestFormFreeComponent implements OnInit {
 
   onSendFreeFormRequest() {
     this.requestItem = this.freeFormRequestDataForm.value;
-    return this.requestService.addFreeFormRequest(this.requestItem).pipe(
-      flatMap((data) => this.requestService.publishRequest(data.id).pipe(mapTo(data)))
-    ).subscribe(({id}) => {
+    return this.requestService.addFreeFormRequest(this.requestItem)
+      .pipe(flatMap((request) => this.requestService.publishRequest(request.id).pipe(mapTo(request))))
+      .subscribe(({id}) => {
         this.router.navigateByUrl(`requests/customer/${id}`);
         this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
       });

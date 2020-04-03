@@ -8,8 +8,8 @@ import { TechnicalCommercialProposalService } from "../services/technical-commer
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
 import { Uuid } from "../../../cart/models/uuid";
-import { from } from "rxjs";
 import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
+import { from } from "rxjs";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
@@ -17,7 +17,7 @@ import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
-  proposalsStateStatus: StateStatus;
+  status: StateStatus;
 }
 
 type Model = TechnicalCommercialProposalStateModel;
@@ -25,7 +25,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerTechnicalCommercialProposals',
-  defaults: { proposals: null, proposalsStateStatus: "pristine" }
+  defaults: { proposals: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
@@ -40,7 +40,7 @@ export class TechnicalCommercialProposalState {
         .filter(proposal => proposal.status === status)
         .reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
           proposal.positions.forEach(proposalPosition => {
-            const item = group.find(_item => _item.position.id === proposalPosition.position.id);
+            const item = group.find(({position}) => position.id === proposalPosition.position.id);
             if (item) {
               item.data.push({ proposal, proposalPosition });
             } else {
@@ -54,9 +54,7 @@ export class TechnicalCommercialProposalState {
   }
 
   @Selector()
-  static status({ proposalsStateStatus }: Model) {
-    return proposalsStateStatus;
-  }
+  static status({ status }: Model) { return status; }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
@@ -64,38 +62,38 @@ export class TechnicalCommercialProposalState {
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
-    ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
+    ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
-        ctx.setState(patch({ proposals, proposalsStateStatus: "received" as StateStatus }));
+        ctx.setState(patch({ proposals, status: "received" as StateStatus }));
         this.cache[requestId] = proposals;
       }));
   }
 
   @Action(Approve)
   approve(ctx: Context, action: Approve) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.approve(action.requestId, action.proposalPosition).pipe(
       tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
     );
   }
 
   @Action(Reject)
   reject(ctx: Context, action: Reject) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.reject(action.requestId, action.position).pipe(
-      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
     );
   }
 
   @Action(ApproveMultiple)
   approveMultiple(ctx: Context, action: ApproveMultiple) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return from(action.proposalPositions.map(pos => this.rest.approve(action.requestId, pos))).pipe(
       concatAll(),
       tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => ctx.setState(patch({ proposalsStateStatus: "received" as StateStatus })))
+      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
     );
   }
 }

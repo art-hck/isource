@@ -1,9 +1,10 @@
-import { AfterViewChecked, AfterViewInit, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, OnDestroy, Output, QueryList, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit, Output, QueryList, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { flatMap, mergeAll, startWith, tap } from "rxjs/operators";
-import { Subscription } from "rxjs";
+import { flatMap, mergeAll, startWith, takeUntil, tap } from "rxjs/operators";
+import { Subject } from "rxjs";
 import { UxgDropdownItemDirective } from "../uxg-dropdown/uxg-dropdown-item.directive";
 import { UxgDropdownItem } from "../uxg-dropdown/uxg-dropdown-item";
+import { DOCUMENT } from "@angular/common";
 
 @Component({
   selector: 'uxg-dropdown-input',
@@ -13,7 +14,7 @@ import { UxgDropdownItem } from "../uxg-dropdown/uxg-dropdown-item";
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => UxgDropdownInputComponent), multi: true }
   ]
 })
-export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, AfterViewChecked, ControlValueAccessor, Validator {
+export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked, ControlValueAccessor, Validator {
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
   @ContentChild('errors', {static: false, read: TemplateRef }) errors: TemplateRef<ElementRef>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
@@ -28,63 +29,63 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   @Input() disabled: boolean;
   @Input() strictMode = false;
   @Input() warning = false;
-  @Input() displayByFn: (val: any) => string;
+  @Input() displayByFn: (value) => string;
 
   public inputValue = null;
   public value = null;
   public isHidden = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;
-  public subscription = new Subscription();
-  public isCustomValue = false;
+  public isNotFromList = false;
+  public destroy$ = new Subject();
+
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  setDisabledState = isDisabled => this.disabled = isDisabled;
+  writeValue = value => this.value = value;
+  clickOut = (e: Event) => {
+    if (!this.isHidden && !this.isInside(e.target)) {
+      this.ngZone.run(() => this.toggle(false));
+      this.cd.detectChanges();
+    }
+  }
 
   get itemsWrapper(): HTMLDivElement | null {
     return this.itemsWrapperRef ? this.itemsWrapperRef.nativeElement : null;
   }
 
-  constructor(private renderer: Renderer2, public el: ElementRef) {}
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private renderer: Renderer2,
+    private ngZone: NgZone,
+    private cd: ChangeDetectorRef,
+    public el: ElementRef) {}
 
-  registerOnChange = (fn: any) => this.onChange = fn;
-  registerOnTouched = (fn: any) => this.onTouched = fn;
-  setDisabledState = (isDisabled: boolean) => this.disabled = isDisabled;
-  writeValue = (value: any) => this.value = value;
+  ngOnInit() {
+    this.ngZone.runOutsideAngular(() => this.document.addEventListener('click', this.clickOut));
+  }
 
   ngAfterViewChecked() {
     this.renderer.setStyle(this.itemsWrapper, 'width', this.el.nativeElement.offsetWidth + "px");
   }
 
   ngAfterViewInit() {
-    this.subscription.add(this.items.changes.pipe(
+    this.items.changes.pipe(
       startWith(this.items),
-      tap((items) => this.toggle(items.length > 0)),
+      tap((items) => this.toggle(this.value && items.length > 0)),
       flatMap(items => items.map(item => item.onSelect)),
-      mergeAll<UxgDropdownItem>()
+      mergeAll<UxgDropdownItem>(),
+      takeUntil(this.destroy$)
     )
-      .subscribe(data => {
-        this.isCustomValue = false;
-        this.writeValue(data.value);
-        this.select.emit({ value: data.value, label: data.label });
+      .subscribe(({label, value}) => {
+        this.isNotFromList = false;
+        this.writeValue(value);
+        this.select.emit({ value, label });
+        if (this.onChange) { this.onChange(value); }
+        if (this.hideAfterSelect) { this.toggle(false); }
+      });
 
-        if (this.onChange) {
-          this.onChange(data.value);
-        }
-
-        if (this.hideAfterSelect) {
-          this.toggle(false);
-        }
-      })
-    );
-
-    this.subscription.add(
-      this.focus.subscribe(value => this.toggle(this.items.length > 0))
-    );
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  clickOut(targetElement) {
-    if (!this.isHidden && !this.isInside(targetElement)) {
-      this.toggle(false);
-    }
+    this.focus.pipe(takeUntil(this.destroy$)).subscribe(value => this.toggle(this.items.length > 0));
   }
 
   toggle(state: boolean) {
@@ -95,7 +96,7 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
 
   input(e: Event) {
     const value = (e.target as HTMLInputElement).value;
-    this.isCustomValue = true;
+    this.isNotFromList = true;
     this.writeValue(value);
 
     if (this.onChange) {
@@ -110,12 +111,14 @@ export class UxgDropdownInputComponent implements AfterViewInit, OnDestroy, Afte
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.strictMode && this.isCustomValue && control.value) {
+    if (this.strictMode !== false && this.isNotFromList && control.value) {
       return {"notFromList": true};
     }
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.document.removeEventListener('click', this.clickOut);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
