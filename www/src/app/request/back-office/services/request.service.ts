@@ -109,5 +109,10 @@ export class RequestService {
         }
       });
   }
+
+  changeHiddenContragents(requestId: Uuid, value: boolean) {
+    const url = `requests/backoffice/${requestId}/change-hidden-contragents`;
+    return this.api.post(url, {hiddenContragents: value});
+  }
 }
 

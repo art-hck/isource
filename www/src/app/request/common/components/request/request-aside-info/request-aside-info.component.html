@@ -83,3 +83,12 @@
     </div>
   </div>
 </div>
+
+<hr class="divider"/>
+<ng-container *ngIf="!user.isCustomer()">
+  <p class="app-row clr-align-items-center">
+    <uxg-checkbox class="app-control" [(ngModel)]="isChecked" (ngModelChange)="onChangeHiddenContragents(isChecked)"></uxg-checkbox>
+    <label> &nbsp; Скрывать поставщиков в КП/ТКП</label>
+  </p>
+  <hr class="divider"/>
+</ng-container>
