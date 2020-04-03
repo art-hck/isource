@@ -147,11 +147,6 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     return contragents.filter(
       c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
-  searchOkei = (query, okei: Okei[]) => {
-    return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-      (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
-    ).slice(0, 5);
-  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

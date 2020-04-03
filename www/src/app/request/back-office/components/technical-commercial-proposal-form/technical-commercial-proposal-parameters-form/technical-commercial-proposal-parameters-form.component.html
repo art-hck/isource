@@ -20,7 +20,7 @@
         <div class="app-col">
 
           <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
-            [$]="okeiList$" [searchFn]="searchOkei" #okei="appSuggestions" [appControlWrap]="false"
+            [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="false"
           >
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
               <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"

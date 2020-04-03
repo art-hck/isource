@@ -89,12 +89,6 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
     }
   }
 
-  searchOkei(query, okei: Okei[]) {
-    return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-      (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
-    ).slice(0, 5);
-  }
-
   isQuantityValid(form: AbstractControl) {
     return +form.get('quantity').value === +this.value[form.get('index').value].position.quantity;
   }

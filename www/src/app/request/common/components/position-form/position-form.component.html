@@ -97,7 +97,7 @@
     </div>
     <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="200">
       <uxg-dropdown-input appSuggestions class="measure-units" formControlName="measureUnit" placeholder="Ед. измерения"
-        [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #sug="appSuggestions"
+        [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
       >
         <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
           <div uxgDropdownItem
