@@ -57,7 +57,7 @@ export class PriceOrderFormComponent implements OnInit {
       forAuthorizedDealer: false,
       russianProduction: false,
       denyMaxPricePosition: false,
-      positions: [null, [Validators.required, PriceOrderFormValidator.positions]]
+      positions: [null, [Validators.required, PriceOrderFormValidators.positions]]
     });
 
     this.form.get('type').disable();

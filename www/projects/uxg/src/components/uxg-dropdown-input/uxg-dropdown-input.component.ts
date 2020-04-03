@@ -85,7 +85,7 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
         if (this.hideAfterSelect) { this.toggle(false); }
       });
 
-    this.focus.pipe(takeUntil(this.destroy$)).subscribe(value => this.toggle(this.items.length > 0))
+    this.focus.pipe(takeUntil(this.destroy$)).subscribe(value => this.toggle(this.items.length > 0));
   }
 
   toggle(state: boolean) {
