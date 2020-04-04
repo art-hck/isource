@@ -83,7 +83,7 @@ export class ContragentRegistrationComponent implements OnInit {
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
-        region: ['', [Validators.required, CustomValidators.cyrillic]],
+        region: ['', [CustomValidators.cyrillicNotRequired]],
         city: ['', [Validators.required, CustomValidators.cyrillic]],
         address: ['', [Validators.required, CustomValidators.simpleText]],
         postIndex: ['', [Validators.required, CustomValidators.index]]
