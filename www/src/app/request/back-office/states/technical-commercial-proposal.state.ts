@@ -41,9 +41,10 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
-    if (this.cache[requestId]) {
-      return ctx.setState(patch({proposals: this.cache[requestId]}));
-    }
+    // Временно выпилил кеш
+    // if (this.cache[requestId]) {
+    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
+    // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
@@ -54,6 +55,7 @@ export class TechnicalCommercialProposalState {
 
   @Action(FetchAvailablePositions)
   fetchAvailablePositions({setState}: Context, {requestId}: FetchAvailablePositions) {
+    setState(patch({ availablePositions: null }));
     return this.rest.availablePositions(requestId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
     );
@@ -72,7 +74,7 @@ export class TechnicalCommercialProposalState {
         status: "received" as StateStatus
       }))),
       mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
-  );
+    );
   }
 
   @Action(Update)

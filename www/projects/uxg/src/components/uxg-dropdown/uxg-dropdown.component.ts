@@ -41,7 +41,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   clickOut = (e: Event) => {
     if (!this.isHidden && !this.isInside(e.target)) {
       this.ngZone.run(() => this.isHidden = true);
-      this.cdr.markForCheck();
+      this.cdr.detectChanges();
     }
   }
 

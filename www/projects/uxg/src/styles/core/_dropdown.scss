@@ -25,7 +25,7 @@
     cursor: pointer;
   }
 
-  &-items-item:hover {
+  &-items-item:hover, &-items-item.focus {
     background: uxg($theme, color-list-hover);
   }
 
@@ -39,9 +39,9 @@
     padding-right: 0;
     transition: border 250ms;
 
-    &:hover {
-      border-color: uxg($theme, color-control-primary);
-    }
+    //&:hover {
+    //  border-color: uxg($theme, color-control-primary);
+    //}
 
     &.active {
       border-color: uxg($theme, color-control-primary);

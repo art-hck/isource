@@ -9,6 +9,8 @@ export class UxgTabTitleComponent {
   @HostBinding('class.app-tabs-item') appTabsItem = true;
   @HostBinding('class.app-tabs-item-active')
   @Input() active = false;
+  @HostBinding('attr.disabled')
+  @Input() disabled = false;
   public onToggle = new EventEmitter<boolean>();
 
   get right(): number {
@@ -20,16 +22,11 @@ export class UxgTabTitleComponent {
     return this.el.nativeElement.offsetLeft;
   }
 
-  get disabled() {
-    const attr = this.el.nativeElement.getAttribute("disabled");
-    return attr !== null && attr !== "false";
-  }
-
   constructor(private el: ElementRef) {}
 
   @HostListener("click")
   activate() {
-    if (!this.active && !this.disabled) {
+    if (!this.active && this.disabled === false) {
       this.active = true;
       this.onToggle.emit(true);
     }

@@ -23,6 +23,7 @@ import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
+import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -108,10 +109,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     document.querySelector('.main-container').append(this.proposalsFooterRef.nativeElement);
   }
 
-  approveAll() {
-    this.proposalsOnReview
-      .filter(component => component.selectedProposalPosition.valid)
-      .forEach(component => component.approve());
+  approveMultiple() {
+    this.store.dispatch(new ApproveMultiple(
+      this.requestId,
+      this.proposalsOnReview
+        .filter(({selectedProposalPosition}) => selectedProposalPosition.valid)
+        .map(({selectedProposalPosition}) => selectedProposalPosition.value)
+    ));
   }
 
   rejectAll() {

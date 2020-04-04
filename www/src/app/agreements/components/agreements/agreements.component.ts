@@ -19,6 +19,10 @@ export class AgreementsComponent {
       label: "Рассмотреть РКД",
       path: "design-documentation"
     },
+    [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]: {
+      label: "Рассмотреть ТКП",
+      path: "technical-commercial-proposals"
+    },
     [PositionStatus.CONTRACT_AGREEMENT]: {
       label: "Рассмотреть договор",
       path: "contracts"
