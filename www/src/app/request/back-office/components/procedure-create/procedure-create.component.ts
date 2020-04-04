@@ -12,6 +12,7 @@ import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -32,8 +33,9 @@ export class ProcedureCreateComponent implements OnInit {
   wizzard: UxgWizzard;
   isLoading: boolean;
 
-  mask: TextMaskConfig = {
-    mask: value => [/[0-2]/, value[0] === "1" ? /[0-9]/ : /[0-3]/, ' ', ':', ' ', /[0-5]/, /\d/],
+  readonly timeEndRegistration = this.fb.control("", Validators.required);
+  readonly mask: TextMaskConfig = {
+    mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
     guide: false,
     keepCharPositions: true
   };
@@ -64,7 +66,6 @@ export class ProcedureCreateComponent implements OnInit {
       general: this.fb.group({
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [this.defaultProcedureValue("dateEndRegistration"), CustomValidators.currentOrFutureDate()],
-        timeEndRegistration: [this.defaultProcedureValue("timeEndRegistration"), [Validators.required, Validators.pattern(/[0-9]{2} : [0-9]{2}/)]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 10), // Продление времени приема заявок на участие (минут)
       }),
@@ -117,6 +118,7 @@ export class ProcedureCreateComponent implements OnInit {
       ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
+      dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString()
     };
 
     this.procedureService.createProcedure(this.request.id, body).pipe(
