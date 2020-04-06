@@ -231,9 +231,4 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
   validate = () => this.form.invalid ? {invalid: true} : null;
-  searchOkei = (query, okei: Okei[]) => {
-    return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-        (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
-    ).slice(0, 5);
-  }
 }

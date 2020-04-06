@@ -7,9 +7,9 @@
 
   <div class="section">
     <div class="app-row app-align-items-center">
-      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('name'), label: 'Имя ценового запроса'}"></ng-container>
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('name'), label: 'Наименование ценового запроса'}"></ng-container>
       <div class="app-col app-secondary-color">
-        Данное имя будет отображаться в списке и поможет легко отличить один ценовой запрос от другого
+        Данное наименование будет отображаться в списке и поможет легко отличить один ценовой запрос от другого
       </div>
     </div>
 
@@ -50,7 +50,7 @@
             <input #dateResponse uxgInput lg [formControl]="dateResponseControl">
             <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
             <label class="app-control-icon"
-                   (click)="form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
+                   (click)="dateResponse.focus(); form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
             <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
@@ -84,15 +84,15 @@
     </div>
     <div class="app-row">
       <!-- dateDelivery -->
-      <div class="app-col" *ngIf="form.get('dateDelivery') as dateDeliveryControl">
+      <div class="app-col">
         <div class="app-control-wrap">
-          <input #dateDelivery uxgInput lg [formControl]="dateDeliveryControl" appKimDateIsAfter="dateResponse">
+          <input #dateDelivery uxgInput lg formControlName="dateDelivery" appDateIsAfter="dateResponse">
           <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
           <label class="app-control-icon"
-                 (click)="form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
+                 (click)="dateDelivery.focus(); form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
             <clr-icon shape="app-calendar-big" size="24"></clr-icon>
           </label>
-          <div class="app-control-error" *ngIf="dateDeliveryControl.errors as e">
+          <div class="app-control-error" *ngIf="form.get('dateDelivery').errors as e">
             <span *ngIf="e.required">Обязательное поле</span>
             <span *ngIf="e.expired">Не может быть раньше даты предоставления ответа</span>
           </div>
@@ -120,7 +120,9 @@
 
       <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
         <div class="app-col app-ellipsis app-bold">{{position.name}}</div>
-        <div class="app-col-sm app-ellipsis">{{position.quantity}} <span class="app-ghost-color">{{position.okei}}</span></div>
+        <div class="app-col-sm app-ellipsis">
+          {{position.quantity}} <span class="app-ghost-color">{{position.okei.symbol | lowercase }}</span>
+        </div>
       </div>
     </div>
     <div class="app-col">

@@ -31,7 +31,7 @@ export class PriceOrderFormComponent implements OnInit {
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
   readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly mask: TextMaskConfig = {
-    mask: value => [/[0-2]/, value[0] === "1" ? /[0-9]/ : /[0-3]/, ' ', ':', ' ', /[0-5]/, /\d/],
+    mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
     guide: false,
     keepCharPositions: true
   };
