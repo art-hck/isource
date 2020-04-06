@@ -3,7 +3,7 @@
   <div class="container">
     <div class="app-row">
       <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
-        <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
+        <div class="app-secondary-color publish-title">В заявке есть неопубликованные позиции в статусе Черновик</div>
         <button uxgButton secondary (click)="publish.emit()">Опубликовать все</button>
       </div>
       <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
