@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { catchError, filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -20,6 +20,7 @@ import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -33,6 +34,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly destroy$ = new Subject();
   requestId: Uuid;
   showForm: boolean;
+  files: File[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +82,18 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
     return proposals
       .map(proposal => proposal.supplier);
+  }
+
+  onDownloadTemplate() {
+    this.store.dispatch(new DownloadTemplate(this.requestId));
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+  }
+
+  onSendTemplatePositions(): void {
+
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;

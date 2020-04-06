@@ -40,4 +40,14 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
     constructor(public proposal: TechnicalCommercialProposal) {}
   }
+
+  export class UploadTkpFromTemplate {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UploadTkpFromTemplate';
+    constructor(public requestId: Uuid, public files: File[]) {}
+  }
+
+  export class DownloadTemplate {
+    static readonly type = '[Technical Commercial Proposals Backoffice] DownloadTemplate';
+    constructor(public requestId: Uuid) {}
+  }
 }

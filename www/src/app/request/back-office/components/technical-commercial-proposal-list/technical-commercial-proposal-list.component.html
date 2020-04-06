@@ -17,14 +17,14 @@
                 <!-- Новое ТКП  -->
                 <button uxgButton secondary iconText (click)="showForm = true">
                   <clr-icon shape="app-plus"></clr-icon>
-                  <span>Новый контрагент</span>
+                  <span>Новое ТКП</span>
                 </button>
 
                 <!-- Новое ТКП шаблона -->
-                <!--button uxgButton primary iconText>
+                <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
                   <clr-icon shape="app-plus"></clr-icon>
                   <span>ТКП из шаблона</span>
-                </button-->
+                </button>
               </div>
             </div>
           </div>
@@ -69,6 +69,22 @@
             (complete)="procedureModal.close()"
           ></app-request-procedure-create>
         </ng-container>
+      </div>
+    </clr-modal>
+    <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
+      <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
+      <div class="modal-body">
+        <div class="app-secondary-color">
+          Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="onDownloadTemplate()"><b>скачать
+          шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
+        </div>
+        <div class="dragAndDropArea">
+          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" uxgButton secondary lg (click)="uploadTemplateModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions(); uploadTemplateModal.close()">Загрузить</button>
       </div>
     </clr-modal>
   </ng-container>
