@@ -75,7 +75,7 @@
       max-width: 100px;
     }
 
-    &-date, &-kpp { max-width: 120px }
+    &-date, &-kpp { min-width: 120px }
     &-inn { max-width: 190px }
   }
 }
