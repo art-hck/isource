@@ -43,9 +43,9 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    protected offersService: CommercialProposalsService,
+    private offersService: CommercialProposalsService,
     private contragentService: ContragentService,
-    private okeiService: OkeiService
+    public okeiService: OkeiService
   ) { }
 
   ngOnInit() {
