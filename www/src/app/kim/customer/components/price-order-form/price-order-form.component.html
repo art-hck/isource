@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="app-card">
+<form [formGroup]="form" (ngSubmit)="submit()">
 
   <div class="app-row app-align-items-center">
     <div class="app-col"><h3>Создать ценовой запрос</h3></div>
@@ -158,27 +158,27 @@
       <div class="app-row">
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forAuthorizedDealer formControlName="forAuthorizedDealer"></uxg-checkbox>
-            <label (click)="forAuthorizedDealer.check($event)">Официальный дилер</label>
+            <uxg-checkbox class="app-control" #isForAuthorizedDealer formControlName="isForAuthorizedDealer"></uxg-checkbox>
+            <label (click)="isForAuthorizedDealer.check($event)">Официальный дилер</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #russianProduction formControlName="russianProduction"></uxg-checkbox>
-            <label (click)="russianProduction.check($event)">Российское производство</label>
+            <uxg-checkbox class="app-control" #isRussianProduction formControlName="isRussianProduction"></uxg-checkbox>
+            <label (click)="isRussianProduction.check($event)">Российское производство</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #denyMaxPricePosition formControlName="denyMaxPricePosition"></uxg-checkbox>
-            <label (click)="denyMaxPricePosition.check($event)">Запрет превышения цены</label>
+            <uxg-checkbox class="app-control" #isDenyMaxPricePosition formControlName="isDenyMaxPricePosition"></uxg-checkbox>
+            <label (click)="isDenyMaxPricePosition.check($event)">Запрет превышения цены</label>
           </p>
         </div>
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forSmallBusiness formControlName="forSmallBusiness"></uxg-checkbox>
-            <label (click)="forSmallBusiness.check($event)">Малый бизнес</label>
+            <uxg-checkbox class="app-control" #isForSmallBusiness formControlName="isForSmallBusiness"></uxg-checkbox>
+            <label (click)="isForSmallBusiness.check($event)">Малый бизнес</label>
           </p>
 
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forProducer formControlName="forProducer"></uxg-checkbox>
-            <label (click)="forProducer.check($event)">Производитель</label>
+            <uxg-checkbox class="app-control" #isForProducer formControlName="isForProducer"></uxg-checkbox>
+            <label (click)="isForProducer.check($event)">Производитель</label>
           </p>
         </div>
       </div>

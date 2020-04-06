@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { Store } from "@ngxs/store";
@@ -25,6 +25,7 @@ import * as moment from "moment";
 export class PriceOrderFormComponent implements OnInit {
   @Input() kimPriceOrder: KimPriceOrder;
   @Output() close = new EventEmitter();
+  @HostBinding('class.app-card') classCard = true;
   form: FormGroup;
   regions$: Observable<OkatoRegion[]>;
   readonly time = this.fb.control("", Validators.required);
@@ -52,11 +53,11 @@ export class PriceOrderFormComponent implements OnInit {
       dateResponse: ["", [Validators.required, PriceOrderFormValidators.dateResponseValidator]],
       dateDelivery: ["", Validators.required],
       type: [KimPriceOrderType.STANDART, Validators.required],
-      forSmallBusiness: false,
-      forProducer: false,
-      forAuthorizedDealer: false,
-      russianProduction: false,
-      denyMaxPricePosition: false,
+      isForSmallBusiness: false,
+      isForProducer: false,
+      isForAuthorizedDealer: false,
+      isRussianProduction: false,
+      isDenyMaxPricePosition: false,
       positions: [null, [Validators.required, PriceOrderFormValidators.positions]]
     });
 
@@ -70,6 +71,7 @@ export class PriceOrderFormComponent implements OnInit {
     const body: Partial<KimPriceOrder> & {id: Uuid} = this.form.value;
     body.dateResponse = moment(body.dateResponse + " " + this.time.value, "DD.MM.YYYY HH:mm").toISOString();
     body.regions = this.form.value.regions.code;
+    body.positions = this.form.value.positions.map(position => ({...position, okei: position.okei.code, okpd2: position.okpd2.code}));
     this.store.dispatch(body.id ? new Update(body) : new Create(body));
     this.close.emit();
   }

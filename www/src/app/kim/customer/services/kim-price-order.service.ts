@@ -19,7 +19,6 @@ export class KimPriceOrderService {
 
   create(body: Partial<KimPriceOrder>) {
     const url = `kim/customer/add-price-order/manual`;
-    return of({...body, id: Guid.create().toString()});
     return this.api.post(url, this.formDataService.toFormData(body));
   }
 }

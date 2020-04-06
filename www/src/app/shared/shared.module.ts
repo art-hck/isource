@@ -32,6 +32,7 @@ import { ToastState } from "./states/toast.state";
 import { ToastListComponent } from "./components/toast-list/toast-list.component";
 import { DocumentsFormControlComponent } from "./components/documents-form-control/documents-form-control.component";
 import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directive";
+import { DatepickerDirective } from './directives/datepicker.directive';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directiv
     ToastListComponent,
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
+    DatepickerDirective,
   ],
   exports: [
     CommonModule,
@@ -108,6 +110,7 @@ import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directiv
     ToastComponent,
     ToastListComponent,
     AppDateIsAfterDirective,
+    DatepickerDirective,
   ]
 })
 export class SharedModule {

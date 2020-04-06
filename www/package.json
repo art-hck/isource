@@ -31,6 +31,7 @@
     "angular2-text-mask": "^9.0.0",
     "core-js": "^2.6.10",
     "file-saver": "^2.0.2",
+    "flatpickr": "^4.6.3",
     "guid-typescript": "^1.0.9",
     "jasmine-allure-reporter": "^1.0.2",
     "leaflet": "^1.6.0",
