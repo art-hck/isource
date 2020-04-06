@@ -33,7 +33,7 @@
           <!-- title -->
           <div class="app-row app-align-items-center">
             <h3 class="app-col">{{order.name}}</h3>
-            <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.nsiId}}">Показать на ЭТП ГПБ</a>
+            <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.etpKimId}}">Показать на ЭТП ГПБ</a>
             <button uxgButton icon link (click)="folded = !folded">
               <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
             </button>
