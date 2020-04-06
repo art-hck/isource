@@ -18,5 +18,8 @@ export interface GpnmarketConfigInterface {
   procedure: {
     url: string
   };
+  priceOrder: {
+    url: string
+  };
   disabledFeatures: Array<keyof typeof FeatureList>;
 }
