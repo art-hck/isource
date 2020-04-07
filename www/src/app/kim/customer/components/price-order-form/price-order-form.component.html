@@ -1,8 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="app-card">
+<form [formGroup]="form" (ngSubmit)="submit()">
 
   <div class="app-row app-align-items-center">
     <div class="app-col"><h3>Создать ценовой запрос</h3></div>
-    <button type="button" uxgButton icon link (click)="close.emit()"><clr-icon shape="app-cross"></clr-icon></button>
+    <button *ngIf="closable" type="button" uxgButton icon link (click)="close.emit()"><clr-icon shape="app-cross"></clr-icon></button>
   </div>
 
   <div class="section">
@@ -47,10 +47,16 @@
         <!-- dateResponse -->
         <div class="app-col" *ngIf="form.get('dateResponse') as dateResponseControl">
           <div class="app-control-wrap">
-            <input #dateResponse uxgInput lg [formControl]="dateResponseControl">
+            <input
+              #dateResponse
+              uxgInput lg appDatepicker
+              dateFormat="d.m.Y H:i"
+              formControlName="dateResponse"
+              [enableTime]="true"
+              [disable]="[isDateResponseValid]"
+            />
             <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
-            <label class="app-control-icon"
-                   (click)="dateResponse.focus(); form.get('dateResponse').enabled ? datepicker.toggleDatepicker($event) : false">
+            <label class="app-control-icon" (click)="dateResponse.focus()">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
             <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
@@ -58,15 +64,19 @@
               <span *ngIf="e.expired">Не менее трёх рабочих дней с момента создания</span>
             </div>
           </div>
-          <clr-date-container #datepicker class="hidden-datepicker">
-            <input clrDate [formControl]="dateResponseControl" />
-          </clr-date-container>
         </div>
+
+        <!-- dateDelivery -->
         <div class="app-col">
-          <div class="app-col app-col-sm">
-            <div class="app-control-wrap">
-              <input #timeControlRef uxgInput lg [formControl]="time" [textMask]="mask"/>
-              <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+          <div class="app-control-wrap">
+            <input #dateDelivery uxgInput lg appDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y" />
+            <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
+            <label class="app-control-icon" (click)="dateDelivery.focus()">
+              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('dateDelivery').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.expired">Не может быть раньше даты предоставления ответа</span>
             </div>
           </div>
         </div>
@@ -81,29 +91,6 @@
           </ng-template>
         </uxg-dropdown-input>
       </div>
-    </div>
-    <div class="app-row">
-      <!-- dateDelivery -->
-      <div class="app-col">
-        <div class="app-control-wrap">
-          <input #dateDelivery uxgInput lg formControlName="dateDelivery" appDateIsAfter="dateResponse">
-          <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
-          <label class="app-control-icon"
-                 (click)="dateDelivery.focus(); form.get('dateDelivery').enabled ? datepicker.toggleDatepicker($event) : false">
-            <clr-icon shape="app-calendar-big" size="24"></clr-icon>
-          </label>
-          <div class="app-control-error" *ngIf="form.get('dateDelivery').errors as e">
-            <span *ngIf="e.required">Обязательное поле</span>
-            <span *ngIf="e.expired">Не может быть раньше даты предоставления ответа</span>
-          </div>
-        </div>
-        <clr-date-container #datepicker class="hidden-datepicker">
-          <input clrDate formControlName="dateDelivery" />
-        </clr-date-container>
-      </div>
-      <div class="app-col"></div>
-      <div class="app-col"></div>
-      <div class="app-col"></div>
     </div>
   </div>
 
@@ -133,7 +120,7 @@
       </div>
 
       <div>
-        <button uxgButton secondary type="button"
+        <button uxgButton secondary type="button" class="button-params"
                 [disabled]="!form.get('positions').value?.length"
                 (click)="paramsPositionsModal.open()">Заполнить параметры</button>
       </div>
@@ -158,27 +145,27 @@
       <div class="app-row">
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forAuthorizedDealer formControlName="forAuthorizedDealer"></uxg-checkbox>
-            <label (click)="forAuthorizedDealer.check($event)">Официальный дилер</label>
+            <uxg-checkbox class="app-control" #isForAuthorizedDealer formControlName="isForAuthorizedDealer"></uxg-checkbox>
+            <label (click)="isForAuthorizedDealer.check($event)">Официальный дилер</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #russianProduction formControlName="russianProduction"></uxg-checkbox>
-            <label (click)="russianProduction.check($event)">Российское производство</label>
+            <uxg-checkbox class="app-control" #isRussianProduction formControlName="isRussianProduction"></uxg-checkbox>
+            <label (click)="isRussianProduction.check($event)">Российское производство</label>
           </p>
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #denyMaxPricePosition formControlName="denyMaxPricePosition"></uxg-checkbox>
-            <label (click)="denyMaxPricePosition.check($event)">Запрет превышения цены</label>
+            <uxg-checkbox class="app-control" #isDenyMaxPricePosition formControlName="isDenyMaxPricePosition"></uxg-checkbox>
+            <label (click)="isDenyMaxPricePosition.check($event)">Запрет превышения цены</label>
           </p>
         </div>
         <div class="app-col">
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forSmallBusiness formControlName="forSmallBusiness"></uxg-checkbox>
-            <label (click)="forSmallBusiness.check($event)">Малый бизнес</label>
+            <uxg-checkbox class="app-control" #isForSmallBusiness formControlName="isForSmallBusiness"></uxg-checkbox>
+            <label (click)="isForSmallBusiness.check($event)">Малый бизнес</label>
           </p>
 
           <p class="app-row clr-align-items-center">
-            <uxg-checkbox class="app-control" #forProducer formControlName="forProducer"></uxg-checkbox>
-            <label (click)="forProducer.check($event)">Производитель</label>
+            <uxg-checkbox class="app-control" #isForProducer formControlName="isForProducer"></uxg-checkbox>
+            <label (click)="isForProducer.check($event)">Производитель</label>
           </p>
         </div>
       </div>
@@ -187,7 +174,7 @@
 
 
   <div class="app-row app-justify-content-end app-section">
-    <button uxgButton secondary type="button" (click)="close.emit()">Отмена</button>
+    <button *ngIf="closable" uxgButton secondary type="button" (click)="close.emit()">Отмена</button>
     <button uxgButton primary [disabled]="form.invalid || form.disabled">Отправить ЦЗ</button>
   </div>
 </form>

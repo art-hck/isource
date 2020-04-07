@@ -46,37 +46,39 @@ input[type=tel],
 input[type=text],
 input[type=time],
 input[type=url] {
-  display: block;
-  width: 100%;
-  padding: 7px 10px;
-  border: 1px solid $color_light_gray;
-  border-radius: 4px;
-  height: 32px;
-  font-family: $font_ptroot;
-  font-size: $font_size_basic;
-  line-height: 1;
-  box-sizing: border-box;
-  color: $color_black;
-  min-width: initial;
-  margin-bottom: 0;
-  transition: none !important;
+  &:not(.app-control) {
+    display: block;
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid $color_light_gray;
+    border-radius: 4px;
+    height: 32px;
+    font-family: $font_ptroot;
+    font-size: $font_size_basic;
+    line-height: 1;
+    box-sizing: border-box;
+    color: $color_black;
+    min-width: initial;
+    margin-bottom: 0;
+    transition: none !important;
 
-  &.invalid {
-    background: 0;
-    border: 1px solid $color_red !important;
-  }
+    &.invalid {
+      background: 0;
+      border: 1px solid $color_red !important;
+    }
 
-  &:not([readonly]) {
-    background-color: white;
-  }
+    &:not([readonly]) {
+      background-color: white;
+    }
 
 
-  &:focus {
-    outline: 0;
-    background-image: none;
-    background-color: white;
-    box-shadow: none;
-    border: 1px solid $color_blue;
+    &:focus {
+      outline: 0;
+      background-image: none;
+      background-color: white;
+      box-shadow: none;
+      border: 1px solid $color_blue;
+    }
   }
 }
 

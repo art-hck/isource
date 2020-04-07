@@ -44,9 +44,10 @@ export class RequestState {
   @Selector() static positionsStatus({positionsStatus}: Model) { return positionsStatus; }
 
   @Action(Fetch) fetch({setState}: Context, {requestId, useCache, clearState}: Fetch) {
-    if (this.cache[requestId] && useCache) {
-      return setState(patch({request: this.cache[requestId]}));
-    }
+    // @TODO: Временно выпилил кеширование
+    // if (this.cache[requestId] && useCache) {
+    //   return setState(patch({request: this.cache[requestId]}));
+    // }
 
     if (clearState) {
       setState(patch({ request: null, status: "fetching" as StateStatus }));
@@ -64,9 +65,10 @@ export class RequestState {
   }
 
   @Action(FetchPositions) fetchPositions({setState}: Context, {requestId, useCache, clearState}: FetchPositions) {
-    if (this.cachePositions[requestId] && useCache) {
-      return setState(patch({positions: this.cachePositions[requestId]}));
-    }
+    // @TODO: Временно выпилил кеширование
+    // if (this.cachePositions[requestId] && useCache) {
+    //   return setState(patch({positions: this.cachePositions[requestId]}));
+    // }
 
     if (clearState) {
       setState(patch({ positions: null, positionsStatus: "fetching" as StateStatus }));

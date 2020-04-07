@@ -57,7 +57,7 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
-    // Временно выпилил кеш
+    // @TODO: Временно выпилил кеширование
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }

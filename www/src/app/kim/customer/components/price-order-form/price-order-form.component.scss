@@ -33,6 +33,11 @@
   flex-basis: 200px;
 }
 
+.button-params {
+  width: 100%;
+  max-width: none;
+}
+
 uxg-checkbox + label { margin-left: .5em; }
 
 @keyframes host-show {

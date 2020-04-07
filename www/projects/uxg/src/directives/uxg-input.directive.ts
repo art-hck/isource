@@ -17,8 +17,6 @@ export class UxgInputDirective implements OnInit {
     return value !== null && value.toString().length;
   }
 
-  // true, если хотя бы 1 раз был onBlur
-  private wasBlured = false;
   private subscription: Subscription;
 
   constructor(private el: ElementRef, @Optional() private ngControl: NgControl) {
@@ -26,28 +24,21 @@ export class UxgInputDirective implements OnInit {
 
   ngOnInit() {
     if (this.ngControl) {
-      this.subscription = this.ngControl.valueChanges.subscribe(
-        () => this.validate(this.ngControl.control)
-      );
-
-      const reset = this.ngControl.control.reset.bind(this.ngControl.control);
-      this.ngControl.control.reset = (value?: any, options?: Object) => {
-        this.wasBlured = false;
-        reset(value, options);
-      };
+      this.subscription = this.ngControl.valueChanges
+        .subscribe(() => this.validate(this.ngControl.control));
     }
   }
 
   @HostListener("blur")
   onBlur() {
-    if (!this.wasBlured && this.ngControl && !this.ngControl.control.pristine) {
-      this.wasBlured = true;
+    if (this.ngControl && !this.ngControl.control.pristine) {
+      this.ngControl.control.markAsTouched();
       this.validate(this.ngControl.control);
     }
   }
 
   private validate(control: AbstractControl) {
-    if (this.wasBlured && !control.pristine && control.errors && (control.touched || control.dirty)) {
+    if (control.touched && control.dirty && control.invalid) {
       this.el.nativeElement.classList.add('invalid');
     } else {
       this.el.nativeElement.classList.remove('invalid');

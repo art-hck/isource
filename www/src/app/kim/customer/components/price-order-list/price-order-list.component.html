@@ -15,7 +15,7 @@
         </uxg-tabs>
         <button *ngIf="(priceOrdersLength$ | async)"
           uxgButton primary (click)="progressTab.activate(); showForm = true">Создать ценовой запрос</button>
-        <button class="filter-button" uxgButton secondary (click)="showFilter = !showFilter">Фильтр</button>
+        <!--button class="filter-button" uxgButton secondary (click)="showFilter = !showFilter">Фильтр</button-->
       </div>
     </div>
     <div class="app-col-aside" [class.visible]="showFilter"></div>
@@ -25,6 +25,7 @@
       <ng-container *ngIf="progressTab.active">
           <app-kim-price-order-form
             *ngIf="progressTab.active && ((priceOrdersLength$ | async) === 0 || showForm)"
+            [closable]="(priceOrdersLength$ | async) > 0"
             (close)="showForm = false"
             @formHide
           ></app-kim-price-order-form>
@@ -33,7 +34,7 @@
           <!-- title -->
           <div class="app-row app-align-items-center">
             <h3 class="app-col">{{order.name}}</h3>
-            <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.nsiId}}">Показать на ЭТП ГПБ</a>
+            <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.etpKimId}}">Показать на ЭТП ГПБ</a>
             <button uxgButton icon link (click)="folded = !folded">
               <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
             </button>
@@ -53,9 +54,9 @@
                 <div class="app-secondary-color">Ожидаемая дата доставки</div>
                 <p>{{ order.dateDelivery | date: "dd.MM.yyyy"}}</p>
               </div>
-              <div class="app-col app-row app-justify-content-end">
+              <!--div class="app-col app-row app-justify-content-end">
                 <button uxgButton secondary>Продлить запрос</button>
-              </div>
+              </div-->
             </div>
 
             <hr/>
@@ -68,7 +69,7 @@
       </ng-container>
     </div>
     <div class="app-col-aside" [class.visible]="showFilter">
-      <h3>Фильтр</h3>
+      <!--h3>Фильтр</h3-->
     </div>
   </div>
 </ng-container>
