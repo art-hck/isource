@@ -40,7 +40,7 @@ export class TechnicalCommercialProposalService {
 
   uploadTemplate(requestId: Uuid, files: File[]) {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals/upload-excel`;
-    return this.api.post(url, this.convertModelToFormData(files, null, 'files'));
+    return this.api.post<TechnicalCommercialProposal[]>(url, this.convertModelToFormData(files, null, 'files'));
   }
 
   availablePositions(requestId: Uuid) {

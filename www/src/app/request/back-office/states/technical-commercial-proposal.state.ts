@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { insertItem, patch, updateItem } from "@ngxs/store/operators";
+import { append, insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
@@ -134,7 +134,16 @@ export class TechnicalCommercialProposalState {
 
   @Action(UploadTkpFromTemplate)
   uploadTkpFromTemplate(ctx: Context, {requestId, files}: UploadTkpFromTemplate) {
+    ctx.setState(patch({status: "updating" as StateStatus}));
     return this.rest.uploadTemplate(requestId, files).pipe(
-    )
+      catchError(err => {
+        ctx.setState(patch({status: "error" as StateStatus}));
+        return throwError(err);
+      }),
+      tap(proposals => ctx.setState(patch({
+        proposals: append(proposals),
+        status: "received" as StateStatus
+      }))),
+    );
   }
 }

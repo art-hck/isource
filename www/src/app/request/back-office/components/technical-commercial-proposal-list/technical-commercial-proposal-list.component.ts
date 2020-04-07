@@ -21,6 +21,7 @@ import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import UploadTkpFromTemplate = TechnicalCommercialProposals.UploadTkpFromTemplate;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -93,7 +94,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   onSendTemplatePositions(): void {
-
+    this.store.dispatch(new UploadTkpFromTemplate(this.requestId, this.files));
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
