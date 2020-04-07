@@ -30,6 +30,7 @@ $color_light_gray: #D4D9E2;
 @import "assets/styles/input-fields.scss";
 @import "assets/styles/checkbox-toggle.scss";
 @import "assets/styles/checkboxes.scss";
+@import "assets/styles/calendar.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -42,7 +43,6 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 
 *:focus {
   outline: 0;
-  box-shadow: none;
 }
 
 body {
