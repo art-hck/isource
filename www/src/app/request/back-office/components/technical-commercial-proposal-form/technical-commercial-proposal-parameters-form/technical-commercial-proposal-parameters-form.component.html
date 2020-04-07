@@ -37,14 +37,11 @@
         </div>
         <div class="app-col">
           <div style="position: relative">
-            <input uxgInput formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)">
-            <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+            <input #deliveryDate uxgInput appDatepicker formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)"/>
+            <label class="app-control-icon" (click)="deliveryDate.focus()">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
           </div>
-          <clr-date-container #datepicker class="hidden-datepicker">
-            <input clrDate formControlName="deliveryDate" />
-          </clr-date-container>
         </div>
       </div>
     </ng-container>

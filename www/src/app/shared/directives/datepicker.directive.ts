@@ -13,7 +13,7 @@ import { throttleTime } from "rxjs/operators";
   exportAs: 'appDatepicker',
 })
 export class DatepickerDirective implements OnInit, OnDestroy {
-  @Input() dateFormat: string;
+  @Input() dateFormat = "d.m.Y";
   @Input() disable: DateLimit<Date>[];
   @Input() enable: DateLimit<Date>[];
   @Input() enableTime: boolean;

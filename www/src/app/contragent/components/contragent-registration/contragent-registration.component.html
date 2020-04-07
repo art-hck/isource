@@ -76,19 +76,15 @@
           <div class="app-row">
             <div class="app-col">
               <div class="app-control-wrap">
-                <input #taxAuthorityRegistrationDate uxgInput lg formControlName="taxAuthorityRegistrationDate"/>
+                <input #taxAuthorityRegistrationDate uxgInput lg appDatepicker formControlName="taxAuthorityRegistrationDate"/>
                 <label class="app-control-label" (click)="taxAuthorityRegistrationDate.focus()">Дата регистрации</label>
-                <label class="app-control-icon"
-                       (click)="datepicker.toggleDatepicker($event)">
+                <label class="app-control-icon" (click)="taxAuthorityRegistrationDate.focus()">
                   <clr-icon shape="app-calendar-big" size="24"></clr-icon>
                 </label>
                 <div class="app-control-error" *ngIf="form.get('contragent').get('taxAuthorityRegistrationDate').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>
                 </div>
               </div>
-              <clr-date-container #datepicker class="hidden-datepicker">
-                <input clrDate formControlName="taxAuthorityRegistrationDate"/>
-              </clr-date-container>
             </div>
             <div class="app-col select-role">
               <uxg-radio-item class="app-control" value="customer" formControlName="role"></uxg-radio-item>
