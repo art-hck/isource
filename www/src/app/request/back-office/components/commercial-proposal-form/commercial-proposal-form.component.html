@@ -91,19 +91,15 @@
     <div class="clr-col-3">
       <div class="app-control-wrap">
         <input [warning]="deliveryDateValidator() !== null"
-               #deliveryDate uxgInput lg formControlName="deliveryDate">
+               #deliveryDate uxgInput lg formControlName="deliveryDate" appDatepicker />
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
-        <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+        <label class="app-control-icon" (click)="deliveryDate.focus()">
           <clr-icon shape="app-calendar-big" size="24"></clr-icon>
         </label>
         <div class="app-control-error" *ngIf="deliveryDateValidator()">
           <span>Позже запрашиваемой даты</span>
         </div>
       </div>
-
-      <clr-date-container #datepicker class="hidden-datepicker">
-        <input clrDate formControlName="deliveryDate" />
-      </clr-date-container>
     </div>
   </div>
 
