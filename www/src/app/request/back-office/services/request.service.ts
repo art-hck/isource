@@ -111,7 +111,7 @@ export class RequestService {
   }
 
   changeHiddenContragents(requestId: Uuid, value: boolean) {
-    const url = `requests/backoffice/${requestId}/hideContragent`;
+    const url = `requests/backoffice/${requestId}/hide-contragent`;
     return this.api.post(url, {hideContragent: value});
   }
 }
