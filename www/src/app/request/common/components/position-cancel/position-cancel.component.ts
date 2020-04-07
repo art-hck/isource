@@ -30,7 +30,7 @@ export class PositionCancelComponent implements OnInit {
     private formBuilder: FormBuilder,
     private positionService: PositionService,
     private store: Store,
-    private user: UserInfoService
+    public user: UserInfoService
   ) {
   }
 
