@@ -87,8 +87,8 @@
 <hr class="divider"/>
 <ng-container *ngIf="!user.isCustomer()">
   <p class="app-row clr-align-items-center">
-    <uxg-checkbox class="app-control" [(ngModel)]="isChecked" (ngModelChange)="onChangeHiddenContragents(isChecked)"></uxg-checkbox>
-    <label> &nbsp; Скрывать поставщиков в КП/ТКП</label>
+    <uxg-checkbox class="app-control" [formControl]="isChecked" (ngModelChange)="onChangeHiddenContragents($event)"></uxg-checkbox>
+    <label>&nbsp; Скрывать поставщиков</label>
   </p>
   <hr class="divider"/>
 </ng-container>
