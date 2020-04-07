@@ -169,7 +169,7 @@
           <a [href]="getPositionUrl(position)"
              (click)="navigateToPosition(position, $event)"
              class="app-row app-link-no-color"
-             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT'}">
+             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
             <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
           </a>
         </ng-container>
