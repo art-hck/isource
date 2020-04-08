@@ -20,13 +20,11 @@
             <tr>
               <th class="position-name"></th>
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
-                <ng-container *ngIf="!request.hideContragent; else noname">
                   <div class="contragent-info">
                     <app-contragent-info-link
                       [contragent]="supplier">
                     </app-contragent-info-link>
                   </div>
-                </ng-container>
                 <ng-template #noname>
                   <div class="noname">Поставщик</div>
                 </ng-template>
