@@ -125,6 +125,7 @@
       <app-request-list-filter
               [resultsCount]="totalItems"
               [backofficeView]="true"
+              [availableFilters]="availableFilters$ | async"
               (filter)="onFilterUpdate($event)"
               (showResults)="onShowResults()">
       </app-request-list-filter>

@@ -14,16 +14,11 @@
 
 
 <div class="customers-list">
-  <ng-container *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue();">
-    <clr-checkbox-wrapper>
-      <input type="checkbox"
-             clrCheckbox
-             [checked]="checkIfCustomerIsChecked(customer.id)"
-             (input)="onCustomerSelected($event.target.value)"
-             value="{{ customer.id }}" />
-      <label>{{ customer.shortName }}</label>
-    </clr-checkbox-wrapper>
-  </ng-container>
+  <div class="app-row" *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue()">
+    <uxg-checkbox #statusCheckbox [ngModel]="checked(customer.id)" (ngModelChange)="check(customer.id)" class="app-control">
+    </uxg-checkbox>
+    <label class="app-col" (click)="statusCheckbox.check($event)">&nbsp; {{ customer.shortName }}</label>
+  </div>
 </div>
 
 <ng-container *ngIf="

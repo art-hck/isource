@@ -14,6 +14,7 @@ import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
+import { AvailableFilters } from "../models/available-filters";
 
 
 @Injectable()
@@ -93,6 +94,11 @@ export class RequestService {
   addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
     const url = `requests/backoffice/${requestId}/add-positions/from-excel`;
     return this.api.post(url, this.formDataService.toFormData({ files })); // @TODO Typization!
+  }
+
+  availableFilters() {
+    const url = `requests/backoffice/available-filters`;
+    return this.api.get<AvailableFilters>(url);
   }
 
   private mapPositionList(requestPositionsList: RequestPositionList[]) {
