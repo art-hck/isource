@@ -73,8 +73,8 @@
     </clr-modal>
     <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
       <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
-      <div class="modal-body">
-        <div class="app-secondary-color">
+      <div class="modal-body" *ngIf="uploadTemplateModal._open">
+        <div class="app-secondary-color template">
           Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="onDownloadTemplate()"><b>скачать
           шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
         </div>

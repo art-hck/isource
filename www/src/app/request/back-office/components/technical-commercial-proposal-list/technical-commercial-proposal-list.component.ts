@@ -63,7 +63,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Create, Update, Publish),
+      ofActionCompleted(Create, Update, Publish, UploadTkpFromTemplate),
       throttleTime(1),
       takeUntil(this.destroy$)
     ).subscribe(({action, result}) => {
