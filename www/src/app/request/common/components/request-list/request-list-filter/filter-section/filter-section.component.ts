@@ -2,10 +2,10 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-request-list-filter-section',
-  templateUrl: './request-list-filter-section.component.html',
-  styleUrls: ['./request-list-filter-section.component.scss']
+  templateUrl: './filter-section.component.html',
+  styleUrls: ['./filter-section.component.scss']
 })
-export class RequestListFilterSectionComponent implements OnInit {
+export class FilterSectionComponent implements OnInit {
 
   @Input() label;
   @Input() isShowed;

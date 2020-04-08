@@ -5,7 +5,7 @@
       <span class="title">Фильтр</span>
     </div>
 
-    <div class="clr-col-auto" *ngIf="formIsFilled()">
+    <div class="clr-col-auto" *ngIf="form.dirty">
       <span class="reset" (click)="resetFilter()">Сбросить все</span>
     </div>
   </div>
@@ -13,19 +13,11 @@
 
   <div class="filter-body">
 
-    <form [formGroup]="requestListFilterForm">
+    <form [formGroup]="form">
 
-      <app-request-list-filter-section
-              class="filter-section"
-              [label]="'Номер или наименование'">
-
-        <input type="text"
-               placeholder="Номер заявки или наименование"
-               formControlName="requestNameOrNumber" />
-
+      <app-request-list-filter-section class="filter-section" label="Номер или наименование">
+          <input uxgInput formControlName="requestNameOrNumber" placeholder="Номер заявки или наименование"/>
       </app-request-list-filter-section>
-
-
 
       <app-request-list-filter-section
               style="display: none"
@@ -52,17 +44,12 @@
 
 
 
-      <app-request-list-filter-section
-              *ngIf="backofficeView"
-              class="filter-section"
-              [label]="'Заказчик'">
-
+      <app-request-list-filter-section *ngIf="backofficeView" class="filter-section" [label]="'Заказчик'">
         <app-request-filter-customer-list
-                [customers]="customersList"
+                [customers]="availableFilters?.contragents"
                 [limit]="5"
                 formControlName="customers">
         </app-request-filter-customer-list>
-
       </app-request-list-filter-section>
 
 
@@ -98,11 +85,14 @@
 
       </app-request-list-filter-section>
 
+      <app-request-list-filter-section *ngIf="backofficeView" class="filter-section" label="Статус">
+        <app-filter-position-statuses [positionsStatuses]="availableFilters?.positionStatuses" formControlName="positionStatuses"></app-filter-position-statuses>
+      </app-request-list-filter-section>
     </form>
 
   </div>
   <div class="app-col"></div>
-  <div class="show-results" (click)="hideFilterModal()">
+  <div class="show-results" (click)="showResults.emit()">
     Показать <span class="results-count">{{ resultsCount }}</span>
   </div>
 
