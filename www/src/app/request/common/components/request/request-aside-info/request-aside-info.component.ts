@@ -21,9 +21,8 @@ export class RequestAsideInfoComponent implements OnChanges {
   statusCounters: PositionStatusesGroupInfo[];
 
   constructor(
-    private user: UserInfoService,
-    private requestService: RequestService,
-    private cd: ChangeDetectorRef
+    public user: UserInfoService,
+    private requestService: RequestService
   ) {
   }
 
