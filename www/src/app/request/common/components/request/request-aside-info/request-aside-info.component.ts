@@ -9,7 +9,7 @@ import { FormControl } from "@angular/forms";
 @Component({
   selector: 'app-request-aside-info',
   templateUrl: 'request-aside-info.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class RequestAsideInfoComponent implements OnChanges {
