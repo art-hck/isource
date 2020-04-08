@@ -35,7 +35,6 @@ export class RequestAsideInfoComponent implements OnChanges {
         positions: this.positions.filter(position => statusCounter.statuses.indexOf(position.status) >= 0)
       })
     );
-    this.cd.detectChanges();
     this.isChecked.setValue(this.request.hideContragent);
   }
 
