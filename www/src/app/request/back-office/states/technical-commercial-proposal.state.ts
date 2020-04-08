@@ -141,7 +141,7 @@ export class TechnicalCommercialProposalState {
         return throwError(err);
       }),
       tap(proposals => ctx.setState(patch({
-        proposals: append(proposals),
+        proposals: patch(proposals),
         status: "received" as StateStatus
       }))),
     );
