@@ -120,6 +120,10 @@ export class RequestComponent implements OnChanges {
     }
   }
 
+  isNotActual(position: RequestPosition): boolean {
+    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT;
+  }
+
   getPositionUrl(position: RequestPositionList): UrlTree {
     return this.router.createUrlTree([position.id], { relativeTo: this.route });
   }
@@ -160,6 +164,10 @@ export class RequestComponent implements OnChanges {
 
     if (position) {
       formGroup.addControl("position", new FormControl(position));
+      if (this.asPosition(position) && (this.asPosition(position).status === PositionStatus.NOT_RELEVANT ||
+        this.asPosition(position).status === PositionStatus.CANCELED)) {
+        formGroup.get("checked").disable();
+      }
     }
 
     return formGroup;
