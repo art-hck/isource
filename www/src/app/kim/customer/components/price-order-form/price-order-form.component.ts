@@ -71,7 +71,7 @@ export class PriceOrderFormComponent implements OnInit {
     const body: Partial<KimPriceOrder> & {id: Uuid} = this.form.value;
     body.dateResponse = moment(body.dateResponse, "DD.MM.YYYY HH:mm").toISOString();
     body.regions = this.form.value.regions.code;
-    body.positions = this.form.value.positions.map(position => ({...position, okei: position.okei.code, okpd2: position.okpd2.code}));
+    body.positions = this.form.value.positions.map(position => ({...position, okei: position.okei.code}));
     this.store.dispatch(body.id ? new Update(body) : new Create(body));
     this.close.emit();
   }
