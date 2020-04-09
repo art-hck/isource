@@ -94,7 +94,8 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
         PositionHistoryType.WINNER_STATUS.valueOf(),
         PositionHistoryType.CONTRACT_STATUS.valueOf(),
         PositionHistoryType.POSITION_TECHNICAL_PROPOSAL_STATUS.valueOf(),
-        PositionHistoryType.DESIGN_STATUS.valueOf()
+        PositionHistoryType.DESIGN_STATUS.valueOf(),
+        PositionHistoryType.POSITION_TECHNICAL_COMMERCIAL_PROPOSAL_STATUS.valueOf()
       ].indexOf(activityItem.type) !== -1
     );
   }
