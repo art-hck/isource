@@ -4,7 +4,12 @@
     <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
+          <ng-container *ngIf="linkedOffer.supplierContragent; else noname">
           <app-contragent-info-link [contragent]="linkedOffer.supplierContragent"></app-contragent-info-link>
+          </ng-container>
+          <ng-template #noname>
+            Поставщик
+          </ng-template>
           <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
         </div>
         <div class="card-block">
