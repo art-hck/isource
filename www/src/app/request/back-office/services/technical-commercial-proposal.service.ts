@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
 import { delay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Uuid } from "../../../cart/models/uuid";
@@ -30,6 +29,16 @@ export class TechnicalCommercialProposalService {
   publish({id}: TechnicalCommercialProposal) {
     const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);
+  }
+
+  downloadTemplate(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/download-excel-template`;
+    return this.api.post(url, {}, {responseType: 'blob'});
+  }
+
+  uploadTemplate(requestId: Uuid, files: File[]) {
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/upload-excel`;
+    return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData({files}));
   }
 
   availablePositions(requestId: Uuid) {
