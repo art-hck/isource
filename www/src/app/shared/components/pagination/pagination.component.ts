@@ -29,7 +29,7 @@ export class PaginationComponent implements OnInit, OnDestroy {
   }
 
   get fullPages() {
-    return (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1);
+    return this.total && (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1) || [];
   }
 
   get pages(): number[] {

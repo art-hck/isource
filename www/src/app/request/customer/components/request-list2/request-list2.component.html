@@ -1,0 +1,18 @@
+<app-request-list2
+  [requests]="requests$ | async"
+  [total]="totalCount$ | async"
+  [status]="status$ | async"
+  [statusCounts]="statusCounts$ | async"
+  [filters]="fetchFilters$ | async"
+  [pageSize]="pageSize"
+  (filter)="fetchFilters$.next($event)"
+  (addRequest)="newRequestModal.open()"
+  (needRefresh)="store.dispatch(toast({text: '123'}))"
+></app-request-list2>
+
+<app-request-create-modal
+  #newRequestModal
+  (cancel)="newRequestModal.close()"
+  (uploadFromTemplate)="store.dispatch(addRequestFromExcel($event, false))"
+  (publishFromTemplate)="store.dispatch(addRequestFromExcel($event, true))">
+</app-request-create-modal>

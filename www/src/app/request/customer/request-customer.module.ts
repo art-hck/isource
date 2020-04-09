@@ -21,6 +21,8 @@ import { TechnicalCommercialProposalComponent } from "./components/technical-com
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { RequestFormFreeComponent } from "./components/request-form-free/request-form-free.component";
 import { RequestState } from "./states/request.state";
+import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListState } from "./states/request-list.state";
 
 
 @NgModule({
@@ -38,6 +40,7 @@ import { RequestState } from "./states/request.state";
     RequestCreateModalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
+    RequestList2Component
   ],
   imports: [
     AgreementsModule,
@@ -45,6 +48,7 @@ import { RequestState } from "./states/request.state";
     RequestCommonModule,
     NgxsModule.forFeature([
       RequestState,
+      RequestListState,
       TechnicalCommercialProposalState
     ]),
   ],

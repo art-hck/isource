@@ -9,8 +9,8 @@ export class RequestCreateModalComponent {
 
   @ViewChild(ClrModal, { static: false }) modal: ClrModal;
 
-  @Output() uploadFromTemplate = new EventEmitter();
-  @Output() publishFromTemplate = new EventEmitter();
+  @Output() uploadFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();
+  @Output() publishFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();
   @Output() cancel = new EventEmitter();
 
   open() {

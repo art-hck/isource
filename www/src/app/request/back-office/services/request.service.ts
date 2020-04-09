@@ -15,6 +15,7 @@ import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
+import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
 
 @Injectable()
@@ -57,7 +58,7 @@ export class RequestService {
 
   requestStatusCount() {
     const url = `requests/backoffice/counts-on-different-statuses`;
-    return this.api.get(url); // @TODO Typization!
+    return this.api.get<RequestStatusCount>(url);
   }
 
   publishRequest(id: Uuid) {

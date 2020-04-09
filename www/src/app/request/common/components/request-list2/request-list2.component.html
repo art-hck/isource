@@ -1,0 +1,112 @@
+<div class="app-row">
+  <div class="app-col">
+    <div class="app-row app-align-items-center">
+      <uxg-tabs class="app-col">
+        <uxg-tab-title #inProgressTab [active]="true" (click)="switchTab(inProgressTab, RequestStatus.IN_PROGRESS)"
+                       [disabled]="statusCounts?.inProgressRequestsCount === 0"
+        >В обработке <span class="app-ghost-color">({{statusCounts?.inProgressRequestsCount}})</span></uxg-tab-title>
+
+        <uxg-tab-title #newTab (click)="switchTab(newTab, RequestStatus.NEW)" [disabled]="statusCounts?.newRequestsCount === 0"
+        >Новые <span class="app-ghost-color">({{statusCounts?.newRequestsCount}})</span></uxg-tab-title>
+
+        <uxg-tab-title
+          #draftTab (click)="switchTab(draftTab, RequestStatus.DRAFT)"
+          *ngIf="feature.authorize('publishRequest')" [disabled]="statusCounts?.draftRequestsCount === 0"
+        >Черновики <span class="app-ghost-color">({{statusCounts?.draftRequestsCount}})</span></uxg-tab-title>
+
+        <uxg-tab-title #onApprovalTab (click)="switchTab(onApprovalTab, RequestStatus.ON_CUSTOMER_APPROVAL)"
+                       [disabled]="statusCounts?.onCustomerApprovalRequestsCount === 0"
+        >На согласовании <span class="app-ghost-color">({{statusCounts?.onCustomerApprovalRequestsCount}})</span></uxg-tab-title>
+
+        <uxg-tab-title #completedTab (click)="switchTab(completedTab, RequestStatus.COMPLETED)"
+                       [disabled]="statusCounts?.completedRequestsCount === 0"
+        >Завершенные <span class="app-ghost-color">({{statusCounts?.completedRequestsCount}})</span></uxg-tab-title>
+      </uxg-tabs>
+
+      <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
+        <clr-icon shape="app-plus"></clr-icon>
+        <span>Новая заявка</span>
+      </button>
+      <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
+        <clr-icon shape="app-sort2"></clr-icon>
+        <span>Фильтр</span>
+        <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
+      </button>
+    </div>
+  </div>
+  <div class="app-col-aside"></div>
+</div>
+
+<div class="app-row">
+  <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
+  <div class="app-col">
+
+    <!-- headers -->
+    <div class="app-table app-no-border">
+      <div class="app-row app-uppercase app-ghost-color app-bold">
+        <small class="app-col app-grow-0 number">Номер</small>
+        <small *ngIf="feature.authorize('backofficeRequest')" class="app-col customer">Заказчик</small>
+        <!--        <small *ngIf="newTab.active" class="app-col published">Опубликована</small>-->
+        <!--        <small *ngIf="completedTab.active" class="app-col completed">Завершена</small>-->
+        <small class="app-col name">Наименование</small>
+        <small class="app-col deliveryDate">Сроки поставки</small>
+        <small *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">Задач</small>
+        <small *ngIf="inProgressTab.active" class="app-col app-grow-0 pie">Заверш/поз.</small>
+        <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
+      </div>
+    </div>
+
+    <!-- requests -->
+    <div class="app-table" [class.disabled]="status !== 'received'">
+      <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
+        <div class="app-col app-grow-0 number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
+        <div *ngIf="feature.authorize('backofficeRequest')" class="app-col customer app-ellipsis">
+          {{request.request.contragent?.shortName}}
+        </div>
+        <!--        <div *ngIf="newTab.active" class="app-col published"></div>-->
+        <!--        <div *ngIf="completedTab.active" class="app-col completed">Завершена</div>-->
+        <div class="app-col name app-ellipsis">{{ request.request.name }}</div>
+        <div class="app-col deliveryDate app-ellipsis">
+          <span *ngIf="request.requestData.asapDeliveryDatePositionsCount">
+            {{request.requestData.asapDeliveryDatePositionsCount}} как можно скорее
+          </span>
+          <span *ngIf="request.requestData.minDeliveryDate">
+            {{ getDeliveryDate((request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
+            (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy'))}}
+          </span>
+        </div>
+        <div *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">{{request.requestData.tasksCount}}</div>
+        <div *ngIf="inProgressTab.active" class="app-col app-grow-0 app-row pie">
+          <svg width="20" height="20" class="chart">
+            <circle r="10" cx="10" cy="10" class="pie"/>
+            <circle r="10" cx="10" cy="10" class="pie" [attr.stroke-dashoffset]="calcPieChart(request)"/>
+          </svg>
+          <div>
+            <span [class.app-ghost-color]="request.requestData.completedPositionsCount === 0">
+              {{ request.requestData.completedPositionsCount}} из
+            </span>
+            <span>{{ request.requestData.positionsCount }}</span>
+          </div>
+        </div>
+        <div *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">{{ request.requestData.positionsCount}}</div>
+      </a>
+    </div>
+    <br/>
+
+    <app-pagination [total]="total" [pageSize]="pageSize" [pages$]="pages$" (change)="filter.emit({page: $event})"></app-pagination>
+
+  </div>
+
+  <div class="app-col-aside filter" [class.opened]="filterOpened">
+
+    <div class="close-btn" [class.opened]="filterOpened" (click)="filterOpened = false"></div>
+
+    <app-request-list-filter
+      [resultsCount]="total"
+      [backofficeView]="user.isBackOffice()"
+      [availableFilters]="availableFilters"
+      (filter)="filter.emit({filters: $event})"
+      (showResults)="filterOpened = false">
+    </app-request-list-filter>
+  </div>
+</div>

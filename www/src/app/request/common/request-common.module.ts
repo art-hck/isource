@@ -44,6 +44,7 @@ import {RequestMoveGroupModalComponent} from "./components/request/request-move-
 import {RequestPositionService} from "./services/request-position.service";
 import {PositionCancelComponent} from "./components/position-cancel/position-cancel.component";
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
+import { RequestList2Component } from "./components/request-list2/request-list2.component";
 
 const RequestCommonModuleDeclarations = [
   BackofficeOffersComponent,
@@ -79,7 +80,8 @@ const RequestCommonModuleDeclarations = [
   SearchFilterPipe,
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
-  FilterPositionStatusesComponent
+  FilterPositionStatusesComponent,
+  RequestList2Component
 ];
 
 @NgModule({

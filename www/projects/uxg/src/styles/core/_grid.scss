@@ -65,6 +65,10 @@
       cursor: pointer;
       background: uxg($theme, color-bg);
     }
+
+    & > :last-child:not(:first-child) {
+      padding-bottom: 0;
+    }
   }
 
   & > .app-row {
