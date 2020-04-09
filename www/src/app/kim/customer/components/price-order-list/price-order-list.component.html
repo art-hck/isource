@@ -7,7 +7,7 @@
             Необходимо рассмотреть  <span class="app-ghost-color" *ngIf="reviewTabCount as cnt">({{cnt}})</span>
           </uxg-tab-title>
           <uxg-tab-title #progressTab [active]="reviewTabCount === 0">
-            Запросы а процессе <span class="app-ghost-color" *ngIf="priceOrdersLength$ | async as cnt">({{cnt}})</span>
+            Запросы в процессе <span class="app-ghost-color" *ngIf="priceOrdersLength$ | async as cnt">({{cnt}})</span>
           </uxg-tab-title>
           <uxg-tab-title #reviewedTab [disabled]="!reviewedTabCount">
             Рассмотренные <span class="app-ghost-color" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
