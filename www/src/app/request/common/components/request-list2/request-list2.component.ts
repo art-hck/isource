@@ -49,9 +49,9 @@ export class RequestList2Component implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private feature: FeatureService,
     private wsService: WebsocketService,
     private cd: ChangeDetectorRef,
+    public feature: FeatureService,
     public user: UserInfoService
   ) {}
 

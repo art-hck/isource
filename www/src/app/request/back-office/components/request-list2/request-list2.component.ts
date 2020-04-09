@@ -39,6 +39,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private store: Store,
     private router: Router,
+    public store: Store,
   ) {}
 
   ngOnInit() {
