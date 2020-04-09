@@ -64,6 +64,10 @@ export class PositionComponent implements DoCheck {
     return this.positionStatusService.isStatusPrevious(position.status, PositionStatus.MANUFACTURING);
   }
 
+  isNotActual(position: RequestPosition) {
+    return position.status === PositionStatus.NOT_RELEVANT || position.status === PositionStatus.CANCELED;
+  }
+
   getRelatedServicesList(position: RequestPosition): string {
     const relatedServices = {
       "ШМР": position.isShmrRequired,

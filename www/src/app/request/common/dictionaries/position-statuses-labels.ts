@@ -24,6 +24,7 @@ export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.PAID]: 'Оплачено',
   [PositionStatus.WARRANTY]: 'Гарантийные обязательства',
   [PositionStatus.COMPLETED]: 'Завершено',
-  [PositionStatus.NOT_RELEVANT]: 'Неактуальна'
+  [PositionStatus.NOT_RELEVANT]: 'Неактуальна',
+  [PositionStatus.CANCELED]: 'Отменена'
 };
 

@@ -68,7 +68,7 @@
         </div>
 
         <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({ files: $event, position: position })"
-                [multiple]="true">
+                [multiple]="true" [disabled]="isNotActual(position)">
           <clr-icon shape="app-upload"></clr-icon>
           <span>Загрузить документы</span>
         </button>
@@ -159,12 +159,12 @@
             <button uxgButton secondary
                     uxgPopoverTrigger
                     (click)="edit.open()"
-                    [disabled]="position.isEditingByAnotherUser">
+                    [disabled]="position.isEditingByAnotherUser || isNotActual(position)">
               <clr-icon shape="app-pen"></clr-icon>
               <span>Редактировать</span>
             </button>
 
-            <ng-container *ngIf="position.isEditingByAnotherUser">
+            <ng-container *ngIf="position.isEditingByAnotherUser && !isNotActual(position)">
               <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
                 <div>Позиция находится на согласовании.</div>
                 <div>Редактирование недоступно.</div>

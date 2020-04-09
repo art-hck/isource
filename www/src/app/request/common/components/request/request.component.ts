@@ -120,6 +120,10 @@ export class RequestComponent implements OnChanges {
     }
   }
 
+  isNotActual(position: RequestPosition): boolean {
+    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT;
+  }
+
   getPositionUrl(position: RequestPositionList): UrlTree {
     return this.router.createUrlTree([position.id], { relativeTo: this.route });
   }
