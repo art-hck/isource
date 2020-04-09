@@ -40,7 +40,7 @@
         <div class="card-block" *ngIf="linkedOffer.technicalProposals.length > 0 || canUploadTp()">
           <div class="card-title">Технические предложения</div>
           <app-document-simple-list
-            [enableUpload]="canUploadTp()"
+            [enableUpload]="!isNotActual(requestPosition)"
             [documents]="linkedOffer.technicalProposals"
             (selected)="onUploadTechnicalProposals($event, linkedOffer)"
           ></app-document-simple-list>
@@ -48,7 +48,7 @@
         <div class="card-block" *ngIf="linkedOffer.documents.length > 0 || canUploadKp()">
           <div class="card-title">Коммерческие предложения</div>
           <app-document-simple-list
-            [enableUpload]="canUploadKp()"
+            [enableUpload]="!isNotActual(requestPosition)"
             [documents]="linkedOffer.documents"
             (selected)="onUploadDocuments($event, linkedOffer)"
           ></app-document-simple-list>
