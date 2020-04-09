@@ -76,13 +76,10 @@
     <br/>
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
-        <clr-date-container #datepicker class="hidden-datepicker hidden-datepicker-top">
-          <input clrDate formControlName="dateEndRegistration"/>
-        </clr-date-container>
         <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg formControlName="dateEndRegistration">
+          <input #dateEndRegistration uxgInput lg appDatepicker formControlName="dateEndRegistration">
           <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
-          <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+          <label class="app-control-icon" (click)="dateEndRegistration.focus()">
             <clr-icon shape="app-calendar-big" size="24"></clr-icon>
           </label>
           <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
@@ -92,7 +89,7 @@
       </div>
       <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
         <div class="app-control-wrap">
-          <input #timeControlRef uxgInput lg formControlName="timeEndRegistration" [textMask]="mask"/>
+          <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
           <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
         </div>
       </div>

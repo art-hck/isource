@@ -7,6 +7,8 @@ import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
+import { AvailableFilters } from "../../models/available-filters";
+import { Observable } from "rxjs";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -30,12 +32,14 @@ export class RequestListComponent implements OnInit {
   filters: any;
   requestWorkflowSteps = RequestStatus;
   requestStatusCount: RequestStatusCount;
+  availableFilters$: Observable<AvailableFilters>;
 
   constructor(private requestService: RequestService) {}
 
   ngOnInit() {
     this.currentStatus = RequestStatus.IN_PROGRESS;
     this.getRequestStatusCount('backoffice');
+    this.availableFilters$ = this.requestService.availableFilters();
   }
 
   /**
@@ -52,11 +56,12 @@ export class RequestListComponent implements OnInit {
    * @param requestStatus
    */
   switchTab(requestStatus: RequestStatus): void {
+    this.requests = null;
     this.currentStatus = requestStatus;
     this.composeFilters();
 
     if (this.requestListFilterComponent) {
-      this.requestListFilterComponent.clearFilter();
+      this.requestListFilterComponent.resetFilter(false);
       this.currentFilters = <RequestsListFilter>{};
     }
   }

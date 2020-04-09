@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { Store } from "@ngxs/store";
@@ -23,15 +23,16 @@ import * as moment from "moment";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PriceOrderFormComponent implements OnInit {
+  @Input() closable = true;
   @Input() kimPriceOrder: KimPriceOrder;
   @Output() close = new EventEmitter();
+  @HostBinding('class.app-card') classCard = true;
   form: FormGroup;
   regions$: Observable<OkatoRegion[]>;
-  readonly time = this.fb.control("", Validators.required);
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
   readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly mask: TextMaskConfig = {
-    mask: value => [/[0-2]/, value[0] === "1" ? /[0-9]/ : /[0-3]/, ' ', ':', ' ', /[0-5]/, /\d/],
+    mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
     guide: false,
     keepCharPositions: true
   };
@@ -49,14 +50,14 @@ export class PriceOrderFormComponent implements OnInit {
       regions: ["", Validators.required],
       deliveryAddress: ["", Validators.required],
       deliveryConditions: ["", Validators.required],
-      dateResponse: ["", [Validators.required, PriceOrderFormValidators.dateResponseValidator]],
+      dateResponse: ["", [Validators.required]],
       dateDelivery: ["", Validators.required],
       type: [KimPriceOrderType.STANDART, Validators.required],
-      forSmallBusiness: false,
-      forProducer: false,
-      forAuthorizedDealer: false,
-      russianProduction: false,
-      denyMaxPricePosition: false,
+      isForSmallBusiness: false,
+      isForProducer: false,
+      isForAuthorizedDealer: false,
+      isRussianProduction: false,
+      isDenyMaxPricePosition: false,
       positions: [null, [Validators.required, PriceOrderFormValidators.positions]]
     });
 
@@ -68,9 +69,19 @@ export class PriceOrderFormComponent implements OnInit {
 
   submit() {
     const body: Partial<KimPriceOrder> & {id: Uuid} = this.form.value;
-    body.dateResponse = moment(body.dateResponse + " " + this.time.value, "DD.MM.YYYY HH:mm").toISOString();
+    body.dateResponse = moment(body.dateResponse, "DD.MM.YYYY HH:mm").toISOString();
     body.regions = this.form.value.regions.code;
+    body.positions = this.form.value.positions.map(position => ({...position, okei: position.okei.code, okpd2: position.okpd2.code}));
     this.store.dispatch(body.id ? new Update(body) : new Create(body));
     this.close.emit();
+  }
+
+  isDateResponseValid(date: Date) {
+    let ammount = 3;
+    for (let i = 1; i <= 3; i++) {
+      // Не учитываем выходные дни
+      if (["0", "6"].includes(moment().add(i, 'd').format("d"))) { ammount++; }
+    }
+    return !moment().add(ammount, "d").startOf('day').isSameOrBefore(date);
   }
 }

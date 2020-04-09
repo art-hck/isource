@@ -24,7 +24,7 @@ export class PriceOrderFormPositionsParamsComponent implements ControlValueAcces
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
-  searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query) >= 0 || item.code === query).slice(0, 20);
+  searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 || item.code === query).slice(0, 20);
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okatoService: OkatoService) {}
 

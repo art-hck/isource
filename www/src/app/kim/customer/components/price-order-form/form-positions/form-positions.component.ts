@@ -26,20 +26,16 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
-  keyOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
-  searchOkei = (query, okei: Okei[]) => (q => okei
-    .filter(({name, symbol}) => name.toLowerCase().indexOf(q) >= 0 || (symbol && symbol.toLowerCase().indexOf(q) >= 0))
-    .slice(0, 5)
-  )(query.toLowerCase())
+  getOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okeiService: OkeiService) {}
 
   ngAfterViewInit() {
-    this.formArray = this.fb.array((this.value || [null]).map(p => this.getFormPosition(p)), Validators.required);
+    this.formArray = this.fb.array((this.value || [null]).map(p => this.fetchFormPosition(p)), Validators.required);
     this.cd.detectChanges();
   }
 
-  getFormPosition(position?: KimPriceOrderPosition): FormGroup {
+  fetchFormPosition(position?: KimPriceOrderPosition): FormGroup {
     const form = this.fb.group({
       controlId: Guid.create().toString(),
       name: [null, Validators.required],
@@ -53,7 +49,7 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
   submit() {
     const value: (KimPriceOrderPosition & {controlId: Uuid})[] = this.formArray.value.reduce((positions, position) => {
       const i = (this.value || []).findIndex(({controlId}) => position.controlId === controlId);
-      positions.push({...(this.value || [])[i], ...position});
+      positions.push({ ...(this.value || [])[i], ...position });
       return positions;
     }, []);
 

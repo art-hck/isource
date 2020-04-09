@@ -95,13 +95,16 @@
           </button>
         </div>-->
 
+        <!-- Отмена позиции заказчиком -->
+        <div class="app-colapp-basis-auto clr-flex-grow-0" *ngIf="user.isCustomer()">
+          <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
+        </div>
         <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link>
               <clr-icon shape="app-kebab"></clr-icon>
             </button>
             <div *uxgPopoverContent (click)="more.hide()">
-
               <!-- Назначиь ответственного -->
               <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
                 <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
@@ -166,7 +169,7 @@
           <a [href]="getPositionUrl(position)"
              (click)="navigateToPosition(position, $event)"
              class="app-row app-link-no-color"
-             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT'}">
+             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
             <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
           </a>
         </ng-container>

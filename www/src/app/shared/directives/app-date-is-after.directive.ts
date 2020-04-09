@@ -9,15 +9,18 @@ import { Subject } from "rxjs";
   providers: [{ provide: NG_VALIDATORS, useExisting: AppDateIsAfterDirective, multi: true}],
 })
 export class AppDateIsAfterDirective implements Validator, OnDestroy {
-  @Input() appKimDateIsAfter: string;
+  @Input() appDateIsAfter: string;
   readonly destroy$ = new Subject();
+  compared: AbstractControl;
 
   validate(control: AbstractControl): ValidationErrors {
-    const compared = control.parent.get(this.appKimDateIsAfter);
-    compared.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => control.updateValueAndValidity());
+    if (!this.compared) {
+      this.compared = control.parent.get(this.appDateIsAfter);
+      this.compared.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => control.updateValueAndValidity());
+    }
 
-    return moment(control.value, "DD.MM.YYYY")
-      .isAfter(moment(compared.value, "DD.MM.YYYY")) ? null : {expired : true};
+    return !this.compared.value || moment(control.value, "DD.MM.YYYY")
+      .isAfter(moment(this.compared.value, "DD.MM.YYYY")) ? null : {expired : true};
   }
 
   ngOnDestroy() {

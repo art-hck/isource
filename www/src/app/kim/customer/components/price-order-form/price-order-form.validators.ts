@@ -15,6 +15,6 @@ export class PriceOrderFormValidators {
       if (["0", "6"].includes(moment().add(i, 'd').format("d"))) { ammount++; }
     }
     const minDate = moment().add(ammount, "d").startOf('day');
-    return moment(value, "DD.MM.YYYY").isSameOrAfter(minDate) ? null : { expired: true };
+    return !value || moment(value, "DD.MM.YYYY").isSameOrAfter(minDate) ? null : { expired: true };
   }
 }

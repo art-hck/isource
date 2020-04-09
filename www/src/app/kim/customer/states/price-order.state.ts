@@ -8,6 +8,7 @@ import { throwError } from "rxjs";
 import { PriceOrderActions } from "../actions/price-order.actions";
 import { KimPriceOrderService } from "../services/kim-price-order.service";
 import Create = PriceOrderActions.Create;
+import Fetch = PriceOrderActions.Fetch;
 
 export interface KimRequestStateModel {
   priceOrders: KimPriceOrder[];
@@ -24,9 +25,21 @@ type Context = StateContext<Model>;
 @Injectable()
 export class PriceOrderState {
   @Selector() static priceOrders({priceOrders}: Model) { return priceOrders; }
+  @Selector() static priceOrdersLength({priceOrders}: Model) { return priceOrders.length; }
   @Selector() static status({status}: Model) { return status; }
 
   constructor(private rest: KimPriceOrderService) {}
+
+  @Action(Fetch)
+  fetch(ctx: Context, action: Fetch) {
+    ctx.setState(patch({ status: "fetching" } as Model));
+
+    return this.rest.list().pipe(
+      this.errorPipe(ctx),
+      tap(priceOrders => ctx.setState(patch({priceOrders}))),
+      tap(priceOrders => ctx.setState(patch({ status: "received" } as Model)))
+    );
+  }
 
   @Action(Create)
   create(ctx: Context, action: Create) {

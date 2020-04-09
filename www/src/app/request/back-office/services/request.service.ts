@@ -14,6 +14,7 @@ import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
+import { AvailableFilters } from "../models/available-filters";
 
 
 @Injectable()
@@ -95,6 +96,11 @@ export class RequestService {
     return this.api.post(url, this.formDataService.toFormData({ files })); // @TODO Typization!
   }
 
+  availableFilters() {
+    const url = `requests/backoffice/available-filters`;
+    return this.api.get<AvailableFilters>(url);
+  }
+
   private mapPositionList(requestPositionsList: RequestPositionList[]) {
     return requestPositionsList.map(
       function recursiveMapPositionList(item: RequestPositionList) {
@@ -108,6 +114,11 @@ export class RequestService {
             return new RequestPosition(item);
         }
       });
+  }
+
+  changeHiddenContragents(requestId: Uuid, value: boolean) {
+    const url = `requests/backoffice/${requestId}/hide-contragent`;
+    return this.api.post(url, {hideContragent: value});
   }
 }
 
