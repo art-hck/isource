@@ -37,7 +37,6 @@ export class RequestList2Component implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
-    private store: Store,
     private router: Router,
     public store: Store,
   ) {}
