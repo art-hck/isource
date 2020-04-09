@@ -48,7 +48,7 @@ export class PriceOrderListComponent implements OnInit, OnDestroy {
       const e = result.error as any;
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(`ЦЗ успешно сохранено`));
+        new ToastActions.Success(`Ценовой запрос успешно отправлен`));
     });
 
   }

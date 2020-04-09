@@ -19,7 +19,7 @@ export class AppDateIsAfterDirective implements Validator, OnDestroy {
       this.compared.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => control.updateValueAndValidity());
     }
 
-    return !this.compared.value || moment(control.value, "DD.MM.YYYY")
+    return !this.compared.value || !control.value || moment(control.value, "DD.MM.YYYY")
       .isAfter(moment(this.compared.value, "DD.MM.YYYY")) ? null : {expired : true};
   }
 
