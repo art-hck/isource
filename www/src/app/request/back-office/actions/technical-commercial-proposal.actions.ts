@@ -5,12 +5,14 @@ export namespace TechnicalCommercialProposals {
   // Получить список ТКП
   export class Fetch {
     static readonly type = '[Technical Commercial Proposals Backoffice] Fetch';
+
     constructor(public requestId: Uuid) {}
   }
 
   // Получить список доступных к добавлению позиций ТКП
   export class FetchAvailablePositions {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchAvailablePositions';
+
     constructor(public requestId: Uuid) {}
   }
 
@@ -38,16 +40,19 @@ export namespace TechnicalCommercialProposals {
   // Отправить на согласование ТКП
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
+
     constructor(public proposal: TechnicalCommercialProposal) {}
   }
 
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
+
     constructor(public requestId: Uuid, public files: File[]) {}
   }
 
   export class DownloadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadTemplate';
+
     constructor(public requestId: Uuid) {}
   }
 }
