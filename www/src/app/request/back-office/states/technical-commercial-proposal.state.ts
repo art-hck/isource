@@ -14,7 +14,7 @@ import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import Update = TechnicalCommercialProposals.Update;
-import UploadTkpFromTemplate = TechnicalCommercialProposals.UploadTkpFromTemplate;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import { saveAs } from 'file-saver/src/FileSaver';
 
@@ -132,8 +132,8 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Action(UploadTkpFromTemplate)
-  uploadTkpFromTemplate(ctx: Context, {requestId, files}: UploadTkpFromTemplate) {
+  @Action(UploadTemplate)
+  uploadTemplate(ctx: Context, {requestId, files}: UploadTemplate) {
     ctx.setState(patch({status: "updating" as StateStatus}));
     return this.rest.uploadTemplate(requestId, files).pipe(
       catchError(err => {

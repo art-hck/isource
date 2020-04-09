@@ -41,8 +41,8 @@ export namespace TechnicalCommercialProposals {
     constructor(public proposal: TechnicalCommercialProposal) {}
   }
 
-  export class UploadTkpFromTemplate {
-    static readonly type = '[Technical Commercial Proposals Backoffice] UploadTkpFromTemplate';
+  export class UploadTemplate {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
     constructor(public requestId: Uuid, public files: File[]) {}
   }
 

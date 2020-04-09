@@ -21,7 +21,7 @@ import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
-import UploadTkpFromTemplate = TechnicalCommercialProposals.UploadTkpFromTemplate;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -63,7 +63,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Create, Update, Publish, UploadTkpFromTemplate),
+      ofActionCompleted(Create, Update, Publish, UploadTemplate),
       throttleTime(1),
       takeUntil(this.destroy$)
     ).subscribe(({action, result}) => {
@@ -94,7 +94,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   onSendTemplatePositions(): void {
-    this.store.dispatch(new UploadTkpFromTemplate(this.requestId, this.files));
+    this.store.dispatch(new UploadTemplate(this.requestId, this.files));
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
