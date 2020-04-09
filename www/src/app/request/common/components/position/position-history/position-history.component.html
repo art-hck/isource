@@ -57,7 +57,7 @@
             <div class="position-winner-selected-item">
               <div class="position-winner-name">
                 <span *ngIf="!activityItem.data.supplierId; else clickableWinnerLink">
-                {{ activityItem.data.supplierName || 'Без имени' }}
+                {{ activityItem.data.supplierName || 'Поставщик' }}
               </span>
 
                 <ng-template #clickableWinnerLink>

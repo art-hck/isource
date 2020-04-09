@@ -21,9 +21,11 @@
               <th class="position-name"></th>
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
                   <div class="contragent-info">
+                    <ng-container *ngIf="supplier.shortName; else noname">
                     <app-contragent-info-link
                       [contragent]="supplier">
                     </app-contragent-info-link>
+                    </ng-container>
                   </div>
                 <ng-template #noname>
                   <div class="noname">Поставщик</div>
@@ -54,10 +56,10 @@
               </td>
 
               <td *ngFor="let supplier of suppliers">
-                <ng-container *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier.shortName)">
+                <ng-container *ngFor="let linkedOffer of getSupplierLinkedOffers(requestPosition.linkedOffers, supplier.id)">
                   <div class="offer"
-                       (click)="onSelectOffer(requestPosition, supplier.shortName, linkedOffer)"
-                       [ngClass]="{ 'selected' : offerIsSelected(requestPosition, supplier.shortName) || offerIsWinner(linkedOffer) }">
+                       (click)="onSelectOffer(requestPosition, supplier.id, linkedOffer)"
+                       [ngClass]="{ 'selected' : offerIsSelected(requestPosition, supplier.id) || offerIsWinner(linkedOffer) }">
                     <div class="counted-price-block">
                       <div class="clr-row clr-justify-content-between">
                         <div class="clr-col-auto">
