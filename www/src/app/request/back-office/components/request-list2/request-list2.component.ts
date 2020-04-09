@@ -33,7 +33,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
-  readonly toast = (toast: Toast) => new ToastActions.Push(toast);
+  readonly fetchStatusCounts = () => new FetchStatusCounts();
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,

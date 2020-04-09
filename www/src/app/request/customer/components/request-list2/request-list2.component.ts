@@ -31,7 +31,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
-  readonly toast = (toast: Toast) => new ToastActions.Push(toast);
+  readonly fetchStatusCounts = () => new FetchStatusCounts();
   readonly addRequestFromExcel = ({files, requestName}, publish: boolean) => new AddRequestFromExcel(files, requestName, publish);
 
   constructor(

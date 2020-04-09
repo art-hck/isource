@@ -7,5 +7,5 @@
   [pageSize]="pageSize"
   [availableFilters]="availableFilters$ | async"
   (filter)="fetchFilters$.next($event)"
-  (needRefresh)="store.dispatch(toast({text: '123'}))"
+  (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
 ></app-request-list2>

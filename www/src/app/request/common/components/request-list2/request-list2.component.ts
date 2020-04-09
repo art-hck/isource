@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { RequestStatusCount } from "../../models/requests-list/request-status-count";
 import { UxgTabTitleComponent } from "uxg";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
@@ -30,9 +30,10 @@ export class RequestList2Component implements OnInit, OnDestroy {
   @Input() filters: {page?: number, filters?: RequestsListFilter};
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter }>();
   @Output() addRequest = new EventEmitter();
-  @Output() needRefresh = new EventEmitter();
+  @Output() refresh = new EventEmitter();
 
   filterOpened = false;
+  hideNeedUpdate = true;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();
   readonly RequestStatus = RequestStatus;
@@ -50,16 +51,16 @@ export class RequestList2Component implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private feature: FeatureService,
     private wsService: WebsocketService,
+    private cd: ChangeDetectorRef,
     public user: UserInfoService
   ) {}
 
   ngOnInit() {
-    this.wsService.on(EventTypes.REQUEST_LIST_UPDATED).pipe(takeUntil(this.destroy$)).pipe(
-      takeUntil(this.needRefresh)
-    )
+    this.wsService.on(EventTypes.REQUEST_LIST_UPDATED).pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         console.log("Refresh motherfucker!");
-        this.needRefresh.emit();
+        this.hideNeedUpdate = false;
+        this.cd.detectChanges();
       });
   }
 

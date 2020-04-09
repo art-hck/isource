@@ -1,5 +1,14 @@
 <div class="app-row">
   <div class="app-col">
+    <clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" [(clrAlertClosed)]="hideNeedUpdate">
+      <clr-alert-item>
+        <span class="alert-text">Список заявок был изменен</span>
+        <div class="alert-actions">
+          <button class="btn alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+        </div>
+      </clr-alert-item>
+    </clr-alert>
+
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
         <uxg-tab-title #inProgressTab [active]="true" (click)="switchTab(inProgressTab, RequestStatus.IN_PROGRESS)"

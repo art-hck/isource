@@ -7,7 +7,7 @@
   [pageSize]="pageSize"
   (filter)="fetchFilters$.next($event)"
   (addRequest)="newRequestModal.open()"
-  (needRefresh)="store.dispatch(toast({text: '123'}))"
+  (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
 ></app-request-list2>
 
 <app-request-create-modal
