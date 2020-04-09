@@ -51,6 +51,7 @@ export class PositionComponent implements OnInit, OnDestroy {
 
   updateData(position: RequestPosition) {
     this.setPageInfo(position);
+    this.updateAvailableStatuses(position);
     this.position$ = of(position);
   }
 

@@ -23,4 +23,5 @@ export enum PositionStatus {
   PAID = 'PAID',                                   // Оплачено
   WARRANTY = 'WARRANTY',                           // Гарантийные обязательства
   COMPLETED = 'COMPLETED',                         // Завершено
+  CANCELED = 'CANCELED'                             // Отменена
 }

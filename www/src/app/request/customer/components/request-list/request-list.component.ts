@@ -65,7 +65,7 @@ export class RequestListComponent implements OnInit {
     this.composeFilters();
 
     if (this.requestListFilterComponent) {
-      this.requestListFilterComponent.clearFilter();
+      this.requestListFilterComponent.resetFilter(false);
       this.currentFilters = <RequestsListFilter>{};
     }
   }

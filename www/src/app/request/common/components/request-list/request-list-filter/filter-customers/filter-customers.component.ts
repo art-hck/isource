@@ -5,15 +5,15 @@ import { ContragentList } from "../../../../../../contragent/models/contragent-l
 
 @Component({
   selector: 'app-request-filter-customer-list',
-  templateUrl: './request-filter-customer-list.component.html',
-  styleUrls: ['./request-filter-customer-list.component.scss'],
+  templateUrl: './filter-customers.component.html',
+  styleUrls: ['./filter-customers.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => RequestFilterCustomerListComponent),
+    useExisting: forwardRef(() => FilterCustomersComponent),
     multi: true
   }]
 })
-export class RequestFilterCustomerListComponent implements ControlValueAccessor {
+export class FilterCustomersComponent implements ControlValueAccessor {
 
   @Input() customers;
   @Input() limit: number;
@@ -21,7 +21,6 @@ export class RequestFilterCustomerListComponent implements ControlValueAccessor 
   @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
 
   customerSearchValue = "";
-  selectedCustomers = [];
 
   value: Uuid[];
   onTouched: (value: Uuid[]) => void;
@@ -49,43 +48,20 @@ export class RequestFilterCustomerListComponent implements ControlValueAccessor 
     return this.customerSearchValue;
   }
 
-  onCustomerSelected(selectedCustomer) {
-    this.updateArray(this.selectedCustomers, selectedCustomer);
-    this.onChange(this.selectedCustomers);
-  }
-
-  checkIfCustomerIsChecked(customerId) {
-    return this.selectedCustomers && this.selectedCustomers.indexOf(customerId) > -1;
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  writeValue(value: Uuid[] | null): void {
-    this.value = value;
-  }
-
-  // canSeeToggleLink(customers, limit) {
-  //   return customers && limit > 0 &&
-  //   (
-  //     limit > customers.length ||
-  //     limit >= filteredCustomers.length
-  //   );
-  // }
-
-
-  protected updateArray(array: Array<Object>, item: Object): void {
-    const index = array.indexOf(item);
-
-    if (index === -1) {
-      array.push(item);
+  check(selectedCustomer) {
+    if (this.value.indexOf(selectedCustomer) === -1) {
+      this.writeValue([...this.value, selectedCustomer]);
     } else {
-      array.splice(index, 1);
+      this.writeValue(this.value.filter(customer => customer !== selectedCustomer));
     }
+    this.onChange(this.value);
   }
+
+  checked(customerId): boolean {
+    return (this.value || []).indexOf(customerId) > -1;
+  }
+
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  writeValue = value => this.value = value;
 }

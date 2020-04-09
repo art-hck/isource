@@ -3,10 +3,12 @@
 }
 
 .customers-list {
+  padding: 11px;
+  margin: -11px;
   max-height: 320px;
   overflow: auto;
 
-  & .clr-checkbox-wrapper {
+  .app-row:not(:last-child) {
     padding-bottom: 10px;
   }
 }

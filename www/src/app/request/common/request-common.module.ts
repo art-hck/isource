@@ -18,11 +18,11 @@ import {RequestAddGroupModalComponent} from "./components/request/request-add-gr
 import {RequestAddResponsibleModalComponent} from './components/request/request-add-responsible-modal/request-add-responsible-modal.component';
 import {RequestAsideInfoComponent} from "./components/request/request-aside-info/request-aside-info.component";
 import {RequestComponent} from "./components/request/request.component";
-import {RequestFilterCustomerListComponent} from './components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
+import {FilterCustomersComponent} from './components/request-list/request-list-filter/filter-customers/filter-customers.component';
 import {RequestListComponent} from "./components/request-list/request-list.component";
 import {TechnicalProposalFilterComponent} from "./components/technical-proposal-filter/technical-proposal-filter.component";
 import {RequestListFilterComponent} from './components/request-list/request-list-filter/request-list-filter.component';
-import {RequestListFilterSectionComponent} from "./components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
+import {FilterSectionComponent} from "./components/request-list/request-list-filter/filter-section/filter-section.component";
 import {PositionComponent} from './components/position/position.component';
 import {RequestPositionStatusService} from "./services/request-position-status.service";
 
@@ -43,6 +43,7 @@ import {PositionsStatusChangeComponent} from "../back-office/components/position
 import {RequestMoveGroupModalComponent} from "./components/request/request-move-group-modal/request-move-group-modal.component";
 import {RequestPositionService} from "./services/request-position.service";
 import {PositionCancelComponent} from "./components/position-cancel/position-cancel.component";
+import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
 
 const RequestCommonModuleDeclarations = [
   BackofficeOffersComponent,
@@ -62,7 +63,7 @@ const RequestCommonModuleDeclarations = [
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
-  RequestFilterCustomerListComponent,
+  FilterCustomersComponent,
   TechnicalProposalFilterContragentListComponent,
   RequestTpFilterStatusesListComponent,
   RequestListComponent,
@@ -70,14 +71,15 @@ const RequestCommonModuleDeclarations = [
   TechnicalProposalFilterComponent,
   RequestTpFilterSectionComponent,
   RequestListFilterComponent,
-  RequestListFilterSectionComponent,
+  FilterSectionComponent,
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
   CommercialProposalListComponent,
   SearchFilterPipe,
   RequestMoveGroupModalComponent,
-  PositionCancelComponent
+  PositionCancelComponent,
+  FilterPositionStatusesComponent
 ];
 
 @NgModule({

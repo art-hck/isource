@@ -10,8 +10,8 @@ export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.RESULTS_AGREEMENT]: 'Выбор победителя',
   [PositionStatus.WINNER_SELECTED]: 'Выбран победитель',
   [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION]: 'Подготовка ТКП',
-  [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]: 'Выбор победителя',
-  [PositionStatus.TCP_WINNER_SELECTED]: 'Выбран победитель',
+  [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]: 'Согласование ТКП',
+  [PositionStatus.TCP_WINNER_SELECTED]: 'Выбран победитель ТКП',
   [PositionStatus.CONTRACT_AGREEMENT]: 'Согласование договора',
   [PositionStatus.CONTRACT_SIGNING]: 'Подписание договора',
   [PositionStatus.CONTRACTED]: 'Законтрактовано',
@@ -24,6 +24,7 @@ export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.PAID]: 'Оплачено',
   [PositionStatus.WARRANTY]: 'Гарантийные обязательства',
   [PositionStatus.COMPLETED]: 'Завершено',
-  [PositionStatus.NOT_RELEVANT]: 'Неактуальна'
+  [PositionStatus.NOT_RELEVANT]: 'Неактуальна',
+  [PositionStatus.CANCELED]: 'Отменена'
 };
 

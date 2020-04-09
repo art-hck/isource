@@ -1,14 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import {Router} from "@angular/router";
 import {RequestType} from "../../enum/request-type";
