@@ -38,17 +38,10 @@ export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService) {
   }
 
-  @Selector()
-  static proposals({ proposals }: Model) {return proposals;}
-
-  @Selector()
-  static proposalsLength({ proposals }: Model) {return proposals.length;}
-
-  @Selector()
-  static availablePositions({ availablePositions }: Model) {return availablePositions;}
-
-  @Selector()
-  static status({ status }: Model) {return status;}
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static proposalsLength({ proposals }: Model) { return proposals.length; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
+  @Selector() static status({ status }: Model) { return status; }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
