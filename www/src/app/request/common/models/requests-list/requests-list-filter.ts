@@ -1,5 +1,6 @@
 import { Uuid } from "../../../../cart/models/uuid";
 import { PositionStatus } from "../../enum/position-status";
+import { RequestStatus } from "../../enum/request-status";
 
 export class RequestsListFilter {
   requestNameOrNumber?: string;
@@ -9,6 +10,5 @@ export class RequestsListFilter {
   shipmentDateFrom?: Date;
   shipmentDateTo?: Date;
   shipmentDateAsap?: boolean;
+  requestListStatusesFilter?: RequestStatus[];
 }
-
-export type RequestsListFilterItem = RequestsListFilter[keyof RequestsListFilter];

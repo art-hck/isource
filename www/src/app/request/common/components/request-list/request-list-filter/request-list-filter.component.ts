@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { RequestsListFilter, RequestsListFilterItem } from "../../../models/requests-list/requests-list-filter";
+import { RequestsListFilter } from "../../../models/requests-list/requests-list-filter";
 import { debounceTime, filter, switchMap, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
@@ -46,31 +46,11 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
       debounceTime(300),
       filter(() => this.form.valid),
       takeUntil(this.destroy$)
-    ).subscribe(() => this.submit());
-  }
-
-
-  submit(): void {
-    this.filter.emit(Object.entries(this.form.value).reduce(
-      (result: RequestsListFilter, [k, v]: [keyof RequestsListFilter, RequestsListFilterItem]) => {
-        if (v instanceof Array && v.length > 0 || !(v instanceof Array) && v) {
-          (result[k] as RequestsListFilterItem) = v;
-        }
-
-        return result;
-      }, {}));
+    ).subscribe(() => this.filter.emit(this.form.value));
   }
 
   resetFilter(emitEvent = true) {
-    this.form.reset({
-        requestNameOrNumber: '',
-        onlyOpenTasks: false,
-        customers: [],
-        positionStatuses: [],
-        shipmentDateFrom: '',
-        shipmentDateTo: '',
-        shipmentDateAsap: false
-    }, { emitEvent });
+    this.form.reset(this.formInitialValue, { emitEvent });
   }
 
   ngOnDestroy() {

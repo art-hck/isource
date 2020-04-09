@@ -11,6 +11,7 @@ import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
+import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
 @Injectable()
 export class RequestService {
@@ -34,7 +35,7 @@ export class RequestService {
 
   requestStatusCount() {
     const url = `requests/customer/counts-on-different-statuses`;
-    return this.api.get(url); // @TODO Typization!
+    return this.api.get<RequestStatusCount>(url);
   }
 
   addFreeFormRequest(request: Partial<Request>) {
@@ -43,7 +44,7 @@ export class RequestService {
       this.formDataService.toFormData({request}));
   }
 
-  addRequestFromExcel(files: File[], requestName: string): Observable<any> {
+  addRequestFromExcel(files: File[], requestName: string) {
     const data = {
       files: files,
       name: requestName
@@ -51,7 +52,7 @@ export class RequestService {
 
     const requestData = this.formDataService.toFormData(data);
 
-    return this.api.post(`requests/customer/add-request/from-excel`, requestData);
+    return this.api.post<{id: Uuid}>(`requests/customer/add-request/from-excel`, requestData);
   }
 
   getRequest(id: Uuid) {
