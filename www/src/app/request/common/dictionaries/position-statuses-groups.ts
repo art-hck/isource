@@ -39,4 +39,10 @@ export const PositionStatusGroups = {
     PositionStatus.PAID,
     PositionStatus.COMPLETED
   ],
+  CANCELED: [
+    PositionStatus.CANCELED
+  ],
+  NOT_RELEVANT: [
+    PositionStatus.NOT_RELEVANT
+  ],
 };

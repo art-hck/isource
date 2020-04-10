@@ -31,8 +31,12 @@ export class PieChartComponent implements OnChanges {
       (sum, item) => sum + item.count, 0
     );
 
-    cx.canvas.width = this.radius * 2;
-    cx.canvas.height = this.radius * 2;
+    const selectItemRadius = this.radius + this.radius / 10;
+    const centerX = selectItemRadius;
+    const centerY = selectItemRadius;
+
+    cx.canvas.width = selectItemRadius * 2;
+    cx.canvas.height = selectItemRadius * 2;
 
     let currentAngle = 1.5 * Math.PI;
 
@@ -40,8 +44,8 @@ export class PieChartComponent implements OnChanges {
       const nextAngle = currentAngle + (item.count / total) * 2 * Math.PI;
 
       cx.beginPath();
-      cx.arc(this.radius, this.radius, this.radius, currentAngle, nextAngle);
-      cx.lineTo(this.radius, this.radius);
+      cx.arc(centerX, centerY, (item.select ? selectItemRadius : this.radius), currentAngle, nextAngle);
+      cx.lineTo(centerX, centerY);
       cx.fillStyle = item.color;
       cx.fill();
       cx.closePath();
@@ -52,13 +56,13 @@ export class PieChartComponent implements OnChanges {
     // рисуем засереную диаграму, если нет данных
     if (total === 0) {
       cx.beginPath();
-      cx.arc(this.radius, this.radius, this.radius, 0, 2 * Math.PI);
+      cx.arc(centerX, centerY, this.radius, 0, 2 * Math.PI);
       cx.fillStyle = '#eee';
       cx.fill();
     }
 
     cx.beginPath();
-    cx.arc(this.radius, this.radius, this.radius - this.radius / 2.5, 0, Math.PI * 2);
+    cx.arc(centerX, centerY, this.radius - this.radius / 3, 0, Math.PI * 2);
     cx.fillStyle = "#fff";
     cx.fill();
 
@@ -66,9 +70,9 @@ export class PieChartComponent implements OnChanges {
       cx.fillStyle = "#aaa";
       cx.textAlign = "center";
       cx.font = "lighter " + Math.round(this.radius / 5) + "px sans-serif";
-      cx.fillText("Всего", this.radius, this.radius);
-      cx.fillStyle = "#777";
-      cx.fillText(this.getHumanNumber(total) + ' ' + this.measure, this.radius, this.radius + Math.round(this.radius / 5));
+      cx.fillText("Всего", centerX, centerY);
+      cx.fillStyle = "#333";
+      cx.fillText(this.getHumanNumber(total) + ' ' + this.measure, centerX, centerY + Math.round(this.radius / 5));
     }
   }
 
@@ -84,5 +88,15 @@ export class PieChartComponent implements OnChanges {
     }
 
     return value;
+  }
+
+  onItemMouseEnter(item: PieChartItem) {
+    item.select = true;
+    this.drawChart();
+  }
+
+  onItemMouseLeave(item: PieChartItem) {
+    item.select = false;
+    this.drawChart();
   }
 }

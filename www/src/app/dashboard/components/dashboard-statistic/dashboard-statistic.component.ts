@@ -37,7 +37,13 @@ export class DashboardStatisticComponent implements OnInit {
             const prepareStatistic = statistics.map(item => {
               return {status: item.status, count: +item.price};
             });
-            const statusCounters = this.getStatusCounters(prepareStatistic);
+            let statusCounters = this.getStatusCounters(prepareStatistic);
+
+            // Не показываем в статистике по деньга статусы Отклонено и Не актуально
+            // Фильтруем по урлу потому что группы статусов не типизированы
+            statusCounters = statusCounters.filter(statusCounter =>
+              !['canceled', 'not-relevant'].includes(statusCounter.url)
+            );
 
             return this.prepareStatistic(statusCounters);
           }

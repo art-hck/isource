@@ -20,7 +20,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Черновик",
     hasActions: false,
-    color: "#b3b3b3"
+    color: "#c4c4c4"
   },
   {
     url: "new",
@@ -94,6 +94,22 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     hasActions: false,
     color: "#20b55f"
   },
+  {
+    url: "canceled",
+    label: "Отменено",
+    statuses: PositionStatusGroups.CANCELED,
+    positions: [],
+    shortName: "Отменено",
+    hasActions: false,
+    color: "#c4c4c4"
+  },
+  {
+    url: "not-relevant",
+    label: "Не актуально",
+    statuses: PositionStatusGroups.NOT_RELEVANT,
+    positions: [],
+    shortName: "Не актуально",
+    hasActions: false,
+    color: "#c4c4c4"
+  },
 ];
-
-
