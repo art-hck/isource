@@ -3,8 +3,9 @@ hr { margin: 14px 0; }
 .app-table > .app-row {
   padding: 8px 0;
 
-  .app-col:first-child {
-    padding-left: 0;
+  .app-col {
+    &:first-child { padding-left: 0; }
+    &:last-child { padding-right: 0; }
   }
 }
 

@@ -62,6 +62,23 @@
             <clr-icon [attr.shape]="item.status==='NEW' ? 'app-unknown' : 'app-check'"></clr-icon>
           </div>
         </div>
+
+        <ng-container *ngIf="proposal.status === 'DRAFT'">
+          <hr/>
+          <div class="app-row app-align-items-center">
+            <div class="app-col app-secondary-color">
+              Вы можете отрадактировать созданный черновик, или отправить его на согласование без изменений
+            </div>
+            <div class="app-col app-row app-justify-content-end app-align-items-center">
+              <div *ngIf="(status$ | async) !== 'received'">
+                <span  class="spinner spinner-inline"></span>
+              </div>
+              <button uxgButton primary  [disabled]="(status$ | async) !== 'received'" (click)="publish()">
+                Отправить на согласование
+              </button>
+            </div>
+          </div>
+        </ng-container>
       </div>
 
       <ng-container  *ngIf="proposal.documents.length">
