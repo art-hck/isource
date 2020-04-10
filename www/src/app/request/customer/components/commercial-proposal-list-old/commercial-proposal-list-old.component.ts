@@ -61,12 +61,6 @@ export class CommercialProposalListOldComponent implements OnInit {
     return linkedOffers.filter(function(item) { return item.supplierContragent.id === supplierId; });
   }
 
-  getSupplierInfo(supplierId: Uuid) {
-    return this.requestPositions.filter(function (item) { return
-
-    })
-  }
-
   getTotalSumBySupplier(requestPositions: RequestPosition[], supplierId: Uuid): number {
     let sum = 0;
 
