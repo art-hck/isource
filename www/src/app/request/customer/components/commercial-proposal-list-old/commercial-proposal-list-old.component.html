@@ -19,11 +19,11 @@
             <thead>
             <tr>
               <th class="position-name"></th>
-              <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
+              <th class="contragent-name" *ngFor="let supplierId of suppliers; let i = index">
                   <div class="contragent-info">
-                    <ng-container *ngIf="supplier.shortName; else noname">
+                    <ng-container *ngIf="!request.hideContragent; else noname">
                     <app-contragent-info-link
-                      [contragent]="supplier">
+                      [contragent]="supplierId">
                     </app-contragent-info-link>
                     </ng-container>
                   </div>
@@ -125,7 +125,7 @@
                   <div class="clr-row clr-align-items-center">
                     <div class="clr-col">
                             <span class="total-sum">
-                              {{ getTotalSumBySupplier(requestPositions, supplier.shortName) | currency : 'RUB' }}
+                              {{ getTotalSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}
                             </span>
                     </div>
                   </div>
@@ -133,17 +133,17 @@
                   <div class="clr-row clr-align-items-center">
                     <div class="clr-col">
                             <span class="selected-sum">
-                              Выбрано на сумму {{ getSelectedSumBySupplier(requestPositions, supplier.shortName) | currency : 'RUB' }}
+                              Выбрано на сумму {{ getSelectedSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}
                             </span>
                     </div>
                   </div>
 
                   <div class="clr-row">
                     <div class="clr-col"
-                         [class.hover-switch-block]="canSelectOffersBySupplier(requestPositions, supplier.shortName)">
+                         [class.hover-switch-block]="canSelectOffersBySupplier(requestPositions, supplier.id)">
 
                       <div class="alert-labels">
-                        <div *ngIf="validPositionsCount(requestPositions, supplier.shortName); else invalidCount">
+                        <div *ngIf="validPositionsCount(requestPositions, supplier.id); else invalidCount">
                             <span class="green-label">
                               <clr-icon shape="check" size="12"></clr-icon> Все позиции в нужном количестве
                             </span>
@@ -156,7 +156,7 @@
                         </ng-template>
 
 
-                        <div *ngIf="validPositionsDeliveryDate(requestPositions, supplier.shortName); else invalidDelivery">
+                        <div *ngIf="validPositionsDeliveryDate(requestPositions, supplier.id); else invalidDelivery">
                             <span class="green-label">
                               <clr-icon shape="check" size="12"></clr-icon> Сроки поставки укладываются в заданные
                             </span>
@@ -171,8 +171,8 @@
 
                       <div class="select-all-button" style="display: none">
                         <button class="btn btn-primary"
-                                *ngIf="canSelectOffersBySupplier(requestPositions, supplier.shortName)"
-                                (click)="onSelectAll(requestPositions, supplier.shortName)">Выбрать всё
+                                *ngIf="canSelectOffersBySupplier(requestPositions, supplier.id)"
+                                (click)="onSelectAll(requestPositions, supplier.id)">Выбрать всё
                         </button>
                       </div>
                     </div>
