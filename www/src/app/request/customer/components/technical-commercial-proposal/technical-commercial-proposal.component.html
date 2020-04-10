@@ -35,7 +35,11 @@
            class="app-row app-link-no-color data data-body"
         >
           <div class="app-col  app-ellipsis supplier">
-            <app-contragent-info-link (click)="$event.stopPropagation()" [contragent]="data.proposal.supplier"></app-contragent-info-link>
+            <app-contragent-info-link *ngIf="data.proposal.supplier.shortName; else noname" (click)="$event.stopPropagation()"
+                                      [contragent]="data.proposal.supplier"></app-contragent-info-link>
+            <ng-template #noname>
+              Поставщик
+            </ng-template>
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
           <div class="app-col quantity ">

@@ -2,7 +2,10 @@
   <div class="app-card" *ngSwitchCase="'view'">
     <div class="app-row app-align-items-center">
       <h3 class="app-col">
+        <ng-container *ngIf="proposal.supplier; else noname">
         <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
+        </ng-container>
+        <ng-template #noname>Поставщик</ng-template>
       </h3>
       <ng-container [ngSwitch]="proposal.status">
         <div class="app-ghost-color app-bold" *ngSwitchCase="'DRAFT'">

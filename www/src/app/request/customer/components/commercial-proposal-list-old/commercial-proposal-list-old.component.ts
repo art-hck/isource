@@ -56,16 +56,16 @@ export class CommercialProposalListOldComponent implements OnInit {
 
   getSupplierLinkedOffers(
     linkedOffers: RequestOfferPosition[],
-    supplier: string
+    supplierId: Uuid
   ): RequestOfferPosition[] {
-    return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
+    return linkedOffers.filter(function(item) { return item.supplierContragent.id === supplierId; });
   }
 
-  getTotalSumBySupplier(requestPositions: RequestPosition[], supplier: string): number {
+  getTotalSumBySupplier(requestPositions: RequestPosition[], supplierId: Uuid): number {
     let sum = 0;
 
     requestPositions.forEach(pos => {
-      const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
+      const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplierId);
       if (supplierLinkedOffer[0]) {
         sum = sum + (supplierLinkedOffer[0].priceWithVat * supplierLinkedOffer[0].quantity);
       }
@@ -74,12 +74,12 @@ export class CommercialProposalListOldComponent implements OnInit {
     return sum;
   }
 
-  getSelectedSumBySupplier(requestPositions: RequestPosition[], supplier: string): number {
+  getSelectedSumBySupplier(requestPositions: RequestPosition[], supplierId: Uuid): number {
     let selectedSum = 0;
     const selectedOffers = this.selectedOffers;
 
     requestPositions.forEach(pos => {
-      const supplierLinkedOffers = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(pos.linkedOffers, supplierId);
 
       supplierLinkedOffers.forEach(offer => {
         if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {

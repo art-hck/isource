@@ -5,7 +5,7 @@
       <div class="card" [class.winner]="linkedOffer.isWinner">
         <div class="card-header">
           <ng-container *ngIf="linkedOffer.supplierContragent; else noname">
-            <app-contragent-info-link [contragent]="linkedOffer.supplierContragent"></app-contragent-info-link>
+          <app-contragent-info-link [contragent]="linkedOffer.supplierContragent"></app-contragent-info-link>
           </ng-container>
           <ng-template #noname>
             Поставщик
