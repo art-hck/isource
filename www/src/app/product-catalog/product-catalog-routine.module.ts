@@ -1,11 +1,10 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { AccessGuard } from '@stdlib-ng/core';
 import { ProductCatalogComponent } from "./page/product-catalog.component";
 
 const routes: Routes = [
   {
-    path: '', canActivateChild: [AccessGuard], children: [
+    path: '', children: [
       /**
        * Тут размещаются роуты, которые доступны на основании списка gui пришедших с бека
        * Каждый роут должен содержать routeId. Пример:

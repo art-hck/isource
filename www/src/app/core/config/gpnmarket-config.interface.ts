@@ -1,4 +1,8 @@
 import { FeatureList } from "./feature-list";
+import { InjectionToken } from "@angular/core";
+
+export const APP_CONFIG = new InjectionToken<GpnmarketConfigInterface>('app.config');
+
 /**
  * Интерфейс главного конфига приложения
  */

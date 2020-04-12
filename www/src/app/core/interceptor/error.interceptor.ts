@@ -9,7 +9,7 @@ import {
 } from "@angular/common/http";
 import { tap } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
-import { TokenService } from "@stdlib-ng/core";
+import { TokenService } from "../../auth/services/token.service";
 import { Router } from "@angular/router";
 import { Store } from "@ngxs/store";
 import { ToastActions } from "../../shared/actions/toast.actions";

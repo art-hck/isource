@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { CardComponent } from "./components/card/card.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ClarityModule } from '@clr/angular';
-import { CustomComponentsModule } from '@stdlib-ng/custom-components';
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
@@ -41,7 +40,6 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     ReactiveFormsModule,
     RouterModule,
     ClarityModule,
-    CustomComponentsModule,
     UxgModule,
     NgxsModule.forFeature([
       ToastState
@@ -80,7 +78,6 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     CommonModule,
     FormsModule,
     ClarityModule,
-    CustomComponentsModule,
     UxgModule,
 
     CardComponent,

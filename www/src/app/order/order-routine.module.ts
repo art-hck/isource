@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { AccessGuard } from '@stdlib-ng/core';
 import { OrdersListComponent } from "./components/orders-list/orders-list.component";
 import { SupplierOrdersListComponent } from "./components/supplier-orders-list/supplier-orders-list.component";
 import { SupplierOrderConfirmationComponent } from "./components/supplier/supplier-order-confirmation/supplier-order-confirmation.component";
@@ -9,7 +8,7 @@ import { CustomerOrderConfirmationComponent } from "./components/customer/custom
 
 const routes: Routes = [
   {
-    path: '', canActivateChild: [AccessGuard], children: [
+    path: '', children: [
       /**
        * Тут размещаются роуты, которые доступны на основании списка gui пришедших с бека
        * Каждый роут должен содеражать routeId. Пример:

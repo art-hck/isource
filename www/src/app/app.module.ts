@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
 import { registerLocaleData } from '@angular/common';
 
@@ -11,9 +11,7 @@ import { ClarityModule } from '@clr/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from "./core/core.module";
-import { AccessGuard, APP_CONFIG, AuthService, AvailableGuiService } from '@stdlib-ng/core';
 import { PagesModule } from "./pages/pages.module";
-import { StartupService } from "./startup.service";
 import { CartStoreService as CartStoreService } from './cart/services/cart-store.service';
 import { CartModule } from './cart/cart.module';
 import { AppConfig } from './config/app.config';
@@ -30,10 +28,7 @@ import { MessageModule } from "./message/message.module";
 import { NgxsModule } from "@ngxs/store";
 import { SharedModule } from "./shared/shared.module";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
-
-export function startupServiceFactory(startupService: StartupService): Function {
-  return () => startupService.load();
-}
+import { APP_CONFIG } from "./core/config/gpnmarket-config.interface";
 
 registerLocaleData(localeRu, 'ru');
 UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
@@ -65,15 +60,7 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     })
   ],
   providers: [
-    StartupService,
     { provide: APP_CONFIG, useValue: AppConfig },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: startupServiceFactory,
-      deps: [StartupService, AuthService, AvailableGuiService],
-      multi: true
-    },
-    AccessGuard,
     RegistrationService,
     CartStoreService,
     {provide: LOCALE_ID, useValue: 'ru'}

@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DadataConfig, DadataType } from "@kolkov/ngx-dadata";
-import { GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
-import { APP_CONFIG } from '@stdlib-ng/core';
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 import * as moment from "moment";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { ContragentService } from "../../services/contragent.service";
