@@ -24,7 +24,7 @@
         <!-- Царь-чекбокс -->
         <div class="app-col app-basis-auto clr-flex-grow-0">
           <div class="app-row clr-align-items-center">
-            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
+            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let form of [form]"></uxg-checkbox>
             <uxg-popover #popover>
               <button uxgButton uxgPopoverTrigger link icon>
                 <clr-icon shape="app-triangle down"></clr-icon>
@@ -163,7 +163,7 @@
           К заявке пока не добавлено ни <br/> одной позиции
         </h2>
       </ng-container>
-      <ng-container *ngFor="let formGroup of formPositions.controls; trackBy: trackByFormPositionId">
+      <ng-container *ngFor="let formGroup of formPositions.controls">
         <!-- Позиция -->
         <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
           <a [href]="getPositionUrl(position)"
@@ -193,8 +193,8 @@
 
 <!-- Шаблон позиции -->
 <ng-template #positionItem let-position="position" let-formGroup="formGroup">
-  <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
-    <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
+  <div class="app-col clr-flex-grow-0" [formGroup]="formGroup">
+    <uxg-checkbox formControlName="checked"></uxg-checkbox>
   </div>
   <div class="app-col app-bold item-title">
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
@@ -240,8 +240,8 @@
 
 <!-- Шаблон группы -->
 <ng-template #groupItem let-group="group" let-formGroup="formGroup">
-  <div *ngIf="!formGroup.get('checked').disabled" class="app-col clr-flex-grow-0">
-    <uxg-checkbox [formControl]="formGroup.get('checked')" uxgSelectAllFor="positions"></uxg-checkbox>
+  <div class="app-col clr-flex-grow-0" [formGroup]="formGroup">
+    <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
 
   <div class="app-col" *ngIf="formGroup.get('folded') as folded">
@@ -263,7 +263,7 @@
 
     <!-- Позиции группы -->
     <div class="positions" *ngIf="!folded.value">
-      <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls; trackBy: trackByFormPositionId">
+      <ng-container *ngFor="let childformGroup of asFormArray(formGroup.get('positions')).controls">
         <div class="app-row">
           <ng-container *ngTemplateOutlet="positionItem; context:{
               position: childformGroup.get('position').value,
@@ -339,10 +339,11 @@
   </div>
 </clr-modal>
 
-<app-request-add-group-modal #addGroupModal
-                             [request]="request"
-                             [positions]="checkedPositions"
-                             (success)="addGroup.emit($event)"
+<app-request-add-group-modal
+  #addGroupModal
+  [request]="request"
+  [positions]="checkedPositions"
+  (success)="addGroup.emit($event)"
 ></app-request-add-group-modal>
 
 <app-request-move-group-modal

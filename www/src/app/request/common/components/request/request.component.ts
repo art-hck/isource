@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, Output } from "@angular/core";
-import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
@@ -17,9 +17,9 @@ import { StateStatus } from "../../models/state-status";
 import { debounceTime } from "rxjs/operators";
 
 @Component({
-  selector: 'app-request',
-  templateUrl: './request.component.html',
-  styleUrls: ['./request.component.scss'],
+  selector: "app-request",
+  templateUrl: "./request.component.html",
+  styleUrls: ["./request.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestComponent implements OnChanges {
@@ -47,13 +47,13 @@ export class RequestComponent implements OnChanges {
   canChangeStatuses: boolean;
 
   get formPositions(): FormArray {
-    return this.form.get('positions') as FormArray;
+    return this.form.get("positions") as FormArray;
   }
 
-  private get formPositionsFlat() {
+  private get formPositionsFlat(): FormGroup[] {
     return this.formPositions.controls
       .reduce((arr, formGroup) => {
-        if (formGroup && formGroup.get("positions").value.length > 0) {
+        if (formGroup && formGroup.get("positions") && formGroup.get("positions").value.length > 0) {
           return [...arr, ...(formGroup.get("positions") as FormArray).controls];
         }
         return [...arr, formGroup];
@@ -79,18 +79,20 @@ export class RequestComponent implements OnChanges {
     private requestService: RequestService,
     private statusService: RequestPositionStatusService,
     private cd: ChangeDetectorRef,
+    private fb: FormBuilder,
     public user: UserInfoService,
-    public featureService: FeatureService,
-    public ngZone: NgZone,
+    public featureService: FeatureService
   ) {}
 
-  ngOnChanges() {
-    this.form = this.positionsToForm(this.positions);
-    this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
-    this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
-    this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
-    this.isOnApproval = this.featureService.authorize('approveRequest') &&
-      (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.positions) {
+      this.form = this.fetchForm(this.positions);
+      this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
+      this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
+      this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
+      this.isOnApproval = this.featureService.authorize("approveRequest") &&
+        (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+    }
 
     this.formPositions.valueChanges.pipe(debounceTime(10)).subscribe(value => {
       this.checkedPositions = this.formPositionsFlat
@@ -106,11 +108,11 @@ export class RequestComponent implements OnChanges {
   }
 
   asGroup(positionList: RequestPositionList): RequestGroup | null {
-    return positionList.entityType !== 'GROUP' ? null : positionList as RequestGroup;
+    return positionList.entityType !== "GROUP" ? null : positionList as RequestGroup;
   }
 
   asPosition(positionList: RequestPositionList): RequestPosition | null {
-    return positionList.entityType !== 'POSITION' ? null : positionList as RequestPosition;
+    return positionList.entityType !== "POSITION" ? null : positionList as RequestPosition;
   }
 
   navigateToPosition(position: RequestPositionList, e: MouseEvent): void {
@@ -134,14 +136,14 @@ export class RequestComponent implements OnChanges {
     }
     if (["groups", "positions"].indexOf(type) >= 0) {
       this.formPositions.controls.forEach(c => c.get("checked").setValue(
-        this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups")
+        c.get("positions") && this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups")
       ));
     }
   }
 
   toggleGroups(folded: boolean) {
     this.formPositions.controls
-      .filter(c => this.asFormArray(c.get("positions")).controls.length > 0)
+      .filter(c => c.get("positions") && this.asFormArray(c.get("positions")).controls.length > 0)
       .forEach(c => c.get("folded").setValue(folded));
   }
 
@@ -153,19 +155,18 @@ export class RequestComponent implements OnChanges {
     return !this.statusService.isStatusAfter(position.status, PositionStatus.TECHNICAL_PROPOSALS_PREPARATION);
   }
 
-  private positionsToForm(positions: RequestPositionList[], position?: RequestPositionList) {
-    const formGroup = new FormGroup({
-      checked: new FormControl(false),
-      folded: new FormControl(false),
-      positions: new FormArray(
-        positions.map(p => this.positionsToForm(this.asGroup(p) ? this.asGroup(p).positions : [], p))
-      )
-    });
+  private fetchForm(positions: RequestPositionList[], position?: RequestPositionList) {
+    const formGroup = this.fb.group({ checked: false, folded: false });
+
+    if (positions) {
+      formGroup.addControl("positions", this.fb.array(
+        positions.map(p => this.fetchForm((p as RequestGroup).positions, p))
+      ));
+    }
 
     if (position) {
-      formGroup.addControl("position", new FormControl(position));
-      if (this.asPosition(position) && (this.asPosition(position).status === PositionStatus.NOT_RELEVANT ||
-        this.asPosition(position).status === PositionStatus.CANCELED)) {
+      formGroup.addControl("position", this.fb.control(position));
+      if (this.asPosition(position) && this.isNotActual(this.asPosition(position))) {
         formGroup.get("checked").disable();
       }
     }

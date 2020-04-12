@@ -104,7 +104,9 @@
 }
 
 a.canceled {
-  color: #b3b3b3;
+  &, &:hover {
+    color: #b3b3b3;
+  }
 }
 
 .publish-title {
