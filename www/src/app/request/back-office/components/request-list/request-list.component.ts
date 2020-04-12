@@ -16,8 +16,7 @@ import { Observable } from "rxjs";
 })
 export class RequestListComponent implements OnInit {
 
-  @ViewChild(RequestListFilterComponent, {static: false})
-             requestListFilterComponent: RequestListFilterComponent;
+  @ViewChild(RequestListFilterComponent) requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
   currentStatus: string;

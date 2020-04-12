@@ -18,7 +18,7 @@ export class FilterCustomersComponent implements ControlValueAccessor {
   @Input() customers;
   @Input() limit: number;
 
-  @ViewChild('customerSearchInput', { static: false }) customerSearchInput: ElementRef;
+  @ViewChild('customerSearchInput') customerSearchInput: ElementRef;
 
   customerSearchValue = "";
 

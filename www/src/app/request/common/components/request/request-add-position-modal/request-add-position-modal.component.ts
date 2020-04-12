@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
   styleUrls: ['./request-add-position-modal.component.scss']
 })
 export class RequestAddPositionModalComponent {
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
   @Input() request: Request;
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() success = new EventEmitter();

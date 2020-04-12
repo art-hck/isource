@@ -11,7 +11,7 @@ import { PaginatorComponent } from "../paginator/paginator.component";
 })
 export class SupplierOrdersListComponent implements AfterViewInit, OnInit {
 
-  @ViewChild(PaginatorComponent, { static: false }) paginator: PaginatorComponent;
+  @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
   orders: Order[];
   pageUrl: string;

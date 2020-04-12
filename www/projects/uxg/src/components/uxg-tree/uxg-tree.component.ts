@@ -11,8 +11,8 @@ export class UxgTreeWrapDirective {}
   templateUrl: './uxg-tree.component.html'
 })
 export class UxgTreeComponent implements AfterViewInit {
-  @ContentChild(UxgTreeWrapDirective, {static: false, read: TemplateRef}) wrapTpl: TemplateRef<any>;
-  @ContentChild(UxgTreeNodeDirective, {static: false, read: TemplateRef}) nodeTpl: TemplateRef<any>;
+  @ContentChild(UxgTreeWrapDirective, { read: TemplateRef }) wrapTpl: TemplateRef<any>;
+  @ContentChild(UxgTreeNodeDirective, { read: TemplateRef }) nodeTpl: TemplateRef<any>;
   @ViewChildren("wrapRef") wraps: QueryList<ElementRef>;
   @ViewChildren("nodeRef") nodes: QueryList<ElementRef>;
   @Input() tree: any[];

@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 })
 export class OrdersListComponent implements AfterViewInit, OnInit {
 
-  @ViewChild(PaginatorComponent, { static: false }) paginator: PaginatorComponent;
+  @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
   orders: Order[];
   pageUrl: string;

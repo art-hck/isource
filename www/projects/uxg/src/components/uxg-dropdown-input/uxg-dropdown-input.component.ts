@@ -16,12 +16,12 @@ import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 })
 export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked, ControlValueAccessor, Validator {
   @ContentChildren(UxgDropdownItemDirective) items: QueryList<UxgDropdownItemDirective>;
-  @ContentChild('errors', {static: false, read: TemplateRef }) errors: TemplateRef<ElementRef>;
+  @ContentChild('errors', { read: TemplateRef }) errors: TemplateRef<ElementRef>;
   @HostBinding('class.app-dropdown') appDropdownClass = true;
   @HostBinding('class.app-control-wrap') @Input() appControlWrap = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
-  @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
-  @ViewChild('inputRef', { static: false }) inputRef: ElementRef;
+  @ViewChild('itemsWrapper') itemsWrapperRef: ElementRef;
+  @ViewChild('inputRef') inputRef: ElementRef;
   @Output() select = new EventEmitter();
   @Output() focus = new EventEmitter();
   @Input() hideAfterSelect = true;

@@ -27,7 +27,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class MessagesViewComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('requestsSearchField', { static: false }) requestsSearchField: ElementRef;
+  @ViewChild('requestsSearchField') requestsSearchField: ElementRef;
 
   requestId: Uuid;
   positionId: Uuid;

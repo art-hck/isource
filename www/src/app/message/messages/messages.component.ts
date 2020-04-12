@@ -27,7 +27,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
   @Input() contextType: string;
-  @ViewChild('scrollContainer', { static: false }) private scrollContainerEl: ElementRef;
+  @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
 
   private scrollContainer: any;

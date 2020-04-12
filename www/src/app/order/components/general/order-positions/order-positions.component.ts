@@ -22,7 +22,7 @@ export class OrderPositionsComponent implements AfterViewInit, OnInit {
    */
   @Input() supplierResponseReadOnly: boolean;
 
-  @ViewChild(PaginatorComponent, { static: false }) paginator: PaginatorComponent;
+  @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
   pageSize = 25;
   positions: Page<OrderPosition>;

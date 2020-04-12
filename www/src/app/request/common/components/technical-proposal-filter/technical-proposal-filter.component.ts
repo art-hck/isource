@@ -19,9 +19,9 @@ import { RequestTpFilterStatusesListComponent } from "./technical-proposal-filte
 })
 export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
 
-  @ViewChild(TechnicalProposalFilterContragentListComponent, {static: false})
+  @ViewChild(TechnicalProposalFilterContragentListComponent)
              requestTpFilterContragentListComponent: TechnicalProposalFilterContragentListComponent;
-  @ViewChild(RequestTpFilterStatusesListComponent, {static: false})
+  @ViewChild(RequestTpFilterStatusesListComponent)
              requestTpFilterStatusesListComponent: RequestTpFilterStatusesListComponent;
 
   @Output() filters = new EventEmitter<RequestsListFilter>();

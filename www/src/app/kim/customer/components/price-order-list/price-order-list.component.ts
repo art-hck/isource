@@ -29,6 +29,7 @@ export class PriceOrderListComponent implements OnInit, OnDestroy {
   progressTabCount = 0;
   reviewedTabCount = 0;
   readonly destroy$ = new Subject();
+  readonly folded = [];
   getOrderId = (i, {id}: KimPriceOrder) => id;
 
   constructor(

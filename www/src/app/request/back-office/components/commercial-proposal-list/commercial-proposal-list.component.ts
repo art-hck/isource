@@ -17,7 +17,7 @@ import { RequestActions } from "../../actions/request.actions";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
-  @ViewChild('confirmToast', { static: false }) confirmToast: ClrModal;
+  @ViewChild('confirmToast') confirmToast: ClrModal;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;

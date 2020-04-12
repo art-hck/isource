@@ -11,23 +11,18 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "spec": false,
           "skipTests": true
         },
         "@schematics/angular:service": {
-          "spec": false,
           "skipTests": true
         },
         "@schematics/angular:directive": {
-          "spec": false,
           "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "spec": false,
           "skipTests": true
         },
         "@schematics/angular:class": {
-          "spec": false,
           "skipTests": true
         }
       },
@@ -35,6 +30,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/mall-front",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -76,6 +72,10 @@
                   "type": "initial",
                   "maximumWarning": "3mb",
                   "maximumError": "7mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -169,7 +169,7 @@
             "main": "projects/uxg-examples/src/main.ts",
             "polyfills": "projects/uxg-examples/src/polyfills.ts",
             "tsConfig": "projects/uxg-examples/tsconfig.json",
-            "aot": false,
+            "aot": true,
             "styles": [
               "./node_modules/@clr/icons/clr-icons.min.css",
               "projects/uxg-examples/src/styles.scss"
@@ -190,7 +190,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -234,6 +233,11 @@
           "options": {
             "tsConfig": "projects/uxg/tsconfig.json",
             "project": "projects/uxg/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/uxg/tsconfig.lib.prod.json"
+            }
           }
         }
       }

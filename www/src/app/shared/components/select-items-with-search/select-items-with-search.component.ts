@@ -20,7 +20,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() filterFn: (q, item) => boolean;
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
-  @ContentChild(TemplateRef, {static: false}) rowTplRef: TemplateRef<any>;
+  @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
 
   public onTouched: (value) => void;
   public onChange: (value) => void;

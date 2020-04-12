@@ -47,7 +47,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   @Input() isNewRequest = false;
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
-  @ViewChild('nameRef', { static: false }) nameDropdownInputRef: UxgDropdownInputComponent;
+  @ViewChild('nameRef') nameDropdownInputRef: UxgDropdownInputComponent;
   form: FormGroup;
   subscription = new Subscription();
   searchNameSuggestions$: Observable<string[]>;

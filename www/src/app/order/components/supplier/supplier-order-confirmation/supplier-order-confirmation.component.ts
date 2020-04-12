@@ -16,7 +16,7 @@ import { ButtonsProfiles } from '../../../enums/buttons-profiles';
 })
 export class SupplierOrderConfirmationComponent implements OnInit {
 
-  @ViewChild(OrderPositionsComponent, { static: false })
+  @ViewChild(OrderPositionsComponent)
   private orderPositionsComponent: OrderPositionsComponent;
 
   positionsResponseTypeBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;

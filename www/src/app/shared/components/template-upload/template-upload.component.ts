@@ -10,7 +10,7 @@ export class TemplateUploadComponent {
   documents: File[] = [];
 
   @Output() fileSelected = new EventEmitter<File[]>();
-  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+  @ViewChild('uploadEl') uploadElRef: ElementRef;
 
   addDocument(files: File[]) {
     this.documents.push(...files);

@@ -22,7 +22,7 @@ import Reject = TechnicalCommercialProposals.Reject;
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   @Input() group: TechnicalCommercialProposalGroupByPosition;
   @Input() requestId: Uuid;
-  @ViewChild("proposalModal", {static: false}) proposalModal: ClrModal;
+  @ViewChild("proposalModal") proposalModal: ClrModal;
   @Input() chooseBy$: Subject<"date" | "price">;
   readonly destroy$ = new Subject();
 

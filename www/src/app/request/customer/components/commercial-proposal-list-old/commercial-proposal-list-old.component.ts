@@ -23,8 +23,8 @@ import { Store } from "@ngxs/store";
 
 export class CommercialProposalListOldComponent implements OnInit {
 
-  @ViewChild('tableBody', { static: false }) tableBody: ElementRef;
-  @ViewChild('tableHeader', { static: false }) tableHeader: ElementRef;
+  @ViewChild('tableBody') tableBody: ElementRef;
+  @ViewChild('tableHeader') tableHeader: ElementRef;
 
   requestId: Uuid;
   request: Request;

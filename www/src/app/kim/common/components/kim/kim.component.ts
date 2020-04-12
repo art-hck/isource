@@ -6,7 +6,7 @@ import { DOCUMENT } from "@angular/common";
   styleUrls: ['./kim.component.scss']
 })
 export class KimComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('menu', { static: false }) menu: ElementRef;
+  @ViewChild('menu') menu: ElementRef;
 
   constructor(@Inject(DOCUMENT) private document: Document) {
   }
