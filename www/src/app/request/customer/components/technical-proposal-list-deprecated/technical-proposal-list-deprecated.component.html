@@ -7,7 +7,7 @@
     <div class="info-card app-col">
       <div class="technical-proposals">
         <div class="technical-proposal-card" *ngFor="let technicalProposal of technicalProposals; let i = index">
-          <div class="app-row app-justify-content-between clr-align-items-center">
+          <div class="app-row app-justify-content-between app-align-items-center">
             <span class="supplier-name clr-col-auto">
               <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
                 <app-contragent-info-link

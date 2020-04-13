@@ -5,7 +5,7 @@
     <div class="left clr-col-6">Комментарий</div>
   </div>
   <div *ngFor="let document of documents">
-    <div class="app-row clr-align-items-center">
+    <div class="app-row app-align-items-center">
       <div class="left clr-col-4">
         <app-document-simple-list [enableUpload]="false" [documents]="[document]"></app-document-simple-list>
       </div>

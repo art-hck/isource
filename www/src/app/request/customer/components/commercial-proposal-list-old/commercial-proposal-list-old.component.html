@@ -122,7 +122,7 @@
 
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
                 <div class="contragent-info">
-                  <div class="app-row clr-align-items-center">
+                  <div class="app-row app-align-items-center">
                     <div class="app-col">
                             <span class="total-sum">
                               {{ getTotalSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}
@@ -130,7 +130,7 @@
                     </div>
                   </div>
 
-                  <div class="app-row clr-align-items-center">
+                  <div class="app-row app-align-items-center">
                     <div class="app-col">
                             <span class="selected-sum">
                               Выбрано на сумму {{ getSelectedSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}

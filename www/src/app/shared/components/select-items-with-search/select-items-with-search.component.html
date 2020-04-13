@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <div class="app-table app-no-border clr-flex-shrink-0">
-    <div class="app-row clr-align-items-center">
+    <div class="app-row app-align-items-center">
       <div class="app-col app-grow-0">
         <uxg-checkbox formControlName="checked" uxgSelectAllFor="items"></uxg-checkbox>
       </div>
@@ -8,7 +8,7 @@
         <small><span class="app-secondary-color">Выбрано: </span><b>{{ checkedFormItems.length }}</b></small>
       </div>
       <ng-container *ngIf="filterFn">
-        <div class="app-col app-row app-grow-0 app-basis-auto clr-align-items-center">
+        <div class="app-col app-row app-grow-0 app-basis-auto app-align-items-center">
           <div class="app-col app-ghost-color app-grow-0 app-basis-auto">Фильтр: &nbsp; </div>
           <div class="app-col search">
             <input type="text" uxgInput formControlName="search" [placeholder]="placeholder"/>

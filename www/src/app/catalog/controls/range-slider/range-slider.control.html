@@ -7,7 +7,7 @@
   (change)="onChange($event)"
   [disabled]="isDisabled"
 ></nouislider>
-<div class="app-row clr-align-items-center">
+<div class="app-row app-align-items-center">
   <div class="app-col">
     <input #minInput type="text" [ngModel]="value[0]" [disabled]="isDisabled"
            (input)="writeValue([+minInput.value, +maxInput.value]); onChange(value)"

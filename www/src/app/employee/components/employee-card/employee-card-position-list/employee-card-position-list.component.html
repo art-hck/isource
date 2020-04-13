@@ -1,19 +1,19 @@
-<div class="app-table positions-list-datagrid app-section">
+<div class="app-table positions-list-datagrid app-section app-align-items-center">
   <ng-container *ngFor="let position of positions">
     <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId]">
-      <div class="position-request-number clr-col-1 clr-align-self-center">
+      <div class="position-request-number clr-col-1">
         <b>{{ position.requestNumber }}</b>
       </div>
 
-      <div class="app-ellipsis app-col clr-align-self-center">
+      <div class="app-ellipsis app-col">
         <b>{{ position.name }}</b>
       </div>
 
-      <div class="position-quantity clr-col-2 clr-align-self-center">
+      <div class="position-quantity clr-col-2">
         {{ position.quantity }} <span class="gray">{{ position.measureUnit }}</span>
       </div>
 
-      <div class="position-delivery-date bold-text clr-col-2 clr-align-self-center">
+      <div class="position-delivery-date bold-text clr-col-2">
       <span *ngIf="position.isDeliveryDateAsap">
         Как можно скорее
       </span>
@@ -23,7 +23,7 @@
       </span>
       </div>
 
-      <div class="position-status clr-col-2 clr-align-self-center"
+      <div class="position-status clr-col-2"
            [ngClass]="{ 'app-bold' : position.status.name === 'NEW' }">
         <uxg-position-status [label]="position.status.label" [status]="position.status.name">
         </uxg-position-status>

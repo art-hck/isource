@@ -15,7 +15,7 @@
     </div>
 
     <!-- supplier -->
-    <div class="app-row clr-align-items-center">
+    <div class="app-row app-align-items-center">
       <div class="app-col">
         <div class="app-control-wrap">
           <uxg-dropdown-input
@@ -131,11 +131,11 @@
     <hr/>
 
     <!-- footer -->
-    <div class="app-row clr-align-items-center section">
+    <div class="app-row app-align-items-center section">
       <div class="app-col app-secondary-color">
         Черновики технико-коммерческих предложений видны только сотрудникам бэкофиса, но не заказчику
       </div>
-      <div class="app-row app-col app-grow-0 app-basis-auto clr-align-items-center">
+      <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
           type="button" uxgButton secondary (click)="submit(false)"

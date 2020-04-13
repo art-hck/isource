@@ -1,21 +1,21 @@
 <div class="app-table requests-list-datagrid">
 
-  <a class="app-row app-link-no-color" *ngFor="let request of requests" [routerLink]="['/requests', 'backoffice', request.request.id]">
-    <div class="request-number clr-col-1 clr-align-self-center">
+  <a class="app-row app-link-no-color app-align-items-center" *ngFor="let request of requests" [routerLink]="['/requests', 'backoffice', request.request.id]">
+    <div class="request-number clr-col-1">
       <b>{{ request.request?.number }}</b>
     </div>
 
-    <div class="customer-name clr-col-3 clr-align-self-center"
+    <div class="customer-name clr-col-3"
                  title="{{ request.request.contragent?.shortName }}">
       {{ request.request.contragent?.shortName }}
     </div>
 
-    <div class="request-name app-col clr-align-self-center"
+    <div class="request-name app-col"
                  title="{{ request.request.name }}">
       {{ request.request.name }}
     </div>
 
-    <div class="request-completed clr-col-1 clr-align-self-center">
+    <div class="request-completed clr-col-1">
       <div class="pie-chart">
         <svg width="20" height="20" class="chart">
           <circle r="10" cx="10" cy="10" class="pie" />

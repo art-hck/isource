@@ -1,6 +1,6 @@
 <app-catalog-categories *ngIf="categoriesOpened" [(opened)]="categoriesOpened"></app-catalog-categories>
 
-<div class="app-row search-bar clr-align-items-center"
+<div class="app-row search-bar app-align-items-center"
      (window:resize)="onResize()"
      [attr.style]="('width:' + getSearchBarWidth()) | safeStyle">
   <div class="clr-col-2">

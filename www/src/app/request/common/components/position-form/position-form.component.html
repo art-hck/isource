@@ -32,7 +32,7 @@
 
   <div class="app-row">
     <div class="app-col">
-      <div class="app-row clr-align-items-center">
+      <div class="app-row app-align-items-center">
 
         <!-- deliveryDate -->
         <div class="app-col">
@@ -48,7 +48,7 @@
           </div>
         </div>
         <!-- isDeliveryDateAsap -->
-        <div class="app-col app-row clr-align-items-center">
+        <div class="app-col app-row app-align-items-center">
           <uxg-checkbox class="app-control asap" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
           <label (click)="isDeliveryDateAsap.check($event)"> Как можно скорее</label>
         </div>
@@ -138,7 +138,7 @@
         </div>
       </div>
     </div>
-    <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
+    <div class="app-col app-basis-auto app-row app-align-items-center app-grow-0">
       <uxg-checkbox class="app-control" #design class="is-design-req" formControlName="isDesignRequired"></uxg-checkbox>
       <label (click)="design.check($event)">Требуется РКД</label>
     </div>
@@ -151,15 +151,15 @@
       <h3>Необходимость сопутствующих услуг</h3>
       <br/>
       <div class="app-row">
-        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
+        <div class="app-col app-basis-auto app-row app-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-shmr-req" #shmr formControlName="isShmrRequired"></uxg-checkbox>
           <label (click)="shmr.check($event)">ШМР</label>
         </div>
-        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
+        <div class="app-col app-basis-auto app-row app-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-pnr-req" #pnr formControlName="isPnrRequired"></uxg-checkbox>
           <label (click)="pnr.check($event)">ПНР</label>
         </div>
-        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
+        <div class="app-col app-basis-auto app-row app-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-inspection-control-req" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
           <label (click)="inspection.check($event)">Инспекционный контроль</label>
         </div>
