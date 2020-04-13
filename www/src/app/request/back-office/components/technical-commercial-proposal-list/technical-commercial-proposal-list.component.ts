@@ -78,11 +78,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe();
 
-    this.proposalsByPositions$.pipe(
-      filter(p => !!p),
-      takeUntil(this.destroy$)
-    ).subscribe((items) => {
-
+    this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
       this.form.removeControl("positions");
       this.form.addControl("positions", this.fb.array(
         items.map(item => {
