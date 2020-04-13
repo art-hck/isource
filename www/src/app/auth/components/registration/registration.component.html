@@ -5,7 +5,7 @@
       <div class="form-block">
         <div class="clr-form-control">
           <h3>Личная информация</h3>
-          <div class="clr-row w-100">
+          <div class="app-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="email">Email</label>
               <input type="text" formControlName="username" appFormControlInvalidClass="invalid"/>
@@ -21,7 +21,7 @@
                      appFormControlInvalidClass="invalid">
             </div>
           </div>
-          <div class="clr-row w-100">
+          <div class="app-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="lastName">Фамилия</label>
               <input id="lastName" type="text" formControlName="lastName"
@@ -38,21 +38,19 @@
                      appFormControlInvalidClass="invalid"/>
             </div>
           </div>
-          <div class="clr-row w-100">
+          <div class="app-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
               <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-6 agreement">
-              <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="agreement" id="agreement" formControlName="agreement">
-                <label>Согласие на обработку персональных данных</label>
-              </clr-checkbox-wrapper>
+              <uxg-checkbox class="app-control" #agreement formControlName="agreement"></uxg-checkbox>
+              <label (click)="agreement.check($event)">Согласие на обработку персональных данных</label>
             </div>
           </div>
 
           <h3>Контрагент</h3>
-          <div class="clr-row w-100" [formGroup]="contragentForm">
+          <div class="app-row w-100" [formGroup]="contragentForm">
             <div class="clr-col-4">
               <label class="clr-control-label" for="inn">ИНН</label>
               <input id="inn" type="text" formControlName="inn" appFormControlInvalidClass="invalid"/>

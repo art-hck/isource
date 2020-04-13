@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
   templateUrl: 'request-add-group-modal.component.html'
 })
 export class RequestAddGroupModalComponent implements OnDestroy {
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<GroupWithPositions>();

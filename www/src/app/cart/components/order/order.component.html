@@ -1,34 +1,30 @@
 <h3>Оформить заказ</h3>
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <div class="clr-row">
+  <div class="app-row">
     <div class="clr-col-6">
       <label>Наименование заявки <b class="required-star">*</b></label>
       <input type="text" formControlName="requestName" appFormControlInvalidClass="invalid"/>
     </div>
     <div class="clr-col-6">
-      <div class="clr-row">
-        <div class="clr-col"><label>Необходимый срок поставки <b class="required-star">*</b></label></div>
+      <div class="app-row">
+        <div class="app-col"><label>Необходимый срок поставки <b class="required-star">*</b></label></div>
       </div>
-      <div class="clr-row clr-align-items-center">
-        <div class="clr-col clr-flex-grow-0">
+      <div class="app-row app-align-items-center">
+        <div class="app-col app-grow-0">
           <div style="position:relative">
-            <clr-date-container>
-              <input clrDate formControlName="deliveryDate" type="text" placeholder="Выберите дату"
+              <input appDatepicker formControlName="deliveryDate" type="text" placeholder="Выберите дату"
                 appFormControlInvalidClass="invalid"
               />
-            </clr-date-container>
           </div>
         </div>
-        <div class="clr-col">
-          <clr-checkbox-wrapper class="asap-checkbox">
-            <input type="checkbox" formControlName="isDeliveryDateAsap" clrCheckbox/>
-            <label>как можно скорее</label>
-          </clr-checkbox-wrapper>
+        <div class="app-col">
+          <uxg-checkbox class="app-control" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
+          <label (click)="isDeliveryDateAsap.check($event)">как можно скорее</label>
         </div>
       </div>
     </div>
   </div>
-  <div class="clr-row">
+  <div class="app-row">
     <div class="clr-col-6">
       <label>Базис поставки (пункт, до которого требуется доставка) <b class="required-star">*</b></label>
       <input type="text" formControlName="deliveryBasis" appFormControlInvalidClass="invalid"/>
@@ -54,8 +50,8 @@
     </div>
 
   </div>
-  <div class="clr-row clr-justify-content-end">
-    <div class="clr-col clr-flex-grow-0">
+  <div class="app-row app-justify-content-end">
+    <div class="app-col app-grow-0">
       <button class="btn btn-submit btn-primary" [clrLoading]="loadingState"
               [disabled]="form.invalid || isQuantityInvalid()">Сделать заказ
       </button>

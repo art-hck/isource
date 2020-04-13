@@ -14,7 +14,7 @@
           Отчет Прима-информ</button>
       </div>
     </div>
-    <div class="info-field clr-row">
+    <div class="info-field app-row">
       <div class="clr-col-4 app-section">
         <div class="app-ghost-color">Краткое наименование</div>
         <span>{{ contragent.shortName || '—' }}</span>
@@ -25,7 +25,7 @@
           <span>{{ contragent.fullName || '—' }}</span>
         </div>
     </div>
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section">
           <div class="app-ghost-color">ИНН</div>
           <span>{{ contragent.inn }}</span>
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section">
           <div class="app-ghost-color">Дата регистрации</div>
           <span>{{ contragent.taxAuthorityRegistrationDate ?
@@ -62,7 +62,7 @@
     <div class="legal-info">
       <h3>Юридический адрес</h3>
 
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section">
           <div class="app-ghost-color">Страна</div>
           <span>{{ contragent.addresses[0]?.country || '—' }}</span>
@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section">
           <div class="app-ghost-color">Почтовый индекс</div>
           <span>{{ contragent.addresses[0]?.postIndex || '—' }}</span>
@@ -101,7 +101,7 @@
     <div class="bank-info">
       <h3>Банковские реквизиты</h3>
 
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section">
           <div class="app-ghost-color">БИК</div>
           <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.bik : '—' }}</span>
@@ -118,7 +118,7 @@
         </div>
       </div>
 
-      <div class="info-field clr-row">
+      <div class="info-field app-row">
         <div class="clr-col-4 app-section app-ellipsis">
           <div class="app-ghost-color">Наименование банка</div>
           <span>{{ contragent.bankRequisites ? contragent.bankRequisites[0]?.name : '—' }}</span>

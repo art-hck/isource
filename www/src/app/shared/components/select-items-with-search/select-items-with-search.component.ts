@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ContentChild, forwardRef, Input, OnChanges, OnDestroy, TemplateRef } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { CustomValidators } from "../../forms/custom.validators";
 import { Subscription } from "rxjs";
 
@@ -20,7 +20,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() filterFn: (q, item) => boolean;
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
-  @ContentChild(TemplateRef, {static: false}) rowTplRef: TemplateRef<any>;
+  @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
 
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -29,11 +29,11 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   private subscription = new Subscription();
 
   get formItems() {
-    return this.form.get('items') as FormArray;
+    return this.form?.get('items') as FormArray;
   }
 
   get checkedFormItems() {
-    return this.formItems.controls.filter(control => control.get("checked").value);
+    return this.formItems?.controls.filter(control => control.get("checked").value) || [];
   }
 
   constructor(private fb: FormBuilder) {}
@@ -60,12 +60,8 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   }
 
   setFormItems() {
-    if (!this.items) {
-      return;
-    }
-
     this.items
-      .filter(() => this.form)
+      ?.filter(() => this.form)
       .forEach(item => {
         let formItem: AbstractControl;
         formItem = this.formItems.controls
@@ -75,7 +71,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
           formItem.get('item').setValue(item);
         } else {
           formItem = this.fb.group({
-            checked: this.value && !!this.value.find(_item => this.trackBy(_item) === this.trackBy(item)),
+            checked: !!this.value?.find(_item => this.trackBy(_item) === this.trackBy(item)),
             item: item
           });
 
@@ -96,7 +92,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
       .map(control => control.get('item').value)
       .map(item => ({
         ...item,
-        ...this.value && this.value.find(_item => this.trackBy(_item) === this.trackBy(item))
+        ...this.value?.find(_item => this.trackBy(_item) === this.trackBy(item))
       }));
 
     this.writeValue(value);

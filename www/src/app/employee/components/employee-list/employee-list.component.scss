@@ -1,7 +1,7 @@
-::ng-deep .employee-list-datagrid *:focus {
-  outline: 0;
-}
-
-.requests-positions-count {
-  min-width: 200px;
+.name { flex-grow: .4 }
+.email { flex-grow: .3 }
+.phone { flex-grow: .2 }
+.count {
+  flex-grow: .1;
+  min-width: 105px;
 }

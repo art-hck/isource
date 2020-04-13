@@ -14,7 +14,7 @@ import { AvailableFilters } from "../../../../back-office/models/available-filte
 })
 export class RequestListFilterComponent implements OnInit, OnDestroy {
 
-  @ViewChild(FilterCustomersComponent, {static: false}) filterCustomersComponent: FilterCustomersComponent;
+  @ViewChild(FilterCustomersComponent) filterCustomersComponent: FilterCustomersComponent;
   @Output() filter = new EventEmitter<RequestsListFilter>();
   @Output() showResults = new EventEmitter();
   @Input() backofficeView: boolean;

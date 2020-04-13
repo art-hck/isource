@@ -33,11 +33,11 @@
   </div>
 
   <!-- Статус -->
-  <div class="app-col app-col-aside status" *ngIf="user.isBackOffice() && statuses">
+  <div class="app-col-aside status" *ngIf="user.isBackOffice() && statuses">
     <div class="app-position-status-icon" [ngClass]="position.status"></div>
     <uxg-dropdown
       lg
-      class="clr-flex-grow-1"
+      class="app-col"
       [placeholder]="position.statusLabel"
       [disabled]="statuses.length === 0"
       (select)="changeStatus.emit({status: $event, position: position})">

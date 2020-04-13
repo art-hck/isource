@@ -28,10 +28,10 @@
         </div>
 
 
-        <div class="clr-row">
+        <div class="app-row">
 
           <ng-container *ngIf="!errorCode && titleMessage">
-            <div class="clr-col">
+            <div class="app-col">
               <button [clrLoading]="loading"
                       (click)="router.navigateByUrl('auth/login')"
                       class="btn btn-primary">
@@ -42,7 +42,7 @@
 
 
           <ng-container *ngIf="errorCode === activationErrorCode.ACTIVATION_TOKEN_EXPIRED">
-            <div class="clr-col">
+            <div class="app-col">
               <button [clrLoading]="loading"
                       (click)="resendActivationLink(activationToken)"
                       class="btn btn-primary">
@@ -53,7 +53,7 @@
 
 
           <ng-container *ngIf="errorCode === activationErrorCode.NOT_ACTIVATED">
-            <div class="clr-col">
+            <div class="app-col">
               <button [clrLoading]="loading"
                       (click)="router.navigateByUrl('auth/login')"
                       class="btn btn-primary">

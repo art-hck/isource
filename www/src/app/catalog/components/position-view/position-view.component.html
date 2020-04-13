@@ -3,65 +3,43 @@
     <span class="document-label">Нормативный документ:</span>{{position.productionDocument}}
   </div>
   <h1>{{position.name}}</h1>
-  <div class="clr-row">
+  <div class="app-row">
     <div class="clr-col-9 tabs">
-      <clr-tabs>
-        <clr-tab>
-          <button clrTabLink>Характеристики</button>
-          <ng-template [(clrIfActive)]="dashboardActive">
-            <clr-tab-content>
-              <div class="clr-row position-info w-100">
-                <div class="clr-col-4 img">
-                  <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
-                  <ng-template #noImage>
-                    <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
-                  </ng-template>
-                </div>
-                <div class="clr-col info">
-                  <div class="info-title">
-                    Описание
-                  </div>
-                  <div class="description">
-                    {{position.description}}
-                  </div>
-                  <div class="info-title tech">
-                    Технические характеристики
-                  </div>
-                  <div class="attributes" *ngIf="(attributes$ | async) as attributes">
-                    <div class="clr-row w-100 attr-line" *ngFor="let attribute of attributes">
-                      <div class="clr-col-7 attribute-name">
-                        <span class="name">{{attribute.name}}</span>
-                      </div>
-                      <div class="clr-col-5 attribute-values">
-                        <span *ngFor="let value of attribute.values"><b>{{value.value}}</b></span>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
+      <uxg-tabs>
+        <uxg-tab-title #tab1>Характеристики</uxg-tab-title>
+        <uxg-tab-title #tab2>Документы</uxg-tab-title>
+        <uxg-tab-title #tab3>Поставщики</uxg-tab-title>
+      </uxg-tabs>
+      <div *ngIf="tab1.active" class="app-row position-info w-100">
+        <div class="clr-col-4 img">
+          <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
+          <ng-template #noImage>
+            <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
+          </ng-template>
+        </div>
+        <div class="app-col info">
+          <div class="info-title">
+            Описание
+          </div>
+          <div class="description">
+            {{position.description}}
+          </div>
+          <div class="info-title tech">
+            Технические характеристики
+          </div>
+          <div class="attributes" *ngIf="(attributes$ | async) as attributes">
+            <div class="app-row w-100 attr-line" *ngFor="let attribute of attributes">
+              <div class="clr-col-7 attribute-name">
+                <span class="name">{{attribute.name}}</span>
               </div>
-            </clr-tab-content>
-          </ng-template>
-        </clr-tab>
+              <div class="clr-col-5 attribute-values">
+                <span *ngFor="let value of attribute.values"><b>{{value.value}}</b></span>
+              </div>
+            </div>
 
-        <clr-tab>
-          <button clrTabLink>Документы</button>
-          <ng-template [(clrIfActive)]="managementActive">
-            <clr-tab-content>
-              ...
-            </clr-tab-content>
-          </ng-template>
-        </clr-tab>
-
-        <clr-tab>
-          <button clrTabLink>Поставщики</button>
-          <ng-template [(clrIfActive)]="cloudActive">
-            <clr-tab-content>
-              ...
-            </clr-tab-content>
-          </ng-template>
-        </clr-tab>
-      </clr-tabs>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="clr-col-3 price-card">
       <span class="card-title">доступность и доставка</span>
@@ -82,7 +60,7 @@
         </div>
       </div>
       <div class="price-info">Количество</div>
-      <div class="clr-row">
+      <div class="app-row">
         <input #quantity
                [disabled]="isPositionInCart(position)"
                type="number"

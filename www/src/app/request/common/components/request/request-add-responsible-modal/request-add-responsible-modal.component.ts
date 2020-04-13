@@ -14,7 +14,7 @@ import { finalize } from "rxjs/operators";
   templateUrl: './request-add-responsible-modal.component.html'
 })
 export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<User>();

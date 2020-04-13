@@ -28,7 +28,7 @@ export class DocumentSimpleListComponent {
 
   @Output() selected = new EventEmitter<File[]>();
   @Output() delete = new EventEmitter<RequestDocument>();
-  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+  @ViewChild('uploadEl') uploadElRef: ElementRef;
   showAll = false;
 
   constructor(

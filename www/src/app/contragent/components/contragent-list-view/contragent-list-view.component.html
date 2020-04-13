@@ -1,38 +1,35 @@
-<div class="container">
-  <div class="app-row">
-    <div class="app-col">
-      <div class="input-group">
-        <input class="contragent-search-field"
-               type="text"
-               placeholder="Введите наименование контрагента или ИНН..."
-               [value]="customerSearchValue"
-               (input)="onCustomerSearchInputChange($event.target.value)"/>
-        <button type="button"
-                class="btn btn-icon btn-link btn-clear"
-                aria-label="Очистить фильтр"
-                [disabled]="!this.customerSearchValue.length"
-                (click)="onClearFilterClick()">
-          <clr-icon shape="times"></clr-icon>
-        </button>
-      </div>
-    </div>
-
-    <div class="app-col action">
-      <button uxgButton secondary iconText
-              *ngIf="userInfoService.isSeniorBackoffice()"
-              (click)="router.navigateByUrl('contragents/create')">
-        <clr-icon size="16" shape="app-plus"></clr-icon>
-        <span>Новый контрагент</span>
+<div class="app-row">
+  <div class="app-col">
+    <div class="input-group">
+      <input class="contragent-search-field"
+             type="text"
+             placeholder="Введите наименование контрагента или ИНН..."
+             [value]="customerSearchValue"
+             (input)="onCustomerSearchInputChange($event.target.value)"/>
+      <button type="button"
+              class="btn btn-icon btn-link btn-clear"
+              aria-label="Очистить фильтр"
+              [disabled]="!this.customerSearchValue.length"
+              (click)="onClearFilterClick()">
+        <clr-icon shape="times"></clr-icon>
       </button>
     </div>
   </div>
 
-  <app-contragent-list
-    [searchValue]="customerSearchValue"
-    [contragents]="(contragents$ | async)">
-  </app-contragent-list>
-
+  <div class="app-col action">
+    <button uxgButton secondary iconText
+            *ngIf="userInfoService.isSeniorBackoffice()"
+            (click)="router.navigateByUrl('contragents/create')">
+      <clr-icon size="16" shape="app-plus"></clr-icon>
+      <span>Новый контрагент</span>
+    </button>
+  </div>
 </div>
+
+<app-contragent-list
+  [searchValue]="customerSearchValue"
+  [contragents]="(contragents$ | async)">
+</app-contragent-list>
 
 <clr-modal #modal [clrModalSize]="'xl'">
   <div class="modal-body">

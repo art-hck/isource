@@ -27,7 +27,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Output() create = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() cancel = new EventEmitter();
-  @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
+  @ViewChild('contragentName') contragentName: ElementRef;
 
   newCommercialProposalForm: FormGroup;
   supplierContragentControl: FormControl;

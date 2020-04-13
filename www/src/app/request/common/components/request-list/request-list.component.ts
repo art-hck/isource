@@ -20,7 +20,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   appConfig: GpnmarketConfigInterface;
 
-  @ViewChild('datagridElement', { static: false }) datagridElement: ElementRef;
+  @ViewChild('datagridElement') datagridElement: ElementRef;
   datagridFilter: {};
 
   @Input() customerNameColumnShow = false;

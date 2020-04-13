@@ -4,8 +4,7 @@ import { EmployeeItem } from "../../models/employee-item";
 
 @Component({
   selector: 'app-employee-list-view',
-  templateUrl: './employee-list-view.component.html',
-  styleUrls: ['./employee-list-view.component.css']
+  templateUrl: './employee-list-view.component.html'
 })
 export class EmployeeListViewComponent implements OnInit {
 

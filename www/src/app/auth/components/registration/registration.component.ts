@@ -18,8 +18,8 @@ import { Toast } from "../../../shared/models/toast";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  @ViewChild('contragentFound', { static: false }) contragentFound: ClrModal;
-  @ViewChild('contragentNotFound', { static: false }) contragentNotFound: ClrModal;
+  @ViewChild('contragentFound') contragentFound: ClrModal;
+  @ViewChild('contragentNotFound') contragentNotFound: ClrModal;
   @ViewChild('successRegister', { static: true }) successRegister: TemplateRef<any>;
 
   form: FormGroup;

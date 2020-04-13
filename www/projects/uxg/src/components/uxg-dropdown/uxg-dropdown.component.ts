@@ -20,7 +20,7 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   @HostBinding('class.app-dropdown') appDropdownClass = true;
   @HostBinding('class.app-dropdown-disabled') get isDisabled() { return this.is(this.disabled); }
   @HostBinding('class.app-dropdown-large') get isLarge() { return this.is(this.lg); }
-  @ViewChild('itemsWrapper', { static: false }) itemsWrapperRef: ElementRef;
+  @ViewChild('itemsWrapper') itemsWrapperRef: ElementRef;
   @Output() select = new EventEmitter();
   @Input() lg: boolean | string;
   @Input() hideAfterSelect = true;

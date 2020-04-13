@@ -44,6 +44,7 @@ export class DesignDocumentationListComponent implements OnInit {
 
   private loadingDesignDocs: DesignDocumentation[] = [];
   private sendingForApproval: DesignDocumentationList[] = [];
+  public designDocModels = [];
   public newDesignDocModels: {model: DesignDocumentationEdit, state: ClrLoadingState}[][] = [];
 
   get addDocumentationListForm() {

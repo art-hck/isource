@@ -14,7 +14,7 @@ import { RequestPositionService } from "../../../services/request-position.servi
   templateUrl: 'request-move-group-modal.component.html'
 })
 export class RequestMoveGroupModalComponent implements OnDestroy {
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
   @Input() groups: RequestGroup[] = [];
   @Input() request: Request;

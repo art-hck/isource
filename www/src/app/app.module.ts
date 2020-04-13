@@ -6,8 +6,6 @@ import { registerLocaleData } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ClarityModule } from '@clr/angular';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from "./core/core.module";
@@ -39,7 +37,6 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     AgreementsModule,
     AuthModule,
     BrowserModule,
-    ClarityModule,
     AppRoutingModule,
     PagesModule,
     CoreModule,

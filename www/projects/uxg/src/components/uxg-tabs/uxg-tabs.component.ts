@@ -10,7 +10,7 @@ import { debounceTime, filter, flatMap, mapTo, mergeAll, startWith, takeUntil, t
 export class UxgTabsComponent implements AfterViewInit, OnDestroy {
 
   @HostBinding('class.app-tabs-wrap') appTabs = true;
-  @ViewChild('appTabsScroll', { static: false }) appTabsScroll: ElementRef;
+  @ViewChild('appTabsScroll') appTabsScroll: ElementRef;
   @ContentChildren(UxgTabTitleComponent) tabTitle !: QueryList<UxgTabTitleComponent>;
 
   destroy$ = new Subject();

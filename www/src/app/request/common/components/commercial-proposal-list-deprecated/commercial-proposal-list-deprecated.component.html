@@ -1,4 +1,4 @@
-<div class="cards clr-row" *ngIf="requestPosition.linkedOffers.length !== 0">
+<div class="cards app-row" *ngIf="requestPosition.linkedOffers.length !== 0">
   <ng-container *ngFor="let linkedOffer of requestPosition.linkedOffers">
 
     <div class="card-wrap clr-col-xl-6 clr-col-lg-12">
@@ -13,25 +13,25 @@
           <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="star" class="is-solid"></clr-icon>
         </div>
         <div class="card-block">
-          <div class="clr-row">
-            <div class="clr-col">Цена</div>
-            <div class="clr-col">{{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}</div>
+          <div class="app-row">
+            <div class="app-col">Цена</div>
+            <div class="app-col">{{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}</div>
           </div>
-          <div class="clr-row">
-            <div class="clr-col">Количество</div>
-            <div class="clr-col">{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</div>
+          <div class="app-row">
+            <div class="app-col">Количество</div>
+            <div class="app-col">{{linkedOffer.quantity}} {{linkedOffer.measureUnit}}</div>
           </div>
-          <div class="clr-row">
-            <div class="clr-col">Дата поставки</div>
-            <div class="clr-col">{{linkedOffer.deliveryDate | date :'shortDate'}}</div>
+          <div class="app-row">
+            <div class="app-col">Дата поставки</div>
+            <div class="app-col">{{linkedOffer.deliveryDate | date :'shortDate'}}</div>
           </div>
-          <div class="clr-row">
-            <div class="clr-col">Условия оплаты</div>
-            <div class="clr-col">{{linkedOffer.paymentTerms}}</div>
+          <div class="app-row">
+            <div class="app-col">Условия оплаты</div>
+            <div class="app-col">{{linkedOffer.paymentTerms}}</div>
           </div>
-          <div class="clr-row" *ngIf="isCustomerView && canChoiceWinner()">
-            <div class="clr-col"></div>
-            <div class="clr-col">
+          <div class="app-row" *ngIf="isCustomerView && canChoiceWinner()">
+            <div class="app-col"></div>
+            <div class="app-col">
               <button (click)="onChoiceWinner(linkedOffer)" class="btn btn-sm btn-primary-outline">Выбрать победителя
               </button>
             </div>
@@ -59,7 +59,7 @@
 </div>
 
 <ng-container *ngIf="!requestPosition.linkedOffers || requestPosition.linkedOffers.length === 0">
-  <div class="clr-row no-offers">
+  <div class="app-row no-offers">
     <p>Коммерческие предложения по позиции отсутствуют</p>
   </div>
 </ng-container>

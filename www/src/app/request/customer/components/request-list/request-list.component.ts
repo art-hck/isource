@@ -18,7 +18,7 @@ import { catchError, flatMap, mapTo, tap } from "rxjs/operators";
 })
 export class RequestListComponent implements OnInit {
 
-  @ViewChild(RequestListFilterComponent, {static: false})
+  @ViewChild(RequestListFilterComponent)
   requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;

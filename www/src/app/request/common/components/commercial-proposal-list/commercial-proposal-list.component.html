@@ -3,7 +3,7 @@
     <div class="app-col app-table app-no-border">
       <div class="app-row action-bar">
         <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
-        <div class="app-col app-basis-auto clr-flex-grow-1 actions">
+        <div class="app-col app-basis-auto actions">
 
           <!-- Создать процедуру  -->
           <ng-container *ngIf="featureService.authorize('createProcedure')">
@@ -73,7 +73,7 @@
           </div>
         </div>
         <div class="app-row" formGroupName="{{i}}">
-          <div class="app-col clr-flex-grow-0">
+          <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col">

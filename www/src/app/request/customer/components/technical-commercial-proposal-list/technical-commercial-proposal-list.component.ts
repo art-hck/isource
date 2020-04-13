@@ -33,11 +33,11 @@ import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChild('sentToReview', { static: false }) set content(tab: UxgTabTitleComponent) {
+  @ViewChild('sentToReview') set content(tab: UxgTabTitleComponent) {
     this.isProposalsFooterHidden = !tab || !tab.active;
     this.cd.detectChanges();
   }
-  @ViewChild('proposalsFooterRef', { static: false }) proposalsFooterRef: ElementRef;
+  @ViewChild('proposalsFooterRef') proposalsFooterRef: ElementRef;
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))

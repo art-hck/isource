@@ -22,8 +22,8 @@
     <div class="app-col app-table app-no-border">
       <div class="app-row app-align-items-center">
         <!-- Царь-чекбокс -->
-        <div class="app-col app-basis-auto clr-flex-grow-0">
-          <div class="app-row clr-align-items-center">
+        <div class="app-col app-basis-auto app-grow-0">
+          <div class="app-row app-align-items-center">
             <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let form of [form]"></uxg-checkbox>
             <uxg-popover #popover>
               <button uxgButton uxgPopoverTrigger link icon>
@@ -48,7 +48,7 @@
         </div>
 
         <!-- Добавить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.authorize('addRequestGroup')">
+        <div class="app-col app-basis-auto app-grow-0" *ngIf="featureService.authorize('addRequestGroup')">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
             <clr-icon shape="app-group" size="16" class="is-solid"></clr-icon>
             <span>Создать группу</span>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Переместить в группу -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.authorize('moveRequestGroup')">
+        <div class="app-col app-basis-auto app-grow-0" *ngIf="featureService.authorize('moveRequestGroup')">
           <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0" (click)="moveGroupModal.open()">
             <clr-icon shape="app-move" size="16" class="is-solid"></clr-icon>
             <span>Переместить</span>
@@ -64,7 +64,7 @@
         </div>
 
         <!-- Групповая смена статус -->
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto app-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
             <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses" (click)="changeStatusModal.open()">
               <clr-icon shape="app-circle-arrow"></clr-icon>
@@ -79,7 +79,7 @@
 
         <!-- Отклонить -->
         <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+        <!--<div class="app-col app-basis-auto app-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0">
             <clr-icon shape="app-cross"></clr-icon>
             <span>Отклонить</span>
@@ -88,7 +88,7 @@
 
         <!-- Согласовать -->
         <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
+        <!--<div class="app-col app-basis-auto app-grow-0" *ngIf="featureService.available('approveRequest', user.roles)">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0">
             <clr-icon shape="app-check"></clr-icon>
             <span>Согласовать</span>
@@ -96,10 +96,10 @@
         </div>-->
 
         <!-- Отмена позиции заказчиком -->
-        <div class="app-colapp-basis-auto clr-flex-grow-0" *ngIf="user.isCustomer()">
+        <div class="app-colapp-basis-auto app-grow-0" *ngIf="user.isCustomer()">
           <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
         </div>
-        <div class="app-col app-basis-auto clr-flex-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto app-grow-0" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link>
               <clr-icon shape="app-kebab"></clr-icon>
@@ -123,7 +123,7 @@
         </div>
 
         <div class="app-col"></div>
-        <div class="app-col app-basis-auto clr-flex-grow-0">
+        <div class="app-col app-basis-auto app-grow-0">
 
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
@@ -193,7 +193,7 @@
 
 <!-- Шаблон позиции -->
 <ng-template #positionItem let-position="position" let-formGroup="formGroup">
-  <div class="app-col clr-flex-grow-0" [formGroup]="formGroup">
+  <div class="app-col app-grow-0" [formGroup]="formGroup">
     <uxg-checkbox formControlName="checked"></uxg-checkbox>
   </div>
   <div class="app-col app-bold item-title">
@@ -240,7 +240,7 @@
 
 <!-- Шаблон группы -->
 <ng-template #groupItem let-group="group" let-formGroup="formGroup">
-  <div class="app-col clr-flex-grow-0" [formGroup]="formGroup">
+  <div class="app-col app-grow-0" [formGroup]="formGroup">
     <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
   </div>
 
@@ -255,7 +255,7 @@
       <!--div class="app-col" [style.max-width.px]="460">
         2 как можно скорее | 01.01.2020 — ...
       </div-->
-      <div class="app-col app-row clr-flex-grow-0">
+      <div class="app-col app-row app-grow-0">
         <clr-icon class="app-accordion-title-icon" shape="app-chevron" [attr.dir]="folded.value ? 'down' : 'up'"
                   (click)="folded.setValue(!folded.value); $event.preventDefault(); $event.stopPropagation();"></clr-icon>
       </div>
