@@ -9,8 +9,8 @@
     "lint": "ng lint",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "e2e": "ng e2e",
-    "prestart": "ng build uxg",
-    "prebuild": "ng build uxg",
+    "prestart": "ng build uxg --prod",
+    "prebuild": "ng build uxg --prod",
     "postinstall": "ngcc"
   },
   "private": true,

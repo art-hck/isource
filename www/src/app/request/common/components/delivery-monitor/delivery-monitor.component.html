@@ -16,8 +16,8 @@
         <clr-accordion-panel class="delivery-timeline-panel" *ngIf="consignmentCanBeShown(consignment)">
 
           <clr-accordion-title class="delivery-timeline-header">
-            <div class="clr-row">
-              <div class="clr-col delivery-timeline-item">
+            <div class="app-row">
+              <div class="app-col delivery-timeline-item">
                 <div class="vehicle-icon"></div>
 
                 <div class="item-info-block">
@@ -38,7 +38,7 @@
 
           <clr-accordion-content class="item-info-inner-content" *clrIfExpanded>
 
-            <div class="clr-row">
+            <div class="app-row">
               <div class="clr-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Вес по документам</p>
@@ -47,7 +47,7 @@
               </div>
             </div>
 
-            <div class="clr-row">
+            <div class="app-row">
               <div class="clr-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Дата отгрузки</p>
@@ -64,7 +64,7 @@
             </div>
 
 
-            <div class="clr-row">
+            <div class="app-row">
               <div class="clr-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Внутренний номер c/ф</p>
@@ -88,8 +88,8 @@
             </div>
 
 
-            <div class="clr-row">
-              <div class="clr-col">
+            <div class="app-row">
+              <div class="app-col">
                 <div class="item-info-element">
                   <p class="item-info-label">Транспортные средства или номер заказа транспортной компании</p>
                   <p class="item-info-content">{{ getVehicleNumber(consignment) }}</p>
@@ -98,9 +98,9 @@
             </div>
 
 
-            <div class="clr-row from-to-block">
+            <div class="app-row from-to-block">
 
-              <div class="clr-col">
+              <div class="app-col">
                 <div class="item-info-element">
                   <p class="item-info-label">Грузоотправитель</p>
                   <p class="item-info-content">{{ consignment.consignor.name || '—' }}</p>
@@ -116,7 +116,7 @@
                 <div class="from-to-icon"></div>
               </div>
 
-              <div class="clr-col">
+              <div class="app-col">
                 <div class="item-info-element">
                   <p class="item-info-label">Грузополучатель</p>
                   <p class="item-info-content">{{ consignment?.consignee?.name || '—' }}</p>
@@ -131,7 +131,7 @@
             </div>
 
 
-            <!--        <div class="clr-row">-->
+            <!--        <div class="app-row">-->
             <!--          <table class="shipment-tracker">-->
             <!--            <thead>-->
             <!--            <tr>-->

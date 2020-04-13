@@ -82,7 +82,7 @@
   <br/>
 
   <div class="app-row">
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
+    <div class="app-col app-basis-auto app-grow-0" [style.width.px]="130">
       <div class="app-control-wrap">
         <input #quantity uxgInput lg class="quantity" formControlName="quantity"/>
         <label class="app-control-label" (click)="quantity.focus()">Количество</label>
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="200">
+    <div class="app-col app-basis-auto app-grow-0" [style.width.px]="200">
       <uxg-dropdown-input appSuggestions class="measure-units" formControlName="measureUnit" placeholder="Ед. измерения"
         [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
       >
@@ -110,7 +110,7 @@
       </uxg-dropdown-input>
     </div>
 
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="290">
+    <div class="app-col app-basis-auto app-grow-0" [style.width.px]="290">
       <div class="app-control-wrap">
         <input #startPrice uxgInput lg class="start-price" formControlName="startPrice"/>
         <label class="app-control-label" (click)="startPrice.focus()">Начальная макс. цена (необязательно)</label>
@@ -120,7 +120,7 @@
       </div>
     </div>
 
-    <div class="app-col app-basis-auto clr-flex-grow-0" [style.width.px]="130">
+    <div class="app-col app-basis-auto app-grow-0" [style.width.px]="130">
       <label class="input-label">Валюта</label>
       <uxg-dropdown lg placeholder="Валюта" class="currency" formControlName="currency">
         <div uxgDropdownItem [value]="currency[1]" *ngFor="let currency of currencies">{{ currency[0] }}</div>
@@ -138,7 +138,7 @@
         </div>
       </div>
     </div>
-    <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+    <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
       <uxg-checkbox class="app-control" #design class="is-design-req" formControlName="isDesignRequired"></uxg-checkbox>
       <label (click)="design.check($event)">Требуется РКД</label>
     </div>
@@ -151,15 +151,15 @@
       <h3>Необходимость сопутствующих услуг</h3>
       <br/>
       <div class="app-row">
-        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-shmr-req" #shmr formControlName="isShmrRequired"></uxg-checkbox>
           <label (click)="shmr.check($event)">ШМР</label>
         </div>
-        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-pnr-req" #pnr formControlName="isPnrRequired"></uxg-checkbox>
           <label (click)="pnr.check($event)">ПНР</label>
         </div>
-        <div class="app-col app-basis-auto app-row clr-align-items-center clr-flex-grow-0">
+        <div class="app-col app-basis-auto app-row clr-align-items-center app-grow-0">
           <uxg-checkbox class="app-control is-inspection-control-req" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
           <label (click)="inspection.check($event)">Инспекционный контроль</label>
         </div>
@@ -191,7 +191,7 @@
     <div class="app-col">
       Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
-    <div class="app-col clr-flex-grow-0 app-basis-auto">
+    <div class="app-col app-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
       <button *ngIf="!needApprove" uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
       <button *ngIf="needApprove" uxgButton primary lg [disabled]="form.invalid">Отправить на согласование</button>

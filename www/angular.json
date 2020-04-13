@@ -236,7 +236,7 @@
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/uxg/tsconfig.lib.prod.json"
+              "tsConfig": "projects/uxg/tsconfig.prod.json"
             }
           }
         }

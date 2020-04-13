@@ -1,6 +1,6 @@
 <div class="card" *ngIf="positions?.length !== 0; else noPositions">
   <div class="item-card" *ngFor="let position of positions">
-    <div class="clr-row position-list">
+    <div class="app-row position-list">
       <div class="clr-col-3 image open-info">
         <a class="title" [routerLink]="['/catalog', 'position', position.id]">
           <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
@@ -14,12 +14,12 @@
           <p class="position-name">{{position.name}}</p>
           <p class="document">{{position.productionDocument}}</p>
         </a>
-        <div class="clr-row w-100">
-          <div class="clr-col open-info">
+        <div class="app-row w-100">
+          <div class="app-col open-info">
             <a class="title" [routerLink]="['/catalog', 'position', position.id]">
               <p class="position-header">основные характеристики</p>
               <div class="attr-block">
-                <div class="clr-row w-100 attributes" *ngFor="let attribute of position.attributes">
+                <div class="app-row w-100 attributes" *ngFor="let attribute of position.attributes">
                   <div class="clr-col-6 attribute-name">
                     <span>{{attribute.name}}</span>
                   </div>
@@ -42,12 +42,12 @@
 
             <div class="price-info">Срок поставки</div>
             {{position.productionTime}} дней
-            <div class="clr-row w-100 inline nopadding">
-              <div class="clr-col price">
+            <div class="app-row w-100 inline nopadding">
+              <div class="app-col price">
                 <b>{{position.price | currency: 'RUB' :'symbol':"1.0-2"}}</b>
                 <p class="one-item">За 1 {{position.measureUnit}}</p>
               </div>
-              <div class="clr-col inline nopadding">
+              <div class="app-col inline nopadding">
                 <input #quantity
                        [disabled]="isPositionInCart(position)"
                        type="number"
@@ -74,7 +74,7 @@
   </div>
 </div>
 <ng-template #noPositions>
-  <div class="clr-row position-list no-positions">
+  <div class="app-row position-list no-positions">
     Позиций не найдено
   </div>
 </ng-template>

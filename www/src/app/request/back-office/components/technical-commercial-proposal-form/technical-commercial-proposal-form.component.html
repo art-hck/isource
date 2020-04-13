@@ -7,7 +7,7 @@
         <h3 *ngIf="technicalCommercialProposal">Редактирование технико-коммерческого предложения</h3>
       </div>
 
-      <div class="app-col clr-flex-grow-0" *ngIf="closable">
+      <div class="app-col app-grow-0" *ngIf="closable">
         <button type="button" uxgButton icon link (click)="close.emit()">
           <clr-icon shape="app-cross"></clr-icon>
         </button>
@@ -135,7 +135,7 @@
       <div class="app-col app-secondary-color">
         Черновики технико-коммерческих предложений видны только сотрудникам бэкофиса, но не заказчику
       </div>
-      <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+      <div class="app-row app-col app-grow-0 app-basis-auto clr-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
           type="button" uxgButton secondary (click)="submit(false)"
@@ -169,7 +169,7 @@
           >
             <ng-template let-formGroup="formGroup" let-positionWithMan="item">
               <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
-                <div class="app-col clr-flex-grow-0">
+                <div class="app-col app-grow-0">
                   <uxg-checkbox formControlName="checked"></uxg-checkbox>
                 </div>
                 <div class="app-col app-bold app-ellipsis">{{ position.name }}</div>
@@ -185,7 +185,7 @@
             </ng-template>
           </select-items-with-search>
           <br/>
-          <div class="app-row clr-justify-content-end">
+          <div class="app-row app-justify-content-end">
             <button type="button" uxgButton lg secondary (click)="positionsModal.close()">Отмена</button>
             <button uxgButton lg primary (click)="positionsSelect.submit()"
                     [disabled]="!positionsSelect.checkedFormItems.length">Всё готово</button>

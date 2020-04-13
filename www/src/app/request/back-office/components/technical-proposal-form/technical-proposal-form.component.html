@@ -8,12 +8,12 @@
         <h3 *ngIf="isEditing">Редактирование технического предложения</h3>
       </div>
       <!-- Пока не реализовано на бэка -->
-<!--      <div class="app-col clr-flex-grow-0" *ngIf="isEditing">-->
+<!--      <div class="app-col app-grow-0" *ngIf="isEditing">-->
 <!--        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">-->
 <!--          <clr-icon shape="app-trash"></clr-icon>-->
 <!--        </button>-->
 <!--      </div>-->
-      <div class="app-col clr-flex-grow-0">
+      <div class="app-col app-grow-0">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
           <clr-icon shape="app-cross"></clr-icon>
         </button>
@@ -128,7 +128,7 @@
       <div class="app-col app-secondary-color">
         Черновики технических предложений видны только сотрудникам бэкофиса, но не заказчику
       </div>
-      <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+      <div class="app-row app-col app-grow-0 app-basis-auto clr-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
         <button
           type="button" uxgButton secondary (click)="submit(false)"
@@ -163,7 +163,7 @@
           >
             <ng-template let-formGroup="formGroup" let-positionWithMan="item">
               <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
-                <div class="app-col clr-flex-grow-0">
+                <div class="app-col app-grow-0">
                   <uxg-checkbox formControlName="checked"></uxg-checkbox>
                 </div>
                 <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
@@ -179,7 +179,7 @@
             </ng-template>
           </select-items-with-search>
           <br/>
-          <div class="app-row clr-justify-content-end">
+          <div class="app-row app-justify-content-end">
             <button type="button" uxgButton lg secondary (click)="positionsModal.close()">Отмена</button>
             <button uxgButton lg primary (click)="positionsSearch.submit()"
                     [disabled]="!positionsSearch.checkedFormItems.length">Всё готово</button>

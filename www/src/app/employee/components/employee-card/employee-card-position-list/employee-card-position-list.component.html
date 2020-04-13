@@ -1,34 +1,33 @@
-<clr-datagrid class="positions-list-datagrid">
+<div class="app-table positions-list-datagrid app-section">
+  <ng-container *ngFor="let position of positions">
+    <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId]">
+      <div class="position-request-number clr-col-1 clr-align-self-center">
+        <b>{{ position.requestNumber }}</b>
+      </div>
 
-  <clr-dg-row *ngFor="let position of positions" (click)="onRowClick(position)">
-    <clr-dg-cell class="position-request-number clr-col-1 clr-align-self-center">
-      <b>{{ position.requestNumber }}</b>
-    </clr-dg-cell>
+      <div class="app-ellipsis app-col clr-align-self-center">
+        <b>{{ position.name }}</b>
+      </div>
 
-    <clr-dg-cell class="position-name clr-col clr-align-self-center">
-      <b>{{ position.name }}</b>
-    </clr-dg-cell>
+      <div class="position-quantity clr-col-2 clr-align-self-center">
+        {{ position.quantity }} <span class="gray">{{ position.measureUnit }}</span>
+      </div>
 
-    <clr-dg-cell class="position-quantity clr-col-2 clr-align-self-center">
-      {{ position.quantity }} <span class="gray">{{ position.measureUnit }}</span>
-    </clr-dg-cell>
-
-    <clr-dg-cell class="position-delivery-date clr-col-2 clr-align-self-center">
+      <div class="position-delivery-date bold-text clr-col-2 clr-align-self-center">
       <span *ngIf="position.isDeliveryDateAsap">
         Как можно скорее
       </span>
 
-      <span *ngIf="!position.isDeliveryDateAsap">
+        <span *ngIf="!position.isDeliveryDateAsap">
        {{ position.deliveryDate | date:'dd.MM.yyyy' }}
       </span>
-    </clr-dg-cell>
+      </div>
 
-    <clr-dg-cell class="position-status clr-col-2 clr-align-self-center"
-                 [ngClass]="{ 'bold-text' : position.status.name === 'NEW' }">
-      <uxg-position-status  [label]="position.status.label" [status]="position.status.name">
-      </uxg-position-status>
-    </clr-dg-cell>
-
-  </clr-dg-row>
-
-</clr-datagrid>
+      <div class="position-status clr-col-2 clr-align-self-center"
+           [ngClass]="{ 'app-bold' : position.status.name === 'NEW' }">
+        <uxg-position-status [label]="position.status.label" [status]="position.status.name">
+        </uxg-position-status>
+      </div>
+    </a>
+  </ng-container>
+</div>

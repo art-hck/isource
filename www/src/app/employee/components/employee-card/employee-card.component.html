@@ -6,70 +6,59 @@
 
     <h1>{{ employee.fullName }}</h1>
 
-    <div class="clr-row">
+    <div class="app-row">
 
-      <div class="clr-col-9 employee-card-content">
+      <div class="app-col employee-card-content">
+        <uxg-tabs class="app-section">
+          <uxg-tab-title #requestsTab [active]="true">
+            Заявки
+            <ng-container *ngIf="requestList; else employeeCardCountLoader">
+              <span class="light-grey">({{ requestList.length }})</span>
+            </ng-container>
 
-        <clr-tabs>
-          <clr-tab>
+            <ng-template #employeeCardCountLoader>
+              <span class="employee-card-count-loader spinner spinner-md"></span>
+            </ng-template>
+          </uxg-tab-title>
+          <uxg-tab-title #positionsTab>
+            Позиции
+            <ng-container *ngIf="positionsList; else employeeCardCountLoader">
+              <span class="light-grey">({{ positionsList.length }})</span>
+            </ng-container>
 
-            <button clrTabLink id="link1">
-              Заявки
-              <ng-container *ngIf="requestList; else employeeCardCountLoader">
-                <span class="light-grey">({{ requestList.length }})</span>
-              </ng-container>
+            <ng-template #employeeCardCountLoader>
+              <span class="employee-card-count-loader spinner spinner-md"></span>
+            </ng-template>
+          </uxg-tab-title>
+        </uxg-tabs>
 
-              <ng-template #employeeCardCountLoader>
-                <span class="employee-card-count-loader spinner spinner-md"></span>
-              </ng-template>
-            </button>
+        <ng-container *ngIf="requestsTab.active">
+          <ng-container *ngIf="requestList.length > 0; else emptyRequestList">
+            <app-employee-card-request-list
+              [requests]="requestList">
+            </app-employee-card-request-list>
+          </ng-container>
 
-            <clr-tab-content id="content1" *clrIfActive="true">
-              <ng-container *ngIf="requestList.length > 0; else emptyRequestList">
-                <app-employee-card-request-list
-                        [requests]="requestList">
-                </app-employee-card-request-list>
-              </ng-container>
+          <ng-template #emptyRequestList>
+            <span class="empty-list">Список заявок пуст</span>
+          </ng-template>
+        </ng-container>
 
-              <ng-template #emptyRequestList>
-                <span class="empty-list">Список заявок пуст</span>
-              </ng-template>
-            </clr-tab-content>
+        <ng-container *ngIf="positionsTab.active">
+          <ng-container *ngIf="positionsList.length > 0; else emptyPositionsList">
+            <app-employee-card-position-list
+              [positions]="positionsList">
+            </app-employee-card-position-list>
+          </ng-container>
 
-          </clr-tab>
-
-
-          <clr-tab>
-            <button clrTabLink>
-              Позиции
-              <ng-container *ngIf="positionsList; else employeeCardCountLoader">
-                <span class="light-grey">({{ positionsList.length }})</span>
-              </ng-container>
-
-              <ng-template #employeeCardCountLoader>
-                <span class="employee-card-count-loader spinner spinner-md"></span>
-              </ng-template>
-            </button>
-
-            <clr-tab-content *clrIfActive>
-              <ng-container *ngIf="positionsList.length > 0; else emptyPositionsList">
-                <app-employee-card-position-list
-                        [positions]="positionsList">
-                </app-employee-card-position-list>
-              </ng-container>
-
-              <ng-template #emptyPositionsList>
-                <span class="empty-list">Список позиций пуст</span>
-              </ng-template>
-            </clr-tab-content>
-
-          </clr-tab>
-        </clr-tabs>
-
+          <ng-template #emptyPositionsList>
+            <span class="empty-list">Список позиций пуст</span>
+          </ng-template>
+        </ng-container>
       </div>
 
       <!-- Сайдбар с информацией -->
-      <div class="clr-col-3">
+      <div class="app-col-aside">
         <div class="app-row employee-info-card">
           <div class="app-col">
             <h3 class="sector-title">Информация о сотруднике</h3>

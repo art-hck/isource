@@ -22,7 +22,7 @@
     >
       <ng-template let-formGroup="formGroup" let-position="item">
         <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
-          <div class="app-col clr-flex-grow-0">
+          <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
@@ -130,7 +130,7 @@
     >
       <ng-template let-formGroup="formGroup" let-contragent="item">
         <div class="app-row select-list-item" [formGroup]="formGroup">
-          <div class="app-col clr-flex-grow-0">
+          <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col app-bold select-list-item-title">{{ contragent.shortName }}</div>
@@ -169,7 +169,7 @@
 
   <br/>
   <div class="app-row app-justify-content-end">
-    <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+    <div class="app-row app-col app-grow-0 app-basis-auto clr-align-items-center">
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from "./components/card/card.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ClarityModule } from '@clr/angular';
+import { ClrAccordionModule, ClrAlertModule, ClrCheckboxModule, ClrDropdownModule, ClrIconModule, ClrLoadingModule, ClrModalModule } from '@clr/angular';
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
@@ -39,7 +39,13 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    ClarityModule,
+    ClrModalModule,
+    ClrDropdownModule,
+    ClrIconModule,
+    ClrAlertModule,
+    ClrAccordionModule,
+    ClrCheckboxModule,
+    ClrLoadingModule,
     UxgModule,
     NgxsModule.forFeature([
       ToastState
@@ -77,7 +83,13 @@ import { DatepickerDirective } from './directives/datepicker.directive';
   exports: [
     CommonModule,
     FormsModule,
-    ClarityModule,
+    ClrModalModule,
+    ClrDropdownModule,
+    ClrIconModule,
+    ClrAlertModule,
+    ClrAccordionModule,
+    ClrCheckboxModule,
+    ClrLoadingModule,
     UxgModule,
 
     CardComponent,

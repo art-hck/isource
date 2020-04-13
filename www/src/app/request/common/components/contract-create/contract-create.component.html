@@ -11,7 +11,7 @@
         <h5>Выберите поставщика</h5>
         <div [class.clr-error]="formContragentInvalid">
           <div class="clr-select-wrapper">
-            <select class="clr-select" formControlName="contragent" [compareWith]="compareContragentByID">
+            <select formControlName="contragent" [compareWith]="compareContragentByID">
               <option *ngFor="let contragent of contragents" [ngValue]="getContragentList(contragent)">
                 {{contragent.shortName}}
               </option>

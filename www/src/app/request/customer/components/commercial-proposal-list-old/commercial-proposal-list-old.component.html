@@ -3,10 +3,10 @@
 </ng-container>
 
 <ng-container *ngIf="request">
-  <div class="clr-row commercial-proposals">
-    <div class="info-card clr-col">
+  <div class="app-row commercial-proposals">
+    <div class="info-card app-col">
       <div class="request-info">
-        <div class="clr-row">
+        <div class="app-row">
           <div class="clr-col-5">
           </div>
           <div class="clr-col-7 price-auto-select">
@@ -61,7 +61,7 @@
                        (click)="onSelectOffer(requestPosition, supplier.id, linkedOffer)"
                        [ngClass]="{ 'selected' : offerIsSelected(requestPosition, supplier.id) || offerIsWinner(linkedOffer) }">
                     <div class="counted-price-block">
-                      <div class="clr-row clr-justify-content-between">
+                      <div class="app-row app-justify-content-between">
                         <div class="clr-col-auto">
                             <span class="counted-offer-price">
                               {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
@@ -108,7 +108,7 @@
             <thead>
             <tr>
               <th class="position-name">
-                <div class="clr-row footer-total-sum">
+                <div class="app-row footer-total-sum">
                   <span class="clr-col-12">Итого {{ getTotalSum() | currency: 'RUB' }}</span>
 
                   <div class="clr-col-12 send-for-agreement-btn">
@@ -122,24 +122,24 @@
 
               <th class="contragent-name" *ngFor="let supplier of suppliers; let i = index">
                 <div class="contragent-info">
-                  <div class="clr-row clr-align-items-center">
-                    <div class="clr-col">
+                  <div class="app-row clr-align-items-center">
+                    <div class="app-col">
                             <span class="total-sum">
                               {{ getTotalSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}
                             </span>
                     </div>
                   </div>
 
-                  <div class="clr-row clr-align-items-center">
-                    <div class="clr-col">
+                  <div class="app-row clr-align-items-center">
+                    <div class="app-col">
                             <span class="selected-sum">
                               Выбрано на сумму {{ getSelectedSumBySupplier(requestPositions, supplier.id) | currency : 'RUB' }}
                             </span>
                     </div>
                   </div>
 
-                  <div class="clr-row">
-                    <div class="clr-col"
+                  <div class="app-row">
+                    <div class="app-col"
                          [class.hover-switch-block]="canSelectOffersBySupplier(requestPositions, supplier.id)">
 
                       <div class="alert-labels">

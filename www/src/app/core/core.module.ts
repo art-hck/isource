@@ -8,11 +8,11 @@ import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { CartModule } from '../cart/cart.module';
 import { DataInterceptor } from "./interceptor/data.interceptor";
 import { ErrorInterceptor } from "./interceptor/error.interceptor";
-import { ClarityModule } from '@clr/angular';
 import { FeatureService } from "./services/feature.service";
 import { AuthInterceptor } from "./interceptor/auth.interceptor";
 import { MessageModule } from "../message/message.module";
 import { BaseUrlInterceptor } from "./interceptor/base-url-interceptor";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { BaseUrlInterceptor } from "./interceptor/base-url-interceptor";
     HttpClientModule,
     RouterModule,
     CartModule,
-    ClarityModule,
+    SharedModule,
     MessageModule
   ],
   exports: [
