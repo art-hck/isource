@@ -19,7 +19,7 @@ export class RequestTechnicalProposalComponent {
   @Output() cancelTechnicalProposal = new EventEmitter<TechnicalProposal>();
   isFolded: boolean;
 
-  protected durationCancelPublish = 10 * 60;
+  public durationCancelPublish = 10 * 60;
 
   constructor(
     public featureService: FeatureService,

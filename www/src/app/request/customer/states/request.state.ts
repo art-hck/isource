@@ -34,8 +34,8 @@ type Context = StateContext<Model>;
 })
 @Injectable()
 export class RequestState {
-  cache: { [reqeustId in Uuid]: Request } = {};
-  cachePositions: { [reqeustId in Uuid]: RequestPositionList[] } = {};
+  cache: { [requestId in Uuid]: Request } = {};
+  cachePositions: { [requestId in Uuid]: RequestPositionList[] } = {};
   constructor(private rest: RequestService) {}
 
   @Selector() static request({request}: Model) { return request; }

@@ -29,7 +29,7 @@ type Context = StateContext<Model>;
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [reqeustId in Uuid]: TechnicalCommercialProposal[] } = {};
+  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 

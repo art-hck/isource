@@ -28,7 +28,7 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
   getOkeiSymbol = ({symbol}: Okei) => symbol && symbol.toLowerCase();
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okeiService: OkeiService) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, public okeiService: OkeiService) {}
 
   ngAfterViewInit() {
     this.formArray = this.fb.array((this.value || [null]).map(p => this.fetchFormPosition(p)), Validators.required);
