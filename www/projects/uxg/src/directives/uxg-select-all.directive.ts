@@ -1,8 +1,8 @@
-import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, NgControl } from "@angular/forms";
+import { Directive, Input, OnDestroy, OnInit, Optional } from '@angular/core';
+import { AbstractControl, FormGroup, NgControl } from "@angular/forms";
 import { UxgCheckboxComponent } from "../components/uxg-checkbox/uxg-checkbox.component";
-import { merge, Subscription } from "rxjs";
-import { filter, tap } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { filter, map, mapTo, takeUntil, tap } from "rxjs/operators";
 import { pipeFromArray } from "rxjs/internal/util/pipe";
 
 @Directive({
@@ -10,43 +10,39 @@ import { pipeFromArray } from "rxjs/internal/util/pipe";
 })
 export class UxgSelectAllDirective implements OnInit, OnDestroy {
   @Input() uxgSelectAllFor: string;
-  subscription = new Subscription();
+  destroy$ = new Subject();
 
-  constructor(private component: UxgCheckboxComponent, private ngControl: NgControl) {}
+  constructor(@Optional() private component: UxgCheckboxComponent, private ngControl: NgControl) {}
 
   ngOnInit() {
     const control: AbstractControl = this.ngControl.control;
     const controlName = Object.keys(control.parent.controls).find(key => control.parent.get(key) === control);
-    const formArray: FormArray = control.parent.get(this.uxgSelectAllFor) as FormArray;
-    if (!formArray) { return; }
-    const childs: AbstractControl[] = formArray.controls.map(
-      (formGroup: FormGroup) => formGroup.controls[controlName]
-    );
-    let subscribed = true;
-    if (!childs.length) { return; }
+    let listen = true;
 
-    const pipes = (action: () => void) => [
-      filter(() => subscribed),
-      filter(() => !control.disabled),
-      tap(() => subscribed = false),
+    const pipes = (action: (childs: AbstractControl[]) => void) => [
+      mapTo(control.parent.get(this.uxgSelectAllFor)),
+      filter(Boolean),
+      filter(() => listen),
+      filter(() => control.enabled),
+      tap(() => listen = false),
+      map(({controls}) => controls.map(({controls: c}: FormGroup) => c[controlName])),
       tap(action),
-      tap(() => this.component.isMixed = childs.length > childs.filter(c => c.value).length),
-      tap(() => subscribed = true)
+      tap((childs: AbstractControl[]) => this.component && (this.component.isMixed = childs.length > childs.filter(c => c.value).length)),
+      tap(() => listen = true),
+      takeUntil(this.destroy$)
     ];
 
-    this.subscription.add(control.valueChanges
-      .pipe(
-        pipeFromArray(pipes(
-          () => childs.filter(c => !c.disabled).forEach(c => c.setValue(this.ngControl.value))
-        )))
-      .subscribe());
+    control.valueChanges.pipe(pipeFromArray(pipes(
+      childs => childs.filter(c => !c.disabled).forEach(c => c.setValue(control.value))
+    ))).subscribe();
 
-    this.subscription.add(merge(...childs.map(c => c.valueChanges))
-      .pipe(pipeFromArray(pipes(() => control.setValue(childs.filter(c => c.value).length > 0))))
-      .subscribe());
+    control.parent.get(this.uxgSelectAllFor).valueChanges.pipe(pipeFromArray(pipes(
+      childs => control.setValue(childs.filter(c => c.value).length > 0)
+    ))).subscribe();
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

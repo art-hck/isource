@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
-import { APP_CONFIG } from '@stdlib-ng/core';
+import { APP_CONFIG, GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
 import { Feature } from "../models/feature";
 import { UserRole } from "../../user/models/user-role";
 import { FeatureList, IFeatureList } from "../config/feature-list";

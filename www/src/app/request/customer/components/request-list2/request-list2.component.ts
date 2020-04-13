@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { APP_CONFIG } from '@stdlib-ng/core';
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { filter, scan, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
-import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";

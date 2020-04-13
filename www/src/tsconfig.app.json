@@ -9,12 +9,5 @@
   ],
   "exclude": [
     "**/*.spec.ts"
-  ],
-  // Эти пути важны, т.к stdlib-ng подлючается не через npm
-  "paths": {
-    "@stdlib-ng/core": ["node_modules/stdlib-ng/dist/core"],
-    "@stdlib-ng/core/*": ["node_modules/stdlib-ng/dist/core/*"],
-    "@stdlib-ng/custom-components": ["node_modules/stdlib-ng/dist/custom-components"],
-    "@stdlib-ng/custom-components/*": ["node_modules/stdlib-ng/dist/custom-components/*"]
-  }
+  ]
 }

@@ -4,7 +4,7 @@ import { distinctUntilChanged, filter, map, share, takeWhile, tap } from 'rxjs/o
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { IWebsocketService, IWsMessage, WebSocketConfig } from './websocket.interfaces';
 import { config } from './websocket.config';
-import { TokenService } from '@stdlib-ng/core';
+import { TokenService } from "../auth/services/token.service";
 
 
 @Injectable({

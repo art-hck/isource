@@ -8,8 +8,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/for
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { RequestPositionList } from "../../models/request-position-list";
 import { ActivatedRoute } from "@angular/router";
-import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
-import { APP_CONFIG } from '@stdlib-ng/core';
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
