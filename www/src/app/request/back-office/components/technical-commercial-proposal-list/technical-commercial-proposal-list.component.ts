@@ -23,22 +23,32 @@ import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import { animate, style, transition, trigger } from "@angular/animations";
+import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
+import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
   styleUrls: ['technical-commercial-proposal-list.component.scss'],
+  animations: [trigger('sidebarHide', [
+    transition(':leave', animate('300ms ease', style({ 'max-width': '0', 'margin-left': '0' }))),
+  ])],
+
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
-  @Select(TechnicalCommercialProposalState.proposals) technicalCommercialProposals$: Observable<TechnicalCommercialProposal[]>;
+  @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
+  @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
   @Select(TechnicalCommercialProposalState.proposalsLength) proposalsLength$: Observable<number>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
-  view: "grid" | "list" = "list";
+  view: "grid" | "list" = "grid";
   readonly form = this.fb.group({ checked: false });
+  readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
 
@@ -68,13 +78,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe();
 
-    this.technicalCommercialProposals$.pipe(
-      filter(Boolean),
+    this.proposalsByPositions$.pipe(
+      filter(p => !!p),
       takeUntil(this.destroy$)
-    ).subscribe((proposals: TechnicalCommercialProposal[]) => {
-      this.form.removeControl("proposals");
-      this.form.addControl("proposals", this.fb.array(
-        proposals.map(proposal => this.fb.group({ checked: false, proposal }))
+    ).subscribe((items) => {
+
+      this.form.removeControl("positions");
+      this.form.addControl("positions", this.fb.array(
+        items.map(item => {
+          return this.fb.group({ checked: false, item });
+        })
       ));
     });
 
@@ -99,6 +112,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
     return proposals
       .map(proposal => proposal.supplier);
+  }
+
+  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
+    return positions.find(({position}) => position.id === id);
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;

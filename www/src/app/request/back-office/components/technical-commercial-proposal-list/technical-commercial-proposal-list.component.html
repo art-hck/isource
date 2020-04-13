@@ -1,12 +1,12 @@
 <ng-container *ngIf="(request$ | async) as request; else placeholder">
-  <ng-container *ngIf="(technicalCommercialProposals$ | async) as proposals; else placeholder" [formGroup]="form">
+  <ng-container *ngIf="(proposals$ | async) as proposals; else placeholder" [formGroup]="form">
     <!-- actions -->
     <div class="app-row">
       <div class="app-col">
         <div class="app-table app-no-border">
           <div class="app-row  app-align-items-center">
-            <div class="app-row app-align-items-center" *ngIf="view==='grid'">
-              <uxg-checkbox formControlName="checked" uxgSelectAllFor="proposals"></uxg-checkbox>
+            <ng-container *ngIf="view==='grid'">
+              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
               <uxg-popover #selectPopover>
                 <button uxgButton uxgPopoverTrigger link icon><clr-icon shape="app-triangle down"></clr-icon></button>
                 <div *uxgPopoverContent>
@@ -14,12 +14,13 @@
                   <div><button uxgButton clear (click)="selectPopover.hide()">Ни одного</button></div>
                 </div>
               </uxg-popover>
-            </div>
+            </ng-container>
             <div>
+              <span class="app-secondary-color">показать: </span>
               <uxg-popover #viewPopover>
                 <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
-                 <span *ngSwitchCase="'grid'">показать: <b>по позициям</b></span>
-                 <span *ngSwitchCase="'list'">показать: <b>по поставщикам</b></span>
+                 <span *ngSwitchCase="'grid'"><b>по позициям</b></span>
+                 <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
                 </button>
                 <div *uxgPopoverContent>
                   <div><button uxgButton clear (click)="view='grid'; viewPopover.hide()">по позициям</button></div>
@@ -57,19 +58,61 @@
               </button>
 
               <!-- Отправить на согласование -->
-              <button *ngSwitchCase="'grid'" uxgButton primary (click)="uploadTemplateModal.open()">
+              <button *ngSwitchCase="'grid'" uxgButton primary>
                 Отправить на согласование
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="app-col app-col-aside" *ngIf="view==='list'"></div>
+      <div @sidebarHide *ngIf="view==='list'" class="app-col app-col-aside"></div>
     </div>
 
     <!-- grid -->
-    <ng-container *ngIf="view ==='grid'">
-    </ng-container>
+    <div class="grid" *ngIf="view ==='grid'" [formGroup]="form">
+      <!-- headers -->
+      <div class="grid-row app-row contragents">
+        <div class="app-col app-bold" *ngFor="let proposal of proposals">
+          <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
+        </div>
+      </div>
+
+      <!-- items -->
+      <div class="item" *ngFor="let item of proposalsByPositions$ | async; index as i" formArrayName="positions">
+        <div class="app-row app-align-items-center app-section" [formGroupName]="i">
+          <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
+          <label (click)="checked.check($event)"><b>&nbsp; {{item.position.name}}</b></label>
+        </div>
+        <div class="grid-row app-row app-section">
+          <ng-container *ngFor="let proposal of proposals">
+            <div class="grid-item app-col" *ngIf="getProposalPosition(proposal, item.position) as proposalPosition; else addProposalPosition">
+              <h3>
+                {{(proposalPosition?.priceWithoutVat * proposalPosition?.quantity) | number:'1.0-2'}}
+                <span class="app-ghost-color">{{getCurrencySymbol(proposalPosition.currency, "narrow")}}</span>
+              </h3>
+              <p>
+                {{proposalPosition.quantity}} {{proposalPosition.measureUnit}} |
+                {{proposalPosition.priceWithoutVat | number:'1.0-2'}}
+                <span class="app-ghost-color">
+                  {{getCurrencySymbol(proposalPosition.currency, "narrow")}}/{{proposalPosition.measureUnit}}
+                </span>
+              </p>
+              <p class="app-ellipsis">
+                {{ proposalPosition.manufacturingName }}
+              </p>
+
+
+              {{proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
+            </div>
+            <ng-template #addProposalPosition>
+              <a class="grid-item app-col empty">
+                <clr-icon shape="app-plus-big" size="24"></clr-icon>
+              </a>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
 
     <!-- list -->
     <div class="app-row" *ngIf="view==='list'">
