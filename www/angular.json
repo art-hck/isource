@@ -174,7 +174,9 @@
               "./node_modules/@clr/icons/clr-icons.min.css",
               "projects/uxg-examples/src/styles.scss"
             ],
-            "assets": ["projects/uxg-examples/src/pluginIcon.svg"],
+            "assets": [
+              "projects/uxg-examples/src/pluginIcon.svg"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -243,5 +245,8 @@
       }
     }
   },
-  "defaultProject": "mall-front"
+  "defaultProject": "mall-front",
+  "cli": {
+    "analytics": false
+  }
 }

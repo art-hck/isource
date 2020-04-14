@@ -3,6 +3,14 @@
     <uxg-tabs>
       <uxg-tab-title #catalogTab disabled [class.app-bold]="catalogTab.active">Все товары портала</uxg-tab-title>
       <uxg-tab-title
+        #itemsDictionaryTab
+        routerLink="customer/items-dictionary" routerLinkActive
+        [active]="itemsDictionary.isActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [class.app-bold]="itemsDictionaryTab.active"
+        #itemsDictionary="routerLinkActive"
+      >Поиск по справочнику</uxg-tab-title>
+      <uxg-tab-title
         #priceOrderTab
         routerLink="customer/price-orders" routerLinkActive
         [active]="rlaPriceOrders.isActive"
@@ -10,7 +18,13 @@
         [class.app-bold]="priceOrderTab.active"
         #rlaPriceOrders="routerLinkActive"
       >Мои ценовые запросы</uxg-tab-title>
-      <uxg-tab-title #cartTab disabled [class.app-bold]="cartTab.active">
+      <uxg-tab-title
+        #cartTab
+        routerLink="customer/cart" routerLinkActive
+        [active]="cart.isActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [class.app-bold]="cartTab.active"
+        #cart="routerLinkActive">
         <div class="app-row app-align-items-center">
           <clr-icon shape="app-basket"></clr-icon><span>Корзина торгового портала</span>
         </div>
