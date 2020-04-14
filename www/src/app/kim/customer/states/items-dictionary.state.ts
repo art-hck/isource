@@ -44,9 +44,10 @@ export class ItemsDictionaryState {
   }
 
   @Action(AddItem)
-  addItem({setState}: Context, {item}: AddItem) {
+  addItem(ctx: Context, {item}: AddItem) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.addItem(item).pipe(
-      tap()
-    )
+      tap(() => ctx.setState(patch({status: "received" as StateStatus})))
+    );
   }
 }
