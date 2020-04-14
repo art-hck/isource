@@ -1,0 +1,62 @@
+/* Табы */
+
+.nav {
+  height: 42px;
+  box-shadow: inset 0 -1px 0 $color_light_gray;
+
+  .nav-link {
+    font-size: 12px;
+    padding: 7px 0;
+    line-height: 18px;
+
+    &.btn {
+      text-transform: none;
+      margin-bottom: 1px;
+      border-radius: 0;
+      border: 0;
+      color: $color_gray;
+      font-weight: 500;
+      height: 42px;
+    }
+
+    &.active,
+    &.active:hover {
+      color: $color_black;
+      pointer-events: none;
+    }
+
+
+    &:active,
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+
+    &.active,
+    &:hover {
+      box-shadow: inset 0 -2px 0 #f69f39;
+      transition: none;
+    }
+
+  }
+
+  .nav-item {
+    margin-right: 20px;
+  }
+}
+
+
+.nav-link {
+  &.btn-link.btn, &.btn.btn-link {
+    &:active {
+      border-color: transparent;
+      background-color: transparent;
+      color: #1991ff;
+    }
+
+    &:hover {
+      color: #1991ff;
+      box-shadow: none;
+    }
+  }
+}

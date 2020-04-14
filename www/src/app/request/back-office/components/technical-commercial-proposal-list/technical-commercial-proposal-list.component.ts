@@ -1,6 +1,6 @@
-import { ActivatedRoute } from "@angular/router";
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Observable, Subject, timer } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -16,17 +16,18 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder } from "@angular/forms";
+import { animate, style, transition, trigger } from "@angular/animations";
+import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
+import { getCurrencySymbol } from "@angular/common";
+import * as moment from "moment";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
-import { animate, style, transition, trigger } from "@angular/animations";
-import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
-import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { getCurrencySymbol } from "@angular/common";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -38,8 +39,10 @@ import { getCurrencySymbol } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
+  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
+  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @Select(TechnicalCommercialProposalState.proposalsLength) proposalsLength$: Observable<number>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
@@ -59,7 +62,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private featureService: FeatureService,
     private actions: Actions,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
     public store: Store,
+    public router: Router,
   ) {
   }
 
@@ -114,10 +119,41 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return positions.find(({position}) => position.id === id);
   }
 
+  isReviewed({data}: TechnicalCommercialProposalGroupByPosition): boolean {
+    return data.some(({proposal: p}) => p.status === 'REVIEWED');
+  }
+
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('document:keydown.arrowLeft')
+  scrollLeft() {
+    this.gridRows.forEach(({nativeElement: el}) => el.scroll({ left: el.scrollLeft - 300, behavior: 'smooth' }));
+    timer(350).subscribe(() => this.cd.detectChanges());
+  }
+
+  @HostListener('document:keydown.arrowRight')
+  scrollRight() {
+    this.gridRows.forEach(({nativeElement: el}) => el.scroll({ left: el.scrollLeft + 300, behavior: 'smooth' }));
+    timer(350).subscribe(() => this.cd.detectChanges());
+  }
+
+  isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
+    return proposalPosition.position.isDeliveryDateAsap ||
+      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
+  }
+
+  isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
+    return proposalPosition.quantity === proposalPosition.position.quantity;
+  }
+
+  get selectedPositions() {
+    return (this.form.get('positions') as FormArray).controls
+      .filter(({value}) => value.checked)
+      .map(({value}) => value.item);
   }
 }

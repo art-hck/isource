@@ -1,0 +1,236 @@
+/* Список карточек */
+
+.stack-view {
+  margin-top: 0;
+  border: 0;
+  border-radius: 0;
+  line-height: 1;
+  background-color: white;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+
+clr-stack-view {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Полная ширина лейбла и нулевая ширина контента */
+.stack-view .stack-block-label {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.stack-view .stack-block-content {
+  flex: 1 1 auto;
+  width: 0;
+}
+
+/* Дополнительно обнуляем отступы блока с контентом */
+.stack-view .stack-block-content {
+  padding: 0;
+}
+
+.stack-view .stack-block-label {
+  padding: 15px 20px;
+  background-color: #fafafa;
+}
+
+.stack-view .stack-children .stack-block {
+  border: 0;
+}
+
+
+.label-content {
+  display: inline-block;
+}
+.label-content-right {
+  float: right;
+}
+
+
+
+/* Ширина блоков с лейблом и контентом внутри карточки */
+.stack-view .stack-children .stack-block-label {
+  flex: 0 0 140px;
+  max-width: 140px;
+  font-size: $font_size_basic;
+  line-height: 1;
+}
+.stack-view .stack-children .stack-block-content {
+  flex: 1 1 auto;
+  width: auto;
+
+  font-size: $font_size_basic;
+  color: $color_black;
+}
+
+
+
+
+clr-stack-block.icon > .stack-children { /* Если блок содержит иконку, сдвигаем контент вправо */
+  padding-left: 90px;
+}
+
+
+clr-stack-block {
+  padding: 0;
+}
+
+clr-stack-block > .stack-children > .stack-block {
+  padding-bottom: 10px;
+}
+clr-stack-block > .stack-children > .stack-block:last-of-type {
+  padding-bottom: 15px;
+}
+
+
+
+.stack-header .stack-title {
+  display: block;
+  flex: 1 1 auto;
+  padding: 10px 20px;
+  background: #eceff1;
+  font-size: 12px;
+  font-family: $font_roboto;
+  width: 100%;
+  line-height: 1;
+  text-transform: uppercase;
+  color: $color_black;
+  font-weight: 300;
+}
+
+
+.stack-view .stack-children {
+  padding: 0 20px;
+}
+
+
+.stack-view .stack-children>.stack-block:last-child,
+.stack-view .stack-children>:last-child .stack-block:last-of-type,
+.stack-view>.stack-block:last-child,
+.stack-view>:last-child .stack-block:last-of-type {
+  border-bottom: none;
+  box-shadow: initial;
+}
+
+
+
+.stack-view .stack-block-label::before {
+  height: 0;
+  width: 0;
+  margin: 0;
+}
+
+
+.stack-view .stack-children .stack-block-label {
+  color: $color_gray;
+  font-weight: normal;
+}
+
+
+.stack-view clr-stack-block > .stack-block-content,
+.stack-view clr-stack-block > .stack-block-label {
+  background-color: transparent !important;
+  font-size: $font_size_basic;
+  color: $color_black;
+  font-weight: normal;
+  line-height: 20px;
+}
+
+.stack-view clr-stack-block > .stack-block-content span.stack-block-description,
+.stack-view clr-stack-block > .stack-block-label span.stack-block-description {
+  color: #9fa8b0;
+  display: table;
+  line-height: 20px;
+}
+
+.stack-view clr-stack-block > .stack-block-content span.stack-block-title,
+.stack-view clr-stack-block > .stack-block-label span.stack-block-title {
+  padding-bottom: 5px;
+  display: table;
+}
+
+.stack-view clr-stack-block > .stack-block-content span.stack-block-sum,
+.stack-view clr-stack-block > .stack-block-label span.stack-block-sum {
+  float: right;
+  font-weight: 500;
+}
+
+
+.stack-view clr-stack-block.income > .stack-block-content span.stack-block-sum,
+.stack-view clr-stack-block.income > .stack-block-label span.stack-block-sum,
+.stack-view clr-stack-block.unblocked > .stack-block-content span.stack-block-sum,
+.stack-view clr-stack-block.unblocked > .stack-block-label span.stack-block-sum {
+  color: $color_green;
+}
+
+
+
+
+.stack-view clr-stack-block > .stack-block-label::before {
+  content: '';
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+
+
+.stack-view clr-stack-block.income > .stack-block-label::before,
+.stack-view clr-stack-block.outcome > .stack-block-label::before,
+.stack-view clr-stack-block.blocked > .stack-block-label::before,
+.stack-view clr-stack-block.unblocked > .stack-block-label::before {
+  content: '';
+  width: 48px;
+  height: 48px;
+  border-radius: 50px;
+  background-color: #9caebb;
+  margin: 0 22px 0 0;
+}
+
+
+.stack-view clr-icon[dir=right] svg,
+.stack-view clr-icon[dir=down] svg {
+  display: none;
+}
+
+.stack-view clr-stack-block.income > .stack-block-label::before {
+  content: '';
+  background-image: url('assets/styles/stdlib-styles/images/income-icon.svg');
+  background-size: 14px;
+}
+.stack-view clr-stack-block.outcome > .stack-block-label::before {
+  content: '';
+  background-image: url('assets/styles/stdlib-styles/images/outcome-icon.svg');
+  background-size: 14px;
+}
+.stack-view clr-stack-block.blocked > .stack-block-label::before {
+  content: '';
+  background-image: url('assets/styles/stdlib-styles/images/blocked-icon.svg');
+  background-size: 14px;
+}
+.stack-view clr-stack-block.unblocked > .stack-block-label::before {
+  content: '';
+  background-image: url('assets/styles/stdlib-styles/images/unblocked-icon.svg');
+  background-size: 14px;
+}
+
+.stack-view .stack-children .stack-block-content,
+.stack-view .stack-children .stack-block-label {
+  background-color: white;
+  padding: 0;
+}
+
+
+/* Фон заголовка карточки при наведении */
+.stack-view .stack-block-expandable:hover:not(.stack-block-expanded)>.stack-block-content,
+.stack-view .stack-block-expandable:hover:not(.stack-block-expanded)>.stack-block-label {
+  background-color: initial;
+}
+
+
+.stack-view .stack-block {
+  border-bottom: 1px solid $color_light_gray;
+}

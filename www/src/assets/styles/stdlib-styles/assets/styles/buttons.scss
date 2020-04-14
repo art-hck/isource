@@ -1,0 +1,223 @@
+/* Кнопки */
+
+button:focus {
+  outline: none;
+}
+
+.btn {
+  border-radius: 2px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: $font_size_basic;
+  font-weight: 400;
+  height: 36px;
+  border-color: $color_blue;
+  color: $color_blue;
+  line-height: 1;
+  padding: 0 9px;
+  max-width: initial;
+
+  span { /* Дополнительный отступ вокруг текста в кнопке */
+    padding: 0 4px;
+  }
+
+  &.large { /* Переопределение высоты для больших кнопок высотой 46px */
+    height: 46px;
+  }
+
+  clr-icon { /* Фикс разной высоты текста в кнопках с иконкой и без */
+    -webkit-transform: none;
+    transform: none;
+    vertical-align: sub;
+  }
+}
+
+
+
+/* Синяя кнопка */
+.btn-primary {
+  .btn, &.btn {
+    border-color: $color_blue;
+    background-color: $color_blue;
+    color: white;
+
+    &:hover {
+      border-color: #0077e5;
+      background-color: #0077e5;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: #0067c5;
+      background-color: #0067c5;
+    }
+
+    &:disabled {
+      border-color: $color_blue;
+      background-color: $color_blue;
+      color: white;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+
+
+/* Зелёная кнопка */
+.btn-success {
+  .btn, &.btn {
+    border-color: #4CAF50;
+    background-color: #4CAF50;
+    color: white;
+
+    &:hover {
+      border-color: #43A047;
+      background-color: #43A047;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: #2E7D32;
+      background-color: #2E7D32;
+    }
+
+    &:disabled {
+      border-color: #4CAF50;
+      background-color: #4CAF50;
+      color: white;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+
+
+/* Оранжевая кнопка */
+.btn-yellow {
+  .btn, &.btn {
+    border-color: #f69f39;
+    background-color: #f69f39;
+    color: white;
+
+    &:hover {
+      border-color: #e79637;
+      background-color: #e79637;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: #cc812a;
+      background-color: #cc812a;
+    }
+
+    &:disabled {
+      border-color: #f69f39;
+      background-color: #f69f39;
+      color: white;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+
+
+/* Кнопка с рамкой */
+.btn-outline {
+  .btn, &.btn {
+    border-color: #9fa8b0;
+    background-color: transparent;
+    color: #9fa8b0;
+
+    &:hover {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-color: transparent;
+      color: $color_black;
+    }
+
+    &:active {
+      border-color: $color_black;
+    }
+
+    &:disabled {
+      border-color: #9fa8b0;
+      background-color: transparent;
+      color: #9fa8b0;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+
+
+/* Кнопка-ссылка без рамки и фона */
+.btn-link {
+  .btn, &.btn {
+    border-color: transparent;
+    background-color: transparent;
+    color: $color_blue;
+
+    &:hover {
+      border-color: transparent;
+      background-color: transparent;
+      color: #0067c5;
+    }
+
+    &:active {
+      border-color: transparent;
+      background-color: transparent;
+      color: #004a70;
+    }
+
+    &:disabled {
+      border-color: transparent;
+      background-color: transparent;
+      color: $color_blue;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
+
+
+
+/* Кнопка-ссылка без рамки и фона (серая) */
+.btn-gray-link {
+  .btn, &.btn {
+    border-color: transparent;
+    background-color: transparent;
+    color: #9fa8b0;
+
+    &:hover {
+      border-color: transparent;
+      background-color: transparent;
+      color: #847777;
+    }
+
+    &:active {
+      -webkit-box-shadow: none; // todo убрать?
+      box-shadow: none; // todo убрать?
+      border-color: transparent;
+      background-color: transparent;
+      color: $color_black;
+    }
+
+    &:disabled {
+      border-color: transparent;
+      background-color: transparent;
+      color: #9fa8b0;
+      cursor: not-allowed;
+      opacity: .5;
+    }
+  }
+}
