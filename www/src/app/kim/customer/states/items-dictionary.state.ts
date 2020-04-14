@@ -39,6 +39,6 @@ export class ItemsDictionaryState {
 
   @Action(Clear)
   clear({setState}: Context) {
-    setState(patch({itemsDictionary: null, status: "received" as StateStatus}))
+    setState(patch({itemsDictionary: null, status: "received" as StateStatus}));
   }
 }

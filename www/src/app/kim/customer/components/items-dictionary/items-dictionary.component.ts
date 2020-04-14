@@ -17,7 +17,7 @@ import Clear = ItemsDictionaryActions.Clear;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemsDictionaryComponent implements OnInit {
-  @Select(ItemsDictionaryState.itemsDictionary) itemsDictionary$: Observable<KimDictionaryItem[]>
+  @Select(ItemsDictionaryState.itemsDictionary) itemsDictionary$: Observable<KimDictionaryItem[]>;
   @Select(ItemsDictionaryState.status) status$: Observable<StateStatus>;
   searchText = new FormControl();
 
