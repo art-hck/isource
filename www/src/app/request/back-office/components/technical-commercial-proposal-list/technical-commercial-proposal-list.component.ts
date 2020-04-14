@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { catchError, filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -16,6 +16,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
+import { FormBuilder } from "@angular/forms";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -37,14 +38,19 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
+  view: "grid" | "list" = "list";
+  readonly form = this.fb.group({ checked: false });
+  readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
+  readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
 
   constructor(
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
     private featureService: FeatureService,
-    private store: Store,
-    private actions: Actions
+    private actions: Actions,
+    private fb: FormBuilder,
+    public store: Store,
   ) {
   }
 
@@ -62,6 +68,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.technicalCommercialProposals$.pipe(
+      filter(Boolean),
+      takeUntil(this.destroy$)
+    ).subscribe((proposals: TechnicalCommercialProposal[]) => {
+      this.form.removeControl("proposals");
+      this.form.addControl("proposals", this.fb.array(
+        proposals.map(proposal => this.fb.group({ checked: false, proposal }))
+      ));
+    });
 
     this.actions.pipe(
       ofActionCompleted(Create, Update, Publish, UploadTemplate),
@@ -88,18 +104,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   downloadAnalyticalReport() {
     this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
-  }
-
-  onDownloadTemplate() {
-    this.store.dispatch(new DownloadTemplate(this.requestId));
-  }
-
-  onChangeFilesList(files: File[]): void {
-    this.files = files;
-  }
-
-  onSendTemplatePositions(): void {
-    this.store.dispatch(new UploadTemplate(this.requestId, this.files));
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
