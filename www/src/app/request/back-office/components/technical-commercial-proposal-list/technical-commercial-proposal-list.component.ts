@@ -22,6 +22,7 @@ import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -83,6 +84,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
     return proposals
       .map(proposal => proposal.supplier);
+  }
+
+  downloadAnalyticalReport() {
+    this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
   }
 
   onDownloadTemplate() {

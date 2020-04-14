@@ -142,4 +142,9 @@ export class CommercialProposalsService {
     const url = `requests/backoffice/${requestId}/procedures/${prolongationProcedureId}/change-end-registration`;
     return this.api.post(url, { dateEndRegistration: newProcedureEndDate });
   }
+
+  downloadAnalyticalReport(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/commercial-proposals/download-analytical-report`;
+    return this.api.post(url, {}, {responseType: 'blob'});
+  }
 }

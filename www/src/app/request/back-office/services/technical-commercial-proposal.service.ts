@@ -41,6 +41,11 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData({files}));
   }
 
+  downloadAnalyticalReport(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/download-analytical-report`;
+    return this.api.post(url, {}, {responseType: 'blob'});
+  }
+
   availablePositions(requestId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals/available-request-positions`;
     return this.api.get<RequestPosition[]>(url);

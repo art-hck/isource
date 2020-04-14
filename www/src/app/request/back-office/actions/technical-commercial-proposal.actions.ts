@@ -55,4 +55,10 @@ export namespace TechnicalCommercialProposals {
 
     constructor(public requestId: Uuid) {}
   }
+
+  export class DownloadAnalyticalReport {
+    static readonly type = '[Technical Commercial Proposals Backoffice] DownloadAnalyticalReport';
+
+    constructor(public requestId: Uuid) {}
+  }
 }

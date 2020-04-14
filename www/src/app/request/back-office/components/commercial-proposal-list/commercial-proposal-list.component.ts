@@ -14,6 +14,8 @@ import { Select, Store } from "@ngxs/store";
 import { ClrModal } from "@clr/angular";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
+import {CommercialProposals} from "../../actions/commercial-proposal.actions";
+import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -125,5 +127,9 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
       )),
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  downloadAnalyticalReport(): void {
+    this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
   }
 }
