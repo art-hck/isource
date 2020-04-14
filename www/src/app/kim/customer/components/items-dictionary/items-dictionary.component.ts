@@ -9,6 +9,8 @@ import { FormControl } from "@angular/forms";
 import { KimDictionaryItem } from "../../../common/models/kim-dictionary-item";
 import { ActivatedRoute, Router } from "@angular/router";
 import Clear = ItemsDictionaryActions.Clear;
+import AddItem = ItemsDictionaryActions.AddItem;
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-items-dictionary',
@@ -38,5 +40,16 @@ export class ItemsDictionaryComponent implements OnInit {
 
   onSearch(searchText: string) {
     return this.store.dispatch(new Search(searchText));
+  }
+
+  addItem(item: KimDictionaryItem) {
+    this.store.dispatch(new AddItem(item)).subscribe(
+      (result) => {
+        const e = result.error as any;
+        this.store.dispatch(e ?
+          new ToastActions.Error(e && e.error.detail) : new ToastActions.Success('Позиция добавлена в корзину')
+        );
+      }
+    );
   }
 }

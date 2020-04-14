@@ -69,7 +69,7 @@
       </div>
       <div class="app-col quantity">
         <input uxgInput [value]="1">
-        <button uxgButton icon primary disabled>
+        <button uxgButton icon primary (click)="addItem(itemDictionary)">
           <clr-icon shape="app-basket"></clr-icon>
         </button>
       </div>
