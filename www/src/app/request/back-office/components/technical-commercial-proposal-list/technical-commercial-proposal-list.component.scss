@@ -15,3 +15,134 @@
 .template {
   padding-bottom: 20px;
 }
+
+.app-table > .app-row {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.grid-table {
+
+  .grid-row {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    scroll-behavior: smooth;
+
+    .grid-cell {
+      flex-basis: 280px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-right: 20px;
+    }
+
+  }
+  .items-row .grid-cell {
+    height: 130px;
+    border: 1px solid #E3EEFF;
+    padding: 16px;
+    border-radius: uxg($theme, control-border-radius);
+    background: uxg($theme, color-control-input-bg);
+    overflow: hidden;
+    text-align: left;
+    cursor: pointer;
+
+    &:disabled {
+      font-size: 17px;
+      color: #BEDAFC;
+      cursor: default;
+    }
+
+    & > *:not(:last-child) {
+      margin-bottom: 11px;
+    }
+
+    &.empty {
+      border-color: #BEDAFC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+    }
+
+    .winner {
+      margin: -4px -16px;
+    }
+  }
+
+  .contragents-row {
+    background: #fff;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    position: sticky;
+    top: -10px;
+    z-index: 1;
+    border-bottom: 1px solid #E3EEFF;
+
+    button {
+      position: absolute;
+      top: 16px;
+
+      &.left {
+        left: 23px;
+      }
+
+      &.right {
+        right: 23px;
+      }
+    }
+  }
+
+  .position-row {
+    background: #F4F6FB;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    margin-bottom: 4px;
+  }
+
+
+  @media (min-width: 576px) {
+    $width: calc((1000px) / 2);
+    $negWidth: calc((1000px) / 2 * -1);
+    margin: 0 $negWidth;
+
+    .contragents-row .grid-row, .position-row {
+      padding-left: $width;
+      padding-right: $width;
+    }
+
+    .items-row {
+      margin: 0 $negWidth;
+      padding: 0 $width;
+    }
+  }
+
+  @media (min-width: 1300px) {
+    $width: calc((100vw - 1300px) / 2);
+    $negWidth: calc((100vw - 1300px) / 2 * -1);
+    margin: 0 $negWidth;
+    .contragents-row .grid-row, .position-row {
+      padding-left: $width;
+      padding-right: $width;
+    }
+    .items-row {
+      margin: 0 $negWidth;
+      padding: 0 $width;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    $width: calc((100vw - 1600px) / 2);
+    $negWidth: calc((100vw - 1600px) / 2 * -1);
+    margin: 0 $negWidth;
+    .contragents-row .grid-row, .position-row {
+      padding-left: $width;
+      padding-right: $width;
+    }
+    .items-row {
+      margin: 0 $negWidth;
+      padding: 0 $width;
+    }
+  }
+}
+
+

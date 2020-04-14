@@ -1,0 +1,21 @@
+body {
+  & .gray { /* Серый текст */
+    color: #9fa8b0;
+  }
+
+  & .red-text {
+    color: $color_red !important;
+  }
+
+  & .text-right {
+    text-align: right !important;
+  }
+}
+
+
+a,
+a:link,
+a:active,
+a:visited {
+  text-decoration: none;
+}

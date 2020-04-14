@@ -1,12 +1,12 @@
 <ng-container *ngIf="(request$ | async) as request; else placeholder">
-  <ng-container *ngIf="(technicalCommercialProposals$ | async) as proposals; else placeholder" [formGroup]="form">
+  <ng-container *ngIf="(proposals$ | async) as proposals; else placeholder" [formGroup]="form">
     <!-- actions -->
     <div class="app-row">
       <div class="app-col">
         <div class="app-table app-no-border">
           <div class="app-row  app-align-items-center">
-            <div class="app-row app-align-items-center" *ngIf="view==='grid'">
-              <uxg-checkbox formControlName="checked" uxgSelectAllFor="proposals"></uxg-checkbox>
+            <ng-container *ngIf="view==='grid'">
+              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
               <uxg-popover #selectPopover>
                 <button uxgButton uxgPopoverTrigger link icon><clr-icon shape="app-triangle down"></clr-icon></button>
                 <div *uxgPopoverContent>
@@ -14,19 +14,19 @@
                   <div><button uxgButton clear (click)="selectPopover.hide()">Ни одного</button></div>
                 </div>
               </uxg-popover>
-            </div>
+            </ng-container>
             <div>
+              <span class="app-secondary-color">показать: </span>
               <uxg-popover #viewPopover>
                 <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
-                 <span *ngSwitchCase="'grid'">показать: <b>по позициям</b></span>
-                 <span *ngSwitchCase="'list'">показать: <b>по поставщикам</b></span>
+                 <span *ngSwitchCase="'grid'"><b>по позициям матрица</b></span>
+                 <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
                 </button>
                 <div *uxgPopoverContent>
-                  <div><button uxgButton clear (click)="view='grid'; viewPopover.hide()">по позициям</button></div>
+                  <div><button uxgButton clear (click)="view='grid'; viewPopover.hide()">по позициям матрица</button></div>
                   <div><button uxgButton clear (click)="view='list'; viewPopover.hide()">по поставщикам</button></div>
                 </div>
               </uxg-popover>
-
             </div>
             <div class="app-col"></div>
             <div [ngSwitch]="view">
@@ -39,13 +39,15 @@
               </button-->
 
               <!-- Новое ТКП  -->
-              <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
+              <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true"
+                      [disabled]="(availablePositions$ | async)?.length === 0">
                 <clr-icon shape="app-plus"></clr-icon>
                 <span>Новое ТКП</span>
               </button>
 
               <!-- Добавить столбец контрагента  -->
-              <button *ngSwitchCase="'grid'" uxgButton secondary iconText (click)="showForm = true">
+              <button *ngSwitchCase="'grid'" uxgButton secondary iconText (click)="showForm = true"
+                      [disabled]="(availablePositions$ | async)?.length === 0">
                 <clr-icon shape="app-plus"></clr-icon>
                 <span>Контрагент</span>
               </button>
@@ -57,19 +59,85 @@
               </button>
 
               <!-- Отправить на согласование -->
-              <button *ngSwitchCase="'grid'" uxgButton primary (click)="uploadTemplateModal.open()">
+              <button *ngSwitchCase="'grid'" uxgButton primary [disabled]="selectedPositions?.length === 0">
                 Отправить на согласование
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="app-col app-col-aside" *ngIf="view==='list'"></div>
+      <div @sidebarHide *ngIf="view==='list'" class="app-col app-col-aside"></div>
     </div>
 
     <!-- grid -->
-    <ng-container *ngIf="view ==='grid'">
-    </ng-container>
+    <div class="grid-table" *ngIf="view ==='grid'" [formGroup]="form">
+      <!-- contragents -->
+      <div class="contragents-row">
+        <div #gridRow class="app-row grid-row">
+          <div class="app-col grid-cell app-bold" *ngFor="let proposal of proposals">
+            <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
+          </div>
+        </div>
+
+        <button class="left" *ngIf="gridRow.scrollLeft > 0" uxgButton primary icon (click)="scrollLeft()"><clr-icon shape="app-chevron" dir="left"></clr-icon></button>
+        <button class="right" *ngIf="gridRow.scrollLeft === 0 || gridRow.scrollLeft < gridRow.scrollWidth - gridRow.offsetWidth" uxgButton primary icon (click)="scrollRight()"><clr-icon shape="app-chevron" dir="right"></clr-icon></button>
+      </div>
+
+      <!-- positions -->
+      <div class="position-row" *ngFor="let proposalPos of proposalsByPositions$ | async; index as i" formArrayName="positions">
+        <div class="app-row app-align-items-center app-section" [formGroupName]="i">
+          <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
+          <label (click)="checked.check($event)"><b>&nbsp; {{proposalPos.position.name}}</b></label>
+          <div class="app-col"></div>
+          <div class="app-success-color app-bold" *ngIf="isReviewed(proposalPos)">
+            <clr-icon shape="app-check"></clr-icon>
+            <span>Выбран победитель</span>
+          </div>
+        </div>
+        <div #gridRow class="grid-row app-row app-section items-row">
+          <ng-container *ngFor="let proposal of proposals">
+            <button class="grid-item grid-cell app-col" *ngIf="getProposalPosition(proposal, proposalPos.position) as p; else emptyProposal">
+              <div class="app-row app-align-items-center">
+                <h3 class="app-col">
+                  <span>{{(p?.priceWithoutVat * p?.quantity) | number:'1.0-2'}} </span>
+                  <span class="app-ghost-color">{{getCurrencySymbol(p.currency, "narrow")}}</span>
+                </h3>
+                <ng-container [ngSwitch]="p.status">
+                  <div class="winner" *ngSwitchCase="'APPROVED'">
+                    <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0 0H101V25H0L7 12.5L0 0Z" fill="#0EA04B"></path>
+                      <text y="13" x="92" fill="#fff" alignment-baseline="middle" text-anchor="end">Победитель</text>
+                    </svg>
+                  </div>
+                  <div class="app-ghost-color" *ngSwitchCase="'REJECTED'">
+                    <clr-icon shape="app-check"></clr-icon>
+                  </div>
+                </ng-container>
+              </div>
+              <div>
+                <!-- Количество, цена за ед. -->
+                <span [ngClass]="!isQuantityValid(p) ? 'app-error-color app-bold' : ''">{{p.quantity}} {{p.measureUnit}}</span>
+                <span class="app-ghost-color"> | </span>
+                <span class="app-ghost-color">{{p.priceWithoutVat | number:'1.0-2'}} </span>
+                <span class="app-ghost-color">{{getCurrencySymbol(p.currency, "narrow")}}/{{p.measureUnit}}</span>
+                <br/>
+
+                <!-- Дата поставки. -->
+                <span [ngClass]="!isDateValid(p) ? 'app-error-color app-bold' : ''">{{p.deliveryDate | date:"dd.MM.yyyy"}}</span>
+                <span class="app-ghost-color"> доставка</span>
+              </div>
+              <div class="app-ellipsis app-secondary-color">{{ p.manufacturingName }}</div>
+            </button>
+            <ng-template #emptyProposal>
+              <button class="grid-item grid-cell app-col empty" [disabled]="proposal.status!=='DRAFT'">
+                <clr-icon class="app-link" *ngIf="proposal.status==='DRAFT'; else notProvided" shape="app-plus-big" size="24"></clr-icon>
+                <ng-template #notProvided><b>Не предоставлено</b></ng-template>
+              </button>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
 
     <!-- list -->
     <div class="app-row" *ngIf="view==='list'">

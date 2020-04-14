@@ -153,7 +153,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
   onRequestItemClick(item: (RequestPositionList | RequestGroup | RequestPosition)) {
     this.selectedRequestsItem = item;
-    const requestItemType = this.getRequestEntityUrlNameByType(this.selectedRequestsItem.entityType);
+    const requestItemType = this.getRequestEntityUrlNameByType(this.selectedRequestsItem);
 
     this.contextType = MessagesViewComponent.getContextType(item);
     this.contextId = MessagesViewComponent.getContextId(item);
@@ -170,7 +170,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
    *
    * @param entityType
    */
-  getRequestEntityUrlNameByType(entityType): string {
+  getRequestEntityUrlNameByType({entityType}: RequestPositionList | RequestGroup | RequestPosition): string {
     switch (entityType) {
       case 'POSITION':
         return 'position';

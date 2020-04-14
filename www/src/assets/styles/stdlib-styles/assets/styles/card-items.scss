@@ -1,0 +1,24 @@
+/* Элементы информационных карточек */
+.card {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  border-width: 0;
+}
+
+.card-header {
+  display: block;
+  flex: 1 1 auto;
+  padding: 10px 20px;
+  background: #eceff1;
+  font-size: 14px;
+  width: 100%;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #828182;
+  font-weight: 500;
+}
+
+.card-block {
+  border-bottom: 1px solid $color_light_gray;
+  padding: 15px;
+}

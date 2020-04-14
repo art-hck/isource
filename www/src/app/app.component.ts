@@ -30,14 +30,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    public bc: UxgBreadcrumbsService,
+    public featureService: FeatureService,
+    public user: UserInfoService,
+    public titleService: Title,
     private authService: AuthService,
-    private featureService: FeatureService,
-    private user: UserInfoService,
-    private titleService: Title,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private cartStoreService: CartStoreService,
-    private bc: UxgBreadcrumbsService,
     private cd: ChangeDetectorRef,
   ) {
     this.router.events.pipe(
