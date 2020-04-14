@@ -1,6 +1,60 @@
-<div class="empty app-row app-justify-content-center app-align-items-center">
-  <div class="app-col text-center">
-    <clr-icon shape="app-cart"></clr-icon>
-    <div>Корзина пуста</div>
+<div class="app-row" *ngIf="cartItems$ | async; else emptyCart">
+  <div class="app-col">
+    <div class="app-card" *ngFor="let cartItem of cartItems$ | async">
+      <div class="app-row">
+        <div class="app-col app-bold name">
+          {{cartItem.name}}
+        </div>
+        <div class="app-col app-grow-0">
+          <button uxgButton icon clear disabled>
+            <clr-icon shape="trash" class="is-solid" size="14" [style.opacity]="0.6"></clr-icon>
+          </button>
+        </div>
+      </div>
+      <div class="app-row">
+        <div class="app-col">
+          <div class="app-secondary-color">
+            Единица измерения
+          </div>
+          <div class="measure-units">
+            {{cartItem.measureUnits}}
+          </div>
+        </div>
+        <div class="app-col">
+          <div class="app-secondary-color">
+            Код позиции
+          </div>
+          <div class="measure-units">
+            {{cartItem.positionCode}}
+          </div>
+        </div>
+        <div class="app-col quantity clr-align-items-center">
+          <span class="app-secondary-color quantity-label">Количество</span>
+          <input uxgInput value="{{cartItem.quantity}}" disabled>
+        </div>
+        <div class="app-col">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-col app-col-aside">
+    <h2>Итого в корзине</h2>
+    <p class="app-secondary-color">Товаров</p>
+    <span class="app-bold">{{(cartItems$ | async).length}}</span>
+    <p class="app-secondary-color">Дата обновления</p>
+    <div class="app-bold">
+      -
+    </div>
+    <button uxgButton lg primary class="create-request" disabled>Отправить ценовой запрос</button>
   </div>
 </div>
+
+<ng-template #emptyCart>
+  <div class="empty app-row app-justify-content-center app-align-items-center">
+    <h1 class="text-center" [style.opacity]="0.1">
+      <clr-icon shape="app-basket" size="270"></clr-icon>
+      <br/>
+      Корзина пуста
+    </h1>
+  </div>
+</ng-template>

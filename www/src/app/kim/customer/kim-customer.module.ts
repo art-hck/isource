@@ -14,6 +14,8 @@ import { TextMaskModule } from "angular2-text-mask";
 import { ItemsDictionaryComponent } from './components/items-dictionary/items-dictionary.component';
 import { ItemsDictionaryState } from "./states/items-dictionary.state";
 import { KimItemsDictionaryService } from "./services/kim-items-dictionary.service";
+import { KimCartService } from "./services/kim-cart.service";
+import { CartState } from "./states/cart.state";
 
 
 @NgModule({
@@ -28,14 +30,16 @@ import { KimItemsDictionaryService } from "./services/kim-items-dictionary.servi
   ],
   providers: [
     KimPriceOrderService,
-    KimItemsDictionaryService
+    KimItemsDictionaryService,
+    KimCartService
   ],
   imports: [
     KimCommonModule,
     KimCustomerRoutingModule,
     NgxsModule.forFeature([
       PriceOrderState,
-      ItemsDictionaryState
+      ItemsDictionaryState,
+      CartState
     ]),
     TextMaskModule
   ]
