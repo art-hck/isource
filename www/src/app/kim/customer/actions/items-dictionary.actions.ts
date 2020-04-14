@@ -3,4 +3,8 @@ export namespace ItemsDictionaryActions {
     static readonly type = '[Kim Customer ItemsDictionary] Search';
     constructor(public name: string) {}
   }
+
+  export class Clear {
+    static readonly type = '[Kim Customer ItemsDictionary] Clear';
+  }
 }

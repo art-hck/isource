@@ -6,8 +6,8 @@ import { catchError, tap } from "rxjs/operators";
 import { KimDictionaryItem } from "../../common/models/kim-dictionary-item";
 import { ItemsDictionaryActions } from "../actions/items-dictionary.actions";
 import Search = ItemsDictionaryActions.Search;
-import { throwError } from "rxjs";
 import { KimItemsDictionaryService } from "../services/kim-items-dictionary.service";
+import Clear = ItemsDictionaryActions.Clear;
 
 export interface KimItemsDictionaryStateModel {
   itemsDictionary: KimDictionaryItem[];
@@ -35,5 +35,10 @@ export class ItemsDictionaryState {
     return this.rest.search(name).pipe(
       tap(itemsDictionary => setState(patch({ itemsDictionary, status: "received" as StateStatus } )))
     );
+  }
+
+  @Action(Clear)
+  clear({setState}: Context) {
+    setState(patch({itemsDictionary: null, status: "received" as StateStatus}))
   }
 }

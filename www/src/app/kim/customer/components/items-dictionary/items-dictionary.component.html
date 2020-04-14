@@ -49,7 +49,7 @@
   </div>
   </div>
 </ng-template>
-<ng-container *ngIf="(status$ | async) === 'received'">
+<ng-container *ngIf="(itemsDictionary$ | async) !== null">
   <div class="app-row app-uppercase app-ghost-color app-bold">
     <small class="app-col app-ellipsis name">Наименование</small>
     <small class="app-col app-ellipsis dictionary-name">Раздел классификатора ОКПД2</small>

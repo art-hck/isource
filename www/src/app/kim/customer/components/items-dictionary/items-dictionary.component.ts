@@ -7,8 +7,8 @@ import { ItemsDictionaryActions } from "../../actions/items-dictionary.actions";
 import Search = ItemsDictionaryActions.Search;
 import { FormControl } from "@angular/forms";
 import { KimDictionaryItem } from "../../../common/models/kim-dictionary-item";
-import { ActivatedRoute, Router, RouterLinkActive } from "@angular/router";
-import { filter } from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
+import Clear = ItemsDictionaryActions.Clear;
 
 @Component({
   selector: 'app-items-dictionary',
@@ -27,10 +27,11 @@ export class ItemsDictionaryComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.route.params.pipe(
-      filter(params => !!params.query)
-    ).subscribe(params => {
-        this.onSearch(params.query)
+    this.route.params.subscribe(({query}) => {
+      if (query) {
+        this.onSearch(query);
+      } else {
+        this.store.dispatch(new Clear());
       }
     );
   }
