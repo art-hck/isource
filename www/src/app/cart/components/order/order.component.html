@@ -1,4 +1,4 @@
-<h3>Оформить заказ</h3>
+<h2>Оформить заказ</h2>
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-row">
     <div class="clr-col-6">
@@ -12,14 +12,13 @@
       <div class="app-row app-align-items-center">
         <div class="app-col app-grow-0">
           <div style="position:relative">
-              <input appDatepicker formControlName="deliveryDate" type="text" placeholder="Выберите дату"
-                appFormControlInvalidClass="invalid"
-              />
+              <input uxgInput appDatepicker formControlName="deliveryDate" type="text" placeholder="Выберите дату"
+                appFormControlInvalidClass="invalid"/>
           </div>
         </div>
-        <div class="app-col">
-          <uxg-checkbox class="app-control" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
-          <label (click)="isDeliveryDateAsap.check($event)">как можно скорее</label>
+        <div class="app-col app-align-items-center inline">
+          <uxg-checkbox class="app-control delivery-date-asap" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
+          <label (click)="isDeliveryDateAsap.check($event)">Как можно скорее</label>
         </div>
       </div>
     </div>
@@ -31,22 +30,12 @@
     </div>
 
     <div class="clr-col-6">
-      <label>Условия оплаты <b class="required-star">*</b></label>
-
-      <select clrSelect
-              name="paymentTerms"
-              id="paymentTerms"
-              formControlName="paymentTerms"
-              appFormControlInvalidClass="invalid">
-
-        <option value="30 дней по факту поставки">
-          30 дней по факту поставки
-        </option>
-
-        <option value="60 дней по факту поставки">
-          60 дней по факту поставки
-        </option>
-      </select>
+      <label class="input-label">Условия оплаты <b class="required-star">*</b></label>
+      <uxg-dropdown placeholder="Условия оплаты" class="payment-terms" name="paymentTerms" id="paymentTerms" formControlName="paymentTerms" appFormControlInvalidClass="invalid">
+        <div uxgDropdownItem value="30 дней по факту поставки">30 дней по факту поставки</div>
+        <div uxgDropdownItem value="60 дней по факту поставки">60 дней по факту поставки</div>
+        <div uxgDropdownItem value="90 дней по факту поставки">90 дней по факту поставки</div>
+      </uxg-dropdown>
     </div>
 
   </div>
