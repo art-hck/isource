@@ -105,7 +105,7 @@
     $negWidth: calc((1000px) / 2 * -1);
     margin: 0 $negWidth;
 
-    .contragents-row .grid-row, .item {
+    .contragents-row .grid-row, .position-row {
       padding-left: $width;
       padding-right: $width;
     }
@@ -120,7 +120,7 @@
     $width: calc((100vw - 1300px) / 2);
     $negWidth: calc((100vw - 1300px) / 2 * -1);
     margin: 0 $negWidth;
-    .contragents-row .grid-row, .item {
+    .contragents-row .grid-row, .position-row {
       padding-left: $width;
       padding-right: $width;
     }
@@ -134,7 +134,7 @@
     $width: calc((100vw - 1600px) / 2);
     $negWidth: calc((100vw - 1600px) / 2 * -1);
     margin: 0 $negWidth;
-    .contragents-row .grid-row, .item {
+    .contragents-row .grid-row, .position-row {
       padding-left: $width;
       padding-right: $width;
     }
