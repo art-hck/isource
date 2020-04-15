@@ -18,6 +18,7 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import { saveAs } from 'file-saver/src/FileSaver';
+import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -34,7 +35,7 @@ type Context = StateContext<Model>;
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [reqeustId in Uuid]: TechnicalCommercialProposal[] } = {};
+  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService) {
   }
@@ -43,6 +44,19 @@ export class TechnicalCommercialProposalState {
   @Selector() static proposalsLength({ proposals }: Model) { return proposals.length; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
+  @Selector() static proposalsByPositions({ proposals }: Model) {
+    return proposals.reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
+      proposal.positions.forEach(proposalPosition => {
+        const item = group.find(({position}) => position.id === proposalPosition.position.id);
+        if (item) {
+          item.data.push({ proposal, proposalPosition });
+        } else {
+          group.push({ position: proposalPosition.position, data: [{ proposal, proposalPosition }] });
+        }
+      });
+      return group;
+    }, []);
+  }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {

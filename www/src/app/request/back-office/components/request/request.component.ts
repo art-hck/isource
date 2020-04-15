@@ -41,10 +41,10 @@ export class RequestComponent implements OnInit, OnDestroy {
     )
 
   constructor(
+    public store: Store,
     private route: ActivatedRoute,
     private requestService: RequestService,
     private bc: UxgBreadcrumbsService,
-    private store: Store,
     private title: Title
   ) {}
 

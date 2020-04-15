@@ -30,7 +30,7 @@ export class NavComponent {
     public auth: AuthService,
     public user: UserInfoService,
     public cartStoreService: CartStoreService,
-    private featureService: FeatureService
+    public featureService: FeatureService
   ) {}
 
   getUserBriefInfo(user: UserInfoService): string {

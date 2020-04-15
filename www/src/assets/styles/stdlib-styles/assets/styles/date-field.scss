@@ -1,0 +1,86 @@
+/* Поле для даты */
+
+.date-container {
+  display: block;
+
+  input {
+    display: inline-block;
+  }
+}
+
+
+
+
+.datepicker-trigger {
+  margin-left: -27px !important;
+  height: auto;
+  min-width: initial;
+  border-radius: 0;
+  line-height: 1;
+
+  clr-icon[shape=calendar] {
+    svg { /* Скрываем дефолтную иконку календаря */
+      display: none;
+    }
+
+    &:after {
+      content: '';
+      background: url('assets/styles/stdlib-styles/images/calendar-icon.svg') 50% no-repeat;
+      height: 16px;
+      width: 16px;
+      display: inline-block;
+    }
+  }
+}
+
+
+clr-datepicker-view-manager:focus {
+  outline: none;
+}
+
+/* Стилизация слоя с календарём */
+.datepicker {
+  padding: 0;
+  width: 280px;
+  height: 295px;
+}
+
+.calendar-header {
+  background: $color_light_gray;
+  color: $color_black;
+}
+
+
+button.calendar-btn {
+  &.monthpicker-trigger,
+  &.yearpicker-trigger {
+    color: $color_black;
+    font-weight: 500;
+    font-size: $font_size_basic;
+  }
+
+  &:focus,
+  &:hover {
+    background: #bfc6d4;
+  }
+
+  .switcher {
+    color: $color_black;
+  }
+}
+
+table.calendar-table.weekdays {
+  background: $color_light_gray;
+  color: $color_black;
+}
+
+.weekday {
+  font-size: $font_size_basic;
+  font-weight: normal;
+}
+
+.day-btn.is-today {
+  color: white;
+  font-weight: 600;
+  background: $color_blue;
+}

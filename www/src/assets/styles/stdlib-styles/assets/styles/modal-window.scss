@@ -1,0 +1,51 @@
+/* Модальное окно */
+
+.modal {
+  &-header {
+    & .close { /* Позиционирование кнопки закрытия модального окна */
+      margin-top: -18px;
+      margin-right: -18px;
+
+      &:focus { /* Убираем подсветку кнопки закрытия при клике */
+        box-shadow: none;
+      }
+
+      clr-icon {
+        fill: #9caebb;
+        width: 17px;
+        height: 17px;
+      }
+    }
+
+    .modal-title {
+      margin: 0;
+      padding: 0;
+      font-family: $font_roboto;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 32px;
+      color: $color_black;
+    }
+  }
+
+  &-dialog {
+    .modal-content {
+      box-shadow: none;
+      padding: 24px 30px;
+      border-radius: 0;
+    }
+  }
+
+  &-body {
+    padding: 0;
+  }
+
+  &-footer {
+    padding: 30px 0 0;
+  }
+
+  &-backdrop { /* Цвет фона под слоем открытого модального окна */
+    background-color: rgba(0, 0, 0, 0.30);
+    opacity: 1;
+  }
+}

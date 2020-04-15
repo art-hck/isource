@@ -66,7 +66,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     this.updatePositionsAndSuppliers();
   }
 
-  protected updatePositionsAndSuppliers(): void {
+  updatePositionsAndSuppliers(): void {
     this.requestPositionsWithOffers$ = this.requestService.getRequestPositionsWithOffers(this.requestId);
   }
 

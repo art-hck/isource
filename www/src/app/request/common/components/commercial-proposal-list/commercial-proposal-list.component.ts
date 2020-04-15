@@ -49,7 +49,7 @@ export class CommercialProposalListComponent implements OnInit {
   /**
    * Время в течение которого бэкофис может отозвать КП (в секундах)
    */
-  protected durationCancelPublish = 10 * 60;
+  public durationCancelPublish = 10 * 60;
 
   constructor(
     private fb: FormBuilder,
