@@ -42,7 +42,7 @@ export class TechnicalCommercialProposalService {
   }
 
   downloadAnalyticalReport(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/download-analytical-report`;
+    const url = `requests/backoffice/${requestId}/analytic-report/download-by-tcp`;
     return this.api.post(url, {}, {responseType: 'blob'});
   }
 

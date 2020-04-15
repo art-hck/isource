@@ -144,7 +144,7 @@ export class CommercialProposalsService {
   }
 
   downloadAnalyticalReport(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/commercial-proposals/download-analytical-report`;
+    const url = `requests/backoffice/${requestId}/analytic-report/download-by-tp`;
     return this.api.post(url, {}, {responseType: 'blob'});
   }
 }
