@@ -5,7 +5,7 @@ import { getCurrencySymbol } from "@angular/common";
 @Component({
   selector: 'cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.scss']
 })
 export class CartComponent {
   getCurrencySymbol = getCurrencySymbol;

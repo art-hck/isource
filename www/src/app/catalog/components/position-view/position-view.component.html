@@ -46,11 +46,13 @@
       <div class="price-info">Наличие на складе
       </div>
       <b>Под заказ</b>
-      <div class="price-info">Поставщик</div>
 
-      <app-contragent-info-link
-              [contragent]="position.supplierContragent">
-      </app-contragent-info-link>
+      <div *ngIf="position.supplierContragent">
+        <div class="price-info">Поставщик</div>
+        <app-contragent-info-link
+                [contragent]="position.supplierContragent">
+        </app-contragent-info-link>
+      </div>
 
       <div class="price-info">Срок поставки</div>
       <b>{{position.productionTime}} дней</b>
