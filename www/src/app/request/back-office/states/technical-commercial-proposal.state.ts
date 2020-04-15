@@ -16,6 +16,7 @@ import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePosi
 import Update = TechnicalCommercialProposals.Update;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
 
@@ -143,6 +144,13 @@ export class TechnicalCommercialProposalState {
         proposals: [...proposals, ...ctx.getState().proposals],
         status: "received" as StateStatus
       }))),
+    );
+  }
+
+  @Action(DownloadAnalyticalReport)
+  downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId).pipe(
+      tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }
 }

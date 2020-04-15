@@ -4,6 +4,16 @@
     <div class="app-row">
       <div class="app-col">
         <div class="app-table app-no-border">
+
+          <div class="secondary-action app-row app-justify-content-end">
+            <div class="app-col app-basis-auto app-grow-0">
+              <span class="analytical-report-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
+                Аналитическая справка
+                <clr-icon class="download-icon" shape="app-download"></clr-icon>
+              </span>
+            </div>
+          </div>
+
           <div class="app-row  app-align-items-center">
             <ng-container *ngIf="view==='grid'">
               <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>

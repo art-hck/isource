@@ -31,6 +31,7 @@ import { TechnicalCommercialProposalParametersFormComponent } from './components
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestList2Component } from './components/request-list2/request-list2.component';
+import {CommercialProposalState} from "./states/commercial-proposal.state";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { RequestList2Component } from './components/request-list2/request-list2.
     NgxsModule.forFeature([
       RequestState,
       RequestListState,
-      TechnicalCommercialProposalState
+      TechnicalCommercialProposalState,
+      CommercialProposalState,
     ]),
     RequestCommonModule
   ],
