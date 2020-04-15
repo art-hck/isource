@@ -24,10 +24,13 @@
   }
   &.action {
     text-align: right;
-    max-width: 100px;
+    max-width: 50px;
 
-    .btn-in-cart {
+    .btn-delete {
+      color: #666;
+      margin: 0;
       padding: 0 10px;
+      min-width: unset;
     }
   }
 }
