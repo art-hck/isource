@@ -1,11 +1,11 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject, timer } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService } from "uxg";
+import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
@@ -18,16 +18,18 @@ import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { FormArray, FormBuilder } from "@angular/forms";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
 import * as moment from "moment";
+import { AppComponent } from "../../../../app.component";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -35,15 +37,13 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
   animations: [trigger('sidebarHide', [
     transition(':leave', animate('300ms ease', style({ 'max-width': '0', 'margin-left': '0' }))),
   ])],
-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
-  @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
-  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
-  @Select(TechnicalCommercialProposalState.proposalsLength) proposalsLength$: Observable<number>;
+  @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
@@ -54,6 +54,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
+  readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
+
+  get selectedPositions(): TechnicalCommercialProposalByPosition[] {
+    return (this.form.get('positions') as FormArray).controls
+      .filter(({value}) => value.checked)
+      .map(({value}) => (value.item));
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +72,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private cd: ChangeDetectorRef,
     public store: Store,
     public router: Router,
+    private app: AppComponent
   ) {
   }
 
@@ -87,7 +95,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       this.form.removeControl("positions");
       this.form.addControl("positions", this.fb.array(
         items.map(item => {
-          return this.fb.group({ checked: false, item });
+          const form = this.fb.group({ checked: false, item });
+          if (this.isReviewed(item)) {
+            form.get("checked").disable();
+          }
+          return form;
         })
       ));
     });
@@ -102,6 +114,14 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success(`ТКП успешно ${action instanceof Publish ? 'отправлено' : 'сохранено'}`));
     });
+
+    this.switchView(this.view);
+  }
+
+  switchView(view: "grid" | "list") {
+    this.view = view;
+    this.app.noContentPadding = view === "grid";
+    this.viewPopover?.hide();
   }
 
   getPositions(proposals: TechnicalCommercialProposal[]): RequestPosition[] {
@@ -119,26 +139,19 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return positions.find(({position}) => position.id === id);
   }
 
-  isReviewed({data}: TechnicalCommercialProposalGroupByPosition): boolean {
+  isReviewed({data}: TechnicalCommercialProposalByPosition): boolean {
     return data.some(({proposal: p}) => p.status === 'REVIEWED');
-  }
-
-  trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   @HostListener('document:keydown.arrowLeft')
   scrollLeft() {
-    this.gridRows.forEach(({nativeElement: el}) => el.scroll({ left: el.scrollLeft - 300, behavior: 'smooth' }));
+    this.gridRows.forEach(({nativeElement: el}) => el.scrollLeft -= el.scrollLeft % 300 || 300);
     timer(350).subscribe(() => this.cd.detectChanges());
   }
 
   @HostListener('document:keydown.arrowRight')
   scrollRight() {
-    this.gridRows.forEach(({nativeElement: el}) => el.scroll({ left: el.scrollLeft + 300, behavior: 'smooth' }));
+    this.gridRows.forEach(({nativeElement: el}) => el.scrollLeft += 300);
     timer(350).subscribe(() => this.cd.detectChanges());
   }
 
@@ -151,9 +164,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return proposalPosition.quantity === proposalPosition.position.quantity;
   }
 
-  get selectedPositions() {
-    return (this.form.get('positions') as FormArray).controls
-      .filter(({value}) => value.checked)
-      .map(({value}) => value.item);
+  trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

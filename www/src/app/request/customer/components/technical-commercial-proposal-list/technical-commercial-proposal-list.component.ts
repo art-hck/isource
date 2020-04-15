@@ -10,7 +10,7 @@ import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { StateStatus } from "../../../common/models/state-status";
-import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
@@ -41,9 +41,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
-  readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
+  readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.REVIEWED))
-  readonly proposalsReviewed$: Observable<TechnicalCommercialProposalGroupByPosition[]>;
+  readonly proposalsReviewed$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
   readonly chooseBy$ = new Subject<"date" | "price">();
@@ -106,7 +106,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   ngAfterViewInit() {
-    document.querySelector('.main-container').append(this.proposalsFooterRef.nativeElement);
+    document.querySelector('.app-container').append(this.proposalsFooterRef.nativeElement);
   }
 
   approveMultiple() {
@@ -122,7 +122,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.proposalsOnReview.forEach(component => component.reject());
   }
 
-  trackByPositionId(i, item: TechnicalCommercialProposalGroupByPosition) {
+  trackByPositionId(i, item: TechnicalCommercialProposalByPosition) {
     return item.position.id;
   }
 

@@ -6,7 +6,7 @@ import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
-import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 import { from } from "rxjs";
@@ -37,7 +37,7 @@ export class TechnicalCommercialProposalState {
     return createSelector(
       [TechnicalCommercialProposalState],
       ({proposals}: Model) => proposals
-        .reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
+        .reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
           proposal.positions.forEach(proposalPosition => {
             const item = group.find(({position}) => position.id === proposalPosition.position.id);
             if (item) {
