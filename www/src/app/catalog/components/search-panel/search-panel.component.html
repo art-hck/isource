@@ -16,8 +16,8 @@
            type="text"
            name="searchName"
            class="input-search"
-           [(ngModel)]="searchText"
-           (input)="onShowSearchSuggestions()"/>
+           (keydown.enter)="onSearch()"
+           [(ngModel)]="searchText"/>
     <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
       <img src="../../../../assets/images/delete.svg">
     </button>
@@ -36,6 +36,5 @@
       </ng-container>
     </div>
   </div>
-  <a class="new-request" [routerLink]="'/requests/create'">Не нашли, что искали?</a>
 </div>
 

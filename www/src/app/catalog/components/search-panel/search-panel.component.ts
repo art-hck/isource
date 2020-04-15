@@ -43,12 +43,17 @@ export class SearchPanelComponent {
   ) {
   }
 
+  // todo подсказки временно отключили
   onShowSearchSuggestions() {
     this.searchResults$ = this.catalogService.searchSuggestions(this.searchText, 10, 10);
     this.showSearchResults = true;
   }
 
   onSearch() {
+    if (!this.searchText) {
+      return;
+    }
+
     this.showSearchResults = false;
     this.searchTextChange.emit(this.searchText);
   }
