@@ -1,7 +1,7 @@
 <ng-container *ngIf="(category$ | async) as category">
   <h1>{{ category.name }}</h1>
   <div class="app-row" *ngIf="category.positionsCount > 0; else categories">
-    <div class="clr-col">фывафывафывфывыав
+    <div class="clr-col">
       <ng-template #loading class="load-block"><span class="spinner spinner-md"></span></ng-template>
       <app-catalog-positions-list *ngIf="(positions$ | async) as positions; else loading" [positions]="positions">
       </app-catalog-positions-list>
@@ -26,6 +26,11 @@
           </li>
         </ul>
       </div>
+      <ng-container *ngIf="categories.length === 0">
+        <div class="clr-row position-list no-positions">
+          Позиций не найдено
+        </div>
+      </ng-container>
     </div>
   </ng-template>
 </ng-container>

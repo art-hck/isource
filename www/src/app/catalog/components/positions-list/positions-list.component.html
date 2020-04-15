@@ -12,19 +12,15 @@
   <div class="app-table">
     <div class="app-row app-align-items-center" *ngFor="let position of positions">
       <div class="app-col photo">
-        <a class="title" [routerLink]="['/catalog', 'position', position.id]">
-          <img *ngIf="position.image; else noImage" src="{{ position.image }}" alt="{{position.name}}"/>
-          <ng-template #noImage>
-            <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
-          </ng-template>
-        </a>
+        <img *ngIf="position.image; else noImage" src="{{ position.image }}" alt="{{position.name}}"/>
+        <ng-template #noImage>
+          <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
+        </ng-template>
       </div>
 
       <div class="app-col name">
-        <a class="title" [routerLink]="['/catalog', 'position', position.id]">
-          <p class="position-name">{{position.name}}</p>
-          <p class="position-description">{{position.description}}</p>
-        </a>
+        <p class="position-name">{{position.name}}</p>
+        <p class="position-description">{{position.description}}</p>
       </div>
 
       <div class="app-col measure app-ghost-color">

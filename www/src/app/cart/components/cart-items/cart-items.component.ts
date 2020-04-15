@@ -10,7 +10,7 @@ import { getCurrencySymbol } from "@angular/common";
   templateUrl: './cart-items.component.html',
   styleUrls: ['./cart-items.component.scss']
 })
-export class CartItemComponent {
+export class CartItemsComponent {
 
   @Input() items: CartItem[];
 
