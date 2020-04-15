@@ -5,7 +5,10 @@
       <ng-container *ngIf="user.isBackOffice()">
         <div class="secondary-action app-row app-justify-content-end">
           <div class="app-col app-basis-auto app-grow-0">
-            <span class="analytical-report-link" (click)="onDownloadAnalyticalReport($event)">Аналитическая справка</span>
+            <span class="analytical-report-link" (click)="onDownloadAnalyticalReport()">
+                Аналитическая справка
+                <clr-icon class="download-icon" shape="app-download"></clr-icon>
+              </span>
           </div>
         </div>
       </ng-container>

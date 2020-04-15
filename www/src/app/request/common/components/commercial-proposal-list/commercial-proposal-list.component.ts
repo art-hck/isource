@@ -13,7 +13,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
-import {Store} from "@ngxs/store";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-request-commercial-proposal-list',
@@ -187,8 +187,7 @@ export class CommercialProposalListComponent implements OnInit {
     this.offersService.downloadOffersTemplate(this.request);
   }
 
-  onDownloadAnalyticalReport(event): void {
-    console.log('clicked');
+  onDownloadAnalyticalReport(): void {
     this.downloadReport.emit();
   }
 

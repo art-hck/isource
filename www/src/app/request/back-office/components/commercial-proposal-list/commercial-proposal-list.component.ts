@@ -14,7 +14,7 @@ import { Select, Store } from "@ngxs/store";
 import { ClrModal } from "@clr/angular";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import {CommercialProposalsActions} from "../../actions/commercial-proposal.actions";
+import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
@@ -42,7 +42,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private store: Store,
+    public store: Store,
     protected offersService: CommercialProposalsService,
     protected router: Router
   ) {
