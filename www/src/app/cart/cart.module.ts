@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { CartComponent } from "./components/cart/cart.component";
-import { CartItemComponent } from './components/cart-item/cart-item.component';
+import { CartItemsComponent } from './components/cart-items/cart-items.component';
 import { WidgetComponent } from './widget/widget.component';
 import { OrderComponent } from './components/order/order.component';
 import { CartSumComponent } from './components/cart-sum/cart-sum.component';
@@ -19,12 +19,12 @@ import { ReactiveFormsModule } from "@angular/forms";
   ],
   exports: [
     WidgetComponent,
-    CartItemComponent
+    CartItemsComponent
   ],
   declarations: [
     CartComponent,
     WidgetComponent,
-    CartItemComponent,
+    CartItemsComponent,
     OrderComponent,
     CartSumComponent
   ]

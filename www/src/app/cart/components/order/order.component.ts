@@ -11,7 +11,7 @@ import { ClrLoadingState } from "@clr/angular";
 @Component({
   selector: 'cart-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.css']
+  styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit, OnDestroy {
 

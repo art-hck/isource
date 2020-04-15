@@ -30,6 +30,7 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -54,6 +55,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
+  readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {

@@ -6,13 +6,13 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 import { getCurrencySymbol } from "@angular/common";
 
 @Component({
-  selector: 'cart-item',
-  templateUrl: './cart-item.component.html',
-  styleUrls: ['./cart-item.component.scss']
+  selector: 'cart-items',
+  templateUrl: './cart-items.component.html',
+  styleUrls: ['./cart-items.component.scss']
 })
-export class CartItemComponent {
+export class CartItemsComponent {
 
-  @Input() item: CartItem;
+  @Input() items: CartItem[];
 
   contragent: ContragentInfo;
   getCurrencySymbol = getCurrencySymbol;
