@@ -125,10 +125,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.some(({proposal: p}) => p.status === 'REVIEWED');
   }
 
-  // downloadAnalyticalReport() {
-  //   this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
-  // }
-
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
 
   ngOnDestroy() {
