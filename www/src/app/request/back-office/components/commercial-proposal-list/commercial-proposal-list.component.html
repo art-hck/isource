@@ -10,7 +10,7 @@
       (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
       (editOffer)="showEditOfferModal($event)"
       (createProcedure)="procedureModal.open()"
-      (downloadReport)="downloadAnalyticalReport()"
+      (downloadReport)="store.dispatch(downloadAnalyticalReport(requestId))"
     ></app-request-commercial-proposal-list>
 
     <clr-modal clrModalSize="lg" #procedureModal>

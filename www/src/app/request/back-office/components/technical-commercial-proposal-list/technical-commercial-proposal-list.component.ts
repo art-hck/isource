@@ -55,6 +55,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
+  readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
 
   constructor(
     private route: ActivatedRoute,
@@ -124,9 +125,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.some(({proposal: p}) => p.status === 'REVIEWED');
   }
 
-  downloadAnalyticalReport() {
-    this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
-  }
+  // downloadAnalyticalReport() {
+  //   this.store.dispatch(new DownloadAnalyticalReport(this.requestId));
+  // }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
 

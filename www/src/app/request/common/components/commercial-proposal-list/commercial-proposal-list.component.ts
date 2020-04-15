@@ -187,7 +187,8 @@ export class CommercialProposalListComponent implements OnInit {
     this.offersService.downloadOffersTemplate(this.request);
   }
 
-  onDownloadAnalyticalReport(): void {
+  onDownloadAnalyticalReport(event): void {
+    console.log('clicked');
     this.downloadReport.emit();
   }
 

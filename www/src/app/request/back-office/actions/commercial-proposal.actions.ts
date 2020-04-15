@@ -1,6 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 
-export namespace CommercialProposals {
+export namespace CommercialProposalsActions {
 
   // Скачать аналитическую справку
   export class DownloadAnalyticalReport {

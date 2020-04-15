@@ -27,10 +27,8 @@
   font-weight: bold;
   line-height: 16px;
   padding-right: 7px;
-
-  &:hover:after {
-    opacity: 1;
-  }
+  color: #1991ff;
+  cursor: pointer;
 
   &:after {
     content: '';
@@ -39,7 +37,15 @@
     width: 16px;
     height: 16px;
     float: right;
-    opacity: 0.7;
+    opacity: 0.8;
+  }
+
+  &:hover {
+    color: #2685f5;
+
+    &:after {
+      opacity: 1;
+    }
   }
 }
 

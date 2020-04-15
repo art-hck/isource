@@ -1,15 +1,14 @@
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { tap } from "rxjs/operators";
-import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
 import { Uuid } from "../../../cart/models/uuid";
-import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import { saveAs } from 'file-saver/src/FileSaver';
 import {CommercialProposal} from "../../common/models/commercial-proposal";
 import {CommercialProposalsService} from "../services/commercial-proposals.service";
+import {CommercialProposalsActions} from "../actions/commercial-proposal.actions";
+import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 
 export interface CommercialProposalStateModel {
   proposals: CommercialProposal[];
@@ -25,8 +24,8 @@ type Context = StateContext<Model>;
   defaults: { proposals: null, availablePositions: null, status: "pristine" }
 })
 @Injectable()
-export class TechnicalCommercialProposalState {
-  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
+export class CommercialProposalState {
+  cache: { [requestId in Uuid]: CommercialProposal[] } = {};
 
   constructor(private rest: CommercialProposalsService) {
   }
