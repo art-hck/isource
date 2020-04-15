@@ -1,14 +1,16 @@
 <ng-container *ngIf="(category$ | async) as category">
   <h1>{{ category.name }}</h1>
   <div class="app-row" *ngIf="category.positionsCount > 0; else categories">
-    <div class="clr-col-9">
+    <div class="clr-col">фывафывафывфывыав
       <ng-template #loading class="load-block"><span class="spinner spinner-md"></span></ng-template>
       <app-catalog-positions-list *ngIf="(positions$ | async) as positions; else loading" [positions]="positions">
       </app-catalog-positions-list>
     </div>
+    <!--
+    todo временно скрываем фильтры
     <div class="clr-col-3 app-grow-0">
       <app-catalog-filter (filter)="filter($event)"></app-catalog-filter>
-    </div>
+    </div>-->
   </div>
   <ng-template #categories>
     <div class="app-row" *ngIf="(categoryChilds$ | async) as categories">
