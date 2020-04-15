@@ -50,10 +50,6 @@ export class SearchPanelComponent {
   }
 
   onSearch() {
-    if (!this.searchText) {
-      return;
-    }
-
     this.showSearchResults = false;
     this.searchTextChange.emit(this.searchText);
   }
