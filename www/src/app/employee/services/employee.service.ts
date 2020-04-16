@@ -24,7 +24,7 @@ export class EmployeeService {
   }
 
   createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
-    return this.api.post<EmployeeInfoBrief>(`registration`, {
+    return this.api.post<EmployeeInfoBrief>(`users/registration/customer`, {
       "joinContragent": {
         "id": contragentId
       },
