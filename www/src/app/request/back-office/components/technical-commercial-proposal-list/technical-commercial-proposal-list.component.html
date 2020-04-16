@@ -1,20 +1,16 @@
 <ng-container *ngIf="(request$ | async) as request; else placeholder">
   <ng-container *ngIf="(proposals$ | async) as proposals; else placeholder" [formGroup]="form">
     <!-- actions -->
-    <div class="app-row app-layout">
+    <div class="app-row" [class.app-layout]="view==='grid'">
       <div class="app-col">
+        <div class="app-row app-justify-content-end analytical-report">
+          <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
+            <span>Аналитическая справка </span>
+            <clr-icon shape="app-download"></clr-icon>
+          </button>
+        </div>
         <div class="app-table app-no-border">
-
-          <div class="secondary-action app-row app-justify-content-end">
-            <div class="app-col app-basis-auto app-grow-0">
-              <span class="analytical-report-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
-                Аналитическая справка
-                <clr-icon class="download-icon" shape="app-download"></clr-icon>
-              </span>
-            </div>
-          </div>
-
-          <div class="app-row  app-align-items-center">
+          <div class="app-row app-align-items-center">
             <ng-container *ngIf="view==='grid'">
               <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
               <uxg-popover #selectPopover>

@@ -14,7 +14,7 @@ export class UxgInputDirective implements OnInit {
   @HostBinding('class.app-control-label-shown')
   get labelShown() {
     const value = this.ngControl && this.ngControl.control.value;
-    return value !== null && value.toString().length;
+    return value?.toString().length;
   }
 
   private subscription: Subscription;
