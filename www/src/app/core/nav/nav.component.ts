@@ -17,14 +17,6 @@ export class NavComponent {
     return Menu.filter(item => !item.feature || this.featureService.available(item.feature, this.user.roles));
   }
 
-  get isMenuHidden(): boolean {
-    return this.router.isActive('auth/login', false) ||
-      this.router.isActive('auth/registration', false) ||
-      this.router.isActive('auth/forgot-password', false) ||
-      this.router.isActive('auth/change-password', false) ||
-      this.router.isActive('activate', false);
-  }
-
   constructor(
     private router: Router,
     public auth: AuthService,
@@ -33,14 +25,12 @@ export class NavComponent {
     public featureService: FeatureService
   ) {}
 
-  getUserBriefInfo(user: UserInfoService): string {
-    return user.isCustomer() ?
-      (user.getUserInfo().contragent ? user.getUserInfo().contragent.shortName : '') :
-      'Бэк-офис';
+  get userBriefInfo(): string {
+    return this.user.isCustomer() ? this.user.getUserInfo()?.contragent.shortName : 'Бэк-офис';
   }
 
   logout(): void {
     this.router.navigate(["auth/login"]);
-    const subscription = this.auth.logout().subscribe(() => subscription.unsubscribe());
+    this.auth.logout().subscribe();
   }
 }

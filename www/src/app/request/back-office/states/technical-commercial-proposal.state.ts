@@ -18,7 +18,8 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import { saveAs } from 'file-saver/src/FileSaver';
-import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
+import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -41,11 +42,10 @@ export class TechnicalCommercialProposalState {
   }
 
   @Selector() static proposals({ proposals }: Model) { return proposals; }
-  @Selector() static proposalsLength({ proposals }: Model) { return proposals.length; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposalsByPositions({ proposals }: Model) {
-    return proposals.reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
+    return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
       proposal.positions.forEach(proposalPosition => {
         const item = group.find(({position}) => position.id === proposalPosition.position.id);
         if (item) {
@@ -123,6 +123,12 @@ export class TechnicalCommercialProposalState {
         status: "received" as StateStatus
       })))
     );
+  }
+
+  @Action(PublishByPosition)
+  publishPositions(ctx: Context, action: PublishByPosition) {
+    // @TODO Impement publishing
+    // console.log(action.proposalGroupByPositions);
   }
 
   @Action(DownloadTemplate)

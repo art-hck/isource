@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { Uuid } from "../../../../cart/models/uuid";
 import { Actions, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Subject } from "rxjs";
@@ -20,7 +20,7 @@ import Reject = TechnicalCommercialProposals.Reject;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
-  @Input() group: TechnicalCommercialProposalGroupByPosition;
+  @Input() group: TechnicalCommercialProposalByPosition;
   @Input() requestId: Uuid;
   @ViewChild("proposalModal") proposalModal: ClrModal;
   @Input() chooseBy$: Subject<"date" | "price">;
@@ -108,5 +108,5 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalGroupByPosition["data"][number]) => proposalPosition.id;
+  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalByPosition["data"][number]) => proposalPosition.id;
 }

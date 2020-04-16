@@ -1,9 +1,5 @@
 $border-radius: 18px;
 
-.app-row {
-  margin: 0;
-}
-
 .app-col {
   padding: 0;
   position: relative;
@@ -45,12 +41,12 @@ $border-radius: 18px;
 
 .search-bar {
   background-color: #E5E8EF;
-  height: 56px;
-  left: 0;
-  top: 64px;
-  position: absolute;
+  flex: 0 0 56px;
+  position: sticky;
+  top: 0;
   z-index: 10;
-  padding: 0 130px;
+  width: 100%;
+  display: flex;
 }
 
 .search {

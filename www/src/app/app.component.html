@@ -1,46 +1,29 @@
-<div class="main-container">
-  <app-nav></app-nav>
+<div class="app-container">
+  <app-nav *ngIf="authService.isAuth()"></app-nav>
 
-  <div class="content-container">
-    <div class="content-area" [ngClass]="{ 'no-padding': noContainerPadding }">
-      <div class="container">
-        <div class="breadcrumbs" *ngIf="!isBreadcrumbsHidden">
+  <div class="app-scroll">
+    <div class="app-content">
+      <div [class.app-layout]="!noContentPadding">
+        <div class="breadcrumbs" *ngIf="!isBreadcrumbsHidden" [class.app-layout]="noContentPadding">
           <uxg-breadcrumbs [breadcrumbs]="bc.breadcrumbs"></uxg-breadcrumbs>
         </div>
-        <h1 *ngIf="!isTitleHidden">{{ titleService.getTitle() }}</h1>
+        <h1 [class.app-layout]="noContentPadding" *ngIf="!_isTitleHidden && titleService.getTitle() as title">{{ title }}</h1>
 
         <router-outlet></router-outlet>
-
       </div>
+    </div>
 
-
-      <div class="footer" *ngIf="!noFooter">
-        <div class="app-row app-align-items-center">
-          <div class="app-col">
-            <span class="gray">© Marketplace, 2020</span>
-          </div>
-
-          <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForCustomer', user.roles)">
-            <div class="file-block">
-              <div class="file-icon"></div>
-              <span class="file-link">
-                  <a target="_blank" href="assets/GPN_Marketpleys_Rukovodstvo_zakazchika_04.03.2020.pdf">Скачать инструкцию</a>
-                </span>
-            </div>
-          </div>
-
-          <div class="clr-col-auto" *ngIf="featureService.available('instructionsFileForBackoffice', user.roles)">
-            <div class="file-block">
-              <div class="file-icon"></div>
-              <span class="file-link">
-                  <a target="_blank" href="assets/GPN_Marketpleys_Rukovodstvo_sotrudnika_bek-ofisa_04.03.2020.pdf">Скачать инструкцию</a>
-                </span>
-            </div>
-          </div>
-        </div>
+    <div class="app-footer app-row app-secondary-color" *ngIf="!noFooter">
+        <div class="app-layout app-row">
+        <div class="app-col">© Marketplace, 2020</div>
+        <ng-container *ngIf="featureService.authorize('instructionsFileForCustomer')">
+          <a class="app-secondary-color" target="_blank" [href]="appConfig.instructions.forCustomer">Скачать инструкцию</a>
+        </ng-container>
+        <ng-container *ngIf="featureService.authorize('instructionsFileForBackoffice')">
+          <a class="app-secondary-color" target="_blank" [href]="appConfig.instructions.forBackoffice">Скачать инструкцию</a>
+        </ng-container>
       </div>
-
     </div>
   </div>
-  <app-toast-list></app-toast-list>
 </div>
+<app-toast-list></app-toast-list>
