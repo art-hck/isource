@@ -1,5 +1,5 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -14,7 +14,7 @@ import { TechnicalCommercialProposalByPosition } from "../../../common/models/te
 import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { getCurrencySymbol } from "@angular/common";
+import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import { TechnicalCommercialProposalStatus } from "../../../common/enum/technical-commercial-proposal-status";
@@ -61,6 +61,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private fb: FormBuilder,
@@ -106,7 +107,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   ngAfterViewInit() {
-    document.querySelector('.app-container').append(this.proposalsFooterRef.nativeElement);
+    this.document.querySelector('.app-scroll').insertBefore(
+      this.proposalsFooterRef.nativeElement,
+      this.document.querySelector('.app-footer')
+    );
   }
 
   approveMultiple() {
