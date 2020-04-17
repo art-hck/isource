@@ -1,38 +1,5 @@
 .breadcrumbs {
-  margin-bottom: 30px;
-}
-
-.content-area.no-padding {
-  padding: 0;
-}
-
-.content-area.no-padding .container {
-  max-width: 100%;
-  padding: 0;
-}
-
-.content-area.no-footer .footer {
-  display: none;
-}
-
-.container {
-  min-height: calc(100% - 68px);
-}
-
-.footer {
-  padding-top: 40px;
-  line-height: 10px;
-}
-
-.footer > div {
-  height: 100%;
-}
-
-.file-icon {
-  display: inline-block;
-  background: url('/assets/images/file-formats/pdf-s.svg') no-repeat;
-  width: 21px;
-  height: 28px;
+  margin: 10px 0 30px;
 }
 
 span.file-link {

@@ -27,7 +27,7 @@ export class UxgSelectAllDirective implements OnInit, OnDestroy {
       tap(() => listen = false),
       map(({controls}) => controls.map(({controls: c}: FormGroup) => c[controlName])),
       tap(action),
-      tap((childs: AbstractControl[]) => this.component && (this.component.isMixed = childs.length > childs.filter(c => c.value).length)),
+      tap((childs: AbstractControl[]) => this.component && (this.component.isMixed = childs.filter(c => c.enabled).length > childs.filter(c => c.value).length)),
       tap(() => listen = true),
       takeUntil(this.destroy$)
     ];

@@ -7,7 +7,7 @@ const chatPageData = {
   title: "Сообщения",
   hideTitle: true,
   hideBreadcrumbs: true,
-  noContainerPadding: true,
+  noContentPadding: true,
   noFooter: true
 };
 

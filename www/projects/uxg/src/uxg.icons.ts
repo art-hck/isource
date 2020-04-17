@@ -5,9 +5,11 @@ enum UxgIcons {
   AppArrowIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M7 5.40566L3.70279 8.70287L2.28857 7.28866L7.9999 1.57733L13.7112 7.28866L12.297 8.70287L9 5.40586V14H7V5.40566Z" /></svg>',
   AppArrowNarrowIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 3L11 7H9V14H7V7H5L8 3Z"/></svg>\n',
   AppBasketIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M1 4V3H3.5L4.156 5H13.45C13.9495 5 14.2883 5.50815 14.0962 5.96923L12.3846 10.0769C12.1517 10.6359 11.6056 11 11 11H5.27069C4.53743 11 3.91165 10.4699 3.7911 9.7466L3 5H3.02588L3 4.99L2.7 4L1 4Z"/><path d="M7 13C7 13.5523 6.55228 14 6 14C5.44772 14 5 13.5523 5 13C5 12.4477 5.44772 12 6 12C6.55228 12 7 12.4477 7 13Z"/><path d="M10 14C10.5523 14 11 13.5523 11 13C11 12.4477 10.5523 12 10 12C9.44771 12 9 12.4477 9 13C9 13.5523 9.44771 14 10 14Z"/></svg>',
+  AppBasketBigIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.01 19C6.01 17.9 6.9 17 8 17C9.1 17 10 17.9 10 19C10 20.1 9.1 21 8 21C6.9 21 6.01 20.1 6.01 19Z"/><path d="M2 5V3H5.27L6.21 5H21.082C21.8253 5 22.3088 5.78231 21.9764 6.44721L18.2528 13.8944C17.914 14.572 17.2215 15 16.4639 15H7.89222C6.96036 15 6.15198 14.3564 5.94311 13.4483L4 5H2Z"/><path d="M15.01 19C15.01 17.9 15.9 17 17 17C18.1 17 19 17.9 19 19C19 20.1 18.1 21 17 21C15.9 21 15.01 20.1 15.01 19Z"/></svg>',
   AppCalendarIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M5 1C4.44772 1 4 1.44772 4 2V3H2C1.44772 3 1 3.44772 1 4V14C1 14.5523 1.44772 15 2 15H14C14.5523 15 15 14.5523 15 14V4C15 3.44772 14.5523 3 14 3H12V2C12 1.44772 11.5523 1 11 1C10.4477 1 10 1.44772 10 2V3H6V2C6 1.44772 5.55228 1 5 1ZM3 7H13V13H3V7Z"/></svg>',
   AppCalendarBigIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 12H12V17H17V12ZM16 1V3H8V1H6V3H5C3.89 3 3.01 3.9 3.01 5L3 19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1H16ZM19 19H5V8H19V19Z"/></svg>',
   AppCommentIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14 11C14 11.5523 13.5534 12 13.0012 12C10.835 12 5.77104 12 4.16667 12L2 14C2 12.2129 2 6.35421 2 3.99625C2 3.44397 2.44772 3 3 3H13C13.5523 3 14 3.44772 14 4V11Z"/></svg>',
+  AppCommentBigIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"/></svg>',
   AppCheckIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6.79874 10.4172L3.12384 7.07922L1.77912 8.55966L6.99376 13.2962L14.733 4.07301L13.2009 2.78744L6.79874 10.4172Z"/></svg>',
   AppChevronIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.00002 6.40582L3.70291 10.7029L2.2887 9.28872L8.00002 3.57739L13.7113 9.28872L12.2971 10.7029L8.00002 6.40582Z" /></svg>',
   AppCrossIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M13.6568 3.75735L12.2426 2.34314L8 6.58577L3.75737 2.34314L2.34316 3.75735L6.58579 7.99998L2.34314 12.2426L3.75735 13.6568L8 9.4142L12.2427 13.6568L13.6569 12.2426L9.41422 7.99998L13.6568 3.75735Z"/></svg>',
@@ -42,6 +44,7 @@ enum UxgIcons {
   AppCircleArrowIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 8V11H9V8H11L8 5L5 8H7Z"/></svg>',
   AppClockwiseArrowIcon = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 15C11.5265 15 14.4439 12.3923 14.9291 9H12.9C12.4367 11.2822 10.419 13 8 13C5.23858 13 3 10.7614 3 8C3 5.23858 5.23858 3 8 3C9.895 3 11.5438 4.0542 12.3919 5.60814L11 7H12.9H14.9291H15V3L13.8482 4.15176C12.5963 2.25299 10.4445 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15Z" fill="black"/></svg>',
   AppUnknownIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"> <path d="M7.13965 9.93848C7.13965 9.27311 7.21484 8.74902 7.36523 8.36621C7.51562 7.97884 7.75944 7.64388 8.09668 7.36133C8.43392 7.07878 8.68913 6.82129 8.8623 6.58887C9.04004 6.35189 9.12891 6.09212 9.12891 5.80957C9.12891 5.12142 8.83268 4.77734 8.24023 4.77734C7.9668 4.77734 7.74577 4.8776 7.57715 5.07812C7.40853 5.27865 7.31966 5.5498 7.31055 5.8916H5C5.00911 4.98014 5.29622 4.27148 5.86133 3.76562C6.42643 3.25521 7.2194 3 8.24023 3C9.25651 3 10.0426 3.2347 10.5986 3.7041C11.1592 4.1735 11.4395 4.84115 11.4395 5.70703C11.4395 6.08529 11.3643 6.42936 11.2139 6.73926C11.0635 7.04915 10.8219 7.36589 10.4893 7.68945L9.70312 8.4209C9.47982 8.63509 9.32487 8.85612 9.23828 9.08398C9.15169 9.30729 9.10384 9.59212 9.09473 9.93848H7.13965ZM6.85938 12.0166C6.85938 11.6794 6.98014 11.4036 7.22168 11.1895C7.46777 10.9707 7.77311 10.8613 8.1377 10.8613C8.50228 10.8613 8.80534 10.9707 9.04688 11.1895C9.29297 11.4036 9.41602 11.6794 9.41602 12.0166C9.41602 12.3538 9.29297 12.6318 9.04688 12.8506C8.80534 13.0648 8.50228 13.1719 8.1377 13.1719C7.77311 13.1719 7.46777 13.0648 7.22168 12.8506C6.98014 12.6318 6.85938 12.3538 6.85938 12.0166Z"/></svg>',
+  AppDownloadIcon = '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 11L3 13L13 13L13 11L12 11L12 9L13 9C14.1046 9 15 9.89543 15 11L15 13C15 14.1046 14.1046 15 13 15L3 15C1.89543 15 1 14.1046 1 13L1 11C1 9.89543 1.89543 9 3 9L4 9L4 11L3 11ZM7.94975 11L12.8995 6.05025L11.4853 4.63604L8.89949 7.22183L8.89949 1.00002L6.89949 1.00002L6.89949 7.12132L4.41421 4.63604L3 6.05025L6.53553 9.58579L6.89949 9.94975L6.89949 10L6.94977 10L7.94975 11Z"/></svg>',
 }
 
 export const UxgIconShapesSources: IconShapeSources[] = [
@@ -49,9 +52,11 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-arrow": UxgIcons.AppArrowIcon },
   {"app-narrow-arrow": UxgIcons.AppArrowNarrowIcon },
   {"app-basket": UxgIcons.AppBasketIcon },
+  {"app-basket-big": UxgIcons.AppBasketBigIcon },
   {"app-calendar": UxgIcons.AppCalendarIcon },
-  {"app-comment": UxgIcons.AppCommentIcon },
   {"app-calendar-big": UxgIcons.AppCalendarBigIcon },
+  {"app-comment": UxgIcons.AppCommentIcon },
+  {"app-comment-big": UxgIcons.AppCommentBigIcon },
   {"app-check": UxgIcons.AppCheckIcon },
   {"app-chevron": UxgIcons.AppChevronIcon },
   {"app-cross": UxgIcons.AppCrossIcon },
@@ -86,4 +91,5 @@ export const UxgIconShapesSources: IconShapeSources[] = [
   {"app-circle-arrow": UxgIcons.AppCircleArrowIcon},
   {"app-clockwise-arrow": UxgIcons.AppClockwiseArrowIcon},
   {"app-unknown": UxgIcons.AppUnknownIcon},
+  {"app-download": UxgIcons.AppDownloadIcon},
 ];

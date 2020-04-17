@@ -34,8 +34,8 @@
       flex-shrink: 0;
       margin-right: 20px;
     }
-
   }
+
   .items-row .grid-cell {
     height: 130px;
     border: 1px solid #E3EEFF;
@@ -64,9 +64,7 @@
       background: none;
     }
 
-    .winner {
-      margin: -4px -16px;
-    }
+    .winner { margin: -4px -16px }
   }
 
   .contragents-row {
@@ -82,13 +80,8 @@
       position: absolute;
       top: 16px;
 
-      &.left {
-        left: 23px;
-      }
-
-      &.right {
-        right: 23px;
-      }
+      &.left { left: 23px }
+      &.right { right: 23px }
     }
   }
 
@@ -98,51 +91,17 @@
     padding-bottom: 23px;
     margin-bottom: 4px;
   }
+}
 
-
-  @media (min-width: 576px) {
-    $width: calc((1000px) / 2);
-    $negWidth: calc((1000px) / 2 * -1);
-    margin: 0 $negWidth;
-
-    .contragents-row .grid-row, .position-row {
-      padding-left: $width;
-      padding-right: $width;
-    }
-
-    .items-row {
-      margin: 0 $negWidth;
-      padding: 0 $width;
-    }
-  }
-
-  @media (min-width: 1300px) {
-    $width: calc((100vw - 1300px) / 2);
-    $negWidth: calc((100vw - 1300px) / 2 * -1);
-    margin: 0 $negWidth;
-    .contragents-row .grid-row, .position-row {
-      padding-left: $width;
-      padding-right: $width;
-    }
-    .items-row {
-      margin: 0 $negWidth;
-      padding: 0 $width;
-    }
-  }
-
-  @media (min-width: 1400px) {
-    $width: calc((100vw - 1600px) / 2);
-    $negWidth: calc((100vw - 1600px) / 2 * -1);
-    margin: 0 $negWidth;
-    .contragents-row .grid-row, .position-row {
-      padding-left: $width;
-      padding-right: $width;
-    }
-    .items-row {
-      margin: 0 $negWidth;
-      padding: 0 $width;
-    }
-  }
+.analytical-report {
+  margin-top: -26px;
+  position: relative;
+  top: -28px;
 }
 
 
+@media (max-width: 1479px) {
+  .app-col-aside {
+    display: none;
+  }
+}

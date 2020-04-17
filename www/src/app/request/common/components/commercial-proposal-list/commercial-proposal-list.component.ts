@@ -13,6 +13,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-request-commercial-proposal-list',
@@ -37,6 +38,7 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() addOffersTemplate = new EventEmitter<File[]>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
   @Output() createProcedure = new EventEmitter();
+  @Output() downloadReport = new EventEmitter();
 
   supplier: ContragentList;
 
@@ -55,6 +57,7 @@ export class CommercialProposalListComponent implements OnInit {
     private offersService: CommercialProposalsService,
     public featureService: FeatureService,
     public user: UserInfoService,
+    private store: Store,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
     this.appConfig = appConfig;
   }
@@ -182,6 +185,10 @@ export class CommercialProposalListComponent implements OnInit {
 
   onDownloadOffersTemplate(): void {
     this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onDownloadAnalyticalReport(): void {
+    this.downloadReport.emit();
   }
 
   onChangeFilesList(files: File[]): void {

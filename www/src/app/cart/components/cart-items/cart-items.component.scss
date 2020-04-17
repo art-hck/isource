@@ -1,3 +1,7 @@
+.app-table.app-no-border {
+  text-transform: uppercase;
+}
+
 .app-col {
   &.photo {
     max-width: 60px;
@@ -20,10 +24,13 @@
   }
   &.action {
     text-align: right;
-    max-width: 110px;
+    max-width: 50px;
 
-    button {
-      min-width: 110px;
+    .btn-delete {
+      color: #666;
+      margin: 0;
+      padding: 0 10px;
+      min-width: unset;
     }
   }
 }

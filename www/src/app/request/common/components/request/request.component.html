@@ -1,12 +1,12 @@
 <!-- @TODO Выпилить после реализации попозиционного согласования -->
 <div class="notification-bar" *ngIf="isOnApproval || isDraft">
-  <div class="container">
+  <div class="app-layout">
     <div class="app-row">
-      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isDraft">
-        <div class="app-secondary-color publish-title">В заявке есть неопубликованные позиции в статусе Черновик</div>
+      <div class="app-col app-row app-align-items-center app-grow-0 app-basis-auto" *ngIf="isDraft">
+        <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
         <button uxgButton secondary (click)="publish.emit()">Опубликовать все</button>
       </div>
-      <div class="app-col app-row app-align-items-center app-grow-0" *ngIf="isOnApproval">
+      <div class="app-col app-row app-align-items-center app-grow-0 app-basis-auto" *ngIf="isOnApproval">
         <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
         <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
         <button uxgButton primary (click)="approve.emit()">Согласовать все</button>
@@ -96,10 +96,10 @@
         </div>-->
 
         <!-- Отмена позиции заказчиком -->
-        <div class="app-colapp-basis-auto app-grow-0" *ngIf="user.isCustomer()">
+        <div class="app-col app-basis-auto" *ngIf="user.isCustomer()">
           <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
         </div>
-        <div class="app-col app-basis-auto app-grow-0" *ngIf="user.isBackOffice()">
+        <div class="app-col app-basis-auto" *ngIf="user.isBackOffice()">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link>
               <clr-icon shape="app-kebab"></clr-icon>
@@ -122,7 +122,6 @@
           </uxg-popover>
         </div>
 
-        <div class="app-col"></div>
         <div class="app-col app-basis-auto app-grow-0">
 
           <uxg-popover #more [openOnHover]="true">
@@ -196,20 +195,20 @@
   <div class="app-col app-grow-0" [formGroup]="formGroup">
     <uxg-checkbox formControlName="checked"></uxg-checkbox>
   </div>
-  <div class="app-col app-bold item-title">
+  <div class="app-col app-bold item-title app-ellipsis">
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color">
       {{ position.name }}
     </a>
   </div>
-  <div class="app-col item-quantity">
+  <div class="app-col item-quantity app-ellipsis">
     <span>{{ position.quantity }} </span>
     <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
   </div>
-  <div class="app-col item-date">
+  <div class="app-col item-date app-ellipsis">
     <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
     <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
   </div>
-  <div class="app-col item-status">
+  <div class="app-col item-status app-ellipsis">
     <ng-container
       *ngIf="user.isBackOffice() &&
       user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS) &&
@@ -221,21 +220,6 @@
       </uxg-position-status>
     </ng-template>
   </div>
-  <div class="app-col item-actions">
-
-    <ng-container *ngIf="position.nameTemplate && isEditable(position) && !isNotActual(position)">
-      <uxg-popover [openOnHover]="true" [hideDelay]="100">
-        <clr-icon uxgPopoverTrigger shape="app-warning" class="app-warning-color"></clr-icon>
-        <div *uxgPopoverContent="'app-popover-content-top-right'">Скорее всего наименование позиции нуждается в редактировании</div>
-      </uxg-popover>
-
-      <button uxgButton link icon (click)="$event.stopPropagation(); editedPosition = position;">
-        <clr-icon shape="app-pen"></clr-icon>
-      </button>
-    </ng-container>
-
-  </div>
-
 </ng-template>
 
 <!-- Шаблон группы -->
@@ -246,7 +230,7 @@
 
   <div class="app-col" *ngIf="formGroup.get('folded') as folded">
     <div class="app-row">
-      <div class="app-col item-title">
+      <div class="app-col item-title app-ellipsis">
         <span class="app-secondary-color">Группа: </span>
         <b>{{ group.name || "Без имени" }} </b>
         <span class="app-ghost-color">({{group.positions.length}})</span>
@@ -322,20 +306,6 @@
         Сменить
       </button>
     </div>
-  </div>
-</clr-modal>
-
-<!-- Модальное окно для редактирования позиции -->
-<clr-modal clrModalSize="lg" [clrModalOpen]="!!editedPosition">
-  <h2 class="modal-title"><b>Редактирование позиции</b></h2>
-  <div class="modal-body" *ngIf="editedPosition">
-    <app-request-position-form
-      [requestId]="request.id"
-      [position]="editedPosition"
-      (cancel)="editedPosition = null"
-      (positionChange)="addPosition.emit($event); editedPosition = null"
-      [onDrafted]="onDrafted"
-    ></app-request-position-form>
   </div>
 </clr-modal>
 
