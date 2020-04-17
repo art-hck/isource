@@ -1,9 +1,9 @@
 import { Uuid } from "../../cart/models/uuid";
 import { EmployeeListRequestPosition } from "./employee-list-request-position";
 import { RequestListItem } from "../../request/common/models/requests-list/requests-list-item";
-import {ContragentInfoAddresses} from "../../contragent/models/contragent-info-address";
-import {ContragentInfoBankRequisites} from "../../contragent/models/contragent-info-bank-requisites";
-import {User} from "../../user/models/user";
+import { ContragentInfoAddresses } from "../../contragent/models/contragent-info-address";
+import { ContragentInfoBankRequisites } from "../../contragent/models/contragent-info-bank-requisites";
+import { User } from "../../user/models/user";
 
 export class EmployeeInfo {
   requests: EmployeeInfoRequestItem[];

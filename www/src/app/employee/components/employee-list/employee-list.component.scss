@@ -1,3 +1,6 @@
+.name, .email, .phone, .count {
+  line-height: 32px;
+}
 .name { flex-grow: .4 }
 .email { flex-grow: .3 }
 .phone { flex-grow: .2 }

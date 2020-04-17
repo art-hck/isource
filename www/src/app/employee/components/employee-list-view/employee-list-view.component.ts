@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmployeeService } from "../../services/employee.service";
 import { EmployeeItem } from "../../models/employee-item";
-import {UserInfoService} from "../../../user/service/user-info.service";
-import {Router} from "@angular/router";
+import { UserInfoService } from "../../../user/service/user-info.service";
+import { Router } from "@angular/router";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Subscription } from "rxjs";
 import { Store } from "@ngxs/store";
 import { EmployeeInfoBrief } from "../../models/employee-info";
+import { EmployeeItemInfo } from "../../models/employee-item-info";
 
 @Component({
   selector: 'app-employee-list-view',
@@ -51,7 +52,7 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
 
   addEmployee(employee: EmployeeInfoBrief) {
     this.subscription.add(this.employeeService.registerEmployee(employee).subscribe(
-      (data: any) => {
+      (data: EmployeeItemInfo) => {
         const preparedData = { user: data, posCount: 0, reqCount: 0 };
 
         if (employee.role === 'BACKOFFICE_BUYER') {

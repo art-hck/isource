@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidators} from "../../../shared/forms/custom.validators";
-import {EmployeeInfoBrief} from "../../models/employee-info";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CustomValidators} from "../../../shared/forms/custom.validators";
+import { EmployeeInfoBrief } from "../../models/employee-info";
 
 @Component({
   selector: 'app-employee-form',

@@ -22,7 +22,7 @@
       <div class="app-col phone">{{ employee.user.phone || 'не указан' }}</div>
       <div class="app-col count">{{ employee.reqCount }}<span class="gray">/</span>{{ employee.posCount }}</div>
 
-      <div class="app-col edit" [style.max-width.px]="60">
+      <div class="app-col edit">
         <button uxgButton secondary icon *ngIf="userInfoService.isSeniorBackoffice()"
                 (click)="editedEmployee = employee; openEditModal($event, employee.user);">
           <clr-icon shape="app-pen"></clr-icon>

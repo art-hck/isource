@@ -7,6 +7,7 @@ import {Uuid} from "../../cart/models/uuid";
 import {ContragentRegistrationRequest} from "../../contragent/models/contragent-registration-request";
 import {EmployeeRegistrationRequest} from "../models/employee-registration-request";
 import {ContragentShortInfo} from "../../contragent/models/contragent-short-info";
+import { EmployeeItemInfo } from "../models/employee-item-info";
 
 @Injectable()
 export class EmployeeService {
@@ -41,7 +42,7 @@ export class EmployeeService {
   }
 
   registerEmployee(employee: EmployeeInfoBrief) {
-    return this.api.post<EmployeeItem>(`users/registration/backoffice`, {
+    return this.api.post<EmployeeItemInfo>(`users/registration/backoffice`, {
       "username": employee.username,
       "role": employee.role,
       "firstName": employee.firstName,
