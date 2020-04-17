@@ -1,10 +1,7 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "../../../shared/forms/custom.validators";
 import {EmployeeInfoBrief} from "../../models/employee-info";
-import {TechnicalProposal} from "../../../request/common/models/technical-proposal";
-import {TechnicalProposalsStatus} from "../../../request/common/enum/technical-proposals-status";
-import * as moment from "moment";
 
 @Component({
   selector: 'app-employee-form',
@@ -13,6 +10,7 @@ import * as moment from "moment";
 })
 export class EmployeeFormComponent implements OnInit {
   @Input() employee: EmployeeInfoBrief;
+  @Input() roleSelectorDisabled = true;
   @Output() cancel = new EventEmitter();
   @Output() addEmployee = new EventEmitter<EmployeeInfoBrief>();
   @Output() editEmployee = new EventEmitter<EmployeeInfoBrief>();
@@ -36,7 +34,8 @@ export class EmployeeFormComponent implements OnInit {
       firstName: [this.defaultEmployeeValue('firstName', null), [Validators.required, CustomValidators.cyrillicName]],
       lastName: [this.defaultEmployeeValue('lastName', null), [Validators.required, CustomValidators.cyrillicName]],
       middleName: [this.defaultEmployeeValue('middleName', null)],
-      position: [this.defaultEmployeeValue('position', null), [Validators.required, CustomValidators.cyrillic]]
+      position: [this.defaultEmployeeValue('position', null), [Validators.required, CustomValidators.cyrillic]],
+      role: [this.defaultEmployeeValue('role', 'BACKOFFICE_BUYER')],
     });
     if (this.isEditing) {
       this.form.get('username').disable();

@@ -24,7 +24,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     EmployeeCardComponent,
     EmployeeCardRequestListComponent,
     EmployeeCardPositionListComponent,
-    EmployeeFormComponent
+    EmployeeFormComponent,
   ],
   providers: [
     EmployeeService,

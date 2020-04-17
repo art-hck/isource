@@ -9,16 +9,18 @@
         </div>
       </div>
     </div>
-      <div class="app-col">
-        <div class="app-control-wrap">
-          <input #phone uxgInput lg formControlName="phone"/>
-          <label class="app-control-label" (click)="phone.focus()">Телефон</label>
-          <div class="app-control-error" *ngIf="form.get('phone').errors as e">
-            <span *ngIf="e.required">Обязательное поле</span>
-          </div>
+
+    <div class="app-col">
+      <div class="app-control-wrap">
+        <input #phone uxgInput lg formControlName="phone"/>
+        <label class="app-control-label" (click)="phone.focus()">Телефон</label>
+        <div class="app-control-error" *ngIf="form.get('phone').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
     </div>
+  </div>
+
   <div class="app-row">
     <div class="app-col">
       <div class="app-control-wrap">
@@ -29,6 +31,7 @@
         </div>
       </div>
     </div>
+
     <div class="app-col">
       <div class="app-control-wrap">
         <input #lastName uxgInput lg formControlName="lastName"/>
@@ -39,6 +42,7 @@
       </div>
     </div>
   </div>
+
   <div class="app-row">
     <div class="app-col">
       <div class="app-control-wrap">
@@ -46,6 +50,7 @@
         <label class="app-control-label" (click)="middleName.focus()">Отчество</label>
       </div>
     </div>
+
     <div class="app-col">
       <div class="app-control-wrap">
         <input #position uxgInput lg formControlName="position"/>
@@ -56,20 +61,26 @@
       </div>
     </div>
   </div>
-  <div class="app-row">
-    <div class="app-col">
-      <uxg-dropdown disabled>
-        <div uxgDropdownItem>Закупщик</div>
-      </uxg-dropdown>
 
-    </div>
-    <div class="app-col">
-    </div>
+  <div class="app-row">
+      <div class="app-control-wrap">
+        <div class="app-col">
+          <uxg-dropdown formControlName="role" [disabled]="roleSelectorDisabled">
+            <div uxgDropdownItem [value]="'BACKOFFICE_BUYER'">Младший менеджер</div>
+            <div uxgDropdownItem [value]="'SENIOR_BACKOFFICE'">Старший менеджер</div>
+          </uxg-dropdown>
+        </div>
+
+        <div class="app-col">
+        </div>
+      </div>
   </div>
+
   <div class="app-row modal-footer">
     <div class="app-col">
       Все поля, кроме отчества, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
+
     <div class="app-col app-grow-0 app-basis-auto">
       <button type="button" uxgButton secondary lg (click)="onCancel()">Отмена</button>
       <button uxgButton primary lg [disabled]="form.invalid">{{isEditing ? "Сохранить" : "Добавить" }}</button>
