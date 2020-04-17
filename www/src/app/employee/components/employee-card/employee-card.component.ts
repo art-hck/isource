@@ -56,8 +56,4 @@ export class EmployeeCardComponent implements OnInit {
     });
   }
 
-  resendActivationLink() {
-    console.log('activation link resent');
-  }
-
 }
