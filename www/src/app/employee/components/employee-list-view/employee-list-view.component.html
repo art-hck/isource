@@ -28,11 +28,11 @@
 
 <app-employee-list *ngIf="backofficeTab.active"
                    [employees]="backoffice"
-                   (onEdit)="createEmployeeModal.open(); editedEmployee = $event"></app-employee-list>
+                   (edit)="createEmployeeModal.open(); editedEmployee = $event"></app-employee-list>
 
 <app-employee-list *ngIf="employeesTab.active"
                    [employees]="seniorBackoffice"
-                   (onEdit)="createEmployeeModal.open(); editedEmployee = $event"></app-employee-list>
+                   (edit)="createEmployeeModal.open(); editedEmployee = $event"></app-employee-list>
 
 
 

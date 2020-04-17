@@ -22,13 +22,13 @@ export class EmployeeListComponent {
   ) { }
 
   @Input() employees: EmployeeItem[];
-  @Output() onEdit = new EventEmitter();
+  @Output() edit = new EventEmitter();
 
   openEditModal(ev, employee) {
     ev.preventDefault();
     ev.stopPropagation();
 
-    this.onEdit.emit(employee);
+    this.edit.emit(employee);
   }
 
   mailto(ev, email): void {
