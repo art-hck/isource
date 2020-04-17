@@ -54,6 +54,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     const orderFormInfo = new OrderFormInfo(this.form.value);
     this.loadingState = ClrLoadingState.LOADING;
+
     this.subscription.add(
       this.cart.sendOrder(orderFormInfo)
         .subscribe(data => {
