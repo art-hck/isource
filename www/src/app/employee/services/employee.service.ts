@@ -38,7 +38,7 @@ export class EmployeeService {
   }
 
   editEmployee(employee: EmployeeInfoBrief) {
-    return this.api.post<EmployeeInfoBrief>(`users/edit`, {
+    return this.api.post<EmployeeInfoBrief>(`users/edit/customer`, {
       userId: employee.id,
       ...employee
     });
