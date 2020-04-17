@@ -25,13 +25,17 @@
       </ng-container>
     </ng-container>
 
-    <div class="card " *ngFor="let contract of contracts">
+    <div class="card" *ngFor="let contract of contracts">
       <div class="card-header">
         <div class="app-row">
           <div class="app-col">
-            <app-contragent-info-link
+            <app-contragent-info-link *ngIf="contract.supplier; else hiddenSupplierName"
                     [contragent]="contract.supplier">
             </app-contragent-info-link>
+
+            <ng-template #hiddenSupplierName>
+              <span>Имя поставщика скрыто</span>
+            </ng-template>
           </div>
         </div>
       </div>
