@@ -1,7 +1,7 @@
 <div class="app-card">
   <!-- title -->
   <div class="app-row app-align-items-center">
-    <h3 class="app-col">{{group.position.name}}</h3>
+    <h3 class="app-col">{{proposalByPos.position.name}}</h3>
     <div class="app-ghost-color app-bold" *ngIf="!isReviewed">
       <clr-icon shape="app-waiting"></clr-icon>
       <span>Необходимо рассмотреть</span>
@@ -29,17 +29,17 @@
         <div *ngIf="!isReviewed" class="app-col radio"></div>
         <div *ngIf="isReviewed" class="app-col status"><small class="app-uppercase app-ghost-color">Статус</small></div>
       </div>
-      <div class="data-body-container" *ngFor="let data of group.data; index as i; trackBy: trackByproposalPositionId">
+      <div class="data-body-container" *ngFor="let data of proposalByPos.data; index as i; trackBy: trackByproposalPositionId">
         <div *ngIf="data.proposalPosition as proposalPos"
            (click)="proposalModal.open()"
            class="app-row app-link-no-color data data-body"
         >
           <div class="app-col  app-ellipsis supplier">
-            <app-contragent-info-link *ngIf="data.proposal.supplier.shortName; else noname" (click)="$event.stopPropagation()"
-                                      [contragent]="data.proposal.supplier"></app-contragent-info-link>
-            <ng-template #noname>
-              Поставщик
-            </ng-template>
+            <app-contragent-info-link
+              hiddenName="Поставщик №{{i + 1}}"
+              [contragent]="data.proposal.supplier"
+              (click)="$event.stopPropagation()"
+            ></app-contragent-info-link>
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
           <div class="app-col quantity ">
@@ -67,7 +67,7 @@
           </div>
           <div class="app-col radio" *ngIf="!isReviewed">
             <uxg-radio-item
-              [name]="group.position.id"
+              [name]="proposalByPos.position.id"
               [value]="proposalPos"
               [formControl]="selectedProposalPosition"
               (click)="$event.stopPropagation()"
@@ -83,51 +83,10 @@
         <clr-modal #proposalModal clrModalSize="lg">
           <h2 class="modal-title"><span class="app-bold">{{ data.proposalPosition.position.name }}</span></h2>
           <div class="modal-body">
-            <ng-container *ngIf="data.proposal.documents.length">
-              <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>
-              <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="data.proposal.documents">
-              </app-document-simple-list>
-            </ng-container>
-            <small class="app-uppercase app-ghost-color app-bold">Параметры предложения</small>
-            <div class="modal-section">
-              <div class="app-row modal-section-header">
-                <div class="app-col app-ghost-color">Наименование контрагента</div>
-                <div class="app-col app-ghost-color">Заводское наименование</div>
-              </div>
-              <div class="app-row">
-                <div class="app-col app-bold">{{data.proposal.supplier.shortName}}</div>
-                <div class="app-col app-bold">{{data.proposalPosition.manufacturingName}}</div>
-              </div>
-            </div>
-            <div class="modal-section">
-              <div class="app-row modal-section-header app-ghost-color">Условия оплаты</div>
-              <div class="app-row app-bold">60 дней со дня поставки по факту оказания всех услуг</div>
-            </div>
-            <div class="modal-section modal-info">
-              <div class="app-row app-ghost-color">
-                <div class="app-col">Количество</div>
-                <div class="app-col">Цена за единицу</div>
-                <div class="app-col">Срок поставки</div>
-                <div class="app-col">Сумма</div>
-              </div>
-              <div class="app-row">
-                <h2 class="app-col">
-                  <span [class.app-error-color]="!isQuantityValid(data.proposalPosition)">{{data.proposalPosition.quantity}}</span>
-                  <span class="app-ghost-color">{{data.proposalPosition.measureUnit}}</span>
-                </h2>
-                <h2 class="app-col">
-                  {{data.proposalPosition.priceWithoutVat | number:'1.0-2'}}
-                  <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
-                </h2>
-                <h2 class="app-col" [class.app-error-color]="!isDateValid(data.proposalPosition)">
-                  {{data.proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}
-                </h2>
-                <h2 class="app-col">
-                  {{data.proposalPosition.priceWithoutVat * data.proposalPosition.quantity | number:'1.0-2'}}
-                  <span class="app-ghost-color">{{getCurrencySymbol(data.proposalPosition.currency, "narrow")}}</span>
-                </h2>
-              </div>
-            </div>
+            <app-technical-commercial-proposal-detail
+              [proposal]="data.proposal"
+              [proposalPosition]="data.proposalPosition"
+            ></app-technical-commercial-proposal-detail>
             <div class="app-row">
               <div class="app-col app-bold">
                 <div class="app-success-color" *ngIf="isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>

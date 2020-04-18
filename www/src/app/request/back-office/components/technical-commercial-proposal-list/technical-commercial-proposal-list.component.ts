@@ -21,7 +21,6 @@ import { animate, style, transition, trigger } from "@angular/animations";
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
-import * as moment from "moment";
 import { AppComponent } from "../../../../app.component";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
@@ -51,6 +50,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   showForm: boolean;
   files: File[] = [];
   view: "grid" | "list" = "grid";
+  addProposalPositionData: {
+    proposal: TechnicalCommercialProposal,
+    position: RequestPosition
+  } | boolean;
   readonly form = this.fb.group({ checked: false });
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
@@ -145,25 +148,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.some(({proposal: p}) => p.status === 'REVIEWED');
   }
 
-  @HostListener('document:keydown.arrowLeft')
-  scrollLeft() {
-    this.gridRows.forEach(({nativeElement: el}) => el.scrollLeft -= el.scrollLeft % 300 || 300);
-    timer(350).subscribe(() => this.cd.detectChanges());
-  }
-
-  @HostListener('document:keydown.arrowRight')
-  scrollRight() {
-    this.gridRows.forEach(({nativeElement: el}) => el.scrollLeft += 300);
-    timer(350).subscribe(() => this.cd.detectChanges());
-  }
-
-  isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.position.isDeliveryDateAsap ||
-      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
-  }
-
-  isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.quantity === proposalPosition.position.quantity;
+  addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
+    this.addProposalPositionData = {proposal, position};
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;

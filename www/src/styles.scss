@@ -32,6 +32,7 @@ $color_light_gray: #D4D9E2;
 @import "assets/styles/checkbox-toggle.scss";
 @import "assets/styles/checkboxes.scss";
 @import "assets/styles/calendar.scss";
+@import "assets/styles/proposals-grid";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -230,6 +231,9 @@ span.registry-purchase-title {
         max-width: 1180px;
         @media (min-width: 1480px) { max-width: 1480px }
         @media (min-width: 1780px) { max-width: uxg($theme, content-width) }
+        @media (max-width: 1479px) {
+          .app-col-aside.detachable { display: none }
+        }
       }
     }
 
@@ -248,3 +252,4 @@ span.registry-purchase-title {
     }
   }
 }
+

@@ -33,7 +33,7 @@ export class TechnicalCommercialProposalState {
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  static proposals(status: TechnicalCommercialProposalStatus) {
+  static proposalsByPos(status: TechnicalCommercialProposalStatus) {
     return createSelector(
       [TechnicalCommercialProposalState],
       ({proposals}: Model) => proposals
@@ -52,8 +52,8 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Selector()
-  static status({ status }: Model) { return status; }
+  @Selector() static status({ status }: Model) { return status; }
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {

@@ -13,8 +13,7 @@ export class UxgInputDirective implements OnInit {
   @HostBinding('class.warning') get isWarning() { return this.is(this.warning); }
   @HostBinding('class.app-control-label-shown')
   get labelShown() {
-    const value = this.ngControl && this.ngControl.control.value;
-    return value !== null && value.toString().length;
+    return this.ngControl?.control.value?.toString().length;
   }
 
   private subscription: Subscription;

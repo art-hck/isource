@@ -1,5 +1,5 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -14,16 +14,20 @@ import { TechnicalCommercialProposalByPosition } from "../../../common/models/te
 import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import { getCurrencySymbol } from "@angular/common";
+import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import { TechnicalCommercialProposalStatus } from "../../../common/enum/technical-commercial-proposal-status";
+import { RequestState } from "../../states/request.state";
+import { RequestActions } from "../../actions/request.actions";
+import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
+import { RequestPosition } from "../../../common/models/request-position";
+import { AppComponent } from "../../../../app.component";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
-import { RequestState } from "../../states/request.state";
-import { RequestActions } from "../../actions/request.actions";
 import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import { ProposalGridCardComponent } from "../../../common/components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -33,17 +37,21 @@ import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChild('sentToReview') set content(tab: UxgTabTitleComponent) {
-    this.isProposalsFooterHidden = !tab || !tab.active;
+  @ViewChildren('proposalsOnReviewGridCard') proposalsOnReviewGridCard: QueryList<ProposalGridCardComponent>;
+  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ViewChild('reviewedTab') set content(tab: UxgTabTitleComponent) {
+    this.isProposalsFooterHidden = tab?.active;
     this.cd.detectChanges();
   }
   @ViewChild('proposalsFooterRef') proposalsFooterRef: ElementRef;
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
-  @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
+  @Select(TechnicalCommercialProposalState.proposalsByPos(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalByPosition[]>;
-  @Select(TechnicalCommercialProposalState.proposals(TechnicalCommercialProposalStatus.REVIEWED))
+  @Select(TechnicalCommercialProposalState.proposalsByPos(TechnicalCommercialProposalStatus.REVIEWED))
   readonly proposalsReviewed$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.proposals)
+  readonly proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
   readonly chooseBy$ = new Subject<"date" | "price">();
@@ -51,16 +59,19 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly destroy$ = new Subject();
   requestId: Uuid;
   isProposalsFooterHidden: boolean;
+  view: "grid" | "list" = "grid";
+  proposalDetail: TechnicalCommercialProposalByPosition["data"][number] | boolean;
 
   get total() {
     return this.proposalsOnReview && this.proposalsOnReview.reduce((total, curr) => {
       const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposalPosition.value;
-      total += proposalPosition && proposalPosition.priceWithoutVat * proposalPosition.quantity;
+      total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity;
       return total;
     }, 0);
   }
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private fb: FormBuilder,
@@ -68,7 +79,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private store: Store,
     private actions: Actions,
     private pluralize: PluralizePipe,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private app: AppComponent
   ) {}
 
   ngOnInit() {
@@ -103,10 +115,15 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
     });
+
+    this.switchView(this.view);
   }
 
   ngAfterViewInit() {
-    document.querySelector('.app-container').append(this.proposalsFooterRef.nativeElement);
+    this.document.querySelector('.app-scroll').insertBefore(
+      this.proposalsFooterRef.nativeElement,
+      this.document.querySelector('.app-footer')
+    );
   }
 
   approveMultiple() {
@@ -122,8 +139,18 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.proposalsOnReview.forEach(component => component.reject());
   }
 
+  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
+    return positions.find(({position}) => position.id === id);
+  }
+
   trackByPositionId(i, item: TechnicalCommercialProposalByPosition) {
     return item.position.id;
+  }
+
+  switchView(view: "grid" | "list") {
+    this.view = view;
+    this.app.noContentPadding = view === "grid";
+    this.cd.detectChanges();
   }
 
   ngOnDestroy() {

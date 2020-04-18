@@ -10,7 +10,7 @@ $contentOffset: $arrOffset + $arrWidth;
 .app-popover {
   display: inline-block;
   position: relative;
-  z-index: 2;
+  z-index: 1000;
 
   & .app-popover-content {
     background: uxg($theme, color-popover-bg);

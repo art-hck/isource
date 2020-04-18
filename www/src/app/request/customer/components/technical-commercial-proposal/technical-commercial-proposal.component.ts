@@ -20,7 +20,7 @@ import Reject = TechnicalCommercialProposals.Reject;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
-  @Input() group: TechnicalCommercialProposalByPosition;
+  @Input() proposalByPos: TechnicalCommercialProposalByPosition;
   @Input() requestId: Uuid;
   @ViewChild("proposalModal") proposalModal: ClrModal;
   @Input() chooseBy$: Subject<"date" | "price">;
@@ -31,7 +31,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   folded = false;
 
   get isReviewed(): boolean {
-    return this.group.data.some(({ proposalPosition }) => proposalPosition.status !== "NEW");
+    return this.proposalByPos.data.some(({ proposalPosition }) => proposalPosition.status !== "NEW");
   }
 
   constructor(
@@ -66,7 +66,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   reject() {
-    this.dispatchAction(new Reject(this.requestId, this.group.position));
+    this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
   }
 
   isValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
@@ -91,7 +91,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   private chooseBy(by: (p, c) => typeof p | typeof c | null) {
-    const item = this.group.data.reduce((prev, curr) => {
+    const item = this.proposalByPos.data.reduce((prev, curr) => {
       const prevValid = prev && this.isValid(prev.proposalPosition);
       const currValid = curr && this.isValid(curr.proposalPosition);
       if (prevValid && !currValid) { return prev; }
