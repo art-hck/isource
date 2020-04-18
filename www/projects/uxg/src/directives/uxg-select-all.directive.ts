@@ -1,6 +1,6 @@
 import { Directive, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormGroup, NgControl } from "@angular/forms";
-import { UxgCheckboxComponent } from "../components/uxg-checkbox/uxg-checkbox.component";
+import { UxgCheckboxComponent } from "../components/checkbox/uxg-checkbox.component";
 import { Subject } from "rxjs";
 import { filter, map, mapTo, takeUntil, tap } from "rxjs/operators";
 import { pipeFromArray } from "rxjs/internal/util/pipe";

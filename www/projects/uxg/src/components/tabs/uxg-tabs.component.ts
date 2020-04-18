@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, HostBinding, OnDestroy, QueryList, ViewChild } from '@angular/core';
-import { UxgTabTitleComponent } from "../uxg-tab-title/uxg-tab-title.component";
+import { UxgTabTitleComponent } from "../tab-title/uxg-tab-title.component";
 import { fromEvent, Subject } from "rxjs";
 import { debounceTime, filter, flatMap, mapTo, mergeAll, startWith, takeUntil, tap } from "rxjs/operators";
 

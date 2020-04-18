@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-import { UxgPopoverContentDirection } from "../../../uxg/src/components/uxg-popover/uxg-popover-direction-enum";
+import { UxgPopoverContentDirection } from "uxg";
 
 @Component({
   selector: 'uxg-example-input',

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
-import { UxgTabTitleComponent } from "../components/uxg-tab-title/uxg-tab-title.component";
+import { UxgTabTitleComponent } from "../components/tab-title/uxg-tab-title.component";
 import { Subject } from "rxjs";
 import { startWith, takeUntil } from "rxjs/operators";
 

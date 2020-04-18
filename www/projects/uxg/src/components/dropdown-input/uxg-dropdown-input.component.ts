@@ -2,8 +2,8 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentC
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
 import { flatMap, mergeAll, startWith, takeUntil, tap } from "rxjs/operators";
 import { Subject } from "rxjs";
-import { UxgDropdownItemDirective } from "../uxg-dropdown/uxg-dropdown-item.directive";
-import { UxgDropdownItem } from "../uxg-dropdown/uxg-dropdown-item";
+import { UxgDropdownItemDirective } from "../dropdown/uxg-dropdown-item.directive";
+import { UxgDropdownItem } from "../dropdown/uxg-dropdown-item";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({

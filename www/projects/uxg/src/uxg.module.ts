@@ -1,30 +1,30 @@
-import { ClarityModule } from "@clr/angular";
+import { ClrIconModule } from "@clr/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgModule } from '@angular/core';
-import { UxgCheckboxComponent } from "./components/uxg-checkbox/uxg-checkbox.component";
+import { UxgCheckboxComponent } from "./components/checkbox/uxg-checkbox.component";
 import { UxgTabDirective } from './directives/uxg-tab.directive';
-import { UxgTabTitleComponent } from './components/uxg-tab-title/uxg-tab-title.component';
-import { UxgTabsComponent } from './components/uxg-tabs/uxg-tabs.component';
-import { UxgPositionStatusComponent } from './components/uxg-position-status/uxg-position-status.component';
-import { UxgSwitcherComponent } from './components/uxg-switcher/uxg-switcher.component';
-import { UxgDropdownComponent } from './components/uxg-dropdown/uxg-dropdown.component';
-import { UxgDropdownItemDirective } from './components/uxg-dropdown/uxg-dropdown-item.directive';
+import { UxgTabTitleComponent } from './components/tab-title/uxg-tab-title.component';
+import { UxgTabsComponent } from './components/tabs/uxg-tabs.component';
+import { UxgPositionStatusComponent } from './components/position-status/uxg-position-status.component';
+import { UxgSwitcherComponent } from './components/switcher/uxg-switcher.component';
+import { UxgDropdownComponent } from './components/dropdown/uxg-dropdown.component';
+import { UxgDropdownItemDirective } from './components/dropdown/uxg-dropdown-item.directive';
 import { UxgInputDirective } from './directives/uxg-input.directive';
 import { UxgButtonDirective } from './directives/uxg-button.directive';
-import { UxgCodeComponent } from './components/uxg-code/uxg-code.component';
-import { UxgBreadcrumbsComponent } from './components/uxg-breadcrumbs/uxg-breadcrumbs.component';
+import { UxgCodeComponent } from './components/code/uxg-code.component';
+import { UxgBreadcrumbsComponent } from './components/breadcrumbs/uxg-breadcrumbs.component';
 import { RouterModule } from "@angular/router";
 import { UxgSelectAllDirective } from "./directives/uxg-select-all.directive";
-import { UxgRadioItemComponent } from "./components/uxg-radio/uxg-radio-item.component";
-import { UxgTreeComponent, UxgTreeNodeDirective, UxgTreeWrapDirective } from './components/uxg-tree/uxg-tree.component';
-import { UxgPopoverComponent } from "./components/uxg-popover/uxg-popover.component";
-import { UxgPopoverTriggerDirective } from "./components/uxg-popover/uxg-popover-trigger.directive";
-import { UxgPopoverContentDirective } from "./components/uxg-popover/uxg-popover-content.directive";
-import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/uxg-wizzard/uxg-wizzard.directive';
-import { UxgWizzardButtonDirective } from "./components/uxg-wizzard/uxg-wizzard-button.directive";
-import { UxgWizzardStepsComponent } from "./components/uxg-wizzard/uxg-wizzard-steps.component";
-import { UxgDropdownInputComponent } from "./components/uxg-dropdown-input/uxg-dropdown-input.component";
+import { UxgRadioItemComponent } from "./components/radio/uxg-radio-item.component";
+import { UxgTreeComponent, UxgTreeNodeDirective, UxgTreeWrapDirective } from './components/tree/uxg-tree.component';
+import { UxgPopoverComponent } from "./components/popover/uxg-popover.component";
+import { UxgPopoverTriggerDirective } from "./components/popover/uxg-popover-trigger.directive";
+import { UxgPopoverContentDirective } from "./components/popover/uxg-popover-content.directive";
+import { UxgWizzardDirective, UxgWizzardStepDirective } from './components/wizzard/uxg-wizzard.directive';
+import { UxgWizzardButtonDirective } from "./components/wizzard/uxg-wizzard-button.directive";
+import { UxgWizzardStepsComponent } from "./components/wizzard/uxg-wizzard-steps.component";
+import { UxgDropdownInputComponent } from "./components/dropdown-input/uxg-dropdown-input.component";
 
 
 @NgModule({
@@ -33,7 +33,7 @@ import { UxgDropdownInputComponent } from "./components/uxg-dropdown-input/uxg-d
     RouterModule,
     ReactiveFormsModule,
     CommonModule,
-    ClarityModule,
+    ClrIconModule,
   ],
   declarations: [
     UxgCheckboxComponent,
