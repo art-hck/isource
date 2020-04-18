@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
-import { PositionService } from "../../services/position.service";
-import { RequestPosition } from "../../../common/models/request-position";
+import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
+import { PositionService } from "../../../back-office/services/position.service";
+import { RequestPosition } from "../../models/request-position";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
 

@@ -2,49 +2,79 @@
 <ng-container *ngIf="(stateStatus$ | async) !== 'fetching'; else placeholder">
   <div class="app-row">
     <div class="app-col">
-      <div class="app-row">
+      <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReview [active]="true" >
+          <uxg-tab-title #sentToReviewTab [active]="true" >
             <ng-container *ngIf="(proposalsSentToReview$ | async) as proposalsSentToReview">
               Необходимо рассмотреть ({{proposalsSentToReview?.length}})
             </ng-container>
           </uxg-tab-title>
-          <uxg-tab-title #reviewed>
+          <uxg-tab-title #reviewedTab>
             <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
               Рассмотренные ({{ proposalsReviewed?.length }})
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
-        <!-- <button uxgButton secondary>Фильтр</button> -->
+        <div class="app-secondary-color">Режим отображения:</div>
+        <div class="app-btn-group">
+          <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
+            <clr-icon shape="app-grid-view"></clr-icon>
+          </button>
+          <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
+            <clr-icon shape="app-list-view"></clr-icon>
+          </button>
+        </div>
+        <button uxgButton secondary>Фильтр</button>
       </div>
       <br/>
-      <ng-container *uxgTab="sentToReview">
-        <app-request-technical-commercial-proposal
-          #proposalsOnReview
-          [chooseBy$]="chooseBy$"
-          *ngFor="let positionProposals of proposalsSentToReview$ | async; trackBy: trackByPositionId"
-          [requestId]="requestId"
-          [group]="positionProposals">
-        </app-request-technical-commercial-proposal>
+      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$: proposalsSentToReview$) | async as proposalsByPos">
+        <!-- grid -->
+        <div class="grid-table" *ngSwitchCase="'grid'">
+          <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals$ | async">
+          </app-technical-commercial-proposal-grid-contragents-row>
 
-        <div *ngIf="(proposalsSentToReview$ | async).length === 0">
+          <div class="position-row" *ngFor="let proposalsByPos of proposalsByPos; index as i">
+            <div class="app-row app-align-items-center app-section app-layout" *ngIf="proposalsByPos.position as position">
+              <div><b>{{position.name}}</b></div>
+              <div class="app-ghost-color">&nbsp;| {{position.quantity}} {{ position.measureUnit}}</div>
+              <div class="app-ghost-color">&nbsp;| {{position.deliveryDate | date:"dd.MM.yyyy"}}</div>
+            </div>
+
+            <div #gridRow class="grid-row app-row app-section items-row app-layout">
+              <app-technical-commercial-proposal-grid-card
+                #proposalsOnReviewGridCard
+                *ngFor="let proposal of proposals$ | async"
+                [proposal]="proposal"
+                [selectable]="true"
+                [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
+              ></app-technical-commercial-proposal-grid-card>
+            </div>
+          </div>
+        </div>
+
+        <!-- list -->
+        <ng-container *ngSwitchCase="'list'">
+          <app-request-technical-commercial-proposal
+            #proposalsOnReview
+            [chooseBy$]="chooseBy$"
+            *ngFor="let positionProposals of proposalsByPos; trackBy: trackByPositionId"
+            [requestId]="requestId"
+            [proposalByPos]="positionProposals">
+          </app-request-technical-commercial-proposal>
+        </ng-container>
+
+        <!-- empty -->
+        <div *ngIf="proposalsByPos.length === 0">
           <h1 class="text-center" [style.opacity]="0.1">
             <br/>
             <clr-icon shape="app-publish" size="270"></clr-icon><br/>
             Все технико-коммерческие предложения рассмотрены
           </h1>
         </div>
-      </ng-container>
 
-      <ng-container *uxgTab="reviewed">
-        <app-request-technical-commercial-proposal
-          *ngFor="let positionProposals of proposalsReviewed$ | async; trackBy: trackByPositionId"
-          [requestId]="requestId"
-          [group]="positionProposals">
-        </app-request-technical-commercial-proposal>
       </ng-container>
     </div>
-    <div class="app-col-aside"></div>
+    <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
   </div>
 </ng-container>
 <div class="proposals-footer" #proposalsFooterRef [class.hidden]="isProposalsFooterHidden">
@@ -67,7 +97,7 @@
   </div>
 </div>
 <ng-template #placeholder>
-  <div class="app-row">
+  <div class="app-row" [class.app-layout]="view === 'grid'">
     <div class="app-col">
       <div class="app-row">
         <div class="app-col app-row">
@@ -78,6 +108,6 @@
 
       <div class="placeholder" *ngFor="let i of [].constructor(10)" [style.height.px]="160"></div>
     </div>
-    <div class="app-col-aside"></div>
+    <div class="app-col-aside detachable"></div>
   </div>
 </ng-template>

@@ -1,0 +1,15 @@
+<div class="contragents-row">
+  <div #gridRow class="app-row grid-row app-layout">
+    <div class="app-col grid-cell app-bold app-ellipsis" *ngFor="let proposal of proposals; index as i">
+      <app-contragent-info-link hiddenName="Поставщик №{{i + 1}}" [contragent]="proposal.supplier">
+      </app-contragent-info-link>
+    </div>
+  </div>
+
+  <button class="left" *ngIf="canScrollLeft()" uxgButton primary icon (click)="scrollLeft()">
+    <clr-icon shape="app-chevron" dir="left"></clr-icon>
+  </button>
+  <button class="right" *ngIf="canScrollRight()" uxgButton primary icon (click)="scrollRight()">
+    <clr-icon shape="app-chevron" dir="right"></clr-icon>
+  </button>
+</div>
