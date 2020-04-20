@@ -3,12 +3,12 @@
   <div class="card">
     <form [formGroup]="form" class="form" (ngSubmit)="submit()">
       <div class="form-block">
-        <div class="clr-form-control">
+        <div>
           <h3>Личная информация</h3>
           <div class="app-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="email">Email</label>
-              <input type="text" formControlName="username" appFormControlInvalidClass="invalid"/>
+              <input type="text" id="email" formControlName="username" appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="password">Пароль</label>
@@ -38,7 +38,7 @@
                      appFormControlInvalidClass="invalid"/>
             </div>
           </div>
-          <div class="app-row w-100">
+          <div class="app-row">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
               <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid"/>
