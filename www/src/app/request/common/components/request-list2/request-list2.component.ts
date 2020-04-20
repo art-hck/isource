@@ -28,6 +28,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   @Input() pageSize: number;
   @Input() availableFilters: AvailableFilters;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
+  @Input() activeFiltersObj: any;
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
@@ -41,7 +42,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   readonly calcPieChart = ({ requestData: d }: RequestsList) => (65 - (65 * d.completedPositionsCount / d.positionsCount * 100) / 100);
 
   get activeFilters() {
-    return this.filters && this.filters.filters && Object.entries(this.filters.filters)
+    return this.activeFiltersObj && Object.entries(this.activeFiltersObj)
       .filter(([k, v]: [keyof RequestsListFilter, any]) => {
         return k !== 'requestListStatusesFilter' && v instanceof Array && v.length > 0 || !(v instanceof Array) && v;
       });
