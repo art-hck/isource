@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Subject, timer } from "rxjs";
-import { distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { distinctUntilChanged, takeUntil, tap } from "rxjs/operators";
 import { UxgPopoverTriggerDirective } from "./uxg-popover-trigger.directive";
 import { DOCUMENT } from "@angular/common";
 
@@ -11,6 +11,7 @@ import { DOCUMENT } from "@angular/common";
 })
 export class UxgPopoverComponent implements OnInit, OnDestroy {
   @HostBinding('class.app-popover') classPopover = true;
+  @HostBinding('class.app-popover-open') isOpen = false;
   @ContentChild(UxgPopoverTriggerDirective, {static: true, read: ElementRef}) triggerEl: ElementRef;
   @Input() openOnHover = false;
   @Input() openDelay = 0;
@@ -40,7 +41,9 @@ export class UxgPopoverComponent implements OnInit, OnDestroy {
 
   private toggle(state: boolean, delay: number) {
     this.endTimer$.next();
-    timer(delay).pipe(takeUntil(this.endTimer$)).subscribe(() => this.ngZone.run(() => this.changeState.next(state)));
+    timer(delay).pipe(takeUntil(this.endTimer$))
+      .pipe(tap(() => this.isOpen = state))
+      .subscribe(() => this.ngZone.run(() => this.changeState.next(state)));
   }
 
   ngOnDestroy() {
