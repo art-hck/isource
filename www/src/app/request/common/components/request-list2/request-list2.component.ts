@@ -28,7 +28,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   @Input() pageSize: number;
   @Input() availableFilters: AvailableFilters;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
-  @Input() activeFiltersObj: any;
+  @Input() activeFiltersObj: RequestsListFilter;
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();

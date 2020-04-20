@@ -27,7 +27,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   @Select(RequestListState.statusCounts) statusCounts$: Observable<RequestStatusCount>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
-  activeFilters: any;
+  activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
