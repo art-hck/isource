@@ -16,7 +16,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { FormArray, FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
@@ -30,6 +30,7 @@ import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import { StateStatus } from "../../../common/models/state-status";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -44,6 +45,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
@@ -54,7 +56,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
   } | boolean;
-  readonly form = this.fb.group({ checked: false });
+  form: FormGroup;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
@@ -63,7 +65,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
-      .filter(({value}) => value.checked)
+      ?.filter(({value}) => value.checked)
       .map(({value}) => (value.item));
   }
 
@@ -97,16 +99,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     ).subscribe();
 
     this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
-      this.form.removeControl("positions");
-      this.form.addControl("positions", this.fb.array(
-        items.map(item => {
+      this.form = this.fb.group({
+        checked: false,
+        positions: this.fb.array(items.map(item => {
           const form = this.fb.group({ checked: false, item });
-          if (this.isReviewed(item)) {
+          if (this.isReviewed(item) || this.isOnReview(item)) {
             form.get("checked").disable();
           }
           return form;
-        })
-      ));
+        }))
+      });
     });
 
     this.actions.pipe(
@@ -148,11 +150,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.some(({proposal: p}) => p.status === 'REVIEWED');
   }
 
+  isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
+    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW');
+  }
+
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
     this.addProposalPositionData = {proposal, position};
   }
 
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
+  trackByProposalByPos = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
 
   ngOnDestroy() {
     this.destroy$.next();

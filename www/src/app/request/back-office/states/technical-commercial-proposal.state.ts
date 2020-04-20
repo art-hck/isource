@@ -127,8 +127,18 @@ export class TechnicalCommercialProposalState {
 
   @Action(PublishByPosition)
   publishPositions(ctx: Context, action: PublishByPosition) {
-    // @TODO Impement publishing
-    // console.log(action.proposalGroupByPositions);
+    ctx.setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.publishPositions(action.proposalGroupByPositions.reduce((ids , proposalByPos) => {
+      ids.push(...proposalByPos.data.map(({proposalPosition}) => proposalPosition.id));
+      return ids;
+    }, [])).pipe(
+      tap(proposalPositions => proposalPositions.forEach(proposalPosition => ctx.setState(patch({
+        proposals: updateItem(({ id }) => proposalPosition.proposalId === id, patch({
+          positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
+        })),
+        status: "received" as StateStatus,
+      }))))
+    );
   }
 
   @Action(DownloadTemplate)
