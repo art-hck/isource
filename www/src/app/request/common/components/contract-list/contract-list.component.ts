@@ -68,8 +68,7 @@ export class ContractListComponent implements OnInit {
       );
 
     this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
-      .pipe(publishReplay(1), refCount())
-    ;
+      .pipe(publishReplay(1), refCount());
 
     this.contracts$ = this.contractService.getContracts(requestId)
       .pipe(publishReplay(1), refCount());
