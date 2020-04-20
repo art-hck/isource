@@ -28,8 +28,8 @@ app-request-list-filter-section:not(:last-child):after {
     font-weight: 500;
     font-size: 14px;
     opacity: 0.6;
-
     cursor: pointer;
+    line-height: 28px;
 
     &:before {
       content: '';
