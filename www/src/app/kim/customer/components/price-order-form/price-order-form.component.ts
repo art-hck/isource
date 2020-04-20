@@ -35,11 +35,12 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   @Select(CartState.cartItems) orderPositions$: Observable<KimPriceOrderPosition[]>;
   @Input() cartView = false;
   @Output() close = new EventEmitter();
+
   form: FormGroup;
   regions$: Observable<OkatoRegion[]>;
   okpd2List$: Observable<Okpd2Item[]>;
-  searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-    item.code === query).slice(0, 20);
+  searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 || item.code === query).slice(0, 20);
+
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
   readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly mask: TextMaskConfig = {
