@@ -18,7 +18,9 @@ import { AvailableFilters } from "../models/available-filters";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class RequestService {
 
   constructor(

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { ContragentListComponent } from './components/contragent-list/contragent-list.component';
 import { SharedModule } from "../shared/shared.module";
 import { ContragentListViewComponent } from "./components/contragent-list-view/contragent-list-view.component";
-import { ContragentService } from "./services/contragent.service";
 import { ContragentInfoViewComponent } from "./components/contragent-info-view/contragent-info-view.component";
 import { ContragentRegistrationComponent } from './components/contragent-registration/contragent-registration.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -28,9 +27,6 @@ import { ContragentSharedModule } from "./contragent-shared.module";
     ContragentListComponent,
     ContragentInfoViewComponent,
     ContragentRegistrationComponent,
-  ],
-  providers: [
-    ContragentService,
   ]
 })
 export class ContragentModule { }

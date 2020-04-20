@@ -8,7 +8,9 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { ContragentShortInfo } from "../models/contragent-short-info";
 import { ContragentRegistrationRequest } from "../models/contragent-registration-request";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class ContragentService {
 
   loading = false;

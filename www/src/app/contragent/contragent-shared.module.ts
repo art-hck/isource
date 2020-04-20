@@ -12,9 +12,6 @@ import { ContragentInfoLinkComponent } from './components/contragent-info-link/c
     ContragentInfoComponent,
     ContragentInfoLinkComponent,
   ],
-  providers: [
-    ContragentService,
-  ],
   exports: [
     ContragentInfoComponent,
     ContragentInfoLinkComponent

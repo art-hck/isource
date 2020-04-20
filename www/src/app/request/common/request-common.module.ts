@@ -100,7 +100,6 @@ const RequestCommonModuleDeclarations = [
     ContragentSharedModule,
   ],
   providers: [
-    ContragentService,
     ContractService,
     RequestPositionStatusService,
     DeliveryMonitorService,

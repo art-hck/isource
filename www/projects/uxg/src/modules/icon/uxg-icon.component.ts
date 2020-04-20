@@ -1,6 +1,8 @@
 import { Component, ElementRef, Input } from '@angular/core';
 import { UxgIcons } from "./uxg-icons";
 
+type UxgIconType = keyof typeof UxgIcons;
+
 @Component({
   selector: 'uxg-icon',
   templateUrl: 'uxg-icon.component.html',
@@ -8,7 +10,7 @@ import { UxgIcons } from "./uxg-icons";
 })
 
 export class UxgIconComponent {
-  @Input() shape: keyof typeof UxgIcons;
+  @Input() shape: UxgIconType;
   @Input() size;
   @Input() dir;
   @Input() flip;
