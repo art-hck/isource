@@ -14,7 +14,6 @@ import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
 import { UxgIcons, UxgModule } from "uxg";
 import { ClarityIcons } from "@clr/icons";
-// import '@clr/icons/shapes/all-shapes';
 import { UxgExampleHomeComponent } from './uxg-example-home/uxg-example-home.component';
 import { UxgExamplePopoverComponent } from './uxg-example-popover/uxg-example-popover.component';
 import { UxgExampleWizzardComponent } from "./uxg-example-wizzard/uxg-example-wizzard.component";
