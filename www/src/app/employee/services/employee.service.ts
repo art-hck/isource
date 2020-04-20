@@ -4,6 +4,10 @@ import {Observable} from "rxjs";
 import {EmployeeInfo, EmployeeInfoBrief} from "../models/employee-info";
 import {EmployeeItem} from "../models/employee-item";
 import {Uuid} from "../../cart/models/uuid";
+import {ContragentRegistrationRequest} from "../../contragent/models/contragent-registration-request";
+import {EmployeeRegistrationRequest} from "../models/employee-registration-request";
+import {ContragentShortInfo} from "../../contragent/models/contragent-short-info";
+import { EmployeeItemInfo } from "../models/employee-item-info";
 
 @Injectable()
 export class EmployeeService {
@@ -23,10 +27,10 @@ export class EmployeeService {
     return this.api.get<EmployeeInfo>(`requests/backoffice/users/${id}`);
   }
 
-  createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
+  createEmployee(employeeId: Uuid, employee: EmployeeInfoBrief) {
     return this.api.post<EmployeeInfoBrief>(`users/registration/customer`, {
       "joinContragent": {
-        "id": contragentId
+        "id": employeeId
       },
       "username": employee.username,
       "firstName": employee.firstName,
@@ -34,6 +38,18 @@ export class EmployeeService {
       "middleName": employee.middleName,
       "phone": employee.phone,
       "position": employee.position
+    });
+  }
+
+  registerEmployee(employee: EmployeeInfoBrief) {
+    return this.api.post<EmployeeItemInfo>(`users/registration/backoffice`, {
+      "username": employee.username,
+      "role": employee.role,
+      "firstName": employee.firstName,
+      "lastName": employee.lastName,
+      "middleName": employee.middleName,
+      "phone": employee.phone,
+      "position": employee.position,
     });
   }
 
