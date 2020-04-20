@@ -17,5 +17,5 @@
 
 <label class="label" *ngFor="let contragent of value;">
   {{contragent.shortName}}
-  <clr-icon *ngIf="multiple && !isDisabled" shape="times" (click)="delete(contragent)"></clr-icon>
+  <clr-icon *ngIf="multiple && !isDisabled" shape="app-cross" (click)="delete(contragent)"></clr-icon>
 </label>

@@ -1,11 +1,11 @@
 <div class="digital-inspector-content">
   <ng-template #noData>
     <ng-template #loadingInspectorData>
-      <p class="no-inspector-data gray">Загружаются события инспекционного контроля...</p>
+      <p class="no-inspector-data app-ghost-color">Загружаются события инспекционного контроля...</p>
     </ng-template>
 
     <ng-container *ngIf="inspectorStages && inspectorStages.length === 0; else loadingInspectorData">
-      <p class="no-inspector-data gray">На данный момент событий нет</p>
+      <p class="no-inspector-data app-ghost-color">На данный момент событий нет</p>
     </ng-container>
   </ng-template>
 

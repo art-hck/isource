@@ -11,9 +11,9 @@
     <div class="app-col content">
       <div class="app-bold">{{notification.typeLabel}}</div>
       <div class="app-row app-align-items-center" *ngIf="notification?.data?.newStatus">
-        <uxg-position-status [status]="notification.data.oldStatus" [label]="notification.data.oldStatusLabel"></uxg-position-status>
+        <app-position-status [status]="notification.data.oldStatus" [label]="notification.data.oldStatusLabel"></app-position-status>
         <clr-icon shape="app-arrow right" class="app-ghost-color"></clr-icon>
-        <uxg-position-status [status]="notification.data.newStatus" [label]="notification.data.newStatusLabel"></uxg-position-status>
+        <app-position-status [status]="notification.data.newStatus" [label]="notification.data.newStatusLabel"></app-position-status>
       </div>
       <div class="app-secondary-color">
         <span *ngIf="notification.request">Заявка № {{notification.request.number}} {{notification.request.name}}</span>

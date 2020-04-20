@@ -42,24 +42,3 @@ hr {
   }
 }
 
-.modal-body {
-  @include scrollbar($theme);
-  margin: 0 -30px;
-  padding: 0 30px;
-}
-
-.modal-section {
-  &-header {
-    margin: 16px 0 9px 0;
-  }
-}
-
-.modal-info {
-  margin: 24px -30px;
-  padding: 16px 30px;
-  background: #F4F6FB;
-
-  h2 {
-    font-weight: 500;
-  }
-}

@@ -1,0 +1,207 @@
+/* Кнопки */
+
+$color_blue: #2585F5;
+$color_dark_blue: #1A71D8;
+$color_grey: #E5E8EF;
+$color_dark_grey: #D0D4DE;
+$color_light_gray: #E5E6E9;
+
+button:focus {
+  outline: none;
+}
+
+.btn {
+  --deprecated: "WARNING: Use .other-class instead";
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  border-radius: 4px;
+  line-height: 1;
+  padding: 0 9px;
+  max-width: initial;
+
+  border: 0 $color_grey;
+  background-color: $color_grey;
+  color: #000000;
+
+  span { /* Дополнительный отступ вокруг текста в кнопке */
+    padding: 0 4px;
+  }
+
+  &.large { /* Переопределение высоты для больших кнопок высотой 46px */
+    height: 46px;
+  }
+
+  clr-icon { /* Фикс разной высоты текста в кнопках с иконкой и без */
+    -webkit-transform: none;
+    transform: none;
+    vertical-align: sub;
+  }
+}
+
+/* Синяя кнопка большая*/
+.btn-primary {
+  .btn, &.btn {
+    background-color: $color_blue;
+    color: white;
+    padding: 0 20px;
+    transition: background-color 0.5s ease;
+
+    &:hover {
+      background-color: $color_dark_blue;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-color: $color_dark_blue;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
+      opacity: 1;
+    }
+  }
+}
+
+/* Синяя кнопка маленькая*/
+.btn-primary-small {
+  .btn, &.btn {
+    border-color: $color_blue;
+    background-color: $color_blue;
+    color: white;
+    height: 32px;
+    padding: 0 16px;
+    transition: background-color 0.5s ease;
+
+    &:hover {
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
+      color: white; // todo убрать?
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_blue;
+      background-color: $color_dark_blue;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Серая кнопка*/
+.btn-secondary {
+  .btn, &.btn {
+    border-color: $color_grey;
+    background-color: $color_grey;
+    color: black;
+    height: 40px;
+    padding: 0 20px;
+    transition: background-color 0.5s ease;
+
+    &:hover {
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+      color: black;
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Серая кнопка маленькая*/
+.btn-secondary-small {
+  .btn, &.btn {
+    border-color: $color_grey;
+    background-color: $color_grey;
+    color: black;
+    height: 32px;
+    padding: 0 16px;
+    transition: background-color 0.5s ease;
+
+    &:hover {
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+    }
+
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-color: $color_dark_grey;
+      background-color: $color_dark_grey;
+    }
+
+    &:disabled {
+      border-color: $color_light_gray;
+      background-color: $color_light_gray;
+      color: grey;
+      cursor: not-allowed;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Кнопка-ссылка без рамки и фона */
+.btn-link {
+  .btn, &.btn {
+    border-color: transparent;
+    background-color: transparent;
+    color: black;
+    opacity: 0.6;
+
+    &:hover {
+      border-color: transparent;
+      background-color: transparent;
+      color: black;
+      opacity: 1;
+    }
+
+    &:active {
+      border-color: transparent;
+      background-color: transparent;
+      color: black;
+      opacity: 1;
+    }
+
+    &:disabled {
+      border-color: transparent;
+      background-color: transparent;
+      color: black;
+      cursor: not-allowed;
+      opacity: .3;
+    }
+  }
+}
+
+.btn-group .btn:not(:last-child) {
+  margin: 0 1px 0 0;
+}
+

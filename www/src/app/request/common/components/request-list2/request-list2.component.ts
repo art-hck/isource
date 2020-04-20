@@ -58,7 +58,6 @@ export class RequestList2Component implements OnInit, OnDestroy {
   ngOnInit() {
     this.wsService.on(EventTypes.REQUEST_LIST_UPDATED).pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        console.log("Refresh motherfucker!");
         this.hideNeedUpdate = false;
         this.cd.detectChanges();
       });

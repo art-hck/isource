@@ -209,12 +209,11 @@
 
   <div class="clr-input-wrapper control-element">
     <label>Тип события:</label>
-
-    <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
-      <option value="CertificateUploaded">Загружен сертификат качества</option>
-      <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
-      <option value="OptionVerification">Инспектор проверил характеристику</option>
-    </select>
+    <uxg-dropdown formControlName="type" placeholder="Тип события">
+      <div uxgDropdownItem value="CertificateUploaded">Загружен сертификат качества</div>
+      <div uxgDropdownItem value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</div>
+      <div uxgDropdownItem value="OptionVerification">Инспектор проверил характеристику</div>
+    </uxg-dropdown>
   </div>
 
   <div class="clr-input-wrapper control-element">

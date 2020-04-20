@@ -4,7 +4,6 @@ import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-exam
 import { UxgExampleControlsComponent } from "./uxg-example-controls/uxg-example-controls.component";
 import { UxgExampleDropdownComponent } from "./uxg-example-dropdown/uxg-example-dropdown.component";
 import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.component";
-import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status/uxg-example-position-status.component";
 import { UxgExampleTabsComponent } from "./uxg-example-tabs/uxg-example-tabs.component";
 import { UxgExampleIconsComponent } from "./uxg-example-icons/uxg-example-icons.component";
 import { UxgExampleHomeComponent } from "./uxg-example-home/uxg-example-home.component";
@@ -37,11 +36,6 @@ const routes: Routes = [
     path: "dropdown",
     component: UxgExampleDropdownComponent,
     data: { title: 'Dropdowns' }
-  },
-{
-    path: "position-status",
-    component: UxgExamplePositionStatusComponent,
-    data: { title: 'Position status' }
   },
   {
     path: "tab",

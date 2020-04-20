@@ -37,7 +37,7 @@
         </div>
         <div class="app-col">
           <div style="position: relative">
-            <input #deliveryDate uxgInput appDatepicker formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)"/>
+            <input #deliveryDate uxgInput uxgDatepicker formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)"/>
             <label class="app-control-icon" (click)="deliveryDate.focus()">
               <clr-icon shape="app-calendar-big" size="24"></clr-icon>
             </label>
