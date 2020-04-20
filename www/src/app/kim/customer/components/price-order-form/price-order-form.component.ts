@@ -50,16 +50,14 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   readonly searchRegions = (query: string, items: OkatoRegion[]) => {
     return items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
   }
-  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
-  readonly destroy$ = new Subject();
-
   searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
     item.code === query).slice(0, 20);
-
+  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
   }
+  readonly destroy$ = new Subject();
 
   constructor(private fb: FormBuilder,
               private store: Store,
