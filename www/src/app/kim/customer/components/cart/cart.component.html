@@ -1,5 +1,6 @@
-<div class="app-row" *ngIf="cartItems$ | async; else emptyCart">
+<div class="app-row">
   <div class="app-col">
+    <ng-container *ngIf="(cartItems$ | async).length !== 0; else emptyCart">
     <div class="app-card" *ngFor="let cartItem of cartItems$ | async">
       <div class="app-row">
         <div class="app-col app-bold name">
@@ -17,7 +18,7 @@
             Единица измерения
           </div>
           <div class="measure-units">
-            {{cartItem.measureUnits}}
+            {{cartItem.okei}}
           </div>
         </div>
         <div class="app-col">
@@ -25,7 +26,7 @@
             Код позиции
           </div>
           <div class="measure-units">
-            {{cartItem.positionCode}}
+            {{cartItem.okpd2}}
           </div>
         </div>
         <div class="app-col quantity clr-align-items-center">
@@ -36,16 +37,18 @@
         </div>
       </div>
     </div>
+    </ng-container>
   </div>
   <div class="app-col app-col-aside">
     <h2>Итого в корзине</h2>
     <p class="app-secondary-color">Товаров</p>
-    <span class="app-bold">{{(cartItems$ | async).length}}</span>
+<!--    <span class="app-bold">{{(cartItems$ | async).length}}</span>-->
     <p class="app-secondary-color">Дата обновления</p>
     <div class="app-bold">
       -
     </div>
-    <button uxgButton lg primary class="create-request" disabled>Отправить ценовой запрос</button>
+    <button uxgButton lg primary class="create-request"
+    (click)="createPriceOrderModal.open()">Отправить ценовой запрос</button>
   </div>
 </div>
 
@@ -58,3 +61,11 @@
     </h1>
   </div>
 </ng-template>
+
+<!-- Модальное окно содание ЦЗ -->
+<clr-modal #createPriceOrderModal [clrModalSize]="'lg'">
+  <h2 class="modal-title">Создание ценового запроса из корзины</h2>
+  <div class="modal-body" *ngIf="createPriceOrderModal._open">
+    <app-kim-price-order-form [cartView]="true" (close)="createPriceOrderModal.close()"></app-kim-price-order-form>
+  </div>
+</clr-modal>

@@ -12,6 +12,7 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 import Fetch = PriceOrderActions.Fetch;
 import Create = PriceOrderActions.Create;
 import Update = PriceOrderActions.Update;
+import { Router } from "@angular/router";
 
 @Component({
   templateUrl: './price-order-list.component.html',
@@ -35,7 +36,8 @@ export class PriceOrderListComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(APP_CONFIG) public appConfig: GpnmarketConfigInterface,
     private store: Store,
-    private actions: Actions
+    private actions: Actions,
+    private router: Router
   ) { }
 
   ngOnInit() {

@@ -16,6 +16,7 @@ import { ItemsDictionaryState } from "./states/items-dictionary.state";
 import { KimItemsDictionaryService } from "./services/kim-items-dictionary.service";
 import { KimCartService } from "./services/kim-cart.service";
 import { CartState } from "./states/cart.state";
+import { ManualPriceOrderComponent } from './components/manual-price-order/manual-price-order.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { CartState } from "./states/cart.state";
     PriceOrderFormPositionsComponent,
     PriceOrderFormPositionsParamsComponent,
     ItemsDictionaryComponent,
+    ManualPriceOrderComponent,
   ],
   providers: [
     KimPriceOrderService,

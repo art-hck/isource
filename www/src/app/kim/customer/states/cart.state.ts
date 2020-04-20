@@ -1,15 +1,18 @@
 import { StateStatus } from "../../../request/common/models/state-status";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { Injectable } from "@angular/core";
-import { patch } from "@ngxs/store/operators";
+import { insertItem, patch } from "@ngxs/store/operators";
 import { catchError, tap } from "rxjs/operators";
 import { KimCartItem } from "../../common/models/kim-cart-item";
 import { CartActions } from "../actions/cart.actions";
 import Fetch = CartActions.Fetch;
 import { KimCartService } from "../services/kim-cart.service";
+import { KimPriceOrderPosition } from "../../common/models/kim-price-order-position";
+import CreatePriceOrder = CartActions.CreatePriceOrder;
+import { throwError } from "rxjs";
 
 export interface CartStateModel {
-  cartItems: KimCartItem[];
+  cartItems: KimPriceOrderPosition[];
   status: StateStatus;
 }
 
@@ -34,5 +37,22 @@ export class CartState {
     return this.rest.list().pipe(
       tap(cartItems => setState(patch({ cartItems, status: "received" as StateStatus } )))
     );
+  }
+
+  @Action(CreatePriceOrder)
+  create(ctx: Context, action: CreatePriceOrder) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+
+    return this.rest.create(action.payload).pipe(
+        this.errorPipe(ctx),
+        tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
+      );
+  }
+
+  errorPipe(ctx: Context) {
+    return catchError(err => {
+      ctx.setState(patch({ status: "error" as StateStatus }));
+      return throwError(err);
+    });
   }
 }

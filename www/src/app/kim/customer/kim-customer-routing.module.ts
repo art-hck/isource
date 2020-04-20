@@ -4,6 +4,7 @@ import { PriceOrderListComponent } from "./components/price-order-list/price-ord
 import { Routes } from "../../core/models/routes";
 import { CartComponent } from "./components/cart/cart.component";
 import { ItemsDictionaryComponent } from "./components/items-dictionary/items-dictionary.component";
+import { ManualPriceOrderComponent } from "./components/manual-price-order/manual-price-order.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,11 @@ const routes: Routes = [
     path: "price-orders",
     component: PriceOrderListComponent,
     data: { title: "Мои ценовые запросы" }
+  },
+  {
+    path: "price-orders/create",
+    component: ManualPriceOrderComponent,
+    data: { title: " Создание произвольного ценового запроса вручную" }
   },
   {
     path: "cart",
