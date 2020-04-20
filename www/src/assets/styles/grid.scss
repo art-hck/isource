@@ -1,39 +1,55 @@
-.main-container {
-  background-color: #FBFCFE;
+@import "projects/uxg/src/styles/index";
 
-  & .content-container .content-area {
-    padding: 30px;
+body {
+  min-width: 1180px;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .app-layout {
+    padding: 0 60px;
+    width: 100%;
+    max-width: uxg($theme, content-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .app-scroll {
+    overflow-y: scroll;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .app-content {
+      flex-grow: 1;
+      width: 100%;
+
+      & > .app-layout {
+        max-width: 1180px;
+        @media (min-width: 1480px) { max-width: 1480px }
+        @media (min-width: 1780px) { max-width: uxg($theme, content-width) }
+        @media (max-width: 1479px) {
+          .app-col-aside.detachable { display: none }
+        }
+      }
+    }
+
+    .app-footer {
+      align-items: center;
+      background: uxg($theme, color-default);
+      border-top: 1px #d5dde2 solid;
+      flex: 0 0 64px;
+      margin-top: 50px;
+      width: 100%;
+
+      a, a:hover {
+        font-size: uxg($theme, font-size-l);
+        color: inherit;
+      }
+    }
   }
 }
-
-.container {
-  width: 100%;
-  padding-left: .5rem;
-  padding-right: .5rem;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-@media (min-width: 576px) {
-  .container {
-    max-width: 1200px;
-  }
-}
-
-@media (min-width: 1300px) {
-  .container {
-    max-width: 1300px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .container {
-    max-width: 1600px;
-  }
-}
-
-
-.w-100 {
-  width: 100%!important;
-}
-

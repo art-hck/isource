@@ -5,10 +5,10 @@
     <div class="app-row app-align-items-center">
       <div>{{ toast.text }}</div>
       <ng-container [ngSwitch]="toast.type">
-        <clr-icon *ngSwitchCase="'info'" shape="app-info" size="24"></clr-icon>
-        <clr-icon *ngSwitchCase="'success'" class="app-success-color" shape="app-check" size="24"></clr-icon>
-        <clr-icon *ngSwitchCase="'warning'" class="app-warning-color" shape="app-warning" size="24"></clr-icon>
-        <clr-icon *ngSwitchCase="'error'" class="app-error-color" shape="app-warning" size="24"></clr-icon>
+        <uxg-icon *ngSwitchCase="'info'" shape="app-info" size="24"></uxg-icon>
+        <uxg-icon *ngSwitchCase="'success'" class="app-success-color" shape="app-check" size="24"></uxg-icon>
+        <uxg-icon *ngSwitchCase="'warning'" class="app-warning-color" shape="app-warning" size="24"></uxg-icon>
+        <uxg-icon *ngSwitchCase="'error'" class="app-error-color" shape="app-warning" size="24"></uxg-icon>
       </ng-container>
     </div>
   </ng-container>

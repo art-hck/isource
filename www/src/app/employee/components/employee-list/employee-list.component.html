@@ -19,7 +19,7 @@
         <a (click)="mailto($event, employee.user.username)" href="mailto:{{ employee.user.username }}">{{ employee.user.username }}</a>
       </div>
       <div class="app-col phone">{{ employee.user.phone || 'не указан' }}</div>
-      <div class="app-col count">{{ employee.reqCount }}<span class="gray">/</span>{{ employee.posCount }}</div>
+      <div class="app-col count">{{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}</div>
     </a>
   </div>
 </ng-container>

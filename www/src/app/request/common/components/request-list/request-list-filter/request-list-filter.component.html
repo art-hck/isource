@@ -28,15 +28,12 @@
         <div class="clr-row clr-align-items-center">
           <div class="clr-col">
             <div class="toggle-label">
-              <label for="tasks-toggle">Есть открытые задачи</label>
+              <label (click)="onlyOpenTasksRef.switch($event)">Есть открытые задачи</label>
             </div>
           </div>
 
           <div class="clr-col-auto">
-            <div class="toggle-checkbox">
-              <input id="tasks-toggle" type="checkbox" name="tasks-toggle" formControlName="onlyOpenTasks" />
-              <label for="tasks-toggle"></label>
-            </div>
+            <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenTasks" ></uxg-switcher>
           </div>
         </div>
 
@@ -61,10 +58,10 @@
 
         <div class="shipping-dates clr-row">
           <div class="clr-col-6">
-            <input appDatepicker type="date" autocomplete="off" placeholder="Дата с" formControlName="shipmentDateFrom" />
+            <input uxgDatepicker type="date" autocomplete="off" placeholder="Дата с" formControlName="shipmentDateFrom" />
           </div>
           <div class="clr-col-6">
-            <input appDatepicker type="date" autocomplete="off" placeholder="Дата по" formControlName="shipmentDateTo" />
+            <input uxgDatepicker type="date" autocomplete="off" placeholder="Дата по" formControlName="shipmentDateTo" />
           </div>
         </div>
 

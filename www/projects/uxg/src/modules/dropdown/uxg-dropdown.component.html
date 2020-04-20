@@ -1,0 +1,19 @@
+<div class="app-dropdown-handler"
+     (click)="toggle()"
+     [class.active]="!isHidden"
+     [class.app-dropdown-handler-up]="isDirectionUp"
+>
+  <div class="app-dropdown-handler-title">{{ selected?.label || placeholder }}</div>
+  <div class="app-dropdown-handler-icon">
+    <uxg-icon shape="app-triangle" [attr.dir]="isHidden ? 'down':'up'"></uxg-icon>
+  </div>
+</div>
+<div #itemsWrapper
+     class="app-dropdown-items-wrapper"
+     [class.hidden]="isHidden"
+     [class.app-dropdown-items-wrapper-up]="isDirectionUp"
+>
+  <div class="app-dropdown-items">
+    <ng-content></ng-content>
+  </div>
+</div>

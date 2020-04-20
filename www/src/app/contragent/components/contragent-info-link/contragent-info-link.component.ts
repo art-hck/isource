@@ -13,7 +13,7 @@ import { ContragentShortInfo } from "../../models/contragent-short-info";
 })
 export class ContragentInfoLinkComponent implements OnInit {
 
-  @Input() contragent: ContragentInfo | ContragentShortInfo | { id: Uuid };
+  @Input() contragent: ContragentInfo | ContragentShortInfo | { id: Uuid, shortName? };
   @Input() hiddenName = 'Поставщик';
 
   contragentInfo$: Observable<ContragentInfo>;

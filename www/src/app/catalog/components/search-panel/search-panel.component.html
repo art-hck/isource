@@ -5,7 +5,7 @@
     <div class="clr-col-2">
       <button class="btn btn-categories btn-primary-small" aria-label="Каталог" title="Каталог"
               (click)="onToggleCategories()">
-        <clr-icon shape="bars"></clr-icon>
+        <clr-icon shape="app-hamburger"></clr-icon>
         Каталог
       </button>
     </div>
@@ -22,7 +22,7 @@
       </button>
       <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
               [disabled]="!searchText">
-        <clr-icon shape="search" size="17"></clr-icon>
+        <clr-icon shape="app-search"></clr-icon>
       </button>
       <div class="search-dropdown" *ngIf="showSearchResults">
         <ng-container *ngIf="(searchResults$ | async) as searchResults">

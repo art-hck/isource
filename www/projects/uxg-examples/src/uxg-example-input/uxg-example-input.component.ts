@@ -33,7 +33,7 @@ export class UxgExampleInputComponent {
       <ng-container *ngIf="form.get('password').errors as e">
 
         <uxg-popover #errorPopover class="app-control-icon-error" *ngIf="errorsCount(e) > 1; else passowrdSingleError">
-          <clr-icon shape="app-info" size="16" (mouseenter)="errorPopover.show()" (mouseleave)="errorPopover.hide()"></clr-icon>
+          <uxg-icon shape="app-info" size="16" (mouseenter)="errorPopover.show()" (mouseleave)="errorPopover.hide()"></uxg-icon>
           <div *uxgPopoverContent="popoverDir.topRight" class="app-primary-color">
             <ng-container *ngTemplateOutlet="passwordErrors"></ng-container>
           </div>
@@ -59,10 +59,10 @@ export class UxgExampleInputComponent {
       <div class="app-col"></div>
       <div class="app-btn-group">
         <button uxgButton outline lg icon type="button" (click)="form.reset()">
-          <clr-icon shape="refresh" flip="horizontal" class="is-solid"></clr-icon>
+          <uxg-icon shape="refresh" flip="horizontal" class="is-solid"></uxg-icon>
         </button>
         <button uxgButton primary lg iconText [disabled]="form.invalid">
-          <clr-icon shape="login" class="is-solid"></clr-icon>
+          <uxg-icon shape="login" class="is-solid"></uxg-icon>
           <span>Войти</span>
         </button>
       </div>
