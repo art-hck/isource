@@ -6,10 +6,10 @@
     </div>
   </div>
 
-  <button class="left" *ngIf="canScrollLeft()" uxgButton primary icon (click)="scrollLeft()">
-    <clr-icon shape="app-chevron" dir="left"></clr-icon>
+  <button class="left" *ngIf="canScrollLeft" uxgButton primary icon (click)="scrollLeft()">
+    <uxg-icon shape="app-chevron" dir="left"></uxg-icon>
   </button>
-  <button class="right" *ngIf="canScrollRight()" uxgButton primary icon (click)="scrollRight()">
-    <clr-icon shape="app-chevron" dir="right"></clr-icon>
+  <button class="right" *ngIf="canScrollRight" uxgButton primary icon (click)="scrollRight()">
+    <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
   </button>
 </div>

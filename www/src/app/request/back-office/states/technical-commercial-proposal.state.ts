@@ -20,6 +20,7 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
 import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
+import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -80,8 +81,8 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Action(Create)
-  create(ctx: Context, action: Create) {
+  @Action([Create, CreateContragent])
+  create(ctx: Context, action: Create | CreateContragent) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
       catchError(err => {

@@ -1,6 +1,7 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 
 export namespace TechnicalCommercialProposals {
   // Получить список ТКП
@@ -52,12 +53,14 @@ export namespace TechnicalCommercialProposals {
     constructor(public proposalGroupByPositions: TechnicalCommercialProposalByPosition[]) {}
   }
 
+  // Создать ТКП из шаблона
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
 
     constructor(public requestId: Uuid, public files: File[]) {}
   }
 
+  // Скачать шаблон
   export class DownloadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadTemplate';
 
@@ -69,5 +72,15 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadAnalyticalReport';
 
     constructor(public requestId: Uuid) {}
+  }
+
+  // Создать пустое ТКП (только контрагент)
+  export class CreateContragent {
+    static readonly type = '[Technical Commercial Proposals Backoffice] CreateContragent';
+    public publish = false;
+    constructor(
+      public requestId: Uuid,
+      public payload: Partial<TechnicalCommercialProposal> & {supplier: ContragentShortInfo}
+    ) {}
   }
 }
