@@ -19,7 +19,7 @@ export namespace TechnicalCommercialProposals {
   // Согласовать ТКП у множества позиций
   export class ApproveMultiple {
     static readonly type = '[Technical Commercial Proposals Customer] Approve multiple';
-    constructor(public requestId: Uuid, public proposalPositions: TechnicalCommercialProposalPosition[]) {}
+    constructor(public proposalPositions: TechnicalCommercialProposalPosition[]) {}
   }
 
   // Отклонить все предложения у определенной позиции

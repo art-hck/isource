@@ -51,7 +51,7 @@ export namespace TechnicalCommercialProposals {
   export class PublishByPosition {
     static readonly type = '[Technical Commercial Proposals Backoffice] PublishPositions';
 
-    constructor(public proposalGroupByPositions: TechnicalCommercialProposalByPosition[]) {}
+    constructor(public proposalsByPositions: TechnicalCommercialProposalByPosition[]) {}
   }
 
   // Создать ТКП из шаблона

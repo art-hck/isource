@@ -31,14 +31,14 @@
     </div>
     <div>
       <!-- Количество, цена за ед. -->
-      <span [ngClass]="!isQuantityValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>
+      <span [ngClass]="!helper.isQuantityValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>
       <span class="app-ghost-color"> | </span>
       <span class="app-ghost-color">{{proposalPosition.priceWithoutVat | number:'1.0-2'}} </span>
       <span class="app-ghost-color">{{getCurrencySymbol(proposalPosition.currency, "narrow")}}/{{proposalPosition.measureUnit}}</span>
       <br/>
 
       <!-- Дата поставки. -->
-      <span [ngClass]="!isDateValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}</span>
+      <span [ngClass]="!helper.isDateValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}</span>
       <span class="app-ghost-color"> доставка</span>
     </div>
     <div class="app-ellipsis app-secondary-color">{{ proposalPosition.manufacturingName }}</div>
@@ -53,10 +53,10 @@
       ></app-technical-commercial-proposal-detail>
       <div class="app-row">
         <div class="app-col app-bold">
-          <div class="app-success-color" *ngIf="isQuantityValid(proposalPosition)">- Позиция в нужном количестве</div>
-          <div class="app-success-color" *ngIf="isDateValid(proposalPosition)"> - Сроки укладываются в заданные</div>
-          <div class="app-error-color" *ngIf="!isQuantityValid(proposalPosition)">- Количество меньше нужного</div>
-          <div class="app-error-color" *ngIf="!isDateValid(proposalPosition)"> - Сроки не укладываются в заданные</div>
+          <div class="app-success-color" *ngIf="helper.isQuantityValid(proposalPosition)">- Позиция в нужном количестве</div>
+          <div class="app-success-color" *ngIf="helper.isDateValid(proposalPosition)"> - Сроки укладываются в заданные</div>
+          <div class="app-error-color" *ngIf="!helper.isQuantityValid(proposalPosition)">- Количество меньше нужного</div>
+          <div class="app-error-color" *ngIf="!helper.isDateValid(proposalPosition)"> - Сроки не укладываются в заданные</div>
         </div>
         <!--      @TODO Доделать возможность выбрать из модалки -->
         <!--      <div *ngIf="!isReviewed">-->

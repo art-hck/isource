@@ -2,7 +2,6 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { RequestService } from "../../services/request.service";
 import { bufferTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
@@ -11,7 +10,6 @@ import { TechnicalCommercialProposalState } from "../../states/technical-commerc
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { StateStatus } from "../../../common/models/state-status";
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
-import { FormBuilder } from "@angular/forms";
 import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { DOCUMENT, getCurrencySymbol } from "@angular/common";
@@ -23,11 +21,11 @@ import { RequestActions } from "../../actions/request.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import { AppComponent } from "../../../../app.component";
+import { ProposalGridCardComponent } from "../../../common/components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
-import { ProposalGridCardComponent } from "../../../common/components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -36,9 +34,7 @@ import { ProposalGridCardComponent } from "../../../common/components/technical-
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChildren('proposalsOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChildren('proposalsOnReviewGridCard') proposalsOnReviewGridCard: QueryList<ProposalGridCardComponent>;
-  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
   @ViewChild('reviewedTab') set content(tab: UxgTabTitleComponent) {
     this.isProposalsFooterHidden = tab?.active;
     this.cd.detectChanges();
@@ -59,13 +55,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly destroy$ = new Subject();
   requestId: Uuid;
   isProposalsFooterHidden: boolean;
+  gridRows: ElementRef[];
   view: "grid" | "list" = "grid";
-  proposalDetail: TechnicalCommercialProposalByPosition["data"][number] | boolean;
 
   get total() {
-    return this.proposalsOnReview && this.proposalsOnReview.reduce((total, curr) => {
+    return this.proposalsOnReview?.reduce((total, curr) => {
       const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposalPosition.value;
-      total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity;
+      total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
   }
@@ -74,8 +70,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
-    private fb: FormBuilder,
-    private requestService: RequestService,
     private store: Store,
     private actions: Actions,
     private pluralize: PluralizePipe,
@@ -116,6 +110,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       );
     });
 
+
+
     this.switchView(this.view);
   }
 
@@ -124,11 +120,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       this.proposalsFooterRef.nativeElement,
       this.document.querySelector('.app-footer')
     );
+
+    this.proposalsOnReview.changes.pipe(
+      tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
+      tap(() => this.cd.detectChanges()),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   approveMultiple() {
     this.store.dispatch(new ApproveMultiple(
-      this.requestId,
       this.proposalsOnReview
         .filter(({selectedProposalPosition}) => selectedProposalPosition.valid)
         .map(({selectedProposalPosition}) => selectedProposalPosition.value)

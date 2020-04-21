@@ -130,13 +130,12 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(PublishByPosition)
-  publishPositions(ctx: Context, action: PublishByPosition) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.publishPositions(action.proposalGroupByPositions.reduce((ids, proposalByPos) => {
-      ids.push(...proposalByPos.data.map(({ proposalPosition }) => proposalPosition.id));
-      return ids;
-    }, [])).pipe(
-      tap(proposalPositions => proposalPositions.forEach(proposalPosition => ctx.setState(patch({
+  publishPositions({ setState }: Context, { proposalsByPositions }: PublishByPosition) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.publishPositions(
+      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: {id} }) => id)], [])
+    ).pipe(
+      tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
         proposals: updateItem(({ id }) => proposalPosition.proposalId === id, patch({
           positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
         })),
