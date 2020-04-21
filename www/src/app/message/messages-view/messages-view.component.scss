@@ -1,3 +1,5 @@
+@import "src/assets/styles/statuses";
+
 .text-muted {
   color: #000000;
   opacity: 0.4;
@@ -168,6 +170,15 @@
 
         &.selected.status-position-default {
           background: #568BF2;
+        }
+
+        @each $status, $color in $statuses {
+          &.status-position-#{$status} {
+            &.selected,
+            &:before {
+              background-color: $color
+            }
+          }
         }
 
         &.sub-item {
