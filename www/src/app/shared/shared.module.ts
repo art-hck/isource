@@ -1,7 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ClrAccordionModule, ClrAlertModule, ClrCheckboxModule, ClrDropdownModule, ClrIconModule, ClrLoadingModule, ClrModalModule } from '@clr/angular';
+import {
+  ClrAccordionModule,
+  ClrAlertModule,
+  ClrButton, ClrButtonModule,
+  ClrCheckboxModule,
+  ClrDropdownModule,
+  ClrIconModule,
+  ClrLoadingModule,
+  ClrModalModule
+} from '@clr/angular';
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
@@ -42,6 +51,7 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     ClrAccordionModule,
     ClrCheckboxModule,
     ClrLoadingModule,
+    ClrButtonModule,
     UxgModule,
     ToastListModule,
   ],
@@ -81,6 +91,7 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     ClrAccordionModule,
     ClrCheckboxModule,
     ClrLoadingModule,
+    ClrButtonModule,
     UxgModule,
 
     DocumentSimpleListComponent,

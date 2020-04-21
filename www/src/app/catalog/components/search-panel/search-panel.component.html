@@ -10,32 +10,29 @@
       </button>
     </div>
 
-    <div class="clr-col-7 search">
-      <input placeholder="Введите наименование позиции для поиска"
-             type="text"
-             name="searchName"
-             class="input-search"
-             [(ngModel)]="searchText"
-             (input)="onShowSearchSuggestions()"/>
-      <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
-        <img src="../../../../assets/images/delete.svg">
-      </button>
-      <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
-              [disabled]="!searchText">
-        <clr-icon shape="app-search"></clr-icon>
-      </button>
-      <div class="search-dropdown" *ngIf="showSearchResults">
-        <ng-container *ngIf="(searchResults$ | async) as searchResults">
-          <div class="search-item category"
-            *ngFor="let category of searchResults.categories"
-            (click)="onCategoryClick(category)">{{ category.name }}</div>
-          <div class="search-item position"
-            *ngFor="let position of searchResults.positions"
-               (click)="onPositionClick(position)">{{ position.name }}</div>
-        </ng-container>
-      </div>
+  <div class="clr-col-7 search">
+    <input placeholder="Введите наименование позиции для поиска"
+           type="text"
+           name="searchName"
+           class="input-search"
+           (keydown.enter)="onSearch()"
+           [(ngModel)]="searchText"/>
+    <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
+      <img src="../../../../assets/images/delete.svg">
+    </button>
+    <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
+            [disabled]="!searchText">
+      <clr-icon shape="app-search"></clr-icon>
+    </button>
+    <div class="search-dropdown" *ngIf="showSearchResults">
+      <ng-container *ngIf="(searchResults$ | async) as searchResults">
+        <div class="search-item category"
+          *ngFor="let category of searchResults.categories"
+          (click)="onCategoryClick(category)">{{ category.name }}</div>
+        <div class="search-item position"
+          *ngFor="let position of searchResults.positions"
+             (click)="onPositionClick(position)">{{ position.name }}</div>
+      </ng-container>
     </div>
-    <a class="new-request" [routerLink]="'/requests/create'">Не нашли, что искали?</a>
   </div>
 </div>
-
