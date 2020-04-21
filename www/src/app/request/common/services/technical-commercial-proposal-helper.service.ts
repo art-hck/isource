@@ -22,14 +22,20 @@ export class TechnicalCommercialProposalHelperService {
     return proposalPosition.quantity === proposalPosition.position.quantity;
   }
 
-  chooseBy(data: ProposalByPositionData, by: (p, c) => typeof p | typeof c | null): TechnicalCommercialProposalPosition {
+  chooseBy(type: "date" | "price", data: ProposalByPositionData): TechnicalCommercialProposalPosition {
     return data.reduce((prev, curr) => {
       const prevValid = prev && this.isValid(prev.proposalPosition);
       const currValid = curr && this.isValid(curr.proposalPosition);
       if (prevValid && !currValid) { return prev; }
       if (!prevValid && currValid) { return curr; }
       if (!prevValid && !currValid) { return null; }
-      return by(prev, curr);
+
+      switch (type) {
+        case "price":
+          return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat ? prev : curr;
+        case "date":
+          return moment(prev.proposalPosition.deliveryDate).isSameOrBefore(curr.proposalPosition.deliveryDate) ? prev : curr;
+      }
     }).proposalPosition;
   }
 }

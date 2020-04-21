@@ -14,7 +14,6 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
-import * as moment from "moment";
 
 
 @Component({
@@ -51,22 +50,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
-        tap(type => {
-          let item;
-          switch (type) {
-            case "price":
-              item = this.helper.chooseBy(this.proposalByPos.data, (prev, curr) => {
-                return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr
-              });
-            break;
-            case "date":
-              item = this.helper.chooseBy(this.proposalByPos.data, (prev, curr) => {
-                return moment(prev.proposalPosition.deliveryDate).isSameOrBefore(curr.proposalPosition.deliveryDate) ? prev : curr
-              });
-            break;
-          }
-          this.selectedProposalPosition.setValue(item);
-        }),
+        tap(type => this.selectedProposalPosition.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
         takeUntil(this.destroy$))
       .subscribe(() => this.cd.detectChanges());
     }
