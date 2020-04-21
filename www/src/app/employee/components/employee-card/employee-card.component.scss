@@ -36,3 +36,26 @@ span.empty-list {
   opacity: 0.3;
   padding: 0 0 0 4px;
 }
+
+.activation-section {
+  margin-bottom: 20px;
+
+  & div.title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #ED9254;
+    margin-bottom: 5px;
+  }
+
+  & div.description {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
+  }
+
+  button.resend-btn {
+    margin-left: 0;
+  }
+}

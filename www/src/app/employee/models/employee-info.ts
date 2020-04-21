@@ -23,6 +23,7 @@ export class EmployeeInfoRequestItem {
 
 export class EmployeeInfoBrief {
   id: Uuid;
+  activated: boolean;
   firstName: string;
   fullName: string;
   lastName: string;

@@ -1,7 +1,7 @@
-import { EmployeeItemInfo } from "./employee-item-info";
+import { EmployeeInfoBrief } from "./employee-info";
 
 export class EmployeeItem {
-  user: EmployeeItemInfo;
+  user: EmployeeInfoBrief;
   posCount: number;
   reqCount: number;
 }

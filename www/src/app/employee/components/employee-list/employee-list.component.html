@@ -15,18 +15,44 @@
 
   <div class="app-table">
     <a class="app-row app-link-no-color" [routerLink]="['/employees', employee.user.id, 'info']" *ngFor="let employee of employees">
-      <div class="app-col app-bold name app-ellipsis">{{ employee.user.fullName }}</div>
+      <div class="app-col app-bold name app-ellipsis" [ngClass]="{ 'not-activated' : !employee.user.activated }">
+        {{ employee.user.fullName }}
+        <span *ngIf="!employee.user.activated">
+          (<span class="label-text">Не активирован пользоватетлем</span>)
+        </span>
+      </div>
+
       <div class="app-col email app-ellipsis">
         <a (click)="mailto($event, employee.user.username)" href="mailto:{{ employee.user.username }}">{{ employee.user.username }}</a>
       </div>
-      <div class="app-col phone">{{ employee.user.phone || 'не указан' }}</div>
-      <div class="app-col count">{{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}</div>
+
+      <div class="app-col phone">
+        {{ employee.user.phone || 'не указан' }}
+      </div>
+
+      <div class="app-col count">
+        {{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}
+      </div>
 
       <div class="app-col edit">
-        <button uxgButton secondary icon *ngIf="userInfoService.isSeniorBackoffice()"
-                (click)="editedEmployee = employee; openEditModal($event, employee.user);">
-          <clr-icon shape="app-pen"></clr-icon>
-        </button>
+
+        <div class="app-row">
+          <div class="app-col">
+            <button uxgButton secondary icon [disabled]="sendingActivationLink"
+                    *ngIf="userInfoService.isSeniorBackoffice() && !employee.user.activated"
+                    (click)="resendActivationLink($event, employee.user.id)">
+              <clr-icon shape="app-clockwise-arrow"></clr-icon>
+            </button>
+          </div>
+
+          <div class="app-col">
+            <button uxgButton secondary icon
+                    *ngIf="userInfoService.isSeniorBackoffice()"
+                    (click)="editedEmployee = employee; openEditModal($event, employee.user);">
+              <clr-icon shape="app-pen"></clr-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </a>
   </div>
