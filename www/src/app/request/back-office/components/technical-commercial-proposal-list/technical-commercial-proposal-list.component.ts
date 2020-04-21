@@ -105,7 +105,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
         checked: false,
         positions: this.fb.array(items.map(item => {
           const form = this.fb.group({ checked: false, item });
-          if (this.isReviewed(item) || this.isOnReview(item)) {
+          if (this.isReviewed(item) || this.isOnReview(item) || item.data.length === 0) {
             form.get("checked").disable();
           }
           return form;

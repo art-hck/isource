@@ -15,22 +15,27 @@
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
-        <div class="app-secondary-color">Режим отображения:</div>
-        <div class="app-btn-group">
-          <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
-            <clr-icon shape="app-grid-view"></clr-icon>
-          </button>
-          <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
-            <clr-icon shape="app-list-view"></clr-icon>
-          </button>
-        </div>
-        <button uxgButton secondary>Фильтр</button>
+        <ng-container *ngIf="(proposals$ | async).length">
+          <div class="app-secondary-color">Режим отображения:</div>
+          <div class="app-btn-group">
+            <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
+              <clr-icon shape="app-grid-view"></clr-icon>
+            </button>
+            <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
+              <clr-icon shape="app-list-view"></clr-icon>
+            </button>
+          </div>
+<!--          <button uxgButton secondary>Фильтр</button>-->
+        </ng-container>
       </div>
       <br/>
       <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$: proposalsSentToReview$) | async as proposalsByPos">
         <!-- grid -->
         <div class="grid-table" *ngSwitchCase="'grid'">
-          <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals$ | async">
+          <app-technical-commercial-proposal-grid-contragents-row
+            *ngIf="proposalsByPos.length"
+            [gridRows]="gridRows"
+            [proposals]="proposals$ | async">
           </app-technical-commercial-proposal-grid-contragents-row>
 
           <div class="position-row" *ngFor="let proposalsByPos of proposalsByPos; index as i">
