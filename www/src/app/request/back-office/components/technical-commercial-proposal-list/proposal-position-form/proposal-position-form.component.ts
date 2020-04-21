@@ -42,6 +42,7 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
     const p = this.getProposalPosition(this.proposal, this.position);
 
     this.form = this.fb.group({
+      id: [p?.id ?? null],
       position: [this.position, Validators.required],
       manufacturingName: [p?.manufacturingName ?? this.position.name, Validators.required],
       priceWithoutVat: [p?.priceWithoutVat ?? this.position.startPrice, Validators.required],
