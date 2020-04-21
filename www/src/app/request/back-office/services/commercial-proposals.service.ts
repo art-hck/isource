@@ -10,7 +10,9 @@ import { RequestPosition } from "../../common/models/request-position";
 import { map } from 'rxjs/operators';
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class CommercialProposalsService {
 
   constructor(
