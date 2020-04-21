@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommercialProposalListOldComponent } from './components/commercial-proposal-list-old/commercial-proposal-list-old.component';
 import { RequestCommonModule } from "../common/request-common.module";
-import { RequestComponent as CustomerRequestComponent } from './components/request/request.component';
+import { RequestComponent } from './components/request/request.component';
 import { RequestCustomerRoutingModule } from "./request-customer-routing.module";
-import { RequestListComponent as CustomerRequestListViewComponent } from './components/request-list/request-list.component';
-import { RequestService as CustomerRequestService } from "./services/request.service";
+import { RequestListComponent } from './components/request-list/request-list.component';
+import { RequestService } from "./services/request.service";
 import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
-import { TechnicalProposalsService as CustomerTechnicalProposalsService } from "./services/technical-proposals.service";
+import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
 import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
@@ -18,13 +18,20 @@ import { TechnicalCommercialProposalService } from "./services/technical-commerc
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
+import { RequestFormComponent } from "./components/request-form/request-form.component";
+import { RequestFormFreeComponent } from "./components/request-form-free/request-form-free.component";
+import { RequestState } from "./states/request.state";
+import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListState } from "./states/request-list.state";
 
 
 @NgModule({
   declarations: [
     CommercialProposalListOldComponent,
-    CustomerRequestComponent,
-    CustomerRequestListViewComponent,
+    RequestComponent,
+    RequestFormComponent,
+    RequestFormFreeComponent,
+    RequestListComponent,
     PositionComponent,
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
@@ -33,18 +40,21 @@ import { TechnicalCommercialProposalComponent } from "./components/technical-com
     RequestCreateModalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
+    RequestList2Component
   ],
   imports: [
     AgreementsModule,
     RequestCustomerRoutingModule,
     RequestCommonModule,
     NgxsModule.forFeature([
+      RequestState,
+      RequestListState,
       TechnicalCommercialProposalState
     ]),
   ],
   providers: [
-    CustomerRequestService,
-    CustomerTechnicalProposalsService,
+    RequestService,
+    TechnicalProposalsService,
     TechnicalCommercialProposalService
   ]
 })

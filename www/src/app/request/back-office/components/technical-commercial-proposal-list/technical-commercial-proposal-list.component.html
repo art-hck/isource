@@ -4,30 +4,30 @@
     <div class="app-row">
       <div class="app-col">
         <div class="app-table app-no-border">
-            <div class="app-row clr-justify-content-end">
-              <div class="app-col app-basis-auto clr-flex-grow-0">
+          <div class="app-row app-justify-content-end">
+            <div class="app-col app-basis-auto app-grow-0">
 
-                <!-- Создать процедуру @TODO временно скрыто  -->
-                <!--button uxgButton secondary iconText (click)="procedureModal.open()"
-                        *ngIf="featureService.authorize('createProcedure')">
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>Создать процедуру</span>
-                </button-->
+              <!-- Создать процедуру @TODO временно скрыто  -->
+              <!--button uxgButton secondary iconText (click)="procedureModal.open()"
+                      *ngIf="featureService.authorize('createProcedure')">
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>Создать процедуру</span>
+              </button-->
 
-                <!-- Новое ТКП  -->
-                <button uxgButton secondary iconText (click)="showForm = true">
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>Новый контрагент</span>
-                </button>
+              <!-- Новое ТКП  -->
+              <button uxgButton secondary iconText (click)="showForm = true">
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>Новое ТКП</span>
+              </button>
 
-                <!-- Новое ТКП шаблона -->
-                <!--button uxgButton primary iconText>
-                  <clr-icon shape="app-plus"></clr-icon>
-                  <span>ТКП из шаблона</span>
-                </button-->
-              </div>
+              <!-- Новое ТКП шаблона -->
+              <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
+                <clr-icon shape="app-plus"></clr-icon>
+                <span>ТКП из шаблона</span>
+              </button>
             </div>
           </div>
+        </div>
       </div>
       <div class="app-col app-col-aside"></div>
     </div>
@@ -69,6 +69,25 @@
             (complete)="procedureModal.close()"
           ></app-request-procedure-create>
         </ng-container>
+      </div>
+    </clr-modal>
+    <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
+      <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
+      <div class="modal-body" *ngIf="uploadTemplateModal._open">
+        <div class="app-secondary-color template">
+          Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="onDownloadTemplate()"><b>скачать
+          шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
+        </div>
+        <div class="dragAndDropArea">
+          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" uxgButton secondary lg (click)="uploadTemplateModal.close()">Отмена</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions(); uploadTemplateModal.close()"
+                [disabled]="files.length === 0">
+          Загрузить
+        </button>
       </div>
     </clr-modal>
   </ng-container>

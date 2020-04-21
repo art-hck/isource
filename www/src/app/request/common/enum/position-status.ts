@@ -2,6 +2,7 @@ export enum PositionStatus {
   DRAFT = 'DRAFT',                                 // Черновик
   ON_CUSTOMER_APPROVAL = 'ON_CUSTOMER_APPROVAL',   // На согласовании заказчика
   NEW = 'NEW',                                     // Новая
+  NOT_RELEVANT = 'NOT_RELEVANT',                   // Неактуально
   TECHNICAL_PROPOSALS_PREPARATION = 'TECHNICAL_PROPOSALS_PREPARATION', // Подготовка ТП
   TECHNICAL_PROPOSALS_AGREEMENT = 'TECHNICAL_PROPOSALS_AGREEMENT',     // Согласование ТП
   PROPOSALS_PREPARATION = 'PROPOSALS_PREPARATION', // Подготовка КП
@@ -22,4 +23,5 @@ export enum PositionStatus {
   PAID = 'PAID',                                   // Оплачено
   WARRANTY = 'WARRANTY',                           // Гарантийные обязательства
   COMPLETED = 'COMPLETED',                         // Завершено
+  CANCELED = 'CANCELED'                             // Отменена
 }

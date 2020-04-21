@@ -6,14 +6,14 @@
   <ng-container *ngIf="(contracts$ | async) as contracts; else loading">
     <ng-container *ngIf="userInfoService.isBackOffice()">
       <ng-container *ngIf="(contragentsWithPositions$ | async) as contragentsWithPositions;">
-
-        <button class="btn btn-primary-outline btn-add-contract"
-                (click)="showModal = true"
-                [title]="isAvailableToCreate(contragentsWithPositions) ? '' : 'Нет доступных позиций для создания договора'"
-                [disabled]="!isAvailableToCreate(contragentsWithPositions)">
-          <clr-icon shape="plus" class="is-solid"></clr-icon>
-          <span>Добавить договор</span>
-        </button>
+        <div class="app-row app-justify-content-end app-section">
+          <button uxgButton outline (click)="showModal = true"
+                  [title]="isAvailableToCreate(contragentsWithPositions) ? '' : 'Нет доступных позиций для создания договора'"
+                  [disabled]="!isAvailableToCreate(contragentsWithPositions)">
+            <clr-icon shape="plus" class="is-solid"></clr-icon>
+            <span>Добавить договор</span>
+          </button>
+        </div>
 
         <app-request-contract-create
           *ngIf="showModal"
@@ -27,33 +27,37 @@
 
     <div class="card" *ngFor="let contract of contracts">
       <div class="card-header">
-        <div class="clr-row">
-          <div class="clr-col">
-            <app-contragent-info-link
+        <div class="app-row">
+          <div class="app-col">
+            <app-contragent-info-link *ngIf="contract.supplier; else hiddenSupplierName"
                     [contragent]="contract.supplier">
             </app-contragent-info-link>
+
+            <ng-template #hiddenSupplierName>
+              <span>Имя поставщика скрыто</span>
+            </ng-template>
           </div>
         </div>
       </div>
       <div class="card-block">
-        <div class="clr-row">
-          <div class="clr-col">
+        <div class="app-row">
+          <div class="app-col">
 
-            <div class="clr-row clr-head">
+            <div class="app-row clr-head">
               <div class="clr-col-4 clr-col-xl-6">Позиция</div>
               <div class="clr-col-2">Количество</div>
               <div class="clr-col-3 clr-col-xl-2">Цена за ед.</div>
               <div class="clr-col-3 clr-col-xl-2">Сумма</div>
             </div>
             <ng-container *ngFor="let currency of getCurrencies(contract);">
-            <div class="clr-row" *ngFor="let offerPosition of groupPositionsByCurrency(contract)[currency].offerPositions">
+            <div class="app-row" *ngFor="let offerPosition of groupPositionsByCurrency(contract)[currency].offerPositions">
 
               <div class="clr-col-4 clr-col-xl-6">{{ offerPosition.requestPosition.name }}</div>
               <div class="clr-col-2">{{ offerPosition.quantity }} {{ offerPosition.measureUnit}}</div>
               <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat | currency: currency }}</div>
               <div class="clr-col-3 clr-col-xl-2">{{ offerPosition.priceWithoutVat * offerPosition.quantity  | currency: currency }}</div>
             </div>
-            <div class="clr-row total">
+            <div class="app-row total">
               <div class="clr-col-9 clr-col-xl-10"></div>
               <div class="clr-col-3 clr-col-xl-2"><b>{{ groupPositionsByCurrency(contract)[currency].total | currency: currency }}</b></div>
             </div>
@@ -61,23 +65,23 @@
           </div>
         </div>
 
-        <div class="clr-row">
-          <div class="clr-col"
+        <div class="app-row">
+          <div class="app-col"
                *ngIf="isShowGenerateContractButton(contract) && featureService.available('contractGeneration')">
-            <button class="btn btn-primary" (click)="onGenerateContract(request, contract)"> Создать типовой договор </button>
+            <button uxgButton primary (click)="onGenerateContract(request, contract)"> Создать типовой договор </button>
           </div>
 
-          <div class="clr-col"
+          <div class="app-col"
                *ngIf="isShowSignContractButton(contract) && featureService.available('contractGeneration')">
-            <button class="btn btn-primary" (click)="onSignContract(contract)"> Подтвердить подписание договора </button>
+            <button uxgButton primary (click)="onSignContract(contract)"> Подтвердить подписание договора </button>
           </div>
         </div>
 
       </div>
       <div class="card-block" *ngIf="contract.documents.length > 0 || getAttachedFiles(contract).length > 0">
         <div class="card-text">
-          <div class="clr-row" >
-            <div class="clr-col"><b>Документы</b></div>
+          <div class="app-row" >
+            <div class="app-col"><b>Документы</b></div>
             <div [ngSwitch]="contract.status">
               <span class="label label-warning" *ngSwitchCase="ContractStatus.REJECTED">
                 <clr-icon shape="hourglass"></clr-icon>На доработке
@@ -90,8 +94,8 @@
               </span>
             </div>
           </div>
-          <div class="clr-row">
-            <div class="clr-col">
+          <div class="app-row">
+            <div class="app-col">
               <app-request-contract-list-upload-document
                 [request]="request"
                 [contract]="contract"
@@ -104,35 +108,35 @@
         </div>
       </div>
       <div class="card-footer">
-        <div class="clr-row">
-          <div class="clr-col">
-            <clr-button-group *ngIf="userInfoService.isBackOffice()">
-              <clr-button appUploadFile (select)="attachFileToContract($event, contract)" [disabled]="!isAvailableToAttach(contract)">
+        <div class="app-row">
+          <div class="app-col">
+            <div class="app-btn-group" *ngIf="userInfoService.isBackOffice()">
+              <button uxgButton secondary appUploadFile (select)="attachFileToContract($event, contract)" [disabled]="!isAvailableToAttach(contract)">
                 <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
-              </clr-button>
+              </button>
 
-              <clr-button [disabled]="!isAvailableForApproval(contract)"
+              <button uxgButton secondary [disabled]="!isAvailableForApproval(contract)"
                           (click)="changeStatus(contract, ContractStatus.ON_APPROVAL)">
                 <clr-icon shape="check"></clr-icon><span>Отправить на согласование</span>
-              </clr-button>
-            </clr-button-group>
+              </button>
+            </div>
 
-            <clr-button-group *ngIf="userInfoService.isCustomer()">
-              <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
+            <div class="app-btn-group" *ngIf="userInfoService.isCustomer()">
+              <button uxgButton secondary [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
                           (click)="changeStatus(contract, ContractStatus.APPROVED)">
                 <clr-icon shape="check"></clr-icon>
                 <span>Согласовать</span>
-              </clr-button>
-              <clr-button appUploadFile [disabled]="contract.status !== ContractStatus.ON_APPROVAL"
+              </button>
+              <button uxgButton secondary appUploadFile [disabled]="contract.status !== ContractStatus.ON_APPROVAL"
                           (select)="attachFileToContract($event, contract)" class="btn-info-outline">
                 <clr-icon shape="attachment"></clr-icon>
                 <span>Прикрепить замечания</span>
-              </clr-button>
-              <clr-button [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
+              </button>
+              <button uxgButton secondary [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
                           (click)="changeStatus(contract, ContractStatus.REJECTED)">
                 <span>На доработку</span>
-              </clr-button>
-            </clr-button-group>
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
@@ -19,10 +20,6 @@
       "dom"
     ],
     "paths": {
-      "@stdlib-ng/core": ["node_modules/stdlib-ng/dist/core"],
-      "@stdlib-ng/core/*": ["node_modules/stdlib-ng/dist/core/*"],
-      "@stdlib-ng/custom-components": ["node_modules/stdlib-ng/dist/custom-components"],
-      "@stdlib-ng/custom-components/*": ["node_modules/stdlib-ng/dist/custom-components/*"],
       "uxg": ["dist/uxg"]
     }
   }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommercialProposalListOldComponent } from "./components/commercial-proposal-list-old/commercial-proposal-list-old.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
-import { RequestListComponent as CustomerRequestsList } from "./components/request-list/request-list.component";
 import { TechnicalProposalListDeprecatedComponent } from "./components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component";
 import { ContractListComponent } from "../common/components/contract-list/contract-list.component";
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
@@ -11,13 +10,14 @@ import { TechnicalProposalListComponent } from "./components/technical-proposal-
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { AgreementsComponent } from "./components/agreements/agreements.component";
-import { RequestFormComponent } from "../common/components/request-form/request-form.component";
+import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
+import { RequestList2Component } from "./components/request-list2/request-list2.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: CustomerRequestsList,
+    component: RequestList2Component,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", feature: "customerRequest" },
   },

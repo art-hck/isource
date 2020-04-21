@@ -20,4 +20,5 @@ export class Request extends BaseModel {
   type?: string;
   dashboard: DashboardInfo;
   isOlderTwoWeeks?: boolean;
+  hideContragent?: boolean;
 }

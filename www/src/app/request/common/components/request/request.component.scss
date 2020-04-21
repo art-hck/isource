@@ -32,6 +32,10 @@
   }
 }
 
+.app-table.disabled {
+  opacity: .5;
+}
+
 .app-table > .app-row {
   &-group {
     background: #F0F6FA;
@@ -97,4 +101,14 @@
   font-size: 11px;
   color: darkslategray;
   padding: 2px 10px 2px 0;
+}
+
+a.canceled {
+  &, &:hover {
+    color: #b3b3b3;
+  }
+}
+
+.publish-title {
+  margin-left: 50px;
 }

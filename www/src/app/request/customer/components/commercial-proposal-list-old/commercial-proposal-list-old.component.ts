@@ -23,8 +23,8 @@ import { Store } from "@ngxs/store";
 
 export class CommercialProposalListOldComponent implements OnInit {
 
-  @ViewChild('tableBody', { static: false }) tableBody: ElementRef;
-  @ViewChild('tableHeader', { static: false }) tableHeader: ElementRef;
+  @ViewChild('tableBody') tableBody: ElementRef;
+  @ViewChild('tableHeader') tableHeader: ElementRef;
 
   requestId: Uuid;
   request: Request;
@@ -56,16 +56,16 @@ export class CommercialProposalListOldComponent implements OnInit {
 
   getSupplierLinkedOffers(
     linkedOffers: RequestOfferPosition[],
-    supplier: string
+    supplierId: Uuid
   ): RequestOfferPosition[] {
-    return linkedOffers.filter(function(item) { return item.supplierContragentName === supplier; });
+    return linkedOffers.filter(function(item) { return item.supplierContragent.id === supplierId; });
   }
 
-  getTotalSumBySupplier(requestPositions: RequestPosition[], supplier: string): number {
+  getTotalSumBySupplier(requestPositions: RequestPosition[], supplierId: Uuid): number {
     let sum = 0;
 
     requestPositions.forEach(pos => {
-      const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
+      const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplierId);
       if (supplierLinkedOffer[0]) {
         sum = sum + (supplierLinkedOffer[0].priceWithVat * supplierLinkedOffer[0].quantity);
       }
@@ -74,12 +74,12 @@ export class CommercialProposalListOldComponent implements OnInit {
     return sum;
   }
 
-  getSelectedSumBySupplier(requestPositions: RequestPosition[], supplier: string): number {
+  getSelectedSumBySupplier(requestPositions: RequestPosition[], supplierId: Uuid): number {
     let selectedSum = 0;
     const selectedOffers = this.selectedOffers;
 
     requestPositions.forEach(pos => {
-      const supplierLinkedOffers = this.getSupplierLinkedOffers(pos.linkedOffers, supplier);
+      const supplierLinkedOffers = this.getSupplierLinkedOffers(pos.linkedOffers, supplierId);
 
       supplierLinkedOffers.forEach(offer => {
         if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {
@@ -112,7 +112,7 @@ export class CommercialProposalListOldComponent implements OnInit {
   }
 
   protected updateRequestInfo(): void {
-    this.requestService.getRequestInfo(this.requestId).subscribe(
+    this.requestService.getRequest(this.requestId).subscribe(
       (request: Request) => {
         this.request = request;
 

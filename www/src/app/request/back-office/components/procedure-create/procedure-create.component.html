@@ -22,12 +22,12 @@
     >
       <ng-template let-formGroup="formGroup" let-position="item">
         <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
-          <div class="app-col clr-flex-grow-0">
+          <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
           <ng-container *ngIf="!formGroup.disabled">
-            <div class="app-col select-list-item-quantity">
+            <div class="app-col app-grow-0 app-basis-auto select-list-item-quantity">
               <span>{{ position.quantity }} </span>
               <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
             </div>
@@ -76,13 +76,10 @@
     <br/>
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
-        <clr-date-container #datepicker class="hidden-datepicker hidden-datepicker-top">
-          <input clrDate formControlName="dateEndRegistration"/>
-        </clr-date-container>
         <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg formControlName="dateEndRegistration">
+          <input #dateEndRegistration uxgInput lg appDatepicker formControlName="dateEndRegistration">
           <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
-          <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+          <label class="app-control-icon" (click)="dateEndRegistration.focus()">
             <clr-icon shape="app-calendar-big" size="24"></clr-icon>
           </label>
           <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
@@ -92,7 +89,7 @@
       </div>
       <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
         <div class="app-control-wrap">
-          <input #timeControlRef uxgInput lg formControlName="timeEndRegistration" [textMask]="mask"/>
+          <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
           <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
         </div>
       </div>
@@ -133,7 +130,7 @@
     >
       <ng-template let-formGroup="formGroup" let-contragent="item">
         <div class="app-row select-list-item" [formGroup]="formGroup">
-          <div class="app-col clr-flex-grow-0">
+          <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
           <div class="app-col app-bold select-list-item-title">{{ contragent.shortName }}</div>
@@ -172,7 +169,7 @@
 
   <br/>
   <div class="app-row app-justify-content-end">
-    <div class="app-row app-col clr-flex-grow-0 app-basis-auto clr-align-items-center">
+    <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center">
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>

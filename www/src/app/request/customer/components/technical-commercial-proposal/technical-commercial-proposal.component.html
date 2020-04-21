@@ -35,7 +35,11 @@
            class="app-row app-link-no-color data data-body"
         >
           <div class="app-col  app-ellipsis supplier">
-            <app-contragent-info-link (click)="$event.stopPropagation()" [contragent]="data.proposal.supplier"></app-contragent-info-link>
+            <app-contragent-info-link *ngIf="data.proposal.supplier.shortName; else noname" (click)="$event.stopPropagation()"
+                                      [contragent]="data.proposal.supplier"></app-contragent-info-link>
+            <ng-template #noname>
+              Поставщик
+            </ng-template>
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
           <div class="app-col quantity ">
@@ -147,7 +151,8 @@
       <hr/>
       <div class="app-row">
         <div class="app-col">
-          Вы можете оклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков
+          <!-- @TODO: Ждем реализацию на бэкенде -->
+          <!-- Вы можете отклонить все предложения по этой позиции и не получать другие предложения по ней от этих поставщиков -->
         </div>
         <div>
           <!-- @TODO: Ждем реализацию на бэкенде -->

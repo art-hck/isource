@@ -2,7 +2,7 @@
 
 <form class="cp-creation-form" [formGroup]="newCommercialProposalForm" (ngSubmit)="submit()">
 
-  <div class="form-row clr-row">
+  <div class="form-row app-row">
     <div class="clr-col-6">
       <uxg-dropdown-input
         [formControl]="supplierContragentControl"
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="clr-col">
+    <div class="app-col">
       <div class="app-control-wrap">
         <uxg-dropdown lg class="app-dropdown" formControlName="currency" placeholder="Валюта...">
           <div uxgDropdownItem value="RUB">Руб.</div>
@@ -50,9 +50,9 @@
   </div>
 
 
-  <div class="form-row clr-row">
+  <div class="form-row app-row">
     <div class="clr-col-6">
-      <div class="clr-row">
+      <div class="app-row">
         <div class="clr-col-7">
           <div class="app-control-wrap">
             <input #quantity [warning]="quantityValidator() !== null" (keypress)="filterEnteredText($event)"
@@ -69,7 +69,7 @@
 
         <div class="clr-col-5">
           <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
-                              [$]="okeiList$" [searchFn]="searchOkei" [lg]="true" #okei="appSuggestions"
+                              [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #okei="appSuggestions"
           >
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
               <div uxgDropdownItem
@@ -91,24 +91,20 @@
     <div class="clr-col-3">
       <div class="app-control-wrap">
         <input [warning]="deliveryDateValidator() !== null"
-               #deliveryDate uxgInput lg formControlName="deliveryDate">
+               #deliveryDate uxgInput lg formControlName="deliveryDate" appDatepicker />
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
-        <label class="app-control-icon" (click)="datepicker.toggleDatepicker($event)">
+        <label class="app-control-icon" (click)="deliveryDate.focus()">
           <clr-icon shape="app-calendar-big" size="24"></clr-icon>
         </label>
         <div class="app-control-error" *ngIf="deliveryDateValidator()">
           <span>Позже запрашиваемой даты</span>
         </div>
       </div>
-
-      <clr-date-container #datepicker class="hidden-datepicker">
-        <input clrDate formControlName="deliveryDate" />
-      </clr-date-container>
     </div>
   </div>
 
-  <div class="form-row clr-row">
-    <div class="clr-col">
+  <div class="form-row app-row">
+    <div class="app-col">
       <div class="app-control-wrap">
         <uxg-dropdown lg class="app-dropdown" formControlName="paymentTerms" placeholder="Условия оплаты...">
           <div uxgDropdownItem value="30 дней по факту поставки">
@@ -127,14 +123,14 @@
     </div>
   </div>
 
-  <div class="form-row clr-row">
+  <div class="form-row app-row">
     <div class="clr-col-auto">
       <div class="app-control-wrap">
         <button type="button" uxgButton secondary appUploadFile (select)="filesSelected($event)" [multiple]="true">Выбрать документы</button>
       </div>
     </div>
 
-    <div class="clr-col">
+    <div class="app-col">
       <div class="app-control-wrap">
         <span class="document-description">
           Прикладываемый/ые документы относятся к полному КП контрагента, и отображаются для всех КП по позициям от этого контрагента.
@@ -176,15 +172,15 @@
   </ng-container>
 
 
-  <div class="clr-row">
-    <div class="clr-col">
+  <div class="app-row">
+    <div class="app-col">
       <span class="requirement-text">
         Все поля являются <span class="red-text">обязательными</span> к заполнению! Документы прикладывать не обязательно.
       </span>
     </div>
 
-    <div class="clr-col">
-      <div class="app-row clr-justify-content-end">
+    <div class="app-col">
+      <div class="app-row app-justify-content-end">
         <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
         <button uxgButton lg primary [disabled]="newCommercialProposalForm.invalid || supplierContragentControl.invalid">
           {{ editMode ? 'Сохранить' : 'Добавить' }}

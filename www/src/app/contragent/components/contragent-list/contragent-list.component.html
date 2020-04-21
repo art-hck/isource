@@ -3,62 +3,33 @@
 </ng-template>
 
 <ng-container *ngIf="contragents; else loading">
+  <div class="app-table app-no-border">
+    <div class="app-row app-uppercase app-ghost-color app-bold">
+      <small class="app-col">Наименование контрагента</small>
+      <small class="app-col">ИНН</small>
+      <small class="app-col">КПП</small>
+      <small class="app-col">E-mail</small>
+      <small class="app-col">Ответственный менеджер БО</small>
+      <small class="app-col edit" *ngIf="user.isSeniorBackoffice()"></small>
+    </div>
+  </div>
 
-  <clr-datagrid class="employee-list-datagrid">
-
-    <clr-dg-column class="request-number clr-col">
-      Наименование контрагента
-    </clr-dg-column>
-
-    <clr-dg-column class="request-published clr-col-2">
-      ИНН
-    </clr-dg-column>
-
-    <clr-dg-column class="phone clr-col-2">
-      КПП
-    </clr-dg-column>
-
-    <clr-dg-column class="requests-positions-count clr-col-2">
-      e-mail
-    </clr-dg-column>
-
-    <clr-dg-column class="requests-positions-count clr-col-1">
-      Ответственный менеджер БО
-    </clr-dg-column>
-    <clr-dg-column class="clr-col-1">
-    </clr-dg-column>
-
-
-    <clr-dg-row *ngFor="let contragent of contragents | contragentSearchFilter: searchValue"
-                (click)="router.navigateByUrl('/contragents/' + contragent.id + '/info')">
-
-      <clr-dg-cell class="employee-full-name clr-col">
-        <b>{{ contragent.shortName}}</b>
-      </clr-dg-cell>
-
-      <clr-dg-cell class="phone clr-col-2">
-        {{ contragent.inn }}
-      </clr-dg-cell>
-
-      <clr-dg-cell class="requests-positions-count clr-col-2">
-        {{ contragent.kpp }}
-      </clr-dg-cell>
-
-      <clr-dg-cell class="employee-email clr-col-2">
-        <a (click)="mailto($event, contragent.email)" href="mailto:{{ contragent.email }}">{{ contragent.email }}</a>
-      </clr-dg-cell>
-
-      <clr-dg-cell class="requests-positions-count clr-col-1">
-        {{ contragent.responsible?.shortName }}
-      </clr-dg-cell>
-      <clr-dg-cell class="edit clr-col-1">
-        <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
-          <clr-icon shape="app-pen"></clr-icon>
-        </button>
-      </clr-dg-cell>
-
-    </clr-dg-row>
-
-  </clr-datagrid>
-
+  <div class="app-table">
+    <ng-container *ngFor="let contragent of contragents | contragentSearchFilter: searchValue">
+      <a class="app-row app-align-items-center app-link-no-color" [routerLink]="['/contragents', contragent.id, 'info']">
+        <div class="app-col app-bold">{{ contragent.shortName }}</div>
+        <div class="app-col">{{ contragent.inn }}</div>
+        <div class="app-col">{{ contragent.kpp }}</div>
+        <div class="app-col">
+          <a (click)="mailto($event, contragent.email)" href="mailto:{{ contragent.email }}">{{ contragent.email }}</a>
+        </div>
+        <div class="app-col">{{ contragent.responsible?.shortName }}</div>
+        <div class="app-col edit" *ngIf="user.isSeniorBackoffice()">
+          <button uxgButton secondary icon (click)="edit($event, contragent)">
+            <clr-icon shape="app-pen"></clr-icon>
+          </button>
+        </div>
+      </a>
+    </ng-container>
+  </div>
 </ng-container>

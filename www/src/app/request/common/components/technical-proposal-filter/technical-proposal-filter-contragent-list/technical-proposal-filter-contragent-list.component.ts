@@ -18,7 +18,7 @@ export class TechnicalProposalFilterContragentListComponent implements ControlVa
   @Input() contragents;
   @Input() limit: number;
 
-  @ViewChild('contragentSearchInput', { static: false }) contragentSearchInput: ElementRef;
+  @ViewChild('contragentSearchInput') contragentSearchInput: ElementRef;
 
   contragentSearchValue = "";
   selectedContragents = [];

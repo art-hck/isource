@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AvailableGuiService } from '@stdlib-ng/core';
 import { UserInfo } from "../models/user-info";
 import { UserRole } from "../models/user-role";
 import { Permission } from "../../auth/models/permission";
@@ -80,11 +79,6 @@ export class UserInfoService {
     }
 
     return roles;
-  }
-
-  constructor(
-    protected gui: AvailableGuiService
-  ) {
   }
 
   public saveData(data: any): void {

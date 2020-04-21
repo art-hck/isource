@@ -2,7 +2,7 @@ import { ClrModal } from "@clr/angular";
 import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { finalize, flatMap } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GroupService } from "../../../services/group.service";
+import { RequestPositionService } from "../../../services/request-position.service";
 import { GroupWithPositions } from "../../../models/groupWithPositions";
 import { Request } from "../../../models/request";
 import { RequestPosition } from "../../../models/request-position";
@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
   templateUrl: 'request-add-group-modal.component.html'
 })
 export class RequestAddGroupModalComponent implements OnDestroy {
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<GroupWithPositions>();
@@ -24,7 +24,7 @@ export class RequestAddGroupModalComponent implements OnDestroy {
     name: new FormControl("", Validators.required)
   });
 
-  constructor(private groupService: GroupService) {}
+  constructor(private positionService: RequestPositionService) {}
 
   open() {
     this.modal.open();
@@ -37,8 +37,8 @@ export class RequestAddGroupModalComponent implements OnDestroy {
   submit() {
     this.isLoading = true;
     this.subscription.add(
-      this.groupService.saveGroup(this.request.id, this.form.get('name').value).pipe(
-        flatMap(requestGroup => this.groupService.addPositionsInGroup(
+      this.positionService.saveGroup(this.request.id, this.form.get('name').value).pipe(
+        flatMap(requestGroup => this.positionService.addPositionsInGroup(
           this.request.id,
           requestGroup.id,
           this.positions.map(position => position.id)

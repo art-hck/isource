@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
-import { GetRequestsService } from "../../../common/services/get-requests.service";
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
@@ -8,7 +7,6 @@ import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { Router } from "@angular/router";
-import { CreateRequestService } from "../../../common/services/create-request.service";
 import { RequestService } from "../../services/request.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
@@ -20,7 +18,7 @@ import { catchError, flatMap, mapTo, tap } from "rxjs/operators";
 })
 export class RequestListComponent implements OnInit {
 
-  @ViewChild(RequestListFilterComponent, {static: false})
+  @ViewChild(RequestListFilterComponent)
   requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
@@ -39,8 +37,6 @@ export class RequestListComponent implements OnInit {
 
   constructor(
     protected router: Router,
-    protected getRequestService: GetRequestsService,
-    protected createRequestService: CreateRequestService,
     protected requestService: RequestService,
     protected store: Store
   ) {
@@ -69,7 +65,7 @@ export class RequestListComponent implements OnInit {
     this.composeFilters();
 
     if (this.requestListFilterComponent) {
-      this.requestListFilterComponent.clearFilter();
+      this.requestListFilterComponent.resetFilter(false);
       this.currentFilters = <RequestsListFilter>{};
     }
   }
@@ -105,7 +101,7 @@ export class RequestListComponent implements OnInit {
   }
 
   getRequestListForCustomer(startFrom, pageSize, filters): void {
-    this.getRequestService.getRequests('customer', startFrom, pageSize, filters).subscribe(
+    this.requestService.getRequests(startFrom, pageSize, filters).subscribe(
       (data: Page<RequestsList>) => {
         this.requests = data.entities;
         this.totalItems = data.totalCount;
@@ -118,7 +114,7 @@ export class RequestListComponent implements OnInit {
    * @param role
    */
   getRequestStatusCount(role: string) {
-    this.getRequestService.requestStatusCount(role).subscribe(
+    this.requestService.requestStatusCount().subscribe(
       (requestStatusCount: RequestStatusCount) => {
         this.requestStatusCount = requestStatusCount;
       }
@@ -143,7 +139,7 @@ export class RequestListComponent implements OnInit {
   }
 
   onSendExcelFile(requestData: { files: File[], requestName: string }): void {
-    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
+    this.requestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
       tap(() => this.store.dispatch(new ToastActions.Success("Черновик заявки создан"))),
       tap(({id}) => this.router.navigateByUrl(`requests/customer/${id}`)),
       catchError(({error}) => this.store.dispatch(
@@ -153,7 +149,7 @@ export class RequestListComponent implements OnInit {
   }
 
   onPublishExcelFile(requestData: { files: File[], requestName: string }): void {
-    this.createRequestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
+    this.requestService.addRequestFromExcel(requestData.files, requestData.requestName).pipe(
       flatMap(data => this.requestService.publishRequest(data.id).pipe(mapTo(data))),
       tap(() => this.store.dispatch(new ToastActions.Success("Заявка опубликована"))),
       tap(({id}) => this.router.navigateByUrl(`requests/customer/${id}`)),

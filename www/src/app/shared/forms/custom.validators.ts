@@ -71,7 +71,7 @@ export class CustomValidators {
   // разрешена кириллица, латиница, пробелы, тире, цифры и знаки препинания
   static simpleText(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^[?!,№`"-.а-яА-ЯёЁa-zA-Z0-9\s]+$/);
+    const valid = String(value).trim().match(/^[?!,«»„“№`"-.а-яА-ЯёЁa-zA-Z0-9\s]+$/);
     return valid ? null : {field: true};
   }
 
@@ -79,7 +79,7 @@ export class CustomValidators {
   // разрешена кириллица, пробелы, тире, цифры и знаки препинания
   static cyrillic(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^[?!,"-.а-яА-ЯёЁ0-9\s]+$/);
+    const valid = String(value).trim().match(/^[?!,«»„“"-.а-яА-ЯёЁ0-9\s]+$/);
     return valid ? null : {field: true};
   }
 

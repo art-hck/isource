@@ -1,0 +1,208 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div class="app-row app-align-items-center">
+    <div class="app-col"><h3>Создать ценовой запрос</h3></div>
+    <button *ngIf="closable" type="button" uxgButton icon link (click)="close.emit()"><clr-icon shape="app-cross"></clr-icon></button>
+  </div>
+
+  <div class="section">
+    <div class="app-row app-align-items-center">
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('name'), label: 'Наименование ценового запроса'}"></ng-container>
+      <div class="app-col app-secondary-color">
+        Данное наименование будет отображаться в списке и поможет легко отличить один ценовой запрос от другого
+      </div>
+    </div>
+
+    <div class="app-row">
+      <div class="app-col">
+        <uxg-dropdown-input
+          lg
+          appSuggestions
+          strictMode
+          formControlName="regions"
+          placeholder="Регион"
+          [$]="regions$"
+          [searchFn]="searchRegions"
+          [displayByFn]="getRegionName"
+          #regions="appSuggestions"
+        >
+          <ng-container *ngFor="let suggestion of regions.suggestions$ | async">
+            <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">{{suggestion.name }}</div>
+          </ng-container>
+          <ng-template #errors>
+            <div class="app-control-error" *ngIf="form.get('regions').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.notFromList">Выберите регион из списка</span>
+            </div>
+          </ng-template>
+        </uxg-dropdown-input>
+      </div>
+
+      <ng-container *ngTemplateOutlet="controlInput; context: {control: form.get('deliveryAddress'), label: 'Адрес'}"></ng-container>
+    </div>
+
+    <div class="app-row">
+      <div class="app-col app-row">
+
+        <!-- dateResponse -->
+        <div class="app-col" *ngIf="form.get('dateResponse') as dateResponseControl">
+          <div class="app-control-wrap">
+            <input
+              #dateResponse
+              uxgInput lg appDatepicker
+              dateFormat="d.m.Y H:i"
+              formControlName="dateResponse"
+              [enableTime]="true"
+              [disable]="[isDateResponseValid]"
+            />
+            <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
+            <label class="app-control-icon" (click)="dateResponse.focus()">
+              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            </label>
+            <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.expired">Не менее трёх рабочих дней с момента создания</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- dateDelivery -->
+        <div class="app-col">
+          <div class="app-control-wrap">
+            <input #dateDelivery uxgInput lg appDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y" />
+            <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
+            <label class="app-control-icon" (click)="dateDelivery.focus()">
+              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('dateDelivery').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.expired">Не может быть раньше даты предоставления ответа</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-col">
+        <uxg-dropdown-input formControlName="deliveryConditions" placeholder="Условия оплаты и доставки" lg>
+          <div uxgDropdownItem *ngFor="let term of paymentTermsLabels" [value]="term[0]">{{ term[1] }}</div>
+          <ng-template #errors>
+            <div class="app-control-error" *ngIf="form.get('deliveryConditions').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+            </div>
+          </ng-template>
+        </uxg-dropdown-input>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="section app-row">
+    <div class="app-col">
+      <div class="app-row position-info-item app-ghost-color app-uppercase app-bold">
+        <small class="app-col app-ellipsis">Наименование позиции</small>
+        <small class="app-col-sm app-ellipsis">Количество</small>
+      </div>
+
+      <div><button uxgButton secondary type="button" (click)="addPositionsModal.open()">Добавить позиции</button></div>
+
+      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
+        <div class="app-col app-ellipsis app-bold">{{position.name}}</div>
+        <div class="app-col-sm app-ellipsis">
+          {{position.quantity}} <span class="app-ghost-color">{{position.okei.symbol | lowercase }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="app-col">
+      <div class="app-row position-info-item app-uppercase app-ghost-color app-bold">
+        <small class="app-col-sm app-ellipsis">ОКПД2</small>
+        <small class="app-col-m app-ellipsis">Максимальная цена</small>
+        <small class="app-col app-ellipsis">Комментарий</small>
+      </div>
+
+      <div>
+        <button uxgButton secondary type="button" class="button-params"
+                [disabled]="!form.get('positions').value?.length"
+                (click)="paramsPositionsModal.open()">Заполнить параметры</button>
+      </div>
+      <div class="app-row position-info-item" *ngFor="let position of form.get('positions').value">
+        <div class="app-col-sm app-ellipsis">{{position.okpd2}}</div>
+        <div class="app-col-m app-ellipsis">{{position?.maxPrice | currency: 'RUB' :"symbol":"1.0-2"}}</div>
+        <div class="app-col app-ellipsis">{{position?.comment}}</div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="section app-row">
+    <div class="app-col">
+      <p class="app-row" *ngFor="let type of typeLabels">
+        <uxg-radio-item class="app-control"  #radio1 name="radio" [value]="type[0]" formControlName="type"></uxg-radio-item>
+        <label (click)="radio1.select($event)"> &nbsp; {{type[1]}}</label>
+      </p>
+    </div>
+    <div class="app-col">
+      <div class="app-row">
+        <div class="app-col">
+          <p class="app-row app-align-items-center">
+            <uxg-checkbox class="app-control" #isForAuthorizedDealer formControlName="isForAuthorizedDealer"></uxg-checkbox>
+            <label (click)="isForAuthorizedDealer.check($event)">Официальный дилер</label>
+          </p>
+          <p class="app-row app-align-items-center">
+            <uxg-checkbox class="app-control" #isRussianProduction formControlName="isRussianProduction"></uxg-checkbox>
+            <label (click)="isRussianProduction.check($event)">Российское производство</label>
+          </p>
+          <p class="app-row app-align-items-center">
+            <uxg-checkbox class="app-control" #isDenyMaxPricePosition formControlName="isDenyMaxPricePosition"></uxg-checkbox>
+            <label (click)="isDenyMaxPricePosition.check($event)">Запрет превышения цены</label>
+          </p>
+        </div>
+        <div class="app-col">
+          <p class="app-row app-align-items-center">
+            <uxg-checkbox class="app-control" #isForSmallBusiness formControlName="isForSmallBusiness"></uxg-checkbox>
+            <label (click)="isForSmallBusiness.check($event)">Малый бизнес</label>
+          </p>
+
+          <p class="app-row app-align-items-center">
+            <uxg-checkbox class="app-control" #isForProducer formControlName="isForProducer"></uxg-checkbox>
+            <label (click)="isForProducer.check($event)">Производитель</label>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="app-row app-justify-content-end app-section">
+    <button *ngIf="closable" uxgButton secondary type="button" (click)="close.emit()">Отмена</button>
+    <button uxgButton primary [disabled]="form.invalid || form.disabled">Отправить ЦЗ</button>
+  </div>
+</form>
+
+<clr-modal clrModalSize="lg" #addPositionsModal>
+  <h2 class="modal-title">Добавление позиций к ЦЗ</h2>
+  <div class="modal-body" *ngIf="addPositionsModal._open" [formGroup]="form">
+    <app-kim-price-order-form-positions formControlName="positions" (cancel)="addPositionsModal.close()">
+    </app-kim-price-order-form-positions>
+  </div>
+</clr-modal>
+
+<clr-modal clrModalSize="lg" #paramsPositionsModal>
+  <h2 class="modal-title">Дополнительная информация о позициях</h2>
+  <div class="modal-body" *ngIf="paramsPositionsModal._open" [formGroup]="form">
+    <app-kim-price-order-form-positions-params formControlName="positions" (cancel)="paramsPositionsModal.close()">
+    </app-kim-price-order-form-positions-params>
+  </div>
+</clr-modal>
+
+<ng-template #controlInput let-control="control" let-label="label">
+  <div class="app-col">
+    <div class="app-control-wrap">
+      <input #controlRef uxgInput lg [formControl]="control"/>
+      <label class="app-control-label" (click)="controlRef.focus()">{{label}}</label>
+      <div class="app-control-error" *ngIf="control.errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

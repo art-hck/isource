@@ -3,47 +3,23 @@
 </ng-template>
 
 <ng-container *ngIf="employees; else loading">
+  <div class="app-table app-no-border">
+    <div class="app-row app-uppercase app-ghost-color app-bold">
+      <small class="app-col name">Имя сотрудника</small>
+      <small class="app-col email">E-mail</small>
+      <small class="app-col phone">Телефон</small>
+      <small class="app-col count">Заявок/позиций</small>
+    </div>
+  </div>
 
-  <clr-datagrid class="employee-list-datagrid">
-
-    <clr-dg-column class="request-number clr-col">
-      Имя сотрудника
-    </clr-dg-column>
-
-    <clr-dg-column class="request-published clr-col-4">
-      E-mail
-    </clr-dg-column>
-
-    <clr-dg-column class="phone clr-col-2">
-      Телефон
-    </clr-dg-column>
-
-    <clr-dg-column class="requests-positions-count clr-col-1">
-      Заявок/позиций
-    </clr-dg-column>
-
-
-    <clr-dg-row *ngFor="let employee of employees"
-                (click)="onRowClick(employee.user.id)">
-
-      <clr-dg-cell class="employee-full-name clr-col">
-        <b>{{ employee.user.fullName}}</b>
-      </clr-dg-cell>
-
-      <clr-dg-cell class="employee-email clr-col-4">
+  <div class="app-table">
+    <a class="app-row app-link-no-color" [routerLink]="['/employees', employee.user.id, 'info']" *ngFor="let employee of employees">
+      <div class="app-col app-bold name app-ellipsis">{{ employee.user.fullName }}</div>
+      <div class="app-col email app-ellipsis">
         <a (click)="mailto($event, employee.user.username)" href="mailto:{{ employee.user.username }}">{{ employee.user.username }}</a>
-      </clr-dg-cell>
-
-      <clr-dg-cell class="phone clr-col-2">
-        {{ employee.user.phone || 'не указан' }}
-      </clr-dg-cell>
-
-      <clr-dg-cell class="requests-positions-count clr-col-1">
-        {{ employee.reqCount }}<span class="gray">/</span>{{ employee.posCount }}
-      </clr-dg-cell>
-
-    </clr-dg-row>
-
-  </clr-datagrid>
-
+      </div>
+      <div class="app-col phone">{{ employee.user.phone || 'не указан' }}</div>
+      <div class="app-col count">{{ employee.reqCount }}<span class="gray">/</span>{{ employee.posCount }}</div>
+    </a>
+  </div>
 </ng-container>

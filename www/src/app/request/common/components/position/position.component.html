@@ -33,11 +33,11 @@
   </div>
 
   <!-- Статус -->
-  <div class="app-col app-col-aside status" *ngIf="user.isBackOffice() && statuses">
+  <div class="app-col-aside status" *ngIf="user.isBackOffice() && statuses">
     <div class="app-position-status-icon" [ngClass]="position.status"></div>
     <uxg-dropdown
       lg
-      class="clr-flex-grow-1"
+      class="app-col"
       [placeholder]="position.statusLabel"
       [disabled]="statuses.length === 0"
       (select)="changeStatus.emit({status: $event, position: position})">
@@ -68,7 +68,7 @@
         </div>
 
         <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({ files: $event, position: position })"
-                [multiple]="true">
+                [multiple]="true" [disabled]="isNotActual(position)">
           <clr-icon shape="app-upload"></clr-icon>
           <span>Загрузить документы</span>
         </button>
@@ -80,13 +80,15 @@
       <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
         <br/>
         <h2 class="text-center" [style.opacity]="0.1">
-          <clr-icon shape="app-doc" size="270"></clr-icon><br/>
+          <clr-icon shape="app-doc" size="270"></clr-icon>
+          <br/>
           К позиции пока не загружено ни <br/> одного документа
         </h2>
       </ng-container>
     </ng-container>
     <ng-container *uxgTab="offersTab">
-      <app-request-commercial-proposal-list-deprecated [requestPosition]="position" [requestId]="requestId" [isCustomerView]="user.isCustomer()"></app-request-commercial-proposal-list-deprecated>
+      <app-request-commercial-proposal-list-deprecated [requestPosition]="position" [requestId]="requestId"
+                                                       [isCustomerView]="user.isCustomer()"></app-request-commercial-proposal-list-deprecated>
     </ng-container>
     <ng-container *uxgTab="deliveryTab">
       <app-request-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-request-delivery-monitor>
@@ -101,15 +103,15 @@
         <h3 class="sector-title">Общая информация о позиции</h3>
 
         <div class="app-ghost-color">Наименование МТР</div>
-        <div class="app-bold">{{ position.name }}</div>
+        <div class="app-bold position-name">{{ position.name }}</div>
         <br/>
 
         <div class="app-ghost-color">Количество</div>
-        <div class="app-bold">{{ position.quantity }} {{ position.measureUnit | lowercase }}</div>
+        <div class="app-bold quantity">{{ position.quantity }} {{ position.measureUnit | lowercase }}</div>
         <br/>
 
         <div class="app-ghost-color">Необходимый срок поставки</div>
-        <div class="app-bold">
+        <div class="app-bold delivery-date">
           <ng-container *ngIf="!position.isDeliveryDateAsap; else asap">
             {{ position.deliveryDate | date : "dd.MM.yyyy" }}
           </ng-container>
@@ -118,24 +120,24 @@
         <br/>
 
         <div class="app-ghost-color">Базис поставки</div>
-        <div class="app-bold">{{ position.deliveryBasis }}</div>
+        <div class="app-bold delivery-basis">{{ position.deliveryBasis }}</div>
         <br/>
 
         <div class="app-ghost-color">Условия оплаты</div>
-        <div class="app-bold">{{ position.paymentTerms }}</div>
+        <div class="app-bold paymentTerms">{{ position.paymentTerms }}</div>
         <br/>
-
-        <div class="app-ghost-color">Начальная максимальная цена</div>
-        <div class="app-bold">{{ position.startPrice | currency: position.currency }}</div>
-        <br/>
-
+        <ng-container *ngIf="position.startPrice">
+          <div class="app-ghost-color">Начальная максимальная цена</div>
+          <div class="app-bold price">{{ position.startPrice | currency: position.currency }}</div>
+          <br/>
+        </ng-container>
         <div class="app-ghost-color">Документ, в соответствии с которым необходимо изготовление</div>
-        <div class="app-bold">{{ position.productionDocument }}</div>
+        <div class="app-bold document">{{ position.productionDocument }}</div>
         <br/>
 
         <ng-container *ngIf="position.isDesignRequired">
           <div class="app-ghost-color">Необходимость РКД</div>
-          <div class="app-bold">Да, необходимо</div>
+          <div class="app-bold rkd">Да, необходимо</div>
           <br/>
         </ng-container>
 
@@ -148,7 +150,7 @@
 
         <ng-container *ngIf="position.comments">
           <div class="app-ghost-color">Дополнительные требования</div>
-          <div class="app-bold">{{ position.comments }}</div>
+          <div class="app-bold comment">{{ position.comments }}</div>
           <br/>
         </ng-container>
 
@@ -157,12 +159,12 @@
             <button uxgButton secondary
                     uxgPopoverTrigger
                     (click)="edit.open()"
-                    [disabled]="position.isEditingByAnotherUser">
+                    [disabled]="position.isEditingByAnotherUser || isNotActual(position)">
               <clr-icon shape="app-pen"></clr-icon>
               <span>Редактировать</span>
             </button>
 
-            <ng-container *ngIf="position.isEditingByAnotherUser">
+            <ng-container *ngIf="position.isEditingByAnotherUser && !isNotActual(position)">
               <div *uxgPopoverContent="PopoverContentDirection.bottomRight" (click)="more.hide()">
                 <div>Позиция находится на согласовании.</div>
                 <div>Редактирование недоступно.</div>

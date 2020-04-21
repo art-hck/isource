@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
-import Swal from "sweetalert2";
 import { filter, finalize, tap } from "rxjs/operators";
 import { ClrModal } from "@clr/angular";
 import { RegistrationRequest } from "../../models/registration-request";
@@ -19,8 +18,8 @@ import { Toast } from "../../../shared/models/toast";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  @ViewChild('contragentFound', { static: false }) contragentFound: ClrModal;
-  @ViewChild('contragentNotFound', { static: false }) contragentNotFound: ClrModal;
+  @ViewChild('contragentFound') contragentFound: ClrModal;
+  @ViewChild('contragentNotFound') contragentNotFound: ClrModal;
   @ViewChild('successRegister', { static: true }) successRegister: TemplateRef<any>;
 
   form: FormGroup;

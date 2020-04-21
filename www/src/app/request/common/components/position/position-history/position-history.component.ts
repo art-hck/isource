@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
 import { History } from "../../../models/history";
-import { RequestPositionHistoryService } from "../../../services/request-position-history.service";
 import * as moment from "moment";
 import { PositionHistoryType } from "../../../enum/position-history-type";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { PositionInfoFieldsLabels } from "../../../dictionaries/position-info-fields-labels";
 import { ContragentInfo } from "../../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../../contragent/services/contragent.service";
+import { RequestPositionService } from "../../../services/request-position.service";
 
 @Component({
   selector: 'app-request-position-history',
@@ -23,8 +23,8 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
   history: History[];
 
   constructor(
-    protected getContragentService: ContragentService,
-    private historyService: RequestPositionHistoryService
+    private getContragentService: ContragentService,
+    private positionService: RequestPositionService
   ) {
   }
 
@@ -37,7 +37,7 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
   }
 
   getHistory(): void {
-    this.historyService.getHistory(this.requestPosition)
+    this.positionService.getHistory(this.requestPosition)
       .subscribe((history: History[]) => {
         this.history = history;
       });
@@ -57,7 +57,7 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
   }
 
   downloadDocument(documentId: Uuid, documentName: string): void {
-    this.historyService.downloadFileFromHistory(documentId, documentName);
+    this.positionService.downloadFileFromHistory(documentId, documentName);
   }
 
   showContragentInfo(event: MouseEvent, contragentId: Uuid): void {
@@ -94,7 +94,8 @@ export class PositionHistoryComponent implements OnInit, OnChanges {
         PositionHistoryType.WINNER_STATUS.valueOf(),
         PositionHistoryType.CONTRACT_STATUS.valueOf(),
         PositionHistoryType.POSITION_TECHNICAL_PROPOSAL_STATUS.valueOf(),
-        PositionHistoryType.DESIGN_STATUS.valueOf()
+        PositionHistoryType.DESIGN_STATUS.valueOf(),
+        PositionHistoryType.POSITION_TECHNICAL_COMMERCIAL_PROPOSAL_STATUS.valueOf()
       ].indexOf(activityItem.type) !== -1
     );
   }

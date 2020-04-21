@@ -7,10 +7,10 @@ import { ClrModal } from "@clr/angular";
 })
 export class RequestCreateModalComponent {
 
-  @ViewChild(ClrModal, { static: false }) modal: ClrModal;
+  @ViewChild(ClrModal) modal: ClrModal;
 
-  @Output() uploadFromTemplate = new EventEmitter();
-  @Output() publishFromTemplate = new EventEmitter();
+  @Output() uploadFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();
+  @Output() publishFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();
   @Output() cancel = new EventEmitter();
 
   open() {

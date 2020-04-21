@@ -6,14 +6,11 @@ import { ContractListComponent } from "./components/contract-list/contract-list.
 import { ContractCreateComponent } from "./components/contract-create/contract-create.component";
 import { ContractService } from "./services/contract.service";
 import { ContractListUploadDocumentComponent } from "./components/contract-list/contract-list-upload-document/contract-list-upload-document.component";
-import { RequestFormComponent } from './components/request-form/request-form.component';
-import { RequestFormFreeComponent } from './components/request-form-free/request-form-free.component';
 import { DeliveryMonitorComponent } from './components/delivery-monitor/delivery-monitor.component';
 import { DeliveryMonitorService } from "./services/delivery-monitor.service";
 import { DesignDocumentationListComponent } from "./components/design-documentation-list/design-documentation-list.component";
 import { DeliveryMonitorDigitalInspectorComponent } from "./components/delivery-monitor/delivery-monitor-digital-inspector/delivery-monitor-digital-inspector.component";
 import { DeliveryMonitorGoodCardComponent } from './components/delivery-monitor/delivery-monitor-good-card/delivery-monitor-good-card.component';
-import { GroupService } from "./services/group.service";
 import { CommercialProposalListDeprecatedComponent as BackofficeOffersComponent } from './components/commercial-proposal-list-deprecated/commercial-proposal-list-deprecated.component';
 import { RequestPieChartComponent } from './components/request/request-pie-chart/request-pie-chart.component';
 import { PositionHistoryComponent } from './components/position/position-history/position-history.component';
@@ -21,11 +18,11 @@ import { RequestAddGroupModalComponent } from "./components/request/request-add-
 import { RequestAddResponsibleModalComponent } from './components/request/request-add-responsible-modal/request-add-responsible-modal.component';
 import { RequestAsideInfoComponent } from "./components/request/request-aside-info/request-aside-info.component";
 import { RequestComponent } from "./components/request/request.component";
-import { RequestFilterCustomerListComponent } from './components/request-list/request-list-filter/request-filter-customer-list/request-filter-customer-list.component';
+import { FilterCustomersComponent } from './components/request-list/request-list-filter/filter-customers/filter-customers.component';
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { TechnicalProposalFilterComponent } from "./components/technical-proposal-filter/technical-proposal-filter.component";
 import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
-import { RequestListFilterSectionComponent } from "./components/request-list/request-list-filter/request-list-filter-section/request-list-filter-section.component";
+import { FilterSectionComponent } from "./components/request-list/request-list-filter/filter-section/filter-section.component";
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
 
@@ -44,14 +41,16 @@ import { RequestTpFilterSectionComponent } from "./components/technical-proposal
 import { CommercialProposalListFilterComponent } from "./components/commercial-proposal-list/commercial-proposal-list-filter/commercial-proposal-list-filter.component";
 import { PositionsStatusChangeComponent } from "../back-office/components/position-status-change/positions-status-change.component";
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
+import { RequestPositionService } from "./services/request-position.service";
+import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
+import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
+import { RequestList2Component } from "./components/request-list2/request-list2.component";
 
 const RequestCommonModuleDeclarations = [
   BackofficeOffersComponent,
   ContractListComponent,
   ContractCreateComponent,
   ContractListUploadDocumentComponent,
-  RequestFormComponent,
-  RequestFormFreeComponent,
   DeliveryMonitorComponent,
   DesignDocumentationListComponent,
   DeliveryMonitorDigitalInspectorComponent,
@@ -65,7 +64,7 @@ const RequestCommonModuleDeclarations = [
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
-  RequestFilterCustomerListComponent,
+  FilterCustomersComponent,
   TechnicalProposalFilterContragentListComponent,
   RequestTpFilterStatusesListComponent,
   RequestListComponent,
@@ -73,13 +72,16 @@ const RequestCommonModuleDeclarations = [
   TechnicalProposalFilterComponent,
   RequestTpFilterSectionComponent,
   RequestListFilterComponent,
-  RequestListFilterSectionComponent,
+  FilterSectionComponent,
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
   CommercialProposalListComponent,
   SearchFilterPipe,
-  RequestMoveGroupModalComponent
+  RequestMoveGroupModalComponent,
+  PositionCancelComponent,
+  FilterPositionStatusesComponent,
+  RequestList2Component
 ];
 
 @NgModule({
@@ -92,11 +94,11 @@ const RequestCommonModuleDeclarations = [
     ContragentModule
   ],
   providers: [
-    GroupService,
     ContragentService,
     ContractService,
     RequestPositionStatusService,
     DeliveryMonitorService,
+    RequestPositionService
   ],
   exports: [
     SharedModule,

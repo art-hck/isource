@@ -1,0 +1,18 @@
+.search {
+  padding-bottom: 24px;
+}
+
+.customers-list {
+  padding: 11px;
+  margin: -11px;
+  max-height: 320px;
+  overflow: auto;
+
+  .app-row:not(:last-child) {
+    padding-bottom: 10px;
+  }
+}
+
+.show-all {
+  margin-top: 10px;
+}

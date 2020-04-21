@@ -11,11 +11,12 @@ export class PositionService {
   ) {
   }
 
-  changePositionsStatus(positionIds: Uuid[], newStatus: string) {
-    const url = `requests/backoffice/positions/statuses/change`;
+  changePositionsStatus(positionIds: Uuid[], newStatus: string, role: string, reason?) {
+    const url = `requests/${role}/positions/statuses/change`;
     return this.api.post<RequestPosition[]>(url, {
       positionIds: positionIds,
-      status: newStatus
+      status: newStatus,
+      statusComment: reason
     });
   }
 }

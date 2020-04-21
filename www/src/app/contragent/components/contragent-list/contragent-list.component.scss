@@ -1,38 +1,10 @@
-::ng-deep h2 {
-  margin-bottom: 20px;
-  font-weight: 600;
-}
+.app-table > .app-row > .app-col {
+  &:not(:first-child) {
+    flex-grow: .4;
+  }
 
-::ng-deep .contragent-list-datagrid *:focus {
-  outline: 0;
-}
-
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-row:hover {
-  cursor: default;
-  background: initial;
-}
-
-::ng-deep .contragent-list-datagrid {
-  margin-bottom: 50px;
-}
-::ng-deep .contragent-list-datagrid .datagrid {
-  overflow: visible;
-}
-::ng-deep .contragent-list-datagrid .datagrid-table {
-  overflow: visible;
-}
-::ng-deep .contragent-list-datagrid .datagrid-header {
-  top: -50px;
-}
-
-
-
-::ng-deep .contragent-list-datagrid .datagrid .datagrid-header {
-  padding: 0;
-  z-index: 5;
-}
-
-.edit {
-  text-align: right;
-  padding-right: 20px;
+  &.edit {
+    flex-basis: 32px;
+    flex-grow: 0;
+  }
 }

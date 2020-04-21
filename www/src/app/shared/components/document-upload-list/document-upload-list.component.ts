@@ -19,7 +19,7 @@ export class DocumentUploadListComponent {
 
   @Output() fileSelected = new EventEmitter<File[]>();
 
-  @ViewChild('uploadEl', { static: false }) uploadElRef: ElementRef;
+  @ViewChild('uploadEl') uploadElRef: ElementRef;
 
   public documentIconSize = DocumentIconSize;
 

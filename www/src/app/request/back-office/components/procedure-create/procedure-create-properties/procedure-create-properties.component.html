@@ -1,17 +1,17 @@
 <ng-container [formGroup]="form">
-  <p class="app-row clr-align-items-center">
+  <p class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsRequiredAll" #positionsRequiredAll></uxg-checkbox>
     <label (click)="positionsRequiredAll.check($event)"> &nbsp; Обязательная подача предложений на все позиции</label>
   </p>
-  <p class="app-row clr-align-items-center">
+  <p class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsAnalogs" #allowAnalogs></uxg-checkbox>
     <label (click)="allowAnalogs.check($event)"> &nbsp; Разрешается прием аналогов</label>
   </p>
-  <p class="app-row clr-align-items-center">
+  <p class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsAllowAnalogsOnly" #allowAnalogsOnly></uxg-checkbox>
     <label (click)="allowAnalogsOnly.check($event)"> &nbsp; Возможность подачи аналогов без основного предложения</label>
   </p>
-  <p class="app-row clr-align-items-center">
+  <p class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsEntireVolume" #entireVolume></uxg-checkbox>
     <label (click)="entireVolume.check($event)"> &nbsp; Заявка подается на весь закупаемый объем</label>
   </p>

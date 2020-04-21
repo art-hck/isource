@@ -1,12 +1,14 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
-import { GetRequestsService } from "../../../common/services/get-requests.service";
+import { RequestService } from "../../services/request.service";
 import { Page } from "../../../../core/models/page";
 import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
+import { AvailableFilters } from "../../models/available-filters";
+import { Observable } from "rxjs";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -14,8 +16,7 @@ import { RequestListFilterComponent } from "../../../common/components/request-l
 })
 export class RequestListComponent implements OnInit {
 
-  @ViewChild(RequestListFilterComponent, {static: false})
-             requestListFilterComponent: RequestListFilterComponent;
+  @ViewChild(RequestListFilterComponent) requestListFilterComponent: RequestListFilterComponent;
 
   currentDatagridState: DatagridStateAndFilter;
   currentStatus: string;
@@ -30,14 +31,14 @@ export class RequestListComponent implements OnInit {
   filters: any;
   requestWorkflowSteps = RequestStatus;
   requestStatusCount: RequestStatusCount;
+  availableFilters$: Observable<AvailableFilters>;
 
-  constructor(
-    protected getRequestService: GetRequestsService
-  ) { }
+  constructor(private requestService: RequestService) {}
 
   ngOnInit() {
     this.currentStatus = RequestStatus.IN_PROGRESS;
     this.getRequestStatusCount('backoffice');
+    this.availableFilters$ = this.requestService.availableFilters();
   }
 
   /**
@@ -54,11 +55,12 @@ export class RequestListComponent implements OnInit {
    * @param requestStatus
    */
   switchTab(requestStatus: RequestStatus): void {
+    this.requests = null;
     this.currentStatus = requestStatus;
     this.composeFilters();
 
     if (this.requestListFilterComponent) {
-      this.requestListFilterComponent.clearFilter();
+      this.requestListFilterComponent.resetFilter(false);
       this.currentFilters = <RequestsListFilter>{};
     }
   }
@@ -94,7 +96,7 @@ export class RequestListComponent implements OnInit {
   }
 
   getRequestListForBackoffice(startFrom, pageSize, filters): void {
-    this.getRequestService.getRequests('backoffice', startFrom, pageSize, filters).subscribe(
+    this.requestService.getRequests(startFrom, pageSize, filters).subscribe(
       (data: Page<RequestsList>) => {
         this.requests = data.entities;
         this.totalItems = data.totalCount;
@@ -107,7 +109,7 @@ export class RequestListComponent implements OnInit {
    * @param role
    */
   getRequestStatusCount(role: string) {
-    this.getRequestService.requestStatusCount(role).subscribe(
+    this.requestService.requestStatusCount().subscribe(
       (requestStatusCount: RequestStatusCount) => {
         this.requestStatusCount = requestStatusCount;
       }

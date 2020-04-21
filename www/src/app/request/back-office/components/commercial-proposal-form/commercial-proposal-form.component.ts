@@ -27,7 +27,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Output() create = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() cancel = new EventEmitter();
-  @ViewChild('contragentName', { static: false }) contragentName: ElementRef;
+  @ViewChild('contragentName') contragentName: ElementRef;
 
   newCommercialProposalForm: FormGroup;
   supplierContragentControl: FormControl;
@@ -43,9 +43,9 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    protected offersService: CommercialProposalsService,
+    private offersService: CommercialProposalsService,
     private contragentService: ContragentService,
-    private okeiService: OkeiService
+    public okeiService: OkeiService
   ) { }
 
   ngOnInit() {
@@ -146,11 +146,6 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   searchContragent = (query: string, contragents: ContragentList[]) => {
     return contragents.filter(
       c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
-  searchOkei = (query, okei: Okei[]) => {
-    return okei.filter(({name, symbol}) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-      (symbol && symbol.toLowerCase().indexOf(query.toLowerCase()) >= 0)
-    ).slice(0, 5);
   }
 
   ngOnDestroy() {

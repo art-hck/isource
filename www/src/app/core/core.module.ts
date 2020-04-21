@@ -6,16 +6,13 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { CartModule } from '../cart/cart.module';
-import { AccessGuard, BaseUrlInterceptor } from '@stdlib-ng/core';
 import { DataInterceptor } from "./interceptor/data.interceptor";
 import { ErrorInterceptor } from "./interceptor/error.interceptor";
-import { ClarityModule } from '@clr/angular';
-import { ItemsdictionaryHttpClient } from "./services/itemsdictionary-http-client.service";
-import { NsiHttpClient } from "./services/nsi-http-client.service";
-import { NsiService } from "./services/nsi.service";
 import { FeatureService } from "./services/feature.service";
 import { AuthInterceptor } from "./interceptor/auth.interceptor";
 import { MessageModule } from "../message/message.module";
+import { BaseUrlInterceptor } from "./interceptor/base-url-interceptor";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -23,7 +20,7 @@ import { MessageModule } from "../message/message.module";
     HttpClientModule,
     RouterModule,
     CartModule,
-    ClarityModule,
+    SharedModule,
     MessageModule
   ],
   exports: [
@@ -37,10 +34,6 @@ import { MessageModule } from "../message/message.module";
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DataInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    AccessGuard,
-    ItemsdictionaryHttpClient,
-    NsiHttpClient,
-    NsiService,
     FeatureService
   ],
 })

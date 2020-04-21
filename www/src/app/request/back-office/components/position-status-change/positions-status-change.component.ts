@@ -74,7 +74,7 @@ export class PositionsStatusChangeComponent implements OnInit, OnChanges {
       return position.id;
     });
     this.loading = true;
-    this.positionService.changePositionsStatus(positionIds, this.newStatus).subscribe(() => {
+    this.positionService.changePositionsStatus(positionIds, this.newStatus, 'backoffice').subscribe(() => {
       this.loading = false;
       this.changeStatus.emit(this.status);
     }, (error) => {

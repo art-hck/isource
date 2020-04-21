@@ -3,12 +3,12 @@
 </ng-template>
 
 <ng-container *ngIf="(request$ | async) as request; else loading">
-  <div class="clr-row">
-    <div class="info-card clr-col">
+  <div class="app-row">
+    <div class="info-card app-col">
       <div class="request-info">
 
         <ng-container *ngIf="userInfoService.isBackOffice()">
-          <div class="clr-row w-100">
+          <div class="app-row w-100">
             <div class="clr-col-2">
               <button class="btn btn-link"
                       [disabled]="getPositions().length === 0"
@@ -28,7 +28,7 @@
             <div class="modal-body">
               <form [formGroup]="addDocumentationForm" class="form">
                 <div formArrayName="addDocumentationListForm">
-                  <div class="clr-row w-100">
+                  <div class="app-row w-100">
                     <div class="clr-col-5">
                       <label>Наименование документа</label>
                     </div>
@@ -38,7 +38,7 @@
                   <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
                     <div class="form-block">
                       <div class="clr-form-control">
-                        <div class="clr-row w-100" formGroupName="{{i}}">
+                        <div class="app-row w-100" formGroupName="{{i}}">
                           <div class="clr-col-5">
                             <input id="name" type="text" formControlName="name" appFormControlInvalidClass="invalid"/>
                           </div>
@@ -70,7 +70,7 @@
                 <div class="position-choice">
                   <b>Выберите позиции:</b>
                 </div>
-                <div class="clr-row w-100" *ngFor="let position of getPositions()">
+                <div class="app-row w-100" *ngFor="let position of getPositions()">
                   <div class="clr-col-12">
                     <clr-checkbox-wrapper class="select-checkbox">
                       <input clrCheckbox type="checkbox"
@@ -95,8 +95,8 @@
           <div class="design-documentation-card-list"
                *ngFor="let designDocumentation of designDocumentations; index as j">
             <div class="design-documentation-card">
-              <div class="clr-row">
-                <span class="clr-col position-name">
+              <div class="app-row">
+                <span class="app-col position-name">
                   <span>{{designDocumentation.position.name}}</span>
                 </span>
                 <span>
@@ -130,24 +130,24 @@
                   </ng-container>
                 </span>
               </div>
-              <div class="clr-row clr-align-items-center">
+              <div class="app-row app-align-items-center">
                 <table class="document-list table table-noborder">
                   <thead>
-                  <tr class="clr-row clr-flex-nowrap">
+                  <tr class="app-row clr-flex-nowrap">
                     <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа</th>
                     <th class="left clr-col-lg-3 clr-col-xl-4">Документ</th>
-                    <th class="left clr-col">Дата корректировки</th>
-                    <th class="left clr-col">Дата предоставления</th>
-                    <th class="left clr-col">Дата рассмотрения</th>
+                    <th class="left app-col">Дата корректировки</th>
+                    <th class="left app-col">Дата предоставления</th>
+                    <th class="left app-col">Дата рассмотрения</th>
                     <th class="left clr-col-2" *ngIf="designDocumentation.status === designDocStatus.NEW"></th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="clr-row"
-                      *ngFor="let designDoc of designDocumentation.designDocs; let designDocModel = null">
+                  <tr class="app-row"
+                      *ngFor="let designDoc of designDocumentation.designDocs; index as i">
                     <td class="left clr-col-lg-2 clr-col-xl-3">
-                      <span *ngIf="!designDocModel">{{designDoc.name}}</span>
-                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.name"
+                      <span *ngIf="!designDocModels[i]">{{designDoc.name}}</span>
+                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].name"
                              appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left clr-col-lg-3 clr-col-xl-4">
@@ -163,21 +163,21 @@
                         <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                       </div>
                     </td>
-                    <td class="left clr-col">
-                      <span *ngIf="!designDocModel" [class.expired]="isDateExpired(designDoc.adjustmentDate)">
+                    <td class="left app-col">
+                      <span *ngIf="!designDocModels[i]" [class.expired]="isDateExpired(designDoc.adjustmentDate)">
                         {{designDoc.adjustmentDate | date :'shortDate'}}
                       </span>
-                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.adjustmentLimit"
+                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].adjustmentLimit"
                              appFormControlInvalidClass="invalid"/>
                     </td>
-                    <td class="left clr-col">
-                      <span *ngIf="!designDocModel" [class.expired]="isDateExpired(designDoc.receivingDate)">
+                    <td class="left app-col">
+                      <span *ngIf="!designDocModels[i]" [class.expired]="isDateExpired(designDoc.receivingDate)">
                         {{designDoc.receivingDate | date :'shortDate'}}
                       </span>
-                      <input *ngIf="designDocModel" type="text" required [(ngModel)]="designDocModel.receivingLimit"
+                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].receivingLimit"
                              appFormControlInvalidClass="invalid"/>
                     </td>
-                    <td class="left clr-col">
+                    <td class="left app-col">
                       <span>{{designDoc.reviewDate | date :'shortDate'}}</span>
                     </td>
                     <td class="left clr-col-2"
@@ -197,34 +197,34 @@
                           </button>
                         </div>
                       </clr-modal>
-                      <div class="clr-row clr-justify-content-end">
-                        <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModel">
+                      <div class="app-row app-justify-content-end">
+                        <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModels[i]">
                           <button (click)="confirmDeleteDoc.open()" type="button" class="btn">Удалить</button>
-                          <button (click)="designDocModel = getDesignDocModel(designDoc)" class="btn">Изменить</button>
+                          <button (click)="designDocModels[i] = getDesignDocModel(designDoc)" class="btn">Изменить</button>
                         </ng-container>
-                        <ng-container *ngIf="designDocModel">
-                          <button (click)="designDocModel = null" class="btn btn-icon">Отмена</button>
-                          <button [disabled]="isDesignDocModelInvalid(designDocModel)"
-                                  (click)="editDesignDoc(request, designDocModel, designDocumentation)" type="button"
+                        <ng-container *ngIf="designDocModels[i]">
+                          <button (click)="designDocModels[i] = null" class="btn btn-icon">Отмена</button>
+                          <button [disabled]="isDesignDocModelInvalid(designDocModels[i])"
+                                  (click)="editDesignDoc(request, designDocModels[i], designDocumentation)" type="button"
                                   class="btn btn-primary">Сохранить
                           </button>
                         </ng-container>
                       </div>
                     </td>
                   </tr>
-                  <tr class="clr-row" *ngFor="let newDesignDocModel of newDesignDocModels[j]; index as i; ">
+                  <tr class="app-row" *ngFor="let newDesignDocModel of newDesignDocModels[j]; index as i; ">
                     <td class="clr-col-4">
                       <input type="text" [(ngModel)]="newDesignDocModel.model.name"/>
                     </td>
                     <td class="clr-col-4"></td>
-                    <td class="clr-col">
+                    <td class="app-col">
                       <input type="text" [(ngModel)]="newDesignDocModel.model.adjustmentLimit"/>
                     </td>
-                    <td class="clr-col">
+                    <td class="app-col">
                       <input type="text" [(ngModel)]="newDesignDocModel.model.receivingLimit"/>
                     </td>
                     <td class="clr-col-2 ">
-                      <div class="clr-row clr-justify-content-end">
+                      <div class="app-row app-justify-content-end">
                         <button (click)="removeNewDesignDoc(j, i)" type="button" class="btn">Удалить</button>
                         <button [disabled]="isDesignDocModelInvalid(newDesignDocModel.model)"
                                 [clrLoading]="newDesignDocModel.state"
@@ -235,9 +235,9 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="clr-row" *ngIf="canEditDesignDocList(designDocumentation)">
-                    <td class="clr-col clr-justify-content-end">
-                      <div class="clr-row clr-justify-content-end">
+                  <tr class="app-row" *ngIf="canEditDesignDocList(designDocumentation)">
+                    <td class="app-col app-justify-content-end">
+                      <div class="app-row app-justify-content-end">
                         <button (click)="pushNewDesignDoc(j)" type="button"
                                 class="btn btn-primary">Добавить документ
                         </button>
@@ -253,7 +253,7 @@
 
         <div class="designDocumentation" *ngIf="userInfoService.isCustomer()">
           <div class="table designDocumentationHead">
-            <div class="clr-row">
+            <div class="app-row">
               <div class="left clr-col-4">ПОЗИЦИЯ</div>
               <div class="left clr-col-6">ДОКУМЕНТЫ</div>
               <div class="left clr-col-2"></div>
@@ -261,7 +261,7 @@
           </div>
 
           <div class="table designDocumentationBody">
-            <div class="clr-row" *ngFor="let designDocumentation of designDocumentations">
+            <div class="app-row" *ngFor="let designDocumentation of designDocumentations">
 
               <div class="left clr-col-4 title">{{designDocumentation.position.name}}</div>
 

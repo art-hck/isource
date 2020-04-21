@@ -18,6 +18,7 @@ $color_light_gray: #D4D9E2;
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+@import "~flatpickr/dist/flatpickr.min.css";
 @import "projects/uxg/src/styles/default-theme";
 @import "assets/styles/tabs.scss";
 @import "assets/styles/grid.scss";
@@ -29,6 +30,7 @@ $color_light_gray: #D4D9E2;
 @import "assets/styles/input-fields.scss";
 @import "assets/styles/checkbox-toggle.scss";
 @import "assets/styles/checkboxes.scss";
+@import "assets/styles/calendar.scss";
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -41,12 +43,12 @@ body, body p, input, select, h1, h2, h3, h4, h5, h6 {
 
 *:focus {
   outline: 0;
-  box-shadow: none;
 }
 
 body {
   color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
+  min-width: 1000px;
 }
 
 h2 {
@@ -78,7 +80,7 @@ b.required-star {
 
 /* Улучшение отступов для контента */
 .main-container .content-container .content-area {
-    padding: 10px 130px 30px 130px;
+    padding-top: 10px;
     overflow-x: hidden;
     overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
 }
@@ -355,6 +357,9 @@ $status-position-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
 $status-position-NEW: rgb(185, 185, 185);
 $status-position-TECHNICAL_PROPOSALS_PREPARATION: rgb(91, 154, 185);
 $status-position-TECHNICAL_PROPOSALS_AGREEMENT: rgb(99, 185, 154);
+$status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION: rgb(159, 56, 255);
+$status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT: rgb(159, 56, 255);
+$status-position-TCP_WINNER_SELECTED: rgb(159, 56, 255);
 $status-position-PROPOSALS_PREPARATION: rgb(40, 177, 236);
 $status-position-RESULTS_AGREEMENT: rgb(0, 183, 94);
 $status-position-WINNER_SELECTED: rgb(255, 71, 90);
@@ -362,10 +367,13 @@ $status-position-CONTRACT_AGREEMENT: rgb(97, 77, 255);
 $status-position-CONTRACT_SIGNING: rgb(159, 56, 255);
 $status-position-CONTRACTED: rgb(150, 183, 57);
 $status-position-RKD_AGREEMENT: rgb(142, 46, 90);
+$status-position-RKD_APPROVED: rgb(142, 46, 90);
 $status-position-MANUFACTURING: rgb(149, 65, 25);
 $status-position-DELIVERY: rgb(84, 199, 171);
 $status-position-DELIVERED: rgb(100, 142, 255);
 $status-position-PAID: rgb(231, 200, 35);
+$status-position-RELATED_SERVICES_EXECUTION: rgb(0, 183, 94);
+$status-position-WARRANTY: rgb(0, 183, 94);
 $status-position-COMPLETED: rgb(255, 127, 127);
 
 .status-request-NEW:before {
@@ -402,6 +410,15 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 .status-position-PROPOSALS_PREPARATION:before {
     background: $status-position-PROPOSALS_PREPARATION;
 }
+.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT:before {
+  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT;
+}
+.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION:before {
+  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION;
+}
+.status-position-TCP_WINNER_SELECTED:before {
+  background: $status-position-TCP_WINNER_SELECTED;
+}
 .status-position-RESULTS_AGREEMENT:before {
     background: $status-position-RESULTS_AGREEMENT;
 }
@@ -420,6 +437,9 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 .status-position-RKD_AGREEMENT:before {
     background: $status-position-RKD_AGREEMENT;
 }
+.status-position-RKD_APPROVED:before {
+  background: $status-position-RKD_APPROVED;
+}
 .status-position-MANUFACTURING:before {
     background: $status-position-MANUFACTURING;
 }
@@ -431,6 +451,12 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 }
 .status-position-PAID:before {
     background: $status-position-PAID;
+}
+.status-position-RELATED_SERVICES_EXECUTION:before {
+  background: $status-position-RELATED_SERVICES_EXECUTION;
+}
+.status-position-WARRANTY:before {
+  background: $status-position-WARRANTY;
 }
 .status-position-COMPLETED:before {
     background: $status-position-COMPLETED;
@@ -455,6 +481,15 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 .status-position-PROPOSALS_PREPARATION.selected {
   background: $status-position-PROPOSALS_PREPARATION !important;
 }
+.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT.selected {
+  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT !important;
+}
+.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION.selected {
+  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION !important;
+}
+.status-position-TCP_WINNER_SELECTED.selected {
+  background: $status-position-TCP_WINNER_SELECTED !important;
+}
 .status-position-RESULTS_AGREEMENT.selected {
   background: $status-position-RESULTS_AGREEMENT !important;
 }
@@ -473,6 +508,9 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 .status-position-RKD_AGREEMENT.selected {
   background: $status-position-RKD_AGREEMENT !important;
 }
+.status-position-RKD_APPROVED.selected {
+  background: $status-position-RKD_APPROVED !important;
+}
 .status-position-MANUFACTURING.selected {
   background: $status-position-MANUFACTURING !important;
 }
@@ -484,6 +522,12 @@ $status-position-COMPLETED: rgb(255, 127, 127);
 }
 .status-position-PAID.selected {
   background: $status-position-PAID !important;
+}
+.status-position-RELATED_SERVICES_EXECUTION.selected {
+  background: $status-position-RELATED_SERVICES_EXECUTION !important;
+}
+.status-position-WARRANTY.selected {
+  background: $status-position-WARRANTY !important;
 }
 .status-position-COMPLETED.selected {
   background: $status-position-COMPLETED !important;

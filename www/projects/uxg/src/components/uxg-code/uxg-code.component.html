@@ -1,1 +1,4 @@
-<code><ng-content></ng-content></code>
+<code>
+  <ng-content *ngIf="!code"></ng-content>
+  <ng-container *ngIf="code">{{code}}</ng-container>
+</code>

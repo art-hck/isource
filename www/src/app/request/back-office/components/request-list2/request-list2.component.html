@@ -1,0 +1,12 @@
+<app-request-list2
+  [requests]="requests$ | async"
+  [total]="totalCount$ | async"
+  [status]="status$ | async"
+  [statusCounts]="statusCounts$ | async"
+  [filters]="fetchFilters$ | async"
+  [pageSize]="pageSize"
+  [availableFilters]="availableFilters$ | async"
+  [activeFiltersObj]="activeFilters"
+  (filter)="fetchFilters$.next($event)"
+  (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
+></app-request-list2>

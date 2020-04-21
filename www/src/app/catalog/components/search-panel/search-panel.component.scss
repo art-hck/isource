@@ -1,10 +1,10 @@
 $border-radius: 18px;
 
-.clr-row {
+.app-row {
   margin: 0;
 }
 
-.clr-col {
+.app-col {
   padding: 0;
   position: relative;
 }
@@ -29,6 +29,7 @@ $border-radius: 18px;
   top: 0;
   margin: 0;
   height: 32px;
+  min-width: unset;
 }
 
 .btn-search {

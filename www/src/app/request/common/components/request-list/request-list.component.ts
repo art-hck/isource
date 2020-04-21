@@ -1,20 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import {RequestsList} from "../../models/requests-list/requests-list";
 import {Router} from "@angular/router";
 import {RequestType} from "../../enum/request-type";
 import { ClrDatagridStateInterface } from "@clr/angular";
-import { GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
-import { APP_CONFIG } from '@stdlib-ng/core';
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
 import { RequestStatus } from "../../enum/request-status";
 import { WebsocketService } from "../../../../websocket/websocket.service";
@@ -31,7 +20,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   appConfig: GpnmarketConfigInterface;
 
-  @ViewChild('datagridElement', { static: false }) datagridElement: ElementRef;
+  @ViewChild('datagridElement') datagridElement: ElementRef;
   datagridFilter: {};
 
   @Input() customerNameColumnShow = false;

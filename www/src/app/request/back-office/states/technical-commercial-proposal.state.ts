@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { insertItem, patch, updateItem } from "@ngxs/store/operators";
+import { append, insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
@@ -14,10 +14,13 @@ import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import Update = TechnicalCommercialProposals.Update;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import { saveAs } from 'file-saver/src/FileSaver';
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
-  proposalsStateStatus: StateStatus;
+  status: StateStatus;
   availablePositions: RequestPosition[];
 }
 
@@ -26,33 +29,19 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, proposalsStateStatus: "pristine" }
+  defaults: { proposals: null, availablePositions: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
   cache: { [reqeustId in Uuid]: TechnicalCommercialProposal[] } = {};
 
-  constructor(private rest: TechnicalCommercialProposalService) {}
-
-  @Selector()
-  static getList({proposals}: Model) {
-    return proposals;
+  constructor(private rest: TechnicalCommercialProposalService) {
   }
 
-  @Selector()
-  static proposalsLength({proposals}: Model) {
-    return proposals.length;
-  }
-
-  @Selector()
-  static availablePositions({availablePositions}: Model) {
-    return availablePositions;
-  }
-
-  @Selector()
-  static status({proposalsStateStatus}: Model) {
-    return proposalsStateStatus;
-  }
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static proposalsLength({ proposals }: Model) { return proposals.length; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
+  @Selector() static status({ status }: Model) { return status; }
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId }: Fetch) {
@@ -60,16 +49,16 @@ export class TechnicalCommercialProposalState {
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
-    ctx.setState(patch({ proposals: null, proposalsStateStatus: "fetching" as StateStatus }));
+    ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
-        ctx.setState(patch({ proposals, proposalsStateStatus: "received" as StateStatus }));
+        ctx.setState(patch({ proposals, status: "received" as StateStatus }));
         this.cache[requestId] = proposals;
       }));
   }
 
   @Action(FetchAvailablePositions)
-  fetchAvailablePositions({setState}: Context, {requestId}: FetchAvailablePositions) {
+  fetchAvailablePositions({ setState }: Context, { requestId }: FetchAvailablePositions) {
     setState(patch({ availablePositions: null }));
     return this.rest.availablePositions(requestId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
@@ -78,27 +67,27 @@ export class TechnicalCommercialProposalState {
 
   @Action(Create)
   create(ctx: Context, action: Create) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
       catchError(err => {
-        ctx.setState(patch({ proposalsStateStatus: "error" as StateStatus }));
+        ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
       }),
       tap(proposal => ctx.setState(patch({
         proposals: insertItem(proposal),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       }))),
       mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
-  );
+    );
   }
 
   @Action(Update)
-  update(ctx: Context, {publish, payload}: Update) {
-    ctx.setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+  update(ctx: Context, { publish, payload }: Update) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.update(payload).pipe(
       tap(proposal => ctx.setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       }))),
       mergeMap(proposal => {
         if (publish) {
@@ -111,13 +100,35 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Publish)
-  publish({setState}: Context, {proposal}: Publish) {
-    setState(patch({ proposalsStateStatus: "updating" as StateStatus }));
+  publish({ setState }: Context, { proposal }: Publish) {
+    setState(patch({ status: "updating" as StateStatus }));
     return this.rest.publish(proposal).pipe(
       tap((_proposal) => setState(patch({
         proposals: updateItem<TechnicalCommercialProposal>(__proposal => __proposal.id === _proposal.id, patch(_proposal)),
-        proposalsStateStatus: "received" as StateStatus
+        status: "received" as StateStatus
       })))
+    );
+  }
+
+  @Action(DownloadTemplate)
+  downloadTemplate(ctx: Context, { requestId }: DownloadTemplate) {
+    return this.rest.downloadTemplate(requestId).pipe(
+      tap((data) => saveAs(data, `RequestTechnicalCommercialProposalsTemplate.xlsx`))
+    );
+  }
+
+  @Action(UploadTemplate)
+  uploadTemplate(ctx: Context, { requestId, files }: UploadTemplate) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.uploadTemplate(requestId, files).pipe(
+      catchError(err => {
+        ctx.setState(patch({ status: "error" as StateStatus }));
+        return throwError(err);
+      }),
+      tap(proposals => ctx.setState(patch({
+        proposals: [...proposals, ...ctx.getState().proposals],
+        status: "received" as StateStatus
+      }))),
     );
   }
 }

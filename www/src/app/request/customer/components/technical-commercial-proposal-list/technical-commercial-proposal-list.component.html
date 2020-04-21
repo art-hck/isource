@@ -47,7 +47,7 @@
     <div class="app-col-aside"></div>
   </div>
 </ng-container>
-<div class="proposals-footer" #proposalsFooterRef [class.hidden]="!sentToReview?.active || !(proposalsSentToReview$ | async)?.length">
+<div class="proposals-footer" #proposalsFooterRef [class.hidden]="isProposalsFooterHidden">
   <div class="proposals-footer-body app-row app-align-items-center">
     <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
     <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>

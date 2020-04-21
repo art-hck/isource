@@ -14,7 +14,6 @@ import { UxgExamplePositionStatusComponent } from "./uxg-example-position-status
 import { UxgExampleInputComponent } from "./uxg-example-input/uxg-example-input.component";
 import { UxgExampleTypographyComponent } from "./uxg-example-typography/uxg-example-typography.component";
 import { UxgIconShapesSources, UxgModule } from "uxg";
-import { PrismModule } from "@ngx-prism/core";
 import { ClarityIcons } from "@clr/icons";
 import '@clr/icons/shapes/all-shapes';
 import { UxgExampleHomeComponent } from './uxg-example-home/uxg-example-home.component';
@@ -45,7 +44,6 @@ UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
     ReactiveFormsModule,
     CommonModule,
     ClarityModule,
-    PrismModule,
     UxgModule
   ],
   bootstrap: [AppComponent]
