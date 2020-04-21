@@ -11,16 +11,16 @@ import { Request } from "../../../common/models/request";
 })
 export class TechnicalCommercialProposalComponent {
   @Input() request: Request;
-  @Input() technicalCommercialProposal: TechnicalCommercialProposal;
+  @Input() proposal: TechnicalCommercialProposal;
   state: "view" | "edit" = "view";
   folded = false;
   getCurrencySymbol = getCurrencySymbol;
 
   get publishedCount() {
-    return this.technicalCommercialProposal?.positions.filter(({status}) => status !== 'NEW').length;
+    return this.proposal?.positions.filter(({status}) => status !== 'NEW').length;
   }
 
   get isReviewed() {
-    return this.technicalCommercialProposal?.positions.every(({status}) => ['APPROVED', 'REJECTED'].includes(status));
+    return this.proposal?.positions.length > 0 && this.proposal?.positions.every(({status}) => ['APPROVED', 'REJECTED'].includes(status));
   }
 }

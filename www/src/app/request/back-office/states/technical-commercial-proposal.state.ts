@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { catchError, mergeMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { append, insertItem, patch, updateItem } from "@ngxs/store/operators";
+import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import CreateContragent = TechnicalCommercialProposals.CreateContragent;
+import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -45,10 +46,11 @@ export class TechnicalCommercialProposalState {
   @Selector() static proposals({ proposals }: Model) { return proposals; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
-  @Selector() static proposalsByPositions({ proposals }: Model) {
+  @Selector() static proposalsByPositions({ proposals, availablePositions }: Model) {
+    // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
       proposal.positions.forEach(proposalPosition => {
-        const item = group.find(({position}) => position.id === proposalPosition.position.id);
+        const item = group.find(({ position: { id } }) => proposalPosition.position.id === id);
         if (item) {
           item.data.push({ proposal, proposalPosition });
         } else {
@@ -56,7 +58,8 @@ export class TechnicalCommercialProposalState {
         }
       });
       return group;
-    }, []);
+    }, availablePositions?.map(p => ({ position: p, data: [] })) || []);
+    // }, []).sort((a, b) => moment(a.position.updatedDate).isSameOrAfter(b.position.updatedDate) ? 1 : -1);
   }
 
   @Action(Fetch)
@@ -82,7 +85,7 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action([Create, CreateContragent])
-  create(ctx: Context, action: Create | CreateContragent) {
+  create(ctx: Context, action: Create) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.create(action.requestId, action.payload).pipe(
       catchError(err => {
@@ -97,7 +100,7 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Action(Update)
+  @Action([Update, CreatePosition])
   update(ctx: Context, { publish, payload }: Update) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.update(payload).pipe(
@@ -129,8 +132,8 @@ export class TechnicalCommercialProposalState {
   @Action(PublishByPosition)
   publishPositions(ctx: Context, action: PublishByPosition) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.publishPositions(action.proposalGroupByPositions.reduce((ids , proposalByPos) => {
-      ids.push(...proposalByPos.data.map(({proposalPosition}) => proposalPosition.id));
+    return this.rest.publishPositions(action.proposalGroupByPositions.reduce((ids, proposalByPos) => {
+      ids.push(...proposalByPos.data.map(({ proposalPosition }) => proposalPosition.id));
       return ids;
     }, [])).pipe(
       tap(proposalPositions => proposalPositions.forEach(proposalPosition => ctx.setState(patch({

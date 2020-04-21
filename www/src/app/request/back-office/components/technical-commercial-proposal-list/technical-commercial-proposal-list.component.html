@@ -123,7 +123,7 @@
         <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId">
           <app-request-technical-commercial-proposal
             [request]="request"
-            [technicalCommercialProposal]="proposal"
+            [proposal]="proposal"
           ></app-request-technical-commercial-proposal>
         </ng-container>
       </div>
@@ -171,41 +171,21 @@
     </clr-modal>
 
     <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="addProposalPositionData">
-      <h2 class="modal-title"><b>Добавить новое ТКП от ....</b></h2>
+      <h2 class="modal-title"><b>Добавить новое ТКП от {{addProposalPositionData?.proposal?.supplier.shortName}}</b></h2>
       <div class="modal-body" *ngIf="addProposalPositionData">
+        <technical-commercial-proposal-position-form
+          [position]="addProposalPositionData.position"
+          [proposal]="addProposalPositionData.proposal"
+          (close)="addProposalPositionData = null"
+        ></technical-commercial-proposal-position-form>
       </div>
     </clr-modal>
 
     <clr-modal #addContragentModal>
       <h2 class="modal-title"><b>Добавить столбик контрагента</b></h2>
       <div class="modal-body" *ngIf="addContragentModal._open">
-        <form [formGroup]="contragentForm" (ngSubmit)="submitContragent(); addContragentModal.close()">
-          <div class="app-secondary-color">
-            Вы можете добавлять контрагентов и ТКП по ним по каждой позиции отдельно, а так же с помощью шаблона или в
-            альтернативном отображении.
-          </div>
-          <uxg-dropdown-input
-            formControlName="supplier" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
-          >
-            <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
-              <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
-                {{contragent.shortName || contragent.fullName}}
-                <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>
-              </div>
-            </ng-container>
-            <ng-template #errors>
-              <div class="app-control-error" *ngIf="contragentForm.get('supplier').errors as e">
-                <span *ngIf="e.required">Обязательное поле</span>
-                <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
-              </div>
-            </ng-template>
-          </uxg-dropdown-input>
-          <div class="app-row app-justify-content-end">
-            <button uxgButton lg secondary type="button" (click)="addContragentModal.close()">Отмена</button>
-            <button uxgButton lg primary>Добавить</button>
-          </div>
-        </form>
+        <technical-commercial-proposal-contragent-form [request]="request" (close)="addContragentModal.close()">
+        </technical-commercial-proposal-contragent-form>
       </div>
     </clr-modal>
 

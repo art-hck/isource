@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDe
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { filter, shareReplay, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -16,15 +16,13 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../common/models/state-status";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -33,7 +31,7 @@ import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
-import CreateContragent = TechnicalCommercialProposals.CreateContragent;
+import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -58,10 +56,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   addProposalPositionData: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
-  } | boolean;
+  };
   form: FormGroup;
-  contragentForm: FormGroup;
-  contragents$: Observable<ContragentList[]>;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
@@ -82,7 +78,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private actions: Actions,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private contragentService: ContragentService,
     public store: Store,
     public router: Router,
     private app: AppComponent
@@ -93,6 +88,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
       tap(({id}) => this.store.dispatch(new Fetch(id))),
+      tap(({id}) => this.store.dispatch(new FetchAvailablePositions(id))),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
       filter(request => !!request),
@@ -116,12 +112,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
         }))
       });
     });
-
-    this.contragentForm = this.fb.group({
-      supplier: [null, Validators.required]
-    });
-
-    this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
 
     this.actions.pipe(
       ofActionCompleted(Create, Update, Publish, UploadTemplate),
@@ -159,31 +149,18 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   isReviewed({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.some(({proposal: p}) => p.status === 'REVIEWED');
+    return data.some(({proposal: p}) => p.status === 'REVIEWED') && data.length > 0;
   }
 
   isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW');
+    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW') && data.length > 0;
   }
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
     this.addProposalPositionData = {proposal, position};
   }
 
-  searchContragent(query: string, contragents: ContragentList[]) {
-    return contragents.filter(
-      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
-
-  submitContragent() {
-    if (this.contragentForm.invalid) { return; }
-    return this.store.dispatch(new CreateContragent(this.requestId, this.contragentForm.value));
-  }
-
-
   trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
-  trackByProposalByPos = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
-  getContragentName = ({shortName, fullName}: ContragentList) => shortName || fullName;
 
   ngOnDestroy() {
     this.destroy$.next();
