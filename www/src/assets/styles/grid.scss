@@ -4,18 +4,18 @@ body {
   min-width: 1180px;
 }
 
+.app-layout {
+  padding: 0 60px;
+  width: 100%;
+  max-width: uxg($theme, content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-
-  .app-layout {
-    padding: 0 60px;
-    width: 100%;
-    max-width: uxg($theme, content-width);
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   .app-scroll {
     overflow-y: scroll;
