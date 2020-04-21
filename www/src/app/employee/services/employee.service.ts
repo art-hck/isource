@@ -64,6 +64,6 @@ export class EmployeeService {
 
   resendEmployeeActivationLink(employeeId: Uuid) {
     const url = `users/registration/resend-activation`;
-    return this.api.post<null>(url, { userId: employeeId});
+    return this.api.post<null>(url, { userId: employeeId });
   }
 }

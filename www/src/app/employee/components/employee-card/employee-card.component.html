@@ -63,9 +63,8 @@
           <div class="app-col">
             <h3 class="sector-title">Информация о сотруднике</h3>
 
-
             <div class="activation-section" *ngIf="!employee.activated">
-              <div class="title">Профиль не активирован пользователем</div>
+              <div class="title app-warning-color">Профиль не активирован пользователем</div>
               <div class="description">Не осуществлен переход по ссылке активации</div>
 
               <button uxgButton secondary iconText [disabled]="sendingActivationLink"

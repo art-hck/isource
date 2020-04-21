@@ -15,10 +15,13 @@
 
   <div class="app-table">
     <a class="app-row app-link-no-color" [routerLink]="['/employees', employee.user.id, 'info']" *ngFor="let employee of employees">
-      <div class="app-col app-bold name app-ellipsis" [ngClass]="{ 'not-activated' : !employee.user.activated }">
+      <div class="app-col app-bold name app-ellipsis" [ngClass]="{
+        'not-activated' : !employee.user.activated,
+        'app-ghost-color' : !employee.user.activated
+      }">
         {{ employee.user.fullName }}
         <span *ngIf="!employee.user.activated">
-          (<span class="label-text">Не активирован пользоватетлем</span>)
+          (<span class="app-warning-color">Не активирован пользоватетлем</span>)
         </span>
       </div>
 
