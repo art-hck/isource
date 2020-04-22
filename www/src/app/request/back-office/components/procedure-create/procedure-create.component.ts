@@ -74,7 +74,6 @@ export class ProcedureCreateComponent implements OnInit {
       documents: this.fb.group({
         procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к заявке
         procedureLotDocuments: [ this.defaultProcedureValue("procedureLotDocuments", []) ], // Документы, относящиеся к позицям
-        procedureUploadDocuments: [ this.defaultProcedureValue("procedureUploadDocuments", [])] // Загруженные документы
       })
     });
 
@@ -130,7 +129,7 @@ export class ProcedureCreateComponent implements OnInit {
     ).subscribe(
       data => {
         this.complete.emit();
-        this.store.dispatch(new ToastActions.Success(`Процедура ${ data.procedureId } успешно создана`));
+        this.store.dispatch(new ToastActions.Success(`Процедура <b>${ data.procedureId }</b> успешно создана`));
       },
       err => this.store.dispatch(new ToastActions.Error(
         err.error && err.error.detail || "Ошибка при создании процедуры"
@@ -155,10 +154,6 @@ export class ProcedureCreateComponent implements OnInit {
 
   filterContragents(q: string, contragent: ContragentList): boolean {
     return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
-  }
-
-  addDocuments($event) {
-    this.form.get('documents.procedureUploadDocuments').setValue([...this.form.get('documents.procedureUploadDocuments').value, ...$event])
   }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;

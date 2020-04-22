@@ -33,7 +33,6 @@ export class ProcedureCreateDocumentsComponent implements AfterContentInit, Cont
         document })))
     });
 
-
     this.form.valueChanges.subscribe(value => {
       const documentIds = this.formDocuments.value.filter(data => data.checked).map(data => data.document.id);
       this.writeValue(documentIds);

@@ -11,8 +11,7 @@
         Вы можете перетащить нужный документ в окно слева, или нажать на кнопку ниже, и выбрать необходимые файлы в окне проводника
       </div>
       <div>
-        <button type="button" uxgButton secondary appUploadFile (select)="addDocument($event)"
-                [multiple]="true">{{uploadLabel}}</button>
+        <button type="button" uxgButton secondary appUploadFile (select)="addDocument($event)" [multiple]="true">{{uploadLabel}}</button>
       </div>
     </div>
   </div>
@@ -28,9 +27,9 @@
       <clr-icon shape="app-cross"></clr-icon>
     </button>
   </li>
-    <ng-template #uploadList>
-      <div class="form-group" *ngIf="uploadAvailable">
-        <a appUploadFile (select)="addDocument($event)" [multiple]="true">{{ uploadLabel }}</a>
-      </div>
-    </ng-template>
+<ng-template #uploadList>
+  <div class="form-group">
+    <a appUploadFile (select)="addDocument($event)" [multiple]="true">{{ uploadLabel }}</a>
+  </div>
+</ng-template>
 </ul>
