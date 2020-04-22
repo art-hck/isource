@@ -31,6 +31,12 @@
           Описание
         </button>
 
+        <a class="request-link"
+                [routerLink]="getRequestUrl()">
+          <clr-icon shape="align-left-text"></clr-icon>
+          Описание
+        </a>
+
         Заявка №{{ selectedRequest?.number }}
         <div class="request-items-header-sub">
           {{ selectedRequest.contragent.shortName }}
