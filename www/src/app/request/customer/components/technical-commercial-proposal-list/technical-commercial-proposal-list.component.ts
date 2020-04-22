@@ -93,13 +93,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject),
-      bufferTime(2000),
-      filter(data => data.length > 0),
-      map(data => ({...data[0], length: data.length}))
-    ).subscribe(({result, action, length}) => {
+      ofActionCompleted(Approve, Reject, ApproveMultiple),
+      takeUntil(this.destroy$)
+    ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const text = (action instanceof Approve ? 'По $0 выбран победитель' : "$1 отклонено")
+      const length = action?.proposalPositions.length ?? 1;
+      const text = (action instanceof Reject ? "$1 отклонено" : "По $0 выбран победитель")
         .replace(/\$(\d)/g, (all, i) => [
           this.pluralize.transform(length, "позиции", "позициям", "позициям"),
           this.pluralize.transform(length, "предложение", "предложения", "предложений"),
@@ -109,8 +108,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
     });
-
-
 
     this.switchView(this.view);
   }

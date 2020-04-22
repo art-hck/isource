@@ -1,5 +1,4 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
 import { RequestPosition } from "../../common/models/request-position";
 
@@ -18,7 +17,7 @@ export namespace TechnicalCommercialProposals {
 
   // Согласовать ТКП у множества позиций
   export class ApproveMultiple {
-    static readonly type = '[Technical Commercial Proposals Customer] Approve multiple';
+    static readonly type = '[Technical Commercial Proposals Customer] ApproveMultiple';
     constructor(public proposalPositions: TechnicalCommercialProposalPosition[]) {}
   }
 
