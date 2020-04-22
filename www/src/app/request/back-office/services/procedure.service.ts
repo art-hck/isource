@@ -6,18 +6,20 @@ import { Observable } from "rxjs";
 import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { ProcedureCreateRequest } from "../models/procedure-create-request";
+import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable()
 export class ProcedureService {
 
   constructor(
     protected api: HttpClient,
+    protected formDataService: FormDataService
   ) {}
 
   createProcedure(requestId: Uuid, body: ProcedureCreateRequest): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
 
-    return this.api.post<ProcedureCreateResponse>(url, body);
+    return this.api.post<ProcedureCreateResponse>(url, this.formDataService.toFormData(body));
   }
 
   /**
@@ -26,46 +28,5 @@ export class ProcedureService {
    */
   importOffersFromProcedure(request: Request): Observable<RequestOfferPosition[]> {
     return this.api.get<RequestOfferPosition[]>(`requests/backoffice/${request.id}/procedure-offers`);
-  }
-
-  /**
-   * Функция для преобразования формы в FormData, при котором можно отправлять файлы
-   *
-   * @param model
-   * @param form
-   * @param namespace
-   */
-  convertModelToFormData(model: any, form: FormData = null, namespace = ''): FormData {
-    const formData = form || new FormData();
-
-    if (model instanceof File) {
-      formData.append(namespace, model);
-      return formData;
-    }
-
-    for (const propertyName in model) {
-      if (!model.hasOwnProperty(propertyName) || !model[propertyName]) {
-        continue;
-      }
-
-      const formKey = namespace ? `${namespace}[${propertyName}]` : propertyName;
-
-      if (model[propertyName] instanceof Date) {
-        formData.append(formKey, model[propertyName].toISOString());
-      } else if (model[propertyName] instanceof Array) {
-        model[propertyName].forEach((element, index) => {
-          const tempFormKey = `${formKey}[${index}]`;
-          this.convertModelToFormData(element, formData, tempFormKey);
-        });
-      } else if (model[propertyName] instanceof File) {
-        formData.append(formKey, model[propertyName]);
-      } else if (typeof model[propertyName] === 'object') {
-        this.convertModelToFormData(model[propertyName], formData, formKey);
-      } else {
-        formData.append(formKey, model[propertyName].toString());
-      }
-    }
-
-    return formData;
   }
 }
