@@ -139,7 +139,6 @@
       <app-technical-commercial-proposal-grid-card
         *ngFor="let proposal of proposals"
         [proposal]="proposal"
-        [selectable]="true"
         [selectedProposalPosition]="selectedProposalPosition"
         [proposalPosition]="getProposalPosition(proposal, position)"
       ></app-technical-commercial-proposal-grid-card>

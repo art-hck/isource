@@ -14,7 +14,6 @@ export class ProposalGridCardComponent {
   @Input() proposal: TechnicalCommercialProposal;
   @Input() proposalPosition: TechnicalCommercialProposalPosition;
   @Input() editable: boolean;
-  @Input() selectable: boolean;
   @Input() selectedProposalPosition: FormControl;
   @Output() create = new EventEmitter();
   @Output() click = new EventEmitter();

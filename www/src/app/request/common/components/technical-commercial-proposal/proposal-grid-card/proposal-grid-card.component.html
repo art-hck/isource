@@ -18,7 +18,7 @@
           <clr-icon shape="app-check"></clr-icon>
         </div>
         <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="selectable">
+          <ng-container *ngIf="selectedProposalPosition">
             <uxg-radio-item
               [name]="proposalPosition.position.id"
               [value]="proposalPosition"
