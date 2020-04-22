@@ -59,7 +59,6 @@ export class TechnicalCommercialProposalState {
       });
       return group;
     }, availablePositions?.map(p => ({ position: p, data: [] })) || []);
-    // }, []).sort((a, b) => moment(a.position.updatedDate).isSameOrAfter(b.position.updatedDate) ? 1 : -1);
   }
 
   @Action(Fetch)
