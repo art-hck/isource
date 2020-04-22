@@ -232,10 +232,14 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     return '';
   }
 
-  getRequestUrl() {
+  getRequestUrl(): string {
     const userRole = this.user.getUserRole();
-
     return `/requests/${userRole}/${this.selectedRequest.id}`;
+  }
+
+  getPositionUrl(): string {
+    const userRole = this.user.getUserRole();
+    return `/requests/${userRole}/${this.selectedRequest.id}/${this.selectedRequestsItem.id}`;
   }
 
   getRequestItemStatus(item: RequestPositionList): { name: string, label: string } {

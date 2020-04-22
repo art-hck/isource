@@ -25,22 +25,17 @@
   <div class="request-items">
     <ng-container *ngIf="selectedRequest">
       <div class="request-items-header">
-        <button class="btn btn-link btn-description"
-                [routerLink]="getRequestUrl()">
-          <clr-icon shape="align-left-text"></clr-icon>
-          Описание
-        </button>
-
-        <a class="request-link"
-                [routerLink]="getRequestUrl()">
-          <clr-icon shape="align-left-text"></clr-icon>
-          Описание
-        </a>
-
-        Заявка №{{ selectedRequest?.number }}
-        <div class="request-items-header-sub">
-          {{ selectedRequest.contragent.shortName }}
+        <div class="request-info">
+          Заявка №{{ selectedRequest?.number }}
+          <div class="request-items-header-sub">
+            {{ selectedRequest.contragent.shortName }}
+          </div>
         </div>
+
+        <a class="request-link" [routerLink]="getRequestUrl()">
+          <uxg-icon shape="app-hamburger"></uxg-icon>
+          <span>Описание</span>
+        </a>
       </div>
 
       <div class="request-items-list">
@@ -87,12 +82,12 @@
           <span  class="position-status status-position-{{ itemStatus.name }}">{{ itemStatus.label }}</span>
         </ng-container>
 
-        <!-- @TODO: Переделать на ссылку в саму группу/позицию. -->
         <!-- Ссылка на заявку если в позиции или группе -->
-        <button *ngIf="selectedRequestsItem" class="btn btn-link btn-description" [routerLink]="getRequestUrl()">
-          <clr-icon shape="align-left-text"></clr-icon>
-          Описание
-        </button>
+        <a *ngIf="selectedRequestsItem && selectedRequestsItem.entityType === 'POSITION'" class="position-link"
+           [routerLink]="getPositionUrl()">
+          <uxg-icon shape="app-hamburger"></uxg-icon>
+          <span>Описание</span>
+        </a>
 
         <!-- Статус для заявки -->
         <span *ngIf="selectedRequest && !selectedRequestsItem" class="request-status status-request-{{ selectedRequest.status.name }}">
