@@ -6,6 +6,8 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { Uuid } from "../../../cart/models/uuid";
 import { EmployeeListRequestPosition } from "../../models/employee-list-request-position";
+import { ToastActions } from "../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-employee-card',
@@ -15,10 +17,10 @@ import { EmployeeListRequestPosition } from "../../models/employee-list-request-
 export class EmployeeCardComponent implements OnInit {
 
   @Input() employeeCardInfo: EmployeeInfo;
-
   employeeId: Uuid;
 
   employee: EmployeeInfoBrief;
+  sendingActivationLink = false;
 
   requestList: EmployeeInfoRequestItem[];
   positionsList: EmployeeListRequestPosition[];
@@ -30,7 +32,8 @@ export class EmployeeCardComponent implements OnInit {
     private bc: UxgBreadcrumbsService,
     private title: Title,
     private route: ActivatedRoute,
-    protected employeeService: EmployeeService
+    protected employeeService: EmployeeService,
+    private store: Store
   ) { }
 
   ngOnInit() {
@@ -54,6 +57,23 @@ export class EmployeeCardComponent implements OnInit {
 
       subscription.unsubscribe();
     });
+  }
+
+  resendActivationLink(userId): void {
+    this.sendingActivationLink = true;
+
+    const subscription = this.employeeService.resendEmployeeActivationLink(userId).subscribe(
+      () => {
+        this.store.dispatch(new ToastActions.Success("Ссылка на активацию повторно отправлена пользователю"));
+        this.sendingActivationLink = false;
+        subscription.unsubscribe();
+      },
+      () => {
+        this.store.dispatch(new ToastActions.Error("Не удалось повторно отправить ссылку на активацию"));
+        this.sendingActivationLink = false;
+        subscription.unsubscribe();
+      }
+    );
   }
 
 }

@@ -63,19 +63,17 @@
           <div class="app-col">
             <h3 class="sector-title">Информация о сотруднике</h3>
 
+            <div class="activation-section" *ngIf="!employee.activated">
+              <div class="title app-warning-color">Профиль не активирован пользователем</div>
+              <div class="description">Не осуществлен переход по ссылке активации</div>
 
-<!--            todo скрыто временно -->
-<!--            <ng-container *ngIf="false">-->
-<!--              <div>Профиль не активирован пользователем</div>-->
-<!--              <div>Не осуществлен переход по ссылке активации</div>-->
-
-<!--              <button uxgButton secondary iconText-->
-<!--                      (click)="resendActivationLink()">-->
-<!--                <clr-icon shape="app-circle-arrow"></clr-icon>-->
-<!--                Редактировать контрагента-->
-<!--              </button>-->
-<!--            </ng-container>-->
-
+              <button uxgButton secondary iconText [disabled]="sendingActivationLink"
+                      class="resend-btn"
+                      (click)="resendActivationLink(employee.id)">
+                <clr-icon shape="app-clockwise-arrow"></clr-icon>
+                Отправить повторно
+              </button>
+            </div>
 
             <div class="app-ghost-color">ФИО</div>
             <div>{{ employee.fullName }}</div>
