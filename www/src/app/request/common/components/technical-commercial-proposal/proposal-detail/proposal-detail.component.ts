@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TechnicalCommercialProposalPosition } from "../../../models/technical-commercial-proposal-position";
-import * as moment from "moment";
 import { getCurrencySymbol } from "@angular/common";
 import { TechnicalCommercialProposal } from "../../../models/technical-commercial-proposal";
+import { TechnicalCommercialProposalHelperService } from "../../../services/technical-commercial-proposal-helper.service";
 
 @Component({
   selector: 'app-technical-commercial-proposal-detail',
   templateUrl: './proposal-detail.component.html',
-  styleUrls: ['./proposal-detail.component.scss']
+  styleUrls: ['./proposal-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProposalDetailComponent {
 
@@ -15,12 +16,5 @@ export class ProposalDetailComponent {
   @Input() proposalPosition: TechnicalCommercialProposalPosition;
   getCurrencySymbol = getCurrencySymbol;
 
-  isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.position.isDeliveryDateAsap ||
-      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
-  }
-
-  isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.quantity === proposalPosition.position.quantity;
-  }
+  constructor(public helper: TechnicalCommercialProposalHelperService) {}
 }
