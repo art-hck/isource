@@ -13,6 +13,33 @@
   margin: 0;
 }
 
+.request-info {
+  display: inline-block;
+}
+
+a.request-link, a.position-link  {
+  font-size: 14px;
+  line-height: 24px;
+  display: flex;
+  vertical-align: middle;
+  color: #999999;
+
+  & span {
+    margin-left: 5px;
+  }
+
+  &:hover {
+    color: black;
+  }
+}
+
+a.request-link {
+  float: right;
+}
+a.position-link {
+  margin-left: 15px;
+}
+
 .wrapper {
   display: flex;
   flex: 1 1 auto;
