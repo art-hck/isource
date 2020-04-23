@@ -5,6 +5,7 @@ import { TechnicalCommercialProposal } from "../../common/models/technical-comme
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
+import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
@@ -29,6 +30,11 @@ export class TechnicalCommercialProposalService {
   publish({id}: TechnicalCommercialProposal) {
     const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);
+  }
+
+  publishPositions(positionIds: Uuid[]) {
+    const url = `requests/backoffice/technical-commercial-proposals/send-positions-to-review`;
+    return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionIds });
   }
 
   downloadTemplate(requestId: Uuid) {

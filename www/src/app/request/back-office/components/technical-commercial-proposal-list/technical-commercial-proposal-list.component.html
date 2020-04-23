@@ -12,7 +12,8 @@
         <div class="app-table app-no-border">
           <div class="app-row app-align-items-center">
             <ng-container *ngIf="view === 'grid'">
-              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
+              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
+              </uxg-checkbox>
               <uxg-popover #selectPopover>
                 <button uxgButton uxgPopoverTrigger link icon><clr-icon shape="app-triangle down"></clr-icon></button>
                 <div *uxgPopoverContent>
@@ -51,7 +52,7 @@
               </button>
 
               <!-- Добавить столбец контрагента  -->
-              <button *ngSwitchCase="'grid'" uxgButton secondary iconText (click)="showForm = true">
+              <button *ngSwitchCase="'grid'" uxgButton secondary iconText (click)="addContragentModal.open()">
                 <clr-icon shape="app-plus"></clr-icon>
                 <span>Контрагент</span>
               </button>
@@ -63,7 +64,8 @@
               </button>
 
               <!-- Отправить на согласование -->
-              <button *ngSwitchCase="'grid'" uxgButton primary [disabled]="selectedPositions?.length === 0"
+              <button *ngSwitchCase="'grid'" uxgButton primary
+                      [disabled]="selectedPositions?.length === 0 || (status$ | async) !=='received'"
                       (click)="store.dispatch(publishPositions(selectedPositions))">
                 Отправить на согласование
               </button>
@@ -71,11 +73,11 @@
           </div>
         </div>
       </div>
-      <div @sidebarHide *ngIf="view === 'list'" class="app-col app-col-aside"></div>
+      <div @sidebarHide *ngIf="view === 'list'" class="app-col app-col-aside detachable"></div>
     </div>
 
     <!-- grid -->
-    <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form">
+    <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
       <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
       </app-technical-commercial-proposal-grid-contragents-row>
 
@@ -91,10 +93,14 @@
             <clr-icon shape="app-check"></clr-icon>
             <span>Выбран победитель</span>
           </div>
+          <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
+            <uxg-icon shape="app-waiting"></uxg-icon>
+            <span>На согласовании</span>
+          </div>
         </div>
         <div #gridRow class="grid-row app-row app-section items-row app-layout">
           <app-technical-commercial-proposal-grid-card
-            *ngFor="let proposal of proposals"
+            *ngFor="let proposal of proposals; trackBy: trackByProposalId"
             [proposal]="proposal"
             [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
             [editable]="proposal.status==='DRAFT' && !isReviewed(proposalsByPos)"
@@ -117,7 +123,7 @@
         <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId">
           <app-request-technical-commercial-proposal
             [request]="request"
-            [technicalCommercialProposal]="proposal"
+            [proposal]="proposal"
           ></app-request-technical-commercial-proposal>
         </ng-container>
       </div>
@@ -165,8 +171,21 @@
     </clr-modal>
 
     <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="addProposalPositionData">
-      <h2 class="modal-title"><b>Добавить новое ТКП от ....</b></h2>
+      <h2 class="modal-title"><b>Добавить новое ТКП от {{addProposalPositionData?.proposal?.supplier.shortName}}</b></h2>
       <div class="modal-body" *ngIf="addProposalPositionData">
+        <technical-commercial-proposal-position-form
+          [position]="addProposalPositionData.position"
+          [proposal]="addProposalPositionData.proposal"
+          (close)="addProposalPositionData = null"
+        ></technical-commercial-proposal-position-form>
+      </div>
+    </clr-modal>
+
+    <clr-modal #addContragentModal>
+      <h2 class="modal-title"><b>Добавить столбик контрагента</b></h2>
+      <div class="modal-body" *ngIf="addContragentModal._open">
+        <technical-commercial-proposal-contragent-form [request]="request" (close)="addContragentModal.close()">
+        </technical-commercial-proposal-contragent-form>
       </div>
     </clr-modal>
 

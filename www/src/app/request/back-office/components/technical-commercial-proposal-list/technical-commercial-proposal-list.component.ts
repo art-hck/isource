@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Observable, Subject, timer } from "rxjs";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
@@ -16,12 +16,13 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { FormArray, FormBuilder } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
+import { StateStatus } from "../../../common/models/state-status";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -30,6 +31,7 @@ import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -44,6 +46,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
@@ -53,8 +56,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   addProposalPositionData: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
-  } | boolean;
-  readonly form = this.fb.group({ checked: false });
+  };
+  form: FormGroup;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
@@ -63,7 +66,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
-      .filter(({value}) => value.checked)
+      ?.filter(({value}) => value.checked)
       .map(({value}) => (value.item));
   }
 
@@ -85,6 +88,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
       tap(({id}) => this.store.dispatch(new Fetch(id))),
+      tap(({id}) => this.store.dispatch(new FetchAvailablePositions(id))),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
       filter(request => !!request),
@@ -97,16 +101,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     ).subscribe();
 
     this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
-      this.form.removeControl("positions");
-      this.form.addControl("positions", this.fb.array(
-        items.map(item => {
+      this.form = this.fb.group({
+        checked: false,
+        positions: this.fb.array(items.map(item => {
           const form = this.fb.group({ checked: false, item });
-          if (this.isReviewed(item)) {
+          if (this.isReviewed(item) || this.isOnReview(item) || item.data.length === 0) {
             form.get("checked").disable();
           }
           return form;
-        })
-      ));
+        }))
+      });
     });
 
     this.actions.pipe(
@@ -145,7 +149,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   isReviewed({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.some(({proposal: p}) => p.status === 'REVIEWED');
+    return data.some(({proposal: p}) => p.status === 'REVIEWED') && data.length > 0;
+  }
+
+  isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
+    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW') && data.length > 0;
   }
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {

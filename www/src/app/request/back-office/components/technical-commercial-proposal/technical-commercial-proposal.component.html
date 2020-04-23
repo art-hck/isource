@@ -1,31 +1,26 @@
-<ng-container *ngIf="technicalCommercialProposal as proposal" [ngSwitch]="state">
+<ng-container *ngIf="proposal as proposal" [ngSwitch]="state">
   <div class="app-card" *ngSwitchCase="'view'">
     <div class="app-row app-align-items-center">
       <h3 class="app-col">
-        <ng-container *ngIf="proposal.supplier; else noname">
         <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
-        </ng-container>
-        <ng-template #noname>Поставщик</ng-template>
       </h3>
-      <ng-container [ngSwitch]="proposal.status">
-        <div class="app-ghost-color app-bold" *ngSwitchCase="'DRAFT'">
-          <clr-icon shape="app-doc" class="is-solid"></clr-icon>
-          Черновик
-        </div>
-        <div class="app-ghost-color app-bold" *ngSwitchCase="'SENT_TO_REVIEW'">
-          <clr-icon shape="app-waiting"></clr-icon>
-          На рассмотрении
-        </div>
-        <div class="app-success-color app-bold" *ngSwitchCase="'REVIEWED'">
-          <clr-icon shape="app-check"></clr-icon>
-          Рассмотрено
-        </div>
+      <div class="app-ghost-color app-bold" *ngIf="publishedCount === 0">
+        <clr-icon shape="app-draft"></clr-icon>
+        <span>Черновик</span>
+      </div>
+      <div class="app-ghost-color app-bold" *ngIf="!isReviewed && publishedCount > 0">
+        <uxg-icon shape="app-waiting" class="is-solid"></uxg-icon>
+        <span>Отправлено {{ publishedCount }} из {{ proposal.positions.length }}</span>
+      </div>
+      <div class="app-success-color app-bold" *ngIf="isReviewed">
+        <clr-icon shape="app-check"></clr-icon>
+        <span>Рассмотрено</span>
+      </div>
 
-      </ng-container>
-      <button uxgButton icon link (click)="state = 'edit'" [disabled]="proposal.status!=='DRAFT'">
+      <button uxgButton icon link (click)="state = 'edit'" [disabled]="publishedCount > 0">
         <clr-icon shape="app-pen"></clr-icon>
       </button>
-      <button uxgButton icon link (click)="folded = !folded">
+      <button uxgButton icon link (click)="folded = !folded" [disabled]="proposal.positions.length === 0">
         <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
       </button>
     </div>
@@ -61,8 +56,11 @@
           <div class="status text-center"
                [class.app-ghost-color]="item.status !== 'APPROVED'"
                [class.app-success-color]="item.status === 'APPROVED'"
+               [ngSwitch]="item.status"
           >
-            <clr-icon [attr.shape]="item.status==='NEW' ? 'app-unknown' : 'app-check'"></clr-icon>
+            <uxg-icon shape="app-draft" *ngSwitchCase="'NEW'"></uxg-icon>
+            <uxg-icon shape="app-unknown" *ngSwitchCase="'SENT_TO_REVIEW'"></uxg-icon>
+            <uxg-icon shape="app-check" *ngSwitchDefault></uxg-icon>
           </div>
         </div>
 
