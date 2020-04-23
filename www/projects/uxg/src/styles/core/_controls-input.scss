@@ -56,8 +56,6 @@
       &:disabled {
         color: uxg($theme, color-font-ghost);
         cursor: default;
-        background: uxg($theme, color-control-secondary);
-        border-color: uxg($theme, color-secondary);
       }
     }
 
