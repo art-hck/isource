@@ -41,7 +41,7 @@
           <div class="app-row">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
-              <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid"/>
+              <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid" [textMask]="phoneMask" />
             </div>
             <div class="clr-col-6 agreement">
               <uxg-checkbox class="app-control" #agreement formControlName="agreement"></uxg-checkbox>

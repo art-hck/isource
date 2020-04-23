@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TextMaskModule } from 'angular2-text-mask';
 import { CommonModule } from '@angular/common';
 import { RegistrationComponent } from "./components/registration/registration.component";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -18,7 +19,8 @@ import { ActivationFormComponent } from './components/activation-form/activation
     ReactiveFormsModule,
     NgxDadataModule,
     CommonModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    TextMaskModule
   ],
   declarations: [
     RegistrationComponent,

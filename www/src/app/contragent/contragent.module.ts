@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
 import { EmployeeModule } from "../employee/employee.module";
 import { ContragentSharedModule } from "./contragent-shared.module";
+import { TextMaskModule } from "angular2-text-mask";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ContragentSharedModule } from "./contragent-shared.module";
     CommonModule,
     ContragentRoutingModule,
     EmployeeModule,
-    ContragentSharedModule
+    ContragentSharedModule,
+    TextMaskModule
   ],
   declarations: [
     ContragentListViewComponent,

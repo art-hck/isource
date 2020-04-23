@@ -18,6 +18,7 @@ import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
 import {User} from "../../../user/models/user";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -35,6 +36,13 @@ export class ContragentRegistrationComponent implements OnInit {
   subscription = new Subscription();
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
+
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   get isEditing(): boolean {
     return !!this.contragentId;
