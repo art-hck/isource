@@ -138,6 +138,7 @@
             [positions]="positions"
             [contragents]="getContragents(proposals)"
             (complete)="procedureModal.close()"
+            (cancel)="procedureModal.close()"
           ></app-request-procedure-create>
         </ng-container>
       </div>

@@ -28,6 +28,7 @@ export class ProcedureCreateComponent implements OnInit {
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: "create" | "prolong" | "bargain" = "create";
   @Output() complete = new EventEmitter();
+  @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
 
   form: FormGroup;

@@ -1,4 +1,4 @@
-<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="complete.emit()">
+<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="cancel.emit()">
   <uxg-wizzard-steps [wizzard]="wizzard"></uxg-wizzard-steps>
   <br/>
   <br/>

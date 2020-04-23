@@ -23,6 +23,7 @@
           [contragents]="contragents$ | async"
           (updateSelectedPositions)="updateContragents($event)"
           (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
+          (cancel)="procedureModal.close()"
         ></app-request-procedure-create>
       </div>
     </clr-modal>
