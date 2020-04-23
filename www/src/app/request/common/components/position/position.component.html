@@ -6,8 +6,8 @@
 
       <div class="app-col">
         <span class="app-ghost-color">Изменена: </span>
-        <span>{{ position.createdDate | date : "dd.MM.yyyy" }} </span>
-        <span class="app-ghost-color">{{ position.createdDate | date : "hh:mm" }}</span>
+        <span>{{ position.updatedDate | date : "dd.MM.yyyy" }} </span>
+        <span class="app-ghost-color">{{ position.updatedDate | date : "HH:mm" }}</span>
       </div>
 
       <ng-container *ngIf="position.group">
