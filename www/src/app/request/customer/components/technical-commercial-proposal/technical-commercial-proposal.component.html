@@ -1,4 +1,4 @@
-<div class="app-card">
+<div class="app-card" *ngIf="view === 'list'">
   <!-- title -->
   <div class="app-row app-align-items-center">
     <h3 class="app-col">{{proposalByPos.position.name}}</h3>
@@ -43,7 +43,7 @@
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
           <div class="app-col quantity ">
-            <div [ngClass]="!isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
+            <div [ngClass]="!helper.isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
               <div class="app-row app-align-items-center">
                 <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
                 <clr-icon shape="app-narrow-arrow"
@@ -57,7 +57,7 @@
             <span class="app-ghost-color">{{getCurrencySymbol(proposalPos.currency, "narrow")}}</span>
           </div>
           <div class="app-col date">
-            <span [ngClass]="!isDateValid(proposalPos) ? 'app-error-color app-bold' : ''">
+            <span [ngClass]="!helper.isDateValid(proposalPos) ? 'app-error-color app-bold' : ''">
               {{proposalPos.deliveryDate | date:"dd.MM.yyyy"}}
             </span>
           </div>
@@ -89,10 +89,10 @@
             ></app-technical-commercial-proposal-detail>
             <div class="app-row">
               <div class="app-col app-bold">
-                <div class="app-success-color" *ngIf="isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
-                <div class="app-success-color" *ngIf="isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
-                <div class="app-error-color" *ngIf="!isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
-                <div class="app-error-color" *ngIf="!isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
+                <div class="app-success-color" *ngIf="helper.isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
+                <div class="app-success-color" *ngIf="helper.isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
+                <div class="app-error-color" *ngIf="!helper.isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
+                <div class="app-error-color" *ngIf="!helper.isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
               </div>
               <div *ngIf="!isReviewed">
                 <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
@@ -126,3 +126,22 @@
     </ng-container>
   </ng-container>
 </div>
+
+<ng-container *ngIf="view === 'grid'">
+  <ng-container *ngIf="proposalByPos.position as position">
+    <div class="app-row app-align-items-center app-section app-layout">
+      <div><b>{{position.name}}</b></div>
+      <div class="app-ghost-color">&nbsp;| {{position.quantity}} {{ position.measureUnit}}</div>
+      <div class="app-ghost-color">&nbsp;| {{position.deliveryDate | date:"dd.MM.yyyy"}}</div>
+    </div>
+
+    <div #gridRow class="grid-row app-row app-section items-row app-layout">
+      <app-technical-commercial-proposal-grid-card
+        *ngFor="let proposal of proposals"
+        [proposal]="proposal"
+        [selectedProposalPosition]="selectedProposalPosition"
+        [proposalPosition]="getProposalPosition(proposal, position)"
+      ></app-technical-commercial-proposal-grid-card>
+    </div>
+  </ng-container>
+</ng-container>

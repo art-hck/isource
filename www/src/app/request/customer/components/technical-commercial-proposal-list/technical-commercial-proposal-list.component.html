@@ -38,32 +38,27 @@
             [proposals]="proposals$ | async">
           </app-technical-commercial-proposal-grid-contragents-row>
 
-          <div class="position-row" *ngFor="let proposalsByPos of proposalsByPos; index as i">
-            <div class="app-row app-align-items-center app-section app-layout" *ngIf="proposalsByPos.position as position">
-              <div><b>{{position.name}}</b></div>
-              <div class="app-ghost-color">&nbsp;| {{position.quantity}} {{ position.measureUnit}}</div>
-              <div class="app-ghost-color">&nbsp;| {{position.deliveryDate | date:"dd.MM.yyyy"}}</div>
-            </div>
+          <app-request-technical-commercial-proposal
+            class="position-row"
+            #proposalOnReview
+            [chooseBy$]="chooseBy$"
+            [proposals]="proposals$ | async"
+            *ngFor="let positionProposals of proposalsByPos; trackBy: trackByPositionId"
+            [requestId]="requestId"
+            [view]="'grid'"
+            [proposalByPos]="positionProposals">
+          </app-request-technical-commercial-proposal>
 
-            <div #gridRow class="grid-row app-row app-section items-row app-layout">
-              <app-technical-commercial-proposal-grid-card
-                #proposalsOnReviewGridCard
-                *ngFor="let proposal of proposals$ | async"
-                [proposal]="proposal"
-                [selectable]="true"
-                [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
-              ></app-technical-commercial-proposal-grid-card>
-            </div>
-          </div>
         </div>
 
         <!-- list -->
         <ng-container *ngSwitchCase="'list'">
           <app-request-technical-commercial-proposal
-            #proposalsOnReview
+            #proposalOnReview
             [chooseBy$]="chooseBy$"
             *ngFor="let positionProposals of proposalsByPos; trackBy: trackByPositionId"
             [requestId]="requestId"
+            [view]="'list'"
             [proposalByPos]="positionProposals">
           </app-request-technical-commercial-proposal>
         </ng-container>

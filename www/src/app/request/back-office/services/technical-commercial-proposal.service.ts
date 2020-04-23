@@ -56,8 +56,4 @@ export class TechnicalCommercialProposalService {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals/available-request-positions`;
     return this.api.get<RequestPosition[]>(url);
   }
-
-  private delayPipe(min, max) {
-    return delay(Math.floor(min + Math.random() * (max + 1 - min)));
-  }
 }
