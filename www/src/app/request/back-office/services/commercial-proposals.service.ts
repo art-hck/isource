@@ -140,9 +140,9 @@ export class CommercialProposalsService {
     return formData;
   }
 
-  prolongateProcedureEndDate(requestId, prolongationProcedureId, newProcedureEndDate): Observable<any> {
-    const url = `requests/backoffice/${requestId}/procedures/${prolongationProcedureId}/change-end-registration`;
-    return this.api.post(url, { dateEndRegistration: newProcedureEndDate });
+  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration) {
+    const url = `requests/backoffice/${requestId}/procedures/${procedureId}/prolong`;
+    return this.api.post(url, { dateEndRegistration });
   }
 
   downloadAnalyticalReport(requestId: Uuid) {
