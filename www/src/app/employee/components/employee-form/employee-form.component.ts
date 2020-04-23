@@ -10,6 +10,7 @@ import { EmployeeInfoBrief } from "../../models/employee-info";
 })
 export class EmployeeFormComponent implements OnInit {
   @Input() employee: EmployeeInfoBrief;
+  @Input() employeeActiveTabType: string;
   @Input() roleSelectorDisabled = true;
   @Output() cancel = new EventEmitter();
   @Output() addEmployee = new EventEmitter<EmployeeInfoBrief>();
@@ -35,7 +36,7 @@ export class EmployeeFormComponent implements OnInit {
       lastName: [this.defaultEmployeeValue('lastName', null), [Validators.required, CustomValidators.cyrillicName]],
       middleName: [this.defaultEmployeeValue('middleName', null)],
       position: [this.defaultEmployeeValue('position', null), [Validators.required, CustomValidators.cyrillic]],
-      role: [this.defaultEmployeeValue('role', 'BACKOFFICE_BUYER')],
+      role: [this.employeeActiveTabType, [Validators.required]],
     });
     if (this.isEditing) {
       this.form.get('username').disable();
