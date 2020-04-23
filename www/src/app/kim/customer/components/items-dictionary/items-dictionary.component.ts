@@ -28,10 +28,11 @@ export class ItemsDictionaryComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(({query}) => {
-      if (query) {
-        this.onSearch(query);
-      } else {
-        this.store.dispatch(new Clear());
+        if (query) {
+          this.onSearch(query);
+        } else {
+          this.store.dispatch(new Clear());
+        }
       }
     );
   }

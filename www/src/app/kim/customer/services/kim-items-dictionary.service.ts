@@ -6,8 +6,8 @@ import { KimDictionaryItem } from "../../common/models/kim-dictionary-item";
 export class KimItemsDictionaryService {
   constructor(private api: HttpClient) {}
 
-  search(name: string) {
-    const url = `kim/customer/items-dictionary/search`;
-    return this.api.post<KimDictionaryItem[]>(url, {name: name});
+  search(query: string) {
+    const url = `kim/customer/dictionary-positions/search`;
+    return this.api.post<KimDictionaryItem[]>(url, {query: query});
   }
 }

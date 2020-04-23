@@ -29,10 +29,10 @@ export class ItemsDictionaryState {
   constructor(private rest: KimItemsDictionaryService) {}
 
   @Action(Search)
-  search({setState}: Context, {name}: Search) {
+  search({setState}: Context, {query}: Search) {
     setState(patch({ status: "fetching" as StateStatus }));
 
-    return this.rest.search(name).pipe(
+    return this.rest.search(query).pipe(
       tap(itemsDictionary => setState(patch({ itemsDictionary, status: "received" as StateStatus } )))
     );
   }
