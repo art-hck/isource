@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, mergeMap, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService } from "uxg";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -7,7 +7,7 @@ import { RequestService } from "../../services/request.service";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
-import { Observable, Subject } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Select, Store } from "@ngxs/store";
@@ -16,6 +16,7 @@ import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -39,12 +40,12 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    public store: Store,
     private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private requestService: RequestService,
-    public store: Store,
-    protected offersService: CommercialProposalsService,
-    protected router: Router
+    private offersService: CommercialProposalsService,
+    private contragentService: ContragentService
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -113,7 +114,9 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   updateContragents(positions: RequestPosition[]) {
-    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions);
+    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions).pipe(mergeMap(
+        contragents => contragents.length === 0 ? this.contragentService.getContragentList() : of(contragents)
+      ));
   }
 
   ngOnDestroy() {
