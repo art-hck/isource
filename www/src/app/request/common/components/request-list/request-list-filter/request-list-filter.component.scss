@@ -7,9 +7,15 @@ app-request-list-filter-section:not(:last-child):after {
 }
 
 .request-list-filter {
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.filter-form-block {
+  max-height: 100%;
+  overflow: hidden auto;
+  padding-right: 15px;
 }
 
 .filter-header {

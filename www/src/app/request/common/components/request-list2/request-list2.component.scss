@@ -57,6 +57,7 @@
   .app-col-aside:not(.opened) {
     margin-right: -320px;
     transition: margin 0.3s ease-out;
+    box-shadow: none;
   }
 
   .app-col-aside.opened {
