@@ -93,7 +93,7 @@ const RequestCommonModuleDeclarations = [
 ];
 
 @NgModule({
-  declarations: [RequestCommonModuleDeclarations],
+  declarations: RequestCommonModuleDeclarations,
   imports: [
     RouterModule,
     SharedModule,
