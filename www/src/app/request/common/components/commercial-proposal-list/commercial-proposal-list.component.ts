@@ -41,6 +41,8 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() downloadReport = new EventEmitter();
 
   supplier: ContragentList;
+  positionProlongedProcedure: RequestPosition;
+  readonly moment = moment;
 
   get formPositions() {
     return this.form.get('positions') as FormArray;

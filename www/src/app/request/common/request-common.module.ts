@@ -48,6 +48,7 @@ import { RequestList2Component } from "./components/request-list2/request-list2.
 import { ProposalGridContragentsComponent } from "./components/technical-commercial-proposal/proposal-grid-contragents/proposal-grid-contragents.component";
 import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import { ProposalDetailComponent } from "./components/technical-commercial-proposal/proposal-detail/proposal-detail.component";
+import { ProlongateProcedureComponent } from "./components/commercial-proposal-list/prolongate-procedure/prolongate-procedure.component";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -88,10 +89,11 @@ const RequestCommonModuleDeclarations = [
   ProposalGridContragentsComponent,
   ProposalGridCardComponent,
   ProposalDetailComponent,
+  ProlongateProcedureComponent,
 ];
 
 @NgModule({
-  declarations: RequestCommonModuleDeclarations,
+  declarations: [RequestCommonModuleDeclarations],
   imports: [
     RouterModule,
     SharedModule,
