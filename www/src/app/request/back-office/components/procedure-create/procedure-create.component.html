@@ -77,7 +77,7 @@
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
         <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg uxgDatepicker formControlName="dateEndRegistration">
+          <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
           <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
           <label class="app-control-icon" (click)="dateEndRegistration.focus()">
             <clr-icon shape="app-calendar-big" size="24"></clr-icon>
@@ -105,7 +105,7 @@
       <app-request-procedure-create-properties
         formControlName="properties"
         [action]="action"
-        [publicAccess]="publicAccess"
+        [publicAccess]="contragents?.length < 2"
       ></app-request-procedure-create-properties>
     </div>
     <hr class="divider"/>
@@ -120,7 +120,7 @@
     <br/>
     <br/>
     <select-items-with-search
-      *ngIf="contragents"
+      *ngIf="contragents?.length ? contragents : (allContragents$ | async) as contragents; else loading"
       class="select-list select-list-contragents"
       formControlName="privateAccessContragents"
       placeholder="Наименование контрагента или ИНН"
@@ -145,6 +145,11 @@
         </div>
       </ng-template>
     </select-items-with-search>
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
   </div>
 
   <!-- Documents -->

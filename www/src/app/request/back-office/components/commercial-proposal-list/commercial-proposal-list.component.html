@@ -21,7 +21,6 @@
           [request]="request"
           [positions]="positionsWithOffers.positions"
           [contragents]="contragents$ | async"
-          [publicAccess]="false"
           (updateSelectedPositions)="updateContragents($event)"
           (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
         ></app-request-procedure-create>

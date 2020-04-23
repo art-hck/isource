@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, mergeMap, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService } from "uxg";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Select, Store } from "@ngxs/store";
@@ -114,9 +114,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   updateContragents(positions: RequestPosition[]) {
-    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions).pipe(mergeMap(
-        contragents => contragents.length === 0 ? this.contragentService.getContragentList() : of(contragents)
-      ));
+    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions.map(({id}) => id));
   }
 
   ngOnDestroy() {

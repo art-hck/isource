@@ -47,9 +47,7 @@
           <app-request-procedure-create
             *ngIf="procedureModal._open"
             [request]="request"
-            [publicAccess]="true"
             [positions]="positions"
-            [contragents]="contragents$ | async"
             (complete)="procedureModal.close()"
           ></app-request-procedure-create>
         </ng-container>
