@@ -8,7 +8,6 @@ import { ItemsDictionaryActions } from "../actions/items-dictionary.actions";
 import Search = ItemsDictionaryActions.Search;
 import { KimItemsDictionaryService } from "../services/kim-items-dictionary.service";
 import Clear = ItemsDictionaryActions.Clear;
-import AddItem = ItemsDictionaryActions.AddItem;
 
 export interface KimItemsDictionaryStateModel {
   itemsDictionary: KimDictionaryItem[];
@@ -41,13 +40,5 @@ export class ItemsDictionaryState {
   @Action(Clear)
   clear({setState}: Context) {
     setState(patch({itemsDictionary: null, status: "received" as StateStatus}));
-  }
-
-  @Action(AddItem)
-  addItem(ctx: Context, {item}: AddItem) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.addItem(item).pipe(
-      tap(() => ctx.setState(patch({status: "received" as StateStatus})))
-    );
   }
 }

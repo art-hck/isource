@@ -1,10 +1,7 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { KimDictionaryItem } from "./kim-dictionary-item";
 
 export class KimCartItem {
-  id: Uuid;
-  name: string;
-  measureUnits: string;
-  positionCode: string;
-  price?: number;
+  kimDictionaryPosition: KimDictionaryItem;
   quantity: number;
 }

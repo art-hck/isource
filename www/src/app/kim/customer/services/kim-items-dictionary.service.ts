@@ -10,9 +10,4 @@ export class KimItemsDictionaryService {
     const url = `kim/customer/dictionary-positions/search`;
     return this.api.post<KimDictionaryItem[]>(url, {query: query});
   }
-
-  addItem(item: KimDictionaryItem) {
-    const url = `kim/customer/items-dictionary/add-item`;
-    return this.api.post<KimDictionaryItem[]>(url, {positionId: item.id});
-  }
 }
