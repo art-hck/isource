@@ -11,6 +11,9 @@ import { KimCustomerRoutingModule } from "./kim-customer-routing.module";
 import { PriceOrderFormPositionsComponent } from './components/price-order-form/form-positions/form-positions.component';
 import { PriceOrderFormPositionsParamsComponent } from './components/price-order-form/form-positions-params/form-positions-params.component';
 import { TextMaskModule } from "angular2-text-mask";
+import { ItemsDictionaryComponent } from './components/items-dictionary/items-dictionary.component';
+import { ItemsDictionaryState } from "./states/items-dictionary.state";
+import { KimItemsDictionaryService } from "./services/kim-items-dictionary.service";
 
 
 @NgModule({
@@ -21,15 +24,18 @@ import { TextMaskModule } from "angular2-text-mask";
     CatalogComponent,
     PriceOrderFormPositionsComponent,
     PriceOrderFormPositionsParamsComponent,
+    ItemsDictionaryComponent,
   ],
   providers: [
-    KimPriceOrderService
+    KimPriceOrderService,
+    KimItemsDictionaryService
   ],
   imports: [
     KimCommonModule,
     KimCustomerRoutingModule,
     NgxsModule.forFeature([
-      PriceOrderState
+      PriceOrderState,
+      ItemsDictionaryState
     ]),
     TextMaskModule
   ]
