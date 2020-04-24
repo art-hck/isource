@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
