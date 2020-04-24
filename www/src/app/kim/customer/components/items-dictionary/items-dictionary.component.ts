@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
@@ -20,7 +20,7 @@ import AddItem = CartActions.AddItem;
   styleUrls: ['./items-dictionary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ItemsDictionaryComponent implements OnInit {
+export class ItemsDictionaryComponent implements OnInit, OnDestroy {
   @Select(ItemsDictionaryState.itemsDictionary) itemsDictionary$: Observable<KimDictionaryItem[]>;
   @Select(ItemsDictionaryState.status) status$: Observable<StateStatus>;
   searchText = new FormControl();
@@ -64,22 +64,23 @@ export class ItemsDictionaryComponent implements OnInit {
           return formGroup;
         }))
       );
-    })
+    });
   }
-    addItem(formGroup: AbstractControl) {
-      const { itemDictionary, quantity } = formGroup.value;
-      this.store.dispatch(new AddItem(itemDictionary, quantity)).subscribe(
-        (result) => {
-          const e = result.error as any;
-          this.store.dispatch(e ?
-            new ToastActions.Error(e && e.error.detail) : new ToastActions.Success('Позиция добавлена в корзину')
-          );
-        }
-      );
-    }
+
+  addItem(formGroup: AbstractControl) {
+    const { itemDictionary, quantity } = formGroup.value;
+    this.store.dispatch(new AddItem(itemDictionary, quantity)).subscribe(
+      (result) => {
+        const e = result.error as any;
+        this.store.dispatch(e ?
+          new ToastActions.Error(e && e.error.detail) : new ToastActions.Success('Позиция добавлена в корзину')
+        );
+      }
+    );
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  }
+}
