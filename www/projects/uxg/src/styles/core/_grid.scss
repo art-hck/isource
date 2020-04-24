@@ -28,6 +28,16 @@
       margin-left: 20px;
     }
   }
+
+  @for $i from 1 through 12 {
+    &-#{$i} {
+      max-width: $i / 12 * 100%;
+    }
+  }
+}
+
+[class*=app-col-] {
+  @extend .app-col;
 }
 
 .app-card {

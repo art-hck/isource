@@ -88,15 +88,9 @@ export class CommercialProposalsService {
     );
   }
 
-  getContragentsWithTp(requestId: Uuid, requestPositions: RequestPosition[]): Observable<ContragentList[]> {
-    const ids = requestPositions.map(item => item.id);
-
-    return this.api.post(
-      `requests/backoffice/${requestId}/contragents-with-tp`,
-      {positions: ids}
-    ).pipe(map((data) => {
-      return data as ContragentList[];
-    }));
+  getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
+    const url = `requests/backoffice/${requestId}/contragents-with-tp`;
+    return this.api.post<ContragentList[]>(url, {positions});
   }
 
   /**
