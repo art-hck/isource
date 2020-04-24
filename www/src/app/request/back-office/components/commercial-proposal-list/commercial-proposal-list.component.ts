@@ -17,6 +17,7 @@ import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -24,7 +25,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
-  requestPositionsWithOffers$: Observable<any>;
+  requestPositionsWithOffers$: Observable<PositionsWithSuppliers>;
   contragents$: Observable<ContragentList[]>;
   showForm = false;
   showEditForm = false;
