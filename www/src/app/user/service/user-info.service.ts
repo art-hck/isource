@@ -122,35 +122,35 @@ export class UserInfoService {
   }
 
   public isCustomer(): boolean {
-    return this.getUserInfo().isCustomer;
+    return this.getUserInfo()?.isCustomer;
   }
 
   public isBackOffice(): boolean {
-    return this.getUserInfo().isBackOffice;
+    return this.getUserInfo()?.isBackOffice;
   }
 
   public isSupplier(): boolean {
-    return this.getUserInfo().isSupplier;
+    return this.getUserInfo()?.isSupplier;
   }
 
   public isAdmin(): boolean {
-    return this.getUserInfo().isAdmin;
+    return this.getUserInfo()?.isAdmin;
   }
 
   public isCustomerBuyer(): boolean {
-    return this.getUserInfo().isCustomerBuyer;
+    return this.getUserInfo()?.isCustomerBuyer;
   }
 
   public isBackofficeBuyer(): boolean {
-    return this.getUserInfo().isBackofficeBuyer;
+    return this.getUserInfo()?.isBackofficeBuyer;
   }
 
   public isSeniorBackoffice(): boolean {
-    return this.getUserInfo().isSeniorBackoffice;
+    return this.getUserInfo()?.isSeniorBackoffice;
   }
 
   public isContragentCreator(): boolean {
-    return this.getUserInfo().isContragentCreator;
+    return this.getUserInfo()?.isContragentCreator;
   }
 
   public getUserRole(): string {

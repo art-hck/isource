@@ -4,14 +4,12 @@ import { CommonModule } from '@angular/common';
 import { ContragentListComponent } from './components/contragent-list/contragent-list.component';
 import { SharedModule } from "../shared/shared.module";
 import { ContragentListViewComponent } from "./components/contragent-list-view/contragent-list-view.component";
-import { ContragentService } from "./services/contragent.service";
-import { ContragentInfoComponent } from './components/contragent-info/contragent-info.component';
-import { ContragentInfoLinkComponent } from './components/contragent-info-link/contragent-info-link.component';
 import { ContragentInfoViewComponent } from "./components/contragent-info-view/contragent-info-view.component";
 import { ContragentRegistrationComponent } from './components/contragent-registration/contragent-registration.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxDadataModule } from "@kolkov/ngx-dadata";
-import {EmployeeModule} from "../employee/employee.module";
+import { EmployeeModule } from "../employee/employee.module";
+import { ContragentSharedModule } from "./contragent-shared.module";
 
 @NgModule({
   imports: [
@@ -21,22 +19,14 @@ import {EmployeeModule} from "../employee/employee.module";
     SharedModule,
     CommonModule,
     ContragentRoutingModule,
-    EmployeeModule
+    EmployeeModule,
+    ContragentSharedModule
   ],
   declarations: [
     ContragentListViewComponent,
     ContragentListComponent,
-    ContragentInfoComponent,
     ContragentInfoViewComponent,
-    ContragentInfoLinkComponent,
     ContragentRegistrationComponent,
-  ],
-  providers: [
-    ContragentService,
-  ],
-  exports: [
-    ContragentInfoComponent,
-    ContragentInfoLinkComponent
   ]
 })
 export class ContragentModule { }

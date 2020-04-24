@@ -34,15 +34,15 @@ export class ContractListComponent implements OnInit {
   contragentInfoModalOpened = false;
 
   constructor(
+    public featureService: FeatureService,
+    public userInfoService: UserInfoService,
     private bc: UxgBreadcrumbsService,
     private router: Router,
     private route: ActivatedRoute,
     private backofficeRequestService: BackofficeRequestService,
     private customerRequestService: CustomerRequestService,
     private contractService: ContractService,
-    private userInfoService: UserInfoService,
-    private featureService: FeatureService,
-    protected getContragentService: ContragentService,
+    private getContragentService: ContragentService,
   ) {
   }
 
@@ -68,8 +68,7 @@ export class ContractListComponent implements OnInit {
       );
 
     this.contragentsWithPositions$ = this.contractService.getContragentsWithPositions(requestId)
-      .pipe(publishReplay(1), refCount())
-    ;
+      .pipe(publishReplay(1), refCount());
 
     this.contracts$ = this.contractService.getContracts(requestId)
       .pipe(publishReplay(1), refCount());

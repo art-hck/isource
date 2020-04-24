@@ -56,7 +56,7 @@
               [outline]="type === 'outline'" [link]="type === 'link'"
               [clear]="type === 'clear'" [icon]="subType === 'icon'" [iconText]=" subType=== 'iconText'"
       >
-        <clr-icon *ngIf="subType" shape="app-trash" size="16" class="is-solid"></clr-icon>
+        <uxg-icon *ngIf="subType" shape="app-trash" size="16" class="is-solid"></uxg-icon>
         <span *ngIf="subType !== 'icon'">{{ title }}</span>
       </button>
     </ng-template>

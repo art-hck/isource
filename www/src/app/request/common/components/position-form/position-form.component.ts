@@ -113,7 +113,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private positionService: RequestPositionService,
     private userInfoService: UserInfoService,
     private normPositionService: NormPositionService,
-    private okeiService: OkeiService,
+    public okeiService: OkeiService,
     private store: Store
   ) {}
 

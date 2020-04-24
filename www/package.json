@@ -45,7 +45,7 @@
     "rxjs": "^6.5.5",
     "stdlib-ng": "git+http://stdlib-ng-token:paqRDyd6S7EejgxVQKAX@gitlab.etpgpb.loc/newetp-stdlib/stdlib-ng.git#gpn_market-173",
     "text-mask-addons": "^3.8.0",
-    "tslib": "^1.10.0",
+    "tslib": "^1.11.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
@@ -62,7 +62,7 @@
     "@types/node": "^12.11.1",
     "@types/prismjs": "^1.9.0",
     "@types/websocket": "~0.0.40",
-    "codelyzer": "^5.1.2",
+    "codelyzer": "^5.2.2",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^4.4.1",

@@ -33,7 +33,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
-    protected router: Router,
+    public router: Router,
     private store: Store
   ) {
   }

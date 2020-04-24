@@ -1,6 +1,6 @@
 <div class="app-table positions-list-datagrid app-section app-align-items-center">
   <ng-container *ngFor="let position of positions">
-    <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId]">
+    <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId, position.id]">
       <div class="position-request-number clr-col-1">
         <b>{{ position.requestNumber }}</b>
       </div>
@@ -10,7 +10,7 @@
       </div>
 
       <div class="position-quantity clr-col-2">
-        {{ position.quantity }} <span class="gray">{{ position.measureUnit }}</span>
+        {{ position.quantity }} <span class="app-ghost-color">{{ position.measureUnit }}</span>
       </div>
 
       <div class="position-delivery-date bold-text clr-col-2">
@@ -25,8 +25,8 @@
 
       <div class="position-status clr-col-2"
            [ngClass]="{ 'app-bold' : position.status.name === 'NEW' }">
-        <uxg-position-status [label]="position.status.label" [status]="position.status.name">
-        </uxg-position-status>
+        <app-position-status [label]="position.status.label" [status]="position.status.name">
+        </app-position-status>
       </div>
     </a>
   </ng-container>

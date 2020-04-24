@@ -1,5 +1,5 @@
 <div #menu class="kim-menu">
-  <div class="container">
+  <div class="app-layout">
     <uxg-tabs>
       <uxg-tab-title #catalogTab disabled [class.app-bold]="catalogTab.active">Все товары портала</uxg-tab-title>
       <uxg-tab-title
@@ -24,9 +24,10 @@
         [active]="cart.isActive"
         [routerLinkActiveOptions]="{exact: true}"
         [class.app-bold]="cartTab.active"
-        #cart="routerLinkActive">
+        #cart="routerLinkActive" [disabled]="(cartItemsLength$ | async) === 0">
         <div class="app-row app-align-items-center">
           <clr-icon shape="app-basket"></clr-icon><span>Корзина торгового портала</span>
+          <small class="basket-counter" *ngIf="cartItemsLength$ | async as cnt">{{cnt}}</small>
         </div>
       </uxg-tab-title>
     </uxg-tabs>

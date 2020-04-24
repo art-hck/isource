@@ -92,7 +92,7 @@ export class UxgExampleControlsComponent {
     let title = "";
 
     if (this.subType) {
-      title += `\n  <clr-icon shape="app-trash" size="16" class="is-solid"></clr-icon>`;
+      title += `\n  <uxg-icon shape="app-trash" size="16" class="is-solid"></uxg-icon>`;
     }
 
     if (this.subType !== 'icon') {

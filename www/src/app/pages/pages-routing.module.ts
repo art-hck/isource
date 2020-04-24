@@ -5,17 +5,15 @@ import { ForbiddenComponent } from "./forbidden/forbidden.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 
 const routes: Routes = [
-  { path: 'forbidden', component: ForbiddenComponent },
-  { path: 'not-found', component: NotFoundComponent }
+  { path: 'forbidden', component: ForbiddenComponent, data: {title: "403 - Доступ запрещен"} },
+  { path: 'not-found', component: NotFoundComponent, data: {title: "404 - Страница не найдена"} }
 ];
 
 @NgModule({
   imports: [
     RouterModule.forChild(routes)
   ],
-  exports: [
-    RouterModule
-  ]
+  exports: [RouterModule]
 })
 
 export class PagesRoutingModule {

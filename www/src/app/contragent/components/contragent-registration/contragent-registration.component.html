@@ -76,7 +76,7 @@
           <div class="app-row">
             <div class="app-col">
               <div class="app-control-wrap">
-                <input #taxAuthorityRegistrationDate uxgInput lg appDatepicker formControlName="taxAuthorityRegistrationDate"/>
+                <input #taxAuthorityRegistrationDate uxgInput lg uxgDatepicker formControlName="taxAuthorityRegistrationDate"/>
                 <label class="app-control-label" (click)="taxAuthorityRegistrationDate.focus()">Дата регистрации</label>
                 <label class="app-control-icon" (click)="taxAuthorityRegistrationDate.focus()">
                   <clr-icon shape="app-calendar-big" size="24"></clr-icon>
@@ -100,7 +100,6 @@
         <br/>
 
         <h3>Юридический адрес</h3>
-        <p class="app-secondary-color">Поля «Регион/область» и «Квартира/офис» заполняются если есть и не являются обязательными.</p>
         <ng-container formGroupName="contragentAddress">
           <div class="app-row">
             <div class="app-col">

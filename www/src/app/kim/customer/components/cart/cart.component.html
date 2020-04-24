@@ -1,14 +1,14 @@
-<div class="app-row">
+<div class="app-row" *ngIf="cartItems$ | async; else emptyCart">
   <div class="app-col">
     <ng-container *ngIf="(cartItems$ | async).length !== 0; else emptyCart">
     <div class="app-card" *ngFor="let cartItem of cartItems$ | async">
       <div class="app-row">
         <div class="app-col app-bold name">
-          {{cartItem.name}}
+          {{cartItem.kimDictionaryPosition.dictionaryPositionName}}
         </div>
         <div class="app-col app-grow-0">
           <button uxgButton icon clear disabled>
-            <clr-icon shape="trash" class="is-solid" size="14" [style.opacity]="0.6"></clr-icon>
+            <clr-icon shape="app-trash" class="is-solid" size="14" [style.opacity]="0.6"></clr-icon>
           </button>
         </div>
       </div>
@@ -18,15 +18,14 @@
             Единица измерения
           </div>
           <div class="measure-units">
-            {{cartItem.okei}}
           </div>
         </div>
         <div class="app-col">
           <div class="app-secondary-color">
             Код позиции
           </div>
-          <div class="measure-units">
-            {{cartItem.okpd2}}
+          <div class="position-code">
+            {{cartItem.kimDictionaryPosition.dictionaryPositionCategoryCode}}
           </div>
         </div>
         <div class="app-col quantity clr-align-items-center">
@@ -42,7 +41,7 @@
   <div class="app-col app-col-aside">
     <h2>Итого в корзине</h2>
     <p class="app-secondary-color">Товаров</p>
-<!--    <span class="app-bold">{{(cartItems$ | async).length}}</span>-->
+    <span class="app-bold">{{(cartItems$ | async).length}}</span>
     <p class="app-secondary-color">Дата обновления</p>
     <div class="app-bold">
       -

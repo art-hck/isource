@@ -7,6 +7,7 @@ import { KimCartItem } from "../../common/models/kim-cart-item";
 import { CartActions } from "../actions/cart.actions";
 import Fetch = CartActions.Fetch;
 import { KimCartService } from "../services/kim-cart.service";
+import AddItem = CartActions.AddItem;
 import { KimPriceOrderPosition } from "../../common/models/kim-price-order-position";
 import CreatePriceOrder = CartActions.CreatePriceOrder;
 import { throwError } from "rxjs";
@@ -26,6 +27,7 @@ type Context = StateContext<Model>;
 @Injectable()
 export class CartState {
   @Selector() static cartItems({cartItems}: Model) { return cartItems; }
+  @Selector() static cartItemsLength({cartItems}: Model) { return cartItems.length; }
   @Selector() static status({ status }: Model) { return status; }
 
   constructor(private rest: KimCartService) {}
@@ -36,6 +38,15 @@ export class CartState {
 
     return this.rest.list().pipe(
       tap(cartItems => setState(patch({ cartItems, status: "received" as StateStatus } )))
+    );
+  }
+
+  @Action(AddItem)
+  addItem({setState}: Context, {item, quantity}: AddItem) {
+    setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.addItem(item, quantity).pipe(
+      tap(cartItems => setState(patch({cartItems}))),
+      tap(() => setState(patch({status: "received" as StateStatus})))
     );
   }
 

@@ -1,80 +1,49 @@
-<div class="card" *ngIf="positions?.length !== 0; else noPositions">
-  <div class="item-card" *ngFor="let position of positions">
-    <div class="app-row position-list">
-      <div class="clr-col-3 image open-info">
-        <a class="title" [routerLink]="['/catalog', 'position', position.id]">
-          <img *ngIf="position.image; else noImage" src="{{ position.image }}"/>
-          <ng-template #noImage>
-            <img src="../../../../assets/images/no-image.png" alt="Изображение отсуствует">
-          </ng-template>
-        </a>
+<ng-container [formGroup]="form">
+  <ng-container *ngIf="positions?.length !== 0; else noPositions">
+    <div class="app-table app-no-border">
+      <div class="app-row app-uppercase app-ghost-color">
+        <small class="app-col photo">Фото</small>
+        <small class="app-col name">Наименование МТР</small>
+        <small class="app-col measure">ед. изм.</small>
+        <small class="app-col quantity">Количество</small>
+        <small class="app-col action"></small>
       </div>
-      <div class="clr-col-9 position-info">
-        <a class="title" [routerLink]="['/catalog', 'position', position.id]">
+    </div>
+
+    <div class="app-table" formArrayName="positions">
+      <div class="app-row app-align-items-center" *ngFor="let position of positions; index as i" [formGroupName]="i">
+        <div class="app-col photo">
+          <img *ngIf="position.image; else noImage" [src]="position.image" alt="{{position.name}}"/>
+          <ng-template #noImage>
+            <img src="assets/images/no-image.png" alt="Изображение отсуствует">
+          </ng-template>
+        </div>
+
+        <div class="app-col name">
           <p class="position-name">{{position.name}}</p>
-          <p class="document">{{position.productionDocument}}</p>
-        </a>
-        <div class="app-row w-100">
-          <div class="app-col open-info">
-            <a class="title" [routerLink]="['/catalog', 'position', position.id]">
-              <p class="position-header">основные характеристики</p>
-              <div class="attr-block">
-                <div class="app-row w-100 attributes" *ngFor="let attribute of position.attributes">
-                  <div class="clr-col-6 attribute-name">
-                    <span>{{attribute.name}}</span>
-                  </div>
-                  <div class="clr-col-6 attribute-values">
-                    <span *ngFor="let value of attribute.values">{{value.value}}</span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="clr-col-6 nopadding">
-            <p class="position-header">доступность и поставка</p>
-            <div class="price-info">Наличие на складе
-            </div>
-            Под заказ
-            <div class="price-info">Поставщик</div>
-            <app-contragent-info-link
-                    [contragent]="position.supplierContragent">
-            </app-contragent-info-link>
+          <p class="position-description">{{position.description}}</p>
+        </div>
 
-            <div class="price-info">Срок поставки</div>
-            {{position.productionTime}} дней
-            <div class="app-row w-100 inline nopadding">
-              <div class="app-col price">
-                <b>{{position.price | currency: 'RUB' :'symbol':"1.0-2"}}</b>
-                <p class="one-item">За 1 {{position.measureUnit}}</p>
-              </div>
-              <div class="app-col inline nopadding">
-                <input #quantity
-                       [disabled]="isPositionInCart(position)"
-                       type="number"
-                       min="1"
-                       class="quantity"
-                       value="1"
-                       (input)="setValidQuantity($event.target.value, quantity)">
-                <button *ngIf="!isPositionInCart(position) && quantity.value > 0; else disabledButton" class="btn btn-primary in-cart"
-                        (click)="onAddPositionToCart(position, +quantity.value)">
-                  <img src="../../../../assets/images/cart-button.svg">
-                </button>
+        <div class="app-col measure app-ghost-color">
+          {{ position.measureUnit }}
+        </div>
 
-                <ng-template #disabledButton>
-                  <button class="btn btn-primary in-cart disabled-cart" disabled>
-                    <img src="../../../../assets/images/cart.svg">
-                  </button>
-                </ng-template>
-              </div>
-            </div>
-          </div>
+        <div class="app-col quantity">
+          <input uxgInput lg formControlName="quantity" type="number"/>
+        </div>
+
+        <div class="app-col action">
+          <button uxgButton primary lg [disabled]="formPositions.at(i).invalid" (click)="addToCart(formPositions.at(i))">
+            <clr-icon *ngIf="formPositions.at(i).get('position').valid; else inCart" shape="app-basket-big"></clr-icon>
+            <ng-template #inCart>В корзине</ng-template>
+          </button>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </ng-container>
+</ng-container>
 <ng-template #noPositions>
-  <div class="app-row position-list no-positions">
+  <div class="clr-row position-list no-positions">
     Позиций не найдено
   </div>
 </ng-template>

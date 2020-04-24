@@ -18,8 +18,8 @@
         <span class="app-ghost-color">{{ position.updatedDate | date : "HH:mm" }}</span>
       </div>
       <div class="app-col status">
-        <uxg-position-status [label]="position.statusLabel" [status]="position.status">
-        </uxg-position-status>
+        <app-position-status [label]="position.statusLabel" [status]="position.status">
+        </app-position-status>
       </div>
       <div class="app-col action">
         <a [routerLink]="getRouterLink(position)">

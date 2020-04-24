@@ -2,7 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { RegistrationRequest } from "../models/registration-request";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class RegistrationService {
 
   constructor(protected api: HttpClient) {}

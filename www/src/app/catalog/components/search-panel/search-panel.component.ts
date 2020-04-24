@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Inject, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { DOCUMENT } from "@angular/common";
 import { CatalogPosition } from "../../models/catalog-position";
@@ -12,9 +12,10 @@ import { CatalogCategory } from "../../models/catalog-category";
   templateUrl: './search-panel.component.html',
   styleUrls: ['./search-panel.component.scss'],
 })
-export class SearchPanelComponent {
+export class SearchPanelComponent implements AfterViewInit, OnDestroy {
   @Input() searchText: string;
   @Output() searchTextChange = new EventEmitter<string>();
+  @ViewChild('searchPanel') searchPanel: ElementRef;
 
   showSearchResults = false;
   searchResults$: Observable<SearchResults>;
@@ -43,6 +44,14 @@ export class SearchPanelComponent {
   ) {
   }
 
+  ngAfterViewInit() {
+    this.document.querySelector('.app-scroll').insertBefore(
+      this.searchPanel.nativeElement,
+      this.document.querySelector('.app-content')
+    );
+  }
+
+  // todo подсказки временно отключили
   onShowSearchSuggestions() {
     this.searchResults$ = this.catalogService.searchSuggestions(this.searchText, 10, 10);
     this.showSearchResults = true;
@@ -69,16 +78,11 @@ export class SearchPanelComponent {
     this.router.navigate(['catalog/position', position.id], {replaceUrl: true});
   }
 
-  onResize() {
-    this.getSearchBarWidth();
-  }
-
   onToggleCategories() {
     this.categoriesOpened = !this.categoriesOpened;
   }
 
-  getSearchBarWidth() {
-    // TODO аналогично для блока результатов
-    return this.document.getElementsByClassName('content-area')[0].clientWidth + 'px';
+  ngOnDestroy() {
+    this.searchPanel.nativeElement.remove();
   }
 }

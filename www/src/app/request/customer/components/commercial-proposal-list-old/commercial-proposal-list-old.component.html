@@ -45,7 +45,7 @@
               <td class="position-name">
                 <span class="position-label">{{ requestPosition.name }}</span>
 
-                <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
+                <span class="app-ghost-color">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
                   <span *ngIf="requestPosition.deliveryDate; else ASAP">
                       к {{ makeReadableDate(requestPosition.deliveryDate) }}
                     </span>
@@ -75,7 +75,7 @@
                         </div>
 
                         <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto clr-align-self-start">
-                          <clr-icon shape="lock" class="lock-icon is-solid" size="14"></clr-icon>
+                          <clr-icon shape="app-lock" class="lock-icon is-solid" size="14"></clr-icon>
                         </div>
                       </div>
                     </div>
@@ -145,26 +145,26 @@
                       <div class="alert-labels">
                         <div *ngIf="validPositionsCount(requestPositions, supplier.id); else invalidCount">
                             <span class="green-label">
-                              <clr-icon shape="check" size="12"></clr-icon> Все позиции в нужном количестве
+                              <clr-icon shape="app-check" size="12"></clr-icon> Все позиции в нужном количестве
                             </span>
                         </div>
 
                         <ng-template #invalidCount>
                             <span class="red-label">
-                              <clr-icon shape="times" size="12"></clr-icon> Не все позиции в нужном количестве
+                              <clr-icon shape="app-cross" size="12"></clr-icon> Не все позиции в нужном количестве
                             </span>
                         </ng-template>
 
 
                         <div *ngIf="validPositionsDeliveryDate(requestPositions, supplier.id); else invalidDelivery">
                             <span class="green-label">
-                              <clr-icon shape="check" size="12"></clr-icon> Сроки поставки укладываются в заданные
+                              <clr-icon shape="app-check" size="12"></clr-icon> Сроки поставки укладываются в заданные
                             </span>
                         </div>
 
                         <ng-template #invalidDelivery>
                             <span class="red-label">
-                              <clr-icon shape="times" size="12"></clr-icon> Сроки поставки не укладываются в заданные
+                              <clr-icon shape="app-cross" size="12"></clr-icon> Сроки поставки не укладываются в заданные
                             </span>
                         </ng-template>
                       </div>

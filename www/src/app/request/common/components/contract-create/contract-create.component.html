@@ -3,23 +3,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <button aria-label="Close" class="close" type="button" (click)="close.emit()">
-          <clr-icon aria-hidden="true" shape="close"></clr-icon>
+          <clr-icon aria-hidden="true" shape="app-cross"></clr-icon>
         </button>
         <h3 class="modal-title">Новый договор</h3>
       </div>
       <div class="modal-body">
         <h5>Выберите поставщика</h5>
-        <div [class.clr-error]="formContragentInvalid">
-          <div class="clr-select-wrapper">
-            <select formControlName="contragent" [compareWith]="compareContragentByID">
-              <option *ngFor="let contragent of contragents" [ngValue]="getContragentList(contragent)">
-                {{contragent.shortName}}
-              </option>
-            </select>
-            <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
+
+        <uxg-dropdown lg formControlName="contragent" placeholder="Поставщик">
+          <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="getContragentList(contragent)">
+            {{contragent.shortName}}
           </div>
-          <span *ngIf="formContragentInvalid" class="clr-subtext">Поле не может быть пустым</span>
-        </div>
+        </uxg-dropdown>
+
         <br/>
 
         <ng-container *ngIf="form.get('contragent').valid">
