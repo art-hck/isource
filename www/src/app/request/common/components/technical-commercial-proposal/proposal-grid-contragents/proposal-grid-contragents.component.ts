@@ -9,7 +9,7 @@ import { timer } from "rxjs";
 })
 export class ProposalGridContragentsComponent implements AfterViewInit {
   @ViewChild('gridRow') gridRow: ElementRef;
-  @Input() gridRows: QueryList<ElementRef>;
+  @Input() gridRows: ElementRef[];
   @Input() proposals: TechnicalCommercialProposal[];
   canScrollLeft: boolean;
   canScrollRight: boolean;

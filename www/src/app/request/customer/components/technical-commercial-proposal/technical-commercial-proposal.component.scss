@@ -1,5 +1,9 @@
 @import "projects/uxg/src/styles/index";
 
+:host {
+  display: block;
+}
+
 .app-card {
   margin-bottom: 24px;
 }

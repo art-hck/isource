@@ -78,7 +78,7 @@
 
     <!-- grid -->
     <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
-      <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
+      <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows.toArray()" [proposals]="proposals">
       </app-technical-commercial-proposal-grid-contragents-row>
 
       <!-- positions -->
