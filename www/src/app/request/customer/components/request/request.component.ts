@@ -42,7 +42,7 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private bc: UxgBreadcrumbsService,
-    private store: Store,
+    public store: Store,
     private title: Title
   ) {}
 

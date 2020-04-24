@@ -1,10 +1,9 @@
 import { Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import {RequestsList} from "../../models/requests-list/requests-list";
-import {Router} from "@angular/router";
-import {RequestType} from "../../enum/request-type";
+import { RequestsList } from "../../models/requests-list/requests-list";
+import { Router } from "@angular/router";
+import { RequestType } from "../../enum/request-type";
 import { ClrDatagridStateInterface } from "@clr/angular";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
-import { DatagridStateAndFilter } from "../../models/datagrid-state-and-filter";
 import { RequestStatus } from "../../enum/request-status";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { EventTypes } from "../../../../websocket/event-types";
@@ -28,7 +27,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() totalItems: number;
   @Input() requestStatus: RequestStatus;
 
-  @Output() datagridState = new EventEmitter<DatagridStateAndFilter>();
+  @Output() datagridState = new EventEmitter();
   currentDatagridState: ClrDatagridStateInterface;
 
   datagridLoader = false;
@@ -87,7 +86,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   refresh(state: ClrDatagridStateInterface): void {
     this.currentDatagridState = state;
-    const datagridState: DatagridStateAndFilter = {
+    const datagridState = {
       startFrom: state.page && state.page.from >= 0 ? state.page.from : 0,
       pageSize: state.page && state.page.size >= 0 ? state.page.size : this.pageSize,
       filters: this.datagridFilter ? this.datagridFilter : {},

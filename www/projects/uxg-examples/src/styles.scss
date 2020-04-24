@@ -1,6 +1,6 @@
 @import "dark-theme";
 
-@include core($theme, $statuses);
+@include core($theme);
 
 html { scroll-behavior: smooth; }
 

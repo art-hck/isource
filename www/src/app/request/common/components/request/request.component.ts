@@ -151,10 +151,6 @@ export class RequestComponent implements OnChanges {
     return control as FormArray;
   }
 
-  isEditable(position: RequestPosition): boolean {
-    return !this.statusService.isStatusAfter(position.status, PositionStatus.TECHNICAL_PROPOSALS_PREPARATION);
-  }
-
   private fetchForm(positions: RequestPositionList[], position?: RequestPositionList) {
     const formGroup = this.fb.group({ checked: false, folded: false });
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { Page } from "../../../../core/models/page";
-import { DatagridStateAndFilter } from "../../../common/models/datagrid-state-and-filter";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestListFilterComponent } from "../../../common/components/request-list/request-list-filter/request-list-filter.component";
@@ -21,7 +20,7 @@ export class RequestListComponent implements OnInit {
   @ViewChild(RequestListFilterComponent)
   requestListFilterComponent: RequestListFilterComponent;
 
-  currentDatagridState: DatagridStateAndFilter;
+  currentDatagridState;
   currentStatus: string;
   currentFilters: RequestsListFilter;
 
@@ -92,7 +91,7 @@ export class RequestListComponent implements OnInit {
    *
    * @param state
    */
-  onDatagridStateChange(state: DatagridStateAndFilter): void {
+  onDatagridStateChange(state): void {
     this.currentDatagridState = state;
     this.composeFilters();
     this.getRequestStatusCount('customer');

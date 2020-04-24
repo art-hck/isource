@@ -40,10 +40,10 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   readonly destroy$ = new Subject();
 
   constructor(
+    public okeiService: OkeiService,
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private okeiService: OkeiService
   ) {
   }
 

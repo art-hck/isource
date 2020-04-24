@@ -6,7 +6,6 @@
   "core/buttons-group",
   "core/controls",
   "core/grid",
-  "core/statuses",
   "core/tabs",
   "core/typography",
   "core/dropdown",
@@ -16,14 +15,12 @@
   "core/scrollbar",
   "core/wizzard";
 
-@mixin core($theme: (), $statuses: ()) {
-
+@mixin core($theme: ()) {
   @include accordion($theme);
   @include buttons($theme);
   @include buttons-group($theme);
   @include controls($theme);
   @include grid($theme);
-  @include statuses($theme, $statuses);
   @include tabs($theme);
   @include typography($theme);
   @include dropdown($theme);

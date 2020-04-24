@@ -1,15 +1,14 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { concatAll, finalize, tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
-import { TechnicalCommercialProposalGroupByPosition } from "../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
-import { from } from "rxjs";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
@@ -29,15 +28,15 @@ type Context = StateContext<Model>;
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [reqeustId in Uuid]: TechnicalCommercialProposal[] } = {};
+  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  static proposals(status: TechnicalCommercialProposalStatus) {
+  static proposalsByPos(status: TechnicalCommercialProposalStatus) {
     return createSelector(
       [TechnicalCommercialProposalState],
       ({proposals}: Model) => proposals
-        .reduce((group: TechnicalCommercialProposalGroupByPosition[], proposal) => {
+        .reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
           proposal.positions.forEach(proposalPosition => {
             const item = group.find(({position}) => position.id === proposalPosition.position.id);
             if (item) {
@@ -48,33 +47,33 @@ export class TechnicalCommercialProposalState {
           });
           return group;
         }, [])
-        .filter(({data}) => data.every(({proposalPosition}) => proposalPosition.status === "NEW") === (status === "SENT_TO_REVIEW"))
+        .filter(({data}) => data.every(({proposalPosition}) => ["NEW", "SENT_TO_REVIEW"].includes(proposalPosition.status)) === (status === "SENT_TO_REVIEW"))
     );
   }
 
-  @Selector()
-  static status({ status }: Model) { return status; }
+  @Selector() static status({ status }: Model) { return status; }
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
 
   @Action(Fetch)
-  fetch(ctx: Context, { requestId }: Fetch) {
+  fetch({ setState }: Context, { requestId }: Fetch) {
     // @TODO: Временно выпилил кеширование
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
-    ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
+    setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(tap(proposals => {
-        ctx.setState(patch({ proposals, status: "received" as StateStatus }));
+        setState(patch({ proposals, status: "received" as StateStatus }));
         this.cache[requestId] = proposals;
       }));
   }
 
   @Action(Approve)
-  approve(ctx: Context, action: Approve) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.approve(action.requestId, action.proposalPosition).pipe(
-      tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
+  approve({ setState }: Context, { requestId, proposalPosition }: Approve) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.approve(requestId, proposalPosition).pipe(
+      tap(proposal => setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
+      finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }
 
@@ -87,12 +86,13 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(ApproveMultiple)
-  approveMultiple(ctx: Context, action: ApproveMultiple) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return from(action.proposalPositions.map(pos => this.rest.approve(action.requestId, pos))).pipe(
-      concatAll(),
-      tap(proposal => ctx.setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
+  approveMultiple({ setState }: Context, { proposalPositions }: ApproveMultiple) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.approveMultiple(proposalPositions.map(({ id }) => id)).pipe(
+      tap(proposals => proposals.forEach(proposal => setState(patch({
+        proposals: updateItem(({ id }) => proposal.id === id, proposal),
+        status: "received" as StateStatus
+      }))))
     );
   }
 }

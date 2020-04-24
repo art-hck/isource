@@ -3,7 +3,7 @@
 }
 
 :host, .categories-wrap {
-  animation: catalog-accordion 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  animation: catalog-accordion 200ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
 }
 
 .categories-wrap {
@@ -38,19 +38,16 @@
         padding: 24px 0;
         background: white;
 
-        .main-category-item {
-          padding: 8px 24px 8px 16px;
+        li a {
+          display: block;
+          padding: 14px 16px;
           cursor: pointer;
-
-          a {
-            color: black;
-            font-weight: 600;
-          }
+          color: #333;
+          font-weight: 500;
         }
 
         .main-category-item-selected {
           background-color: #E5E8EF;
-          height: 100%;
           border-radius: 4px;
         }
       }

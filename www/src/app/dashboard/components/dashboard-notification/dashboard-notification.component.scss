@@ -1,4 +1,4 @@
-@import "projects/uxg/src/styles/index";
+@import "src/assets/styles/statuses";
 
 .app-notification {
   padding: 1em 0;
@@ -12,9 +12,7 @@
     margin-right: .5em;
 
     @each $status, $color in $statuses {
-      &.#{$status} {
-        background-color: $color;
-      }
+      &.#{$status} { background-color: $color }
     }
 
     &:after {

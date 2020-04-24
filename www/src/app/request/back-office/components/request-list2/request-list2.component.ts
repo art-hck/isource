@@ -27,6 +27,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   @Select(RequestListState.statusCounts) statusCounts$: Observable<RequestStatusCount>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
+  activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
@@ -50,6 +51,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
       } as {page?: number, filters?: RequestsListFilter})
     ).subscribe((data) => {
+      this.activeFilters = data.filters;
       this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters));
     });
 

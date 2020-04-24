@@ -1,8 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardComponent } from "./components/card/card.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ClrAccordionModule, ClrAlertModule, ClrCheckboxModule, ClrDropdownModule, ClrIconModule, ClrLoadingModule, ClrModalModule } from '@clr/angular';
+import {
+  ClrAccordionModule,
+  ClrAlertModule,
+  ClrButton, ClrButtonModule,
+  ClrCheckboxModule,
+  ClrDropdownModule,
+  ClrIconModule,
+  ClrLoadingModule,
+  ClrModalModule
+} from '@clr/angular';
 import { DocumentSimpleListComponent } from "./components/document-simple-list/document-simple-list.component";
 import { DocumentUploadListComponent } from "./components/document-upload-list/document-upload-list.component";
 import { DocumentIconComponent } from "./components/document-icon/document-icon.component";
@@ -25,13 +33,10 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { SuggestionsDirective } from "./directives/suggestions.directive";
 import { HumanDatePipe } from './pipes/human-date.pipe';
 import { AddFromExcelComponent } from "./components/add-from-excel/add-from-excel.component";
-import { ToastComponent } from './components/toast-list/toast/toast.component';
-import { NgxsModule } from "@ngxs/store";
-import { ToastState } from "./states/toast.state";
-import { ToastListComponent } from "./components/toast-list/toast-list.component";
 import { DocumentsFormControlComponent } from "./components/documents-form-control/documents-form-control.component";
 import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directive";
-import { DatepickerDirective } from './directives/datepicker.directive';
+import { AppPositionStatusComponent } from "./components/position-status/app-position-status.component";
+import { ToastListModule } from "./components/toast-list/toast-list.module";
 
 @NgModule({
   imports: [
@@ -46,13 +51,11 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     ClrAccordionModule,
     ClrCheckboxModule,
     ClrLoadingModule,
+    ClrButtonModule,
     UxgModule,
-    NgxsModule.forFeature([
-      ToastState
-    ]),
+    ToastListModule,
   ],
   declarations: [
-    CardComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
@@ -74,11 +77,9 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     HumanDatePipe,
     SuggestionsDirective,
     AddFromExcelComponent,
-    ToastComponent,
-    ToastListComponent,
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
-    DatepickerDirective,
+    AppPositionStatusComponent,
   ],
   exports: [
     CommonModule,
@@ -90,9 +91,9 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     ClrAccordionModule,
     ClrCheckboxModule,
     ClrLoadingModule,
+    ClrButtonModule,
     UxgModule,
 
-    CardComponent,
     DocumentSimpleListComponent,
     DocumentUploadListComponent,
     DocumentIconComponent,
@@ -116,10 +117,9 @@ import { DatepickerDirective } from './directives/datepicker.directive';
     HumanDatePipe,
     SuggestionsDirective,
     AddFromExcelComponent,
-    ToastComponent,
-    ToastListComponent,
     AppDateIsAfterDirective,
-    DatepickerDirective,
+    AppPositionStatusComponent,
+    ToastListModule,
   ]
 })
 export class SharedModule {

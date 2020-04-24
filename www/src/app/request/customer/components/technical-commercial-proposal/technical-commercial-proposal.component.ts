@@ -1,17 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Actions, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { TechnicalCommercialProposalGroupByPosition } from "../../../common/models/technical-commercial-proposal-group-by-position";
+import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
-import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Subject } from "rxjs";
 import { ClrModal } from "@clr/angular";
 import { FormControl, Validators } from "@angular/forms";
 import { finalize, takeUntil, tap } from "rxjs/operators";
-import * as moment from "moment";
+import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
+import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
+import { RequestPosition } from "../../../common/models/request-position";
+import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
+
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -20,10 +23,13 @@ import Reject = TechnicalCommercialProposals.Reject;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
-  @Input() group: TechnicalCommercialProposalGroupByPosition;
-  @Input() requestId: Uuid;
   @ViewChild("proposalModal") proposalModal: ClrModal;
+  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @Input() proposalByPos: TechnicalCommercialProposalByPosition;
+  @Input() proposals: TechnicalCommercialProposal[];
+  @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
+  @Input() view: "list" | "grid";
   readonly destroy$ = new Subject();
 
   getCurrencySymbol = getCurrencySymbol;
@@ -31,10 +37,11 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   folded = false;
 
   get isReviewed(): boolean {
-    return this.group.data.some(({ proposalPosition }) => proposalPosition.status !== "NEW");
+    return this.proposalByPos.data.some(({ proposalPosition }) => !["NEW", "SENT_TO_REVIEW"].includes(proposalPosition.status));
   }
 
   constructor(
+    public helper: TechnicalCommercialProposalHelperService,
     private store: Store,
     private actions: Actions,
     private cd: ChangeDetectorRef
@@ -42,16 +49,9 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.chooseBy$) {
-      this.chooseBy$.pipe(tap(type => {
-        switch (type) {
-          case "price":
-            this.chooseBy((prev, curr) => prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat  ? prev : curr);
-          break;
-          case "date":
-            this.chooseBy((prev, curr) => +new Date(prev.proposalPosition.deliveryDate) <= +new Date(curr.proposalPosition.deliveryDate)  ? prev : curr);
-          break;
-        }
-      }), takeUntil(this.destroy$))
+      this.chooseBy$.pipe(
+        tap(type => this.selectedProposalPosition.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
+        takeUntil(this.destroy$))
       .subscribe(() => this.cd.detectChanges());
     }
 
@@ -66,20 +66,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   reject() {
-    this.dispatchAction(new Reject(this.requestId, this.group.position));
-  }
-
-  isValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return this.isDateValid(proposalPosition) && this.isQuantityValid(proposalPosition);
-  }
-
-  isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.position.isDeliveryDateAsap ||
-      moment(proposalPosition.deliveryDate).isSameOrBefore(moment(proposalPosition.position.deliveryDate));
-  }
-
-  isQuantityValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return proposalPosition.quantity === proposalPosition.position.quantity;
+    this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
   }
 
   private dispatchAction(action) {
@@ -90,17 +77,8 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private chooseBy(by: (p, c) => typeof p | typeof c | null) {
-    const item = this.group.data.reduce((prev, curr) => {
-      const prevValid = prev && this.isValid(prev.proposalPosition);
-      const currValid = curr && this.isValid(curr.proposalPosition);
-      if (prevValid && !currValid) { return prev; }
-      if (!prevValid && currValid) { return curr; }
-      if (!prevValid && !currValid) { return null; }
-      return by(prev, curr);
-    });
-
-    return item && this.selectedProposalPosition.setValue(item.proposalPosition);
+  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
+    return positions.find(({position}) => position.id === id);
   }
 
   ngOnDestroy() {
@@ -108,5 +86,5 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalGroupByPosition["data"][number]) => proposalPosition.id;
+  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalByPosition["data"][number]) => proposalPosition.id;
 }

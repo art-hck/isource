@@ -14,7 +14,7 @@
                       [disabled]="getPositions().length === 0"
                       title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
                       (click)="onShowDesignDocumentationListModal()">
-                <clr-icon shape="plus" class="is-solid"></clr-icon>
+                <clr-icon shape="app-plus" class="is-solid"></clr-icon>
                 <span> Добавить перечень РКД</span>
               </button>
             </div>
@@ -53,7 +53,7 @@
                           <div class="clr-col-1">
                             <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
                                     title="Удалить из списка" *ngIf="i > 0">
-                              <clr-icon shape="times" size="24"></clr-icon>
+                              <clr-icon shape="app-cross" size="24"></clr-icon>
                             </button>
                           </div>
                         </div>
@@ -61,7 +61,7 @@
                     </div>
                   </ng-container>
                   <button class="btn btn-link" (click)="onAddNext()">
-                    <clr-icon shape="plus"></clr-icon>
+                    <clr-icon shape="app-plus"></clr-icon>
                     Добавить документ
                   </button>
                 </div>
@@ -285,16 +285,16 @@
 
                     <button class="btn btn-primary btn-dropdown" clrDropdownTrigger>
                       <div>Принять решение</div>
-                      <clr-icon shape="caret down"></clr-icon>
+                      <clr-icon shape="app-chevron down"></clr-icon>
                     </button>
 
                     <clr-dropdown-menu>
                       <div clrDropdownItem (click)="approve(designDocumentation)">
-                        <clr-icon shape="check"></clr-icon>
+                        <clr-icon shape="app-check"></clr-icon>
                         <span> Согласовать</span>
                       </div>
                       <label clrDropdownItem appUploadFile (select)="reject(designDocumentation, $event)">
-                        <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+                        <clr-icon shape="app-warning" class="is-solid"></clr-icon>
                         <span> Приложить замечания</span>
                       </label>
                     </clr-dropdown-menu>
@@ -304,11 +304,11 @@
                     <span>Новый</span>
                   </span>
                   <span *ngSwitchCase="designDocStatus.APPROVED" class="status status-success">
-                    <clr-icon shape="check"></clr-icon>
+                    <clr-icon shape="app-check"></clr-icon>
                     <span> Согласовано</span>
                   </span>
                   <span *ngSwitchCase="designDocStatus.REJECTED" class="status status-warning">
-                    <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+                    <clr-icon shape="app-warning" class="is-solid"></clr-icon>
                     <span> На доработке</span>
                   </span>
                 </ng-container>

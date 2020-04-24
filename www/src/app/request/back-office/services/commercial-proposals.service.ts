@@ -10,7 +10,9 @@ import { RequestPosition } from "../../common/models/request-position";
 import { map } from 'rxjs/operators';
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class CommercialProposalsService {
 
   constructor(
@@ -141,5 +143,10 @@ export class CommercialProposalsService {
   prolongateProcedureEndDate(requestId, prolongationProcedureId, newProcedureEndDate): Observable<any> {
     const url = `requests/backoffice/${requestId}/procedures/${prolongationProcedureId}/change-end-registration`;
     return this.api.post(url, { dateEndRegistration: newProcedureEndDate });
+  }
+
+  downloadAnalyticalReport(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/analytic-report/download-by-cp`;
+    return this.api.post(url, {}, {responseType: 'blob'});
   }
 }

@@ -14,7 +14,11 @@
 
 .proposals-footer {
   overflow: hidden;
+  width: 100%;
   flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  margin-bottom: -50px;
 
   &-body {
     background: #fff;
@@ -26,5 +30,11 @@
   &.hidden &-body {
     transition-delay: 0ms;
     margin-bottom: -81px;
+  }
+}
+
+@media (max-width: 1479px) {
+  .app-col-aside {
+    display: none;
   }
 }

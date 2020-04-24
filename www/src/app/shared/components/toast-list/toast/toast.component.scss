@@ -1,21 +1,18 @@
-@import "../../../../../../projects/uxg/src/styles/index";
+@import "projects/uxg/src/styles/index";
 
 :host {
-  background: rgba(#000, 0.8);
-  display: block;
-  color: uxg($theme, color-default);
   animation: app-toast-show 300ms ease;
-  transform-origin: bottom;
-  position: relative;
-  z-index: 9999;
+  background: rgba(#000, 0.8);
+  color: uxg($theme, color-default);
+  display: block;
+  font-size: uxg($theme, font-size-l);
+  font-weight: bold;
   overflow: hidden;
-
-  .container {
-    font-size: uxg($theme, font-size-l);
-    font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
+  padding-bottom: 20px;
+  padding-top: 20px;
+  position: relative;
+  transform-origin: bottom;
+  z-index: 9999;
 }
 
 

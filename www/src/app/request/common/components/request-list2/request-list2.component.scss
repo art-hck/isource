@@ -12,7 +12,7 @@
   }
 }
 
-@media (min-width: 1521px) {
+@media (min-width: 1480px) {
   .clr-col-xxl-9 {
     flex: 0 0 75%;
     max-width: 75%;
@@ -38,7 +38,7 @@
   }
 }
 
-@media (max-width: 1520px) {
+@media (max-width: 1479px) {
   .app-col-aside {
     position: fixed;
     background: white;
@@ -57,6 +57,7 @@
   .app-col-aside:not(.opened) {
     margin-right: -320px;
     transition: margin 0.3s ease-out;
+    box-shadow: none;
   }
 
   .app-col-aside.opened {

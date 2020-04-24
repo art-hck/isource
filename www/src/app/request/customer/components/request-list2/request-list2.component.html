@@ -5,6 +5,7 @@
   [statusCounts]="statusCounts$ | async"
   [filters]="fetchFilters$ | async"
   [pageSize]="pageSize"
+  [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (addRequest)="newRequestModal.open()"
   (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
