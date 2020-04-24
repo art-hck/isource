@@ -25,5 +25,9 @@ export interface GpnmarketConfigInterface {
   priceOrder: {
     url: string
   };
+  instructions: {
+    forCustomer: string,
+    forBackoffice: string
+  };
   disabledFeatures: Array<keyof typeof FeatureList>;
 }

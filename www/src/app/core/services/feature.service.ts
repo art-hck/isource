@@ -5,7 +5,9 @@ import { UserRole } from "../../user/models/user-role";
 import { FeatureList, IFeatureList } from "../config/feature-list";
 import { UserInfoService } from "../../user/service/user-info.service";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class FeatureService {
 
   constructor(

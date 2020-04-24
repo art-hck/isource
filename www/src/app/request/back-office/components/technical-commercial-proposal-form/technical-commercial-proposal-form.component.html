@@ -138,10 +138,10 @@
       <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
-          type="button" uxgButton secondary (click)="submit(false)"
-          [disabled]="form.disabled || form.invalid">Сохранить {{technicalCommercialProposal ? 'изменения' : 'черновик'}}
-        </button>
-        <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
+          type="button" uxgButton primary (click)="submit(false)"
+          [disabled]="form.disabled || form.invalid">Сохранить</button>
+        <!-- Временно убрали публикацию из интерфейса списка ТКП -->
+        <!-- <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>-->
       </div>
     </div>
 

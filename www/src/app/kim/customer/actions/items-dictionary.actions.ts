@@ -3,7 +3,7 @@ import { KimDictionaryItem } from "../../common/models/kim-dictionary-item";
 export namespace ItemsDictionaryActions {
   export class Search {
     static readonly type = '[Kim Customer ItemsDictionary] Search';
-    constructor(public name: string) {}
+    constructor(public query: string) {}
   }
 
   export class Clear {

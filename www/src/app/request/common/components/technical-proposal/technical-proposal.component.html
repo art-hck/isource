@@ -21,7 +21,7 @@
                            'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
             <clr-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></clr-icon>
             <clr-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></clr-icon>
-            <clr-icon shape="app-doc" class="is-solid" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
+            <clr-icon shape="app-draft" *ngIf="technicalProposal.status === 'NEW'"></clr-icon>
             <clr-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></clr-icon>
             <b>{{ tpStatusLabel(technicalProposal) }}</b>
           </div>

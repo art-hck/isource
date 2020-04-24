@@ -26,13 +26,11 @@ const routes: Routes = [
     path: 'items-dictionary',
     component: ItemsDictionaryComponent,
     data: {hideTitle: true},
-    children: [
-      {
-        path: ':query',
-        component: ItemsDictionaryComponent,
-      }
-    ]
   },
+  {
+    path: 'items-dictionary/:query',
+    component: ItemsDictionaryComponent
+  }
 ];
 
 @NgModule({

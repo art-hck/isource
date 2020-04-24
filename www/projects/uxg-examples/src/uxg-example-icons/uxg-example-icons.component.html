@@ -3,7 +3,7 @@
 
   <div>
     <button uxgButton secondary icon (click)="ctx.$implicit = shape" *ngFor="let shape of shapes">
-      <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></clr-icon>
+      <uxg-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></uxg-icon>
     </button>
   </div>
   <br/>
@@ -18,10 +18,10 @@
 
     <div>
       <button uxgButton outline icon lg>
-        <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></clr-icon>
+        <uxg-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)"></uxg-icon>
       </button>
       <button *ngIf="hasSolid(shape)" uxgButton outline icon lg>
-        <clr-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)" class="is-solid"></clr-icon>
+        <uxg-icon [attr.shape]="shape" [attr.size]="getDefaultSize(shape)" class="is-solid"></uxg-icon>
       </button>
     </div>
     <br/>

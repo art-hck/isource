@@ -1,7 +1,7 @@
 @import "../uxg";
 
 @mixin helpers($theme) {
-*, *::before, *::after { box-sizing: inherit; }
+*, *::before, *::after { box-sizing: border-box; }
 
 .app-bold { font-weight: bold; }
 .app-font-normal { font-weight: normal; }
@@ -63,11 +63,11 @@
   }
 }
 
-* + clr-icon {
+* + clr-icon, * + uxg-icon {
   margin-left: .5em;
 }
 
-clr-icon {
+clr-icon, uxg-icon {
   vertical-align: middle;
   align-self: center;
 

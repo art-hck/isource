@@ -91,7 +91,7 @@
     <div class="clr-col-3">
       <div class="app-control-wrap">
         <input [warning]="deliveryDateValidator() !== null"
-               #deliveryDate uxgInput lg formControlName="deliveryDate" appDatepicker />
+               #deliveryDate uxgInput lg formControlName="deliveryDate" uxgDatepicker />
         <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
         <label class="app-control-icon" (click)="deliveryDate.focus()">
           <clr-icon shape="app-calendar-big" size="24"></clr-icon>
@@ -175,7 +175,7 @@
   <div class="app-row">
     <div class="app-col">
       <span class="requirement-text">
-        Все поля являются <span class="red-text">обязательными</span> к заполнению! Документы прикладывать не обязательно.
+        Все поля являются <span class="app-alert-color">обязательными</span> к заполнению! Документы прикладывать не обязательно.
       </span>
     </div>
 

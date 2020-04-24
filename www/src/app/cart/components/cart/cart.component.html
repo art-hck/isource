@@ -1,20 +1,10 @@
 <div class="app-row app-justify-content-center" *ngIf="cartStore.getItems().length > 0; else emptyCart">
-
   <div class="clr-col-xl-10">
-      <div class="card">
-        <cart-item *ngFor="let cartItem of cartStore.getItems()" [item]="cartItem"></cart-item>
-      </div>
-      <div class="app-row total">
-        <div class="app-col text-right">Итого:</div>
-        <div class="clr-col-3">
-          <b class="price">{{ cartStore.getSum() | number : '1.0-2' }} </b>
-          <b class="currency">{{ getCurrencySymbol('RUB', 'narrow') }}</b>
-        </div>
-      </div>
+      <cart-items [items]="cartStore.getItems()"></cart-items>
       <cart-order></cart-order>
   </div>
-
 </div>
+
 <ng-template #emptyCart>
   <div class="empty app-row app-justify-content-center app-align-items-center">
     <div class="app-col text-center">

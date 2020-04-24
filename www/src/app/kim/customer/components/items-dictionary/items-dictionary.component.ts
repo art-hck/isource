@@ -26,20 +26,17 @@ export class ItemsDictionaryComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router) { }
+    public router: Router) { }
 
   ngOnInit() {
     this.route.params.subscribe(({query}) => {
-      if (query) {
-        this.onSearch(query);
-      } else {
-        this.store.dispatch(new Clear());
+        if (query) {
+          return this.store.dispatch(new Search(query));
+        } else {
+          this.store.dispatch(new Clear());
+        }
       }
     );
-  }
-
-  onSearch(searchText: string) {
-    return this.store.dispatch(new Search(searchText));
   }
 
   addItem(item: KimDictionaryItem) {

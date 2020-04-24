@@ -1,6 +1,18 @@
 <form [formGroup]="form" (ngSubmit)="submit(formPositions.controls)">
   <div class="app-row">
     <div class="app-col app-table app-no-border">
+
+      <ng-container *ngIf="user.isBackOffice()">
+        <div class="secondary-action app-row app-justify-content-end">
+          <div class="app-col app-basis-auto app-grow-0">
+            <span class="analytical-report-link" (click)="onDownloadAnalyticalReport()">
+                Аналитическая справка
+                <clr-icon class="download-icon" shape="app-download"></clr-icon>
+              </span>
+          </div>
+        </div>
+      </ng-container>
+
       <div class="app-row action-bar">
         <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"></uxg-checkbox>
         <div class="app-col app-basis-auto actions">
@@ -91,7 +103,7 @@
             <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
            <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
             <span class="offer-status" *ngIf="positionCanBeSelected(position)">
-                <clr-icon shape="app-doc" class="is-solid"></clr-icon>Черновик</span>
+                <clr-icon shape="app-draft"></clr-icon>Черновик</span>
             <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
               <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
             <button uxgButton primary type="button"

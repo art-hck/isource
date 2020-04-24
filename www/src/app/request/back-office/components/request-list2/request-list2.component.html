@@ -6,6 +6,7 @@
   [filters]="fetchFilters$ | async"
   [pageSize]="pageSize"
   [availableFilters]="availableFilters$ | async"
+  [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
 ></app-request-list2>

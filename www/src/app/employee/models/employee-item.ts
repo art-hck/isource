@@ -1,18 +1,7 @@
-import { Uuid } from "../../cart/models/uuid";
+import { EmployeeInfoBrief } from "./employee-info";
 
 export class EmployeeItem {
-  user: EmployeeInfo;
+  user: EmployeeInfoBrief;
   posCount: number;
   reqCount: number;
-}
-
-class EmployeeInfo {
-  id: Uuid;
-  username: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  fullName: string;
-  shortName: string;
 }

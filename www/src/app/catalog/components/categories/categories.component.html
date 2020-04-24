@@ -6,13 +6,12 @@
       <div class="clr-col-3 categories">
         <ul class="main-categories">
           <li *ngFor="let category of categories" (mouseenter)="onMainCategorySelect(category)">
-            <div class="main-category-item"
-                 [ngClass]="{'main-category-item-selected': category === selectedMainCategory}">
-              <a [routerLink]="'/catalog/' + category.id"
-                 title="{{ category.name }}">
-                <span>{{ category.name }}</span>
-              </a>
-            </div>
+            <a [routerLink]="'/catalog/' + category.id"
+               (click)="onCategoryClick()"
+               [ngClass]="{'main-category-item-selected': category === selectedMainCategory}"
+               title="{{ category.name }}">
+              <span>{{ category.name }}</span>
+            </a>
           </li>
         </ul>
       </div>
