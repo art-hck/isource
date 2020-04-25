@@ -6,7 +6,7 @@ export namespace CartActions {
   }
 
   export class AddItem {
-    static readonly type = '[Kim Customer ItemsDictionary] AddItem';
+    static readonly type = '[Kim Customer Cart] AddItem';
     constructor(public item: KimDictionaryItem, public quantity: number) {}
   }
 }

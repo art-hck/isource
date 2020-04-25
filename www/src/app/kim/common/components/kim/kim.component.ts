@@ -6,8 +6,6 @@ import { Observable } from "rxjs";
 import { KimCartItem } from "../../models/kim-cart-item";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { CartActions } from "../../../customer/actions/cart.actions";
-import Fetch = CartActions.Fetch;
-import { PriceOrderState } from "../../../customer/states/price-order.state";
 
 @Component({
   templateUrl: './kim.component.html',
@@ -29,7 +27,7 @@ export class KimComponent implements AfterViewInit, OnDestroy {
       this.menu.nativeElement,
       this.document.querySelector('.app-content')
     );
-    this.store.dispatch(new Fetch());
+    this.store.dispatch(new CartActions.Fetch());
   }
 
   ngOnDestroy() {

@@ -9,7 +9,6 @@ import { Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "./core/services/feature.service";
 import { APP_CONFIG, GpnmarketConfigInterface } from "./core/config/gpnmarket-config.interface";
-import { KimCartService } from "./kim/customer/services/kim-cart.service";
 
 @Component({
   selector: 'app-root',

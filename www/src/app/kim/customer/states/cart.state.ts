@@ -42,8 +42,7 @@ export class CartState {
   addItem({setState}: Context, {item, quantity}: AddItem) {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.addItem(item, quantity).pipe(
-      tap(cartItems => setState(patch({cartItems}))),
-      tap(() => setState(patch({status: "received" as StateStatus})))
+      tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
     );
   }
 }

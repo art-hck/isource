@@ -12,8 +12,8 @@ export class KimCartService {
     return this.api.get<KimCartItem[]>(url);
   }
 
-  addItem(item: KimDictionaryItem, quantity: number) {
+  addItem({id: itemId}: KimDictionaryItem, quantity: number) {
     const url = `kim/customer/cart/add-item`;
-    return this.api.post<KimCartItem[]>(url, {itemId: item.id, quantity: quantity});
+    return this.api.post<KimCartItem[]>(url, {itemId, quantity});
   }
 }

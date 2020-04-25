@@ -12,7 +12,6 @@ import Clear = ItemsDictionaryActions.Clear;
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { filter, takeUntil } from "rxjs/operators";
 import { CartActions } from "../../actions/cart.actions";
-import AddItem = CartActions.AddItem;
 
 @Component({
   selector: 'app-items-dictionary',
@@ -69,11 +68,11 @@ export class ItemsDictionaryComponent implements OnInit, OnDestroy {
 
   addItem(formGroup: AbstractControl) {
     const { itemDictionary, quantity } = formGroup.value;
-    this.store.dispatch(new AddItem(itemDictionary, quantity)).subscribe(
+    this.store.dispatch(new CartActions.AddItem(itemDictionary, quantity)).subscribe(
       (result) => {
         const e = result.error as any;
         this.store.dispatch(e ?
-          new ToastActions.Error(e && e.error.detail) : new ToastActions.Success('Позиция добавлена в корзину')
+          new ToastActions.Error(e && e?.error?.detail) : new ToastActions.Success('Позиция добавлена в корзину')
         );
       }
     );
