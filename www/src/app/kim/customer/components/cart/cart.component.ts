@@ -31,7 +31,7 @@ export class CartComponent implements OnInit {
           new ToastActions.Error(e && e?.error?.detail) : new ToastActions.Success('Позиция удалена из корзины')
         );
       }
-    )
+    );
   }
 
   updateItemQuantity(item: KimCartItem, quantity: number) {
