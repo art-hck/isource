@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { startWith } from "rxjs/operators";
+import { ProcedureAction } from "../../../models/procedure-action";
 
 @Component({
   selector: 'app-request-procedure-create-properties',
@@ -12,7 +13,7 @@ import { startWith } from "rxjs/operators";
   }]
 })
 export class ProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
-  @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() action: ProcedureAction["action"] = "create";
   @Input() publicAccess = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;

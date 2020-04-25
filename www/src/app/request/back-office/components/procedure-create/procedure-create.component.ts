@@ -15,6 +15,7 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 import * as moment from "moment";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { Observable } from "rxjs";
+import { ProcedureAction } from "../../models/procedure-action";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -22,11 +23,11 @@ import { Observable } from "rxjs";
   styleUrls: ['./procedure-create.component.scss']
 })
 export class ProcedureCreateComponent implements OnInit {
-  @Input() procedure: Procedure;
+  @Input() procedure: Partial<Procedure>;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
-  @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() action: ProcedureAction["action"] = "create";
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
@@ -59,7 +60,7 @@ export class ProcedureCreateComponent implements OnInit {
   ngOnInit() {
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
-      general: ["Общие сведения", () => this.form.get('general').valid && !!this.contragents],
+      general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || !this.form.get('positions').value.length)],
       properties: { label: "Свойства", disabled: this.action === 'prolong' },
       contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
       documents: ["Документы", () => this.form.valid],
@@ -83,14 +84,17 @@ export class ProcedureCreateComponent implements OnInit {
 
     if (this.action === 'prolong') {
       this.wizzard.get("positions").disable();
+      // this.form.get("positions").disable();
+      // this.form.get('positions').clearValidators();
+
       this.wizzard.get("properties").disable();
-      this.form.get("positions").disable();
       this.form.get("properties").disable();
     }
 
     if (this.action === 'bargain') {
       this.wizzard.get("positions").disable();
       this.form.get("positions").disable();
+      // this.form.get('positions').clearValidators();
     }
 
     this.form.get("positions").valueChanges

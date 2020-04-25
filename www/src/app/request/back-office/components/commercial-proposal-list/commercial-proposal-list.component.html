@@ -9,21 +9,25 @@
       (addOffer)="showAddOfferModal($event)"
       (addOffersTemplate)="onSendOffersTemplateFilesClick($event)"
       (editOffer)="showEditOfferModal($event)"
-      (createProcedure)="procedureModal.open()"
+      (procedureAction)="procedureAction($event)"
       (downloadReport)="store.dispatch(downloadAnalyticalReport(requestId))"
     ></app-request-commercial-proposal-list>
 
-    <clr-modal clrModalSize="lg" #procedureModal>
-      <h2 class="modal-title">Создание новой процедуры</h2>
-      <div class="modal-body" [style.overflow]="'visible'">
+    <clr-modal clrModalSize="lg" [(clrModalOpen)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">
+      <h2 class="modal-title" *ngSwitchCase="'create'">Создание новой процедуры</h2>
+      <h2 class="modal-title" *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload.position.procedureId}}</h2>
+      <h2 class="modal-title" *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload.position.procedureId}}</h2>
+      <div class="modal-body" [style.overflow]="'visible'" *ngIf="procedureModalPayload">
         <app-request-procedure-create
-          *ngIf="procedureModal._open"
+          *ngIf="!procedureModalPayload.procedure$ || (procedureModalPayload.procedure$ | async)"
           [request]="request"
+          [action]="procedureModalPayload.action"
+          [procedure]="procedureModalPayload.procedure$ | async"
           [positions]="positionsWithOffers.positions"
           [contragents]="contragents$ | async"
           (updateSelectedPositions)="updateContragents($event)"
-          (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
-          (cancel)="procedureModal.close()"
+          (complete)="updatePositionsAndSuppliers(); procedureModalPayload = null"
+          (cancel)="procedureModalPayload = null"
         ></app-request-procedure-create>
       </div>
     </clr-modal>

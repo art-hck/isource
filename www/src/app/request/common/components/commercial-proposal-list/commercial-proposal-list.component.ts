@@ -14,6 +14,7 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
 import { Store } from "@ngxs/store";
+import { ProcedureAction } from "../../../back-office/models/procedure-action";
 
 @Component({
   selector: 'app-request-commercial-proposal-list',
@@ -37,7 +38,7 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
   @Output() addOffersTemplate = new EventEmitter<File[]>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
-  @Output() createProcedure = new EventEmitter();
+  @Output() procedureAction = new EventEmitter<ProcedureAction>();
   @Output() downloadReport = new EventEmitter();
 
   supplier: ContragentList;
