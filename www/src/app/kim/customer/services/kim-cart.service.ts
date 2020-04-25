@@ -16,4 +16,14 @@ export class KimCartService {
     const url = `kim/customer/cart/add-item`;
     return this.api.post<KimCartItem[]>(url, {itemId, quantity});
   }
+
+  deleteItem(item: KimCartItem) {
+    const url = `kim/customer/cart/remove-item`;
+    return this.api.post<KimCartItem[]>(url, {itemId: item.kimDictionaryPosition.id});
+  }
+
+  editItem(item: KimCartItem, quantity: number) {
+    const url = `kim/customer/cart/edit-item-quantity`;
+    return this.api.post<KimCartItem[]>(url, {itemId: item.kimDictionaryPosition.id, quantity: quantity});
+  }
 }
