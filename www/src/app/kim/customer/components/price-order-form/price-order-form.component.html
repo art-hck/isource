@@ -59,7 +59,7 @@
               <div class="app-control-wrap">
                 <input
                   #dateResponse
-                  uxgInput lg appDatepicker
+                  uxgInput lg uxgDatepicker
                   dateFormat="d.m.Y H:i"
                   formControlName="dateResponse"
                   [enableTime]="true"
@@ -78,7 +78,7 @@
             <!-- dateDelivery -->
             <div class="app-col">
               <div class="app-control-wrap">
-                <input #dateDelivery uxgInput lg appDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y"/>
+                <input #dateDelivery uxgInput lg uxgDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y"/>
                 <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
                 <label class="app-control-icon" (click)="dateDelivery.focus()">
                   <clr-icon shape="app-calendar-big" size="24"></clr-icon>

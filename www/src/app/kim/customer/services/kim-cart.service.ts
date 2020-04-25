@@ -12,12 +12,10 @@ export class KimCartService {
   list() {
     const url = `kim/customer/cart/list`;
     return this.api.get<KimCartItem[]>(url);
-    const url = `kim/customer/cart`;
-    return this.api.get<KimPriceOrderPosition[]>(url);
   }
 
   create(body: Partial<KimPriceOrder>) {
-    const url = `kim/customer/cart/add-price-order`;
+    const url = `kim/customer/add-price-order/from-cart`;
     return this.api.post(url, body);
   }
 

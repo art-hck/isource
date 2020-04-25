@@ -19,10 +19,10 @@ import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-po
 import CreatePriceOrder = CartActions.CreatePriceOrder;
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { OkeiService } from "../../../../shared/services/okei.service";
-import { Okei } from "../../../../shared/models/okei";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Router } from "@angular/router";
 import { shareReplay, takeUntil } from "rxjs/operators";
+import { KimCartItem } from "../../../common/models/kim-cart-item";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -32,7 +32,7 @@ import { shareReplay, takeUntil } from "rxjs/operators";
 })
 
 export class PriceOrderFormComponent implements OnInit, OnDestroy {
-  @Select(CartState.cartItems) orderPositions$: Observable<KimPriceOrderPosition[]>;
+  @Select(CartState.cartItems) orderPositions$: Observable<KimCartItem[]>;
   @Input() cartView = false;
   @Output() close = new EventEmitter();
 
@@ -62,8 +62,8 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
               private store: Store,
               private okatoService: OkatoService,
-              private okeiService: OkeiService,
-              private router: Router) { }
+              public okeiService: OkeiService,
+              public router: Router) { }
 
   ngOnInit() {
     this.okpd2List$ = this.okatoService.getOkpd2();
@@ -107,7 +107,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     body.dateResponse = moment(body.dateResponse, "DD.MM.YYYY HH:mm").toISOString();
     body.regions = this.form.value.regions.code;
     if (this.cartView) {
-      body.positions = orderPositions;
+      //body.positions = orderPositions;
       this.store.dispatch(new CreatePriceOrder(body))
         .pipe(takeUntil(this.destroy$))
         .subscribe(

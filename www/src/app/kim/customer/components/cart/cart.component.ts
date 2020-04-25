@@ -5,7 +5,7 @@ import { StateStatus } from "../../../../request/common/models/state-status";
 import { CartState } from "../../states/cart.state";
 import { CartActions } from "../../actions/cart.actions";
 import Fetch = CartActions.Fetch;
-import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-position";
+import { KimCartItem } from "../../../common/models/kim-cart-item";
 
 @Component({
   templateUrl: './cart.component.html',
@@ -13,7 +13,7 @@ import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-po
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CartComponent implements OnInit {
-  @Select(CartState.cartItems) cartItems$: Observable<KimPriceOrderPosition[]>;
+  @Select(CartState.cartItems) cartItems$: Observable<KimCartItem[]>;
   @Select(CartState.status) status$: Observable<StateStatus>;
   constructor(private store: Store) { }
 

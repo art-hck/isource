@@ -13,6 +13,7 @@ import Fetch = PriceOrderActions.Fetch;
 import Create = PriceOrderActions.Create;
 import Update = PriceOrderActions.Update;
 import { Router } from "@angular/router";
+import { OkeiService } from "../../../../shared/services/okei.service";
 
 @Component({
   templateUrl: './price-order-list.component.html',
@@ -37,7 +38,7 @@ export class PriceOrderListComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: GpnmarketConfigInterface,
     private store: Store,
     private actions: Actions,
-    private router: Router
+    public router: Router
   ) { }
 
   ngOnInit() {

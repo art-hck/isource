@@ -13,7 +13,7 @@ import CreatePriceOrder = CartActions.CreatePriceOrder;
 import { throwError } from "rxjs";
 
 export interface CartStateModel {
-  cartItems: KimPriceOrderPosition[];
+  cartItems: KimCartItem[];
   status: StateStatus;
 }
 
