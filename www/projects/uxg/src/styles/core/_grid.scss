@@ -21,13 +21,26 @@
   }
 
   &-aside {
-    @extend .app-col;
     max-width: uxg($theme, aside-width);
 
     & + * {
       margin-left: 20px;
     }
   }
+
+  &-auto {
+    flex: 0 0 auto;
+  }
+
+  @for $i from 1 through 12 {
+    &-#{$i} {
+      max-width: $i / 12 * 100%;
+    }
+  }
+}
+
+[class*=app-col-] {
+  @extend .app-col;
 }
 
 .app-card {
@@ -53,7 +66,6 @@
   &:not(.app-row) + & {
     margin-top: 2em;
   }
-
 }
 
 .app-table {

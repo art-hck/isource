@@ -1,5 +1,7 @@
 export * from './uxg.module';
 export * from './modules/icon/uxg-icons';
+export * from './modules/icon/uxg-icon.component';
+export * from './modules/icon/uxg-icon.module';
 
 export * from './modules/tab/uxg-tab.module';
 export * from './modules/tab/uxg-tabs.component';
@@ -25,6 +27,10 @@ export * from './modules/radio/uxg-radio.module';
 export * from './modules/radio/uxg-radio-item.component';
 export * from './modules/tree/uxg-tree.module';
 export * from './modules/tree/uxg-tree.component';
+export * from './modules/modal/uxg-modal-close.directive';
+export * from './modules/modal/uxg-modal.component';
+export * from './modules/modal/uxg-modal-footer.directive';
+export * from './modules/modal/uxg-modal.module';
 export * from './modules/popover/uxg-popover-direction-enum';
 export * from './modules/popover/uxg-popover.module';
 export * from './modules/popover/uxg-popover.component';

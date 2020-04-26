@@ -33,12 +33,6 @@ button:focus {
   &.large { /* Переопределение высоты для больших кнопок высотой 46px */
     height: 46px;
   }
-
-  clr-icon { /* Фикс разной высоты текста в кнопках с иконкой и без */
-    -webkit-transform: none;
-    transform: none;
-    vertical-align: sub;
-  }
 }
 
 /* Синяя кнопка большая*/

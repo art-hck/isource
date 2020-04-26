@@ -5,7 +5,9 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "@clr/icons" : "@clr/icons",
-      "@clr/angular" : "@clr/angular"
+      "@clr/angular" : "@clr/angular",
+      "flatpickr" : "flatpickr",
+      "flatpickr/dist/l10n/ru" : "Russian"
     }
   }
 }
