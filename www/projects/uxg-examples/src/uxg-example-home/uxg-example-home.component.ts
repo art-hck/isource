@@ -37,10 +37,8 @@ export class UxgExampleHomeComponent {
   }
 }`;
 
-  module = `import { UxgIconShapesSources, UxgModule } from "uxg";
+  module = `import { UxgModule } from "uxg";
 import { AppComponent } from "./app.component";
-
-UxgIconShapesSources.forEach(icon => ClarityIcons.add(icon));
 
 @NgModule({
     imports: [

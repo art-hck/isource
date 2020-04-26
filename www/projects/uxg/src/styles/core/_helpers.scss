@@ -55,24 +55,7 @@
   width: 100%;
 }
 
-.app-section {
+.app-section:not(:last-child) {
   margin-bottom: .9em;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-}
-
-* + clr-icon, * + uxg-icon {
-  margin-left: .5em;
-}
-
-clr-icon, uxg-icon {
-  vertical-align: middle;
-  align-self: center;
-
-  & + * {
-    margin-left: .5em;
-  }
 }
 }

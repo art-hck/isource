@@ -1,6 +1,7 @@
 export * from './uxg.module';
 export * from './modules/icon/uxg-icons';
-export * from './modules/icon/uxg-icon.component';
+export * from './modules/icon/uxg-icon.directive';
+export * from './modules/icon/uxg-icon.service';
 export * from './modules/icon/uxg-icon.module';
 
 export * from './modules/tab/uxg-tab.module';

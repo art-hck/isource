@@ -1,7 +1,7 @@
 <label (click)="isShowed = !isShowed" [class.showed]="isShowed">
   <div class="clr-flex-grow-1">{{ label }}</div>
 
-  <uxg-icon shape="angle" [attr.dir]="isShowed ? 'down' : 'up'"></uxg-icon>
+  <uxg-icon shape="app-chevron" [attr.dir]="isShowed ? 'down' : 'up'"></uxg-icon>
 </label>
 
 <div class="control" *ngIf="isShowed">
