@@ -35,12 +35,12 @@
 
   <div class="new-message">
     <button appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn btn-link btn-add-file app-ghost-color">
-      <clr-icon shape="app-attach" size="32"></clr-icon>
+      <uxg-icon shape="app-attach" size="32"></uxg-icon>
     </button>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <button type="submit" class="btn btn-link btn-icon btn-send" [disabled]="form.invalid">
-        <clr-icon shape="app-message" size="32"></clr-icon>
+        <uxg-icon shape="app-message" size="32"></uxg-icon>
         Отправить
       </button>
 

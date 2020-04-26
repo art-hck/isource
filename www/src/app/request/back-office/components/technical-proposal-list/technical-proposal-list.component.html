@@ -5,19 +5,19 @@
       <div class="app-row">
         <div class="app-col app-table app-no-border">
           <div class="app-row app-justify-content-end">
-            <div class="app-col app-basis-auto app-grow-0">
+            <div class="app-col-auto">
 
               <!-- Создать процедуру  -->
               <button uxgButton secondary iconText
                       *ngIf="featureService.authorize('createProcedure')"
                       (click)="procedureModal.open()" >
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Создать процедуру</span>
               </button>
 
               <!-- Новое ТП  -->
               <button uxgButton primary iconText (click)="showForm = true">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Новое ТП</span>
               </button>
             </div>
@@ -40,12 +40,11 @@
         (cancelTechnicalProposal)="onCancelPublishTechnicalProposal($event)"
       ></app-request-backoffice-technical-proposal>
 
-      <clr-modal clrModalSize="lg" #procedureModal>
-        <h2 class="modal-title">Создание новой процедуры</h2>
-        <div class="modal-body" [style.overflow]="'visible'">
+      <uxg-modal size="l" #procedureModal>
+        <h2>Создание новой процедуры</h2>
         <ng-container *ngIf="(positions$ | async) as positions">
           <app-request-procedure-create
-            *ngIf="procedureModal._open"
+            *ngIf="procedureModal.state"
             [request]="request"
             [publicAccess]="true"
             [positions]="positions"
@@ -53,8 +52,7 @@
             (complete)="procedureModal.close()"
           ></app-request-procedure-create>
         </ng-container>
-        </div>
-      </clr-modal>
+      </uxg-modal>
     </div>
 
     <div class="app-col app-col-aside">

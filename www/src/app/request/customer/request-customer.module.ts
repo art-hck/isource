@@ -3,7 +3,6 @@ import { CommercialProposalListOldComponent } from './components/commercial-prop
 import { RequestCommonModule } from "../common/request-common.module";
 import { RequestComponent } from './components/request/request.component';
 import { RequestCustomerRoutingModule } from "./request-customer-routing.module";
-import { RequestListComponent } from './components/request-list/request-list.component';
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
@@ -31,7 +30,6 @@ import { RequestListState } from "./states/request-list.state";
     RequestComponent,
     RequestFormComponent,
     RequestFormFreeComponent,
-    RequestListComponent,
     PositionComponent,
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,

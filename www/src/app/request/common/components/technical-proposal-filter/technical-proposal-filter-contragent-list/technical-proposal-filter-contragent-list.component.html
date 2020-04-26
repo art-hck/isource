@@ -15,14 +15,14 @@
 
 <div class="contragents-list">
   <ng-container *ngFor="let contragent of getContragents() | contragentSearchFilter: getContragentSearchInputValue();">
-    <clr-checkbox-wrapper>
-      <input type="checkbox"
-             clrCheckbox
-             [checked]="checkIfContragentIsChecked(contragent.id)"
-             (input)="onContragentSelected($event.target.value)"
-             value="{{ contragent.id }}" />
-      <label>{{ contragent.shortName }}</label>
-    </clr-checkbox-wrapper>
+    <div class="app-row clr-align-items-center app-section">
+      <uxg-checkbox
+        class="app-control" #contragentCheckbox
+        [ngModel]="checkIfContragentIsChecked(contragent.id)"
+        (ngModelChange)="onContragentSelected(contragent)"
+      ></uxg-checkbox>
+      <label (click)="contragentCheckbox.check($event)">&nbsp; {{ contragent.shortName }}</label>
+    </div>
   </ng-container>
 </div>
 

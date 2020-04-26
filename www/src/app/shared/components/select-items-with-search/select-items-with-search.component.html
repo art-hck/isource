@@ -8,8 +8,8 @@
         <small><span class="app-secondary-color">Выбрано: </span><b>{{ checkedFormItems.length }}</b></small>
       </div>
       <ng-container *ngIf="filterFn">
-        <div class="app-col app-row app-grow-0 app-basis-auto app-align-items-center">
-          <div class="app-col app-ghost-color app-grow-0 app-basis-auto">Фильтр: &nbsp; </div>
+        <div class="app-col app-col-auto app-row app-align-items-center">
+          <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp; </div>
           <div class="app-col search">
             <input type="text" uxgInput formControlName="search" [placeholder]="placeholder"/>
           </div>

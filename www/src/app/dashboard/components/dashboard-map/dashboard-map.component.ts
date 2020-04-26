@@ -101,7 +101,7 @@ export class DashboardMapComponent implements OnInit {
       className: null,
       iconSize: [44, 44],
       iconAnchor: [22, 44],
-      html: `<clr-icon shape="map-jiber-bus" class="dashboard-map-marker-icon" size="44"></clr-icon>`
+      html: `<uxg-icon shape="map-jiber-bus" class="dashboard-map-marker-icon" size="44"></uxg-icon>`
     });
 
     this.markersGroup.addLayer(L.marker(line.getCenter(), { icon }));

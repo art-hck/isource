@@ -75,7 +75,7 @@
                         </div>
 
                         <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto clr-align-self-start">
-                          <clr-icon shape="app-lock" class="lock-icon is-solid" size="14"></clr-icon>
+                          <uxg-icon shape="app-lock" class="lock-icon is-solid" size="14"></uxg-icon>
                         </div>
                       </div>
                     </div>
@@ -145,26 +145,26 @@
                       <div class="alert-labels">
                         <div *ngIf="validPositionsCount(requestPositions, supplier.id); else invalidCount">
                             <span class="green-label">
-                              <clr-icon shape="app-check" size="12"></clr-icon> Все позиции в нужном количестве
+                              <uxg-icon shape="app-check" size="12"></uxg-icon> Все позиции в нужном количестве
                             </span>
                         </div>
 
                         <ng-template #invalidCount>
                             <span class="red-label">
-                              <clr-icon shape="app-cross" size="12"></clr-icon> Не все позиции в нужном количестве
+                              <uxg-icon shape="app-cross" size="12"></uxg-icon> Не все позиции в нужном количестве
                             </span>
                         </ng-template>
 
 
                         <div *ngIf="validPositionsDeliveryDate(requestPositions, supplier.id); else invalidDelivery">
                             <span class="green-label">
-                              <clr-icon shape="app-check" size="12"></clr-icon> Сроки поставки укладываются в заданные
+                              <uxg-icon shape="app-check" size="12"></uxg-icon> Сроки поставки укладываются в заданные
                             </span>
                         </div>
 
                         <ng-template #invalidDelivery>
                             <span class="red-label">
-                              <clr-icon shape="app-cross" size="12"></clr-icon> Сроки поставки не укладываются в заданные
+                              <uxg-icon shape="app-cross" size="12"></uxg-icon> Сроки поставки не укладываются в заданные
                             </span>
                         </ng-template>
                       </div>
@@ -191,13 +191,10 @@
 </ng-container>
 
 <!-- Модальное окно со списком документов КП -->
-<clr-modal [(clrModalOpen)]="commercialProposalsDocumentsModalOpened">
-  <h3 class="modal-title">Документы</h3>
-
-  <div class="modal-body">
-    <app-document-simple-list
-      [documents]="linkedOfferDocuments"
-      [enableUpload]="false">
-    </app-document-simple-list>
-  </div>
-</clr-modal>
+<uxg-modal [(state)]="commercialProposalsDocumentsModalOpened" size="s">
+  <h2>Документы</h2>
+  <app-document-simple-list
+    [documents]="linkedOfferDocuments"
+    [enableUpload]="false">
+  </app-document-simple-list>
+</uxg-modal>

@@ -1,14 +1,19 @@
 <!-- tabs -->
 <div class="app-row">
   <div class="app-col">
-    <clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" [(clrAlertClosed)]="hideNeedUpdate">
-      <clr-alert-item>
-        <span class="alert-text">Список заявок был изменен</span>
-        <div class="alert-actions">
-          <button class="btn alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+
+    <div class="alert alert-app-level alert-info ng-star-inserted" *ngIf="!hideNeedUpdate">
+      <div class="alert-items">
+        <div class="alert-item">
+          <div class="alert-icon-wrapper"><uxg-icon class="alert-icon" shape="app-info"></uxg-icon></div>
+          <span class="alert-text">Список заявок был изменен</span>
+          <div class="alert-actions">
+            <button class="btn alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+          </div>
         </div>
-      </clr-alert-item>
-    </clr-alert>
+      </div>
+      <button type="button" class="close" (click)="hideNeedUpdate = true"><uxg-icon shape="app-cross"></uxg-icon></button>
+    </div>
 
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
@@ -34,11 +39,11 @@
       </uxg-tabs>
 
       <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
-        <clr-icon shape="app-plus"></clr-icon>
+        <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>
       <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
-        <clr-icon shape="app-sort2"></clr-icon>
+        <uxg-icon shape="app-sort2"></uxg-icon>
         <span>Фильтр</span>
         <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
       </button>

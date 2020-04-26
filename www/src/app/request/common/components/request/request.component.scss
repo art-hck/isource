@@ -65,6 +65,10 @@
   & > .app-col:first-child {
     padding-right: 6px;
   }
+
+  .app-col {
+    box-sizing: content-box;
+  }
 }
 
 // @TODO Выпилить после реализации попозиционного согласования

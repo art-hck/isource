@@ -14,12 +14,11 @@ import { DeliveryMonitorGoodCardComponent } from './components/delivery-monitor/
 import { CommercialProposalListDeprecatedComponent } from './components/commercial-proposal-list-deprecated/commercial-proposal-list-deprecated.component';
 import { RequestPieChartComponent } from './components/request/request-pie-chart/request-pie-chart.component';
 import { PositionHistoryComponent } from './components/position/position-history/position-history.component';
-import { RequestAddGroupModalComponent } from "./components/request/request-add-group-modal/request-add-group-modal.component";
-import { RequestAddResponsibleModalComponent } from './components/request/request-add-responsible-modal/request-add-responsible-modal.component';
+import { RequestGroupFormComponent } from "./components/request/request-add-group-modal/request-group-form.component";
+import { RequestAddResponsibleComponent } from './components/request/request-add-responsible-modal/request-add-responsible.component';
 import { RequestAsideInfoComponent } from "./components/request/request-aside-info/request-aside-info.component";
 import { RequestComponent } from "./components/request/request.component";
 import { FilterCustomersComponent } from './components/request-list/request-list-filter/filter-customers/filter-customers.component';
-import { RequestListComponent } from "./components/request-list/request-list.component";
 import { TechnicalProposalFilterComponent } from "./components/technical-proposal-filter/technical-proposal-filter.component";
 import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
 import { FilterSectionComponent } from "./components/request-list/request-list-filter/filter-section/filter-section.component";
@@ -27,7 +26,6 @@ import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
 
 import { ContragentSharedModule } from "../../contragent/contragent-shared.module";
-import { ContragentService } from "../../contragent/services/contragent.service";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
@@ -61,16 +59,15 @@ const RequestCommonModuleDeclarations = [
   RequestPieChartComponent,
   PositionHistoryComponent,
   PositionSearchFilterPipe,
-  RequestAddGroupModalComponent,
+  RequestGroupFormComponent,
   PositionsStatusChangeComponent,
-  RequestAddResponsibleModalComponent,
+  RequestAddResponsibleComponent,
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
   FilterCustomersComponent,
   TechnicalProposalFilterContragentListComponent,
   RequestTpFilterStatusesListComponent,
-  RequestListComponent,
   CommercialProposalListFilterComponent,
   TechnicalProposalFilterComponent,
   RequestTpFilterSectionComponent,

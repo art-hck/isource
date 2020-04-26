@@ -14,83 +14,76 @@
                       [disabled]="getPositions().length === 0"
                       title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
                       (click)="onShowDesignDocumentationListModal()">
-                <clr-icon shape="app-plus" class="is-solid"></clr-icon>
+                <uxg-icon shape="app-plus" class="is-solid"></uxg-icon>
                 <span> Добавить перечень РКД</span>
               </button>
             </div>
           </div>
 
           <!-- Модальное окно добавление перечня ркд -->
-          <clr-modal [(clrModalOpen)]="showDesignDocumentationListModal"
-                     [clrModalClosable]="false"
-                     [clrModalSize]="'xl'">
+          <uxg-modal [(state)]="showDesignDocumentationListModal" size="l">
             <h3 class="modal-title">Новый перечень РКД</h3>
-            <div class="modal-body">
-              <form [formGroup]="addDocumentationForm" class="form">
-                <div formArrayName="addDocumentationListForm">
-                  <div class="app-row w-100">
-                    <div class="clr-col-5">
-                      <label>Наименование документа</label>
-                    </div>
-                    <div class="clr-col-3"><label>Срок корректировки (календ. дней)</label></div>
-                    <div class="clr-col-3"><label>Срок предоставления (календ. дней)</label></div>
-                  </div>
-                  <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
-                    <div class="form-block">
-                      <div class="clr-form-control">
-                        <div class="app-row w-100" formGroupName="{{i}}">
-                          <div class="clr-col-5">
-                            <input id="name" type="text" formControlName="name" appFormControlInvalidClass="invalid"/>
-                          </div>
-                          <div class="clr-col-3">
-                            <input id="adjustmentLimit" type="number" formControlName="adjustmentLimit"
-                                   appFormControlInvalidClass="invalid"/>
-                          </div>
-                          <div class="clr-col-3">
-                            <input id="receivingLimit" type="number" formControlName="receivingLimit"
-                                   appFormControlInvalidClass="invalid"/>
-                          </div>
-                          <div class="clr-col-1">
-                            <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
-                                    title="Удалить из списка" *ngIf="i > 0">
-                              <clr-icon shape="app-cross" size="24"></clr-icon>
-                            </button>
-                          </div>
-                        </div>
+            <form [formGroup]="addDocumentationForm" class="form">
+              <div formArrayName="addDocumentationListForm">
+                <ng-container *ngFor="let item of addDocumentationListForm.controls; let i=index">
+                  <div class="app-row" formGroupName="{{i}}">
+                    <div class="app-col-6">
+                      <div class="app-control-wrap">
+                        <input #nameRef uxgInput type="text" lg formControlName="name"/>
+                        <label class="app-control-label" (click)="nameRef.focus()">Наименование документа</label>
                       </div>
                     </div>
-                  </ng-container>
-                  <button class="btn btn-link" (click)="onAddNext()">
-                    <clr-icon shape="app-plus"></clr-icon>
-                    Добавить документ
-                  </button>
-                </div>
-              </form>
-              <div class="position-list">
-                <div class="position-choice">
-                  <b>Выберите позиции:</b>
-                </div>
-                <div class="app-row w-100" *ngFor="let position of getPositions()">
-                  <div class="clr-col-12">
-                    <clr-checkbox-wrapper class="select-checkbox">
-                      <input clrCheckbox type="checkbox"
-                             [checked]="isPositionIsChecked(position)"
-                             (change)="onSelectPosition(position)">
-                      <label class="position-label nopadding">{{ position.name }}
-                      </label>
-                    </clr-checkbox-wrapper>
+                    <div class="app-col-3">
+                      <div class="app-control-wrap">
+                        <input #adjustmentLimitRef uxgInput type="number" lg formControlName="adjustmentLimit"/>
+                        <label class="app-control-label" (click)="adjustmentLimitRef.focus()">Срок корректировки (дн.)</label>
+                      </div>
+                    </div>
+                    <div class="app-col-3">
+                      <div class="app-control-wrap">
+                        <input #receivingLimitRef uxgInput type="number" lg formControlName="receivingLimit"/>
+                        <label class="app-control-label" (click)="receivingLimitRef.focus()">Срок корректировки (дн.)</label>
+                      </div>
+                    </div>
+                    <div class="app-col-1">
+                      <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
+                              title="Удалить из списка" *ngIf="i > 0">
+                        <uxg-icon shape="app-trash"></uxg-icon>
+                      </button>
+                    </div>
+                  </div>
+                </ng-container>
+                <button class="btn btn-link" (click)="onAddNext()">
+                  <uxg-icon shape="app-plus"></uxg-icon>
+                  Добавить документ
+                </button>
+              </div>
+            </form>
+            <div class="position-list">
+              <div class="position-choice">
+                <b>Выберите позиции:</b>
+              </div>
+              <div class="app-row w-100" *ngFor="let position of getPositions()">
+                <div class="app-col-12">
+                  <div class="app-row clr-align-items-center app-section">
+                    <uxg-checkbox
+                      class="app-control" #positionCheckbox
+                      [ngModel]="isPositionIsChecked(position)"
+                      (ngModelChange)="onSelectPosition(position)"
+                    ></uxg-checkbox>
+                    <label (click)="positionCheckbox.check($event)">&nbsp; {{ position.name }}</label>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button class="btn btn-link" (click)="onCloseAddDesignDocumentationModal()">Отмена</button>
-              <button class="btn btn-primary" (click)="onAddDesignDocumentationList()"
+            <ng-template uxgModalFooter>
+              <button uxgButton secondary lg (click)="onCloseAddDesignDocumentationModal()">Отмена</button>
+              <button uxgButton primary lg (click)="onAddDesignDocumentationList()"
                       [disabled]="addDocumentationForm.invalid || selectedPositions.length === 0">
                 Добавить
               </button>
-            </div>
-          </clr-modal>
+            </ng-template>
+          </uxg-modal>
 
           <div class="design-documentation-card-list"
                *ngFor="let designDocumentation of designDocumentations; index as j">
@@ -110,16 +103,17 @@
                               class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
                     </ng-container>
                     <ng-container *ngIf="status === designDocStatus.NEW">
-                      <clr-modal #confirmDelete [clrModalStaticBackdrop]="false">
-                        <h3 class="modal-title">Удалить перечень полностью?</h3>
-                        <h5 class="modal-body"><b>Отменить действие будет невозможно.</b></h5>
-                        <div class="modal-footer">
-                          <button type="button" class="btn" (click)="confirmDelete.close()">Отмена</button>
-                          <button
-                            (click)="removeDesignDocumentList(request, designDocumentation); confirmDelete.close()"
-                            type="button" class="btn btn-danger">Удалить</button>
-                        </div>
-                      </clr-modal>
+                      <uxg-modal #confirmDelete size="s">
+                        <h2>Удалить перечень полностью?</h2>
+                        <br/>
+                        <div>Отменить действие будет невозможно.</div>
+                        <ng-template uxgModalFooter>
+                          <button class="app-col" uxgButton secondary uxgModalClose lg>Отмена</button>
+                          <button class="app-col" uxgButton primary uxgModalClose lg (click)="removeDesignDocumentList(request, designDocumentation)">
+                            Удалить
+                          </button>
+                        </ng-template>
+                      </uxg-modal>
                       <button *ngIf="designDocumentation.status === 'NEW'" (click)="confirmDelete.open()" type="button"
                               class="btn">Удалить</button>
                     </ng-container>
@@ -182,21 +176,19 @@
                     </td>
                     <td class="left clr-col-2"
                         *ngIf="designDocumentation.status === designDocStatus.NEW">
-                      <clr-modal #confirmDeleteDoc [clrModalStaticBackdrop]="false">
-                        <h3 class="modal-title">Удалить документ {{ designDoc.name }}?</h3>
-                        <h5 class="modal-body">
-                          <div *ngIf="designDoc.documents.length > 0">Документ содержит загруженные файлы, которые тоже
-                            будут удалены.
-                          </div>
-                          <div><b>Отменить действие будет невозможно.</b></div>
-                        </h5>
-                        <div class="modal-footer">
-                          <button type="button" class="btn" (click)="confirmDeleteDoc.close()">Отмена</button>
-                          <button type="button" class="btn btn-danger"
-                                  (click)="removeDesignDocument(request, designDoc); confirmDeleteDoc.close()">Удалить
-                          </button>
+                      <uxg-modal #confirmDeleteDoc size="s">
+                        <h2>Удалить документ {{ designDoc.name }}?</h2>
+                        <div *ngIf="designDoc.documents.length > 0">Документ содержит загруженные файлы, которые тоже
+                          будут удалены.
                         </div>
-                      </clr-modal>
+                        <div><b>Отменить действие будет невозможно.</b></div>
+                        <ng-template uxgModalFooter>
+                          <button class="app-col" uxgButton secondary lg uxgModalClose>Отмена</button>
+                          <button class="app-col" uxgButton primary lg uxgModalClose (click)="removeDesignDocument(request, designDoc)">
+                            Удалить
+                          </button>
+                        </ng-template>
+                      </uxg-modal>
                       <div class="app-row app-justify-content-end">
                         <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModels[i]">
                           <button (click)="confirmDeleteDoc.open()" type="button" class="btn">Удалить</button>
@@ -281,34 +273,27 @@
 
               <div class="design-actions clr-col-2">
                 <ng-container [ngSwitch]="designDocumentation.status">
-                  <clr-dropdown *ngSwitchCase="designDocStatus.ON_APPROVAL" class="bottom-right">
 
-                    <button class="btn btn-primary btn-dropdown" clrDropdownTrigger>
-                      <div>Принять решение</div>
-                      <clr-icon shape="app-chevron down"></clr-icon>
-                    </button>
+                  <uxg-dropdown lg >
+                    <div uxgDropdownItem (click)="approve(designDocumentation)">
+                      <uxg-icon shape="app-check"></uxg-icon>
+                      <span> Согласовать</span>
+                    </div>
+                    <div uxgDropdownItem appUploadFile (select)="reject(designDocumentation, $event)">
+                      <uxg-icon shape="app-warning" class="is-solid"></uxg-icon>
+                      <span> Приложить замечания</span>
+                    </div>
 
-                    <clr-dropdown-menu>
-                      <div clrDropdownItem (click)="approve(designDocumentation)">
-                        <clr-icon shape="app-check"></clr-icon>
-                        <span> Согласовать</span>
-                      </div>
-                      <label clrDropdownItem appUploadFile (select)="reject(designDocumentation, $event)">
-                        <clr-icon shape="app-warning" class="is-solid"></clr-icon>
-                        <span> Приложить замечания</span>
-                      </label>
-                    </clr-dropdown-menu>
-
-                  </clr-dropdown>
+                  </uxg-dropdown>
                   <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
                   </span>
                   <span *ngSwitchCase="designDocStatus.APPROVED" class="status status-success">
-                    <clr-icon shape="app-check"></clr-icon>
+                    <uxg-icon shape="app-check"></uxg-icon>
                     <span> Согласовано</span>
                   </span>
                   <span *ngSwitchCase="designDocStatus.REJECTED" class="status status-warning">
-                    <clr-icon shape="app-warning" class="is-solid"></clr-icon>
+                    <uxg-icon shape="app-warning" class="is-solid"></uxg-icon>
                     <span> На доработке</span>
                   </span>
                 </ng-container>

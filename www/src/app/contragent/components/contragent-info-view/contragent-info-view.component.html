@@ -6,7 +6,7 @@
   <div class="app-row action">
     <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
             (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
-      <clr-icon shape="app-pen"></clr-icon>
+      <uxg-icon shape="app-pen"></uxg-icon>
       Редактировать контрагента
     </button>
     <button uxgButton primary
@@ -30,7 +30,7 @@
       <ng-container *uxgTab="employeesTab">
         <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
           <button uxgButton secondary (click)="createEmployeeModal.open()">
-            <clr-icon shape="app-plus"></clr-icon>
+            <uxg-icon shape="app-plus"></uxg-icon>
             Новый сотрудник
           </button>
         </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="app-col edit" [style.max-width.px]="60">
                   <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="editedEmployee = employee; createEmployeeModal.open()">
-                    <clr-icon shape="app-pen"></clr-icon>
+                    <uxg-icon shape="app-pen"></uxg-icon>
                   </button>
                 </div>
               </div>
@@ -80,20 +80,17 @@
       </ng-container>
     </div>
   </div>
-  <clr-modal #createEmployeeModal [clrModalSize]="'lg'">
-    <h2 class="modal-title" *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника {{contragent.shortName}}</h2>
+  <uxg-modal #createEmployeeModal size="l">
+    <h2 *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника {{contragent.shortName}}</h2>
     <ng-template #editEmployee>
-      <h2 class="modal-title">Редактировать сотрудника {{contragent.shortName}}</h2>
+      <h2>Редактировать сотрудника {{contragent.shortName}}</h2>
     </ng-template>
-    <div class="modal-body">
-      <app-employee-form
-        *ngIf="createEmployeeModal._open"
-        (cancel)="editedEmployee = null; createEmployeeModal.close()"
-        (addEmployee)="addEmployee($event); createEmployeeModal.close()"
-        (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
-        [employee]="editedEmployee"></app-employee-form>
-    </div>
-  </clr-modal>
+    <app-employee-form
+      (cancel)="editedEmployee = null; createEmployeeModal.close()"
+      (addEmployee)="addEmployee($event); createEmployeeModal.close()"
+      (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
+      [employee]="editedEmployee"></app-employee-form>
+  </uxg-modal>
 </ng-container>
 
 

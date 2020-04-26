@@ -9,7 +9,7 @@
     <div class="app-col search">
       <button uxgButton icon primary lg
               [disabled]="!searchText.value">
-        <clr-icon shape="app-search"></clr-icon>
+        <uxg-icon shape="app-search"></uxg-icon>
       </button>
     </div>
 
@@ -37,7 +37,7 @@
           <div class="app-col search">
             <button uxgButton icon primary lg
                     [disabled]="!searchText.value">
-              <clr-icon shape="app-search"></clr-icon>
+              <uxg-icon shape="app-search"></uxg-icon>
             </button>
           </div>
         </form>
@@ -75,7 +75,7 @@
         <div class="app-col quantity">
           <input uxgInput [value]="1">
           <button uxgButton icon primary disabled>
-            <clr-icon shape="app-basket"></clr-icon>
+            <uxg-icon shape="app-basket"></uxg-icon>
           </button>
         </div>
       </div>
@@ -84,7 +84,7 @@
 </ng-container>
 <ng-template #noItems>
   <h2 class="text-center" [style.opacity]="0.1">
-    <clr-icon shape="add-search" size="270"></clr-icon>
+    <uxg-icon shape="add-search" size="270"></uxg-icon>
     <br/>
     Извините, по вашему запросу<br/> ничего не найдено
   </h2>
