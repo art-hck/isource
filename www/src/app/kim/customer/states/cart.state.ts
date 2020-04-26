@@ -50,7 +50,7 @@ export class CartState {
 
   @Action(DeleteItem)
   deleteItem({setState}: Context, {item}: DeleteItem) {
-    setState(patch({ status: "fetching" as StateStatus }));
+    setState(patch({ status: "updating" as StateStatus }));
     return this.rest.deleteItem(item).pipe(
       tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
     );
@@ -58,7 +58,7 @@ export class CartState {
 
   @Action(EditItemQuantity)
   editItem({setState}: Context, {item, quantity}: EditItemQuantity) {
-    setState(patch({ status: "fetching" as StateStatus }));
+    setState(patch({ status: "updating" as StateStatus }));
     return this.rest.editItem(item, quantity).pipe(
       tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
     );
