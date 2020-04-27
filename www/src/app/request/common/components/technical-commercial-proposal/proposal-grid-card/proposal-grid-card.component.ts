@@ -7,8 +7,7 @@ import { FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-technical-commercial-proposal-grid-card',
-  templateUrl: './proposal-grid-card.component.html',
-  styleUrls: ['./proposal-grid-card.component.scss']
+  templateUrl: './proposal-grid-card.component.html'
 })
 export class ProposalGridCardComponent {
   @Input() proposal: TechnicalCommercialProposal;

@@ -17,7 +17,8 @@
   }
 
   &-status {
-    max-width: 200px;
+    min-width: 240px;
+    max-width: 240px;
   }
 
   &-date {
@@ -64,6 +65,10 @@
 
   & > .app-col:first-child {
     padding-right: 6px;
+  }
+
+  .app-col {
+    box-sizing: content-box;
   }
 }
 

@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { ClrIconModule } from "@clr/angular";
-import { UxgIconComponent } from "./uxg-icon.component";
+import { UxgIconDirective } from "./uxg-icon.directive";
+import { CommonModule } from "@angular/common";
+import { UxgIconService } from "./uxg-icon.service";
 
 
 @NgModule({
-  imports: [ClrIconModule],
-  declarations: [UxgIconComponent],
-  exports: [UxgIconComponent, ClrIconModule],
+  imports: [CommonModule],
+  declarations: [UxgIconDirective],
+  providers: [UxgIconService],
+  exports: [UxgIconDirective],
 })
 export class UxgIconModule {
 }

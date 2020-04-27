@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { ClrModal } from "@clr/angular";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { RequestPosition } from "../../../models/request-position";
 import { Request } from "../../../models/request";
 import { Observable, Subscription } from "rxjs";
@@ -10,14 +9,14 @@ import { RequestService } from "../../../../back-office/services/request.service
 import { finalize } from "rxjs/operators";
 
 @Component({
-  selector: 'app-request-add-responsible-modal',
-  templateUrl: './request-add-responsible-modal.component.html'
+  selector: 'app-request-add-responsible',
+  templateUrl: './request-add-responsible.component.html'
 })
-export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
-  @ViewChild(ClrModal) modal: ClrModal;
+export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<User>();
+  @Output() close = new EventEmitter<User>();
   subscription = new Subscription();
   isLoading: boolean;
   regularBackofficeUsers$: Observable<User[]>;
@@ -35,14 +34,6 @@ export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
     this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers();
   }
 
-  open() {
-    this.modal.open();
-  }
-
-  close() {
-    this.modal.close();
-  }
-
   submit() {
     this.isLoading = true;
     this.subscription.add(
@@ -50,7 +41,7 @@ export class RequestAddResponsibleModalComponent implements OnInit, OnDestroy {
         finalize(() => this.isLoading = false)
       ).subscribe(() => {
           this.success.emit(this.form.get('user').value);
-          this.close();
+          this.close.emit();
         }
       )
     );

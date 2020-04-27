@@ -15,7 +15,7 @@
           </svg>
         </div>
         <div class="app-ghost-color" *ngSwitchCase="'REJECTED'">
-          <clr-icon shape="app-check"></clr-icon>
+          <uxg-icon shape="app-check"></uxg-icon>
         </div>
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="selectedProposalPosition">
@@ -44,39 +44,37 @@
     <div class="app-ellipsis app-secondary-color">{{ proposalPosition.manufacturingName }}</div>
   </button>
 
-  <clr-modal #proposalModal clrModalSize="lg">
-    <h2 class="modal-title"><span class="app-bold">{{ proposalPosition.position.name }}</span></h2>
-    <div class="modal-body" *ngIf="proposalModal._open">
+  <uxg-modal #proposalModal>
+    <h2><span class="app-bold">{{ proposalPosition.position.name }}</span></h2>
+    <div *ngIf="proposalModal.state">
       <app-technical-commercial-proposal-detail
         [proposal]="proposal"
         [proposalPosition]="proposalPosition"
       ></app-technical-commercial-proposal-detail>
-      <div class="app-row">
-        <div class="app-col app-bold">
-          <div class="app-success-color" *ngIf="helper.isQuantityValid(proposalPosition)">- Позиция в нужном количестве</div>
-          <div class="app-success-color" *ngIf="helper.isDateValid(proposalPosition)"> - Сроки укладываются в заданные</div>
-          <div class="app-error-color" *ngIf="!helper.isQuantityValid(proposalPosition)">- Количество меньше нужного</div>
-          <div class="app-error-color" *ngIf="!helper.isDateValid(proposalPosition)"> - Сроки не укладываются в заданные</div>
-        </div>
-        <!--      @TODO Доделать возможность выбрать из модалки -->
-        <!--      <div *ngIf="!isReviewed">-->
-        <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>-->
-        <!--        <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>-->
-        <!--      </div>-->
-        <!--      <div *ngIf="isReviewed">-->
-        <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>-->
-        <!--      </div>-->
-        <div>
-          <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>
-        </div>
-      </div>
     </div>
-  </clr-modal>
+    <ng-template uxgModalFooter>
+      <div class="app-col app-bold">
+        <div class="app-success-color" *ngIf="helper.isQuantityValid(proposalPosition)">- Позиция в нужном количестве</div>
+        <div class="app-success-color" *ngIf="helper.isDateValid(proposalPosition)"> - Сроки укладываются в заданные</div>
+        <div class="app-error-color" *ngIf="!helper.isQuantityValid(proposalPosition)">- Количество меньше нужного</div>
+        <div class="app-error-color" *ngIf="!helper.isDateValid(proposalPosition)"> - Сроки не укладываются в заданные</div>
+      </div>
+      <!--      @TODO Доделать возможность выбрать из модалки -->
+      <!--      <div *ngIf="!isReviewed">-->
+      <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>-->
+      <!--        <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>-->
+      <!--      </div>-->
+      <!--      <div *ngIf="isReviewed">-->
+      <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>-->
+      <!--      </div>-->
+      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+    </ng-template>
+  </uxg-modal>
 </ng-container>
 
 <ng-template #emptyProposal>
   <button [disabled]="!editable" (click)="create.emit()">
-    <clr-icon class="app-link" *ngIf="editable; else notProvided" shape="app-plus-big" size="24"></clr-icon>
+    <uxg-icon class="app-link" *ngIf="editable; else notProvided" shape="app-plus-big" size="24"></uxg-icon>
     <ng-template #notProvided><b>Не предоставлено</b></ng-template>
   </button>
 </ng-template>

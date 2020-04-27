@@ -2,7 +2,7 @@
 
   <div class="app-row app-align-items-center">
     <div class="app-col"><h3>Создать ценовой запрос</h3></div>
-    <button *ngIf="closable" type="button" uxgButton icon link (click)="close.emit()"><clr-icon shape="app-cross"></clr-icon></button>
+    <button *ngIf="closable" type="button" uxgButton icon link (click)="close.emit()"><uxg-icon shape="app-cross"></uxg-icon></button>
   </div>
 
   <div class="section">
@@ -57,7 +57,7 @@
             />
             <label class="app-control-label" (click)="dateResponse.focus()">Дата предоставления ответа</label>
             <label class="app-control-icon" (click)="dateResponse.focus()">
-              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
             <div class="app-control-error" *ngIf="dateResponseControl.errors as e">
               <span *ngIf="e.required">Обязательное поле</span>
@@ -72,7 +72,7 @@
             <input #dateDelivery uxgInput lg uxgDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y" />
             <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
             <label class="app-control-icon" (click)="dateDelivery.focus()">
-              <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
             <div class="app-control-error" *ngIf="form.get('dateDelivery').errors as e">
               <span *ngIf="e.required">Обязательное поле</span>
@@ -179,21 +179,21 @@
   </div>
 </form>
 
-<clr-modal clrModalSize="lg" #addPositionsModal>
-  <h2 class="modal-title">Добавление позиций к ЦЗ</h2>
-  <div class="modal-body" *ngIf="addPositionsModal._open" [formGroup]="form">
+<uxg-modal size="l" #addPositionsModal>
+  <h2>Добавление позиций к ЦЗ</h2>
+  <div [formGroup]="form">
     <app-kim-price-order-form-positions formControlName="positions" (cancel)="addPositionsModal.close()">
     </app-kim-price-order-form-positions>
   </div>
-</clr-modal>
+</uxg-modal>
 
-<clr-modal clrModalSize="lg" #paramsPositionsModal>
-  <h2 class="modal-title">Дополнительная информация о позициях</h2>
-  <div class="modal-body" *ngIf="paramsPositionsModal._open" [formGroup]="form">
+<uxg-modal size="l" #paramsPositionsModal>
+  <h2>Дополнительная информация о позициях</h2>
+  <div [formGroup]="form">
     <app-kim-price-order-form-positions-params formControlName="positions" (cancel)="paramsPositionsModal.close()">
     </app-kim-price-order-form-positions-params>
   </div>
-</clr-modal>
+</uxg-modal>
 
 <ng-template #controlInput let-control="control" let-label="label">
   <div class="app-col">

@@ -1,5 +1,4 @@
-import { ClrModal } from "@clr/angular";
-import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { finalize } from "rxjs/operators";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GroupWithPositions } from "../../../models/groupWithPositions";
@@ -14,11 +13,11 @@ import { RequestPositionService } from "../../../services/request-position.servi
   templateUrl: 'request-move-group-modal.component.html'
 })
 export class RequestMoveGroupModalComponent implements OnDestroy {
-  @ViewChild(ClrModal) modal: ClrModal;
   @Input() positions: RequestPosition[] = [];
   @Input() groups: RequestGroup[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<GroupWithPositions>();
+  @Output() close = new EventEmitter();
   subscription = new Subscription();
   isLoading: boolean;
 
@@ -27,14 +26,6 @@ export class RequestMoveGroupModalComponent implements OnDestroy {
   });
 
   constructor(private positionService: RequestPositionService) {}
-
-  open() {
-    this.modal.open();
-  }
-
-  close() {
-    this.modal.close();
-  }
 
   submit() {
     this.isLoading = true;
@@ -48,7 +39,7 @@ export class RequestMoveGroupModalComponent implements OnDestroy {
         finalize(() => {
           this.isLoading = false;
           this.form.reset();
-          this.close();
+          this.close.emit();
         })
       ).subscribe(groupWithPositions => this.success.emit(groupWithPositions))
     );

@@ -10,7 +10,7 @@
           <button uxgButton outline (click)="showModal = true"
                   [title]="isAvailableToCreate(contragentsWithPositions) ? '' : 'Нет доступных позиций для создания договора'"
                   [disabled]="!isAvailableToCreate(contragentsWithPositions)">
-            <clr-icon shape="app-plus" class="is-solid"></clr-icon>
+            <uxg-icon shape="app-plus" class="is-solid"></uxg-icon>
             <span>Добавить договор</span>
           </button>
         </div>
@@ -43,7 +43,7 @@
         <div class="app-row">
           <div class="app-col">
 
-            <div class="app-row clr-head">
+            <div class="app-row app-ghost-color">
               <div class="clr-col-4 clr-col-xl-6">Позиция</div>
               <div class="clr-col-2">Количество</div>
               <div class="clr-col-3 clr-col-xl-2">Цена за ед.</div>
@@ -84,13 +84,13 @@
             <div class="app-col"><b>Документы</b></div>
             <div [ngSwitch]="contract.status">
               <span class="label label-warning" *ngSwitchCase="ContractStatus.REJECTED">
-                <clr-icon shape="app-waiting"></clr-icon>На доработке
+                <uxg-icon shape="app-waiting"></uxg-icon>На доработке
               </span>
               <span class="label label-info" *ngSwitchCase="ContractStatus.ON_APPROVAL">
-                <clr-icon shape="app-waiting"></clr-icon>На согласовании
+                <uxg-icon shape="app-waiting"></uxg-icon>На согласовании
               </span>
               <span class="label label-success" *ngSwitchCase="ContractStatus.APPROVED">
-                <clr-icon shape="app-check"></clr-icon>Согласовано
+                <uxg-icon shape="app-check"></uxg-icon>Согласовано
               </span>
             </div>
           </div>
@@ -112,24 +112,24 @@
           <div class="app-col">
             <div class="app-btn-group" *ngIf="userInfoService.isBackOffice()">
               <button uxgButton secondary appUploadFile (select)="attachFileToContract($event, contract)" [disabled]="!isAvailableToAttach(contract)">
-                <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
+                <uxg-icon shape="app-attach"></uxg-icon><span>Прикрепить документ</span>
               </button>
 
               <button uxgButton secondary [disabled]="!isAvailableForApproval(contract)"
                           (click)="changeStatus(contract, ContractStatus.ON_APPROVAL)">
-                <clr-icon shape="app-check"></clr-icon><span>Отправить на согласование</span>
+                <uxg-icon shape="app-check"></uxg-icon><span>Отправить на согласование</span>
               </button>
             </div>
 
             <div class="app-btn-group" *ngIf="userInfoService.isCustomer()">
               <button uxgButton secondary [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-success-outline"
                           (click)="changeStatus(contract, ContractStatus.APPROVED)">
-                <clr-icon shape="app-check"></clr-icon>
+                <uxg-icon shape="app-check"></uxg-icon>
                 <span>Согласовать</span>
               </button>
               <button uxgButton secondary appUploadFile [disabled]="contract.status !== ContractStatus.ON_APPROVAL"
                           (select)="attachFileToContract($event, contract)" class="btn-info-outline">
-                <clr-icon shape="attachment"></clr-icon>
+                <uxg-icon shape="attachment"></uxg-icon>
                 <span>Прикрепить замечания</span>
               </button>
               <button uxgButton secondary [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
