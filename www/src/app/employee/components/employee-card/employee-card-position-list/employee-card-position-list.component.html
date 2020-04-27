@@ -1,6 +1,6 @@
 <div class="app-table positions-list-datagrid app-section app-align-items-center">
   <ng-container *ngFor="let position of positions">
-    <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId]">
+    <a class="app-link-no-color app-row" [routerLink]="['/requests', 'backoffice', position.requestId, position.id]">
       <div class="position-request-number clr-col-1">
         <b>{{ position.requestNumber }}</b>
       </div>

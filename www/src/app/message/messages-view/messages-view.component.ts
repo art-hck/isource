@@ -109,6 +109,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Преобразует RequestPositionList в одноуровневый массив позиций без групп
+   */
+  getRequestPositionsFlat(requestPositionsList: RequestPositionList[]): RequestPosition[] {
+    return requestPositionsList.reduce(function flatPositionList(arr, curr: RequestPositionList) {
+      if (curr instanceof RequestGroup) {
+        return [...arr, ...flatPositionList(curr.positions, null)];
+      } else {
+        return [...arr, curr].filter(Boolean);
+      }
+    }, []);
+  }
+
   jumpToRequestOrPosition(): void {
     if (this.positionId && this.requestId) {
       // Выбор заявки в списке
@@ -119,7 +132,9 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
       // Выбор позиции в списке
       this.requestsItems$.subscribe(requestItems => {
-        const requestItemToSelect = Object.values(requestItems).filter(
+        const flatPositionsList = this.getRequestPositionsFlat(requestItems);
+
+        const requestItemToSelect = Object.values(flatPositionsList).filter(
           requestItem => requestItem.id === this.positionId
         );
         this.onRequestItemClick(requestItemToSelect[0]);
@@ -217,10 +232,14 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     return '';
   }
 
-  getRequestUrl() {
+  getRequestUrl(): string {
     const userRole = this.user.getUserRole();
-
     return `/requests/${userRole}/${this.selectedRequest.id}`;
+  }
+
+  getPositionUrl(): string {
+    const userRole = this.user.getUserRole();
+    return `/requests/${userRole}/${this.selectedRequest.id}/${this.selectedRequestsItem.id}`;
   }
 
   getRequestItemStatus(item: RequestPositionList): { name: string, label: string } {

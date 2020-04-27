@@ -112,7 +112,7 @@
           <div class="app-col">
             <div class="app-btn-group" *ngIf="userInfoService.isBackOffice()">
               <button uxgButton secondary appUploadFile (select)="attachFileToContract($event, contract)" [disabled]="!isAvailableToAttach(contract)">
-                <clr-icon shape="attachment"></clr-icon><span>Прикрепить документ</span>
+                <uxg-icon shape="app-attach"></uxg-icon><span>Прикрепить документ</span>
               </button>
 
               <button uxgButton secondary [disabled]="!isAvailableForApproval(contract)"

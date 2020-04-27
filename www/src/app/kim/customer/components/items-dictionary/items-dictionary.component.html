@@ -1,0 +1,91 @@
+<div class="app-row" *ngIf="itemsDictionary$ | async; else startSearch">
+  <form (ngSubmit)="router.navigate(['/kim','customer', 'items-dictionary', searchText.value])">
+    <div class="app-col">
+      <div class="app-control-wrap">
+        <input #search uxgInput lg [formControl]="searchText"/>
+        <label class="app-control-label" (click)="search.focus()">Поиск по справочнику товаров</label>
+      </div>
+    </div>
+    <div class="app-col search">
+      <button uxgButton icon primary lg
+              [disabled]="!searchText.value">
+        <clr-icon shape="app-search"></clr-icon>
+      </button>
+    </div>
+
+    <div class="app-col desc">
+    <span class="app-ghost-color">
+      Если вы не нашли нужный товар в каталоге, его можно поискать по класификатору,
+      если он будет найден вы можете добавить его в корзину и создать по нему ценовой запрос.
+    </span>
+    </div>
+  </form>
+</div>
+
+<ng-template #startSearch>
+  <div class="app-row clr-justify-content-center">
+    <div class="start-search-block">
+      <h1>Поиск по справочнику товаров</h1>
+      <div class="app-row">
+        <form (ngSubmit)="router.navigate(['/kim','customer', 'items-dictionary', searchText.value])">
+          <div class="app-col start-search">
+            <div class="app-control-wrap">
+              <input #search uxgInput lg [formControl]="searchText"/>
+              <label class="app-control-label" (click)="search.focus()">Поиск по справочнику товаров</label>
+            </div>
+          </div>
+          <div class="app-col search">
+            <button uxgButton icon primary lg
+                    [disabled]="!searchText.value">
+              <clr-icon shape="app-search"></clr-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="app-row clr-justify-content-center">
+        <div class="app-col">
+          <span class="app-ghost-color start-desc">
+          Если вы не нашли нужный товар в каталоге, его можно поискать по класификатору,
+          если он будет найден вы можете добавить его в корзину и создать по нему ценовой запрос.
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-container *ngIf="(itemsDictionary$ | async) !== null">
+  <ng-container *ngIf="(itemsDictionary$ | async).length !==0; else noItems">
+    <div class="app-row app-uppercase app-ghost-color app-bold">
+      <small class="app-col app-ellipsis name">Наименование</small>
+      <small class="app-col app-ellipsis dictionary-name">Раздел классификатора ОКПД2</small>
+      <small class="app-col measure">Ед. изм.</small>
+      <small class="app-col quantity">Количество</small>
+    </div>
+    <div class="app-card">
+      <div class="app-row item" *ngFor="let itemDictionary of itemsDictionary$ | async">
+        <div class="app-col app-ellipsis app-bold clr-align-self-center name" title="{{itemDictionary.dictionaryPositionName}}"
+        >{{itemDictionary.dictionaryPositionName}}
+        </div>
+        <div class="app-col app-ellipsis app-secondary-color clr-align-self-center dictionary-name"
+             title="{{itemDictionary.classifierCategory.okpd2}} {{itemDictionary.classifierCategory.name}}">
+          {{itemDictionary.classifierCategory.okpd2}} {{itemDictionary.classifierCategory.name}}</div>
+        <div class="app-col app-ghost-color clr-align-self-center measure">
+        </div>
+        <div class="app-col quantity">
+          <input uxgInput [value]="1">
+          <button uxgButton icon primary disabled>
+            <clr-icon shape="app-basket"></clr-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+<ng-template #noItems>
+  <h2 class="text-center" [style.opacity]="0.1">
+    <clr-icon shape="add-search" size="270"></clr-icon>
+    <br/>
+    Извините, по вашему запросу<br/> ничего не найдено
+  </h2>
+</ng-template>

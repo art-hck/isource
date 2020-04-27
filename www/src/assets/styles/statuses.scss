@@ -1,6 +1,8 @@
 $statuses: (
   DRAFT: #b3b3b3, // Черновик
   ON_CUSTOMER_APPROVAL: #b3b3b3, // На согласовании заказчика
+  CANCELED: #b3b3b3, // Отменена
+  NOT_RELEVANT: #b3b3b3, // Неактуальна
   NEW: #EB5757, // Новый
   TECHNICAL_PROPOSALS_PREPARATION: #fb6a9e, // Подготовка ТП
   TECHNICAL_PROPOSALS_AGREEMENT: #fb6a9e, // Согласование ТП
@@ -33,8 +35,8 @@ $statuses: (
   DELIVERY: #9b51e0, // Доставка
   DELIVERED: #9b51e0, // Поставлено
   RELATED_SERVICES_EXECUTION: #9b51e0, // Оказание сопутствующих услуг
-  PAID: #20b55f, // Оплачено
-  WARRANTY: #20b55f, // Гарантийные обязательства
+  PAID: #9b51e0, // Оплачено
+  WARRANTY: #9b51e0, // Гарантийные обязательства
   COMPLETED: #20b55f, // Завершено
 );
 

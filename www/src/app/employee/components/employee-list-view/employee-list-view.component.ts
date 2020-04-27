@@ -7,7 +7,6 @@ import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Subscription } from "rxjs";
 import { Store } from "@ngxs/store";
 import { EmployeeInfoBrief } from "../../models/employee-info";
-import { EmployeeItemInfo } from "../../models/employee-item-info";
 
 @Component({
   selector: 'app-employee-list-view',
@@ -23,7 +22,7 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
   backofficeCount: number;
   seniorBackofficeCount: number;
 
-  editedEmployee: EmployeeItem;
+  editedEmployee: EmployeeInfoBrief;
 
   constructor(
     protected employeeService: EmployeeService,
@@ -52,7 +51,7 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
 
   addEmployee(employee: EmployeeInfoBrief) {
     this.subscription.add(this.employeeService.registerEmployee(employee).subscribe(
-      (data: EmployeeItemInfo) => {
+      (data: EmployeeInfoBrief) => {
         const preparedData = { user: data, posCount: 0, reqCount: 0 };
 
         if (employee.role === 'BACKOFFICE_BUYER') {

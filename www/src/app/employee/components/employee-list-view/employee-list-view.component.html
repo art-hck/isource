@@ -19,7 +19,7 @@
   <div class="app-col action app-grow-0">
     <button uxgButton secondary iconText
             *ngIf="userInfoService.isSeniorBackoffice()"
-            (click)="createEmployeeModal.open()">
+            (click)="editedEmployee = null; createEmployeeModal.open()">
       <clr-icon size="16" shape="app-plus"></clr-icon>
       <span>Новый сотрудник</span>
     </button>
@@ -28,15 +28,15 @@
 
 <app-employee-list *ngIf="backofficeTab.active"
                    [employees]="backoffice"
-                   (edit)="editedEmployee = $event"></app-employee-list>
+                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
 
 <app-employee-list *ngIf="employeesTab.active"
                    [employees]="seniorBackoffice"
-                   (edit)="editedEmployee = $event"></app-employee-list>
+                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
 
 
 
-<clr-modal [(clrModalOpen)]="!!editedEmployee" #createEmployeeModal [clrModalSize]="'lg'">
+<clr-modal #createEmployeeModal [clrModalSize]="'lg'">
   <h2 class="modal-title" *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника</h2>
 
   <ng-template #editEmployee>
