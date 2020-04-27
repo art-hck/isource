@@ -8,7 +8,9 @@ import { Observable } from "rxjs";
 import { DesignDocumentationList } from "../../common/models/design-documentationList";
 import { DesignDocumentationEdit } from "../../common/models/requests-list/design-documentation-edit";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DesignDocumentationService {
 
   constructor(
