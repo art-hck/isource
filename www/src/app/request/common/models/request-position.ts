@@ -41,8 +41,8 @@ export class RequestPosition extends RequestPositionList {
   hasProcedure?: boolean;
   procedureId?: string;
   procedureTitle?: string;
-  procedureStartDate?: Date;
-  procedureEndDate?: Date;
+  procedureStartDate?: string;
+  procedureEndDate?: string;
   isDraftEntity: boolean;
   isEditingByAnotherUser: boolean;
   isDesignRequired: boolean;
