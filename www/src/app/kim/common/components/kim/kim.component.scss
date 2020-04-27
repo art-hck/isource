@@ -13,3 +13,17 @@
     &-indicator { height: 3px; }
   }
 }
+
+.basket-counter {
+  background: #2585f5;
+  border-radius: 50%;
+  box-sizing: content-box;
+  color: #fff;
+  height: 16px;
+  line-height: 16px;
+  position: absolute;
+  right: -20px;
+  text-align: center;
+  top: 12px;
+  width: 16px;
+}

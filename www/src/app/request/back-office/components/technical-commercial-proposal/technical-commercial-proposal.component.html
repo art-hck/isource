@@ -5,7 +5,7 @@
         <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
       </h3>
       <div class="app-ghost-color app-bold" *ngIf="publishedCount === 0">
-        <clr-icon shape="app-draft"></clr-icon>
+        <uxg-icon shape="app-draft"></uxg-icon>
         <span>Черновик</span>
       </div>
       <div class="app-ghost-color app-bold" *ngIf="!isReviewed && publishedCount > 0">
@@ -13,15 +13,15 @@
         <span>Отправлено {{ publishedCount }} из {{ proposal.positions.length }}</span>
       </div>
       <div class="app-success-color app-bold" *ngIf="isReviewed">
-        <clr-icon shape="app-check"></clr-icon>
+        <uxg-icon shape="app-check"></uxg-icon>
         <span>Рассмотрено</span>
       </div>
 
       <button uxgButton icon link (click)="state = 'edit'" [disabled]="publishedCount > 0">
-        <clr-icon shape="app-pen"></clr-icon>
+        <uxg-icon shape="app-pen"></uxg-icon>
       </button>
       <button uxgButton icon link (click)="folded = !folded" [disabled]="proposal.positions.length === 0">
-        <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
+        <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
       </button>
     </div>
 

@@ -1,13 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-section"><b>{{position.name}}</b></div>
   <div class="app-row app-align-items-center">
-    <div class="app-col app-col-5">
+    <div class="app-col app-col-6">
       <div class="app-control-wrap">
         <input #manufacturingNameRef uxgInput type="text" lg formControlName="manufacturingName"/>
         <label class="app-control-label" (click)="manufacturingNameRef.focus()">Заводское наименование</label>
       </div>
     </div>
-    <div class="app-col app-col-3">
+    <div class="app-col app-col-4">
       <div class="app-control-wrap">
         <input #priceWithoutVatRef uxgInput type="text" lg formControlName="priceWithoutVat"/>
         <label class="app-control-label" (click)="priceWithoutVatRef.focus()">Цена за единицу</label>
@@ -26,7 +26,7 @@
         <label class="app-control-label" (click)="quantityRef.focus()">Количество</label>
       </div>
     </div>
-    <div class="app-col app-col-2">
+    <div class="app-col app-col-3">
       <uxg-dropdown-input
         lg appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
         [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
@@ -39,7 +39,7 @@
         </ng-container>
       </uxg-dropdown-input>
     </div>
-    <div class="app-col app-col-3">
+    <div class="app-col app-col-4">
       <div class="app-control-wrap">
         <input #deliveryDateRef uxgInput lg uxgDatepicker formControlName="deliveryDate"/>
         <label class="app-control-label" (click)="deliveryDateRef.focus()">Срок поставки</label>

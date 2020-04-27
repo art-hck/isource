@@ -27,8 +27,8 @@
       <span class="error-msg-container">{{ getErrorMsg('password') }}</span>
     </div>
 
-    <button type="submit"
-            class="btn btn-primary"
+    <button uxgButton primary lg type="submit"
+            class="app-col"
             [disabled]="authForm.invalid"
             [clrLoading]="loading">
       Войти
@@ -37,11 +37,11 @@
   </form>
 
   <div class="app-row app-justify-content-between">
-    <div class="clr-col-auto forgot-password">
+    <div class="app-col-auto forgot-password">
       <a (click)="router.navigateByUrl('auth/forgot-password')">Забыли пароль?</a>
     </div>
 
-    <div class="clr-col-auto registration" *ngIf="featureService.available('registration')">
+    <div class="app-col-auto registration" *ngIf="featureService.available('registration')">
       <a (click)="router.navigateByUrl('registration')">Регистрация</a>
     </div>
   </div>

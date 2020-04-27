@@ -4,7 +4,7 @@ import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
 import { filter, finalize, tap } from "rxjs/operators";
-import { ClrModal } from "@clr/angular";
+import { UxgModalComponent } from "uxg";
 import { RegistrationRequest } from "../../models/registration-request";
 import { Subscription } from "rxjs";
 import { ContragentService } from "../../../contragent/services/contragent.service";
@@ -18,8 +18,8 @@ import { Toast } from "../../../shared/models/toast";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  @ViewChild('contragentFound') contragentFound: ClrModal;
-  @ViewChild('contragentNotFound') contragentNotFound: ClrModal;
+  @ViewChild('contragentFound') contragentFound: UxgModalComponent;
+  @ViewChild('contragentNotFound') contragentNotFound: UxgModalComponent;
   @ViewChild('successRegister', { static: true }) successRegister: TemplateRef<any>;
 
   form: FormGroup;

@@ -22,12 +22,12 @@ label {
   margin-bottom: 12px;
   user-select: none;
 
-  clr-icon {
+  uxg-icon {
     transform: rotate(180deg);
     transition: transform 150ms;
   }
 
-  &.showed clr-icon {
+  &.showed uxg-icon {
     transform: rotate(0deg);
   }
 }

@@ -5,7 +5,7 @@ import { TechnicalProposalPositionStatus } from "../../enum/technical-proposal-p
 import { TechnicalProposalsStatus } from "../../enum/technical-proposals-status";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
-import * as moment from "moment";
+import moment from "moment";
 
 @Component({
   selector: 'app-request-technical-proposal',

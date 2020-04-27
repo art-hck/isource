@@ -1,5 +1,4 @@
-import { ClrModal } from "@clr/angular";
-import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { finalize, flatMap } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { RequestPositionService } from "../../../services/request-position.service";
@@ -9,14 +8,14 @@ import { RequestPosition } from "../../../models/request-position";
 import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-request-add-group-modal',
-  templateUrl: 'request-add-group-modal.component.html'
+  selector: 'app-request-group-form',
+  templateUrl: 'request-group-form.component.html'
 })
-export class RequestAddGroupModalComponent implements OnDestroy {
-  @ViewChild(ClrModal) modal: ClrModal;
+export class RequestGroupFormComponent implements OnDestroy {
   @Input() positions: RequestPosition[] = [];
   @Input() request: Request;
   @Output() success = new EventEmitter<GroupWithPositions>();
+  @Output() close = new EventEmitter();
   subscription = new Subscription();
   isLoading: boolean;
 
@@ -26,15 +25,9 @@ export class RequestAddGroupModalComponent implements OnDestroy {
 
   constructor(private positionService: RequestPositionService) {}
 
-  open() {
-    this.modal.open();
-  }
-
-  close() {
-    this.modal.close();
-  }
-
   submit() {
+    if (this.form.invalid) { return; }
+
     this.isLoading = true;
     this.subscription.add(
       this.positionService.saveGroup(this.request.id, this.form.get('name').value).pipe(
@@ -46,7 +39,7 @@ export class RequestAddGroupModalComponent implements OnDestroy {
         finalize(() => {
           this.isLoading = false;
           this.form.reset();
-          this.close();
+          this.close.emit();
         })
       ).subscribe(groupWithPositions => this.success.emit(groupWithPositions))
     );

@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { KimPriceOrder } from "../../common/models/kim-price-order";
-import { KimPriceOrdersMock } from "./kim-price-orders.mock";
-import { of } from "rxjs";
-import { delay } from "rxjs/operators";
 
 @Injectable()
 export class KimPriceOrderService {

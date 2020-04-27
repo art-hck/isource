@@ -1,7 +1,7 @@
 <div class="request-list-filter">
 
   <div class="filter-form-block">
-    <div class="filter-header clr-row clr-justify-content-between">
+    <div class="filter-header clr-row app-justify-content-between">
       <div class="clr-col">
         <span class="title">Фильтр</span>
       </div>
@@ -24,7 +24,7 @@
                 class="filter-section"
                 [label]="'Задачи'">
 
-          <div class="clr-row clr-align-items-center">
+          <div class="clr-row app-align-items-center">
             <div class="clr-col">
               <div class="toggle-label">
                 <label (click)="onlyOpenTasksRef.switch($event)">Есть открытые задачи</label>
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class="clr-row clr-align-items-center">
+          <div class="clr-row app-align-items-center">
             <div class="clr-col-auto">
               <div class="toggle-checkbox">
                 <input id="asap-toggle" type="checkbox" name="asap-toggle" formControlName="shipmentDateAsap" />

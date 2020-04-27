@@ -19,7 +19,7 @@
           <div class="app-row app-align-items-center">
           <h3 class="app-col">Новая позиция</h3>
           <button uxgButton icon type="button" (click)="formPositions.removeAt(i)" *ngIf="formPositions.length > 1">
-            <clr-icon shape="app-cross"></clr-icon>
+            <uxg-icon shape="app-cross"></uxg-icon>
           </button>
           </div>
           <app-request-position-form [formControl]="position" [isNewRequest]="true"></app-request-position-form>
@@ -29,7 +29,7 @@
       <div class="app-card">
         <div class="addNext">
           <button uxgButton secondary type="button" (click)="pushPosition()">
-            <clr-icon shape="app-plus"></clr-icon>Добавить еще одну позицию</button>
+            <uxg-icon shape="app-plus"></uxg-icon>Добавить еще одну позицию</button>
         </div>
       </div>
       <br/>
@@ -51,7 +51,7 @@
     <div class="app-section">
       <div class="app-ghost-color">Документы заявки</div>
       <button uxgButton secondary class="download-docs" disabled>
-        <clr-icon shape="app-upload"></clr-icon>
+        <uxg-icon shape="app-upload"></uxg-icon>
         <span>Загрузить документы</span>
       </button>
     </div>

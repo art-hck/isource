@@ -5,14 +5,16 @@ import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
-import { ProcedureCreateRequest } from "../../models/procedure-create-request";
-import { finalize } from "rxjs/operators";
+import { Procedure } from "../../models/procedure";
+import { finalize, tap } from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import * as moment from "moment";
+import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -20,16 +22,17 @@ import * as moment from "moment";
   styleUrls: ['./procedure-create.component.scss']
 })
 export class ProcedureCreateComponent implements OnInit {
-  @Input() procedure;
+  @Input() procedure: Procedure;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
-  @Input() contragents: ContragentList[] | ContragentShortInfo[];
+  @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: "create" | "prolong" | "bargain" = "create";
-  @Input() publicAccess = true;
   @Output() complete = new EventEmitter();
+  @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
 
   form: FormGroup;
+  allContragents$: Observable<ContragentList[]>;
   wizzard: UxgWizzard;
   isLoading: boolean;
 
@@ -49,13 +52,14 @@ export class ProcedureCreateComponent implements OnInit {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
+    private contragentService: ContragentService,
     private store: Store,
   ) {}
 
   ngOnInit() {
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
-      general: ["Общие сведения", () => this.form.get('general').valid ],
+      general: ["Общие сведения", () => this.form.get('general').valid && !!this.contragents],
       properties: { label: "Свойства", disabled: this.action === 'prolong' },
       contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
       documents: ["Документы", () => this.form.valid],
@@ -92,16 +96,14 @@ export class ProcedureCreateComponent implements OnInit {
     this.form.get("positions").valueChanges
       .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
-    this.form.get("properties").valueChanges
-      .subscribe(properties => {
-        if (!properties.publicAccess) {
-          this.form.get("privateAccessContragents").setValidators([Validators.required, Validators.minLength(2)]);
-        } else {
-          this.form.get("privateAccessContragents").clearValidators();
-        }
+    this.form.get("properties").valueChanges.pipe(
+      tap(({ publicAccess }) => this.form.get("privateAccessContragents").setValidators(
+        publicAccess ? null : [Validators.required, Validators.minLength(2)]
+      )),
+      tap(({ publicAccess }) => this.wizzard.get("contragents").toggle(!publicAccess))
+    ).subscribe();
 
-        this.wizzard.get("contragents").toggle(!properties.publicAccess);
-      });
+    this.allContragents$ = this.contragentService.getContragentList();
   }
 
   submit() {
@@ -112,7 +114,7 @@ export class ProcedureCreateComponent implements OnInit {
     this.isLoading = true;
     this.form.disable();
 
-    const body: ProcedureCreateRequest = {
+    const body: Procedure = {
       ...this.form.get("general").value,
       ...this.form.get("documents").value,
       ...this.form.get("properties").value,

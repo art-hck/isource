@@ -60,8 +60,8 @@ export class PositionComponent implements DoCheck {
     return this.positionStatusService.isStatusAfter(position.status, PositionStatus.MANUFACTURING);
   }
 
-  isBeforeManufacturing(position: RequestPosition) {
-    return this.positionStatusService.isStatusPrevious(position.status, PositionStatus.MANUFACTURING);
+  isBeforeRKDApproved(position: RequestPosition) {
+    return this.positionStatusService.isStatusPrevious(position.status, PositionStatus.RKD_APPROVED);
   }
 
   isNotActual(position: RequestPosition) {

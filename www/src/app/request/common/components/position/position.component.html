@@ -24,7 +24,7 @@
       <div class="app-col">
         <a routerLink="/messages/request/{{ position.request.id }}/position/{{ position.id }}">
           <span class="app-secondary-color">
-            <clr-icon shape="app-comment"></clr-icon>
+            <uxg-icon shape="app-comment"></uxg-icon>
             <span>Перейти к чату по позиции</span>
           </span>
         </a>
@@ -69,7 +69,7 @@
 
         <button uxgButton secondary iconText appUploadFile (select)="uploadDocuments.emit({ files: $event, position: position })"
                 [multiple]="true" [disabled]="isNotActual(position)">
-          <clr-icon shape="app-upload"></clr-icon>
+          <uxg-icon shape="app-upload"></uxg-icon>
           <span>Загрузить документы</span>
         </button>
       </div>
@@ -80,7 +80,7 @@
       <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
         <br/>
         <h2 class="text-center" [style.opacity]="0.1">
-          <clr-icon shape="app-doc" size="270"></clr-icon>
+          <uxg-icon shape="app-doc" size="270"></uxg-icon>
           <br/>
           К позиции пока не загружено ни <br/> одного документа
         </h2>
@@ -154,13 +154,13 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeManufacturing(position) || user.isCustomer()">
+        <div *ngIf="isBeforeRKDApproved(position) || user.isCustomer()">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger
                     (click)="edit.open()"
                     [disabled]="position.isEditingByAnotherUser || isNotActual(position)">
-              <clr-icon shape="app-pen"></clr-icon>
+              <uxg-icon shape="app-pen"></uxg-icon>
               <span>Редактировать</span>
             </button>
 
@@ -173,19 +173,17 @@
           </uxg-popover>
         </div>
 
-        <clr-modal #edit [clrModalStaticBackdrop]="false" clrModalSize="lg">
-          <h2 class="modal-title">Редактирование общей информации по позиции</h2>
-          <div class="modal-body">
-            <app-request-position-form
-              *ngIf="edit._open"
-              [requestId]="requestId"
-              [(position)]="position"
-              (cancel)="edit.close()"
-              (positionChange)="positionChange.emit($event); edit.close()"
-              [onDrafted]="onDrafted"
-            ></app-request-position-form>
-          </div>
-        </clr-modal>
+        <uxg-modal #edit size="l">
+          <h2>Редактирование общей информации по позиции</h2>
+          <app-request-position-form
+            *ngIf="edit.state"
+            [requestId]="requestId"
+            [(position)]="position"
+            (cancel)="edit.close()"
+            (positionChange)="positionChange.emit($event); edit.close()"
+            [onDrafted]="onDrafted"
+          ></app-request-position-form>
+        </uxg-modal>
       </div>
     </div>
   </div>
