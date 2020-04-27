@@ -167,11 +167,12 @@
                 <div class="app-col">
                   <uxg-dropdown-input appSuggestions class="measure-units" formControlName="okei" placeholder="Единицы измерения"
                                       [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
+                                      [displayByFn]="getOkeiName"
                   >
                     <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
                       <div uxgDropdownItem
                            *ngFor="let suggestion of okeiSuggestions"
-                           [value]="suggestion.code | lowercase"
+                           [value]="suggestion"
                            [attr.title]="suggestion.name | lowercase"
                       >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
                     </ng-container>
@@ -191,9 +192,10 @@
                     [searchFn]="searchOkpd2"
                     #okpd2="appSuggestions"
                     [strictMode]="true"
+                    [displayByFn]="getOkpd2Name"
                   lg>
                     <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
-                      <div uxgDropdownItem [value]="suggestion.code" [attr.title]="suggestion.code">{{suggestion.name }}</div>
+                      <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">{{suggestion.name }}</div>
                     </ng-container>
                   </uxg-dropdown-input>
                 </div>
@@ -216,9 +218,10 @@
       </ng-container>
     </div>
     <div class="app-row clr-justify-content-end actions">
+      <span *ngIf="(status$ | async) === 'fetching'" class="spinner spinner-inline"></span>
       <button *ngIf="cartView" uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>
       <ng-container *ngIf="(orderPositions$ | async) as orderPositions; else manualPriceOrder">
-      <button uxgButton primary lg (click)="submit(orderPositions); close.emit()" [disabled]="form.invalid">Создать</button>
+      <button uxgButton primary lg (click)="submit()" [disabled]="form.disabled || form.invalid">Создать</button>
       </ng-container>
       <ng-template #manualPriceOrder>
         <button uxgButton primary lg (click)="submit()" [disabled]="form.invalid">Создать</button>

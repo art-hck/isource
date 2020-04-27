@@ -21,8 +21,9 @@ import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Router } from "@angular/router";
-import { shareReplay, takeUntil } from "rxjs/operators";
+import { shareReplay, takeUntil, tap } from "rxjs/operators";
 import { KimCartItem } from "../../../common/models/kim-cart-item";
+import { StateStatus } from "../../../../request/common/models/state-status";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -33,10 +34,12 @@ import { KimCartItem } from "../../../common/models/kim-cart-item";
 
 export class PriceOrderFormComponent implements OnInit, OnDestroy {
   @Select(CartState.cartItems) orderPositions$: Observable<KimCartItem[]>;
+  @Select(CartState.status) status$: Observable<StateStatus>;
   @Input() cartView = false;
   @Output() close = new EventEmitter();
 
   form: FormGroup;
+  isLoading: boolean;
   regions$: Observable<OkatoRegion[]>;
   okpd2List$: Observable<Okpd2Item[]>;
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
@@ -50,6 +53,8 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   readonly searchRegions = (query: string, items: OkatoRegion[]) => {
     return items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0);
   }
+  readonly getOkeiName = ({ name }) => name;
+  readonly getOkpd2Name = ({ name }) => name;
   searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
     item.code === query).slice(0, 20);
   readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
@@ -68,7 +73,6 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.okpd2List$ = this.okatoService.getOkpd2();
     this.form = this.fb.group({
-      id: null,
       name: ["", Validators.required],
       regions: ["", Validators.required],
       deliveryAddress: ["", Validators.required],
@@ -102,34 +106,27 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     }));
   }
 
-  submit(orderPositions?: KimPriceOrderPosition[]) {
+  submit() {
     const body: Partial<KimPriceOrder> & { id: Uuid } = this.form.value;
     body.dateResponse = moment(body.dateResponse, "DD.MM.YYYY HH:mm").toISOString();
     body.regions = this.form.value.regions.code;
-    if (this.cartView) {
-      //body.positions = orderPositions;
-      this.store.dispatch(new CreatePriceOrder(body))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(
-        (result) => {
-          const count = orderPositions.length;
-          this.store.dispatch(new ToastActions.Success('Создан ценовой запрос по ' + count + ' позициям'));
-          this.router.navigate(["kim/customer/price-orders"]);
-        }
-      );
-      this.close.emit();
-    } else {
-      body.positions = this.form.get('positions').value;
-      this.store.dispatch(new Create(body))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (result) => {
-            const count = this.form.value.positions.length;
-            this.store.dispatch(new ToastActions.Success('Создан ценовой запрос по ' + count + ' позициям'));
-            this.router.navigate(["kim/customer/price-orders"]);
-          }
-      );
+    if (!this.cartView) {
+      body.positions = this.form.get('positions').value.map(position => {
+        position.okei = position.okei.code;
+        position.okpd2 = position.okpd2.code;
+        return position
+      })
     }
+    this.form.disable();
+    this.store.dispatch(this.cartView ? new CreatePriceOrder(body) : new Create(body))
+      .pipe(tap(() => {
+          this.store.dispatch(new ToastActions.Success('Ценовой запрос успешно создан'));
+          this.form.enable();
+          this.close.emit();
+          this.router.navigate(["kim/customer/price-orders"]);
+      }),
+            takeUntil(this.destroy$))
+      .subscribe();
   }
 
   isDateResponseValid(date: Date) {
@@ -142,6 +139,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('destroy');
     this.destroy$.next();
     this.destroy$.complete();
   }
