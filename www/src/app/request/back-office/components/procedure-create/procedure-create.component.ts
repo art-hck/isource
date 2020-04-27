@@ -70,6 +70,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       positions: [this.defaultProcedureValue("positions", []), [Validators.required]],
       general: this.fb.group({
+        requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
@@ -109,6 +110,10 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     this.allContragents$ = this.contragentService.getContragentList();
   }
 
+  getFormGroup(formGroupName: string) {
+    return this.form.get(formGroupName) as FormGroup;
+  }
+
   submit() {
     if (this.form.invalid) {
       return;
@@ -116,11 +121,10 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
     this.form.disable();
-
     const body: Procedure = {
-      ...this.form.get("general").value,
-      ...this.form.get("documents").value,
-      ...this.form.get("properties").value,
+      ...this.getFormGroup("general").getRawValue(),
+      ...this.getFormGroup("documents").getRawValue(),
+      ...this.getFormGroup("properties").getRawValue(),
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString()
