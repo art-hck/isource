@@ -196,7 +196,7 @@
     </ng-template>
 </uxg-modal>
 
-<uxg-modal [(clrModalOpen)]="positionProlongedProcedure">
+<uxg-modal [(state)]="positionProlongedProcedure">
   <h2>Продление процедуры №{{positionProlongedProcedure?.procedureId}}</h2>
   <app-prolongate-procedure
     *ngIf="positionProlongedProcedure"
