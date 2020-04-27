@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, shareReplay, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, map, shareReplay, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { ActivatedRoute } from "@angular/router";
@@ -139,7 +139,8 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   procedureAction(e: ProcedureAction) {
     this.procedureModalPayload = e;
     if (e.action !== 'create') {
-      this.procedureModalPayload.procedure$ = this.procedureService.getByPosition(e.position.id).pipe(shareReplay(1));
+      this.procedureModalPayload.procedure$ = this.procedureService.getByPosition(e.position.id)
+        .pipe(map(([p]) => p), shareReplay(1));
     }
   }
 }

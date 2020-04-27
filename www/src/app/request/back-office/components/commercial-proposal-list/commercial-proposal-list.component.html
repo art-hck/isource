@@ -11,6 +11,7 @@
       (editOffer)="showEditOfferModal($event)"
       (procedureAction)="procedureAction($event)"
       (downloadReport)="store.dispatch(downloadAnalyticalReport(requestId))"
+      (refresh)="updatePositionsAndSuppliers()"
     ></app-request-commercial-proposal-list>
 
     <uxg-modal size="l" [(state)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">

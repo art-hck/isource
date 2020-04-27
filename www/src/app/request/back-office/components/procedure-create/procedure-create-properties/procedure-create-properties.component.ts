@@ -36,7 +36,7 @@ export class ProcedureCreatePropertiesComponent implements AfterContentInit, Con
     });
 
     if (this.action === 'bargain') {
-      ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume']
+      ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume', 'publicAccess']
         .forEach(k => this.form.get(k).disable());
     }
 

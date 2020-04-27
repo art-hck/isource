@@ -54,8 +54,7 @@
   <!-- General -->
   <div *uxgWizzardStep="'general'" formGroupName="general">
     <div class="app-secondary-color">
-      Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
-      создать техническое предложение от одного контрагента.
+      Обратите внимание, что все поля в этом шаге являются <b>обязательными</b> к заполнению!
     </div>
     <br/>
     <br/>
@@ -120,7 +119,7 @@
     <br/>
     <br/>
     <select-items-with-search
-      *ngIf="contragents?.length ? contragents : (allContragents$ | async) as contragents; else loading"
+      *ngIf="contragents?.length ? contragents : procedure.privateAccessContragents || (allContragents$ | async) as contragents; else loading"
       class="select-list select-list-contragents"
       formControlName="privateAccessContragents"
       placeholder="Наименование контрагента или ИНН"
@@ -179,7 +178,9 @@
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>
       <button uxgWizzardButton="next" type="button" uxgButton primary lg >Продолжить</button>
-      <button uxgWizzardButton="end" uxgButton primary lg >Создать процедуру</button>
+      <button *ngIf="action==='create'" uxgWizzardButton="end" uxgButton primary lg >Создать процедуру</button>
+      <button *ngIf="action==='bargain'" uxgWizzardButton="end" uxgButton primary lg >Объявить уторговывание</button>
+      <button *ngIf="action==='prolong'" uxgWizzardButton="end" uxgButton primary lg >Продлить процедруру</button>
     </div>
   </div>
 </form>

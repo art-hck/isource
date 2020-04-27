@@ -10,12 +10,16 @@ import { Procedure } from "../models/procedure";
 @Injectable()
 export class ProcedureService {
 
-  constructor(
-    protected api: HttpClient,
-  ) {}
+  constructor(private api: HttpClient) {}
 
   createProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
+
+    return this.api.post<ProcedureCreateResponse>(url, body);
+  }
+
+  bargainProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
+    const url = `requests/backoffice/${requestId}/create-retrade`;
 
     return this.api.post<ProcedureCreateResponse>(url, body);
   }
@@ -30,8 +34,7 @@ export class ProcedureService {
 
   getByPosition(positionId: Uuid) {
     const url = `/requests/backoffice/procedures-by-position`;
-    return this.api.post<Procedure>(url, {positionId});
+    return this.api.post<Procedure[]>(url, { positionId });
   }
-
 
 }

@@ -19,6 +19,7 @@ export class ProlongateProcedureComponent implements OnChanges, OnDestroy {
   @Input() procedureId: string;
   @Input() date: string;
   @Output() close = new EventEmitter();
+  @Output() complete = new EventEmitter();
   form: FormGroup;
   parsedDate: Moment;
   isLoading: boolean;
@@ -45,7 +46,7 @@ export class ProlongateProcedureComponent implements OnChanges, OnDestroy {
     this.isLoading = true;
     this.offersService.prolongateProcedureEndDate(requestId, procedureId, moment(date, "DD.MM.YYYY HH:mm")).pipe(
       tap(() => this.store.dispatch(new ToastActions.Success("Дата окончания процедуры изменена"))),
-      tap(() => this.close.emit()),
+      tap(() => this.complete.emit()),
       catchError(err => {
         this.store.dispatch(new ToastActions.Error(err?.error?.detail ?? "Не удалось изменить дату окончания процедуры"));
         return throwError(err);

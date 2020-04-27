@@ -40,6 +40,7 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
   @Output() procedureAction = new EventEmitter<ProcedureAction>();
   @Output() downloadReport = new EventEmitter();
+  @Output() refresh = new EventEmitter();
 
   supplier: ContragentList;
   positionProlongedProcedure: RequestPosition;
