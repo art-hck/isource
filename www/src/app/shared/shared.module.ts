@@ -10,7 +10,6 @@ import { BytesToSizePipe } from "./pipes/bytes-to-size-pipe";
 import { SafeStylePipe } from "./pipes/safe-style-pipe";
 import { ContragentSearchFilterPipe } from "./pipes/contragent-list-filter-pipe";
 import { ControlInvalidClassDirective } from "./directives/control-invalid-class.directive";
-import { PhoneNumberDirective } from "./directives/phone-number.directive";
 import { CountdownTimerPipe } from "./pipes/countdown-timer.pipe";
 import { UploadFileDragDirective } from './directives/upload-file-drag.directive';
 import { UxgModule } from "uxg";
@@ -51,7 +50,6 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     ContragentSearchFilterPipe,
     CountdownTimerPipe,
     ControlInvalidClassDirective,
-    PhoneNumberDirective,
     UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
@@ -88,7 +86,6 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     CountdownTimerPipe,
 
     ControlInvalidClassDirective,
-    PhoneNumberDirective,
     UploadFileDragDirective,
     SelectItemsWithSearchComponent,
     SplitNumberPipe,
