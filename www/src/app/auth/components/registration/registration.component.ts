@@ -11,6 +11,7 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 import { Store } from "@ngxs/store";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Toast } from "../../../shared/models/toast";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
   selector: 'app-registration',
@@ -27,6 +28,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   isLoading = false;
   registrationProcessing = false;
   subscription = new Subscription();
+
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   constructor(
     private fb: FormBuilder,

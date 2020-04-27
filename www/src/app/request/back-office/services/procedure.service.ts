@@ -6,16 +6,20 @@ import { Observable } from "rxjs";
 import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
+import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable()
 export class ProcedureService {
 
-  constructor(private api: HttpClient) {}
+  constructor(
+    private api: HttpClient,
+    private formDataService: FormDataService
+  ) {}
 
   createProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
 
-    return this.api.post<ProcedureCreateResponse>(url, body);
+    return this.api.post<ProcedureCreateResponse>(url, this.formDataService.toFormData(body));
   }
 
   bargainProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {

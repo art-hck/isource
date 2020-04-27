@@ -81,13 +81,14 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       documents: this.fb.group({
         procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к заявке
         procedureLotDocuments: [ this.defaultProcedureValue("procedureLotDocuments", []) ], // Документы, относящиеся к позицям
+        procedureUploadDocuments: [ this.defaultProcedureValue("procedureUploadDocuments", [])] // Загруженные документы
       })
     });
 
     if (this.action === 'prolong') {
       this.wizzard.get("positions").disable();
-
       this.wizzard.get("properties").disable();
+      this.form.get("positions").disable();
       this.form.get("properties").disable();
     }
 
@@ -124,6 +125,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
     this.form.disable();
+
     const body: Procedure = {
       ...this.getFormGroup("general").getRawValue(),
       ...this.getFormGroup("documents").getRawValue(),
@@ -170,6 +172,10 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
   filterContragents(q: string, contragent: ContragentList): boolean {
     return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  }
+
+  addDocuments($event) {
+    this.form.get('documents.procedureUploadDocuments').setValue([...this.form.get('documents.procedureUploadDocuments').value, ...$event]);
   }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;

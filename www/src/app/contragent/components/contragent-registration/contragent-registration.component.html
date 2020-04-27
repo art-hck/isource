@@ -214,7 +214,7 @@
             </div>
             <div class="app-col">
               <div class="app-control-wrap">
-                <input #phone uxgInput lg formControlName="phone"/>
+                <input #phone uxgInput lg formControlName="phone" [textMask]="phoneMask"/>
                 <label class="app-control-label" (click)="phone.focus()">Телефон контрагента</label>
               </div>
             </div>

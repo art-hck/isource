@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators} from "../../../shared/forms/custom.validators";
 import { EmployeeInfoBrief } from "../../models/employee-info";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
   selector: 'app-employee-form',
@@ -16,6 +17,13 @@ export class EmployeeFormComponent implements OnInit {
   @Output() editEmployee = new EventEmitter<EmployeeInfoBrief>();
 
   form: FormGroup;
+
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   get isEditing(): boolean {
     return !!this.employee;
