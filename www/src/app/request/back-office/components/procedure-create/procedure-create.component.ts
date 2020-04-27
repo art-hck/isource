@@ -94,6 +94,9 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     if (this.action === 'bargain') {
       this.wizzard.get("positions").disable();
       this.wizzard.get("documents").disable();
+      this.form.get("positions").disable();
+      this.form.get("general.procedureTitle").disable();
+      this.form.get("general.dishonestSuppliersForbidden").disable();
     }
 
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
@@ -110,8 +113,8 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     this.allContragents$ = this.contragentService.getContragentList();
   }
 
-  getFormGroup(formGroupName: string) {
-    return this.form.get(formGroupName) as FormGroup;
+  getFormGroup(name: string) {
+    return this.form.get(name) as FormGroup;
   }
 
   submit() {
@@ -124,7 +127,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     const body: Procedure = {
       ...this.getFormGroup("general").getRawValue(),
       ...this.getFormGroup("documents").getRawValue(),
-      ...this.getFormGroup("properties").getRawValue(),
+      ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString()

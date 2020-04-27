@@ -44,9 +44,9 @@ export class ProcedureCreatePropertiesComponent implements AfterContentInit, Con
       this.form.get('publicAccess').disable();
     }
 
-    this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
-      this.writeValue(value);
-      this.onChange(value);
+    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue())).subscribe(() => {
+      this.writeValue(this.form.getRawValue());
+      this.onChange(this.form.getRawValue());
     });
   }
 
