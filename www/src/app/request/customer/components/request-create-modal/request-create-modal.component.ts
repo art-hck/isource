@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { ClrModal } from "@clr/angular";
+import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-request-create-modal',
@@ -7,7 +7,7 @@ import { ClrModal } from "@clr/angular";
 })
 export class RequestCreateModalComponent {
 
-  @ViewChild(ClrModal) modal: ClrModal;
+  @ViewChild(UxgModalComponent) modal: UxgModalComponent;
 
   @Output() uploadFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();
   @Output() publishFromTemplate = new EventEmitter<{ files: File[], requestName: string }>();

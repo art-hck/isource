@@ -159,10 +159,6 @@ p {
   display: table;
 }
 
-input {
-  margin-bottom: 10px;
-}
-
 .btn.btn-link {
   margin: 0;
 }
@@ -211,14 +207,6 @@ label {
   height: 1em;
   padding-right: 9px;
   margin-right: 9px;
-}
-
-clr-dropdown-menu  {
-  margin-top: 10px;
-
-  & > * {
-    padding: 10px 15px;
-  }
 }
 
 .design-actions {
@@ -285,4 +273,8 @@ clr-dropdown-menu  {
 
 .expired {
   color: #a32100;
+}
+
+.head-nowrap {
+  flex-wrap: nowrap;
 }

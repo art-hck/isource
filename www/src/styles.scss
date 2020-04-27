@@ -2,21 +2,8 @@
 @import "assets/styles/fonts";
 
 $font_ptroot: PT Root UI, Roboto, sans-serif;
-
-@import "~@clr/ui/clr-ui.min.css";
-@import "~nouislider/distribute/nouislider.min.css";
-@import "~leaflet/dist/leaflet.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
-@import "~flatpickr/dist/flatpickr.min.css";
-
-@import "projects/uxg/src/styles/default-theme";
-@import "assets/styles/calendar.scss";
-@import "assets/styles/grid";
-@import "assets/styles/proposals-grid";
-@import "assets/styles/statuses";
-
-/* deprecated section, to not use this styles */
+/* deprecated section, do not use this styles */
+$clr-use-custom-properties: false;
 $color_black: #000000;
 $color_blue: #0085FF;
 $color_orange: #FF9E00;
@@ -25,14 +12,25 @@ $color_red: #FF2519;
 $color_gray: #999999;
 $color_light_gray: #D4D9E2;
 $font_size_basic: 14px;
-@import "assets/styles/deprecated/buttons";
+@import "~@clr/ui/src/main";
+
 @import "assets/styles/deprecated/card-items";
 @import "assets/styles/deprecated/input-fields";
-@import "assets/styles/deprecated/checkboxes";
 @import "assets/styles/deprecated/alerts";
-@import "assets/styles/deprecated/modal-window";
 @import "assets/styles/deprecated/styles";
 /* end of deprecated sectiion */
+
+
+@import "~nouislider/distribute/nouislider.min.css";
+@import "~leaflet/dist/leaflet.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+@import "~flatpickr/dist/flatpickr.min.css";
+
+@import "projects/uxg/src/styles/default-theme";
+@import "assets/styles/grid";
+@import "assets/styles/proposals-grid";
+@import "assets/styles/statuses";
 
 body, body p, h1, h2, h3, h4, h5, h6 {
   font-family: $font_ptroot;
@@ -48,7 +46,7 @@ body {
   outline: 0;
 }
 
-a:hover {
+a, a:hover, a:visited, a[routerlink]:hover, a[ng-reflect-router-link]:hover {
   text-decoration: none;
   cursor: pointer;
 }

@@ -16,7 +16,7 @@
   word-break: break-all;
 }
 
-clr-icon {
+uxg-icon {
   height: 20px;
   width: 20px;
   color: #0085FF;
@@ -92,7 +92,7 @@ span {
   background: #FFE5C9;
 }
 
-.winner .card-header clr-icon {
+.winner .card-header uxg-icon {
   color: #E46C00;
   float: right;
 }

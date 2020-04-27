@@ -19,10 +19,10 @@
           <div class="app-secondary-color">Режим отображения:</div>
           <div class="app-btn-group">
             <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
-              <clr-icon shape="app-grid-view"></clr-icon>
+              <uxg-icon shape="app-grid-view"></uxg-icon>
             </button>
             <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
-              <clr-icon shape="app-list-view"></clr-icon>
+              <uxg-icon shape="app-list-view"></uxg-icon>
             </button>
           </div>
 <!--          <button uxgButton secondary>Фильтр</button>-->
@@ -67,7 +67,7 @@
         <div *ngIf="proposalsByPos.length === 0">
           <h1 class="text-center" [style.opacity]="0.1">
             <br/>
-            <clr-icon shape="app-publish" size="270"></clr-icon><br/>
+            <uxg-icon shape="app-publish" size="270"></uxg-icon><br/>
             Все технико-коммерческие предложения рассмотрены
           </h1>
         </div>

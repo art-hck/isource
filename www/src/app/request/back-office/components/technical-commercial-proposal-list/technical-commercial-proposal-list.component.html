@@ -6,7 +6,7 @@
         <div class="app-row app-justify-content-end analytical-report">
           <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
             <span>Аналитическая справка </span>
-            <clr-icon shape="app-download"></clr-icon>
+            <uxg-icon shape="app-download"></uxg-icon>
           </button>
         </div>
         <div class="app-table app-no-border">
@@ -15,7 +15,7 @@
               <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
               </uxg-checkbox>
               <uxg-popover #selectPopover>
-                <button uxgButton uxgPopoverTrigger link icon><clr-icon shape="app-triangle down"></clr-icon></button>
+                <button uxgButton uxgPopoverTrigger link icon><uxg-icon shape="app-triangle down"></uxg-icon></button>
                 <div *uxgPopoverContent>
                   <div><button uxgButton clear (click)="form.get('checked').setValue(true); selectPopover.hide()">Все</button></div>
                   <div><button uxgButton clear (click)="form.get('checked').setValue(false); selectPopover.hide()">Ни одного</button></div>
@@ -41,25 +41,25 @@
               <!-- Создать процедуру @TODO временно скрыто  -->
               <!--button uxgButton secondary iconText (click)="procedureModal.open()"
                       *ngIf="featureService.authorize('createProcedure')">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Создать процедуру</span>
               </button-->
 
               <!-- Новое ТКП  -->
               <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Новое ТКП</span>
               </button>
 
               <!-- Добавить столбец контрагента  -->
               <button *ngSwitchCase="'grid'" uxgButton secondary iconText (click)="addContragentModal.open()">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Контрагент</span>
               </button>
 
               <!-- Новое ТКП шаблона -->
               <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>ТКП из шаблона</span>
               </button>
 
@@ -90,7 +90,7 @@
           <div class="app-ghost-color">| {{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}} </div>
           <div class="app-col"></div>
           <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
-            <clr-icon shape="app-check"></clr-icon>
+            <uxg-icon shape="app-check"></uxg-icon>
             <span>Выбран победитель</span>
           </div>
           <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
@@ -134,60 +134,53 @@
     </div>
 
     <!-- modals -->
-    <clr-modal clrModalSize="lg" #procedureModal>
-      <h2 class="modal-title">Создание новой процедуры</h2>
-      <div class="modal-body" [style.overflow]="'visible'">
-        <ng-container *ngIf="(availablePositions$ | async) as positions">
-          <app-request-procedure-create
-            *ngIf="procedureModal._open"
-            [request]="request"
-            [positions]="positions"
-            [contragents]="getContragents(proposals)"
-            (complete)="procedureModal.close()"
-            (cancel)="procedureModal.close()"
-          ></app-request-procedure-create>
-        </ng-container>
-      </div>
-    </clr-modal>
+    <uxg-modal size="l" #procedureModal>
+      <h2>Создание новой процедуры</h2>
+      <ng-container *ngIf="(availablePositions$ | async) as positions">
+        <app-request-procedure-create
+          *ngIf="procedureModal.state"
+          [request]="request"
+          [positions]="positions"
+          [contragents]="getContragents(proposals)"
+          (complete)="procedureModal.close()"
+          (cancel)="procedureModal.close()"
+        ></app-request-procedure-create>
+      </ng-container>
+    </uxg-modal>
 
-    <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
+    <uxg-modal #uploadTemplateModal size="l">
       <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
-      <div class="modal-body" *ngIf="uploadTemplateModal._open">
-        <div class="app-secondary-color template">
-          Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
-          шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
-        </div>
-        <div class="dragAndDropArea">
-          <app-template-upload (fileSelected)="files = $event"></app-template-upload>
-        </div>
+      <div class="app-secondary-color template">
+        Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
+        шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
       </div>
-      <div class="modal-footer">
-        <button type="button" uxgButton secondary lg (click)="uploadTemplateModal.close()">Отмена</button>
-        <button uxgButton primary lg (click)="store.dispatch(uploadTemplate(requestId, files)); uploadTemplateModal.close()"
+      <div class="dragAndDropArea">
+        <app-template-upload (fileSelected)="files = $event"></app-template-upload>
+      </div>
+      <ng-template uxgModalFooter>
+        <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+        <button uxgButton primary lg uxgModalClose (click)="store.dispatch(uploadTemplate(requestId, files))"
                 [disabled]="files.length === 0">
           Загрузить
         </button>
-      </div>
-    </clr-modal>
+      </ng-template>
+    </uxg-modal>
 
-    <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="addProposalPositionData">
-      <h2 class="modal-title"><b>Добавить новое ТКП от {{addProposalPositionData?.proposal?.supplier.shortName}}</b></h2>
-      <div class="modal-body" *ngIf="addProposalPositionData">
-        <technical-commercial-proposal-position-form
-          [position]="addProposalPositionData.position"
-          [proposal]="addProposalPositionData.proposal"
-          (close)="addProposalPositionData = null"
-        ></technical-commercial-proposal-position-form>
-      </div>
-    </clr-modal>
+    <uxg-modal [(state)]="addProposalPositionData">
+      <h2>Добавить новое ТКП от {{addProposalPositionData?.proposal?.supplier.shortName}}</h2>
+      <technical-commercial-proposal-position-form
+        *ngIf="addProposalPositionData"
+        [position]="addProposalPositionData.position"
+        [proposal]="addProposalPositionData.proposal"
+        (close)="addProposalPositionData = null"
+      ></technical-commercial-proposal-position-form>
+    </uxg-modal>
 
-    <clr-modal #addContragentModal>
-      <h2 class="modal-title"><b>Добавить столбик контрагента</b></h2>
-      <div class="modal-body" *ngIf="addContragentModal._open">
-        <technical-commercial-proposal-contragent-form [request]="request" (close)="addContragentModal.close()">
-        </technical-commercial-proposal-contragent-form>
-      </div>
-    </clr-modal>
+    <uxg-modal #addContragentModal size="s">
+      <h2><b>Добавить столбик контрагента</b></h2>
+      <technical-commercial-proposal-contragent-form [request]="request" (close)="addContragentModal.close()">
+      </technical-commercial-proposal-contragent-form>
+    </uxg-modal>
 
   </ng-container>
 </ng-container>

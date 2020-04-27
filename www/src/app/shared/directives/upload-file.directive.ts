@@ -15,7 +15,7 @@ export class UploadFileDirective implements OnInit {
     this.inputEl.setAttribute("type", "file");
     this.inputEl.multiple = this.multiple;
     this.renderer.setStyle(this.inputEl, "display", "none");
-    this.renderer.insertBefore(this.el.nativeElement.parentNode, this.inputEl, this.el.nativeElement);
+    this.renderer.insertBefore(this.el.nativeElement.parentNode, this.inputEl, this.el.nativeElement.nextSibling);
     this.renderer.listen(this.inputEl, "change", this.onFileSelected);
   }
 

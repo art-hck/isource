@@ -7,7 +7,7 @@
         </div>
         <div class="app-col app-grow-0">
           <button uxgButton icon clear (click)="deleteItem(cartItem)" class="app-secondary-color">
-            <clr-icon shape="app-trash" class="is-solid" size="14"></clr-icon>
+            <uxg-icon shape="app-trash" class="is-solid" size="14"></uxg-icon>
           </button>
         </div>
       </div>
@@ -27,7 +27,7 @@
             {{cartItem.kimDictionaryPosition.dictionaryPositionCategoryCode}}
           </div>
         </div>
-        <div class="app-col quantity clr-align-items-center">
+        <div class="app-col quantity app-align-items-center">
           <span class="app-secondary-color quantity-label">Количество</span>
           <input uxgInput type="number"
                  [value]="cartItem.quantity"
@@ -55,7 +55,7 @@
 <ng-template #emptyCart>
   <div class="empty app-row app-justify-content-center app-align-items-center">
     <h1 class="text-center" [style.opacity]="0.1">
-      <clr-icon shape="app-basket" size="270"></clr-icon>
+      <uxg-icon shape="app-basket" size="270"></uxg-icon>
       <br/>
       Корзина пуста
     </h1>

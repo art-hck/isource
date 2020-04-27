@@ -1,62 +1,61 @@
 import { Directive, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import flatpickr from "flatpickr";
-import { Instance } from "flatpickr/dist/types/instance";
-import { DateLimit, DateOption } from "flatpickr/dist/types/options";
 import { DOCUMENT } from "@angular/common";
-import { Russian } from "flatpickr/dist/l10n/ru";
-import { CustomLocale, key as LocaleKey } from "flatpickr/dist/types/locale";
 import { Subject } from "rxjs";
 import { throttleTime } from "rxjs/operators";
+import { Instance } from "flatpickr/dist/types/instance";
+import { Options } from "flatpickr/dist/types/options";
+import { Russian } from "flatpickr/dist/l10n/ru";
+import flatpickr from "flatpickr";
 
 @Directive({
   selector: '[uxgDatepicker]',
   exportAs: 'uxgDatepicker',
 })
-export class UxgDatepickerDirective implements OnInit, OnDestroy {
-  @Input() dateFormat = "d.m.Y";
-  @Input() disable: DateLimit<Date>[];
-  @Input() enable: DateLimit<Date>[];
-  @Input() enableTime: boolean;
-  @Input() enableSeconds: boolean;
-  @Input() inline: boolean;
-  @Input() maxDate: DateOption;
-  @Input() maxTime: DateOption;
-  @Input() minDate: DateOption;
-  @Input() minTime: DateOption;
-  @Input() mode: "single" | "multiple" | "range" | "time";
-  @Input() monthSelectorType: "dropdown" | "static";
-  @Input() time_24hr = true;
-  @Input() position: "auto" | "above" | "below";
-  @Input() showMonths: number;
-  @Input() altInput: boolean;
-  @Input() altFormat: string;
-  @Input() appendTo: HTMLElement;
-  @Input() locale: LocaleKey | CustomLocale = Russian;
-  @Input() defaultDate: DateOption | DateOption[];
-  @Input() wrap: boolean;
+export class UxgDatepickerDirective implements OnInit, OnDestroy, Options {
+  @Input() altFormat: Options["altFormat"];
+  @Input() altInput: Options["altInput"];
+  @Input() appendTo: Options["appendTo"];
+  @Input() dateFormat: Options["dateFormat"] = "d.m.Y";
+  @Input() defaultDate: Options["defaultDate"];
+  @Input() disable: Options["disable"];
+  @Input() enable: Options["enable"];
+  @Input() enableSeconds: Options["enableSeconds"];
+  @Input() enableTime: Options["enableTime"];
+  @Input() inline: Options["inline"];
+  @Input() locale: Options["locale"] = Russian;
+  @Input() maxDate: Options["maxDate"];
+  @Input() maxTime: Options["maxTime"];
+  @Input() minDate: Options["minDate"];
+  @Input() minTime: Options["minTime"];
+  @Input() mode: Options["mode"];
+  @Input() monthSelectorType: Options["monthSelectorType"];
+  @Input() position: Options["position"];
+  @Input() showMonths: Options["showMonths"];
+  @Input() time_24hr: Options["time_24hr"] = true;
+  @Input() wrap: Options["wrap"];
 
   flatpickr: Instance;
-  open: () => void;
-  close: () => void;
-  readonly onScroll = new Subject();
-  readonly closeOnScroll = () => this.onScroll.next();
+  open: Instance["open"];
+  close: Instance["close"];
+  readonly onScroll$ = new Subject();
+  readonly onScrollFn = () => this.onScroll$.next();
 
   constructor(@Inject(DOCUMENT) private document: Document, private el: ElementRef) {}
 
   ngOnInit() {
     this.flatpickr = flatpickr(this.el.nativeElement, {
       ...this,
-      onOpen: () => window.addEventListener('scroll', this.closeOnScroll, true),
-      onClose: () => window.removeEventListener('scroll', this.closeOnScroll, true)
+      onOpen: () => window.addEventListener('scroll', this.onScrollFn, true),
+      onClose: () => window.removeEventListener('scroll', this.onScrollFn, true)
     });
     this.open = this.flatpickr.open;
     this.close = this.flatpickr.close;
 
-    this.onScroll.pipe(throttleTime(100)).subscribe(() => this.flatpickr._positionCalendar());
+    this.onScroll$.pipe(throttleTime(50)).subscribe(() => this.flatpickr._positionCalendar());
   }
 
   ngOnDestroy() {
     this.flatpickr.destroy();
-    this.onScroll.complete();
+    this.onScroll$.complete();
   }
 }
