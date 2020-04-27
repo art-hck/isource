@@ -159,8 +159,9 @@
     <br/>
     <div class="app-row app-align-items-center">
       <h3 class="app-col">Документы процедуры</h3>
-      <button type="button" uxgButton secondary iconText disabled="" title="Not implemented">
-        <uxg-icon shape="app-upload"></uxg-icon> Загрузить документы
+      <button type="button" uxgButton secondary iconText appUploadFile [multiple]="true"
+              (select)="addDocuments($event)">
+        <clr-icon shape="app-upload"></clr-icon> Загрузить документы
       </button>
     </div>
     <br/>
@@ -168,6 +169,9 @@
     <div class="scrollable">
       <app-request-procedure-create-documents [documents]="documents" formControlName="procedureLotDocuments">
       </app-request-procedure-create-documents>
+      <app-document-upload-list [documents]="form.get('documents.procedureUploadDocuments').value"
+                                [uploadAvailable]="false">
+      </app-document-upload-list>
     </div>
     <hr class="divider"/>
   </div>
