@@ -160,7 +160,7 @@ export class ProcedureCreateComponent implements OnInit {
   }
 
   addDocuments($event) {
-    this.form.get('documents.procedureUploadDocuments').setValue([...this.form.get('documents.procedureUploadDocuments').value, ...$event])
+    this.form.get('documents.procedureUploadDocuments').setValue([...this.form.get('documents.procedureUploadDocuments').value, ...$event]);
   }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;
