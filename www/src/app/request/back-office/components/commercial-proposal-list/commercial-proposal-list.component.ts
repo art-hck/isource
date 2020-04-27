@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
-import { UxgBreadcrumbsService } from "uxg";
+import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
@@ -11,17 +11,16 @@ import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Select, Store } from "@ngxs/store";
-import { ClrModal } from "@clr/angular";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
-import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
+import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
-  @ViewChild('confirmToast') confirmToast: ClrModal;
+  @ViewChild('confirmToast') confirmToast: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;

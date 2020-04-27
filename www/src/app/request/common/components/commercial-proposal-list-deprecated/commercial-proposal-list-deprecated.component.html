@@ -10,7 +10,7 @@
           <ng-template #noname>
             Поставщик
           </ng-template>
-          <clr-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="app-star" class="is-solid"></clr-icon>
+          <uxg-icon title="Победитель" *ngIf="linkedOffer.isWinner" shape="app-star" class="is-solid"></uxg-icon>
         </div>
         <div class="card-block">
           <div class="app-row">
@@ -32,7 +32,7 @@
           <div class="app-row" *ngIf="isCustomerView && canChoiceWinner()">
             <div class="app-col"></div>
             <div class="app-col">
-              <button (click)="onChoiceWinner(linkedOffer)" class="btn btn-sm btn-primary-outline">Выбрать победителя
+              <button uxgButton primary (click)="onChoiceWinner(linkedOffer)">Выбрать победителя
               </button>
             </div>
           </div>
@@ -63,17 +63,3 @@
     <p>Коммерческие предложения по позиции отсутствуют</p>
   </div>
 </ng-container>
-
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-
-    <div class="modal-body">
-      <app-contragent-info
-        [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>
-

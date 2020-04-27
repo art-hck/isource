@@ -44,7 +44,7 @@
             <button uxgButton secondary icon [disabled]="sendingActivationLink"
                     *ngIf="userInfoService.isSeniorBackoffice() && !employee.user.activated"
                     (click)="resendActivationLink($event, employee.user.id)">
-              <clr-icon shape="app-clockwise-arrow"></clr-icon>
+              <uxg-icon shape="app-clockwise-arrow"></uxg-icon>
             </button>
           </div>
 
@@ -52,7 +52,7 @@
             <button uxgButton secondary icon
                     *ngIf="userInfoService.isSeniorBackoffice()"
                     (click)="editedEmployee = employee; openEditModal($event, employee.user);">
-              <clr-icon shape="app-pen"></clr-icon>
+              <uxg-icon shape="app-pen"></uxg-icon>
             </button>
           </div>
         </div>

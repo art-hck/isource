@@ -1,13 +1,12 @@
 import localeRu from '@angular/common/locales/ru';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { ClarityIcons } from "@clr/icons";
 import { HttpClientModule } from "@angular/common/http";
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
-import { UxgIcons, UxgModule } from "uxg";
+import { UxgModule } from "uxg";
 
 import { APP_CONFIG } from "./core/config/gpnmarket-config.interface";
 import { AppComponent } from './app.component';
@@ -18,7 +17,6 @@ import { ToastListModule } from "./shared/components/toast-list/toast-list.modul
 import { WebsocketModule } from "./websocket/websocket.module";
 
 registerLocaleData(localeRu, 'ru');
-ClarityIcons.add(UxgIcons);
 
 @NgModule({
   declarations: [ AppComponent ],

@@ -6,7 +6,7 @@
       </div>
     </div>
 
-    <div class="app-col app-row app-justify-content-between clr-flex-column">
+    <div class="app-col app-row app-justify-content-between app-flex-column">
       <div class="app-secondary-color">
         Вы можете перетащить нужный документ в окно слева, или нажать на кнопку ниже, и выбрать необходимые файлы в окне проводника
       </div>
@@ -24,8 +24,8 @@
   <li class="document-item" *ngFor="let document of documents">
     <document-icon [name]="document.name" [size]="documentIconSize.small"></document-icon>
     <div>{{ document.name }}</div>
-    <button type="button" class="btn btn-link" (click)="removeDocument(document)">
-      <clr-icon shape="app-cross"></clr-icon>
+    <button uxgButton icon lg link type="button" (click)="removeDocument(document)">
+      <uxg-icon shape="app-cross"></uxg-icon>
     </button>
   </li>
   <ng-template #uploadList>
