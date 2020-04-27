@@ -24,9 +24,10 @@
         [active]="cart.isActive"
         [routerLinkActiveOptions]="{exact: true}"
         [class.app-bold]="cartTab.active"
-        #cart="routerLinkActive">
+        #cart="routerLinkActive" [disabled]="(cartItemsLength$ | async) === 0">
         <div class="app-row app-align-items-center">
           <uxg-icon shape="app-basket"></uxg-icon><span>Корзина торгового портала</span>
+          <small class="basket-counter" *ngIf="cartItemsLength$ | async as cnt">{{cnt}}</small>
         </div>
       </uxg-tab-title>
     </uxg-tabs>
