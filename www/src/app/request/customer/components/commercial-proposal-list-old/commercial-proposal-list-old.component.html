@@ -10,7 +10,7 @@
           <div class="clr-col-5">
           </div>
           <div class="clr-col-7 price-auto-select">
-            <button class="btn btn-outline" (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
+            <button uxgButton outline lg (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
                             </span>
                         </div>
 
-                        <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto clr-align-self-start">
+                        <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto app-align-self-start">
                           <uxg-icon shape="app-lock" class="lock-icon is-solid" size="14"></uxg-icon>
                         </div>
                       </div>
@@ -112,7 +112,7 @@
                   <span class="clr-col-12">Итого {{ getTotalSum() | currency: 'RUB' }}</span>
 
                   <div class="clr-col-12 send-for-agreement-btn">
-                    <button class="btn btn-primary"
+                    <button uxgButton primary lg
                             [disabled]="!isSendButtonEnabled()"
                             (click)="sendForAgreement()">Согласовать
                     </button>
@@ -170,7 +170,7 @@
                       </div>
 
                       <div class="select-all-button" style="display: none">
-                        <button class="btn btn-primary"
+                        <button uxgButton primary lg
                                 *ngIf="canSelectOffersBySupplier(requestPositions, supplier.id)"
                                 (click)="onSelectAll(requestPositions, supplier.id)">Выбрать всё
                         </button>

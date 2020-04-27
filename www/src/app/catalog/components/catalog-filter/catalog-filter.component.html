@@ -27,7 +27,7 @@
       <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index"
                     formArrayName="values">
         <ng-container formGroupName="{{j}}">
-          <div class="app-row clr-align-items-center">
+          <div class="app-row app-align-items-center">
             <uxg-checkbox class="attribute-checkbox app-control" #attributeCheckbox formControlName="checked"></uxg-checkbox>
             <label (click)="attributeCheckbox.check($event)">{{ attributeValue.get('value').value }}</label>
           </div>

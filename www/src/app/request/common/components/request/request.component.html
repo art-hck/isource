@@ -175,8 +175,8 @@
 
         <!-- Группа -->
         <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
-          <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group clr-align-items-start"-->
-          <div class="app-row app-link-no-color app-row-group clr-align-items-start">
+          <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group"-->
+          <div class="app-row app-link-no-color app-row-group">
             <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
           </div>
         </ng-container>

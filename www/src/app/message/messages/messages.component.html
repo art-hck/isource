@@ -34,14 +34,14 @@
 
 
   <div class="new-message">
-    <button appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn btn-link btn-add-file app-ghost-color">
+    <button uxgButton appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn-add-file app-ghost-color">
       <uxg-icon shape="app-attach" size="32"></uxg-icon>
     </button>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <button type="submit" class="btn btn-link btn-icon btn-send" [disabled]="form.invalid">
+      <button uxgButton lg iconText link type="submit" class="btn-send" [disabled]="form.invalid">
         <uxg-icon shape="app-message" size="32"></uxg-icon>
-        Отправить
+        <span>Отправить</span>
       </button>
 
       <div class="input-wrapper">

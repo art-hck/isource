@@ -162,7 +162,7 @@
               {{document.size | bytesToSize : 2}}
             </div>
           </div>
-          <div class="clr-align-self-start" *ngIf="!newCommercialProposalForm.get('documents').disabled && i >= 0">
+          <div class="app-align-self-start" *ngIf="!newCommercialProposalForm.get('documents').disabled && i >= 0">
             <button type="button" uxgButton link icon clear (click)="formDocuments.removeAt(i)">
               <uxg-icon shape="app-trash"></uxg-icon>
             </button>

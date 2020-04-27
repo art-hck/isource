@@ -5,7 +5,7 @@
 
 
 <div class="agreement-state-list">
-  <div *ngFor="let status of tpStatuses" class="app-row clr-align-items-center app-section">
+  <div *ngFor="let status of tpStatuses" class="app-row app-align-items-center app-section">
     <uxg-checkbox
       class="app-control" #statusCheckbox
       [ngModel]="checkIfStatusIsChecked(status)"

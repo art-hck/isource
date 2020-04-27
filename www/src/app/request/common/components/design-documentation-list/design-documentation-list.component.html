@@ -10,7 +10,7 @@
         <ng-container *ngIf="userInfoService.isBackOffice()">
           <div class="app-row w-100">
             <div class="clr-col-2">
-              <button class="btn btn-link"
+              <button uxgButton primary lg
                       [disabled]="getPositions().length === 0"
                       title="{{getPositions().length > 0 ? 'Добавить перечень РКД' : 'Нет доступных позиций'}}"
                       (click)="onShowDesignDocumentationListModal()">
@@ -45,17 +45,17 @@
                         <label class="app-control-label" (click)="receivingLimitRef.focus()">Срок корректировки (дн.)</label>
                       </div>
                     </div>
-                    <div class="app-col-1">
-                      <button type="button" class="btn btn-link btn-danger btn-delete" (click)="deleteItem(i)"
+                    <div class="app-col-1 app-row app-align-items-center">
+                      <button uxgButton link icon type="button" class="btn-delete" (click)="deleteItem(i)"
                               title="Удалить из списка" *ngIf="i > 0">
                         <uxg-icon shape="app-trash"></uxg-icon>
                       </button>
                     </div>
                   </div>
                 </ng-container>
-                <button class="btn btn-link" (click)="onAddNext()">
+                <button uxgButton link iconText (click)="onAddNext()">
                   <uxg-icon shape="app-plus"></uxg-icon>
-                  Добавить документ
+                  <span>Добавить документ</span>
                 </button>
               </div>
             </form>
@@ -65,7 +65,7 @@
               </div>
               <div class="app-row w-100" *ngFor="let position of getPositions()">
                 <div class="app-col-12">
-                  <div class="app-row clr-align-items-center app-section">
+                  <div class="app-row app-align-items-center app-section">
                     <uxg-checkbox
                       class="app-control" #positionCheckbox
                       [ngModel]="isPositionIsChecked(position)"
@@ -95,12 +95,12 @@
                 <span>
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
-                      <button disabled="" *ngSwitchCase="designDocStatus.ON_APPROVAL"
-                              class="btn btn-info-outline btn-label">На согласовании</button>
-                      <button disabled="" *ngSwitchCase="designDocStatus.APPROVED"
-                              class="btn btn-info-outline btn-label status-success">Согласовано</button>
-                      <button disabled="" *ngSwitchCase="designDocStatus.REJECTED"
-                              class="btn btn-info-outline btn-label status-warning">Отклонено заказчиком</button>
+                      <div *ngSwitchCase="designDocStatus.ON_APPROVAL"
+                              class="app-bold app-ghost-color">На согласовании</div>
+                      <div *ngSwitchCase="designDocStatus.APPROVED"
+                              class="app-bold app-success-color status-success">Согласовано</div>
+                      <div *ngSwitchCase="designDocStatus.REJECTED"
+                              class="app-bold app-warning-color status-warning">Отклонено заказчиком</div>
                     </ng-container>
                     <ng-container *ngIf="status === designDocStatus.NEW">
                       <uxg-modal #confirmDelete size="s">
@@ -114,10 +114,11 @@
                           </button>
                         </ng-template>
                       </uxg-modal>
-                      <button *ngIf="designDocumentation.status === 'NEW'" (click)="confirmDelete.open()" type="button"
-                              class="btn">Удалить</button>
+                      <button uxgButton secondary lg *ngIf="designDocumentation.status === 'NEW'" (click)="confirmDelete.open()" type="button">
+                        Удалить
+                      </button>
                     </ng-container>
-                    <button class="btn btn-primary" *ngIf="canEditDesignDocList(designDocumentation)"
+                    <button uxgButton primary lg *ngIf="canEditDesignDocList(designDocumentation)"
                             [clrLoading]="this.isSendingForApproval(designDocumentation) ? clrLoadingState.LOADING : clrLoadingState.DEFAULT"
                             [disabled]="!isSendOnApproveActive(designDocumentation)"
                             (click)="sendForApproval(designDocumentation)">Согласовать</button>
@@ -127,8 +128,8 @@
               <div class="app-row app-align-items-center">
                 <table class="document-list table table-noborder">
                   <thead>
-                  <tr class="app-row clr-flex-nowrap">
-                    <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа</th>
+                  <tr class="app-row head-nowrap">
+                    <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа123</th>
                     <th class="left clr-col-lg-3 clr-col-xl-4">Документ</th>
                     <th class="left app-col">Дата корректировки</th>
                     <th class="left app-col">Дата предоставления</th>
@@ -191,14 +192,14 @@
                       </uxg-modal>
                       <div class="app-row app-justify-content-end">
                         <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModels[i]">
-                          <button (click)="confirmDeleteDoc.open()" type="button" class="btn">Удалить</button>
-                          <button (click)="designDocModels[i] = getDesignDocModel(designDoc)" class="btn">Изменить</button>
+                          <button uxgButton secondary lg (click)="confirmDeleteDoc.open()" type="button">Удалить</button>
+                          <button uxgButton secondary lg (click)="designDocModels[i] = getDesignDocModel(designDoc)">Изменить</button>
                         </ng-container>
                         <ng-container *ngIf="designDocModels[i]">
-                          <button (click)="designDocModels[i] = null" class="btn btn-icon">Отмена</button>
-                          <button [disabled]="isDesignDocModelInvalid(designDocModels[i])"
-                                  (click)="editDesignDoc(request, designDocModels[i], designDocumentation)" type="button"
-                                  class="btn btn-primary">Сохранить
+                          <button uxgButton secondary lg (click)="designDocModels[i] = null">Отмена</button>
+                          <button uxgButton primary lg [disabled]="isDesignDocModelInvalid(designDocModels[i])"
+                                  (click)="editDesignDoc(request, designDocModels[i], designDocumentation)" type="button">
+                            Сохранить
                           </button>
                         </ng-container>
                       </div>
@@ -217,12 +218,13 @@
                     </td>
                     <td class="clr-col-2 ">
                       <div class="app-row app-justify-content-end">
-                        <button (click)="removeNewDesignDoc(j, i)" type="button" class="btn">Удалить</button>
+                        <button uxgButton secondary lg (click)="removeNewDesignDoc(j, i)" type="button">Удалить</button>
                         <button [disabled]="isDesignDocModelInvalid(newDesignDocModel.model)"
                                 [clrLoading]="newDesignDocModel.state"
                                 (click)="addDesignDoc(request, newDesignDocModel.model, designDocumentation, j, i)"
                                 type="button"
-                                class="btn btn-primary">Добавить
+                                uxgButton primary lg
+                        >Добавить
                         </button>
                       </div>
                     </td>
@@ -230,8 +232,8 @@
                   <tr class="app-row" *ngIf="canEditDesignDocList(designDocumentation)">
                     <td class="app-col app-justify-content-end">
                       <div class="app-row app-justify-content-end">
-                        <button (click)="pushNewDesignDoc(j)" type="button"
-                                class="btn btn-primary">Добавить документ
+                        <button uxgButton primary lg (click)="pushNewDesignDoc(j)" type="button">
+                          Добавить документ
                         </button>
                       </div>
                     </td>

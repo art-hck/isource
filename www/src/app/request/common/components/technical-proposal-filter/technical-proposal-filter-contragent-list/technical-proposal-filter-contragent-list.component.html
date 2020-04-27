@@ -15,7 +15,7 @@
 
 <div class="contragents-list">
   <ng-container *ngFor="let contragent of getContragents() | contragentSearchFilter: getContragentSearchInputValue();">
-    <div class="app-row clr-align-items-center app-section">
+    <div class="app-row app-align-items-center app-section">
       <uxg-checkbox
         class="app-control" #contragentCheckbox
         [ngModel]="checkIfContragentIsChecked(contragent.id)"

@@ -34,7 +34,7 @@
 
         <div class="app-col action">
           <button uxgButton primary lg [disabled]="formPositions.at(i).invalid" (click)="addToCart(formPositions.at(i))">
-            <uxg-icon *ngIf="formPositions.at(i).get('position').valid; else inCart" shape="app-basket-big"></uxg-icon>
+            <uxg-icon *ngIf="formPositions.at(i).get('position').valid; else inCart" shape="app-basket"></uxg-icon>
             <ng-template #inCart>В корзине</ng-template>
           </button>
         </div>

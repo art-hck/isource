@@ -21,7 +21,7 @@
         <ng-container *ngIf="form.get('contragent').valid">
           <h5>Выберите позиции</h5>
           <div *ngFor="let position of formPositions.controls; index as i" formArrayName="positions">
-            <div class="app-row clr-align-items-center">
+            <div class="app-row app-align-items-center">
               <uxg-checkbox class="app-control" #positionCheckbox [formControlName]="i.toString()"></uxg-checkbox>
               <label (click)="positionCheckbox.check($event)" >
                 {{ getContragentPositions(form.get('contragent').value)[i].name }}
@@ -31,8 +31,8 @@
         </ng-container>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="close.emit()">Отмена</button>
-        <button class="btn btn-primary" [disabled]="form.invalid">Добавить</button>
+        <button uxgButton secondary lg (click)="close.emit()">Отмена</button>
+        <button uxgButton primary lg [disabled]="form.invalid">Добавить</button>
       </div>
     </div>
   </div>

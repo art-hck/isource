@@ -11,7 +11,7 @@
         </div>
 
       </div>
-      <button *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn btn-delete btn-icon"
+      <button uxgButton secondary lg icon *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn-delete"
               title="Удалить"><uxg-icon shape="app-trash"></uxg-icon>
       </button>
       <uxg-modal #modal>

@@ -21,13 +21,13 @@
             </span>
 
             <div *ngIf="isSendToReview(technicalProposal)" class="clr-col-5 send-for-approval">
-              <button class="btn btn-secondary"
+              <button uxgButton secondary lg
                       (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
                       [disabled]="!isResolutionButtonsAvailable(i)"
                       [title]="isResolutionButtonsAvailable(i) ? '' : 'Для отклонения выберите необходимые позиции'">
                 Отклонить
               </button>
-              <button class="btn btn-primary"
+              <button uxgButton primary lg
                       (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
                       [disabled]="!isResolutionButtonsAvailable(i)"
                       [title]="isResolutionButtonsAvailable(i) ? '' : 'Для согласования выберите необходимые позиции'">
@@ -62,7 +62,7 @@
               <tbody>
               <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
                 <td class="left">
-                  <div class="app-row clr-align-items-center" *ngIf="isPositionSelectorAvailable(technicalProposalPosition)">
+                  <div class="app-row app-align-items-center" *ngIf="isPositionSelectorAvailable(technicalProposalPosition)">
                     <uxg-checkbox
                       class="app-control" #proposalPositionCheckbox
                       [(ngModel)]="technicalProposalPosition.checked"

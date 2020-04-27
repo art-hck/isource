@@ -5,10 +5,9 @@
     <div class="alert alert-app-level alert-info ng-star-inserted" *ngIf="!hideNeedUpdate">
       <div class="alert-items">
         <div class="alert-item">
-          <div class="alert-icon-wrapper"><uxg-icon class="alert-icon" shape="app-info"></uxg-icon></div>
           <span class="alert-text">Список заявок был изменен</span>
           <div class="alert-actions">
-            <button class="btn alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+            <button uxgButton outline class="alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
           </div>
         </div>
       </div>
