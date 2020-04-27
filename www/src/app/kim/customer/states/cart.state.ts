@@ -8,6 +8,8 @@ import { CartActions } from "../actions/cart.actions";
 import Fetch = CartActions.Fetch;
 import { KimCartService } from "../services/kim-cart.service";
 import AddItem = CartActions.AddItem;
+import DeleteItem = CartActions.DeleteItem;
+import EditItemQuantity = CartActions.EditItemQuantity;
 
 export interface CartStateModel {
   cartItems: KimCartItem[];
@@ -42,6 +44,22 @@ export class CartState {
   addItem({setState}: Context, {item, quantity}: AddItem) {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.addItem(item, quantity).pipe(
+      tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
+    );
+  }
+
+  @Action(DeleteItem)
+  deleteItem({setState}: Context, {item}: DeleteItem) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.deleteItem(item).pipe(
+      tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
+    );
+  }
+
+  @Action(EditItemQuantity)
+  editItem({setState}: Context, {item, quantity}: EditItemQuantity) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.editItem(item, quantity).pipe(
       tap(cartItems => setState(patch({cartItems, status: "received" as StateStatus})))
     );
   }
