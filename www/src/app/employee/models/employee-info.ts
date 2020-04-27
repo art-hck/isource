@@ -33,6 +33,7 @@ export class EmployeeInfoBrief {
   username: string;
   position: string;
   role?: string;
+  roles?: any;
   taxAuthorityRegistrationDate?: Date;
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];

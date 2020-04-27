@@ -1,16 +1,16 @@
 <div class="app-row">
   <div class="app-col action">
     <uxg-tabs>
-      <uxg-tab-title #backofficeTab [active]="true">
+      <uxg-tab-title #backofficeTab (click)="employeeActiveTabType = 'BACKOFFICE_BUYER'" [active]="true">
         Закупщики
-        <ng-container *ngIf="backofficeCount">
-          <span class="app-ghost-color">({{ backofficeCount }})</span>
+        <ng-container *ngIf="backoffice">
+          <span class="app-ghost-color">({{ backoffice.length }})</span>
         </ng-container>
       </uxg-tab-title>
-      <uxg-tab-title #employeesTab>
+      <uxg-tab-title #employeesTab (click)="employeeActiveTabType = 'SENIOR_BACKOFFICE'">
         Менеджеры
-          <ng-container *ngIf="seniorBackofficeCount">
-            <span class="app-ghost-color">({{ seniorBackofficeCount }})</span>
+          <ng-container *ngIf="seniorBackoffice">
+            <span class="app-ghost-color">({{ seniorBackoffice.length }})</span>
           </ng-container>
       </uxg-tab-title>
     </uxg-tabs>
@@ -48,6 +48,7 @@
     (addEmployee)="addEmployee($event); createEmployeeModal.close()"
     (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
     [roleSelectorDisabled]="false"
-    [employee]="editedEmployee">
-  </app-employee-form>
-</uxg-modal>
+    [employee]="editedEmployee"
+      [employeeActiveTabType]="employeeActiveTabType">
+    </app-employee-form>
+  </uxg-modal>
