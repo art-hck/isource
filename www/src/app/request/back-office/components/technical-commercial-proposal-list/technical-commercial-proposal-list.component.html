@@ -178,7 +178,10 @@
 
     <uxg-modal #addContragentModal size="s">
       <h2><b>Добавить столбик контрагента</b></h2>
-      <technical-commercial-proposal-contragent-form [request]="request" (close)="addContragentModal.close()">
+      <technical-commercial-proposal-contragent-form
+        [request]="request"
+        [selectedContragents]="getContragents(proposals)"
+        (close)="addContragentModal.close()">
       </technical-commercial-proposal-contragent-form>
     </uxg-modal>
 
