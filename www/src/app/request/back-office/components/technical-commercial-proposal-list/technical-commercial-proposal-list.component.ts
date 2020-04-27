@@ -46,6 +46,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
@@ -131,12 +132,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.viewPopover?.hide();
-  }
-
-  getPositions(proposals: TechnicalCommercialProposal[]): RequestPosition[] {
-    return proposals
-      .map(proposal => proposal.positions.map(proposalPosition => proposalPosition.position))
-      .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {

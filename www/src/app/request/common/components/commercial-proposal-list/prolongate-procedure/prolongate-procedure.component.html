@@ -1,0 +1,22 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="app-control-wrap">
+    <input
+      uxgInput lg uxgDatepicker
+      #dateRef
+      formControlName="date"
+      minDate="today"
+      dateFormat="d.m.Y H:i"
+      [defaultDate]="parsedDate.toDate()"
+      [enableTime]="true"
+    />
+    <label class="app-control-label" (click)="dateRef.focus()">Дата окончания процедуры</label>
+    <label class="app-control-icon" (click)="dateRef.focus()">
+      <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+    </label>
+  </div>
+  <div class="app-row app-justify-content-end app-align-items-center">
+    <div *ngIf="isLoading"><span class="spinner spinner-inline"></span></div>
+    <button uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>
+    <button uxgButton primary lg [disabled]="isLoading">Продлить</button>
+  </div>
+</form>

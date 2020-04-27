@@ -32,6 +32,7 @@ export class UxgDatepickerDirective implements OnInit, OnDestroy {
   @Input() altFormat: string;
   @Input() appendTo: HTMLElement;
   @Input() locale: LocaleKey | CustomLocale = Russian;
+  @Input() defaultDate: DateOption | DateOption[];
   @Input() wrap: boolean;
 
   flatpickr: Instance;

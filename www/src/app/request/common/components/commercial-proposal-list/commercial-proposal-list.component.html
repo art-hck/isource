@@ -76,7 +76,7 @@
               <span class="offer-status app-ghost-color">
             <clr-icon shape="app-waiting"></clr-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }})
           </span>
-            <button type="button" uxgButton secondary iconText [disabled]="true">
+            <button type="button" uxgButton secondary iconText (click)="positionProlongedProcedure = position">
               Продлить
             </button>
             <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
@@ -195,5 +195,17 @@
         <span class="spinner spinner-md"></span>
       </div>
     </ng-template>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="positionProlongedProcedure">
+  <h2 class="modal-title"><b>Продление процедуры №{{positionProlongedProcedure?.procedureId}}</b></h2>
+  <div class="modal-body" *ngIf="positionProlongedProcedure">
+    <app-prolongate-procedure
+      [date]="positionProlongedProcedure.procedureEndDate"
+      [procedureId]="positionProlongedProcedure.procedureId"
+      [requestId]="requestId"
+      (close)="positionProlongedProcedure = null"
+    ></app-prolongate-procedure>
   </div>
 </clr-modal>

@@ -137,7 +137,7 @@
     <clr-modal clrModalSize="lg" #procedureModal>
       <h2 class="modal-title">Создание новой процедуры</h2>
       <div class="modal-body" [style.overflow]="'visible'">
-        <ng-container *ngIf="getPositions(proposals) as positions">
+        <ng-container *ngIf="(availablePositions$ | async) as positions">
           <app-request-procedure-create
             *ngIf="procedureModal._open"
             [request]="request"
