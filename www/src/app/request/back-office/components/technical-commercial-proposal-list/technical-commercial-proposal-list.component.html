@@ -136,7 +136,7 @@
     <!-- modals -->
     <uxg-modal size="l" #procedureModal>
       <h2>Создание новой процедуры</h2>
-      <ng-container *ngIf="getPositions(proposals) as positions">
+      <ng-container *ngIf="(availablePositions$ | async) as positions">
         <app-request-procedure-create
           *ngIf="procedureModal.state"
           [request]="request"
