@@ -70,6 +70,7 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
         const backofficeListIndex = this.backoffice.findIndex(employeeItem => employeeItem.user.id === data.id);
         const seniorBackofficeListIndex = this.seniorBackoffice.findIndex(employeeItem => employeeItem.user.id === data.id);
 
+        // todo Переосмыслить этот кусок после реализации передачи типа сотрудника на бэке
         if (backofficeListIndex !== -1) {
           if (newEmployeeType === 'BACKOFFICE_BUYER') {
             this.backoffice[backofficeListIndex].user = data;
