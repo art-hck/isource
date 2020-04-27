@@ -11,25 +11,25 @@
         </div>
 
       </div>
-      <button *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn btn-delete btn-icon"
-              title="Удалить"><clr-icon shape="app-trash"></clr-icon>
+      <button uxgButton secondary lg icon *ngIf="enableDelete" (click)="modal.open()" type="button" class="btn-delete"
+              title="Удалить"><uxg-icon shape="app-trash"></uxg-icon>
       </button>
-      <clr-modal #modal [clrModalStaticBackdrop]="false">
-        <h3 class="modal-title">Удалить <b>{{document.filename}}</b>?</h3>
-        <div class="modal-footer">
-          <button type="button" class="btn" (click)="modal.close()">
+      <uxg-modal #modal>
+        <h2>Удалить <b>{{document.filename}}</b>?</h2>
+        <ng-template uxgModalFooter>
+          <button uxgButton secondary lg (click)="modal.close()">
             Отмена
           </button>
-          <button type="button" class="btn btn-danger" (click)="onDeleteDocument(document); modal.close()">
+          <button uxgButton primary lg (click)="onDeleteDocument(document); modal.close()">
             Удалить
           </button>
-        </div>
-      </clr-modal>
+        </ng-template>
+      </uxg-modal>
   </li>
 
   <ng-container *ngIf="limit > 0 && limit < documents.length">
     <div class="more" (click)="showAll = !showAll">
-      <clr-icon shape="angle" [attr.dir]="showAll ? 'up' : 'down'"></clr-icon>
+      <uxg-icon shape="app-chevron" [attr.dir]="showAll ? 'up' : 'down'"></uxg-icon>
       <span *ngIf="!showAll"> Еще {{ documents.length - limit | pluralize: "документ" : "документа" : "документов"}}</span>
       <span *ngIf="showAll"> Скрыть</span>
 

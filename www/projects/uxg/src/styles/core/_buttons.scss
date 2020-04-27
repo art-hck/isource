@@ -88,8 +88,8 @@
     padding: 0;
   }
 
-  &-icon-text clr-icon, &-icon-text uxg-icon  {
-    margin-left: -8px;
+  &-icon-text > uxg-icon  {
+    margin-left: -6px;
     align-self: center;
   }
 

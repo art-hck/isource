@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RequestListComponent } from "./components/request-list/request-list.component";
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
 
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";

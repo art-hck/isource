@@ -47,7 +47,7 @@
             <div class="position-status-change">
               <app-position-status [label]="activityItem.data.oldStatusLabel"
                                    [status]="activityItem.data.oldStatus"></app-position-status>
-              <clr-icon shape="app-top" dir="right"></clr-icon>
+              <uxg-icon shape="app-top" dir="right"></uxg-icon>
               <app-position-status [label]="activityItem.data.newStatusLabel"
                                    [status]="activityItem.data.newStatus"></app-position-status>
             </div>
@@ -61,9 +61,10 @@
               </span>
 
                 <ng-template #clickableWinnerLink>
-                  <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
-                     [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName
-                    }}</a>
+                  <app-contragent-info-link [contragent]="{
+                    id: activityItem.data.supplierId,
+                    shortName: activityItem.data.supplierName
+                  }"></app-contragent-info-link>
                 </ng-template>
               </div>
 
@@ -88,10 +89,10 @@
               </span>
 
                 <ng-template #clickableRemovedWinnerLink>
-                  <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
-                     (click)="showContragentInfo($event, activityItem.data.supplierId)">{{
-                    activityItem.data.supplierName
-                    }}</a>
+                  <app-contragent-info-link [contragent]="{
+                    id: activityItem.data.supplierId,
+                    shortName: activityItem.data.supplierName
+                  }"></app-contragent-info-link>
                 </ng-template>
               </div>
 
@@ -115,14 +116,3 @@
     </div>
   </ng-template>
 </div>
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-    <div class="modal-body">
-      <app-contragent-info
-        [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>

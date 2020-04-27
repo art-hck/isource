@@ -14,7 +14,7 @@ import { PriceOrderFormValidators } from "./price-order-form.validators";
 import Create = PriceOrderActions.Create;
 import Update = PriceOrderActions.Update;
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
-import * as moment from "moment";
+import moment from "moment";
 
 @Component({
   selector: 'app-kim-price-order-form',

@@ -9,7 +9,7 @@
 
       <div class="app-col app-grow-0" *ngIf="closable">
         <button type="button" uxgButton icon link (click)="close.emit()">
-          <clr-icon shape="app-cross"></clr-icon>
+          <uxg-icon shape="app-cross"></uxg-icon>
         </button>
       </div>
     </div>
@@ -135,7 +135,7 @@
       <div class="app-col app-secondary-color">
         Черновики технико-коммерческих предложений видны только сотрудникам бэкофиса, но не заказчику
       </div>
-      <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center">
+      <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
           type="button" uxgButton primary (click)="submit(false)"
@@ -146,75 +146,68 @@
     </div>
 
     <!-- modals -->
-    <clr-modal #positionsModal [clrModalSize]="'lg'">
-      <h2 class="modal-title">Выбор позиций для технико-коммерческого предложения</h2>
-      <div class="modal-body">
-        <div class="app-secondary-color">
-          Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
-          создать техническое предложение от одного контрагента.
-        </div>
-        <br/>
-        <br/>
-        <ng-container *ngIf="(availablePositions$ | async) as availablePositions">
-          <select-items-with-search
-            #positionsSelect
-            placeholder="Наименование позиции или группы"
-            formControlName="positions"
-            class="select-list select-list-positions"
-            [liveUpdate]="false"
-            [items]="toProposalPositions(availablePositions)"
-            (ngModelChange)="positionsModal.close()"
-            [filterFn]="searchPosition"
-            [trackBy]="trackByPositionId"
-          >
-            <ng-template let-formGroup="formGroup" let-positionWithMan="item">
-              <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
-                <div class="app-col app-grow-0">
-                  <uxg-checkbox formControlName="checked"></uxg-checkbox>
-                </div>
-                <div class="app-col app-bold app-ellipsis">{{ position.name }}</div>
-                <div class="app-col select-list-item-quantity">
-                  <span>{{ position.quantity }} </span>
-                  <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
-                </div>
-                <div class="app-col select-list-item-date">
-                  <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-                  <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
-                </div>
+    <uxg-modal #positionsModal size="l">
+      <h2>Выбор позиций для технико-коммерческого предложения</h2>
+      <div class="app-secondary-color">
+        Выберите все необходимые позиции или группы позиций в заявке <b>№{{request.number}}</b>, по которым вы хотите
+        создать техническое предложение от одного контрагента.
+      </div>
+      <br/>
+      <br/>
+      <ng-container *ngIf="(availablePositions$ | async) as availablePositions">
+        <select-items-with-search
+          #positionsSelect
+          placeholder="Наименование позиции или группы"
+          formControlName="positions"
+          class="select-list select-list-positions"
+          [liveUpdate]="false"
+          [items]="toProposalPositions(availablePositions)"
+          (ngModelChange)="positionsModal.close()"
+          [filterFn]="searchPosition"
+          [trackBy]="trackByPositionId"
+        >
+          <ng-template let-formGroup="formGroup" let-positionWithMan="item">
+            <div class="app-row" [formGroup]="formGroup" *ngIf="positionWithMan.position as position">
+              <div class="app-col app-grow-0">
+                <uxg-checkbox formControlName="checked"></uxg-checkbox>
               </div>
-            </ng-template>
-          </select-items-with-search>
-          <br/>
-          <div class="app-row app-justify-content-end">
-            <button type="button" uxgButton lg secondary (click)="positionsModal.close()">Отмена</button>
-            <button uxgButton lg primary (click)="positionsSelect.submit()"
-                    [disabled]="!positionsSelect.checkedFormItems.length">Всё готово</button>
-          </div>
-        </ng-container>
-      </div>
-    </clr-modal>
-    <clr-modal #manufacturerModal [clrModalSize]="'lg'">
-      <h2 class="modal-title">Заполнение заводских наименований</h2>
-      <div class="modal-body">
-        <app-request-proposal-form-manufacturer
-          *ngIf="manufacturerModal._open"
-          (cancel)="manufacturerModal.close()"
-          (ngModelChange)="manufacturerModal.close()"
-          formControlName="positions"
-        ></app-request-proposal-form-manufacturer>
-      </div>
-    </clr-modal>
+              <div class="app-col app-bold app-ellipsis">{{ position.name }}</div>
+              <div class="app-col select-list-item-quantity">
+                <span>{{ position.quantity }} </span>
+                <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+              </div>
+              <div class="app-col select-list-item-date">
+                <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+                <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+              </div>
+            </div>
+          </ng-template>
+        </select-items-with-search>
+        <br/>
+        <ng-template uxgModalFooter>
+          <button type="button" uxgButton lg secondary uxgModalClose>Отмена</button>
+          <button uxgButton lg primary (click)="positionsSelect.submit()"
+                  [disabled]="!positionsSelect.checkedFormItems.length">Всё готово</button>
+        </ng-template>
+      </ng-container>
+    </uxg-modal>
+    <uxg-modal #manufacturerModal size="l">
+      <h2>Заполнение заводских наименований</h2>
+      <app-request-proposal-form-manufacturer
+        (cancel)="manufacturerModal.close()"
+        (ngModelChange)="manufacturerModal.close()"
+        formControlName="positions"
+      ></app-request-proposal-form-manufacturer>
+    </uxg-modal>
 
-    <clr-modal #parametersModal [clrModalSize]="'lg'">
-      <h2 class="modal-title">Параметры ТКП по позициям</h2>
-      <div class="modal-body">
-        <app-technical-commercial-proposal-parameters-form
-          *ngIf="parametersModal._open"
-          formControlName="positions"
-          (ngModelChange)="parametersModal.close()"
-          (cancel)="parametersModal.close()"
-        ></app-technical-commercial-proposal-parameters-form>
-      </div>
-    </clr-modal>
+    <uxg-modal #parametersModal size="l">
+      <h2>Параметры ТКП по позициям</h2>
+      <app-technical-commercial-proposal-parameters-form
+        *ngIf="parametersModal.state"
+        formControlName="positions"
+        (ngModelChange)="parametersModal.close()"
+        (cancel)="parametersModal.close()"
+      ></app-technical-commercial-proposal-parameters-form>
+    </uxg-modal>
   </div>
 </form>
