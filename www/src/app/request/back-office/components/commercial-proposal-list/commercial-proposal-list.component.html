@@ -16,12 +16,13 @@
     <uxg-modal size="l" #procedureModal>
       <h2>Создание новой процедуры</h2>
       <app-request-procedure-create
+        *ngIf="procedureModal.state"
         [request]="request"
         [positions]="positionsWithOffers.positions"
         [contragents]="contragents$ | async"
-        [publicAccess]="false"
         (updateSelectedPositions)="updateContragents($event)"
         (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
+        (cancel)="procedureModal.close()"
       ></app-request-procedure-create>
     </uxg-modal>
   </ng-container>
@@ -67,4 +68,3 @@
     <button uxgButton primary lg (click)="publish(); confirmToast.close()">Да, отправить</button>
   </ng-template>
 </uxg-modal>
-

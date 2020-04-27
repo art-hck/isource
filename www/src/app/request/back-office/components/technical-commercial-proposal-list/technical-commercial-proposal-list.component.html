@@ -142,8 +142,8 @@
           [request]="request"
           [positions]="positions"
           [contragents]="getContragents(proposals)"
-          [publicAccess]="false"
           (complete)="procedureModal.close()"
+          (cancel)="procedureModal.close()"
         ></app-request-procedure-create>
       </ng-container>
     </uxg-modal>

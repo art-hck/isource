@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, mergeMap, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { ActivatedRoute } from "@angular/router";
@@ -7,7 +7,7 @@ import { RequestService } from "../../services/request.service";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Select, Store } from "@ngxs/store";
@@ -15,6 +15,7 @@ import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
@@ -23,7 +24,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
-  requestPositionsWithOffers$: Observable<any>;
+  requestPositionsWithOffers$: Observable<PositionsWithSuppliers>;
   contragents$: Observable<ContragentList[]>;
   showForm = false;
   showEditForm = false;
@@ -113,9 +114,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   updateContragents(positions: RequestPosition[]) {
-    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions).pipe(mergeMap(
-        contragents => contragents.length === 0 ? this.contragentService.getContragentList() : of(contragents)
-      ));
+    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions.map(({id}) => id));
   }
 
   ngOnDestroy() {

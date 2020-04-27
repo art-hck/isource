@@ -51,7 +51,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.contragents$ = this.offersService
-      .getContragentsWithTp(this.request.id, [this.position]).pipe(mergeMap(
+      .getContragentsWithTp(this.request.id, [this.position.id]).pipe(mergeMap(
         contragents => contragents.length === 0 ? this.contragentService.getContragentList() : of(contragents)
       ));
 

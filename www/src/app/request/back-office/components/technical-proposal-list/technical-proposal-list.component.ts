@@ -23,7 +23,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
   positions$: Observable<RequestPosition[]>;
-  contragents$: Observable<ContragentList[]>;
   showForm = false;
 
   constructor(
@@ -31,7 +30,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
-    private contragentService: ContragentService,
     public featureService: FeatureService,
     public store: Store
   ) {}
@@ -50,7 +48,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       tap(() => {
         this.getTechnicalProposals();
         this.getTechnicalProposalsPositions();
-        this.getTechnicalProposalsContragents();
       }),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -71,10 +68,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
 
   getTechnicalProposalsPositions() {
     this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
-  }
-
-  getTechnicalProposalsContragents() {
-    this.contragents$ = this.contragentService.getContragentList();
   }
 
   /**
