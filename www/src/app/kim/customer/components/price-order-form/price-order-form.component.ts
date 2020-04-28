@@ -10,6 +10,7 @@ import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-
 import { Observable, Subject } from "rxjs";
 import { OkatoRegion } from "../../../../shared/models/okato-region";
 import { OkatoService } from "../../../../shared/services/okpd2.service";
+import { PriceOrderFormValidators } from "./price-order-form.validators";
 import Create = PriceOrderActions.Create;
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import * as moment from "moment";

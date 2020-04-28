@@ -32,9 +32,9 @@
 
           <ng-container *ngIf="!errorCode && titleMessage">
             <div class="app-col">
-              <button [clrLoading]="loading"
+              <button uxgButton primary lg [clrLoading]="loading"
                       (click)="router.navigateByUrl('auth/login')"
-                      class="btn btn-primary">
+                      >
                 Перейти к авторизации
               </button>
             </div>
@@ -43,9 +43,8 @@
 
           <ng-container *ngIf="errorCode === activationErrorCode.ACTIVATION_TOKEN_EXPIRED">
             <div class="app-col">
-              <button [clrLoading]="loading"
-                      (click)="resendActivationLink(activationToken)"
-                      class="btn btn-primary">
+              <button uxgButton primary lg [clrLoading]="loading"
+                      (click)="resendActivationLink(activationToken)">
                 Отправить письмо ещё раз
               </button>
             </div>
@@ -54,9 +53,8 @@
 
           <ng-container *ngIf="errorCode === activationErrorCode.NOT_ACTIVATED">
             <div class="app-col">
-              <button [clrLoading]="loading"
-                      (click)="router.navigateByUrl('auth/login')"
-                      class="btn btn-primary">
+              <button uxgButton primary lg [clrLoading]="loading"
+                      (click)="router.navigateByUrl('auth/login')">
                 Вернуться к авторизации
               </button>
             </div>

@@ -30,7 +30,7 @@
             <h3 class="app-col">{{order.name}}</h3>
             <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.etpKimId}}">Показать на ЭТП ГПБ</a>
             <button uxgButton icon link (click)="folded[i] = !folded[i]">
-              <clr-icon shape="app-chevron" [attr.dir]="folded[i] ? 'down' : 'up'"></clr-icon>
+              <uxg-icon shape="app-chevron" [attr.dir]="folded[i] ? 'down' : 'up'"></uxg-icon>
             </button>
           </div>
             <hr/>

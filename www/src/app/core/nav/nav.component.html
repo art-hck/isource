@@ -12,18 +12,18 @@
 
     <!-- Сообщения -->
     <a routerLink="messages" routerLinkActive="active" class="app-menu-icon app-secondary-color">
-      <div class="app-ghost-color"><clr-icon shape="app-comment-big" size="24"></clr-icon></div>
+      <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
     </a>
 
     <!-- Корзина -->
     <ng-container *ngIf="featureService.authorize('catalog')">
       <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
-        <clr-icon class="app-ghost-color" shape="app-basket-big" size="24"></clr-icon>
+        <uxg-icon class="app-ghost-color" shape="app-basket-big" size="24"></uxg-icon>
         <small class="basket-counter">{{ cartStoreService.getCount() }}</small>
       </a>
 
       <div *ngIf="cartStoreService.getCount() === 0" class="app-menu-icon app-ghost-color">
-        <clr-icon shape="app-basket-big" size="24"></clr-icon>
+        <uxg-icon shape="app-basket-big" size="24"></uxg-icon>
       </div>
     </ng-container>
 

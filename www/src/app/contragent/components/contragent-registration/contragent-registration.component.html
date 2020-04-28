@@ -79,7 +79,7 @@
                 <input #taxAuthorityRegistrationDate uxgInput lg uxgDatepicker formControlName="taxAuthorityRegistrationDate"/>
                 <label class="app-control-label" (click)="taxAuthorityRegistrationDate.focus()">Дата регистрации</label>
                 <label class="app-control-icon" (click)="taxAuthorityRegistrationDate.focus()">
-                  <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
                 </label>
                 <div class="app-control-error" *ngIf="form.get('contragent').get('taxAuthorityRegistrationDate').errors as e">
                   <span *ngIf="e.required">Обязательное поле</span>

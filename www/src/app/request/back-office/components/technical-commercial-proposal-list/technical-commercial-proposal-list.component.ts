@@ -46,6 +46,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
@@ -58,6 +59,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     position: RequestPosition
   };
   form: FormGroup;
+  canNotAddNewContragent = false;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
@@ -122,6 +124,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success(`ТКП успешно ${action instanceof Publish ? 'отправлено' : 'сохранено'}`));
+
+      this.allPositionsOnReview();
     });
 
     this.switchView(this.view);
@@ -131,12 +135,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.viewPopover?.hide();
-  }
-
-  getPositions(proposals: TechnicalCommercialProposal[]): RequestPosition[] {
-    return proposals
-      .map(proposal => proposal.positions.map(proposalPosition => proposalPosition.position))
-      .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
@@ -154,6 +152,17 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
     return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW') && data.length > 0;
+  }
+
+  allPositionsOnReview(): boolean {
+    this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
+      this.canNotAddNewContragent = items.every(item => item.data.length > 0 ?
+        this.isOnReview(item) || this.isReviewed(item) :
+        false
+      );
+    });
+
+    return this.canNotAddNewContragent;
   }
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {

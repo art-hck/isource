@@ -5,7 +5,7 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
 import { Subject } from "rxjs";
-import { ClrModal } from "@clr/angular";
+import { UxgModalComponent } from "uxg";
 import { FormControl, Validators } from "@angular/forms";
 import { finalize, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
@@ -23,7 +23,7 @@ import Reject = TechnicalCommercialProposals.Reject;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
-  @ViewChild("proposalModal") proposalModal: ClrModal;
+  @ViewChild("proposalModal") proposalModal: UxgModalComponent;
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @Input() proposalByPos: TechnicalCommercialProposalByPosition;
   @Input() proposals: TechnicalCommercialProposal[];

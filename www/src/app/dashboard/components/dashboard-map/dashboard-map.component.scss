@@ -46,7 +46,7 @@
 .legend {
   margin: 1em 1em 0 0;
 
-  clr-icon {color: uxg($theme, color-font-link);}
+  uxg-icon {color: uxg($theme, color-font-link);}
 }
 
 $pointTypes: (err: #EB5757, warn: #F2C94C, succ: #20B55F, contragent: #2585F5);

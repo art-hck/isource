@@ -2,7 +2,7 @@
   <div class="app-row" *ngFor="let item of statuses; index as i;">
     <uxg-checkbox #statusCheckbox [ngModel]="checked(i)" (ngModelChange)="check(i, $event)" class="app-control"></uxg-checkbox>
     <label class="app-col" (click)="statusCheckbox.check($event)">&nbsp; {{PositionStatusesLabels[item.status]}}</label>
-    <div class="app-col app-grow-0 app-basis-auto">
+    <div class="app-col app-col-auto">
       <div class="app-position-status">
         <span class="app-ghost-color">{{ item.count }}</span>
         <div class="app-position-status-icon {{item.status}}"></div>

@@ -1,28 +1,25 @@
-<clr-modal [clrModalStaticBackdrop]="false" clrModalSize="lg">
-  <h2 class="modal-title"><b>Добавить новую позицию</b></h2>
-  <div class="modal-body" *ngIf="modal && modal._open">
+<uxg-modal size="l">
+  <h2>Добавить новую позицию</h2>
 
-    <uxg-tabs>
-      <uxg-tab-title #template>Загрузить из шаблона</uxg-tab-title>
-      <uxg-tab-title #manual [active]="true">Заполнить вручную</uxg-tab-title>
-    </uxg-tabs>
+  <uxg-tabs>
+    <uxg-tab-title #template>Загрузить из шаблона</uxg-tab-title>
+    <uxg-tab-title #manual [active]="true">Заполнить вручную</uxg-tab-title>
+  </uxg-tabs>
 
-    <ng-container *uxgTab="template">
-      <app-add-from-excel
-        (submit)="uploadFromTemplate.emit($event); close()"
-        (cancel)="cancel.emit()"
-        [templateUrl]="'assets/RequestTemplate.xlsx'">
-      </app-add-from-excel>
-    </ng-container>
-    <ng-container *uxgTab="manual">
-      <app-request-position-form
-        *ngIf="!!modal && modal._open"
-        [requestId]="request.id"
-        (cancel)="close()"
-        (positionChange)="success.emit($event); close()"
-        [onDrafted]="onDrafted"
-      ></app-request-position-form>
-    </ng-container>
-
-  </div>
-</clr-modal>
+  <ng-container *uxgTab="template">
+    <app-add-from-excel
+      (submit)="uploadFromTemplate.emit($event); close()"
+      (cancel)="cancel.emit()"
+      [templateUrl]="'assets/RequestTemplate.xlsx'">
+    </app-add-from-excel>
+  </ng-container>
+  <ng-container *uxgTab="manual">
+    <app-request-position-form
+      *ngIf="!!modal && modal.state"
+      [requestId]="request.id"
+      (cancel)="close()"
+      (positionChange)="success.emit($event); close()"
+      [onDrafted]="onDrafted"
+    ></app-request-position-form>
+  </ng-container>
+</uxg-modal>
