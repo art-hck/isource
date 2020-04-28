@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, map, shareReplay, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { ActivatedRoute } from "@angular/router";
@@ -14,8 +14,10 @@ import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
+import { ProcedureAction } from "../../models/procedure-action";
+import { ProcedureService } from "../../services/procedure.service";
+import { Procedure } from "../../models/procedure";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import { ProcedureSource } from "../../../common/enum/procedure-source";
 
@@ -34,6 +36,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   selectedLinkedOffer: any;
   selectedPositions: RequestPosition[] = [];
   procedureSource = ProcedureSource;
+  procedureModalPayload?: ProcedureAction & { procedure$?: Observable<Procedure> } = null;
 
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
 
@@ -47,7 +50,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private offersService: CommercialProposalsService,
-    private contragentService: ContragentService
+    private procedureService: ProcedureService
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -133,5 +136,13 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
       )),
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  procedureAction(e: ProcedureAction) {
+    this.procedureModalPayload = e;
+    if (e.action !== 'create') {
+      this.procedureModalPayload.procedure$ = this.procedureService.getByPosition(e.position.id)
+        .pipe(map(([p]) => p), shareReplay(1));
+    }
   }
 }

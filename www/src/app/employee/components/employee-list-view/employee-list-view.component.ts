@@ -19,9 +19,7 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
   backoffice: EmployeeItem[] = [];
   seniorBackoffice: EmployeeItem[] = [];
 
-  backofficeCount: number;
-  seniorBackofficeCount: number;
-
+  employeeActiveTabType = 'BACKOFFICE_BUYER';
   editedEmployee: EmployeeInfoBrief;
 
   constructor(
@@ -41,10 +39,6 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
       (type === 'BACKOFFICE') ?
         this.backoffice = employee :
         this.seniorBackoffice = employee;
-
-      this.backofficeCount = this.backoffice.length;
-      this.seniorBackofficeCount = this.seniorBackoffice.length;
-
       subscription.unsubscribe();
     });
   }
@@ -56,10 +50,8 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
 
         if (employee.role === 'BACKOFFICE_BUYER') {
           this.backoffice.push(preparedData);
-          ++this.backofficeCount;
         } else if (employee.role === 'SENIOR_BACKOFFICE') {
           this.seniorBackoffice.push(preparedData);
-          ++this.seniorBackofficeCount;
         }
 
         this.store.dispatch(new ToastActions.Success("Сотрудник успешно создан!"));
@@ -72,15 +64,27 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
   updateEmployeeListItem(employee: EmployeeInfoBrief) {
     this.editedEmployee = null;
 
-    this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
+    this.subscription.add(this.employeeService.editEmployee(employee, 'backoffice').subscribe(
       (data) => {
+        const newEmployeeType = data.roles[0].role;
         const backofficeListIndex = this.backoffice.findIndex(employeeItem => employeeItem.user.id === data.id);
         const seniorBackofficeListIndex = this.seniorBackoffice.findIndex(employeeItem => employeeItem.user.id === data.id);
 
+        // todo Переосмыслить этот кусок после реализации передачи типа сотрудника на бэке
         if (backofficeListIndex !== -1) {
-          this.backoffice[backofficeListIndex].user = data;
+          if (newEmployeeType === 'BACKOFFICE_BUYER') {
+            this.backoffice[backofficeListIndex].user = data;
+          } else if (newEmployeeType === 'SENIOR_BACKOFFICE') {
+            this.seniorBackoffice[this.seniorBackoffice.push(this.backoffice[backofficeListIndex]) - 1].user = data;
+            this.backoffice.splice(backofficeListIndex, 1);
+          }
         } else if (seniorBackofficeListIndex !== -1) {
-          this.seniorBackoffice[seniorBackofficeListIndex].user = data;
+          if (newEmployeeType === 'BACKOFFICE_BUYER') {
+            this.backoffice[this.backoffice.push(this.seniorBackoffice[seniorBackofficeListIndex]) - 1].user = data;
+            this.seniorBackoffice.splice(seniorBackofficeListIndex, 1);
+          } else if (employee.role === 'SENIOR_BACKOFFICE') {
+            this.seniorBackoffice[seniorBackofficeListIndex].user = data;
+          }
         }
 
         this.store.dispatch(new ToastActions.Success("Сотрудник успешно отредактирован!"));

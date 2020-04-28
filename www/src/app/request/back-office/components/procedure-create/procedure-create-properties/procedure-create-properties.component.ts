@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { startWith } from "rxjs/operators";
+import { ProcedureAction } from "../../../models/procedure-action";
 
 @Component({
   selector: 'app-request-procedure-create-properties',
@@ -12,7 +13,7 @@ import { startWith } from "rxjs/operators";
   }]
 })
 export class ProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
-  @Input() action: "create" | "prolong" | "bargain" = "create";
+  @Input() action: ProcedureAction["action"] = "create";
   @Input() publicAccess = true;
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -35,7 +36,7 @@ export class ProcedureCreatePropertiesComponent implements AfterContentInit, Con
     });
 
     if (this.action === 'bargain') {
-      ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume']
+      ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume', 'publicAccess']
         .forEach(k => this.form.get(k).disable());
     }
 
@@ -43,9 +44,9 @@ export class ProcedureCreatePropertiesComponent implements AfterContentInit, Con
       this.form.get('publicAccess').disable();
     }
 
-    this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
-      this.writeValue(value);
-      this.onChange(value);
+    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue())).subscribe(() => {
+      this.writeValue(this.form.getRawValue());
+      this.onChange(this.form.getRawValue());
     });
   }
 

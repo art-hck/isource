@@ -12,14 +12,20 @@ import { FormDataService } from "../../../shared/services/form-data.service";
 export class ProcedureService {
 
   constructor(
-    protected api: HttpClient,
-    protected formDataService: FormDataService
+    private api: HttpClient,
+    private formDataService: FormDataService
   ) {}
 
   createProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
 
     return this.api.post<ProcedureCreateResponse>(url, this.formDataService.toFormData(body));
+  }
+
+  bargainProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
+    const url = `requests/backoffice/${requestId}/create-retrade`;
+
+    return this.api.post<ProcedureCreateResponse>(url, body);
   }
 
   /**
@@ -29,4 +35,10 @@ export class ProcedureService {
   importOffersFromProcedure(request: Request): Observable<RequestOfferPosition[]> {
     return this.api.get<RequestOfferPosition[]>(`requests/backoffice/${request.id}/procedure-offers`);
   }
+
+  getByPosition(positionId: Uuid) {
+    const url = `/requests/backoffice/procedures-by-position`;
+    return this.api.post<Procedure[]>(url, { positionId });
+  }
+
 }

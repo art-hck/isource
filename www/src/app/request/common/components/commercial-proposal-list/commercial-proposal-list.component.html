@@ -19,7 +19,7 @@
 
           <!-- Создать процедуру  -->
           <ng-container *ngIf="featureService.authorize('createProcedure')">
-            <button type="button" uxgButton secondary iconText (click)="createProcedure.emit()">
+            <button type="button" uxgButton secondary iconText (click)="procedureAction.emit({action: 'create'})">
               <uxg-icon shape="app-plus"></uxg-icon>
               <span>Создать процедуру</span>
             </button>
@@ -58,7 +58,7 @@
               <span class="offer-status app-success-color">
             <uxg-icon shape="app-check"></uxg-icon>Завершена {{ position.procedureEndDate | date :'shortDate' }}
           </span>
-            <button type="button" uxgButton secondary iconText [disabled]="true">
+            <button type="button" uxgButton secondary iconText (click)="procedureAction.emit({action: 'bargain', position: position})">
               Уторговать
             </button>
             <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
@@ -204,5 +204,6 @@
     [procedureId]="positionProlongedProcedure.procedureId"
     [requestId]="requestId"
     (close)="positionProlongedProcedure = null"
+    (complete)="positionProlongedProcedure = null; refresh.emit()"
   ></app-prolongate-procedure>
 </uxg-modal>

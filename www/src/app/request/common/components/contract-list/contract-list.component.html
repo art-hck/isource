@@ -129,7 +129,7 @@
               </button>
               <button uxgButton secondary appUploadFile [disabled]="contract.status !== ContractStatus.ON_APPROVAL"
                           (select)="attachFileToContract($event, contract)" class="btn-info-outline">
-                <uxg-icon shape="attachment"></uxg-icon>
+                <uxg-icon shape="app-attach"></uxg-icon>
                 <span>Прикрепить замечания</span>
               </button>
               <button uxgButton secondary [disabled]="contract.status !== ContractStatus.ON_APPROVAL" class="btn-warning-outline"
