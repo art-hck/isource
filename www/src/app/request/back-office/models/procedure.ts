@@ -1,4 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { ProcedureSource } from "../../common/enum/procedure-source";
 
 export class Procedure {
   procedureTitle: string;
@@ -19,4 +20,5 @@ export class Procedure {
   procedureLotDocuments: Uuid[];
   privateAccessContragents: [];
   getTPFilesOnImport: boolean;
+  source: ProcedureSource;
 }

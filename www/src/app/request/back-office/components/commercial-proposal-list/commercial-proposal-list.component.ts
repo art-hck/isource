@@ -17,6 +17,7 @@ import { CommercialProposalsActions } from "../../actions/commercial-proposal.ac
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -32,6 +33,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   currentRequestPosition: RequestPosition;
   selectedLinkedOffer: any;
   selectedPositions: RequestPosition[] = [];
+  procedureSource = ProcedureSource;
 
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
 

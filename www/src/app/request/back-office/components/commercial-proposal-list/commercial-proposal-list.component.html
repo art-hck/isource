@@ -20,6 +20,7 @@
         [request]="request"
         [positions]="positionsWithOffers.positions"
         [contragents]="contragents$ | async"
+        [procedureSource]="procedureSource.COMMERCIAL_PROPOSAL"
         (updateSelectedPositions)="updateContragents($event)"
         (complete)="updatePositionsAndSuppliers(); procedureModal.close()"
         (cancel)="procedureModal.close()"
