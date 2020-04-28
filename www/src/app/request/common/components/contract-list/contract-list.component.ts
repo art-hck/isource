@@ -31,6 +31,7 @@ export class ContractListComponent implements OnInit {
   public attachedFiles: { file: File, contract: Contract }[] = [];
 
   contragent: ContragentInfo;
+  contractSignLoader = false;
   contragentInfoModalOpened = false;
 
   constructor(
@@ -190,9 +191,15 @@ export class ContractListComponent implements OnInit {
    * @param contract
    */
   onSignContract(contract: Contract) {
+    this.contractSignLoader = true;
+
     this.contractService.sign(contract.id).subscribe(
       (data: Contract) => {
         contract.status = ContractStatus.SIGNED;
+        this.contractSignLoader = false;
+      },
+      () => {
+        this.contractSignLoader = false;
       }
     );
   }
