@@ -41,6 +41,8 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   regions$: Observable<OkatoRegion[]>;
   okpd2List$: Observable<Okpd2Item[]>;
+  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
+  readonly destroy$ = new Subject();
   readonly paymentTermsLabels = Object.entries(PaymentTermsLabels);
   readonly typeLabels = Object.entries(KimPriceOrderTypeLabels);
   readonly mask: TextMaskConfig = {
@@ -54,8 +56,6 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   }
   readonly getOkeiName = ({ name }) => name;
   readonly getOkpd2Name = ({ name }) => name;
-  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
-  readonly destroy$ = new Subject();
   searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
     item.code === query).slice(0, 20);
 
