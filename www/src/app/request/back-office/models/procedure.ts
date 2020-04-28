@@ -17,7 +17,6 @@ export class Procedure {
   dishonestSuppliersForbidden: boolean;
   prolongateEndRegistration: number;
   procedureDocuments: [];
-  procedureLotDocuments: Uuid[];
   privateAccessContragents: [];
   getTPFilesOnImport: boolean;
   source: ProcedureSource;

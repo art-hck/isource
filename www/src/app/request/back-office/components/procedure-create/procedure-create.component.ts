@@ -81,8 +81,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       properties: null,
       privateAccessContragents: [ this.defaultProcedureValue("privateAccessContragents", []) ],
       documents: this.fb.group({
-        procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к заявке
-        procedureLotDocuments: [ this.defaultProcedureValue("procedureLotDocuments", []) ], // Документы, относящиеся к позицям
+        procedureDocuments: [ this.defaultProcedureValue("procedureDocuments", []) ], // Документы, относящиеся к позицям
         procedureUploadDocuments: [ this.defaultProcedureValue("procedureUploadDocuments", [])] // Загруженные документы
       })
     });

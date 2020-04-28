@@ -46,7 +46,7 @@ body {
   outline: 0;
 }
 
-a, a:hover, a:visited, a[routerlink]:hover, a[ng-reflect-router-link]:hover {
+a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
   text-decoration: none;
   cursor: pointer;
 }
