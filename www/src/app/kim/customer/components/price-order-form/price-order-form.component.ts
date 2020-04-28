@@ -10,13 +10,11 @@ import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-
 import { Observable, Subject } from "rxjs";
 import { OkatoRegion } from "../../../../shared/models/okato-region";
 import { OkatoService } from "../../../../shared/services/okpd2.service";
-import { PriceOrderFormValidators } from "./price-order-form.validators";
 import Create = PriceOrderActions.Create;
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import * as moment from "moment";
 import { CartActions } from "../../actions/cart.actions";
 import { CartState } from "../../states/cart.state";
-import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-position";
 import CreatePriceOrder = CartActions.CreatePriceOrder;
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { OkeiService } from "../../../../shared/services/okei.service";
@@ -56,9 +54,10 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   }
   readonly getOkeiName = ({ name }) => name;
   readonly getOkpd2Name = ({ name }) => name;
+  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
   searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
     item.code === query).slice(0, 20);
-  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
+
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
@@ -115,8 +114,8 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
       body.positions = this.form.get('positions').value.map(position => {
         position.okei = position.okei.code;
         position.okpd2 = position.okpd2.code;
-        return position
-      })
+        return position;
+      });
     }
     this.form.disable();
     this.store.dispatch(this.cartView ? new CreatePriceOrder(body) : new Create(body))
@@ -140,7 +139,6 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('destroy');
     this.destroy$.next();
     this.destroy$.complete();
   }
