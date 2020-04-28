@@ -47,6 +47,7 @@
             *ngIf="procedureModal.state"
             [request]="request"
             [positions]="positions"
+            [procedureSource]="procedureSource.TECHNICAL_PROPOSAL"
             (complete)="procedureModal.close()"
             (cancel)="procedureModal.close()"
           ></app-request-procedure-create>

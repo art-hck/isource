@@ -15,6 +15,7 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestActions } from "../../actions/request.actions";
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({ templateUrl: './technical-proposal-list.component.html' })
 export class TechnicalProposalListComponent implements OnInit, OnDestroy {
@@ -24,6 +25,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   technicalProposals$: Observable<TechnicalProposal[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
+  procedureSource = ProcedureSource;
 
   constructor(
     private route: ActivatedRoute,

@@ -19,6 +19,7 @@ import { ProcedureAction } from "../../models/procedure-action";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -34,6 +35,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   currentRequestPosition: RequestPosition;
   selectedLinkedOffer: any;
   selectedPositions: RequestPosition[] = [];
+  procedureSource = ProcedureSource;
   procedureModalPayload?: ProcedureAction & { procedure$?: Observable<Procedure> } = null;
 
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);

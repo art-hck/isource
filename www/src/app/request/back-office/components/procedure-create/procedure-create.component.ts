@@ -16,6 +16,7 @@ import * as moment from "moment";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { Observable, Subject, throwError } from "rxjs";
 import { ProcedureAction } from "../../models/procedure-action";
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -28,6 +29,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
   @Input() positions: RequestPosition[];
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: ProcedureAction["action"] = "create";
+  @Input() procedureSource: ProcedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
@@ -132,7 +134,8 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
-      dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString()
+      dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
+      source: this.procedureSource
     };
     let request$;
     switch (this.action) {
