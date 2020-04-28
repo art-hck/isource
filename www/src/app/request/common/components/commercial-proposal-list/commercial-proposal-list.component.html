@@ -4,10 +4,10 @@
 
       <ng-container *ngIf="user.isBackOffice()">
         <div class="secondary-action app-row app-justify-content-end">
-          <div class="app-col app-basis-auto app-grow-0">
+          <div class="app-col app-col-auto">
             <span class="analytical-report-link" (click)="onDownloadAnalyticalReport()">
                 Аналитическая справка
-                <clr-icon class="download-icon" shape="app-download"></clr-icon>
+                <uxg-icon class="download-icon" shape="app-download"></uxg-icon>
               </span>
           </div>
         </div>
@@ -20,20 +20,20 @@
           <!-- Создать процедуру  -->
           <ng-container *ngIf="featureService.authorize('createProcedure')">
             <button type="button" uxgButton secondary iconText (click)="createProcedure.emit()">
-              <clr-icon shape="app-plus"></clr-icon>
+              <uxg-icon shape="app-plus"></uxg-icon>
               <span>Создать процедуру</span>
             </button>
           </ng-container>
 
           <!-- Добавить КП  из шаблона -->
           <button type="button" uxgButton secondary iconText (click)="uploadCommercialProposals.open()">
-            <clr-icon shape="app-plus"></clr-icon>
+            <uxg-icon shape="app-plus"></uxg-icon>
             <span>Создать КП из шаблона</span>
           </button>
 
           <!-- Фильтр -->
           <button type="button" uxgButton secondary iconText [disabled]="true">
-            <clr-icon shape="app-sort2"></clr-icon>
+            <uxg-icon shape="app-sort2"></uxg-icon>
             <span>Фильтр</span>
           </button>
 
@@ -56,7 +56,7 @@
           </div>
           <div class="app-col app-col-aside status">
               <span class="offer-status app-success-color">
-            <clr-icon shape="app-check"></clr-icon>Завершена {{ position.procedureEndDate | date :'shortDate' }}
+            <uxg-icon shape="app-check"></uxg-icon>Завершена {{ position.procedureEndDate | date :'shortDate' }}
           </span>
             <button type="button" uxgButton secondary iconText [disabled]="true">
               Уторговать
@@ -74,9 +74,9 @@
           </div>
           <div class="app-col app-col-aside status">
               <span class="offer-status app-ghost-color">
-            <clr-icon shape="app-waiting"></clr-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }})
+            <uxg-icon shape="app-waiting"></uxg-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }})
           </span>
-            <button type="button" uxgButton secondary iconText [disabled]="true">
+            <button type="button" uxgButton secondary iconText (click)="positionProlongedProcedure = position">
               Продлить
             </button>
             <a class="has-finished-procedure-link" target="_blank" href="{{ getProcedureLink(position) }}">
@@ -101,11 +101,11 @@
           </div>
           <div class="app-col app-col-aside status app-ghost-color">
             <span class="offer-status" *ngIf="positionIsSentForAgreement(position)">
-           <clr-icon shape="app-waiting"></clr-icon> На согласовании</span>
+           <uxg-icon shape="app-waiting"></uxg-icon> На согласовании</span>
             <span class="offer-status" *ngIf="positionCanBeSelected(position)">
-                <clr-icon shape="app-draft"></clr-icon>Черновик</span>
+                <uxg-icon shape="app-draft"></uxg-icon>Черновик</span>
             <span class="app-success-color offer-status" *ngIf="positionWithWinner(position)">
-              <clr-icon shape="app-check"></clr-icon>Выбран победитель</span>
+              <uxg-icon shape="app-check"></uxg-icon>Выбран победитель</span>
             <button uxgButton primary type="button"
                     class="fixedWidth"
                     *ngIf="availableCancelPublishOffers(position)"
@@ -114,7 +114,7 @@
             </button>
             <!--            <button uxgButton link icon type="button"-->
             <!--                    *ngIf="isOverflow(positionCard) || isFolded[i] === false" (click)="isFolded[i] = !isFolded[i]">-->
-            <!--              <clr-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></clr-icon>-->
+            <!--              <uxg-icon shape="app-chevron" [dir]="isFolded[i] ? 'up':'down'"></uxg-icon>-->
             <!--            </button>-->
           </div>
         </div>
@@ -123,7 +123,7 @@
                [class.clickable]="isLinkedOfferClickable(position)"
                *ngIf="canAddOffer(position)"
                (click)="newCommercialProposal(position)">
-            <clr-icon shape="app-plus"></clr-icon>
+            <uxg-icon shape="app-plus"></uxg-icon>
           </div>
           <div *ngFor="let linkedOffer of position.linkedOffers">
             <div class="app-col linked-offer" (click)="editCommercialProposal(position, linkedOffer)">
@@ -133,10 +133,10 @@
                 </div>
                 <div class="app-col app-col-aside app-ghost-color icon-status">
                   <div *ngIf="positionWithWinner(position) && !linkedOffer.isWinner">
-                    <clr-icon shape="app-check"></clr-icon>
+                    <uxg-icon shape="app-check"></uxg-icon>
                   </div>
                   <div *ngIf="positionIsSentForAgreement(position)">
-                    <clr-icon shape="app-lock"></clr-icon>
+                    <uxg-icon shape="app-lock"></uxg-icon>
                   </div>
                   <div class="winner" *ngIf="linkedOffer.isWinner">
                     <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
@@ -175,25 +175,34 @@
   </ng-container>
 </form>
 <!-- Модальное окно загрузки КП из шаблона -->
-<clr-modal #uploadCommercialProposals clrModalSize="lg">
-  <h2 class="modal-title"><b>Загрузить коммерческое предложение из шаблона</b></h2>
-  <div class="modal-body">
-    <p class="app-secondary-color">Вы можете загрузить коммерческие предложения списком, если заполните шаблон xls таблицы (
+<uxg-modal #uploadCommercialProposals size="l">
+  <h2>Загрузить коммерческое предложение из шаблона</h2>
+    <div class="app-section app-secondary-color">Вы можете загрузить коммерческие предложения списком, если заполните шаблон xls таблицы (
       <span class="file-link">
-      <a (click)="onDownloadOffersTemplate()"><b>скачать шаблон</b></a></span>), и загрузить файл в систему.</p>
+      <a (click)="onDownloadOffersTemplate()"><b>скачать шаблон</b></a></span>), и загрузить файл в систему.</div>
 
     <app-template-upload #templateUpload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
-    <div class="modal-footer">
+    <ng-template uxgModalFooter>
       <button uxgButton secondary lg (click)="uploadCommercialProposals.close(); templateUpload.clear()" type="button">Отмена</button>
       <button uxgButton primary lg (click)="onSendOffersTemplateFilesClick(); templateUpload.clear()"
               [disabled]="this.files.length === 0">Загрузить
       </button>
-    </div>
+    </ng-template>
 
     <ng-template #loading>
       <div class="text-center">
         <span class="spinner spinner-md"></span>
       </div>
     </ng-template>
-  </div>
-</clr-modal>
+</uxg-modal>
+
+<uxg-modal [(state)]="positionProlongedProcedure">
+  <h2>Продление процедуры №{{positionProlongedProcedure?.procedureId}}</h2>
+  <app-prolongate-procedure
+    *ngIf="positionProlongedProcedure"
+    [date]="positionProlongedProcedure.procedureEndDate"
+    [procedureId]="positionProlongedProcedure.procedureId"
+    [requestId]="requestId"
+    (close)="positionProlongedProcedure = null"
+  ></app-prolongate-procedure>
+</uxg-modal>

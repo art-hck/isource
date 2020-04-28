@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ClrModal } from "@clr/angular";
 import { Request } from "../../../models/request";
 import { RequestPosition } from "../../../models/request-position";
 import { Observable } from "rxjs";
+import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-request-add-position-modal',
@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
   styleUrls: ['./request-add-position-modal.component.scss']
 })
 export class RequestAddPositionModalComponent {
-  @ViewChild(ClrModal) modal: ClrModal;
+  @ViewChild(UxgModalComponent) modal: UxgModalComponent;
   @Input() request: Request;
   @Input() onDrafted: (position: RequestPosition) => Observable<RequestPosition>;
   @Output() success = new EventEmitter();

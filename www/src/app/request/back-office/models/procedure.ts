@@ -1,6 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 
-export class ProcedureCreateRequest {
+export class Procedure {
   procedureTitle: string;
   dateEndRegistration: string;
   positions: Uuid[];

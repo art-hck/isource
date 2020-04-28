@@ -13,8 +13,9 @@
             Рассмотренные <span class="app-ghost-color" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
           </uxg-tab-title>
         </uxg-tabs>
-        <button *ngIf="(priceOrdersLength$ | async)"
-          uxgButton primary (click)="progressTab.activate(); showForm = true">Создать ценовой запрос</button>
+        <button uxgButton primary (click)="router.navigateByUrl('/kim/customer/price-orders/create')">
+          <uxg-icon shape="app-plus"></uxg-icon><span>Новый ЦЗ</span>
+        </button>
         <!--button class="filter-button" uxgButton secondary (click)="showFilter = !showFilter">Фильтр</button-->
       </div>
     </div>
@@ -23,24 +24,15 @@
   <div class="app-row content">
     <div class="app-col">
       <ng-container *ngIf="progressTab.active">
-          <app-kim-price-order-form
-            *ngIf="progressTab.active && ((priceOrdersLength$ | async) === 0 || showForm)"
-            [closable]="(priceOrdersLength$ | async) > 0"
-            (close)="showForm = false"
-            @formHide
-          ></app-kim-price-order-form>
-
         <div class="app-card" *ngFor="let order of priceOrders$ | async; trackBy: getOrderId; index as i">
           <!-- title -->
           <div class="app-row app-align-items-center">
             <h3 class="app-col">{{order.name}}</h3>
             <a class="app-bold" target="_blank" href="{{appConfig.priceOrder.url}}{{order.etpKimId}}">Показать на ЭТП ГПБ</a>
             <button uxgButton icon link (click)="folded[i] = !folded[i]">
-              <clr-icon shape="app-chevron" [attr.dir]="folded[i] ? 'down' : 'up'"></clr-icon>
+              <uxg-icon shape="app-chevron" [attr.dir]="folded[i] ? 'down' : 'up'"></uxg-icon>
             </button>
           </div>
-
-          <ng-container *ngIf="!folded[i]">
             <hr/>
             <div class="app-row">
               <div class="app-col">
@@ -58,7 +50,7 @@
                 <button uxgButton secondary>Продлить запрос</button>
               </div-->
             </div>
-
+          <ng-container *ngIf="folded[i]">
             <hr/>
             <div class="app-uppercase app-ghost-color app-bold"><small>Наименование позиций ценового запроса</small></div>
             <p *ngFor="let position of order.positions">

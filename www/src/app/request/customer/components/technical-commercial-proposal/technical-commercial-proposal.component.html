@@ -3,16 +3,16 @@
   <div class="app-row app-align-items-center">
     <h3 class="app-col">{{proposalByPos.position.name}}</h3>
     <div class="app-ghost-color app-bold" *ngIf="!isReviewed">
-      <clr-icon shape="app-waiting"></clr-icon>
+      <uxg-icon shape="app-waiting"></uxg-icon>
       <span>Необходимо рассмотреть</span>
     </div>
     <div class="app-success-color app-bold" *ngIf="isReviewed">
-      <clr-icon shape="app-check"></clr-icon>
+      <uxg-icon shape="app-check"></uxg-icon>
       <span>Выбран победитель</span>
     </div>
 
     <button uxgButton icon link (click)="folded = !folded">
-      <clr-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></clr-icon>
+      <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
     </button>
   </div>
 
@@ -46,9 +46,9 @@
             <div [ngClass]="!helper.isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
               <div class="app-row app-align-items-center">
                 <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
-                <clr-icon shape="app-narrow-arrow"
+                <uxg-icon shape="app-narrow-arrow"
                   *ngIf="proposalPos.quantity != proposalPos.position.quantity"
-                  [attr.dir]="proposalPos.quantity > proposalPos.position.quantity ? 'up' : 'down'"></clr-icon>
+                  [attr.dir]="proposalPos.quantity > proposalPos.position.quantity ? 'up' : 'down'"></uxg-icon>
               </div>
             </div>
           </div>
@@ -74,36 +74,34 @@
             ></uxg-radio-item>
           </div>
           <div class="app-col status" *ngIf="isReviewed">
-            <clr-icon shape="app-check" [ngClass]="{
+            <uxg-icon shape="app-check" [ngClass]="{
               'app-success-color': proposalPos.status === 'APPROVED',
               'app-ghost-color': proposalPos.status !== 'APPROVED'
-            }"></clr-icon>
+            }"></uxg-icon>
           </div>
         </div>
-        <clr-modal #proposalModal clrModalSize="lg">
-          <h2 class="modal-title"><span class="app-bold">{{ data.proposalPosition.position.name }}</span></h2>
-          <div class="modal-body">
-            <app-technical-commercial-proposal-detail
-              [proposal]="data.proposal"
-              [proposalPosition]="data.proposalPosition"
-            ></app-technical-commercial-proposal-detail>
-            <div class="app-row">
-              <div class="app-col app-bold">
-                <div class="app-success-color" *ngIf="helper.isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
-                <div class="app-success-color" *ngIf="helper.isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
-                <div class="app-error-color" *ngIf="!helper.isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
-                <div class="app-error-color" *ngIf="!helper.isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
-              </div>
-              <div *ngIf="!isReviewed">
-                <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>
-                <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>
-              </div>
-              <div *ngIf="isReviewed">
-                <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>
-              </div>
+        <uxg-modal #proposalModal>
+          <h2>{{ data.proposalPosition.position.name }}</h2>
+          <app-technical-commercial-proposal-detail
+            [proposal]="data.proposal"
+            [proposalPosition]="data.proposalPosition"
+          ></app-technical-commercial-proposal-detail>
+          <ng-template uxgModalFooter>
+            <div class="app-col app-bold">
+              <div class="app-success-color" *ngIf="helper.isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
+              <div class="app-success-color" *ngIf="helper.isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
+              <div class="app-error-color" *ngIf="!helper.isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
+              <div class="app-error-color" *ngIf="!helper.isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
             </div>
-          </div>
-        </clr-modal>
+            <div *ngIf="!isReviewed">
+              <button uxgButton lg secondary uxgModalClose>Отмена</button>
+              <button uxgButton lg primary uxgModalClose (click)="selectedProposalPosition.setValue(data.proposalPosition)">Выбрать</button>
+            </div>
+            <div *ngIf="isReviewed">
+              <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+            </div>
+          </ng-template>
+        </uxg-modal>
       </div>
     </div>
     <ng-container *ngIf="!isReviewed">

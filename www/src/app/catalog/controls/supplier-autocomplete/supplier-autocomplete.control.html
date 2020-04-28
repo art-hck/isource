@@ -6,16 +6,14 @@
   (input)="onInput.next($event.target.value)"/>
 
 <ng-container *ngIf="(contragents$ | async) as contragents">
-  <clr-dropdown *ngIf="contragents.length > 0 && isOpen">
-    <clr-dropdown-menu *clrIfOpen="true">
-      <div clrDropdownItem *ngFor="let contragent of contragents;" (click)="select(contragent)">
-        {{contragent.shortName}}
-      </div>
-    </clr-dropdown-menu>
-  </clr-dropdown>
+  <uxg-dropdown (select)="select($event)" *ngIf="contragents.length > 0 && isOpen">
+    <div uxgDropdownItem *ngFor="let contragent of contragents;" [value]="contragent">
+      {{contragent.shortName}}
+    </div>
+  </uxg-dropdown>
 </ng-container>
 
 <label class="label" *ngFor="let contragent of value;">
   {{contragent.shortName}}
-  <clr-icon *ngIf="multiple && !isDisabled" shape="app-cross" (click)="delete(contragent)"></clr-icon>
+  <uxg-icon *ngIf="multiple && !isDisabled" shape="app-cross" (click)="delete(contragent)"></uxg-icon>
 </label>

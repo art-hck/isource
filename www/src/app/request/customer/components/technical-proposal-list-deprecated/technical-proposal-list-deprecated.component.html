@@ -21,13 +21,13 @@
             </span>
 
             <div *ngIf="isSendToReview(technicalProposal)" class="clr-col-5 send-for-approval">
-              <button class="btn btn-secondary"
+              <button uxgButton secondary lg
                       (click)="toDeclineTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
                       [disabled]="!isResolutionButtonsAvailable(i)"
                       [title]="isResolutionButtonsAvailable(i) ? '' : 'Для отклонения выберите необходимые позиции'">
                 Отклонить
               </button>
-              <button class="btn btn-primary"
+              <button uxgButton primary lg
                       (click)="toAcceptTechnicalProposals(technicalProposal.id, selectedTechnicalProposalsPositions[i])"
                       [disabled]="!isResolutionButtonsAvailable(i)"
                       [title]="isResolutionButtonsAvailable(i) ? '' : 'Для согласования выберите необходимые позиции'">
@@ -49,15 +49,11 @@
               <thead>
               <tr>
                 <th class="left">
-                  <clr-checkbox-container>
-                    <clr-checkbox-wrapper class="select-checkbox"
-                                          *ngIf="hasSelectablePositions(technicalProposal.positions)">
-                      <input class="checkbox select-checkbox" clrCheckbox type="checkbox"
-                             (change)="onSelectAllPositions($event, i, technicalProposal.positions)"
-                             [checked]="areAllPositionsChecked(technicalProposal.positions)"
-                      />
-                    </clr-checkbox-wrapper>
-                  </clr-checkbox-container>
+                  <uxg-checkbox
+                    *ngIf="hasSelectablePositions(technicalProposal.positions)"
+                    [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
+                    (ngModelChange)="onSelectAllPositions($event, i, technicalProposal.positions)">
+                  </uxg-checkbox>
                   <span class="position-header">Наименование позиции</span>
                 </th>
                 <th class="left">Заводское наименование</th>
@@ -66,19 +62,19 @@
               <tbody>
               <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
                 <td class="left">
-                  <clr-checkbox-wrapper *ngIf="isPositionSelectorAvailable(technicalProposalPosition)"
-                                        class="select-checkbox">
-                    <input clrCheckbox type="checkbox"
-                           value="{{technicalProposalPosition}}"
-                           [(ngModel)]="technicalProposalPosition.checked"
-                           (change)="onSelectPosition(i, technicalProposalPosition)">
-                    <label class="position-label">{{ technicalProposalPosition.position.name }}</label>
-                  </clr-checkbox-wrapper>
+                  <div class="app-row app-align-items-center" *ngIf="isPositionSelectorAvailable(technicalProposalPosition)">
+                    <uxg-checkbox
+                      class="app-control" #proposalPositionCheckbox
+                      [(ngModel)]="technicalProposalPosition.checked"
+                      (ngModelChange)="onSelectPosition(i, technicalProposalPosition)"
+                    ></uxg-checkbox>
+                    <label class="position-label" (click)="proposalPositionCheckbox.check($event)">&nbsp; {{ technicalProposalPosition.position.name }}</label>
+                  </div>
                   <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
-                    <clr-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
-                              shape="check"></clr-icon>
-                    <clr-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"
-                              shape="times"></clr-icon>
+                    <uxg-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
+                              shape="app-check"></uxg-icon>
+                    <uxg-icon class="declined" *ngIf="technicalProposalPosition.status === 'DECLINED'"
+                              shape="app-cross"></uxg-icon>
                     <span class="position-name">{{technicalProposalPosition.position.name}}</span>
                   </div>
                 </td>

@@ -1,4 +1,4 @@
-<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="complete.emit()">
+<form [formGroup]="form" [uxgWizzard]="wizzard" (ngSubmit)="submit()" (cancel)="cancel.emit()">
   <uxg-wizzard-steps [wizzard]="wizzard"></uxg-wizzard-steps>
   <br/>
   <br/>
@@ -27,17 +27,17 @@
           </div>
           <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
           <ng-container *ngIf="!formGroup.disabled">
-            <div class="app-col app-grow-0 app-basis-auto select-list-item-quantity">
+            <div class="app-col app-col-auto select-list-item-quantity">
               <span>{{ position.quantity }} </span>
               <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
             </div>
-            <div class="app-col app-grow-0 app-basis-auto select-list-item-date">
+            <div class="app-col app-col-auto select-list-item-date">
               <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
               <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
             </div>
           </ng-container>
           <ng-container *ngIf="formGroup.disabled">
-            <div class="app-col app-grow-0 app-basis-auto">
+            <div class="app-col app-col-auto">
               <span>Участвует в процедуре</span>
             </div>
           </ng-container>
@@ -77,10 +77,10 @@
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
         <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg uxgDatepicker formControlName="dateEndRegistration">
+          <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
           <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
           <label class="app-control-icon" (click)="dateEndRegistration.focus()">
-            <clr-icon shape="app-calendar-big" size="24"></clr-icon>
+            <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
           </label>
           <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
             <span>Неверная дата</span>
@@ -105,7 +105,7 @@
       <app-request-procedure-create-properties
         formControlName="properties"
         [action]="action"
-        [publicAccess]="publicAccess"
+        [publicAccess]="contragents?.length < 2"
       ></app-request-procedure-create-properties>
     </div>
     <hr class="divider"/>
@@ -120,7 +120,7 @@
     <br/>
     <br/>
     <select-items-with-search
-      *ngIf="contragents"
+      *ngIf="contragents?.length ? contragents : (allContragents$ | async) as contragents; else loading"
       class="select-list select-list-contragents"
       formControlName="privateAccessContragents"
       placeholder="Наименование контрагента или ИНН"
@@ -145,6 +145,11 @@
         </div>
       </ng-template>
     </select-items-with-search>
+    <ng-template #loading>
+      <div class="text-center">
+        <span class="spinner spinner-md"></span>
+      </div>
+    </ng-template>
   </div>
 
   <!-- Documents -->
@@ -155,7 +160,7 @@
     <div class="app-row app-align-items-center">
       <h3 class="app-col">Документы процедуры</h3>
       <button type="button" uxgButton secondary iconText disabled="" title="Not implemented">
-        <clr-icon shape="app-upload"></clr-icon> Загрузить документы
+        <uxg-icon shape="app-upload"></uxg-icon> Загрузить документы
       </button>
     </div>
     <br/>
@@ -169,7 +174,7 @@
 
   <br/>
   <div class="app-row app-justify-content-end">
-    <div class="app-row app-col app-grow-0 app-basis-auto app-align-items-center">
+    <div class="app-row app-col app-col-auto app-align-items-center">
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>

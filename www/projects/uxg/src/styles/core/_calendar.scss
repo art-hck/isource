@@ -1,5 +1,6 @@
-@import "projects/uxg/src/styles/index";
+@import "../uxg";
 
+@mixin calendar($theme) {
 .flatpickr-calendar {
   border-radius: uxg($theme, control-border-radius);
   box-shadow: 0 0 16px rgba(black, 0.1), 0 4px 12px rgba(black, 0.1);
@@ -84,14 +85,13 @@
     }
 
     input[type=number] {
-      &, &:focus {
-        border: none !important; // fck stdlib
-        border-radius: 0;
-      }
+      border: none;
+      border-radius: 0;
     }
   }
 }
 
 .flatpickr-input[readonly] {
   cursor: text;
+}
 }

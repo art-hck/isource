@@ -5,14 +5,12 @@
 
 
 <div class="agreement-state-list">
-  <div *ngFor="let status of tpStatuses">
-    <clr-checkbox-wrapper>
-      <input type="checkbox"
-             clrCheckbox
-             [checked]="checkIfStatusIsChecked(status)"
-             (input)="onStatusSelected($event.target.value)"
-             value="{{ status }}" />
-      <label>{{ tpStatusLabel(status) }}</label>
-    </clr-checkbox-wrapper>
+  <div *ngFor="let status of tpStatuses" class="app-row app-align-items-center app-section">
+    <uxg-checkbox
+      class="app-control" #statusCheckbox
+      [ngModel]="checkIfStatusIsChecked(status)"
+      (ngModelChange)="onStatusSelected(status)"
+    ></uxg-checkbox>
+    <label (click)="statusCheckbox.check($event)">&nbsp; {{ tpStatusLabel(status) }}</label>
   </div>
 </div>

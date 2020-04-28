@@ -1,6 +1,6 @@
 import { AbstractControl, FormArray, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { Subscription } from "rxjs";
-import * as moment from "moment";
+import moment from "moment";
 import { ContragentList } from "../../contragent/models/contragent-list";
 
 export class CustomValidators {

@@ -16,6 +16,7 @@ import { UxgTreeModule } from "./modules/tree/uxg-tree.module";
 import { UxgWizzardModule } from "./modules/wizzard/uxg-wizzard.module";
 import { UxgIconModule } from "./modules/icon/uxg-icon.module";
 import { UxgDatepickerModule } from "./modules/datepicker/uxg-datepicker.module";
+import { UxgModalModule } from "./modules/modal/uxg-modal.module";
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { UxgDatepickerModule } from "./modules/datepicker/uxg-datepicker.module"
     UxgDropdownModule,
     UxgIconModule,
     UxgInputModule,
+    UxgModalModule,
     UxgPopoverModule,
     UxgRadioModule,
     UxgSwitcherModule,
@@ -47,6 +49,7 @@ import { UxgDatepickerModule } from "./modules/datepicker/uxg-datepicker.module"
     UxgDropdownModule,
     UxgIconModule,
     UxgInputModule,
+    UxgModalModule,
     UxgPopoverModule,
     UxgRadioModule,
     UxgSwitcherModule,

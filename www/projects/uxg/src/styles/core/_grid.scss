@@ -21,13 +21,26 @@
   }
 
   &-aside {
-    @extend .app-col;
     max-width: uxg($theme, aside-width);
 
     & + * {
       margin-left: 20px;
     }
   }
+
+  &-auto {
+    flex: 0 0 auto;
+  }
+
+  @for $i from 1 through 12 {
+    &-#{$i} {
+      max-width: $i / 12 * 100%;
+    }
+  }
+}
+
+[class*=app-col-] {
+  @extend .app-col;
 }
 
 .app-card {
@@ -37,9 +50,6 @@
   border-radius: 8px;
   padding: 17px 20px;
 
-  & > :last-child:not(:first-child) {
-    padding-bottom: 13px;
-  }
 
   hr {
     border-top:1px uxg($theme, color-border) dotted;
@@ -53,7 +63,6 @@
   &:not(.app-row) + & {
     margin-top: 2em;
   }
-
 }
 
 .app-table {
