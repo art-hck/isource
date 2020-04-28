@@ -220,8 +220,8 @@
     <div class="app-row app-justify-content-end actions">
       <span *ngIf="(status$ | async) === 'fetching'" class="spinner spinner-inline"></span>
       <button *ngIf="cartView" uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>
-      <ng-container *ngIf="(orderPositions$ | async) as orderPositions; else manualPriceOrder">
-      <button uxgButton primary lg (click)="submit()" [disabled]="form.disabled || form.invalid">Создать</button>
+      <ng-container *ngIf="(orderPositions$ | async); else manualPriceOrder">
+      <button uxgButton primary lg (click)="submit()" [disabled]="(status$ | async) === 'fetching' || form.invalid">Создать</button>
       </ng-container>
       <ng-template #manualPriceOrder>
         <button uxgButton primary lg (click)="submit()" [disabled]="form.invalid">Создать</button>
