@@ -10,12 +10,14 @@ import { BaseUrlInterceptor } from "./interceptor/base-url-interceptor";
 import { UxgModule } from "uxg";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
+import { MessageSharedModule } from "../message/message-shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     UxgModule,
+    MessageSharedModule
   ],
   exports: [NavComponent],
   declarations: [NavComponent],
