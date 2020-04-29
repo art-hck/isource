@@ -73,7 +73,9 @@
 
           <div class="app-col"
                *ngIf="isShowSignContractButton(contract) && featureService.available('contractGeneration')">
-            <button uxgButton primary (click)="onSignContract(contract)"> Подтвердить подписание договора </button>
+            <button uxgButton primary
+                    (click)="onSignContract(contract)"
+                    [disabled]="contractSignLoader"> Подтвердить подписание договора </button>
           </div>
         </div>
 
