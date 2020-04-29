@@ -219,11 +219,13 @@
               </div>
             </div>
             <div class="app-col">
-              <uxg-dropdown [placeholder]="responsiblePlaceholder" lg formControlName="responsible" >
-                <div uxgDropdownItem [value]="user.user" *ngFor="let user of seniorBackofficeUsers$ | async">
-                  {{ user.user.fullName}}
-                </div>
-              </uxg-dropdown>
+              <div class="app-control-wrap">
+                <uxg-dropdown [placeholder]="responsiblePlaceholder" lg formControlName="responsible" >
+                  <div uxgDropdownItem [value]="user.user" *ngFor="let user of seniorBackofficeUsers$ | async">
+                    {{ user.user.fullName}}
+                  </div>
+                </uxg-dropdown>
+              </div>
             </div>
           </div>
         </ng-container>
