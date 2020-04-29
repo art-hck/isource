@@ -283,7 +283,7 @@
 <!-- Модальное окно для отмены позиции -->
 <uxg-modal #cancelPositionModal size="s">
   <h2>Отменить позиции <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>
-  <div class="app-section app-secondary-color">Будте внимательны, отменить операцию будет невозможно</div>
+  <div class="app-section app-secondary-color">Будьте внимательны, отменить операцию будет невозможно</div>
   <app-position-cancel [positions]="checkedPositions" [requestId]="request.id" (close)="cancelPositionModal.close()"></app-position-cancel>
 </uxg-modal>
 <!-- Модальное окно для смены статуса группы позиций -->
