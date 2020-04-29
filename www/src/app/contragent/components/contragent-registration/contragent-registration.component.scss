@@ -1,11 +1,6 @@
 @import "projects/uxg/src/styles/index";
 
 :host {
-  @include scrollbar($theme);
-  display: block;
-  max-height: inherit;
-  overflow-y: scroll;
-
   ::ng-deep {
     #address_input {
       background-color: white;
