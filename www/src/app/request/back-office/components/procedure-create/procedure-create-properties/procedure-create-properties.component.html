@@ -6,13 +6,13 @@
 
   <!-- @TODO Поле временно задизейблено и скрыто -->
   <p class="app-row app-align-items-center" [hidden]="true">
-    <uxg-checkbox class="app-control" formControlName="positionsAnalogs" #allowAnalogs [disabled]="true"></uxg-checkbox>
+    <uxg-checkbox class="app-control" formControlName="positionsAnalogs" #allowAnalogs></uxg-checkbox>
     <label (click)="allowAnalogs.check($event)"> &nbsp; Разрешается прием аналогов</label>
   </p>
 
   <!-- @TODO Поле временно задизейблено и скрыто -->
   <p class="app-row app-align-items-center" [hidden]="true">
-    <uxg-checkbox class="app-control" formControlName="positionsAllowAnalogsOnly" #allowAnalogsOnly [disabled]="true"></uxg-checkbox>
+    <uxg-checkbox class="app-control" formControlName="positionsAllowAnalogsOnly" #allowAnalogsOnly></uxg-checkbox>
     <label (click)="allowAnalogsOnly.check($event)"> &nbsp; Возможность подачи аналогов без основного предложения</label>
   </p>
 
