@@ -1,55 +1,65 @@
 @import "projects/uxg/src/styles/index";
+@import "helpers";
 
-body {
-  min-width: 1180px;
-}
+.app {
+  &-layout {
+    padding: 0 $side-padding;
+    max-width: uxg($theme, content-width);
+    width: 100%;
+    margin: auto;
+  }
 
-.app-layout {
-  padding: 0 60px;
-  width: 100%;
-  max-width: uxg($theme, content-width);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-
-  .app-scroll {
-    overflow-y: scroll;
-    flex-grow: 1;
+  &-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    min-width: col(4) - 17;
+    min-height: 100vh;
+  }
 
-    .app-content {
+  &-content {
+    flex-grow: 1;
+    overflow: hidden;
+    width: 100%;
+
+    &-wrap {
       flex-grow: 1;
-      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-      & > .app-layout {
-        max-width: 1180px;
-        @media (min-width: 1480px) { max-width: 1480px }
-        @media (min-width: 1780px) { max-width: uxg($theme, content-width) }
-        @media (max-width: 1479px) {
-          .app-col-aside.detachable { display: none }
+    & > .app-layout {
+      width: col(4);
+
+      @for $i from 4 through 7 {
+        @media (min-width: col($i)) { width: col($i) }
+      }
+
+      @media (max-width: col(5) - 1) {
+        .app-col-aside.detachable {
+          display: none
         }
       }
     }
+  }
 
-    .app-footer {
-      align-items: center;
-      background: uxg($theme, color-default);
-      border-top: 1px #d5dde2 solid;
-      flex: 0 0 64px;
-      margin-top: 50px;
-      width: 100%;
+  &-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
 
-      a, a:hover {
-        font-size: uxg($theme, font-size-l);
-        color: inherit;
-      }
+  &-footer {
+    align-items: center;
+    background: uxg($theme, color-default);
+    border-top: 1px #d5dde2 solid;
+    flex: 0 0 64px;
+    margin-top: 50px;
+    width: 100%;
+
+    a, a:hover {
+      font-size: uxg($theme, font-size-l);
+      color: inherit;
     }
   }
 }

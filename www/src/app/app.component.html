@@ -1,7 +1,7 @@
 <div class="app-container">
-  <app-nav *ngIf="authService.isAuth()"></app-nav>
+  <app-nav class="app-header" *ngIf="authService.isAuth()"></app-nav>
 
-  <div class="app-scroll">
+  <div class="app-content-wrap">
     <div class="app-content">
       <div [class.app-layout]="!noContentPadding">
         <div class="breadcrumbs" *ngIf="!isBreadcrumbsHidden" [class.app-layout]="noContentPadding">
@@ -13,16 +13,14 @@
       </div>
     </div>
 
-    <div class="app-footer app-row app-secondary-color" *ngIf="!noFooter">
-        <div class="app-layout app-row">
-        <div class="app-col">© Marketplace, 2020</div>
-        <ng-container *ngIf="featureService.authorize('instructionsFileForCustomer')">
-          <a class="app-secondary-color" target="_blank" [href]="appConfig.instructions.forCustomer">Скачать инструкцию</a>
-        </ng-container>
-        <ng-container *ngIf="featureService.authorize('instructionsFileForBackoffice')">
-          <a class="app-secondary-color" target="_blank" [href]="appConfig.instructions.forBackoffice">Скачать инструкцию</a>
-        </ng-container>
-      </div>
+    <div class="app-footer app-layout app-row app-secondary-color" *ngIf="!noFooter">
+      <div class="app-col">© Marketplace, 2020</div>
+      <ng-container *ngIf="featureService.authorize('instructionsFileForCustomer')">
+        <a target="_blank" [href]="appConfig.instructions.forCustomer">Скачать инструкцию</a>
+      </ng-container>
+      <ng-container *ngIf="featureService.authorize('instructionsFileForBackoffice')">
+        <a target="_blank" [href]="appConfig.instructions.forBackoffice">Скачать инструкцию</a>
+      </ng-container>
     </div>
   </div>
 </div>
