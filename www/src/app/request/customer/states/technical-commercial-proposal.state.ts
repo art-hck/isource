@@ -1,6 +1,6 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, tap } from "rxjs/operators";
+import { finalize, map, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -9,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
+import { TechnicalCommercialProposalPositionStatus } from "../../common/enum/technical-commercial-proposal-position-status";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
@@ -86,13 +87,26 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(ApproveMultiple)
-  approveMultiple({ setState }: Context, { proposalPositions }: ApproveMultiple) {
+  approveMultiple({ setState, getState }: Context, { proposalPositions }: ApproveMultiple) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.approveMultiple(proposalPositions.map(({ id }) => id)).pipe(
+      map((proposals) => [...proposals, ...getState().proposals
+        // Если ТКП НЕ в списке на апрув, но содержит позиции которые есть в других ТКП на апрув
+        .filter(({ positions }) => positions.some(p1 => proposalPositions.some((p2 => p1.id !== p2.id && p1.position.id === p2.position.id))))
+        .map(proposal => {
+          proposal.positions
+            // Помечаем их как REJECTED
+            .filter(({ position: p1 }) => proposalPositions.some((({ position: p2 }) => p1.id === p2.id)))
+            .map(position => {
+              position.status = TechnicalCommercialProposalPositionStatus.REJECTED;
+              return position;
+            });
+          return proposal;
+      })]),
       tap(proposals => proposals.forEach(proposal => setState(patch({
         proposals: updateItem(({ id }) => proposal.id === id, proposal),
         status: "received" as StateStatus
-      }))))
+      })))),
     );
   }
 }
