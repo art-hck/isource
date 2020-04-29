@@ -169,6 +169,7 @@
       <app-request-procedure-create-documents [documents]="documents" formControlName="procedureDocuments">
       </app-request-procedure-create-documents>
       <app-document-upload-list [documents]="form.get('documents.procedureUploadDocuments').value"
+                                (fileSelected)="form.get('documents.procedureUploadDocuments').setValue($event)"
                                 [uploadAvailable]="false">
       </app-document-upload-list>
     </div>
