@@ -82,10 +82,12 @@
   </div>
   <uxg-modal #createEmployeeModal size="l">
     <h2 *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника {{contragent.shortName}}</h2>
+
     <ng-template #editEmployee>
       <h2>Редактировать сотрудника {{contragent.shortName}}</h2>
     </ng-template>
-    <app-employee-form
+
+    <app-employee-form *ngIf="createEmployeeModal.state"
       (cancel)="editedEmployee = null; createEmployeeModal.close()"
       (addEmployee)="addEmployee($event); createEmployeeModal.close()"
       (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"

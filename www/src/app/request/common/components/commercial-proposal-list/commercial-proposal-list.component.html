@@ -74,7 +74,7 @@
           </div>
           <div class="app-col app-col-aside status">
               <span class="offer-status app-ghost-color">
-            <uxg-icon shape="app-waiting"></uxg-icon>Идет процедура (до {{ position.procedureEndDate | date :'shortDate' }})
+            <uxg-icon shape="app-waiting"></uxg-icon>Идет процедура (до {{ position.procedureEndDate | date : "dd.MM.yyyy, HH:mm" }})
           </span>
             <button type="button" uxgButton secondary iconText (click)="positionProlongedProcedure = position">
               Продлить
