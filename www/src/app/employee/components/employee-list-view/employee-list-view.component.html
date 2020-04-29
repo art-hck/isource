@@ -2,13 +2,13 @@
   <div class="app-col action">
     <uxg-tabs>
       <uxg-tab-title #backofficeTab (click)="employeeActiveTabType = 'BACKOFFICE_BUYER'" [active]="true">
-        Закупщики
+        Младшие менеджеры
         <ng-container *ngIf="backoffice">
           <span class="app-ghost-color">({{ backoffice.length }})</span>
         </ng-container>
       </uxg-tab-title>
       <uxg-tab-title #employeesTab (click)="employeeActiveTabType = 'SENIOR_BACKOFFICE'">
-        Менеджеры
+        Старшие менеджеры
           <ng-container *ngIf="seniorBackoffice">
             <span class="app-ghost-color">({{ seniorBackoffice.length }})</span>
           </ng-container>
