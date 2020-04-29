@@ -20,22 +20,14 @@
         </div>
 
         <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="isReviewed; else radioButtonOption">
-            <div class="app-ghost-color">
-              <uxg-icon shape="app-check"></uxg-icon>
-            </div>
+          <ng-container *ngIf="selectedProposalPosition">
+            <uxg-radio-item
+              [name]="proposalPosition.position.id"
+              [value]="proposalPosition"
+              [formControl]="selectedProposalPosition"
+              (click)="$event.stopPropagation()"
+            ></uxg-radio-item>
           </ng-container>
-
-          <ng-template #radioButtonOption>
-            <ng-container *ngIf="selectedProposalPosition">
-              <uxg-radio-item
-                [name]="proposalPosition.position.id"
-                [value]="proposalPosition"
-                [formControl]="selectedProposalPosition"
-                (click)="$event.stopPropagation()"
-              ></uxg-radio-item>
-            </ng-container>
-          </ng-template>
         </ng-container>
       </ng-container>
     </div>
