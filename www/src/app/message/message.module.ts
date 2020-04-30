@@ -4,19 +4,16 @@ import { MessageRoutingModule } from "./message-routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MessagesViewComponent } from "./messages-view/messages-view.component";
-import { MessageNotificationComponent } from './message-notification/message-notification.component';
+import { MessageSharedModule } from "./message-shared.module";
 
 @NgModule({
   declarations: [
     MessagesComponent,
-    MessagesViewComponent,
-    MessageNotificationComponent
-  ],
-  exports: [
-    MessageNotificationComponent
+    MessagesViewComponent
   ],
   imports: [
     SharedModule,
+    MessageSharedModule,
     MessageRoutingModule,
     ReactiveFormsModule
   ]

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommercialProposalListOldComponent } from "./components/commercial-proposal-list-old/commercial-proposal-list-old.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
 import { TechnicalProposalListDeprecatedComponent } from "./components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component";
@@ -13,6 +13,7 @@ import { AgreementsComponent } from "./components/agreements/agreements.componen
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { Routes } from "../../core/models/routes";
 
 const routes: Routes = [
   {
@@ -73,7 +74,7 @@ const routes: Routes = [
       {
         path: 'commercial-proposals',
         component: CommercialProposalListOldComponent,
-        data: { title: "Коммерческие предложения", noFooter: true }
+        data: { title: "Коммерческие предложения", noFooter: true, noContentPadding: true }
       },
       {
         path: 'technical-commercial-proposals',
