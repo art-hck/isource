@@ -1,9 +1,9 @@
 /* Подключение шрифтов */
-@import "assets/styles/fonts.scss";
+@import "assets/styles/fonts";
 
 $font_ptroot: PT Root UI, Roboto, sans-serif;
-$font_size_basic: 14px;
-
+/* deprecated section, do not use this styles */
+$clr-use-custom-properties: false;
 $color_black: #000000;
 $color_blue: #0085FF;
 $color_orange: #FF9E00;
@@ -11,7 +11,14 @@ $color_green: #417505;
 $color_red: #FF2519;
 $color_gray: #999999;
 $color_light_gray: #D4D9E2;
+$font_size_basic: 14px;
+@import "~@clr/ui/src/main";
 
+@import "assets/styles/deprecated/card-items";
+@import "assets/styles/deprecated/input-fields";
+@import "assets/styles/deprecated/alerts";
+@import "assets/styles/deprecated/styles";
+/* end of deprecated sectiion */
 
 
 @import "~nouislider/distribute/nouislider.min.css";
@@ -19,596 +26,44 @@ $color_light_gray: #D4D9E2;
 @import "~leaflet.markercluster/dist/MarkerCluster.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 @import "~flatpickr/dist/flatpickr.min.css";
+
 @import "projects/uxg/src/styles/default-theme";
-@import "assets/styles/tabs.scss";
-@import "assets/styles/grid.scss";
-@import "assets/styles/buttons.scss";
-@import "assets/styles/header.scss";
-@import "assets/styles/card-items.scss";
-@import "assets/styles/datagrid.scss";
-@import "assets/styles/select.scss";
-@import "assets/styles/input-fields.scss";
-@import "assets/styles/checkbox-toggle.scss";
-@import "assets/styles/checkboxes.scss";
-@import "assets/styles/calendar.scss";
+@import "assets/styles/grid";
+@import "assets/styles/proposals-grid";
+@import "assets/styles/statuses";
 
-/* You can add global styles to this file, and also import other style files */
-
-/* Применение нового шрифта к элементам */
-body, body p, input, select, h1, h2, h3, h4, h5, h6 {
-  font-family: $font_ptroot !important;
+body, body p, h1, h2, h3, h4, h5, h6 {
+  font-family: $font_ptroot;
   line-height: normal;
-}
-
-
-*:focus {
-  outline: 0;
 }
 
 body {
   color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
-  min-width: 1000px;
 }
 
-h2 {
-  font-weight: 800;
-  margin-bottom: 13px;
+*:focus {
+  outline: 0;
 }
 
-h5 {
-  font-weight: 300;
-  margin-bottom: 25px;
-}
-
-select option:disabled {
-  color: #ccc;
-}
-
-b.required-star {
-  font-size: 18px;
-  color: #F44336;
-}
-
-.text-muted {
-  color: #6c757d !important;
-}
-
-.main-container {
-  background: uxg($theme, color-bg);
-}
-
-/* Улучшение отступов для контента */
-.main-container .content-container .content-area {
-    padding-top: 10px;
-    overflow-x: hidden;
-    overflow-y: scroll; /* Фикс прыгающего контента при появлении на странице скролла */
-}
-
-@media (min-width: 992px) {
-  .main-container .content-container .content-area {
-    padding-right: 30px;
-    padding-left: 30px;
-  }
-}
-
-
-
-@media (min-width: 992px) {
-  .main-container .content-container .content-area .positions-list {
-    padding-left: 50px;
-    padding-right: 50px;
-  }
-}
-
-@media (min-width: 1440px) {
-  .main-container .content-container .content-area .positions-list {
-    padding-left: 100px;
-    padding-right: 100px;
-  }
-}
-
-@media (min-width: 1800px) {
-  .main-container .content-container .content-area .positions-list {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-@media (min-width: 992px) {
-  .main-container .content-container .content-area .search-bar {
-    padding-right: 80px;
-    padding-left: 80px;
-  }
-}
-
-@media (min-width: 1440px) {
-  .main-container .content-container .content-area .search-bar {
-    padding-right: 130px;
-    padding-left: 130px;
-  }
-}
-
-span.spinner {
-    margin: 0 auto;
-    display: block;
-}
-
-.modal-body {
-  min-height: 100px;
-
-  &:focus {
-    outline: 0;
-  }
-}
-
-/* Стили элемента статуса */
-.status-label {
-    font-weight: 400;
-    color: #4A4A4A;
-}
-.status-badge {
-    height: 8px;
-    min-width: 8px;
-    margin-right: 10px;
-}
-
-
-
-/* Увеличенный шрифт лейблов полей ввода */
-.form-group label {
-    font-size: 14px;
-}
-
-
-/* Стили элемента stack-view */
-.stack-view .stack-children .stack-block-label {
-    flex: 0 0 0;
-}
-
-.stack-view .stack-block-content {
-    padding: 0;
-}
-.stack-view .stack-children {
-    padding: 0;
-}
-
-.stack-view .stack-children clr-stack-block .stack-block-label {
-    padding-left: 0;
-}
-
-
-/* Стили элемента alert */
-.alert-items {
-    padding: 5px 10px 5px 10px;
-    line-height: 25px;
-    font-size: 13px;
-}
-
-
-/* Центрирование контента в ячейках грида в финансовом блоке */
-.offer-price .datagrid .datagrid-column .datagrid-column-title,
-.offer-price .datagrid .data-head .datagrid-row-actions .datagrid-column-title,
-.offer-price .datagrid .datagrid-cell,
-.offer-price .datagrid .datagrid-column,
-.offer-price .datagrid .datagrid-header .datagrid-row-actions {
-    text-align: center !important;
-}
-
-.datagrid .datagrid-column .datagrid-column-title,
-.datagrid .datagrid-column .datagrid-column-flex,
-.datagrid .datagrid-header .datagrid-row-actions .datagrid-column-flex{
-  align-self: center;
-  align-items: center;
-}
-
-.datagrid-select .clr-control-label {
-    min-height: 1rem;
-    margin-top: 3px;
-}
-
-
-/* Разделительная линия между элементами */
-.right-separator {
-    border-right: 1px solid #D4D9E2;
-}
-
-
-/* Скрытие стрелочек внутри инпута */
-input[type=number].hidden-arrows::-webkit-inner-spin-button,
-input[type=number].hidden-arrows::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-input[type=number].hidden-arrows {
-    -moz-appearance:textfield;
-}
-
-
-/* Стили для реестров */
-.registry-item-value {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-span.registry-purchase-title {
-  font-size: 16px;
-}
-
-
-/* Стили для элементов Card */
-.card {
-  margin: 0 0 24px 0;
-}
-
-.card-link {
+a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
+  text-decoration: none;
   cursor: pointer;
 }
 
-.card-header {
-  font-weight: 600;
-  font-size: 14px;
-  padding: 10px 15px;
-}
+.app-position-status {
+  white-space: nowrap;
 
-.count-items,
-.header-status {
-  text-transform: initial;
-  font-weight: 400;
-  color: #9fa8b0;
-}
+  > * + * { margin-left: .5em }
 
-/* Cтили из бутстрапа для группировки кнопки и инпута. todo вынести потом в stdlib-ng */
-.input-group {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  width: 100%;
-}
-.input-group>.custom-file, .input-group>.custom-select, .input-group>.form-control {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  width: 1%;
-  margin-bottom: 0;
-}
-.input-group-append, .input-group-prepend {
-  display: -ms-flexbox;
-  display: flex;
-}
-.input-group>.input-group-append>.btn, .input-group>.input-group-append>.input-group-text, .input-group>.input-group-prepend:first-child>.btn:not(:first-child), .input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child), .input-group>.input-group-prepend:not(:first-child)>.btn, .input-group>.input-group-prepend:not(:first-child)>.input-group-text {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-/** Плейсхолдер датагрида */
-.datagrid-placeholder {
-  border-top: none;
-}
-
-
-
-clr-dg-footer.datagrid-footer {
-    background-color: #fff;
-    border: none;
-    font-size: 14px;
-}
-
-.clr-toggle-wrapper {
-    height: initial;
+  &-icon {
     display: inline-block;
-    margin-right: 0;
-    margin-left: 7px;
-}
-
-
-
-
-
-/* Цветовые индикаторы к лейблам статусов */
-
-.status-request-NEW:before,
-.status-request-DRAFT:before,
-.status-request-ON_CUSTOMER_APPROVAL:before,
-.status-request-IN_PROGRESS:before,
-.status-request-COMPLETED:before,
-
-.status-position-DRAFT:before,
-.status-position-ON_CUSTOMER_APPROVAL:before,
-.status-position-NEW:before,
-.status-position-TECHNICAL_PROPOSALS_PREPARATION:before,
-.status-position-TECHNICAL_PROPOSALS_AGREEMENT:before,
-.status-position-PROPOSALS_PREPARATION:before,
-.status-position-RESULTS_AGREEMENT:before,
-.status-position-WINNER_SELECTED:before,
-.status-position-CONTRACT_AGREEMENT:before,
-.status-position-CONTRACT_SIGNING:before,
-.status-position-CONTRACTED:before,
-.status-position-RKD_AGREEMENT:before,
-.status-position-MANUFACTURING:before,
-.status-position-DELIVERY:before,
-.status-position-DELIVERED:before,
-.status-position-PAID:before,
-.status-position-COMPLETED:before
-{
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    vertical-align: middle;
-    margin: -2px 4px 0 0;
+    width: .858em;
+    height: .858em;
     border-radius: 50%;
-}
 
-$status-request-NEW: #b9b9b9;
-$status-request-DRAFT: rgb(173, 147, 185);
-$status-request-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
-$status-request-IN_PROGRESS: #f48f32;
-$status-request-COMPLETED: #00b75e;
-
-$status-position-DRAFT: rgb(173, 147, 185);
-$status-position-ON_CUSTOMER_APPROVAL: rgb(95, 112, 167);
-$status-position-NEW: rgb(185, 185, 185);
-$status-position-TECHNICAL_PROPOSALS_PREPARATION: rgb(91, 154, 185);
-$status-position-TECHNICAL_PROPOSALS_AGREEMENT: rgb(99, 185, 154);
-$status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION: rgb(159, 56, 255);
-$status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT: rgb(159, 56, 255);
-$status-position-TCP_WINNER_SELECTED: rgb(159, 56, 255);
-$status-position-PROPOSALS_PREPARATION: rgb(40, 177, 236);
-$status-position-RESULTS_AGREEMENT: rgb(0, 183, 94);
-$status-position-WINNER_SELECTED: rgb(255, 71, 90);
-$status-position-CONTRACT_AGREEMENT: rgb(97, 77, 255);
-$status-position-CONTRACT_SIGNING: rgb(159, 56, 255);
-$status-position-CONTRACTED: rgb(150, 183, 57);
-$status-position-RKD_AGREEMENT: rgb(142, 46, 90);
-$status-position-RKD_APPROVED: rgb(142, 46, 90);
-$status-position-MANUFACTURING: rgb(149, 65, 25);
-$status-position-DELIVERY: rgb(84, 199, 171);
-$status-position-DELIVERED: rgb(100, 142, 255);
-$status-position-PAID: rgb(231, 200, 35);
-$status-position-RELATED_SERVICES_EXECUTION: rgb(0, 183, 94);
-$status-position-WARRANTY: rgb(0, 183, 94);
-$status-position-COMPLETED: rgb(255, 127, 127);
-
-.status-request-NEW:before {
-    background: $status-request-NEW;
-}
-.status-request-DRAFT:before {
-    background: $status-request-DRAFT;
-}
-.status-request-ON_CUSTOMER_APPROVAL:before {
-    background: $status-request-ON_CUSTOMER_APPROVAL;
-}
-.status-request-IN_PROGRESS:before {
-    background: $status-request-IN_PROGRESS;
-}
-.status-request-COMPLETED:before {
-    background: $status-request-COMPLETED;
-}
-
-.status-position-DRAFT:before {
-  background: $status-position-DRAFT;
-}
-.status-position-ON_CUSTOMER_APPROVAL:before {
-  background: $status-position-ON_CUSTOMER_APPROVAL;
-}
-.status-position-NEW:before {
-  background: $status-position-NEW;
-}
-.status-position-TECHNICAL_PROPOSALS_PREPARATION:before {
-  background: $status-position-TECHNICAL_PROPOSALS_PREPARATION;
-}
-.status-position-TECHNICAL_PROPOSALS_AGREEMENT:before {
-  background: $status-position-TECHNICAL_PROPOSALS_AGREEMENT;
-}
-.status-position-PROPOSALS_PREPARATION:before {
-    background: $status-position-PROPOSALS_PREPARATION;
-}
-.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT:before {
-  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT;
-}
-.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION:before {
-  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION;
-}
-.status-position-TCP_WINNER_SELECTED:before {
-  background: $status-position-TCP_WINNER_SELECTED;
-}
-.status-position-RESULTS_AGREEMENT:before {
-    background: $status-position-RESULTS_AGREEMENT;
-}
-.status-position-WINNER_SELECTED:before {
-    background: $status-position-WINNER_SELECTED;
-}
-.status-position-CONTRACT_AGREEMENT:before {
-    background: $status-position-CONTRACT_AGREEMENT;
-}
-.status-position-CONTRACT_SIGNING:before {
-    background: $status-position-CONTRACT_SIGNING;
-}
-.status-position-CONTRACTED:before {
-    background: $status-position-CONTRACTED;
-}
-.status-position-RKD_AGREEMENT:before {
-    background: $status-position-RKD_AGREEMENT;
-}
-.status-position-RKD_APPROVED:before {
-  background: $status-position-RKD_APPROVED;
-}
-.status-position-MANUFACTURING:before {
-    background: $status-position-MANUFACTURING;
-}
-.status-position-DELIVERY:before {
-    background: $status-position-DELIVERY;
-}
-.status-position-DELIVERED:before {
-    background: $status-position-DELIVERED;
-}
-.status-position-PAID:before {
-    background: $status-position-PAID;
-}
-.status-position-RELATED_SERVICES_EXECUTION:before {
-  background: $status-position-RELATED_SERVICES_EXECUTION;
-}
-.status-position-WARRANTY:before {
-  background: $status-position-WARRANTY;
-}
-.status-position-COMPLETED:before {
-    background: $status-position-COMPLETED;
-}
-
-
-.status-position-DRAFT.selected {
-  background: $status-position-DRAFT !important;
-}
-.status-position-ON_CUSTOMER_APPROVAL.selected {
-  background: $status-position-ON_CUSTOMER_APPROVAL !important;
-}
-.status-position-NEW.selected {
-  background: $status-position-NEW !important;
-}
-.status-position-TECHNICAL_PROPOSALS_PREPARATION.selected {
-  background: $status-position-TECHNICAL_PROPOSALS_PREPARATION !important;
-}
-.status-position-TECHNICAL_PROPOSALS_AGREEMENT.selected {
-  background: $status-position-TECHNICAL_PROPOSALS_AGREEMENT !important;
-}
-.status-position-PROPOSALS_PREPARATION.selected {
-  background: $status-position-PROPOSALS_PREPARATION !important;
-}
-.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT.selected {
-  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT !important;
-}
-.status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION.selected {
-  background: $status-position-TECHNICAL_COMMERCIAL_PROPOSALS_PREPARATION !important;
-}
-.status-position-TCP_WINNER_SELECTED.selected {
-  background: $status-position-TCP_WINNER_SELECTED !important;
-}
-.status-position-RESULTS_AGREEMENT.selected {
-  background: $status-position-RESULTS_AGREEMENT !important;
-}
-.status-position-WINNER_SELECTED.selected {
-  background: $status-position-WINNER_SELECTED !important;
-}
-.status-position-CONTRACT_AGREEMENT.selected {
-  background: $status-position-CONTRACT_AGREEMENT !important;
-}
-.status-position-CONTRACT_SIGNING.selected {
-  background: $status-position-CONTRACT_SIGNING !important;
-}
-.status-position-CONTRACTED.selected {
-  background: $status-position-CONTRACTED !important;
-}
-.status-position-RKD_AGREEMENT.selected {
-  background: $status-position-RKD_AGREEMENT !important;
-}
-.status-position-RKD_APPROVED.selected {
-  background: $status-position-RKD_APPROVED !important;
-}
-.status-position-MANUFACTURING.selected {
-  background: $status-position-MANUFACTURING !important;
-}
-.status-position-DELIVERY.selected {
-  background: $status-position-DELIVERY !important;
-}
-.status-position-DELIVERED.selected {
-  background: $status-position-DELIVERED !important;
-}
-.status-position-PAID.selected {
-  background: $status-position-PAID !important;
-}
-.status-position-RELATED_SERVICES_EXECUTION.selected {
-  background: $status-position-RELATED_SERVICES_EXECUTION !important;
-}
-.status-position-WARRANTY.selected {
-  background: $status-position-WARRANTY !important;
-}
-.status-position-COMPLETED.selected {
-  background: $status-position-COMPLETED !important;
-}
-
-.text-alert {
-  font-size: 16px;
-  padding: 0 20px;
-}
-
-/*
-  Стили для всплывающих уведомлений
-  Везде ставится important, т.к. стили компонентом внедрядряются автоматически и после этого файла
-*/
-
-.alert-header {
-  padding: 0 0 1rem !important;
-  align-items: normal !important;
-}
-
-.alert-title {
-  color: #000 !important;
-  font-size: .916667rem !important;
-  font-family: Metropolis,"Avenir Next","Helvetica Neue",Arial,sans-serif !important;
-  font-weight: 400 !important;
-  line-height: 1rem !important;
-  letter-spacing: normal !important;
-  margin: 0 !important;
-}
-
-.alert-popup {
-  border-radius: .125rem !important;
-  padding: 1rem !important;
-  box-shadow: 0 1px 2px 2px rgba(0,0,0,.2) !important;
-}
-
-.alert-content {
-  align-items: normal !important;
-  text-align: left !important;
-  color: #565656 !important;
-  font-weight: 400 !important;
-  font-size: .583333rem !important;
-  letter-spacing: normal !important;
-}
-
-.alert-content .swal2-content {
-  align-items: normal !important;
-}
-
-.alert-actions {
-  margin: 1rem 0 0 !important;
-  justify-content: flex-end !important;
-}
-
-.alert-actions .btn{
-  margin: 0 0 0 .5rem !important;
-}
-
-.alert-close-button {
-  top: 0.6rem !important;
-  right: 0.5rem !important;
-  width: 1rem !important;
-  height: 1rem !important;
-  color: #737373 !important;
-  font-family: inherit !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  font-weight: 200 !important;
-}
-
-/* end Стили для всплывающих уведомлений */
-
-// Для скрытия стандартого поля ввода Clarity
-.hidden-datepicker {
-  &-top {
-    position: relative;
-    top: -280px;
+    @each $status, $color in $statuses {
+      &.#{$status} { background-color: $color }
+    }
   }
-
-  input[clrDate] { display: none }
-  input[clrDate] + button, .clr-validate-icon { display: none }
-  .clr-input-wrapper { height: 0 }
-  .datepicker { margin-top: -1.25rem }
 }

@@ -18,6 +18,9 @@ import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
 import {User} from "../../../user/models/user";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
+import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
+import { ContragentRole } from "../../enum/contragent-role";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -35,6 +38,15 @@ export class ContragentRegistrationComponent implements OnInit {
   subscription = new Subscription();
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
+
+  readonly role = ContragentRole;
+  readonly roleLabel = ContragentRoleLabels;
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   get isEditing(): boolean {
     return !!this.contragentId;
@@ -78,7 +90,7 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        role: ['customer']
+        role: [this.role.CUSTOMER]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -196,9 +208,9 @@ export class ContragentRegistrationComponent implements OnInit {
     this.contragent$ = this.getContragentService.getContragentInfo(this.contragentId).pipe(
       tap(contragent => {
         this.bc.breadcrumbs = [
-          {label: "Контрагенты", link: "/contragents/list"},
+          {label: "Контрагенты", link: `/contragents/list`},
           {label: contragent.shortName, link: `/contragents/${this.contragentId}/info`},
-          {label: "Редактировать", link: '`/contragents/${this.contragentId}/edit`'}
+          {label: "Редактировать", link: `/contragents/${this.contragentId}/edit`}
         ];
       }),
       tap(contragent => {

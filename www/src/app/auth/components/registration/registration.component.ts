@@ -4,13 +4,14 @@ import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { RegistrationService } from "../../services/registration.service";
 import { Router } from "@angular/router";
 import { filter, finalize, tap } from "rxjs/operators";
-import { ClrModal } from "@clr/angular";
+import { UxgModalComponent } from "uxg";
 import { RegistrationRequest } from "../../models/registration-request";
 import { Subscription } from "rxjs";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { Store } from "@ngxs/store";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Toast } from "../../../shared/models/toast";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
   selector: 'app-registration',
@@ -18,8 +19,8 @@ import { Toast } from "../../../shared/models/toast";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  @ViewChild('contragentFound') contragentFound: ClrModal;
-  @ViewChild('contragentNotFound') contragentNotFound: ClrModal;
+  @ViewChild('contragentFound') contragentFound: UxgModalComponent;
+  @ViewChild('contragentNotFound') contragentNotFound: UxgModalComponent;
   @ViewChild('successRegister', { static: true }) successRegister: TemplateRef<any>;
 
   form: FormGroup;
@@ -27,6 +28,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   isLoading = false;
   registrationProcessing = false;
   subscription = new Subscription();
+
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   constructor(
     private fb: FormBuilder,

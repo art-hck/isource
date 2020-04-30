@@ -1,7 +1,7 @@
 @import "../uxg";
 
 @mixin helpers($theme) {
-*, *::before, *::after { box-sizing: inherit; }
+*, *::before, *::after { box-sizing: border-box; }
 
 .app-bold { font-weight: bold; }
 .app-font-normal { font-weight: normal; }
@@ -23,13 +23,17 @@
 
 // Flex
 .app-basis-auto { flex-basis: auto;}
+.app-shrink-0 { flex-shrink: 0;}
+.app-shrink-1 { flex-shrink: 1;}
 .app-grow-0 { flex-grow: 0;}
 .app-grow-1 { flex-grow: 1;}
+.app-flex-column { flex-direction: column;}
 .app-align-items-center { align-items: center; }
 .app-align-items-end { align-items: flex-end; }
 .app-justify-content-between { justify-content: space-between; }
 .app-justify-content-center { justify-content: center; }
 .app-justify-content-end { justify-content: flex-end; }
+.app-align-self-start { align-self: start; }
 
 // Paddings
 .padding-3xs{ padding: uxg($theme, padding-3xs); }
@@ -57,22 +61,5 @@
 
 .app-section {
   margin-bottom: .9em;
-
-  :last-child {
-    margin-bottom: 0;
-  }
-}
-
-* + clr-icon {
-  margin-left: .5em;
-}
-
-clr-icon {
-  vertical-align: middle;
-  align-self: center;
-
-  & + * {
-    margin-left: .5em;
-  }
 }
 }

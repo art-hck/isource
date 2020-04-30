@@ -64,11 +64,11 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
   ];
   readonly disabledFieldsAfterStatus = {
-    // Вырубаем поля после Согласования ТП
-    [PositionStatuses.TECHNICAL_PROPOSALS_AGREEMENT]:
+    // Вырубаем поля после Согласования ТП/Согласования ТКП
+    [PositionStatuses.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]:
       ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'],
 
-    // Вырубаем «ПНР» и стоимость после подготвки КП
+    // Вырубаем «ПНР» и стоимость после подготовки КП
     [PositionStatuses.PROPOSALS_PREPARATION]:
       ['isShmrRequired', 'isPnrRequired', 'startPrice'],
 
@@ -80,8 +80,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     [PositionStatuses.CONTRACT_SIGNING]:
       ['isInspectionControlRequired'],
 
-    // Вырубаем «РКД» после изготовления
-    [PositionStatuses.MANUFACTURING]:
+    // Вырубаем «РКД» после «РКД согласовано»
+    [PositionStatuses.RKD_APPROVED]:
       ['isDesignRequired']
   };
 
@@ -113,7 +113,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private positionService: RequestPositionService,
     private userInfoService: UserInfoService,
     private normPositionService: NormPositionService,
-    private okeiService: OkeiService,
+    public okeiService: OkeiService,
     private store: Store
   ) {}
 

@@ -16,9 +16,12 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
+import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
 
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class RequestService {
 
   constructor(
@@ -53,7 +56,7 @@ export class RequestService {
 
   getRequestPositionsWithOffers(id: Uuid): Observable<any> {
     const url = `requests/backoffice/${id}/positions-with-offers`;
-    return this.api.get<any>(url);
+    return this.api.get<PositionsWithSuppliers>(url);
   }
 
   requestStatusCount() {

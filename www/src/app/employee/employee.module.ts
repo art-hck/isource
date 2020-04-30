@@ -10,13 +10,15 @@ import { EmployeeCardPositionListComponent } from './components/employee-card/em
 import { SharedModule } from "../shared/shared.module";
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { TextMaskModule } from "angular2-text-mask";
 
 @NgModule({
   imports: [
     SharedModule,
     CommonModule,
     EmployeeRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TextMaskModule
   ],
   declarations: [
     EmployeeListViewComponent,
@@ -24,7 +26,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     EmployeeCardComponent,
     EmployeeCardRequestListComponent,
     EmployeeCardPositionListComponent,
-    EmployeeFormComponent
+    EmployeeFormComponent,
   ],
   providers: [
     EmployeeService,

@@ -3,15 +3,11 @@
 </ng-container>
 
 <ng-container *ngIf="request">
-  <div class="app-row commercial-proposals">
+  <div class="app-layout commercial-proposals">
     <div class="info-card app-col">
       <div class="request-info">
-        <div class="app-row">
-          <div class="clr-col-5">
-          </div>
-          <div class="clr-col-7 price-auto-select">
-            <button class="btn btn-outline" (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
-          </div>
+        <div class="app-row app-justify-content-end">
+          <button uxgButton outline lg (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
         </div>
 
         <div class="table-header-wrapper">
@@ -45,7 +41,7 @@
               <td class="position-name">
                 <span class="position-label">{{ requestPosition.name }}</span>
 
-                <span class="gray">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
+                <span class="app-ghost-color">{{requestPosition.quantity}} {{requestPosition.measureUnit}}
                   <span *ngIf="requestPosition.deliveryDate; else ASAP">
                       к {{ makeReadableDate(requestPosition.deliveryDate) }}
                     </span>
@@ -74,8 +70,8 @@
                             </span>
                         </div>
 
-                        <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto clr-align-self-start">
-                          <clr-icon shape="lock" class="lock-icon is-solid" size="14"></clr-icon>
+                        <div *ngIf="positionHasWinner(requestPosition)" class="clr-col-auto app-align-self-start">
+                          <uxg-icon shape="app-lock" class="lock-icon is-solid" size="14"></uxg-icon>
                         </div>
                       </div>
                     </div>
@@ -112,7 +108,7 @@
                   <span class="clr-col-12">Итого {{ getTotalSum() | currency: 'RUB' }}</span>
 
                   <div class="clr-col-12 send-for-agreement-btn">
-                    <button class="btn btn-primary"
+                    <button uxgButton primary lg
                             [disabled]="!isSendButtonEnabled()"
                             (click)="sendForAgreement()">Согласовать
                     </button>
@@ -145,32 +141,32 @@
                       <div class="alert-labels">
                         <div *ngIf="validPositionsCount(requestPositions, supplier.id); else invalidCount">
                             <span class="green-label">
-                              <clr-icon shape="check" size="12"></clr-icon> Все позиции в нужном количестве
+                              <uxg-icon shape="app-check" size="12"></uxg-icon> Все позиции в нужном количестве
                             </span>
                         </div>
 
                         <ng-template #invalidCount>
                             <span class="red-label">
-                              <clr-icon shape="times" size="12"></clr-icon> Не все позиции в нужном количестве
+                              <uxg-icon shape="app-cross" size="12"></uxg-icon> Не все позиции в нужном количестве
                             </span>
                         </ng-template>
 
 
                         <div *ngIf="validPositionsDeliveryDate(requestPositions, supplier.id); else invalidDelivery">
                             <span class="green-label">
-                              <clr-icon shape="check" size="12"></clr-icon> Сроки поставки укладываются в заданные
+                              <uxg-icon shape="app-check" size="12"></uxg-icon> Сроки поставки укладываются в заданные
                             </span>
                         </div>
 
                         <ng-template #invalidDelivery>
                             <span class="red-label">
-                              <clr-icon shape="times" size="12"></clr-icon> Сроки поставки не укладываются в заданные
+                              <uxg-icon shape="app-cross" size="12"></uxg-icon> Сроки поставки не укладываются в заданные
                             </span>
                         </ng-template>
                       </div>
 
                       <div class="select-all-button" style="display: none">
-                        <button class="btn btn-primary"
+                        <button uxgButton primary lg
                                 *ngIf="canSelectOffersBySupplier(requestPositions, supplier.id)"
                                 (click)="onSelectAll(requestPositions, supplier.id)">Выбрать всё
                         </button>
@@ -191,13 +187,10 @@
 </ng-container>
 
 <!-- Модальное окно со списком документов КП -->
-<clr-modal [(clrModalOpen)]="commercialProposalsDocumentsModalOpened">
-  <h3 class="modal-title">Документы</h3>
-
-  <div class="modal-body">
-    <app-document-simple-list
-      [documents]="linkedOfferDocuments"
-      [enableUpload]="false">
-    </app-document-simple-list>
-  </div>
-</clr-modal>
+<uxg-modal [(state)]="commercialProposalsDocumentsModalOpened" size="s">
+  <h2>Документы</h2>
+  <app-document-simple-list
+    [documents]="linkedOfferDocuments"
+    [enableUpload]="false">
+  </app-document-simple-list>
+</uxg-modal>

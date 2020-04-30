@@ -1,75 +1,47 @@
-<nav *ngIf="!isMenuHidden" class="subnav">
-  <div class="container">
-    <div class="app-row w-100">
-      <div class="clr-col-8 menu">
-        <div class="logo-block">
-          <a [routerLink]="'/'">Marketplace</a>
+<nav class="app-menu">
+  <div class="app-layout app-row">
+    <!-- Лого -->
+    <a class="app-link-no-color app-menu-logo app-bold" [routerLink]="'/'">Marketplace</a>
+
+    <!-- Пункты меню -->
+    <ng-container *ngFor="let link of menu">
+      <a class="app-link-no-color app-menu-item" [routerLink]="link.path" routerLinkActive="active">{{ link.text }}</a>
+    </ng-container>
+
+    <div class="app-col"></div>
+
+    <!-- Сообщения -->
+    <a routerLink="messages" routerLinkActive="active" class="app-menu-icon app-secondary-color">
+      <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
+      <app-message-notification></app-message-notification>
+    </a>
+
+    <!-- Корзина -->
+    <ng-container *ngIf="featureService.authorize('catalog')">
+      <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
+        <uxg-icon class="app-ghost-color" shape="app-basket-big" size="24"></uxg-icon>
+        <small class="basket-counter">{{ cartStoreService.getCount() }}</small>
+      </a>
+
+      <div *ngIf="cartStoreService.getCount() === 0" class="app-menu-icon app-ghost-color">
+        <uxg-icon shape="app-basket-big" size="24"></uxg-icon>
+      </div>
+    </ng-container>
+
+    <!-- Профиль -->
+    <div class="app-menu-login">
+      <uxg-popover #popover>
+        <div uxgPopoverTrigger class="app-row app-align-items-center">
+          <img src="assets/images/avatar.svg"/>
+          <div>
+            <div class="app-ellipsis">{{ user.getShortUserFio() }}</div>
+            <div class="app-ghost-color app-ellipsis">{{ userBriefInfo }}</div>
+          </div>
         </div>
-
-        <ul class="nav menu-block" *ngIf="auth.isAuth()">
-          <li class="nav-item" *ngFor="let link of menu">
-            <a class="nav-link" [routerLink]="link.path" routerLinkActive="link-active">{{ link.text }}</a>
-          </li>
-        </ul>
-      </div>
-      <div class="clr-col">
-      </div>
-      <div class="clr-col-3">
-        <ul class="nav login-block">
-          <ng-container *ngIf="auth.isAuth(); else login">
-            <li class="nav-item">
-              <a [routerLink]="'messages'" routerLinkActive="link-active" class="nav-icon message-icon">
-                <img src="../../../assets/images/messages.svg">
-              </a>
-              <app-message-notification></app-message-notification>
-            </li>
-
-            <li *ngIf="featureService.available('catalog', user.roles)" class="nav-item">
-              <a *ngIf="cartStoreService.getCount() > 0; else emptyCart" [routerLink]="'/cart'" routerLinkActive="link-active" class="nav-icon">
-                <img src="../../../assets/images/cart.svg">
-                <cart-widget class="cart-widget-margin"></cart-widget>
-              </a>
-              <ng-template #emptyCart>
-                <span class="nav-icon"><img src="../../../assets/images/cart.svg"></span>
-              </ng-template>
-            </li>
-
-            <li class="nav-item">
-              <clr-dropdown class="btn-user">
-                <button class="nav-icon" clrDropdownTrigger>
-                <span class="avatar">
-                 <img src="../../../assets/images/avatar.svg"/>
-                </span>
-                  <div class="user-info-block">
-                    <p class="user-name">{{ user.getShortUserFio() }}</p>
-                    <p class="user-role gray" title="{{ getUserBriefInfo(user) }}">{{ getUserBriefInfo(user) }}</p>
-                  </div>
-                </button>
-
-                <clr-dropdown-menu class="user-info-dropdown" *clrIfOpen clrPosition="bottom-right">
-                  <ng-container *ngIf="user.isBackOffice()">
-                    <h4 class="dropdown-header" title="{{ user.getUserInfo().contragent?.shortName }}">
-                      {{ user.getUserInfo().contragent?.shortName }}
-                    </h4>
-
-                    <div class="dropdown-divider"></div>
-                  </ng-container>
-
-                  <button (click)="logout()" clrDropdownItem>Выход</button>
-                </clr-dropdown-menu>
-              </clr-dropdown>
-            </li>
-          </ng-container>
-          <ng-template #login>
-            <li class="nav-item">
-              <a routerLink="auth/login" class="nav-icon nav-logout">
-                Вход
-                <clr-icon shape="login" size="32"></clr-icon>
-              </a>
-            </li>
-          </ng-template>
-        </ul>
-      </div>
+        <div *uxgPopoverContent="'app-popover-content-bottom-right'">
+          <button uxgButton clear (click)="popover.hide(); logout();">Выход</button>
+        </div>
+      </uxg-popover>
     </div>
   </div>
 </nav>

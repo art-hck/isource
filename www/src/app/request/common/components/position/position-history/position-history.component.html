@@ -19,7 +19,7 @@
       </div>
       <div class="app-col">
         <span class="activity-type" [class.app-bold]="isPositionWinnerSelectedAction(activityItem)"
-              [class.gray]="isStatusChangeAction(activityItem)">
+              [class.app-ghost-color]="isStatusChangeAction(activityItem)">
           {{ activityItem.typeLabel }}
         </span>
 
@@ -34,7 +34,7 @@
           <ng-container *ngIf="isPositionEditAction(activityItem)">
             <div class="position-edit-item">
               <div class="edit-info-item" *ngFor="let item of getPositionEditInfoList(activityItem.data)">
-                <span class="edit-info-label gray">{{ item.label }}:</span>
+                <span class="edit-info-label app-ghost-color">{{ item.label }}:</span>
 
                 <span class="edit-info-value">{{ item.oldValue }}</span>
                 <span class="arrow">→</span>
@@ -45,11 +45,11 @@
 
           <ng-container *ngIf="isStatusChangeAction(activityItem)">
             <div class="position-status-change">
-              <uxg-position-status [label]="activityItem.data.oldStatusLabel"
-                                   [status]="activityItem.data.oldStatus"></uxg-position-status>
-              <clr-icon shape="app-top" dir="right"></clr-icon>
-              <uxg-position-status [label]="activityItem.data.newStatusLabel"
-                                   [status]="activityItem.data.newStatus"></uxg-position-status>
+              <app-position-status [label]="activityItem.data.oldStatusLabel"
+                                   [status]="activityItem.data.oldStatus"></app-position-status>
+              <uxg-icon shape="app-top" dir="right"></uxg-icon>
+              <app-position-status [label]="activityItem.data.newStatusLabel"
+                                   [status]="activityItem.data.newStatus"></app-position-status>
             </div>
           </ng-container>
 
@@ -61,19 +61,20 @@
               </span>
 
                 <ng-template #clickableWinnerLink>
-                  <a (click)="showContragentInfo($event, activityItem.data.supplierId)"
-                     [href]="'/contragents/' + activityItem.data.supplierId + '/info'">{{ activityItem.data.supplierName
-                    }}</a>
+                  <app-contragent-info-link [contragent]="{
+                    id: activityItem.data.supplierId,
+                    shortName: activityItem.data.supplierName
+                  }"></app-contragent-info-link>
                 </ng-template>
               </div>
 
               <div class="position-winner-offer">
                 {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
                 currency : activityItem.data.offerCurrency }}
-                <span class="gray">
+                <span class="app-ghost-color">
                   за </span>
                 {{ activityItem.data.offerQuantity }}
-                <span class="gray">
+                <span class="app-ghost-color">
                   {{ activityItem.data.offerMeasureUnit }}
                 </span>
               </div>
@@ -88,10 +89,10 @@
               </span>
 
                 <ng-template #clickableRemovedWinnerLink>
-                  <a [href]="'/contragents/' + activityItem.data.supplierId + '/info'"
-                     (click)="showContragentInfo($event, activityItem.data.supplierId)">{{
-                    activityItem.data.supplierName
-                    }}</a>
+                  <app-contragent-info-link [contragent]="{
+                    id: activityItem.data.supplierId,
+                    shortName: activityItem.data.supplierName
+                  }"></app-contragent-info-link>
                 </ng-template>
               </div>
 
@@ -99,7 +100,7 @@
                 {{ activityItem.data.offerPrice * activityItem.data.offerQuantity |
                 currency : activityItem.data.offerCurrency }}
                 <span
-                  class="gray">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
+                  class="app-ghost-color">за {{ activityItem.data.offerQuantity }} {{ activityItem.data.offerMeasureUnit }}</span>
               </div>
             </div>
           </ng-container>
@@ -107,7 +108,7 @@
         </ng-template>
 
         <div class="author-block">
-          <span class="user-name gray">
+          <span class="user-name app-ghost-color">
             {{ activityItem.user.lastName }} {{ activityItem.user.firstName }} {{ activityItem.user.middleName }}
           </span>
         </div>
@@ -115,14 +116,3 @@
     </div>
   </ng-template>
 </div>
-
-<ng-container *ngIf="contragent">
-  <clr-modal [clrModalSize]="'lg'" [(clrModalOpen)]="contragentInfoModalOpened">
-    <h3 class="modal-title">{{ contragent.shortName }}</h3>
-    <div class="modal-body">
-      <app-contragent-info
-        [contragent]="contragent">
-      </app-contragent-info>
-    </div>
-  </clr-modal>
-</ng-container>

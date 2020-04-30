@@ -22,11 +22,13 @@
         <app-document-simple-list [enableUpload]="false"
                                   [documents]="[fileAsDocument(form.get('file').value)]"></app-document-simple-list>
       </div>
+
       <div class="left app-col">
         <textarea formControlName="comment"></textarea>
       </div>
-      <div>
-        <button class="btn btn-primary-outline" [clrLoading]="form.get('state').value">Загрузить</button>
+
+      <div class="clr-col-auto">
+        <button uxgButton primary lg [clrLoading]="form.get('state').value">Загрузить</button>
       </div>
     </div>
   </form>

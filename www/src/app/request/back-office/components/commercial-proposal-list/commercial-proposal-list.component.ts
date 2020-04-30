@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { catchError, filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, filter, map, shareReplay, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Request } from "../../../common/models/request";
-import { UxgBreadcrumbsService } from "uxg";
-import { ActivatedRoute, Router } from "@angular/router";
+import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
+import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -11,17 +11,23 @@ import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Select, Store } from "@ngxs/store";
-import { ClrModal } from "@clr/angular";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
+import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
+import { PositionsWithSuppliers } from "../../models/positions-with-suppliers";
+import { ProcedureAction } from "../../models/procedure-action";
+import { ProcedureService } from "../../services/procedure.service";
+import { Procedure } from "../../models/procedure";
+import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
-  @ViewChild('confirmToast') confirmToast: ClrModal;
+  @ViewChild('confirmToast') confirmToast: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
-  requestPositionsWithOffers$: Observable<any>;
+  requestPositionsWithOffers$: Observable<PositionsWithSuppliers>;
   contragents$: Observable<ContragentList[]>;
   showForm = false;
   showEditForm = false;
@@ -29,17 +35,22 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   currentRequestPosition: RequestPosition;
   selectedLinkedOffer: any;
   selectedPositions: RequestPosition[] = [];
+  procedureSource = ProcedureSource;
+  procedureModalPayload?: ProcedureAction & { procedure$?: Observable<Procedure> } = null;
+
+  readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
 
   get hasProsedure() {
     return this.selectedPositions.some(requestPosition => requestPosition.hasProcedure === true);
   }
 
-  constructor(private bc: UxgBreadcrumbsService,
-              private route: ActivatedRoute,
-              private requestService: RequestService,
-              private store: Store,
-              protected offersService: CommercialProposalsService,
-              protected router: Router
+  constructor(
+    public store: Store,
+    private bc: UxgBreadcrumbsService,
+    private route: ActivatedRoute,
+    private requestService: RequestService,
+    private offersService: CommercialProposalsService,
+    private procedureService: ProcedureService
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -64,7 +75,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     this.updatePositionsAndSuppliers();
   }
 
-  protected updatePositionsAndSuppliers(): void {
+  updatePositionsAndSuppliers(): void {
     this.requestPositionsWithOffers$ = this.requestService.getRequestPositionsWithOffers(this.requestId);
   }
 
@@ -108,7 +119,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   }
 
   updateContragents(positions: RequestPosition[]) {
-    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions);
+    this.contragents$ = this.offersService.getContragentsWithTp(this.requestId, positions.map(({id}) => id));
   }
 
   ngOnDestroy() {
@@ -125,5 +136,13 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
       )),
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  procedureAction(e: ProcedureAction) {
+    this.procedureModalPayload = e;
+    if (e.action !== 'create') {
+      this.procedureModalPayload.procedure$ = this.procedureService.getByPosition(e.position.id)
+        .pipe(map(([p]) => p), shareReplay(1));
+    }
   }
 }

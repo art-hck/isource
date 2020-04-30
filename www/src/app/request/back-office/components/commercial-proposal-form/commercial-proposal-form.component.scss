@@ -1,15 +1,15 @@
-@import "../../../../../../projects/uxg/src/styles/index";
+@import "projects/uxg/src/styles/index";
 
 form.cp-creation-form {
   margin-bottom: 16px;
 }
 
-:host ::ng-deep .cp-creation-modal .modal-dialog.modal-lg {
-  width: 765px;
-}
-
 div.documents {
   margin-bottom: 30px;
+}
+
+[class*=app-col]:not(:last-child) {
+  padding-right: 20px;
 }
 
 .position-name {
@@ -32,15 +32,6 @@ input.app-control-large {
   bottom: 0;
   padding: 2px 0;
   margin-top: -18px;
-}
-
-span.document-description,
-span.requirement-text {
-  color: rgba(0, 0, 0, 0.6);
-
-  span.red-text {
-
-  }
 }
 
 small {

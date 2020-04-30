@@ -98,7 +98,7 @@
             </div>
 
 
-            <div class="app-row from-to-block">
+            <div class="app-row app-align-items-center from-to-block">
 
               <div class="app-col">
                 <div class="item-info-element">
@@ -112,7 +112,7 @@
                 </div>
               </div>
 
-              <div class="clr-col-auto clr-align-self-center">
+              <div class="clr-col-auto">
                 <div class="from-to-icon"></div>
               </div>
 
@@ -194,12 +194,12 @@
 <form [formGroup]="assignIdForm" (ngSubmit)="assignIdSubmit()" *ngIf="opened">
   <span class="gibert-title">Замена ID товара</span>
 
-  <div class="clr-input-wrapper control-element">
+  <div class="control-element">
     <label>ID товара:</label>
     <input type="text" formControlName="newGoodId" appFormControlInvalidClass="invalid"/>
   </div>
 
-  <button class="btn btn-primary">Заменить</button>
+  <button uxgButton primary lg>Заменить</button>
   <br><br>
 </form>
 
@@ -207,26 +207,25 @@
 <form [formGroup]="newEventForm" (ngSubmit)="newEventSubmit()" *ngIf="opened">
   <span class="gibert-title">Добавление нового события</span>
 
-  <div class="clr-input-wrapper control-element">
+  <div class=" control-element">
     <label>Тип события:</label>
-
-    <select clrSelect name="type" id="type" formControlName="type" appFormControlInvalidClass="invalid">
-      <option value="CertificateUploaded">Загружен сертификат качества</option>
-      <option value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</option>
-      <option value="OptionVerification">Инспектор проверил характеристику</option>
-    </select>
+    <uxg-dropdown formControlName="type" placeholder="Тип события">
+      <div uxgDropdownItem value="CertificateUploaded">Загружен сертификат качества</div>
+      <div uxgDropdownItem value="PackagesLeftProductionOperationLink">Пакеты прошли через производственное звено</div>
+      <div uxgDropdownItem value="OptionVerification">Инспектор проверил характеристику</div>
+    </uxg-dropdown>
   </div>
 
-  <div class="clr-input-wrapper control-element">
+  <div class=" control-element">
     <label>Описание:</label>
     <input type="text" formControlName="description" appFormControlInvalidClass="invalid"/>
   </div>
 
-  <div class="clr-input-wrapper control-element">
+  <div class=" control-element">
     <label>Дата:</label>
     <input type="date" formControlName="occurredAt" appFormControlInvalidClass="invalid"/>
   </div>
 
-  <button class="btn btn-primary">Добавить</button>
-  <button class="btn btn-secondary" (click)="opened = false">Закрыть</button>
+  <button uxgButton primary lg>Добавить</button>
+  <button uxgButton secondary lg (click)="opened = false">Закрыть</button>
 </form>

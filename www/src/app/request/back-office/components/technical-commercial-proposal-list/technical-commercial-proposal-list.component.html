@@ -1,42 +1,122 @@
 <ng-container *ngIf="(request$ | async) as request; else placeholder">
-  <ng-container *ngIf="(technicalCommercialProposals$ | async) as proposals; else placeholder">
+  <ng-container *ngIf="(proposals$ | async) as proposals; else placeholder" [formGroup]="form">
     <!-- actions -->
-    <div class="app-row">
+    <div class="app-row" [class.app-layout]="view === 'grid'">
       <div class="app-col">
+        <div class="app-row app-justify-content-end analytical-report">
+          <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
+            <span>Аналитическая справка </span>
+            <uxg-icon shape="app-download"></uxg-icon>
+          </button>
+        </div>
         <div class="app-table app-no-border">
-          <div class="app-row app-justify-content-end">
-            <div class="app-col app-basis-auto app-grow-0">
+          <div class="app-row app-align-items-center">
+            <ng-container *ngIf="view === 'grid'">
+              <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
+              </uxg-checkbox>
+              <uxg-popover #selectPopover>
+                <button uxgButton uxgPopoverTrigger link icon><uxg-icon shape="app-triangle down"></uxg-icon></button>
+                <div *uxgPopoverContent>
+                  <div><button uxgButton clear (click)="form.get('checked').setValue(true); selectPopover.hide()">Все</button></div>
+                  <div><button uxgButton clear (click)="form.get('checked').setValue(false); selectPopover.hide()">Ни одного</button></div>
+                </div>
+              </uxg-popover>
+            </ng-container>
+            <div>
+              <span class="app-secondary-color">показать: </span>
+              <uxg-popover #viewPopover>
+                <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
+                 <span *ngSwitchCase="'grid'"><b>по позициям матрица</b></span>
+                 <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
+                </button>
+                <div *uxgPopoverContent>
+                  <div><button uxgButton clear (click)="switchView('grid')">по позициям матрица</button></div>
+                  <div><button uxgButton clear (click)="switchView('list')">по поставщикам</button></div>
+                </div>
+              </uxg-popover>
+            </div>
+            <div class="app-col"></div>
+            <div [ngSwitch]="view">
 
               <!-- Создать процедуру @TODO временно скрыто  -->
               <!--button uxgButton secondary iconText (click)="procedureModal.open()"
                       *ngIf="featureService.authorize('createProcedure')">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Создать процедуру</span>
               </button-->
 
               <!-- Новое ТКП  -->
-              <button uxgButton secondary iconText (click)="showForm = true">
-                <clr-icon shape="app-plus"></clr-icon>
+              <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>Новое ТКП</span>
+              </button>
+
+              <!-- Добавить столбец контрагента  -->
+              <button *ngSwitchCase="'grid'" uxgButton secondary iconText
+                      [disabled]="allPositionsOnReview()"
+                      (click)="addContragentModal.open()">
+                <uxg-icon shape="app-plus"></uxg-icon>
+                <span>Контрагент</span>
               </button>
 
               <!-- Новое ТКП шаблона -->
               <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
-                <clr-icon shape="app-plus"></clr-icon>
+                <uxg-icon shape="app-plus"></uxg-icon>
                 <span>ТКП из шаблона</span>
+              </button>
+
+              <!-- Отправить на согласование -->
+              <button *ngSwitchCase="'grid'" uxgButton primary
+                      [disabled]="selectedPositions?.length === 0 || (status$ | async) !=='received'"
+                      (click)="store.dispatch(publishPositions(selectedPositions))">
+                Отправить на согласование
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="app-col app-col-aside"></div>
+      <div @sidebarHide *ngIf="view === 'list'" class="app-col app-col-aside detachable"></div>
+    </div>
+
+    <!-- grid -->
+    <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
+      <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows.toArray()" [proposals]="proposals">
+      </app-technical-commercial-proposal-grid-contragents-row>
+
+      <!-- positions -->
+      <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i" formArrayName="positions">
+        <div class="app-row app-align-items-center app-section app-layout" [formGroupName]="i">
+          <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
+          <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>
+          <div class="app-ghost-color"> | {{proposalsByPos.position.quantity}} {{proposalsByPos.position.measureUnit}} </div>
+          <div class="app-ghost-color"> | {{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}} </div>
+          <div class="app-col"></div>
+          <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
+            <uxg-icon shape="app-check"></uxg-icon>
+            <span>Выбран победитель</span>
+          </div>
+          <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
+            <uxg-icon shape="app-waiting"></uxg-icon>
+            <span>На согласовании</span>
+          </div>
+        </div>
+        <div #gridRow class="grid-row app-row app-section items-row app-layout">
+          <app-technical-commercial-proposal-grid-card
+            *ngFor="let proposal of proposals; trackBy: trackByProposalId"
+            [proposal]="proposal"
+            [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
+            [editable]="proposal.status ==='DRAFT' && !isReviewed(proposalsByPos) && !isOnReview(proposalsByPos)"
+            (create)="addProposalPosition(proposal, proposalsByPos.position)"
+          ></app-technical-commercial-proposal-grid-card>
+        </div>
+      </div>
     </div>
 
     <!-- list -->
-    <div class="app-row">
+    <div class="app-row" *ngIf="view === 'list'">
       <div class="app-col app-technical-commercial-proposal-list">
         <app-technical-commercial-proposal-form
-          *ngIf="(proposalsLength$ | async) === 0 || showForm"
+          *ngIf="(proposals$ | async)?.length === 0 || showForm"
           [request]="request"
           [closable]="proposals.length > 0"
           (close)="showForm = false"
@@ -45,59 +125,76 @@
         <ng-container *ngFor="let proposal of proposals; trackBy: trackByProposalId">
           <app-request-technical-commercial-proposal
             [request]="request"
-            [technicalCommercialProposal]="proposal"
+            [proposal]="proposal"
           ></app-request-technical-commercial-proposal>
         </ng-container>
       </div>
 
-      <div class="app-col-aside">
+      <div class="app-col-aside detachable">
         <technical-commercial-proposal-filter></technical-commercial-proposal-filter>
       </div>
     </div>
 
     <!-- modals -->
-    <clr-modal clrModalSize="lg" #procedureModal>
-      <h2 class="modal-title">Создание новой процедуры</h2>
-      <div class="modal-body" [style.overflow]="'visible'">
-        <ng-container *ngIf="getPositions(proposals) as positions">
-          <app-request-procedure-create
-            *ngIf="procedureModal._open"
-            [request]="request"
-            [positions]="positions"
-            [contragents]="getContragents(proposals)"
-            [publicAccess]="false"
-            (complete)="procedureModal.close()"
-          ></app-request-procedure-create>
-        </ng-container>
-      </div>
-    </clr-modal>
-    <clr-modal #uploadTemplateModal [clrModalSize]="'lg'">
+    <uxg-modal size="l" #procedureModal>
+      <h2>Создание новой процедуры</h2>
+      <ng-container *ngIf="(availablePositions$ | async) as positions">
+        <app-request-procedure-create
+          *ngIf="procedureModal.state"
+          [request]="request"
+          [positions]="positions"
+          [contragents]="getContragents(proposals)"
+          (complete)="procedureModal.close()"
+          (cancel)="procedureModal.close()"
+        ></app-request-procedure-create>
+      </ng-container>
+    </uxg-modal>
+
+    <uxg-modal #uploadTemplateModal size="l">
       <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
-      <div class="modal-body" *ngIf="uploadTemplateModal._open">
-        <div class="app-secondary-color template">
-          Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="onDownloadTemplate()"><b>скачать
-          шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
-        </div>
-        <div class="dragAndDropArea">
-          <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
-        </div>
+      <div class="app-secondary-color template">
+        Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
+        шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
       </div>
-      <div class="modal-footer">
-        <button type="button" uxgButton secondary lg (click)="uploadTemplateModal.close()">Отмена</button>
-        <button uxgButton primary lg (click)="onSendTemplatePositions(); uploadTemplateModal.close()"
+      <div class="dragAndDropArea">
+        <app-template-upload (fileSelected)="files = $event"></app-template-upload>
+      </div>
+      <ng-template uxgModalFooter>
+        <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+        <button uxgButton primary lg uxgModalClose (click)="store.dispatch(uploadTemplate(requestId, files))"
                 [disabled]="files.length === 0">
           Загрузить
         </button>
-      </div>
-    </clr-modal>
+      </ng-template>
+    </uxg-modal>
+
+    <uxg-modal [(state)]="addProposalPositionData">
+      <h2>Добавить новое ТКП от {{addProposalPositionData?.proposal?.supplier.shortName}}</h2>
+      <technical-commercial-proposal-position-form
+        *ngIf="addProposalPositionData"
+        [position]="addProposalPositionData.position"
+        [proposal]="addProposalPositionData.proposal"
+        (close)="addProposalPositionData = null"
+      ></technical-commercial-proposal-position-form>
+    </uxg-modal>
+
+    <uxg-modal #addContragentModal size="s">
+      <h2><b>Добавить столбик контрагента</b></h2>
+      <technical-commercial-proposal-contragent-form
+        [request]="request"
+        [selectedContragents]="getContragents(proposals)"
+        (close)="addContragentModal.close()">
+      </technical-commercial-proposal-contragent-form>
+    </uxg-modal>
+
   </ng-container>
 </ng-container>
 
 <ng-template #placeholder>
-  <div class="app-row">
+  <div class="app-row" [class.app-layout]="view === 'grid'">
     <div class="app-col">
       <div class="placeholder" *ngFor="let i of [].constructor(10)"></div>
     </div>
-    <div class="app-col-aside"></div>
+    <div class="app-col-aside detachable"></div>
   </div>
 </ng-template>

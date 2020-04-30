@@ -8,27 +8,21 @@
 .item {
   &-title {
     line-height: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   &-quantity {
     flex-grow: .15; // 15% width
     max-width: 100px;
+    flex-basis: 45px;
   }
 
   &-status {
-    max-width: 200px;
+    min-width: 240px;
+    max-width: 240px;
   }
 
   &-date {
     max-width: 120px;
-  }
-
-  &-actions {
-    margin: -6px 0;
-    max-width: 80px;
   }
 }
 
@@ -72,6 +66,10 @@
   & > .app-col:first-child {
     padding-right: 6px;
   }
+
+  .app-col {
+    box-sizing: content-box;
+  }
 }
 
 // @TODO Выпилить после реализации попозиционного согласования
@@ -83,32 +81,13 @@
   top: 64px;
   z-index: 2;
 
-  .container {
-    padding: 1em 0;
-
-    > .app-row {
-      justify-content: center;
-      .app-col {
-        flex-basis: 50%;
-      }
-    }
-  }
+  .app-row { justify-content: space-evenly }
+  .app-col { padding: 16px }
 }
 
-.outdated-request-info {
-  display: inline-block;
-  vertical-align: bottom;
-  font-size: 11px;
-  color: darkslategray;
-  padding: 2px 10px 2px 0;
-}
 
 a.canceled {
   &, &:hover {
     color: #b3b3b3;
   }
-}
-
-.publish-title {
-  margin-left: 50px;
 }

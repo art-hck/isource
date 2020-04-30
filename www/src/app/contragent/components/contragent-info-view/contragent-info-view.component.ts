@@ -33,7 +33,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     public user: UserInfoService,
-    protected router: Router,
+    public router: Router,
     private store: Store
   ) {
   }
@@ -83,7 +83,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   updateEmployeeListItem(employee: EmployeeInfoBrief) {
     this.editedEmployee = null;
-    this.subscription.add(this.employeeService.editEmployee(employee).subscribe(
+    this.subscription.add(this.employeeService.editEmployee(employee, 'customer').subscribe(
       (data) => {
         this.employeesList$ = this.employeesList$.pipe(
           map(employeeList => {

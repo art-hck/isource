@@ -13,6 +13,8 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { CommercialProposalsService } from "../../../back-office/services/commercial-proposals.service";
 import { Request } from "../../models/request";
+import { Store } from "@ngxs/store";
+import { ProcedureAction } from "../../../back-office/models/procedure-action";
 
 @Component({
   selector: 'app-request-commercial-proposal-list',
@@ -36,9 +38,12 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() cancelOffer = new EventEmitter<RequestPosition>();
   @Output() addOffersTemplate = new EventEmitter<File[]>();
   @Output() editOffer = new EventEmitter<{ position, linkedOffer }>();
-  @Output() createProcedure = new EventEmitter();
+  @Output() procedureAction = new EventEmitter<ProcedureAction>();
+  @Output() downloadReport = new EventEmitter();
+  @Output() refresh = new EventEmitter();
 
   supplier: ContragentList;
+  positionProlongedProcedure: RequestPosition;
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
@@ -47,7 +52,7 @@ export class CommercialProposalListComponent implements OnInit {
   /**
    * Время в течение которого бэкофис может отозвать КП (в секундах)
    */
-  protected durationCancelPublish = 10 * 60;
+  public durationCancelPublish = 10 * 60;
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +60,7 @@ export class CommercialProposalListComponent implements OnInit {
     private offersService: CommercialProposalsService,
     public featureService: FeatureService,
     public user: UserInfoService,
+    private store: Store,
     @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface) {
     this.appConfig = appConfig;
   }
@@ -182,6 +188,10 @@ export class CommercialProposalListComponent implements OnInit {
 
   onDownloadOffersTemplate(): void {
     this.offersService.downloadOffersTemplate(this.request);
+  }
+
+  onDownloadAnalyticalReport(): void {
+    this.downloadReport.emit();
   }
 
   onChangeFilesList(files: File[]): void {

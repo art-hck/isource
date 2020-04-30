@@ -1,7 +1,9 @@
+@import "src/assets/styles/helpers";
+
 .content { margin-top: 32px }
 .filter-button { display: none }
 
-@media (max-width: 1520px) {
+@media (max-width: col(5) - 1) {
   .app-col-aside:not(.visible) { display: none }
   .filter-button { display: block }
 }

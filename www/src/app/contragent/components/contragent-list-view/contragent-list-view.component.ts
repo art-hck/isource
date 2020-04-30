@@ -20,7 +20,7 @@ export class ContragentListViewComponent implements OnInit {
     protected getContragentService: ContragentService,
     public featureService: FeatureService,
     public userInfoService: UserInfoService,
-    protected router: Router
+    public router: Router
   ) { }
 
   ngOnInit() {

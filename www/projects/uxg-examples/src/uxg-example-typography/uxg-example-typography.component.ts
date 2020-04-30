@@ -28,15 +28,15 @@ gridWithBorder = true;
 <p class="app-ghost-color">Ghost font color</p>
 <p><a [routerLink]="...">Simple link</a></p>
 <p class="app-success-color app-row app-align-items-center">
-  <clr-icon shape="app-check"></clr-icon>
+  <uxg-icon shape="app-check"></uxg-icon>
   <span>Success font color</span>
 </p>
 <p class="app-warning-color app-row app-align-items-center">
-  <clr-icon shape="app-info"></clr-icon>
+  <uxg-icon shape="app-info"></uxg-icon>
   <span>Warning font color</span>
 </p>
 <p class="app-alert-color app-row app-align-items-center">
-  <clr-icon shape="app-warning"></clr-icon>
+  <uxg-icon shape="app-warning"></uxg-icon>
   <span>Alert font color</span>
 </p>
 `;

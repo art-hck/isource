@@ -28,6 +28,7 @@ small {
   font-size: uxg($theme, font-size-s);
 }
 
+.app-link,
 a:link,
 a:visited {
   color: uxg($theme, color-font-link);

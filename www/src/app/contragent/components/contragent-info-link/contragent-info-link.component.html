@@ -1,21 +1,20 @@
-<a [href]="'/contragents/' + contragent.id + '/info'" (click)="showContragentInfo($event, contragent.id)">
-  <b>{{ contragent.shortName }}</b>
+<a *ngIf="contragent?.shortName else noname" [href]="'/contragents/' + contragent.id + '/info'" (click)="showContragentInfo($event, contragent.id)">
+  <b>{{ contragent?.shortName }}</b>
 </a>
+<ng-template #noname>{{ hiddenName }}</ng-template>
 
 <!-- Модальное окно с карточкой контрагента -->
-<clr-modal [clrModalSize]="'lg'" *ngIf="isModalOpened" [(clrModalOpen)]="isModalOpened">
-  <h3 class="modal-title">{{ contragent.shortName }}</h3>
+<uxg-modal size="l" *ngIf="isModalOpened" [(state)]="isModalOpened">
+  <h2>{{ contragent?.shortName }}</h2>
 
-  <div class="modal-body">
-    <ng-container *ngIf="(contragentInfo$ | async) as contragentInfo; else loader">
-      <app-contragent-info
-        [contragent]="contragentInfo">
-      </app-contragent-info>
-    </ng-container>
+  <ng-container *ngIf="(contragentInfo$ | async) as contragentInfo; else loader">
+    <app-contragent-info
+      [contragent]="contragentInfo">
+    </app-contragent-info>
+  </ng-container>
 
-    <ng-template #loader>
-      <span class="spinner spinner-md"></span>
-    </ng-template>
+  <ng-template #loader>
+    <span class="spinner spinner-md"></span>
+  </ng-template>
 
-  </div>
-</clr-modal>
+</uxg-modal>

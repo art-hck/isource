@@ -7,11 +7,12 @@
              [value]="customerSearchValue"
              (input)="onCustomerSearchInputChange($event.target.value)"/>
       <button type="button"
-              class="btn btn-icon btn-link btn-clear"
+              uxgButton icon
+              class="btn-clear"
               aria-label="Очистить фильтр"
               [disabled]="!this.customerSearchValue.length"
               (click)="onClearFilterClick()">
-        <clr-icon shape="times"></clr-icon>
+        <uxg-icon shape="app-cross"></uxg-icon>
       </button>
     </div>
   </div>
@@ -20,7 +21,7 @@
     <button uxgButton secondary iconText
             *ngIf="userInfoService.isSeniorBackoffice()"
             (click)="router.navigateByUrl('contragents/create')">
-      <clr-icon size="16" shape="app-plus"></clr-icon>
+      <uxg-icon size="16" shape="app-plus"></uxg-icon>
       <span>Новый контрагент</span>
     </button>
   </div>
@@ -31,8 +32,6 @@
   [contragents]="(contragents$ | async)">
 </app-contragent-list>
 
-<clr-modal #modal [clrModalSize]="'xl'">
-  <div class="modal-body">
-    <app-contragent-registration (contragentCreated)="getContragentList(); modal.close();"></app-contragent-registration>
-  </div>
-</clr-modal>
+<uxg-modal #modal size="l">
+  <app-contragent-registration (contragentCreated)="getContragentList(); modal.close();"></app-contragent-registration>
+</uxg-modal>

@@ -23,10 +23,10 @@ export class EmployeeService {
     return this.api.get<EmployeeInfo>(`requests/backoffice/users/${id}`);
   }
 
-  createEmployee(contragentId: Uuid, employee: EmployeeInfoBrief) {
+  createEmployee(employeeId: Uuid, employee: EmployeeInfoBrief) {
     return this.api.post<EmployeeInfoBrief>(`users/registration/customer`, {
       "joinContragent": {
-        "id": contragentId
+        "id": employeeId
       },
       "username": employee.username,
       "firstName": employee.firstName,
@@ -37,8 +37,20 @@ export class EmployeeService {
     });
   }
 
-  editEmployee(employee: EmployeeInfoBrief) {
-    return this.api.post<EmployeeInfoBrief>(`users/edit`, {
+  registerEmployee(employee: EmployeeInfoBrief) {
+    return this.api.post<EmployeeInfoBrief>(`users/registration/backoffice`, {
+      "username": employee.username,
+      "role": employee.role,
+      "firstName": employee.firstName,
+      "lastName": employee.lastName,
+      "middleName": employee.middleName,
+      "phone": employee.phone,
+      "position": employee.position,
+    });
+  }
+
+  editEmployee(employee: EmployeeInfoBrief, type: string) {
+    return this.api.post<EmployeeInfoBrief>(`users/edit/${type}`, {
       userId: employee.id,
       ...employee
     });
@@ -48,5 +60,10 @@ export class EmployeeService {
     return this.api.post<EmployeeInfoBrief[]>(`users/employee-list`, {
       "contragentId": contragentId
     });
+  }
+
+  resendEmployeeActivationLink(employeeId: Uuid) {
+    const url = `users/registration/resend-activation`;
+    return this.api.post<null>(url, { userId: employeeId });
   }
 }

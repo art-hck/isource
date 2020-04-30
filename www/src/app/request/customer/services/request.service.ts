@@ -13,7 +13,9 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class RequestService {
 
   constructor(

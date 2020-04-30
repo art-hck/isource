@@ -1,4 +1,4 @@
-@import "../../../../../../projects/uxg/src/styles/index";
+@import "projects/uxg/src/styles/index";
 
 .app-technical-commercial-proposal-list > *:not(:last-child) {
   display: block;
@@ -14,4 +14,15 @@
 
 .template {
   padding-bottom: 20px;
+}
+
+.app-table > .app-row {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.analytical-report {
+  margin-top: -26px;
+  position: relative;
+  top: -28px;
 }

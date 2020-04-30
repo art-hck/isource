@@ -6,6 +6,9 @@ export interface Route extends AngularRoutes {
   data?: {
     title?: string
     feature?: keyof typeof FeatureList
+    hideTitle?: boolean
+    noFooter?: boolean
+    noContentPadding?: boolean
   };
   children?: Routes;
 }

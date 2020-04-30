@@ -1,17 +1,54 @@
-<uxg-tabs>
-  <uxg-tab-title #backofficeTab [active]="true">
-    Закупщики
-    <ng-container *ngIf="backofficeCount">
-      <span class="app-ghost-color">({{ backofficeCount }})</span>
-    </ng-container>
-  </uxg-tab-title>
-  <uxg-tab-title #employeesTab>
-    Менеджеры
-      <ng-container *ngIf="seniorBackofficeCount">
-        <span class="app-ghost-color">({{ seniorBackofficeCount }})</span>
-      </ng-container>
-  </uxg-tab-title>
-</uxg-tabs>
+<div class="app-row">
+  <div class="app-col action">
+    <uxg-tabs>
+      <uxg-tab-title #backofficeTab (click)="employeeActiveTabType = 'BACKOFFICE_BUYER'" [active]="true">
+        Младшие менеджеры
+        <ng-container *ngIf="backoffice">
+          <span class="app-ghost-color">({{ backoffice.length }})</span>
+        </ng-container>
+      </uxg-tab-title>
+      <uxg-tab-title #employeesTab (click)="employeeActiveTabType = 'SENIOR_BACKOFFICE'">
+        Старшие менеджеры
+          <ng-container *ngIf="seniorBackoffice">
+            <span class="app-ghost-color">({{ seniorBackoffice.length }})</span>
+          </ng-container>
+      </uxg-tab-title>
+    </uxg-tabs>
+  </div>
 
-<app-employee-list *ngIf="backofficeTab.active" [employees]="backoffice"></app-employee-list>
-<app-employee-list *ngIf="employeesTab.active" [employees]="seniorBackoffice"></app-employee-list>
+  <div class="app-col action app-grow-0">
+    <button uxgButton secondary iconText
+            *ngIf="userInfoService.isSeniorBackoffice()"
+            (click)="editedEmployee = null; createEmployeeModal.open()">
+      <uxg-icon size="16" shape="app-plus"></uxg-icon>
+      <span>Новый сотрудник</span>
+    </button>
+  </div>
+</div>
+
+<app-employee-list *ngIf="backofficeTab.active"
+                   [employees]="backoffice"
+                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
+
+<app-employee-list *ngIf="employeesTab.active"
+                   [employees]="seniorBackoffice"
+                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
+
+
+
+<uxg-modal #createEmployeeModal size="l">
+  <h2 *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника</h2>
+
+  <ng-template #editEmployee>
+    <h2>Редактировать сотрудника</h2>
+  </ng-template>
+
+  <app-employee-form *ngIf="createEmployeeModal.state"
+    (cancel)="editedEmployee = null; createEmployeeModal.close()"
+    (addEmployee)="addEmployee($event); createEmployeeModal.close()"
+    (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
+    [roleSelectorDisabled]="false"
+    [employee]="editedEmployee"
+    [employeeActiveTabType]="employeeActiveTabType">
+  </app-employee-form>
+</uxg-modal>

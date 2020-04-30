@@ -1,0 +1,85 @@
+@import "projects/uxg/src/styles/index";
+
+.grid-table {
+
+  &.disabled {
+    opacity: 0.5;
+  }
+
+  .grid-row {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    scroll-behavior: smooth;
+
+    .grid-cell {
+      flex-basis: 280px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-right: 20px;
+    }
+  }
+
+  .items-row .grid-cell {
+    overflow: hidden;
+
+    & > button {
+      height: 130px;
+      border: 1px solid #E3EEFF;
+      padding: 16px;
+      border-radius: uxg($theme, control-border-radius);
+      background: uxg($theme, color-control-input-bg);
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+
+      &:disabled {
+        font-size: 17px;
+        color: #BEDAFC;
+        cursor: default;
+      }
+
+      & > *:not(:last-child) {
+        margin-bottom: 11px;
+      }
+    }
+
+
+
+    &.empty > button {
+      background: none;
+      border-color: #BEDAFC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .winner {
+      margin: -4px -16px
+    }
+  }
+
+  .contragents-row {
+    background: #fff;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    position: sticky;
+    top: 64px;
+    z-index: 1;
+    border-bottom: 1px solid #E3EEFF;
+
+    .left, .right {
+      position: absolute;
+      top: 16px;
+    }
+
+    .left { left: 23px }
+    .right { right: 23px }
+  }
+
+  .position-row {
+    background: #F4F6FB;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    margin-bottom: 4px;
+  }
+}

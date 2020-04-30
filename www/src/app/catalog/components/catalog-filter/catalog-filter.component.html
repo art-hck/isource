@@ -26,10 +26,12 @@
     <app-catalog-filter-section [label]="attribute.get('label').value" formGroupName="{{i}}">
       <ng-container *ngFor="let attributeValue of asFormArray(attribute.get('values')).controls; let j=index"
                     formArrayName="values">
-        <clr-checkbox-wrapper class="attribute-checkbox" formGroupName="{{j}}">
-          <input type="checkbox" clrCheckbox formControlName="checked"/>
-          <label>{{ attributeValue.get('value').value }}</label>
-        </clr-checkbox-wrapper>
+        <ng-container formGroupName="{{j}}">
+          <div class="app-row app-align-items-center">
+            <uxg-checkbox class="attribute-checkbox app-control" #attributeCheckbox formControlName="checked"></uxg-checkbox>
+            <label (click)="attributeCheckbox.check($event)">{{ attributeValue.get('value').value }}</label>
+          </div>
+        </ng-container>
       </ng-container>
     </app-catalog-filter-section>
   </ng-container>

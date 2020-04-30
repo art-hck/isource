@@ -1,10 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidators} from "../../../shared/forms/custom.validators";
-import {EmployeeInfoBrief} from "../../models/employee-info";
-import {TechnicalProposal} from "../../../request/common/models/technical-proposal";
-import {TechnicalProposalsStatus} from "../../../request/common/enum/technical-proposals-status";
-import * as moment from "moment";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CustomValidators} from "../../../shared/forms/custom.validators";
+import { EmployeeInfoBrief } from "../../models/employee-info";
+import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
 @Component({
   selector: 'app-employee-form',
@@ -13,11 +11,20 @@ import * as moment from "moment";
 })
 export class EmployeeFormComponent implements OnInit {
   @Input() employee: EmployeeInfoBrief;
+  @Input() employeeActiveTabType = 'BACKOFFICE_BUYER';
+  @Input() roleSelectorDisabled = true;
   @Output() cancel = new EventEmitter();
   @Output() addEmployee = new EventEmitter<EmployeeInfoBrief>();
   @Output() editEmployee = new EventEmitter<EmployeeInfoBrief>();
 
   form: FormGroup;
+
+  readonly phoneMask: TextMaskConfig = {
+    mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
+    guide: false,
+    keepCharPositions: false,
+    showMask: true
+  };
 
   get isEditing(): boolean {
     return !!this.employee;
@@ -36,7 +43,8 @@ export class EmployeeFormComponent implements OnInit {
       firstName: [this.defaultEmployeeValue('firstName', null), [Validators.required, CustomValidators.cyrillicName]],
       lastName: [this.defaultEmployeeValue('lastName', null), [Validators.required, CustomValidators.cyrillicName]],
       middleName: [this.defaultEmployeeValue('middleName', null)],
-      position: [this.defaultEmployeeValue('position', null), [Validators.required, CustomValidators.cyrillic]]
+      position: [this.defaultEmployeeValue('position', null), [Validators.required, CustomValidators.cyrillic]],
+      role: [this.employeeActiveTabType, [Validators.required]],
     });
     if (this.isEditing) {
       this.form.get('username').disable();

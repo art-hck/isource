@@ -6,7 +6,6 @@ import { DesignDocumentationService } from "./services/design-documentation.serv
 import { CommercialProposalsService } from "./services/commercial-proposals.service";
 import { ProcedureService } from "./services/procedure.service";
 import { RequestComponent } from './components/request/request.component';
-import { RequestListComponent } from './components/request-list/request-list.component';
 import { PositionComponent } from "./components/position/position.component";
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
@@ -31,11 +30,13 @@ import { TechnicalCommercialProposalParametersFormComponent } from './components
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestList2Component } from './components/request-list2/request-list2.component';
+import {CommercialProposalState} from "./states/commercial-proposal.state";
+import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
+import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
 
 @NgModule({
   declarations: [
     RequestComponent,
-    RequestListComponent,
     PositionComponent,
     TechnicalProposalListComponent,
     TechnicalProposalFormComponent,
@@ -52,13 +53,16 @@ import { RequestList2Component } from './components/request-list2/request-list2.
     TechnicalCommercialProposalFilterComponent,
     TechnicalCommercialProposalParametersFormComponent,
     RequestList2Component,
+    TechnicalCommercialProposalContragentFormComponent,
+    TechnicalCommercialProposalPositionFormComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
     NgxsModule.forFeature([
       RequestState,
       RequestListState,
-      TechnicalCommercialProposalState
+      TechnicalCommercialProposalState,
+      CommercialProposalState,
     ]),
     RequestCommonModule
   ],

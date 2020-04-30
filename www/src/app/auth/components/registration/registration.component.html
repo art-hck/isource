@@ -3,12 +3,12 @@
   <div class="card">
     <form [formGroup]="form" class="form" (ngSubmit)="submit()">
       <div class="form-block">
-        <div class="clr-form-control">
+        <div>
           <h3>Личная информация</h3>
           <div class="app-row w-100">
             <div class="clr-col-4">
               <label class="clr-control-label" for="email">Email</label>
-              <input type="text" formControlName="username" appFormControlInvalidClass="invalid"/>
+              <input type="text" id="email" formControlName="username" appFormControlInvalidClass="invalid"/>
             </div>
             <div class="clr-col-4">
               <label class="clr-control-label" for="password">Пароль</label>
@@ -38,10 +38,10 @@
                      appFormControlInvalidClass="invalid"/>
             </div>
           </div>
-          <div class="app-row w-100">
+          <div class="app-row">
             <div class="clr-col-4">
               <label class="clr-control-label" for="phone">Телефон</label>
-              <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid"/>
+              <input id="phone" type="text" formControlName="phone" appFormControlInvalidClass="invalid" [textMask]="phoneMask" />
             </div>
             <div class="clr-col-6 agreement">
               <uxg-checkbox class="app-control" #agreement formControlName="agreement"></uxg-checkbox>
@@ -66,7 +66,7 @@
             <div>
               <span *ngIf="isLoading" class="spinner spinner-inline"></span>
             </div>
-            <button class="btn btn-primary next" [disabled]="form.invalid || contragentForm.invalid">Регистрация</button>
+            <button uxgButton primary lg class="next" [disabled]="form.invalid || contragentForm.invalid">Регистрация</button>
           </div>
         </div>
       </div>
@@ -74,45 +74,43 @@
   </div>
 </div>
 
-<clr-modal #contragentFound clrModalSize="sm">
-  <div class="modal-title">
-    <h3>Найден контрагент с такими данными</h3>
-  </div>
-  <div class="modal-body" *ngIf="contragentForm.value as contragent">
+<uxg-modal #contragentFound size="s">
+  <h3>Найден контрагент с такими данными</h3>
+  <br/>
+  <div class="app-section" *ngIf="contragentForm.value as contragent">
     <h2>{{contragent.name}} </h2>
-    <div class="app-row">
+    <div class="app-row app-section">
       <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
       <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
     </div>
-    <div class="app-row app-secondary-color">
+    <div class="app-row app-secondary-color app-section">
       Если это ваша организация нажмите кнопку: «Зарегистрироваться», чтобы завершить процесс регистрации. Если нет, то
       проверьте правильность ввода ИНН и КПП, нажав кнопку: «Отмена».
     </div>
-    <div class="app-row app-justify-content-between">
+    <ng-template uxgModalFooter>
       <button class="app-col" uxgButton secondary lg type="button" (click)="contragentFound.close()">Отмена</button>
-      <button class="app-col" uxgButton primary lg [disabled]="registrationProcessing" (click)="register();">Зарегистрироваться</button>
-    </div>
+      <button uxgButton primary lg [disabled]="registrationProcessing" (click)="register();">Зарегистрироваться</button>
+    </ng-template>
   </div>
-</clr-modal>
+</uxg-modal>
 
-<clr-modal #contragentNotFound clrModalSize="sm">
-  <div class="modal-title">
-    <h3>Контрагент с такими данными не найден</h3>
-  </div>
-  <div class="modal-body" *ngIf="contragentForm.value as contragent">
-    <div class="app-row">
+<uxg-modal #contragentNotFound size="s">
+  <h3>Контрагент с такими данными не найден</h3>
+  <br/>
+  <div class="app-section" *ngIf="contragentForm.value as contragent">
+    <div class="app-row app-section">
       <div class="app-col"><span class="app-secondary-color">ИНН:</span>{{ contragent.inn }}</div>
       <div class="app-col"><span class="app-secondary-color">КПП:</span>{{ contragent.kpp }}</div>
     </div>
-    <div class="app-row app-secondary-color">
+    <div class="app-row app-secondary-color app-section">
       Если данные введены верно, то Вы можете обратиться к администраторам проекта, чтобы контрагент был зарегистрирован,
       или скорректируйте данные.
     </div>
-    <div class="app-row app-justify-content-end">
+    <ng-template uxgModalFooter>
       <button uxgButton primary lg (click)="contragentNotFound.close()">Всё понятно</button>
-    </div>
+    </ng-template>
   </div>
-</clr-modal>
+</uxg-modal>
 
 <ng-template #successRegister let-toast>
   <div>Регистрация прошла успешно.</div>

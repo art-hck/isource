@@ -1,6 +1,6 @@
 import { AbstractControl, FormArray, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { Subscription } from "rxjs";
-import * as moment from "moment";
+import moment from "moment";
 import { ContragentList } from "../../contragent/models/contragent-list";
 
 export class CustomValidators {
@@ -91,7 +91,7 @@ export class CustomValidators {
 
   static phone(control: FormControl): any {
     const value = control.value || '';
-    const valid = String(value).trim().match(/^\d{10,11}$/);
+    const valid = String(value).trim().match(/^\+?7?[ ]?\d{10}$/);
     return valid ? null : {invalid_phone: true};
   }
 

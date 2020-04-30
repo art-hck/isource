@@ -1,0 +1,67 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="app-section"><b>{{position.name}}</b></div>
+  <div class="app-row app-align-items-center">
+    <div class="app-col app-col-6">
+      <div class="app-control-wrap">
+        <input #manufacturingNameRef uxgInput type="text" lg formControlName="manufacturingName"/>
+        <label class="app-control-label" (click)="manufacturingNameRef.focus()">Заводское наименование</label>
+      </div>
+    </div>
+    <div class="app-col app-col-4">
+      <div class="app-control-wrap">
+        <input #priceWithoutVatRef uxgInput type="text" lg formControlName="priceWithoutVat"/>
+        <label class="app-control-label" (click)="priceWithoutVatRef.focus()">Цена за единицу</label>
+      </div>
+    </div>
+    <div class="app-col app-col-2">
+      <uxg-dropdown lg placeholder="Валюта" formControlName="currency">
+        <div uxgDropdownItem [value]="currency[0]" *ngFor="let currency of currencies">{{ currency[1] }}</div>
+      </uxg-dropdown>
+    </div>
+  </div>
+  <div class="app-row app-align-items-center">
+    <div class="app-col app-col-3">
+      <div class="app-control-wrap">
+        <input #quantityRef uxgInput type="text" lg formControlName="quantity"/>
+        <label class="app-control-label" (click)="quantityRef.focus()">Количество</label>
+      </div>
+    </div>
+    <div class="app-col app-col-3">
+      <uxg-dropdown-input
+        lg appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+        [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
+      >
+        <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+          <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
+               [value]="suggestion.symbol | lowercase"
+               [attr.title]="suggestion.name | lowercase"
+          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+        </ng-container>
+      </uxg-dropdown-input>
+    </div>
+    <div class="app-col app-col-4">
+      <div class="app-control-wrap">
+        <input #deliveryDateRef uxgInput lg uxgDatepicker formControlName="deliveryDate"/>
+        <label class="app-control-label" (click)="deliveryDateRef.focus()">Срок поставки</label>
+        <label class="app-control-icon" (click)="deliveryDateRef.focus()">
+          <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+        </label>
+      </div>
+    </div>
+    <div class="app-col app-col-2"></div>
+  </div>
+  <div class="app-row">
+    <div class="app-col">
+      <uxg-dropdown-input formControlName="paymentTerms" placeholder="Способ оплаты" lg>
+        <div uxgDropdownItem *ngFor="let term of paymentTerms" [value]="term[0]">{{ term[1] }}</div>
+      </uxg-dropdown-input>
+    </div>
+  </div>
+  <div class="app-row app-align-items-center">
+    <div class="app-col">
+      Все поля являются <b class="app-error-color">обязательными</b> к заполнению! Документы прикладывать не обязательно.
+    </div>
+    <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
+    <button uxgButton lg primary [disabled]="form.invalid">Добавить</button>
+  </div>
+</form>

@@ -10,7 +10,9 @@ import { RequestPosition } from "../../common/models/request-position";
 import { map } from 'rxjs/operators';
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class CommercialProposalsService {
 
   constructor(
@@ -86,15 +88,9 @@ export class CommercialProposalsService {
     );
   }
 
-  getContragentsWithTp(requestId: Uuid, requestPositions: RequestPosition[]): Observable<ContragentList[]> {
-    const ids = requestPositions.map(item => item.id);
-
-    return this.api.post(
-      `requests/backoffice/${requestId}/contragents-with-tp`,
-      {positions: ids}
-    ).pipe(map((data) => {
-      return data as ContragentList[];
-    }));
+  getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
+    const url = `requests/backoffice/${requestId}/contragents-with-tp`;
+    return this.api.post<ContragentList[]>(url, {positions});
   }
 
   /**
@@ -138,8 +134,13 @@ export class CommercialProposalsService {
     return formData;
   }
 
-  prolongateProcedureEndDate(requestId, prolongationProcedureId, newProcedureEndDate): Observable<any> {
-    const url = `requests/backoffice/${requestId}/procedures/${prolongationProcedureId}/change-end-registration`;
-    return this.api.post(url, { dateEndRegistration: newProcedureEndDate });
+  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration) {
+    const url = `requests/backoffice/${requestId}/procedures/${procedureId}/prolong`;
+    return this.api.post(url, { dateEndRegistration });
+  }
+
+  downloadAnalyticalReport(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/analytic-report/download-by-cp`;
+    return this.api.post(url, {}, {responseType: 'blob'});
   }
 }

@@ -1,13 +1,18 @@
+<!-- tabs -->
 <div class="app-row">
   <div class="app-col">
-    <clr-alert [clrAlertType]="'info'" [clrAlertAppLevel]="true" [clrAlertClosable]="true" [(clrAlertClosed)]="hideNeedUpdate">
-      <clr-alert-item>
-        <span class="alert-text">Список заявок был изменен</span>
-        <div class="alert-actions">
-          <button class="btn alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+
+    <div class="alert alert-app-level alert-info ng-star-inserted" *ngIf="!hideNeedUpdate">
+      <div class="alert-items">
+        <div class="alert-item">
+          <span class="alert-text">Список заявок был изменен</span>
+          <div class="alert-actions">
+            <button uxgButton outline class="alert-action" (click)="hideNeedUpdate = true; refresh.emit()">Обновить список</button>
+          </div>
         </div>
-      </clr-alert-item>
-    </clr-alert>
+      </div>
+      <button type="button" class="close" (click)="hideNeedUpdate = true"><uxg-icon shape="app-cross"></uxg-icon></button>
+    </div>
 
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
@@ -33,11 +38,11 @@
       </uxg-tabs>
 
       <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
-        <clr-icon shape="app-plus"></clr-icon>
+        <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>
       <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
-        <clr-icon shape="app-sort2"></clr-icon>
+        <uxg-icon shape="app-sort2"></uxg-icon>
         <span>Фильтр</span>
         <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
       </button>
@@ -46,11 +51,10 @@
   <div class="app-col-aside"></div>
 </div>
 
-<div class="app-row">
-  <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
-  <div class="app-col">
 
-    <!-- headers -->
+<!-- headers -->
+<div class="app-row">
+  <div class="app-col">
     <div class="app-table app-no-border">
       <div class="app-row app-uppercase app-ghost-color app-bold">
         <small class="app-col app-grow-0 number">Номер</small>
@@ -64,8 +68,15 @@
         <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
       </div>
     </div>
+  </div>
+  <div class="app-col-aside filter" [class.opened]="filterOpened">
+  </div>
+</div>
 
-    <!-- requests -->
+<!-- requests -->
+<div class="app-row">
+  <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
+  <div class="app-col">
     <div class="app-table" [class.disabled]="status !== 'received'">
       <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
         <div class="app-col app-grow-0 number app-bold">{{ request.request.number | number:'1.0-2' }}</div>

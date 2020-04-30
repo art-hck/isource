@@ -1,15 +1,14 @@
 <app-catalog-categories *ngIf="categoriesOpened" [(opened)]="categoriesOpened"></app-catalog-categories>
 
-<div class="app-row search-bar app-align-items-center"
-     (window:resize)="onResize()"
-     [attr.style]="('width:' + getSearchBarWidth()) | safeStyle">
-  <div class="clr-col-2">
-    <button class="btn btn-categories btn-primary-small" aria-label="Каталог" title="Каталог"
-            (click)="onToggleCategories()">
-      <clr-icon shape="bars"></clr-icon>
-      Каталог
-    </button>
-  </div>
+<div #searchPanel class="search-bar">
+  <div class="app-row app-layout app-align-items-center">
+    <div class="clr-col-2">
+      <button uxgButton primary iconText class="btn-categories" aria-label="Каталог" title="Каталог"
+              (click)="onToggleCategories()">
+        <uxg-icon shape="app-hamburger"></uxg-icon>
+        <span>Каталог</span>
+      </button>
+    </div>
 
   <div class="clr-col-7 search">
     <input placeholder="Введите наименование позиции для поиска"
@@ -18,12 +17,12 @@
            class="input-search"
            (keydown.enter)="onSearch()"
            [(ngModel)]="searchText"/>
-    <button class="btn btn-link btn-reset" (click)="onResetClick()" *ngIf="searchText">
-      <img src="../../../../assets/images/delete.svg">
+    <button uxgButton icon clear class="btn-reset" (click)="onResetClick()" *ngIf="searchText">
+      <uxg-icon shape="app-cross"></uxg-icon>
     </button>
-    <button class="btn btn-primary btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
+    <button uxgButton primary lg class="btn-search" aria-label="Поиск" title="Поиск" (click)="onSearch()"
             [disabled]="!searchText">
-      <clr-icon shape="search" size="17"></clr-icon>
+      <uxg-icon shape="app-search"></uxg-icon>
     </button>
     <div class="search-dropdown" *ngIf="showSearchResults">
       <ng-container *ngIf="(searchResults$ | async) as searchResults">
@@ -37,4 +36,3 @@
     </div>
   </div>
 </div>
-
