@@ -10,9 +10,13 @@
   overflow: hidden;
   padding-bottom: 20px;
   padding-top: 20px;
-  position: relative;
+  *position: relative; // Вернуть позже
   transform-origin: bottom;
   z-index: 9999;
+
+  bottom: 0; // Временное решение позиционирования алерта
+  position: fixed;
+  width: 100%;
 }
 
 
