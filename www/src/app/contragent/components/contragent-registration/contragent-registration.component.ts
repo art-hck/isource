@@ -86,7 +86,7 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        role: ['customer']
+        role: ['CUSTOMER']
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -204,9 +204,9 @@ export class ContragentRegistrationComponent implements OnInit {
     this.contragent$ = this.getContragentService.getContragentInfo(this.contragentId).pipe(
       tap(contragent => {
         this.bc.breadcrumbs = [
-          {label: "Контрагенты", link: "/contragents/list"},
+          {label: "Контрагенты", link: `/contragents/list`},
           {label: contragent.shortName, link: `/contragents/${this.contragentId}/info`},
-          {label: "Редактировать", link: '`/contragents/${this.contragentId}/edit`'}
+          {label: "Редактировать", link: `/contragents/${this.contragentId}/edit`}
         ];
       }),
       tap(contragent => {
