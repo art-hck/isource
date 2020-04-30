@@ -40,7 +40,7 @@ export class ContragentRegistrationComponent implements OnInit {
   contragent$: Observable<ContragentInfo>;
 
   readonly role = ContragentRole;
-  readonly roleLabels = ContragentRoleLabels;
+  readonly roleLabel = ContragentRoleLabels;
   readonly phoneMask: TextMaskConfig = {
     mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
     guide: false,
