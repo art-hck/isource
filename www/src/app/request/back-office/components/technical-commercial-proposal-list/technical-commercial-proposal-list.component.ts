@@ -169,7 +169,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.addProposalPositionData = {proposal, position};
   }
 
-  trackByProposalId = (i, proposal: TechnicalCommercialProposal) => proposal.id;
+  trackByProposalId = (i, { id }: TechnicalCommercialProposal) => id;
+  trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
 
   ngOnDestroy() {
     this.destroy$.next();
