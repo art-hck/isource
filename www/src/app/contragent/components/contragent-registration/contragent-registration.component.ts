@@ -19,6 +19,8 @@ import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
 import {User} from "../../../user/models/user";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
+import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
+import { ContragentRole } from "../../enum/contragent-role";
 
 @Component({
   selector: 'app-contragent-registration',
@@ -37,6 +39,8 @@ export class ContragentRegistrationComponent implements OnInit {
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
 
+  readonly role = ContragentRole;
+  readonly roleLabels = ContragentRoleLabels;
   readonly phoneMask: TextMaskConfig = {
     mask: value => ['+', '7', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
     guide: false,
@@ -86,7 +90,7 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        role: ['CUSTOMER']
+        role: [this.role.CUSTOMER]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
