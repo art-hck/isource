@@ -2,6 +2,7 @@ import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
+import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
@@ -37,6 +38,7 @@ export class RequestComponent implements OnChanges {
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
   readonly permissionType = PermissionType;
+  readonly PositionStatusesLabels = PositionStatusesLabels;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
