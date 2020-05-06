@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
-import { debounceTime, filter, switchMap, takeUntil } from "rxjs/operators";
+import { debounceTime, filter, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalProposalFilterContragentListComponent } from "./technical-proposal-filter-contragent-list/technical-proposal-filter-contragent-list.component";
