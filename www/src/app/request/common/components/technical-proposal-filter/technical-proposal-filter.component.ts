@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
-import { debounceTime, filter, switchMap } from "rxjs/operators";
+import { debounceTime, filter, switchMap, takeUntil } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalProposalFilterContragentListComponent } from "./technical-proposal-filter-contragent-list/technical-proposal-filter-contragent-list.component";
@@ -121,12 +121,8 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   /**
    * Сброс значений фильтра и подтягивание новых данных
    */
-  resetFilter() {
-    this.requestTpListFilterForm.reset({
-      positionName: '',
-      contragents: [],
-      tpStatus: [],
-      });
+  resetFilter(emitEvent = true) {
+    this.requestTpListFilterForm.reset(this.filterFormInitialState, { emitEvent });
 
     this.requestTpFilterContragentListComponent.selectedContragents = [];
     this.requestTpFilterContragentListComponent.contragentSearchValue = "";
