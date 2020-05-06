@@ -14,6 +14,7 @@ export const AppConfig: GpnmarketConfigInterface = {
   },
   procedure: {
     url: 'https://demo2.etpgpb.ru/#com/procedure/edit/id/',
+    resultUrl: 'https://demo2.etpgpb.ru/#com/applic/viewapplics/lot/
   },
   priceOrder: {
     url: 'https://demo2.etpgpb.ru/#nsi/priceorder/directCustomer/orderId/'
