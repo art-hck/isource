@@ -40,6 +40,7 @@ export class RequestPosition extends RequestPositionList {
   linkedOffers: RequestOfferPosition[];
   hasProcedure?: boolean;
   procedureId?: string;
+  procedureLotId?: string;
   procedureTitle?: string;
   procedureStartDate?: string;
   procedureEndDate?: string;
