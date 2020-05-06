@@ -104,9 +104,8 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
     );
   }
 
-  onSelectAllPositions(event, i, technicalProposalPositions: TechnicalProposalPosition[]): void {
-    // TODO: 2019-11-06 Указать тип аргумента event
-    if (event.target.checked === true) {
+  onSelectAllPositions(checked: boolean, i, technicalProposalPositions: TechnicalProposalPosition[]): void {
+    if (checked === true) {
       this.selectedTechnicalProposalsPositions[i] = [];
       technicalProposalPositions.forEach(technicalProposalPosition => {
         if (this.isPositionSelectorAvailable(technicalProposalPosition)) {

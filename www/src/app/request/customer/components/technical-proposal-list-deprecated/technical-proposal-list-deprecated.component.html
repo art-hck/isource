@@ -47,17 +47,17 @@
 
             <table class="positions-list table table-noborder">
               <thead>
-              <tr>
-                <th class="left">
-                  <uxg-checkbox
-                    *ngIf="hasSelectablePositions(technicalProposal.positions)"
-                    [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
-                    (ngModelChange)="onSelectAllPositions($event, i, technicalProposal.positions)">
-                  </uxg-checkbox>
-                  <span class="position-header">Наименование позиции</span>
-                </th>
-                <th class="left">Заводское наименование</th>
-              </tr>
+                <tr>
+                  <th class="left">
+                    <uxg-checkbox
+                      *ngIf="hasSelectablePositions(technicalProposal.positions)"
+                      [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
+                      (ngModelChange)="onSelectAllPositions($event, i, technicalProposal.positions)">
+                    </uxg-checkbox>
+                    <span class="position-header">Наименование позиции</span>
+                  </th>
+                  <th class="left">Заводское наименование</th>
+                </tr>
               </thead>
               <tbody>
               <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
