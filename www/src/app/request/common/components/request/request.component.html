@@ -216,7 +216,7 @@
       {{ position.responsibleUser.shortName }}
     </ng-container>
     <ng-template #status>
-      <app-position-status [label]="position.statusLabel" [status]="position.status">
+      <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
       </app-position-status>
     </ng-template>
   </div>
