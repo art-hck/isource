@@ -3,15 +3,11 @@
 </ng-container>
 
 <ng-container *ngIf="request">
-  <div class="app-row commercial-proposals">
+  <div class="app-layout commercial-proposals">
     <div class="info-card app-col">
       <div class="request-info">
-        <div class="app-row">
-          <div class="clr-col-5">
-          </div>
-          <div class="clr-col-7 price-auto-select">
-            <button uxgButton outline lg (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
-          </div>
+        <div class="app-row app-justify-content-end">
+          <button uxgButton outline lg (click)="onAutoselectOfferByMinPrice()">Автовыбор по минимальной цене</button>
         </div>
 
         <div class="table-header-wrapper">

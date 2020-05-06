@@ -2,10 +2,12 @@
   <!-- title -->
   <div class="app-row app-align-items-center">
     <h3 class="app-col">{{proposalByPos.position.name}}</h3>
+
     <div class="app-ghost-color app-bold" *ngIf="!isReviewed">
       <uxg-icon shape="app-waiting"></uxg-icon>
       <span>Необходимо рассмотреть</span>
     </div>
+
     <div class="app-success-color app-bold" *ngIf="isReviewed">
       <uxg-icon shape="app-check"></uxg-icon>
       <span>Выбран победитель</span>
@@ -42,10 +44,10 @@
             ></app-contragent-info-link>
           </div>
           <div class="app-col app-ellipsis manufacturing">{{proposalPos.manufacturingName}}</div>
-          <div class="app-col quantity ">
+          <div class="app-col quantity">
             <div [ngClass]="!helper.isQuantityValid(proposalPos) ? 'app-error-color app-bold' : ''">
               <div class="app-row app-align-items-center">
-                <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
+                <span>{{proposalPos.quantity}} <span class="app-ghost-color">{{proposalPos.measureUnit}}</span></span>
                 <uxg-icon shape="app-narrow-arrow"
                   *ngIf="proposalPos.quantity != proposalPos.position.quantity"
                   [attr.dir]="proposalPos.quantity > proposalPos.position.quantity ? 'up' : 'down'"></uxg-icon>

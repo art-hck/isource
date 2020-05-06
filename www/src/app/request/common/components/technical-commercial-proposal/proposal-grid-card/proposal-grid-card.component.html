@@ -14,9 +14,11 @@
             <text y="13" x="92" fill="#fff" alignment-baseline="middle" text-anchor="end">Победитель</text>
           </svg>
         </div>
+
         <div class="app-ghost-color" *ngSwitchCase="'REJECTED'">
           <uxg-icon shape="app-check"></uxg-icon>
         </div>
+
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="selectedProposalPosition">
             <uxg-radio-item
@@ -29,6 +31,7 @@
         </ng-container>
       </ng-container>
     </div>
+
     <div>
       <!-- Количество, цена за ед. -->
       <span [ngClass]="!helper.isQuantityValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>

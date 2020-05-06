@@ -43,12 +43,12 @@
     <h2>Редактировать сотрудника</h2>
   </ng-template>
 
-  <app-employee-form
+  <app-employee-form *ngIf="createEmployeeModal.state"
     (cancel)="editedEmployee = null; createEmployeeModal.close()"
     (addEmployee)="addEmployee($event); createEmployeeModal.close()"
     (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
     [roleSelectorDisabled]="false"
     [employee]="editedEmployee"
-      [employeeActiveTabType]="employeeActiveTabType">
-    </app-employee-form>
-  </uxg-modal>
+    [employeeActiveTabType]="employeeActiveTabType">
+  </app-employee-form>
+</uxg-modal>

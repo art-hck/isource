@@ -23,10 +23,9 @@ export class KimComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.document.querySelector('.app-scroll').insertBefore(
-      this.menu.nativeElement,
-      this.document.querySelector('.app-content')
-    );
+    const contentEl = this.document.querySelector('.app-content');
+    contentEl.parentElement.insertBefore(this.menu.nativeElement, contentEl);
+
     this.store.dispatch(new CartActions.Fetch());
   }
 

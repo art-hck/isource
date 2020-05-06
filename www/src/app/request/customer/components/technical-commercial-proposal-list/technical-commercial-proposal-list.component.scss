@@ -1,3 +1,5 @@
+@import "src/assets/styles/helpers";
+
 .placeholder {
   background: #F2F2F2;
   margin-bottom: 24px;
@@ -30,11 +32,5 @@
   &.hidden &-body {
     transition-delay: 0ms;
     margin-bottom: -81px;
-  }
-}
-
-@media (max-width: 1479px) {
-  .app-col-aside {
-    display: none;
   }
 }

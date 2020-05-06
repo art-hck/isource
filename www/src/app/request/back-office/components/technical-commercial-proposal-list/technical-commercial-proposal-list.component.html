@@ -84,7 +84,7 @@
       </app-technical-commercial-proposal-grid-contragents-row>
 
       <!-- positions -->
-      <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; index as i" formArrayName="positions">
+      <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i" formArrayName="positions">
         <div class="app-row app-align-items-center app-section app-layout" [formGroupName]="i">
           <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
           <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>

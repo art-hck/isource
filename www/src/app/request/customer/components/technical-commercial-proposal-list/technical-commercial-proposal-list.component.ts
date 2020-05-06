@@ -113,10 +113,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   ngAfterViewInit() {
-    this.document.querySelector('.app-scroll').insertBefore(
-      this.proposalsFooterRef.nativeElement,
-      this.document.querySelector('.app-footer')
-    );
+    const footerEl = this.document.querySelector('.app-footer');
+    footerEl.parentElement.insertBefore(this.proposalsFooterRef.nativeElement, footerEl);
 
     this.proposalsOnReview.changes.pipe(
       tap(() => this.gridRows = this.proposalsOnReview.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),

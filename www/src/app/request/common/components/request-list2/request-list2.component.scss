@@ -1,3 +1,5 @@
+@import "src/assets/styles/helpers";
+
 .app-table {
   .number { flex-basis: 50px; }
   .tasks { flex-basis: 40px; }
@@ -12,7 +14,7 @@
   }
 }
 
-@media (min-width: 1480px) {
+@media (min-width: col(5)) {
   .clr-col-xxl-9 {
     flex: 0 0 75%;
     max-width: 75%;
@@ -38,7 +40,7 @@
   }
 }
 
-@media (max-width: 1479px) {
+@media (max-width: col(5) - 1) {
   .app-col-aside {
     position: fixed;
     background: white;

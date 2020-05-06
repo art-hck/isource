@@ -45,10 +45,8 @@ export class SearchPanelComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.document.querySelector('.app-scroll').insertBefore(
-      this.searchPanel.nativeElement,
-      this.document.querySelector('.app-content')
-    );
+    const contentEl = this.document.querySelector('.app-content');
+    contentEl.parentElement.insertBefore(this.searchPanel.nativeElement, contentEl);
   }
 
   // todo подсказки временно отключили
