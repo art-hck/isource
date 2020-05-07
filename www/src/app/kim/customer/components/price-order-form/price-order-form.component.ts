@@ -97,7 +97,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   pushPosition() {
     this.formPositions.push(this.fb.group({
       name: ["", Validators.required],
-      quantity: ["", [Validators.required, Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      quantity: ["", [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
       okei: ["", Validators.required],
       okpd2: ["", Validators.required],
       maxPrice: ["", [Validators.required, Validators.pattern("^[0-9]+$"), Validators.min(1)]]

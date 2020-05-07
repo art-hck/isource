@@ -49,7 +49,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
       supplierContragentName: ['', Validators.required],
       priceWithVat: ['', [Validators.required, Validators.min(1)]],
       currency: ['', Validators.required],
-      quantity: ['', [Validators.required, Validators.min(1)]],
+      quantity: ['', [Validators.required, Validators.min(0.0001), Validators.pattern("^[.0-9]+$")]],
       measureUnit: ['', Validators.required],
       deliveryDate: ['', [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: ['', Validators.required]
