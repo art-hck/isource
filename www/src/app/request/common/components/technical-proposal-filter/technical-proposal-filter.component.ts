@@ -121,12 +121,8 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   /**
    * Сброс значений фильтра и подтягивание новых данных
    */
-  resetFilter() {
-    this.requestTpListFilterForm.reset({
-      positionName: '',
-      contragents: [],
-      tpStatus: [],
-      });
+  resetFilter(emitEvent = true) {
+    this.requestTpListFilterForm.reset(this.filterFormInitialState, { emitEvent });
 
     this.requestTpFilterContragentListComponent.selectedContragents = [];
     this.requestTpFilterContragentListComponent.contragentSearchValue = "";

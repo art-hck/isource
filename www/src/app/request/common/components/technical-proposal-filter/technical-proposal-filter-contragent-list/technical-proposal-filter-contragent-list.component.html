@@ -19,7 +19,7 @@
       <uxg-checkbox
         class="app-control" #contragentCheckbox
         [ngModel]="checkIfContragentIsChecked(contragent.id)"
-        (ngModelChange)="onContragentSelected(contragent)"
+        (ngModelChange)="onContragentSelected(contragent.id)"
       ></uxg-checkbox>
       <label (click)="contragentCheckbox.check($event)">&nbsp; {{ contragent.shortName }}</label>
     </div>
