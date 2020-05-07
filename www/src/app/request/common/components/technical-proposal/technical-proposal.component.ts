@@ -6,6 +6,8 @@ import { TechnicalProposalsStatus } from "../../enum/technical-proposals-status"
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import moment from "moment";
+import { TechnicalProposalsService } from "../../../back-office/services/technical-proposals.service";
+import { Request } from "../../models/request";
 
 @Component({
   selector: 'app-request-technical-proposal',
@@ -14,16 +16,22 @@ import moment from "moment";
 })
 export class RequestTechnicalProposalComponent {
 
+  @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
   @Output() edit = new EventEmitter<boolean>();
+  @Output() update = new EventEmitter<TechnicalProposal>();
   @Output() cancelTechnicalProposal = new EventEmitter<TechnicalProposal>();
+  @Output() sendTechnicalProposalToAgreement = new EventEmitter<TechnicalProposal>();
+
+  isLoading: boolean;
   isFolded: boolean;
 
   public durationCancelPublish = 10 * 60;
 
   constructor(
     public featureService: FeatureService,
-    public userInfoService: UserInfoService
+    public userInfoService: UserInfoService,
+    private technicalProposalsService: TechnicalProposalsService,
   ) {
   }
 
@@ -56,7 +64,19 @@ export class RequestTechnicalProposalComponent {
     return moment().diff(moment(technicalProposal.statusChangedDate), 'seconds');
   }
 
-  onCancelPublishTechicalProposal(technicalProposal: TechnicalProposal) {
+  onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
     this.cancelTechnicalProposal.emit(technicalProposal);
+  }
+
+  sendToAgreement(technicalProposal: TechnicalProposal): void {
+    this.isLoading = true;
+
+    const subscription = this.technicalProposalsService.sendToAgreement(this.request.id, technicalProposal).subscribe(
+      () => {
+        this.update.emit(technicalProposal);
+        this.isLoading = false;
+        subscription.unsubscribe();
+      }
+    );
   }
 }
