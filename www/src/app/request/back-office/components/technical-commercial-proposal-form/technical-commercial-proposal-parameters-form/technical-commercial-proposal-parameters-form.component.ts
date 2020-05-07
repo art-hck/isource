@@ -54,7 +54,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
           index: [index],
           name: [p.position.name, Validators.required],
           priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, Validators.required],
-          quantity: [p.quantity || p.position.quantity, Validators.required],
+          quantity: [p.quantity || p.position.quantity, Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],

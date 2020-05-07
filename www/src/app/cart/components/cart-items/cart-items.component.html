@@ -28,7 +28,7 @@
     </div>
 
     <div class="app-col quantity">
-      <input type="number" name="quantity" step="1" min="1"
+      <input type="number" name="quantity"
              [value]="item.quantity"
              (change)="updateItemQuantity(item, $event.target.value)"
              [class.invalid]="item.quantity <= 0"

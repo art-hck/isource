@@ -55,7 +55,7 @@ export class ItemsDictionaryComponent implements OnInit, OnDestroy {
         itemsDictionary.map((itemDictionary) => {
           const formGroup = this.fb.group({
             itemDictionary,
-            quantity: [1, [Validators.required, Validators.min(0.01)]],
+            quantity: [1, [Validators.required, Validators.min(0.0001)]],
           });
           if (formGroup.get('itemDictionary').hasError('inCart')) {
             formGroup.get('quantity').disable();
