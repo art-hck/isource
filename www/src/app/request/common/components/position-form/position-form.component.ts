@@ -133,7 +133,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       measureUnit: [p.measureUnit, Validators.required],
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
-      quantity: [p.quantity, [Validators.required, Validators.pattern("^[.0-9]+$")]],
+      quantity: [p.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
       startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
       documents: [[]]
     });
