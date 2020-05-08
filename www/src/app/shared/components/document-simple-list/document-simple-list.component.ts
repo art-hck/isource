@@ -22,6 +22,7 @@ export class DocumentSimpleListComponent {
 
   @Input() enableDelete = false;
   @Input() enableUpload = true;
+  @Input() uploadedDateHidden = false;
   @Input() gridable = false;
   @Input() limit = 0;
   @Input() size: DocumentIconSize = DocumentIconSize.medium;
