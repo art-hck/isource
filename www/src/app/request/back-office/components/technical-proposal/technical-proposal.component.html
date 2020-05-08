@@ -1,7 +1,9 @@
 <app-request-technical-proposal
   *ngIf="!editing"
+  [request]="request"
   [technicalProposal]="technicalProposal"
   (edit)="editing = $event"
+  (update)="update.emit($event)"
   (cancelTechnicalProposal)="cancelTechnicalProposal.emit($event)"
 ></app-request-technical-proposal>
 
