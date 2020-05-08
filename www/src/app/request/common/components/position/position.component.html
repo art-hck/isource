@@ -75,7 +75,12 @@
       </div>
       <div class="documents" *ngFor="let dateWithDocs of datesWithDocuments">
         <h4>{{dateWithDocs.date}}</h4>
-        <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="dateWithDocs.documents"></app-document-simple-list>
+        <app-document-simple-list
+          [gridable]="true"
+          [enableUpload]="false"
+          [uploadedDateHidden]="true"
+          [documents]="dateWithDocs.documents">
+        </app-document-simple-list>
       </div>
       <ng-container *ngIf="!datesWithDocuments || datesWithDocuments.length === 0">
         <br/>
