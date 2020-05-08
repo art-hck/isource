@@ -58,6 +58,7 @@
     <div class="app-table app-no-border">
       <div class="app-row app-uppercase app-ghost-color app-bold">
         <small class="app-col app-grow-0 number">Номер</small>
+        <small *ngIf="feature.authorize('backofficeRequest')" class="app-col app-grow-0 published">Опубликована</small>
         <small *ngIf="feature.authorize('backofficeRequest')" class="app-col customer">Заказчик</small>
         <!--        <small *ngIf="newTab.active" class="app-col published">Опубликована</small>-->
         <!--        <small *ngIf="completedTab.active" class="app-col completed">Завершена</small>-->
@@ -80,6 +81,9 @@
     <div class="app-table" [class.disabled]="status !== 'received'">
       <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
         <div class="app-col app-grow-0 number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
+        <div *ngIf="feature.authorize('backofficeRequest')" class="app-col app-grow-0 published app-ghost-color">
+          {{ request.request.publishedDate | date:'dd.MM.yyyy' }}
+        </div>
         <div *ngIf="feature.authorize('backofficeRequest')" class="app-col customer app-ellipsis">
           {{request.request.contragent?.shortName}}
         </div>
