@@ -59,3 +59,8 @@ uxg-checkbox + label { margin-left: .5em; }
 .actions {
   margin-top: 16px;
 }
+
+.delete {
+  text-align: end;
+  align-self: flex-end;
+}

@@ -39,7 +39,7 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
     const form = this.fb.group({
       controlId: Guid.create().toString(),
       name: [null, Validators.required],
-      quantity: [null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+      quantity: [null, [Validators.required, Validators.min(0.0001), Validators.pattern(/^\d+$/)]],
       okei: [null, Validators.required],
     });
     form.patchValue(position || {});
