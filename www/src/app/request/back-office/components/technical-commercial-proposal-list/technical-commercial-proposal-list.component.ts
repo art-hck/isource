@@ -76,10 +76,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
-    private featureService: FeatureService,
     private actions: Actions,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    public featureService: FeatureService,
     public store: Store,
     public router: Router,
     private app: AppComponent
