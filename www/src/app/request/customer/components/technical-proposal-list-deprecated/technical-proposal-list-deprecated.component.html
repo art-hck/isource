@@ -68,7 +68,10 @@
                       [(ngModel)]="technicalProposalPosition.checked"
                       (ngModelChange)="onSelectPosition(i, technicalProposalPosition)"
                     ></uxg-checkbox>
-                    <label class="position-label" (click)="proposalPositionCheckbox.check($event)">&nbsp; {{ technicalProposalPosition.position.name }}</label>
+                    <label class="app-col position-label"
+                           title="{{technicalProposalPosition.position.name}}"
+                           (click)="proposalPositionCheckbox.check($event)">&nbsp;
+                      {{ technicalProposalPosition.position.name }}</label>
                   </div>
                   <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
                     <uxg-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"
