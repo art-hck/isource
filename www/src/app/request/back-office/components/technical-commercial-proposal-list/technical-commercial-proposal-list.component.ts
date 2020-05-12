@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -41,7 +41,7 @@ import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePosi
   ])],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
+export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
@@ -129,6 +129,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     });
 
     this.switchView(this.view);
+  }
+
+  ngAfterViewInit() {
+    this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
   }
 
   switchView(view: "grid" | "list") {
