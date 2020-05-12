@@ -15,7 +15,7 @@
           <input uxgInput formControlName="priceWithoutVat" placeholder="Цена за единицу"/>
         </div>
         <div class="app-col">
-          <input uxgInput formControlName="quantity" placeholder="Количество" [warning]="!isQuantityValid(form)"/>
+          <input uxgInput formControlName="quantity" placeholder="Количество" type="number" [warning]="!isQuantityValid(form)"/>
         </div>
         <div class="app-col">
 

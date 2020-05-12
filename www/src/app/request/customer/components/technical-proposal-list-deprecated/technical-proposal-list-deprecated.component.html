@@ -47,17 +47,17 @@
 
             <table class="positions-list table table-noborder">
               <thead>
-              <tr>
-                <th class="left">
-                  <uxg-checkbox
-                    *ngIf="hasSelectablePositions(technicalProposal.positions)"
-                    [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
-                    (ngModelChange)="onSelectAllPositions($event, i, technicalProposal.positions)">
-                  </uxg-checkbox>
-                  <span class="position-header">Наименование позиции</span>
-                </th>
-                <th class="left">Заводское наименование</th>
-              </tr>
+                <tr>
+                  <th class="left">
+                    <uxg-checkbox
+                      *ngIf="hasSelectablePositions(technicalProposal.positions)"
+                      [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
+                      (ngModelChange)="onSelectAllPositions($event, i, technicalProposal.positions)">
+                    </uxg-checkbox>
+                    <span class="position-header">Наименование позиции</span>
+                  </th>
+                  <th class="left">Заводское наименование</th>
+                </tr>
               </thead>
               <tbody>
               <tr *ngFor="let technicalProposalPosition of technicalProposal.positions">
@@ -68,7 +68,10 @@
                       [(ngModel)]="technicalProposalPosition.checked"
                       (ngModelChange)="onSelectPosition(i, technicalProposalPosition)"
                     ></uxg-checkbox>
-                    <label class="position-label" (click)="proposalPositionCheckbox.check($event)">&nbsp; {{ technicalProposalPosition.position.name }}</label>
+                    <label class="app-col position-label"
+                           title="{{technicalProposalPosition.position.name}}"
+                           (click)="proposalPositionCheckbox.check($event)">&nbsp;
+                      {{ technicalProposalPosition.position.name }}</label>
                   </div>
                   <div *ngIf="isPositionStatusIndicatorAvailable(technicalProposalPosition)">
                     <uxg-icon class="accepted" *ngIf="technicalProposalPosition.status === 'ACCEPTED'"

@@ -12,4 +12,5 @@ export class RequestListItem {
   type?: string;
   comment?: string;
   contragent?: Contragent;
+  publishedDate?: Date;
 }

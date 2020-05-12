@@ -21,6 +21,7 @@ export interface GpnmarketConfigInterface {
   };
   procedure: {
     url: string
+    resultUrl: string
   };
   priceOrder: {
     url: string

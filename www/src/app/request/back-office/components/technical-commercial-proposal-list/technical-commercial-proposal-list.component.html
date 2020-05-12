@@ -80,14 +80,20 @@
 
     <!-- grid -->
     <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
+
       <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows.toArray()" [proposals]="proposals">
       </app-technical-commercial-proposal-grid-contragents-row>
 
       <!-- positions -->
       <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i" formArrayName="positions">
-        <div class="app-row app-align-items-center app-section app-layout" [formGroupName]="i">
-          <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
+
+        <div class="position-item app-row app-align-items-center app-section app-layout" [formGroupName]="i">
+          <uxg-checkbox class="app-control" #checked
+                        formControlName="checked"
+                        [disabled]="isReviewed(proposalsByPos) || isOnReview(proposalsByPos) || proposalsByPos.data.length === 0">
+          </uxg-checkbox>
           <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>
+
           <div class="app-ghost-color"> | {{proposalsByPos.position.quantity}} {{proposalsByPos.position.measureUnit}} </div>
           <div class="app-ghost-color"> | {{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}} </div>
           <div class="app-col"></div>
@@ -100,6 +106,7 @@
             <span>На согласовании</span>
           </div>
         </div>
+
         <div #gridRow class="grid-row app-row app-section items-row app-layout">
           <app-technical-commercial-proposal-grid-card
             *ngFor="let proposal of proposals; trackBy: trackByProposalId"

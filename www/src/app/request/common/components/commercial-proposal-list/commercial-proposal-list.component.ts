@@ -163,11 +163,12 @@ export class CommercialProposalListComponent implements OnInit {
     return requestPosition.procedureEndDate && !requestPosition.hasProcedure;
   }
 
-  getProcedureLink(requestPosition: RequestPosition): string {
-    const procedureUrl = this.appConfig.procedure.url;
-    const id = requestPosition.procedureId;
+  getProcedureLink({ procedureId }: RequestPosition): string {
+    return this.appConfig.procedure.url + procedureId;
+  }
 
-    return procedureUrl + id;
+  getProcedureResultLink({ procedureLotId }: RequestPosition): string {
+    return this.appConfig.procedure.resultUrl + procedureLotId;
   }
 
   /**

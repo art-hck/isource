@@ -9,10 +9,10 @@
 }
 
 .section {
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 
   & ~ .section {
-    margin-top: 32px;
+    margin-top: 20px;
   }
 
   &:first-child { margin-top: 0 }
@@ -50,4 +50,17 @@ uxg-checkbox + label { margin-left: .5em; }
     transform: scaleY(1);
     opacity: 1;
   }
+}
+
+.type {
+  min-width: 300px;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.delete {
+  text-align: end;
+  align-self: flex-end;
 }
