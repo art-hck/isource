@@ -37,6 +37,7 @@ export class RequestComponent implements OnChanges {
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
+  @Output() sentToApprove = new EventEmitter();
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
   flatPositions: RequestPosition[] = [];
@@ -47,6 +48,7 @@ export class RequestComponent implements OnChanges {
   isOnApproval: boolean;
   groups: RequestGroup[];
   canChangeStatuses: boolean;
+  canPublish: boolean;
 
   get formPositions(): FormArray {
     return this.form.get("positions") as FormArray;
@@ -104,6 +106,10 @@ export class RequestComponent implements OnChanges {
 
       this.canChangeStatuses = this.checkedPositions.length && this.checkedPositions.every(
         position => position.status === this.checkedPositions[0].status
+      );
+
+      this.canPublish = this.checkedPositions.length && this.checkedPositions.every(
+        position => position.status === PositionStatus.DRAFT
       );
       this.cd.detectChanges();
     });

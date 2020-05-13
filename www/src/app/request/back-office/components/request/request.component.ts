@@ -26,6 +26,7 @@ import FetchPositions = RequestActions.FetchPositions;
 })
 export class RequestComponent implements OnInit, OnDestroy {
   requestId: Uuid;
+  positions: RequestPosition[];
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.positions) positions$: Observable<RequestPositionList[]>;
   @Select(RequestState.status) status$: Observable<StateStatus>;
@@ -33,7 +34,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   readonly refresh = id => new Refresh(id);
   readonly refreshPositions = id => new RefreshPositions(id);
-  readonly publish = id => new Publish(id);
+  readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
     .dispatch(new Publish(this.requestId, false)).pipe(
