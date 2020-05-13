@@ -149,6 +149,7 @@
           *ngIf="procedureModal.state"
           [request]="request"
           [positions]="positions"
+          [procedureSource]="procedureSource"
           (complete)="procedureModal.close()"
           (cancel)="procedureModal.close()"
         ></app-request-procedure-create>
