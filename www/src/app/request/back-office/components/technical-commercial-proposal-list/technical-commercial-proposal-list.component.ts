@@ -32,6 +32,7 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import { ProcedureSource } from "../../../common/enum/procedure-source";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -61,6 +62,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   form: FormGroup;
   canNotAddNewContragent = false;
   readonly getCurrencySymbol = getCurrencySymbol;
+  readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
@@ -76,10 +78,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
-    private featureService: FeatureService,
     private actions: Actions,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    public featureService: FeatureService,
     public store: Store,
     public router: Router,
     private app: AppComponent
