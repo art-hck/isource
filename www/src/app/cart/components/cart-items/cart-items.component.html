@@ -31,8 +31,7 @@
       <input name="quantity" type="number"
              [value]="item.quantity"
              (change)="updateItemQuantity(item, $event.target.value)"
-             [class.invalid]="item.quantity <= 0"
-             (keypress)="filterEnteredText($event)"/>
+             [class.invalid]="item.quantity <= 0"/>
     </div>
 
     <div class="app-col action">

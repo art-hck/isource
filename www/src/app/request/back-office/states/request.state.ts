@@ -83,8 +83,8 @@ export class RequestState {
     return dispatch(new FetchPositions(requestId, false, false));
   }
 
-  @Action(Publish) publish({setState, dispatch}: Context, {requestId, refresh}: Publish) {
-    return this.rest.publishRequest(requestId).pipe(
+  @Action(Publish) publish({setState, dispatch}: Context, {requestId, positions, refresh}: Publish) {
+    return this.rest.publishRequest(requestId, positions).pipe(
       switchMap(() => dispatch(refresh ? [new Refresh(requestId), new RefreshPositions(requestId)] : []))
     );
   }
