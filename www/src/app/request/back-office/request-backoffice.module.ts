@@ -35,6 +35,7 @@ import { TechnicalCommercialProposalContragentFormComponent } from "./components
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
 import { SharedModule } from "../../shared/shared.module";
 
+
 @NgModule({
   declarations: [
     RequestComponent,
@@ -63,8 +64,7 @@ import { SharedModule } from "../../shared/shared.module";
       RequestState,
       RequestListState,
       TechnicalCommercialProposalState,
-      CommercialProposalState,
-      SharedModule
+      CommercialProposalState
     ]),
     RequestCommonModule
   ],

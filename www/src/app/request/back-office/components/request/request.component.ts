@@ -49,8 +49,7 @@ export class RequestComponent implements OnInit, OnDestroy {
     private requestService: RequestService,
     private bc: UxgBreadcrumbsService,
     private title: Title,
-    private actions: Actions,
-    private pluralize: PluralizePipe
+    private actions: Actions
   ) {}
 
   ngOnInit() {
@@ -71,14 +70,10 @@ export class RequestComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const length = action?.positions.length ?? 1;
-      const text = ("$0 отправлено на согласование")
-        .replace(/\$(\d)/g, (all, i) => [
-          this.pluralize.transform(length, "позиции", "позициям", "позициям"),
-        ][i] || all);
-
       this.store.dispatch(e ?
-        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
+        new ToastActions.Error(e && e.error.detail) :
+        new ToastActions.Success(action.positions.length > 1 ? action.positions.length + '  позиции отправлено на согласование' :
+          'Позиция отправлена на согласование')
       );
     });
   }
