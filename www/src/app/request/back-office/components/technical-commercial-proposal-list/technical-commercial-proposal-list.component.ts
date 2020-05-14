@@ -23,6 +23,9 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../common/models/state-status";
+import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { Procedure } from "../../models/procedure";
+import { ProcedureAction } from "../../models/procedure-action";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -32,7 +35,7 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -48,25 +51,30 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
+  @Select(TechnicalCommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
+  @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
   view: "grid" | "list" = "grid";
-  addProposalPositionData: {
+  addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
   };
   form: FormGroup;
   canNotAddNewContragent = false;
+  procedureModalPayload: ProcedureAction & { procedure?: Procedure };
+  prolongModalPayload: Procedure;
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
+  readonly updateProcedures = () => new RefreshProcedures(this.requestId);
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
@@ -172,10 +180,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
-    this.addProposalPositionData = {proposal, position};
+    this.addProposalPositionPayload = { proposal, position };
   }
 
-  trackByProposalId = (i, { id }: TechnicalCommercialProposal) => id;
+  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
   trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
 
   ngOnDestroy() {

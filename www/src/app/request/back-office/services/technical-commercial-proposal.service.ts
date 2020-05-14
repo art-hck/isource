@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { delay } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
+import { Procedure } from "../models/procedure";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
@@ -55,5 +55,10 @@ export class TechnicalCommercialProposalService {
   availablePositions(requestId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals/available-request-positions`;
     return this.api.get<RequestPosition[]>(url);
+  }
+
+  procedures(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/procedures`;
+    return this.api.get<Procedure[]>(url);
   }
 }

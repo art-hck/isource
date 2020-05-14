@@ -1,0 +1,36 @@
+<ng-container *ngIf="procedure">
+  <div class="app-card">
+    <div class="app-row app-align-items-center">
+      <h3 class="app-col">
+        Процедура № {{procedure.procedureId | splitNumber }} «{{procedure.procedureTitle}}»
+      </h3>
+      <a *ngIf="finished" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+      <a *ngIf="!finished" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+
+      <button uxgButton icon link (click)="folded = !folded">
+        <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
+      </button>
+    </div>
+
+    <ng-container *ngIf="!folded">
+      <hr/>
+      <div class="app-section app-col app-uppercase app-ghost-color app-bold app-ellipsis">
+        <small>Даты проведения</small>
+      </div>
+      <div class="app-row">
+        <div class="app-col">
+          <div class="app-section">Прием заявок до</div>
+          <div class="app-section"><b>{{procedure.dateEndRegistration | date:"dd.MM.yyyy, HH:mm"}}</b></div>
+        </div>
+        <div class="app-col">
+          <div class="app-section">Возможность продления</div>
+          <div class="app-section"><b>{{finished ? 'Нет' : 'Да'}}</b></div>
+        </div>
+        <div class="app-col">
+          <button uxgButton secondary *ngIf="finished" (click)="bargain.emit()">Уторговать</button>
+          <button uxgButton secondary *ngIf="!finished" (click)="prolong.emit()">Продлить процедуру</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
