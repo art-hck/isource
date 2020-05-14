@@ -49,7 +49,7 @@
       документы и заполнить все заводские наименования.
     </div>
     <div class="app-row section" *ngIf="form.get('positions') as control">
-      <div class="app-col">
+      <div class="app-col" [style.max-width.px]="700">
         <div class="app-row">
           <div class="app-col" [style.overflow]="'hidden'">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Наименование позиции</small></div>
