@@ -42,7 +42,7 @@ const routes: Routes = [
         children: [
           {
             path: 'technical-proposals',
-            component: TechnicalProposalListComponent,
+            component: TechnicalProposalListDeprecatedComponent,
             data: { title: "Технические предложения" }
           },
           {
@@ -68,7 +68,7 @@ const routes: Routes = [
       },
       {
         path: 'technical-proposals',
-        component: TechnicalProposalListDeprecatedComponent,
+        component: TechnicalProposalListComponent,
         data: { title: "Технические предложения" }
       },
       {

@@ -6,7 +6,9 @@ import { RequestCustomerRoutingModule } from "./request-customer-routing.module"
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
+import { ProposalFormManufacturerComponent } from './components/proposal-form-manufacturer/proposal-form-manufacturer.component';
 import { PositionComponent } from "./components/position/position.component";
+import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
 import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
 import { AgreementsComponent } from './components/agreements/agreements.component';
@@ -22,6 +24,7 @@ import { RequestFormFreeComponent } from "./components/request-form-free/request
 import { RequestState } from "./states/request.state";
 import { RequestList2Component } from "./components/request-list2/request-list2.component";
 import { RequestListState } from "./states/request-list.state";
+import { TechnicalProposalState } from "./states/technical-proposal.state";
 
 
 @NgModule({
@@ -31,6 +34,8 @@ import { RequestListState } from "./states/request-list.state";
     RequestFormComponent,
     RequestFormFreeComponent,
     PositionComponent,
+    ProposalFormManufacturerComponent,
+    RequestTechnicalProposalComponent,
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
     CommercialProposalListComponent,
@@ -47,7 +52,8 @@ import { RequestListState } from "./states/request-list.state";
     NgxsModule.forFeature([
       RequestState,
       RequestListState,
-      TechnicalCommercialProposalState
+      TechnicalCommercialProposalState,
+      TechnicalProposalState
     ]),
   ],
   providers: [

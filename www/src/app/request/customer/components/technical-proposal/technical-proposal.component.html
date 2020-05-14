@@ -1,0 +1,141 @@
+<div class="app-table tp-card">
+  <div class="app-row">
+    <div class="app-col">
+      <div class="tp-header">
+
+        <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW' && !isFolded">
+          <uxg-checkbox
+            *ngIf="hasSelectablePositions(technicalProposal.positions)"
+            [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
+            (ngModelChange)="onSelectAllPositions($event, technicalProposalIndex, technicalProposal.positions)">
+          </uxg-checkbox>
+        </div>
+
+        <div class="app-col">
+          <ng-container *ngIf="technicalProposal.supplierContragent; else noContragent">
+            <h3>
+              <app-contragent-info-link
+                [contragent]="technicalProposal.supplierContragent">
+              </app-contragent-info-link>
+            </h3>
+          </ng-container>
+
+          <ng-template #noContragent><span>Поставщик</span></ng-template>
+        </div>
+
+        <div class="app-col app-col-aside status">
+          <div [ngClass]="{'accepted': technicalProposal.status === 'ACCEPTED',
+                           'declined': technicalProposal.status === 'DECLINED',
+                           'draft': technicalProposal.status === 'NEW',
+                           'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
+            <uxg-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></uxg-icon>
+            <uxg-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></uxg-icon>
+            <uxg-icon shape="app-draft" *ngIf="technicalProposal.status === 'NEW'"></uxg-icon>
+            <uxg-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></uxg-icon>
+            <b>{{ tpStatusLabel(technicalProposal) }}</b>
+          </div>
+
+          <button uxgButton link icon (click)="isFolded = !isFolded">
+            <uxg-icon shape="app-chevron" [attr.dir]="isFolded ? 'up':'down'"></uxg-icon>
+          </button>
+        </div>
+      </div>
+      <div class="extendable-block" *ngIf="!isFolded">
+
+        <!-- Секция списка позиций ТП -->
+        <hr>
+        <div class="app-row position-list section">
+          <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'"></div>
+          <div class="app-col upper-label">Наименование позиции</div>
+          <div class="app-col upper-label">Заводское наименование</div>
+          <div class="app-col upper-label">Решение принято</div>
+          <div class="app-col icon-status"></div>
+        </div>
+
+        <div class="app-row position-list" *ngFor="let technicalProposalPosition of technicalProposal.positions">
+
+          <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'">
+            <uxg-checkbox
+              [disabled]="proposalPositionIsReviewed(technicalProposalPosition)"
+              class="app-control" #proposalPositionCheckbox
+              [(ngModel)]="technicalProposalPosition.checked"
+              (ngModelChange)="onSelectPosition(technicalProposalIndex, technicalProposalPosition)"
+            ></uxg-checkbox>
+          </div>
+
+          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+            {{ technicalProposalPosition.position.name }}
+          </div>
+
+          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+            <ng-container *ngIf="technicalProposalPosition.manufacturingName; else noItem">
+              <span>{{ technicalProposalPosition.manufacturingName }}</span>
+            </ng-container>
+          </div>
+
+          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+            <ng-container class="user" *ngIf="technicalProposalPosition.history; else noItem">
+              {{ technicalProposalPosition.history?.user.shortName }}
+              <span class="light-grey">
+              {{ technicalProposalPosition.history?.createdDate | date:'shortDate' }}
+            </span>
+            </ng-container>
+          </div>
+
+          <div class="app-col icon-status">
+            <uxg-icon class="accepted"
+                      shape="app-check"
+                      *ngIf="technicalProposalPosition.status === 'ACCEPTED'"></uxg-icon>
+            <uxg-icon class="declined"
+                      shape="app-cross"
+                      *ngIf="technicalProposalPosition.status === 'DECLINED'"></uxg-icon>
+          </div>
+
+          <ng-template #noItem>
+            <span class="light-grey">—</span>
+          </ng-template>
+        </div>
+
+
+        <!-- Секция докуметов ТП -->
+        <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
+          <hr>
+          <div class="section">
+            <span class="upper-label">документы предложения</span>
+            <app-document-simple-list
+              [gridable]="true"
+              [enableUpload]="false"
+              [documents]="technicalProposal.documents">
+            </app-document-simple-list>
+          </div>
+        </div>
+
+
+        <!-- footer -->
+        <ng-container *ngIf="currentList === 'SENT_TO_REVIEW'">
+          <hr>
+
+          <div class="app-row app-align-items-center">
+            <div class="app-col app-secondary-color">
+              Вы можете оклонить все предложения по этим позициям и не получать другие <br>
+              предложения по ним от этого поставщика
+            </div>
+
+            <div class="app-row app-col app-col-auto app-align-items-center">
+              <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
+
+              <button uxgButton secondary (click)="reject()" [disabled]="!hasSelectedPositions() || isLoading">
+                Отклонить
+              </button>
+
+              <button uxgButton primary (click)="approve()" [disabled]="!hasSelectedPositions() || isLoading">
+                Согласовать
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>
