@@ -37,7 +37,6 @@ export class RequestComponent implements OnChanges {
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
-  @Output() sentToApprove = new EventEmitter();
   readonly permissionType = PermissionType;
   readonly PositionStatusesLabels = PositionStatusesLabels;
   flatPositions: RequestPosition[] = [];

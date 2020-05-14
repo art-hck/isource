@@ -50,7 +50,7 @@
         <!-- Отправить позиции на согласование -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('sentToApprove') && isDraft">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish" (click)="publish.emit(checkedPositions)">
-            <uxg-icon shape="app-group" size="16" class="is-solid"></uxg-icon>
+            <uxg-icon shape="app-on-approve" size="16" class="is-solid"></uxg-icon>
             <span>На согласование</span>
           </button>
         </div>

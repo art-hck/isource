@@ -33,6 +33,7 @@ import { RequestList2Component } from './components/request-list2/request-list2.
 import {CommercialProposalState} from "./states/commercial-proposal.state";
 import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { TechnicalCommercialProposalPositionFormComponent } from "./components/t
       RequestListState,
       TechnicalCommercialProposalState,
       CommercialProposalState,
+      SharedModule
     ]),
     RequestCommonModule
   ],

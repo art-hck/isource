@@ -7,12 +7,14 @@ import { ActivatedRoute } from "@angular/router";
 import { switchMap, takeUntil, tap } from "rxjs/operators";
 import { Title } from "@angular/platform-browser";
 import { UxgBreadcrumbsService } from "uxg";
-import { Select, Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
 import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
 import { StateStatus } from "../../../common/models/state-status";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import Publish = RequestActions.Publish;
 import RefreshPositions = RequestActions.RefreshPositions;
@@ -46,7 +48,9 @@ export class RequestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private bc: UxgBreadcrumbsService,
-    private title: Title
+    private title: Title,
+    private actions: Actions,
+    private pluralize: PluralizePipe
   ) {}
 
   ngOnInit() {
@@ -61,6 +65,22 @@ export class RequestComponent implements OnInit, OnDestroy {
       ]),
       takeUntil(this.destroy$),
     ).subscribe();
+
+    this.actions.pipe(
+      ofActionCompleted(Publish),
+      takeUntil(this.destroy$)
+    ).subscribe(({result, action}) => {
+      const e = result.error as any;
+      const length = action?.positions.length ?? 1;
+      const text = ("$0 отправлено на согласование")
+        .replace(/\$(\d)/g, (all, i) => [
+          this.pluralize.transform(length, "позиции", "позициям", "позициям"),
+        ][i] || all);
+
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
+      );
+    });
   }
 
   ngOnDestroy() {
