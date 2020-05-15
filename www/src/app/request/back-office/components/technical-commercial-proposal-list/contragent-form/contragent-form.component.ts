@@ -36,17 +36,8 @@ export class TechnicalCommercialProposalContragentFormComponent {
 
   submit() {
     if (this.form.invalid) { return; }
-    return this.store.dispatch(new CreateContragent(this.request.id, this.form.value)).subscribe(() => {
-      this.resetFormAndValidity();
-    });
+    return this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
   }
 
   getContragentName = ({ shortName, fullName }: ContragentList) => shortName || fullName;
-
-  resetFormAndValidity(): void {
-    this.form.get('supplier').setValue('');
-    this.form.get('supplier').markAsUntouched();
-    this.form.get('supplier').markAsPristine();
-    this.form.get('supplier').updateValueAndValidity();
-  }
 }
