@@ -38,7 +38,8 @@
           </ng-container>
           <ng-container *ngIf="formGroup.disabled">
             <div class="app-col app-col-auto">
-              <span>Участвует в процедуре</span>
+              <span *ngIf="position.hasProcedure">Участвует в процедуре</span>
+              <span *ngIf="position.status === 'WINNER_SELECTED' || position.status === 'TCP_WINNER_SELECTED'">Выбран победитель</span>
             </div>
           </ng-container>
         </div>

@@ -17,6 +17,7 @@ import { ContragentService } from "../../../../contragent/services/contragent.se
 import { Observable, Subject, throwError } from "rxjs";
 import { ProcedureAction } from "../../models/procedure-action";
 import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { PositionStatus } from "../../../common/enum/position-status";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -169,7 +170,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
   }
 
   disabledPositions(position: RequestPosition): boolean {
-    return position.hasProcedure;
+    return position.hasProcedure || position.status === PositionStatus.WINNER_SELECTED || position.status === PositionStatus.TCP_WINNER_SELECTED;
   }
 
   filterContragents(q: string, contragent: ContragentList): boolean {
