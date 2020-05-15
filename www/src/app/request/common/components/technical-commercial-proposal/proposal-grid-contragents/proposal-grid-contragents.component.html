@@ -1,8 +1,9 @@
 <div class="contragents-row">
   <div #gridRow class="app-row grid-row app-layout">
-    <div class="app-col grid-cell app-bold app-ellipsis" *ngFor="let proposal of proposals; index as i">
-      <app-contragent-info-link hiddenName="Поставщик №{{i + 1}}" [contragent]="proposal.supplier">
+    <div class="app-col grid-cell app-ellipsis" *ngFor="let proposal of proposals; index as i">
+      <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="proposal.supplier">
       </app-contragent-info-link>
+      <div class="app-ghost-color analog" *ngIf="hasAnalogs(proposal)">аналоги</div>
     </div>
   </div>
 

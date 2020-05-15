@@ -132,6 +132,7 @@
                   <h3>{{linkedOffer.priceWithVat * linkedOffer.quantity | currency: 'RUB' :'symbol':"1.0-2"}}</h3>
                 </div>
                 <div class="app-col app-col-aside app-ghost-color icon-status">
+                  <div class="app-ghost-color" *ngIf="!linkedOffer.isAnalog">Аналог</div>
                   <div *ngIf="positionWithWinner(position) && !linkedOffer.isWinner">
                     <uxg-icon shape="app-check"></uxg-icon>
                   </div>
