@@ -67,7 +67,7 @@ export class CommercialProposalListOldComponent implements OnInit {
     requestPositions.forEach(pos => {
       const supplierLinkedOffer = this.getSupplierLinkedOffers(pos.linkedOffers, supplierId);
       if (supplierLinkedOffer[0]) {
-        sum = sum + (supplierLinkedOffer[0].priceWithVat * supplierLinkedOffer[0].quantity);
+        sum = sum + (supplierLinkedOffer[0].priceWithoutVat * supplierLinkedOffer[0].quantity);
       }
     });
 
@@ -83,7 +83,7 @@ export class CommercialProposalListOldComponent implements OnInit {
 
       supplierLinkedOffers.forEach(offer => {
         if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {
-          selectedSum += offer.priceWithVat * offer.quantity;
+          selectedSum += offer.priceWithoutVat * offer.quantity;
         }
       });
     });
@@ -180,8 +180,8 @@ export class CommercialProposalListOldComponent implements OnInit {
    */
   findOfferByMinPrice(positionOffers: RequestOfferPosition[]): RequestOfferPosition {
     positionOffers = positionOffers.sort((offer1, offer2) => {
-      const offer1price = offer1.priceWithVat * offer1.quantity;
-      const offer2price = offer2.priceWithVat * offer2.quantity;
+      const offer1price = offer1.priceWithoutVat * offer1.quantity;
+      const offer2price = offer2.priceWithoutVat * offer2.quantity;
 
       const delta = offer1price - offer2price;
 
@@ -210,7 +210,7 @@ export class CommercialProposalListOldComponent implements OnInit {
     this.requestPositions.forEach(pos => {
       pos.linkedOffers.forEach(offer => {
         if ((offer.isWinner === true) || (Object.values(selectedOffers).indexOf(offer.id) > -1)) {
-          totalSum += offer.priceWithVat * offer.quantity;
+          totalSum += offer.priceWithoutVat * offer.quantity;
         }
       });
     });

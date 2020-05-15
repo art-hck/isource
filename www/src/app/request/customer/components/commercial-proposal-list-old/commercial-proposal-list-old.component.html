@@ -60,7 +60,7 @@
                       <div class="app-row app-justify-content-between">
                         <div class="clr-col-auto">
                             <span class="counted-offer-price">
-                              {{ linkedOffer.priceWithVat * linkedOffer.quantity | currency : linkedOffer.currency }}
+                              {{ linkedOffer.priceWithoutVat * linkedOffer.quantity | currency : linkedOffer.currency }}
 
                               <span class="offer-quantity">за
                                 <span [class.warning-text]="linkedOffer.quantity < requestPosition.quantity">
@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="per-unit-price-block">
-                      {{ linkedOffer.priceWithVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
+                      {{ linkedOffer.priceWithoutVat | currency : linkedOffer.currency }}/{{linkedOffer.measureUnit}}
                     </div>
 
                     <div class="delivery">Поставят к
