@@ -24,7 +24,7 @@ export namespace RequestActions {
 
   export class Publish {
     static readonly type = '[Request Backoffice] Publish';
-    constructor(public requestId: Uuid, public refresh = true, public positions?: RequestPosition[]) {}
+    constructor(public requestId: Uuid, public refresh = true, public positions: [string]) {}
   }
 
   export class UploadFromTemplate {
