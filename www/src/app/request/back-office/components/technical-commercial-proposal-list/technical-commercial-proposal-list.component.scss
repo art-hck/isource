@@ -1,8 +1,14 @@
 @import "projects/uxg/src/styles/index";
 
-.app-technical-commercial-proposal-list > *:not(:last-child) {
-  display: block;
-  margin-bottom: 24px;
+.app-technical-commercial-proposal-list {
+  & > *:not(:last-child) {
+    display: block;
+    margin-bottom: 24px;
+  }
+
+  &.disabled {
+    opacity: .5;
+  }
 }
 
 .placeholder {
@@ -30,3 +36,4 @@
 .position-row .position-item {
   padding-bottom: 15px;
 }
+

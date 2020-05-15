@@ -1,7 +1,7 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { catchError, mergeMap, tap } from "rxjs/operators";
+import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
@@ -22,10 +22,14 @@ import { TechnicalCommercialProposalByPosition } from "../../common/models/techn
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import CreatePosition = TechnicalCommercialProposals.CreatePosition;
+import { Procedure } from "../models/procedure";
+import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
+import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
   status: StateStatus;
+  procedures: Procedure[];
   availablePositions: RequestPosition[];
 }
 
@@ -34,7 +38,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, status: "pristine" }
+  defaults: { proposals: null, availablePositions: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
@@ -46,6 +50,7 @@ export class TechnicalCommercialProposalState {
   @Selector() static proposals({ proposals }: Model) { return proposals; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static status({ status }: Model) { return status; }
+  @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static proposalsByPositions({ proposals, availablePositions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
@@ -68,11 +73,12 @@ export class TechnicalCommercialProposalState {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId)
-      .pipe(tap(proposals => {
-        ctx.setState(patch({ proposals, status: "received" as StateStatus }));
-        this.cache[requestId] = proposals;
-      }));
+    return this.rest.list(requestId).pipe(
+      tap(proposals => ctx.setState(patch({ proposals }))),
+      tap(proposals => this.cache[requestId] = proposals),
+      switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+    );
   }
 
   @Action(FetchAvailablePositions)
@@ -80,6 +86,24 @@ export class TechnicalCommercialProposalState {
     setState(patch({ availablePositions: null }));
     return this.rest.availablePositions(requestId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
+    );
+  }
+
+  @Action([FetchProcedures, RefreshProcedures])
+  fetchProcedures({ setState }: Context, { requestId, update }: FetchProcedures) {
+    if (update) {
+      setState(patch({ status: "updating" as StateStatus }));
+    } else {
+      setState(patch({ procedures: null, status: "fetching" as StateStatus }));
+    }
+
+    return this.rest.procedures(requestId).pipe(
+      tap(procedures => setState(patch({ procedures }))),
+      tap(() => {
+        if (update) {
+          setState(patch({ status: "received" as StateStatus }));
+        }
+      }),
     );
   }
 

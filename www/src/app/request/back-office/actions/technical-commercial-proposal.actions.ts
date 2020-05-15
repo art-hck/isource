@@ -19,6 +19,22 @@ export namespace TechnicalCommercialProposals {
     constructor(public requestId: Uuid) {}
   }
 
+  // Получить список доступных к процедур из ТКП
+  export class FetchProcedures {
+    static readonly type = '[Technical Commercial Proposals Backoffice] FetchProcedures';
+
+    constructor(public requestId: Uuid, public update = false) {}
+  }
+
+  // Обновить список доступных к процедур из ТКП
+  // @TODO: выпилить когда бэк научится отдавать процедуру при создании/уторговывании/продлении
+  export class RefreshProcedures implements FetchProcedures {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateProcedures';
+    update = true;
+
+    constructor(public requestId: Uuid) {}
+  }
+
   // Создать ТКП
   export class Create {
     static readonly type = '[Technical Commercial Proposals Backoffice] Create';
