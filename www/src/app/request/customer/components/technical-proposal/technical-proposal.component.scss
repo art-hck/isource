@@ -20,6 +20,7 @@
 .icon-status {
   max-width: 18px;
 }
+
 .section {
   padding-top: 14px;
 }
@@ -38,39 +39,15 @@ h3, p.sent-label {
   margin: 0;
 }
 
-.light-grey {
-  color: uxg($theme, color-font-ghost);
-}
-
-.grey {
-  color: uxg($theme, color-font-secondary);
-}
 .upper-label {
   text-transform: uppercase;
-  color: uxg($theme, color-font-ghost);
   font-weight: 600;
   letter-spacing: 0.08em;
   font-size: 11px;
 }
 
-.accepted {
-  color: uxg($theme, color-font-success);
-}
-
-.declined {
-  color: uxg($theme, color-font-alert);
-}
-
-.draft {
-  color: uxg($theme, color-font-ghost);
-}
-
-.onReview {
-  color: uxg($theme, color-font-warning);
-}
-
 .action-bar {
-justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .fixedWidth {

@@ -24,16 +24,23 @@
         </div>
 
         <div class="app-col app-col-aside status">
-          <div [ngClass]="{'accepted': technicalProposal.status === 'ACCEPTED',
-                           'declined': technicalProposal.status === 'DECLINED',
-                           'draft': technicalProposal.status === 'NEW',
-                           'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
-            <uxg-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></uxg-icon>
-            <uxg-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></uxg-icon>
-            <uxg-icon shape="app-draft" *ngIf="technicalProposal.status === 'NEW'"></uxg-icon>
-            <uxg-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></uxg-icon>
-            <b>{{ tpStatusLabel(technicalProposal) }}</b>
-          </div>
+          <ng-container [ngSwitch]="technicalProposal.status">
+            <div class="app-success-color" *ngSwitchCase="'ACCEPTED'"><uxg-icon shape="app-check"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-alert-color" *ngSwitchCase="'DECLINED'"><uxg-icon shape="app-cross"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-ghost-color" *ngSwitchCase="'NEW'"><uxg-icon shape="app-draft"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-warning-color" *ngSwitchCase="'SENT_TO_REVIEW'"><uxg-icon shape="app-warning"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+          </ng-container>
 
           <button uxgButton link icon (click)="isFolded = !isFolded">
             <uxg-icon shape="app-chevron" [attr.dir]="isFolded ? 'up':'down'"></uxg-icon>
@@ -46,9 +53,9 @@
         <hr>
         <div class="app-row position-list section">
           <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'"></div>
-          <div class="app-col upper-label">Наименование позиции</div>
-          <div class="app-col upper-label">Заводское наименование</div>
-          <div class="app-col upper-label">Решение принято</div>
+          <div class="app-col upper-label app-ghost-color">Наименование позиции</div>
+          <div class="app-col upper-label app-ghost-color">Заводское наименование</div>
+          <div class="app-col upper-label app-ghost-color">Решение принято</div>
           <div class="app-col icon-status"></div>
         </div>
 
@@ -76,23 +83,21 @@
           <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
             <ng-container class="user" *ngIf="technicalProposalPosition.history; else noItem">
               {{ technicalProposalPosition.history?.user.shortName }}
-              <span class="light-grey">
+              <span class="app-ghost-color">
               {{ technicalProposalPosition.history?.createdDate | date:'shortDate' }}
             </span>
             </ng-container>
           </div>
 
           <div class="app-col icon-status">
-            <uxg-icon class="accepted"
-                      shape="app-check"
-                      *ngIf="technicalProposalPosition.status === 'ACCEPTED'"></uxg-icon>
-            <uxg-icon class="declined"
-                      shape="app-cross"
-                      *ngIf="technicalProposalPosition.status === 'DECLINED'"></uxg-icon>
+            <ng-container [ngSwitch]="technicalProposalPosition.status">
+              <uxg-icon *ngSwitchCase="'ACCEPTED'" class="app-success-color" shape="app-check"></uxg-icon>
+              <uxg-icon *ngSwitchCase="'DECLINED'" class="app-alert-color" shape="app-cross"></uxg-icon>
+            </ng-container>
           </div>
 
           <ng-template #noItem>
-            <span class="light-grey">—</span>
+            <span class="app-ghost-color">—</span>
           </ng-template>
         </div>
 
@@ -101,7 +106,7 @@
         <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
           <hr>
           <div class="section">
-            <span class="upper-label">документы предложения</span>
+            <span class="upper-label app-ghost-color">документы предложения</span>
             <app-document-simple-list
               [gridable]="true"
               [enableUpload]="false"
