@@ -5,6 +5,7 @@ import { timer } from "rxjs";
 @Component({
   selector: 'app-technical-commercial-proposal-grid-contragents-row',
   templateUrl: './proposal-grid-contragents.component.html',
+  styleUrls: ['./proposal-grid-contragents.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProposalGridContragentsComponent implements AfterViewInit {
@@ -37,5 +38,9 @@ export class ProposalGridContragentsComponent implements AfterViewInit {
     this.canScrollLeft = scrollLeft > 0;
     this.canScrollRight = (scrollLeft === 0 || scrollLeft < scrollWidth - offsetWidth) && scrollWidth > offsetWidth;
     this.cd.detectChanges();
+  }
+
+  hasAnalogs(proposal: TechnicalCommercialProposal): boolean {
+    return proposal.positions.some(({isAnalog}) => isAnalog);
   }
 }

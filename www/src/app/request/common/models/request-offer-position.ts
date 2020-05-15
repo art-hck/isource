@@ -26,6 +26,7 @@ export class RequestOfferPosition {
   supplierContragent?: ContragentShortInfo;
   userId?: Uuid;
   vatPercent: number;
+  isAnalog: boolean;
   isMinPrice?: boolean;
   isWinner?: boolean;
   documents?: RequestDocument[];
