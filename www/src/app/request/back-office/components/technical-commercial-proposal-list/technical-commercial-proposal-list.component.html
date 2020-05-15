@@ -81,7 +81,7 @@
       <!-- grid -->
       <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
 
-        <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows.toArray()" [proposals]="proposals">
+        <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
         </app-technical-commercial-proposal-grid-contragents-row>
 
         <!-- positions -->
@@ -201,6 +201,7 @@
       <uxg-modal #addContragentModal size="s">
         <h2><b>Добавить столбик контрагента</b></h2>
         <technical-commercial-proposal-contragent-form
+          *ngIf="addContragentModal.state"
           [request]="request"
           [selectedContragents]="getContragents(proposals)"
           (close)="addContragentModal.close()">
