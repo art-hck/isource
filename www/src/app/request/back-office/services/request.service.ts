@@ -64,7 +64,7 @@ export class RequestService {
     return this.api.get<RequestStatusCount>(url);
   }
 
-  publishRequest(id: Uuid, positions?: RequestPosition[]) {
+  publishRequest(id: Uuid, positions: [string]) {
     const url = `requests/backoffice/${id}/positions/publish`;
     return this.api.post(url, {positions});
   }
