@@ -6,7 +6,6 @@ import { RequestCustomerRoutingModule } from "./request-customer-routing.module"
 import { RequestService } from "./services/request.service";
 import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
-import { ProposalFormManufacturerComponent } from './components/proposal-form-manufacturer/proposal-form-manufacturer.component';
 import { PositionComponent } from "./components/position/position.component";
 import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
@@ -34,7 +33,6 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
     RequestFormComponent,
     RequestFormFreeComponent,
     PositionComponent,
-    ProposalFormManufacturerComponent,
     RequestTechnicalProposalComponent,
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
