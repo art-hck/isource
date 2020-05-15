@@ -30,9 +30,4 @@ export class CartItemsComponent {
     quantity = Math.abs(quantity);
     return this.store.updateQuantity(item, quantity);
   }
-
-  filterEnteredText(event: KeyboardEvent): boolean {
-    const key = Number(event.key);
-    return (key >= 0 && key <= 9);
-  }
 }

@@ -40,9 +40,11 @@
   </div>
 
   <div class="app-row app-justify-content-end">
-    <div class="app-col app-grow-0">
-      <button uxgButton primary lg class="btn-submit" [clrLoading]="loadingState"
-              [disabled]="form.invalid || isQuantityInvalid()">Сделать заказ
+    <div class="app-row app-col app-col-auto app-align-items-center">
+      <span *ngIf="loadingState" class="spinner spinner-inline">Загрузка...</span>
+
+      <button uxgButton primary lg class="btn-submit"
+              [disabled]="form.invalid || isQuantityInvalid() || loadingState">Сделать заказ
       </button>
     </div>
   </div>

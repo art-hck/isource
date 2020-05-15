@@ -16,6 +16,8 @@ export class PositionsListComponent implements OnChanges {
   @Input() positions: CatalogPosition[];
   form = new FormGroup({});
   contragent: ContragentInfo;
+  loadingState = false;
+  thisButtonIndex: number;
 
   constructor(
     protected getContragentService: ContragentService,
@@ -47,10 +49,15 @@ export class PositionsListComponent implements OnChanges {
     ));
   }
 
-  addToCart(formGroup: AbstractControl) {
+  addToCart(formGroup: AbstractControl, index) {
+    this.loadingState = true;
+    this.thisButtonIndex = index;
+
     const { position, quantity } = formGroup.value;
     this.cartStoreService.addItem(position, quantity).finally(() => {
       formGroup.get('position').updateValueAndValidity();
+      this.loadingState = false;
+      this.thisButtonIndex = null;
     });
   }
 

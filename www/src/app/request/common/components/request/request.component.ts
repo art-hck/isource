@@ -47,6 +47,7 @@ export class RequestComponent implements OnChanges {
   isOnApproval: boolean;
   groups: RequestGroup[];
   canChangeStatuses: boolean;
+  canPublish: boolean;
 
   get formPositions(): FormArray {
     return this.form.get("positions") as FormArray;
@@ -104,6 +105,10 @@ export class RequestComponent implements OnChanges {
 
       this.canChangeStatuses = this.checkedPositions.length && this.checkedPositions.every(
         position => position.status === this.checkedPositions[0].status
+      );
+
+      this.canPublish = this.checkedPositions.length && this.checkedPositions.every(
+        position => position.status === PositionStatus.DRAFT
       );
       this.cd.detectChanges();
     });
