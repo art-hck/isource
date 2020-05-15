@@ -31,6 +31,24 @@
           <button uxgButton secondary *ngIf="!finished" (click)="prolong.emit()">Продлить процедуру</button>
         </div>
       </div>
+
+      <ng-container *ngIf="documents.length">
+        <hr/>
+        <small class="app-uppercase app-ghost-color app-bold">Документы процедуры</small>
+        <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="documents">
+        </app-document-simple-list>
+      </ng-container>
+
+      <ng-container *ngIf="procedure.positions.length">
+        <hr/>
+        <div class="app-section app-col app-uppercase app-ghost-color app-bold app-ellipsis">
+          <small>Наименование позиции процедуры</small>
+        </div>
+
+        <div class="app-section" *ngFor="let procedurePosition of procedure.positions">
+          {{ procedurePosition.requestPosition.name }}
+        </div>
+      </ng-container>
     </ng-container>
   </div>
 </ng-container>
