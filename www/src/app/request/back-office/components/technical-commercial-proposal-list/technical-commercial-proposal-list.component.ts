@@ -59,7 +59,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
-  view: "grid" | "list" = "list";
+  view: "grid" | "list" = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
