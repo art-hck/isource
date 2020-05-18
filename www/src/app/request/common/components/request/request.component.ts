@@ -91,6 +91,7 @@ export class RequestComponent implements OnChanges {
     if (changes.positions) {
       this.form = this.fetchForm(this.positions);
       this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
+      this.checkedPositions = [];
       this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
       this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
       this.isOnApproval = this.featureService.authorize("approveRequest") &&
