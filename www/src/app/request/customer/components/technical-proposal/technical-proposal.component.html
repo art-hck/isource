@@ -53,34 +53,36 @@
         <hr>
         <div class="app-row position-list section">
           <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'"></div>
-          <div class="app-col upper-label app-ghost-color">Наименование позиции</div>
-          <div class="app-col upper-label app-ghost-color">Заводское наименование</div>
-          <div class="app-col upper-label app-ghost-color">Решение принято</div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Наименование позиции</small></div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Заводское наименование</small></div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Решение принято</small></div>
           <div class="app-col icon-status"></div>
         </div>
 
-        <div class="app-row position-list" *ngFor="let technicalProposalPosition of technicalProposal.positions">
+        <div class="app-row position-list"
+             [class.app-ghost-color]="isProposalPositionReviewed(technicalProposalPosition)"
+             *ngFor="let technicalProposalPosition of technicalProposal.positions">
 
           <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'">
             <uxg-checkbox
-              [disabled]="proposalPositionIsReviewed(technicalProposalPosition)"
-              class="app-control" #proposalPositionCheckbox
+              class="app-control"
+              [disabled]="isProposalPositionReviewed(technicalProposalPosition)"
               [(ngModel)]="technicalProposalPosition.checked"
               (ngModelChange)="onSelectPosition(technicalProposalIndex, technicalProposalPosition)"
             ></uxg-checkbox>
           </div>
 
-          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+          <div class="app-col">
             {{ technicalProposalPosition.position.name }}
           </div>
 
-          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+          <div class="app-col">
             <ng-container *ngIf="technicalProposalPosition.manufacturingName; else noItem">
               <span>{{ technicalProposalPosition.manufacturingName }}</span>
             </ng-container>
           </div>
 
-          <div class="app-col" [class.app-ghost-color]="proposalPositionIsReviewed(technicalProposalPosition)">
+          <div class="app-col">
             <ng-container class="user" *ngIf="technicalProposalPosition.history; else noItem">
               {{ technicalProposalPosition.history?.user.shortName }}
               <span class="app-ghost-color">
@@ -97,7 +99,7 @@
           </div>
 
           <ng-template #noItem>
-            <span class="app-ghost-color">—</span>
+            <span>—</span>
           </ng-template>
         </div>
 
@@ -106,7 +108,8 @@
         <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
           <hr>
           <div class="section">
-            <span class="upper-label app-ghost-color">документы предложения</span>
+            <small class="app-uppercase app-bold app-ghost-color">Документы предложения</small>
+
             <app-document-simple-list
               [gridable]="true"
               [enableUpload]="false"

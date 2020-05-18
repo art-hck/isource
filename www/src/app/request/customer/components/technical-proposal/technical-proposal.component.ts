@@ -103,7 +103,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
     });
   }
 
-  onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition) {
+  onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition): void {
     const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
 
     if (index === -1) {
@@ -118,7 +118,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
       technicalProposalPositions.forEach(technicalProposalPosition => {
         const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
 
-        if (!this.proposalPositionIsReviewed(technicalProposalPosition) && index === -1) {
+        if (!this.isProposalPositionReviewed(technicalProposalPosition) && index === -1) {
           technicalProposalPosition.checked = true;
           this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
         }
@@ -131,7 +131,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
     }
   }
 
-  areAllPositionsChecked(technicalProposalPositions: TechnicalProposalPosition[]) {
+  areAllPositionsChecked(technicalProposalPositions: TechnicalProposalPosition[]): boolean {
     return !technicalProposalPositions.some(
       technicalProposalPosition => technicalProposalPosition.checked !== true
     );
@@ -155,7 +155,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
     return selectorAvailableStatues.indexOf(tpPosition.status) >= 0;
   }
 
-  proposalPositionIsReviewed(position) {
+  isProposalPositionReviewed(position): boolean {
     return ['ACCEPTED', 'DECLINED'].indexOf(position.status) > -1;
   }
 }

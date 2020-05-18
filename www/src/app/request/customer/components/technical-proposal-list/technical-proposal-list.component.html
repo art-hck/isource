@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <ng-container *ngIf="(getActiveList() | async) as technicalProposals">
+      <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
         <app-request-customer-technical-proposal
           *ngFor="let technicalProposal of technicalProposals; let i = index"
           [request]="request"
@@ -33,6 +33,7 @@
     </div>
 
     <div class="app-col app-col-aside">
+      <!-- todo Будет раскомментировано при реализации фильтрации -->
       <!-- <app-request-technical-proposal-filter [technicalProposals]="technicalProposals" (filters)="filter($event)"></app-request-technical-proposal-filter>-->
     </div>
   </ng-container>
