@@ -3,9 +3,10 @@ import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import {TechnicalProposalPosition} from "../../common/models/technical-proposal-position";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
-import { Observable } from "rxjs";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class TechnicalProposalsService {
 
   constructor(
@@ -13,7 +14,7 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid): Observable<TechnicalProposal[]> {
+  getTechnicalProposalsList(requestId: Uuid) {
     const url = `requests/customer/${requestId}/technical-proposals`;
     return this.api.get<TechnicalProposal[]>(url);
   }

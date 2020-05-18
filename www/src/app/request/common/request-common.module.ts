@@ -47,6 +47,7 @@ import { ProposalGridContragentsComponent } from "./components/technical-commerc
 import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import { ProposalDetailComponent } from "./components/technical-commercial-proposal/proposal-detail/proposal-detail.component";
 import { ProlongateProcedureComponent } from "./components/commercial-proposal-list/prolongate-procedure/prolongate-procedure.component";
+import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -101,6 +102,7 @@ const RequestCommonModuleDeclarations = [
   providers: [
     ContractService,
     RequestPositionStatusService,
+    TechnicalProposalsService,
     DeliveryMonitorService,
     RequestPositionService
   ],
