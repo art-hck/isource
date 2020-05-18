@@ -74,7 +74,7 @@
         <!-- Групповая смена статус -->
         <div class="app-col app-col-auto" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
-            <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses" (click)="changeStatusModal.open()">
+            <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses && checkedPositions.length === 0" (click)="changeStatusModal.open()">
               <uxg-icon shape="app-circle-arrow"></uxg-icon>
               <span>Сменить статус</span>
             </button>
