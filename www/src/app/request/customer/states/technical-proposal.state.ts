@@ -1,5 +1,5 @@
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, tap } from "rxjs/operators";
+import { finalize, flatMap, tap } from "rxjs/operators";
 import { TechnicalProposals } from "../actions/technical-proposal.actions";
 import { patch } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -8,7 +8,6 @@ import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 import { TechnicalProposalsService } from "../services/technical-proposals.service";
-
 import Fetch = TechnicalProposals.Fetch;
 import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
@@ -77,17 +76,19 @@ export class TechnicalProposalState {
   }
 
   @Action(Approve)
-  approve({ setState }: Context, { requestId, technicalProposalId, proposalPosition }: Approve) {
+  approve({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: Approve) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.acceptTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
-      finalize(() => setState(patch({ status: "received" as StateStatus })))
+      flatMap(() => dispatch(new Update(requestId))),
+      finalize(() => setState(patch({ status: "received" as StateStatus }))),
     );
   }
 
   @Action(Reject)
-  reject({ setState }: Context, { requestId, technicalProposalId, proposalPosition }: Reject) {
+  reject({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: Reject) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
+      flatMap(() => dispatch(new Update(requestId))),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }

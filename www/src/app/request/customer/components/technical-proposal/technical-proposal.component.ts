@@ -113,21 +113,17 @@ export class RequestTechnicalProposalComponent implements OnInit {
     }
   }
 
-  onSelectAllPositions(checked: boolean, i, technicalProposalPositions: TechnicalProposalPosition[]): void {
+  onSelectAllPositions(checked, i): void {
     if (checked === true) {
-      technicalProposalPositions.forEach(technicalProposalPosition => {
+      this.technicalProposal.positions.forEach(technicalProposalPosition => {
         const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
 
         if (!this.isProposalPositionReviewed(technicalProposalPosition) && index === -1) {
-          technicalProposalPosition.checked = true;
           this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
         }
       });
     } else {
       this.selectedTechnicalProposalsPositions[i] = [];
-      technicalProposalPositions.forEach(technicalProposalPosition => {
-        technicalProposalPosition.checked = null;
-      });
     }
   }
 
@@ -142,9 +138,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
       this.isPositionSelectorAvailable(technicalProposalPosition));
   }
 
-  hasSelectedPositions(): boolean {
+  hasSelectedPositions(index): boolean {
     return this.technicalProposal.positions.some(technicalProposalPosition => {
-      return technicalProposalPosition.checked === true && this.isPositionSelectorAvailable(technicalProposalPosition);
+      return this.isTechnicalProposalPositionChecked(index, technicalProposalPosition) &&
+             this.isPositionSelectorAvailable(technicalProposalPosition);
     });
   }
 
@@ -153,6 +150,12 @@ export class RequestTechnicalProposalComponent implements OnInit {
       TechnicalProposalPositionStatus.REVIEW.valueOf()
     ];
     return selectorAvailableStatues.indexOf(tpPosition.status) >= 0;
+  }
+
+  isTechnicalProposalPositionChecked(i, tpPosition: TechnicalProposalPosition): boolean {
+    const index = this.selectedTechnicalProposalsPositions[i].indexOf(tpPosition);
+
+    return index !== -1;
   }
 
   isProposalPositionReviewed(position): boolean {

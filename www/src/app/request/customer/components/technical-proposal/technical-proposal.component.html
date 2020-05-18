@@ -7,7 +7,7 @@
           <uxg-checkbox
             *ngIf="hasSelectablePositions(technicalProposal.positions)"
             [ngModel]="areAllPositionsChecked(technicalProposal.positions)"
-            (ngModelChange)="onSelectAllPositions($event, technicalProposalIndex, technicalProposal.positions)">
+            (ngModelChange)="onSelectAllPositions($event, technicalProposalIndex)">
           </uxg-checkbox>
         </div>
 
@@ -67,7 +67,8 @@
             <uxg-checkbox
               class="app-control"
               [disabled]="isProposalPositionReviewed(technicalProposalPosition)"
-              [(ngModel)]="technicalProposalPosition.checked"
+              [ngModel]="!isProposalPositionReviewed(technicalProposalPosition) &&
+                          isTechnicalProposalPositionChecked(technicalProposalIndex, technicalProposalPosition)"
               (ngModelChange)="onSelectPosition(technicalProposalIndex, technicalProposalPosition)"
             ></uxg-checkbox>
           </div>
@@ -132,11 +133,11 @@
             <div class="app-row app-col app-col-auto app-align-items-center">
               <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
 
-              <button uxgButton secondary (click)="reject()" [disabled]="!hasSelectedPositions() || isLoading">
+              <button uxgButton secondary (click)="reject()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
                 Отклонить
               </button>
 
-              <button uxgButton primary (click)="approve()" [disabled]="!hasSelectedPositions() || isLoading">
+              <button uxgButton primary (click)="approve()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
                 Согласовать
               </button>
             </div>
