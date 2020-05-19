@@ -58,7 +58,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
   }
 
   protected getTechnicalProposals() {
-    this.technicalProposalsService.getTechnicalProposalsList(this.requestId).subscribe(
+    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, null).subscribe(
       (data: TechnicalProposal[]) => {
         this.technicalProposals = data;
         for (let i = 0; i < this.technicalProposals.length; i++) {
