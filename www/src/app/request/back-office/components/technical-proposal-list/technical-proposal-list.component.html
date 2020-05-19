@@ -51,7 +51,7 @@
         <uxg-modal size="l" [(state)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">
           <h2 *ngSwitchCase="'create'">Создание новой процедуры</h2>
           <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
-          <h2 * ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
+          <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
           <ng-container *ngIf="(positions$ | async) as positions">
             <app-request-procedure-form
               *ngIf="procedureModalPayload"
