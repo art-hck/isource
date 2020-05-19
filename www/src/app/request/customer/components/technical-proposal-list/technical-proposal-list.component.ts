@@ -31,6 +31,9 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_REVIEW]))
   readonly proposalsSentToReview$: Observable<TechnicalProposal[]>;
 
+  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_EDIT]))
+  readonly proposalsSentToEdit$: Observable<TechnicalProposal[]>;
+
   @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.ACCEPTED, TechnicalProposalsStatus.PARTIALLY_ACCEPTED, TechnicalProposalsStatus.CANCELED]))
   readonly proposalsReviewed$: Observable<TechnicalProposal[]>;
 
@@ -70,6 +73,8 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     switch (this.activeTab) {
       case this.technicalProposalsStatus.SENT_TO_REVIEW:
         return this.proposalsSentToReview$;
+      case this.technicalProposalsStatus.SENT_TO_EDIT:
+        return this.proposalsSentToEdit$;
       case this.technicalProposalsStatus.ACCEPTED:
         return this.proposalsReviewed$;
       default:

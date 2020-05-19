@@ -11,6 +11,12 @@
               </ng-container>
             </uxg-tab-title>
 
+            <uxg-tab-title #sentToEdit (click)="activeTab = technicalProposalsStatus.SENT_TO_EDIT">
+              <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposalsSentToEdit">
+                На доработке <span class="app-ghost-color">({{ proposalsSentToEdit?.length }})</span>
+              </ng-container>
+            </uxg-tab-title>
+
             <uxg-tab-title #reviewedTab (click)="activeTab = technicalProposalsStatus.ACCEPTED">
               <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
                 Рассмотренные <span class="app-ghost-color">({{ proposalsReviewed?.length }})</span>
