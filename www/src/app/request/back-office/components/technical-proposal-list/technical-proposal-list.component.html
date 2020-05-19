@@ -43,14 +43,14 @@
       <uxg-modal size="l" #procedureModal>
         <h2>Создание новой процедуры</h2>
         <ng-container *ngIf="(positions$ | async) as positions">
-          <app-request-procedure-create
+          <app-request-procedure-form
             *ngIf="procedureModal.state"
             [request]="request"
             [positions]="positions"
             [procedureSource]="procedureSource.TECHNICAL_PROPOSAL"
             (complete)="procedureModal.close()"
             (cancel)="procedureModal.close()"
-          ></app-request-procedure-create>
+          ></app-request-procedure-form>
         </ng-container>
       </uxg-modal>
     </div>

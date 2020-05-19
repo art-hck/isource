@@ -12,9 +12,9 @@ import { TechnicalProposalsService } from "./services/technical-proposals.servic
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
 import { TechnicalProposalFormComponent } from './components/technical-proposal-form/technical-proposal-form.component';
 import { ProposalFormManufacturerComponent } from './components/proposal-form-manufacturer/proposal-form-manufacturer.component';
-import { ProcedureCreateComponent } from './components/procedure-create/procedure-create.component';
-import { ProcedureCreatePropertiesComponent } from './components/procedure-create/procedure-create-properties/procedure-create-properties.component';
-import { ProcedureCreateDocumentsComponent } from "./components/procedure-create/procedure-create-documents/procedure-create-documents.component";
+import { ProcedureFormComponent } from './components/procedure-form/procedure-form.component';
+import { ProcedureFormPropertiesComponent } from './components/procedure-form/procedure-form-properties/procedure-form-properties.component';
+import { ProcedureFormDocumentsComponent } from "./components/procedure-form/procedure-form-documents/procedure-form-documents.component";
 import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
 import { CommercialProposalFormComponent } from './components/commercial-proposal-form/commercial-proposal-form.component';
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
@@ -42,9 +42,9 @@ import { ProcedureComponent } from './components/procedure/procedure.component';
     TechnicalProposalListComponent,
     TechnicalProposalFormComponent,
     ProposalFormManufacturerComponent,
-    ProcedureCreateComponent,
-    ProcedureCreatePropertiesComponent,
-    ProcedureCreateDocumentsComponent,
+    ProcedureFormComponent,
+    ProcedureFormPropertiesComponent,
+    ProcedureFormDocumentsComponent,
     TechnicalProposalComponent,
     CommercialProposalListComponent,
     CommercialProposalFormComponent,

@@ -4,15 +4,15 @@ import { startWith } from "rxjs/operators";
 import { ProcedureAction } from "../../../models/procedure-action";
 
 @Component({
-  selector: 'app-request-procedure-create-properties',
-  templateUrl: './procedure-create-properties.component.html',
+  selector: 'app-request-procedure-form-properties',
+  templateUrl: './procedure-form-properties.component.html',
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => ProcedureCreatePropertiesComponent),
+    useExisting: forwardRef(() => ProcedureFormPropertiesComponent),
     multi: true
   }]
 })
-export class ProcedureCreatePropertiesComponent implements AfterContentInit, ControlValueAccessor {
+export class ProcedureFormPropertiesComponent implements AfterContentInit, ControlValueAccessor {
   @Input() action: ProcedureAction["action"] = "create";
   @Input() publicAccess = true;
   public onTouched: (value) => void;

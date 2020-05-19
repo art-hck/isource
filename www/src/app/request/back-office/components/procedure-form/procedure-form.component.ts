@@ -21,11 +21,11 @@ import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 
 @Component({
-  selector: 'app-request-procedure-create',
-  templateUrl: './procedure-create.component.html',
-  styleUrls: ['./procedure-create.component.scss']
+  selector: 'app-request-procedure-form',
+  templateUrl: './procedure-form.component.html',
+  styleUrls: ['./procedure-form.component.scss']
 })
-export class ProcedureCreateComponent implements OnInit, OnDestroy {
+export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() procedure: Partial<Procedure>;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
