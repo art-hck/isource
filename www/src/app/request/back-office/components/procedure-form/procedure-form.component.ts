@@ -141,8 +141,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     };
     let request$;
     switch (this.action) {
-      case "create": request$ = this.procedureService.createProcedure(this.request.id, body); break;
-      case "bargain": request$ = this.procedureService.bargainProcedure(this.request.id, body); break;
+      case "create": request$ = this.procedureService.create(this.request.id, body); break;
+      case "bargain": request$ = this.procedureService.bargain(this.request.id, body); break;
     }
 
     request$.pipe(
