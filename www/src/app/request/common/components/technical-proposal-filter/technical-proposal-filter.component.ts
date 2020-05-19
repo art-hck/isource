@@ -100,7 +100,9 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
 
   getContragentList(): void {
     this.technicalProposals.forEach(tp => {
-      this.contragents.push(tp.supplierContragent);
+      if (tp.supplierContragent) {
+        this.contragents.push(tp.supplierContragent);
+      }
     });
 
     // Убираем из массива дублирующихся контрагентов
@@ -124,8 +126,10 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   resetFilter(emitEvent = true) {
     this.requestTpListFilterForm.reset(this.filterFormInitialState, { emitEvent });
 
-    this.requestTpFilterContragentListComponent.selectedContragents = [];
-    this.requestTpFilterContragentListComponent.contragentSearchValue = "";
+    if (this.requestTpFilterContragentListComponent) {
+      this.requestTpFilterContragentListComponent.selectedContragents = [];
+      this.requestTpFilterContragentListComponent.contragentSearchValue = "";
+    }
 
     this.requestTpFilterStatusesListComponent.selectedStatuses = [];
   }

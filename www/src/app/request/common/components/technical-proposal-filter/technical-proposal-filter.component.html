@@ -27,6 +27,7 @@
 
 
       <app-request-tp-filter-section
+              *ngIf="contragents && contragents.length > 0"
               class="filter-section"
               [label]="'Контрагент'">
 

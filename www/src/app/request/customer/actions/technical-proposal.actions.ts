@@ -5,13 +5,13 @@ export namespace TechnicalProposals {
   // Получить список ТП
   export class Fetch {
     static readonly type = '[Technical Proposals Customer] Fetch';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters = {}) {}
   }
 
   // Обновить список ТП
   export class Update {
     static readonly type = '[Technical Proposals Customer] Update';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters = {}) {}
   }
 
   // Согласовать позицию ТП
