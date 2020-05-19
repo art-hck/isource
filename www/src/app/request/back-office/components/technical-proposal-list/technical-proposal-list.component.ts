@@ -16,6 +16,7 @@ import { RequestActions } from "../../actions/request.actions";
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
 import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { TechnicalProposalFilter } from "../../../common/models/technical-proposal-filter";
 
 @Component({ templateUrl: './technical-proposal-list.component.html' })
 export class TechnicalProposalListComponent implements OnInit, OnDestroy {
@@ -62,7 +63,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     );
   }
 
-  filter(filters: {}) {
+  filter(filters: TechnicalProposalFilter) {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
       this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
     });

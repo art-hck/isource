@@ -8,6 +8,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 import { TechnicalProposalsService } from "../services/technical-proposals.service";
+import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 import Fetch = TechnicalProposals.Fetch;
 import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
@@ -15,7 +16,7 @@ import Reject = TechnicalProposals.Reject;
 
 export interface TechnicalProposalStateModel {
   proposals: TechnicalProposal[];
-  filters: any;
+  filters: TechnicalProposalFilter;
   status: StateStatus;
 }
 

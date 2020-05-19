@@ -21,7 +21,7 @@
       </div>
 
       <div class="app-row">
-        <div class="app-col ">
+        <div class="app-col">
           <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
             <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
               <app-request-customer-technical-proposal
@@ -34,7 +34,7 @@
             </ng-container>
 
             <ng-template #emptyList>
-              <span class="empty-list ng-star-inserted">Список технических предложений пуст</span>
+              <div class="ghost-color">Список технических предложений пуст</div>
             </ng-template>
           </ng-container>
         </div>

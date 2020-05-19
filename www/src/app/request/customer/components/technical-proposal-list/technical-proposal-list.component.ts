@@ -83,9 +83,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   filter(filters: {}) {
-    this.store.dispatch(new Update(this.requestId, filters)).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe();
+    this.store.dispatch(new Update(this.requestId, filters));
   }
 
   ngOnDestroy() {
