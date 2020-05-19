@@ -17,7 +17,7 @@
     </a>
 
     <!-- Корзина -->
-    <ng-container *ngIf="featureService.authorize('catalog')">
+    <ng-container *ngIf="featureService.authorize('cart')">
       <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
         <uxg-icon class="app-ghost-color" shape="app-basket-big" size="24"></uxg-icon>
         <small class="basket-counter">{{ cartStoreService.getCount() }}</small>
