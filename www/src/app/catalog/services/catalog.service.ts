@@ -7,6 +7,7 @@ import { Uuid } from "../../cart/models/uuid";
 import { tap } from "rxjs/operators";
 import { CatalogCategoryAttribute } from "../models/catalog-category-attribute";
 import { SearchResults } from "../models/search-results";
+import { FormDataService } from "../../shared/services/form-data.service";
 
 @Injectable()
 export class CatalogService {
@@ -14,7 +15,8 @@ export class CatalogService {
   protected categoryForMenu: CatalogCategory[];
 
   constructor(
-    protected api: HttpClient
+    private api: HttpClient,
+    private formDataService: FormDataService
   ) {
   }
 
@@ -64,5 +66,10 @@ export class CatalogService {
 
   getPositionAttributes(positionId: Uuid): Observable<CatalogCategoryAttribute[]> {
     return this.api.get<CatalogCategoryAttribute[]>(`catalog/position/${positionId}/attributes`);
+  }
+
+  uploadTemplate(files: File[]): Observable<any> {
+    const url = `catalog/backoffice/positions/upload-excel`;
+    return this.api.post(url, this.formDataService.toFormData({files}));
   }
 }
