@@ -7,6 +7,7 @@ import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
 import { FormDataService } from "../../../shared/services/form-data.service";
+import { ProcedureSource } from "../../common/enum/procedure-source";
 
 @Injectable()
 export class ProcedureService {
@@ -16,13 +17,18 @@ export class ProcedureService {
     private formDataService: FormDataService
   ) {}
 
-  createProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
+  list(requestId: Uuid, source: ProcedureSource): Observable<Procedure[]> {
+    const url = `requests/backoffice/${requestId}/procedures`;
+    return this.api.post<Procedure[]>(url, { source });
+  }
+
+  create(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-procedure`;
 
     return this.api.post<ProcedureCreateResponse>(url, this.formDataService.toFormData(body));
   }
 
-  bargainProcedure(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
+  bargain(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {
     const url = `requests/backoffice/${requestId}/create-retrade`;
 
     return this.api.post<ProcedureCreateResponse>(url, body);
@@ -40,5 +46,4 @@ export class ProcedureService {
     const url = `/requests/backoffice/procedures-by-position`;
     return this.api.post<Procedure[]>(url, { positionId });
   }
-
 }

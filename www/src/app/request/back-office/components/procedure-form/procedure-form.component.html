@@ -102,11 +102,11 @@
     <br/>
     <hr class="divider"/>
     <div class="scrollable">
-      <app-request-procedure-create-properties
+      <app-request-procedure-form-properties
         formControlName="properties"
         [action]="action"
         [publicAccess]="contragents?.length < 2 && procedure?.privateAccessContragents.length < 2"
-      ></app-request-procedure-create-properties>
+      ></app-request-procedure-form-properties>
     </div>
     <hr class="divider"/>
   </div>
@@ -167,8 +167,8 @@
     <br/>
     <hr class="divider"/>
     <div class="scrollable">
-      <app-request-procedure-create-documents [documents]="documents" formControlName="procedureDocuments">
-      </app-request-procedure-create-documents>
+      <app-request-procedure-form-documents [documents]="documents" formControlName="procedureDocuments">
+      </app-request-procedure-form-documents>
       <app-document-upload-list [documents]="form.get('documents.procedureUploadDocuments').value"
                                 (fileSelected)="form.get('documents.procedureUploadDocuments').setValue($event)"
                                 [uploadAvailable]="false">
