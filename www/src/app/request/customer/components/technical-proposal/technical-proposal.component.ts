@@ -13,7 +13,6 @@ import { takeUntil } from "rxjs/operators";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Subject } from "rxjs";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
-
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
 import SendToEdit = TechnicalProposals.SendToEdit;
@@ -68,6 +67,15 @@ export class RequestTechnicalProposalComponent implements OnInit {
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
+  }
+
+  getLabelWithCounters(technicalProposal: TechnicalProposal): string {
+    const totalPositionsCount = technicalProposal.positions.length;
+    const approvedPositionsCount = technicalProposal.positions.reduce(
+      (count, tpPosition) => tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED ? count + 1 : count, 0
+    );
+
+    return 'Согласовано ' + approvedPositionsCount + ' из ' + totalPositionsCount;
   }
 
   approve() {
@@ -162,6 +170,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
   }
 
   isProposalPositionReviewed(position): boolean {
-    return ['ACCEPTED', 'DECLINED', 'SENT_TO_EDIT'].indexOf(position.status) > -1;
+    return [
+      TechnicalProposalPositionStatus.ACCEPTED,
+      TechnicalProposalPositionStatus.DECLINED,
+      TechnicalProposalPositionStatus.SENT_TO_EDIT
+    ].indexOf(position.status) > -1;
   }
 }

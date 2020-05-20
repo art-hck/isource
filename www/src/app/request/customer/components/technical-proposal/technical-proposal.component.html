@@ -40,6 +40,11 @@
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
 
+            <div class="app-success-color" *ngSwitchCase="'PARTIALLY_ACCEPTED'">
+              <uxg-icon shape="app-check"></uxg-icon>
+              <b>{{ getLabelWithCounters(technicalProposal) }}</b>
+            </div>
+
             <div class="app-warning-color" *ngSwitchCase="'SENT_TO_EDIT'">
               <uxg-icon shape="app-warning"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>

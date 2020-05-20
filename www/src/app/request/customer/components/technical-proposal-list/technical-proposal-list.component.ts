@@ -74,7 +74,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  getActiveList$(): Observable<TechnicalProposal[]> {
+  get activeList$(): Observable<TechnicalProposal[]> {
     switch (this.activeTab) {
       case this.technicalProposalsStatus.SENT_TO_REVIEW:
         return this.proposalsSentToReview$;

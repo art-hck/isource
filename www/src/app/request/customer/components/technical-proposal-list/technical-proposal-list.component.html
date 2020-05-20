@@ -28,7 +28,7 @@
 
       <div class="app-row">
         <div class="app-col">
-          <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
+          <ng-container *ngIf="(activeList$ | async) as technicalProposals">
             <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
               <app-request-customer-technical-proposal
                 *ngFor="let technicalProposal of technicalProposals; let i = index"

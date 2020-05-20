@@ -45,6 +45,15 @@ export class RequestTechnicalProposalComponent {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
   }
 
+  getLabelWithCounters(technicalProposal: TechnicalProposal): string {
+    const totalPositionsCount = technicalProposal.positions.length;
+    const approvedPositionsCount = technicalProposal.positions.reduce(
+      (count, tpPosition) => tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED ? count + 1 : count, 0
+    );
+
+    return 'Согласовано ' + approvedPositionsCount + ' из ' + totalPositionsCount;
+  }
+
   editDisabled(tp: TechnicalProposal): boolean {
     return !tp.positions
       .filter(() => tp.status !== TechnicalProposalsStatus.SENT_TO_REVIEW)
