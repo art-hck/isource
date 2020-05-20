@@ -12,6 +12,7 @@ import Fetch = TechnicalProposals.Fetch;
 import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
+import SendToEdit = TechnicalProposals.SendToEdit;
 
 export interface TechnicalProposalStateModel {
   proposals: TechnicalProposal[];
@@ -88,6 +89,15 @@ export class TechnicalProposalState {
   reject({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: Reject) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
+      flatMap(() => dispatch(new Update(requestId))),
+      finalize(() => setState(patch({ status: "received" as StateStatus })))
+    );
+  }
+
+  @Action(SendToEdit)
+  sendToEdit({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: SendToEdit) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.sendToEditTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
       flatMap(() => dispatch(new Update(requestId))),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );

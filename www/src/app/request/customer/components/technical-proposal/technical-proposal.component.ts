@@ -17,6 +17,7 @@ import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
+import SendToEdit = TechnicalProposals.SendToEdit;
 
 @Component({
   selector: 'app-request-customer-technical-proposal',
@@ -103,6 +104,20 @@ export class RequestTechnicalProposalComponent implements OnInit {
     });
   }
 
+  sendToEdit() {
+    this.isLoading = true;
+
+    this.store.dispatch(new SendToEdit(
+      this.request.id,
+      this.technicalProposal.id,
+      this.selectedTechnicalProposalsPositions[this.technicalProposalIndex]
+    )).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(new Update(this.request.id)).subscribe(() => this.isLoading = false);
+    });
+  }
+
   onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition): void {
     const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
 
@@ -159,6 +174,6 @@ export class RequestTechnicalProposalComponent implements OnInit {
   }
 
   isProposalPositionReviewed(position): boolean {
-    return ['ACCEPTED', 'DECLINED'].indexOf(position.status) > -1;
+    return ['ACCEPTED', 'DECLINED', 'SENT_TO_EDIT'].indexOf(position.status) > -1;
   }
 }

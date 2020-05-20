@@ -148,6 +148,10 @@
                 Отклонить
               </button>
 
+              <button uxgButton secondary (click)="sendToEdit()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
+                На доработку
+              </button>
+
               <button uxgButton primary (click)="approve()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
                 Согласовать
               </button>
