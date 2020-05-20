@@ -15,16 +15,33 @@
         </div>
 
         <div class="app-col app-col-aside status">
-          <div [ngClass]="{'accepted': technicalProposal.status === 'ACCEPTED',
-                           'declined': technicalProposal.status === 'DECLINED',
-                           'draft': technicalProposal.status === 'NEW',
-                           'onReview': technicalProposal.status === 'SENT_TO_REVIEW'}">
-            <uxg-icon shape="app-check" *ngIf="technicalProposal.status === 'ACCEPTED'"></uxg-icon>
-            <uxg-icon shape="app-cross" *ngIf="technicalProposal.status === 'DECLINED'"></uxg-icon>
-            <uxg-icon shape="app-draft" *ngIf="technicalProposal.status === 'NEW'"></uxg-icon>
-            <uxg-icon shape="app-warning" *ngIf="technicalProposal.status === 'SENT_TO_REVIEW'"></uxg-icon>
-            <b>{{ tpStatusLabel(technicalProposal) }}</b>
-          </div>
+          <ng-container [ngSwitch]="technicalProposal.status">
+            <div class="app-ghost-color" *ngSwitchCase="'NEW'">
+              <uxg-icon shape="app-draft"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-ghost-color" *ngSwitchCase="'SENT_TO_REVIEW'">
+              <uxg-icon shape="app-waiting"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-success-color" *ngSwitchCase="'ACCEPTED'">
+              <uxg-icon shape="app-check"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-warning-color" *ngSwitchCase="'SENT_TO_EDIT'">
+              <uxg-icon shape="app-warning"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-alert-color" *ngSwitchCase="'DECLINED'">
+              <uxg-icon shape="app-cross"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+          </ng-container>
+
           <button uxgButton link icon
                   *ngIf="featureService.available('editTechnicalProposal', userInfoService.roles)"
                   (click)="edit.emit(true)"
@@ -42,7 +59,8 @@
         <div class="documents" *ngIf="technicalProposal.documents.length !== 0">
           <hr>
           <div class="section">
-            <span class="upper-label">документы предложения</span>
+            <small class="app-uppercase app-bold app-ghost-color">Документы предложения</small>
+
             <app-document-simple-list
               [gridable]="true"
               [enableUpload]="false"
@@ -54,37 +72,42 @@
         <!-- Секция списка позиций ТП -->
         <hr>
         <div class="app-row position-list section">
-          <div class="app-col upper-label pr-10">Наименование позиции</div>
-          <div class="app-col upper-label pr-10">Заводское наименование</div>
-          <div class="app-col upper-label">Решение принято</div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Наименование позиции</small></div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Заводское наименование</small></div>
+          <div class="app-col"><small class="app-uppercase app-bold app-ghost-color">Решение принято</small></div>
           <div class="app-col icon-status"></div>
         </div>
 
-        <div class="app-row position-list" *ngFor="let technicalProposalPosition of technicalProposal.positions">
-          <div class="app-col pr-10">{{ technicalProposalPosition.position.name }}</div>
-          <div class="app-col pr-10">
+        <div class="app-row position-list"
+             *ngFor="let technicalProposalPosition of technicalProposal.positions">
+          <div class="app-col">{{ technicalProposalPosition.position.name }}</div>
+
+          <div class="app-col">
             <ng-container *ngIf="technicalProposalPosition.manufacturingName; else noItem">
-              <span class="grey">{{ technicalProposalPosition.manufacturingName }}</span>
+              <span class="app-secondary-color">{{ technicalProposalPosition.manufacturingName }}</span>
             </ng-container>
           </div>
+
           <div class="app-col">
             <ng-container class="user" *ngIf="technicalProposalPosition.history; else noItem">
               {{ technicalProposalPosition.history?.user.shortName }}
-              <span class="light-grey">
-              {{ technicalProposalPosition.history?.createdDate | date:'shortDate' }}
-            </span>
+              <span class="app-ghost-color">
+                {{ technicalProposalPosition.history?.createdDate | date:'shortDate' }}
+              </span>
             </ng-container>
           </div>
+
           <div class="app-col icon-status">
-            <uxg-icon class="accepted"
-                      shape="app-check"
-                      *ngIf="technicalProposalPosition.status === 'ACCEPTED'"></uxg-icon>
-            <uxg-icon class="declined"
-                      shape="app-cross"
-                      *ngIf="technicalProposalPosition.status === 'DECLINED'"></uxg-icon>
+            <ng-container [ngSwitch]="technicalProposalPosition.status">
+              <uxg-icon *ngSwitchCase="'REVIEW'" class="app-ghost-color" shape="app-unknown"></uxg-icon>
+              <uxg-icon *ngSwitchCase="'ACCEPTED'" class="app-success-color" shape="app-check"></uxg-icon>
+              <uxg-icon *ngSwitchCase="'DECLINED'" class="app-alert-color" shape="app-cross"></uxg-icon>
+              <uxg-icon *ngSwitchCase="'SENT_TO_EDIT'" class="app-warning-color" shape="app-warning"></uxg-icon>
+            </ng-container>
           </div>
+
           <ng-template #noItem>
-            <span class="light-grey">—</span>
+            <span>—</span>
           </ng-template>
         </div>
 
