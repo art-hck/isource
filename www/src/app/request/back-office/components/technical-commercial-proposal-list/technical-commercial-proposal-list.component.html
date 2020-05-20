@@ -157,7 +157,7 @@
         <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
         <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
         <ng-container *ngIf="(availablePositions$ | async) as positions">
-          <app-request-procedure-create
+          <app-request-procedure-form
             *ngIf="procedureModalPayload"
             [request]="request"
             [positions]="positions"
@@ -166,7 +166,7 @@
             [procedureSource]="procedureSource"
             (complete)="this.store.dispatch(updateProcedures()); procedureModalPayload = null"
             (cancel)="procedureModalPayload = null"
-          ></app-request-procedure-create>
+          ></app-request-procedure-form>
         </ng-container>
       </uxg-modal>
 

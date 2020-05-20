@@ -4,16 +4,16 @@ import { RequestDocument } from "../../../../common/models/request-document";
 import { Uuid } from "../../../../../cart/models/uuid";
 
 @Component({
-  selector: 'app-request-procedure-create-documents',
-  templateUrl: './procedure-create-documents.component.html',
-  styleUrls: ['./procedure-create-documents.component.scss'],
+  selector: 'app-request-procedure-form-documents',
+  templateUrl: './procedure-form-documents.component.html',
+  styleUrls: ['./procedure-form-documents.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => ProcedureCreateDocumentsComponent),
+    useExisting: forwardRef(() => ProcedureFormDocumentsComponent),
     multi: true
   }]
 })
-export class ProcedureCreateDocumentsComponent implements AfterContentInit, ControlValueAccessor {
+export class ProcedureFormDocumentsComponent implements AfterContentInit, ControlValueAccessor {
   @Input() documents: RequestDocument[];
   public onTouched: (value) => void;
   public onChange: (value) => void;

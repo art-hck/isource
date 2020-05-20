@@ -74,7 +74,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
-  readonly updateProcedures = () => new RefreshProcedures(this.requestId);
+  readonly updateProcedures = () => [new RefreshProcedures(this.requestId), new FetchAvailablePositions(this.requestId)];
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls

@@ -19,7 +19,7 @@
       <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload.position.procedureId}}</h2>
       <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload.position.procedureId}}</h2>
       <ng-container *ngIf="procedureModalPayload">
-        <app-request-procedure-create
+        <app-request-procedure-form
           *ngIf="!procedureModalPayload.procedure$ || (procedureModalPayload.procedure$ | async)"
           [request]="request"
           [action]="procedureModalPayload.action"
@@ -30,7 +30,7 @@
           (updateSelectedPositions)="updateContragents($event)"
           (complete)="updatePositionsAndSuppliers(); procedureModalPayload = null"
           (cancel)="procedureModalPayload = null"
-        ></app-request-procedure-create>
+        ></app-request-procedure-form>
       </ng-container>
     </uxg-modal>
   </ng-container>
