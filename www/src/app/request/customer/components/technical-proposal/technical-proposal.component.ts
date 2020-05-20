@@ -100,12 +100,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.store.dispatch(new SendToEdit(
       this.request.id,
       this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions[this.technicalProposalIndex]
+      this.selectedTechnicalProposalsPositions
     )).pipe(
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.store.dispatch(new Update(this.request.id)).subscribe(() => this.isLoading = false);
-    });
+    ).subscribe();
   }
 
   onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition): void {
