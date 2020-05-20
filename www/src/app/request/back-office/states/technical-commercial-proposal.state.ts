@@ -9,6 +9,11 @@ import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
 import { Uuid } from "../../../cart/models/uuid";
+import { saveAs } from 'file-saver/src/FileSaver';
+import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
+import { Procedure } from "../models/procedure";
+import { ProcedureService } from "../services/procedure.service";
+import { ProcedureSource } from "../../common/enum/procedure-source";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
@@ -17,12 +22,9 @@ import Update = TechnicalCommercialProposals.Update;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
-import { saveAs } from 'file-saver/src/FileSaver';
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import CreatePosition = TechnicalCommercialProposals.CreatePosition;
-import { Procedure } from "../models/procedure";
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 
@@ -44,7 +46,7 @@ type Context = StateContext<Model>;
 export class TechnicalCommercialProposalState {
   cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
-  constructor(private rest: TechnicalCommercialProposalService) {
+  constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
   @Selector() static proposals({ proposals }: Model) { return proposals; }
@@ -97,7 +99,7 @@ export class TechnicalCommercialProposalState {
       setState(patch({ procedures: null, status: "fetching" as StateStatus }));
     }
 
-    return this.rest.procedures(requestId).pipe(
+    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL).pipe(
       tap(procedures => setState(patch({ procedures }))),
       tap(() => {
         if (update) {

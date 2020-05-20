@@ -3,6 +3,8 @@ import {Injectable} from "@angular/core";
 import {Uuid} from "../../../cart/models/uuid";
 import {TechnicalProposalPosition} from "../../common/models/technical-proposal-position";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
+import { Observable } from "rxjs";
+import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 
 @Injectable({
   providedIn: "root"
@@ -14,9 +16,9 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid) {
+  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
-    return this.api.get<TechnicalProposal[]>(url);
+    return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
   acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {

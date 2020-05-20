@@ -14,7 +14,6 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Subject } from "rxjs";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 
-import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
 import SendToEdit = TechnicalProposals.SendToEdit;
@@ -28,7 +27,6 @@ import SendToEdit = TechnicalProposals.SendToEdit;
 export class RequestTechnicalProposalComponent implements OnInit {
 
   @Input() request: Request;
-  @Input() technicalProposals: TechnicalProposal[];
   @Input() technicalProposal: TechnicalProposal;
   @Input() technicalProposalIndex: number;
   @Input() currentList: string;
@@ -37,7 +35,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
   isFolded: boolean;
 
   readonly destroy$ = new Subject();
-  selectedTechnicalProposalsPositions: TechnicalProposalPosition[][] = [];
+  selectedTechnicalProposalsPositions: TechnicalProposalPosition[] = [];
 
   constructor(
     public featureService: FeatureService,
@@ -66,10 +64,6 @@ export class RequestTechnicalProposalComponent implements OnInit {
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
     });
-
-    for (let i = 0; i < this.technicalProposals.length; i++) {
-      this.selectedTechnicalProposalsPositions[i] = [];
-    }
   }
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
@@ -82,12 +76,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.store.dispatch(new Approve(
       this.request.id,
       this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions[this.technicalProposalIndex]
+      this.selectedTechnicalProposalsPositions
     )).pipe(
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.store.dispatch(new Update(this.request.id)).subscribe(() => this.isLoading = false);
-    });
+    ).subscribe();
   }
 
   reject() {
@@ -96,12 +88,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.store.dispatch(new Reject(
       this.request.id,
       this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions[this.technicalProposalIndex]
+      this.selectedTechnicalProposalsPositions
     )).pipe(
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.store.dispatch(new Update(this.request.id)).subscribe(() => this.isLoading = false);
-    });
+    ).subscribe();
   }
 
   sendToEdit() {
@@ -119,26 +109,26 @@ export class RequestTechnicalProposalComponent implements OnInit {
   }
 
   onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition): void {
-    const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
+    const index = this.selectedTechnicalProposalsPositions.indexOf(technicalProposalPosition);
 
     if (index === -1) {
-      this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+      this.selectedTechnicalProposalsPositions.push(technicalProposalPosition);
     } else {
-      this.selectedTechnicalProposalsPositions[i].splice(index, 1);
+      this.selectedTechnicalProposalsPositions.splice(index, 1);
     }
   }
 
   onSelectAllPositions(checked, i): void {
     if (checked === true) {
       this.technicalProposal.positions.forEach(technicalProposalPosition => {
-        const index = this.selectedTechnicalProposalsPositions[i].indexOf(technicalProposalPosition);
+        const index = this.selectedTechnicalProposalsPositions.indexOf(technicalProposalPosition);
 
         if (!this.isProposalPositionReviewed(technicalProposalPosition) && index === -1) {
-          this.selectedTechnicalProposalsPositions[i].push(technicalProposalPosition);
+          this.selectedTechnicalProposalsPositions.push(technicalProposalPosition);
         }
       });
     } else {
-      this.selectedTechnicalProposalsPositions[i] = [];
+      this.selectedTechnicalProposalsPositions = [];
     }
   }
 
@@ -162,13 +152,13 @@ export class RequestTechnicalProposalComponent implements OnInit {
 
   isPositionSelectorAvailable(tpPosition: TechnicalProposalPosition): boolean {
     const selectorAvailableStatues = [
-      TechnicalProposalPositionStatus.REVIEW.valueOf()
+      TechnicalProposalPositionStatus.REVIEW
     ];
     return selectorAvailableStatues.indexOf(tpPosition.status) >= 0;
   }
 
   isTechnicalProposalPositionChecked(i, tpPosition: TechnicalProposalPosition): boolean {
-    const index = this.selectedTechnicalProposalsPositions[i].indexOf(tpPosition);
+    const index = this.selectedTechnicalProposalsPositions.indexOf(tpPosition);
 
     return index !== -1;
   }

@@ -16,6 +16,7 @@ import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposa
 import { TechnicalProposalState } from "../../states/technical-proposal.state";
 import { StateStatus } from "../../../common/models/state-status";
 import Fetch = TechnicalProposals.Fetch;
+import Update = TechnicalProposals.Update;
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -34,7 +35,11 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_EDIT]))
   readonly proposalsSentToEdit$: Observable<TechnicalProposal[]>;
 
-  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.ACCEPTED, TechnicalProposalsStatus.PARTIALLY_ACCEPTED, TechnicalProposalsStatus.CANCELED]))
+  @Select(TechnicalProposalState.proposalsByStatus([
+    TechnicalProposalsStatus.ACCEPTED,
+    TechnicalProposalsStatus.PARTIALLY_ACCEPTED,
+    TechnicalProposalsStatus.CANCELED
+  ]))
   readonly proposalsReviewed$: Observable<TechnicalProposal[]>;
 
   @Select(TechnicalProposalState.proposals)
@@ -80,6 +85,10 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       default:
         return this.proposalsSentToReview$;
     }
+  }
+
+  filter(filters: {}) {
+    this.store.dispatch(new Update(this.requestId, filters));
   }
 
   ngOnDestroy() {

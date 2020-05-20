@@ -26,21 +26,35 @@
         </div>
       </div>
 
-      <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
-        <app-request-customer-technical-proposal
-          *ngFor="let technicalProposal of technicalProposals; let i = index"
-          [request]="request"
-          [technicalProposals]="technicalProposals"
-          [technicalProposal]="technicalProposal"
-          [technicalProposalIndex]="i"
-          [currentList]="activeTab"
-        ></app-request-customer-technical-proposal>
-      </ng-container>
-    </div>
+      <div class="app-row">
+        <div class="app-col">
+          <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
+            <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
+              <app-request-customer-technical-proposal
+                *ngFor="let technicalProposal of technicalProposals; let i = index"
+                [request]="request"
+                [technicalProposal]="technicalProposal"
+                [technicalProposalIndex]="i"
+                [currentList]="activeTab"
+              ></app-request-customer-technical-proposal>
+            </ng-container>
 
-    <div class="app-col app-col-aside">
-      <!-- todo Будет раскомментировано при реализации фильтрации -->
-      <!-- <app-request-technical-proposal-filter [technicalProposals]="technicalProposals" (filters)="filter($event)"></app-request-technical-proposal-filter>-->
+            <ng-template #emptyList>
+              <div class="ghost-color">Список технических предложений пуст</div>
+            </ng-template>
+          </ng-container>
+        </div>
+
+        <div class="app-col-aside">
+          <ng-container *ngIf="(technicalProposals$ | async) as technicalProposals">
+            <app-request-technical-proposal-filter
+              [technicalProposals]="technicalProposals"
+              (filters)="filter($event)">
+            </app-request-technical-proposal-filter>
+          </ng-container>
+        </div>
+      </div>
+
     </div>
   </ng-container>
 

@@ -1,17 +1,18 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalProposalPosition } from "../../common/models/technical-proposal-position";
+import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 
 export namespace TechnicalProposals {
   // Получить список ТП
   export class Fetch {
     static readonly type = '[Technical Proposals Customer] Fetch';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
   }
 
   // Обновить список ТП
   export class Update {
     static readonly type = '[Technical Proposals Customer] Update';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
   }
 
   // Согласовать позицию ТП

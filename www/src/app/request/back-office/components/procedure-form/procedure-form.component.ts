@@ -21,11 +21,11 @@ import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 
 @Component({
-  selector: 'app-request-procedure-create',
-  templateUrl: './procedure-create.component.html',
-  styleUrls: ['./procedure-create.component.scss']
+  selector: 'app-request-procedure-form',
+  templateUrl: './procedure-form.component.html',
+  styleUrls: ['./procedure-form.component.scss']
 })
-export class ProcedureCreateComponent implements OnInit, OnDestroy {
+export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() procedure: Partial<Procedure>;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
@@ -141,8 +141,8 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     };
     let request$;
     switch (this.action) {
-      case "create": request$ = this.procedureService.createProcedure(this.request.id, body); break;
-      case "bargain": request$ = this.procedureService.bargainProcedure(this.request.id, body); break;
+      case "create": request$ = this.procedureService.create(this.request.id, body); break;
+      case "bargain": request$ = this.procedureService.bargain(this.request.id, body); break;
     }
 
     request$.pipe(
