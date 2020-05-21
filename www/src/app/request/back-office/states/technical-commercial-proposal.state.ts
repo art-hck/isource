@@ -1,5 +1,5 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
-import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext, StateOperator } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
@@ -9,6 +9,9 @@ import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
 import { Uuid } from "../../../cart/models/uuid";
+import { saveAs } from 'file-saver/src/FileSaver';
+import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
+import { Procedure } from "../models/procedure";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
@@ -17,12 +20,9 @@ import Update = TechnicalCommercialProposals.Update;
 import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
-import { saveAs } from 'file-saver/src/FileSaver';
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import CreatePosition = TechnicalCommercialProposals.CreatePosition;
-import { Procedure } from "../models/procedure";
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 
@@ -35,6 +35,18 @@ export interface TechnicalCommercialProposalStateModel {
 
 type Model = TechnicalCommercialProposalStateModel;
 type Context = StateContext<Model>;
+
+function insertOrUpdateProposals(proposals: TechnicalCommercialProposal[]): StateOperator<Model> {
+  return (state: Readonly<Model>) => ({
+    ...state,
+    status: "received",
+    proposals: proposals.reduce((updatedProposals, proposal) => {
+      const i = updatedProposals.findIndex(({id}) => id === proposal.id);
+      i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
+      return updatedProposals;
+    }, state.proposals)
+  });
+}
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
@@ -182,10 +194,7 @@ export class TechnicalCommercialProposalState {
         ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
       }),
-      tap(proposals => ctx.setState(patch({
-        proposals: [...proposals, ...ctx.getState().proposals],
-        status: "received" as StateStatus
-      }))),
+      tap(proposals => ctx.setState(insertOrUpdateProposals(proposals))),
     );
   }
 
