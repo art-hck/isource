@@ -38,7 +38,8 @@ export class RequestTechnicalProposalComponent {
   private editableStatuses = [
     TechnicalProposalPositionStatus.NEW,
     TechnicalProposalPositionStatus.EDITED,
-    TechnicalProposalPositionStatus.DECLINED
+    TechnicalProposalPositionStatus.DECLINED,
+    TechnicalProposalPositionStatus.SENT_TO_EDIT
   ];
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
