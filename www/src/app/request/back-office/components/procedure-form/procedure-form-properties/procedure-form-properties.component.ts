@@ -38,6 +38,8 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
     if (this.action === 'bargain') {
       ['positionsRequiredAll', 'positionsAnalogs', 'positionsAllowAnalogsOnly', 'positionsEntireVolume', 'publicAccess']
         .forEach(k => this.form.get(k).disable());
+
+      this.form.addControl('restrictDeclinePrice', this.fb.control(this.default("restrictDeclinePrice", false)));
     }
 
     if (!this.publicAccess) {
