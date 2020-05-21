@@ -79,7 +79,7 @@
         </div>
 
         <div class="app-row position-list"
-             [class.app-ghost-color]="isProposalPositionReviewed(technicalProposalPosition)"
+             [class.app-ghost-color]="isProposalPositionReviewed(technicalProposalPosition) && hasSelectablePositions(technicalProposal.positions)"
              *ngFor="let technicalProposalPosition of technicalProposal.positions">
 
           <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'">
