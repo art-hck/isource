@@ -3,10 +3,6 @@ stages:
   - codestyle
 #  - e2e
 
-cache:
-  key: ${CI_JOB_NAME}
-  paths:
-    - www/.npm/
 
 build staging:
   stage: build
@@ -27,7 +23,7 @@ codestyle staging:
     - gpn-test-front
   script:
     - cd www
-    - npm ci --cache .npm --no-optional --no-audit --ignore-scripts --prefer-offline
+    - npm ci --no-optional --no-audit --ignore-scripts --prefer-offline
     - npm run tslint
     - exit 0
   only:
