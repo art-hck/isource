@@ -102,20 +102,20 @@ export class TechnicalProposalState {
   }
 
   @Action(Reject)
-  reject({ setState, getState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: Reject) {
+  reject({ setState, getState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition, comment }: Reject) {
     const filters = getState().filters;
 
     setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
+    return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
       flatMap(() => dispatch(new Update(requestId, filters))),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }
 
   @Action(SendToEdit)
-  sendToEdit({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition }: SendToEdit) {
+  sendToEdit({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition, comment }: SendToEdit) {
     setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.sendToEditTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
+    return this.rest.sendToEditTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
       flatMap(() => dispatch(new Update(requestId))),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );

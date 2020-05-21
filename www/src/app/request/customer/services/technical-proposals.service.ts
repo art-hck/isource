@@ -32,19 +32,20 @@ export class TechnicalProposalsService {
     });
   }
 
-  declineTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
+  declineTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/decline`;
     const ids = [];
+
     for (const technicalProposalsPosition of technicalProposalsPositions) {
       ids.push(technicalProposalsPosition.id);
     }
     return this.api.post(url, {
       positions: ids,
-      comment: '—'
+      comment: comment
     });
   }
 
-  sendToEditTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
+  sendToEditTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/send-to-edit-positions`;
     const ids = [];
     for (const technicalProposalsPosition of technicalProposalsPositions) {
@@ -52,7 +53,7 @@ export class TechnicalProposalsService {
     }
     return this.api.post(url, {
       positions: ids,
-      comment: '—'
+      comment: comment
     });
   }
 }

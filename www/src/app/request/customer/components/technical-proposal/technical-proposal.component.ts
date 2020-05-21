@@ -8,14 +8,17 @@ import { TechnicalProposalsService } from "../../../back-office/services/technic
 import { Request } from "../../../common/models/request";
 import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
 import { TechnicalProposals } from "../../actions/technical-proposal.actions";
-import { Actions, ofActionCompleted, Store } from "@ngxs/store";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { takeUntil } from "rxjs/operators";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
 import SendToEdit = TechnicalProposals.SendToEdit;
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { TechnicalProposalState } from "../../states/technical-proposal.state";
+import { StateStatus } from "../../../common/models/state-status";
 
 @Component({
   selector: 'app-request-customer-technical-proposal',
@@ -32,9 +35,23 @@ export class RequestTechnicalProposalComponent implements OnInit {
 
   isLoading: boolean;
   isFolded: boolean;
+  actionType: string;
+
+  lastSentToEditComment: string;
+  lastSentToEditCommentDate: string;
+
+  lastRejectComment: string;
+  lastRejectCommentDate: string;
+
+  @Select(TechnicalProposalState.status)
+  readonly stateStatus$: Observable<StateStatus>;
 
   readonly destroy$ = new Subject();
   selectedTechnicalProposalsPositions: TechnicalProposalPosition[] = [];
+
+  form = new FormGroup({
+    comment: new FormControl(this.actionType === 'reject' ? this.lastRejectComment : this.lastSentToEditComment, Validators.maxLength(300))
+  });
 
   constructor(
     public featureService: FeatureService,
@@ -47,21 +64,34 @@ export class RequestTechnicalProposalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.lastSentToEditComment = this.getLastSentToEditComment();
+    this.lastSentToEditCommentDate = this.getLastSentToEditCommentDate();
+
+    this.lastRejectComment = this.getLastRejectComment();
+    this.lastRejectCommentDate = this.getLastRejectCommentDate();
+
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject),
+      ofActionCompleted(Approve, Reject, SendToEdit),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
       const length = action?.proposalPosition.length ?? 1;
-      const text = (action instanceof Reject ? "$0" : "$1")
+      const text = (action instanceof Reject ? "$0" : (action instanceof Approve ? "$1" : "$2"))
         .replace(/\$(\d)/g, (all, i) => [
         this.pluralize.transform(length, "позиция отклонена", "позиции отклонены", "позиций отклонено"),
         this.pluralize.transform(length, "позиция согласована", "позиции согласованы", "позиций согласовано"),
+        this.pluralize.transform(length, "позиция отправлена на доработку", "позиции отправлены на доработку", "позиций отправлено на доработку"),
       ][i] || all);
 
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
+
+      this.lastSentToEditComment = this.getLastSentToEditComment();
+      this.lastSentToEditCommentDate = this.getLastSentToEditCommentDate();
+
+      this.lastRejectComment = this.getLastRejectComment();
+      this.lastRejectCommentDate = this.getLastRejectCommentDate();
     });
   }
 
@@ -96,7 +126,8 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.store.dispatch(new Reject(
       this.request.id,
       this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions
+      this.selectedTechnicalProposalsPositions,
+      this.form.get('comment').value
     )).pipe(
       takeUntil(this.destroy$)
     ).subscribe();
@@ -108,10 +139,19 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.store.dispatch(new SendToEdit(
       this.request.id,
       this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions
+      this.selectedTechnicalProposalsPositions,
+      this.form.get('comment').value
     )).pipe(
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  submit() {
+    if (this.actionType === 'reject') {
+      this.reject();
+    } else if (this.actionType === 'sendToEdit') {
+      this.sendToEdit();
+    }
   }
 
   onSelectPosition(i, technicalProposalPosition: TechnicalProposalPosition): void {
@@ -175,5 +215,27 @@ export class RequestTechnicalProposalComponent implements OnInit {
       TechnicalProposalPositionStatus.DECLINED,
       TechnicalProposalPositionStatus.SENT_TO_EDIT
     ].indexOf(position.status) > -1;
+  }
+
+  getLastRejectComment(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .pop()?.history.data.statusComment.comment;
+  }
+  getLastRejectCommentDate(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .pop()?.history.createdDate;
+  }
+
+  getLastSentToEditComment(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .pop()?.history.data.statusComment.comment;
+  }
+  getLastSentToEditCommentDate(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .pop()?.history.createdDate;
   }
 }
