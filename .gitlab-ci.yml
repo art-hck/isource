@@ -27,7 +27,7 @@ codestyle staging:
     - gpn-test-front
   script:
     - cd www
-    - npm i --no-optional --only=dev --no-audit --ignore-scripts --prefer-offline
+    - npm i --no-optional --no-audit --ignore-scripts --prefer-offline
     - npm run tslint
     - exit 0
   only:
