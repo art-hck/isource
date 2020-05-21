@@ -54,6 +54,11 @@
               <uxg-icon shape="app-cross"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
+
+            <div class="app-alert-color" *ngSwitchCase="'CANCELED'">
+              <uxg-icon shape="app-cross"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
           </ng-container>
 
           <button uxgButton link icon (click)="isFolded = !isFolded">
