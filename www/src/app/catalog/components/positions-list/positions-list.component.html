@@ -5,6 +5,7 @@
         <small class="app-col photo">Фото</small>
         <small class="app-col name">Наименование МТР</small>
         <small class="app-col measure">ед. изм.</small>
+        <small class="app-col in-stock">Скл. ост.</small>
         <ng-container *ngIf="featureService.authorize('cart')">
           <small class="app-col quantity">Количество</small>
           <small class="app-col action"></small>
@@ -29,6 +30,11 @@
         <div class="app-col measure app-ghost-color">
           {{ position.measureUnit }}
         </div>
+
+        <div class="app-col in-stock app-ghost-color">
+          {{ position.inStock }}
+        </div>
+
         <ng-container *ngIf="featureService.authorize('cart')">
           <div class="app-col quantity">
             <input uxgInput lg formControlName="quantity" type="number"/>

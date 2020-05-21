@@ -17,4 +17,5 @@ export class CatalogPosition {
   productionDocument: string;
   productionTime: number;
   createdDate: string;
+  inStock: number;
 }
