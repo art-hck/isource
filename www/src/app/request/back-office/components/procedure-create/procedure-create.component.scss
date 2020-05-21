@@ -27,8 +27,8 @@
       flex-grow: .15; // 15% width
       max-width: 100px;
     }
-
-    &-date, &-kpp { min-width: 120px }
+    &-date { min-width: 150px }
+    &-kpp { min-width: 120px }
     &-inn { max-width: 190px }
   }
 }

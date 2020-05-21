@@ -39,7 +39,8 @@ export class RequestPosition extends RequestPositionList {
   manufacturingDocuments: ManufacturingDocument[];
   linkedOffers: RequestOfferPosition[];
   hasProcedure?: boolean;
-  procedureId?: string;
+  procedureId?: number;
+  procedureLotId?: string;
   procedureTitle?: string;
   procedureStartDate?: string;
   procedureEndDate?: string;

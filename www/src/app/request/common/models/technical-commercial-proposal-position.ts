@@ -9,18 +9,19 @@ import { TechnicalCommercialProposalPositionStatus } from "../enum/technical-com
 import { TechnicalCommercialProposalPositionStatusLabel } from "../enum/technical-commercial-proposal-position-status-label";
 
 export class TechnicalCommercialProposalPosition {
-    id: Uuid;
-    proposalId: Uuid;
-    manufacturingName: string;
-    priceWithVat: number;
-    priceWithoutVat: number;
-    vatPercent: number | null;
-    currency: PositionCurrency | null;
-    quantity: number;
-    measureUnit: string;
-    deliveryDate: string | null;
-    status: TechnicalCommercialProposalPositionStatus;
-    statusLabel: TechnicalCommercialProposalPositionStatusLabel;
-    position: RequestPosition;
-    paymentTerms: string;
+  id: Uuid;
+  proposalId: Uuid;
+  manufacturingName: string;
+  priceWithVat: number;
+  priceWithoutVat: number;
+  vatPercent: number | null;
+  currency: PositionCurrency | null;
+  quantity: number;
+  measureUnit: string;
+  deliveryDate: string | null;
+  status: TechnicalCommercialProposalPositionStatus;
+  statusLabel: TechnicalCommercialProposalPositionStatusLabel;
+  position: RequestPosition;
+  paymentTerms: string;
+  isAnalog: boolean;
 }

@@ -28,11 +28,10 @@
     </div>
 
     <div class="app-col quantity">
-      <input type="number" name="quantity" step="1" min="1"
+      <input name="quantity" type="number"
              [value]="item.quantity"
              (change)="updateItemQuantity(item, $event.target.value)"
-             [class.invalid]="item.quantity <= 0"
-             (keypress)="filterEnteredText($event)"/>
+             [class.invalid]="item.quantity <= 0"/>
     </div>
 
     <div class="app-col action">

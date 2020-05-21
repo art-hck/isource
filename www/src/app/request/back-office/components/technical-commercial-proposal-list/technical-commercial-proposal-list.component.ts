@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -23,6 +23,9 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../common/models/state-status";
+import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { Procedure } from "../../models/procedure";
+import { ProcedureAction } from "../../models/procedure-action";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -32,6 +35,7 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -41,30 +45,36 @@ import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePosi
   ])],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy {
+export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
+  @Select(TechnicalCommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(TechnicalCommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
+  @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
   view: "grid" | "list" = "grid";
-  addProposalPositionData: {
+  addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
   };
   form: FormGroup;
   canNotAddNewContragent = false;
+  procedureModalPayload: ProcedureAction & { procedure?: Procedure };
+  prolongModalPayload: Procedure;
   readonly getCurrencySymbol = getCurrencySymbol;
+  readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
+  readonly updateProcedures = () => new RefreshProcedures(this.requestId);
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
@@ -76,10 +86,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
-    private featureService: FeatureService,
     private actions: Actions,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    public featureService: FeatureService,
     public store: Store,
     public router: Router,
     private app: AppComponent
@@ -131,6 +141,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.switchView(this.view);
   }
 
+  ngAfterViewInit() {
+    this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
+  }
+
   switchView(view: "grid" | "list") {
     this.view = view;
     this.app.noContentPadding = view === "grid";
@@ -147,11 +161,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   isReviewed({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.some(({proposal: p}) => p.status === 'REVIEWED') && data.length > 0;
+    return data.some(({proposalPosition: p}) => ['APPROVED', 'REJECTED'].includes(p.status)) && data.length > 0;
   }
 
   isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW') && data.length > 0;
+    return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
   }
 
   allPositionsOnReview(): boolean {
@@ -166,10 +180,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
-    this.addProposalPositionData = {proposal, position};
+    this.addProposalPositionPayload = { proposal, position };
   }
 
-  trackByProposalId = (i, { id }: TechnicalCommercialProposal) => id;
+  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
   trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
 
   ngOnDestroy() {

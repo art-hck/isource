@@ -54,14 +54,15 @@
         <!-- Секция списка позиций ТП -->
         <hr>
         <div class="app-row position-list section">
-          <div class="app-col upper-label">Наименование позиции</div>
-          <div class="app-col upper-label">Заводское наименование</div>
+          <div class="app-col upper-label pr-10">Наименование позиции</div>
+          <div class="app-col upper-label pr-10">Заводское наименование</div>
           <div class="app-col upper-label">Решение принято</div>
           <div class="app-col icon-status"></div>
         </div>
+
         <div class="app-row position-list" *ngFor="let technicalProposalPosition of technicalProposal.positions">
-          <div class="app-col">{{ technicalProposalPosition.position.name }}</div>
-          <div class="app-col">
+          <div class="app-col pr-10">{{ technicalProposalPosition.position.name }}</div>
+          <div class="app-col pr-10">
             <ng-container *ngIf="technicalProposalPosition.manufacturingName; else noItem">
               <span class="grey">{{ technicalProposalPosition.manufacturingName }}</span>
             </ng-container>
@@ -87,23 +88,31 @@
           </ng-template>
         </div>
 
+        <!-- footer -->
+        <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal) || tpStatusLabel(technicalProposal) === 'Черновик'">
+          <hr>
+          <div class="app-row app-align-items-center">
+            <div class="app-col app-secondary-color">
+              Вы можете отозвать отправленное на согласование заказчику техническое предложение
+              в течение ограниченного количества времени (таймер на кнопке)
+            </div>
 
-        <!-- Секция отмены отправки на согласование -->
-<ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal)">
-        <hr>
-        <div class="app-row section">
-          <div class="app-col">
-            Вы можете отозвать отправленное на согласование заказчику ТП в течение ограниченного времени (таймер на кнопке).
+            <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal); else sendToReviewBtn">
+              <div class="app-col app-col-auto status">
+                <button uxgButton primary type="button" class="fixedWidth" (click)="onCancelPublishTechnicalProposal(technicalProposal)">
+                  Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
+                </button>
+              </div>
+            </ng-container>
+
+            <ng-template #sendToReviewBtn>
+              <div class="app-row app-col app-col-auto app-align-items-center">
+                <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
+                <button uxgButton primary (click)="sendToAgreement(technicalProposal)">Отправить на согласование</button>
+              </div>
+            </ng-template>
           </div>
-          <div class="app-col status">
-            <button uxgButton primary type="button"
-                    class="fixedWidth"
-                    (click)="onCancelPublishTechicalProposal(technicalProposal)">
-              Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
-            </button>
-          </div>
-        </div>
-</ng-container>
+        </ng-container>
       </div>
     </div>
   </div>

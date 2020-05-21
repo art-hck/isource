@@ -16,7 +16,7 @@ import { Subject, throwError } from "rxjs";
 export class ProlongateProcedureComponent implements OnChanges, OnDestroy {
 
   @Input() requestId: Uuid;
-  @Input() procedureId: string;
+  @Input() procedureId: number;
   @Input() date: string;
   @Output() close = new EventEmitter();
   @Output() complete = new EventEmitter();

@@ -2,6 +2,7 @@ import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
+import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { Request } from "../../models/request";
 import { RequestGroup } from "../../models/request-group";
 import { RequestPosition } from "../../models/request-position";
@@ -37,6 +38,7 @@ export class RequestComponent implements OnChanges {
   @Output() approve = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
   readonly permissionType = PermissionType;
+  readonly PositionStatusesLabels = PositionStatusesLabels;
   flatPositions: RequestPosition[] = [];
   form: FormGroup;
   editedPosition: RequestPosition;
@@ -45,6 +47,7 @@ export class RequestComponent implements OnChanges {
   isOnApproval: boolean;
   groups: RequestGroup[];
   canChangeStatuses: boolean;
+  canPublish: boolean;
 
   get formPositions(): FormArray {
     return this.form.get("positions") as FormArray;
@@ -88,6 +91,7 @@ export class RequestComponent implements OnChanges {
     if (changes.positions) {
       this.form = this.fetchForm(this.positions);
       this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
+      this.checkedPositions = [];
       this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
       this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
       this.isOnApproval = this.featureService.authorize("approveRequest") &&
@@ -102,6 +106,10 @@ export class RequestComponent implements OnChanges {
 
       this.canChangeStatuses = this.checkedPositions.length && this.checkedPositions.every(
         position => position.status === this.checkedPositions[0].status
+      );
+
+      this.canPublish = this.checkedPositions.length && this.checkedPositions.every(
+        position => position.status === PositionStatus.DRAFT
       );
       this.cd.detectChanges();
     });

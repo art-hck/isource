@@ -1,10 +1,33 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { ProcedureSource } from "../../common/enum/procedure-source";
+import { RequestDocument } from "../../common/models/request-document";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
+import { RequestPosition } from "../../common/models/request-position";
 
 export class Procedure {
+  id: Uuid;
+  procedureId: number;
+  contactEmail: string;
+  contactPerson: string;
+  contactPhone: string;
+  createdDate: string;
+  remoteId: string;
+  requestId: Uuid;
   procedureTitle: string;
   dateEndRegistration: string;
-  positions: Uuid[];
+  datePublished: string;
+  lotId: number;
+  offersImported: false;
+  positions: {
+    contragent: ContragentShortInfo
+    id: Uuid
+    lotId: number
+    procedureId: number
+    requestPosition: RequestPosition
+    requestPositionId: Uuid
+    requestProcedureId: Uuid
+    unitId: number
+  }[];
   manualEndRegistration: boolean;
   positionsAllowAnalogsOnly: boolean;
   positionsAnalogs: boolean;
@@ -15,9 +38,10 @@ export class Procedure {
   positionsSuppliersVisibility: "Name" | "NameHidden" | "None";
 
   dishonestSuppliersForbidden: boolean;
+  procedureLotDocuments: RequestDocument[];
   prolongateEndRegistration: number;
-  procedureDocuments: [];
-  privateAccessContragents: [];
+  procedureDocuments: RequestDocument[];
+  privateAccessContragents: ContragentShortInfo[];
   getTPFilesOnImport: boolean;
   source: ProcedureSource;
 }

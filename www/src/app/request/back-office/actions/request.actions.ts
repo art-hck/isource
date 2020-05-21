@@ -1,4 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
+import { RequestPosition } from "../../common/models/request-position";
 
 export namespace RequestActions {
   export class Fetch {
@@ -23,7 +24,7 @@ export namespace RequestActions {
 
   export class Publish {
     static readonly type = '[Request Backoffice] Publish';
-    constructor(public requestId: Uuid, public refresh = true) {}
+    constructor(public requestId: Uuid, public refresh = true, public positions: [string]) {}
   }
 
   export class UploadFromTemplate {

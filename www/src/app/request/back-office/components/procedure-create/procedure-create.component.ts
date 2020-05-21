@@ -17,6 +17,8 @@ import { ContragentService } from "../../../../contragent/services/contragent.se
 import { Observable, Subject, throwError } from "rxjs";
 import { ProcedureAction } from "../../models/procedure-action";
 import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { PositionStatus } from "../../../common/enum/position-status";
+import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 
 @Component({
   selector: 'app-request-procedure-create',
@@ -41,6 +43,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
+  readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly mask: TextMaskConfig = {
     mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
     guide: false,
@@ -129,10 +132,11 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
     const body: Procedure = {
       ...this.getFormGroup("general").getRawValue(),
-      ...this.getFormGroup("documents").getRawValue(),
       ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
+      procedureDocuments: this.getFormGroup("documents").get("procedureDocuments").value.map(document => document.id),
+      procedureUploadDocuments: this.getFormGroup("documents").get("procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
@@ -168,8 +172,13 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
-  disabledPositions(position: RequestPosition): boolean {
-    return position.hasProcedure;
+
+  isStatusInvalid(status: PositionStatus) {
+    return [
+      PositionStatus.WINNER_SELECTED,
+      PositionStatus.TCP_WINNER_SELECTED,
+      PositionStatus.RESULTS_AGREEMENT
+    ].includes(status);
   }
 
   filterContragents(q: string, contragent: ContragentList): boolean {
@@ -182,6 +191,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
   trackById = (item: RequestPosition | ContragentList) => item.id;
   defaultProcedureValue = (field: string, defaultValue: any = "") => this.procedure?.[field] ?? defaultValue;
+  disabledPositions = ({ hasProcedure, status }: RequestPosition): boolean => hasProcedure || this.isStatusInvalid(status);
 
   ngOnDestroy() {
     this.destroy$.next();

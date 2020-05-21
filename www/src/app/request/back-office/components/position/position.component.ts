@@ -91,10 +91,8 @@ export class PositionComponent implements OnInit, OnDestroy {
         this.position$ = of(position);
       });
   }
-
-  // @TODO На данном этапе отправляем на согласование сразу всю заявку, ждём попозиционный бэк
   sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
-    .dispatch(new RequestActions.Publish(this.requestId, false)).pipe(
+    .dispatch(new RequestActions.Publish(this.requestId, false, [position.id])).pipe(
       switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))
     )
 

@@ -64,8 +64,8 @@ export class RequestList2Component implements OnInit, OnDestroy {
       });
   }
 
-  switchTab({ disabled }: UxgTabTitleComponent, status: RequestStatus) {
-    return !disabled && this.filter.emit({ filters: { requestListStatusesFilter: [status] } });
+  switchTab({ disabled }: UxgTabTitleComponent, status: RequestStatus[]) {
+    return !disabled && this.filter.emit({ filters: { requestListStatusesFilter: status } });
   }
 
   ngOnDestroy() {

@@ -37,8 +37,9 @@
             </div>
           </ng-container>
           <ng-container *ngIf="formGroup.disabled">
-            <div class="app-col app-col-auto">
-              <span>Участвует в процедуре</span>
+            <div class="app-col app-col-auto select-list-item-date">
+              <span *ngIf="position.hasProcedure">Участвует в процедуре</span>
+              <span *ngIf="isStatusInvalid(position.status)">{{PositionStatusesLabels[position.status]}}</span>
             </div>
           </ng-container>
         </div>

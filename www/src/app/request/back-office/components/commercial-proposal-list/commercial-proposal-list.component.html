@@ -27,8 +27,8 @@
           [positions]="positionsWithOffers.positions"
           [contragents]="contragents$ | async"
           [procedureSource]="procedureSource.COMMERCIAL_PROPOSAL"
-        (updateSelectedPositions)="updateContragents($event)"
-        (complete)="updatePositionsAndSuppliers(); procedureModalPayload = null"
+          (updateSelectedPositions)="updateContragents($event)"
+          (complete)="updatePositionsAndSuppliers(); procedureModalPayload = null"
           (cancel)="procedureModalPayload = null"
         ></app-request-procedure-create>
       </ng-container>

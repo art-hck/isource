@@ -2,7 +2,7 @@
 <div class="notification-bar" *ngIf="isOnApproval || isDraft">
   <div class="app-layout">
     <div class="app-row">
-      <div class="app-col app-col-auto app-row app-align-items-center" *ngIf="isDraft">
+      <div class="app-col app-col-auto app-row app-align-items-center" *ngIf="isDraft && user.isCustomer()">
         <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
         <button uxgButton secondary (click)="publish.emit()">Опубликовать все</button>
       </div>
@@ -47,6 +47,14 @@
           </div>
         </div>
 
+        <!-- Отправить позиции на согласование -->
+        <div class="app-col app-col-auto" *ngIf="featureService.authorize('sentToApprove') && isDraft">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish" (click)="publish.emit(checkedPositions)">
+            <uxg-icon shape="app-on-approve" size="16" class="is-solid"></uxg-icon>
+            <span>На согласование</span>
+          </button>
+        </div>
+
         <!-- Добавить в группу -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('addRequestGroup')">
           <button uxgButton clear link [disabled]="checkedPositions.length === 0" (click)="addGroupModal.open()">
@@ -66,7 +74,7 @@
         <!-- Групповая смена статус -->
         <div class="app-col app-col-auto" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
-            <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses" (click)="changeStatusModal.open()">
+            <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses && checkedPositions.length === 0" (click)="changeStatusModal.open()">
               <uxg-icon shape="app-circle-arrow"></uxg-icon>
               <span>Сменить статус</span>
             </button>
@@ -216,7 +224,7 @@
       {{ position.responsibleUser.shortName }}
     </ng-container>
     <ng-template #status>
-      <app-position-status [label]="position.statusLabel" [status]="position.status">
+      <app-position-status [label]="PositionStatusesLabels[position.status]" [status]="position.status">
       </app-position-status>
     </ng-template>
   </div>

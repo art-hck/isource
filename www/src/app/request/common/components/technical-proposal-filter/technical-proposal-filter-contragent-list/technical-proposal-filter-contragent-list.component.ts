@@ -49,8 +49,8 @@ export class TechnicalProposalFilterContragentListComponent implements ControlVa
     return this.contragentSearchValue;
   }
 
-  onContragentSelected(selectedContragent) {
-    this.updateArray(this.selectedContragents, selectedContragent);
+  onContragentSelected(selectedContragentId) {
+    this.updateArray(this.selectedContragents, selectedContragentId);
     this.onChange(this.selectedContragents);
   }
 

@@ -42,9 +42,4 @@ export class CartComponent implements OnInit {
     quantity = Math.abs(quantity);
     this.store.dispatch(new CartActions.EditItemQuantity(item, quantity));
   }
-
-  filterEnteredText(event: KeyboardEvent): boolean {
-    const key = Number(event.key);
-    return (key >= 0 && key <= 9);
-  }
 }

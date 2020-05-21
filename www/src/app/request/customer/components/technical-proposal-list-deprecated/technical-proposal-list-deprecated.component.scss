@@ -127,3 +127,9 @@ table {
 .position-header {
   padding-left: 28px;
 }
+
+.position-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

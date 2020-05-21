@@ -6,7 +6,7 @@
       [onDrafted]="sendOnApprove"
       [status]="status$ | async"
       [positionsStatus]="positionsStatus$ | async"
-      (publish)="store.dispatch(publish(requestId))"
+      (publish)="store.dispatch(publish(requestId, $event))"
       (addPosition)="store.dispatch(refreshPositions(requestId))"
       (addGroup)="store.dispatch(refreshPositions(requestId))"
       (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"

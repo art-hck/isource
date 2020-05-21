@@ -55,8 +55,8 @@
       <div class="app-row">
         <div class="app-col-7">
           <div class="app-control-wrap">
-            <input #quantity [warning]="quantityValidator() !== null" (keypress)="filterEnteredText($event)"
-                   uxgInput lg formControlName="quantity" />
+            <input #quantity [warning]="quantityValidator() !== null"
+                   uxgInput lg formControlName="quantity" type="number"/>
             <label class="app-control-label" (click)="quantity.focus()">Количество</label>
             <div class="app-control-error" *ngIf="quantityValidator()">
               <span>Меньше необходимого</span>

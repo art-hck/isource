@@ -61,7 +61,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
       id: [this.defaultCPValue('id', null)],
       priceWithVat: [this.defaultCPValue('priceWithVat', this.position.startPrice || null), [Validators.required, Validators.min(1)]],
       currency: [this.defaultCPValue('currency', this.position.currency || null), Validators.required],
-      quantity: [this.defaultCPValue('quantity', this.position.quantity || null), [Validators.required, Validators.min(1)]],
+      quantity: [this.defaultCPValue('quantity', this.position.quantity || null), [Validators.required, Validators.min(0.0001), Validators.pattern("^[.0-9]+$")]],
       measureUnit: [this.defaultCPValue('measureUnit', this.position.measureUnit || null), Validators.required],
       deliveryDate: [this.defaultDeliveryDate, [Validators.required, CustomValidators.futureDate()]],
       paymentTerms: [this.defaultCPValue('paymentTerms', this.position.paymentTerms || null), Validators.required],
