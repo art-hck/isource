@@ -11,6 +11,12 @@
               </ng-container>
             </uxg-tab-title>
 
+            <uxg-tab-title #sentToEdit (click)="activeTab = technicalProposalsStatus.SENT_TO_EDIT">
+              <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposalsSentToEdit">
+                На доработке <span class="app-ghost-color">({{ proposalsSentToEdit?.length }})</span>
+              </ng-container>
+            </uxg-tab-title>
+
             <uxg-tab-title #reviewedTab (click)="activeTab = technicalProposalsStatus.ACCEPTED">
               <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
                 Рассмотренные <span class="app-ghost-color">({{ proposalsReviewed?.length }})</span>
@@ -22,7 +28,7 @@
 
       <div class="app-row">
         <div class="app-col">
-          <ng-container *ngIf="(getActiveList$() | async) as technicalProposals">
+          <ng-container *ngIf="(activeList$ | async) as technicalProposals">
             <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
               <app-request-customer-technical-proposal
                 *ngFor="let technicalProposal of technicalProposals; let i = index"
@@ -34,7 +40,7 @@
             </ng-container>
 
             <ng-template #emptyList>
-              <div class="ghost-color">Список технических предложений пуст</div>
+              <div class="ghost-color empty-list">Список технических предложений пуст</div>
             </ng-template>
           </ng-container>
         </div>

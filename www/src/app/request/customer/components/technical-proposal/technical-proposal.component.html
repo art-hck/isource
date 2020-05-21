@@ -25,19 +25,38 @@
 
         <div class="app-col app-col-aside status">
           <ng-container [ngSwitch]="technicalProposal.status">
-            <div class="app-success-color" *ngSwitchCase="'ACCEPTED'"><uxg-icon shape="app-check"></uxg-icon>
+            <div class="app-ghost-color" *ngSwitchCase="'NEW'">
+              <uxg-icon shape="app-draft"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
 
-            <div class="app-alert-color" *ngSwitchCase="'DECLINED'"><uxg-icon shape="app-cross"></uxg-icon>
+            <div class="app-ghost-color" *ngSwitchCase="'SENT_TO_REVIEW'">
+              <uxg-icon shape="app-waiting"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
 
-            <div class="app-ghost-color" *ngSwitchCase="'NEW'"><uxg-icon shape="app-draft"></uxg-icon>
+            <div class="app-success-color" *ngSwitchCase="'ACCEPTED'">
+              <uxg-icon shape="app-check"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
 
-            <div class="app-warning-color" *ngSwitchCase="'SENT_TO_REVIEW'"><uxg-icon shape="app-warning"></uxg-icon>
+            <div class="app-success-color" *ngSwitchCase="'PARTIALLY_ACCEPTED'">
+              <uxg-icon shape="app-check"></uxg-icon>
+              <b>{{ getLabelWithCounters(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-warning-color" *ngSwitchCase="'SENT_TO_EDIT'">
+              <uxg-icon shape="app-warning"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-alert-color" *ngSwitchCase="'DECLINED'">
+              <uxg-icon shape="app-cross"></uxg-icon>
+              <b>{{ tpStatusLabel(technicalProposal) }}</b>
+            </div>
+
+            <div class="app-alert-color" *ngSwitchCase="'CANCELED'">
+              <uxg-icon shape="app-cross"></uxg-icon>
               <b>{{ tpStatusLabel(technicalProposal) }}</b>
             </div>
           </ng-container>
@@ -60,7 +79,7 @@
         </div>
 
         <div class="app-row position-list"
-             [class.app-ghost-color]="isProposalPositionReviewed(technicalProposalPosition)"
+             [class.app-ghost-color]="isProposalPositionReviewed(technicalProposalPosition) && hasSelectablePositions(technicalProposal.positions)"
              *ngFor="let technicalProposalPosition of technicalProposal.positions">
 
           <div class="app-col-auto checkbox-space" *ngIf="currentList === 'SENT_TO_REVIEW'">
@@ -94,8 +113,10 @@
 
           <div class="app-col icon-status">
             <ng-container [ngSwitch]="technicalProposalPosition.status">
+              <uxg-icon *ngSwitchCase="'REVIEW'" class="app-ghost-color" shape="app-unknown"></uxg-icon>
               <uxg-icon *ngSwitchCase="'ACCEPTED'" class="app-success-color" shape="app-check"></uxg-icon>
               <uxg-icon *ngSwitchCase="'DECLINED'" class="app-alert-color" shape="app-cross"></uxg-icon>
+              <uxg-icon *ngSwitchCase="'SENT_TO_EDIT'" class="app-warning-color" shape="app-warning"></uxg-icon>
             </ng-container>
           </div>
 
@@ -135,6 +156,10 @@
 
               <button uxgButton secondary (click)="reject()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
                 Отклонить
+              </button>
+
+              <button uxgButton secondary (click)="sendToEdit()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">
+                На доработку
               </button>
 
               <button uxgButton primary (click)="approve()" [disabled]="!hasSelectedPositions(technicalProposalIndex) || isLoading">

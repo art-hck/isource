@@ -26,4 +26,11 @@ export namespace TechnicalProposals {
     static readonly type = '[Technical Proposals Customer] Reject';
     constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPosition: TechnicalProposalPosition[]) {}
   }
+
+  // Отправить позицию ТП на доработку
+  export class SendToEdit {
+    static readonly type = '[Technical Proposals Customer] SendToEdit';
+    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPosition: TechnicalProposalPosition[]) {}
+  }
+
 }

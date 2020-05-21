@@ -13,9 +13,9 @@ import { takeUntil } from "rxjs/operators";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Subject } from "rxjs";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
-
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
+import SendToEdit = TechnicalProposals.SendToEdit;
 
 @Component({
   selector: 'app-request-customer-technical-proposal',
@@ -53,10 +53,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
     ).subscribe(({result, action}) => {
       const e = result.error as any;
       const length = action?.proposalPosition.length ?? 1;
-      const text = (action instanceof Reject ? "$1" : "$0")
+      const text = (action instanceof Reject ? "$0" : "$1")
         .replace(/\$(\d)/g, (all, i) => [
         this.pluralize.transform(length, "позиция отклонена", "позиции отклонены", "позиций отклонено"),
-        this.pluralize.transform(length, "предложение отклонено", "предложения отклонены", "предложений отклонено"),
+        this.pluralize.transform(length, "позиция согласована", "позиции согласованы", "позиций согласовано"),
       ][i] || all);
 
       this.store.dispatch(e ?
@@ -67,6 +67,15 @@ export class RequestTechnicalProposalComponent implements OnInit {
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
+  }
+
+  getLabelWithCounters(technicalProposal: TechnicalProposal): string {
+    const totalPositionsCount = technicalProposal.positions.length;
+    const approvedPositionsCount = technicalProposal.positions.reduce(
+      (count, tpPosition) => tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED ? count + 1 : count, 0
+    );
+
+    return 'Согласовано ' + approvedPositionsCount + ' из ' + totalPositionsCount;
   }
 
   approve() {
@@ -85,6 +94,18 @@ export class RequestTechnicalProposalComponent implements OnInit {
     this.isLoading = true;
 
     this.store.dispatch(new Reject(
+      this.request.id,
+      this.technicalProposal.id,
+      this.selectedTechnicalProposalsPositions
+    )).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
+  sendToEdit() {
+    this.isLoading = true;
+
+    this.store.dispatch(new SendToEdit(
       this.request.id,
       this.technicalProposal.id,
       this.selectedTechnicalProposalsPositions
@@ -149,6 +170,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
   }
 
   isProposalPositionReviewed(position): boolean {
-    return ['ACCEPTED', 'DECLINED'].indexOf(position.status) > -1;
+    return [
+      TechnicalProposalPositionStatus.ACCEPTED,
+      TechnicalProposalPositionStatus.DECLINED,
+      TechnicalProposalPositionStatus.SENT_TO_EDIT
+    ].indexOf(position.status) > -1;
   }
 }

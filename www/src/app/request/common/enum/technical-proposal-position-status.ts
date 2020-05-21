@@ -3,5 +3,6 @@ export enum TechnicalProposalPositionStatus {
   EDITED   = 'EDITED',
   REVIEW   = 'REVIEW',
   ACCEPTED = 'ACCEPTED',
-  DECLINED = 'DECLINED'
+  DECLINED = 'DECLINED',
+  SENT_TO_EDIT = 'SENT_TO_EDIT',
 }
