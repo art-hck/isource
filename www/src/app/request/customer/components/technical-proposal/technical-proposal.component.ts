@@ -53,10 +53,10 @@ export class RequestTechnicalProposalComponent implements OnInit {
     ).subscribe(({result, action}) => {
       const e = result.error as any;
       const length = action?.proposalPosition.length ?? 1;
-      const text = (action instanceof Reject ? "$1" : "$0")
+      const text = (action instanceof Reject ? "$0" : "$1")
         .replace(/\$(\d)/g, (all, i) => [
         this.pluralize.transform(length, "позиция отклонена", "позиции отклонены", "позиций отклонено"),
-        this.pluralize.transform(length, "предложение отклонено", "предложения отклонены", "предложений отклонено"),
+        this.pluralize.transform(length, "позиция согласована", "позиции согласованы", "позиций согласовано"),
       ][i] || all);
 
       this.store.dispatch(e ?

@@ -39,7 +39,8 @@ export class TechnicalProposalsService {
       ids.push(technicalProposalsPosition.id);
     }
     return this.api.post(url, {
-      positions: ids
+      positions: ids,
+      comment: '—'
     });
   }
 
@@ -51,7 +52,7 @@ export class TechnicalProposalsService {
     }
     return this.api.post(url, {
       positions: ids,
-      message: '—'
+      comment: '—'
     });
   }
 }
