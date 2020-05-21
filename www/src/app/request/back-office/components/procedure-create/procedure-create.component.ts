@@ -132,10 +132,11 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
 
     const body: Procedure = {
       ...this.getFormGroup("general").getRawValue(),
-      ...this.getFormGroup("documents").getRawValue(),
       ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
+      procedureDocuments: this.getFormGroup("documents").get("procedureDocuments").value.map(document => document.id),
+      procedureUploadDocuments: this.getFormGroup("documents").get("procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
