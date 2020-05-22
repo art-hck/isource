@@ -161,11 +161,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   isReviewed({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.some(({proposal: p}) => p.status === 'REVIEWED') && data.length > 0;
+    return data.some(({proposalPosition: p}) => ['APPROVED', 'REJECTED'].includes(p.status)) && data.length > 0;
   }
 
   isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
-    return data.every(({proposalPosition: p}) => p.status === 'SENT_TO_REVIEW') && data.length > 0;
+    return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
   }
 
   allPositionsOnReview(): boolean {
