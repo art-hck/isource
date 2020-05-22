@@ -92,7 +92,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
   }
 
   toDeclineTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
-    this.technicalProposalsService.declineTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
+    this.technicalProposalsService.declineTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions, '—').subscribe(
       () => {
         this.getTechnicalProposals();
         const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
