@@ -17,4 +17,7 @@ export class ActivityData {
   offerMeasureUnit?: string;
   offerPrice?: number;
   offerCurrency?: string;
+  statusComment?: {
+      comment: string;
+  };
 }
