@@ -24,15 +24,15 @@
 
   <div class="request-items">
     <ng-container *ngIf="selectedRequest">
-      <div class="request-items-header">
-        <div class="request-info">
+      <div class="app-row request-items-header">
+        <div class="app-col request-info">
           Заявка №{{ selectedRequest?.number }}
           <div class="request-items-header-sub">
             {{ selectedRequest.contragent.shortName }}
           </div>
         </div>
 
-        <a class="request-link" [routerLink]="getRequestUrl()">
+        <a class="app-col request-link" [routerLink]="getRequestUrl()">
           <uxg-icon shape="app-hamburger"></uxg-icon>
           <span>Описание</span>
         </a>

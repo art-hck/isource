@@ -130,7 +130,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       isInspectionControlRequired: [p.isInspectionControlRequired],
       isPnrRequired: [p.isPnrRequired],
       isShmrRequired: [p.isShmrRequired],
-      measureUnit: [p.measureUnit, Validators.required],
+      measureUnit: [p.measureUnit, [Validators.required, Validators.pattern("^[а-яА-ЯёЁ]+$")]],
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
       quantity: [p.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],

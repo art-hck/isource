@@ -35,6 +35,7 @@ a.request-link, a.position-link  {
 
 a.request-link {
   float: right;
+  display: block;
 }
 a.position-link {
   margin-left: 15px;
@@ -274,4 +275,8 @@ a.position-link {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.request-link {
+  max-width: 90px;
 }
