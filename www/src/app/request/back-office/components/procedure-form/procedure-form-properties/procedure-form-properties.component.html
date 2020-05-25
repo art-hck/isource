@@ -1,4 +1,8 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form" *ngIf="value">
+  <p class="app-row app-align-items-center" *ngIf="form.get('bestPriceRequirements')">
+    <uxg-checkbox class="app-control" formControlName="bestPriceRequirements" #bestPriceRequirements></uxg-checkbox>
+    <label (click)="bestPriceRequirements.check($event)"> &nbsp; Обязательная подача предложений на все позиции</label>
+  </p>
   <p class="app-row app-align-items-center">
     <uxg-checkbox class="app-control" formControlName="positionsRequiredAll" #positionsRequiredAll></uxg-checkbox>
     <label (click)="positionsRequiredAll.check($event)"> &nbsp; Обязательная подача предложений на все позиции</label>
