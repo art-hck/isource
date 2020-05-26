@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { RequestStatusCount } from "../../models/requests-list/request-status-count";
 import { UxgTabTitleComponent } from "uxg";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
@@ -21,7 +31,13 @@ import { Subject } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestList2Component implements OnInit, OnDestroy {
-  @Input() statusCounts: RequestStatusCount;
+  @ViewChild('inProgressTab') inProgressTabElRef: UxgTabTitleComponent;
+  @ViewChild('newTab') newTabElRef: UxgTabTitleComponent;
+  @ViewChild('draftTab') draftTabElRef: UxgTabTitleComponent;
+  @ViewChild('onApprovalTab') onApprovalTabElRef: UxgTabTitleComponent;
+  @ViewChild('completedTab') completedTabElRef: UxgTabTitleComponent;
+
+  @Input() statusCounters: RequestStatusCount;
   @Input() status: StateStatus;
   @Input() requests: RequestsList[];
   @Input() total: number;
@@ -71,5 +87,96 @@ export class RequestList2Component implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+
+  switchToPrioritizedTab(requests) {
+    // Если заявок не найдено, ничего не делаем, остаёмся в том же табе
+    if (requests.entities.length !== 0) {
+      return false;
+    }
+
+    let firstNotEmptyTab;
+
+    // Находим и сохраняем первый таб, в котором есть результаты по запросу
+    for (const [key, value] of Object.entries(requests.statusCounters)) {
+      if (value > 0) {
+        firstNotEmptyTab = key;
+        break;
+      }
+    }
+
+    // Активируем найденный таб с результатами
+    switch (firstNotEmptyTab) {
+      case 'inProgressRequestsCount':
+        this.clickOnTab(RequestStatus.IN_PROGRESS);
+        break;
+      case 'newRequestsCount':
+        this.clickOnTab(RequestStatus.NEW);
+        break;
+      case 'onCustomerApprovalRequestsCount':
+        this.clickOnTab(RequestStatus.ON_CUSTOMER_APPROVAL);
+        break;
+      case 'draftRequestsCount':
+        this.clickOnTab(RequestStatus.DRAFT);
+        break;
+      case 'completedRequestsCount':
+        this.clickOnTab(RequestStatus.COMPLETED);
+        break;
+      default:
+        return false;
+    }
+  }
+
+  clickOnTab(tab) {
+    switch (tab) {
+      // todo Тернарка почему-то не зашла в свитчкейсе, не понял почему
+      case RequestStatus.IN_PROGRESS:
+        if (this.inProgressTabElRef) {
+          this.inProgressTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      case RequestStatus.NEW:
+        if (this.newTabElRef) {
+          this.newTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      case RequestStatus.ON_CUSTOMER_APPROVAL:
+        if (this.onApprovalTabElRef) {
+          this.onApprovalTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      case RequestStatus.DRAFT:
+        if (this.draftTabElRef) {
+          this.draftTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      case RequestStatus.COMPLETED:
+        if (this.completedTabElRef) {
+          this.completedTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      case RequestStatus.NOT_RELEVANT:
+        if (this.completedTabElRef) {
+          this.completedTabElRef.onToggle.emit(true);
+        } else {
+          return false;
+        }
+        break;
+      default:
+        return false;
+    }
+
+    this.filter.emit({ filters: { requestListStatusesFilter: [tab] } });
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { scan, tap, throttleTime } from "rxjs/operators";
@@ -12,8 +12,8 @@ import { RequestsListFilter } from "../../../common/models/requests-list/request
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { StateStatus } from "../../../common/models/state-status";
 import { AvailableFilters } from "../../models/available-filters";
+import { RequestList2Component as CommonRequestListComponent } from "../../../common/components/request-list2/request-list2.component";
 import Fetch = RequestListActions.Fetch;
-import FetchStatusCounts = RequestListActions.FetchStatusCounts;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 
 @Component({
@@ -21,17 +21,18 @@ import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestList2Component implements OnInit, OnDestroy {
+  @ViewChild(CommonRequestListComponent) requestListComponent: CommonRequestListComponent;
+
   @Select(RequestListState.availableFilters) availableFilters$: Observable<AvailableFilters>;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
+  @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
-  @Select(RequestListState.statusCounts) statusCounts$: Observable<RequestStatusCount>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
   activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
-  readonly fetchStatusCounts = () => new FetchStatusCounts();
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
@@ -52,11 +53,13 @@ export class RequestList2Component implements OnInit, OnDestroy {
       } as {page?: number, filters?: RequestsListFilter})
     ).subscribe((data) => {
       this.activeFilters = data.filters;
-      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters));
+      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(
+        ({ BackofficeRequestList }) => {
+          this.requestListComponent.switchToPrioritizedTab(BackofficeRequestList.requests);
+        });
     });
 
     this.store.dispatch(new FetchAvailableFilters());
-    this.store.dispatch(new FetchStatusCounts());
   }
 
   ngOnDestroy() {

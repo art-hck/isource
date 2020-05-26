@@ -9,8 +9,4 @@ export namespace RequestListActions {
   export class FetchAvailableFilters {
     static readonly type = '[Request List Backoffice] Fetch Available Filters';
   }
-
-  export class FetchStatusCounts {
-    static readonly type = '[Request List Backoffice] Fetch Status Counts';
-  }
 }
