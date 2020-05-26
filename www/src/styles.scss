@@ -32,6 +32,11 @@ $font_size_basic: 14px;
 @import "assets/styles/proposals-grid";
 @import "assets/styles/statuses";
 
+body,
+html {
+  height: 100%;
+}
+
 body, body p, h1, h2, h3, h4, h5, h6 {
   font-family: $font_ptroot;
   line-height: normal;
@@ -49,6 +54,13 @@ body {
 a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
   text-decoration: none;
   cursor: pointer;
+}
+
+.main-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .app-position-status {
