@@ -166,13 +166,6 @@ export class RequestList2Component implements OnInit, OnDestroy {
           return false;
         }
         break;
-      case RequestStatus.NOT_RELEVANT:
-        if (this.completedTabElRef) {
-          this.completedTabElRef.onToggle.emit(true);
-        } else {
-          return false;
-        }
-        break;
       default:
         return false;
     }
