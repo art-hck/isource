@@ -119,7 +119,7 @@ export class DeliveryMonitorComponent implements OnInit {
     return shipmentItemCreatedDate ? moment(shipmentItemCreatedDate).locale("ru").format('dd, DD.MM') : '—';
   }
 
-  getShipmentItemArrivalDate(consignment: DeliveryMonitorConsignment): string {
+  getShipmentItemEstimatedArrivalDate(consignment: DeliveryMonitorConsignment): string {
     if (this.isEmptyArray(consignment.waybills)) {
       return '—';
     }
@@ -139,11 +139,65 @@ export class DeliveryMonitorComponent implements OnInit {
 
     if (estimatedDates.length > 1) {
       estimatedDates = estimatedDates.sort(
-        (a, b) => a.getTime() - b.getTime()
+        (a, b) => moment(a).unix() - moment(b).unix()
       );
     }
 
     return moment(estimatedDates[0]).locale("ru").format('dd, DD.MM');
+  }
+
+  getShipmentItemExpectedArrivalDate(consignment: DeliveryMonitorConsignment): string {
+    if (this.isEmptyArray(consignment.waybills)) {
+      return '—';
+    }
+
+    let dates: Date[] = [];
+
+    for (let i = 0; i < consignment.waybills.length; i++) {
+      const waybill = consignment.waybills[i];
+      if (waybill.expectedDateOfArrival) {
+        dates.push(waybill.expectedDateOfArrival);
+      }
+    }
+
+    if (this.isEmptyArray(dates)) {
+      return '—';
+    }
+
+    if (dates.length > 1) {
+      dates = dates.sort(
+        (a, b) => moment(a).unix() - moment(b).unix()
+      );
+    }
+
+    return moment(dates[0]).locale("ru").format('dd, DD.MM');
+  }
+
+  getShipmentItemActualArrivalDate(consignment: DeliveryMonitorConsignment): string {
+    if (this.isEmptyArray(consignment.waybills)) {
+      return '—';
+    }
+
+    let dates: Date[] = [];
+
+    for (let i = 0; i < consignment.waybills.length; i++) {
+      const waybill = consignment.waybills[i];
+      if (waybill.actualArrivalDate) {
+        dates.push(waybill.actualArrivalDate);
+      }
+    }
+
+    if (this.isEmptyArray(dates)) {
+      return '—';
+    }
+
+    if (dates.length > 1) {
+      dates = dates.sort(
+        (a, b) => moment(a).unix() - moment(b).unix()
+      );
+    }
+
+    return moment(dates[0]).locale("ru").format('dd, DD.MM');
   }
 
   deliveryMonitorInfoCanBeShown() {
@@ -173,13 +227,20 @@ export class DeliveryMonitorComponent implements OnInit {
     );
   }
 
+  getWeightEiByTd(consignment: DeliveryMonitorConsignment): string {
+    if (this.isEmptyArray(consignment.cargos)) {
+      return '—';
+    }
+    return consignment.cargos[0].eiCargoAmount;
+  }
+
   getWaybillNumber(consignment: DeliveryMonitorConsignment): string {
     if (this.isEmptyArray(consignment.waybills)) {
       return '—';
     }
     return consignment.waybills.map((waybill) => {
       return waybill.waybillNumber;
-    }).join(',');
+    }).join(', ');
   }
 
   getVehicleNumber(consignment: DeliveryMonitorConsignment): string {
@@ -191,16 +252,22 @@ export class DeliveryMonitorComponent implements OnInit {
 
     for (let i = 0; i < consignment.waybills.length; i++) {
       const waybill = consignment.waybills[i];
-      if (this.isEmptyArray(waybill.vehicles)) {
+      if (this.isEmptyArray(waybill.deliveryVehicles)) {
         continue;
       }
-      for (let j = 0; j < waybill.vehicles.length; j++) {
-        const vehicle = waybill.vehicles[j];
-        numbers.add(vehicle.vehicleNumber);
+
+      for (let j = 0; j < waybill.deliveryVehicles.length; j++) {
+        const deliveryVehicle = waybill.deliveryVehicles[j];
+
+        if (!deliveryVehicle.vehicle) {
+          continue;
+        }
+
+        numbers.add(deliveryVehicle.vehicle.vehicleNumber);
       }
     }
 
-    return [ ...numbers.values() ].join(',');
+    return [ ...numbers.values() ].join(', ');
   }
 
   getStatusLabel(status: string): string {
