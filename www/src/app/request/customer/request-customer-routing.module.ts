@@ -28,11 +28,6 @@ const routes: Routes = [
     component: RequestFormComponent,
     data: { title: "Создание заявки вручную", feature: "createRequest" }
   },
-  // {
-  //   path: 'agreements',
-  //   component: AgreementsComponent,
-  //   data: { title: "Согласования" }
-  // },
   {
     path: ':id',
     canActivate: [CanActivateFeatureGuard],
