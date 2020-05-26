@@ -6,11 +6,12 @@ import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.
 import { DashboardStatisticComponent } from './components/dashboard-statistic/dashboard-statistic.component';
 import { DashboardNotificationComponent } from './components/dashboard-notification/dashboard-notification.component';
 import { SharedModule } from "../shared/shared.module";
-import { AgreementsModule } from "../agreements/agreements.module";
 import { DashboardService } from "./services/dashboard.service";
 import { DashboardMapService } from "./services/dashboard-map.service";
 import { DashboardMapDirective } from './directive/dashboard-map.directive';
 import { DashboardMapMarkerDirective } from "./directive/dashboard-map-marker.directive";
+import { AgreementsCommonModule } from "../agreements/common/agreements-common.module";
+import { AgreementsService } from "../agreements/customer/services/agreements.service";
 
 @NgModule({
   declarations: [
@@ -22,14 +23,15 @@ import { DashboardMapMarkerDirective } from "./directive/dashboard-map-marker.di
     DashboardMapMarkerDirective,
   ],
   imports: [
-    AgreementsModule,
+    AgreementsCommonModule,
     SharedModule,
     CommonModule,
     DashboardRoutingModule
   ],
   providers: [
     DashboardService,
-    DashboardMapService
+    DashboardMapService,
+    AgreementsService
   ],
 })
 export class DashboardModule {

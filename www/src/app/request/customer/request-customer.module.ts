@@ -10,7 +10,6 @@ import { PositionComponent } from "./components/position/position.component";
 import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
 import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
-import { AgreementsComponent } from './components/agreements/agreements.component';
 import { AgreementsModule } from "../../agreements/agreements.module";
 import { RequestCreateModalComponent } from './components/request-create-modal/request-create-modal.component';
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
@@ -37,7 +36,6 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
     CommercialProposalListComponent,
-    AgreementsComponent,
     RequestCreateModalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
