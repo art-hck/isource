@@ -98,14 +98,18 @@
 
           <ng-template #deliveryDates>
             <ng-container *ngIf="request.requestData.asapDeliveryDatePositionsCount !== request.requestData.positionsCount; else allPositionsAsap">
-              <span *ngIf="request.requestData.minDeliveryDate">
+              <span *ngIf="request.requestData.minDeliveryDate"
+                    title="{{ getDeliveryDate(
+                            (request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
+                            (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy') ) }}">
                 {{ getDeliveryDate(
                   (request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
                   (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy')
                 ) }}
               </span>
 
-              <span *ngIf="request.requestData.minDeliveryDate && request.requestData.asapDeliveryDatePositionsCount">
+              <span *ngIf="request.requestData.minDeliveryDate && request.requestData.asapDeliveryDatePositionsCount"
+                    title="Как можно быстрее: {{ request.requestData.asapDeliveryDatePositionsCount }} поз.">
                Как можно быстрее: {{ request.requestData.asapDeliveryDatePositionsCount }} поз.
               </span>
             </ng-container>
