@@ -54,7 +54,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();
   readonly RequestStatus = RequestStatus;
-  readonly getDeliveryDate = (min, max): string => min === max ? min : min + " - " + max;
+  readonly getDeliveryDate = (min, max): string => min === max ? min : min + " – " + max;
   readonly calcPieChart = ({ requestData: d }: RequestsList) => (65 - (65 * d.completedPositionsCount / d.positionsCount * 100) / 100);
 
   get activeFilters() {

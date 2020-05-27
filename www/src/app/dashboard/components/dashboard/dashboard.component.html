@@ -4,19 +4,19 @@
     <ng-template #agreements let-agreements>
       <div class="app-row app-align-items-center">
         <h2 class="app-col">Согласования</h2>
-        <div><a routerLink="/requests/customer/agreements"><b>Все согласования ({{ agreements?.totalCount }})</b></a></div>
+        <div><a routerLink="/agreements/customer"><b>Все согласования ({{ agreements?.totalCount }})</b></a></div>
       </div>
-      <app-agreements [positions]="agreements?.entities" [total]="agreements?.totalCount">
+      <app-agreements [agreements]="agreements?.entities">
       </app-agreements>
     </ng-template>
   </div>
 </div>
 <br/>
 <br/>
-<div class="app-row">
+<div class="app-row"><br/>
   <div class="app-col">
-    <ng-container *ngTemplateOutlet="notofications; context: {$implicit: notifications$ | async}"></ng-container>
-    <ng-template #notofications let-notifications>
+    <ng-container *ngTemplateOutlet="notifications; context: {$implicit: notifications$ | async}"></ng-container>
+    <ng-template #notifications let-notifications>
       <div class="app-row app-align-items-center">
         <h2 class="app-col">Последние уведомления</h2>
         <div><a routerLink="/notifications"><b>Все уведомления</b></a></div>

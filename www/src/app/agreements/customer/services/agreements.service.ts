@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { AgreementsResponse } from "../models/agreements-response";
+import { AgreementsResponse } from "../../common/models/agreements-response";
 import { Observable } from "rxjs";
 
 @Injectable()

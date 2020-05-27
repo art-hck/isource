@@ -4,11 +4,20 @@
   .number { flex-basis: 50px; }
   .published { flex-basis: 100px; }
   .tasks { flex-basis: 40px; }
-  .deliveryDate { max-width: 300px; }
+  .delivery-date {
+    max-width: 330px;
+
+    & span:not(:last-of-type):after {
+      content: '|';
+      padding: 0 5px;
+      opacity: 0.3;
+    }
+  }
   .pie { flex-basis: 74px; }
   .positions { flex-basis: 74px; }
   .tasks + .positions { flex-basis: 142px; }
-  .customer, .name { min-width: 250px; }
+  .customer { min-width: 250px; }
+  .name { min-width: 220px; }
 
   &.disabled {
     opacity: .5;

@@ -1,4 +1,4 @@
-import { RequestPosition } from "../../request/common/models/request-position";
+import { RequestPosition } from "../../../request/common/models/request-position";
 
 export class AgreementsResponse {
   totalCount: number;
