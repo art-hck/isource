@@ -1,8 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { PositionStatus } from "../../../../request/common/enum/position-status";
 import { RequestPosition } from "../../../../request/common/models/request-position";
-import { AgreementsResponse } from "../../models/agreements-response";
-import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
 
 @Component({
   selector: 'app-agreements',
