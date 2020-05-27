@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
   { path: 'notifications', loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'kim', loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
+  { path: 'agreements', loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},
   { path: '**', redirectTo: '/not-found' }
 ];
 

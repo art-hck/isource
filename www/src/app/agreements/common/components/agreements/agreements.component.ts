@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { PositionStatus } from "../../../request/common/enum/position-status";
-import { RequestPosition } from "../../../request/common/models/request-position";
+import { Component, Inject, Input } from '@angular/core';
+import { PositionStatus } from "../../../../request/common/enum/position-status";
+import { RequestPosition } from "../../../../request/common/models/request-position";
 
 @Component({
   selector: 'app-agreements',
@@ -8,8 +8,7 @@ import { RequestPosition } from "../../../request/common/models/request-position
   styleUrls: ['./agreements.component.scss']
 })
 export class AgreementsComponent {
-  @Input() positions: RequestPosition[];
-  @Input() total: number;
+  @Input() agreements: RequestPosition[];
   readonly labels = {
     [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: {
       label: "Рассмотреть ТП",

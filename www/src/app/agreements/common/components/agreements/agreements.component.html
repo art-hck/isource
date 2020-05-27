@@ -1,18 +1,18 @@
-<ng-container *ngIf="positions; else loading">
+<ng-container *ngIf="agreements; else loading">
   <div class="app-table app-no-border">
     <div class="app-row">
       <small class="app-col app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
       <small class="app-col app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
-      <small class="app-col app-ghost-color date"><b>НА СОГЛАСОВАНИИ С</b></small>
+      <small class="app-col app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
       <small class="app-col app-ghost-color status"><b>СТАТУС</b></small>
-      <small class="app-col app-ghost-color action"><b>СОГЛАСОВАНИЯ</b></small>
+      <small class="app-col app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
     </div>
   </div>
 
-  <div class="app-table">
-    <div class="app-row app-align-items-center" *ngFor="let position of positions">
+  <div class="app-table agreements-list">
+    <div class="app-row app-align-items-center" *ngFor="let position of agreements">
       <div class="app-col id">{{ position.request.number}}</div>
-      <div class="app-col name"><b>{{position.name}}</b></div>
+      <div class="app-col app-ellipsis name"><b>{{position.name}}</b></div>
       <div class="app-col date">
         <span>{{ position.updatedDate | date : "dd.MM.yyyy" }} </span>
         <span class="app-ghost-color">{{ position.updatedDate | date : "HH:mm" }}</span>
@@ -36,3 +36,4 @@
     </div>
   </div>
 </ng-template>
+
