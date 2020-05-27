@@ -36,7 +36,6 @@ export class AgreementsComponent {
       label: "Рассмотреть позицию"
     },
   };
-  constructor() {}
 
   getRouterLink(position: RequestPosition): any[] {
     const routerLink = ['/requests/customer', position.request.id];
