@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
-import { scan, tap, throttleTime } from "rxjs/operators";
+import { scan, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
@@ -50,7 +50,8 @@ export class RequestList2Component implements OnInit, OnDestroy {
       }),
       scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as {page?: number, filters?: RequestsListFilter})
+      } as {page?: number, filters?: RequestsListFilter}),
+      takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
       this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(

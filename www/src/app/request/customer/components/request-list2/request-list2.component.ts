@@ -59,7 +59,8 @@ export class RequestList2Component implements OnInit, OnDestroy {
       }),
       scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as {page?: number, filters?: RequestsListFilter})
+      } as {page?: number, filters?: RequestsListFilter}),
+      takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
       this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(
