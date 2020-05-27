@@ -14,8 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'list',
-    component: ContragentListViewComponent,
-    data: { title: "Контрагенты" }
+    component: ContragentListViewComponent
   },
   {
     path: 'create',
