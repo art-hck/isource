@@ -1,5 +1,5 @@
 <ng-container *ngIf="proposalPosition else emptyProposal">
-  <button (click)="proposalModal.open()">
+  <button (click)="clickOnProposalPosition.emit(proposalPosition)">
     <div class="app-row app-align-items-center">
       <!-- name -->
       <h3 class="app-col">
@@ -43,9 +43,6 @@
       <span class="app-ghost-color"> доставка</span>
     </div>
   </button>
-  <uxg-modal #proposalModal>
-    <h2><span class="app-bold">{{ proposalPosition.position.name }}</span></h2>
-  </uxg-modal>
 </ng-container>
 
 <ng-template #emptyProposal>

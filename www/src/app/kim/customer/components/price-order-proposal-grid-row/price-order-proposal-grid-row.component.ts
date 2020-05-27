@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Subject } from "rxjs";
 import { FormControl, Validators } from "@angular/forms";
@@ -17,6 +17,7 @@ export class PriceOrderProposalGridRowComponent {
   @Input() priceOrderId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() view: "list" | "grid";
+  @Output() clickOnProposalPosition = new EventEmitter<KimPriceOrderProposalPosition>();
   readonly selectedProposalPosition = new FormControl(null, Validators.required);
 
   get isReviewed(): boolean {

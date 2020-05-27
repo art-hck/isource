@@ -7,5 +7,6 @@
     *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId"
     [selectedProposalPosition]="isReviewed ? null : selectedProposalPosition"
     [proposalPosition]="getProposalPosition(supplier)"
+    (clickOnProposalPosition)="clickOnProposalPosition.emit($event)"
   ></app-price-order-proposal-grid-cell>
 </div>

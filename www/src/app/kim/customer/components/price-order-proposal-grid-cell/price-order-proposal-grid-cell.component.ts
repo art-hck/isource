@@ -5,13 +5,13 @@ import { KimPriceOrderProposalPosition } from "../../../common/models/kim-price-
 
 @Component({
   selector: 'app-price-order-proposal-grid-cell',
-  templateUrl: './price-order-proposal-grid-cell.component.html'
+  templateUrl: './price-order-proposal-grid-cell.component.html',
 })
 export class PriceOrderProposalGridCellComponent {
   @Input() proposalPosition: KimPriceOrderProposalPosition;
   @Input() selectedProposalPosition: FormControl;
   @Output() create = new EventEmitter();
-  @Output() click = new EventEmitter();
+  @Output() clickOnProposalPosition = new EventEmitter<KimPriceOrderProposalPosition>();
   @HostBinding('class.grid-item')
   @HostBinding('class.grid-cell')
   @HostBinding('class.app-col') classes = true;

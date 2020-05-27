@@ -5,6 +5,7 @@ import { OkatoRegionCode } from "../../../shared/models/okato-region";
 import { EmployeeInfoBrief } from "../../../employee/models/employee-info";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { KimPriceOrderType } from "../enum/kim-price-order-type";
+import { RequestDocument } from "../../../request/common/models/request-document";
 
 export class KimPriceOrder {
   id: Uuid;
@@ -14,6 +15,7 @@ export class KimPriceOrder {
   contragentId: Uuid;
   contragent: ContragentShortInfo;
   name: string;
+  documents?: RequestDocument[];
   deliveryAddress: string;
   deliveryConditions: string;
   dateResponse: string;

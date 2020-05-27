@@ -14,6 +14,7 @@ import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { PriceOrderProposalGridRowComponent } from "../price-order-proposal-grid-row/price-order-proposal-grid-row.component";
 import Fetch = PriceOrderProposalsActions.Fetch;
+import { KimPriceOrderProposalPosition } from "../../../common/models/kim-price-order-proposal-position";
 
 @Component({
   templateUrl: './price-order-proposal-view.component.html',
@@ -32,6 +33,7 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   priceOrderId: Uuid;
   view: "grid" | "list" = "grid";
   gridRows: ElementRef[];
+  clickedProposalPosition: KimPriceOrderProposalPosition;
   readonly destroy$ = new Subject();
   readonly chooseBy$ = new Subject<"date" | "price">();
 

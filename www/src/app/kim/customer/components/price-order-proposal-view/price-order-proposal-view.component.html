@@ -52,6 +52,7 @@
             [suppliers]="suppliers(positionsWithProposals)"
             [view]="'grid'"
             [proposalPositions]="positionWithProposals.proposalPositions"
+            (clickOnProposalPosition)="clickedProposalPosition = $event"
           >
             <ng-container *ngIf="positionWithProposals.position as position">
               <div><b>{{ position.name }}</b></div>
@@ -91,3 +92,17 @@
     <div class="app-col-aside detachable"></div>
   </div>
 </ng-template>
+
+<uxg-modal [(state)]="clickedProposalPosition" size="l">
+  <h2>{{ (priceOrder$ | async).name }}</h2>
+  <app-kim-price-order-proposal-detail
+    *ngIf="clickedProposalPosition"
+    [proposalPosition]="clickedProposalPosition"
+    [priceOrder]="priceOrder$ | async"
+  ></app-kim-price-order-proposal-detail>
+
+  <ng-template uxgModalFooter>
+      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+  </ng-template>
+
+</uxg-modal>

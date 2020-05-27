@@ -21,6 +21,7 @@ import { PriceOrderProposalViewComponent } from './components/price-order-propos
 import { PriceOrderProposalsState } from "./states/price-order-proposals.state";
 import { PriceOrderProposalGridRowComponent } from "./components/price-order-proposal-grid-row/price-order-proposal-grid-row.component";
 import { PriceOrderProposalGridCellComponent } from "./components/price-order-proposal-grid-cell/price-order-proposal-grid-cell.component";
+import { PriceOrderProposalDetailComponent } from "./components/price-order-proposal-detail/price-order-proposal-detail.component";
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { PriceOrderProposalGridCellComponent } from "./components/price-order-pr
     ManualPriceOrderComponent,
     PriceOrderProposalGridRowComponent,
     PriceOrderProposalViewComponent,
-    PriceOrderProposalGridCellComponent
+    PriceOrderProposalGridCellComponent,
+    PriceOrderProposalDetailComponent
   ],
   providers: [
     KimPriceOrderService,
