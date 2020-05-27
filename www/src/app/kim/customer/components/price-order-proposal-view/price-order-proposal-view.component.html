@@ -75,6 +75,20 @@
     </div>
     <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
   </div>
+  <uxg-modal [(state)]="clickedProposalPosition" size="l">
+    <h2>{{ (priceOrder$ | async).name }}</h2>
+    <app-kim-price-order-proposal-detail
+      *ngIf="clickedProposalPosition"
+      [priceOrder]="priceOrder$ | async"
+      [proposalPosition]="clickedProposalPosition"
+    ></app-kim-price-order-proposal-detail>
+
+    <ng-template uxgModalFooter>
+      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+    </ng-template>
+
+  </uxg-modal>
+
 </ng-container>
 
 <ng-template #placeholder>
@@ -93,16 +107,3 @@
   </div>
 </ng-template>
 
-<uxg-modal [(state)]="clickedProposalPosition" size="l">
-  <h2>{{ (priceOrder$ | async).name }}</h2>
-  <app-kim-price-order-proposal-detail
-    *ngIf="clickedProposalPosition"
-    [proposalPosition]="clickedProposalPosition"
-    [priceOrder]="priceOrder$ | async"
-  ></app-kim-price-order-proposal-detail>
-
-  <ng-template uxgModalFooter>
-      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
-  </ng-template>
-
-</uxg-modal>

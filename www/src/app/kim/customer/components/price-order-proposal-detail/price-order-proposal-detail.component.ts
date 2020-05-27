@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import { KimPriceOrderProposalPosition } from "../../../common/models/kim-price-order-proposal-position";
-import { TechnicalCommercialProposalHelperService } from "../../../../request/common/services/technical-commercial-proposal-helper.service";
 
 @Component({
   selector: 'app-kim-price-order-proposal-detail',

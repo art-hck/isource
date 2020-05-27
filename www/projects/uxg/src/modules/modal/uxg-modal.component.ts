@@ -8,7 +8,7 @@ import { DOCUMENT } from "@angular/common";
 })
 export class UxgModalComponent {
   @ContentChild(UxgModalFooterDirective, { read: TemplateRef }) footerTpl: TemplateRef<ElementRef>;
-  @Input() state: boolean;
+  @Input() state;
   @Input() noBackdrop: boolean;
   @Input() staticBackdrop: boolean;
   @Input() closable = true;

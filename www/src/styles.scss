@@ -76,3 +76,17 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
     }
   }
 }
+
+.placeholder {
+  background: #F2F2F2;
+  margin-bottom: 24px;
+  border-radius: 4px;
+
+  &-row {
+    @extend .placeholder;
+
+    & + & {
+      margin-left: 1em;
+    }
+  }
+}
