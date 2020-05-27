@@ -2,13 +2,13 @@
   [requests]="requests$ | async"
   [total]="totalCount$ | async"
   [status]="status$ | async"
-  [statusCounts]="statusCounts$ | async"
+  [statusCounters]="statusCounters$ | async"
   [filters]="fetchFilters$ | async"
   [pageSize]="pageSize"
   [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (addRequest)="newRequestModal.open()"
-  (refresh)="fetchFilters$.next({}); store.dispatch(fetchStatusCounts())"
+  (refresh)="fetchFilters$.next({})"
 ></app-request-list2>
 
 <app-request-create-modal

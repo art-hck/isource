@@ -11,7 +11,6 @@ import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
-import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 
 @Injectable({
   providedIn: "root"
@@ -33,11 +32,6 @@ export class RequestService {
     const requestData = this.formDataService.toFormData({ name, positions });
 
     return this.api.post<Request>(`requests/customer/add-request/manual`, requestData);
-  }
-
-  requestStatusCount() {
-    const url = `requests/customer/counts-on-different-statuses`;
-    return this.api.get<RequestStatusCount>(url);
   }
 
   addFreeFormRequest(request: Partial<Request>) {

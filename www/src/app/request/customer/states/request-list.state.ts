@@ -11,9 +11,7 @@ import { RequestStatusCount } from "../../common/models/requests-list/request-st
 import { RequestActions } from "../actions/request.actions";
 import { of } from "rxjs";
 import Fetch = RequestListActions.Fetch;
-import FetchStatusCounts = RequestListActions.FetchStatusCounts;
 import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
-import { Request } from "../../common/models/request";
 import { Uuid } from "../../../cart/models/uuid";
 
 export interface RequestStateStateModel {
@@ -35,21 +33,15 @@ export class RequestListState {
   constructor(private rest: RequestService) {}
 
   @Selector() static requests({requests}: Model) { return requests.entities; }
+  @Selector() static statusCounters({requests}: Model) { return requests.statusCounters; }
   @Selector() static totalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
-  @Selector() static statusCounts({requestStatusCounts}: Model) { return requestStatusCounts; }
   @Selector() static createdRequest({createdRequestId}: Model) { return createdRequestId; }
 
   @Action(Fetch, { cancelUncompleted: true }) fetch({setState}: Context, {startFrom, pageSize, filters}: Fetch) {
     setState(patch({ status: "fetching" as StateStatus }));
     return this.rest.getRequests(startFrom, pageSize, filters).pipe(
       tap(requests => setState(patch({requests, status: "received" as StateStatus}))),
-    );
-  }
-
-  @Action(FetchStatusCounts) fetchStatusCounts({setState}: Context) {
-    return this.rest.requestStatusCount().pipe(
-      tap(requestStatusCounts => setState(patch({requestStatusCounts}))),
     );
   }
 
