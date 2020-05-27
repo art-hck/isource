@@ -27,12 +27,16 @@ export class DeliveryMonitorConsignment {
       deliveryState: string,
       weightByTd: number,
       waybillId: string,
-      vehicles: [
+      deliveryVehicles: [
         {
-          vehicleNumber: string,
-          shipmentDate: Date,
-          vehicleType: string,
-          vehicleId: string
+          deliveryVehicleId: string,
+          shipmentDate: Date|null,
+          vehicle: {
+            vehicleNumber: string,
+            shipmentDate: Date,
+            vehicleType: string,
+            vehicleId: string
+          }
         }
       ]
     }
