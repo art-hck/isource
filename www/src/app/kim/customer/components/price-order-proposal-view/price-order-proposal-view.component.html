@@ -1,0 +1,93 @@
+<ng-container *ngIf="(status$ | async) !== 'fetching'; else placeholder">
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
+
+        <uxg-tabs class="app-col">
+          <uxg-tab-title #sentToReviewTab [active]="true" >
+            <ng-container *ngIf="(positionsWithProposalsOnReview$ | async) as posWithProposalsOnReview">
+              Необходимо рассмотреть ({{posWithProposalsOnReview?.length}})
+            </ng-container>
+          </uxg-tab-title>
+
+          <uxg-tab-title #reviewedTab>
+            <ng-container *ngIf="(positionsWithProposalsReviewed$ | async) as posWithProposalsReviewed">
+              Рассмотренные ({{ posWithProposalsReviewed?.length }})
+            </ng-container>
+          </uxg-tab-title>
+        </uxg-tabs>
+
+        <ng-container *ngIf="(proposalsLength$ | async)">
+          <div class="app-secondary-color">Режим отображения:</div>
+          <div class="app-btn-group">
+            <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
+              <uxg-icon shape="app-grid-view"></uxg-icon>
+            </button>
+            <button disabled uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
+              <uxg-icon shape="app-list-view"></uxg-icon>
+            </button>
+          </div>
+          <!--  <button uxgButton secondary>Фильтр</button> -->
+        </ng-container>
+      </div>
+
+      <br/>
+
+      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? positionsWithProposalsReviewed$ : positionsWithProposalsOnReview$) | async as positionsWithProposals">
+        <!-- grid -->
+        <div class="grid-table" *ngSwitchCase="'grid'">
+          <app-grid-contragents
+            *ngIf="positionsWithProposals.length"
+            [gridRows]="gridRows"
+            [hasAnalogsFn]="hasAnalogs(positionsWithProposals)"
+            [suppliers]="suppliers(positionsWithProposals)"
+          ></app-grid-contragents>
+
+          <app-price-order-proposal-grid-row
+            class="position-row"
+            #proposalOnReview
+            [chooseBy$]="chooseBy$"
+            *ngFor="let positionWithProposals of positionsWithProposals"
+            [priceOrderId]="priceOrderId"
+            [suppliers]="suppliers(positionsWithProposals)"
+            [view]="'grid'"
+            [proposalPositions]="positionWithProposals.proposalPositions"
+          >
+            <ng-container *ngIf="positionWithProposals.position as position">
+              <div><b>{{ position.name }}</b></div>
+              <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{ position.okei }}</div>
+              <div class="app-ghost-color">&nbsp;| {{ (priceOrder$ | async).dateDelivery | date:"dd.MM.yyyy" }}</div>
+            </ng-container>
+          </app-price-order-proposal-grid-row>
+        </div>
+
+        <!-- empty -->
+        <div *ngIf="positionsWithProposals.length === 0">
+          <h1 class="text-center" [style.opacity]="0.1">
+            <br/>
+            <uxg-icon shape="app-publish" size="270"></uxg-icon><br/>
+            Все технико-коммерческие предложения рассмотрены
+          </h1>
+        </div>
+
+      </ng-container>
+    </div>
+    <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
+  </div>
+</ng-container>
+
+<ng-template #placeholder>
+  <div class="app-row" [class.app-layout]="view === 'grid'">
+    <div class="app-col">
+      <div class="app-row">
+        <div class="app-col app-row">
+          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40" [style.width.px]="200"></div>
+        </div>
+        <div class="placeholder-row" [style.height.px]="40" [style.width.px]="80"></div>
+      </div>
+
+      <div class="placeholder" *ngFor="let i of [].constructor(10)" [style.height.px]="160"></div>
+    </div>
+    <div class="app-col-aside detachable"></div>
+  </div>
+</ng-template>

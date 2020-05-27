@@ -5,13 +5,13 @@ import { Routes } from "../../core/models/routes";
 import { CartComponent } from "./components/cart/cart.component";
 import { ItemsDictionaryComponent } from "./components/items-dictionary/items-dictionary.component";
 import { ManualPriceOrderComponent } from "./components/manual-price-order/manual-price-order.component";
+import { PriceOrderProposalViewComponent } from "./components/price-order-proposal-view/price-order-proposal-view.component";
 
 const routes: Routes = [
   {
     path: "",
-    // component: KimCatalogComponent,
-    // data: { title: "Все товары портала" },
     redirectTo: "price-orders",
+    pathMatch: 'full'
   },
   {
     path: "price-orders",
@@ -24,6 +24,11 @@ const routes: Routes = [
     data: { title: " Создание произвольного ценового запроса вручную" }
   },
   {
+    path: "price-orders/:id",
+    component: PriceOrderProposalViewComponent,
+    data: { title: "Мои ценовые запросы" }
+  },
+  {
     path: "cart",
     component: CartComponent,
     data: { title: "Корзина торгового портала" }
@@ -31,7 +36,7 @@ const routes: Routes = [
   {
     path: 'items-dictionary',
     component: ItemsDictionaryComponent,
-    data: {hideTitle: true},
+    data: { hideTitle: true },
   },
   {
     path: 'items-dictionary/:query',

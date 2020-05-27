@@ -24,8 +24,6 @@ import { RequestListFilterComponent } from './components/request-list/request-li
 import { FilterSectionComponent } from "./components/request-list/request-list-filter/filter-section/filter-section.component";
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
-
-import { ContragentSharedModule } from "../../contragent/contragent-shared.module";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
@@ -97,7 +95,6 @@ const RequestCommonModuleDeclarations = [
     SharedModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentSharedModule,
   ],
   providers: [
     ContractService,
@@ -110,7 +107,6 @@ const RequestCommonModuleDeclarations = [
     SharedModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentSharedModule,
     ...RequestCommonModuleDeclarations
   ]
 })

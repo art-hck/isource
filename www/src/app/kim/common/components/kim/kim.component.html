@@ -4,26 +4,26 @@
       <uxg-tab-title #catalogTab disabled [class.app-bold]="catalogTab.active">Все товары портала</uxg-tab-title>
       <uxg-tab-title
         #itemsDictionaryTab
-        routerLink="customer/items-dictionary" routerLinkActive
+        routerLink="/kim/customer/items-dictionary" routerLinkActive
         [active]="itemsDictionary.isActive"
         [routerLinkActiveOptions]="{exact: true}"
-        [class.app-bold]="itemsDictionaryTab.active"
+        [class.app-bold]="itemsDictionary.isActive"
         #itemsDictionary="routerLinkActive"
       >Поиск по справочнику</uxg-tab-title>
       <uxg-tab-title
         #priceOrderTab
-        routerLink="customer/price-orders" routerLinkActive
+        routerLink="/kim/customer/price-orders" routerLinkActive
         [active]="rlaPriceOrders.isActive"
         [routerLinkActiveOptions]="{exact: true}"
-        [class.app-bold]="priceOrderTab.active"
+        [class.app-bold]="rlaPriceOrders.isActive"
         #rlaPriceOrders="routerLinkActive"
       >Мои ценовые запросы</uxg-tab-title>
       <uxg-tab-title
         #cartTab
-        routerLink="customer/cart" routerLinkActive
+        routerLink="/kim/customer/cart" routerLinkActive
         [active]="cart.isActive"
         [routerLinkActiveOptions]="{exact: true}"
-        [class.app-bold]="cartTab.active"
+        [class.app-bold]="cart.isActive"
         #cart="routerLinkActive" [disabled]="(cartItemsLength$ | async) === 0">
         <div class="app-row app-align-items-center">
           <uxg-icon shape="app-basket"></uxg-icon><span>Корзина торгового портала</span>

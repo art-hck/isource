@@ -1,0 +1,16 @@
+<div class="contragents-row">
+  <div #gridRow class="app-row grid-row app-layout">
+    <div class="app-col grid-cell app-ellipsis" *ngFor="let supplier of suppliers; index as i">
+      <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
+      </app-contragent-info-link>
+      <div class="app-ghost-color analog" *ngIf="hasAnalogsFn(i)">аналоги</div>
+    </div>
+  </div>
+
+  <button class="left" *ngIf="canScrollLeft" uxgButton primary icon (click)="scrollLeft()">
+    <uxg-icon shape="app-chevron" dir="left"></uxg-icon>
+  </button>
+  <button class="right" *ngIf="canScrollRight" uxgButton primary icon (click)="scrollRight()">
+    <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
+  </button>
+</div>

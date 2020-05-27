@@ -115,7 +115,7 @@
               *ngFor="let proposal of proposals; trackBy: trackById"
               [proposal]="proposal"
               [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
-              [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos)"
+              [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos) && !withAnalogs(proposal)"
               (create)="addProposalPosition(proposal, proposalsByPos.position)"
             ></app-technical-commercial-proposal-grid-card>
           </div>

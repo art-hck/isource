@@ -7,14 +7,12 @@ import { OrderComponent } from './components/order/order.component';
 import { CartSumComponent } from './components/cart-sum/cart-sum.component';
 import { SharedModule } from "../shared/shared.module";
 import { CartRoutingModule } from "./cart-routing.module";
-import { ContragentSharedModule } from "../contragent/contragent-shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     SharedModule,
     CartRoutingModule,
-    ContragentSharedModule,
     ReactiveFormsModule
   ],
   exports: [

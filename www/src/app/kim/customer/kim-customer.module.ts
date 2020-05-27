@@ -17,6 +17,10 @@ import { KimItemsDictionaryService } from "./services/kim-items-dictionary.servi
 import { KimCartService } from "./services/kim-cart.service";
 import { CartState } from "./states/cart.state";
 import { ManualPriceOrderComponent } from './components/manual-price-order/manual-price-order.component';
+import { PriceOrderProposalViewComponent } from './components/price-order-proposal-view/price-order-proposal-view.component';
+import { PriceOrderProposalsState } from "./states/price-order-proposals.state";
+import { PriceOrderProposalGridRowComponent } from "./components/price-order-proposal-grid-row/price-order-proposal-grid-row.component";
+import { PriceOrderProposalGridCellComponent } from "./components/price-order-proposal-grid-cell/price-order-proposal-grid-cell.component";
 
 
 @NgModule({
@@ -29,6 +33,9 @@ import { ManualPriceOrderComponent } from './components/manual-price-order/manua
     PriceOrderFormPositionsParamsComponent,
     ItemsDictionaryComponent,
     ManualPriceOrderComponent,
+    PriceOrderProposalGridRowComponent,
+    PriceOrderProposalViewComponent,
+    PriceOrderProposalGridCellComponent
   ],
   providers: [
     KimPriceOrderService,
@@ -40,6 +47,7 @@ import { ManualPriceOrderComponent } from './components/manual-price-order/manua
     KimCustomerRoutingModule,
     NgxsModule.forFeature([
       PriceOrderState,
+      PriceOrderProposalsState,
       ItemsDictionaryState,
       CartState
     ]),

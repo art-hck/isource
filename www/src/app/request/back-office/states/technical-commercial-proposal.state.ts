@@ -1,7 +1,7 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext, StateOperator } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
+import { catchError, map, mergeMap, switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
@@ -88,6 +88,17 @@ export class TechnicalCommercialProposalState {
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId).pipe(
+      // Разделение предложений ТКП с аналогами и без
+      map(proposals => proposals.reduce((result, proposal) => {
+        [true, false].forEach(withAnalog => {
+          const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
+          if (positions.length) {
+            result.push({ ...proposal, positions});
+          }
+        });
+
+        return result;
+      }, [])),
       tap(proposals => ctx.setState(patch({ proposals }))),
       tap(proposals => this.cache[requestId] = proposals),
       switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),
