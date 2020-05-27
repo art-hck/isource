@@ -63,7 +63,7 @@
         <!--        <small *ngIf="newTab.active" class="app-col published">Опубликована</small>-->
         <!--        <small *ngIf="completedTab.active" class="app-col completed">Завершена</small>-->
         <small class="app-col name">Наименование</small>
-        <small class="app-col deliveryDate">Сроки поставки</small>
+        <small class="app-col delivery-date">Сроки поставки</small>
         <small *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">Задач</small>
         <small *ngIf="inProgressTab.active" class="app-col app-grow-0 pie">Заверш/поз.</small>
         <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
@@ -90,15 +90,37 @@
         <!--        <div *ngIf="newTab.active" class="app-col published"></div>-->
         <!--        <div *ngIf="completedTab.active" class="app-col completed">Завершена</div>-->
         <div class="app-col name app-ellipsis">{{ request.request.name }}</div>
-        <div class="app-col deliveryDate app-ellipsis">
-          <span *ngIf="request.requestData.asapDeliveryDatePositionsCount">
-            {{request.requestData.asapDeliveryDatePositionsCount}} как можно скорее
-          </span>
-          <span *ngIf="request.requestData.minDeliveryDate">
-            {{ getDeliveryDate((request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
-            (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy'))}}
-          </span>
+
+        <div class="app-col delivery-date app-ellipsis">
+          <ng-container *ngIf="request.requestData.positionsCount === 0; else deliveryDates">
+            <span>—</span>
+          </ng-container>
+
+          <ng-template #deliveryDates>
+            <ng-container *ngIf="request.requestData.asapDeliveryDatePositionsCount !== request.requestData.positionsCount; else allPositionsAsap">
+              <span *ngIf="request.requestData.minDeliveryDate"
+                    title="{{ getDeliveryDate(
+                            (request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
+                            (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy') ) }}">
+                {{ getDeliveryDate(
+                  (request.requestData.minDeliveryDate | date:'dd.MM.yyyy'),
+                  (request.requestData.maxDeliveryDate | date:'dd.MM.yyyy')
+                ) }}
+              </span>
+
+              <span *ngIf="request.requestData.minDeliveryDate && request.requestData.asapDeliveryDatePositionsCount"
+                    title="Как можно быстрее: {{ request.requestData.asapDeliveryDatePositionsCount }} поз.">
+               Как можно быстрее: {{ request.requestData.asapDeliveryDatePositionsCount }} поз.
+              </span>
+            </ng-container>
+
+            <ng-template #allPositionsAsap>
+              <span>Все как можно скорее</span>
+            </ng-template>
+          </ng-template>
+
         </div>
+
         <div *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">{{request.requestData.tasksCount}}</div>
         <div *ngIf="inProgressTab.active" class="app-col app-grow-0 app-row pie">
           <svg width="20" height="20" class="chart">
