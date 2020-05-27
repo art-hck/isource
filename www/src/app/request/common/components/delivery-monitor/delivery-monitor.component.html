@@ -36,50 +36,64 @@
             </div>
           </clr-accordion-title>
 
-          <clr-accordion-content class="item-info-inner-content" *clrIfExpanded>
+          <clr-accordion-content class="item-info-inner-content">
 
             <div class="app-row">
-              <div class="clr-col-4">
+              <div class="app-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Вес по документам</p>
-                  <p class="item-info-content">{{ getWeightByTd(consignment) }}</p>
+                  <p class="item-info-content">{{ getWeightByTd(consignment) }} {{ getWeightEiByTd(consignment) }}</p>
                 </div>
               </div>
-            </div>
 
-            <div class="app-row">
-              <div class="clr-col-4">
+              <div class="app-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Дата отгрузки</p>
                   <p class="item-info-content">{{ getShipmentItemShippingDate(consignment) }}</p>
                 </div>
               </div>
 
-              <div class="clr-col-auto">
+              <div class="app-col-auto">
                 <div class="item-info-element">
-                  <p class="item-info-label">Плановая дата прибытия</p>
-                  <p class="item-info-content">{{ getShipmentItemArrivalDate(consignment) }}</p>
+                  <p class="item-info-label">Расчетная дата прибытия</p>
+                  <p class="item-info-content">{{ getShipmentItemEstimatedArrivalDate(consignment) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-row">
+              <div class="app-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Ожидаемая дата прибытия</p>
+                  <p class="item-info-content">{{ getShipmentItemExpectedArrivalDate(consignment) }}</p>
+                </div>
+              </div>
+
+              <div class="app-col-4">
+                <div class="item-info-element">
+                  <p class="item-info-label">Фактическая дата прибытия</p>
+                  <p class="item-info-content">{{ getShipmentItemActualArrivalDate(consignment) }}</p>
                 </div>
               </div>
             </div>
 
 
             <div class="app-row">
-              <div class="clr-col-4">
+              <div class="app-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Внутренний номер c/ф</p>
                   <p class="item-info-content">{{ consignment.invoice?.internalNumber || '—' }}</p>
                 </div>
               </div>
 
-              <div class="clr-col-4">
+              <div class="app-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Внешний номер с/ф</p>
                   <p class="item-info-content">{{ consignment.invoice?.externalNumber || '—' }}</p>
                 </div>
               </div>
 
-              <div class="clr-col-4">
+              <div class="app-col-4">
                 <div class="item-info-element">
                   <p class="item-info-label">Транспортная накладная</p>
                   <p class="item-info-content">{{ getWaybillNumber(consignment) }}</p>
@@ -89,7 +103,7 @@
 
 
             <div class="app-row">
-              <div class="app-col">
+              <div class="app-col-auto">
                 <div class="item-info-element">
                   <p class="item-info-label">Транспортные средства или номер заказа транспортной компании</p>
                   <p class="item-info-content">{{ getVehicleNumber(consignment) }}</p>
@@ -98,9 +112,9 @@
             </div>
 
 
-            <div class="app-row app-align-items-center from-to-block">
+            <div class="app-row">
 
-              <div class="app-col">
+              <div class="app-col-6">
                 <div class="item-info-element">
                   <p class="item-info-label">Грузоотправитель</p>
                   <p class="item-info-content">{{ consignment.consignor.name || '—' }}</p>
@@ -108,15 +122,11 @@
 
                 <div class="item-info-element">
                   <p class="item-info-label">Пункт отправления</p>
-                  <p class="item-info-content">{{ consignment.consignor?.actualAddress?.city || '—' }}</p>
+                  <p class="item-info-content">{{ consignment.consignor?.actualAddress?.rawAddress || '—' }}</p>
                 </div>
               </div>
 
-              <div class="clr-col-auto">
-                <div class="from-to-icon"></div>
-              </div>
-
-              <div class="app-col">
+              <div class="app-col-6">
                 <div class="item-info-element">
                   <p class="item-info-label">Грузополучатель</p>
                   <p class="item-info-content">{{ consignment?.consignee?.name || '—' }}</p>
@@ -124,7 +134,7 @@
 
                 <div class="item-info-element">
                   <p class="item-info-label">Пункт назначения</p>
-                  <p class="item-info-content">{{ consignment?.consignee?.actualAddress?.city || '—' }}</p>
+                  <p class="item-info-content">{{ consignment?.consignee?.actualAddress?.rawAddress || '—' }}</p>
                 </div>
               </div>
 
