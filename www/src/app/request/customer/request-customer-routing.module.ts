@@ -21,7 +21,7 @@ const routes: Routes = [
     path: '',
     component: RequestList2Component,
     canActivate: [CanActivateFeatureGuard],
-    data: { feature: "customerRequest" },
+    data: { title: "Заявки", hideTitle: true, feature: "customerRequest" },
   },
   {
     path: 'create',
