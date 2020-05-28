@@ -1,6 +1,6 @@
 <ng-container *ngIf="(agreements$ | async) as agreements">
-  <app-agreements
+  <app-agreements-deprecated
   [agreements]="agreements">
-  </app-agreements>
+  </app-agreements-deprecated>
   <app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
 </ng-container>

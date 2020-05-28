@@ -5,6 +5,8 @@ import { SharedModule } from "../shared/shared.module";
 import { RouterModule } from "@angular/router";
 import { AgreementsCustomerModule } from "./customer/agreements-customer.module";
 import { AgreementsRoutingModule } from "./agreements-routing.module";
+import { AgreementsBackofficeModule } from "./back-office/agreements-backoffice.module";
+
 
 
 @NgModule({
@@ -14,6 +16,7 @@ import { AgreementsRoutingModule } from "./agreements-routing.module";
     SharedModule,
     CommonModule,
     AgreementsCustomerModule,
+    AgreementsBackofficeModule,
     AgreementsRoutingModule
   ],
 })

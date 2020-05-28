@@ -9,6 +9,12 @@ export interface MenuModel {
 
 export const Menu: MenuModel[] = [
   {
+    text: 'Задачи',
+    path: 'agreements/backoffice',
+    feature: 'backofficeAgreements',
+    children: []
+  },
+  {
     text: 'Заявки',
     path: 'requests/customer',
     feature: 'customerRequest',

@@ -1,0 +1,4 @@
+export enum AgreementAction {
+  PROCESS_REQUEST = 'PROCESS_REQUEST',
+  WORK_ON_REQUEST = 'WORK_ON_REQUEST',
+}

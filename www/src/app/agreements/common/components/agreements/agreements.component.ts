@@ -1,6 +1,8 @@
-import { Component, Inject, Input } from '@angular/core';
-import { PositionStatus } from "../../../../request/common/enum/position-status";
-import { RequestPosition } from "../../../../request/common/models/request-position";
+import { Component, Input } from '@angular/core';
+import { Agreement } from "../../models/Agreement";
+import { AgreementAction } from "../../../back-office/enum/agreement-action";
+import { PaymentTermsLabels } from "../../../../request/common/dictionaries/payment-terms-labels";
+import { AgreementActionLabel } from "../../../back-office/enum/agreement-action-label";
 
 @Component({
   selector: 'app-agreements',
@@ -8,39 +10,25 @@ import { RequestPosition } from "../../../../request/common/models/request-posit
   styleUrls: ['./agreements.component.scss']
 })
 export class AgreementsComponent {
-  @Input() agreements: RequestPosition[];
+  @Input() agreements: Agreement[];
   readonly labels = {
-    [PositionStatus.TECHNICAL_PROPOSALS_AGREEMENT]: {
-      label: "Рассмотреть ТП",
-      path: "technical-proposals"
+    [AgreementAction.PROCESS_REQUEST]: {
+      label: "Обработать заявку",
+      path: ''
     },
-    [PositionStatus.RKD_AGREEMENT]: {
-      label: "Рассмотреть РКД",
-      path: "design-documentation"
-    },
-    [PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]: {
-      label: "Рассмотреть ТКП",
-      path: "technical-commercial-proposals"
-    },
-    [PositionStatus.CONTRACT_AGREEMENT]: {
-      label: "Рассмотреть договор",
-      path: "contracts"
-    },
-    [PositionStatus.RESULTS_AGREEMENT]: {
-      label: "Рассмотреть КП",
-      path: "commercial-proposals"
-    },
-    [PositionStatus.ON_CUSTOMER_APPROVAL]: {
-      label: "Рассмотреть позицию"
-    },
+    [AgreementAction.WORK_ON_REQUEST]: {
+      label: "Принять в работу",
+      path: ''
+    }
   };
 
-  getRouterLink(position: RequestPosition): any[] {
-    const routerLink = ['/requests/customer', position.request.id];
+  getRouterLink(agreement: Agreement): any[] {
+    const routerLink = ['/requests/backoffice', agreement.request.id];
 
-    if (this.labels[position.status] && this.labels[position.status].path) {
-      routerLink.push(this.labels[position.status].path);
+    if (this.labels[agreement.action.name] && this.labels[agreement.action.name].path) {
+      routerLink.push(this.labels[agreement.action.name].path);
     }
     return routerLink;
   }
+
 }
