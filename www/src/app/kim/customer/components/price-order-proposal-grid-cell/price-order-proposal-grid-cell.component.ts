@@ -1,21 +1,21 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { FormControl } from "@angular/forms";
 import { getCurrencySymbol } from "@angular/common";
-import { KimPriceOrderProposalPosition } from "../../../common/models/kim-price-order-proposal-position";
+import { KimPriceOrderProposal } from "../../../common/models/kim-price-order-proposal";
 
 @Component({
   selector: 'app-price-order-proposal-grid-cell',
   templateUrl: './price-order-proposal-grid-cell.component.html',
 })
 export class PriceOrderProposalGridCellComponent {
-  @Input() proposalPosition: KimPriceOrderProposalPosition;
-  @Input() selectedProposalPosition: FormControl;
+  @Input() proposal: KimPriceOrderProposal;
+  @Input() selectedProposal: FormControl;
   @Output() create = new EventEmitter();
-  @Output() clickOnProposalPosition = new EventEmitter<KimPriceOrderProposalPosition>();
+  @Output() show = new EventEmitter<KimPriceOrderProposal>();
   @HostBinding('class.grid-item')
   @HostBinding('class.grid-cell')
   @HostBinding('class.app-col') classes = true;
-  @HostBinding('class.empty') get isEmpty() { return !this.proposalPosition; }
+  @HostBinding('class.empty') get isEmpty() { return !this.proposal; }
   getCurrencySymbol = getCurrencySymbol;
 
 }

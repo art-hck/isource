@@ -6,6 +6,7 @@ import { EmployeeInfoBrief } from "../../../employee/models/employee-info";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { KimPriceOrderType } from "../enum/kim-price-order-type";
 import { RequestDocument } from "../../../request/common/models/request-document";
+import { KimProceOrderSupplier } from "./kim-proce-order-supplier";
 
 export class KimPriceOrder {
   id: Uuid;
@@ -30,5 +31,6 @@ export class KimPriceOrder {
   status: KimPriceOrderStatus;
   statusLabel: string;
   type: KimPriceOrderType;
-  positions?: KimPriceOrderPosition[];
+  proposalSuppliers?: KimProceOrderSupplier[];
+  positions: KimPriceOrderPosition[];
 }

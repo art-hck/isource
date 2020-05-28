@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { KimPriceOrder } from "../../common/models/kim-price-order";
-import { KimPriceOrderProposals } from "../../common/models/kim-price-order-proposals";
-import { PriceOrderProposalsMock } from "./kim-price-order.mock";
-import { of } from "rxjs";
 import { Uuid } from "../../../cart/models/uuid";
-import { delay } from "rxjs/operators";
 
 @Injectable()
 export class KimPriceOrderService {
@@ -23,9 +19,8 @@ export class KimPriceOrderService {
   }
 
   proposals(priceOrderId: Uuid) {
-    return of(PriceOrderProposalsMock).pipe(delay(300));
-    // const url = `kim/customer/price-order/${priceOrderId}/proposals`;
-    // return this.api.get<KimPriceOrderProposals>(url);
+    const url = `kim/customer/price-order/${priceOrderId}/proposals`;
+    return this.api.get<KimPriceOrder>(url);
   }
 }
 

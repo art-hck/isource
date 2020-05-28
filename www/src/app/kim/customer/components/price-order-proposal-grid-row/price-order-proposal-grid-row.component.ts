@@ -1,32 +1,41 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Subject } from "rxjs";
 import { FormControl, Validators } from "@angular/forms";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import { KimPriceOrderProposalPosition } from "../../../common/models/kim-price-order-proposal-position";
+import { KimPriceOrderProposal } from "../../../common/models/kim-price-order-proposal";
 
 @Component({
   selector: 'app-price-order-proposal-grid-row',
   templateUrl: './price-order-proposal-grid-row.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PriceOrderProposalGridRowComponent {
+export class PriceOrderProposalGridRowComponent implements OnInit {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @Input() suppliers: ContragentShortInfo[];
-  @Input() proposalPositions: KimPriceOrderProposalPosition[];
+  @Input() proposals: KimPriceOrderProposal[];
   @Input() priceOrderId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() view: "list" | "grid";
-  @Output() clickOnProposalPosition = new EventEmitter<KimPriceOrderProposalPosition>();
-  readonly selectedProposalPosition = new FormControl(null, Validators.required);
+  @Output() show = new EventEmitter<KimPriceOrderProposal>();
+  readonly selectedProposal = new FormControl(null, Validators.required);
+  readonly rejectedProposalPosition = new FormControl(null, Validators.required);
+
+  ngOnInit() {
+    this.selectedProposal.valueChanges
+      .subscribe(() => this.rejectedProposalPosition.reset(null, {emitEvent: false}));
+
+    this.rejectedProposalPosition.valueChanges
+      .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
+  }
 
   get isReviewed(): boolean {
-    return this.proposalPositions.some(({ isWinner }) => isWinner);
+    return this.proposals.some(({ isWinner }) => isWinner);
   }
 
-  getProposalPosition(supplier: ContragentShortInfo): KimPriceOrderProposalPosition {
-    return this.proposalPositions.find(({ supplier: {id} }) => id === supplier.id);
+  getProposal({id}: ContragentShortInfo): KimPriceOrderProposal {
+    return this.proposals.find(({ proposalSupplier: { supplier } }) => supplier.id === id);
   }
 
-  trackByProposalPositionId = (i, supplier: ContragentShortInfo) => this.getProposalPosition(supplier)?.id;
+  trackByProposalPositionId = (i, supplier: ContragentShortInfo) => this.getProposal(supplier)?.id;
 }
