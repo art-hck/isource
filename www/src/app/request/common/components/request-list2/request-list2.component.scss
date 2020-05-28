@@ -5,7 +5,7 @@
   .published { flex-basis: 100px; }
   .tasks { flex-basis: 40px; }
   .delivery-date {
-    min-width: 350px;
+    min-width: 330px;
 
     & span:not(:last-of-type):after {
       content: '|';
@@ -17,7 +17,6 @@
   .positions { flex-basis: 94px; }
   .tasks + .positions { flex-basis: 142px; }
   .customer, .name {
-    max-width: 260px;
     min-width: 140px;
   }
 
