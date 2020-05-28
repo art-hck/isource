@@ -7,10 +7,6 @@ export namespace RequestListActions {
     constructor(public startFrom: number, public pageSize: number, public filters: RequestsListFilter = {}) {}
   }
 
-  export class FetchStatusCounts {
-    static readonly type = '[Request List Customer] Fetch Status Counts';
-  }
-
   export class AddRequestFromExcel {
     static readonly type = '[Request List Customer] Add Request From Excel';
 

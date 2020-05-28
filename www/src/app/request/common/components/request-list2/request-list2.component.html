@@ -16,25 +16,36 @@
 
     <div class="app-row app-align-items-center">
       <uxg-tabs class="app-col">
-        <uxg-tab-title #inProgressTab [active]="true" (click)="switchTab(inProgressTab, [RequestStatus.IN_PROGRESS])"
-                       [disabled]="statusCounts?.inProgressRequestsCount === 0"
-        >В обработке <span class="app-ghost-color">({{statusCounts?.inProgressRequestsCount}})</span></uxg-tab-title>
+        <uxg-tab-title #inProgressTab [active]="true"
+                       (click)="switchTab(inProgressTab, [RequestStatus.IN_PROGRESS])"
+                       [disabled]="statusCounters?.inProgressRequestsCount === 0">
+          В обработке <span class="app-ghost-color">({{statusCounters?.inProgressRequestsCount}})</span>
+        </uxg-tab-title>
 
-        <uxg-tab-title #newTab (click)="switchTab(newTab, [RequestStatus.NEW])" [disabled]="statusCounts?.newRequestsCount === 0"
-        >Новые <span class="app-ghost-color">({{statusCounts?.newRequestsCount}})</span></uxg-tab-title>
+        <uxg-tab-title #newTab
+                       (click)="switchTab(newTab, [RequestStatus.NEW])"
+                       [disabled]="statusCounters?.newRequestsCount === 0">
+          Новые <span class="app-ghost-color">({{statusCounters?.newRequestsCount}})</span>
+        </uxg-tab-title>
 
-        <uxg-tab-title
-          #draftTab (click)="switchTab(draftTab, [RequestStatus.DRAFT])"
-          *ngIf="feature.authorize('publishRequest')" [disabled]="statusCounts?.draftRequestsCount === 0"
-        >Черновики <span class="app-ghost-color">({{statusCounts?.draftRequestsCount}})</span></uxg-tab-title>
+        <uxg-tab-title #draftTab
+                       (click)="switchTab(draftTab, [RequestStatus.DRAFT])"
+                       *ngIf="feature.authorize('publishRequest')"
+                       [disabled]="statusCounters?.draftRequestsCount === 0">
+          Черновики <span class="app-ghost-color">({{statusCounters?.draftRequestsCount}})</span>
+        </uxg-tab-title>
 
-        <uxg-tab-title #onApprovalTab (click)="switchTab(onApprovalTab, [RequestStatus.ON_CUSTOMER_APPROVAL])"
-                       [disabled]="statusCounts?.onCustomerApprovalRequestsCount === 0"
-        >На согласовании <span class="app-ghost-color">({{statusCounts?.onCustomerApprovalRequestsCount}})</span></uxg-tab-title>
+        <uxg-tab-title #onApprovalTab
+                       (click)="switchTab(onApprovalTab, [RequestStatus.ON_CUSTOMER_APPROVAL])"
+                       [disabled]="statusCounters?.onCustomerApprovalRequestsCount === 0">
+          На согласовании <span class="app-ghost-color">({{statusCounters?.onCustomerApprovalRequestsCount}})</span>
+        </uxg-tab-title>
 
-        <uxg-tab-title #completedTab (click)="switchTab(completedTab, [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT])"
-                       [disabled]="statusCounts?.completedRequestsCount === 0"
-        >Завершенные <span class="app-ghost-color">({{statusCounts?.completedRequestsCount}})</span></uxg-tab-title>
+        <uxg-tab-title #completedTab
+                       (click)="switchTab(completedTab, [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT])"
+                       [disabled]="statusCounters?.completedRequestsCount === 0">
+          Завершенные <span class="app-ghost-color">({{statusCounters?.completedRequestsCount}})</span>
+        </uxg-tab-title>
       </uxg-tabs>
 
       <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
@@ -65,7 +76,7 @@
         <small class="app-col name">Наименование</small>
         <small class="app-col delivery-date">Сроки поставки</small>
         <small *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">Задач</small>
-        <small *ngIf="inProgressTab.active" class="app-col app-grow-0 pie">Заверш/поз.</small>
+        <small *ngIf="inProgressTab.active" class="app-col app-grow-0 pie">Завершено поз.</small>
         <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
       </div>
     </div>
@@ -81,14 +92,20 @@
     <div class="app-table" [class.disabled]="status !== 'received'">
       <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
         <div class="app-col app-grow-0 number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
+
         <div class="app-col app-grow-0 published app-ghost-color">
           {{ request.request.publishedDate | date:'dd.MM.yyyy' }}
         </div>
-        <div *ngIf="feature.authorize('backofficeRequest')" class="app-col customer app-ellipsis">
-          {{request.request.contragent?.shortName}}
+
+        <div *ngIf="feature.authorize('backofficeRequest')"
+             title="{{ request.request.contragent?.shortName }}"
+             class="app-col customer app-ellipsis">
+          {{ request.request.contragent?.shortName }}
         </div>
+
         <!--        <div *ngIf="newTab.active" class="app-col published"></div>-->
         <!--        <div *ngIf="completedTab.active" class="app-col completed">Завершена</div>-->
+
         <div class="app-col name app-ellipsis">{{ request.request.name }}</div>
 
         <div class="app-col delivery-date app-ellipsis">
@@ -122,6 +139,7 @@
         </div>
 
         <div *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">{{request.requestData.tasksCount}}</div>
+
         <div *ngIf="inProgressTab.active" class="app-col app-grow-0 app-row pie">
           <svg width="20" height="20" class="chart">
             <circle r="10" cx="10" cy="10" class="pie"/>
@@ -134,6 +152,7 @@
             <span>{{ request.requestData.positionsCount }}</span>
           </div>
         </div>
+
         <div *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">{{ request.requestData.positionsCount}}</div>
       </a>
     </div>
