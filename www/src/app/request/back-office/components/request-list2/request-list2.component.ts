@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChil
 import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { scan, takeUntil, tap, throttleTime } from "rxjs/operators";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
@@ -37,6 +37,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private router: Router,
+    public route: ActivatedRoute,
     public store: Store,
   ) {}
 
@@ -45,7 +46,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
       throttleTime(100),
       tap(({page}) => {
         if (!page) {
-          this.router.navigate(["."], { queryParams: null });
+          this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
       scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
