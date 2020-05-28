@@ -17,7 +17,7 @@ const routes: Routes = [
     path: '',
     component: RequestList2Component,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", feature: "backofficeRequest" }
+    data: { feature: "backofficeRequest" }
   },
   {
     path: ':id',
