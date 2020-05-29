@@ -31,9 +31,9 @@ export class RequestService {
   ) {
   }
 
-  getRequests(startFrom, pageSize, filters): Observable<Page<RequestsList>> {
+  getRequests(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
     const url = `requests/backoffice/list`;
-    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters });
+    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
   }
 
   getRequest(id: Uuid) {

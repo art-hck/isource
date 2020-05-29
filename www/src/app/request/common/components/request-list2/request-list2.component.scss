@@ -1,7 +1,12 @@
 @import "src/assets/styles/helpers";
 
 .app-table {
-  .number { flex-basis: 50px; }
+  small a {
+    line-height: 16px;
+    vertical-align: middle;
+  }
+
+  .number { flex-basis: 65px; }
   .published { flex-basis: 100px; }
   .tasks { flex-basis: 40px; }
   .delivery-date {
@@ -13,7 +18,7 @@
       opacity: 0.3;
     }
   }
-  .pie { flex-basis: 94px; }
+  .pie { flex-basis: 120px; }
   .positions { flex-basis: 94px; }
   .tasks + .positions { flex-basis: 142px; }
   .customer, .name {

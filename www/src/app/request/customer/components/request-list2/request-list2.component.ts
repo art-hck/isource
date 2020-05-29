@@ -22,6 +22,7 @@ import Fetch = RequestListActions.Fetch;
 import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestList2Component as CommonRequestListComponent } from "../../../common/components/request-list2/request-list2.component";
+import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 
 @Component({
   templateUrl: './request-list2.component.html',
@@ -37,7 +38,7 @@ export class RequestList2Component implements OnInit, OnDestroy {
 
   activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
-  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
+  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   readonly destroy$ = new Subject();
   readonly addRequestFromExcel = ({files, requestName}, publish: boolean) => new AddRequestFromExcel(files, requestName, publish);
 
@@ -57,13 +58,13 @@ export class RequestList2Component implements OnInit, OnDestroy {
           this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
-      scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
+      scan(({filters: prev},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...currSort}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as {page?: number, filters?: RequestsListFilter}),
+      } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort } ),
       takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
-      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(
+      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort)).subscribe(
         ({ CustomerRequestList }) => {
           this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests);
         });
