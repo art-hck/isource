@@ -29,6 +29,7 @@
     "@clr/ui": "^3.1.0",
     "@kolkov/ngx-dadata": "^0.4.2",
     "@ngxs/store": "^3.6.2",
+    "@sentry/browser": "^5.15.5",
     "@webcomponents/custom-elements": "^1.4.1",
     "angular2-text-mask": "^9.0.0",
     "core-js": "^2.6.11",
