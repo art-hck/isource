@@ -3,8 +3,9 @@ import { KimPriceOrderStatus } from "../enum/kim-price-order-status";
 import { KimPriceOrderPosition } from "./kim-price-order-position";
 import { OkatoRegionCode } from "../../../shared/models/okato-region";
 import { EmployeeInfoBrief } from "../../../employee/models/employee-info";
-import { ContragentInfo } from "../../../contragent/models/contragent-info";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { KimPriceOrderType } from "../enum/kim-price-order-type";
+import { RequestDocument } from "../../../request/common/models/request-document";
 
 export class KimPriceOrder {
   id: Uuid;
@@ -12,8 +13,9 @@ export class KimPriceOrder {
   userId: Uuid;
   user: EmployeeInfoBrief;
   contragentId: Uuid;
-  contragent: ContragentInfo;
+  contragent: ContragentShortInfo;
   name: string;
+  documents?: RequestDocument[];
   deliveryAddress: string;
   deliveryConditions: string;
   dateResponse: string;
@@ -24,9 +26,9 @@ export class KimPriceOrder {
   isRussianProduction: boolean;
   isDenyMaxPricePosition: boolean;
   regions: OkatoRegionCode;
-  dateCreate: string;
+  createdDate: string;
   status: KimPriceOrderStatus;
   statusLabel: string;
   type: KimPriceOrderType;
-  positions: KimPriceOrderPosition[];
+  positions?: KimPriceOrderPosition[];
 }

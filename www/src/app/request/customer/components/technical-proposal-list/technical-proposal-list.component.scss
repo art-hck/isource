@@ -4,20 +4,6 @@
   padding-bottom: 20px;
 }
 
-.placeholder {
-  background: #F2F2F2;
-  margin-bottom: 24px;
-  border-radius: 4px;
-
-  &-row {
-    @extend .placeholder;
-
-    & + & {
-      margin-left: 1em;
-    }
-  }
-}
-
 .empty-list {
   text-align: center;
   padding: 100px 0;

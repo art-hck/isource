@@ -63,10 +63,20 @@ export class TechnicalCommercialProposalState {
     // }
     setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
-      .pipe(tap(proposals => {
-        setState(patch({ proposals, status: "received" as StateStatus }));
-        this.cache[requestId] = proposals;
-      }));
+      .pipe(
+        map(proposals => proposals.reduce((_proposals, proposal) => {
+          [true, false].forEach(withAnalog => {
+            const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
+            if (positions.length) {
+              _proposals.push({ ...proposal, positions});
+            }
+          });
+
+          return _proposals;
+        }, [])),
+        tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
+        tap(proposals => this.cache[requestId] = proposals),
+      );
   }
 
   @Action(Approve)

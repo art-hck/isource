@@ -6,7 +6,8 @@
     padding: 0 $side-padding;
     max-width: uxg($theme, content-width);
     width: 100%;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &-container {
@@ -61,4 +62,8 @@
       color: inherit;
     }
   }
+}
+
+.position-row[_ngcontent-sdr-c163] .position-item[_ngcontent-sdr-c163] {
+  /* padding-bottom: 15px; */
 }

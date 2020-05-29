@@ -7,7 +7,6 @@ import { SearchPanelComponent } from "./components/search-panel/search-panel.com
 import { SearchViewComponent } from "./components/search-view/search-view.component";
 import { PositionsListComponent } from "./components/positions-list/positions-list.component";
 import { CategoriesComponent } from './components/categories/categories.component';
-import { ContragentSharedModule } from "../contragent/contragent-shared.module";
 import { CatalogComponent } from "./components/catalog/catalog.component";
 import { CatalogFilterComponent } from "./components/catalog-filter/catalog-filter.component";
 import { CheckboxSliderControlComponent } from "./controls/checkbox-slider/checkbox-slider.control";
@@ -38,7 +37,6 @@ import { SupplierAutocompleteControlComponent } from "./controls/supplier-autoco
     ReactiveFormsModule,
     SharedModule,
     CatalogRoutingModule,
-    ContragentSharedModule,
     NouisliderModule
   ],
   providers: [

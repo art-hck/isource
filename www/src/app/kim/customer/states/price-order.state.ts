@@ -19,7 +19,7 @@ type Model = KimRequestStateModel;
 type Context = StateContext<Model>;
 
 @State<Model>({
-  name: 'Kim',
+  name: 'KimCustomerPriceOrder',
   defaults: { priceOrders: null, status: "pristine" }
 })
 @Injectable()

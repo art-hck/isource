@@ -1,0 +1,50 @@
+<ng-container *ngIf="proposalPosition else emptyProposal">
+  <button (click)="clickOnProposalPosition.emit(proposalPosition)">
+    <div class="app-row app-align-items-center">
+      <!-- name -->
+      <h3 class="app-col">
+        <span>{{(proposalPosition.priceWithoutVat * proposalPosition.quantity) | number:'1.0-2'}} </span>
+        <span class="app-ghost-color">{{getCurrencySymbol(proposalPosition.currency, "narrow")}}</span>
+      </h3>
+      <!-- status -->
+      <ng-container *ngIf="!selectedProposalPosition">
+        <div class="winner" *ngIf="proposalPosition.isWinner">
+          <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0H101V25H0L7 12.5L0 0Z" fill="#0EA04B"></path>
+            <text y="13" x="92" fill="#fff" alignment-baseline="middle" text-anchor="end">Победитель</text>
+          </svg>
+        </div>
+
+        <div class="app-ghost-color" *ngIf="!proposalPosition.isWinner">
+          <uxg-icon shape="app-check"></uxg-icon>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="selectedProposalPosition">
+        <uxg-radio-item
+          [name]="proposalPosition.position.id"
+          [value]="proposalPosition"
+          [formControl]="selectedProposalPosition"
+          (click)="$event.stopPropagation()"
+        ></uxg-radio-item>
+      </ng-container>
+    </div>
+
+    <div>
+      <!-- Количество, цена за ед. -->
+      <span>{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>
+      <span class="app-ghost-color"> | </span>
+      <span class="app-ghost-color">{{proposalPosition.priceWithoutVat | number:'1.0-2'}} </span>
+      <span class="app-ghost-color">{{getCurrencySymbol(proposalPosition.currency, "narrow")}}/{{proposalPosition.measureUnit}}</span>
+      <br/>
+
+      <!-- Дата поставки. -->
+      <span>{{proposalPosition.deliveryDate | date:"dd.MM.yyyy"}}</span>
+      <span class="app-ghost-color"> доставка</span>
+    </div>
+  </button>
+</ng-container>
+
+<ng-template #emptyProposal>
+  <button disabled><b>Не предоставлено</b></button>
+</ng-template>

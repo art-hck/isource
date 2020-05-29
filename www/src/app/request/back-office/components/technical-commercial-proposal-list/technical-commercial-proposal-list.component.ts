@@ -168,6 +168,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
   }
 
+  withAnalogs({positions}: TechnicalCommercialProposal): boolean {
+    return positions.every(({isAnalog}) => isAnalog) && positions.length > 0;
+  }
+
   allPositionsOnReview(): boolean {
     this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
       this.canNotAddNewContragent = items.every(item => item.data.length > 0 ?

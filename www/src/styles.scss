@@ -45,6 +45,10 @@ body, body p, h1, h2, h3, h4, h5, h6 {
 body {
   color: uxg($theme, color-font-primary);
   background-color: #FBFCFE;
+
+  &.modal-open {
+    overflow: hidden;
+  }
 }
 
 *:focus {
@@ -69,6 +73,20 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
 
     @each $status, $color in $statuses {
       &.#{$status} { background-color: $color }
+    }
+  }
+}
+
+.placeholder {
+  background: #F2F2F2;
+  margin-bottom: 24px;
+  border-radius: 4px;
+
+  &-row {
+    @extend .placeholder;
+
+    & + & {
+      margin-left: 1em;
     }
   }
 }

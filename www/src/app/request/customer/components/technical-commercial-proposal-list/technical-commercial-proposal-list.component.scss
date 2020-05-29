@@ -1,19 +1,5 @@
 @import "src/assets/styles/helpers";
 
-.placeholder {
-  background: #F2F2F2;
-  margin-bottom: 24px;
-  border-radius: 4px;
-
-  &-row {
-    @extend .placeholder;
-
-    & + & {
-      margin-left: 1em;
-    }
-  }
-}
-
 .proposals-footer {
   overflow: hidden;
   width: 100%;
