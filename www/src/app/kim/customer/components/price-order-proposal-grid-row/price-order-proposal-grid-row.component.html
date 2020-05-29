@@ -5,8 +5,8 @@
 <div #gridRow class="grid-row app-row app-section items-row app-layout">
   <app-price-order-proposal-grid-cell
     *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId"
-    [selectedProposalPosition]="isReviewed ? null : selectedProposalPosition"
-    [proposalPosition]="getProposalPosition(supplier)"
-    (clickOnProposalPosition)="clickOnProposalPosition.emit($event)"
+    [selectedProposal]="isReviewed ? null : selectedProposal"
+    [proposal]="getProposal(supplier)"
+    (show)="show.emit($event)"
   ></app-price-order-proposal-grid-cell>
 </div>
