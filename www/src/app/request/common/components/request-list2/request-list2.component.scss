@@ -31,6 +31,15 @@
   }
 }
 
+// Окрашивание стрелок иконки сортировки в зависимости от направления
+::ng-deep .active-sort {
+  &.asc .app-icon[shape="app-sort-arrows"] #arrow_2,
+  &.desc .app-icon[shape="app-sort-arrows"] #arrow_1 {
+    color: #5066FF;
+  }
+}
+
+
 @media (min-width: col(5)) {
   .clr-col-xxl-9 {
     flex: 0 0 75%;
