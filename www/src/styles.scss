@@ -49,10 +49,10 @@ body {
   &.modal-open {
     overflow: hidden;
   }
-}
 
-*:focus {
-  outline: 0;
+  *:focus {
+    outline: 0;
+  }
 }
 
 a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {

@@ -55,7 +55,8 @@
             (show)="showedProposal = $event"
           >
             <div><b>{{ position.name }}</b></div>
-            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{ position.okei }}</div>
+            <!-- шт поменять на okei ждём бэк -->
+            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} шт</div>
             <div class="app-ghost-color">&nbsp;| {{ (priceOrder$ | async).dateDelivery | date:"dd.MM.yyyy" }}</div>
             <div class="app-col"></div>
             <label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
