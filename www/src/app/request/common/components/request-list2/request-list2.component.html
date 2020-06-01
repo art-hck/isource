@@ -114,8 +114,11 @@
                class="app-col sorter app-grow-0 positions"
                [class.active-sort]="sortingColumn === 'positions'"
                [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
-               (click)="sortBy('positions')">Позиций</small>
-        <uxg-icon shape="app-sort-arrows"></uxg-icon>
+               (click)="sortBy('positions')">
+          <span>Позиций</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
       </div>
     </div>
   </div>
