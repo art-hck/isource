@@ -110,7 +110,12 @@
           <uxg-icon shape="app-sort-arrows"></uxg-icon>
         </small>
 
-        <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
+        <small *ngIf="!inProgressTab.active"
+               class="app-col sorter app-grow-0 positions"
+               [class.active-sort]="sortingColumn === 'positions'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('positions')">Позиций</small>
+        <uxg-icon shape="app-sort-arrows"></uxg-icon>
       </div>
     </div>
   </div>
