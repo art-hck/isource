@@ -85,6 +85,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       .pipe(finalize(() => this.state = "received"))
       .subscribe((data) => {
         this.procedures$ = this.procedures$.pipe(mapTo(data));
+        this.fetchPositions();
       });
   }
 
