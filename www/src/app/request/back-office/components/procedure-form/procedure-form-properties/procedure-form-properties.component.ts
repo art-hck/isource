@@ -32,7 +32,7 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       positionsSuppliersVisibility: this.default("positionsSuppliersVisibility", 'NameHidden'),
       positionsBestPriceType: this.default("positionsBestPriceType", 'LowerStartPrice'),
       positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating'),
-      publicAccess: this.default("publicAccess", this.publicAccess)
+      publicAccess: this.publicAccess
     });
 
     if (this.action === 'bargain') {
