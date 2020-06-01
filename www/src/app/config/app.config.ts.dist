@@ -1,4 +1,5 @@
 import { GpnmarketConfigInterface } from "../core/config/gpnmarket-config.interface";
+import * as Sentry from "@sentry/browser";
 
 export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
