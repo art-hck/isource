@@ -89,6 +89,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       })
     });
 
+    this.form.get('properties').patchValue(this.procedure ?? null);
+
     if (this.action === 'prolong') {
       this.wizzard.get("positions").disable();
       this.wizzard.get("properties").disable();
