@@ -1,52 +1,36 @@
 <div class="free-form-request-content">
+  <form [formGroup]="form" (ngSubmit)="submit()">
 
-  <form [formGroup]="freeFormRequestDataForm" class="form">
-    <div class="card">
-      <div class="card-block">
-        <div class="card-text">
-          <input uxgInput type="text"
-                 lg
-                 class="request-name-input"
-                 [class.required]="!requestName.length"
-                 id="request-name"
-                 value="{{ requestName }}"
-                 formControlName="name"
-                 (input)="onRequestNameChange($event.target.value)"
-                 placeholder="Наименование заявки"/>
-
-          <span class="app-secondary-color">
-              Загрузите сюда опросный лист или другой документ, который поможет нам понять какое оборудование или услуга вам нужны
-            </span>
-          <div class="form-group">
-            <app-document-upload-list #uploadDocuments
-              [dragAndDropAvailable]="true"
-              (fileSelected)="onFreeFormDocumentSelected($event, freeFormRequestDataForm)">
-            </app-document-upload-list>
-          </div>
-          <div class="form-group comment-block">
-            <div class="comment-label">
-              <h3>Комментарий</h3><span class="app-ghost-color">(необязательно, если нужно дополнить опросный лист)</span>
-            </div>
-            <textarea id="comment-block-textarea"
-                      rows="3"
-                      placeholder="Текст комментария"
-                      formControlName="comments">
-              </textarea>
-          </div>
-        </div>
+    <div class="app-control-wrap">
+      <input #nameRef uxgInput type="text" lg formControlName="name"/>
+      <label class="app-control-label" (click)="nameRef.focus()">Наименование заявки</label>
+      <div class="app-control-error" *ngIf="form.get('name').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
       </div>
     </div>
-  </form>
 
-  <div class="submit">
-    <button type="button" uxgButton lg secondary
-            (click)="onCancel(); uploadDocuments.clear()">Отмена
-    </button>
-    <button type="button"
-            uxgButton lg primary=""
-            (click)="onSendFreeFormRequest()"
-            [disabled]="!checkCanSendRequest(freeFormRequestDataForm.value)">
-      Опубликовать
-    </button>
-  </div>
+    <div class="app-secondary-color app-section">
+      Загрузите сюда опросный лист или другой документ, который поможет нам понять какое оборудование или услуга вам нужны
+    </div>
+    <div class="form-group">
+      <app-document-upload-list
+        [dragAndDropAvailable]="true"
+        (fileSelected)="form.get('documents').setValue($event)">
+      </app-document-upload-list>
+    </div>
+
+    <div class="app-section comment app-align-items-center">
+      <div class="app-row">
+        <h3>Комментарий</h3>
+        <div class="app-ghost-color">(необязательно, если нужно дополнить опросный лист)</div>
+      </div>
+      <textarea rows="3" placeholder="Текст комментария" formControlName="comments"></textarea>
+    </div>
+
+    <div class="app-row app-justify-content-end app-align-items-center">
+      <div *ngIf="isLoading"><span class="spinner spinner-inline"></span></div>
+      <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
+      <button uxgButton lg primary [disabled]="form.invalid || form.disabled">Опубликовать</button>
+    </div>
+  </form>
 </div>
