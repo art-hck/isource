@@ -12,7 +12,7 @@
     <div class="app-secondary-color app-section">
       Загрузите сюда опросный лист или другой документ, который поможет нам понять какое оборудование или услуга вам нужны
     </div>
-    <div class="form-group">
+    <div class="app-section">
       <app-document-upload-list
         [dragAndDropAvailable]="true"
         (fileSelected)="form.get('documents').setValue($event)">

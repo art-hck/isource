@@ -28,13 +28,14 @@
 
     <app-add-from-excel
       *uxgTab="template"
-      (submit)="store.dispatch(addRequestFromExcel($event, false)); newRequestModal.close()"
-      (publish)="store.dispatch(addRequestFromExcel($event, true)); newRequestModal.close()"
-      (cancel)="newRequestModal.close()"
+      [isLoading]="(status$ | async) === 'updating'"
       [templateUrl]="'assets/RequestTemplate.xlsx'"
-      [newRequest]="true"
-      [buttonLabel]="'Сохранить черновик'">
-    </app-add-from-excel>
+      [isNew]="true"
+      [buttonLabel]="'Сохранить черновик'"
+      (create)="store.dispatch(addRequestFromExcel($event, false))"
+      (publish)="store.dispatch(addRequestFromExcel($event, true))"
+      (cancel)="newRequestModal.close()"
+    ></app-add-from-excel>
 
     <app-request-form-free *uxgTab="freeForm" (cancel)="newRequestModal.close()">
     </app-request-form-free>
