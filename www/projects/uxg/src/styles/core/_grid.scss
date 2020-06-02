@@ -47,7 +47,7 @@
   border: 1px solid uxg($theme, color-border);
   background: uxg($theme, color-default);
   transition: background-color 250ms;
-  border-radius: 8px;
+  border-radius: uxg($theme, card-border-radius);
   padding: 17px 20px;
 
 

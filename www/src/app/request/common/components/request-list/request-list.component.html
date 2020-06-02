@@ -19,32 +19,32 @@
         <uxg-tab-title #inProgressTab [active]="true"
                        (click)="switchTab(inProgressTab, [RequestStatus.IN_PROGRESS])"
                        [disabled]="statusCounters?.inProgressRequestsCount === 0">
-          В обработке <span class="app-ghost-color">({{statusCounters?.inProgressRequestsCount}})</span>
+          В обработке <span class="counter">({{statusCounters?.inProgressRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #newTab
                        (click)="switchTab(newTab, [RequestStatus.NEW])"
                        [disabled]="statusCounters?.newRequestsCount === 0">
-          Новые <span class="app-ghost-color">({{statusCounters?.newRequestsCount}})</span>
+          Новые <span class="counter">({{statusCounters?.newRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #draftTab
                        (click)="switchTab(draftTab, [RequestStatus.DRAFT])"
                        *ngIf="feature.authorize('publishRequest')"
                        [disabled]="statusCounters?.draftRequestsCount === 0">
-          Черновики <span class="app-ghost-color">({{statusCounters?.draftRequestsCount}})</span>
+          Черновики <span class="counter">({{statusCounters?.draftRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #onApprovalTab
                        (click)="switchTab(onApprovalTab, [RequestStatus.ON_CUSTOMER_APPROVAL])"
                        [disabled]="statusCounters?.onCustomerApprovalRequestsCount === 0">
-          На согласовании <span class="app-ghost-color">({{statusCounters?.onCustomerApprovalRequestsCount}})</span>
+          На согласовании <span class="counter">({{statusCounters?.onCustomerApprovalRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #completedTab
                        (click)="switchTab(completedTab, [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT])"
                        [disabled]="statusCounters?.completedRequestsCount === 0">
-          Завершенные <span class="app-ghost-color">({{statusCounters?.completedRequestsCount}})</span>
+          Завершенные <span class="counter">({{statusCounters?.completedRequestsCount}})</span>
         </uxg-tab-title>
       </uxg-tabs>
 
