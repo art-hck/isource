@@ -46,21 +46,23 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       this.form.get('publicAccess').disable();
     }
 
-    this.form.get('positionsAnalogs').valueChanges
-      .pipe(startWith(<{}>this.form.get('positionsAnalogs').value)).subscribe(value => {
-        const c = this.form.get('positionsAllowAnalogsOnly');
-        value ? c.enable() : c.disable();
-        c.setValue(false);
-      });
+    let analogsValueChanges$ = this.form.get('positionsAnalogs').valueChanges;
 
-    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue())).subscribe(() => {
-      this.writeValue(this.form.getRawValue());
-      this.onChange(this.form.getRawValue());
+    if (this.action !== 'bargain') {
+      analogsValueChanges$ = analogsValueChanges$.pipe(startWith(<{}>this.form.get('positionsAnalogs').value));
+    }
+    analogsValueChanges$.subscribe(value => {
+      const c = this.form.get('positionsAllowAnalogsOnly');
+      value ? c.enable() : c.disable();
+      c.setValue(false);
     });
+
+    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue()))
+      .subscribe(() => this.onChange(this.form.getRawValue()));
   }
 
-  default = (k, v) => (this.value && this.value[k]) === null ? v : this.value[k];
-  registerOnChange = (fn: any) => this.onChange = fn;
-  registerOnTouched = (fn: any) => this.onTouched = fn;
-  writeValue = (value) => this.value = value;
+  default = (k, v) => this.value?.[k] ?? v;
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  writeValue = value => this.value = value;
 }
