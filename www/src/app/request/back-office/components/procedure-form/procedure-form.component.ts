@@ -79,7 +79,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
-        prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 10), // Продление времени приема заявок на участие (минут)
+        prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 0), // Продление времени приема заявок на участие (минут)
       }),
       properties: null,
       privateAccessContragents: [ this.defaultProcedureValue("privateAccessContragents", []) ],
