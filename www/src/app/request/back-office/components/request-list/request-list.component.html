@@ -1,4 +1,4 @@
-<app-request-list2
+<app-request-list
   [requests]="requests$ | async"
   [total]="totalCount$ | async"
   [status]="status$ | async"
@@ -9,4 +9,4 @@
   [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
-></app-request-list2>
+></app-request-list>

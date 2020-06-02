@@ -16,13 +16,15 @@
 </div>
 
 <uxg-modal #uploadTemplateModal size="l">
-  <h2><b>Загрузить позиции каталога из шаблона</b></h2>
-  <div class="app-secondary-color app-section">
-    Вы можете загрузить позиции каталога списком, если заполните шаблон xls таблицы, и загрузите файл в систему.
-  </div>
-  <div class="dragAndDropArea">
-    <app-template-upload (fileSelected)="templateFiles = $event"></app-template-upload>
-  </div>
+    <h2><b>Загрузить позиции каталога из шаблона</b></h2>
+  <ng-container *ngIf="uploadTemplateModal.state">
+    <div class="app-secondary-color app-section">
+      Вы можете загрузить позиции каталога списком, если заполните шаблон xls таблицы, и загрузите файл в систему.
+    </div>
+    <div class="dragAndDropArea">
+      <app-template-upload (fileSelected)="templateFiles = $event"></app-template-upload>
+    </div>
+  </ng-container>
   <ng-template uxgModalFooter>
     <div class="app-row app-align-items-center app-justify-content-end">
       <div *ngIf="templateLoading"><span class="spinner spinner-inline"></span></div>

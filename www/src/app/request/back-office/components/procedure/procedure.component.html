@@ -2,7 +2,7 @@
   <div class="app-card">
     <div class="app-row app-align-items-center">
       <h3 class="app-col">
-        Процедура № {{procedure.procedureId | splitNumber }} «{{procedure.procedureTitle}}»
+        Процедура № {{procedure.procedureId}} «{{procedure.procedureTitle}}»
       </h3>
       <a *ngIf="finished" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
       <a *ngIf="!finished" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>

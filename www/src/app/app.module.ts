@@ -1,7 +1,7 @@
 import localeRu from '@angular/common/locales/ru';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpErrorResponse } from "@angular/common/http";
 import { LOCALE_ID, NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
@@ -32,8 +32,19 @@ Sentry.configureScope(function(scope) {
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
+
+  extractError(error) {
+    // обработка ошибок с бэкэнда
+    if (error instanceof HttpErrorResponse) {
+      return `${error.message}, detail: "${error.error.detail}"`;
+    }
+
+    return error.originalError || error;
+  }
+
   handleError(error) {
-    Sentry.captureException(error.originalError || error, );
+    const extractedError = this.extractError(error);
+    Sentry.captureException(extractedError);
   }
 }
 

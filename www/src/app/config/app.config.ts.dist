@@ -13,7 +13,7 @@ export const AppConfig: GpnmarketConfigInterface = {
   sentry: {
     enabled: false,
     dsn: "https://88e1e59f21a84941acebb6f614d142e9@o398925.ingest.sentry.io/5255352",
-    environment: 'prod-front',
+    environment: 'local',
     level: Sentry.Severity.Error
   },
   paginator: {

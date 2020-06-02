@@ -173,8 +173,8 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
     return posWithMan.position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
-  private findTpPosition(position: RequestPosition): TechnicalProposalPosition {
-    return this.technicalProposal && this.technicalProposal.positions.find(tpp => tpp.positionId === position.id);
+  private findTpPosition({ id }: RequestPosition): TechnicalProposalPosition {
+    return this.technicalProposal?.positions.find(({ positionId }) => positionId === id);
   }
 
   private get supplierContragent() {
@@ -183,7 +183,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   }
 
   trackByPositionId = ({position}: PositionWithManufacturer) => position.id;
-  defaultTPValue = (field: keyof TechnicalProposal, defaultValue: any = "") => this.technicalProposal && this.technicalProposal[field] || defaultValue;
+  defaultTPValue = (field: keyof TechnicalProposal, defaultValue: any = "") => this.technicalProposal?.[field] ?? defaultValue;
 
   positionSelectDisabled = ({position}: PositionWithManufacturer) => {
     const tpPosition = this.findTpPosition(position);
@@ -192,7 +192,8 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   positionManufacturerNameDisabled = ({position}: PositionWithManufacturer) => {
     const tpPosition = this.findTpPosition(position);
-    return tpPosition && tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED;
+    return [TechnicalProposalPositionStatus.ACCEPTED, TechnicalProposalPositionStatus.DECLINED]
+      .includes(tpPosition?.status);
   }
 
   onDownloadTemplate() {
