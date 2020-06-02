@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { startWith } from "rxjs/operators";
+import { mapTo, startWith, tap } from "rxjs/operators";
 import { ProcedureAction } from "../../../models/procedure-action";
 
 @Component({
@@ -57,8 +57,12 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       c.setValue(false);
     });
 
-    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue()))
-      .subscribe(() => this.onChange(this.form.getRawValue()));
+    this.form.valueChanges.pipe(
+      startWith({}),
+      mapTo(this.form.getRawValue()),
+      tap(value => this.writeValue(value)),
+      tap(value => this.onChange(value))
+    ).subscribe();
   }
 
   default = (k, v) => this.value?.[k] ?? v;
