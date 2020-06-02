@@ -48,11 +48,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
 
   submit(publish = true) {
     const {name, positions} = this.form.value;
-    let request$ = this.requestService.addRequest(name, positions)
-      .pipe(finalize(() => {
-        this.isLoading = false;
-        this.form.enable();
-      }));
+    let request$ = this.requestService.addRequest(name, positions);
 
     if (publish) {
       request$ = request$.pipe(
@@ -63,7 +59,13 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.form.disable();
 
-    request$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+    request$.pipe(
+      takeUntil(this.destroy$),
+      finalize(() => {
+        this.isLoading = false;
+        this.form.enable();
+      })
+    ).subscribe(data => {
       this.store.dispatch(new ToastActions.Success(publish ? "Заявка опубликована" : "Черновик заявки создан"));
       this.router.navigate(["requests/customer", data.id]);
     });
