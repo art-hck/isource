@@ -55,7 +55,7 @@
           <button uxgButton link icon
                   *ngIf="featureService.available('editTechnicalProposal', userInfoService.roles)"
                   (click)="edit.emit(true)"
-                  [disabled]="editDisabled(technicalProposal)">
+                  [disabled]="!editable">
             <uxg-icon shape="app-pen"></uxg-icon>
           </button>
           <button uxgButton link icon (click)="isFolded = !isFolded">
