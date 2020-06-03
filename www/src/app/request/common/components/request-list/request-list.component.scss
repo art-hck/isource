@@ -1,20 +1,7 @@
-@import "src/theme";
 @import "src/assets/styles/helpers";
 
 .app-table {
-  small {
-    & span {
-      cursor: pointer;
-      line-height: 16px;
-      vertical-align: middle;
-
-      &:hover {
-        color: uxg($theme, color-font-secondary);
-      }
-    }
-  }
-
-  .number { flex-basis: 65px; }
+  .number { flex-basis: 50px; }
   .published { flex-basis: 100px; }
   .tasks { flex-basis: 40px; }
   .delivery-date {
@@ -26,7 +13,7 @@
       opacity: 0.3;
     }
   }
-  .pie { flex-basis: 120px; }
+  .pie { flex-basis: 94px; }
   .positions { flex-basis: 94px; }
   .tasks + .positions { flex-basis: 142px; }
   .customer, .name {
@@ -35,14 +22,6 @@
 
   &.disabled {
     opacity: .5;
-  }
-}
-
-// Окрашивание стрелок иконки сортировки в зависимости от направления
-::ng-deep .active-sort {
-  &.asc .app-icon[shape="app-sort-arrows"] #arrow_2,
-  &.desc .app-icon[shape="app-sort-arrows"] #arrow_1 {
-    color: #5066FF;
   }
 }
 

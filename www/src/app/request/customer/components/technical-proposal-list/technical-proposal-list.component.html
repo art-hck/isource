@@ -7,19 +7,19 @@
           <uxg-tabs>
             <uxg-tab-title #sentToReviewTab [active]="true" (click)="activeTab = technicalProposalsStatus.SENT_TO_REVIEW">
               <ng-container *ngIf="(proposalsSentToReview$ | async) as proposalsSentToReview">
-                Необходимо рассмотреть <span class="counter">({{ proposalsSentToReview?.length }})</span>
+                Необходимо рассмотреть <span class="app-ghost-color">({{ proposalsSentToReview?.length }})</span>
               </ng-container>
             </uxg-tab-title>
 
             <uxg-tab-title #sentToEdit (click)="activeTab = technicalProposalsStatus.SENT_TO_EDIT">
               <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposalsSentToEdit">
-                На доработке <span class="counter">({{ proposalsSentToEdit?.length }})</span>
+                На доработке <span class="app-ghost-color">({{ proposalsSentToEdit?.length }})</span>
               </ng-container>
             </uxg-tab-title>
 
             <uxg-tab-title #reviewedTab (click)="activeTab = technicalProposalsStatus.ACCEPTED">
               <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
-                Рассмотренные <span class="counter">({{ proposalsReviewed?.length }})</span>
+                Рассмотренные <span class="app-ghost-color">({{ proposalsReviewed?.length }})</span>
               </ng-container>
             </uxg-tab-title>
           </uxg-tabs>

@@ -1,22 +1,22 @@
-@import "src/theme";
-
 .kim-menu {
-  background: #3B385E;
+  background: #1C243B;
   width: 100%;
 
   ::ng-deep .app-tabs {
     &-item {
       color: #fff;
       padding: 11px 0;
+
+      &-active { color: #2585F5; }
     }
 
-    &-indicator { height: 3px; background: #fff; }
+    &-indicator { height: 3px; }
   }
 }
 
 .basket-counter {
   background: #2585f5;
-  border-radius: uxg($theme, counter-border-radius);
+  border-radius: 50%;
   box-sizing: content-box;
   color: #fff;
   height: 16px;
