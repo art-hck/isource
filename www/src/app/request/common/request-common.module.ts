@@ -40,7 +40,7 @@ import { RequestMoveGroupModalComponent } from "./components/request/request-mov
 import { RequestPositionService } from "./services/request-position.service";
 import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
-import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 import { ProposalGridContragentsComponent } from "./components/technical-commercial-proposal/proposal-grid-contragents/proposal-grid-contragents.component";
 import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import { ProposalDetailComponent } from "./components/technical-commercial-proposal/proposal-detail/proposal-detail.component";
@@ -81,7 +81,7 @@ const RequestCommonModuleDeclarations = [
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
   FilterPositionStatusesComponent,
-  RequestList2Component,
+  RequestListComponent,
   ProposalGridContragentsComponent,
   ProposalGridCardComponent,
   ProposalDetailComponent,

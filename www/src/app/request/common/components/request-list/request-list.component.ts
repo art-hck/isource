@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { RequestStatusCount } from "../../models/requests-list/request-status-count";
 import { UxgTabTitleComponent } from "uxg";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
@@ -26,12 +16,12 @@ import { Subject } from "rxjs";
 import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
 
 @Component({
-  selector: 'app-request-list2',
-  templateUrl: './request-list2.component.html',
-  styleUrls: ['./request-list2.component.scss'],
+  selector: 'app-request-list',
+  templateUrl: './request-list.component.html',
+  styleUrls: ['./request-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestList2Component implements OnInit, OnDestroy {
+export class RequestListComponent implements OnInit, OnDestroy {
   @ViewChild('inProgressTab') inProgressTabElRef: UxgTabTitleComponent;
   @ViewChild('newTab') newTabElRef: UxgTabTitleComponent;
   @ViewChild('draftTab') draftTabElRef: UxgTabTitleComponent;

@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, Input, Output, Renderer2, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Inject, Input, OnDestroy, Output, Renderer2, TemplateRef } from '@angular/core';
 import { UxgModalFooterDirective } from "./uxg-modal-footer.directive";
 import { DOCUMENT } from "@angular/common";
 
@@ -6,7 +6,7 @@ import { DOCUMENT } from "@angular/common";
   selector: 'uxg-modal',
   templateUrl: './uxg-modal.component.html',
 })
-export class UxgModalComponent {
+export class UxgModalComponent implements OnDestroy {
   @ContentChild(UxgModalFooterDirective, { read: TemplateRef }) footerTpl: TemplateRef<ElementRef>;
   @Input() state;
   @Input() noBackdrop: boolean;
@@ -57,5 +57,9 @@ export class UxgModalComponent {
     outer.parentNode.removeChild(outer);
 
     return scrollbarWidth;
+  }
+
+  ngOnDestroy() {
+    this.close();
   }
 }

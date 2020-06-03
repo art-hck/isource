@@ -29,7 +29,7 @@ import { TechnicalCommercialProposalComponent } from "./components/technical-com
 import { TechnicalCommercialProposalParametersFormComponent } from './components/technical-commercial-proposal-form/technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.component';
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
-import { RequestList2Component } from './components/request-list2/request-list2.component';
+import { RequestListComponent } from './components/request-list/request-list.component';
 import {CommercialProposalState} from "./states/commercial-proposal.state";
 import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
@@ -53,7 +53,7 @@ import { ProcedureComponent } from './components/procedure/procedure.component';
     TechnicalCommercialProposalFormComponent,
     TechnicalCommercialProposalFilterComponent,
     TechnicalCommercialProposalParametersFormComponent,
-    RequestList2Component,
+    RequestListComponent,
     TechnicalCommercialProposalContragentFormComponent,
     TechnicalCommercialProposalPositionFormComponent,
     ProcedureComponent,

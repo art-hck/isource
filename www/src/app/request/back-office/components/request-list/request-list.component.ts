@@ -1,14 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
-import { filter, scan, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { scan, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
@@ -16,21 +9,22 @@ import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gp
 import { RequestsList } from "../../../common/models/requests-list/requests-list";
 import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
-import { StateStatus } from "../../../common/models/state-status";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
-import Fetch = RequestListActions.Fetch;
-import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
-import { RequestList2Component as CommonRequestListComponent } from "../../../common/components/request-list2/request-list2.component";
+import { StateStatus } from "../../../common/models/state-status";
+import { AvailableFilters } from "../../models/available-filters";
+import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
+import Fetch = RequestListActions.Fetch;
+import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 
 @Component({
-  templateUrl: './request-list2.component.html',
+  templateUrl: './request-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RequestList2Component implements OnInit, OnDestroy {
+export class RequestListComponent implements OnInit, OnDestroy {
   @ViewChild(CommonRequestListComponent) requestListComponent: CommonRequestListComponent;
 
+  @Select(RequestListState.availableFilters) availableFilters$: Observable<AvailableFilters>;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
   @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
@@ -38,15 +32,13 @@ export class RequestList2Component implements OnInit, OnDestroy {
 
   activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
-  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
+  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
-  readonly addRequestFromExcel = ({files, requestName}, publish: boolean) => new AddRequestFromExcel(files, requestName, publish);
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private router: Router,
-    private route: ActivatedRoute,
-    private actions: Actions,
+    public route: ActivatedRoute,
     public store: Store,
   ) {}
 
@@ -60,31 +52,17 @@ export class RequestList2Component implements OnInit, OnDestroy {
       }),
       scan(({filters: prev, sort: prevSort},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...prevSort, ...currSort}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort } ),
+      } as {page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}),
       takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
       this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort)).subscribe(
-        ({ CustomerRequestList }) => {
-          this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests);
+        ({ BackofficeRequestList }) => {
+          this.requestListComponent.switchToPrioritizedTab(BackofficeRequestList.requests);
         });
     });
 
-    this.actions.pipe(
-      ofActionCompleted(AddRequestFromExcel),
-      takeUntil(this.destroy$)
-    ).subscribe(({action, result}) => {
-      const e = result.error as any;
-      const text = (action.publish ? 'Заявка опубликована' : "Черновик заявки создан");
-
-      this.store.dispatch(e ?
-        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
-      );
-
-      this.store.select(RequestListState.createdRequest).pipe(filter(Boolean)).subscribe((id) => {
-        this.router.navigate([id], { relativeTo: this.route});
-      });
-    });
+    this.store.dispatch(new FetchAvailableFilters());
   }
 
   ngOnDestroy() {
