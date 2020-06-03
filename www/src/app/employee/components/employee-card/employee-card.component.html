@@ -13,7 +13,7 @@
           <uxg-tab-title #requestsTab [active]="true">
             Заявки
             <ng-container *ngIf="requestList; else employeeCardCountLoader">
-              <span class="counter">({{ requestList.length }})</span>
+              <span class="light-grey">({{ requestList.length }})</span>
             </ng-container>
 
             <ng-template #employeeCardCountLoader>
@@ -23,7 +23,7 @@
           <uxg-tab-title #positionsTab>
             Позиции
             <ng-container *ngIf="positionsList; else employeeCardCountLoader">
-              <span class="counter">({{ positionsList.length }})</span>
+              <span class="light-grey">({{ positionsList.length }})</span>
             </ng-container>
 
             <ng-template #employeeCardCountLoader>

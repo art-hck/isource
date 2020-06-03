@@ -1,5 +1,3 @@
-@import "src/theme";
-
 .activation-splash {
   background: linear-gradient(to top, #1A71D8, #2585F5);
   position: absolute;
@@ -46,7 +44,7 @@
     padding: 30px 32px;
     background: #FFFFFF;
     box-shadow: 0 0 20px rgba(26, 84, 153, 0.5);
-    border-radius: uxg($theme, card-border-radius);
+    border-radius: 8px;
     margin-bottom: 17px;
 
     & a {

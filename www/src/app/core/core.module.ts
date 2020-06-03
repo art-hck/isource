@@ -1,6 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-import { NavComponent } from './components/nav/nav.component';
+import { NavComponent } from './nav/nav.component';
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { DataInterceptor } from "./interceptor/data.interceptor";

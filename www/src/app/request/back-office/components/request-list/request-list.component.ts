@@ -15,7 +15,6 @@ import { AvailableFilters } from "../../models/available-filters";
 import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
-import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -32,7 +31,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
-  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
+  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
   readonly destroy$ = new Subject();
 
   constructor(
@@ -50,13 +49,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
-      scan(({filters: prev},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...currSort}}), {
+      scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as {page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}),
+      } as {page?: number, filters?: RequestsListFilter}),
       takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
-      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort)).subscribe(
+      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(
         ({ BackofficeRequestList }) => {
           this.requestListComponent.switchToPrioritizedTab(BackofficeRequestList.requests);
         });

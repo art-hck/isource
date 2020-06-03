@@ -13,7 +13,6 @@ import { ActivatedRoute } from "@angular/router";
 import { EventTypes } from "../../../../websocket/event-types";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { Subject } from "rxjs";
-import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
 
 @Component({
   selector: 'app-request-list',
@@ -36,12 +35,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() availableFilters: AvailableFilters;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
   @Input() activeFiltersObj: RequestsListFilter;
-  @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
+  @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
-
-  sortDirection: string = null;
-  sortingColumn: string;
 
   filterOpened = false;
   hideNeedUpdate = true;
@@ -81,28 +77,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-
-  sortBy(column) {
-    if (this.sortingColumn !== column) {
-      this.sortDirection = null;
-    }
-
-    const directions = [ "ASC", "DESC", null ];
-    let index = directions.indexOf(this.sortDirection) + 1;
-    if (index === directions.length) {
-      index = 0;
-    }
-    this.sortDirection = directions[index];
-    this.sortingColumn = column;
-
-    if (this.sortDirection === null) {
-      this.filter.emit({ sort: {} });
-      return;
-    }
-
-    this.filter.emit({ sort: { orderBy: column, sortDirection: this.sortDirection } });
   }
 
 

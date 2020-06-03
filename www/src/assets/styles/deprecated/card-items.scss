@@ -1,9 +1,7 @@
-@import "src/theme";
-
 /* Элементы информационных карточек */
 .card {
   box-shadow: none;
-  border-radius: uxg($theme, card-border-radius);
+  border-radius: 8px;
   border: 1px solid #B2D0FF;
   overflow: hidden;
   margin: 0 0 24px 0;
