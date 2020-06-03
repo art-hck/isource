@@ -27,7 +27,7 @@ export class DeliveryMonitorComponent implements OnInit {
 
   // @Input() requestPosition: RequestPosition; // TODO: 2019-11-20 Раскаментить после демо
   requestPositionValue: RequestPosition; // TODO: 2019-11-20 Убрать после демо
-
+  readonly folded = [];
   // TODO: 2019-11-18 Убрать getter и setter requestPosition после демо
 
   @Input()
@@ -35,7 +35,7 @@ export class DeliveryMonitorComponent implements OnInit {
     this.requestPositionValue = value;
     this.goodId = this.getGoodId();
     this.getDeliveryMonitorInfo();
-    this.getInspectorStagesInfo();
+    // this.getInspectorStagesInfo();
   }
 
   get requestPosition(): RequestPosition {
@@ -50,7 +50,6 @@ export class DeliveryMonitorComponent implements OnInit {
   shiftCount = 0;
 
   goodId: string;
-  // demoGoodId = '61'; // TODO: 2019-11-20 Раскаментить после демо
 
   assignIdForm = new FormGroup({
     newGoodId: new FormControl('', Validators.required),
@@ -93,25 +92,14 @@ export class DeliveryMonitorComponent implements OnInit {
   }
 
   ngOnInit() {
-    // используется захардкоженный id, в дальнейшем получать свой id для разных позиций
-    // this.goodId = this.demoGoodId; // TODO: 2019-11-20 Раскаментить после демо
     this.goodId = this.getGoodId(); // TODO: 2019-11-20 Убрать после демо
     this.getDeliveryMonitorInfo();
-    this.getInspectorStagesInfo();
   }
 
   getDeliveryMonitorInfo(): void {
     this.deliveryMonitorInfo$ = this.deliveryMonitorService.getDeliveryMonitorInfo(this.requestPosition.id);
     this.consignments$ = this.deliveryMonitorInfo$
       .pipe(map(deliveryMonitorInfo => deliveryMonitorInfo.consignments ));
-  }
-
-  getInspectorStagesInfo(): void {
-    const subscription = this.deliveryMonitorService.getInspectorInfo(this.requestPosition.id).subscribe(
-      data => {
-        this.inspectorStages = data;
-        subscription.unsubscribe();
-      });
   }
 
   getShipmentItemShippingDate(consignment: DeliveryMonitorConsignment): string {
@@ -312,10 +300,6 @@ export class DeliveryMonitorComponent implements OnInit {
     this.store.dispatch(new ToastActions.Success('Событие добавлено'));
     this.inspectorStages.push(formData);
   }
-
-
-
-  // TODO: 2019-11-20 Убрать метод getGoodId после демо
 
   protected getGoodId(): string {
     const positionName = this.requestPositionValue.name;
