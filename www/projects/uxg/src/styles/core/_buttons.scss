@@ -50,6 +50,10 @@
     &:not(:disabled):hover {
       background-color: uxg($theme, color-control-primary-hover);
     }
+
+    &:disabled {
+      background-color: uxg($theme, color-control-secondary);
+    }
   }
 
   &-secondary {
@@ -66,6 +70,10 @@
 
     &:not(:disabled):hover {
       border-color: uxg($theme, color-control-secondary-hover-border);
+    }
+
+    &:disabled {
+      border-color: uxg($theme, color-soft);
     }
   }
 
@@ -97,10 +105,9 @@
   }
 
   &:disabled {
-    opacity: .5;
     cursor: not-allowed;
+    color: uxg($theme, color-font-ghost);
   }
-
 }
 
 * + .app-btn {
