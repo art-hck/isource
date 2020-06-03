@@ -137,7 +137,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       ...this.form.get("properties").value,
       positions: this.form.get("positions").value.map(position => position.id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
-      procedureDocuments: this.getFormGroup("documents").get("procedureDocuments").value.map(document => document.id),
+      procedureDocuments: this.getFormGroup("documents").get("procedureDocuments").value,
       procedureUploadDocuments: this.getFormGroup("documents").get("procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
