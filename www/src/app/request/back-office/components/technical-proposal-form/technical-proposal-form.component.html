@@ -130,7 +130,7 @@
       </div>
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-        <button *ngIf="technicalProposal.status !== 'SENT_TO_EDIT'"
+        <button *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'"
           type="button" uxgButton secondary (click)="submit(false)"
           [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>
