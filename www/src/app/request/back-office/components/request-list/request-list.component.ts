@@ -50,7 +50,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
-      scan(({filters: prev},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...currSort}}), {
+      scan(({filters: prev, sort: prevSort},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...prevSort, ...currSort}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
       } as {page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}),
       takeUntil(this.destroy$)

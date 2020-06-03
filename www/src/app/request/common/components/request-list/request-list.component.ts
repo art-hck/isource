@@ -98,7 +98,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.sortingColumn = column;
 
     if (this.sortDirection === null) {
-      this.filter.emit({ sort: {} });
+      this.filter.emit({ sort: { orderBy: null, sortDirection: null } });
       return;
     }
 
