@@ -24,7 +24,6 @@
 
   &:not(&-clear) {
     height: uxg($theme, control-height);
-    max-width: uxg($theme, button-max-width);
     min-width: uxg($theme, button-min-width);
     padding: uxg($theme, button-padding);
 
@@ -38,6 +37,10 @@
       margin-left: .5em;
       vertical-align: middle;
     }
+  }
+
+  &:not(&-clear):not(&-strength) {
+    max-width: uxg($theme, button-max-width);
   }
 
   &-primary {

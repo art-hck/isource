@@ -15,6 +15,7 @@ export class UxgButtonDirective {
   @Input() icon: boolean | string;
   @Input() iconText: boolean | string;
   @Input() clear: boolean | string;
+  @Input() strength: boolean | string;
 
   @HostBinding('class.app-btn') buttonClass = true;
   @HostBinding('class.app-btn-large') get isLarge() { return this.is(this.lg); }
@@ -25,6 +26,7 @@ export class UxgButtonDirective {
   @HostBinding('class.app-btn-icon') get isIcon() { return this.is(this.icon); }
   @HostBinding('class.app-btn-icon-text') get isIconText() { return this.is(this.iconText); }
   @HostBinding('class.app-btn-clear') get isClear() { return this.is(this.clear); }
+  @HostBinding('class.app-btn-strength') get isStrength() { return this.is(this.strength); }
 
   private is = (prop?: boolean | string) => prop !== undefined && prop !== false;
 }

@@ -9,6 +9,7 @@ export interface Route extends AngularRoutes {
     hideTitle?: boolean
     noFooter?: boolean
     noContentPadding?: boolean
+    hideBreadcrumbs?: boolean
   };
   children?: Routes;
 }

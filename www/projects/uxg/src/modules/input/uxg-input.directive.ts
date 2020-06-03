@@ -21,15 +21,13 @@ export class UxgInputDirective implements OnInit, OnDestroy {
   constructor(private el: ElementRef, @Optional() private ngControl: NgControl) {}
 
   ngOnInit() {
-    if (this.ngControl) {
-      this.ngControl.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.validate(this.ngControl.control));
-    }
+    this.ngControl?.statusChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.validate(this.ngControl.control));
   }
 
   @HostListener("blur")
   onBlur() {
-    if (this.ngControl && !this.ngControl.control.pristine) {
+    if (!this.ngControl?.control.pristine) {
       this.ngControl.control.markAsTouched();
       this.validate(this.ngControl.control);
     }

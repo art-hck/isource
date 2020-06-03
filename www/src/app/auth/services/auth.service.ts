@@ -5,6 +5,8 @@ import { tap } from 'rxjs/internal/operators';
 import { APP_CONFIG, GpnmarketConfigInterface } from '../../core/config/gpnmarket-config.interface';
 import { UserInfoService } from "../../user/service/user-info.service";
 import { TokenService } from "./token.service";
+import { ActivationError } from "../models/activation-error";
+import { RestorationResponse } from "../models/restoration-response";
 
 @Injectable({
   providedIn: 'root'
@@ -99,22 +101,22 @@ export class AuthService {
 
   requestPasswordRecover(email: string) {
     const url = `request-password-recover`;
-    return this.http.post<null>(url, { email });
+    return this.http.post(url, { email });
   }
 
   changePasswordByCode(password: string, code: string) {
     const url = `change-password-by-code`;
-    return this.http.post<null>(url, { password, code });
+    return this.http.post<RestorationResponse>(url, { password, code });
   }
 
   activateAccount(activationCode: string) {
     const url = `activation/${activationCode}`;
-    return this.http.post<null>(url, null);
+    return this.http.post<ActivationError>(url, null);
   }
 
   resendActivationLink(activationCode: string) {
     const url = `activation/resend/${activationCode}`;
-    return this.http.post<null>(url, null);
+    return this.http.post<ActivationError>(url, null);
   }
 
 }

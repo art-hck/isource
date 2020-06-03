@@ -3,5 +3,6 @@ export enum ActivationErrorCode {
   ALREADY_ACTIVATED = 'already-activated',
   ACTIVATION_TOKEN_EXPIRED = 'activation-token-expired',
   NOT_ACTIVATED = 'not-activated',
-  INVALID_GRANT = 'invalid_grant' // Здесь именно с символом подчёркивания
+  INVALID_LINK = 'invalid-link',
+  UNKNOWN = 'unexpected-error'
 }

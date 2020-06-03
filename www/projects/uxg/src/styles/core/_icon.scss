@@ -5,13 +5,13 @@
     display: inline-block;
     vertical-align: middle;
     align-self: center;
+    fill: currentColor;
 
     & + * {
       margin-left: .5em;
     }
 
     svg {
-      fill: currentColor;
       display: block;
       &.has-solid .clr-i-solid {display: none;}
     }
