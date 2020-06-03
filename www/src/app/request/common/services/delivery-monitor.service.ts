@@ -19,17 +19,14 @@ export class DeliveryMonitorService {
 
   getDeliveryMonitorInfo(positionId: Uuid): Observable<DeliveryMonitorInfo> {
     return this.api.post<DeliveryMonitorInfo>(`monitor/goods/${positionId}`, null);
-    // return of(MonitorMock);
   }
 
   getInspectorInfo(positionId: Uuid): Observable<InspectorInfo[]> {
     return this.api.post<InspectorInfo[]>(`monitor/goods/${positionId}/production`, null);
-    // return of(InspectorMock);
   }
 
   getInspectorStages(positionId: Uuid): Observable<DeliveryMonitorInfo> {
     return this.api.post<DeliveryMonitorInfo>(`monitor/goods/${positionId}/production-schedules`, null);
-    // return of(GoodsMock);
   }
 
   addInspectorStage(stage: InspectorStage): Observable<InspectorStage[]> {

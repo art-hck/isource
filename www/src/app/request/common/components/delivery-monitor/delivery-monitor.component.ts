@@ -24,18 +24,14 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 export class DeliveryMonitorComponent implements OnInit {
 
   @Input() requestId: Uuid;
-
-  // @Input() requestPosition: RequestPosition; // TODO: 2019-11-20 Раскаментить после демо
   requestPositionValue: RequestPosition; // TODO: 2019-11-20 Убрать после демо
   readonly folded = [];
-  // TODO: 2019-11-18 Убрать getter и setter requestPosition после демо
 
   @Input()
   set requestPosition(value: RequestPosition) {
     this.requestPositionValue = value;
     this.goodId = this.getGoodId();
     this.getDeliveryMonitorInfo();
-    // this.getInspectorStagesInfo();
   }
 
   get requestPosition(): RequestPosition {
@@ -270,8 +266,6 @@ export class DeliveryMonitorComponent implements OnInit {
         return DeliveryMonitorStatusLabels[DeliveryMonitorStatus.ARRIVED];
     }
   }
-
-
 
   assignIdSubmit() {
     if (this.assignIdForm.invalid) {

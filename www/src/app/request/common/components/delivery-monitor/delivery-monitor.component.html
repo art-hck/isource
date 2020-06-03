@@ -23,9 +23,11 @@
 
                 <div class="item-info-block">
                   <div class="item-name">Партия от {{ getShipmentItemShippingDate(consignment) }}</div>
-                  <div class="item-info">{{ getWaybillNumber(consignment) }}</div>
+                  <div class="item-info">{{ getWaybillNumber(consignment) }}
+                    <span class="item-info-label">Вес по документам: </span>
+                    <span class="item-info-content">{{ getWeightByTd(consignment) }} {{ getWeightEiByTd(consignment) }}</span>
+                  </div>
                 </div>
-
                 <div class="item-status-block">
                   <div class="item-status st-{{ consignment.deliveryState }}">
                     {{ getStatusLabel(consignment.deliveryState) }}
@@ -44,8 +46,8 @@
               <div class="app-row">
                 <div class="app-col-4">
                   <div class="item-info-element">
-                    <p class="item-info-label">Вес по документам</p>
-                    <p class="item-info-content">{{ getWeightByTd(consignment) }} {{ getWeightEiByTd(consignment) }}</p>
+                    <p class="item-info-label">Транспортная накладная</p>
+                    <p class="item-info-content">{{ getWaybillNumber(consignment) }}</p>
                   </div>
                 </div>
 
@@ -97,10 +99,6 @@
                 </div>
 
                 <div class="app-col-4">
-                  <div class="item-info-element">
-                    <p class="item-info-label">Транспортная накладная</p>
-                    <p class="item-info-content">{{ getWaybillNumber(consignment) }}</p>
-                  </div>
                 </div>
               </div>
 
@@ -194,6 +192,7 @@
           <!--        </div>-->
         </div>
       </div>
+
     </ng-container>
   </ng-container>
 

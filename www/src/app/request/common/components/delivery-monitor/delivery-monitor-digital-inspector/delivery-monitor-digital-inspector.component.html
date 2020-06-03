@@ -1,6 +1,12 @@
+<app-request-delivery-monitor-good-card
+  [deliveryMonitorInfo]="productStages"
+  [requestPosition]="position">
+</app-request-delivery-monitor-good-card>
 <div class="good-infographics-card" *ngFor="let product of productStages.products">
   <div class="good-info-block">
-    <div class="good-name">Изделие №{{product.position}} зв. №{{product.factoryNumber}}</div>
+    <div class="good-name">Изделие №{{product.position}}
+      <ng-container *ngIf="product.factoryNumber">зв. №{{product.factoryNumber}}</ng-container>
+    </div>
     <p class="inn-info app-ghost-color">
       Готовность по плану: {{product.schedulePlan.plannedCompletionDate | date: 'shortDate'}}
     </p>
