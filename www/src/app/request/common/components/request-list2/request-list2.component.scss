@@ -30,7 +30,7 @@
   .positions { flex-basis: 94px; }
   .tasks + .positions { flex-basis: 142px; }
   .customer, .name {
-    min-width: 140px;
+    min-width: 120px;
   }
 
   &.disabled {
