@@ -1,59 +1,33 @@
-<div class="from-excel-request-content">
-  <form class="view">
-    <div class="card">
-      <div class="card-block">
-        <div class="card-text">
+<form class="view" [formGroup]="form">
 
-          <ng-container *ngIf="newRequest">
-            <input uxgInput [(ngModel)]="requestName"
-                   [ngModelOptions]="{ standalone: true }"
-                   type="text"
-                   lg
-                   class="request-name-input"
-                   [class.required]="!requestName.length"
-                   id="request-name"
-                   value="{{ requestName }}"
-                   (input)="onRequestNameChange($event.target.value)"
-                   placeholder="Наименование заявки"/>
-          </ng-container>
-
-          <span class="app-secondary-color" *ngIf="!newRequest; else newRequestTemplate">
-            Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
-            и загрузите файлы в систему.
-          </span>
-          <ng-template #newRequestTemplate>
-            <span class="app-secondary-color">
-              Вы можете создать заявку с помощью шаблона, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
-            и загрузите файлы в систему.
-            </span>
-          </ng-template>
-
-          <app-template-upload #uploadTemplate
-                               (fileSelected)="onChangeFilesList($event)">
-          </app-template-upload>
-        </div>
-      </div>
+  <div class="app-control-wrap" *ngIf="form.get('requestName')">
+    <input #requestNameRef uxgInput type="text" lg formControlName="requestName"/>
+    <label class="app-control-label" (click)="requestNameRef.focus()">Наименование заявки</label>
+    <div class="app-control-error" *ngIf="form.get('requestName').errors as e">
+      <span *ngIf="e.required">Обязательное поле</span>
     </div>
-  </form>
-
-  <div class="submit">
-    <button type="button" uxgButton lg secondary
-            (click)="onCancelClick(); uploadTemplate.clear()">Отмена
-    </button>
-    <button uxgButton secondary lg
-            type="button"
-            (click)="onSaveClick()"
-            [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
-      <span>{{buttonLabel}}</span>
-    </button>
-    <ng-container *ngIf="newRequest">
-      <button uxgButton primary lg
-              type="button"
-              (click)="onPublishClick()"
-              [disabled]="files.length === 0 || (newRequest && requestName.trim().length === 0)">
-        <span>Опубликовать</span>
-      </button>
-    </ng-container>
   </div>
-</div>
 
+  <div class="app-secondary-color app-section" *ngIf="!isNew; else newRequestTemplate">
+    Вы можете загрузить новые позиции списком, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
+    и загрузите файлы в систему.
+  </div>
+  <ng-template #newRequestTemplate>
+    <div class="app-secondary-color app-section">
+      Вы можете создать заявку с помощью шаблона, если заполните шаблон xls таблицы (<a [href]="templateUrl"><b>скачать шаблон</b></a>)
+    и загрузите файлы в систему.
+    </div>
+  </ng-template>
+
+  <div class="app-section">
+    <app-template-upload (fileSelected)="form.get('files').setValue($event)">
+    </app-template-upload>
+  </div>
+
+  <div class="app-row app-justify-content-end app-align-items-center">
+    <div *ngIf="isLoading"><span class="spinner spinner-inline"></span></div>
+    <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
+    <button type="button" uxgButton lg secondary (click)="create.emit(form.value)" [disabled]="disabled">{{buttonLabel}}</button>
+    <button type="button" uxgButton lg primary (click)="publish.emit(form.value)" [disabled]="disabled" *ngIf="isNew">Опубликовать</button>
+  </div>
+</form>

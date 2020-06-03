@@ -1,60 +1,7 @@
-:host {
-  text-align: left;
+.app-section {
+  margin-bottom: 1.5em;
 }
 
-.from-excel-request-content {
-  text-align: left;
-}
-
-.app-secondary-color {
-  line-height: 1.5;
-  display: block;
-  padding-bottom: 10px;
-}
-
-.from-excel-request-content .card-block {
-  padding: 0;
-}
-
-.from-excel-request-content .card-text {
-  padding: 35px 0 40px 0;
-}
-
-.file-upload-label {
-  padding-top: 20px;
-}
-
-.card {
-  box-shadow: 0 0 0 0;
-  border-radius: 0;
-  margin-bottom: 0;
-  border: 0;
-}
-
-::ng-deep label.file-upload-label  {
-  padding-top: 5px;
-}
-::ng-deep label.file-upload-label a {
-  font-weight: bold;
-}
-
-input#file_upload {
-  display: none;
-}
-
-.submit {
-  text-align: right;
-}
-
-.btn-primary {
-  margin-top: 20px;
-  margin-right: 0;
-  padding: 0 25px;
-}
-
-.request-name-input {
-  margin: 10px 0 15px 0;
-}
-.request-name-input.ng-touched.required {
-  border-color: #FF2519;
+.app-section:first-child {
+  margin-top: 1.5em;
 }

@@ -27,7 +27,8 @@ $font_size_basic: 14px;
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 @import "~flatpickr/dist/flatpickr.min.css";
 
-@import "projects/uxg/src/styles/default-theme";
+@import "src/theme";
+@include core($theme);
 @import "assets/styles/grid";
 @import "assets/styles/proposals-grid";
 @import "assets/styles/statuses";
@@ -44,7 +45,7 @@ body, body p, h1, h2, h3, h4, h5, h6 {
 
 body {
   color: uxg($theme, color-font-primary);
-  background-color: #FBFCFE;
+  background: uxg($theme, color-bg);
 
   &.modal-open {
     overflow: hidden;
@@ -62,14 +63,17 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
 
 .app-position-status {
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
 
-  > * + * { margin-left: .5em }
+  > * + * {
+    margin-left: .5em
+  }
 
   &-icon {
-    display: inline-block;
     width: .858em;
     height: .858em;
-    border-radius: 50%;
+    border-radius: uxg($theme, counter-border-radius);
 
     @each $status, $color in $statuses {
       &.#{$status} { background-color: $color }
@@ -88,5 +92,15 @@ a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
     & + & {
       margin-left: 1em;
     }
+  }
+}
+
+.app-tabs-item {
+  &:not(&-active) .counter {
+    @extend .app-ghost-color;
+  }
+
+  .counter {
+    @extend .app-font-normal;
   }
 }

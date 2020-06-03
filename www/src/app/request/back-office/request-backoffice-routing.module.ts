@@ -10,12 +10,12 @@ import { TechnicalProposalListComponent } from "./components/technical-proposal-
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
-import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: RequestList2Component,
+    component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", hideTitle: true, feature: "backofficeRequest" }
   },

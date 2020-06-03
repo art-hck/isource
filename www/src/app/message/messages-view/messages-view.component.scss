@@ -1,4 +1,5 @@
 @import "src/assets/styles/statuses";
+@import "src/theme";
 
 .text-muted {
   color: #000000;
@@ -63,7 +64,7 @@ a.position-link {
 
     li {
       background: #F3F3F3;
-      border-radius: 8px;
+      border-radius: uxg($theme, card-border-radius);
       width: 100%;
       cursor: pointer;
       font-size: 14px;

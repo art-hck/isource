@@ -9,7 +9,7 @@
 
     <ng-container *uxgTab="template">
       <app-add-from-excel
-        (submit)="uploadFromTemplate.emit($event); close()"
+        (create)="uploadFromTemplate.emit($event); close()"
         (cancel)="cancel.emit()"
         [templateUrl]="'assets/RequestTemplate.xlsx'">
       </app-add-from-excel>

@@ -3,10 +3,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { Store } from "@ngxs/store";
-import { finalize, flatMap, mapTo } from "rxjs/operators";
+import { finalize, flatMap, mapTo, takeUntil } from "rxjs/operators";
 import { RequestService } from "../../services/request.service";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   templateUrl: './request-form.component.html',
@@ -14,7 +15,7 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 })
 export class RequestFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  subscription = new Subscription();
+  destroy$ = new Subject();
   isLoading = false;
 
   get formPositions() {
@@ -22,7 +23,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
   }
 
   get validPositions() {
-    return this.formPositions.controls.filter(control => control.valid);
+    return this.formPositions.controls.filter(({valid}) => valid);
   }
 
   constructor(
@@ -35,8 +36,8 @@ export class RequestFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      'name': [null, Validators.required],
-      'positions': this.formBuilder.array([], Validators.required)
+      'name': [null, CustomValidators.requiredNotEmpty],
+      'positions': this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
     });
     this.pushPosition();
   }
@@ -47,11 +48,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
 
   submit(publish = true) {
     const {name, positions} = this.form.value;
-    let request$ = this.requestService.addRequest(name, positions)
-      .pipe(finalize(() => {
-        this.isLoading = false;
-        this.form.enable();
-      }));
+    let request$ = this.requestService.addRequest(name, positions);
 
     if (publish) {
       request$ = request$.pipe(
@@ -62,16 +59,20 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.form.disable();
 
-    this.subscription.add(
-    request$.subscribe(
-      data => {
-        this.store.dispatch(new ToastActions.Success(publish ? "Заявка опубликована" : "Черновик заявки создан"));
-        this.router.navigate(["requests/customer", data.id]);
-      }
-    ));
+    request$.pipe(
+      takeUntil(this.destroy$),
+      finalize(() => {
+        this.isLoading = false;
+        this.form.enable();
+      })
+    ).subscribe(data => {
+      this.store.dispatch(new ToastActions.Success(publish ? "Заявка опубликована" : "Черновик заявки создан"));
+      this.router.navigate(["requests/customer", data.id]);
+    });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

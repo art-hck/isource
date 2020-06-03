@@ -1,4 +1,6 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import { FormBuilder, Validators } from "@angular/forms";
+import { CustomValidators } from "../../forms/custom.validators";
 
 @Component({
   selector: 'app-add-from-excel',
@@ -8,54 +10,27 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 export class AddFromExcelComponent implements OnInit {
 
   @Input() templateUrl: string;
-  @Input() newRequest = false;
+  @Input() isNew = false;
   @Input() buttonLabel = 'Добавить';
+  @Input() isLoading: boolean;
 
   @Output() cancel = new EventEmitter();
-
-  @Output() submit = new EventEmitter<{ files: File[], requestName: string }>();
+  @Output() create = new EventEmitter<{ files: File[], requestName: string }>();
   @Output() publish = new EventEmitter<{ files: File[], requestName: string }>();
 
-  requestName = "";
-  files: File[] = [];
+  form = this.fb.group({
+    files: [[], [Validators.required, Validators.minLength(1)]]
+  });
 
-  constructor() {
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    if (this.isNew) {
+      this.form.addControl("requestName", this.fb.control("", CustomValidators.requiredNotEmpty));
+    }
   }
 
-  onRequestNameChange(value) {
-    this.requestName = value.trim();
+  get disabled() {
+    return this.form.invalid || this.form.disabled || this.isLoading;
   }
-
-  onSaveClick(): void {
-    const requestData = {
-      files: this.files,
-      requestName: this.requestName
-    };
-
-    this.submit.emit(requestData);
-  }
-
-  onPublishClick(): void {
-    const requestData = {
-      files: this.files,
-      requestName: this.requestName
-    };
-
-    this.publish.emit(requestData);
-  }
-
-
-
-  onCancelClick(): void {
-    this.requestName = '';
-    this.cancel.emit();
-  }
-
-  onChangeFilesList(files: File[]): void {
-    this.files = files;
-  }
-
 }

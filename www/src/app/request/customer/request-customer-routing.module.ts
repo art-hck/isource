@@ -12,14 +12,14 @@ import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
-import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 import { Routes } from "../../core/models/routes";
 import { AgreementsComponent } from "../../agreements/customer/components/agreements/agreements.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: RequestList2Component,
+    component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
     data: { title: "Заявки", hideTitle: true, feature: "customerRequest" },
   },
