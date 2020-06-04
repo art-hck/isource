@@ -9,7 +9,7 @@ import { map } from "rxjs/operators";
 import { AgreementListActions } from "../../actions/agreement-list.actions";
 import { Agreement } from "../../../common/models/Agreement";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AgreementActionLabel } from "../../enum/agreement-action-label";
+import { AgreementActionLabel } from "../../dictionaries/agreement-action-label";
 
 @Component({
   templateUrl: './agreements.component.html',
@@ -43,7 +43,6 @@ export class AgreementsComponent implements OnInit {
         this.store.dispatch(new Fetch(action, 0, this.pageSize));
       }
     );
-    this.store.dispatch(new Fetch(null));
   }
 
   loadPage(page: number) {
