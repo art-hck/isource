@@ -34,7 +34,12 @@ export class TechnicalCommercialProposalHelperService {
         case "price":
           return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat ? prev : curr;
         case "date":
-          return moment(prev.proposalPosition.deliveryDate).isSameOrBefore(curr.proposalPosition.deliveryDate) ? prev : curr;
+          // Выбираем по дате, если дата одинаковая, выбираем наиболее выгодную по цене
+          return moment(prev.proposalPosition.deliveryDate).isSameOrBefore(curr.proposalPosition.deliveryDate) ?
+            (moment(prev.proposalPosition.deliveryDate).isSame(curr.proposalPosition.deliveryDate) ?
+               (prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat ? prev : curr) :
+                curr) :
+            curr;
       }
     }).proposalPosition;
   }
