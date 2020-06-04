@@ -1,116 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { ActivationErrorCode } from "../../enum/activation-error-code";
-import {
-  ActivationErrorCodeDescriptions,
-  ActivationErrorCodeLabels
-} from "../../dictionaries/activation-error-code-labels";
+import { ActivationErrorCodeLabels } from "../../dictionaries/activation-error-code-labels";
 import { ActivationError } from "../../models/activation-error";
+import { Title } from "@angular/platform-browser";
+import { Subject } from "rxjs";
+import { finalize, takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-activation-form',
-  templateUrl: './activation-form.component.html',
-  styleUrls: ['./activation-form.component.scss']
+  templateUrl: './activation-form.component.html'
 })
-export class ActivationFormComponent implements OnInit {
+export class ActivationFormComponent implements OnInit, OnDestroy {
 
   loading = false;
-
-  titleMessage: string;
-  descriptionMessage: string;
+  state: "completeActivation" | "completeResend" = null;
+  code: string;
   errorCode: string;
-
-  notActivated = false;
-
-  activationToken: string;
-  activationErrorCode = ActivationErrorCode;
+  readonly ErrorCode = ActivationErrorCode;
+  readonly destroy$ = new Subject();
 
   constructor(
-    public router: Router,
+    public title: Title,
     private route: ActivatedRoute,
     private authService: AuthService,
   ) { }
 
   ngOnInit() {
-    this.activationToken = this.route.snapshot.queryParams.code;
+    this.code = this.route.snapshot.queryParams.code;
 
-    if (this.route.snapshot.queryParams.activated && this.route.snapshot.queryParams.activated === 'false') {
-      this.notActivated = true;
-
-      this.titleMessage = this.getErrorTitleByType(ActivationErrorCode.NOT_ACTIVATED);
-      this.descriptionMessage = this.getErrorDescriptionByType(ActivationErrorCode.NOT_ACTIVATED);
-      this.errorCode = ActivationErrorCode.NOT_ACTIVATED;
-      return;
-    } else if (this.activationToken) {
+    if (this.route.snapshot.queryParams?.activated === 'false') {
+      this.responseProcessing({ error: ActivationErrorCode.NOT_ACTIVATED });
+    } else if (this.code) {
       this.loading = true;
 
-      const subscription = this.authService.activateAccount(this.activationToken).subscribe(
-        (data: ActivationError) => {
-          this.responseProcessing(data);
-          this.loading = false;
-          subscription.unsubscribe();
-        });
+      this.authService.activateAccount(this.code)
+        .pipe(takeUntil(this.destroy$), finalize(() => this.loading = false))
+        .subscribe(data => this.responseProcessing(data));
     } else {
-      this.titleMessage = 'Ссылка недействительна';
-      this.descriptionMessage = 'В ссылке отсутствует код активации';
+      this.responseProcessing({ error: ActivationErrorCode.INVALID_LINK });
     }
   }
 
-  resendActivationLink(activationCode: string): void {
+  resendActivationLink(code: string): void {
     this.loading = true;
 
-    const subscription = this.authService.resendActivationLink(activationCode).subscribe(
-      (data: ActivationError) => {
-        this.responseProcessing(data, 'resend');
-        this.loading = false;
-        subscription.unsubscribe();
-      });
+    this.authService.resendActivationLink(code)
+      .pipe(takeUntil(this.destroy$), finalize(() => this.loading = false))
+      .subscribe(data => this.responseProcessing(data, true));
   }
 
-  responseProcessing(response: ActivationError, requestType: string = null): void {
-    if (!response.error && !requestType) {
-      this.titleMessage = 'Профиль активирован';
-      this.descriptionMessage = 'Ваш профиль успешно активирован';
-      this.errorCode = null;
-    } else if (!response.error && requestType === 'resend') {
-      this.titleMessage = 'Письмо отправлено';
-      this.descriptionMessage = 'Мы отправили письмо с активацией на Вашу электронную почту';
+  responseProcessing(response: ActivationError, resend?: boolean): void {
+    if (!response.error) {
+      this.title.setTitle(resend ? 'Письмо отправлено' : 'Профиль активирован');
+      this.state = resend ? 'completeResend' : 'completeActivation';
       this.errorCode = null;
     } else {
-      switch (response.error) {
-        case ActivationErrorCode.INCORRECT_ACTIVATION_TOKEN:
-          this.titleMessage = this.getErrorTitleByType(ActivationErrorCode.INCORRECT_ACTIVATION_TOKEN);
-          this.descriptionMessage = this.getErrorDescriptionByType(ActivationErrorCode.INCORRECT_ACTIVATION_TOKEN);
-          this.errorCode = ActivationErrorCode.INCORRECT_ACTIVATION_TOKEN;
-          break;
-
-        case ActivationErrorCode.ALREADY_ACTIVATED:
-          this.titleMessage = this.getErrorTitleByType(ActivationErrorCode.ALREADY_ACTIVATED);
-          this.descriptionMessage = this.getErrorDescriptionByType(ActivationErrorCode.ALREADY_ACTIVATED);
-          this.errorCode = ActivationErrorCode.ALREADY_ACTIVATED;
-          break;
-
-        case ActivationErrorCode.ACTIVATION_TOKEN_EXPIRED:
-          this.titleMessage = this.getErrorTitleByType(ActivationErrorCode.ACTIVATION_TOKEN_EXPIRED);
-          this.descriptionMessage = this.getErrorDescriptionByType(ActivationErrorCode.ACTIVATION_TOKEN_EXPIRED);
-          this.errorCode = ActivationErrorCode.ACTIVATION_TOKEN_EXPIRED;
-          break;
-
-        default:
-          this.titleMessage = 'Что-то пошло не так';
-          this.descriptionMessage = 'Произошла ошибка. Попробуйте обновить страницу или повторить запрос позднее';
-          this.errorCode = 'unexpected-error';
-      }
+      this.errorCode = response.error ?? ActivationErrorCode.UNKNOWN;
+      this.title.setTitle(ActivationErrorCodeLabels[this.errorCode]);
     }
   }
 
-  getErrorTitleByType(type: string): string {
-    return ActivationErrorCodeLabels[type];
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-
-  getErrorDescriptionByType(type: string): string {
-    return ActivationErrorCodeDescriptions[type];
-  }
-
 }

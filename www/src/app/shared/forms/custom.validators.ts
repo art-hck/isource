@@ -121,6 +121,12 @@ export class CustomValidators {
     };
   }
 
+  static comparePassword(compareControlName: string) {
+    return (c: AbstractControl) => {
+      return c.value && c.parent.get(compareControlName).value !== c.value ? {password_mismatch: true} : null;
+    };
+  }
+
   static customDate(startDate: string): ValidatorFn {
     return (endDate: AbstractControl): ValidationErrors | null => {
       if (endDate.value === null || endDate.value.length === 0) {

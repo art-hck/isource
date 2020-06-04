@@ -24,7 +24,6 @@
 
   &:not(&-clear) {
     height: uxg($theme, control-height);
-    max-width: uxg($theme, button-max-width);
     min-width: uxg($theme, button-min-width);
     padding: uxg($theme, button-padding);
 
@@ -40,12 +39,20 @@
     }
   }
 
+  &:not(&-clear):not(&-strength) {
+    max-width: uxg($theme, button-max-width);
+  }
+
   &-primary {
     background-color: uxg($theme, color-control-primary);
     color: uxg($theme, color-default);
 
     &:not(:disabled):hover {
       background-color: uxg($theme, color-control-primary-hover);
+    }
+
+    &:disabled {
+      background-color: uxg($theme, color-control-secondary);
     }
   }
 
@@ -63,6 +70,10 @@
 
     &:not(:disabled):hover {
       border-color: uxg($theme, color-control-secondary-hover-border);
+    }
+
+    &:disabled {
+      border-color: uxg($theme, color-soft);
     }
   }
 
@@ -94,10 +105,9 @@
   }
 
   &:disabled {
-    opacity: .5;
     cursor: not-allowed;
+    color: uxg($theme, color-font-ghost);
   }
-
 }
 
 * + .app-btn {
