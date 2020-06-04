@@ -8,6 +8,7 @@ import { RequestDocument } from "../../models/request-document";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { UxgPopoverContentDirection } from "uxg";
+import { Request } from "../../models/request";
 
 @Component({
   selector: 'app-request-position',
@@ -56,8 +57,16 @@ export class PositionComponent implements DoCheck {
     );
   }
 
+  showInspection(position: RequestPosition): boolean {
+    return (this.isAfterContracted(position) && position.isInspectionControlRequired) ?? false;
+  }
+
   isAfterManufacturing(position: RequestPosition): boolean {
     return this.positionStatusService.isStatusAfter(position.status, PositionStatus.MANUFACTURING);
+  }
+
+  isAfterContracted(position: RequestPosition): boolean {
+    return this.positionStatusService.isStatusAfter(position.status, PositionStatus.CONTRACTED);
   }
 
   isBeforeRKDApproved(position: RequestPosition) {

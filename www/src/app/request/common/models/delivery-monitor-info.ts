@@ -1,5 +1,6 @@
 import { DeliveryMonitorConsignment } from "./delivery-monitor-consignment";
 import { DeliveryMonitorCompany } from './delivery-monitor-company';
+import { DigitalInspectorProduct } from "./digital-inspector-product";
 
 export class DeliveryMonitorInfo {
   goodId: string;
@@ -25,6 +26,7 @@ export class DeliveryMonitorInfo {
     consignee: DeliveryMonitorCompany;
   };
   consignments: DeliveryMonitorConsignment[];
+  products?: DigitalInspectorProduct[];
 }
 
 export class InspectorStage {
