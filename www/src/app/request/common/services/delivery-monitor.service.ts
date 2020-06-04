@@ -4,10 +4,6 @@ import { DeliveryMonitorInfo, InspectorStage } from "../models/delivery-monitor-
 import { Observable, of } from "rxjs";
 import { Uuid } from "../../../cart/models/uuid";
 import { InspectorInfo } from "../models/inspector-info";
-import { MonitorMock } from "./delivery-monitor.mock";
-import { InspectorMock } from "./inspector.mock";
-import { GoodsMock } from "./goods.mock";
-
 
 @Injectable()
 export class DeliveryMonitorService {

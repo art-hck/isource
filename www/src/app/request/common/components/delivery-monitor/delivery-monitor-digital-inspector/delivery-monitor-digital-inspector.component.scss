@@ -245,7 +245,7 @@
   margin-bottom: 20px;
   overflow: hidden;
 
-  & .awaiting-progress {
+  .awaiting-progress {
     height: 20px;
     display: inline-block;
     overflow: hidden;
@@ -253,7 +253,7 @@
     width: 100%;
     position: relative;
 
-    & .ready {
+    .ready {
       position: absolute;
       z-index: 2;
       width: 100%;
@@ -262,7 +262,7 @@
       }
     }
 
-    & .production-progress {
+    .production-progress {
       height: 20px;
       display: inline-block;
       overflow: hidden;
