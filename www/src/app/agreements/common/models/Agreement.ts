@@ -14,7 +14,7 @@ export class Agreement {
   issuedDate: string;
   request: Request;
   groupCounter: number;
-  requestTechnicalProposal: TechnicalProposal;
+  requestTechnicalProposal?: TechnicalProposal;
   positionsStatus: {
     name: PositionStatus;
     label: string;
