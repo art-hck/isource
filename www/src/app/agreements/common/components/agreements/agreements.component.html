@@ -15,8 +15,12 @@
       <div class="app-col-5 app-ellipsis name">
         <ng-container *ngIf="agreement.type === 'REQUEST'">
           <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color"> ({{agreement.groupCounter}})</span>
         </ng-container>
+        <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
+          <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}} </b>
+        </ng-container>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color"> ({{agreement.groupCounter}})</span>
+
         </div>
       <div class="app-col-2 date">
         <span>{{ agreement.issuedDate | date : "dd.MM.yyyy" }} </span>
