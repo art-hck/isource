@@ -1,8 +1,12 @@
+<ng-template #loading>
+  <span class="spinner spinner-md delivery-monitor-loader"></span>
+</ng-template>
+
 <app-request-delivery-monitor-good-card
   [deliveryMonitorInfo]="productStages"
   [requestPosition]="position">
 </app-request-delivery-monitor-good-card>
-<ng-container *ngIf="productStages.products">
+<ng-container *ngIf="productStages && productStages.products; else loading">
   <div class="good-infographics-card" *ngFor="let product of productStages.products">
     <div class="good-info-block">
       <div class="good-name">Изделие №{{product.position}}
