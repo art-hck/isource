@@ -1,4 +1,3 @@
-@import "src/theme";
 @import "src/assets/styles/statuses";
 
 .activity-feed {
@@ -57,7 +56,7 @@
         background-color: #fbfcfe;
         margin-left: 6px;
         margin-top: -14px;
-        border-radius: uxg($theme, counter-border-radius);
+        border-radius: 50%;
       }
     }
     &:last-of-type {

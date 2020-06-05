@@ -1,7 +1,7 @@
 <nav class="app-menu">
   <div class="app-layout app-row">
     <!-- Лого -->
-    <a routerLink="/"><img class="app-menu-logo" src="assets/images/logo.svg"/></a>
+    <a class="app-link-no-color app-menu-logo app-bold" [routerLink]="'/'">Marketplace</a>
 
     <!-- Пункты меню -->
     <ng-container *ngFor="let link of menu">
@@ -34,7 +34,7 @@
         <div uxgPopoverTrigger class="app-row app-align-items-center">
           <img src="assets/images/avatar.svg"/>
           <div>
-            <div class="app-ellipsis username">{{ user.getShortUserFio() }}</div>
+            <div class="app-ellipsis">{{ user.getShortUserFio() }}</div>
             <div class="app-ghost-color app-ellipsis contragent">{{ userBriefInfo }}</div>
           </div>
         </div>

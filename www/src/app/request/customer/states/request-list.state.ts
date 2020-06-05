@@ -38,9 +38,9 @@ export class RequestListState {
   @Selector() static status({status}: Model) { return status; }
   @Selector() static createdRequest({createdRequestId}: Model) { return createdRequestId; }
 
-  @Action(Fetch, { cancelUncompleted: true }) fetch({setState}: Context, {startFrom, pageSize, filters, sort}: Fetch) {
+  @Action(Fetch, { cancelUncompleted: true }) fetch({setState}: Context, {startFrom, pageSize, filters}: Fetch) {
     setState(patch({ status: "fetching" as StateStatus }));
-    return this.rest.getRequests(startFrom, pageSize, filters, sort).pipe(
+    return this.rest.getRequests(startFrom, pageSize, filters).pipe(
       tap(requests => setState(patch({requests, status: "received" as StateStatus}))),
     );
   }

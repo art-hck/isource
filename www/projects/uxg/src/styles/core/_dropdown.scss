@@ -33,7 +33,7 @@
     align-items: center;
     border: 1px uxg($theme, color-control-secondary) solid;
     background: uxg($theme, color-default);
-    border-radius: uxg($theme, control-border-radius);
+    border-radius: 4px;
     display: flex;
     justify-content: space-between;
     padding-right: 0;
@@ -80,7 +80,7 @@
       animation: app-dropdown-show 300ms;
       background: uxg($theme, color-default);
       border: 1px uxg($theme, color-control-primary) solid;
-      border-radius: uxg($theme, control-border-radius);
+      border-radius: 4px;
       box-sizing: border-box;
       left: 0;
       overflow: hidden;

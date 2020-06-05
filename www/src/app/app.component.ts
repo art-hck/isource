@@ -21,7 +21,6 @@ export class AppComponent implements OnInit, OnDestroy {
   noContentPadding: boolean;
   noFooter: boolean;
   _isTitleHidden: boolean;
-  readonly year = new Date().getFullYear();
 
 
   constructor(

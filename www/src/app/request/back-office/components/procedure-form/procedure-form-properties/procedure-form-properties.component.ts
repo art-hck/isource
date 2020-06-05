@@ -57,8 +57,10 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       c.setValue(false);
     });
 
-    this.form.valueChanges.pipe(startWith(<{}>this.form.getRawValue()))
-      .subscribe(() => this.onChange(this.form.getRawValue()));
+    this.form.valueChanges.pipe(startWith({})).subscribe(() => {
+      this.writeValue(this.form.getRawValue());
+      this.onChange(this.form.getRawValue());
+    });
   }
 
   default = (k, v) => this.value?.[k] ?? v;

@@ -17,7 +17,8 @@ export class Procedure {
   dateEndRegistration: string;
   datePublished: string;
   lotId: number;
-  offersImported: false;
+  offersImported: boolean;
+  isRetrade: boolean;
   positions: {
     contragent: ContragentShortInfo
     id: Uuid

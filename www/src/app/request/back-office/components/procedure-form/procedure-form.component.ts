@@ -120,10 +120,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.allContragents$ = this.contragentService.getContragentList();
   }
 
-  getFormGroup(name: string) {
-    return this.form.get(name) as FormGroup;
-  }
-
   submit() {
     if (this.form.invalid) {
       return;
@@ -133,12 +129,12 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.form.disable();
 
     const body: Procedure = {
-      ...this.getFormGroup("general").getRawValue(),
+      ...(this.form.get("general") as FormGroup).getRawValue(),
       ...this.form.get("properties").value,
-      positions: this.form.get("positions").value.map(position => position.id),
-      privateAccessContragents: this.form.get("privateAccessContragents").value.map(contragent => contragent.id),
-      procedureDocuments: this.getFormGroup("documents").get("procedureDocuments").value.map(document => document.id),
-      procedureUploadDocuments: this.getFormGroup("documents").get("procedureUploadDocuments").value,
+      positions: this.form.get("positions").value.map(({id}) => id),
+      privateAccessContragents: this.form.get("privateAccessContragents").value.map(({id}) => id),
+      procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
+      procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };

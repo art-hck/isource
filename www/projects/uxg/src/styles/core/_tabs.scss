@@ -44,8 +44,7 @@
     }
 
     &-active {
-      color: uxg($theme, color-font-link);
-      font-weight: bold;
+      color: uxg($theme, color-font-primary);
     }
   }
 
