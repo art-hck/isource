@@ -19,32 +19,32 @@
         <uxg-tab-title #inProgressTab [active]="true"
                        (click)="switchTab(inProgressTab, [RequestStatus.IN_PROGRESS])"
                        [disabled]="statusCounters?.inProgressRequestsCount === 0">
-          В обработке <span class="app-ghost-color">({{statusCounters?.inProgressRequestsCount}})</span>
+          В обработке <span class="counter">({{statusCounters?.inProgressRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #newTab
                        (click)="switchTab(newTab, [RequestStatus.NEW])"
                        [disabled]="statusCounters?.newRequestsCount === 0">
-          Новые <span class="app-ghost-color">({{statusCounters?.newRequestsCount}})</span>
+          Новые <span class="counter">({{statusCounters?.newRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #draftTab
                        (click)="switchTab(draftTab, [RequestStatus.DRAFT])"
                        *ngIf="feature.authorize('publishRequest')"
                        [disabled]="statusCounters?.draftRequestsCount === 0">
-          Черновики <span class="app-ghost-color">({{statusCounters?.draftRequestsCount}})</span>
+          Черновики <span class="counter">({{statusCounters?.draftRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #onApprovalTab
                        (click)="switchTab(onApprovalTab, [RequestStatus.ON_CUSTOMER_APPROVAL])"
                        [disabled]="statusCounters?.onCustomerApprovalRequestsCount === 0">
-          На согласовании <span class="app-ghost-color">({{statusCounters?.onCustomerApprovalRequestsCount}})</span>
+          На согласовании <span class="counter">({{statusCounters?.onCustomerApprovalRequestsCount}})</span>
         </uxg-tab-title>
 
         <uxg-tab-title #completedTab
                        (click)="switchTab(completedTab, [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT])"
                        [disabled]="statusCounters?.completedRequestsCount === 0">
-          Завершенные <span class="app-ghost-color">({{statusCounters?.completedRequestsCount}})</span>
+          Завершенные <span class="counter">({{statusCounters?.completedRequestsCount}})</span>
         </uxg-tab-title>
       </uxg-tabs>
 
@@ -68,16 +68,57 @@
   <div class="app-col">
     <div class="app-table app-no-border">
       <div class="app-row app-uppercase app-ghost-color app-bold">
-        <small class="app-col app-grow-0 number">Номер</small>
-        <small class="app-col app-grow-0 published">Опублик.</small>
+        <small class="app-col sorter app-grow-0 number"
+               [class.active-sort]="sortingColumn === 'number'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('number')">
+          <span>Номер</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
+        <small class="app-col sorter app-grow-0 published"
+               [class.active-sort]="sortingColumn === 'published'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('published')">
+          <span>Опублик.</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
         <small *ngIf="feature.authorize('backofficeRequest')" class="app-col customer">Заказчик</small>
+
         <!--        <small *ngIf="newTab.active" class="app-col published">Опубликована</small>-->
         <!--        <small *ngIf="completedTab.active" class="app-col completed">Завершена</small>-->
-        <small class="app-col name">Наименование</small>
+
+        <small class="app-col sorter name"
+               [class.active-sort]="sortingColumn === 'name'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('name')">
+          <span>Наименование</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
         <small class="app-col delivery-date">Сроки поставки</small>
+
         <small *ngIf="inProgressTab.active && feature.authorize('backofficeRequest')" class="app-col app-grow-0 tasks">Задач</small>
-        <small *ngIf="inProgressTab.active" class="app-col app-grow-0 pie">Завершено поз.</small>
-        <small *ngIf="!inProgressTab.active" class="app-col app-grow-0 positions">Позиций</small>
+
+        <small *ngIf="inProgressTab.active"
+               class="app-col sorter app-grow-0 pie"
+               [class.active-sort]="sortingColumn === 'finishedPositions'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('finishedPositions')">
+          <span>Завершено поз.</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
+        <small *ngIf="!inProgressTab.active"
+               class="app-col sorter app-grow-0 positions"
+               [class.active-sort]="sortingColumn === 'positions'"
+               [ngClass]="{'asc' : sortDirection === 'ASC', 'desc' : sortDirection === 'DESC'}"
+               (click)="sortBy('positions')">
+          <span>Позиций</span>
+          <uxg-icon shape="app-sort-arrows"></uxg-icon>
+        </small>
+
       </div>
     </div>
   </div>

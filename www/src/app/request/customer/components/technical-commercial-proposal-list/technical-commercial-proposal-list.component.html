@@ -7,13 +7,13 @@
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReviewTab [active]="true" >
             <ng-container *ngIf="(proposalsSentToReview$ | async) as proposalsSentToReview">
-              Необходимо рассмотреть ({{proposalsSentToReview?.length}})
+              Необходимо рассмотреть <span class="counter">({{proposalsSentToReview?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
           <uxg-tab-title #reviewedTab>
             <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
-              Рассмотренные ({{ proposalsReviewed?.length }})
+              Рассмотренные <span class="counter">({{ proposalsReviewed?.length }})</span>
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>

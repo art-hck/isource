@@ -23,9 +23,9 @@ export class RequestService {
   ) {
   }
 
-  getRequests(startFrom, pageSize, filters): Observable<Page<RequestsList>> {
+  getRequests(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
     const url = `requests/customer/list`;
-    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters });
+    return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
   }
 
   addRequest(name: string, positions: Array<any>): Observable<Request> {
