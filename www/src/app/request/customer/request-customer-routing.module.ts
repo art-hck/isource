@@ -9,28 +9,24 @@ import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
-import { AgreementsComponent } from "./components/agreements/agreements.component";
+
 import { RequestFormComponent } from "./components/request-form/request-form.component";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
-import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 import { Routes } from "../../core/models/routes";
+import { AgreementsComponent } from "../../agreements/customer/components/agreements/agreements.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: RequestList2Component,
+    component: RequestListComponent,
     canActivate: [CanActivateFeatureGuard],
-    data: { title: "Заявки", feature: "customerRequest" },
+    data: { title: "Заявки", hideTitle: true, feature: "customerRequest" },
   },
   {
     path: 'create',
     component: RequestFormComponent,
     data: { title: "Создание заявки вручную", feature: "createRequest" }
-  },
-  {
-    path: 'agreements',
-    component: AgreementsComponent,
-    data: { title: "Согласования" }
   },
   {
     path: ':id',
@@ -42,7 +38,7 @@ const routes: Routes = [
         children: [
           {
             path: 'technical-proposals',
-            component: TechnicalProposalListComponent,
+            component: TechnicalProposalListDeprecatedComponent,
             data: { title: "Технические предложения" }
           },
           {
@@ -68,7 +64,7 @@ const routes: Routes = [
       },
       {
         path: 'technical-proposals',
-        component: TechnicalProposalListDeprecatedComponent,
+        component: TechnicalProposalListComponent,
         data: { title: "Технические предложения" }
       },
       {

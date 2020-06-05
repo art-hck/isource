@@ -1,4 +1,5 @@
 import { GpnmarketConfigInterface } from "../core/config/gpnmarket-config.interface";
+import * as Sentry from "@sentry/browser";
 
 export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
@@ -8,6 +9,12 @@ export const AppConfig: GpnmarketConfigInterface = {
   },
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
+  },
+  sentry: {
+    enabled: false,
+    dsn: "https://88e1e59f21a84941acebb6f614d142e9@o398925.ingest.sentry.io/5255352",
+    environment: 'local',
+    level: Sentry.Severity.Error
   },
   paginator: {
     pageSize: 10,

@@ -11,7 +11,7 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
 
   @HostBinding('class.app-tabs-wrap') appTabs = true;
   @ViewChild('appTabsScroll') appTabsScroll: ElementRef;
-  @ContentChildren(UxgTabTitleComponent) tabTitle !: QueryList<UxgTabTitleComponent>;
+  @ContentChildren(UxgTabTitleComponent) tabTitle!: QueryList<UxgTabTitleComponent>;
 
   destroy$ = new Subject();
   hasScroll = false;

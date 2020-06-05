@@ -1,20 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AgreementsComponent } from "./components/agreements/agreements.component";
-import { AgreementsService } from "./services/agreements.service";
+import { AgreementsService } from "./customer/services/agreements.service";
 import { SharedModule } from "../shared/shared.module";
 import { RouterModule } from "@angular/router";
+import { AgreementsCustomerModule } from "./customer/agreements-customer.module";
+import { AgreementsRoutingModule } from "./agreements-routing.module";
+import { AgreementsBackofficeModule } from "./back-office/agreements-backoffice.module";
+
 
 
 @NgModule({
-  declarations: [AgreementsComponent],
   providers: [AgreementsService],
   imports: [
     RouterModule,
     SharedModule,
-    CommonModule
+    CommonModule,
+    AgreementsCustomerModule,
+    AgreementsBackofficeModule,
+    AgreementsRoutingModule
   ],
-  exports: [AgreementsComponent]
 })
 export class AgreementsModule {
 }

@@ -74,7 +74,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly uploadTemplate = (requestId: Uuid, files: File[]) => new UploadTemplate(requestId, files);
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
-  readonly updateProcedures = () => new RefreshProcedures(this.requestId);
+  readonly updateProcedures = () => [new RefreshProcedures(this.requestId), new FetchAvailablePositions(this.requestId)];
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
@@ -166,6 +166,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   isOnReview({data}: TechnicalCommercialProposalByPosition): boolean {
     return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
+  }
+
+  withAnalogs({positions}: TechnicalCommercialProposal): boolean {
+    return positions.every(({isAnalog}) => isAnalog) && positions.length > 0;
   }
 
   allPositionsOnReview(): boolean {

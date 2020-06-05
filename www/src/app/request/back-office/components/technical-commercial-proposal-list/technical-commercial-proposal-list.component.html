@@ -39,11 +39,11 @@
               <div class="app-col"></div>
               <div [ngSwitch]="view">
 
-                <!--button uxgButton secondary iconText (click)="procedureModalPayload = {action: 'create'}"
+                <button uxgButton secondary iconText (click)="procedureModalPayload = {action: 'create'}"
                         *ngIf="featureService.authorize('createProcedure')">
                   <uxg-icon shape="app-plus"></uxg-icon>
                   <span>Создать процедуру</span>
-                </button-->
+                </button>
 
                 <!-- Новое ТКП  -->
                 <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
@@ -115,7 +115,7 @@
               *ngFor="let proposal of proposals; trackBy: trackById"
               [proposal]="proposal"
               [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
-              [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos)"
+              [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos) && !withAnalogs(proposal)"
               (create)="addProposalPosition(proposal, proposalsByPos.position)"
             ></app-technical-commercial-proposal-grid-card>
           </div>
@@ -157,7 +157,7 @@
         <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
         <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
         <ng-container *ngIf="(availablePositions$ | async) as positions">
-          <app-request-procedure-create
+          <app-request-procedure-form
             *ngIf="procedureModalPayload"
             [request]="request"
             [positions]="positions"
@@ -166,7 +166,7 @@
             [procedureSource]="procedureSource"
             (complete)="this.store.dispatch(updateProcedures()); procedureModalPayload = null"
             (cancel)="procedureModalPayload = null"
-          ></app-request-procedure-create>
+          ></app-request-procedure-form>
         </ng-container>
       </uxg-modal>
 

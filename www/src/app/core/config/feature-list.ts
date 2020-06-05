@@ -7,6 +7,8 @@ export interface IFeatureList {
   customerRequest;
   createRequest;
   catalog;
+  catalogUpdate;
+  cart;
   backofficeRequest;
   deliveryMonitor;
   createContragent;
@@ -22,6 +24,7 @@ export interface IFeatureList {
   moveRequestGroup;
   kim;
   sentToApprove;
+  backofficeAgreements;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -29,7 +32,9 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   registration: {},
   customerRequest: { roles: [UserRole.CUSTOMER] },
   createRequest: { roles: [UserRole.CUSTOMER] },
-  catalog: { roles: [UserRole.CUSTOMER] },
+  catalog: {},
+  catalogUpdate: { roles: [UserRole.BACKOFFICE] },
+  cart: { roles: [UserRole.CUSTOMER] },
   instructionsFileForCustomer: { roles: [UserRole.CUSTOMER] },
   backofficeRequest: { roles: [UserRole.BACKOFFICE] },
   deliveryMonitor: { roles: [UserRole.BACKOFFICE] },
@@ -45,4 +50,5 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
   kim: { roles: [UserRole.CUSTOMER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
+  backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] }
 };

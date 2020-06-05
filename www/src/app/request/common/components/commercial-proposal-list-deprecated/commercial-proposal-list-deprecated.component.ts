@@ -62,8 +62,10 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
   }
 
   isNotActual(position: RequestPosition): boolean {
-    return position.status === PositionStatus.CANCELED || position.status === PositionStatus.NOT_RELEVANT ||
-      position.status === PositionStatus.RESULTS_AGREEMENT;
+    return position.status === PositionStatus.CANCELED ||
+           position.status === PositionStatus.NOT_RELEVANT ||
+           position.status === PositionStatus.RESULTS_AGREEMENT ||
+           position.status === PositionStatus.WINNER_SELECTED;
   }
 
   findDefaultOffer() {

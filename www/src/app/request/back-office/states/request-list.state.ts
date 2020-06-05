@@ -11,7 +11,6 @@ import { AvailableFilters } from "../models/available-filters";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 import Fetch = RequestListActions.Fetch;
 import FetchFilters = RequestListActions.FetchAvailableFilters;
-import FetchStatusCounts = RequestListActions.FetchStatusCounts;
 
 export interface RequestStateStateModel {
   requests: Page<RequestsList>;
@@ -32,6 +31,7 @@ export class RequestListState {
   constructor(private rest: RequestService) {}
 
   @Selector() static requests({requests}: Model) { return requests.entities; }
+  @Selector() static statusCounters({requests}: Model) { return requests.statusCounters; }
   @Selector() static totalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
   @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
@@ -46,11 +46,5 @@ export class RequestListState {
 
   @Action(FetchFilters) fetchFilters({setState}: Context) {
     return this.rest.availableFilters().pipe(tap(filters => setState(patch({availableFilters: filters}))));
-  }
-
-  @Action(FetchStatusCounts) fetchStatusCounts({setState}: Context) {
-    return this.rest.requestStatusCount().pipe(
-      tap(requestStatusCounts => setState(patch({requestStatusCounts}))),
-    );
   }
 }

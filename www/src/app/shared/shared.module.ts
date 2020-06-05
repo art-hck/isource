@@ -28,6 +28,9 @@ import { DocumentsFormControlComponent } from "./components/documents-form-contr
 import { AppDateIsAfterDirective } from "./directives/app-date-is-after.directive";
 import { AppPositionStatusComponent } from "./components/position-status/app-position-status.component";
 import { ToastListModule } from "./components/toast-list/toast-list.module";
+import { GridContragentsComponent } from './components/grid/grid-contragents/grid-contragents.component';
+import { ContragentInfoComponent } from "../contragent/components/contragent-info/contragent-info.component";
+import { ContragentInfoLinkComponent } from "../contragent/components/contragent-info-link/contragent-info-link.component";
 
 @NgModule({
   imports: [
@@ -65,6 +68,9 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
     AppPositionStatusComponent,
+    GridContragentsComponent,
+    ContragentInfoComponent,
+    ContragentInfoLinkComponent,
   ],
   exports: [
     CommonModule,
@@ -99,6 +105,9 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
     AppDateIsAfterDirective,
     AppPositionStatusComponent,
     ToastListModule,
+    GridContragentsComponent,
+    ContragentInfoComponent,
+    ContragentInfoLinkComponent,
   ]
 })
 export class SharedModule {

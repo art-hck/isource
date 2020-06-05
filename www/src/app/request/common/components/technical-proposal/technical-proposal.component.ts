@@ -38,17 +38,27 @@ export class RequestTechnicalProposalComponent {
   private editableStatuses = [
     TechnicalProposalPositionStatus.NEW,
     TechnicalProposalPositionStatus.EDITED,
-    TechnicalProposalPositionStatus.DECLINED
+    TechnicalProposalPositionStatus.SENT_TO_EDIT,
+    TechnicalProposalsStatus.NEW,
+    TechnicalProposalsStatus.SENT_TO_EDIT,
   ];
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
   }
 
-  editDisabled(tp: TechnicalProposal): boolean {
-    return !tp.positions
-      .filter(() => tp.status !== TechnicalProposalsStatus.SENT_TO_REVIEW)
-      .some((position) => this.editableStatuses.indexOf(position.status) >= 0);
+  getLabelWithCounters(technicalProposal: TechnicalProposal): string {
+    const totalPositionsCount = technicalProposal.positions.length;
+    const approvedPositionsCount = technicalProposal.positions.reduce(
+      (count, tpPosition) => tpPosition.status === TechnicalProposalPositionStatus.ACCEPTED ? count + 1 : count, 0
+    );
+
+    return 'Согласовано ' + approvedPositionsCount + ' из ' + totalPositionsCount;
+  }
+
+  get editable(): boolean {
+    const {status, positions} = this.technicalProposal;
+    return this.editableStatuses.includes(status) && positions.some(({ status: s }) => this.editableStatuses.indexOf(s) >= 0);
   }
 
   availableCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {

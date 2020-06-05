@@ -3,6 +3,7 @@ stages:
   - codestyle
 #  - e2e
 
+
 build staging:
   stage: build
   tags:
@@ -10,7 +11,7 @@ build staging:
   script:
     - pwd | xargs /bin/bash /var/agent/front/01.sync.sh
     - /bin/bash /var/agent/front/02.npm_install.sh
-    - /bin/bash /var/agent/front/03.ng_build_prod.sh
+    - /bin/bash /var/agent/front/03.ng_build.sh
     - /bin/bash /var/agent/front/04.change_girs.sh
     - exit 0
   only:
@@ -22,7 +23,7 @@ codestyle staging:
     - gpn-test-front
   script:
     - cd www
-    - npm i tslint --no-optional
+    - pnpm i --dev --no-optional --ignore-scripts --prefer-offline
     - npm run tslint
     - exit 0
   only:
@@ -41,6 +42,8 @@ codestyle staging:
 #    - /^release-.*$/
 #  when: manual
 #
+
+
 #e2e prod:
 #  stage: e2e
 #  tags:

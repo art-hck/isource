@@ -11,6 +11,7 @@ import { TechnicalProposalsService } from "../../../back-office/services/technic
 import { Uuid } from "../../../../cart/models/uuid";
 import { TechnicalProposal } from "../../models/technical-proposal";
 import { RequestTpFilterStatusesListComponent } from "./technical-proposal-filter-statuses-list/request-tp-filter-statuses-list.component";
+import { TechnicalProposalFilter } from "../../models/technical-proposal-filter";
 
 @Component({
   selector: 'app-request-technical-proposal-filter',
@@ -24,7 +25,7 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   @ViewChild(RequestTpFilterStatusesListComponent)
              requestTpFilterStatusesListComponent: RequestTpFilterStatusesListComponent;
 
-  @Output() filters = new EventEmitter<RequestsListFilter>();
+  @Output() filters = new EventEmitter<TechnicalProposalFilter>();
   @Output() showResults = new EventEmitter();
 
   @Input() backofficeView: boolean;
@@ -76,7 +77,7 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
 
 
   submit(): void {
-    const filters = <RequestsListFilter>{};
+    const filters = <TechnicalProposalFilter>{};
 
     if (this.requestTpListFilterForm.value) {
       for (const [filterType, filterValue] of Object.entries(this.requestTpListFilterForm.value)) {
@@ -99,9 +100,9 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
 
 
   getContragentList(): void {
-    this.technicalProposals.forEach(tp => {
-      this.contragents.push(tp.supplierContragent);
-    });
+    this.contragents = this.technicalProposals
+      .filter(tp => tp.supplierContragent)
+      .reduce((contragents, tp) => [...contragents, tp.supplierContragent], []);
 
     // Убираем из массива дублирующихся контрагентов
     this.contragents = this.contragents.filter((value, index, array) =>
@@ -124,8 +125,10 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   resetFilter(emitEvent = true) {
     this.requestTpListFilterForm.reset(this.filterFormInitialState, { emitEvent });
 
-    this.requestTpFilterContragentListComponent.selectedContragents = [];
-    this.requestTpFilterContragentListComponent.contragentSearchValue = "";
+    if (this.requestTpFilterContragentListComponent) {
+      this.requestTpFilterContragentListComponent.selectedContragents = [];
+      this.requestTpFilterContragentListComponent.contragentSearchValue = "";
+    }
 
     this.requestTpFilterStatusesListComponent.selectedStatuses = [];
   }

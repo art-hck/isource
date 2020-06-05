@@ -1,0 +1,12 @@
+<app-request-list
+  [requests]="requests$ | async"
+  [total]="totalCount$ | async"
+  [status]="status$ | async"
+  [statusCounters]="statusCounters$ | async"
+  [filters]="fetchFilters$ | async"
+  [pageSize]="pageSize"
+  [availableFilters]="availableFilters$ | async"
+  [activeFiltersObj]="activeFilters"
+  (filter)="fetchFilters$.next($event)"
+  (refresh)="fetchFilters$.next({})"
+></app-request-list>

@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -9,29 +9,40 @@ import { TechnicalProposalsService } from "../../services/technical-proposals.se
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { RequestPosition } from "../../../common/models/request-position";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestActions } from "../../actions/request.actions";
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
 import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { TechnicalProposalFilter } from "../../../common/models/technical-proposal-filter";
+import { Procedure } from "../../models/procedure";
+import { ProcedureService } from "../../services/procedure.service";
+import { ProcedureAction } from "../../models/procedure-action";
+import { StateStatus } from "../../../common/models/state-status";
 
-@Component({ templateUrl: './technical-proposal-list.component.html' })
+@Component({
+  templateUrl: './technical-proposal-list.component.html',
+  styleUrls: ['technical-proposal-list.component.scss']
+})
 export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;
   readonly destroy$ = new Subject();
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
+  procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
   procedureSource = ProcedureSource;
+  procedureModalPayload: ProcedureAction & { procedure?: Procedure };
+  prolongModalPayload: Procedure;
+  state: StateStatus = "pristine";
 
   constructor(
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
+    private procedureService: ProcedureService,
     public featureService: FeatureService,
     public store: Store
   ) {}
@@ -48,18 +59,34 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
         { label: 'Согласование технических предложений', link: `/requests/backoffice/${id}/technical-proposals` }
       ]),
       tap(() => {
-        this.getTechnicalProposals();
-        this.getTechnicalProposalsPositions();
+        this.fetch();
+        this.fetchProcedures();
+        this.fetchPositions();
       }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  getTechnicalProposals(filters = {}) {
+  fetch(filters = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
-      tap(technicalProposals => this.showForm = technicalProposals.length === 0),
       publishReplay(1), refCount()
     );
+  }
+
+  fetchProcedures() {
+    this.procedures$ = this.procedureService.list(this.requestId, ProcedureSource.TECHNICAL_PROPOSAL).pipe(
+      publishReplay(1), refCount()
+    );
+  }
+
+  refreshProcedures() {
+    this.state = "updating";
+    this.procedureService.list(this.requestId, ProcedureSource.TECHNICAL_PROPOSAL)
+      .pipe(finalize(() => this.state = "received"))
+      .subscribe((data) => {
+        this.procedures$ = this.procedures$.pipe(mapTo(data));
+        this.fetchPositions();
+      });
   }
 
   filter(filters: {}) {
@@ -68,7 +95,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTechnicalProposalsPositions() {
+  fetchPositions() {
     this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
   }
 
@@ -76,7 +103,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
    * @TODO uncomment when backend return technicalProposal data
    */
   addTechnicalProposal(technicalProposal) {
-    this.getTechnicalProposals();
+    this.fetch();
     // this.technicalProposals$ = this.technicalProposals$.pipe(
     //   map(technicalProposals => {
     //     technicalProposals.unshift(technicalProposal);
@@ -89,7 +116,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
    * @TODO uncomment when backend return technicalProposal data
    */
   updateTechnicalProposal(technicalProposal) {
-    this.getTechnicalProposals();
+    this.fetch();
     // this.technicalProposals$ = this.technicalProposals$.pipe(
     //   map(technicalProposals => {
     //     const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
@@ -104,7 +131,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
     const subscription = this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal).subscribe(
       () => {
-        this.getTechnicalProposals();
+        this.fetch();
         subscription.unsubscribe();
       }
     );

@@ -1,8 +1,8 @@
 import localeRu from '@angular/common/locales/ru';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http";
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { HttpClientModule, HttpErrorResponse } from "@angular/common/http";
+import { LOCALE_ID, NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
@@ -16,7 +16,37 @@ import { CoreModule } from "./core/core.module";
 import { ToastListModule } from "./shared/components/toast-list/toast-list.module";
 import { WebsocketModule } from "./websocket/websocket.module";
 
+import * as Sentry from "@sentry/browser";
+
 registerLocaleData(localeRu, 'ru');
+
+Sentry.init({
+  dsn: AppConfig.sentry.dsn,
+  enabled: AppConfig.sentry.enabled,
+  environment: AppConfig.sentry.environment
+});
+Sentry.configureScope(function(scope) {
+  scope.setLevel(AppConfig.sentry.level);
+});
+
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+
+  extractError(error) {
+    // обработка ошибок с бэкэнда
+    if (error instanceof HttpErrorResponse) {
+      return `${error.message}, detail: "${error.error.detail}"`;
+    }
+
+    return error.originalError || error;
+  }
+
+  handleError(error) {
+    const extractedError = this.extractError(error);
+    Sentry.captureException(extractedError);
+  }
+}
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -30,11 +60,13 @@ registerLocaleData(localeRu, 'ru');
     NgxsReduxDevtoolsPluginModule.forRoot(),
     ToastListModule,
     UxgModule,
-    WebsocketModule.config({ url: AppConfig.endpoints.ws })
+    WebsocketModule.config({ url: AppConfig.endpoints.ws }),
+    BrowserModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
-    { provide: LOCALE_ID, useValue: 'ru' }
+    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: ErrorHandler, useClass: SentryErrorHandler }
   ],
   bootstrap: [AppComponent]
 })

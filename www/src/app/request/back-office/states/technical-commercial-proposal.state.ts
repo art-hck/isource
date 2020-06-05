@@ -1,7 +1,7 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, Selector, State, StateContext, StateOperator } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
-import { catchError, mergeMap, switchMap, tap } from "rxjs/operators";
+import { catchError, map, mergeMap, switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { of, throwError } from "rxjs";
@@ -12,6 +12,8 @@ import { Uuid } from "../../../cart/models/uuid";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Procedure } from "../models/procedure";
+import { ProcedureService } from "../services/procedure.service";
+import { ProcedureSource } from "../../common/enum/procedure-source";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
@@ -56,7 +58,7 @@ function insertOrUpdateProposals(proposals: TechnicalCommercialProposal[]): Stat
 export class TechnicalCommercialProposalState {
   cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
-  constructor(private rest: TechnicalCommercialProposalService) {
+  constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
   @Selector() static proposals({ proposals }: Model) { return proposals; }
@@ -86,6 +88,17 @@ export class TechnicalCommercialProposalState {
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId).pipe(
+      // Разделение предложений ТКП с аналогами и без
+      map(proposals => proposals.reduce((result, proposal) => {
+        [true, false].forEach(withAnalog => {
+          const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
+          if (positions.length) {
+            result.push({ ...proposal, positions});
+          }
+        });
+
+        return result;
+      }, [])),
       tap(proposals => ctx.setState(patch({ proposals }))),
       tap(proposals => this.cache[requestId] = proposals),
       switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),
@@ -109,7 +122,7 @@ export class TechnicalCommercialProposalState {
       setState(patch({ procedures: null, status: "fetching" as StateStatus }));
     }
 
-    return this.rest.procedures(requestId).pipe(
+    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL).pipe(
       tap(procedures => setState(patch({ procedures }))),
       tap(() => {
         if (update) {

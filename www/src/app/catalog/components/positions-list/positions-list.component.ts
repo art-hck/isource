@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
+import { FeatureService } from "../../../core/services/feature.service";
 
 @Component({
   selector: 'app-catalog-positions-list',
@@ -20,11 +21,12 @@ export class PositionsListComponent implements OnChanges {
   thisButtonIndex: number;
 
   constructor(
-    protected getContragentService: ContragentService,
+    public featureService: FeatureService,
+    private getContragentService: ContragentService,
     private catalogService: CatalogService,
     private cartStoreService: CartStoreService,
-    protected router: Router,
-    protected fb: FormBuilder
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   get formPositions(): FormArray {

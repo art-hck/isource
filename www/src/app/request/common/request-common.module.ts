@@ -24,8 +24,6 @@ import { RequestListFilterComponent } from './components/request-list/request-li
 import { FilterSectionComponent } from "./components/request-list/request-list-filter/filter-section/filter-section.component";
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
-
-import { ContragentSharedModule } from "../../contragent/contragent-shared.module";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
 import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
@@ -42,11 +40,12 @@ import { RequestMoveGroupModalComponent } from "./components/request/request-mov
 import { RequestPositionService } from "./services/request-position.service";
 import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
-import { RequestList2Component } from "./components/request-list2/request-list2.component";
+import { RequestListComponent } from "./components/request-list/request-list.component";
 import { ProposalGridContragentsComponent } from "./components/technical-commercial-proposal/proposal-grid-contragents/proposal-grid-contragents.component";
 import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import { ProposalDetailComponent } from "./components/technical-commercial-proposal/proposal-detail/proposal-detail.component";
 import { ProlongateProcedureComponent } from "./components/commercial-proposal-list/prolongate-procedure/prolongate-procedure.component";
+import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -82,7 +81,7 @@ const RequestCommonModuleDeclarations = [
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
   FilterPositionStatusesComponent,
-  RequestList2Component,
+  RequestListComponent,
   ProposalGridContragentsComponent,
   ProposalGridCardComponent,
   ProposalDetailComponent,
@@ -96,11 +95,11 @@ const RequestCommonModuleDeclarations = [
     SharedModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentSharedModule,
   ],
   providers: [
     ContractService,
     RequestPositionStatusService,
+    TechnicalProposalsService,
     DeliveryMonitorService,
     RequestPositionService
   ],
@@ -108,7 +107,6 @@ const RequestCommonModuleDeclarations = [
     SharedModule,
     ReactiveFormsModule,
     TextMaskModule,
-    ContragentSharedModule,
     ...RequestCommonModuleDeclarations
   ]
 })
