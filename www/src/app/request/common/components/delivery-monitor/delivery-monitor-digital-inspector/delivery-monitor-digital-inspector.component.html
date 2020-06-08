@@ -12,9 +12,11 @@
       <div class="good-name">Изделие №{{product.position}}
         <ng-container *ngIf="product.factoryNumber">зв. №{{product.factoryNumber}}</ng-container>
       </div>
+      <ng-container *ngIf="product.schedulePlan">
       <p class="inn-info app-ghost-color">
         Готовность по плану: {{product.schedulePlan.plannedCompletionDate | date: 'shortDate'}}
       </p>
+      </ng-container>
     </div>
 
     <div class="good-statistics-info">
