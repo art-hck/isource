@@ -2,7 +2,8 @@
   <div class="app-table app-no-border">
     <div class="app-row">
       <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
-      <small class="app-col-5 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
+      <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
+      <small class="app-col-2 app-ghost-color customer"><b>ЗАКАЗЧИК</b></small>
       <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
       <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
       <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
@@ -12,7 +13,7 @@
   <div class="app-table agreements-list">
     <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
       <div class="app-col-1 id">{{ agreement.request.number}}</div>
-      <div class="app-col-5 app-ellipsis name">
+      <div class="app-col-3 app-ellipsis name">
         <ng-container *ngIf="agreement.type === 'REQUEST'">
           <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
         </ng-container>
@@ -21,7 +22,10 @@
         </ng-container>
           <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color"> ({{agreement.groupCounter}})</span>
 
-        </div>
+      </div>
+      <div class="app-col-2 app-ellipsis customer">
+        {{agreement.request.contragent.shortName}}
+      </div>
       <div class="app-col-2 date">
         <span>{{ agreement.issuedDate | date : "dd.MM.yyyy" }} </span>
         <span class="app-ghost-color">{{ agreement.issuedDate | date : "HH:mm" }}</span>
