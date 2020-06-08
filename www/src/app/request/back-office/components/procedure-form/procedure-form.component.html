@@ -105,7 +105,7 @@
       <app-request-procedure-form-properties
         formControlName="properties"
         [action]="action"
-        [publicAccess]="contragents?.length < 2 && procedure?.privateAccessContragents.length < 2"
+        [(publicAccess)]="publicAccess"
       ></app-request-procedure-form-properties>
     </div>
     <hr class="divider"/>
@@ -120,7 +120,7 @@
     <br/>
     <br/>
     <select-items-with-search
-      *ngIf="contragents?.length ? contragents : procedure?.privateAccessContragents || (allContragents$ | async) as contragents; else loading"
+      *ngIf="procedure?.privateAccessContragents || (contragents?.length ? contragents : (allContragents$ | async)) as contragents; else loading"
       class="select-list select-list-contragents"
       formControlName="privateAccessContragents"
       placeholder="Наименование контрагента или ИНН"

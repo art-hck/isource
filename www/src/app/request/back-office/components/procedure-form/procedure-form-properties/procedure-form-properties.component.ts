@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { startWith } from "rxjs/operators";
 import { ProcedureAction } from "../../../models/procedure-action";
@@ -15,6 +15,7 @@ import { ProcedureAction } from "../../../models/procedure-action";
 export class ProcedureFormPropertiesComponent implements AfterContentInit, ControlValueAccessor {
   @Input() action: ProcedureAction["action"] = "create";
   @Input() publicAccess = true;
+  @Output() publicAccessChange = new EventEmitter();
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -42,10 +43,6 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       this.form.addControl('bestPriceRequirements', this.fb.control(this.default("bestPriceRequirements", false)));
     }
 
-    if (!this.publicAccess) {
-      this.form.get('publicAccess').disable();
-    }
-
     let analogsValueChanges$ = this.form.get('positionsAnalogs').valueChanges;
 
     if (this.action !== 'bargain') {
@@ -56,6 +53,8 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       value ? c.enable() : c.disable();
       c.setValue(false);
     });
+
+    this.form.get('publicAccess').valueChanges.subscribe(value => this.publicAccessChange.emit(value));
 
     this.form.valueChanges.pipe(startWith({})).subscribe(() => {
       this.writeValue(this.form.getRawValue());
