@@ -39,6 +39,8 @@ export class ContragentRegistrationComponent implements OnInit {
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
 
+  contragentRating: number;
+
   readonly role = ContragentRole;
   readonly roleLabel = ContragentRoleLabels;
   readonly phoneMask: TextMaskConfig = {
@@ -148,6 +150,8 @@ export class ContragentRegistrationComponent implements OnInit {
     });
 
     this.form.markAllAsTouched();
+
+    this.calculateContragentRating();
   }
 
   onBankSuggestionSelected(event): void {
@@ -223,5 +227,23 @@ export class ContragentRegistrationComponent implements OnInit {
           moment(new Date(contragent.taxAuthorityRegistrationDate)).format('DD.MM.YYYY'));
       })
     );
+  }
+
+  // Фейковый подсчёт рейтинга надёжности контрагента.
+  // При ИНН кратном 2 — три здвезды, при кратном 3 — четыре здвезды, в остальных случаях — пять здвезд
+  calculateContragentRating(): void {
+    const inn = this.form.get('contragent').get('inn').value;
+
+    if (inn % 2 === 0) {
+      this.contragentRating = 3;
+    } else if (inn % 3 === 0) {
+      this.contragentRating = 4;
+    } else {
+      this.contragentRating = 5;
+    }
+  }
+
+  isRatingStarActive(value): boolean {
+    return value <= this.contragentRating;
   }
 }
