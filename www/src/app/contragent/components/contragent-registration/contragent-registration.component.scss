@@ -55,13 +55,10 @@
   display: inline-block;
   margin: 0 5px 0 0;
   width: 20px;
-  color: gray;
-  opacity: 0.4;
-}
 
-.rating-stars .star.active {
-  color: #5066FF;
-  opacity: 1;
+  &.active {
+    color: uxg($theme, color-primary);
+  }
 }
 
 .rating-label {

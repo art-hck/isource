@@ -229,6 +229,8 @@ export class ContragentRegistrationComponent implements OnInit {
     );
   }
 
+  // Фейковый подсчёт рейтинга надёжности контрагента.
+  // При ИНН кратном 2 — три здвезды, при кратном 3 — четыре здвезды, в остальных случаях — пять здвезд
   calculateContragentRating(): void {
     const inn = this.form.get('contragent').get('inn').value;
 
