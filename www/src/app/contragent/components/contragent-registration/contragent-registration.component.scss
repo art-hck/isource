@@ -53,12 +53,14 @@
 
 .rating-stars .star {
   display: inline-block;
-  fill: gray;
+  margin: 0 5px 0 0;
+  width: 20px;
+  color: gray;
   opacity: 0.4;
 }
 
 .rating-stars .star.active {
-  fill: #5066FF;
+  color: #5066FF;
   opacity: 1;
 }
 
@@ -69,6 +71,5 @@
 }
 
 .rating-stars {
-  height: 0;
-  display: inline-block;
+  margin-left: -3px;
 }

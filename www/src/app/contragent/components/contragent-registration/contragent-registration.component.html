@@ -98,11 +98,9 @@
                 <div class="rating-label app-secondary-color">Рейтинг надёжности контрагента:</div>
 
                 <div class="rating-stars">
-                  <uxg-icon class="star" [class.active]="isRatingStarActive(1)" shape="app-rating-star" size="18"></uxg-icon>
-                  <uxg-icon class="star" [class.active]="isRatingStarActive(2)" shape="app-rating-star" size="18"></uxg-icon>
-                  <uxg-icon class="star" [class.active]="isRatingStarActive(3)" shape="app-rating-star" size="18"></uxg-icon>
-                  <uxg-icon class="star" [class.active]="isRatingStarActive(4)" shape="app-rating-star" size="18"></uxg-icon>
-                  <uxg-icon class="star" [class.active]="isRatingStarActive(5)" shape="app-rating-star" size="18"></uxg-icon>
+                  <ng-container *ngFor="let index of [1, 2, 3, 4, 5]">
+                    <uxg-icon class="star is-solid" [class.active]="isRatingStarActive(index)" shape="app-star" size="23"></uxg-icon>
+                  </ng-container>
                 </div>
               </ng-container>
             </div>
