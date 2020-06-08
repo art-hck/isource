@@ -50,3 +50,25 @@
   margin-bottom: 20px;
 }
 
+
+.rating-stars .star {
+  display: inline-block;
+  fill: gray;
+  opacity: 0.4;
+}
+
+.rating-stars .star.active {
+  fill: #5066FF;
+  opacity: 1;
+}
+
+.rating-label {
+  margin-top: 18px;
+  font-size: 13px;
+  padding-bottom: 5px;
+}
+
+.rating-stars {
+  height: 0;
+  display: inline-block;
+}
