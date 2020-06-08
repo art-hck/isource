@@ -67,7 +67,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
       general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || this.form.get('privateAccessContragents').valid)],
-      properties: { label: "Свойства", disabled: this.action === 'prolong' },
+      properties: { label: "Параметры", disabled: this.action === 'prolong' },
       contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
       documents: ["Документы", () => this.form.valid],
     });
