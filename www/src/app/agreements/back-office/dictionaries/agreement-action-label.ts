@@ -9,5 +9,8 @@ export const AgreementActionLabel: Record<AgreementAction, string> = {
   [AgreementAction.CORRECT_TP] : "Скорректировать ТП",
   [AgreementAction.PROCESS_WINNER_SELECTED_CP] : "Обработать результаты выбора",
   [AgreementAction.PROCESS_WINNER_SELECTED_TCP] : "Обработать результаты выбора",
+  [AgreementAction.SEND_CONTRACT_AGREEMENT] : "Направить проект договора на согласование",
+  [AgreementAction.SIGN_CONTRACT] : "Подписать договор",
+  [AgreementAction.CORRECT_CONTRACT] : "Скорректировать проект договора"
 
 };

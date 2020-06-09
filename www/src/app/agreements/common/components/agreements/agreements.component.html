@@ -14,7 +14,7 @@
     <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
       <div class="app-col-1 id">{{ agreement.request.number}}</div>
       <div class="app-col-3 app-ellipsis name">
-        <ng-container *ngIf="agreement.type === 'REQUEST'">
+        <ng-container *ngIf="agreement.type === 'REQUEST' || agreement.type === 'REQUEST_CONTRACT'">
           <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
         </ng-container>
         <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
