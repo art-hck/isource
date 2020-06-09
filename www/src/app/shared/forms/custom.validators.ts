@@ -30,15 +30,13 @@ export class CustomValidators {
 
   // Используется для валидации КПП и БИК
   protected static nineDigits(control: FormControl): any {
-    const value = control.value || '';
-    const valid = String(value).match(/^\d{9}$/);
+    const valid = control.value ? String(control.value).match(/^\d{9}$/) : true;
     return valid ? null : {field: true};
 }
 
   // Используется для валидации банковского и корреспонденского счета
   static twentyDigits(control: FormControl): any {
-    const value = control.value || '';
-    const valid = String(value).match(/^\d{20}$/);
+    const valid = control.value ? String(control.value).match(/^\d{20}$/) : true;
     return valid ? null : {field: true};
   }
 

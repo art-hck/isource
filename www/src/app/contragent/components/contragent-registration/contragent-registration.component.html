@@ -178,18 +178,12 @@
               <div class="app-control-wrap">
                 <input #account uxgInput lg formControlName="account"/>
                 <label class="app-control-label" (click)="account.focus()">Расчетный счет</label>
-                <div class="app-control-error" *ngIf="form.get('contragentBankRequisite').get('account').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
               </div>
             </div>
             <div class="app-col">
               <div class="app-control-wrap">
                 <input #correspondentAccount uxgInput lg formControlName="correspondentAccount"/>
                 <label class="app-control-label" (click)="correspondentAccount.focus()">Корреспондентский счет</label>
-                <div class="app-control-error" *ngIf="form.get('contragentBankRequisite').get('correspondentAccount').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
               </div>
             </div>
           </div>
@@ -198,22 +192,17 @@
               <div class="app-control-wrap">
                 <input #name uxgInput lg formControlName="name"/>
                 <label class="app-control-label" (click)="name.focus()">Наименование банка</label>
-                <div class="app-control-error" *ngIf="form.get('contragentBankRequisite').get('name').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
               </div>
             </div>
             <div class="app-col">
               <div class="app-control-wrap">
                 <input #address uxgInput lg formControlName="address"/>
                 <label class="app-control-label" (click)="address.focus()">Адрес банка</label>
-                <div class="app-control-error" *ngIf="form.get('contragentBankRequisite').get('address').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
               </div>
             </div>
           </div>
         </ng-container>
+
         <h3>Контактная информация и ответственный</h3>
         <p class="app-secondary-color">Поля «E-mail контрагента» и «Телефон контрагента» заполняются если есть и не являются обязательными.</p>
         <ng-container formGroupName="contragentContact">

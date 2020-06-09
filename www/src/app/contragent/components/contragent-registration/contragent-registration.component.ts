@@ -102,11 +102,11 @@ export class ContragentRegistrationComponent implements OnInit {
         postIndex: ['', [Validators.required, CustomValidators.index]]
       }),
       contragentBankRequisite: this.fb.group({
-        account: ['', [Validators.required, CustomValidators.bankAccount]],
-        correspondentAccount: ['', [Validators.required, CustomValidators.corrAccount]],
-        bik: ['', [Validators.required, CustomValidators.bik]],
-        name: ['', [Validators.required]],
-        address: ['', [Validators.required]],
+        account: ['', CustomValidators.bankAccount],
+        correspondentAccount: ['', CustomValidators.corrAccount],
+        bik: ['', CustomValidators.bik],
+        name: [''],
+        address: [''],
       }),
       contragentContact: this.fb.group({
         email: ['', CustomValidators.emailOptional],
