@@ -41,8 +41,15 @@
       background: #E9F1F7;
     }
 
-    .item-title a:hover {
-      color: uxg($theme, color-font-secondary);
+    .item-title {
+      & a.position-link {
+        max-width: 700px;
+        display: block;
+      }
+
+      & a:hover {
+        color: uxg($theme, color-font-secondary);
+      }
     }
 
     .positions {
