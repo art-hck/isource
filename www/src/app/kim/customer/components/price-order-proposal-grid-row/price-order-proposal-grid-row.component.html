@@ -6,6 +6,7 @@
   <app-price-order-proposal-grid-cell
     *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId"
     [selectedProposal]="isReviewed ? null : selectedProposal"
+    [positionId]="position.id"
     [proposal]="getProposal(supplier)"
     (show)="show.emit($event)"
   ></app-price-order-proposal-grid-cell>

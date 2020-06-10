@@ -27,7 +27,7 @@
   </div>
   <div class="app-row">
     <h2 class="app-col">
-      <span>{{proposal.quantity}}</span>
+      <span [class.app-error-color]="!helper.isQuantityValid(positionWithDeliveryDate, proposalWithDeliveryDate)">{{proposal.quantity}}</span>
       <!-- @TODO Ждём бэк -->
       <!--span class="app-ghost-color">{{proposal.measureUnit}}</span-->
       <span class="app-ghost-color">шт</span>
@@ -36,7 +36,7 @@
       {{proposal.priceWithoutVat | number:'1.0-2'}}
       <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}</span>
     </h2>
-    <h2 class="app-col">
+    <h2 class="app-col" [class.app-error-color]="!helper.isDateValid(positionWithDeliveryDate, proposalWithDeliveryDate)">
       {{proposal.proposalSupplier.dateDelivery | date:"dd.MM.yyyy"}}
     </h2>
     <h2 class="app-col">

@@ -22,6 +22,16 @@ export class KimPriceOrderService {
     const url = `kim/customer/price-order/${priceOrderId}/proposals`;
     return this.api.get<KimPriceOrder>(url);
   }
+
+  approve(priceOrderId: Uuid, proposalId: Uuid) {
+    const url = `kim/customer/price-order/${priceOrderId}/proposals/${proposalId}/approve`;
+    return this.api.get<KimPriceOrder>(url);
+  }
+
+  approveMultiple(priceOrderId: Uuid, proposalIds: Uuid[]) {
+    const url = `kim/customer/price-order/${priceOrderId}/proposals/choose-winners`;
+    return this.api.post<KimPriceOrder>(url, { proposalIds });
+  }
 }
 
 

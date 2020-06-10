@@ -22,7 +22,7 @@
 
       <ng-container *ngIf="selectedProposal">
         <uxg-radio-item
-          [name]="proposal.proposalSupplierId"
+          [name]="positionId"
           [value]="proposal"
           [formControl]="selectedProposal"
           (click)="$event.stopPropagation()"
