@@ -1,10 +1,10 @@
 <ng-container *ngIf="(agreements$ | async) as agreements">
   <form [formGroup]="form">
-    <uxg-dropdown lg class="action-select" formControlName="action">
+    <uxg-dropdown lg class="action-select" formControlName="actions">
       <div uxgDropdownItem [value]="null">Все задачи</div>
-      <div uxgDropdownItem [value]="action[0]"
+      <div uxgDropdownItem [value]="action.agreementAction"
            *ngFor="let action of actions"
-      >{{ action[1] }}</div>
+      >{{ action.label }}</div>
     </uxg-dropdown>
   </form>
   <app-agreements

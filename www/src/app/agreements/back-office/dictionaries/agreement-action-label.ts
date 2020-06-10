@@ -1,16 +1,16 @@
 import { AgreementAction } from "../enum/agreement-action";
 
-export const AgreementActionLabel: Record<AgreementAction, string> = {
-  [AgreementAction.PROCESS_REQUEST] : "Обработать заявку",
-  [AgreementAction.WORK_ON_REQUEST] : "Принять в работу",
-  [AgreementAction.PROVIDE_TP] : "Предоставить ТП",
-  [AgreementAction.PROVIDE_CP] : "Предоставить КП",
-  [AgreementAction.PROVIDE_TCP] : "Предоставить ТКП",
-  [AgreementAction.CORRECT_TP] : "Скорректировать ТП",
-  [AgreementAction.PROCESS_WINNER_SELECTED_CP] : "Обработать результаты выбора",
-  [AgreementAction.PROCESS_WINNER_SELECTED_TCP] : "Обработать результаты выбора",
-  [AgreementAction.SEND_CONTRACT_AGREEMENT] : "Направить проект договора на согласование",
-  [AgreementAction.SIGN_CONTRACT] : "Подписать договор",
-  [AgreementAction.CORRECT_CONTRACT] : "Скорректировать проект договора"
-
-};
+export const AgreementActionFilters: {agreementAction: AgreementAction | AgreementAction[], label: string}[] = [
+{ agreementAction: AgreementAction.PROCESS_REQUEST, label: "Обработать заявку"},
+  { agreementAction: AgreementAction.WORK_ON_REQUEST, label: "Принять в работу"},
+  { agreementAction: AgreementAction.PROVIDE_TP, label: "Предоставить ТП"},
+  { agreementAction: AgreementAction.PROVIDE_CP, label: "Предоставить КП"},
+  { agreementAction: AgreementAction.PROVIDE_TCP, label: "Предоставить ТКП"},
+  { agreementAction: AgreementAction.CORRECT_TP, label: "Скорректировать ТП"},
+  { agreementAction: [AgreementAction.PROCESS_WINNER_SELECTED_CP, AgreementAction.PROCESS_WINNER_SELECTED_TCP], label: "Обработать результаты выбора"},
+  { agreementAction: AgreementAction.SEND_CONTRACT_AGREEMENT, label: "Направить проект договора на согласование"},
+  { agreementAction: AgreementAction.SIGN_CONTRACT, label: "Подписать договор"},
+  { agreementAction: AgreementAction.CORRECT_CONTRACT, label: "Скорректировать проект договора"},
+  { agreementAction: AgreementAction.INIT_AGREEMENT_RKD, label: "Инициировать согласование РКД"},
+  { agreementAction: AgreementAction.INSPECTION_CONTROL, label: "Контроль размещения инспекции"}
+];
