@@ -16,8 +16,12 @@ import { CoreModule } from "./core/core.module";
 import { ToastListModule } from "./shared/components/toast-list/toast-list.module";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
+import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
+import { AuthService } from "./auth/services/auth.service";
 
 registerLocaleData(localeRu, 'ru');
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -32,14 +36,57 @@ registerLocaleData(localeRu, 'ru');
     ToastListModule,
     UxgModule,
     WebsocketModule.config({ url: AppConfig.endpoints.ws }),
-    BrowserModule
+    BrowserModule,
+    KeycloakAngularModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    { provide: KeycloakService, useValue: keycloakService }
   ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
+  constructor(
+    public authService: AuthService
+  ) {
+  }
+
+  ngDoBootstrap(app) {
+    // TODO вынести в конфиг
+    const options: KeycloakOptions = {
+      config: {
+        url: 'http://contragent.gpb.lc:8082/auth',
+        realm: 'master',
+        clientId: 'gpnmarket-loc',
+      },
+      loadUserProfileAtStartUp: false
+    };
+
+    keycloakService
+      .init(options)
+      .then(() => {
+        console.log('[ngDoBootstrap] bootstrap app');
+
+        app.bootstrap(AppComponent);
+      })
+      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthRefreshSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
+  }
 }

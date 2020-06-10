@@ -8,14 +8,12 @@ import { ChangePasswordFormComponent } from "./components/change-password-form/c
 import { ActivationFormComponent } from "./components/activation-form/activation-form.component";
 import { CanActivateFeatureGuard } from "../core/can-activate-feature.guard";
 import { Routes } from "../core/models/routes";
-import { CanActivateAuthGuard } from "./can-activate-auth-guard.service";
 
 const routes: Routes = [
   {
     path: 'auth',
     component: AuthPageComponent,
     data: { title: "Страница входа" },
-    canActivate: [CanActivateAuthGuard],
     children: [
       {
         path: '',

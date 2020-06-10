@@ -3,13 +3,23 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { FeatureService } from "./services/feature.service";
 import { UserInfoService } from "../user/service/user-info.service";
 import { AuthService } from "../auth/services/auth.service";
+import { AppAuthGuard } from "../auth/app-auth.guard";
+import { KeycloakService } from "keycloak-angular";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CanActivateFeatureGuard implements CanActivate {
+export class CanActivateFeatureGuard extends AppAuthGuard {
 
-  constructor(private router: Router, private feature: FeatureService, private userInfo: UserInfoService, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private feature: FeatureService,
+    private userInfo: UserInfoService,
+    private authService: AuthService,
+    protected keycloakAngular: KeycloakService
+  ) {
+    super(router, keycloakAngular);
+  }
 
   canActivate(route: ActivatedRouteSnapshot) {
     if (route.data["feature"]) {
@@ -21,9 +31,6 @@ export class CanActivateFeatureGuard implements CanActivate {
       if (!this.feature.allowed(route.data["feature"], this.userInfo.roles)) {
         if (this.userInfo.getUserInfo()) {
           this.router.navigate(['/forbidden']);
-        } else {
-          const queryParams = ['/', '/auth/login'].indexOf(window.location.pathname) < 0 ? { returnUrl: window.location.pathname } : {};
-          this.router.navigate(['/auth/login'], { queryParams });
         }
 
         return false;

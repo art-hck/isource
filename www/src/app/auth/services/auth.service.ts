@@ -7,6 +7,7 @@ import { UserInfoService } from "../../user/service/user-info.service";
 import { TokenService } from "./token.service";
 import { ActivationError } from "../models/activation-error";
 import { RestorationResponse } from "../models/restoration-response";
+import { KeycloakService } from "keycloak-angular";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class AuthService {
       private http: HttpClient,
       private token: TokenService,
       private userInfoService: UserInfoService,
+      private keycloakService: KeycloakService,
       @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
     this.appConfig = appConfig;
@@ -74,7 +76,6 @@ export class AuthService {
       .pipe(
         tap(data => {
           this.userInfoService.saveData(data);
-          this.onLogin.next();
         })
       );
   }
@@ -96,7 +97,7 @@ export class AuthService {
   }
 
   isAuth(): boolean {
-    return !!this.token.getToken();
+    return this.keycloakService.isLoggedIn();
   }
 
   requestPasswordRecover(email: string) {
