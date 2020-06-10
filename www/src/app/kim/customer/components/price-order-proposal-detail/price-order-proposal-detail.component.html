@@ -1,6 +1,6 @@
-<ng-container *ngIf="priceOrder.documents?.length">
+<ng-container *ngIf="proposal?.proposalSupplier.documents?.length">
   <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>
-  <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="priceOrder.documents">
+  <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="proposal?.proposalSupplier.documents">
   </app-document-simple-list>
 </ng-container>
 <small class="app-uppercase app-ghost-color app-bold">Параметры запроса</small>
@@ -27,10 +27,8 @@
   </div>
   <div class="app-row">
     <h2 class="app-col">
-      <span [class.app-error-color]="!helper.isQuantityValid(positionWithDeliveryDate, proposalWithDeliveryDate)">{{proposal.quantity}}</span>
-      <!-- @TODO Ждём бэк -->
-      <!--span class="app-ghost-color">{{proposal.measureUnit}}</span-->
-      <span class="app-ghost-color">шт</span>
+      <span [class.app-error-color]="!helper.isQuantityValid(positionWithDeliveryDate, proposalWithDeliveryDate)">{{proposal.quantity}} </span>
+      <span class="app-ghost-color">{{position.okeiItem.symbol | lowercase}}</span>
     </h2>
     <h2 class="app-col">
       {{proposal.priceWithoutVat | number:'1.0-2'}}

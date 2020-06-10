@@ -56,10 +56,10 @@
             (show)="showedProposal = $event; modalData = {proposal: $event, position: position}"
           >
             <div><b>{{ position.name }}</b></div>
-            <!-- шт поменять на okei ждём бэк -->
-            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} шт</div>
+            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{position.okeiItem.symbol | lowercase}}</div>
             <div class="app-ghost-color">&nbsp;| {{ (priceOrder$ | async).dateDelivery | date:"dd.MM.yyyy" }}</div>
             <div class="app-col"></div>
+            <!-- @TODO Ждём бэк на отклонение предложений по позиции -->
             <!--label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
             <uxg-radio-item
               class="app-control"
