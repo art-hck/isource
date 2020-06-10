@@ -123,14 +123,18 @@
 
         <!-- footer -->
         <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal) || tpStatusLabel(technicalProposal) === 'Черновик'">
-          <hr>
+          <!-- todo Разделитель временно скрывается, пока скрыта кнопка отзыва ТП -->
+          <hr *ngIf="!availableCancelPublishTechnicalProposal(technicalProposal)">
+
           <div class="app-row app-align-items-center">
             <div class="app-col app-secondary-color">
-              Вы можете отозвать отправленное на согласование заказчику техническое предложение
-              в течение ограниченного количества времени (таймер на кнопке)
+              <!-- todo Текст комментария про отзыв скрывается, пока скрыта кнопка отзыва ТП -->
+              <!-- Вы можете отозвать отправленное на согласование заказчику техническое предложение-->
+              <!-- в течение ограниченного количества времени (таймер на кнопке)-->
             </div>
 
             <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal); else sendToReviewBtn">
+              <!-- todo Кнопка для отзыва ТП скрывается, пока скрыта кнопка отзыва ТП -->
               <!--div class="app-col app-col-auto status">
                 <button uxgButton primary type="button" class="fixedWidth" (click)="onCancelPublishTechnicalProposal(technicalProposal)">
                   Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
@@ -144,6 +148,50 @@
                 <button uxgButton primary (click)="sendToAgreement(technicalProposal)">Отправить на согласование</button>
               </div>
             </ng-template>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="lastSentToEditComment">
+          <hr>
+          <div class="section">
+            <div class="app-row">
+              <div class="app-col">
+                <small class="app-uppercase app-bold app-ghost-color">Последний комментарий по доработкам</small>
+              </div>
+
+              <div class="app-col-auto">
+                <div class="comment-datetime">
+                  <div class="date">{{ lastSentToEditCommentDate | date : "dd.MM.yyyy" }}</div>
+                  <div class="time app-ghost-color">{{ lastSentToEditCommentDate | date : "HH:mm" }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tp-comment">
+              {{ lastSentToEditComment }}
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="lastRejectComment">
+          <hr>
+          <div class="section">
+            <div class="app-row">
+              <div class="app-col">
+                <small class="app-uppercase app-bold app-ghost-color">Последний комментарий по отклонению</small>
+              </div>
+
+              <div class="app-col-auto">
+                <div class="comment-datetime">
+                  <div class="date">{{ lastRejectCommentDate | date : "dd.MM.yyyy" }}</div>
+                  <div class="time app-ghost-color">{{ lastRejectCommentDate | date : "H:mm" }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tp-comment">
+              {{ lastRejectComment }}
+            </div>
           </div>
         </ng-container>
       </div>

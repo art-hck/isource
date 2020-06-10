@@ -21,7 +21,7 @@
   max-width: 18px;
 }
 .section {
-  padding-top: 14px;
+  padding-top: 5px;
 }
 
 .position-list {
@@ -48,4 +48,20 @@ h3, p.sent-label {
 
 .fixedWidth {
   min-width: 135px;
+}
+
+.tp-comment {
+  padding: 15px 0;
+}
+
+.comment-datetime {
+  font-size: 11px;
+
+  & .date {
+    padding-right: 5px;
+  }
+
+  & .date, & .time {
+    display: inline-block;
+  }
 }
