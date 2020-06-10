@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, forwardRef, Input } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { RequestDocument } from "../../../../common/models/request-document";
 
@@ -14,6 +14,7 @@ import { RequestDocument } from "../../../../common/models/request-document";
 })
 export class ProcedureFormDocumentsComponent implements AfterContentInit, ControlValueAccessor {
   @Input() documents: RequestDocument[];
+  @Output() addDocuments = new EventEmitter();
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -27,6 +28,7 @@ export class ProcedureFormDocumentsComponent implements AfterContentInit, Contro
 
   ngAfterContentInit() {
     this.form = this.fb.group({
+      checked: false,
       documents: this.fb.array(this.documents.map(document => this.fb.group({
         checked: this.value && !!this.value.find(({id}) => document.id === id),
         document })))
