@@ -1,6 +1,8 @@
 <ng-container [formGroup]="form">
   <div class="app-row app-align-items-center">
+    <ng-container *ngIf="formDocuments.controls.length">
     <uxg-checkbox formControlName="checked" uxgSelectAllFor="documents"></uxg-checkbox>
+    </ng-container>
     <h3 class="app-col">&nbsp; Документы процедуры</h3>
     <button type="button" uxgButton secondary iconText appUploadFile [multiple]="true"
             (select)="addDocuments.emit($event)">
