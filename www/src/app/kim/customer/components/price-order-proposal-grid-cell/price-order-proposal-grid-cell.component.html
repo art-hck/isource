@@ -22,7 +22,7 @@
 
       <ng-container *ngIf="selectedProposal">
         <uxg-radio-item
-          [name]="proposal.proposalSupplierId"
+          [name]="position.id"
           [value]="proposal"
           [formControl]="selectedProposal"
           (click)="$event.stopPropagation()"
@@ -32,8 +32,7 @@
 
     <div>
       <!-- Количество, цена за ед. -->
-      <!-- @TODO Ждём бэк -->
-      <span>{{proposal.quantity}} шт<!--{{proposal.measureUnit}}--></span>
+      <span>{{proposal.quantity}} {{position.okeiItem.symbol | lowercase}}</span>
       <span class="app-ghost-color"> | </span>
       <span class="app-ghost-color">{{proposal.priceWithoutVat | number:'1.0-2'}} </span>
       <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}/<!--{{proposal.measureUnit}}--></span>

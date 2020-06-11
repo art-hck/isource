@@ -1,6 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { PositionCurrency } from "../../../request/common/enum/position-currency";
-import { KimProceOrderSupplier } from "./kim-proce-order-supplier";
+import { KimPriceOrderSupplier } from "./kim-price-order-supplier";
 
 export class KimPriceOrderProposal {
   id: Uuid;
@@ -11,9 +11,8 @@ export class KimPriceOrderProposal {
   vatPercent: number;
   currency: PositionCurrency;
   quantity: number;
-  // measureUnit: string;
   createdDate: string;
-  proposalSupplier: KimProceOrderSupplier;
+  proposalSupplier: KimPriceOrderSupplier;
   isAnalog: boolean;
   isWinner: boolean;
 }

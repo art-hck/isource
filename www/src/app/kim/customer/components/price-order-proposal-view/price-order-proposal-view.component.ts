@@ -17,6 +17,7 @@ import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-position";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
 import Fetch = PriceOrderProposalsActions.Fetch;
+import ApproveMultiple = PriceOrderProposalsActions.ApproveMultiple;
 
 @Component({
   templateUrl: './price-order-proposal-view.component.html',
@@ -39,6 +40,7 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   view: "grid" | "list" = "grid";
   gridRows: ElementRef[];
   showedProposal: KimPriceOrderProposal;
+  modalData: {proposal: KimPriceOrderProposal, position: KimPriceOrderPosition};
   readonly destroy$ = new Subject();
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
@@ -49,6 +51,11 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  get disabled() {
+    return this.proposalsOnReview
+      .toArray().some(({selectedProposal: c}) => c.invalid);
   }
 
   constructor(
@@ -115,13 +122,12 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   }
 
   reviewSelected() {
-    // @TODO: ждём бэк на выбор победителя
-    console.log("selected", this.proposalsOnReview
-      .filter(({selectedProposal: c}) => c.valid)
-      .map(({ selectedProposal: c }) => c.value));
-    console.log("rejected", this.proposalsOnReview
-      .filter(({rejectedProposalPosition: c}) => c.valid)
-      .map(({ rejectedProposalPosition: c }) => c.value));
+    this.store.dispatch(new ApproveMultiple(
+      this.priceOrderId,
+      this.proposalsOnReview
+        .filter(({selectedProposal: c}) => c.valid)
+        .map(({selectedProposal: c}) => c.value.id)
+    ));
   }
 
   ngOnDestroy() {

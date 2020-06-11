@@ -48,18 +48,19 @@
             #proposalOnReview
             [chooseBy$]="chooseBy$"
             *ngFor="let position of positions"
-            [priceOrderId]="priceOrderId"
+            [position]="position"
+            [priceOrder]="priceOrder$ | async"
             [suppliers]="suppliers(positions)"
             [view]="'grid'"
             [proposals]="position.proposals"
-            (show)="showedProposal = $event"
+            (show)="showedProposal = $event; modalData = {proposal: $event, position: position}"
           >
             <div><b>{{ position.name }}</b></div>
-            <!-- шт поменять на okei ждём бэк -->
-            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} шт</div>
+            <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{position.okeiItem.symbol | lowercase}}</div>
             <div class="app-ghost-color">&nbsp;| {{ (priceOrder$ | async).dateDelivery | date:"dd.MM.yyyy" }}</div>
             <div class="app-col"></div>
-            <label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
+            <!-- @TODO Ждём бэк на отклонение предложений по позиции -->
+            <!--label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
             <uxg-radio-item
               class="app-control"
               #rejectRadio
@@ -67,7 +68,7 @@
               [value]="position"
               [formControl]="proposalOnReview.rejectedProposalPosition"
               (click)="$event.stopPropagation()"
-            ></uxg-radio-item>
+            ></uxg-radio-item-->
           </app-price-order-proposal-grid-row>
         </div>
 
@@ -84,12 +85,13 @@
     </div>
     <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
   </div>
-  <uxg-modal [(state)]="showedProposal" size="l">
+  <uxg-modal [(state)]="modalData" size="l">
     <h2>{{ (priceOrder$ | async).name }}</h2>
     <app-kim-price-order-proposal-detail
-      *ngIf="showedProposal"
+      *ngIf="modalData"
       [priceOrder]="priceOrder$ | async"
-      [proposal]="showedProposal"
+      [proposal]="modalData.proposal"
+      [position]="modalData.position"
     ></app-kim-price-order-proposal-detail>
 
     <ng-template uxgModalFooter>
@@ -100,7 +102,7 @@
 
 </ng-container>
 
-<div class="proposals-footer" #proposalsFooterRef [class.hidden]="reviewedTab?.active">
+<div class="proposals-footer" #proposalsFooterRef [class.hidden]="reviewedTab?.active || proposalsOnReview?.length === 0">
   <div class="proposals-footer-body app-row app-align-items-center">
     <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
     <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
@@ -115,7 +117,7 @@
       <button uxgButton secondary lg (click)="rejectAll(positions)" [disabled]="(status$ | async) !== 'received'">
         Отклонить всё
       </button>
-      <button uxgButton primary lg (click)="reviewSelected()" [disabled]="(status$ | async) !== 'received'">
+      <button uxgButton primary lg (click)="reviewSelected()" [disabled]="(status$ | async) !== 'received' || disabled">
         Согласовать выбранные
       </button>
     </ng-container>
