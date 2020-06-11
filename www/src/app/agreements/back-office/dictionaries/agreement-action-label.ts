@@ -12,5 +12,6 @@ export const AgreementActionFilters: {type: AgreementAction[], label: string}[] 
   { type: [AgreementAction.SIGN_CONTRACT], label: "Подписать договор"},
   { type: [AgreementAction.CORRECT_CONTRACT], label: "Скорректировать проект договора"},
   { type: [AgreementAction.INIT_AGREEMENT_RKD], label: "Инициировать согласование РКД"},
-  { type: [AgreementAction.INSPECTION_CONTROL], label: "Контроль размещения инспекции"}
+  { type: [AgreementAction.INSPECTION_CONTROL], label: "Контроль размещения инспекции"},
+  { type: [AgreementAction.MANUFACTURING_CONTROL, AgreementAction.MANUFACTURING_CONTROL_WITH_RKD], label: "Контроль начала изготовления"},
 ];
