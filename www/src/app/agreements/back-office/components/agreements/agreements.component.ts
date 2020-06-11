@@ -22,7 +22,7 @@ export class AgreementsComponent implements OnInit {
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
   readonly pageSize = 10;
-  readonly actions: {agreementAction: AgreementAction | AgreementAction[], label: string}[] = AgreementActionFilters;
+  readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   pages$: Observable<number>;
 
   form = new FormGroup({
