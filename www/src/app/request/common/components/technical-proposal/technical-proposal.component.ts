@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TechnicalProposal } from "../../models/technical-proposal";
 import { TechnicalProposalsStatusesLabels } from "../../dictionaries/technical-proposals-statuses-labels";
 import { TechnicalProposalPositionStatus } from "../../enum/technical-proposal-position-status";
@@ -14,7 +14,7 @@ import { Request } from "../../models/request";
   templateUrl: './technical-proposal.component.html',
   styleUrls: ['./technical-proposal.component.scss']
 })
-export class RequestTechnicalProposalComponent {
+export class RequestTechnicalProposalComponent implements OnInit {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
@@ -22,6 +22,12 @@ export class RequestTechnicalProposalComponent {
   @Output() update = new EventEmitter<TechnicalProposal>();
   @Output() cancelTechnicalProposal = new EventEmitter<TechnicalProposal>();
   @Output() sendTechnicalProposalToAgreement = new EventEmitter<TechnicalProposal>();
+
+  lastSentToEditComment: string;
+  lastSentToEditCommentDate: string;
+
+  lastRejectComment: string;
+  lastRejectCommentDate: string;
 
   isLoading: boolean;
   isFolded: boolean;
@@ -42,6 +48,14 @@ export class RequestTechnicalProposalComponent {
     TechnicalProposalsStatus.NEW,
     TechnicalProposalsStatus.SENT_TO_EDIT,
   ];
+
+  ngOnInit() {
+    this.lastSentToEditComment = this.getLastSentToEditComment();
+    this.lastSentToEditCommentDate = this.getLastSentToEditCommentDate();
+
+    this.lastRejectComment = this.getLastRejectComment();
+    this.lastRejectCommentDate = this.getLastRejectCommentDate();
+  }
 
   tpStatusLabel(technicalProposal: TechnicalProposal): string {
     return TechnicalProposalsStatusesLabels[technicalProposal.status];
@@ -88,5 +102,27 @@ export class RequestTechnicalProposalComponent {
         subscription.unsubscribe();
       }
     );
+  }
+
+  getLastRejectComment(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .pop()?.history.data.statusComment.comment;
+  }
+  getLastRejectCommentDate(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .pop()?.history.createdDate;
+  }
+
+  getLastSentToEditComment(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .pop()?.history.data.statusComment.comment;
+  }
+  getLastSentToEditCommentDate(): string {
+    return this.technicalProposal.positions
+      .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .pop()?.history.createdDate;
   }
 }
