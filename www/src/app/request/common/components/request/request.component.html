@@ -203,19 +203,23 @@
   <div class="app-col app-grow-0" [formGroup]="formGroup">
     <uxg-checkbox formControlName="checked"></uxg-checkbox>
   </div>
+
   <div class="app-col app-bold item-title app-ellipsis">
     <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color position-link app-ellipsis">
       {{ position.name }}
     </a>
   </div>
+
   <div class="app-col item-quantity app-ellipsis">
     <span class="quantity">{{ position.quantity }} </span>
     <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
   </div>
+
   <div class="app-col item-date app-ellipsis">
     <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
     <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
   </div>
+
   <div class="app-col item-status app-ellipsis">
     <ng-container
       *ngIf="user.isBackOffice() &&
@@ -228,6 +232,17 @@
       </app-position-status>
     </ng-template>
   </div>
+
+  <div class="app-col item-attribute-icon">
+    <uxg-popover #more [openOnHover]="true" *ngIf="position.isInspectionControlRequired">
+      <uxg-icon uxgPopoverTrigger shape="app-inspector" class="app-ghost-color"></uxg-icon>
+
+      <div *uxgPopoverContent="popoverDir.bottomRight" (click)="more.hide()">
+        <div>Инспекционный контроль</div>
+      </div>
+    </uxg-popover>
+  </div>
+
 </ng-template>
 
 <!-- Шаблон группы -->
