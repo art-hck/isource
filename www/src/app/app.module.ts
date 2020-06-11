@@ -7,7 +7,6 @@ import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
 import { UxgModule } from "uxg";
-
 import { APP_CONFIG } from "./core/config/gpnmarket-config.interface";
 import { AppComponent } from './app.component';
 import { AppConfig } from './config/app.config';
@@ -18,6 +17,7 @@ import { WebsocketModule } from "./websocket/websocket.module";
 import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
 import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
 import { AuthService } from "./auth/services/auth.service";
+import { ApplicationRef } from "@angular/core";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -53,7 +53,7 @@ export class AppModule {
   ) {
   }
 
-  ngDoBootstrap(app) {
+  ngDoBootstrap(app: ApplicationRef) {
     // TODO вынести в конфиг
     const options: KeycloakOptions = {
       config: {
