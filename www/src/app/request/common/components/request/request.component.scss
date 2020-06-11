@@ -29,6 +29,11 @@
   &-date {
     max-width: 120px;
   }
+
+  &-attribute-icon {
+    min-width: 16px;
+    max-width: 16px;
+  }
 }
 
 .app-table.disabled {
