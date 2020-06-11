@@ -147,14 +147,14 @@
                     </td>
                     <td class="left clr-col-lg-3 clr-col-xl-4">
                       <div class="form-group compact">
-                        <app-document-simple-list
-                          [documents]="designDoc.documents"
-                          [enableUpload]="designDoc.id && canUploadDocuments(designDoc, designDocumentation)"
-                          [limit]="5"
-                          [enableDelete]="designDocumentation.status === designDocStatus.NEW"
-                          (delete)="removeDocuments(request, designDoc, [$event])"
-                          (selected)="onSelectDocument($event, designDoc)"
-                        ></app-document-simple-list>
+<!--                        <app-document-simple-list-->
+<!--                          [documents]="designDoc.documents"-->
+<!--                          [enableUpload]="designDoc.id && canUploadDocuments(designDoc, designDocumentation)"-->
+<!--                          [limit]="5"-->
+<!--                          [enableDelete]="designDocumentation.status === designDocStatus.NEW"-->
+<!--                          (delete)="removeDocuments(request, designDoc, [$event])"-->
+<!--                          (selected)="onSelectDocument($event, designDoc)"-->
+<!--                        ></app-document-simple-list>-->
                         <label class="document-loading" *ngIf="isLoadingDesignDoc(designDoc)">Загрузка...</label>
                       </div>
                     </td>

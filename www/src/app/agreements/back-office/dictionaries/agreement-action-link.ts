@@ -9,5 +9,6 @@ export const AgreementActionLink: Partial<Record<AgreementAction, string>> = {
   [AgreementAction.PROCESS_WINNER_SELECTED_TCP] : "technical-commercial-proposals",
   [AgreementAction.SEND_CONTRACT_AGREEMENT] : "contracts",
   [AgreementAction.SIGN_CONTRACT] : "contracts",
-  [AgreementAction.CORRECT_CONTRACT] : "contracts"
+  [AgreementAction.CORRECT_CONTRACT] : "contracts",
+  [AgreementAction.MANUFACTURING_CONTROL_WITH_RKD] : "design-documentation"
 };
