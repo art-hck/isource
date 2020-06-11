@@ -9,7 +9,8 @@ import { map } from "rxjs/operators";
 import { AgreementListActions } from "../../actions/agreement-list.actions";
 import { Agreement } from "../../../common/models/Agreement";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AgreementActionLabel } from "../../dictionaries/agreement-action-label";
+import { AgreementActionFilters } from "../../dictionaries/agreement-action-label";
+import { AgreementAction } from "../../enum/agreement-action";
 
 @Component({
   templateUrl: './agreements.component.html',
@@ -21,11 +22,11 @@ export class AgreementsComponent implements OnInit {
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
   readonly pageSize = 10;
-  readonly actions = Object.entries(AgreementActionLabel);
+  readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   pages$: Observable<number>;
 
   form = new FormGroup({
-    action: new FormControl(null)
+    actions: new FormControl(null)
   });
 
   constructor(
