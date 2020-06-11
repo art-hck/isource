@@ -9,17 +9,9 @@ import { KeycloakService } from "keycloak-angular";
 @Injectable({
   providedIn: 'root'
 })
-export class CanActivateFeatureGuard extends AppAuthGuard {
+export class CanActivateFeatureGuard implements CanActivate {
 
-  constructor(
-    private router: Router,
-    private feature: FeatureService,
-    private userInfo: UserInfoService,
-    private authService: AuthService,
-    protected keycloakAngular: KeycloakService
-  ) {
-    super(router, keycloakAngular);
-  }
+  constructor(private router: Router, private feature: FeatureService, private userInfo: UserInfoService) {}
 
   canActivate(route: ActivatedRouteSnapshot) {
     if (route.data["feature"]) {

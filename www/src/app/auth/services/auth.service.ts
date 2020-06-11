@@ -97,7 +97,13 @@ export class AuthService {
   }
 
   isAuth(): boolean {
-    return this.keycloakService.isLoggedIn();
+    this.keycloakService
+      .isLoggedIn()
+      .then((isLoggedIn: boolean) => {
+        return isLoggedIn;
+      });
+
+    return false;
   }
 
   requestPasswordRecover(email: string) {
