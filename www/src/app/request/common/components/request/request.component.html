@@ -237,7 +237,7 @@
     <uxg-popover #more [openOnHover]="true" *ngIf="position.isInspectionControlRequired">
       <uxg-icon uxgPopoverTrigger shape="app-inspector" class="app-ghost-color"></uxg-icon>
 
-      <div *uxgPopoverContent (click)="more.hide()">
+      <div *uxgPopoverContent="popoverDir.bottomRight" (click)="more.hide()">
         <div>Инспекционный контроль</div>
       </div>
     </uxg-popover>
