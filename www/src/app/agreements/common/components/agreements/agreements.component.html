@@ -13,15 +13,16 @@
   <div class="app-table agreements-list">
     <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
       <div class="app-col-1 id">{{ agreement.request.number}}</div>
-      <div class="app-col-3 app-ellipsis name">
+      <div class="app-col-3 name">
+        <div class="app-ellipsis">
         <ng-container *ngIf="agreement.type === 'REQUEST' || agreement.type === 'REQUEST_CONTRACT'">
           <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
         </ng-container>
         <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
           <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}} </b>
         </ng-container>
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color"> ({{agreement.groupCounter}})</span>
-
+        </div>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color">  ({{agreement.groupCounter}})</span>
       </div>
       <div class="app-col-2 app-ellipsis customer">
         {{agreement.request.contragent.shortName}}
@@ -30,13 +31,13 @@
         <span>{{ agreement.issuedDate | date : "dd.MM.yyyy" }} </span>
         <span class="app-ghost-color">{{ agreement.issuedDate | date : "HH:mm" }}</span>
       </div>
-      <div class="app-col-2 status">
+      <div class="app-col-2 status app-ellipsis">
         <app-position-status *ngIf="agreement.positionsStatus"
                              [label]="agreement.positionsStatus.label"
                              [status]="agreement.positionsStatus.name">
         </app-position-status>
       </div>
-      <div class="app-col-2 action">
+      <div class="app-col-2 action app-ellipsis">
         <a [routerLink]="getRouterLink(agreement)">
           {{agreement.action.label }}
         </a>
