@@ -11,7 +11,7 @@
               </ng-container>
             </uxg-tab-title>
 
-            <uxg-tab-title #sentToEdit (click)="activeTab = technicalProposalsStatus.SENT_TO_EDIT">
+            <uxg-tab-title #sentToEditTab (click)="activeTab = technicalProposalsStatus.SENT_TO_EDIT">
               <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposalsSentToEdit">
                 На доработке <span class="counter">({{ proposalsSentToEdit?.length }})</span>
               </ng-container>
