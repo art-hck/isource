@@ -210,7 +210,7 @@
         </technical-commercial-proposal-contragent-form>
       </uxg-modal>
 
-      <uxg-modal [(state)]="prolongModalPayload" size="s">
+      <uxg-modal [(state)]="prolongModalPayload">
         <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
         <app-prolongate-procedure
           *ngIf="prolongModalPayload"
