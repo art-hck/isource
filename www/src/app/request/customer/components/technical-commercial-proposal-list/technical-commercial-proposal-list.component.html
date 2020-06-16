@@ -38,6 +38,7 @@
         <!-- grid -->
         <div class="grid-table" *ngSwitchCase="'grid'">
           <app-grid-contragents
+            *ngIf="proposalsByPos.length"
             [gridRows]="gridRows"
             [suppliers]="suppliers(proposals$ | async)"
             [hasAnalogsFn]="hasAnalogs(proposals$ | async)"
