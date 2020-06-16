@@ -54,6 +54,29 @@ export class AppModule {
   }
 
   ngDoBootstrap(app: ApplicationRef) {
-    this.authService.keycloakInit(app);
+    keycloakService
+      .init(AppConfig.keycloak)
+      .then(() => {
+        console.log('[ngDoBootstrap] bootstrap app');
+
+        app.bootstrap(AppComponent);
+      })
+      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthRefreshSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
   }
 }
