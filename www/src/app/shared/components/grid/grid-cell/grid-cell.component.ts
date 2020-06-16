@@ -4,6 +4,7 @@ import { getCurrencySymbol } from "@angular/common";
 import { Position } from "../position";
 import { Proposal } from "../proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-grid-cell',
@@ -14,9 +15,9 @@ export class GridCellComponent {
   @Input() proposal: Proposal;
   @Input() selectedProposal: FormControl;
   @Input() editable: boolean;
+  @Input() supplier: ContragentShortInfo;
   @Output() create = new EventEmitter();
   @Output() show = new EventEmitter<Proposal>();
-  @HostBinding('class.grid-item')
   @HostBinding('class.grid-cell')
   @HostBinding('class.app-col') classes = true;
   @HostBinding('class.empty') get isEmpty() { return !this.proposal; }

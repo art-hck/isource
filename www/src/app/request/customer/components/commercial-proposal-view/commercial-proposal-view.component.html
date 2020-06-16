@@ -1,7 +1,7 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching'; else placeholder">
   <div class="app-row">
     <div class="app-col">
-      <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
+      <div class="app-row app-align-items-center" [class.app-layout]="view !== 'list'">
 
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReviewTab [active]="true" >
@@ -20,10 +20,13 @@
         <ng-container *ngIf="positionsLength$ | async">
           <div class="app-secondary-color">Режим отображения:</div>
           <div class="app-btn-group">
-            <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
+            <button uxgButton [primary]="view==='simple-grid'" [secondary]="view!=='simple-grid'" icon (click)="switchView('simple-grid')">
+              <uxg-icon shape="app-simple-grid-view"></uxg-icon>
+            </button>
+            <button uxgButton [primary]="view==='grid'" [secondary]="view!=='grid'" icon (click)="switchView('grid')">
               <uxg-icon shape="app-grid-view"></uxg-icon>
             </button>
-            <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
+            <button uxgButton [primary]="view==='list'" [secondary]="view!=='list'" icon (click)="switchView('list')">
               <uxg-icon shape="app-list-view"></uxg-icon>
             </button>
           </div>
@@ -34,10 +37,14 @@
       <br/>
 
       <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? positionsReviewed$ : positionsOnReview$) | async as positions">
-        <!-- grid -->
-        <div class="grid-table" [class.disabled]="(status$ | async) === 'updating'" *ngSwitchCase="'grid'">
+        <!-- grid & simple-grid -->
+        <div *ngIf="view !== 'list'" [ngClass]="{
+          'grid-table': view === 'grid',
+          'simple-grid-table': view === 'simple-grid',
+          'disabled': (status$ | async) === 'updating'}"
+        >
           <app-grid-contragents
-            *ngIf="positions.length"
+            *ngIf="positions.length && view === 'grid'"
             [gridRows]="gridRows"
             [suppliers]="suppliers$ | async"
             [hasAnalogsFn]="hasAnalogs(positions)"
@@ -47,6 +54,7 @@
               #proposalOnReview
               [chooseBy$]="chooseBy$"
               [position]="convertPosition(position)"
+              [simpleView]="view === 'simple-grid'"
               [suppliers]="suppliers$ | async"
               [proposals]="convertProposals(position.linkedOffers)"
               [isReviewed]="position.status === 'WINNER_SELECTED'"
@@ -123,7 +131,7 @@
 ></app-grid-footer>
 
 <ng-template #placeholder>
-  <div class="app-row" [class.app-layout]="view === 'grid'">
+  <div class="app-row" [class.app-layout]="view !== 'list'">
     <div class="app-col">
       <div class="app-row">
         <div class="app-col app-row">

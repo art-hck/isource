@@ -44,7 +44,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
   @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<ContragentList[]>;
   requestId: Uuid;
-  view: "grid" | "list" = "grid";
+  view: "grid" | "simple-grid"| "list" = "grid";
   gridRows: ElementRef[];
   showedProposal: Proposal<RequestOfferPosition>;
   modalData: { proposal: Proposal<RequestOfferPosition>, position: Position<RequestPosition> };
@@ -100,9 +100,9 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     ).subscribe();
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: "grid" | "simple-grid" | "list") {
     this.view = view;
-    this.app.noContentPadding = view === "grid";
+    this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
   }
 

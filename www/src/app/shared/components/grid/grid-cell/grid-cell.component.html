@@ -42,6 +42,11 @@
       <span [ngClass]="!helper.isDateValid(position, proposal) ? 'app-error-color app-bold' : ''">{{proposal.deliveryDate | date:"dd.MM.yyyy"}}</span>
       <span class="app-ghost-color"> доставка</span>
     </div>
+
+    <div *ngIf="supplier" class="app-ellipsis">
+      <app-contragent-info-link (click)="$event.stopPropagation()" hiddenName="Наименование поставщика скрыто" [contragent]="supplier">
+      </app-contragent-info-link>
+    </div>
   </button>
 </ng-container>
 

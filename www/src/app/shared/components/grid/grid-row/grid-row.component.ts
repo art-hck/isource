@@ -21,6 +21,7 @@ export class GridRowComponent implements OnInit, OnDestroy {
   @Input() isReviewed: boolean;
   @Input() getProposal: (supplier: ContragentShortInfo) => Proposal;
   @Input() editable: boolean;
+  @Input() simpleView: boolean;
   @Output() show = new EventEmitter<Proposal>();
   @HostBinding('class.position-row') positionRow = true;
   readonly selectedProposal = new FormControl(null, Validators.required);

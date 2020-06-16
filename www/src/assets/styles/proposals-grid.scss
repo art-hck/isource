@@ -1,14 +1,16 @@
 @import "src/theme";
 
-.grid-table {
+.grid-table, .simple-grid-table {
 
   &.disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
+  &:not(.simple-grid-table) .grid-row { flex-wrap: nowrap }
+  .simple-grid-table .grid-cell { margin-bottom: 20px }
+
   .grid-row {
-    flex-wrap: nowrap;
     overflow: hidden;
     scroll-behavior: smooth;
 
