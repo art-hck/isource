@@ -87,6 +87,7 @@
             [requestId]="requestId"
             [position]="convertPosition(position)"
             [proposals]="convertProposals(position.linkedOffers)"
+            (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
           ></app-commercial-proposal-list>
         </ng-container>
 
@@ -105,19 +106,33 @@
   </div>
 
   <uxg-modal [(state)]="modalData" size="l">
-    <h2>{{ modalData?.position?.sourcePosition.name }}</h2>
-    <app-proposal-detail
-      *ngIf="modalData"
-      [proposal]="modalData.proposal"
-      [position]="modalData.position"
-      [documents]="modalData.proposal.sourceProposal.documents"
-      [paymentTerms]="modalData.proposal.sourceProposal.paymentTerms"
-      [supplier]="modalData.proposal.sourceProposal.supplierContragent"
-    ></app-proposal-detail>
+    <ng-container *ngIf="modalData">
+      <h2>{{ modalData.position?.sourcePosition.name }}</h2>
+      <app-proposal-detail
+        [proposal]="modalData.proposal"
+        [position]="modalData.position"
+        [documents]="modalData.proposal.sourceProposal.documents"
+        [paymentTerms]="modalData.proposal.sourceProposal.paymentTerms"
+        [supplier]="modalData.proposal.sourceProposal.supplierContragent"
+      ></app-proposal-detail>
 
-    <ng-template uxgModalFooter>
-      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
-    </ng-template>
+      <ng-template uxgModalFooter>
+        <div class="app-col app-bold">
+          <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposal)">- Позиция в нужном количестве</div>
+          <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки укладываются в заданные</div>
+          <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposal)">- Количество меньше нужного</div>
+          <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
+        </div>
+
+        <div *ngIf="!modalData.proposal.isWinner">
+          <button uxgButton lg secondary uxgModalClose>Отмена</button>
+          <button uxgButton lg primary (click)="selectProposal(modalData.proposal); modalData = null">Выбрать</button>
+        </div>
+        <div *ngIf="modalData.proposal.isWinner">
+          <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+        </div>
+      </ng-template>
+    </ng-container>
 
   </uxg-modal>
 </ng-container>

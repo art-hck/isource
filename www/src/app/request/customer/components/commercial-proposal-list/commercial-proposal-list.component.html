@@ -32,7 +32,7 @@
       </div>
 
       <div class="data-body-container" *ngFor="let proposal of proposals; index as i; trackBy: trackByProposaId;">
-        <div (click)="proposalModal.open()" class="app-row app-link-no-color data data-body">
+        <div (click)="show.emit(proposal)" class="app-row app-link-no-color data data-body">
           <div class="app-col  app-ellipsis supplier">
             <app-contragent-info-link
               hiddenName="Поставщик №{{i + 1}}"
@@ -78,32 +78,6 @@
             }"></uxg-icon>
           </div>
         </div>
-        <uxg-modal #proposalModal>
-          <h2>{{ position.sourcePosition.name }}</h2>
-          <app-proposal-detail
-            [supplier]="proposal.sourceProposal.supplierContragent"
-            [paymentTerms]="proposal.sourceProposal.paymentTerms"
-            [documents]="proposal.sourceProposal.documents"
-            [proposal]="proposal"
-            [position]="position"
-          ></app-proposal-detail>
-
-          <ng-template uxgModalFooter>
-            <div class="app-col app-bold">
-              <div class="app-success-color" *ngIf="helper.isQuantityValid(position, proposal)">- Позиция в нужном количестве</div>
-              <div class="app-success-color" *ngIf="helper.isDateValid(position, proposal)"> - Сроки укладываются в заданные</div>
-              <div class="app-error-color" *ngIf="!helper.isQuantityValid(position, proposal)">- Количество меньше нужного</div>
-              <div class="app-error-color" *ngIf="!helper.isDateValid(position, proposal)"> - Сроки не укладываются в заданные</div>
-            </div>
-            <div *ngIf="!isReviewed">
-              <button uxgButton lg secondary uxgModalClose>Отмена</button>
-              <button uxgButton lg primary uxgModalClose (click)="selectedProposal.setValue(proposal.sourceProposal)">Выбрать</button>
-            </div>
-            <div *ngIf="isReviewed">
-              <button uxgButton lg secondary uxgModalClose>Закрыть</button>
-            </div>
-          </ng-template>
-        </uxg-modal>
       </div>
     </div>
     <ng-container *ngIf="!isReviewed">

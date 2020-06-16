@@ -36,6 +36,7 @@ import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -68,6 +69,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   canNotAddNewContragent = false;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
+  proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
+
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
@@ -92,7 +95,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     public featureService: FeatureService,
     public store: Store,
     public router: Router,
-    private app: AppComponent
+    public helper: TechnicalCommercialProposalHelperService,
+    private app: AppComponent,
   ) {
   }
 

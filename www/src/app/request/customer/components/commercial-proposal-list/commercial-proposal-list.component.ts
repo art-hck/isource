@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Actions, Store } from "@ngxs/store";
 import { Subject } from "rxjs";
@@ -24,6 +24,7 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   @Input() proposals: Proposal<RequestOfferPosition>[];
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() requestId: Uuid;
+  @Output() show = new EventEmitter<Proposal<RequestOfferPosition>>();
   readonly destroy$ = new Subject();
   getCurrencySymbol = getCurrencySymbol;
   selectedProposal = new FormControl(null, Validators.required);

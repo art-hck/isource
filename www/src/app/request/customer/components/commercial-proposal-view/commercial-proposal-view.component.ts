@@ -25,6 +25,7 @@ import { Position } from "../../../../shared/components/grid/position";
 import Fetch = CommercialProposals.Fetch;
 import Approve = CommercialProposals.Approve;
 import { CommercialProposalListComponent } from "../commercial-proposal-list/commercial-proposal-list.component";
+import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -49,7 +50,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   showedProposal: Proposal<RequestOfferPosition>;
   modalData: { proposal: Proposal<RequestOfferPosition>, position: Position<RequestPosition> };
   readonly destroy$ = new Subject();
-  readonly chooseBy$ = new Subject<"date" | "price">();
+  readonly chooseBy$ = new Subject<"date" | "price" | Proposal["sourceProposal"]>();
   readonly getCurrencySymbol = getCurrencySymbol;
 
   get total() {
@@ -67,7 +68,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     private actions: Actions,
     private bc: UxgBreadcrumbsService,
     private cd: ChangeDetectorRef,
-    private app: AppComponent
+    private app: AppComponent,
+    public helper: ProposalHelperService
   ) {}
 
   ngOnInit() {
@@ -137,6 +139,11 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
+  selectProposal(proposal: Proposal) {
+    this.proposalsOnReview
+      .filter(({ proposals }) => proposals.some(({id}) => proposal.id === id))
+      .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
+  }
 
   ngOnDestroy() {
     this.destroy$.next();

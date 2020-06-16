@@ -120,6 +120,7 @@
               [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
               [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos) && !withAnalogs(proposal)"
               (create)="addProposalPosition(proposal, proposalsByPos.position)"
+              (show)="proposalModalData = {proposalPosition: getProposalPosition(proposal, proposalsByPos.position), proposal: proposal}"
             ></app-technical-commercial-proposal-grid-card>
           </div>
         </div>
@@ -225,6 +226,29 @@
         ></app-prolongate-procedure>
       </uxg-modal>
 
+      <uxg-modal [(state)]="proposalModalData" size="l">
+        <ng-container *ngIf="proposalModalData as modalData">
+          <h2>{{ modalData.proposalPosition.position.name }}</h2>
+          <app-proposal-detail
+            [supplier]="modalData.proposal.supplier"
+            [paymentTerms]="modalData.proposalPosition.paymentTerms"
+            [manufacturingName]="modalData.proposalPosition.manufacturingName"
+            [documents]="modalData.proposal.documents"
+            [proposal]="modalData.proposalPosition"
+            [position]="modalData.proposalPosition.position"
+          ></app-proposal-detail>
+
+          <ng-template uxgModalFooter>
+            <div class="app-col app-bold">
+              <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposalPosition)">- Позиция в нужном количестве</div>
+              <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposalPosition)"> - Сроки укладываются в заданные</div>
+              <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposalPosition)">- Количество меньше нужного</div>
+              <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposalPosition)"> - Сроки не укладываются в заданные</div>
+            </div>
+            <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+          </ng-template>
+        </ng-container>
+      </uxg-modal>
 
     </ng-container>
   </ng-container>
