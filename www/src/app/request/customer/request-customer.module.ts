@@ -23,6 +23,7 @@ import { RequestListComponent } from "./components/request-list/request-list.com
 import { RequestListState } from "./states/request-list.state";
 import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
+import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { CommercialProposalState } from "./states/commercial-proposal.state";
     CommercialProposalViewComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
-    RequestListComponent
+    RequestListComponent,
+    CommercialProposalListComponent
   ],
   imports: [
     AgreementsModule,

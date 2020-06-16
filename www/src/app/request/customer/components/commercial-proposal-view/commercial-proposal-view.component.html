@@ -23,7 +23,7 @@
             <button uxgButton [primary]="view==='grid'" [secondary]="view==='list'" icon (click)="switchView('grid')">
               <uxg-icon shape="app-grid-view"></uxg-icon>
             </button>
-            <button uxgButton disabled [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
+            <button uxgButton [primary]="view==='list'" [secondary]="view==='grid'" icon (click)="switchView('list')">
               <uxg-icon shape="app-list-view"></uxg-icon>
             </button>
           </div>
@@ -44,6 +44,7 @@
           ></app-grid-contragents>
           <ng-container *ngFor="let position of positions">
             <app-grid-row
+              #proposalOnReview
               [chooseBy$]="chooseBy$"
               [position]="convertPosition(position)"
               [suppliers]="suppliers$ | async"
@@ -69,6 +70,17 @@
             </app-grid-row>
           </ng-container>
         </div>
+
+        <ng-container *ngSwitchCase="'list'">
+          <app-commercial-proposal-list
+            *ngFor="let position of positions"
+            #proposalOnReview
+            [chooseBy$]="chooseBy$"
+            [requestId]="requestId"
+            [position]="convertPosition(position)"
+            [proposals]="convertProposals(position.linkedOffers)"
+          ></app-commercial-proposal-list>
+        </ng-container>
 
         <!-- empty -->
         <div *ngIf="positions.length === 0">

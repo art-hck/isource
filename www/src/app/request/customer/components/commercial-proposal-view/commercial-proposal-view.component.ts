@@ -21,17 +21,17 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { Proposal } from "../../../../shared/components/grid/proposal";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
-import { KimPriceOrderProposal } from "../../../../kim/common/models/kim-price-order-proposal";
 import { Position } from "../../../../shared/components/grid/position";
 import Fetch = CommercialProposals.Fetch;
 import Approve = CommercialProposals.Approve;
+import { CommercialProposalListComponent } from "../commercial-proposal-list/commercial-proposal-list.component";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommercialProposalViewComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChildren(GridRowComponent) proposalsOnReview: QueryList<GridRowComponent>;
+  @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<GridRowComponent | CommercialProposalListComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @ViewChild('reviewedTab') reviewedTab: UxgTabTitleComponent;
 
@@ -54,7 +54,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   get total() {
     return this.proposalsOnReview?.reduce((total, { selectedProposal }) => {
-      const proposalPosition: KimPriceOrderProposal = selectedProposal.value;
+      const proposalPosition: Proposal = selectedProposal.value;
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
