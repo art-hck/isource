@@ -1,6 +1,7 @@
 import { FeatureList } from "./feature-list";
 import { InjectionToken } from "@angular/core";
 import * as Sentry from "@sentry/browser";
+import { KeycloakOptions } from "keycloak-angular";
 
 export const APP_CONFIG = new InjectionToken<GpnmarketConfigInterface>('app.config');
 
@@ -14,6 +15,7 @@ export interface GpnmarketConfigInterface {
     // адрес WebSocket сервера
     ws: string
   };
+  keycloak: KeycloakOptions;
   dadata: {
     apiKey: string
   };

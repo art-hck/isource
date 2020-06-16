@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { ApplicationRef, Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/internal/operators';
@@ -8,6 +8,8 @@ import { TokenService } from "./token.service";
 import { ActivationError } from "../models/activation-error";
 import { RestorationResponse } from "../models/restoration-response";
 import { KeycloakService } from "keycloak-angular";
+import { AppConfig } from "../../config/app.config";
+import { AppComponent } from "../../app.component";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,39 @@ export class AuthService {
       @Inject(APP_CONFIG) appConfig: GpnmarketConfigInterface
   ) {
     this.appConfig = appConfig;
+  }
+
+  /**
+   * Инициирует кейклок.
+   * После инициализации доступна аутентификация.
+   *
+   * @param app
+   */
+  keycloakInit(app: ApplicationRef) {
+    this.keycloakService
+      .init(AppConfig.keycloak)
+      .then(() => {
+        console.log('[ngDoBootstrap] bootstrap app');
+
+        app.bootstrap(AppComponent);
+      })
+      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+    this.keycloakService
+      .getKeycloakInstance()
+      .onAuthSuccess = () => {
+      this.saveAuthUserData().subscribe(() => {
+        console.log('saveAuthUserData');
+      });
+    };
+
+    this.keycloakService
+      .getKeycloakInstance()
+      .onAuthRefreshSuccess = () => {
+      this.saveAuthUserData().subscribe(() => {
+        console.log('saveAuthUserData');
+      });
+    };
   }
 
   attemptAuth(): Observable<any> {
@@ -87,13 +122,11 @@ export class AuthService {
     return this.attemptAuth();
   }
 
-  logout(): Observable<any> {
-    return this.http.post('logout', {}).pipe(
-      tap(() => {
-        this.onLogout.next();
-        this.token.signOut();
-      })
-    );
+  logout(): void {
+    this.keycloakService.logout().then(() => {
+      this.onLogout.next();
+      this.token.signOut();
+    });
   }
 
   isAuth(): boolean {

@@ -54,39 +54,6 @@ export class AppModule {
   }
 
   ngDoBootstrap(app: ApplicationRef) {
-    // TODO вынести в конфиг
-    const options: KeycloakOptions = {
-      config: {
-        url: 'http://contragent.gpb.lc:8082/auth',
-        realm: 'master',
-        clientId: 'gpnmarket-loc',
-      },
-      loadUserProfileAtStartUp: false
-    };
-
-    keycloakService
-      .init(options)
-      .then(() => {
-        console.log('[ngDoBootstrap] bootstrap app');
-
-        app.bootstrap(AppComponent);
-      })
-      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
-
-    keycloakService
-      .getKeycloakInstance()
-      .onAuthSuccess = () => {
-        this.authService.saveAuthUserData().subscribe(() => {
-          console.log('saveAuthUserData');
-        });
-      };
-
-    keycloakService
-      .getKeycloakInstance()
-      .onAuthRefreshSuccess = () => {
-        this.authService.saveAuthUserData().subscribe(() => {
-          console.log('saveAuthUserData');
-        });
-      };
+    this.authService.keycloakInit(app);
   }
 }
