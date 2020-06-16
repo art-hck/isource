@@ -9,7 +9,7 @@ import { TechnicalProposalsService } from "./services/technical-proposals.servic
 import { PositionComponent } from "./components/position/position.component";
 import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
 import { TechnicalProposalListComponent } from './components/technical-proposal-list/technical-proposal-list.component';
-import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
+import { CommercialProposalViewComponent } from './components/commercial-proposal-view/commercial-proposal-view.component';
 import { AgreementsModule } from "../../agreements/agreements.module";
 import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
@@ -22,6 +22,7 @@ import { RequestState } from "./states/request.state";
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { RequestListState } from "./states/request-list.state";
 import { TechnicalProposalState } from "./states/technical-proposal.state";
+import { CommercialProposalState } from "./states/commercial-proposal.state";
 
 
 @NgModule({
@@ -34,7 +35,7 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
     RequestTechnicalProposalComponent,
     TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
-    CommercialProposalListComponent,
+    CommercialProposalViewComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent
@@ -47,7 +48,8 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
       RequestState,
       RequestListState,
       TechnicalCommercialProposalState,
-      TechnicalProposalState
+      TechnicalProposalState,
+      CommercialProposalState
     ]),
   ],
   providers: [

@@ -50,10 +50,14 @@
   <uxg-modal #proposalModal>
     <h2><span class="app-bold">{{ proposalPosition.position.name }}</span></h2>
     <div *ngIf="proposalModal.state">
-      <app-technical-commercial-proposal-detail
-        [proposal]="proposal"
-        [proposalPosition]="proposalPosition"
-      ></app-technical-commercial-proposal-detail>
+      <app-proposal-detail
+        [supplier]="proposal.supplier"
+        [paymentTerms]="proposalPosition.paymentTerms"
+        [manufacturingName]="proposalPosition.manufacturingName"
+        [documents]="proposal.documents"
+        [proposal]="proposalPosition"
+        [position]="proposalPosition.position"
+      ></app-proposal-detail>
     </div>
     <ng-template uxgModalFooter>
       <div class="app-col app-bold">

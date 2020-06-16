@@ -1,6 +1,7 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnChanges, QueryList, SimpleChanges, ViewChild } from '@angular/core';
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { timer } from "rxjs";
+import { ContragentList } from "../../../../contragent/models/contragent-list";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -11,7 +12,7 @@ import { timer } from "rxjs";
 export class GridContragentsComponent implements AfterViewInit, OnChanges, AfterViewChecked {
   @ViewChild('gridRow') gridRow: ElementRef;
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
-  @Input() suppliers: ContragentShortInfo[];
+  @Input() suppliers: ContragentShortInfo[] | ContragentList[];
   @Input() hasAnalogsFn: (i) => boolean;
   canScrollLeft: boolean;
   canScrollRight: boolean;

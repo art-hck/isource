@@ -81,8 +81,11 @@
       <!-- grid -->
       <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
 
-        <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
-        </app-technical-commercial-proposal-grid-contragents-row>
+        <app-grid-contragents
+          [gridRows]="gridRows"
+          [suppliers]="suppliers(proposals$ | async)"
+          [hasAnalogsFn]="hasAnalogs(proposals$ | async)"
+        ></app-grid-contragents>
 
         <!-- positions -->
         <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i" formArrayName="positions">

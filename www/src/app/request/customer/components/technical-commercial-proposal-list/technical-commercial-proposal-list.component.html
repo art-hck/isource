@@ -37,11 +37,11 @@
       <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$ : proposalsSentToReview$) | async as proposalsByPos">
         <!-- grid -->
         <div class="grid-table" *ngSwitchCase="'grid'">
-          <app-technical-commercial-proposal-grid-contragents-row
-            *ngIf="proposalsByPos.length"
+          <app-grid-contragents
             [gridRows]="gridRows"
-            [proposals]="proposals$ | async">
-          </app-technical-commercial-proposal-grid-contragents-row>
+            [suppliers]="suppliers(proposals$ | async)"
+            [hasAnalogsFn]="hasAnalogs(proposals$ | async)"
+          ></app-grid-contragents>
 
           <app-request-technical-commercial-proposal
             class="position-row"
@@ -81,25 +81,15 @@
     <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
   </div>
 </ng-container>
-<div class="proposals-footer" #proposalsFooterRef [class.hidden]="isProposalsFooterHidden">
-  <div class="proposals-footer-body app-row app-align-items-center">
-    <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
-    <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
-    <div class="app-col"></div>
-    <h3 *ngIf="total > 0">
-      <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-      <span>{{total | number: "1.0-2"}}</span>
-      <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
-    </h3>
-    <!-- @TODO: Ждем реализацию на бэкенде -->
-    <!--<button uxgButton secondary lg (click)="rejectAll()" [disabled]="(stateStatus$ | async) !== 'received'">
-      Отклонить всё
-    </button>-->
-    <button uxgButton primary lg (click)="approveMultiple()" [disabled]="!total || (stateStatus$ | async) !== 'received'">
-      Согласовать всё
-    </button>
-  </div>
-</div>
+
+<app-grid-footer
+  [disabled]="(stateStatus$ | async) !== 'received'"
+  (approve)="approveMultiple()"
+  [chooseBy$]="chooseBy$"
+  [hidden]="reviewedTab?.active || proposalsOnReview?.length === 0"
+  [total]="total"
+></app-grid-footer>
+
 <ng-template #placeholder>
   <div class="app-row" [class.app-layout]="view === 'grid'">
     <div class="app-col">

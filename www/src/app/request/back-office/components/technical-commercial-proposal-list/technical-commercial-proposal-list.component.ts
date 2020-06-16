@@ -187,6 +187,14 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.addProposalPositionPayload = { proposal, position };
   }
 
+  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
+    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  }
+
+  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
+    return i => proposals.map(({ positions }) => positions[i]).some(p => p?.isAnalog);
+  }
+
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
   trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
 

@@ -1,21 +1,20 @@
-import {Uuid} from "../../../cart/models/uuid";
+import { Uuid } from "../../../cart/models/uuid";
 import { RequestDocument } from "./request-document";
 import { RequestPosition } from "./request-position";
-import { ContragentList } from "../../../contragent/models/contragent-list";
-import { Contragent } from "../../../core/models/contragent";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
+import { PositionCurrency } from "../enum/position-currency";
 
 export class RequestOfferPosition {
   comments?: string;
   createdDate?: string;
   customerContragentId?: string;
-  deliveryDate?: string;
+  deliveryDate: string;
   id: Uuid;
   paymentTerms?: string;
   priceWithVat: number;
   priceWithoutVat: number;
   quantity: number;
-  currency: string;
+  currency: PositionCurrency;
   measureUnit: string;
   requestPosition: RequestPosition;
   requestId?: Uuid;
@@ -28,7 +27,7 @@ export class RequestOfferPosition {
   vatPercent: number;
   isAnalog: boolean;
   isMinPrice?: boolean;
-  isWinner?: boolean;
+  isWinner: boolean;
   documents?: RequestDocument[];
   technicalProposals?: RequestDocument[];
   status?: string;

@@ -84,10 +84,15 @@
         </div>
         <uxg-modal #proposalModal>
           <h2>{{ data.proposalPosition.position.name }}</h2>
-          <app-technical-commercial-proposal-detail
-            [proposal]="data.proposal"
-            [proposalPosition]="data.proposalPosition"
-          ></app-technical-commercial-proposal-detail>
+          <app-proposal-detail
+            [supplier]="data.proposal.supplier"
+            [paymentTerms]="data.proposalPosition.paymentTerms"
+            [manufacturingName]="data.proposalPosition.manufacturingName"
+            [documents]="data.proposal.documents"
+            [proposal]="data.proposalPosition"
+            [position]="data.proposalPosition.position"
+          ></app-proposal-detail>
+
           <ng-template uxgModalFooter>
             <div class="app-col app-bold">
               <div class="app-success-color" *ngIf="helper.isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
