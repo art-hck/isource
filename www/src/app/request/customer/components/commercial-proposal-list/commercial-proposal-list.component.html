@@ -97,7 +97,7 @@
             </div>
             <div *ngIf="!isReviewed">
               <button uxgButton lg secondary uxgModalClose>Отмена</button>
-              <button uxgButton lg primary uxgModalClose (click)="selectedProposal.setValue(proposal)">Выбрать</button>
+              <button uxgButton lg primary uxgModalClose (click)="selectedProposal.setValue(proposal.sourceProposal)">Выбрать</button>
             </div>
             <div *ngIf="isReviewed">
               <button uxgButton lg secondary uxgModalClose>Закрыть</button>

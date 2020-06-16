@@ -3,13 +3,15 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { Actions, Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { getCurrencySymbol } from "@angular/common";
-import { takeUntil, tap } from "rxjs/operators";
+import { finalize, takeUntil, tap } from "rxjs/operators";
 import { RequestPosition } from "../../../common/models/request-position";
 import { Proposal } from "../../../../shared/components/grid/proposal";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { Position } from "../../../../shared/components/grid/position";
 import { FormControl, Validators } from "@angular/forms";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
+import { CommercialProposals } from "../../actions/commercial-proposal.actions";
+import Approve = CommercialProposals.Approve;
 
 @Component({
   selector: 'app-commercial-proposal-list',
@@ -59,11 +61,20 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   }
 
   approve() {
-    // this.dispatchAction(new Approve(this.requestId, this.selectedProposalPosition.value));
+    this.dispatchAction(new Approve(this.requestId, {[this.position.id]: this.selectedProposal.value.id}));
   }
 
   reject() {
+    // TODO: Ждём бэк
     // this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
+  }
+
+  private dispatchAction(action) {
+    this.selectedProposal.disable();
+    this.store.dispatch(action).pipe(
+      finalize(() => this.selectedProposal.enable()),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   trackByProposaId = (i, {id}: Proposal) => id;
