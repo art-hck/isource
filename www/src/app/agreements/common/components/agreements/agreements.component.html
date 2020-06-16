@@ -20,10 +20,10 @@
               <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
             </ng-container>
             <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
-              <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}} </b>
+              <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}}</b>
             </ng-container>
           </div>
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color">  ({{agreement.groupCounter}})</span>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
         <div class="app-col-2 app-ellipsis customer">
           {{agreement.request.contragent.shortName}}
