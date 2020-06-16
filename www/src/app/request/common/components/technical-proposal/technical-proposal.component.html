@@ -134,12 +134,11 @@
             </div>
 
             <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal); else sendToReviewBtn">
-              <!-- todo Кнопка для отзыва ТП скрывается, пока скрыта кнопка отзыва ТП -->
-              <!--div class="app-col app-col-auto status">
+              <div class="app-col app-col-auto status">
                 <button uxgButton primary type="button" class="fixedWidth" (click)="onCancelPublishTechnicalProposal(technicalProposal)">
                   Отозвать <span class="cancel-timer"> {{ technicalProposal.statusChangedDate | countdownTimer: durationCancelPublish }} </span>
                 </button>
-              </div-->
+              </div>
             </ng-container>
 
             <ng-template #sendToReviewBtn>
