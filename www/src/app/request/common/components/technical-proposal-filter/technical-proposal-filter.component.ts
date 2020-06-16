@@ -124,8 +124,6 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   }
 
   getAgreementStateList(): void {
-    this.tpStatuses = [];
-
     this.technicalProposals.forEach(tp => {
       this.tpStatuses.push(tp.status);
     });
