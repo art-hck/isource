@@ -34,7 +34,7 @@
 
     <div>
       <!-- Количество, цена за ед. -->
-      <span [ngClass]="!helper.isQuantityValid(proposalPosition) ? 'app-error-color app-bold' : ''">{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>
+      <span [ngClass]="helper.isQuantityMoreOrLess(proposalPosition) !== 0 ? 'app-error-color app-bold' : ''">{{proposalPosition.quantity}} {{proposalPosition.measureUnit}}</span>
       <span class="app-ghost-color"> | </span>
       <span class="app-ghost-color">{{proposalPosition.priceWithoutVat | number:'1.0-2'}} </span>
       <span class="app-ghost-color">{{getCurrencySymbol(proposalPosition.currency, "narrow")}}/{{proposalPosition.measureUnit}}</span>

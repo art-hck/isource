@@ -240,9 +240,11 @@
 
           <ng-template uxgModalFooter>
             <div class="app-col app-bold">
-              <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposalPosition)">- Позиция в нужном количестве</div>
+              <div class="app-success-color" *ngIf="helper.isQuantityMoreOrLess(modalData.proposalPosition) === 0">- Позиция в нужном количестве</div>
+              <div class="app-error-color" *ngIf="helper.isQuantityMoreOrLess(modalData.proposalPosition) > 0">- Количество больше нужного</div>
+              <div class="app-error-color" *ngIf="helper.isQuantityMoreOrLess(modalData.proposalPosition) < 0">- Количество меньше нужного</div>
+
               <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposalPosition)"> - Сроки укладываются в заданные</div>
-              <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposalPosition)">- Количество меньше нужного</div>
               <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposalPosition)"> - Сроки не укладываются в заданные</div>
             </div>
             <button uxgButton lg secondary uxgModalClose>Закрыть</button>

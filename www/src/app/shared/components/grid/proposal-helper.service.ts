@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
+import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { Proposal } from "./proposal";
 export class ProposalHelperService {
 
   isValid(position: Position, proposal: Proposal): boolean {
-    return this.isDateValid(position, proposal) && this.isQuantityValid(position, proposal);
+    return this.isDateValid(position, proposal) && this.isQuantityMoreOrLess(position, proposal) === 0;
   }
 
   isDateValid(position: Position, { deliveryDate }: Proposal): boolean {
@@ -18,8 +19,14 @@ export class ProposalHelperService {
       moment(deliveryDate).isSameOrBefore(moment(position.deliveryDate));
   }
 
-  isQuantityValid(position: Position, { quantity }: Proposal): boolean {
-    return position.quantity === quantity;
+  isQuantityMoreOrLess(position: Position, { quantity }: Proposal): number {
+    if (quantity === position.quantity) {
+      return 0;
+    } else if (quantity > position.quantity) {
+      return 1;
+    } else {
+      return -1;
+    }
   }
 
   chooseBy(type: "date" | "price", position: Position, proposals: Proposal[]): Proposal["sourceProposal"] {

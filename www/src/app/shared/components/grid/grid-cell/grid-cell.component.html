@@ -32,7 +32,7 @@
 
     <div>
       <!-- Количество, цена за ед. -->
-      <span [ngClass]="!helper.isQuantityValid(position, proposal) ? 'app-error-color app-bold' : ''">{{proposal.quantity}} {{position.measureUnit | lowercase}}</span>
+      <span [ngClass]="helper.isQuantityMoreOrLess(position, proposal) !== 0 ? 'app-error-color app-bold' : ''">{{proposal.quantity}} {{position.measureUnit | lowercase}}</span>
       <span class="app-ghost-color"> | </span>
       <span class="app-ghost-color">{{proposal.priceWithoutVat | number:'1.0-2'}} </span>
       <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}/{{proposal.measureUnit}}</span>

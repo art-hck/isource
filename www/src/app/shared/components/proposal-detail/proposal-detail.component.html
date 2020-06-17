@@ -31,16 +31,20 @@
   </div>
   <div class="app-row">
     <h2 class="app-col">
-      <span [class.app-error-color]="!helper.isQuantityValid(position, proposal)">{{proposal.quantity}}</span>
-      <span class="app-ghost-color">{{proposal.measureUnit}}</span>
+      <span [class.app-error-color]="helper.isQuantityMoreOrLess(position, proposal) !== 0">{{proposal.quantity}}
+        <span class="app-ghost-color">{{proposal.measureUnit}}</span>
+      </span>
     </h2>
+
     <h2 class="app-col">
       {{proposal.priceWithoutVat | number:'1.0-2'}}
       <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}</span>
     </h2>
+
     <h2 class="app-col" [class.app-error-color]="!helper.isDateValid(position, proposal)">
       {{proposal.deliveryDate | date:"dd.MM.yyyy"}}
     </h2>
+
     <h2 class="app-col">
       {{proposal.priceWithoutVat * proposal.quantity | number:'1.0-2'}}
       <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}</span>
