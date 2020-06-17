@@ -124,11 +124,11 @@
           <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
         </div>
 
-        <div *ngIf="!modalData.proposal.isWinner">
+        <div *ngIf="!hasWinners(modalData.position.sourcePosition)">
           <button uxgButton lg secondary uxgModalClose>Отмена</button>
           <button uxgButton lg primary (click)="selectProposal(modalData.proposal); modalData = null">Выбрать</button>
         </div>
-        <div *ngIf="modalData.proposal.isWinner">
+        <div *ngIf="hasWinners(modalData.position.sourcePosition)">
           <button uxgButton lg secondary uxgModalClose>Закрыть</button>
         </div>
       </ng-template>

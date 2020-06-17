@@ -112,6 +112,10 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     return i => positions.map(({ linkedOffers }) => linkedOffers[i]).some(p => p?.isAnalog);
   }
 
+  hasWinners({ linkedOffers }: RequestPosition) {
+    return linkedOffers.some(p => p?.isWinner);
+  }
+
   rejectAll(positions: RequestPosition[]) {
     // @TODO: ждём бэк на отклонение позиций
     positions.map(({ id }) => id);
