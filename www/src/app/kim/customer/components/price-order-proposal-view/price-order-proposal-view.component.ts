@@ -135,14 +135,14 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   convertProposals(position: KimPriceOrderPosition) {
     return position.proposals.map(proposal => new Proposal<KimPriceOrderProposal>(
       proposal,
-      p => ({ ...p, deliveryDate: p.proposalSupplier.dateDelivery, measureUnit: position.okeiItem.symbol }))
+      p => ({ ...p, deliveryDate: p.proposalSupplier.dateDelivery, measureUnit: position.okeiItem?.symbol }))
     );
   }
 
   convertPosition(position: KimPriceOrderPosition, priceOrder) {
     return new Position<KimPriceOrderPosition>(
       position,
-      p => ({ ...p, deliveryDate: priceOrder.dateDelivery, measureUnit: p.okeiItem.symbol })
+      p => ({ ...p, deliveryDate: priceOrder.dateDelivery, measureUnit: p.okeiItem?.symbol })
     );
   }
 
@@ -150,7 +150,7 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
     const proposal = position.proposals.find(({ proposalSupplier: { supplier } }) => supplier.id === id);
     return proposal ? new Proposal<KimPriceOrderProposal>(
       proposal,
-      p => ({ ...p, deliveryDate: p?.proposalSupplier.dateDelivery, measureUnit: position.okeiItem.symbol })
+      p => ({ ...p, deliveryDate: p?.proposalSupplier.dateDelivery, measureUnit: position.okeiItem?.symbol })
     ) : null;
   }
 
