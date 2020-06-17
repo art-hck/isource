@@ -23,7 +23,7 @@
       <ng-container *ngIf="selectedProposal">
         <uxg-radio-item
           [name]="position.id"
-          [value]="proposal"
+          [value]="proposal.sourceProposal"
           [formControl]="selectedProposal"
           (click)="$event.stopPropagation()"
         ></uxg-radio-item>
@@ -32,19 +32,27 @@
 
     <div>
       <!-- Количество, цена за ед. -->
-      <span>{{proposal.quantity}} {{position.okeiItem.symbol | lowercase}}</span>
+      <span [ngClass]="!helper.isQuantityValid(position, proposal) ? 'app-error-color app-bold' : ''">{{proposal.quantity}} {{position.measureUnit | lowercase}}</span>
       <span class="app-ghost-color"> | </span>
       <span class="app-ghost-color">{{proposal.priceWithoutVat | number:'1.0-2'}} </span>
-      <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}/<!--{{proposal.measureUnit}}--></span>
+      <span class="app-ghost-color">{{getCurrencySymbol(proposal.currency, "narrow")}}/{{proposal.measureUnit}}</span>
       <br/>
 
       <!-- Дата поставки. -->
-      <span>{{proposal.proposalSupplier.dateDelivery | date:"dd.MM.yyyy"}}</span>
+      <span [ngClass]="!helper.isDateValid(position, proposal) ? 'app-error-color app-bold' : ''">{{proposal.deliveryDate | date:"dd.MM.yyyy"}}</span>
       <span class="app-ghost-color"> доставка</span>
+    </div>
+
+    <div *ngIf="supplier" class="app-ellipsis">
+      <app-contragent-info-link (click)="$event.stopPropagation()" hiddenName="Наименование поставщика скрыто" [contragent]="supplier">
+      </app-contragent-info-link>
     </div>
   </button>
 </ng-container>
 
 <ng-template #emptyProposal>
-  <button disabled><b>Не предоставлено</b></button>
+  <button [disabled]="!editable" (click)="create.emit()">
+    <uxg-icon class="app-link" *ngIf="editable; else notProvided" shape="app-plus-big" size="24"></uxg-icon>
+    <ng-template #notProvided><b>Не предоставлено</b></ng-template>
+  </button>
 </ng-template>

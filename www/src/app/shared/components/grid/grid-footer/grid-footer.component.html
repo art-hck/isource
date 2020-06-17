@@ -1,0 +1,17 @@
+<div class="proposals-footer-body app-row app-align-items-center">
+  <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
+  <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
+  <div class="app-col"></div>
+  <h3 *ngIf="total > 0">
+    <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+    <span>{{total | number: "1.0-2"}}</span>
+    <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
+  </h3>
+  <!-- @TODO: Ждем реализацию на бэкенде -->
+  <!--<button uxgButton secondary lg (click)="rejectAll()" [disabled]="disabled">
+    Отклонить всё
+  </button>-->
+  <button uxgButton primary lg (click)="approve.emit()" [disabled]="!total || disabled">
+    Согласовать всё
+  </button>
+</div>

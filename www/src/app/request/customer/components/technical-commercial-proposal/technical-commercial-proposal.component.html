@@ -33,7 +33,7 @@
       </div>
       <div class="data-body-container" *ngFor="let data of proposalByPos.data; index as i; trackBy: trackByproposalPositionId">
         <div *ngIf="data.proposalPosition as proposalPos"
-           (click)="proposalModal.open()"
+           (click)="modalData = data"
            class="app-row app-link-no-color data data-body"
         >
           <div class="app-col  app-ellipsis supplier">
@@ -70,7 +70,7 @@
           <div class="app-col radio" *ngIf="!isReviewed">
             <uxg-radio-item
               [name]="proposalByPos.position.id"
-              [value]="proposalPos"
+              [value]="data.proposalPosition"
               [formControl]="selectedProposalPosition"
               (click)="$event.stopPropagation()"
             ></uxg-radio-item>
@@ -82,28 +82,6 @@
             }"></uxg-icon>
           </div>
         </div>
-        <uxg-modal #proposalModal>
-          <h2>{{ data.proposalPosition.position.name }}</h2>
-          <app-technical-commercial-proposal-detail
-            [proposal]="data.proposal"
-            [proposalPosition]="data.proposalPosition"
-          ></app-technical-commercial-proposal-detail>
-          <ng-template uxgModalFooter>
-            <div class="app-col app-bold">
-              <div class="app-success-color" *ngIf="helper.isQuantityValid(data.proposalPosition)">- Позиция в нужном количестве</div>
-              <div class="app-success-color" *ngIf="helper.isDateValid(data.proposalPosition)"> - Сроки укладываются в заданные</div>
-              <div class="app-error-color" *ngIf="!helper.isQuantityValid(data.proposalPosition)">- Количество меньше нужного</div>
-              <div class="app-error-color" *ngIf="!helper.isDateValid(data.proposalPosition)"> - Сроки не укладываются в заданные</div>
-            </div>
-            <div *ngIf="!isReviewed">
-              <button uxgButton lg secondary uxgModalClose>Отмена</button>
-              <button uxgButton lg primary uxgModalClose (click)="selectedProposalPosition.setValue(data.proposalPosition)">Выбрать</button>
-            </div>
-            <div *ngIf="isReviewed">
-              <button uxgButton lg secondary uxgModalClose>Закрыть</button>
-            </div>
-          </ng-template>
-        </uxg-modal>
       </div>
     </div>
     <ng-container *ngIf="!isReviewed">
@@ -141,7 +119,40 @@
         [proposal]="proposal"
         [selectedProposalPosition]="selectedProposalPosition"
         [proposalPosition]="getProposalPosition(proposal, position)"
+        (show)="modalData = {proposal: proposal, proposalPosition: getProposalPosition(proposal, position) }"
       ></app-technical-commercial-proposal-grid-card>
     </div>
   </ng-container>
 </ng-container>
+
+
+<uxg-modal [(state)]="modalData" size="l">
+  <ng-container *ngIf="modalData">
+    <h2>{{ modalData.proposalPosition.position.name }}</h2>
+    <app-proposal-detail
+      [supplier]="modalData.proposal.supplier"
+      [paymentTerms]="modalData.proposalPosition.paymentTerms"
+      [manufacturingName]="modalData.proposalPosition.manufacturingName"
+      [documents]="modalData.proposal.documents"
+      [proposal]="modalData.proposalPosition"
+      [position]="modalData.proposalPosition.position"
+    ></app-proposal-detail>
+
+    <ng-template uxgModalFooter>
+      <div class="app-col app-bold">
+        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposalPosition)">- Позиция в нужном количестве</div>
+        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposalPosition)"> - Сроки укладываются в заданные</div>
+        <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposalPosition)">- Количество меньше нужного</div>
+        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposalPosition)"> - Сроки не укладываются в заданные</div>
+      </div>
+
+      <div *ngIf="!isReviewed">
+        <button uxgButton lg secondary uxgModalClose>Отмена</button>
+        <button uxgButton lg primary (click)="selectedProposalPosition.setValue(modalData.proposalPosition); modalData = null">Выбрать</button>
+      </div>
+      <div *ngIf="isReviewed">
+        <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+      </div>
+    </ng-template>
+  </ng-container>
+</uxg-modal>

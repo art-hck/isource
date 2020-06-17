@@ -1,5 +1,5 @@
 <ng-container *ngIf="proposalPosition else emptyProposal">
-  <button (click)="proposalPosition.status==='NEW' ? create.emit() : proposalModal.open()">
+  <button (click)="proposalPosition.status==='NEW' ? create.emit() : show.emit()">
     <div class="app-row app-align-items-center">
       <!-- name -->
       <h3 class="app-col">
@@ -46,33 +46,6 @@
     </div>
     <div class="app-ellipsis app-secondary-color">{{ proposalPosition.manufacturingName }}</div>
   </button>
-
-  <uxg-modal #proposalModal>
-    <h2><span class="app-bold">{{ proposalPosition.position.name }}</span></h2>
-    <div *ngIf="proposalModal.state">
-      <app-technical-commercial-proposal-detail
-        [proposal]="proposal"
-        [proposalPosition]="proposalPosition"
-      ></app-technical-commercial-proposal-detail>
-    </div>
-    <ng-template uxgModalFooter>
-      <div class="app-col app-bold">
-        <div class="app-success-color" *ngIf="helper.isQuantityValid(proposalPosition)">- Позиция в нужном количестве</div>
-        <div class="app-success-color" *ngIf="helper.isDateValid(proposalPosition)"> - Сроки укладываются в заданные</div>
-        <div class="app-error-color" *ngIf="!helper.isQuantityValid(proposalPosition)">- Количество меньше нужного</div>
-        <div class="app-error-color" *ngIf="!helper.isDateValid(proposalPosition)"> - Сроки не укладываются в заданные</div>
-      </div>
-      <!--      @TODO Доделать возможность выбрать из модалки -->
-      <!--      <div *ngIf="!isReviewed">-->
-      <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Отмена</button>-->
-      <!--        <button uxgButton lg primary (click)="selectedProposalPosition.setValue(data.proposalPosition); proposalModal.close();">Выбрать</button>-->
-      <!--      </div>-->
-      <!--      <div *ngIf="isReviewed">-->
-      <!--        <button uxgButton lg secondary (click)="proposalModal.close()">Закрыть</button>-->
-      <!--      </div>-->
-      <button uxgButton lg secondary uxgModalClose>Закрыть</button>
-    </ng-template>
-  </uxg-modal>
 </ng-container>
 
 <ng-template #emptyProposal>

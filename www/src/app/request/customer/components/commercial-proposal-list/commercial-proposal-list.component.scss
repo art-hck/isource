@@ -1,0 +1,48 @@
+@import "src/theme";
+
+:host {
+  display: block;
+}
+
+.app-card {
+  margin-bottom: 24px;
+}
+
+hr {
+  margin: 21px 0;
+}
+
+.grid {
+  .data {
+    .app-col + .app-col { padding-left: 20px }
+
+    &-body .app-col { padding-top: 14px }
+    &-body-container > div { cursor: pointer }
+
+    .supplier, .manufacturing { min-width: 110px }
+    .supplier > * { cursor: auto }
+    .quantity, .price, .date, .total {
+      flex-basis: 110px;
+      flex-grow: .1;
+    }
+    .radio { max-width: 40px }
+    .status {
+      max-width: 60px;
+      text-align: center;
+    }
+  }
+
+  &.on-review {
+    .data {
+      &-head .app-col { padding-bottom: 14px }
+      &-body .app-col { padding: 17px 0 }
+      &-body-container:nth-child(odd) { background: #F4F6FB }
+    }
+  }
+
+  .data-body-container:nth-child(odd) {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+}
+

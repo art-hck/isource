@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as moment from "moment";
-import { Position } from "../../../shared/components/grid/position";
-import { Proposal } from "../../../shared/components/grid/proposal";
-
+import { Position } from "./position";
+import { Proposal } from "./proposal";
 
 
 @Injectable({

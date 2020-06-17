@@ -31,6 +31,10 @@ import { ToastListModule } from "./components/toast-list/toast-list.module";
 import { GridContragentsComponent } from './components/grid/grid-contragents/grid-contragents.component';
 import { ContragentInfoComponent } from "../contragent/components/contragent-info/contragent-info.component";
 import { ContragentInfoLinkComponent } from "../contragent/components/contragent-info-link/contragent-info-link.component";
+import { GridFooterComponent } from './components/grid/grid-footer/grid-footer.component';
+import { GridCellComponent } from "./components/grid/grid-cell/grid-cell.component";
+import { GridRowComponent } from "./components/grid/grid-row/grid-row.component";
+import { ProposalDetailComponent } from "./components/proposal-detail/proposal-detail.component";
 
 @NgModule({
   imports: [
@@ -71,6 +75,11 @@ import { ContragentInfoLinkComponent } from "../contragent/components/contragent
     GridContragentsComponent,
     ContragentInfoComponent,
     ContragentInfoLinkComponent,
+    GridFooterComponent,
+    GridCellComponent,
+    GridRowComponent,
+    ProposalDetailComponent,
+    ProposalDetailComponent,
   ],
   exports: [
     CommonModule,
@@ -108,6 +117,11 @@ import { ContragentInfoLinkComponent } from "../contragent/components/contragent
     GridContragentsComponent,
     ContragentInfoComponent,
     ContragentInfoLinkComponent,
+    GridFooterComponent,
+    GridCellComponent,
+    GridRowComponent,
+    ProposalDetailComponent,
+    ProposalDetailComponent,
   ]
 })
 export class SharedModule {
