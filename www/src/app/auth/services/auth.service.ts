@@ -87,13 +87,11 @@ export class AuthService {
     return this.attemptAuth();
   }
 
-  logout(): Observable<any> {
-    return this.http.post('logout', {}).pipe(
-      tap(() => {
-        this.onLogout.next();
-        this.token.signOut();
-      })
-    );
+  logout(): void {
+    this.keycloakService.logout().then(() => {
+      this.onLogout.next();
+      this.token.signOut();
+    });
   }
 
   isAuth(): boolean {

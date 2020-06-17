@@ -54,18 +54,8 @@ export class AppModule {
   }
 
   ngDoBootstrap(app: ApplicationRef) {
-    // TODO вынести в конфиг
-    const options: KeycloakOptions = {
-      config: {
-        url: 'http://contragent.gpb.lc:8082/auth',
-        realm: 'master',
-        clientId: 'gpnmarket-loc',
-      },
-      loadUserProfileAtStartUp: false
-    };
-
     keycloakService
-      .init(options)
+      .init(AppConfig.keycloak)
       .then(() => {
         console.log('[ngDoBootstrap] bootstrap app');
 
