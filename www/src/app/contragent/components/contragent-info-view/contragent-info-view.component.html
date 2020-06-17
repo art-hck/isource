@@ -15,18 +15,20 @@
       Отчет Прима-информ
     </button>
   </div>
+
   <div class="app-row content">
     <div class="app-col">
       <uxg-tabs class="app-tabs-border">
         <uxg-tab-title #contragentInfoTab [active]="true">Информация о контрагенте</uxg-tab-title>
         <uxg-tab-title #employeesTab [hidden]="user.isCustomer()">Сотрудники</uxg-tab-title>
       </uxg-tabs>
-      <br/>
+
       <ng-container *uxgTab="contragentInfoTab">
         <app-contragent-info [contragent]="contragent"
                             [modalView]="false">
         </app-contragent-info>
       </ng-container>
+
       <ng-container *uxgTab="employeesTab">
         <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
           <button uxgButton secondary (click)="createEmployeeModal.open()">
@@ -45,12 +47,15 @@
                 <div class="app-col">
                   {{employee.lastName}} {{employee.firstName}} {{employee.middleName}}
                 </div>
+
                 <div class="app-col">
                   {{employee.username}}
                 </div>
+
                 <div class="app-col">
                   {{employee.phone}}
                 </div>
+
                 <div class="app-col edit" [style.max-width.px]="60">
                   <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="editedEmployee = employee; createEmployeeModal.open()">
                     <uxg-icon shape="app-pen"></uxg-icon>
@@ -62,17 +67,21 @@
         </div>
       </ng-container>
     </div>
+
     <div class="app-col app-col-aside">
       <ng-container *ngIf="(contragent$ | async) as contragent">
         <h3>Контакты и ответственный</h3>
+
         <div class="app-section" *ngIf="contragent.email">
-          <div class="app-ghost-color">Email контрагента</div>
+          <div class="app-ghost-color info-label">Email контрагента</div>
           <div>{{contragent.email}}</div>
         </div>
-        <div class="app-section">
-          <div class="app-ghost-color" *ngIf="contragent.phone">Телефон контрагента</div>
+
+        <div class="app-section" *ngIf="contragent.phone">
+          <div class="app-ghost-color info-label">Телефон контрагента</div>
           <div>{{contragent.phone}}</div>
         </div>
+
         <div class="app-section" *ngIf="contragent.responsible">
           <div class="app-ghost-color">Ответственный менеджер БО</div>
           <div>{{contragent.responsible.shortName}}</div>
@@ -80,6 +89,7 @@
       </ng-container>
     </div>
   </div>
+
   <uxg-modal #createEmployeeModal size="l">
     <h2 *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника {{contragent.shortName}}</h2>
 
@@ -87,12 +97,15 @@
       <h2>Редактировать сотрудника {{contragent.shortName}}</h2>
     </ng-template>
 
-    <app-employee-form *ngIf="createEmployeeModal.state"
+    <app-employee-form
+      *ngIf="createEmployeeModal.state"
       (cancel)="editedEmployee = null; createEmployeeModal.close()"
       (addEmployee)="addEmployee($event); createEmployeeModal.close()"
       (editEmployee)="updateEmployeeListItem($event); createEmployeeModal.close()"
-      [employee]="editedEmployee"></app-employee-form>
+      [employee]="editedEmployee">
+    </app-employee-form>
   </uxg-modal>
+
 </ng-container>
 
 
