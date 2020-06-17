@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CanActivateGuard } from "./auth/can-activate.guard";
 import { AppAuthGuard } from "./auth/app-auth.guard";
-import { AppComponent } from "./app.component";
+import { WelcomeComponent } from "./pages/welcome/welcome.component";
 
 const routes: Routes = [
-  { path: '', canActivate: [CanActivateGuard], component: AppComponent },
-  { path: '', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)},
   { path: 'dashboard', canActivate: [AppAuthGuard], loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
   { path: 'requests', canActivate: [AppAuthGuard], loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
   { path: 'catalog', canActivate: [AppAuthGuard], loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
@@ -17,6 +14,8 @@ const routes: Routes = [
   { path: 'notifications', canActivate: [AppAuthGuard], loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'kim', canActivate: [AppAuthGuard], loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
   { path: 'agreements', canActivate: [AppAuthGuard], loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},
+  { path: '', canActivate: [AppAuthGuard], component: WelcomeComponent, pathMatch: 'full' },
+  { path: '', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)},
   { path: '**', redirectTo: '/not-found' }
 ];
 
@@ -25,7 +24,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes)
   ],
   exports: [RouterModule],
-  providers: [CanActivateGuard, AppAuthGuard]
+  providers: [AppAuthGuard]
 })
 export class AppRoutingModule {
 }
