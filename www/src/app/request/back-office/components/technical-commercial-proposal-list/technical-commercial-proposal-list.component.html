@@ -132,6 +132,10 @@
               <uxg-icon shape="app-waiting"></uxg-icon>
               <span>На согласовании</span>
             </div>
+            <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
+              <uxg-icon shape="app-warning"></uxg-icon>
+              <span>На доработке</span>
+            </div>
           </div>
 
           <div #gridRow class="grid-row app-row app-section items-row app-layout">

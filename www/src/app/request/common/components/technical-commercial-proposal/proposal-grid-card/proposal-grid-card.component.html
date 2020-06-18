@@ -19,12 +19,16 @@
           <uxg-icon shape="app-check"></uxg-icon>
         </div>
 
+        <div class="app-warning-color" *ngSwitchCase="'SENT_TO_EDIT'">
+          <uxg-icon shape="app-warning"></uxg-icon>
+        </div>
+
         <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="selectedProposalPosition">
+          <ng-container *ngIf="selectedProposal">
             <uxg-radio-item
               [name]="proposalPosition.position.id"
               [value]="proposalPosition"
-              [formControl]="selectedProposalPosition"
+              [formControl]="selectedProposal"
               (click)="$event.stopPropagation()"
             ></uxg-radio-item>
           </ng-container>
