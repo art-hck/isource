@@ -7,6 +7,14 @@ export const AppConfig: GpnmarketConfigInterface = {
     api: 'api/',
     ws: 'ws://localhost:3000'
   },
+  keycloak: {
+    config: {
+      url: 'http://contragent.gpb.lc:8082/auth',
+      realm: 'master',
+      clientId: 'gpnmarket-loc',
+    },
+    loadUserProfileAtStartUp: false
+  },
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
   },
