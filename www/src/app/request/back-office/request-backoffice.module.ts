@@ -34,6 +34,7 @@ import {CommercialProposalState} from "./states/commercial-proposal.state";
 import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
 import { ProcedureComponent } from './components/procedure/procedure.component';
+import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ProcedureComponent } from './components/procedure/procedure.component';
     TechnicalCommercialProposalContragentFormComponent,
     TechnicalCommercialProposalPositionFormComponent,
     ProcedureComponent,
+    ProcedureGridComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
