@@ -244,7 +244,7 @@
               <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposalPosition)"> - Сроки укладываются в заданные</div>
 
               <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposalPosition)">
-                - {{ helper.getRequestedQuantityLabel(modalData.proposalPosition) }}
+                {{ helper.getRequestedQuantityLabel(modalData.proposalPosition) }}
               </div>
               <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposalPosition)"> - Сроки не укладываются в заданные</div>
             </div>
