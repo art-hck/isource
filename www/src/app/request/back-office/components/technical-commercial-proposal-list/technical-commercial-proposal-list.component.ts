@@ -200,7 +200,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   hasAnalogs(proposals: TechnicalCommercialProposal[]) {
-    return i => proposals.map(({ positions }) => positions[i]).some(p => p?.isAnalog);
+    return i => proposals[i].positions.some(p => p?.isAnalog);
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
