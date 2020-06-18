@@ -3,7 +3,6 @@ import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
 
-
 @Injectable({
   providedIn: "root"
 })
@@ -20,6 +19,12 @@ export class ProposalHelperService {
 
   isQuantityValid(position: Position, { quantity }: Proposal): boolean {
     return position.quantity === quantity;
+  }
+
+  getRequestedQuantityLabel(position: Position, { quantity }: Proposal): string {
+    return quantity > position.quantity ?
+      ' - Количество больше нужного' :
+      ' - Количество меньше нужного';
   }
 
   chooseBy(type: "date" | "price", position: Position, proposals: Proposal[]): Proposal["sourceProposal"] {

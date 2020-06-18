@@ -120,7 +120,10 @@
         <div class="app-col app-bold">
           <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposal)">- Позиция в нужном количестве</div>
           <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки укладываются в заданные</div>
-          <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposal)">- Количество меньше нужного</div>
+
+          <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposal)">
+            {{ helper.getRequestedQuantityLabel(modalData.position, modalData.proposal) }}
+          </div>
           <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
         </div>
 
