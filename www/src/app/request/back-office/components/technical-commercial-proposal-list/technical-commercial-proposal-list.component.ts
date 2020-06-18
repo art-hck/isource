@@ -172,6 +172,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
   }
 
+  isSentToEdit({data}: TechnicalCommercialProposalByPosition): boolean {
+    return data.every(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && data.length > 0;
+  }
+
   withAnalogs({positions}: TechnicalCommercialProposal): boolean {
     return positions.every(({isAnalog}) => isAnalog) && positions.length > 0;
   }

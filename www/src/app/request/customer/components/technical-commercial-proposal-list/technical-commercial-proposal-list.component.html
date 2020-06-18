@@ -6,14 +6,20 @@
 
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReviewTab [active]="true" >
-            <ng-container *ngIf="(proposalsSentToReview$ | async) as proposalsSentToReview">
-              Необходимо рассмотреть <span class="counter">({{proposalsSentToReview?.length}})</span>
+            <ng-container *ngIf="(proposalsSentToReview$ | async) as proposals">
+              Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #reviewedTab>
-            <ng-container *ngIf="(proposalsReviewed$ | async) as proposalsReviewed">
-              Рассмотренные <span class="counter">({{ proposalsReviewed?.length }})</span>
+          <uxg-tab-title #sendToEditTab [disabled]="(proposalsSendToEdit$ | async).length === 0">
+            <ng-container *ngIf="(proposalsSendToEdit$ | async) as proposals">
+              На доработке <span class="counter">({{ proposals?.length }})</span>
+            </ng-container>
+          </uxg-tab-title>
+
+          <uxg-tab-title #reviewedTab [disabled]="(proposalsReviewed$ | async).length === 0">
+            <ng-container *ngIf="(proposalsReviewed$ | async) as proposals">
+              Рассмотренные <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
@@ -34,7 +40,7 @@
 
       <br/>
 
-      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$ : proposalsSentToReview$) | async as proposalsByPos">
+      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$ : sentToReviewTab.active ? proposalsSentToReview$ : proposalsSendToEdit$) | async as proposalsByPos">
         <!-- grid -->
         <div class="grid-table" *ngSwitchCase="'grid'">
           <app-grid-contragents
@@ -84,10 +90,10 @@
 </ng-container>
 
 <app-grid-footer
-  [disabled]="(stateStatus$ | async) !== 'received'"
+  [disabled]="(stateStatus$ | async) !== 'received' || disabled"
   (approve)="approveMultiple()"
   [chooseBy$]="chooseBy$"
-  [hidden]="reviewedTab?.active || proposalsOnReview?.length === 0"
+  [hidden]="!sentToReviewTab?.active || proposalsOnReview?.length === 0"
   [total]="total"
 ></app-grid-footer>
 

@@ -14,6 +14,7 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -33,7 +34,7 @@ export class TechnicalCommercialProposalState {
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  static proposalsByPos(status: TechnicalCommercialProposalStatus) {
+  static proposalsByPos(status: TechnicalCommercialProposalPositionStatus[]) {
     return createSelector(
       [TechnicalCommercialProposalState],
       ({proposals}: Model) => proposals
@@ -48,7 +49,7 @@ export class TechnicalCommercialProposalState {
           });
           return group;
         }, [])
-        .filter(({data}) => data.every(({proposalPosition}) => ["NEW", "SENT_TO_REVIEW"].includes(proposalPosition.status)) === (status === "SENT_TO_REVIEW"))
+        .filter(({data}) => data.every(({proposalPosition}) => status.includes(proposalPosition.status)))
     );
   }
 
@@ -118,5 +119,18 @@ export class TechnicalCommercialProposalState {
         status: "received" as StateStatus
       })))),
     );
+  }
+
+  @Action(SendToEditMultiple)
+  sendToEditMultiple({ setState, getState }: Context, { requestPositions }: SendToEditMultiple) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.sendToEditMultiple(requestPositions.map(({ id }) => id)).pipe(
+      tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
+        proposals: updateItem(
+          ({ positions }) => positions.some(({ id }) => proposalPosition.id === id),
+          patch({ positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition) })
+        ),
+        status: "received" as StateStatus
+      })))));
   }
 }

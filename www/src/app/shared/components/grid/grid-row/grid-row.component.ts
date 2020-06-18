@@ -25,7 +25,7 @@ export class GridRowComponent implements OnInit, OnDestroy {
   @Output() show = new EventEmitter<Proposal>();
   @HostBinding('class.position-row') positionRow = true;
   readonly selectedProposal = new FormControl(null, Validators.required);
-  readonly rejectedProposalPosition = new FormControl(null, Validators.required);
+  readonly rejectedProposal = new FormControl(null, Validators.required);
   readonly destroy$ = new Subject();
 
   constructor(private helper: ProposalHelperService) {}
@@ -46,10 +46,10 @@ export class GridRowComponent implements OnInit, OnDestroy {
       .subscribe(v => {
         // Workaround sync with multiple elements per one formControl
         this.selectedProposal.setValue(v, {onlySelf: true, emitEvent: false});
-        this.rejectedProposalPosition.reset(null, {emitEvent: false});
+        this.rejectedProposal.reset(null, {emitEvent: false});
       });
 
-    this.rejectedProposalPosition.valueChanges.pipe(takeUntil(this.destroy$))
+    this.rejectedProposal.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
   }
 

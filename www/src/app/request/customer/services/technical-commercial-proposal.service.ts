@@ -28,6 +28,11 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal[]>(url, { positions });
   }
 
+  sendToEditMultiple(positionIds: Uuid[]) {
+    const url = `requests/customer/technical-commercial-proposal-positions/sent-to-edit`;
+    return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionIds });
+  }
+
   reject(requestId: Uuid, position: RequestPosition) {
     // const url = `requests/customer/${requestId}/${position}/technical-commercial-proposal/reject`;
     // return this.api.get<TechnicalCommercialProposal>(url);

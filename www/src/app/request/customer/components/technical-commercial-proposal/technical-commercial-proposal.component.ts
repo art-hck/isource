@@ -34,11 +34,20 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   modalData: TechnicalCommercialProposalByPosition["data"][number];
 
   getCurrencySymbol = getCurrencySymbol;
-  selectedProposalPosition = new FormControl(null, Validators.required);
+  selectedProposal = new FormControl(null, Validators.required);
+  sendToEditPosition = new FormControl(null, Validators.required);
   folded = false;
 
   get isReviewed(): boolean {
-    return this.proposalByPos.data.some(({ proposalPosition }) => !["NEW", "SENT_TO_REVIEW"].includes(proposalPosition.status));
+    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(p.status));
+  }
+
+  get hasWinner(): boolean {
+    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED'].includes(p.status));
+  }
+
+  get isSentToEdit(): boolean {
+    return this.proposalByPos.data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && this.proposalByPos.data.length > 0;
   }
 
   constructor(
@@ -51,19 +60,23 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
-        tap(type => this.selectedProposalPosition.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
+        tap(type => this.selectedProposal.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
         takeUntil(this.destroy$))
       .subscribe(() => this.cd.detectChanges());
     }
 
-    // Workaround sync with multiple elements per one formControl
-    this.selectedProposalPosition.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(v => this.selectedProposalPosition.setValue(v, {onlySelf: true, emitEvent: false}));
+    this.selectedProposal.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => {
+      // Workaround sync with multiple elements per one formControl
+      this.selectedProposal.setValue(v, {onlySelf: true, emitEvent: false});
+      this.sendToEditPosition.reset(null, {emitEvent: false});
+    });
+
+    this.sendToEditPosition.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
   }
 
   approve() {
-    this.dispatchAction(new Approve(this.requestId, this.selectedProposalPosition.value));
+    this.dispatchAction(new Approve(this.requestId, this.selectedProposal.value));
   }
 
   reject() {
@@ -71,9 +84,9 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   private dispatchAction(action) {
-    this.selectedProposalPosition.disable();
+    this.selectedProposal.disable();
     this.store.dispatch(action).pipe(
-      finalize(() => this.selectedProposalPosition.enable()),
+      finalize(() => this.selectedProposal.enable()),
       takeUntil(this.destroy$)
     ).subscribe();
   }
