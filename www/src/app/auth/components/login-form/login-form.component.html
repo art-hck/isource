@@ -9,7 +9,7 @@
       <label class="app-control-label" (click)="emailRef.focus()">Логин</label>
       <div class="app-control-error" *ngIf="form.get('email').errors as e">
         <span *ngIf="e.required">Необходимо заполнить эл. почту</span>
-        <span *ngIf="!e.required && e.invalid_email">Пожалуйста, проверьте корректность введённой эл. почты</span>
+        <span *ngIf="!e.required && e.invalid_email">Пожалуйста, проверьте корректность введенной эл. почты</span>
       </div>
     </div>
 

@@ -11,9 +11,9 @@
     Все на доработку
   </button>
   <button *ngIf="reject.observers.length" uxgButton secondary lg (click)="reject.emit()" [disabled]="loading">
-    Отклонить всё
+    Отклонить все
   </button>
   <button *ngIf="approve.observers.length" uxgButton primary lg (click)="approve.emit()" [disabled]="loading || disabled">
-    Согласовать всё
+    Согласовать все
   </button>
 </div>
