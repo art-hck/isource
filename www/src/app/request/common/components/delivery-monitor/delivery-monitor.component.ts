@@ -276,7 +276,7 @@ export class DeliveryMonitorComponent implements OnInit {
     const formData = this.assignIdForm.value;
     this.assignIdForm.reset();
     this.deliveryMonitorService.assignNewGoodId(this.requestPosition.id, formData).subscribe();
-    this.store.dispatch(new ToastActions.Success('Идентификатор товара заменён'));
+    this.store.dispatch(new ToastActions.Success('Идентификатор товара заменен'));
   }
 
   newEventSubmit() {

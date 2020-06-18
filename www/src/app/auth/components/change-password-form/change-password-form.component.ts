@@ -59,7 +59,7 @@ export class ChangePasswordFormComponent implements OnInit, OnDestroy {
           this.title.setTitle('Не удалось изменить пароль');
         } else {
           this.state = "success";
-          this.title.setTitle('Пароль изменён');
+          this.title.setTitle('Пароль изменен');
         }
       },
       ({ error }) => {

@@ -7,7 +7,7 @@
       Ваш профиль уже был активирован, повторная активация не требуется.
     </ng-container>
     <ng-container *ngSwitchCase="ErrorCode.ACTIVATION_TOKEN_EXPIRED">
-      Не удалось активировать профиль, так как срок действия ссылки истёк. Вы можете запросить письмо для активации повторно.
+      Не удалось активировать профиль, так как срок действия ссылки истек. Вы можете запросить письмо для активации повторно.
     </ng-container>
     <ng-container *ngSwitchCase="ErrorCode.NOT_ACTIVATED">
       Вы зарегистрированы в системе, но еще не подтвердили свою регистрацию. Для активации аккаунта перейдите по ссылке, отправленной на электронную почту, указанную Вами при регистрации.
@@ -34,7 +34,7 @@
       Вернуться к авторизации
     </button>
     <button class="app-col" uxgButton primary lg strength (click)="resendActivationLink(code)" *ngSwitchCase="ErrorCode.ACTIVATION_TOKEN_EXPIRED" [disabled]="loading">
-      Отправить письмо ещё раз
+      Отправить письмо еще раз
     </button>
   </div>
 </ng-container>
