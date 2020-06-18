@@ -91,7 +91,9 @@
 
 <app-grid-footer
   [disabled]="(stateStatus$ | async) !== 'received' || disabled"
+  [loading]="(stateStatus$ | async) !== 'received'"
   (approve)="approveMultiple()"
+  (sendToEdit)="sendToEditAll()"
   [chooseBy$]="chooseBy$"
   [hidden]="!sentToReviewTab?.active || proposalsOnReview?.length === 0"
   [total]="total"

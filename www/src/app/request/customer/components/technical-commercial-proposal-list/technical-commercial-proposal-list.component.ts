@@ -71,8 +71,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   get disabled() {
-    return this.proposalsOnReview
-      .toArray().every(({selectedProposal, sendToEditPosition}) => selectedProposal.invalid && sendToEditPosition.invalid);
+    return this.proposalsOnReview?.toArray()
+      .every(({selectedProposal, sendToEditPosition}) => selectedProposal.invalid && sendToEditPosition.invalid);
   }
 
   constructor(
@@ -102,15 +102,22 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, ApproveMultiple),
+      ofActionCompleted(Approve, Reject, SendToEditMultiple, ApproveMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const length = action?.proposalPositions.length ?? 1;
-      const text = (action instanceof Reject ? "$1 отклонено" : "По $0 выбран победитель")
-        .replace(/\$(\d)/g, (all, i) => [
+      const length = action?.proposalPositions?.length ?? action?.requestPositions?.length ?? 1;
+      let text = "";
+      switch (true) {
+        case action instanceof Reject: text = "$1 отклонено"; break;
+        case action instanceof SendToEditMultiple: text = "$2 на доработке"; break;
+        default: text = "По $0 выбран победитель";
+      }
+
+      text = text.replace(/\$(\d)/g, (all, i) => [
           this.pluralize.transform(length, "позиции", "позициям", "позициям"),
           this.pluralize.transform(length, "предложение", "предложения", "предложений"),
+          this.pluralize.transform(length, "позиция", "позиции", "позиций"),
         ][i] || all);
 
       this.store.dispatch(e ?
@@ -148,6 +155,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
           .map(({ sendToEditPosition }) => sendToEditPosition.value)
       ));
     }
+  }
+
+  sendToEditAll() {
+    this.store.dispatch(new SendToEditMultiple(
+      this.proposalsOnReview.map(({ proposalByPos: { position } }) => position)
+    ));
   }
 
   rejectAll() {
