@@ -282,8 +282,7 @@
               </div>
 
               <div class="design-actions clr-col-2">
-
-
+                <ng-container *ngIf="designDocumentation.position.status !== 'RKD_APPROVED'">
                   <uxg-dropdown lg>
                     <div uxgDropdownItem (click)="approve(designDocumentation)">
                       <uxg-icon shape="app-check"></uxg-icon>
@@ -294,6 +293,7 @@
                       <span> Приложить замечания</span>
                     </div>
                   </uxg-dropdown>
+                </ng-container>
                 <ng-container [ngSwitch]="designDocumentation.status">
                   <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
