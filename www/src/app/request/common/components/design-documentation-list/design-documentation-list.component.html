@@ -104,11 +104,11 @@
                   <ng-container *ngIf="designDocumentation.status as status">
                     <ng-container [ngSwitch]="status">
                       <div *ngSwitchCase="designDocStatus.ON_APPROVAL"
-                              class="app-bold app-ghost-color">На согласовании</div>
+                           class="app-bold app-ghost-color">На согласовании</div>
                       <div *ngSwitchCase="designDocStatus.APPROVED"
-                              class="app-bold app-success-color status-success">Согласовано</div>
+                           class="app-bold app-success-color status-success">Согласовано</div>
                       <div *ngSwitchCase="designDocStatus.REJECTED"
-                              class="app-bold app-warning-color status-warning">Отклонено заказчиком</div>
+                           class="app-bold app-warning-color status-warning">Отклонено заказчиком</div>
                     </ng-container>
                     <ng-container *ngIf="status === designDocStatus.NEW">
                       <uxg-modal #confirmDelete size="s">
@@ -137,12 +137,12 @@
                 <table class="document-list table table-noborder">
                   <thead>
                   <tr class="app-row head-nowrap">
-                    <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа123</th>
-                    <th class="left clr-col-lg-3 clr-col-xl-4">Документ</th>
+                    <th class="left clr-col-lg-2 clr-col-xl-3">Наименование документа</th>
+                    <th class="left clr-col-lg-1 clr-col-xl-2">Документ</th>
                     <th class="left app-col">Дата корректировки</th>
                     <th class="left app-col">Дата предоставления</th>
                     <th class="left app-col">Дата рассмотрения</th>
-                    <th class="left clr-col-2" *ngIf="designDocumentation.status === designDocStatus.NEW"></th>
+                    <th class="left clr-col-3" *ngIf="designDocumentation.status === designDocStatus.NEW"></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -153,7 +153,7 @@
                       <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].name"
                              appFormControlInvalidClass="invalid"/>
                     </td>
-                    <td class="left clr-col-lg-3 clr-col-xl-4">
+                    <td class="left clr-col-lg-1 clr-col-xl-2">
                       <div class="form-group compact">
                         <app-document-simple-list
                           [documents]="designDoc.documents"
@@ -183,7 +183,7 @@
                     <td class="left app-col">
                       <span>{{designDoc.reviewDate | date :'shortDate'}}</span>
                     </td>
-                    <td class="left clr-col-2"
+                    <td class="left clr-col-3"
                         *ngIf="designDocumentation.status === designDocStatus.NEW">
                       <uxg-modal #confirmDeleteDoc size="s">
                         <h2>Удалить документ {{ designDoc.name }}?</h2>
@@ -282,9 +282,9 @@
               </div>
 
               <div class="design-actions clr-col-2">
-                <ng-container [ngSwitch]="designDocumentation.status">
 
-                  <uxg-dropdown lg >
+
+                  <uxg-dropdown lg>
                     <div uxgDropdownItem (click)="approve(designDocumentation)">
                       <uxg-icon shape="app-check"></uxg-icon>
                       <span> Согласовать</span>
@@ -293,8 +293,8 @@
                       <uxg-icon shape="app-warning" class="is-solid"></uxg-icon>
                       <span> Приложить замечания</span>
                     </div>
-
                   </uxg-dropdown>
+                <ng-container [ngSwitch]="designDocumentation.status">
                   <span *ngSwitchCase="designDocStatus.NEW" class="status status-info" disabled="">
                     <span>Новый</span>
                   </span>
