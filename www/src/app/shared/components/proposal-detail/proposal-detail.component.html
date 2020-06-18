@@ -31,7 +31,7 @@
   </div>
   <div class="app-row">
     <h2 class="app-col">
-      <span [class.app-error-color]="helper.isQuantityMoreOrLess(position, proposal) !== 0">{{proposal.quantity}}
+      <span [class.app-error-color]="!helper.isQuantityValid(position, proposal)">{{proposal.quantity}}
         <span class="app-ghost-color">{{proposal.measureUnit}}</span>
       </span>
     </h2>

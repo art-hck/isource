@@ -41,7 +41,7 @@
             ></app-contragent-info-link>
           </div>
           <div class="app-col quantity">
-            <div [ngClass]="helper.isQuantityMoreOrLess(position, proposal) !== 0 ? 'app-error-color app-bold' : ''">
+            <div [ngClass]="!helper.isQuantityValid(position, proposal) ? 'app-error-color app-bold' : ''">
               <div class="app-row app-align-items-center">
                 <span>{{proposal.quantity}} <span class="app-ghost-color">{{proposal.measureUnit}}</span></span>
                 <uxg-icon shape="app-narrow-arrow"

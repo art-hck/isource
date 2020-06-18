@@ -10,7 +10,7 @@ type ProposalByPositionData = TechnicalCommercialProposalByPosition["data"];
 export class TechnicalCommercialProposalHelperService {
 
   isValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
-    return this.isDateValid(proposalPosition) && this.isQuantityMoreOrLess(proposalPosition) === 0;
+    return this.isDateValid(proposalPosition) && this.isQuantityValid(proposalPosition);
   }
 
   isDateValid(proposalPosition: TechnicalCommercialProposalPosition): boolean {
@@ -22,14 +22,10 @@ export class TechnicalCommercialProposalHelperService {
     return proposalPosition.quantity === proposalPosition.position.quantity;
   }
 
-  isQuantityMoreOrLess(proposalPosition: TechnicalCommercialProposalPosition): number {
-    if (proposalPosition.quantity === proposalPosition.position.quantity) {
-      return 0;
-    } else if (proposalPosition.quantity > proposalPosition.position.quantity) {
-      return 1;
-    } else {
-      return -1;
-    }
+  getRequestedQuantityLabel(proposalPosition: TechnicalCommercialProposalPosition): string {
+    return proposalPosition.quantity > proposalPosition.position.quantity ?
+      ' - Количество больше нужного' :
+      ' - Количество меньше нужного';
   }
 
   chooseBy(type: "date" | "price", data: ProposalByPositionData): TechnicalCommercialProposalPosition {
