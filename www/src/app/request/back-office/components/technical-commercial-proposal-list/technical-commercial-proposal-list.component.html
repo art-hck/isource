@@ -89,7 +89,7 @@
       </div>
 
       <!-- grid -->
-      <div class="grid-table" *ngIf="(view ==='grid' && proposals.length) || (view ==='grid' && (procedures$ | async).length > 0)"
+      <div class="grid-table" *ngIf="(view ==='grid' && proposals.length + (procedures$ | async).length)"
            [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
 
         <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
