@@ -68,7 +68,7 @@
         </div>
 
         <div class="app-col-5">
-          <uxg-dropdown-input appSuggestions formControlName="measureUnit" placeholder="Ед. измерения"
+          <uxg-dropdown-input appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
                               [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #okei="appSuggestions"
           >
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
@@ -81,6 +81,7 @@
             <ng-template #errors>
               <div class="app-control-error" *ngIf="newCommercialProposalForm.get('measureUnit').errors as e">
                 <span *ngIf="e.required">Обязательное поле</span>
+                <span *ngIf="e.notFromList">Выберите значение из списка</span>
               </div>
             </ng-template>
           </uxg-dropdown-input>
