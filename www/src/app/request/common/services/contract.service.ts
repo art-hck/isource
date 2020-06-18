@@ -17,10 +17,10 @@ export class ContractService {
   constructor(protected api: HttpClient) {
   }
 
-  create(request: Request, contragent: ContragentList, positions: RequestPosition[]): Observable<Contract> {
+  create(request: Request, contragentId: Uuid, positions: RequestPosition[]): Observable<Contract> {
     const url = `requests/${request.id}/contracts/create`;
     const body: ContractCreate = {
-      supplierId: contragent.id,
+      supplierId: contragentId,
       positions: positions.map(position => position.id)
     };
 

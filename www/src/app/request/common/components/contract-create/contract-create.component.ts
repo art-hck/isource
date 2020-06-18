@@ -8,6 +8,7 @@ import { Contract } from "../../models/contract";
 import { ContragentWithPositions } from "../../models/contragentWithPositions";
 import { ContractService } from "../../services/contract.service";
 import { finalize } from "rxjs/operators";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-request-contract-create',
@@ -22,7 +23,7 @@ export class ContractCreateComponent implements OnInit {
   @Output() create = new EventEmitter<Contract>();
 
   public form: FormGroup = new FormGroup({
-    'contragent': new FormControl("", CustomValidators.validContragent),
+    'contragent': new FormControl(""),
     'positions': new FormArray([], CustomValidators.multipleCheckboxRequireOne)
   });
 
@@ -42,14 +43,10 @@ export class ContractCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form.get('contragent').valueChanges.subscribe(contragent => {
+    this.form.get('contragent').valueChanges.subscribe(contragentId => {
       this.formPositions.clear();
 
-      if (this.form.get('contragent').invalid) {
-        return;
-      }
-
-      this.getContragentPositions(contragent)
+      this.getContragentPositions(contragentId)
         .forEach(position => this.formPositions.push(new FormControl(false))
         );
     });
@@ -59,9 +56,9 @@ export class ContractCreateComponent implements OnInit {
     return new ContragentList(contragent);
   }
 
-  public getContragentPositions(contragent: ContragentList): RequestPosition[] {
+  public getContragentPositions(contragentId: Uuid): RequestPosition[] {
     return this.contragentsWithPositions
-      .filter(contragentsWithPosition => contragentsWithPosition.supplier.id === contragent.id)
+      .filter(contragentsWithPosition => contragentsWithPosition.supplier.id === contragentId)
       .map(contragentsWithPosition => contragentsWithPosition.positions)
       .reduce((prev, curr) => [...prev, ...curr], []);
   }
@@ -71,14 +68,14 @@ export class ContractCreateComponent implements OnInit {
   }
 
   public submit(): void {
-    const contragent: ContragentList = this.form.get('contragent').value;
+    const contragentId: Uuid = this.form.get('contragent').value;
     const positions: RequestPosition[] = this.form.get('positions').value
-      .map((v, i) => v ? this.getContragentPositions(contragent)[i] : null)
+      .map((v, i) => v ? this.getContragentPositions(contragentId)[i] : null)
       .filter(v => v !== null)
     ;
 
 
-    this.contractService.create(this.request, contragent, positions)
+    this.contractService.create(this.request, contragentId, positions)
       .pipe(finalize(() => this.close.emit()))
       .subscribe((contract) => this.create.emit(contract))
     ;

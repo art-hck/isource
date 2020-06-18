@@ -31,6 +31,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() view: "list" | "grid";
   readonly destroy$ = new Subject();
+  modalData: TechnicalCommercialProposalByPosition["data"][number];
 
   getCurrencySymbol = getCurrencySymbol;
   selectedProposalPosition = new FormControl(null, Validators.required);

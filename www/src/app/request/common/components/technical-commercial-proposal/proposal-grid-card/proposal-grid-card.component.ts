@@ -15,8 +15,8 @@ export class ProposalGridCardComponent {
   @Input() editable: boolean;
   @Input() selectedProposalPosition: FormControl;
   @Output() create = new EventEmitter();
+  @Output() show = new EventEmitter();
   @Output() click = new EventEmitter();
-  @HostBinding('class.grid-item')
   @HostBinding('class.grid-cell')
   @HostBinding('class.app-col') classes = true;
   @HostBinding('class.empty') get isEmpty() { return !this.proposalPosition; }

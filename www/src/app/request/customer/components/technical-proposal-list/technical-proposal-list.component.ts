@@ -1,12 +1,12 @@
 import { ActivatedRoute } from "@angular/router";
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { TechnicalProposals } from "../../actions/technical-proposal.actions";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService } from "uxg";
+import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { RequestPosition } from "../../../common/models/request-position";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestActions } from "../../actions/request.actions";
@@ -23,6 +23,10 @@ import Update = TechnicalProposals.Update;
   styleUrls: ['./technical-proposal-list.component.scss'],
 })
 export class TechnicalProposalListComponent implements OnInit, OnDestroy {
+  @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
+  @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
+  @ViewChild('sentToEditTab') sentToEditTabElRef: UxgTabTitleComponent;
+
   @Select(TechnicalProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
 
@@ -88,7 +92,80 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   filter(filters: {}) {
-    this.store.dispatch(new Update(this.requestId, filters));
+    this.store.dispatch(new Update(this.requestId, filters)).subscribe(
+      ({ CustomerTechnicalProposals }) => {
+        this.switchToPrioritizedTab(CustomerTechnicalProposals.proposals);
+      });
+  }
+
+  switchToPrioritizedTab(proposals): void {
+    if (this.getProposalsCountByTab(proposals, this.activeTab) > 0) {
+      return;
+    }
+
+    if (this.getProposalsCountByTab(proposals, TechnicalProposalsStatus.SENT_TO_REVIEW) > 0) {
+      this.clickOnTab(TechnicalProposalsStatus.SENT_TO_REVIEW);
+      return;
+    }
+    if (this.getProposalsCountByTab(proposals, TechnicalProposalsStatus.SENT_TO_EDIT) > 0) {
+      this.clickOnTab(TechnicalProposalsStatus.SENT_TO_EDIT);
+      return;
+    }
+    if (this.getProposalsCountByTab(proposals, TechnicalProposalsStatus.ACCEPTED) > 0) {
+      this.clickOnTab("REVIEWED");
+      return;
+    }
+  }
+
+
+  clickOnTab(tab): void {
+    switch (tab) {
+      case TechnicalProposalsStatus.SENT_TO_REVIEW:
+        if (this.sentToReviewTabElRef) {
+          this.sentToReviewTabElRef.el.nativeElement.click();
+        } else {
+          return;
+        }
+        break;
+      case TechnicalProposalsStatus.SENT_TO_EDIT:
+        if (this.sentToEditTabElRef) {
+          this.sentToEditTabElRef.el.nativeElement.click();
+        } else {
+          return;
+        }
+        break;
+      case "REVIEWED":
+        if (this.reviewedTabElRef) {
+          this.reviewedTabElRef.el.nativeElement.click();
+        } else {
+          return;
+        }
+        break;
+      default:
+        return;
+    }
+  }
+
+  getProposalsCountByTab(proposals, tab): number {
+    let statuses = [];
+
+    switch (tab) {
+      case TechnicalProposalsStatus.SENT_TO_REVIEW:
+        statuses = [TechnicalProposalsStatus.SENT_TO_REVIEW];
+        break;
+      case TechnicalProposalsStatus.SENT_TO_EDIT:
+        statuses =  [TechnicalProposalsStatus.SENT_TO_EDIT];
+        break;
+      case TechnicalProposalsStatus.ACCEPTED:
+        statuses =  [
+          TechnicalProposalsStatus.ACCEPTED,
+          TechnicalProposalsStatus.PARTIALLY_ACCEPTED,
+          TechnicalProposalsStatus.CANCELED
+        ];
+        break;
+    }
+
+    return proposals.filter(proposal => statuses.indexOf(proposal.status) > -1).length;
   }
 
   ngOnDestroy() {

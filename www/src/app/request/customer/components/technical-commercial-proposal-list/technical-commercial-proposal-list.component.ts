@@ -2,7 +2,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { bufferTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -21,25 +21,22 @@ import { RequestActions } from "../../actions/request.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import { AppComponent } from "../../../../app.component";
-import { ProposalGridCardComponent } from "../../../common/components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
-  styleUrls: ['technical-commercial-proposal-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChild('reviewedTab') set content(tab: UxgTabTitleComponent) {
-    this.isProposalsFooterHidden = tab?.active;
-    this.cd.detectChanges();
-  }
-  @ViewChild('proposalsFooterRef') proposalsFooterRef: ElementRef;
+  @ViewChild('reviewedTab') reviewedTab: UxgTabTitleComponent;
+  @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
   @Select(TechnicalCommercialProposalState.proposalsByPos(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
@@ -147,6 +144,14 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.cd.detectChanges();
+  }
+
+  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
+    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  }
+
+  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
+    return i => proposals.map(({ positions }) => positions[i]).some(p => p?.isAnalog);
   }
 
   ngOnDestroy() {

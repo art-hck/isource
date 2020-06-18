@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DadataConfig, DadataType } from "@kolkov/ngx-dadata";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DadataBank, DadataConfig, DadataParty, DadataSuggestion, DadataType } from "@kolkov/ngx-dadata";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 import * as moment from "moment";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
@@ -13,11 +13,11 @@ import { ContragentShortInfo } from "../../models/contragent-short-info";
 import { EmployeeService } from "../../../employee/services/employee.service";
 import { EmployeeItem } from "../../../employee/models/employee-item";
 import { Uuid } from "../../../cart/models/uuid";
-import { ActivatedRoute, Route, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ContragentInfo } from "../../models/contragent-info";
 import { UxgBreadcrumbsService } from "uxg";
 import { Store } from "@ngxs/store";
-import {User} from "../../../user/models/user";
+import { User } from "../../../user/models/user";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { ContragentRole } from "../../enum/contragent-role";
@@ -125,47 +125,34 @@ export class ContragentRegistrationComponent implements OnInit {
     this.form.get('contragent').get('role').disable();
   }
 
-  onPartySuggestionSelected(event): void {
-    const data = event.data;
+  onPartySuggestionSelected(event: DadataSuggestion & { data: DadataParty }): void {
     this.autofillAlertShown = true;
-    const registrationDate = data.state.registration_date ?
-      moment(new Date(data.state.registration_date)).format('DD.MM.YYYY') : '';
+    const { inn, kpp, ogrn, state: { registration_date }, address: { value: address } } = event.data;
+    const { full_with_opf: fullName, short_with_opf: shortName} = event.data.name;
+    const { country, region, city, postal_code: postIndex, settlement: locality } = event.data.address.data;
+    const taxAuthorityRegistrationDate = registration_date ? moment(new Date(registration_date)).format('DD.MM.YYYY') : '';
+    this.touchForm();
 
-    this.form.get('contragent').patchValue({
-      fullName: data.name.full_with_opf || '',
-      shortName: data.name.short_with_opf || '',
-      inn: data.inn || '',
-      kpp: data.kpp || '',
-      ogrn: data.ogrn || '',
-      taxAuthorityRegistrationDate: registrationDate,
+    this.form.patchValue({
+      contragent: { fullName, shortName, inn, kpp, ogrn, taxAuthorityRegistrationDate },
+      contragentAddress: { country, region, city, postIndex, locality, address }
     });
-
-    this.form.get('contragentAddress').patchValue({
-      country: data.address.data.country || '',
-      region: data.address.data.region || '',
-      city: data.address.data.city || '',
-      postIndex: data.address.data.postal_code || '',
-      locality: data.address.data.settlement || '',
-      address: data.address.value || '',
-    });
-
-    this.form.markAllAsTouched();
-
     this.calculateContragentRating();
   }
 
-  onBankSuggestionSelected(event): void {
-    const data = event.data;
+  onBankSuggestionSelected(event: DadataSuggestion & { data: DadataBank }): void {
     this.autofillAlertShown = true;
+    const { bic: bik, correspondent_account: correspondentAccount, name: { payment: name }, address: { value: address } } = event.data;
+    this.touchForm();
+    this.form.patchValue({ contragentBankRequisite: { bik, correspondentAccount, name, address } });
+  }
 
-    this.form.get('contragentBankRequisite').patchValue({
-      bik: data.bic || '',
-      correspondentAccount: data.correspondent_account || '',
-      name: data.name.payment || '',
-      address: data.address.value || '',
-    });
-
+  touchForm() {
     this.form.markAllAsTouched();
+
+    (function markAsDirty(controls: { [key: string]: AbstractControl }) {
+      Object.values(controls).forEach(c => c instanceof FormGroup ? markAsDirty(c.controls) : c.markAsDirty());
+    })(this.form.controls);
   }
 
   submit() {

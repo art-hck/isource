@@ -11,22 +11,24 @@ import { Title } from "@angular/platform-browser";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../../request/common/models/state-status";
-import { PriceOrderProposalGridRowComponent } from "../price-order-proposal-grid-row/price-order-proposal-grid-row.component";
 import { KimPriceOrderProposal } from "../../../common/models/kim-price-order-proposal";
 import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { KimPriceOrderPosition } from "../../../common/models/kim-price-order-position";
 import { KimPriceOrder } from "../../../common/models/kim-price-order";
+import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
+import { Proposal } from "../../../../shared/components/grid/proposal";
 import Fetch = PriceOrderProposalsActions.Fetch;
 import ApproveMultiple = PriceOrderProposalsActions.ApproveMultiple;
+import { Position } from "../../../../shared/components/grid/position";
+import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 
 @Component({
   templateUrl: './price-order-proposal-view.component.html',
-  styleUrls: ['./price-order-proposal-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<PriceOrderProposalGridRowComponent>;
-  @ViewChild('proposalsFooterRef') proposalsFooterRef: ElementRef;
+  @ViewChildren(GridRowComponent) proposalsOnReview: QueryList<GridRowComponent>;
+  @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @ViewChild('reviewedTab') reviewedTab: UxgTabTitleComponent;
 
   @Select(PriceOrderProposalsState.positionsWithProposals(false))
@@ -39,8 +41,8 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   priceOrderId: Uuid;
   view: "grid" | "list" = "grid";
   gridRows: ElementRef[];
-  showedProposal: KimPriceOrderProposal;
-  modalData: {proposal: KimPriceOrderProposal, position: KimPriceOrderPosition};
+  showedProposal: Proposal;
+  modalData: { proposal: Proposal, position: Position };
   readonly destroy$ = new Subject();
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
@@ -66,9 +68,9 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
     private bc: UxgBreadcrumbsService,
     private cd: ChangeDetectorRef,
     private app: AppComponent
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.params.pipe(
       tap(({id}) => this.priceOrderId = id),
       switchMap(({id}) => this.store.dispatch(new Fetch(id))),
@@ -129,6 +131,30 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
         .map(({selectedProposal: c}) => c.value.id)
     ));
   }
+
+  convertProposals(position: KimPriceOrderPosition) {
+    return position.proposals.map(proposal => new Proposal<KimPriceOrderProposal>(
+      proposal,
+      p => ({ ...p, deliveryDate: p.proposalSupplier.dateDelivery, measureUnit: position.okeiItem?.symbol }))
+    );
+  }
+
+  convertPosition(position: KimPriceOrderPosition, priceOrder) {
+    return new Position<KimPriceOrderPosition>(
+      position,
+      p => ({ ...p, deliveryDate: priceOrder.dateDelivery, measureUnit: p.okeiItem?.symbol })
+    );
+  }
+
+  getProposalBySupplier = (position: KimPriceOrderPosition) => ({ id }: ContragentShortInfo) => {
+    const proposal = position.proposals.find(({ proposalSupplier: { supplier } }) => supplier.id === id);
+    return proposal ? new Proposal<KimPriceOrderProposal>(
+      proposal,
+      p => ({ ...p, deliveryDate: p?.proposalSupplier.dateDelivery, measureUnit: position.okeiItem?.symbol })
+    ) : null;
+  }
+
+  isReviewed = (position: KimPriceOrderPosition) => position.proposals.some(({ isWinner }) => isWinner);
 
   ngOnDestroy() {
     this.destroy$.next();

@@ -5,7 +5,7 @@
 
 <!-- Модальное окно с карточкой контрагента -->
 <uxg-modal size="l" *ngIf="isModalOpened" [(state)]="isModalOpened">
-  <h2>{{ contragent?.shortName }}</h2>
+  <h2 class="contragent-name">{{ contragent?.shortName }}</h2>
 
   <ng-container *ngIf="(contragentInfo$ | async) as contragentInfo; else loader">
     <app-contragent-info
