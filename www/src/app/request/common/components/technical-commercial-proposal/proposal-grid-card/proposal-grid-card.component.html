@@ -1,5 +1,5 @@
 <ng-container *ngIf="proposalPosition else emptyProposal">
-  <button (click)="proposalPosition.status==='NEW' ? create.emit() : show.emit()">
+  <button (click)="['NEW', 'SENT_TO_EDIT'].includes(proposalPosition.status) ? create.emit() : show.emit()">
     <div class="app-row app-align-items-center">
       <!-- name -->
       <h3 class="app-col">
