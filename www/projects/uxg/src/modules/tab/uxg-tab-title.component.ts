@@ -33,7 +33,7 @@ export class UxgTabTitleComponent {
   }
 
   deactivate() {
-    if (this.active && !this.disabled) {
+    if (this.active) {
       this.active = false;
       this.onToggle.emit(false);
     }

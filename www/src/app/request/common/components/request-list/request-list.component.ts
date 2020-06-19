@@ -148,36 +148,36 @@ export class RequestListComponent implements OnInit, OnDestroy {
     switch (tab) {
       // todo Тернарка почему-то не зашла в свитчкейсе, не понял почему
       case RequestStatus.IN_PROGRESS:
-        if (this.inProgressTabElRef) {
-          this.inProgressTabElRef.onToggle.emit(true);
+        if (!this.inProgressTabElRef?.disabled) {
+          this.inProgressTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.NEW:
-        if (this.newTabElRef) {
-          this.newTabElRef.onToggle.emit(true);
+        if (!this.newTabElRef?.disabled) {
+          this.newTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.ON_CUSTOMER_APPROVAL:
-        if (this.onApprovalTabElRef) {
-          this.onApprovalTabElRef.onToggle.emit(true);
+        if (!this.onApprovalTabElRef?.disabled) {
+          this.onApprovalTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.DRAFT:
-        if (this.draftTabElRef) {
-          this.draftTabElRef.onToggle.emit(true);
+        if (!this.draftTabElRef?.disabled) {
+          this.draftTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.COMPLETED:
-        if (this.completedTabElRef) {
-          this.completedTabElRef.onToggle.emit(true);
+        if (!this.completedTabElRef?.disabled) {
+          this.completedTabElRef.activate();
         } else {
           return false;
         }
