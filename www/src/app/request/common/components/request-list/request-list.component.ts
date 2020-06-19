@@ -74,15 +74,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
       });
   }
 
-  switchTab({ disabled }: UxgTabTitleComponent, status: RequestStatus[]) {
-    return !disabled && this.filter.emit({ filters: { requestListStatusesFilter: status } });
-  }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   sortBy(column) {
     if (this.sortingColumn !== column) {
@@ -145,10 +140,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   clickOnTab(tab) {
+    let tabFilters = [];
+
     switch (tab) {
       // todo Тернарка почему-то не зашла в свитчкейсе, не понял почему
       case RequestStatus.IN_PROGRESS:
         if (!this.inProgressTabElRef?.disabled) {
+          tabFilters = [RequestStatus.IN_PROGRESS];
           this.inProgressTabElRef.activate();
         } else {
           return false;
@@ -156,6 +154,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
         break;
       case RequestStatus.NEW:
         if (!this.newTabElRef?.disabled) {
+          tabFilters = [RequestStatus.NEW];
           this.newTabElRef.activate();
         } else {
           return false;
@@ -163,6 +162,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
         break;
       case RequestStatus.ON_CUSTOMER_APPROVAL:
         if (!this.onApprovalTabElRef?.disabled) {
+          tabFilters = [RequestStatus.ON_CUSTOMER_APPROVAL];
           this.onApprovalTabElRef.activate();
         } else {
           return false;
@@ -170,6 +170,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
         break;
       case RequestStatus.DRAFT:
         if (!this.draftTabElRef?.disabled) {
+          tabFilters = [RequestStatus.DRAFT];
           this.draftTabElRef.activate();
         } else {
           return false;
@@ -177,6 +178,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
         break;
       case RequestStatus.COMPLETED:
         if (!this.completedTabElRef?.disabled) {
+          tabFilters = [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT];
           this.completedTabElRef.activate();
         } else {
           return false;
@@ -186,6 +188,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    this.filter.emit({ filters: { requestListStatusesFilter: [tab] } });
+    this.filter.emit({ filters: { requestListStatusesFilter: tabFilters } });
   }
 }
