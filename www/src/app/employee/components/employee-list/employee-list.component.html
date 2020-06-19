@@ -36,27 +36,6 @@
       <div class="app-col count">
         {{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}
       </div>
-
-      <div class="app-col edit">
-
-        <div class="app-row">
-          <div class="app-col">
-            <button uxgButton secondary icon [disabled]="sendingActivationLink"
-                    *ngIf="userInfoService.isSeniorBackoffice() && !employee.user.activated"
-                    (click)="resendActivationLink($event, employee.user.id)">
-              <uxg-icon shape="app-clockwise-arrow"></uxg-icon>
-            </button>
-          </div>
-
-          <div class="app-col">
-            <button uxgButton secondary icon
-                    *ngIf="userInfoService.isSeniorBackoffice()"
-                    (click)="editedEmployee = employee; openEditModal($event, employee.user);">
-              <uxg-icon shape="app-pen"></uxg-icon>
-            </button>
-          </div>
-        </div>
-      </div>
     </a>
   </div>
 </ng-container>

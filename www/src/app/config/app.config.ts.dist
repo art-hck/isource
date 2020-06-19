@@ -9,8 +9,8 @@ export const AppConfig: GpnmarketConfigInterface = {
   },
   keycloak: {
     config: {
-      url: 'http://contragent.gpb.lc:8082/auth',
-      realm: 'master',
+      url: 'https://gpnnsi-keycloak-test.etpgpb.ru/auth',
+      realm: 'gp_passport',
       clientId: 'gpnmarket-loc',
     },
     loadUserProfileAtStartUp: false

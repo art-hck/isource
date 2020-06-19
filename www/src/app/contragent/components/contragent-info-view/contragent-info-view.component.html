@@ -28,12 +28,6 @@
         </app-contragent-info>
       </ng-container>
       <ng-container *uxgTab="employeesTab">
-        <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
-          <button uxgButton secondary (click)="createEmployeeModal.open()">
-            <uxg-icon shape="app-plus"></uxg-icon>
-            Новый сотрудник
-          </button>
-        </div>
         <ng-template #loading class="load-block">
           <span class="spinner spinner-md"></span>
         </ng-template>
@@ -50,11 +44,6 @@
                 </div>
                 <div class="app-col">
                   {{employee.phone}}
-                </div>
-                <div class="app-col edit" [style.max-width.px]="60">
-                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="editedEmployee = employee; createEmployeeModal.open()">
-                    <uxg-icon shape="app-pen"></uxg-icon>
-                  </button>
                 </div>
               </div>
             </div>
