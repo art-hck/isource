@@ -81,7 +81,7 @@
             <ng-template #errors>
               <div class="app-control-error" *ngIf="newCommercialProposalForm.get('measureUnit').errors as e">
                 <span *ngIf="e.required">Обязательное поле</span>
-                <span *ngIf="e.notFromList">Выберите значение из списка</span>
+                <span *ngIf="e.notFromList">Выберите из списка</span>
               </div>
             </ng-template>
           </uxg-dropdown-input>
