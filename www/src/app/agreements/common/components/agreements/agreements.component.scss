@@ -6,6 +6,17 @@
   margin-bottom: 25px;
 }
 
+.group-counter {
+  padding-left: 4px;
+}
+
+span.empty-list {
+  display: block;
+  text-align: center;
+  padding: 100px 0;
+  opacity: 0.6;
+}
+
 .name {
   overflow: hidden;
   display: flex;
