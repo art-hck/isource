@@ -1,0 +1,36 @@
+@import "src/theme";
+
+.status {
+  text-align: right;
+}
+
+.app-no-border {
+  border-top: 1px solid uxg($theme, color-secondary);
+  border-bottom: 1px solid uxg($theme, color-secondary);
+}
+
+.summary {
+  font-size: 11px;
+}
+
+.filter {
+  margin-bottom: 10px;
+}
+
+.search {
+  min-width: 280px;
+}
+
+.show-all {
+  margin: 0;
+}
+
+.pr-20 {
+  padding-right: 20px;
+}
+
+.app-table {
+  & > .app-row {
+    padding: 10px 6px;
+  }
+}

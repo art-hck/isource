@@ -1,0 +1,69 @@
+<div class="app-row">
+  <h3 class="app-col-6">
+    Процедура № {{procedure.procedureId}} «{{procedure.procedureTitle}}»
+  </h3>
+  <div class="app-col-6 status">
+    <ng-container *ngIf="!finished(procedure)">
+                  <span class="app-ghost-color pr-20">
+                    <uxg-icon shape="app-waiting"></uxg-icon>
+                     <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
+                  </span>
+      <a [href]="link(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
+      <button type="button" uxgButton secondary iconText (click)="prolong.emit()">
+        Продлить
+      </button>
+    </ng-container>
+    <ng-container *ngIf="finished(procedure)">
+                  <span class="app-success-color pr-20">
+                    <uxg-icon shape="app-check"></uxg-icon>Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+                  </span>
+      <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
+      <button type="button" uxgButton secondary iconText (click)="bargain.emit()">
+        Уторговать
+      </button>
+    </ng-container>
+  </div>
+</div>
+<div class="positions" *ngFor="let position of procedure.positions.slice(0,3)">
+  {{position.requestPosition.name}}
+</div>
+<ng-container *ngIf="procedure.positions.length > 3">
+  <button uxgButton clear class="app-link show-all" (click)="procedurePositionsModal.open()">Показать все позиции</button>
+</ng-container>
+<uxg-modal #procedurePositionsModal size="l">
+  <h2><b>Позиции процедуры {{procedure.procedureTitle}}</b></h2>
+  <p class="app-secondary-color">
+    Ниже приведен список позиций процедуры. Обратите внимание на то, что одна позиция не может участвовать в двух процедурах одновременно.
+  </p>
+  <br>
+  <br>
+  <form [formGroup]="form">
+    <div class="app-row filter">
+      <div class="app-col app-row app-align-items-center">
+        <small class="app-secondary-color">Позиций в процедуре: &nbsp; <b>{{procedure.positions.length}}</b></small>
+      </div>
+      <div class="app-col app-col-auto app-row app-align-items-center">
+        <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp;</div>
+        <div class="app-col search">
+          <input type="text" uxgInput formControlName="search" placeholder="Наименование позиции или группы"/>
+        </div>
+      </div>
+    </div>
+    <div class="app-table app-no-border">
+      <div class="app-row" *ngFor="let position of procedurePositions">
+        <div class="app-col-7 app-bold select-list-item-title">{{ position.name }}</div>
+        <div class="app-col-2 select-list-item-quantity">
+          <span>{{ position.quantity }} </span>
+          <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+        </div>
+        <div class="app-col-3 select-list-item-date">
+          <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+          <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template uxgModalFooter>
+    <button type="button" uxgButton secondary lg uxgModalClose>Закрыть</button>
+  </ng-template>
+</uxg-modal>

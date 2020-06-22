@@ -8,6 +8,11 @@
 .item {
   &-title {
     line-height: normal;
+
+    & a.position-link {
+      max-width: 700px;
+      display: block;
+    }
   }
 
   &-quantity {
@@ -23,6 +28,11 @@
 
   &-date {
     max-width: 120px;
+  }
+
+  &-attribute-icon {
+    min-width: 16px;
+    max-width: 16px;
   }
 }
 

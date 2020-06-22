@@ -22,6 +22,12 @@ export class TechnicalCommercialProposalHelperService {
     return proposalPosition.quantity === proposalPosition.position.quantity;
   }
 
+  getRequestedQuantityLabel(proposalPosition: TechnicalCommercialProposalPosition): string {
+    return proposalPosition.quantity > proposalPosition.position.quantity ?
+      ' - Количество больше нужного' :
+      ' - Количество меньше нужного';
+  }
+
   chooseBy(type: "date" | "price", data: ProposalByPositionData): TechnicalCommercialProposalPosition {
     return data.reduce((prev, curr) => {
       const prevValid = prev && this.isValid(prev.proposalPosition);

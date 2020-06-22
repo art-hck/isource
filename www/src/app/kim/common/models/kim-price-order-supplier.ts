@@ -2,8 +2,9 @@ import { EmployeeInfoBrief } from "../../../employee/models/employee-info";
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../../../request/common/enum/position-currency";
+import { RequestDocument } from "../../../request/common/models/request-document";
 
-export class KimProceOrderSupplier {
+export class KimPriceOrderSupplier {
   id: Uuid;
   userId: Uuid;
   user: EmployeeInfoBrief;
@@ -19,4 +20,5 @@ export class KimProceOrderSupplier {
   isProducer: boolean;
   isAuthorizedDealer: boolean;
   comment: string | null;
+  documents?: RequestDocument[];
 }

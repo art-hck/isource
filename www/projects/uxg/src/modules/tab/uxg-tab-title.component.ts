@@ -22,7 +22,7 @@ export class UxgTabTitleComponent {
     return this.el.nativeElement.offsetLeft;
   }
 
-  constructor(private el: ElementRef) {}
+  constructor(public el: ElementRef) {}
 
   @HostListener("click")
   activate() {

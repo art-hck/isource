@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
 import { debounceTime, filter, switchMap } from "rxjs/operators";
@@ -18,7 +28,7 @@ import { TechnicalProposalFilter } from "../../models/technical-proposal-filter"
   templateUrl: './technical-proposal-filter.component.html',
   styleUrls: ['./technical-proposal-filter.component.scss']
 })
-export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
+export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(TechnicalProposalFilterContragentListComponent)
              requestTpFilterContragentListComponent: TechnicalProposalFilterContragentListComponent;
@@ -73,6 +83,10 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
 
     this.getTechnicalProposals();
     this.getContragentList();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.getAgreementStateList();
   }
 
 

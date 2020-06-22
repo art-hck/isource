@@ -6,6 +6,7 @@ import {RequestOfferPosition} from "./request-offer-position";
 import { PositionStatus } from "../enum/position-status";
 import { User } from "../../../user/models/user";
 import { RequestGroup } from "./request-group";
+import { PositionCurrency } from "../enum/position-currency";
 
 export class RequestPosition extends RequestPositionList {
   /**
@@ -25,7 +26,7 @@ export class RequestPosition extends RequestPositionList {
   isDeliveryDateAsap: boolean;
   deliveryBasis: string;
   startPrice: number;
-  currency: string;
+  currency: PositionCurrency;
   paymentTerms: string;
   isShmrRequired: boolean;
   isPnrRequired: boolean;

@@ -59,7 +59,9 @@
       }
     }
 
-    &:focus, &.app-control-label-shown {
+    &:focus,
+    &.app-control-label-shown,
+    &:-webkit-autofill {
       & + .app-control-label {
         color: uxg($theme, color-font-secondary);
         cursor: default;

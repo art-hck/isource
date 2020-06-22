@@ -19,8 +19,6 @@ import { CartState } from "./states/cart.state";
 import { ManualPriceOrderComponent } from './components/manual-price-order/manual-price-order.component';
 import { PriceOrderProposalViewComponent } from './components/price-order-proposal-view/price-order-proposal-view.component';
 import { PriceOrderProposalsState } from "./states/price-order-proposals.state";
-import { PriceOrderProposalGridRowComponent } from "./components/price-order-proposal-grid-row/price-order-proposal-grid-row.component";
-import { PriceOrderProposalGridCellComponent } from "./components/price-order-proposal-grid-cell/price-order-proposal-grid-cell.component";
 import { PriceOrderProposalDetailComponent } from "./components/price-order-proposal-detail/price-order-proposal-detail.component";
 
 
@@ -34,9 +32,7 @@ import { PriceOrderProposalDetailComponent } from "./components/price-order-prop
     PriceOrderFormPositionsParamsComponent,
     ItemsDictionaryComponent,
     ManualPriceOrderComponent,
-    PriceOrderProposalGridRowComponent,
     PriceOrderProposalViewComponent,
-    PriceOrderProposalGridCellComponent,
     PriceOrderProposalDetailComponent
   ],
   providers: [

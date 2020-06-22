@@ -21,6 +21,12 @@ export namespace TechnicalCommercialProposals {
     constructor(public proposalPositions: TechnicalCommercialProposalPosition[]) {}
   }
 
+  // Отправить на доработку ТКП у множества позиций
+  export class SendToEditMultiple {
+    static readonly type = '[Technical Commercial Proposals Customer] SendToEditMultiple';
+    constructor(public requestPositions: RequestPosition[]) {}
+  }
+
   // Отклонить все предложения у определенной позиции
   export class Reject {
     static readonly type = '[Technical Commercial Proposals Customer] Reject';
