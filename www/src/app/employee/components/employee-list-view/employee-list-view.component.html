@@ -15,15 +15,6 @@
       </uxg-tab-title>
     </uxg-tabs>
   </div>
-
-  <div class="app-col action app-grow-0">
-    <button uxgButton secondary iconText
-            *ngIf="userInfoService.isSeniorBackoffice()"
-            (click)="editedEmployee = null; createEmployeeModal.open()">
-      <uxg-icon size="16" shape="app-plus"></uxg-icon>
-      <span>Новый сотрудник</span>
-    </button>
-  </div>
 </div>
 
 <app-employee-list *ngIf="backofficeTab.active"

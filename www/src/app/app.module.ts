@@ -7,7 +7,6 @@ import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
 import { UxgModule } from "uxg";
-
 import { APP_CONFIG } from "./core/config/gpnmarket-config.interface";
 import { AppComponent } from './app.component';
 import { AppConfig } from './config/app.config';
@@ -16,8 +15,13 @@ import { CoreModule } from "./core/core.module";
 import { ToastListModule } from "./shared/components/toast-list/toast-list.module";
 import { WebsocketModule } from "./websocket/websocket.module";
 import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
+import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
+import { AuthService } from "./auth/services/auth.service";
+import { ApplicationRef } from "@angular/core";
 
 registerLocaleData(localeRu, 'ru');
+
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -32,14 +36,47 @@ registerLocaleData(localeRu, 'ru');
     ToastListModule,
     UxgModule,
     WebsocketModule.config({ url: AppConfig.endpoints.ws }),
-    BrowserModule
+    BrowserModule,
+    KeycloakAngularModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    { provide: KeycloakService, useValue: keycloakService }
   ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
+  constructor(
+    public authService: AuthService
+  ) {
+  }
+
+  ngDoBootstrap(app: ApplicationRef) {
+    keycloakService
+      .init(AppConfig.keycloak)
+      .then(() => {
+        console.log('[ngDoBootstrap] bootstrap app');
+
+        app.bootstrap(AppComponent);
+      })
+      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthRefreshSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+      };
+  }
 }
