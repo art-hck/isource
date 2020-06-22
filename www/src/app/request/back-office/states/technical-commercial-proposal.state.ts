@@ -92,7 +92,10 @@ export class TechnicalCommercialProposalState {
       map(proposals => proposals.reduce((result, proposal) => {
         [true, false].forEach(withAnalog => {
           const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
-          result.push({ ...proposal, positions});
+
+          if (!withAnalog || positions.length) {
+            result.push({ ...proposal, positions});
+          }
         });
 
         return result;
