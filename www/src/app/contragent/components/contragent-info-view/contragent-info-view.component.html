@@ -34,6 +34,15 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
+        <div class="action">
+          <button
+            uxgButton
+            primary
+            (click)="addContragentToUserModal.open()">
+            Привязать сотрудника заказчика
+          </button>
+        </div>
+
         <div class="app-row app-align-items-center" *ngIf="(employeesList$ |async) as employeesList; else loading">
           <div class="app-col">
             <div class="app-card">
@@ -95,5 +104,12 @@
   </uxg-modal>
 
 </ng-container>
+
+<uxg-modal size="s" #addContragentToUserModal>
+  <h2>Привязать сотрудника заказчика</h2>
+  <ng-container *ngIf="addContragentToUserModal.state">
+
+  </ng-container>
+</uxg-modal>
 
 
