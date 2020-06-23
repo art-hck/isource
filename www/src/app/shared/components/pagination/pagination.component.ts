@@ -38,6 +38,8 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.pages$.pipe(takeUntil(this.destroy$)).subscribe(page => this.change.emit(this.current = page || 1));
+
+    this.ngOnChanges();
   }
 
   ngOnDestroy() {
