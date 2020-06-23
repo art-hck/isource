@@ -46,7 +46,7 @@
       }
 
       @each $status, $color in $statuses {
-        & div[class*=#{$status}] {
+        & div[class*="status-#{$status}"] {
           background-color: $color;
         }
       }

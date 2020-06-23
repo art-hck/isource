@@ -1,23 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { CanActivateGuard } from "./auth/can-activate.guard";
-import { AppComponent } from "./app.component";
+import { AppAuthGuard } from "./auth/app-auth.guard";
+import { WelcomeComponent } from "./pages/welcome/welcome.component";
 
 const routes: Routes = [
-  { path: '', canActivate: [CanActivateGuard], component: AppComponent },
-  { path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+  { path: 'dashboard', canActivate: [AppAuthGuard], loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
+  { path: 'requests', canActivate: [AppAuthGuard], loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
+  { path: 'catalog', canActivate: [AppAuthGuard], loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
+  { path: 'cart', canActivate: [AppAuthGuard], loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
+  { path: 'contragents', canActivate: [AppAuthGuard], loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
+  { path: 'employees', canActivate: [AppAuthGuard], loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
+  { path: 'messages', canActivate: [AppAuthGuard], loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
+  { path: 'notifications', canActivate: [AppAuthGuard], loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
+  { path: 'kim', canActivate: [AppAuthGuard], loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
+  { path: 'agreements', canActivate: [AppAuthGuard], loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},
+  { path: '', canActivate: [AppAuthGuard], component: WelcomeComponent, pathMatch: 'full' },
   { path: '', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)},
-  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
-  { path: 'requests', loadChildren: () => import('./request/request.module').then(m => m.RequestModule)},
-  { path: 'catalog', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)},
-  { path: 'cart', loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)},
-  { path: 'contragents', loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
-  { path: 'employees', loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
-  { path: 'messages', loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
-  { path: 'notifications', loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
-  { path: 'kim', loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
-  { path: 'agreements', loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},
   { path: '**', redirectTo: '/not-found' }
 ];
 
@@ -25,8 +23,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes)
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AppAuthGuard]
 })
-
 export class AppRoutingModule {
 }

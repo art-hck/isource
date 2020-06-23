@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    canActivate: [ CanActivateFeatureGuard ],
+    canActivate: [CanActivateFeatureGuard],
     data: { title: "Главная", hideTitle: true, feature: 'dashboard' }
   },
 ];
