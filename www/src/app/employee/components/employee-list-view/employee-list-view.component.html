@@ -17,15 +17,11 @@
   </div>
 </div>
 
-<app-employee-list *ngIf="backofficeTab.active"
-                   [employees]="backoffice"
-                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
-
-<app-employee-list *ngIf="employeesTab.active"
-                   [employees]="seniorBackoffice"
+<app-employee-list [employees]="employeesTab.active ? seniorBackoffice : backoffice"
                    (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
 
 
+<!-- todo 22.06.2020 Редактирование сотрудника это теперь забота кейклока, но модалку и компонент удалять пока не стал на всякий -->
 
 <uxg-modal #createEmployeeModal size="l">
   <h2 *ngIf="!editedEmployee; else editEmployee">Добавить нового сотрудника</h2>
