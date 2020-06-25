@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submit(formPositions.controls)">
-  <div class="app-row">
+  <div class="app-row" [class.app-layout]="view !== 'list'">
     <div class="app-col app-table app-no-border">
 
       <ng-container *ngIf="user.isBackOffice()">
@@ -48,7 +48,7 @@
   <ng-container *ngFor="let positionControl of formPositions.controls; index as i">
     <ng-container *ngIf="positionControl.value.position as position" formArrayName="positions">
       <div class="position-card">
-        <div class="app-row" *ngIf="positionHasFinishedProcedure(position)">
+        <div class="app-row app-layout" *ngIf="positionHasFinishedProcedure(position)">
           <div class="app-col">
             <span class="procedure-name">
              <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
@@ -66,7 +66,7 @@
             </a>
           </div>
         </div>
-        <div class="app-row" *ngIf="positionHasProcedure(position)">
+        <div class="app-row app-layout" *ngIf="positionHasProcedure(position)">
           <div class="app-col">
             <span class="procedure-name">
              <b>Процедура №{{ position.procedureId }} {{ position.procedureTitle }}</b>
@@ -84,7 +84,7 @@
             </a>
           </div>
         </div>
-        <div class="app-row" formGroupName="{{i}}">
+        <div class="app-row app-layout" formGroupName="{{i}}">
           <div class="app-col app-grow-0">
             <uxg-checkbox formControlName="checked"></uxg-checkbox>
           </div>
@@ -118,7 +118,7 @@
             <!--            </button>-->
           </div>
         </div>
-        <div class="app-row" #positionCard>
+        <div class="app-row app-layout" #positionCard>
           <div class="app-col card linked-offer add-offer"
                [class.clickable]="isLinkedOfferClickable(position)"
                *ngIf="canAddOffer(position)"

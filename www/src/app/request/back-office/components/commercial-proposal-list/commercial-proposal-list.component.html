@@ -4,6 +4,8 @@
       [requestPositions]="positionsWithOffers.positions"
       [suppliers]="positionsWithOffers.suppliers"
       [request]="request"
+      [view]="view"
+      (viewChange)="switchView($event)"
       (sentForAgreement)="selectedPositions = $event.selectedPositions; confirmToast.open()"
       (cancelOffer)="onCancelPublishOffers($event)"
       (addOffer)="showAddOfferModal($event)"
