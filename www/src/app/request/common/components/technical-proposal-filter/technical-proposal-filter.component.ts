@@ -125,11 +125,20 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   }
 
   getAgreementStateList(): void {
-    this.tpStatuses = [];
+    // Т.к. для зака приходит поле availableStatuses, статусы берём из него.
+    // Для бэка пока по-старинке вытаскиваем статусы, пробежавшись по ТП
 
-    this.technicalProposalsAvailableStatuses.forEach(status => {
-      this.tpStatuses.push(status);
-    });
+    if (this.technicalProposalsAvailableStatuses) {
+      this.tpStatuses = [];
+
+      this.technicalProposalsAvailableStatuses.forEach(status => {
+        this.tpStatuses.push(status);
+      });
+    } else {
+      this.technicalProposals.forEach(tp => {
+        this.tpStatuses.push(tp.status);
+      });
+    }
 
     // Убираем из массива дублирующиеся статусы
     this.tpStatuses = this.tpStatuses.filter((value, index, array) =>
