@@ -14,6 +14,7 @@ import {Store} from "@ngxs/store";
 import {ToastActions} from "../../../shared/actions/toast.actions";
 import {User} from "../../../user/models/user";
 import {UserService} from "../../../user/service/user.service";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-contragent-info-view',
@@ -25,9 +26,13 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
   employeesList$: Observable<EmployeeInfoBrief[]>;
-  сustomerBuyerUsersWithoutContragent$: Observable<User[]>;
+  customerBuyerUsersWithoutContragent$: Observable<User[]>;
   subscription = new Subscription();
   editedEmployee: EmployeeInfoBrief;
+
+  form = new FormGroup({
+    user: new FormControl(null, Validators.required)
+  });
 
   constructor(
     private bc: UxgBreadcrumbsService,
@@ -66,7 +71,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   }
 
   getCustomerBuyerUsersWithoutContragent(): void {
-    this.сustomerBuyerUsersWithoutContragent$ = this.userService.getCustomerBuyerUsersWithoutContragent().pipe(shareReplay(1));
+    this.customerBuyerUsersWithoutContragent$ = this.userService.getCustomerBuyerUsersWithoutContragent().pipe(shareReplay(1));
   }
 
   onDownloadPrimaInformReport(): void {
@@ -107,6 +112,18 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
       },
       (err) => {
         this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
+      }));
+  }
+
+  addContragentToUser() {
+    this.subscription.add(this.employeeService.addContragentToUser(this.contragentId, this.form.get('user').value).subscribe(
+      () => {
+        this.getContragentEmployeesList(this.contragentId);
+        this.getCustomerBuyerUsersWithoutContragent();
+        this.store.dispatch(new ToastActions.Success("Сотрудник успешно привязан!"));
+      },
+      (err) => {
+        this.store.dispatch(new ToastActions.Error('Ошибка привязки сотрудника! ' + err.error.detail));
       }));
   }
 

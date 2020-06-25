@@ -34,7 +34,7 @@
           <span class="spinner spinner-md"></span>
         </ng-template>
 
-        <div class="action">
+        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0">
           <button
             uxgButton
             primary
@@ -105,10 +105,19 @@
 
 </ng-container>
 
-<uxg-modal size="s" #addContragentToUserModal>
+<uxg-modal size="m" #addContragentToUserModal>
   <h2>Привязать сотрудника заказчика</h2>
   <ng-container *ngIf="addContragentToUserModal.state">
-
+    <form [formGroup]="form" (ngSubmit)="addContragentToUser(); addContragentToUserModal.close()">
+          <br>
+    <uxg-dropdown lg placeholder="Выберите сотрудника" formControlName="user">
+      <div uxgDropdownItem [value]="user" *ngFor="let user of customerBuyerUsersWithoutContragent$ | async">{{ user.fullName || user.shortName }}</div>
+    </uxg-dropdown>
+      <div class="app-modal-footer app-row app-justify-content-end">
+        <button uxgButton secondary lg type="button" (click)="addContragentToUserModal.close()">Отмена</button>
+        <button uxgButton primary lg [disabled]="form.invalid">Привязать</button>
+      </div>
+    </form>
   </ng-container>
 </uxg-modal>
 
