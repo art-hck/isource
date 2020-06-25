@@ -100,7 +100,6 @@ export class RequestComponent implements OnChanges {
       this.isOnApproval = this.featureService.authorize("approveRequest") &&
         (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
     }
-    console.log("ngOnChanges", this);
 
     this.formPositions.valueChanges.pipe(debounceTime(10)).subscribe(value => {
       this.checkedPositions = this.formPositionsFlat
