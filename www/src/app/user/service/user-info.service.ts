@@ -93,6 +93,10 @@ export class UserInfoService {
     this.getStorage().setItem(USER_INFO_KEY, JSON.stringify(userInfo));
   }
 
+  public clearData(): void {
+    this.getStorage().setItem(USER_INFO_KEY, null);
+  }
+
   public getUserInfo(): UserInfo {
     return JSON.parse(this.getStorage().getItem(USER_INFO_KEY));
   }
@@ -118,6 +122,13 @@ export class UserInfoService {
       }
     }
 
+    return false;
+  }
+
+  public isAuth(): boolean {
+    if (this.getUserInfo()) {
+      return true;
+    }
     return false;
   }
 

@@ -90,23 +90,11 @@ export class AuthService {
   logout(): void {
     this.keycloakService.logout().then(() => {
       this.onLogout.next();
-      this.token.signOut();
     });
   }
 
   isAuth(): boolean {
-    // TODO мы же всегда залогинены?
-    return true;
-
-    /*let isAuth: boolean = false;
-    this.keycloakService
-      .isLoggedIn()
-      .then(isLoggedIn => {
-        console.log(1);
-        isAuth = isLoggedIn;
-      });
-
-    return isAuth;*/
+    return this.userInfoService.isAuth();
   }
 
   requestPasswordRecover(email: string) {
