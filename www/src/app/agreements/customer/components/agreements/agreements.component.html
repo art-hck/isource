@@ -2,5 +2,6 @@
   <app-agreements-deprecated
   [agreements]="agreements">
   </app-agreements-deprecated>
-  <app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
 </ng-container>
+
+<app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
