@@ -15,6 +15,7 @@ import { CommercialProposalsService } from "../../../back-office/services/commer
 import { Request } from "../../models/request";
 import { Store } from "@ngxs/store";
 import { ProcedureAction } from "../../../back-office/models/procedure-action";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   selector: 'app-request-commercial-proposal-list',
@@ -31,6 +32,7 @@ export class CommercialProposalListComponent implements OnInit {
   isFolded = [];
 
   @Input() request: Request;
+  @Input() view: ProposalsView = "grid";
   @Input() requestPositions: RequestPosition[] = [];
   @Input() suppliers: ContragentList[];
   @Output() sentForAgreement = new EventEmitter<{ requestId: Uuid, selectedPositions: RequestPosition[] }>();
@@ -41,6 +43,7 @@ export class CommercialProposalListComponent implements OnInit {
   @Output() procedureAction = new EventEmitter<ProcedureAction>();
   @Output() downloadReport = new EventEmitter();
   @Output() refresh = new EventEmitter();
+  @Output() viewChange = new EventEmitter<ProposalsView>();
 
   supplier: ContragentList;
   positionProlongedProcedure: RequestPosition;

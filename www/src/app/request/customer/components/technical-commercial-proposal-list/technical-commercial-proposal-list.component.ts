@@ -33,6 +33,7 @@ import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
 import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -60,7 +61,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly destroy$ = new Subject();
   requestId: Uuid;
   gridRows: ElementRef[];
-  view: "grid" | "list" = "grid";
+  view: ProposalsView = "grid";
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
@@ -175,7 +176,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return item.position.id;
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.cd.detectChanges();
