@@ -41,6 +41,7 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   @Input() backofficeView: boolean;
   @Input() resultsCount: number;
   @Input() technicalProposals: TechnicalProposal[] = [];
+  @Input() technicalProposalsAvailableStatuses: string[];
 
   private subscription: Subscription = new Subscription();
 
@@ -124,8 +125,10 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   }
 
   getAgreementStateList(): void {
-    this.technicalProposals.forEach(tp => {
-      this.tpStatuses.push(tp.status);
+    this.tpStatuses = [];
+
+    this.technicalProposalsAvailableStatuses.forEach(status => {
+      this.tpStatuses.push(status);
     });
 
     // Убираем из массива дублирующиеся статусы

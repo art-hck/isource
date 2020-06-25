@@ -17,6 +17,7 @@ import SendToEdit = TechnicalProposals.SendToEdit;
 
 export interface TechnicalProposalStateModel {
   proposals: TechnicalProposal[];
+  proposalAvailableStatuses: string[];
   filters: TechnicalProposalFilter;
   status: StateStatus;
 }
@@ -26,7 +27,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerTechnicalProposals',
-  defaults: { proposals: null, filters: null, status: "pristine" }
+  defaults: { proposals: null, proposalAvailableStatuses: null, filters: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalProposalState {
@@ -44,6 +45,7 @@ export class TechnicalProposalState {
 
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static proposalAvailableStatuses({ proposalAvailableStatuses }: Model) { return proposalAvailableStatuses; }
 
   @Action(Fetch)
   fetch({ setState, getState }: Context, { requestId, filters }: Fetch) {
@@ -58,9 +60,9 @@ export class TechnicalProposalState {
 
     setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.getTechnicalProposalsList(requestId, filters)
-      .pipe(tap(proposals => {
-        setState(patch({ proposals, status: "received" as StateStatus }));
-        this.cache[requestId] = proposals;
+      .pipe(tap(data => {
+        setState(patch({ proposals: data.entities, proposalAvailableStatuses: data.availableStatuses, status: "received" as StateStatus }));
+        this.cache[requestId] = data.entities;
       }));
   }
 
@@ -84,9 +86,9 @@ export class TechnicalProposalState {
 
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.getTechnicalProposalsList(requestId, filters)
-      .pipe(tap(proposals => {
-        setState(patch({ proposals, filters, status: "received" as StateStatus }));
-        this.cache[requestId] = proposals;
+      .pipe(tap(data => {
+        setState(patch({ proposals: data.entities, proposalAvailableStatuses: data.availableStatuses, filters, status: "received" as StateStatus }));
+        this.cache[requestId] = data.entities;
       }));
   }
 

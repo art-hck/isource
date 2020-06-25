@@ -16,9 +16,9 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
+  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<{entities: TechnicalProposal[], availableStatuses: string[]}> {
     const url = `requests/customer/${requestId}/technical-proposals`;
-    return this.api.post<TechnicalProposal[]>(url, { filters });
+    return this.api.post<{entities: TechnicalProposal[], availableStatuses: string[]}>(url, { filters });
   }
 
   acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
