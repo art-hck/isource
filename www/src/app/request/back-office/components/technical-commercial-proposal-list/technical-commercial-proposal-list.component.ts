@@ -49,6 +49,7 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -72,7 +73,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
-  view: "grid" | "list" = "grid";
+  view: ProposalsView = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
@@ -161,7 +162,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.viewPopover?.hide();

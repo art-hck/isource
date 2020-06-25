@@ -21,6 +21,7 @@ import Fetch = PriceOrderProposalsActions.Fetch;
 import ApproveMultiple = PriceOrderProposalsActions.ApproveMultiple;
 import { Position } from "../../../../shared/components/grid/position";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './price-order-proposal-view.component.html',
@@ -39,7 +40,7 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   @Select(PriceOrderProposalsState.priceOrder) priceOrder$: Observable<KimPriceOrder>;
   @Select(PriceOrderProposalsState.status) status$: Observable<StateStatus>;
   priceOrderId: Uuid;
-  view: "grid" | "list" = "grid";
+  view: ProposalsView = "grid";
   gridRows: ElementRef[];
   showedProposal: Proposal;
   modalData: { proposal: Proposal, position: Position };
@@ -98,7 +99,7 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
     ).subscribe();
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.cd.detectChanges();
