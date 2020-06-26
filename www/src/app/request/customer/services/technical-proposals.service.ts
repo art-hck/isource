@@ -5,6 +5,7 @@ import {TechnicalProposalPosition} from "../../common/models/technical-proposal-
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
+import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 
 @Injectable({
   providedIn: "root"
@@ -16,9 +17,9 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<{entities: TechnicalProposal[], availableStatuses: string[]}> {
+  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
-    return this.api.post<{entities: TechnicalProposal[], availableStatuses: string[]}>(url, { filters });
+    return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
   acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
@@ -55,5 +56,10 @@ export class TechnicalProposalsService {
       positions: ids,
       comment: comment
     });
+  }
+
+  getTechnicalProposalsAvailableStatuses(requestId: Uuid): Observable<TechnicalProposalsStatus[]> {
+    const url = `requests/customer/${requestId}/technical-proposals/`;
+    return this.api.post<TechnicalProposalsStatus[]>(url, {});
   }
 }
