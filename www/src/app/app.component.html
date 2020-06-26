@@ -14,7 +14,7 @@
     </div>
 
     <div class="app-footer app-layout app-row app-secondary-color" *ngIf="!noFooter">
-      <div class="app-col">© Processor, {{ year }}</div>
+      <div class="app-col">Processor, {{ year }}</div>
       <ng-container *ngIf="featureService.authorize('instructionsFileForCustomer')">
         <a target="_blank" [href]="appConfig.instructions.forCustomer">Скачать инструкцию</a>
         <div class="separator"></div>
