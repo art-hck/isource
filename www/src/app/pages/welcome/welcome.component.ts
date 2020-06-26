@@ -14,17 +14,18 @@ export class WelcomeComponent implements OnInit {
     private featureService: FeatureService,
     private user: UserInfoService,
     private router: Router,
-    ) {
-
-    if (this.user.isCustomer()) {
-      const url = this.featureService.authorize("dashboard") ? "/dashboard" : "/requests/customer";
-      this.router.navigateByUrl(url);
-    } else if (this.user.isBackOffice()) {
-      this.router.navigateByUrl("/agreements/backoffice");
-    }
+  ) {
   }
 
   ngOnInit(): void {
+    setInterval(() => {
+      if (this.user.isCustomer()) {
+        const url = this.featureService.authorize("dashboard") ? "/dashboard" : "/requests/customer";
+        this.router.navigateByUrl(url);
+      } else if (this.user.isBackOffice()) {
+        this.router.navigateByUrl("/agreements/backoffice");
+      }
+    }, 500);
   }
 
 }
