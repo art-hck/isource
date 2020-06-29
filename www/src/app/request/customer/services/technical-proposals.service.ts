@@ -59,7 +59,7 @@ export class TechnicalProposalsService {
   }
 
   getTechnicalProposalsAvailableStatuses(requestId: Uuid): Observable<TechnicalProposalsStatus[]> {
-    const url = `requests/customer/${requestId}/technical-proposals/`;
+    const url = `requests/customer/${requestId}/technical-proposals/available-statuses`;
     return this.api.post<TechnicalProposalsStatus[]>(url, {});
   }
 }

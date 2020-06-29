@@ -49,7 +49,7 @@
           <ng-container *ngIf="(technicalProposals$ | async) as technicalProposals">
             <app-request-technical-proposal-filter
               [technicalProposals]="technicalProposals"
-              [technicalProposalsAvailableStatuses]="(technicalProposalAvailableStatuses$ | async)"
+              [technicalProposalsAvailableStatuses]="technicalProposalAvailableStatuses$ | async"
               (filters)="filter($event)">
             </app-request-technical-proposal-filter>
           </ng-container>

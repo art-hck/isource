@@ -99,7 +99,7 @@ export class TechnicalProposalState {
 
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.acceptTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
-      flatMap(() => dispatch(new Update(requestId, filters))),
+      flatMap(() => dispatch([new Update(requestId, filters), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus }))),
     );
   }
@@ -110,7 +110,7 @@ export class TechnicalProposalState {
 
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
-      flatMap(() => dispatch(new Update(requestId, filters))),
+      flatMap(() => dispatch([new Update(requestId, filters), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }
@@ -119,7 +119,7 @@ export class TechnicalProposalState {
   sendToEdit({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition, comment }: SendToEdit) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.sendToEditTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
-      flatMap(() => dispatch(new Update(requestId))),
+      flatMap(() => dispatch([new Update(requestId), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }
