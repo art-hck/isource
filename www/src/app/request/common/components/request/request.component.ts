@@ -146,7 +146,7 @@ export class RequestComponent implements OnChanges {
     }
     if (["groups", "positions"].indexOf(type) >= 0) {
       this.formPositions.controls.forEach(c => c.get("checked").setValue(
-        c.get("positions") && this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups")
+        !!c.get("positions") === (type === "groups")
       ));
     }
   }
