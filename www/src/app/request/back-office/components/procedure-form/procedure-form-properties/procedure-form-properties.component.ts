@@ -50,8 +50,13 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
     }
     analogsValueChanges$.subscribe(value => {
       const c = this.form.get('positionsAllowAnalogsOnly');
-      value ? c.enable() : c.disable();
-      c.setValue(false);
+
+      if (value) {
+        c.enable();
+      } else {
+        c.disable();
+        c.setValue(false);
+      }
     });
 
     this.form.get('publicAccess').valueChanges.subscribe(value => this.publicAccessChange.emit(value));
