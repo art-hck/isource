@@ -149,8 +149,8 @@
                   <tr class="app-row"
                       *ngFor="let designDoc of designDocumentation.designDocs; index as i">
                     <td class="left clr-col-lg-2 clr-col-xl-3">
-                      <span *ngIf="!designDocModels[i]">{{designDoc.name}}</span>
-                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].name"
+                      <span *ngIf="!designDocModels[j+'_'+i]">{{designDoc.name}}</span>
+                      <input *ngIf="designDocModels[j+'_'+i]" type="text" required [(ngModel)]="designDocModels[j+'_'+i].name"
                              appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left clr-col-lg-1 clr-col-xl-2">
@@ -167,28 +167,27 @@
                       </div>
                     </td>
                     <td class="left app-col">
-                      <span *ngIf="!designDocModels[i]" [class.expired]="isDateExpired(designDoc.adjustmentDate)">
+                      <span *ngIf="!designDocModels[j+'_'+i]" [class.expired]="isDateExpired(designDoc.adjustmentDate)">
                         {{designDoc.adjustmentDate | date :'shortDate'}}
                       </span>
-                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].adjustmentLimit"
+                      <input *ngIf="designDocModels[j+'_'+i]" type="text" required [(ngModel)]="designDocModels[j+'_'+i].adjustmentLimit"
                              appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left app-col">
-                      <span *ngIf="!designDocModels[i]" [class.expired]="isDateExpired(designDoc.receivingDate)">
+                      <span *ngIf="!designDocModels[j+'_'+i]" [class.expired]="isDateExpired(designDoc.receivingDate)">
                         {{designDoc.receivingDate | date :'shortDate'}}
                       </span>
-                      <input *ngIf="designDocModels[i]" type="text" required [(ngModel)]="designDocModels[i].receivingLimit"
+                      <input *ngIf="designDocModels[j+'_'+i]" type="text" required [(ngModel)]="designDocModels[j+'_'+i].receivingLimit"
                              appFormControlInvalidClass="invalid"/>
                     </td>
                     <td class="left app-col">
                       <span>{{designDoc.reviewDate | date :'shortDate'}}</span>
                     </td>
-                    <td class="left clr-col-3"
-                        *ngIf="designDocumentation.status === designDocStatus.NEW">
+                    <td class="left clr-col-3" *ngIf="designDocumentation.status === designDocStatus.NEW">
                       <uxg-modal #confirmDeleteDoc size="s">
                         <h2>Удалить документ {{ designDoc.name }}?</h2>
-                        <div *ngIf="designDoc.documents.length > 0">Документ содержит загруженные файлы, которые тоже
-                          будут удалены.
+                        <div *ngIf="designDoc.documents.length > 0">
+                          Документ содержит загруженные файлы, которые тоже будут удалены.
                         </div>
                         <div><b>Отменить действие будет невозможно.</b></div>
                         <ng-template uxgModalFooter>
@@ -199,14 +198,14 @@
                         </ng-template>
                       </uxg-modal>
                       <div class="app-row app-justify-content-end">
-                        <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModels[i]">
+                        <ng-container *ngIf="canEditDesignDoc(designDocumentation, designDoc) && !designDocModels[j+'_'+i]">
                           <button uxgButton secondary lg (click)="confirmDeleteDoc.open()" type="button">Удалить</button>
-                          <button uxgButton secondary lg (click)="designDocModels[i] = getDesignDocModel(designDoc)">Изменить</button>
+                          <button uxgButton secondary lg (click)="designDocModels[j+'_'+i] = getDesignDocModel(designDoc)">Изменить</button>
                         </ng-container>
-                        <ng-container *ngIf="designDocModels[i]">
-                          <button uxgButton secondary lg (click)="designDocModels[i] = null">Отмена</button>
-                          <button uxgButton primary lg [disabled]="isDesignDocModelInvalid(designDocModels[i])"
-                                  (click)="editDesignDoc(request, designDocModels[i], designDocumentation)" type="button">
+                        <ng-container *ngIf="designDocModels[j+'_'+i]">
+                          <button uxgButton secondary lg (click)="designDocModels[j+'_'+i] = null">Отмена</button>
+                          <button uxgButton primary lg [disabled]="isDesignDocModelInvalid(designDocModels[j+'_'+i])"
+                                  (click)="editDesignDoc(request, j+'_'+i, designDocumentation)" type="button">
                             Сохранить
                           </button>
                         </ng-container>
