@@ -50,6 +50,4 @@ export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-
 }

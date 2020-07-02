@@ -4,13 +4,13 @@
       <div class="app-row app-align-items-center">
         <uxg-tabs class="app-col">
           <uxg-tab-title #reviewTab [disabled]="!reviewTabCount" [active]="reviewTabCount > 0">
-            Необходимо рассмотреть  <span class="app-ghost-color" *ngIf="reviewTabCount as cnt">({{cnt}})</span>
+            Необходимо рассмотреть  <span class="counter" *ngIf="reviewTabCount as cnt">({{cnt}})</span>
           </uxg-tab-title>
           <uxg-tab-title #progressTab [active]="reviewTabCount === 0">
-            Запросы в процессе <span class="app-ghost-color" *ngIf="priceOrdersLength$ | async as cnt">({{cnt}})</span>
+            Запросы в процессе <span class="counter" *ngIf="priceOrdersLength$ | async as cnt">({{cnt}})</span>
           </uxg-tab-title>
           <uxg-tab-title #reviewedTab [disabled]="!reviewedTabCount">
-            Рассмотренные <span class="app-ghost-color" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
+            Рассмотренные <span class="counter" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
           </uxg-tab-title>
         </uxg-tabs>
         <button uxgButton primary (click)="router.navigateByUrl('/kim/customer/price-orders/create')">

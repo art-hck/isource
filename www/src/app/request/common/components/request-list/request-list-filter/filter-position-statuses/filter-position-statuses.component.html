@@ -1,7 +1,7 @@
 <div class="scrollbar">
   <div class="app-row" *ngFor="let item of statuses; index as i;">
     <uxg-checkbox #statusCheckbox [ngModel]="checked(i)" (ngModelChange)="check(i, $event)" class="app-control"></uxg-checkbox>
-    <label class="app-col" (click)="statusCheckbox.check($event)">&nbsp; {{PositionStatusesLabels[item.status]}}</label>
+    <label class="app-col status-label" (click)="statusCheckbox.check($event)">{{PositionStatusesLabels[item.status]}}</label>
     <div class="app-col app-col-auto">
       <div class="app-position-status">
         <span class="app-ghost-color">{{ item.count }}</span>

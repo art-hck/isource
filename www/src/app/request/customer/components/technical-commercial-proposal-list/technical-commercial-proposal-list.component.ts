@@ -2,7 +2,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { bufferTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -15,37 +15,43 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
-import { TechnicalCommercialProposalStatus } from "../../../common/enum/technical-commercial-proposal-status";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import { AppComponent } from "../../../../app.component";
-import { ProposalGridCardComponent } from "../../../common/components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
+import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import NEW = TechnicalCommercialProposalPositionStatus.NEW;
+import APPROVED = TechnicalCommercialProposalPositionStatus.APPROVED;
+import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
+import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
+import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
+import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
-  styleUrls: ['technical-commercial-proposal-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
-  @ViewChild('reviewedTab') set content(tab: UxgTabTitleComponent) {
-    this.isProposalsFooterHidden = tab?.active;
-    this.cd.detectChanges();
-  }
-  @ViewChild('proposalsFooterRef') proposalsFooterRef: ElementRef;
+  @ViewChild('sentToReviewTab') sentToReviewTab: UxgTabTitleComponent;
+  @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
-  @Select(TechnicalCommercialProposalState.proposalsByPos(TechnicalCommercialProposalStatus.SENT_TO_REVIEW))
+  @Select(TechnicalCommercialProposalState.proposalsByPos([NEW, SENT_TO_REVIEW]))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalByPosition[]>;
-  @Select(TechnicalCommercialProposalState.proposalsByPos(TechnicalCommercialProposalStatus.REVIEWED))
+  @Select(TechnicalCommercialProposalState.proposalsByPos([APPROVED, REJECTED]))
   readonly proposalsReviewed$: Observable<TechnicalCommercialProposalByPosition[]>;
+  @Select(TechnicalCommercialProposalState.proposalsByPos([SENT_TO_EDIT]))
+  readonly proposalsSendToEdit$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.proposals)
   readonly proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.status)
@@ -54,16 +60,20 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
   requestId: Uuid;
-  isProposalsFooterHidden: boolean;
   gridRows: ElementRef[];
-  view: "grid" | "list" = "grid";
+  view: ProposalsView = "grid";
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
-      const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposalPosition.value;
+      const proposalPosition: TechnicalCommercialProposalPosition = curr.selectedProposal.value;
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  get disabled() {
+    return this.proposalsOnReview?.toArray()
+      .every(({selectedProposal, sendToEditPosition}) => selectedProposal.invalid && sendToEditPosition.invalid);
   }
 
   constructor(
@@ -93,15 +103,22 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, ApproveMultiple),
+      ofActionCompleted(Approve, Reject, SendToEditMultiple, ApproveMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const length = action?.proposalPositions.length ?? 1;
-      const text = (action instanceof Reject ? "$1 отклонено" : "По $0 выбран победитель")
-        .replace(/\$(\d)/g, (all, i) => [
+      const length = action?.proposalPositions?.length ?? action?.requestPositions?.length ?? 1;
+      let text = "";
+      switch (true) {
+        case action instanceof Reject: text = "$1 отклонено"; break;
+        case action instanceof SendToEditMultiple: text = "$2 на доработке"; break;
+        default: text = "По $0 выбран победитель";
+      }
+
+      text = text.replace(/\$(\d)/g, (all, i) => [
           this.pluralize.transform(length, "позиции", "позициям", "позициям"),
           this.pluralize.transform(length, "предложение", "предложения", "предложений"),
+          this.pluralize.transform(length, "позиция", "позиции", "позиций"),
         ][i] || all);
 
       this.store.dispatch(e ?
@@ -124,10 +141,26 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   approveMultiple() {
-    this.store.dispatch(new ApproveMultiple(
-      this.proposalsOnReview
-        .filter(({selectedProposalPosition}) => selectedProposalPosition.valid)
-        .map(({selectedProposalPosition}) => selectedProposalPosition.value)
+    if (this.proposalsOnReview.filter(({selectedProposal}) => selectedProposal.valid).length) {
+      this.store.dispatch(new ApproveMultiple(
+        this.proposalsOnReview
+          .filter(({ selectedProposal }) => selectedProposal.valid)
+          .map(({ selectedProposal }) => selectedProposal.value)
+      ));
+    }
+
+    if (this.proposalsOnReview.filter(({sendToEditPosition}) => sendToEditPosition.valid).length) {
+      this.store.dispatch(new SendToEditMultiple(
+        this.proposalsOnReview
+          .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
+          .map(({ sendToEditPosition }) => sendToEditPosition.value)
+      ));
+    }
+  }
+
+  sendToEditAll() {
+    this.store.dispatch(new SendToEditMultiple(
+      this.proposalsOnReview.map(({ proposalByPos: { position } }) => position)
     ));
   }
 
@@ -143,10 +176,18 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return item.position.id;
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.cd.detectChanges();
+  }
+
+  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
+    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  }
+
+  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
+    return i => proposals.map(({ positions }) => positions[i]).some(p => p?.isAnalog);
   }
 
   ngOnDestroy() {

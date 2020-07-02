@@ -6,4 +6,16 @@ export namespace PriceOrderProposalsActions {
     constructor(public priceOrderId: Uuid) {
     }
   }
+
+  export class Approve {
+    static readonly type = '[KimCustomerPriceOrderProposals] Approve';
+    constructor(public priceOrderId: Uuid, public proposalId: Uuid) {
+    }
+  }
+
+  export class ApproveMultiple {
+    static readonly type = '[KimCustomerPriceOrderProposals] ApproveMultiple';
+    constructor(public priceOrderId: Uuid, public proposalIds: Uuid[]) {
+    }
+  }
 }

@@ -1,41 +1,58 @@
 <ng-container *ngIf="agreements; else loading">
-  <div class="app-table app-no-border">
-    <div class="app-row">
-      <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
-      <small class="app-col-5 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
-      <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
-      <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
-      <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
+  <ng-container *ngIf="agreements.length > 0; else emptyAgreementsList">
+    <div class="app-table app-no-border">
+      <div class="app-row">
+        <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
+        <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
+        <small class="app-col-2 app-ghost-color customer"><b>ЗАКАЗЧИК</b></small>
+        <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
+        <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
+        <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
+      </div>
     </div>
-  </div>
 
-  <div class="app-table agreements-list">
-    <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
-      <div class="app-col-1 id">{{ agreement.request.number}}</div>
-      <div class="app-col-5 app-ellipsis name">
-        <ng-container *ngIf="agreement.type === 'REQUEST'">
-          <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
-          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color"> ({{agreement.groupCounter}})</span>
-        </ng-container>
+    <div class="app-table agreements-list">
+      <div class="app-row app-align-items-center" *ngFor="let agreement of agreements">
+        <div class="app-col-1 id">{{ agreement.request.number}}</div>
+        <div class="app-col-3 name">
+          <div class="app-ellipsis">
+            <ng-container *ngIf="agreement.type === 'REQUEST' || agreement.type === 'REQUEST_CONTRACT'">
+              <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
+            </ng-container>
+            <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
+              <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}}</b>
+            </ng-container>
+          </div>
+          <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
-      <div class="app-col-2 date">
-        <span>{{ agreement.issuedDate | date : "dd.MM.yyyy" }} </span>
-        <span class="app-ghost-color">{{ agreement.issuedDate | date : "HH:mm" }}</span>
-      </div>
-      <div class="app-col-2 status">
-        <app-position-status *ngIf="agreement.positionsStatus"
-                             [label]="agreement.positionsStatus.label"
-                             [status]="agreement.positionsStatus.name">
-        </app-position-status>
-      </div>
-      <div class="app-col-2 action">
-        <a [routerLink]="getRouterLink(agreement)">
-          {{labels[agreement.action.name]?.label }}
-        </a>
+        <div class="app-col-2 app-ellipsis customer">
+          {{agreement.request.contragent.shortName}}
+        </div>
+        <div class="app-col-2 date">
+          <span>{{ agreement.issuedDate | date : "dd.MM.yyyy" }} </span>
+          <span class="app-ghost-color">{{ agreement.issuedDate | date : "HH:mm" }}</span>
+        </div>
+        <div class="app-col-2 status app-ellipsis">
+          <app-position-status *ngIf="agreement.positionsStatus"
+                               [label]="agreement.positionsStatus.label"
+                               [status]="agreement.positionsStatus.name">
+          </app-position-status>
+        </div>
+        <div class="app-col-2 action app-ellipsis">
+          <a [routerLink]="getRouterLink(agreement)">
+            {{agreement.action.label }}
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #emptyAgreementsList>
+    <span class="empty-list">Список задач пуст</span>
+  </ng-template>
+
 </ng-container>
+
 <ng-template #loading>
   <div class="app-card">
     <div class="text-center">

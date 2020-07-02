@@ -7,7 +7,7 @@ import { ContractListComponent } from "../common/components/contract-list/contra
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
-import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
+import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 
 import { RequestFormComponent } from "./components/request-form/request-form.component";
@@ -43,8 +43,8 @@ const routes: Routes = [
           },
           {
             path: 'commercial-proposals',
-            component: CommercialProposalListComponent,
-            data: { title: "Коммерческие предложения" }
+            component: CommercialProposalListOldComponent,
+            data: { title: "Коммерческие предложения", noFooter: true, noContentPadding: true  }
           },
         ]
       },
@@ -69,8 +69,8 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
-        component: CommercialProposalListOldComponent,
-        data: { title: "Коммерческие предложения", noFooter: true, noContentPadding: true }
+        component: CommercialProposalViewComponent,
+        data: { title: "Коммерческие предложения"}
       },
       {
         path: 'technical-commercial-proposals',

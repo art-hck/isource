@@ -1,10 +1,10 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { interval, Observable, Observer, Subject, SubscriptionLike } from 'rxjs';
-import { distinctUntilChanged, filter, map, share, takeWhile, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, share, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { IWebsocketService, IWsMessage, WebSocketConfig } from './websocket.interfaces';
 import { config } from './websocket.config';
-import { TokenService } from "../auth/services/token.service";
+import { KeycloakService } from "keycloak-angular";
 
 
 @Injectable({
@@ -12,58 +12,43 @@ import { TokenService } from "../auth/services/token.service";
 })
 export class WebsocketService implements IWebsocketService, OnDestroy {
 
-  private readonly config: WebSocketSubjectConfig<IWsMessage<any>>;
-
-  private websocketSub: SubscriptionLike;
-  private statusSub: SubscriptionLike;
+  private readonly config: WebSocketSubjectConfig<IWsMessage<any>> = {
+    url: null,
+    closeObserver: {
+      next: () => {
+        console.log('WebSocket disconnected!');
+        this.websocket$ = null;
+        this.connection$.next(false);
+      }
+    },
+    openObserver: {
+      next: () => {
+        console.log('WebSocket connected!');
+        this.connection$.next(true);
+      }
+    }
+  };
 
   private reconnection$: Observable<number>;
   private websocket$: WebSocketSubject<IWsMessage<any>>;
   private connection$: Observer<boolean>;
-  private wsMessages$: Subject<IWsMessage<any>>;
+  private wsMessages$ = new Subject<IWsMessage<any>>();
+  private destroy$ = new Subject();
 
   // number of connection attempts
-  private readonly reconnectAttempts: number;
+  private readonly reconnectAttempts = this.wsConfig.reconnectAttempts ?? 10;
   // pause between connections
-  private reconnectInterval: number;
+  private reconnectInterval = this.wsConfig.reconnectInterval ?? 5000;
   private isConnected: boolean;
-
-  public status: Observable<boolean>;
+  public status = new Observable<boolean>(observer => this.connection$ = observer).pipe(share(), distinctUntilChanged());
 
   constructor(
     @Inject(config) private wsConfig: WebSocketConfig,
-    private token: TokenService
+    private keycloakService: KeycloakService,
   ) {
-    this.wsMessages$ = new Subject<IWsMessage<any>>();
-
-    this.reconnectInterval = wsConfig.reconnectInterval || 5000;
-    this.reconnectAttempts = wsConfig.reconnectAttempts || 10;
-
-    this.config = {
-      url: wsConfig.url + '?access_token=' + token.getToken(),
-      closeObserver: {
-        next: (event: CloseEvent) => {
-          console.log('WebSocket disconnected!');
-          this.websocket$ = null;
-          this.connection$.next(false);
-        }
-      },
-      openObserver: {
-        next: (event: Event) => {
-          console.log('WebSocket connected!');
-          this.connection$.next(true);
-        }
-      }
-    };
-
-    // connection status
-    this.status = new Observable<boolean>((observer) => {
-      this.connection$ = observer;
-    }).pipe(share(), distinctUntilChanged());
-
-    // run reconnect if not connection
-    this.statusSub = this.status
-      .subscribe((isConnected) => {
+    this.keycloakService.getToken().then(token => {
+      // run reconnect if not connection
+      this.status.pipe(takeUntil(this.destroy$)).subscribe(isConnected => {
         this.isConnected = isConnected;
 
         if (!this.reconnection$ && typeof (isConnected) === 'boolean' && !isConnected) {
@@ -71,16 +56,17 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
         }
       });
 
-    this.websocketSub = this.wsMessages$.subscribe(
-      null, (error: ErrorEvent) => console.error('WebSocket error!', error)
-    );
-
-    this.connect();
+      this.wsMessages$.pipe(takeUntil(this.destroy$)).subscribe(
+        () => {}, (error: ErrorEvent) => console.error('WebSocket error!', error)
+      );
+      this.config.url = wsConfig.url + '?access_token=' + token;
+      this.connect();
+    });
   }
 
   ngOnDestroy() {
-    this.websocketSub.unsubscribe();
-    this.statusSub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /*
@@ -108,7 +94,7 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
 
     this.reconnection$.subscribe(
       () => this.connect(),
-      null,
+      () => {},
       () => {
         // Subject complete if reconnect attemts ending
         this.reconnection$ = null;

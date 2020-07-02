@@ -1,0 +1,47 @@
+<nav class="app-menu">
+  <div class="app-layout app-row">
+    <!-- Лого -->
+    <a routerLink="/"><img class="app-menu-logo" src="assets/images/logo.svg"/></a>
+
+    <!-- Пункты меню -->
+    <ng-container *ngFor="let link of menu">
+      <a class="app-link-no-color app-menu-item" [routerLink]="link.path" routerLinkActive="active">{{ link.text }}</a>
+    </ng-container>
+
+    <div class="app-col"></div>
+
+    <!-- Сообщения -->
+    <a routerLink="messages" routerLinkActive="active" class="app-menu-icon app-secondary-color">
+      <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
+      <app-message-notification></app-message-notification>
+    </a>
+
+    <!-- Корзина -->
+    <ng-container *ngIf="featureService.authorize('cart')">
+      <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
+        <uxg-icon class="app-ghost-color" shape="app-basket-big" size="24"></uxg-icon>
+        <small class="basket-counter">{{ cartStoreService.getCount() }}</small>
+      </a>
+
+      <div *ngIf="cartStoreService.getCount() === 0" class="app-menu-icon app-ghost-color">
+        <uxg-icon shape="app-basket-big" size="24"></uxg-icon>
+      </div>
+    </ng-container>
+
+    <!-- Профиль -->
+    <div class="app-menu-login">
+      <uxg-popover #popover>
+        <div uxgPopoverTrigger class="app-row app-align-items-center">
+          <img src="assets/images/avatar.svg"/>
+          <div>
+            <div class="app-ellipsis username">{{ user.getShortUserFio() }}</div>
+            <div class="app-ghost-color app-ellipsis contragent">{{ userBriefInfo }}</div>
+          </div>
+        </div>
+        <div *uxgPopoverContent="'app-popover-content-bottom-right'">
+          <button uxgButton clear (click)="popover.hide(); logout();">Выход</button>
+        </div>
+      </uxg-popover>
+    </div>
+  </div>
+</nav>

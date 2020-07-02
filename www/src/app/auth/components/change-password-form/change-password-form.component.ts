@@ -1,129 +1,87 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { ClrLoadingState } from "@clr/angular";
-import { Subscription } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
-import { RestorationErrorCode } from "../../enum/restoration-error-code";
 import { RestorationResponse } from "../../models/restoration-response";
+import { Title } from "@angular/platform-browser";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-change-password-form',
-  templateUrl: './change-password-form.component.html',
-  styleUrls: ['./change-password-form.component.scss']
+  templateUrl: './change-password-form.component.html'
 })
-export class ChangePasswordFormComponent implements OnInit {
+export class ChangePasswordFormComponent implements OnInit, OnDestroy {
 
-  passwordHintSheetShown = false;
-
+  state: "pristine" | "security" | "success" | "error" | "loading" = "pristine";
   code: string;
-  errorMsg: string;
-  errorCode: string;
-
-  loadingState = <ClrLoadingState>0;
-  clrLoadingState = ClrLoadingState;
-  subscription = new Subscription();
-
-  restorationErrorCode = RestorationErrorCode;
-
-  passwordChangeForm = new FormGroup({
-      code: new FormControl(null),
-      password: new FormControl("", [Validators.required, CustomValidators.password]),
-      retypePassword: new FormControl("", [Validators.required, CustomValidators.password]),
-    },
-    (form: FormGroup) =>
-      (form.get("retypePassword").value === "" || (form.get("password").value === form.get("retypePassword").value)) ?
-          null : { password_mismatch: true }
-  );
+  error: RestorationResponse["error"];
+  destroy$ = new Subject();
+  form: FormGroup;
 
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private authService: AuthService,
+    public title: Title,
   ) {
   }
 
   ngOnInit() {
-    this.code = this.route.snapshot.queryParams.code;
-
-    if (this.code) {
-      this.passwordChangeForm.get('code').setValue(this.code);
-    } else {
-      this.router.navigate(["auth/forgot-password"]);
-    }
-  }
-
-  getErrorMsg(field: string) {
-    if ((field === 'retypePassword') && (this.passwordChangeForm.hasError('password_mismatch'))) {
-      return 'Пароли не совпадают';
-    }
-
-    if (field === 'password') {
-      if (this.isFieldInvalid(field) && this.passwordChangeForm.controls.password.errors.required) {
-        return 'Необходимо заполнить новый пароль';
+    this.form = this.fb.group({
+        code: [this.route.snapshot.queryParams?.code, Validators.required],
+        password: ["", [Validators.required, CustomValidators.password]],
+        retypePassword: ["", [Validators.required, CustomValidators.comparePassword('password')]],
       }
-      if (this.isFieldInvalid(field) && this.passwordChangeForm.controls.password.errors.invalid_password) {
-        return 'Пароль не соответствует требованиям политики безопасности';
-      }
-    }
+    );
+    this.form.get('password').valueChanges.subscribe(() => this.form.get('retypePassword').updateValueAndValidity());
 
-    if (field === 'retypePassword') {
-      if (this.isFieldInvalid(field) && this.passwordChangeForm.controls.retypePassword.errors.required) {
-        return 'Необходимо повторно заполнить новый пароль';
-      }
-      if (this.isFieldInvalid(field) && this.passwordChangeForm.controls.retypePassword.errors.invalid_password) {
-        return 'Пароль не соответствует требованиям политики безопасности';
-      }
+    if (this.form.get('code').invalid) {
+      this.router.navigateByUrl("/auth/forgot-password", {skipLocationChange: true});
     }
-
-    return '';
   }
 
   submit() {
-    if (this.passwordChangeForm.invalid) {
+    if (this.form.invalid) {
       return;
     }
 
-    const { password, code } = this.passwordChangeForm.value;
-    this.loadingState = ClrLoadingState.LOADING;
+    const { password, code } = this.form.value;
+    this.state = "loading";
 
-    this.subscription.add(
-      this.authService.changePasswordByCode(password, code).subscribe(
-        (response: RestorationResponse) => {
-          if (response.error) {
-            this.errorCode = response.error.code;
-            this.errorMsg = response.error.detail;
-            this.loadingState = ClrLoadingState.ERROR;
-          } else {
-            this.loadingState = ClrLoadingState.SUCCESS;
-          }
-        },
-        (data) => {
-          this.errorMsg = data.error.detail;
-          this.loadingState = ClrLoadingState.ERROR;
+    this.authService.changePasswordByCode(password, code).pipe(takeUntil(this.destroy$)).subscribe(
+      response => {
+        if (response.error) {
+          this.error = response.error;
+          this.state = "error";
+          this.title.setTitle('Не удалось изменить пароль');
+        } else {
+          this.state = "success";
+          this.title.setTitle('Пароль изменен');
         }
-      )
+      },
+      ({ error }) => {
+        this.error = error;
+        this.state = "error";
+        this.title.setTitle('Не удалось изменить пароль');
+      }
     );
   }
 
-  getPasswordExpireDate() {
+  get passwordExpireDate() {
     // todo дата генерится на фронте временно, позже будет подтягиватся из ответа с бэка
     return new Date(new Date().setFullYear(new Date().getFullYear() + 1));
   }
 
-  isFieldInvalid(field: string) {
-    return this.passwordChangeForm.hasError('password_mismatch') && field === 'retypePassword' ||
-           this.passwordChangeForm.get(field).errors &&
-           this.passwordChangeForm.get(field).dirty;
+  reset() {
+    this.title.setTitle(this.route.snapshot.data?.title);
+    this.state = 'pristine';
   }
 
-  submitStateError() {
-    return this.loadingState === ClrLoadingState.ERROR;
-  }
-
-  submitStateSuccess() {
-    return this.loadingState === ClrLoadingState.SUCCESS;
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

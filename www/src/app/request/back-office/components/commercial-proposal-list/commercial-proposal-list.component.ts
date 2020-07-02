@@ -20,6 +20,8 @@ import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
+import { AppComponent } from "../../../../app.component";
 
 @Component({ templateUrl: './commercial-proposal-list.component.html' })
 export class CommercialProposalListComponent implements OnInit, OnDestroy {
@@ -37,6 +39,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
   selectedPositions: RequestPosition[] = [];
   procedureSource = ProcedureSource;
   procedureModalPayload?: ProcedureAction & { procedure$?: Observable<Procedure> } = null;
+  view: ProposalsView = "grid";
 
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
 
@@ -50,7 +53,8 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private offersService: CommercialProposalsService,
-    private procedureService: ProcedureService
+    private procedureService: ProcedureService,
+    private app: AppComponent
   ) {
     this.requestId = this.route.snapshot.paramMap.get('id');
   }
@@ -73,6 +77,7 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.updatePositionsAndSuppliers();
+    this.switchView(this.view);
   }
 
   updatePositionsAndSuppliers(): void {
@@ -144,5 +149,10 @@ export class CommercialProposalListComponent implements OnInit, OnDestroy {
       this.procedureModalPayload.procedure$ = this.procedureService.getByPosition(e.position.id)
         .pipe(map(([p]) => p), shareReplay(1));
     }
+  }
+
+  switchView(view: ProposalsView) {
+    this.view = view;
+    this.app.noContentPadding = view !== "list";
   }
 }

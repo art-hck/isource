@@ -1,4 +1,4 @@
-@import "projects/uxg/src/styles/index";
+@import "src/theme";
 
 .app-dropdown {
   display: inline-block;
@@ -8,6 +8,11 @@
 .item {
   &-title {
     line-height: normal;
+
+    & a.position-link {
+      max-width: 700px;
+      display: block;
+    }
   }
 
   &-quantity {
@@ -24,6 +29,11 @@
   &-date {
     max-width: 120px;
   }
+
+  &-attribute-icon {
+    min-width: 16px;
+    max-width: 16px;
+  }
 }
 
 .app-table.disabled {
@@ -32,9 +42,9 @@
 
 .app-table > .app-row {
   &-group {
-    background: #F0F6FA;
-    border-left: 4px #B2D0FF solid;
-    //cursor: pointer;
+    background: #F4F6FB;
+    border-left: 4px uxg($theme, color-border) solid;
+    //cursor: pointer; @TODO: uncomment when implement group page
     padding-left: 2px;
 
     &:hover {

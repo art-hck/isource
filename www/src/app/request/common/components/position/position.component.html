@@ -55,6 +55,7 @@
       <uxg-tab-title #historyTab [active]="true">История</uxg-tab-title>
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
       <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length">Коммерческие предложения</uxg-tab-title>
+      <uxg-tab-title #inspectionTab [hidden]="!showInspection(position)">Изготовление</uxg-tab-title>
       <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
     <br/>
@@ -94,6 +95,9 @@
     <ng-container *uxgTab="offersTab">
       <app-request-commercial-proposal-list-deprecated [requestPosition]="position" [requestId]="requestId"
                                                        [isCustomerView]="user.isCustomer()"></app-request-commercial-proposal-list-deprecated>
+    </ng-container>
+    <ng-container *uxgTab="inspectionTab">
+      <app-request-delivery-monitor-digital-inspector [position]="position"></app-request-delivery-monitor-digital-inspector>
     </ng-container>
     <ng-container *uxgTab="deliveryTab">
       <app-request-delivery-monitor [requestPosition]="position" [requestId]="requestId"></app-request-delivery-monitor>

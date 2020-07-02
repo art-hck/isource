@@ -1,0 +1,17 @@
+<div class="app-row app-align-items-center app-section app-layout">
+  <ng-content></ng-content>
+</div>
+
+<div #gridRow class="grid-row app-row app-section items-row app-layout">
+  <ng-container *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId">
+    <app-grid-cell
+      *ngIf="!simpleView || getProposal(supplier)"
+      [selectedProposal]="isReviewed ? null : selectedProposal"
+      [position]="position"
+      [supplier]="simpleView ? supplier : null"
+      [editable]="editable"
+      [proposal]="getProposal(supplier)"
+      (show)="show.emit($event)"
+    ></app-grid-cell>
+  </ng-container>
+</div>

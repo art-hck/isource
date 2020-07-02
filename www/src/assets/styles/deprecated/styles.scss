@@ -35,3 +35,11 @@ input[type=number].hidden-arrows::-webkit-outer-spin-button {
 input[type=number].hidden-arrows {
   -moz-appearance:textfield;
 }
+
+button[routerlink]:hover, button[ng-reflect-router-link]:hover{
+  color:inherit;
+}
+
+.app-btn-primary[routerlink]:hover {
+  @extend .app-btn-primary;
+}

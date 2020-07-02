@@ -4,6 +4,8 @@
       [requestPositions]="positionsWithOffers.positions"
       [suppliers]="positionsWithOffers.suppliers"
       [request]="request"
+      [view]="view"
+      (viewChange)="switchView($event)"
       (sentForAgreement)="selectedPositions = $event.selectedPositions; confirmToast.open()"
       (cancelOffer)="onCancelPublishOffers($event)"
       (addOffer)="showAddOfferModal($event)"
@@ -68,7 +70,7 @@
 <uxg-modal #confirmToast size="s">
   <div  class="app-section">
     <h3 *ngIf="!hasProsedure">Отправить на согласование</h3>
-    <h3 *ngIf="hasProsedure">Процедура сбора КП по позиции ещё не завершена</h3>
+    <h3 *ngIf="hasProsedure">Процедура сбора КП по позиции еще не завершена</h3>
   </div>
   <div class="app-section">Вы уверены, что хотите отправить созданные предложения на согласование заказчику?</div>
   <ng-template uxgModalFooter>

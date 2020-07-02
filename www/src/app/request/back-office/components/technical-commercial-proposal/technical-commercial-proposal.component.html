@@ -1,4 +1,4 @@
-<ng-container *ngIf="proposal as proposal" [ngSwitch]="state">
+<ng-container *ngIf="proposal" [ngSwitch]="state">
   <div class="app-card" *ngSwitchCase="'view'">
     <div class="app-row app-align-items-center">
       <h3 class="app-col">
@@ -17,7 +17,7 @@
         <span>Рассмотрено</span>
       </div>
 
-      <button uxgButton icon link (click)="state = 'edit'" [disabled]="publishedCount > 0">
+      <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable">
         <uxg-icon shape="app-pen"></uxg-icon>
       </button>
       <button uxgButton icon link (click)="folded = !folded" [disabled]="proposal.positions.length === 0">
@@ -56,10 +56,12 @@
           <div class="status text-center"
                [class.app-ghost-color]="item.status !== 'APPROVED'"
                [class.app-success-color]="item.status === 'APPROVED'"
+               [class.app-warning-color]="item.status === 'SENT_TO_EDIT'"
                [ngSwitch]="item.status"
           >
             <uxg-icon shape="app-draft" *ngSwitchCase="'NEW'"></uxg-icon>
             <uxg-icon shape="app-unknown" *ngSwitchCase="'SENT_TO_REVIEW'"></uxg-icon>
+            <uxg-icon shape="app-warning" *ngSwitchCase="'SENT_TO_EDIT'"></uxg-icon>
             <uxg-icon shape="app-check" *ngSwitchDefault></uxg-icon>
           </div>
         </div>

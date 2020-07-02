@@ -40,6 +40,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   allContragents$: Observable<ContragentList[]>;
   wizzard: UxgWizzard;
   isLoading: boolean;
+  publicAccess: boolean;
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
@@ -67,7 +68,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
       general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || this.form.get('privateAccessContragents').valid)],
-      properties: { label: "Свойства", disabled: this.action === 'prolong' },
+      properties: { label: "Параметры", disabled: this.action === 'prolong' },
       contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
       documents: ["Документы", () => this.form.valid],
     });
@@ -118,6 +119,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.allContragents$ = this.contragentService.getContragentList();
+
+    this.publicAccess = (this.contragents?.length ?? 0) < 2 && (this.procedure?.privateAccessContragents.length ?? 0) < 2;
   }
 
   submit() {

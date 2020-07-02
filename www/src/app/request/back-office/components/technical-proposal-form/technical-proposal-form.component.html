@@ -66,7 +66,7 @@
       <div class="app-col">
         <button type="button" uxgButton secondary
                 (click)="uploadTemplateModal.open()"
-                [disabled]="!form.get('contragent').value">Загрузить из шаблона
+                [disabled]="form.get('contragent').invalid">Загрузить из шаблона
         </button>
       </div>
       <div class="app-col app-secondary-color">
@@ -180,7 +180,7 @@
         <ng-template uxgModalFooter>
           <button type="button" uxgButton lg secondary uxgModalClose>Отмена</button>
           <button uxgButton lg primary (click)="positionsSearch.submit()"
-                  [disabled]="!positionsSearch.checkedFormItems.length">Всё готово</button>
+                  [disabled]="!positionsSearch.checkedFormItems.length">Все готово</button>
         </ng-template>
       </ng-container>
     </uxg-modal>

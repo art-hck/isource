@@ -1,5 +1,17 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -36,6 +48,8 @@ import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -59,7 +73,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
-  view: "grid" | "list" = "grid";
+  view: ProposalsView = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
     position: RequestPosition
@@ -68,6 +82,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   canNotAddNewContragent = false;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
+  proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
+
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
@@ -92,7 +108,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     public featureService: FeatureService,
     public store: Store,
     public router: Router,
-    private app: AppComponent
+    public helper: TechnicalCommercialProposalHelperService,
+    private app: AppComponent,
   ) {
   }
 
@@ -145,7 +162,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
   }
 
-  switchView(view: "grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view === "grid";
     this.viewPopover?.hide();
@@ -168,6 +185,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return data.every(({proposalPosition: p}) => ['SENT_TO_REVIEW'].includes(p.status)) && data.length > 0;
   }
 
+  isSentToEdit({data}: TechnicalCommercialProposalByPosition): boolean {
+    return data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && data.length > 0;
+  }
+
   withAnalogs({positions}: TechnicalCommercialProposal): boolean {
     return positions.every(({isAnalog}) => isAnalog) && positions.length > 0;
   }
@@ -185,6 +206,14 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
     this.addProposalPositionPayload = { proposal, position };
+  }
+
+  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
+    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  }
+
+  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
+    return i => proposals[i].positions.some(p => p?.isAnalog);
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;

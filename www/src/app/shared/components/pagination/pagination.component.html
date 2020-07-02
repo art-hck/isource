@@ -1,20 +1,23 @@
-<div class="app-row app-align-items-center">
-  <div class="app-pages" *ngIf="pages.length > 1">
+<div class="app-row app-align-items-center" *ngIf="total > 0">
+  <div class="app-pages" *ngIf="pages?.length > 1">
 
-    <ng-container *ngIf="leftSiblingCount > siblingCount">
+    <ng-container *ngIf="pages[0] > 1">
       <a class="app-pages-item" routerLink="." [queryParams]="{page: 1}">1</a>
-      <div class="app-pages-item" *ngIf="leftSiblingCount - 1 > siblingCount">...</div>
+      <div class="app-pages-item" *ngIf="pages[0] - 1 > 1">...</div>
     </ng-container>
 
     <a *ngFor="let page of pages" class="app-pages-item" routerLink="."
        [class.app-pages-item-current]="page === current" [queryParams]="{page: page}">{{ page }}</a>
 
-    <ng-container *ngIf="rightSiblingCount > siblingCount">
-      <div class="app-pages-item" *ngIf="rightSiblingCount - 1 > siblingCount">...</div>
+    <ng-container *ngIf="pages[pages.length - 1] < fullPages.length">
+      <div class="app-pages-item" *ngIf="pages[pages.length - 1] + 1 < fullPages.length">...</div>
       <a class="app-pages-item" routerLink="." [queryParams]="{page: fullPages.length}">{{fullPages.length}}</a>
     </ng-container>
   </div>
-  <div *ngIf="pages.length > 0">
-    <span class="app-ghost-color">На странице</span> {{firstItem}} - {{ lastItem }} <span class="app-ghost-color">из</span> {{total}}
+  <div *ngIf="pages?.length > 0">
+    <span class="app-ghost-color">На странице </span>
+    <span>{{ firstItem }} - {{ lastItem }} </span>
+    <span class="app-ghost-color">из </span>
+    <span>{{ total }}</span>
   </div>
 </div>

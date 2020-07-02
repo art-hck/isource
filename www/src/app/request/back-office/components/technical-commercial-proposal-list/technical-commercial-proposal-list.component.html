@@ -16,10 +16,16 @@
                 <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
                 </uxg-checkbox>
                 <uxg-popover #selectPopover>
-                  <button uxgButton uxgPopoverTrigger link icon><uxg-icon shape="app-triangle down"></uxg-icon></button>
+                  <button uxgButton uxgPopoverTrigger link icon>
+                    <uxg-icon shape="app-triangle down"></uxg-icon>
+                  </button>
                   <div *uxgPopoverContent>
-                    <div><button uxgButton clear (click)="form.get('checked').setValue(true); selectPopover.hide()">Все</button></div>
-                    <div><button uxgButton clear (click)="form.get('checked').setValue(false); selectPopover.hide()">Ни одного</button></div>
+                    <div>
+                      <button uxgButton clear (click)="form.get('checked').setValue(true); selectPopover.hide()">Все</button>
+                    </div>
+                    <div>
+                      <button uxgButton clear (click)="form.get('checked').setValue(false); selectPopover.hide()">Ни одного</button>
+                    </div>
                   </div>
                 </uxg-popover>
               </ng-container>
@@ -27,12 +33,16 @@
                 <span class="app-secondary-color">показать: </span>
                 <uxg-popover #viewPopover>
                   <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
-                   <span *ngSwitchCase="'grid'"><b>по позициям матрица</b></span>
-                   <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
+                    <span *ngSwitchCase="'grid'"><b>по позициям матрица</b></span>
+                    <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
                   </button>
                   <div *uxgPopoverContent>
-                    <div><button uxgButton clear (click)="switchView('grid')">по позициям матрица</button></div>
-                    <div><button uxgButton clear (click)="switchView('list')">по поставщикам</button></div>
+                    <div>
+                      <button uxgButton clear (click)="switchView('grid')">по позициям матрица</button>
+                    </div>
+                    <div>
+                      <button uxgButton clear (click)="switchView('list')">по поставщикам</button>
+                    </div>
                   </div>
                 </uxg-popover>
               </div>
@@ -79,13 +89,27 @@
       </div>
 
       <!-- grid -->
-      <div class="grid-table" *ngIf="view ==='grid' && proposals.length" [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
+      <div class="grid-table" *ngIf="(view ==='grid' && proposals.length + (procedures$ | async).length)"
+           [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
 
-        <app-technical-commercial-proposal-grid-contragents-row [gridRows]="gridRows" [proposals]="proposals">
-        </app-technical-commercial-proposal-grid-contragents-row>
+        <app-grid-contragents
+          [gridRows]="gridRows"
+          [suppliers]="suppliers(proposals$ | async)"
+          [hasAnalogsFn]="hasAnalogs(proposals$ | async)"
+        ></app-grid-contragents>
+
+        <!-- procedure info -->
+        <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
+          <div class="position-row app-layout" *ngIf="(procedures$ | async).length > 0">
+            <app-procedure-grid [procedure]="procedure"
+                                (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
+                                (prolong)="prolongModalPayload = procedure"></app-procedure-grid>
+          </div>
+        </ng-container>
 
         <!-- positions -->
-        <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i" formArrayName="positions">
+        <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i"
+             formArrayName="positions">
 
           <div class="position-item app-row app-align-items-center app-section app-layout" [formGroupName]="i">
             <uxg-checkbox class="app-control" #checked
@@ -108,6 +132,10 @@
               <uxg-icon shape="app-waiting"></uxg-icon>
               <span>На согласовании</span>
             </div>
+            <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
+              <uxg-icon shape="app-warning"></uxg-icon>
+              <span>На доработке</span>
+            </div>
           </div>
 
           <div #gridRow class="grid-row app-row app-section items-row app-layout">
@@ -117,6 +145,7 @@
               [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
               [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos) && !withAnalogs(proposal)"
               (create)="addProposalPosition(proposal, proposalsByPos.position)"
+              (show)="proposalModalData = {proposalPosition: getProposalPosition(proposal, proposalsByPos.position), proposal: proposal}"
             ></app-technical-commercial-proposal-grid-card>
           </div>
         </div>
@@ -134,8 +163,8 @@
 
           <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
             <app-request-procedure [procedure]="procedure"
-               (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
-               (prolong)="prolongModalPayload = procedure"
+                                   (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
+                                   (prolong)="prolongModalPayload = procedure"
             ></app-request-procedure>
           </ng-container>
           <ng-container *ngFor="let proposal of proposals; trackBy: trackById">
@@ -210,7 +239,7 @@
         </technical-commercial-proposal-contragent-form>
       </uxg-modal>
 
-      <uxg-modal [(state)]="prolongModalPayload" size="s">
+      <uxg-modal [(state)]="prolongModalPayload">
         <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
         <app-prolongate-procedure
           *ngIf="prolongModalPayload"
@@ -222,6 +251,32 @@
         ></app-prolongate-procedure>
       </uxg-modal>
 
+      <uxg-modal [(state)]="proposalModalData" size="l">
+        <ng-container *ngIf="proposalModalData as modalData">
+          <h2>{{ modalData.proposalPosition.position.name }}</h2>
+          <app-proposal-detail
+            [supplier]="modalData.proposal.supplier"
+            [paymentTerms]="modalData.proposalPosition.paymentTerms"
+            [manufacturingName]="modalData.proposalPosition.manufacturingName"
+            [documents]="modalData.proposal.documents"
+            [proposal]="modalData.proposalPosition"
+            [position]="modalData.proposalPosition.position"
+          ></app-proposal-detail>
+
+          <ng-template uxgModalFooter>
+            <div class="app-col app-bold">
+              <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposalPosition)">- Позиция в нужном количестве</div>
+              <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposalPosition)"> - Сроки укладываются в заданные</div>
+
+              <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposalPosition)">
+                {{ helper.getRequestedQuantityLabel(modalData.proposalPosition) }}
+              </div>
+              <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposalPosition)"> - Сроки не укладываются в заданные</div>
+            </div>
+            <button uxgButton lg secondary uxgModalClose>Закрыть</button>
+          </ng-template>
+        </ng-container>
+      </uxg-modal>
 
     </ng-container>
   </ng-container>

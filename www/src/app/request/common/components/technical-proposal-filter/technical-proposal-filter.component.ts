@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RequestsListFilter } from "../../models/requests-list/requests-list-filter";
 import { debounceTime, filter, switchMap } from "rxjs/operators";
@@ -12,13 +22,14 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { TechnicalProposal } from "../../models/technical-proposal";
 import { RequestTpFilterStatusesListComponent } from "./technical-proposal-filter-statuses-list/request-tp-filter-statuses-list.component";
 import { TechnicalProposalFilter } from "../../models/technical-proposal-filter";
+import { TechnicalProposalsStatus } from "../../enum/technical-proposals-status";
 
 @Component({
   selector: 'app-request-technical-proposal-filter',
   templateUrl: './technical-proposal-filter.component.html',
   styleUrls: ['./technical-proposal-filter.component.scss']
 })
-export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
+export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(TechnicalProposalFilterContragentListComponent)
              requestTpFilterContragentListComponent: TechnicalProposalFilterContragentListComponent;
@@ -31,12 +42,13 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   @Input() backofficeView: boolean;
   @Input() resultsCount: number;
   @Input() technicalProposals: TechnicalProposal[] = [];
+  @Input() technicalProposalsAvailableStatuses: TechnicalProposalsStatus[];
 
   private subscription: Subscription = new Subscription();
 
   requestId: Uuid;
   contragents: ContragentList[] = [];
-  tpStatuses = [];
+  tpStatuses: TechnicalProposalsStatus[] = [];
 
   requestTpListFilterForm: FormGroup;
 
@@ -75,6 +87,10 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
     this.getContragentList();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.getAgreementStateList();
+  }
+
 
   submit(): void {
     const filters = <TechnicalProposalFilter>{};
@@ -110,9 +126,15 @@ export class TechnicalProposalFilterComponent implements OnInit, OnDestroy {
   }
 
   getAgreementStateList(): void {
-    this.technicalProposals.forEach(tp => {
-      this.tpStatuses.push(tp.status);
-    });
+    // Т.к. для зака приходит поле availableStatuses, статусы берём из него.
+    // Для бэка пока по-старинке вытаскиваем статусы, пробежавшись по ТП
+    if (this.technicalProposalsAvailableStatuses) {
+      this.tpStatuses = this.technicalProposalsAvailableStatuses;
+    } else {
+      this.technicalProposals.forEach(tp => {
+        this.tpStatuses.push(tp.status);
+      });
+    }
 
     // Убираем из массива дублирующиеся статусы
     this.tpStatuses = this.tpStatuses.filter((value, index, array) =>

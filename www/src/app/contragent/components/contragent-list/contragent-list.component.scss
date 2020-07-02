@@ -1,10 +1,6 @@
-.app-table > .app-row > .app-col {
-  &:not(:first-child) {
-    flex-grow: .4;
-  }
-
-  &.edit {
-    flex-basis: 32px;
-    flex-grow: 0;
-  }
-}
+.name { flex-basis: 300px }
+.inn { flex-basis: 70px; }
+.kpp { flex-basis: 70px; }
+.email { flex-basis: 150px; }
+.responsible { flex-basis: 70px; }
+.edit { flex-basis: 50px; flex-grow: 0; }

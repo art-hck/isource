@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   noContentPadding: boolean;
   noFooter: boolean;
   _isTitleHidden: boolean;
+  readonly year = new Date().getFullYear();
 
 
   constructor(
@@ -59,20 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Загружаем корзину, если заказчик
-    if (!this.authService.isAuth()) {
-      this.subscription.add(
-        this.authService.onLogin.subscribe(() => {
-          if (this.user.isCustomer()) {
-            this.cartStoreService.load();
-          }
-        })
-      );
-    } else if (this.user.isCustomer()) {
-      this.cartStoreService.load();
+    if (this.user.isCustomer()) {
       // Выгружаем корзину при логауте
       this.subscription
         .add(this.authService.onLogout.subscribe(() => {
+          this.user.clearData();
           this.cartStoreService.cartItems = [];
         }));
     }

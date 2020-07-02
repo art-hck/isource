@@ -92,7 +92,8 @@ export class TechnicalCommercialProposalState {
       map(proposals => proposals.reduce((result, proposal) => {
         [true, false].forEach(withAnalog => {
           const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
-          if (positions.length) {
+
+          if (!withAnalog || positions.length) {
             result.push({ ...proposal, positions});
           }
         });
@@ -184,7 +185,7 @@ export class TechnicalCommercialProposalState {
       proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: {id} }) => id)], [])
     ).pipe(
       tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
-        proposals: updateItem(({ id }) => proposalPosition.proposalId === id, patch({
+        proposals: updateItem(({ positions }) => positions.some(({id}) => proposalPosition.id === id), patch({
           positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
         })),
         status: "received" as StateStatus,

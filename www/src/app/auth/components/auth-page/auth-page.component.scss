@@ -1,55 +1,18 @@
-.auth-splash {
-  background: linear-gradient(to top, #1A71D8, #2585F5);
-  position: absolute;
-  display: inline-table;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  right: 0;
+@import "src/theme";
+
+.app-row {
+  min-height: calc(100vh - 162px);
 }
 
-.auth-block-wrapper {
-  display: flex;
-  height: 100%;
+.app-col-auto {
+  flex-basis: 400px;
 }
 
-.auth-form-block {
-  width: 400px;
-  margin: auto;
-
-  & .welcome-text {
-    margin: 0 32px;
-    padding-bottom: 30px;
-  }
-
-  & .title,
-  & .welcome-msg {
-    display: block;
-    color: white;
-    font-weight: bold;
-  }
-
-  & .title {
-    font-size: 48px;
-    line-height: 55px;
-  }
-
-  & .welcome-msg {
-    font-size: 17px;
-    line-height: 21px;
-  }
-
-  .footer-text {
-    font-size: 14px;
-    line-height: 18px;
-    color: rgba(255, 255, 255, 0.6);
-    padding: 0 15px;
-  }
+.app-logo {
+  margin: 48px -20px 48px 0;
+  display: block;
 }
 
-::ng-deep .login-form button.btn span,
-::ng-deep .change-password-form button.btn span,
-::ng-deep .forgot-password-form button.btn span {
-  padding: 0;
+.app-card.app-modal {
+  border: none;
 }

@@ -1,13 +1,12 @@
 import localeRu from '@angular/common/locales/ru';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HttpErrorResponse } from "@angular/common/http";
-import { LOCALE_ID, NgModule, Injectable, ErrorHandler } from '@angular/core';
+import { HttpClientModule } from "@angular/common/http";
+import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
 import { UxgModule } from "uxg";
-
 import { APP_CONFIG } from "./core/config/gpnmarket-config.interface";
 import { AppComponent } from './app.component';
 import { AppConfig } from './config/app.config';
@@ -15,38 +14,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from "./core/core.module";
 import { ToastListModule } from "./shared/components/toast-list/toast-list.module";
 import { WebsocketModule } from "./websocket/websocket.module";
-
-import * as Sentry from "@sentry/browser";
+import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
+import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
+import { AuthService } from "./auth/services/auth.service";
+import { ApplicationRef } from "@angular/core";
+import { CartStoreService } from "./cart/services/cart-store.service";
 
 registerLocaleData(localeRu, 'ru');
 
-Sentry.init({
-  dsn: AppConfig.sentry.dsn,
-  enabled: AppConfig.sentry.enabled,
-  environment: AppConfig.sentry.environment
-});
-Sentry.configureScope(function(scope) {
-  scope.setLevel(AppConfig.sentry.level);
-});
-
-@Injectable()
-export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
-
-  extractError(error) {
-    // обработка ошибок с бэкэнда
-    if (error instanceof HttpErrorResponse) {
-      return `${error.message}, detail: "${error.error.detail}"`;
-    }
-
-    return error.originalError || error;
-  }
-
-  handleError(error) {
-    const extractedError = this.extractError(error);
-    Sentry.captureException(extractedError);
-  }
-}
+const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -61,14 +37,50 @@ export class SentryErrorHandler implements ErrorHandler {
     ToastListModule,
     UxgModule,
     WebsocketModule.config({ url: AppConfig.endpoints.ws }),
-    BrowserModule
+    BrowserModule,
+    KeycloakAngularModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: ErrorHandler, useClass: SentryErrorHandler }
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    { provide: KeycloakService, useValue: keycloakService }
   ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
+  constructor(
+    public authService: AuthService,
+    public cartStoreService: CartStoreService,
+  ) {
+  }
+
+  ngDoBootstrap(app: ApplicationRef) {
+    keycloakService
+      .init(AppConfig.keycloak)
+      .then(() => {
+        console.log('[ngDoBootstrap] bootstrap app');
+
+        app.bootstrap(AppComponent);
+      })
+      .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+        this.cartStoreService.load();
+      };
+
+    keycloakService
+      .getKeycloakInstance()
+      .onAuthRefreshSuccess = () => {
+        this.authService.saveAuthUserData().subscribe(() => {
+          console.log('saveAuthUserData');
+        });
+        this.cartStoreService.load();
+      };
+  }
 }

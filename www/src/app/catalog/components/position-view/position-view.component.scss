@@ -1,3 +1,5 @@
+@import "src/theme";
+
 .position-view {
   padding-left: 8px;
 }
@@ -15,7 +17,7 @@
 .price-card {
   background: #FFFFFF;
   border: 1px solid #B2D0FF;
-  border-radius: 8px;
+  border-radius: uxg($theme, card-border-radius);
   padding: 15px 20px 20px 20px;
   margin-top: 30px;
 }

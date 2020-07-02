@@ -13,6 +13,7 @@ import { ActivatedRoute } from "@angular/router";
 import { EventTypes } from "../../../../websocket/event-types";
 import { WebsocketService } from "../../../../websocket/websocket.service";
 import { Subject } from "rxjs";
+import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
 
 @Component({
   selector: 'app-request-list',
@@ -35,9 +36,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() availableFilters: AvailableFilters;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
   @Input() activeFiltersObj: RequestsListFilter;
-  @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter }>();
+  @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
+
+  sortDirection: string = null;
+  sortingColumn: string;
 
   filterOpened = false;
   hideNeedUpdate = true;
@@ -70,13 +74,30 @@ export class RequestListComponent implements OnInit, OnDestroy {
       });
   }
 
-  switchTab({ disabled }: UxgTabTitleComponent, status: RequestStatus[]) {
-    return !disabled && this.filter.emit({ filters: { requestListStatusesFilter: status } });
-  }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  sortBy(column) {
+    if (this.sortingColumn !== column) {
+      this.sortDirection = null;
+    }
+
+    const directions = [ "ASC", "DESC", null ];
+    let index = directions.indexOf(this.sortDirection) + 1;
+    if (index === directions.length) {
+      index = 0;
+    }
+    this.sortDirection = directions[index];
+    this.sortingColumn = column;
+
+    if (this.sortDirection === null) {
+      this.filter.emit({ sort: { orderBy: null, sortDirection: null } });
+      return;
+    }
+
+    this.filter.emit({ sort: { orderBy: column, sortDirection: this.sortDirection } });
   }
 
 
@@ -119,39 +140,46 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   clickOnTab(tab) {
+    let tabFilters = [];
+
     switch (tab) {
       // todo Тернарка почему-то не зашла в свитчкейсе, не понял почему
       case RequestStatus.IN_PROGRESS:
-        if (this.inProgressTabElRef) {
-          this.inProgressTabElRef.onToggle.emit(true);
+        if (!this.inProgressTabElRef?.disabled) {
+          tabFilters = [RequestStatus.IN_PROGRESS];
+          this.inProgressTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.NEW:
-        if (this.newTabElRef) {
-          this.newTabElRef.onToggle.emit(true);
+        if (!this.newTabElRef?.disabled) {
+          tabFilters = [RequestStatus.NEW];
+          this.newTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.ON_CUSTOMER_APPROVAL:
-        if (this.onApprovalTabElRef) {
-          this.onApprovalTabElRef.onToggle.emit(true);
+        if (!this.onApprovalTabElRef?.disabled) {
+          tabFilters = [RequestStatus.ON_CUSTOMER_APPROVAL];
+          this.onApprovalTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.DRAFT:
-        if (this.draftTabElRef) {
-          this.draftTabElRef.onToggle.emit(true);
+        if (!this.draftTabElRef?.disabled) {
+          tabFilters = [RequestStatus.DRAFT];
+          this.draftTabElRef.activate();
         } else {
           return false;
         }
         break;
       case RequestStatus.COMPLETED:
-        if (this.completedTabElRef) {
-          this.completedTabElRef.onToggle.emit(true);
+        if (!this.completedTabElRef?.disabled) {
+          tabFilters = [RequestStatus.COMPLETED, RequestStatus.NOT_RELEVANT];
+          this.completedTabElRef.activate();
         } else {
           return false;
         }
@@ -160,6 +188,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    this.filter.emit({ filters: { requestListStatusesFilter: [tab] } });
+    this.filter.emit({ filters: { requestListStatusesFilter: tabFilters } });
   }
 }

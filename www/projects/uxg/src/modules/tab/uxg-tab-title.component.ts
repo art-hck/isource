@@ -22,7 +22,7 @@ export class UxgTabTitleComponent {
     return this.el.nativeElement.offsetLeft;
   }
 
-  constructor(private el: ElementRef) {}
+  constructor(public el: ElementRef) {}
 
   @HostListener("click")
   activate() {
@@ -33,7 +33,7 @@ export class UxgTabTitleComponent {
   }
 
   deactivate() {
-    if (this.active && !this.disabled) {
+    if (this.active) {
       this.active = false;
       this.onToggle.emit(false);
     }

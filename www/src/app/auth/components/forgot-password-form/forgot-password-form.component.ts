@@ -1,89 +1,65 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "../../../shared/forms/custom.validators";
-import { Router } from "@angular/router";
-import { ClrLoadingState } from "@clr/angular";
-import { Subscription } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subject } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { ResponseSuccessError } from "../../../core/interceptor/error.interceptor";
+import { takeUntil } from "rxjs/operators";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-forgot-password-form',
-  templateUrl: './forgot-password-form.component.html',
-  styleUrls: ['./forgot-password-form.component.scss']
+  templateUrl: './forgot-password-form.component.html'
 })
 export class ForgotPasswordFormComponent implements OnDestroy {
 
-  passwordRestoreForm: FormGroup;
-
-  loadingState = <ClrLoadingState>0;
-  clrLoadingState = ClrLoadingState;
-  subscription = new Subscription();
-
-  timeLimitError = false;
+  form: FormGroup;
+  destroy$ = new Subject();
+  state: "pristine" | "loading" | "error" | "exception" | "success" = "pristine";
 
   constructor(
     public router: Router,
-    private formBuilder: FormBuilder,
-    private authService: AuthService
+    public route: ActivatedRoute,
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private title: Title
   ) {
-    this.passwordRestoreForm = this.formBuilder.group({
+    this.form = this.fb.group({
       'email': ['', [Validators.required, CustomValidators.email]]
     });
   }
 
 
-  isFieldInvalid(field: string) {
-    return this.passwordRestoreForm.get(field).errors && this.passwordRestoreForm.get(field).dirty;
-  }
-
-  getErrorMsg(field: string) {
-    if (field === 'email') {
-      if (this.isFieldInvalid(field) && this.passwordRestoreForm.controls.email.errors.required) {
-        return 'Необходимо заполнить эл. почту';
-      }
-      if (this.isFieldInvalid(field) && this.passwordRestoreForm.controls.email.errors.invalid_email) {
-        return 'Пожалуйста, проверьте корректность введённой эл. почты';
-      }
-    }
-
-    return '';
-  }
-
   submit() {
-    if (this.passwordRestoreForm.invalid) {
+    if (this.form.invalid) {
       return;
     }
-    this.loadingState = ClrLoadingState.LOADING;
-    this.subscription.add(
-      this.authService.requestPasswordRecover(this.passwordRestoreForm.get('email').value).subscribe(
-        () => {
-          this.loadingState = ClrLoadingState.SUCCESS;
-        },
-        (error) => {
-          if (error instanceof ResponseSuccessError) {
-            this.timeLimitError = true;
-            this.loadingState = ClrLoadingState.DEFAULT;
-          } else {
-            this.loadingState = ClrLoadingState.ERROR;
-          }
+    this.state = "loading";
+    this.authService.requestPasswordRecover(this.form.get('email').value).pipe(takeUntil(this.destroy$)).subscribe(
+      () => {
+        this.title.setTitle("Успешно!");
+        this.state = "success";
+      },
+      (error) => {
+        if (error instanceof ResponseSuccessError) {
+          this.title.setTitle("Не удалось отправить письмо");
+          this.state = "error";
+        } else {
+          this.title.setTitle("Что-то пошло не так");
+          this.state = "exception";
         }
-      )
-    );
+      });
   }
 
-
-  submitStateError() {
-    return this.loadingState === ClrLoadingState.ERROR;
+  reset() {
+    this.title.setTitle(this.route.snapshot.data?.title);
+    this.state = 'pristine';
   }
-
-  submitStateSuccess() {
-    return this.loadingState === ClrLoadingState.SUCCESS;
-  }
-
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

@@ -14,9 +14,11 @@ import Update = TechnicalProposals.Update;
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
 import SendToEdit = TechnicalProposals.SendToEdit;
+import GetFilterStatuses = TechnicalProposals.GetFilterStatuses;
 
 export interface TechnicalProposalStateModel {
   proposals: TechnicalProposal[];
+  availableStatuses: TechnicalProposalsStatus[];
   filters: TechnicalProposalFilter;
   status: StateStatus;
 }
@@ -26,7 +28,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerTechnicalProposals',
-  defaults: { proposals: null, filters: null, status: "pristine" }
+  defaults: { proposals: null, availableStatuses: null, filters: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalProposalState {
@@ -44,6 +46,7 @@ export class TechnicalProposalState {
 
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static proposalAvailableStatuses({ availableStatuses }: Model) { return availableStatuses; }
 
   @Action(Fetch)
   fetch({ setState, getState }: Context, { requestId, filters }: Fetch) {
@@ -96,7 +99,7 @@ export class TechnicalProposalState {
 
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.acceptTechnicalProposals(requestId, technicalProposalId, proposalPosition).pipe(
-      flatMap(() => dispatch(new Update(requestId, filters))),
+      flatMap(() => dispatch([new Update(requestId, filters), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus }))),
     );
   }
@@ -107,7 +110,7 @@ export class TechnicalProposalState {
 
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.declineTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
-      flatMap(() => dispatch(new Update(requestId, filters))),
+      flatMap(() => dispatch([new Update(requestId, filters), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
   }
@@ -116,8 +119,23 @@ export class TechnicalProposalState {
   sendToEdit({ setState, dispatch }: Context, { requestId, technicalProposalId, proposalPosition, comment }: SendToEdit) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.sendToEditTechnicalProposals(requestId, technicalProposalId, proposalPosition, comment).pipe(
-      flatMap(() => dispatch(new Update(requestId))),
+      flatMap(() => dispatch([new Update(requestId), new GetFilterStatuses(requestId)])),
       finalize(() => setState(patch({ status: "received" as StateStatus })))
     );
+  }
+
+  /**
+   * Получает список доступных статусов ТП для фильтра
+   * @param setState
+   * @param getState
+   * @param requestId
+   */
+  @Action(GetFilterStatuses)
+  getFilterStatuses({ setState, getState }: Context, { requestId }: GetFilterStatuses) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.getTechnicalProposalsAvailableStatuses(requestId)
+      .pipe(tap(availableStatuses => {
+        setState(patch({ availableStatuses, status: "received" as StateStatus }));
+      }));
   }
 }

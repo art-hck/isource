@@ -7,6 +7,8 @@ import { KimPriceOrderService } from "../services/kim-price-order.service";
 import { PriceOrderProposalsActions } from "../actions/price-order-proposals.actions";
 import Fetch = PriceOrderProposalsActions.Fetch;
 import { KimPriceOrder } from "../../common/models/kim-price-order";
+import Approve = PriceOrderProposalsActions.Approve;
+import ApproveMultiple = PriceOrderProposalsActions.ApproveMultiple;
 
 export class KimCustomerPriceOrderProposalsStateModel {
   priceOrder: KimPriceOrder;
@@ -44,6 +46,24 @@ export class PriceOrderProposalsState {
     setState(patch({ status: "fetching" } as Model));
 
     return this.rest.proposals(priceOrderId).pipe(
+      tap(priceOrder => setState(patch({priceOrder, status: "received"} as Model))),
+    );
+  }
+
+  @Action(Approve)
+  approve({ setState }: Context, { priceOrderId, proposalId}: Approve) {
+    setState(patch({ status: "updating" } as Model));
+
+    return this.rest.approve(priceOrderId, proposalId).pipe(
+      tap(priceOrder => setState(patch({priceOrder, status: "received"} as Model))),
+    );
+  }
+
+  @Action(ApproveMultiple)
+  approveMultiple({ setState }: Context, { priceOrderId, proposalIds}: ApproveMultiple) {
+    setState(patch({ status: "updating" } as Model));
+
+    return this.rest.approveMultiple(priceOrderId, proposalIds).pipe(
       tap(priceOrder => setState(patch({priceOrder, status: "received"} as Model))),
     );
   }

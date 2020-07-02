@@ -1,3 +1,4 @@
+@import "src/theme";
 @import "src/assets/styles/statuses";
 
 .activity-feed {
@@ -45,7 +46,7 @@
       }
 
       @each $status, $color in $statuses {
-        & div[class*=#{$status}] {
+        & div[class*="status-#{$status}"] {
           background-color: $color;
         }
       }
@@ -56,7 +57,7 @@
         background-color: #fbfcfe;
         margin-left: 6px;
         margin-top: -14px;
-        border-radius: 50%;
+        border-radius: uxg($theme, counter-border-radius);
       }
     }
     &:last-of-type {

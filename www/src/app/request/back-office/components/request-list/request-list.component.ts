@@ -15,6 +15,7 @@ import { AvailableFilters } from "../../models/available-filters";
 import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
+import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -31,7 +32,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
-  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter}>();
+  readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
 
   constructor(
@@ -49,13 +50,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.router.navigate(["."], { relativeTo: this.route, queryParams: null });
         }
       }),
-      scan(({filters: prev},  {page = 1, filters: curr}) => ({page, filters: {...prev, ...curr}}), {
+      scan(({filters: prev, sort: prevSort},  {page = 1, filters: curr, sort: currSort}) => ({page, filters: {...prev, ...curr}, sort: {...prevSort, ...currSort}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
-      } as {page?: number, filters?: RequestsListFilter}),
+      } as {page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}),
       takeUntil(this.destroy$)
     ).subscribe((data) => {
       this.activeFilters = data.filters;
-      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters)).subscribe(
+      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort)).subscribe(
         ({ BackofficeRequestList }) => {
           this.requestListComponent.switchToPrioritizedTab(BackofficeRequestList.requests);
         });
