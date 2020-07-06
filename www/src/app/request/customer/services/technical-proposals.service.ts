@@ -5,6 +5,7 @@ import {TechnicalProposalPosition} from "../../common/models/technical-proposal-
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
+import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 
 @Injectable({
   providedIn: "root"
@@ -55,5 +56,10 @@ export class TechnicalProposalsService {
       positions: ids,
       comment: comment
     });
+  }
+
+  getTechnicalProposalsAvailableStatuses(requestId: Uuid): Observable<TechnicalProposalsStatus[]> {
+    const url = `requests/customer/${requestId}/technical-proposals/available-statuses`;
+    return this.api.post<TechnicalProposalsStatus[]>(url, {});
   }
 }

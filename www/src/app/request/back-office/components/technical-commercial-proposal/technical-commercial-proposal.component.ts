@@ -20,7 +20,11 @@ export class TechnicalCommercialProposalComponent {
     return this.proposal?.positions.filter(({status}) => status !== 'NEW').length;
   }
 
+  get editable() {
+    return this.proposal?.positions.every(({status}) => ['NEW', 'SENT_TO_EDIT'].includes(status));
+  }
+
   get isReviewed() {
-    return this.proposal?.positions.length > 0 && this.proposal?.positions.every(({status}) => ['APPROVED', 'REJECTED'].includes(status));
+    return this.proposal?.positions.length > 0 && this.proposal?.positions.some(({status}) => ['APPROVED'].includes(status));
   }
 }

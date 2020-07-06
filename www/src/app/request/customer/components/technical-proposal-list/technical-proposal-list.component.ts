@@ -49,6 +49,9 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @Select(TechnicalProposalState.proposals)
   readonly technicalProposals$: Observable<TechnicalProposal[]>;
 
+  @Select(TechnicalProposalState.proposalAvailableStatuses)
+  readonly technicalProposalAvailableStatuses$: Observable<TechnicalProposalsStatus[]>;
+
   readonly destroy$ = new Subject();
   requestId: Uuid;
   positions$: Observable<RequestPosition[]>;

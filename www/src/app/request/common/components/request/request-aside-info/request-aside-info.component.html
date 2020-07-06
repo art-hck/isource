@@ -53,7 +53,7 @@
         {{ request.user.lastName }} {{ request.user.firstName }} {{ request.user.middleName }}
       </a>
     </div>
-    <div class="app-section">
+    <div class="app-section" *ngIf="request.user.phone">
       <div class="app-ghost-color">Телефон контактного лица</div>
       <div class="contragent-phone">{{ request.user.phone | phone }}</div>
     </div>

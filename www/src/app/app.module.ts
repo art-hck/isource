@@ -18,6 +18,7 @@ import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
 import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
 import { AuthService } from "./auth/services/auth.service";
 import { ApplicationRef } from "@angular/core";
+import { CartStoreService } from "./cart/services/cart-store.service";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -49,7 +50,8 @@ const keycloakService = new KeycloakService();
 })
 export class AppModule {
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    public cartStoreService: CartStoreService,
   ) {
   }
 
@@ -69,6 +71,7 @@ export class AppModule {
         this.authService.saveAuthUserData().subscribe(() => {
           console.log('saveAuthUserData');
         });
+        this.cartStoreService.load();
       };
 
     keycloakService
@@ -77,6 +80,7 @@ export class AppModule {
         this.authService.saveAuthUserData().subscribe(() => {
           console.log('saveAuthUserData');
         });
+        this.cartStoreService.load();
       };
   }
 }

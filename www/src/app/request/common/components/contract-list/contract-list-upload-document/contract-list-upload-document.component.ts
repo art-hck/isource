@@ -19,6 +19,8 @@ export class ContractListUploadDocumentComponent implements OnChanges {
   @Input() contract: Contract;
   @Output() complete = new EventEmitter();
 
+  selectedDocuments: RequestDocument[] = [];
+
   public forms: FormGroup[] = [];
   public uploadedFiles: File[] = [];
 
@@ -26,18 +28,21 @@ export class ContractListUploadDocumentComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.isFilesChanged(changes.files) || true) {
+    if (this.isFilesChanged(changes.files)) {
       const files = this.files
         .filter(file => this.forms.map(form => form.get('file').value).indexOf(file) < 0);
 
-      files.forEach(file => this.forms.push(
-        new FormGroup({
-          file: new FormControl(file),
-          comment: new FormControl(''),
-          state: new FormControl(ClrLoadingState.DEFAULT)
-        })
-      ))
-      ;
+      files.forEach(file => {
+        this.forms.push(
+          new FormGroup({
+            file: new FormControl(file),
+            comment: new FormControl(''),
+            state: new FormControl(ClrLoadingState.DEFAULT)
+          })
+        );
+
+        this.selectedDocuments.push(this.fileAsDocument(file));
+      });
     }
   }
 
@@ -53,9 +58,7 @@ export class ContractListUploadDocumentComponent implements OnChanges {
   }
 
   public isFilesChanged(files: SimpleChange): boolean {
-    return (files.currentValue || []).filter(prevFile => {
-      return (files.previousValue || []).indexOf(prevFile) < 0;
-    }).length > 0;
+    return JSON.stringify(files.currentValue) !== JSON.stringify(files.previousValue);
   }
 
   public submit(form: FormGroup): void {
