@@ -59,8 +59,6 @@ export class AppModule {
     keycloakService
       .init(AppConfig.keycloak)
       .then(() => {
-        console.log('[ngDoBootstrap] bootstrap app');
-
         app.bootstrap(AppComponent);
       })
       .catch(error => console.error('[ngDoBootstrap] init Keycloak failed', error));
@@ -68,18 +66,14 @@ export class AppModule {
     keycloakService
       .getKeycloakInstance()
       .onAuthSuccess = () => {
-        this.authService.saveAuthUserData().subscribe(() => {
-          console.log('saveAuthUserData');
-        });
+        this.authService.saveAuthUserData().subscribe();
         this.cartStoreService.load();
       };
 
     keycloakService
       .getKeycloakInstance()
       .onAuthRefreshSuccess = () => {
-        this.authService.saveAuthUserData().subscribe(() => {
-          console.log('saveAuthUserData');
-        });
+        this.authService.saveAuthUserData().subscribe();
         this.cartStoreService.load();
       };
   }

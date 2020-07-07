@@ -37,7 +37,6 @@ export class GridRowComponent implements OnInit, OnDestroy {
         tap(type => this.selectedProposal.setValue(
           this.helper.chooseBy(type, this.position, this.proposals)
         )),
-        tap(type => console.log(this.helper.chooseBy(type, this.position, this.proposals))),
         takeUntil(this.destroy$)
       ).subscribe();
     }
