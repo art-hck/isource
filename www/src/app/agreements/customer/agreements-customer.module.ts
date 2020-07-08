@@ -7,6 +7,7 @@ import { NgxsModule } from "@ngxs/store";
 import { AgreementListState } from "./states/agreement-list.state";
 import { AgreementsCommonModule } from "../common/agreements-common.module";
 import { AgreementsComponent } from "./components/agreements/agreements.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { AgreementsComponent } from "./components/agreements/agreements.componen
     NgxsModule.forFeature([
       AgreementListState
     ]),
+    ReactiveFormsModule
   ],
   exports: [AgreementsComponent]
 })
