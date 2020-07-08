@@ -16,7 +16,7 @@
 </div>
 
 <form [formGroup]="form">
-  <div class="app-row" *ngIf="request.type !== 'FREE_FORM'">
+  <div class="app-row" *ngIf="request.type !== 'FREE_FORM' || positions.length !== 0">
     <!-- Контролы управления позициями -->
     <div class="app-col app-table app-no-border">
       <div class="app-row app-align-items-center">
