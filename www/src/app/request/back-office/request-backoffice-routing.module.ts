@@ -11,6 +11,7 @@ import { CommercialProposalListComponent } from "./components/commercial-proposa
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
+import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 
 const routes: Routes = [
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
+        component: CommercialProposalViewComponent,
+        data: { title: "Коммерческие предложения" }
+      },
+      {
+        path: 'commercial-proposals-old',
         component: CommercialProposalListComponent,
         data: { title: "Коммерческие предложения" }
       },

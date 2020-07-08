@@ -22,8 +22,8 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Input() request: Request;
   @Input() position: RequestPosition;
   @Input() commercialProposal: CommercialProposal;
-  @Input() addOfferModalOpen = false;
   @Input() editMode = false;
+  @Input() supplier: ContragentList;
   @Output() create = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() cancel = new EventEmitter();
@@ -69,11 +69,11 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     });
 
     this.supplierContragentControl = this.formBuilder.control(
-      this.defaultCPValue('supplierContragent'),
+      this.supplier || this.defaultCPValue('supplierContragent'),
       [Validators.required, (control) => this.supplierOfferExistsValidator(control)]
     );
 
-    if (this.editMode) {
+    if (this.supplier || this.editMode) {
       this.supplierContragentControl.disable();
     }
   }

@@ -7,8 +7,8 @@ import { RequestDocument } from "../../common/models/request-document";
 import { Request } from "../../common/models/request";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestPosition } from "../../common/models/request-position";
-import { map } from 'rxjs/operators';
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
+import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +19,12 @@ export class CommercialProposalsService {
     protected api: HttpClient,
   ) {
   }
+
+  getOffers(id: Uuid) {
+    const url = `requests/backoffice/${id}/positions-with-offers`;
+    return this.api.get<PositionsWithSuppliers>(url);
+  }
+
 
   addOffer(id: Uuid, positionId, offer: RequestOfferPosition) {
     const url = `requests/backoffice/${id}/positions/${positionId}/add-offer`;
@@ -37,11 +43,9 @@ export class CommercialProposalsService {
 
   publishRequestOffers(id: Uuid, requestPositions: RequestPosition[]) {
     const url = `requests/backoffice/${id}/publish-offers`;
-    const ids = requestPositions.map(item => item.id);
+    const positionIds = requestPositions.map(item => item.id);
 
-    return this.api.post(url, {
-      positionIds: ids
-    });
+    return this.api.post(url, { positionIds });
   }
 
   cancelPublishRequestOffers(id: Uuid, requestPosition: RequestPosition): Observable<RequestPosition> {
@@ -79,6 +83,11 @@ export class CommercialProposalsService {
       .subscribe(data => {
         saveAs(data, `Request${request.number}OffersTemplate.xlsx`);
       });
+  }
+
+  downloadTemplate(request: Request) {
+    const url = `requests/backoffice/${request.id}/download-offers-template`;
+    return this.api.post(url, {}, {responseType: 'blob'});
   }
 
   addOffersFromExcel(requestId: Uuid, files: File[]): Observable<any> {

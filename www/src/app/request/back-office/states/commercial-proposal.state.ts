@@ -9,11 +9,18 @@ import {CommercialProposal} from "../../common/models/commercial-proposal";
 import {CommercialProposalsService} from "../services/commercial-proposals.service";
 import {CommercialProposalsActions} from "../actions/commercial-proposal.actions";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import { ContragentList } from "../../../contragent/models/contragent-list";
+import Fetch = CommercialProposalsActions.Fetch;
+import { patch } from "@ngxs/store/operators";
+import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
+import UploadTemplate = CommercialProposalsActions.UploadTemplate;
+import Update = CommercialProposalsActions.Update;
+import PublishPositions = CommercialProposalsActions.PublishPositions;
 
 export interface CommercialProposalStateModel {
-  proposals: CommercialProposal[];
+  positions: RequestPosition[];
+  suppliers: ContragentList[];
   status: StateStatus;
-  availablePositions: RequestPosition[];
 }
 
 type Model = CommercialProposalStateModel;
@@ -21,7 +28,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeCommercialProposals',
-  defaults: { proposals: null, availablePositions: null, status: "pristine" }
+  defaults: { positions: null, suppliers: null, status: "pristine" }
 })
 @Injectable()
 export class CommercialProposalState {
@@ -30,15 +37,45 @@ export class CommercialProposalState {
   constructor(private rest: CommercialProposalsService) {
   }
 
-  @Selector() static proposals({ proposals }: Model) { return proposals; }
-  @Selector() static proposalsLength({ proposals }: Model) { return proposals.length; }
-  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
+  @Selector() static positions({ positions }: Model) { return positions; }
+  @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
+  @Selector() static positionsLength({ positions }: Model) { return positions.length; }
   @Selector() static status({ status }: Model) { return status; }
+
+  @Action([Fetch, Update])
+  fetch({ setState }: Context, { update, requestId }: Fetch) {
+    if (update) {
+      setState(patch({ status: "updating" } as Model));
+    } else {
+      setState(patch({ positions: null, suppliers: null, status: "fetching" } as Model));
+    }
+
+    return this.rest.getOffers(requestId).pipe(
+      tap(({positions, suppliers}) => setState({ positions, suppliers, status: "received" }))
+    );
+  }
+
+  @Action(PublishPositions)
+  publishPositions(ctx: Context, { requestId, positions }: PublishPositions) {
+    return this.rest.publishRequestOffers(requestId, positions).pipe(tap(() => ctx.dispatch(new Update(requestId))));
+  }
 
   @Action(DownloadAnalyticalReport)
   downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
     return this.rest.downloadAnalyticalReport(requestId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
+  }
+
+  @Action(DownloadTemplate)
+  downloadTemplate(ctx: Context, { request }: DownloadTemplate) {
+    return this.rest.downloadTemplate(request).pipe(
+      tap((data) => saveAs(data, `Request${request.number}OffersTemplate.xlsx`))
+    );
+  }
+
+  @Action(UploadTemplate)
+  uploadTemplate(ctx: Context, { requestId, files }: UploadTemplate) {
+    return this.rest.addOffersFromExcel(requestId, files).pipe(tap(() => ctx.dispatch(new Update(requestId))));
   }
 }
