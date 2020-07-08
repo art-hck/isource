@@ -131,13 +131,13 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
     // Кол-во дней, начиная с текущего, с которого можно начинать выбрать дату
     let amount = 3;
 
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= amount; i++) {
       // Не учитываем выходные дни
-      if (["0", "6"].includes(moment().add(i, 'd').format("d"))) { amount++; }
+      if (["6", "7"].includes(moment().add(i, 'd').format("E"))) { amount++; }
     }
 
-    // Блокируем воскресенье и прошедшние даты
-    return moment(date).format('E') === '7' || !moment().add(amount, "d").startOf('day').isSameOrBefore(date);
+    // Блокируем неугодные даты
+    return !moment().add(amount, "d").startOf('day').isSameOrBefore(date);
   }
 
   ngOnDestroy() {
