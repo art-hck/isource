@@ -78,10 +78,7 @@
           <!-- dateDelivery -->
           <div class="app-col">
             <div class="app-control-wrap">
-              <input #dateDelivery uxgInput lg uxgDatepicker
-                     formControlName="dateDelivery"
-                     appDateIsAfter="dateResponse"
-                     dateFormat="d.m.Y" />
+              <input #dateDelivery uxgInput lg uxgDatepicker formControlName="dateDelivery" appDateIsAfter="dateResponse" dateFormat="d.m.Y"/>
               <label class="app-control-label" (click)="dateDelivery.focus()">Дата поставки</label>
               <label class="app-control-icon" (click)="dateDelivery.focus()">
                 <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
