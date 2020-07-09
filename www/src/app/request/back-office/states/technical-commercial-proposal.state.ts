@@ -13,7 +13,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Procedure } from "../models/procedure";
 import { ProcedureService } from "../services/procedure.service";
-import { ProcedureSource } from "../../common/enum/procedure-source";
+import { ProcedureSource } from "../enum/procedure-source";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;

@@ -9,6 +9,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestPosition } from "../../common/models/request-position";
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 
 @Injectable({
   providedIn: "root"
@@ -21,19 +22,23 @@ export class CommercialProposalsService {
   }
 
   getOffers(id: Uuid) {
-    const url = `requests/backoffice/${id}/positions-with-offers`;
+    const url = `requests/backoffice/${id}/commercial-proposals`;
     return this.api.get<PositionsWithSuppliers>(url);
   }
 
+  addSupplier(id: Uuid, supplierId: Uuid) {
+    const url = `requests/backoffice/${id}/commercial-proposals/add-supplier`;
+    return this.api.post<ContragentShortInfo[]>(url, { supplierId });
+  }
 
   addOffer(id: Uuid, positionId, offer: RequestOfferPosition) {
     const url = `requests/backoffice/${id}/positions/${positionId}/add-offer`;
-    return this.api.post(url, this.convertModelToFormData(offer));
+    return this.api.post<RequestOfferPosition>(url, this.convertModelToFormData(offer));
   }
 
   editOffer(id: Uuid, positionId, editedOffer: RequestOfferPosition) {
     const url = `requests/backoffice/${id}/positions/${positionId}/edit-offer`;
-    return this.api.post(url, this.convertModelToFormData(editedOffer));
+    return this.api.post<RequestOfferPosition>(url, this.convertModelToFormData(editedOffer));
   }
 
   publishOffers(id: Uuid, positionId) {

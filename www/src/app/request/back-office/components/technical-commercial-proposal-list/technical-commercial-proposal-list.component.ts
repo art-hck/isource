@@ -35,7 +35,7 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../common/models/state-status";
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProcedureSource } from "../../enum/procedure-source";
 import { Procedure } from "../../models/procedure";
 import { ProcedureAction } from "../../models/procedure-action";
 import Create = TechnicalCommercialProposals.Create;

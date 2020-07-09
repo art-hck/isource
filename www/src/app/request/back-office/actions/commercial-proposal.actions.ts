@@ -1,6 +1,7 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { Request } from "../../common/models/request";
 import { RequestPosition } from "../../common/models/request-position";
+import { RequestOfferPosition } from "../../common/models/request-offer-position";
 
 export namespace CommercialProposalsActions {
 
@@ -12,12 +13,42 @@ export namespace CommercialProposalsActions {
     constructor(public requestId: Uuid) {}
   }
 
+  // Получить процедуры КП
+  export class FetchProcedures {
+    static readonly type = '[Commercial Proposals Backoffice] FetchProcedures';
+    update = false;
+
+    constructor(public requestId: Uuid) {}
+  }
+
+  // Получить процедуры КП
+  export class RefreshProcedures implements FetchProcedures {
+    static readonly type = '[Commercial Proposals Backoffice] RefreshProcedures';
+    update = true;
+
+    constructor(public requestId: Uuid) {}
+  }
+
   // Обновить КП
-  export class Update {
+  export class Refresh implements Fetch {
     static readonly type = '[Commercial Proposals Backoffice] Update';
     update = true;
 
     constructor(public requestId: Uuid) {}
+  }
+
+  // Отправить позиции на согласование
+  export class AddSupplier {
+    static readonly type = '[Commercial Proposals Backoffice] AddSupplier';
+
+    constructor(public requestId: Uuid, public supplierId: Uuid) {}
+  }
+
+  // Отправить позиции на согласование
+  export class SaveProposal {
+    static readonly type = '[Commercial Proposals Backoffice] AddProposal';
+
+    constructor(public requestId: Uuid, public positionId: Uuid, public proposal: RequestOfferPosition) {}
   }
 
   // Отправить позиции на согласование

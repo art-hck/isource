@@ -6,7 +6,7 @@ import { StateStatus } from "../../../common/models/state-status";
 import { Uuid } from "../../../../cart/models/uuid";
 import { ProposalsView } from "../../../../shared/models/proposals-view";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProcedureSource } from "../../enum/procedure-source";
 import { getCurrencySymbol } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
@@ -32,12 +32,12 @@ import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalR
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
 import UploadTemplate = CommercialProposalsActions.UploadTemplate;
-import Update = CommercialProposalsActions.Update;
+import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
+import AddSupplier = CommercialProposalsActions.AddSupplier;
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
-  styleUrls: ['./commercial-proposal-view.component.scss'],
   animations: [trigger('sidebarHide', [
     transition(':leave', animate('300ms ease', style({ 'max-width': '0', 'margin-left': '0' }))),
   ])],
@@ -48,6 +48,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
   @Select(CommercialProposalState.positions) positions$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.suppliers) suppliers$: Observable<ContragentList[]>;
+  @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
@@ -60,14 +61,16 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   proposalModalData: {position: RequestPosition, proposal: Proposal};
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
+  prolongModalPayload: Procedure;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
   readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId);
   readonly downloadTemplate = (request: Request) => new DownloadTemplate(request);
   readonly uploadTemplate = (files: File[]) => new UploadTemplate(this.requestId, files);
-  readonly updatePositions = () => new Update(this.requestId);
+  readonly refresh = () => new Refresh(this.requestId);
   readonly publishPositions = () => new PublishPositions(this.requestId, this.selectedPositions);
+  readonly addSupplier = ({ id }: ContragentShortInfo) => new AddSupplier(this.requestId, id);
 
   get selectedPositions() {
     return (this.form?.get('positions') as FormArray)?.controls?.filter(({value}) => value.checked).map(({value}) => value.position);
@@ -151,4 +154,5 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
+  trackById = (i, { id }) => id;
 }

@@ -16,7 +16,7 @@ import * as moment from "moment";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { Observable, Subject, throwError } from "rxjs";
 import { ProcedureAction } from "../../models/procedure-action";
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProcedureSource } from "../../enum/procedure-source";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 
