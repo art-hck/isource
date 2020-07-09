@@ -35,6 +35,7 @@ import { TechnicalCommercialProposalContragentFormComponent } from "./components
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
 import { ProcedureComponent } from './components/procedure/procedure.component';
 import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
+import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ProcedureGridComponent } from './components/procedure-grid/procedure-gr
     ProcedureFormDocumentsComponent,
     TechnicalProposalComponent,
     CommercialProposalListComponent,
+    CommercialProposalViewComponent,
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,

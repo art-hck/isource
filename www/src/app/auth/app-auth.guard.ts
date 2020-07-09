@@ -15,8 +15,6 @@ export class AppAuthGuard extends KeycloakAuthGuard {
         this.keycloakAngular.login();
         return;
       }
-      console.log('Role restriction given at app-routing.module for this route', route.data.roles);
-      console.log('User roles coming after login from keycloak :', this.roles);
 
       const requiredRoles = route.data.roles;
       let granted = false;
