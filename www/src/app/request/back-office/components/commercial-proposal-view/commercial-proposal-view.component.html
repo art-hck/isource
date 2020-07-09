@@ -82,7 +82,7 @@
         </div>
 
         <!-- grid -->
-        <div *ngIf="(view !=='list' && (positions.length && suppliers.length || (procedures$ | async).length) )"
+        <div *ngIf="(view !=='list' && positions.length + (procedures$ | async).length)"
              class="grid-table" [class.disabled]="(status$ | async) !== 'received'">
           <app-grid-contragents
             *ngIf="view === 'grid' && suppliers.length"
