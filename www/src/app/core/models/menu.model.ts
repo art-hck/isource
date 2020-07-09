@@ -15,6 +15,12 @@ export const Menu: MenuModel[] = [
     children: []
   },
   {
+    text: 'Согласования',
+    path: 'agreements/customer',
+    feature: 'customerAgreements',
+    children: []
+  },
+  {
     text: 'Заявки',
     path: 'requests/customer',
     feature: 'customerRequest',
