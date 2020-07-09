@@ -15,7 +15,6 @@ import { ProposalFormManufacturerComponent } from './components/proposal-form-ma
 import { ProcedureFormComponent } from './components/procedure-form/procedure-form.component';
 import { ProcedureFormPropertiesComponent } from './components/procedure-form/procedure-form-properties/procedure-form-properties.component';
 import { ProcedureFormDocumentsComponent } from "./components/procedure-form/procedure-form-documents/procedure-form-documents.component";
-import { CommercialProposalListComponent } from './components/commercial-proposal-list/commercial-proposal-list.component';
 import { CommercialProposalFormComponent } from './components/commercial-proposal-form/commercial-proposal-form.component';
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
@@ -36,6 +35,7 @@ import { TechnicalCommercialProposalPositionFormComponent } from "./components/t
 import { ProcedureComponent } from './components/procedure/procedure.component';
 import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
+import { ProcedureProlongateComponent } from "./components/procedure-prolongate/procedure-prolongate.component";
 
 @NgModule({
   declarations: [
@@ -47,8 +47,8 @@ import { CommercialProposalViewComponent } from "./components/commercial-proposa
     ProcedureFormComponent,
     ProcedureFormPropertiesComponent,
     ProcedureFormDocumentsComponent,
+    ProcedureProlongateComponent,
     TechnicalProposalComponent,
-    CommercialProposalListComponent,
     CommercialProposalViewComponent,
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,

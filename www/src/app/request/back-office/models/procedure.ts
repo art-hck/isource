@@ -1,5 +1,5 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { ProcedureSource } from "../../common/enum/procedure-source";
+import { ProcedureSource } from "../enum/procedure-source";
 import { RequestDocument } from "../../common/models/request-document";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { RequestPosition } from "../../common/models/request-position";
