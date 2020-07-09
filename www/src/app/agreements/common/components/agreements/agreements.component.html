@@ -22,6 +22,9 @@
             <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
               <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}}</b>
             </ng-container>
+            <ng-container *ngIf="agreement.type === 'REQUEST_POSITION'">
+              <b>{{agreement.requestPosition.name}}</b>
+            </ng-container>
           </div>
           <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
