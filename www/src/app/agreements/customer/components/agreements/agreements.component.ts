@@ -8,9 +8,9 @@ import Fetch = AgreementListActions.Fetch;
 import { map } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AgreementAction } from "../../enum/agreement-action";
-import { AgreementActionFilters } from "../../dictionaries/agreement-action-label";
 import { Agreement } from "../../../common/models/Agreement";
+import { AgreementAction } from "../../../back-office/enum/agreement-action";
+import { AgreementActionFilters } from "../../../back-office/dictionaries/agreement-action-label";
 
 @Component({
   templateUrl: './agreements.component.html',
