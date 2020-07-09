@@ -14,4 +14,8 @@ export const AgreementActionFilters: {type: AgreementAction[], label: string}[] 
   { type: [AgreementAction.INIT_AGREEMENT_RKD], label: "Инициировать согласование РКД"},
   { type: [AgreementAction.INSPECTION_CONTROL], label: "Контроль размещения инспекции"},
   { type: [AgreementAction.MANUFACTURING_CONTROL, AgreementAction.MANUFACTURING_CONTROL_WITH_RKD], label: "Контроль начала изготовления"},
+  { type: [AgreementAction.COMPLETE_REQUEST], label: "Завершить формирование заявки" },
+  { type: [AgreementAction.REQUEST_AGREEMENT], label: "Согласовать заявку" },
+  { type: [AgreementAction.REVIEW_TP], label: "Рассмотреть технические предложения" },
+  { type: [AgreementAction.RESULTS_AGREEMENT_CP, AgreementAction.RESULTS_AGREEMENT_TCP], label: "Выбор поставщика" },
 ];

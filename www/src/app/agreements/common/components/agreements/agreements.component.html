@@ -4,7 +4,7 @@
       <div class="app-row">
         <small class="app-col-1 app-ghost-color id"><b>№ ЗАЯВКИ</b></small>
         <small class="app-col-3 app-ghost-color name"><b>НАИМЕНОВАНИЕ ПОЗИЦИИ/ГРУППЫ</b></small>
-        <small class="app-col-2 app-ghost-color customer"><b>ЗАКАЗЧИК</b></small>
+        <small class="app-col-2 app-ghost-color customer" *ngIf="!userInfoService.isCustomer()"><b>ЗАКАЗЧИК</b></small>
         <small class="app-col-2 app-ghost-color date"><b>ПОСТУПЛЕНИЕ</b></small>
         <small class="app-col-2 app-ghost-color status"><b>СТАТУС</b></small>
         <small class="app-col-2 app-ghost-color action"><b>ПЕРЕХОД К СОГЛАСОВАНИЮ</b></small>
@@ -28,7 +28,7 @@
           </div>
           <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
-        <div class="app-col-2 app-ellipsis customer">
+        <div class="app-col-2 app-ellipsis customer" *ngIf="!userInfoService.isCustomer()">
           {{agreement.request.contragent.shortName}}
         </div>
         <div class="app-col-2 date">
