@@ -133,6 +133,11 @@
                   <uxg-icon shape="app-waiting"></uxg-icon>
                   <span>На согласовании</span>
                 </div>
+                <ng-container *ngIf="this.canRollback(position)">
+                  <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(position))">
+                    Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
+                  </button>
+                </ng-container>
               </app-grid-row>
             </ng-container>
           </ng-container>

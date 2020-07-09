@@ -23,6 +23,7 @@ import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import SaveProposal = CommercialProposalsActions.SaveProposal;
+import Rollback = CommercialProposalsActions.Rollback;
 
 export interface CommercialProposalStateModel {
   positions: RequestPosition[];
@@ -104,6 +105,17 @@ export class CommercialProposalState {
   publishPositions({ setState, dispatch }: Context, { requestId, positions }: PublishPositions) {
     setState(patch({ status: "updating" } as Model));
     return this.rest.publishRequestOffers(requestId, positions).pipe(tap(() => dispatch(new Refresh(requestId))));
+  }
+
+  @Action(Rollback)
+  rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
+    setState(patch({ status: "updating" } as Model));
+    return this.rest.rollback(requestId, positionId).pipe(
+      tap(position => setState(patch({
+        positions: updateItem(({id}) => positionId === id, position),
+        status: "received" as StateStatus
+      })))
+    );
   }
 
   @Action(DownloadAnalyticalReport)

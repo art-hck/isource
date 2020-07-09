@@ -69,15 +69,20 @@ export namespace CommercialProposalsActions {
   export class DownloadTemplate {
     static readonly type = '[Commercial Proposals Backoffice] DownloadTemplate';
 
-    constructor(public request: Request) {
-    }
+    constructor(public request: Request) {}
+  }
+
+  // Откатить КП
+  export class Rollback {
+    static readonly type = '[Commercial Proposals Backoffice] Rollback';
+
+    constructor(public requestId: Uuid, public positionId: Uuid) {}
   }
 
   // Загрузить шаблон
   export class UploadTemplate {
     static readonly type = '[Commercial Proposals Backoffice] UploadTemplate';
 
-    constructor(public requestId: Uuid, public files: File[]) {
-    }
+    constructor(public requestId: Uuid, public files: File[]) {}
   }
 }

@@ -53,11 +53,9 @@ export class CommercialProposalsService {
     return this.api.post(url, { positionIds });
   }
 
-  cancelPublishRequestOffers(id: Uuid, requestPosition: RequestPosition): Observable<RequestPosition> {
+  rollback(id: Uuid, positionId: Uuid): Observable<RequestPosition> {
     const url = `requests/backoffice/${id}/cancel-publish-offers`;
-    return this.api.post<RequestPosition>(url, {
-      positionId: requestPosition.id
-    });
+    return this.api.post<RequestPosition>(url, { positionId });
   }
 
   uploadDocuments(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {

@@ -28,6 +28,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
+import { PositionStatus } from "../../../common/enum/position-status";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -35,6 +36,8 @@ import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
+import Rollback = CommercialProposalsActions.Rollback;
+import moment from "moment";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -62,6 +65,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
   prolongModalPayload: Procedure;
+  rollbackDuration = 10 * 60;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
@@ -71,6 +75,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   readonly refresh = () => new Refresh(this.requestId);
   readonly publishPositions = () => new PublishPositions(this.requestId, this.selectedPositions);
   readonly addSupplier = ({ id }: ContragentShortInfo) => new AddSupplier(this.requestId, id);
+  readonly rollback = ({ id }: RequestPosition) => new Rollback(this.requestId, id);
 
   get selectedPositions() {
     return (this.form?.get('positions') as FormArray)?.controls?.filter(({value}) => value.checked).map(({value}) => value.position);
@@ -147,6 +152,11 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
 
   convertProposals(proposals: RequestOfferPosition[]) {
     return proposals.map(proposal => new Proposal<RequestOfferPosition>(proposal));
+  }
+
+  canRollback(position: RequestPosition): boolean {
+    return position.status === PositionStatus.RESULTS_AGREEMENT &&
+      moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
   }
 
   getProposalBySupplier = (position: RequestPosition) => ({ id }: ContragentShortInfo) => {
