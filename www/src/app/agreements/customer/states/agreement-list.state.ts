@@ -1,18 +1,16 @@
 import { Page } from "../../../core/models/page";
-import { RequestStatusCount } from "../../../request/common/models/requests-list/request-status-count";
 import { StateStatus } from "../../../request/common/models/state-status";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { Injectable } from "@angular/core";
 import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { AgreementsService } from "../services/agreements.service";
-import { AgreementsResponse } from "../../common/models/agreements-response";
 import { AgreementListActions } from "../actions/agreement-list.actions";
 import Fetch = AgreementListActions.Fetch;
-import { RequestPosition } from "../../../request/common/models/request-position";
+import { Agreement } from "../../common/models/Agreement";
 
 export interface AgreementListStateModel {
-  agreements: Page<RequestPosition>;
+  agreements: Page<Agreement>;
   statusCounts: number;
   status: StateStatus;
 }
@@ -37,9 +35,9 @@ export class AgreementListState {
   @Selector()
   static status({ status }: Model) { return status; }
 
-  @Action(Fetch, { cancelUncompleted: true }) fetch({ setState }: Context, {startFrom, pageSize}: Fetch) {
+  @Action(Fetch, { cancelUncompleted: true }) fetch({ setState }: Context, {filters, startFrom, pageSize}: Fetch) {
     setState(patch({ status: "fetching" as StateStatus }));
-    return this.rest.getAgreements(startFrom, pageSize).pipe(
+    return this.rest.getAgreements(filters, startFrom, pageSize).pipe(
       tap(agreements => setState(patch({ agreements, status: "received" as StateStatus }))),
     );
   }

@@ -16,8 +16,7 @@
 </div>
 
 <form [formGroup]="form">
-  <div class="app-row">
-
+  <div class="app-row" *ngIf="request.type !== 'FREE_FORM' || positions.length !== 0">
     <!-- Контролы управления позициями -->
     <div class="app-col app-table app-no-border">
       <div class="app-row app-align-items-center">
@@ -159,37 +158,80 @@
     </div>
     <div class="app-col app-col-aside"></div>
   </div>
+
   <div class="app-row">
+    <ng-container *ngIf="request.type === 'FREE_FORM' && positions.length === 0; else regularRequestPositions">
+      <div class="app-col request-area">
+        <div class="no-positions">
+          <ng-container *ngIf="user.isCustomer()">
+            <h2 class="text-center" [style.opacity]="0.1">
+              <uxg-icon class="clock-icon" shape="app-waiting-big" [size]="165"></uxg-icon>
+              <br/>
+              Заявка находится в обработке <br/>  бэк-офиса, скоро здесь появятся <br/>  позиции
+            </h2>
+          </ng-container>
 
-    <!-- Список позиций -->
-    <div class="app-col app-table" [class.disabled]="(status && status !== 'received') || positionsStatus && positionsStatus !=='received'">
-      <ng-container *ngIf="positions.length === 0">
-        <h2 class="text-center" [style.opacity]="0.1">
-          <uxg-icon shape="app-info" size="270"></uxg-icon>
-          <br/>
-          К заявке пока не добавлено ни <br/> одной позиции
-        </h2>
-      </ng-container>
-      <ng-container *ngFor="let formGroup of formPositions.controls">
-        <!-- Позиция -->
-        <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
-          <a [href]="getPositionUrl(position)"
-             (click)="navigateToPosition(position, $event)"
-             class="app-row app-link-no-color"
-             [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
-            <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
-          </a>
-        </ng-container>
+          <ng-container *ngIf="user.isBackOffice()">
+            <h2 class="text-center" [style.opacity]="0.1">
+              <uxg-icon class="add-position-icon" shape="app-add-position" [size]="270"></uxg-icon>
+              <br/>
+              К заявке пока не добавлено <br/> ни одной позиции
+            </h2>
 
-        <!-- Группа -->
-        <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
-          <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group"-->
-          <div class="app-row app-link-no-color app-row-group">
-            <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
+            <div class="add-position-button">
+              <button uxgButton primary iconText (click)="addPositionModal.open()">
+                <uxg-icon shape="app-plus"></uxg-icon>
+                <span>Новая позиция</span>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+        <ng-container *ngIf="request.documents.length">
+          <div class="app-row">
+            <div class="app-col" [style.padding.px]="20">
+              <hr class="divider">
+
+              <small class="app-uppercase app-ghost-color app-bold">Документы прикреплены при создании</small>
+              <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="request.documents">
+              </app-document-simple-list>
+            </div>
           </div>
         </ng-container>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
+
+    <!-- Список позиций -->
+    <ng-template #regularRequestPositions>
+      <div class="app-col app-table" [class.disabled]="(status && status !== 'received') || positionsStatus && positionsStatus !=='received'">
+        <ng-container *ngIf="positions.length === 0">
+          <h2 class="text-center" [style.opacity]="0.1">
+            <uxg-icon shape="app-info" size="270"></uxg-icon>
+            <br/>
+            К заявке пока не добавлено ни <br/> одной позиции
+          </h2>
+        </ng-container>
+        <ng-container *ngFor="let formGroup of formPositions.controls">
+          <!-- Позиция -->
+          <ng-container *ngIf="asPosition(formGroup.get('position').value) as position">
+            <a [href]="getPositionUrl(position)"
+               (click)="navigateToPosition(position, $event)"
+               class="app-row app-link-no-color"
+               [ngClass]="{'canceled' : position.status === 'NOT_RELEVANT' || position.status === 'CANCELED'}">
+              <div *ngTemplateOutlet="positionItem; context: { position: position, formGroup: formGroup }"></div>
+            </a>
+          </ng-container>
+
+          <!-- Группа -->
+          <ng-container *ngIf="asGroup(formGroup.get('position').value) as group">
+            <!--a [href]="getPositionUrl(group)" (click)="navigateToPosition(group, $event)" class="app-row app-link-no-color app-row-group"-->
+            <div class="app-row app-link-no-color app-row-group">
+              <div *ngTemplateOutlet="groupItem; context:{ group: group, formGroup: formGroup }"></div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-template>
 
     <!-- Правая колонка -->
     <div class="app-col app-col-aside">

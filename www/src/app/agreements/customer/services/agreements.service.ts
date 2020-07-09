@@ -8,13 +8,8 @@ export class AgreementsService {
 
   constructor(private api: HttpClient) {}
 
-  getAgreements(startFrom: number = 0, pageSize: number = 20): Observable<AgreementsResponse> {
-    const url = `requests/customer/agreements`;
-    return this.api.post<AgreementsResponse>(url, {startFrom, pageSize});
-  }
-
-  getDashboardAgreements(): Observable<AgreementsResponse> {
-    const url = `requests/customer/dashboard/agreements`;
-    return this.api.post<AgreementsResponse>(url, null);
+  getAgreements(filters = null, startFrom: number = 0, pageSize: number = 20): Observable<AgreementsResponse> {
+    const url = `requests/customer/tasks`;
+    return this.api.post<AgreementsResponse>(url, {startFrom, pageSize, filters});
   }
 }
