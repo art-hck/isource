@@ -26,6 +26,7 @@ import Fetch = CommercialProposals.Fetch;
 import Approve = CommercialProposals.Approve;
 import { CommercialProposalListComponent } from "../commercial-proposal-list/commercial-proposal-list.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -45,7 +46,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
   @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<ContragentList[]>;
   requestId: Uuid;
-  view: "grid" | "simple-grid"| "list" = "grid";
+  view: ProposalsView = "grid";
   gridRows: ElementRef[];
   showedProposal: Proposal<RequestOfferPosition>;
   modalData: { proposal: Proposal<RequestOfferPosition>, position: Position<RequestPosition> };
@@ -102,7 +103,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     ).subscribe();
   }
 
-  switchView(view: "grid" | "simple-grid" | "list") {
+  switchView(view: ProposalsView) {
     this.view = view;
     this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();

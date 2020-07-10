@@ -22,6 +22,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { TechnicalProposal } from "../../models/technical-proposal";
 import { RequestTpFilterStatusesListComponent } from "./technical-proposal-filter-statuses-list/request-tp-filter-statuses-list.component";
 import { TechnicalProposalFilter } from "../../models/technical-proposal-filter";
+import { TechnicalProposalsStatus } from "../../enum/technical-proposals-status";
 
 @Component({
   selector: 'app-request-technical-proposal-filter',
@@ -41,12 +42,13 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   @Input() backofficeView: boolean;
   @Input() resultsCount: number;
   @Input() technicalProposals: TechnicalProposal[] = [];
+  @Input() technicalProposalsAvailableStatuses: TechnicalProposalsStatus[];
 
   private subscription: Subscription = new Subscription();
 
   requestId: Uuid;
   contragents: ContragentList[] = [];
-  tpStatuses = [];
+  tpStatuses: TechnicalProposalsStatus[] = [];
 
   requestTpListFilterForm: FormGroup;
 
@@ -124,9 +126,15 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   }
 
   getAgreementStateList(): void {
-    this.technicalProposals.forEach(tp => {
-      this.tpStatuses.push(tp.status);
-    });
+    // Т.к. для зака приходит поле availableStatuses, статусы берём из него.
+    // Для бэка пока по-старинке вытаскиваем статусы, пробежавшись по ТП
+    if (this.technicalProposalsAvailableStatuses) {
+      this.tpStatuses = this.technicalProposalsAvailableStatuses;
+    } else {
+      this.technicalProposals.forEach(tp => {
+        this.tpStatuses.push(tp.status);
+      });
+    }
 
     // Убираем из массива дублирующиеся статусы
     this.tpStatuses = this.tpStatuses.filter((value, index, array) =>

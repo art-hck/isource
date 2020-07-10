@@ -13,7 +13,7 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { RequestActions } from "../../actions/request.actions";
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProcedureSource } from "../../enum/procedure-source";
 import { TechnicalProposalFilter } from "../../../common/models/technical-proposal-filter";
 import { Procedure } from "../../models/procedure";
 import { ProcedureService } from "../../services/procedure.service";

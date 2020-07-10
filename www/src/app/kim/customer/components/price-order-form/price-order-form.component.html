@@ -63,7 +63,7 @@
                 dateFormat="d.m.Y H:i"
                 formControlName="dateResponse"
                 [enableTime]="true"
-                [disable]="[isDateResponseValid]"
+                [disable]="[isDateResponseInvalid]"
               />
               <label class="app-control-label" (click)="dateResponse.focus()">Дата ответа</label>
               <label class="app-control-icon" (click)="dateResponse.focus()">

@@ -96,9 +96,8 @@ export class RequestComponent implements OnChanges {
       this.flatPositions = this.requestService.getRequestPositionsFlat(this.positions);
       this.checkedPositions = [];
       this.groups = this.positions.filter(position => this.asGroup(position)) as RequestGroup[];
-      this.isDraft = this.request.status === RequestStatus.DRAFT || this.draftPositions.length > 0;
-      this.isOnApproval = this.featureService.authorize("approveRequest") &&
-        (this.request.status === RequestStatus.ON_CUSTOMER_APPROVAL || this.hasOnApprovalPositions.length > 0);
+      this.isDraft = this.draftPositions.length > 0;
+      this.isOnApproval = this.featureService.authorize("approveRequest") && this.hasOnApprovalPositions.length > 0;
     }
 
     this.formPositions.valueChanges.pipe(debounceTime(10)).subscribe(value => {
@@ -147,7 +146,7 @@ export class RequestComponent implements OnChanges {
     }
     if (["groups", "positions"].indexOf(type) >= 0) {
       this.formPositions.controls.forEach(c => c.get("checked").setValue(
-        c.get("positions") && this.asFormArray(c.get("positions")).controls.length > 0 === (type === "groups")
+        !!c.get("positions") === (type === "groups")
       ));
     }
   }

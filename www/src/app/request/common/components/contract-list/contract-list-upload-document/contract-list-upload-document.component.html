@@ -16,11 +16,11 @@
 </ng-container>
 
 <ng-container *ngIf="forms.length > 0">
-  <form *ngFor="let form of forms" [formGroup]="form" (ngSubmit)="submit(form)">
+  <form *ngFor="let form of forms; let i = index" [formGroup]="form" (ngSubmit)="submit(form)">
     <div class="app-row">
       <div class="left clr-col-4">
         <app-document-simple-list [enableUpload]="false"
-                                  [documents]="[fileAsDocument(form.get('file').value)]"></app-document-simple-list>
+                                  [documents]="[selectedDocuments[i]]"></app-document-simple-list>
       </div>
 
       <div class="left app-col">

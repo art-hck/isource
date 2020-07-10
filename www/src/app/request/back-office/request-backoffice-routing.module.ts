@@ -7,10 +7,10 @@ import { DesignDocumentationListComponent } from "../common/components/design-do
 import { ContractListComponent } from "../common/components/contract-list/contract-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
-import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
+import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 
 const routes: Routes = [
   {
@@ -30,7 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
-        component: CommercialProposalListComponent,
+        component: CommercialProposalViewComponent,
         data: { title: "Коммерческие предложения" }
       },
       {

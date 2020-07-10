@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
-import { ToastActions } from "../../../../../shared/actions/toast.actions";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CommercialProposalsService } from "../../../../back-office/services/commercial-proposals.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Store } from "@ngxs/store";
-import { Uuid } from "../../../../../cart/models/uuid";
+import { Uuid } from "../../../../cart/models/uuid";
 import * as moment from "moment";
 import { Moment } from "moment";
 import { catchError, finalize, takeUntil, tap } from "rxjs/operators";
 import { Subject, throwError } from "rxjs";
 
 @Component({
-  selector: 'app-prolongate-procedure',
-  templateUrl: './prolongate-procedure.component.html'
+  selector: 'app-procedure-prolongate',
+  templateUrl: './procedure-prolongate.component.html'
 })
-export class ProlongateProcedureComponent implements OnChanges, OnDestroy {
+export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
 
   @Input() requestId: Uuid;
   @Input() procedureId: number;

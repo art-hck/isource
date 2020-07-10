@@ -4,8 +4,9 @@
   <div class="app-col"></div>
   <h3 *ngIf="total > 0">
     <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-    <span>{{total | number: "1.0-2"}}</span>
-    <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
+    <span>
+      {{total | number: "1.0-2"}} <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span>
+    </span>
   </h3>
   <button *ngIf="sendToEdit.observers.length" uxgButton secondary lg (click)="sendToEdit.emit()" [disabled]="loading">
     Все на доработку

@@ -19,4 +19,10 @@ export class Agreement {
     name: PositionStatus;
     label: string;
   };
+  requestPosition: {
+    id: Uuid;
+    name: string;
+    status: string;
+    number: number;
+  };
 }

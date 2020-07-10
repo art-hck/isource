@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {EmployeeInfo, EmployeeInfoBrief} from "../models/employee-info";
 import {EmployeeItem} from "../models/employee-item";
 import {Uuid} from "../../cart/models/uuid";
+import { User } from "../../user/models/user";
 
 @Injectable()
 export class EmployeeService {
@@ -65,5 +66,10 @@ export class EmployeeService {
   resendEmployeeActivationLink(employeeId: Uuid) {
     const url = `users/registration/resend-activation`;
     return this.api.post<null>(url, { userId: employeeId });
+  }
+
+  addContragentToUser(contragentId: Uuid, user: User) {
+    const url = `users/add-contragent-to-user`;
+    return this.api.post<EmployeeInfoBrief[]>(url, { userId: user.id, contragentId: contragentId });
   }
 }

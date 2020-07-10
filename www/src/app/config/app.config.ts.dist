@@ -7,6 +7,15 @@ export const AppConfig: GpnmarketConfigInterface = {
     api: 'api/',
     ws: 'ws://localhost:3000'
   },
+  keycloak: {
+    config: {
+      url: 'https://gpnnsi-keycloak-test.etpgpb.ru/auth',
+      realm: 'master',
+      clientId: 'gpnmarket-loc',
+    },
+    loadUserProfileAtStartUp: false,
+    bearerExcludedUrls: ['https://suggestions.dadata.ru/'],
+  },
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',
   },

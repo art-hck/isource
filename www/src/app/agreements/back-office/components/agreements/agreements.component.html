@@ -7,8 +7,10 @@
       >{{ action.label }}</div>
     </uxg-dropdown>
   </form>
+
   <app-agreements
     [agreements]="agreements">
   </app-agreements>
 </ng-container>
+
 <app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>

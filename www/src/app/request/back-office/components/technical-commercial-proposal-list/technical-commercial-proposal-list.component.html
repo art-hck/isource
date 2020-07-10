@@ -118,8 +118,8 @@
             </uxg-checkbox>
             <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>
 
-            <div class="app-ghost-color"> | {{proposalsByPos.position.quantity}} {{proposalsByPos.position.measureUnit}} </div>
-            <div class="app-ghost-color"> |
+            <div class="app-ghost-color">&nbsp;| {{proposalsByPos.position.quantity}} {{proposalsByPos.position.measureUnit}} </div>
+            <div class="app-ghost-color">&nbsp;|
               <ng-container *ngIf="proposalsByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</ng-container>
               <ng-template #deliveryDate>{{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
             </div>
@@ -241,14 +241,14 @@
 
       <uxg-modal [(state)]="prolongModalPayload">
         <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
-        <app-prolongate-procedure
+        <app-procedure-prolongate
           *ngIf="prolongModalPayload"
           [date]="prolongModalPayload.dateEndRegistration"
           [procedureId]="prolongModalPayload.procedureId"
           [requestId]="requestId"
           (close)="prolongModalPayload = null"
           (complete)="this.store.dispatch(updateProcedures()); prolongModalPayload = null"
-        ></app-prolongate-procedure>
+        ></app-procedure-prolongate>
       </uxg-modal>
 
       <uxg-modal [(state)]="proposalModalData" size="l">

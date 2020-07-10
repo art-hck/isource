@@ -308,10 +308,12 @@ export class DesignDocumentationListComponent implements OnInit {
     return {id, name, receivingLimit, adjustmentLimit, comment};
   }
 
-  editDesignDoc(request: Request, designDocModel, designDocList: DesignDocumentationList) {
+  editDesignDoc(request: Request, index, designDocList: DesignDocumentationList) {
+    const designDocModel = this.designDocModels[index];
     this.designDocumentationService.editDesignDocument(request.id, designDocModel.id, designDocModel)
       .subscribe(data => {
         const i = designDocList.designDocs.findIndex(_designDoc => _designDoc.id === designDocModel.id);
+        this.designDocModels[index] = null;
         designDocList.designDocs[i] = data;
       });
   }

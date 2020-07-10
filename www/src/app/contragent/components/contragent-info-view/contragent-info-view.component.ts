@@ -12,6 +12,9 @@ import {EmployeeInfoBrief} from "../../../employee/models/employee-info";
 import {UserInfoService} from "../../../user/service/user-info.service";
 import {Store} from "@ngxs/store";
 import {ToastActions} from "../../../shared/actions/toast.actions";
+import {User} from "../../../user/models/user";
+import {UserService} from "../../../user/service/user.service";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-contragent-info-view',
@@ -23,8 +26,13 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   contragentId: Uuid;
   contragent$: Observable<ContragentInfo>;
   employeesList$: Observable<EmployeeInfoBrief[]>;
+  customerBuyerUsersWithoutContragent$: Observable<User[]>;
   subscription = new Subscription();
   editedEmployee: EmployeeInfoBrief;
+
+  form = new FormGroup({
+    user: new FormControl(null, Validators.required)
+  });
 
   constructor(
     private bc: UxgBreadcrumbsService,
@@ -32,6 +40,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     protected getContragentService: ContragentService,
     protected employeeService: EmployeeService,
+    protected userService: UserService,
     public user: UserInfoService,
     public router: Router,
     private store: Store
@@ -42,6 +51,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     this.contragentId = this.route.snapshot.paramMap.get('id');
     this.getContragentInfo(this.contragentId);
     this.getContragentEmployeesList(this.contragentId);
+    this.getCustomerBuyerUsersWithoutContragent();
   }
 
   getContragentInfo(contragentId: Uuid): void {
@@ -58,6 +68,10 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   getContragentEmployeesList(contragentId: Uuid): void {
     this.employeesList$ = this.employeeService.getEmployeesList(contragentId).pipe(shareReplay(1));
+  }
+
+  getCustomerBuyerUsersWithoutContragent(): void {
+    this.customerBuyerUsersWithoutContragent$ = this.userService.getCustomerBuyerUsersWithoutContragent().pipe(shareReplay(1));
   }
 
   onDownloadPrimaInformReport(): void {
@@ -98,6 +112,18 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
       },
       (err) => {
         this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
+      }));
+  }
+
+  addContragentToUser() {
+    this.subscription.add(this.employeeService.addContragentToUser(this.contragentId, this.form.get('user').value).subscribe(
+      () => {
+        this.getContragentEmployeesList(this.contragentId);
+        this.getCustomerBuyerUsersWithoutContragent();
+        this.store.dispatch(new ToastActions.Success("Сотрудник успешно привязан!"));
+      },
+      (err) => {
+        this.store.dispatch(new ToastActions.Error('Ошибка привязки сотрудника! ' + err.error.detail));
       }));
   }
 

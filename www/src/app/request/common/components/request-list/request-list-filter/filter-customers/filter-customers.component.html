@@ -17,7 +17,7 @@
   <div class="app-row" *ngFor="let customer of getCustomers() | contragentSearchFilter: getCustomerSearchInputValue()">
     <uxg-checkbox #statusCheckbox [ngModel]="checked(customer.id)" (ngModelChange)="check(customer.id)" class="app-control">
     </uxg-checkbox>
-    <label class="app-col" (click)="statusCheckbox.check($event)">&nbsp; {{ customer.shortName }}</label>
+    <label class="app-col status-label" (click)="statusCheckbox.check($event)">{{ customer.shortName }}</label>
   </div>
 </div>
 

@@ -67,14 +67,14 @@
         </uxg-modal>
         <uxg-modal [(state)]="prolongModalPayload">
           <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
-          <app-prolongate-procedure
+          <app-procedure-prolongate
             *ngIf="prolongModalPayload"
             [date]="prolongModalPayload.dateEndRegistration"
             [procedureId]="prolongModalPayload.procedureId"
             [requestId]="requestId"
             (close)="refreshProcedures(); prolongModalPayload = null"
             (complete)="refreshProcedures(); prolongModalPayload = null"
-          ></app-prolongate-procedure>
+          ></app-procedure-prolongate>
         </uxg-modal>
       </div>
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { iif, Observable, of, Subscription } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { mergeMap, shareReplay } from "rxjs/operators";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -12,6 +12,11 @@ import { Request } from "../../../common/models/request";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
+import { Store } from "@ngxs/store";
+import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
+import { RequestOfferPosition } from "../../../common/models/request-offer-position";
+import SaveProposal = CommercialProposalsActions.SaveProposal;
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -21,12 +26,9 @@ import { Okei } from "../../../../shared/models/okei";
 export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Input() request: Request;
   @Input() position: RequestPosition;
-  @Input() commercialProposal: CommercialProposal;
-  @Input() addOfferModalOpen = false;
-  @Input() editMode = false;
-  @Output() create = new EventEmitter();
-  @Output() edit = new EventEmitter();
-  @Output() cancel = new EventEmitter();
+  @Input() commercialProposal: RequestOfferPosition;
+  @Input() supplier: ContragentShortInfo;
+  @Output() close = new EventEmitter();
   @ViewChild('contragentName') contragentName: ElementRef;
 
   newCommercialProposalForm: FormGroup;
@@ -45,7 +47,8 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private offersService: CommercialProposalsService,
     private contragentService: ContragentService,
-    public okeiService: OkeiService
+    public okeiService: OkeiService,
+    public store: Store
   ) { }
 
   ngOnInit() {
@@ -69,11 +72,11 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     });
 
     this.supplierContragentControl = this.formBuilder.control(
-      this.defaultCPValue('supplierContragent'),
+      this.supplier || this.defaultCPValue('supplierContragent'),
       [Validators.required, (control) => this.supplierOfferExistsValidator(control)]
     );
 
-    if (this.editMode) {
+    if (this.supplier || this.commercialProposal?.supplierContragent) {
       this.supplierContragentControl.disable();
     }
   }
@@ -92,15 +95,8 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     };
 
     // Отправляем КП
-    if (!this.editMode) {
-      this.subscription.add(this.offersService.addOffer(this.position.request.id, this.position.id, body)
-        .subscribe(cp => this.create.emit(cp))
-      );
-    } else {
-      this.subscription.add(this.offersService.editOffer(this.position.request.id, this.position.id, body)
-        .subscribe(cp => this.edit.emit(cp))
-      );
-    }
+    this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, body));
+    this.close.emit();
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {

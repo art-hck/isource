@@ -30,15 +30,18 @@
       </ng-container>
 
       <ng-container *uxgTab="employeesTab">
-        <div class="app-row action" *ngIf="user.isSeniorBackoffice()">
-          <button uxgButton secondary (click)="createEmployeeModal.open()">
-            <uxg-icon shape="app-plus"></uxg-icon>
-            Новый сотрудник
-          </button>
-        </div>
         <ng-template #loading class="load-block">
           <span class="spinner spinner-md"></span>
         </ng-template>
+
+        <div class="action" *ngIf="(customerBuyerUsersWithoutContragent$ | async)?.length > 0">
+          <button
+            uxgButton
+            primary
+            (click)="addContragentToUserModal.open()">
+            Привязать сотрудника заказчика
+          </button>
+        </div>
 
         <div class="app-row app-align-items-center" *ngIf="(employeesList$ |async) as employeesList; else loading">
           <div class="app-col">
@@ -54,12 +57,6 @@
 
                 <div class="app-col">
                   {{employee.phone}}
-                </div>
-
-                <div class="app-col edit" [style.max-width.px]="60">
-                  <button uxgButton secondary icon *ngIf="user.isSeniorBackoffice()" (click)="editedEmployee = employee; createEmployeeModal.open()">
-                    <uxg-icon shape="app-pen"></uxg-icon>
-                  </button>
                 </div>
               </div>
             </div>
@@ -107,5 +104,21 @@
   </uxg-modal>
 
 </ng-container>
+
+<uxg-modal size="m" #addContragentToUserModal>
+  <h2>Привязать сотрудника заказчика</h2>
+  <ng-container *ngIf="addContragentToUserModal.state">
+    <form [formGroup]="form" (ngSubmit)="addContragentToUser(); addContragentToUserModal.close()">
+          <br>
+    <uxg-dropdown lg placeholder="Выберите сотрудника" formControlName="user">
+      <div uxgDropdownItem [value]="user" *ngFor="let user of customerBuyerUsersWithoutContragent$ | async">{{ user.fullName || user.shortName }}</div>
+    </uxg-dropdown>
+      <div class="app-modal-footer app-row app-justify-content-end">
+        <button uxgButton secondary lg type="button" (click)="addContragentToUserModal.close()">Отмена</button>
+        <button uxgButton primary lg [disabled]="form.invalid">Привязать</button>
+      </div>
+    </form>
+  </ng-container>
+</uxg-modal>
 
 

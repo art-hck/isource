@@ -7,6 +7,7 @@ export const PositionInfoFieldsLabels: Record<PositionInfoField, string> = {
   [PositionInfoField.IS_DELIVERY_DATE_ASAP]: 'Срочная поставка',
   [PositionInfoField.MEASURE_UNIT]: 'Единица измерения',
   [PositionInfoField.NAME]: 'Наименование позиции',
+  [PositionInfoField.PAYMENT_TERMS]: 'Условия оплаты',
   [PositionInfoField.PRODUCTION_DOCUMENT]: 'Документ изготовления',
   [PositionInfoField.QUANTITY]: 'Количество',
   [PositionInfoField.START_PRICE]: 'Начальная максимальная цена',

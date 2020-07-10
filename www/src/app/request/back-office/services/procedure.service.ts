@@ -7,7 +7,7 @@ import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { ProcedureSource } from "../../common/enum/procedure-source";
+import { ProcedureSource } from "../enum/procedure-source";
 
 @Injectable()
 export class ProcedureService {

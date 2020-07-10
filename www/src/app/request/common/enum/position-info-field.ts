@@ -5,6 +5,7 @@ export enum PositionInfoField {
   IS_DELIVERY_DATE_ASAP = 'isDeliveryDateAsap',
   MEASURE_UNIT = 'measureUnit',
   NAME = 'name',
+  PAYMENT_TERMS = 'paymentTerms',
   PRODUCTION_DOCUMENT = 'productionDocument',
   QUANTITY = 'quantity',
   START_PRICE = 'startPrice',

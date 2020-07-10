@@ -123,14 +123,12 @@
 
         <!-- footer -->
         <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal) || tpStatusLabel(technicalProposal) === 'Черновик'">
-          <!-- todo Разделитель временно скрывается, пока скрыта кнопка отзыва ТП -->
-          <hr *ngIf="!availableCancelPublishTechnicalProposal(technicalProposal)">
+          <hr>
 
           <div class="app-row app-align-items-center">
             <div class="app-col app-secondary-color">
-              <!-- todo Текст комментария про отзыв скрывается, пока скрыта кнопка отзыва ТП -->
-              <!-- Вы можете отозвать отправленное на согласование заказчику техническое предложение-->
-              <!-- в течение ограниченного количества времени (таймер на кнопке)-->
+              Вы можете отозвать отправленное на согласование заказчику техническое предложение
+              в течение ограниченного количества времени (таймер на кнопке)
             </div>
 
             <ng-container *ngIf="availableCancelPublishTechnicalProposal(technicalProposal); else sendToReviewBtn">

@@ -14,6 +14,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 
 @Component({
@@ -29,7 +30,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
-  @Input() view: "list" | "grid";
+  @Input() view: ProposalsView;
   readonly destroy$ = new Subject();
   modalData: TechnicalCommercialProposalByPosition["data"][number];
 
