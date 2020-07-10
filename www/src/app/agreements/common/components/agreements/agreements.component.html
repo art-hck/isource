@@ -20,7 +20,13 @@
               <span class="app-ghost-color">Заявка: </span> <b>{{agreement.request.name}} </b>
             </ng-container>
             <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
-              <span class="app-ghost-color">ТП: </span> <b>{{agreement.requestTechnicalProposal.name}}</b>
+              <span class="app-ghost-color">ТП: </span>
+              <ng-container *ngIf="agreement.requestTechnicalProposal.name !== null; else noContragent">
+                <b>{{agreement.requestTechnicalProposal.name}}</b>
+              </ng-container>
+              <ng-template #noContragent>
+                Поставщик скрыт
+              </ng-template>
             </ng-container>
             <ng-container *ngIf="agreement.type === 'REQUEST_POSITION'">
               <b>{{agreement.requestPosition.name}}</b>
