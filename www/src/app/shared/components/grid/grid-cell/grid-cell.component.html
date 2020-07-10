@@ -8,6 +8,8 @@
       </h3>
       <!-- status -->
       <ng-container *ngIf="!selectedProposal">
+        <div class="app-ghost-color" *ngIf="proposal.isAnalog">Аналог</div>
+
         <div class="winner" *ngIf="proposal.isWinner">
           <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0H101V25H0L7 12.5L0 0Z" fill="#0EA04B"></path>
