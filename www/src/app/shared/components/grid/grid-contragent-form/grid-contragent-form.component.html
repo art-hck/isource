@@ -1,9 +1,4 @@
 <form [formGroup]="form" (ngSubmit)="submit(); close.emit()">
-  <div class="app-secondary-color">
-    Вы можете добавлять контрагентов и ТКП по ним по каждой позиции отдельно, а так же с помощью шаблона или в
-    альтернативном отображении.
-  </div>
-
   <uxg-dropdown-input
     formControlName="supplier" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
     [$]="contragents$"

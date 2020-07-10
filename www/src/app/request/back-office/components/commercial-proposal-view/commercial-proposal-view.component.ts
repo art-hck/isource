@@ -164,5 +164,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
+  getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
+
   trackById = (i, { id }) => id;
 }
