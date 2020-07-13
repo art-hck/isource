@@ -28,7 +28,7 @@
                 Поставщик скрыт
               </ng-template>
             </ng-container>
-            <ng-container *ngIf="agreement.type === 'REQUEST_POSITION' || (agreement.type === 'REQUEST' && agreement.action.name === 'REVIEW_RKD')">
+            <ng-container *ngIf="agreement.type === 'REQUEST_POSITION'">
               <b>{{agreement.requestPosition.name}}</b>
             </ng-container>
           </div>
