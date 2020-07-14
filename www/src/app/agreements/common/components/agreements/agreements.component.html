@@ -21,9 +21,9 @@
             </ng-container>
             <ng-container *ngIf="agreement.type === 'REQUEST_TECHNICAL_PROPOSAL'">
               <span class="app-ghost-color">ТП: </span>
-              <div *ngIf="agreement.requestTechnicalProposal.name; else noContragent">
+              <ng-container *ngIf="agreement.requestTechnicalProposal.name; else noContragent">
                 <b>{{agreement.requestTechnicalProposal.name}}</b>
-              </div>
+              </ng-container>
               <ng-template #noContragent>
                 Поставщик скрыт
               </ng-template>
