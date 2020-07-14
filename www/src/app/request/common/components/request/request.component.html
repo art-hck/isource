@@ -160,7 +160,7 @@
   </div>
 
   <div class="app-row">
-    <ng-container *ngIf="request.type === 'FREE_FORM' && positions.length === 0; else regularRequestPositions">
+    <ng-container *ngIf="request.type === 'FREE_FORM' || positions.length === 0; else regularRequestPositions">
       <div class="app-col request-area">
         <div class="no-positions">
           <ng-container *ngIf="user.isCustomer()">
