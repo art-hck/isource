@@ -8,6 +8,7 @@ export class Proposal<T = any> {
   currency: PositionCurrency;
   priceWithoutVat: number;
   isWinner: boolean;
+  isAnalog: boolean;
   measureUnit: string;
 
   constructor(public sourceProposal?: T, toProposalFn?: (sourceProposal: T) => Proposal<T>) {
