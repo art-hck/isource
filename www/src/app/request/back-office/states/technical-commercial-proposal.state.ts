@@ -27,6 +27,7 @@ import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import Rollback = TechnicalCommercialProposals.Rollback;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -188,6 +189,7 @@ export class TechnicalCommercialProposalState {
         proposals: updateItem(({ positions }) => positions.some(({id}) => proposalPosition.id === id), patch({
           positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
         })),
+        availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position),
         status: "received" as StateStatus,
       }))))
     );
@@ -216,6 +218,17 @@ export class TechnicalCommercialProposalState {
   downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
     return this.rest.downloadAnalyticalReport(requestId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
+    );
+  }
+
+  @Action(Rollback)
+  rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
+    setState(patch({ status: "updating" } as Model));
+    return this.rest.rollback(requestId, positionId).pipe(
+      tap(position => setState(patch({
+        positions: updateItem(({id}) => positionId === id, position),
+        status: "received" as StateStatus
+      })))
     );
   }
 }

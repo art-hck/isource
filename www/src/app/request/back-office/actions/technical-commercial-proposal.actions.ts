@@ -110,4 +110,11 @@ export namespace TechnicalCommercialProposals {
     constructor(public payload: Partial<TechnicalCommercialProposal> & { id: Uuid; positions: TechnicalCommercialProposalPosition[] }) {
     }
   }
+
+  // Откатить ТКП
+  export class Rollback {
+    static readonly type = '[Technical Commercial Proposals Backoffice] Rollback';
+
+    constructor(public requestId: Uuid, public positionId: Uuid) {}
+  }
 }

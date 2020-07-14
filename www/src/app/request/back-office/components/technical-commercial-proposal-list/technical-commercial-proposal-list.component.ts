@@ -1,17 +1,5 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
@@ -38,6 +26,10 @@ import { StateStatus } from "../../../common/models/state-status";
 import { ProcedureSource } from "../../enum/procedure-source";
 import { Procedure } from "../../models/procedure";
 import { ProcedureAction } from "../../models/procedure-action";
+import { PositionStatus } from "../../../common/enum/position-status";
+import moment from "moment";
+import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -48,8 +40,7 @@ import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
-import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
-import { ProposalsView } from "../../../../shared/models/proposals-view";
+import Rollback = TechnicalCommercialProposals.Rollback;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -83,6 +74,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
   proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
+  rollbackDuration = 10 * 60;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
@@ -91,6 +83,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
   readonly updateProcedures = () => [new RefreshProcedures(this.requestId), new FetchAvailablePositions(this.requestId)];
+  readonly rollback = ({ id }: RequestPosition) => new Rollback(this.requestId, id);
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
@@ -214,6 +207,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   hasAnalogs(proposals: TechnicalCommercialProposal[]) {
     return i => proposals[i].positions.some(p => p?.isAnalog);
+  }
+
+  canRollback(position: RequestPosition): boolean {
+    return position.status === PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT &&
+      moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
