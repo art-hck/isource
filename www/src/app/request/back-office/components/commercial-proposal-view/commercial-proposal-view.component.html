@@ -125,9 +125,13 @@
                   <ng-template #deliveryDate>{{position.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
                 </div>
                 <div class="app-col"></div>
-                <div class="app-ghost-color app-bold" *ngIf="position.status === 'PROPOSALS_PREPARATION'">
+                <div class="app-ghost-color app-bold" *ngIf="position.status === 'PROPOSALS_PREPARATION' && !isOnEdit(position)">
                   <uxg-icon shape="app-draft"></uxg-icon>
                   <span>Черновик</span>
+                </div>
+                <div class="app-warning-color app-bold" *ngIf="position.status === 'PROPOSALS_PREPARATION' && isOnEdit(position)">
+                  <uxg-icon shape="app-warning"></uxg-icon>
+                  <span>На доработке</span>
                 </div>
                 <div class="app-success-color app-bold" *ngIf="position.status === 'WINNER_SELECTED'">
                   <uxg-icon shape="app-check"></uxg-icon>

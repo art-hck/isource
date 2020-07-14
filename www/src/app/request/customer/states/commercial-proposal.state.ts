@@ -13,6 +13,8 @@ import { PositionStatus } from "../../common/enum/position-status";
 import Fetch = CommercialProposals.Fetch;
 import Approve = CommercialProposals.Approve;
 import Update = CommercialProposals.Update;
+import { CommercialProposalsStatus } from "../../common/enum/commercial-proposals-status";
+import Review = CommercialProposals.Review;
 
 export interface CommercialProposalStateModel {
   positions: RequestPosition[];
@@ -33,10 +35,12 @@ export class CommercialProposalState {
 
   constructor(private rest: CommercialProposalsService) {}
 
-  static proposalsByPos(positionStatus: PositionStatus) {
+  static proposalsByPos(status: PositionStatus | CommercialProposalsStatus) {
     return createSelector(
       [CommercialProposalState],
-      ({positions}: Model) => positions.filter(({status}) => status === positionStatus)
+      ({ positions }: Model) => positions.filter(
+        position => position.status === status || position.linkedOffers.some((p) => p.status === status)
+      )
     );
   }
 
@@ -61,8 +65,13 @@ export class CommercialProposalState {
   approve({ setState, dispatch }: Context, { requestId, positionIdsWithProposalIds }: Approve) {
     setState(patch({ status: "updating" as StateStatus }));
 
-    return this.rest.accept(requestId, positionIdsWithProposalIds).pipe(
-      switchMap(() => dispatch(new Update(requestId)))
-    );
+    return this.rest.accept(requestId, positionIdsWithProposalIds).pipe(switchMap(() => dispatch(new Update(requestId))));
+  }
+
+  @Action(Review)
+  review({ setState, dispatch }: Context, { requestId, body }: Review) {
+    setState(patch({ status: "updating" as StateStatus }));
+
+    return this.rest.review(requestId, body).pipe(switchMap(() => dispatch(new Update(requestId))));
   }
 }

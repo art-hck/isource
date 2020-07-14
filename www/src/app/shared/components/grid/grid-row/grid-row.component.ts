@@ -28,6 +28,7 @@ export class GridRowComponent implements OnInit, OnDestroy {
   @Output() create = new EventEmitter<ContragentShortInfo>();
   @HostBinding('class.position-row') positionRow = true;
   readonly selectedProposal = new FormControl(null, Validators.required);
+  readonly sendToEditProposal = new FormControl(null, Validators.required);
   readonly rejectedProposal = new FormControl(null, Validators.required);
   readonly destroy$ = new Subject();
 
@@ -48,11 +49,21 @@ export class GridRowComponent implements OnInit, OnDestroy {
       .subscribe(v => {
         // Workaround sync with multiple elements per one formControl
         this.selectedProposal.setValue(v, {onlySelf: true, emitEvent: false});
+        this.sendToEditProposal.reset(null, {emitEvent: false});
         this.rejectedProposal.reset(null, {emitEvent: false});
       });
 
     this.rejectedProposal.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
+      .subscribe(() => {
+        this.selectedProposal.reset(null, {emitEvent: false});
+        this.sendToEditProposal.reset(null, {emitEvent: false});
+      });
+
+    this.sendToEditProposal.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.selectedProposal.reset(null, {emitEvent: false});
+        this.rejectedProposal.reset(null, {emitEvent: false});
+      });
   }
 
   trackByProposalPositionId = (i, supplier: ContragentShortInfo) => this.getProposal(supplier)?.sourceProposal?.id;
