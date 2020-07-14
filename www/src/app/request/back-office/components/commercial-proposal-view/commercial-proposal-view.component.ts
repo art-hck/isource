@@ -152,7 +152,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   }
 
   isOnEdit({ linkedOffers }: RequestPosition) {
-    return linkedOffers.some(({status}) => status === CommercialProposalsStatus.SENT_TO_EDIT);
+    return linkedOffers.every(({status}) => status === CommercialProposalsStatus.SENT_TO_EDIT);
   }
 
   convertProposals(proposals: RequestOfferPosition[]) {
