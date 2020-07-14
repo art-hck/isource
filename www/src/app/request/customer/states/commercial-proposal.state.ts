@@ -10,9 +10,10 @@ import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../common/models/request-position";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { PositionStatus } from "../../common/enum/position-status";
+import { CommercialProposalsStatus } from "../../common/enum/commercial-proposals-status";
 import Fetch = CommercialProposals.Fetch;
-import Approve = CommercialProposals.Approve;
 import Update = CommercialProposals.Update;
+import Review = CommercialProposals.Review;
 
 export interface CommercialProposalStateModel {
   positions: RequestPosition[];
@@ -33,10 +34,12 @@ export class CommercialProposalState {
 
   constructor(private rest: CommercialProposalsService) {}
 
-  static proposalsByPos(positionStatus: PositionStatus) {
+  static proposalsByPos(status: PositionStatus | CommercialProposalsStatus) {
     return createSelector(
       [CommercialProposalState],
-      ({positions}: Model) => positions.filter(({status}) => status === positionStatus)
+      ({ positions }: Model) => positions.filter(
+        position => position.status === status || position.linkedOffers.some((p) => p.status === status)
+      )
     );
   }
 
@@ -57,12 +60,10 @@ export class CommercialProposalState {
     );
   }
 
-  @Action(Approve)
-  approve({ setState, dispatch }: Context, { requestId, positionIdsWithProposalIds }: Approve) {
+  @Action(Review)
+  review({ setState, dispatch }: Context, { requestId, body }: Review) {
     setState(patch({ status: "updating" as StateStatus }));
 
-    return this.rest.accept(requestId, positionIdsWithProposalIds).pipe(
-      switchMap(() => dispatch(new Update(requestId)))
-    );
+    return this.rest.review(requestId, body).pipe(switchMap(() => dispatch(new Update(requestId))));
   }
 }

@@ -29,6 +29,8 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { PositionStatus } from "../../../common/enum/position-status";
+import moment from "moment";
+import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -37,7 +39,6 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
-import moment from "moment";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -148,6 +149,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
 
   hasAnalogs(positions: RequestPosition[]) {
     return i => positions[i].linkedOffers.some(p => p?.isAnalog);
+  }
+
+  isOnEdit({ linkedOffers }: RequestPosition) {
+    return linkedOffers.every(({status}) => status === CommercialProposalsStatus.SENT_TO_EDIT);
   }
 
   convertProposals(proposals: RequestOfferPosition[]) {

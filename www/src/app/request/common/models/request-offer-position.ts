@@ -3,6 +3,7 @@ import { RequestDocument } from "./request-document";
 import { RequestPosition } from "./request-position";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../enum/position-currency";
+import { CommercialProposalsStatus } from "../enum/commercial-proposals-status";
 
 export class RequestOfferPosition {
   comments?: string;
@@ -30,5 +31,5 @@ export class RequestOfferPosition {
   isWinner: boolean;
   documents?: RequestDocument[];
   technicalProposals?: RequestDocument[];
-  status?: string;
+  status: CommercialProposalsStatus;
 }
