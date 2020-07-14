@@ -10,10 +10,9 @@ import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../common/models/request-position";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { PositionStatus } from "../../common/enum/position-status";
-import Fetch = CommercialProposals.Fetch;
-import Approve = CommercialProposals.Approve;
-import Update = CommercialProposals.Update;
 import { CommercialProposalsStatus } from "../../common/enum/commercial-proposals-status";
+import Fetch = CommercialProposals.Fetch;
+import Update = CommercialProposals.Update;
 import Review = CommercialProposals.Review;
 
 export interface CommercialProposalStateModel {
