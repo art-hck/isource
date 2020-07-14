@@ -61,13 +61,6 @@ export class CommercialProposalState {
     );
   }
 
-  @Action(Approve)
-  approve({ setState, dispatch }: Context, { requestId, positionIdsWithProposalIds }: Approve) {
-    setState(patch({ status: "updating" as StateStatus }));
-
-    return this.rest.accept(requestId, positionIdsWithProposalIds).pipe(switchMap(() => dispatch(new Update(requestId))));
-  }
-
   @Action(Review)
   review({ setState, dispatch }: Context, { requestId, body }: Review) {
     setState(patch({ status: "updating" as StateStatus }));

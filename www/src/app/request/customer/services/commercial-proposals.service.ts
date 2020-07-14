@@ -17,11 +17,6 @@ export class CommercialProposalsService {
     return this.api.get<PositionsWithSuppliers>(url);
   }
 
-  accept(requestId: Uuid, positionIdsWithProposalIds: { [key in Uuid]: Uuid }) {
-    const url = `requests/customer/${requestId}/commercial-proposals/accept`;
-    return this.api.post(url, positionIdsWithProposalIds);
-  }
-
   review(requestId: Uuid, body: CommercialProposalReviewBody) {
     const url = `requests/customer/${requestId}/commercial-proposals/change-statuses`;
     return this.api.post(url, body);

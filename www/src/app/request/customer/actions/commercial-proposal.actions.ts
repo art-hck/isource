@@ -17,12 +17,6 @@ export namespace CommercialProposals {
     constructor(public requestId: Uuid) {}
   }
 
-  // Согласовать КП по позиции
-  export class Approve {
-    static readonly type = '[Commercial Proposals Customer] Approve';
-    constructor(public requestId: Uuid, public positionIdsWithProposalIds: { [key in Uuid]: Uuid }) {}
-  }
-
   // Рассмотреть КП по позиции
   export class Review {
     static readonly type = '[Commercial Proposals Customer] Review';
