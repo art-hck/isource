@@ -11,7 +11,7 @@ import { Position } from "../../../../shared/components/grid/position";
 import { FormControl, Validators } from "@angular/forms";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { CommercialProposals } from "../../actions/commercial-proposal.actions";
-import Approve = CommercialProposals.Approve;
+import Review = CommercialProposals.Review;
 
 @Component({
   selector: 'app-commercial-proposal-list',
@@ -64,12 +64,15 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   }
 
   approve() {
-    this.dispatchAction(new Approve(this.requestId, {[this.position.id]: this.selectedProposal.value.id}));
+    this.dispatchAction(new Review(this.requestId, { accepted: {[this.position.id]: this.selectedProposal.value.id} }));
   }
 
   reject() {
     // TODO: Ждём бэк
-    // this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
+  }
+
+  sendToEdit() {
+    this.dispatchAction(new Review(this.requestId, { sendToEdit: [this.position.id] }));
   }
 
   private dispatchAction(action) {
