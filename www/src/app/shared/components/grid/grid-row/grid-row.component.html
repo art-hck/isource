@@ -26,7 +26,7 @@
       [position]="position"
       [editable]="editable"
       [proposal]="proposal"
-      [supplier]="proposal.supplierContragent"
+      [supplier]="getSupplier(proposal)"
       (show)="show.emit($event)"
       (edit)="edit.emit($event)"
       (create)="create.emit(null)"

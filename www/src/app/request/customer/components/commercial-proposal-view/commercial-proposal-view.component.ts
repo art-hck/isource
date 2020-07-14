@@ -144,6 +144,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
+  getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
+
   selectProposal(proposal: Proposal) {
     this.proposalsOnReview
       .filter(({ proposals }) => proposals.some(({id}) => proposal.id === id))

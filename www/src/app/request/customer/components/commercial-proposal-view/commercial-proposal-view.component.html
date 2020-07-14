@@ -59,6 +59,7 @@
               [proposals]="convertProposals(position.linkedOffers)"
               [isReviewed]="position.status === 'WINNER_SELECTED'"
               [getProposal]="getProposalBySupplier(position)"
+              [getSupplier]="view === 'simple-grid' ? getProposalSupplier : null"
               (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
             >
               <div><b>{{ position.name }}</b></div>
