@@ -20,7 +20,6 @@ export class GridRowComponent implements OnInit, OnDestroy {
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() isReviewed: boolean;
   @Input() getProposal: (supplier: ContragentShortInfo) => Proposal;
-  @Input() getSupplier: (proposal: Proposal) => ContragentShortInfo;
   @Input() editable: boolean;
   @Input() simpleView: boolean;
   @Output() show = new EventEmitter<Proposal>();
