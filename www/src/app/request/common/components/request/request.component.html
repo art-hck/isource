@@ -364,8 +364,7 @@
     <ng-template uxgModalFooter>
       <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
       <button type="button" uxgButton primary lg
-              [disabled]="!positionsStatusChange.valid()"
-              [clrLoading]="positionsStatusChange.loading"
+              [disabled]="!positionsStatusChange.valid() || positionsStatusChange.loading"
               (click)="positionsStatusChange.onChangeBtn()">
         Сменить
       </button>

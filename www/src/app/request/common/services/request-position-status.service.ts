@@ -1,25 +1,25 @@
 import {Injectable} from "@angular/core";
-import { PositionStatus as WorkflowSteps } from "../enum/position-status";
+import { PositionStatus } from "../enum/position-status";
 
 @Injectable()
 export class RequestPositionStatusService {
-  private statuses = Object.keys(WorkflowSteps) as WorkflowSteps[];
+  private statuses = Object.keys(PositionStatus) as PositionStatus[];
 
-  isStatusAfter(status: WorkflowSteps, compare: WorkflowSteps): boolean {
+  isStatusAfter(status: PositionStatus, compare: PositionStatus): boolean {
     return this.statuses.indexOf(status) > this.statuses.indexOf(compare);
   }
 
-  isStatusPrevious(status: WorkflowSteps, compare: WorkflowSteps): boolean {
+  isStatusPrevious(status: PositionStatus, compare: PositionStatus): boolean {
     return this.statuses.indexOf(status) < this.statuses.indexOf(compare);
   }
 
-  getPrevStatus(status: WorkflowSteps): WorkflowSteps | undefined {
+  getPrevStatus(status: PositionStatus): PositionStatus | undefined {
     const i = this.statuses.indexOf(status);
 
     return this.statuses[i - 1];
   }
 
-  getNextStatus(status: WorkflowSteps): WorkflowSteps | undefined {
+  getNextStatus(status: PositionStatus): PositionStatus | undefined {
     const i = this.statuses.indexOf(status);
 
     return this.statuses[i + 1];

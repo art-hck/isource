@@ -22,11 +22,14 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { Position } from "../../../../shared/components/grid/position";
-import Fetch = CommercialProposals.Fetch;
-import Approve = CommercialProposals.Approve;
 import { CommercialProposalListComponent } from "../commercial-proposal-list/commercial-proposal-list.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { ProposalsView } from "../../../../shared/models/proposals-view";
+import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
+import { RequestPositionStatusService } from "../../../common/services/request-position-status.service";
+import { CommercialProposalReviewBody } from "../../../common/models/commercial-proposal-review-body";
+import Fetch = CommercialProposals.Fetch;
+import Review = CommercialProposals.Review;
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -41,6 +44,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   readonly positionsOnReview$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.proposalsByPos(PositionStatus.WINNER_SELECTED))
   readonly positionsReviewed$: Observable<RequestPosition[]>;
+  @Select(CommercialProposalState.proposalsByPos(CommercialProposalsStatus.SENT_TO_EDIT))
+  readonly positionsSendToEdit$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.positionsLength) readonly positionsLength$: Observable<number>;
   @Select(RequestState.request) readonly request$: Observable<Request>;
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
@@ -54,7 +59,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   readonly chooseBy$ = new Subject<"date" | "price" | Proposal["sourceProposal"]>();
   readonly getCurrencySymbol = getCurrencySymbol;
 
-  get total() {
+  get total(): number {
     return this.proposalsOnReview?.reduce((total, { selectedProposal }) => {
       const proposalPosition: Proposal = selectedProposal.value;
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
@@ -70,7 +75,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     private bc: UxgBreadcrumbsService,
     private cd: ChangeDetectorRef,
     private app: AppComponent,
-    public helper: ProposalHelperService
+    public helper: ProposalHelperService,
+    public statusService: RequestPositionStatusService
   ) {}
 
   ngOnInit() {
@@ -103,54 +109,64 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     ).subscribe();
   }
 
-  switchView(view: ProposalsView) {
+  switchView(view: ProposalsView): void {
     this.view = view;
     this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
+  }
+
+  selectProposal(proposal: Proposal): void {
+    this.proposalsOnReview
+      .filter(({ proposals }) => proposals.some(({id}) => proposal.id === id))
+      .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
   hasAnalogs(positions: RequestPosition[]) {
     return i => positions.map(({ linkedOffers }) => linkedOffers[i]).some(p => p?.isAnalog);
   }
 
-  hasWinners({ linkedOffers }: RequestPosition) {
+  hasWinner({ linkedOffers }: RequestPosition) {
     return linkedOffers.some(p => p?.isWinner);
   }
 
-  rejectAll(positions: RequestPosition[]) {
-    // @TODO: ждём бэк на отклонение позиций
-    positions.map(({ id }) => id);
+  isSentToEdit(position: RequestPosition): boolean {
+    return this.isReviewed(position) && position.linkedOffers.some(({status}) => status === CommercialProposalsStatus.SENT_TO_EDIT);
+  }
+
+  isReviewed({ status, linkedOffers }: RequestPosition): boolean {
+    // Считаем рассмотренным, если у предложений статус !NEW или позиция после статуса согласования КП (не включая)
+    return linkedOffers.every(({ status: s }) => s !== CommercialProposalsStatus.NEW) ||
+      this.statusService.isStatusAfter(status, PositionStatus.RESULTS_AGREEMENT);
   }
 
   reviewSelected() {
-    this.store.dispatch(new Approve(
-      this.requestId,
-      this.proposalsOnReview
-        .filter(({selectedProposal: c}) => c.valid)
-        .reduce((result, {selectedProposal: c, position}) => ({ ...result, [position.id]: c.value.id }), {})
-    ));
+    const body = this.proposalsOnReview
+      .reduce((_body: CommercialProposalReviewBody, {selectedProposal, sendToEditProposal, position}) => {
+        if (selectedProposal.valid) {
+          _body.accepted = {..._body.accepted, [position.id]: selectedProposal.value.id};
+        }
+
+        if (sendToEditProposal.valid) {
+          _body.sendToEdit.push(position.id);
+        }
+        return _body;
+      }, {});
+
+    this.store.dispatch(new Review(this.requestId, body));
   }
 
-  convertProposals(proposals: RequestOfferPosition[]) {
-    return proposals.map(p => new Proposal(p));
+  sendToEditAll() {
+    this.store.dispatch(new Review(this.requestId, { sendToEdit: this.proposalsOnReview.map(({ position }) => position.id)}));
   }
 
-  convertPosition(position: RequestPosition) {
-    return new Position(position);
-  }
-
+  convertProposals = (proposals: RequestOfferPosition[]) => proposals.map(p => new Proposal(p));
+  convertPosition = (position: RequestPosition) => new Position(position);
   getProposalBySupplier = (position: RequestPosition) => ({ id }: ContragentShortInfo) => {
     const proposal = position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === id);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
-
-  selectProposal(proposal: Proposal) {
-    this.proposalsOnReview
-      .filter(({ proposals }) => proposals.some(({id}) => proposal.id === id))
-      .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
-  }
 
   ngOnDestroy() {
     this.destroy$.next();

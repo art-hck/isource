@@ -92,6 +92,10 @@
           <!--<button uxgButton secondary [disabled]="selectedProposalPosition.disabled" (click)="reject()">
             Отклонить все по позиции
           </button>-->
+          <button uxgButton secondary [disabled]="sendToEditProposal.disabled" (click)="sendToEdit()">
+            Всё на доработку
+          </button>
+
           <button uxgButton primary [disabled]="selectedProposal.invalid || selectedProposal.disabled" (click)="approve()">
             Согласовать
           </button>

@@ -17,9 +17,16 @@
           </svg>
         </div>
 
-        <div class="app-ghost-color" *ngIf="!proposal.isWinner && !editable">
-          <uxg-icon shape="app-check"></uxg-icon>
-        </div>
+        <ng-container *ngIf="!proposal.isWinner && !editable">
+          <div class="app-ghost-color" *ngIf="proposal.sourceProposal?.status !== 'SENT_TO_EDIT'">
+            <uxg-icon shape="app-check"></uxg-icon>
+          </div>
+
+          <div class="app-warning-color" *ngIf="proposal.sourceProposal?.status ==='SENT_TO_EDIT'">
+            <uxg-icon shape="app-warning"></uxg-icon>
+          </div>
+        </ng-container>
+
       </ng-container>
 
       <ng-container *ngIf="selectedProposal">

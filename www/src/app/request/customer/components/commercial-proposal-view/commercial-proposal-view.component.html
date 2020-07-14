@@ -4,14 +4,19 @@
       <div class="app-row app-align-items-center" [class.app-layout]="view !== 'list'">
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReviewTab [active]="true" >
-            <ng-container *ngIf="(positionsOnReview$ | async) as proposalsSentToReview">
-              Необходимо рассмотреть <span class="counter">({{proposalsSentToReview?.length}})</span>
+            <ng-container *ngIf="(positionsOnReview$ | async) as proposals">
+              Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
+            </ng-container>
+          </uxg-tab-title>
+          <uxg-tab-title #sendToEdit>
+            <ng-container *ngIf="(positionsSendToEdit$ | async) as proposals">
+              На доработке <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
           <uxg-tab-title #reviewedTab>
-            <ng-container *ngIf="(positionsReviewed$ | async) as proposalsReviewed">
-              Рассмотренные <span class="counter">({{ proposalsReviewed?.length }})</span>
+            <ng-container *ngIf="(positionsReviewed$ | async) as proposals">
+              Рассмотренные <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
@@ -35,7 +40,7 @@
 
       <br/>
 
-      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? positionsReviewed$ : positionsOnReview$) | async as positions">
+      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? positionsReviewed$ : sendToEdit.active ? positionsSendToEdit$ : positionsOnReview$) | async as positions">
         <!-- grid & simple-grid -->
         <div *ngIf="view !== 'list'" [ngClass]="{
           'grid-table': view === 'grid',
@@ -56,7 +61,7 @@
               [simpleView]="view === 'simple-grid'"
               [suppliers]="suppliers$ | async"
               [proposals]="convertProposals(position.linkedOffers)"
-              [isReviewed]="position.status === 'WINNER_SELECTED'"
+              [isReviewed]="isReviewed(position)"
               [getProposal]="getProposalBySupplier(position)"
               [getSupplier]="view === 'simple-grid' ? getProposalSupplier : null"
               (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
@@ -65,16 +70,26 @@
               <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{position.measureUnit | lowercase}}</div>
               <div class="app-ghost-color">&nbsp;| {{ position.deliveryDate | date:"dd.MM.yyyy" }}</div>
               <div class="app-col"></div>
-              <!-- @TODO Ждём бэк на отклонение предложений по позиции -->
-              <!--label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
-              <uxg-radio-item
-                class="app-control"
-                #rejectRadio
-                [name]="position.id"
-                [value]="position"
-                [formControl]="proposalOnReview.rejectedProposalPosition"
-                (click)="$event.stopPropagation()"
-              ></uxg-radio-item-->
+              <ng-container *ngIf="!isReviewed(position)">
+                <label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
+                <uxg-radio-item
+                  class="app-control"
+                  #rejectRadio
+                  [name]="position.id"
+                  [value]="position"
+                  [formControl]="proposalOnReview.sendToEditProposal"
+                  (click)="$event.stopPropagation()"
+                ></uxg-radio-item>
+              </ng-container>
+              <div class="app-success-color app-bold" *ngIf="hasWinner(position)">
+                <uxg-icon shape="app-check"></uxg-icon>
+                <span>Выбран победитель</span>
+              </div>
+              <div class="app-warning-color app-bold" *ngIf="isSentToEdit(position)">
+                <uxg-icon shape="app-warning"></uxg-icon>
+                <span>На доработке</span>
+              </div>
+
             </app-grid-row>
           </ng-container>
         </div>
@@ -127,11 +142,11 @@
           <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
         </div>
 
-        <div *ngIf="!hasWinners(modalData.position.sourcePosition)">
+        <div *ngIf="!hasWinner(modalData.position.sourcePosition)">
           <button uxgButton lg secondary uxgModalClose>Отмена</button>
           <button uxgButton lg primary (click)="selectProposal(modalData.proposal); modalData = null">Выбрать</button>
         </div>
-        <div *ngIf="hasWinners(modalData.position.sourcePosition)">
+        <div *ngIf="hasWinner(modalData.position.sourcePosition)">
           <button uxgButton lg secondary uxgModalClose>Закрыть</button>
         </div>
       </ng-template>
@@ -143,6 +158,7 @@
 <app-grid-footer
   [disabled]="(status$ | async) !== 'received'"
   (approve)="reviewSelected()"
+  (sendToEdit)="sendToEditAll()"
   [chooseBy$]="chooseBy$"
   [hidden]="reviewedTab?.active || proposalsOnReview?.length === 0"
   [total]="total"
