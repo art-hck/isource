@@ -2,7 +2,6 @@
   <div class="app-row">
     <div class="app-col">
       <div class="app-row app-align-items-center" [class.app-layout]="view !== 'list'">
-
         <uxg-tabs class="app-col">
           <uxg-tab-title #sentToReviewTab [active]="true" >
             <ng-container *ngIf="(positionsOnReview$ | async) as proposalsSentToReview">
