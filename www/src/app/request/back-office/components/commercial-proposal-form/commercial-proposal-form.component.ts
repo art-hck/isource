@@ -17,6 +17,7 @@ import { CommercialProposalsActions } from "../../actions/commercial-proposal.ac
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { PositionCurrency } from "../../../common/enum/position-currency";
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -70,6 +71,10 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
       paymentTerms: [this.defaultCPValue('paymentTerms', this.position.paymentTerms || null), Validators.required],
       documents: this.formBuilder.array([]),
     });
+
+    // @TODO Временное отключение валют
+    this.newCommercialProposalForm.get('currency').setValue(PositionCurrency.RUB);
+    this.newCommercialProposalForm.get('currency').disable();
 
     this.supplierContragentControl = this.formBuilder.control(
       this.supplier || this.defaultCPValue('supplierContragent'),

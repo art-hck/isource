@@ -54,6 +54,7 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
     });
 
     // @TODO Временное отключение валют
+    this.form.get('currency').setValue(PositionCurrency.RUB);
     this.form.get('currency').disable();
   }
 

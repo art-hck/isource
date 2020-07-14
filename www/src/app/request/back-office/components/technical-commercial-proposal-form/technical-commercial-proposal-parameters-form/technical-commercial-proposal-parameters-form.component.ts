@@ -60,7 +60,9 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
           paymentTerms: [p.paymentTerms || p.position.paymentTerms, Validators.required],
         });
+
         // @TODO Временное отключение валют
+        form.get('currency').setValue(PositionCurrency.RUB);
         form.get('currency').disable();
         return form;
       })
