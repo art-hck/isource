@@ -61,4 +61,9 @@ export class TechnicalCommercialProposalService {
     const url = `requests/backoffice/${requestId}/technical-commercial-proposals/procedures`;
     return this.api.get<Procedure[]>(url);
   }
+
+  rollback(requestId: Uuid, positionId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/cancel-publish`;
+    return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionId });
+  }
 }
