@@ -166,6 +166,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
+  getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

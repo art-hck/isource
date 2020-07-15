@@ -148,7 +148,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   }
 
   hasAnalogs(positions: RequestPosition[]) {
-    return i => positions[i].linkedOffers.some(p => p?.isAnalog);
+    return i => positions[i]?.linkedOffers.some(p => p?.isAnalog);
   }
 
   isOnEdit({ linkedOffers }: RequestPosition) {
