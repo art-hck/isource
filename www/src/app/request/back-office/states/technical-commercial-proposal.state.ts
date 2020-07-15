@@ -44,7 +44,7 @@ function insertOrUpdateProposals(proposals: TechnicalCommercialProposal[]): Stat
     ...state,
     status: "received",
     proposals: proposals.reduce((updatedProposals, proposal) => {
-      const i = updatedProposals.findIndex(({id}) => id === proposal.id);
+      const i = updatedProposals.findIndex(({ id }) => id === proposal.id);
       i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
       return updatedProposals;
     }, state.proposals)
@@ -62,11 +62,20 @@ export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
-  @Selector() static proposals({ proposals }: Model) { return proposals; }
-  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
-  @Selector() static status({ status }: Model) { return status; }
-  @Selector() static procedures({ procedures }: Model) { return procedures; }
-  @Selector() static proposalsByPositions({ proposals, availablePositions }: Model) {
+  @Selector()
+  static proposals({ proposals }: Model) { return proposals; }
+
+  @Selector()
+  static availablePositions({ availablePositions }: Model) { return availablePositions; }
+
+  @Selector()
+  static status({ status }: Model) { return status; }
+
+  @Selector()
+  static procedures({ procedures }: Model) { return procedures; }
+
+  @Selector()
+  static proposalsByPositions({ proposals, availablePositions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
       proposal.positions.forEach(proposalPosition => {
@@ -92,10 +101,10 @@ export class TechnicalCommercialProposalState {
       // Разделение предложений ТКП с аналогами и без
       map(proposals => proposals.reduce((result, proposal) => {
         [true, false].forEach(withAnalog => {
-          const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
+          const positions = proposal.positions.filter(({ isAnalog }) => isAnalog === withAnalog);
 
           if (!withAnalog || positions.length) {
-            result.push({ ...proposal, positions});
+            result.push({ ...proposal, positions });
           }
         });
 
@@ -183,10 +192,10 @@ export class TechnicalCommercialProposalState {
   publishPositions({ setState }: Context, { proposalsByPositions }: PublishByPosition) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.publishPositions(
-      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: {id} }) => id)], [])
+      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: { id } }) => id)], [])
     ).pipe(
       tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
-        proposals: updateItem(({ positions }) => positions.some(({id}) => proposalPosition.id === id), patch({
+        proposals: updateItem(({ positions }) => positions.some(({ id }) => proposalPosition.id === id), patch({
           positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
         })),
         availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position),
@@ -225,10 +234,19 @@ export class TechnicalCommercialProposalState {
   rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
     setState(patch({ status: "updating" } as Model));
     return this.rest.rollback(requestId, positionId).pipe(
-      tap(position => setState(patch({
-        positions: updateItem(({id}) => positionId === id, position),
-        status: "received" as StateStatus
-      })))
+      tap(proposalPositions => {
+        proposalPositions.forEach(proposalPosition => {
+          setState(patch({
+            proposals: updateItem(({ positions }) => positions.some(({ id }) => id === proposalPosition.id),
+              patch({
+                positions: updateItem(({ id }) => id === proposalPosition.id, proposalPosition)
+              })
+            ),
+            availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position)
+          }));
+        });
+        setState(patch({ status: "received" } as Model));
+      })
     );
   }
 }
