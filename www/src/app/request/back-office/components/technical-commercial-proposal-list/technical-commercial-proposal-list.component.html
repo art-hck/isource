@@ -136,7 +136,7 @@
               <uxg-icon shape="app-warning"></uxg-icon>
               <span>На доработке</span>
             </div>
-            <ng-container *ngIf="this.canRollback(proposalsByPos.position)">
+            <ng-container *ngIf="canRollback(proposalsByPos.position)">
               <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(proposalsByPos.position))">
                 Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
               </button>
