@@ -2,7 +2,7 @@
   <ng-content></ng-content>
 </div>
 
-<div #gridRow class="grid-row app-row app-section items-row app-layout">
+<div #gridRow class="grid-row app-row items-row app-layout">
   <ng-container *ngIf="!simpleView">
     <ng-container *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId">
       <app-grid-cell

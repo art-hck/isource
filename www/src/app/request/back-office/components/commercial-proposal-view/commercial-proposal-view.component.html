@@ -81,9 +81,12 @@
           <div @sidebarHide *ngIf="view === 'list'" class="app-col app-col-aside detachable"></div>
         </div>
 
-        <!-- grid -->
-        <div *ngIf="(view !=='list' && positions.length + (procedures$ | async).length)"
-             class="grid-table" [class.disabled]="(status$ | async) !== 'received'">
+        <!-- grid & simple-grid -->
+        <div *ngIf="(view !=='list' && positions.length + (procedures$ | async).length)" [ngClass]="{
+          'grid-table': view === 'grid',
+          'simple-grid-table': view === 'simple-grid',
+          'disabled': (status$ | async) === 'updating'}"
+        >
           <app-grid-contragents
             *ngIf="view === 'grid' && suppliers.length"
             [gridRows]="gridRows"
