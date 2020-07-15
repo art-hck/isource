@@ -147,7 +147,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
         }
 
         if (sendToEditProposal.valid) {
-          _body.sendToEdit.push(position.id);
+          _body.sendToEdit = [..._body.sendToEdit ?? [], position.id];
         }
         return _body;
       }, {});
