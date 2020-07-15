@@ -71,10 +71,10 @@
               <div class="app-ghost-color">&nbsp;| {{ position.deliveryDate | date:"dd.MM.yyyy" }}</div>
               <div class="app-col"></div>
               <ng-container *ngIf="!isReviewed(position)">
-                <label (click)="rejectRadio.select($event)">Отклонить все по позиции &nbsp; </label>
+                <label (click)="sendToEditRadio.select($event)">Все на доработку &nbsp; </label>
                 <uxg-radio-item
                   class="app-control"
-                  #rejectRadio
+                  #sendToEditRadio
                   [name]="position.id"
                   [value]="position"
                   [formControl]="proposalOnReview.sendToEditProposal"
