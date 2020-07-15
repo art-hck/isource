@@ -160,7 +160,7 @@
   (approve)="reviewSelected()"
   (sendToEdit)="sendToEditAll()"
   [chooseBy$]="chooseBy$"
-  [hidden]="reviewedTab?.active || proposalsOnReview?.length === 0"
+  [hidden]="reviewedTab?.active || sendToEdit?.active || proposalsOnReview?.length === 0"
   [total]="total"
 ></app-grid-footer>
 

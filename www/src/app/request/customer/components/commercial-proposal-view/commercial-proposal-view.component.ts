@@ -39,6 +39,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<GridRowComponent | CommercialProposalListComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @ViewChild('reviewedTab') reviewedTab: UxgTabTitleComponent;
+  @ViewChild('sendToEdit') sendToEdit: UxgTabTitleComponent;
 
   @Select(CommercialProposalState.proposalsByPos(PositionStatus.RESULTS_AGREEMENT))
   readonly positionsOnReview$: Observable<RequestPosition[]>;
