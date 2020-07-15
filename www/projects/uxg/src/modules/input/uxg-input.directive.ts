@@ -13,7 +13,7 @@ export class UxgInputDirective implements OnInit, OnDestroy {
   @HostBinding('class.app-control-large') get isLarge() { return this.is(this.lg); }
   @HostBinding('class.warning') get isWarning() { return this.is(this.warning); }
   @HostBinding('class.app-control-label-shown') get labelShown() {
-    return this.ngControl?.control.value?.toString().length;
+    return this.ngControl?.control?.value?.toString().length;
   }
 
   readonly destroy$ = new Subject();
