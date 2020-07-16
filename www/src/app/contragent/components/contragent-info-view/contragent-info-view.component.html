@@ -4,6 +4,7 @@
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
   <div class="app-row action">
+    <span *ngIf="getContragentService.loading" class="spinner spinner-sm"></span>
     <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
             (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
       <uxg-icon shape="app-pen"></uxg-icon>
@@ -11,7 +12,8 @@
     </button>
     <button uxgButton primary
             [clrLoading]="getLoaderState()"
-            (click)="onDownloadPrimaInformReport()">
+            (click)="onDownloadPrimaInformReport()"
+            [disabled]="getContragentService.loading">
       Отчет Прима-информ
     </button>
   </div>

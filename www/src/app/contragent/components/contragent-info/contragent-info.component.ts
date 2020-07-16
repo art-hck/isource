@@ -13,7 +13,7 @@ export class ContragentInfoComponent {
   @Input() modalView = true;
 
   constructor(
-    private getContragentService: ContragentService
+    public getContragentService: ContragentService
   ) { }
 
   onDownloadPrimaInformReport(): void {
