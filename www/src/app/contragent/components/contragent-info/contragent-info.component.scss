@@ -41,6 +41,9 @@ h3 {
 
 .report {
   text-align: end;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .basic-info,

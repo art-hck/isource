@@ -9,10 +9,12 @@
         <h3>Общая информация о контрагенте</h3>
       </div>
 
-      <div class="app-col report" *ngIf="modalView">
+      <div class="app-col-auto report" *ngIf="modalView">
+        <span *ngIf="getContragentService.loading" class="spinner spinner-sm"></span>
         <button uxgButton primary
                 [clrLoading]="getLoaderState()"
-                (click)="onDownloadPrimaInformReport()">
+                (click)="onDownloadPrimaInformReport()"
+                [disabled]="getContragentService.loading">
           Отчет Прима-информ
         </button>
       </div>

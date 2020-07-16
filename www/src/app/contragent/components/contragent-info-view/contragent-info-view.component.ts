@@ -38,7 +38,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
     private bc: UxgBreadcrumbsService,
     private title: Title,
     private route: ActivatedRoute,
-    protected getContragentService: ContragentService,
+    public getContragentService: ContragentService,
     protected employeeService: EmployeeService,
     protected userService: UserService,
     public user: UserInfoService,
