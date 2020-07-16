@@ -20,16 +20,17 @@
   <ng-container *ngIf="simpleView">
     <app-grid-cell *ngIf="editable" [editable]="editable" (create)="create.emit(null)"></app-grid-cell>
 
-    <app-grid-cell
-      *ngFor="let proposal of proposals"
-      [selectedProposal]="isReviewed ? null : selectedProposal"
-      [position]="position"
-      [editable]="editable"
-      [proposal]="proposal"
-      [supplier]="getSupplier(proposal)"
-      (show)="show.emit($event)"
-      (edit)="edit.emit($event)"
-      (create)="create.emit(null)"
-    ></app-grid-cell>
+    <ng-container *ngFor="let proposal of proposals; trackBy: trackBySupplierId">
+      <app-grid-cell
+        [selectedProposal]="isReviewed ? null : selectedProposal"
+        [position]="position"
+        [editable]="editable"
+        [proposal]="proposal"
+        [supplier]="getSupplier(proposal)"
+        (show)="show.emit($event)"
+        (edit)="edit.emit($event)"
+        (create)="create.emit(null)"
+      ></app-grid-cell>
+    </ng-container>
   </ng-container>
 </div>

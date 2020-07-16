@@ -67,6 +67,7 @@ export class GridRowComponent implements OnInit, OnDestroy {
   }
 
   trackByProposalPositionId = (i, supplier: ContragentShortInfo) => this.getProposal(supplier)?.sourceProposal?.id;
+  trackBySupplierId = (i, proposal: Proposal) => this.getSupplier(proposal)?.id;
 
   ngOnDestroy() {
     this.destroy$.next();
