@@ -143,12 +143,12 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   reviewSelected() {
     const body = this.proposalsOnReview
-      .reduce((_body: CommercialProposalReviewBody, {selectedProposal, sendToEditProposal, position}) => {
+      .reduce((_body: CommercialProposalReviewBody, {selectedProposal, sendToEditPosition, position}) => {
         if (selectedProposal.valid) {
           _body.accepted = {..._body.accepted, [position.id]: selectedProposal.value.id};
         }
 
-        if (sendToEditProposal.valid) {
+        if (sendToEditPosition.valid) {
           _body.sendToEdit = [..._body.sendToEdit ?? [], position.id];
         }
         return _body;
