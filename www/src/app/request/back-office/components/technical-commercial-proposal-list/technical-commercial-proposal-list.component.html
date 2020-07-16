@@ -208,7 +208,7 @@
         <ng-container *ngIf="uploadTemplateModal.state">
           <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
           <div class="app-secondary-color template">
-            Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
+            Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
             шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
           </div>
           <div class="dragAndDropArea">
