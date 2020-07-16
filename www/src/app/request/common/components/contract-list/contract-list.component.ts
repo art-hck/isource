@@ -15,7 +15,7 @@ import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
-import { ContractStatus } from "../../enum/сontract-status";
+import { ContractStatus } from "../../enum/contract-status";
 
 @Component({
   selector: 'app-request-contract-list',
