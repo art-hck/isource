@@ -22,6 +22,7 @@ import ApproveMultiple = PriceOrderProposalsActions.ApproveMultiple;
 import { Position } from "../../../../shared/components/grid/position";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalsView } from "../../../../shared/models/proposals-view";
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 
 @Component({
   templateUrl: './price-order-proposal-view.component.html',
@@ -110,10 +111,14 @@ export class PriceOrderProposalViewComponent implements OnInit, OnDestroy, After
   }
 
   suppliers(positions: KimPriceOrderPosition[]) {
-    return positions.reduce((suppliers: ContragentShortInfo[], { proposals }) => {
-      proposals
-        .filter(({ proposalSupplier }) => suppliers.findIndex(({ id }) => proposalSupplier.supplier.id === id) < 0)
-        .forEach(({ proposalSupplier }) => suppliers.push(proposalSupplier.supplier));
+    return positions.reduce((suppliers: GridSupplier[], { proposals }) => {
+      [false, true].forEach(hasAnalogs => {
+        proposals
+          .filter(({ proposalSupplier, isAnalog }) => {
+            return suppliers.findIndex(({ id }) => proposalSupplier.supplier.id === id) < 0 && isAnalog === hasAnalogs;
+          })
+          .forEach(({ proposalSupplier }) => suppliers.push({...proposalSupplier.supplier, hasAnalogs}));
+      });
 
       return suppliers;
     }, []);

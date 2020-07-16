@@ -6,6 +6,7 @@ import { takeUntil, tap } from "rxjs/operators";
 import { Proposal } from "../proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
 import { Position } from "../position";
+import { GridSupplier } from "../grid-supplier";
 
 @Component({
   selector: 'app-grid-row',
@@ -14,7 +15,7 @@ import { Position } from "../position";
 })
 export class GridRowComponent implements OnInit, OnDestroy {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
-  @Input() suppliers: ContragentShortInfo[];
+  @Input() suppliers: GridSupplier[];
   @Input() proposals: Proposal[];
   @Input() position: Position;
   @Input() chooseBy$: Subject<"date" | "price">;

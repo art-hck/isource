@@ -8,7 +8,7 @@
       <app-grid-cell
         [selectedProposal]="isReviewed ? null : selectedProposal"
         [position]="position"
-        [editable]="editable"
+        [editable]="editable && !supplier.hasAnalogs"
         [proposal]="getProposal(supplier)"
         (show)="show.emit($event)"
         (edit)="edit.emit($event)"
