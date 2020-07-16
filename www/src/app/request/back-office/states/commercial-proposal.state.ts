@@ -1,4 +1,4 @@
-import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { switchMap, tap } from "rxjs/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
@@ -13,6 +13,7 @@ import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { Procedure } from "../models/procedure";
 import { ProcedureSource } from "../enum/procedure-source";
 import { ProcedureService } from "../services/procedure.service";
+import { ToastActions } from "../../../shared/actions/toast.actions";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -43,7 +44,11 @@ type Context = StateContext<Model>;
 export class CommercialProposalState {
   cache: { [requestId in Uuid]: CommercialProposal[] } = {};
 
-  constructor(private rest: CommercialProposalsService, private procedureService: ProcedureService) {
+  constructor(
+    private rest: CommercialProposalsService,
+    private procedureService: ProcedureService,
+    private store: Store
+  ) {
   }
 
   @Selector() static positions({ positions }: Model) { return positions; }
@@ -139,6 +144,16 @@ export class CommercialProposalState {
   @Action(UploadTemplate)
   uploadTemplate({ setState, dispatch }: Context, { requestId, files }: UploadTemplate) {
     setState(patch({ status: "updating" } as Model));
-    return this.rest.addOffersFromExcel(requestId, files).pipe(tap(() => dispatch(new Refresh(requestId))));
+    return this.rest.addOffersFromExcel(requestId, files).pipe(
+      tap(
+        () => {
+          dispatch(new Refresh(requestId));
+          this.store.dispatch(new ToastActions.Success("Шаблон импортирован"));
+        },
+        () => {
+          dispatch(new Refresh(requestId));
+        }
+      )
+    );
   }
 }

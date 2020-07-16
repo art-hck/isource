@@ -175,9 +175,10 @@
           <ng-container *ngIf="uploadTemplateModal.state">
             <h2 class="modal-title"><b>Загрузить коммерческие предложения из шаблона</b></h2>
             <div class="app-secondary-color template">
-              Вы можете загрузить КП списком, если заполните шаблон xls таблицы (<a (click)="store.dispatch(downloadTemplate(request))"><b>скачать
-              шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько КП.<br>
+              Вы можете загрузить КП списком, если заполните шаблон xls таблицы (<a href (click)="store.dispatch(downloadTemplate(request))"><b>скачать
+              шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько КП.
             </div>
+            <br>
             <div class="dragAndDropArea">
               <app-template-upload (fileSelected)="files = $event"></app-template-upload>
             </div>
