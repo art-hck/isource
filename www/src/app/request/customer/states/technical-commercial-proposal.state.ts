@@ -101,24 +101,13 @@ export class TechnicalCommercialProposalState {
   approveMultiple({ setState, getState }: Context, { proposalPositions }: ApproveMultiple) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.approveMultiple(proposalPositions.map(({ id }) => id)).pipe(
-      map((proposals) => [...proposals, ...getState().proposals
-        // Если ТКП НЕ в списке на апрув, но содержит позиции которые есть в других ТКП на апрув
-        .filter(({ positions }) => positions.some(p1 => proposalPositions.some((p2 => p1.id !== p2.id && p1.position.id === p2.position.id))))
-        .map(proposal => {
-          proposal.positions
-            // Помечаем их как REJECTED
-            .filter(({ position: p1 }) => proposalPositions.some((({ position: p2 }) => p1.id === p2.id)))
-            .map(position => {
-              position.status = TechnicalCommercialProposalPositionStatus.REJECTED;
-              return position;
-            });
-          return proposal;
-      })]),
-      tap(proposals => proposals.forEach(proposal => setState(patch({
-        proposals: updateItem(({ id }) => proposal.id === id, proposal),
+      tap(technicalProposalPositions => technicalProposalPositions.forEach(technicalCommercialProposalPosition => setState(patch({
+        proposals: updateItem(
+          ({ positions }) => positions.some(({ id }) => technicalCommercialProposalPosition.id === id),
+          patch({ positions: updateItem(({ id }) => technicalCommercialProposalPosition.id === id, technicalCommercialProposalPosition) })
+        ),
         status: "received" as StateStatus
-      })))),
-    );
+      })))));
   }
 
   @Action(SendToEditMultiple)
