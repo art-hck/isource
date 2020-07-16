@@ -90,8 +90,7 @@
           <app-grid-contragents
             *ngIf="view === 'grid' && suppliers.length"
             [gridRows]="gridRows"
-            [suppliers]="suppliers"
-            [hasAnalogsFn]="hasAnalogs(positions)"
+            [suppliers]="convertSuppliers(suppliers, positions)"
           ></app-grid-contragents>
 
           <!-- procedure info -->
@@ -108,7 +107,7 @@
             <ng-container *ngFor="let position of positions; index as i" formArrayName="positions">
               <app-grid-row
                 [position]="position"
-                [suppliers]="suppliers"
+                [suppliers]="convertSuppliers(suppliers, positions)"
                 [proposals]="convertProposals(position.linkedOffers)"
                 [simpleView]="view === 'simple-grid'"
                 [isReviewed]="true"

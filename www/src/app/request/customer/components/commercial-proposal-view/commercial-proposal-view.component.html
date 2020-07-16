@@ -50,8 +50,7 @@
           <app-grid-contragents
             *ngIf="positions.length && view === 'grid'"
             [gridRows]="gridRows"
-            [suppliers]="suppliers$ | async"
-            [hasAnalogsFn]="hasAnalogs(positions)"
+            [suppliers]="convertSuppliers(suppliers$ | async, positions)"
           ></app-grid-contragents>
           <ng-container *ngFor="let position of positions">
             <app-grid-row
@@ -59,7 +58,7 @@
               [chooseBy$]="chooseBy$"
               [position]="convertPosition(position)"
               [simpleView]="view === 'simple-grid'"
-              [suppliers]="suppliers$ | async"
+              [suppliers]="convertSuppliers(suppliers$ | async, positions)"
               [proposals]="convertProposals(position.linkedOffers)"
               [isReviewed]="isReviewed(position)"
               [getProposal]="getProposalBySupplier(position)"
