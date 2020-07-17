@@ -8,13 +8,12 @@ import { TechnicalCommercialProposalService } from "../services/technical-commer
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 import { TechnicalCommercialProposalPositionStatus } from "../../common/enum/technical-commercial-proposal-position-status";
 import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
-import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import ProcessMultiple = TechnicalCommercialProposals.ProcessMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -97,19 +96,6 @@ export class TechnicalCommercialProposalState {
     );
   }
 
-  @Action(ApproveMultiple)
-  approveMultiple({ setState, getState }: Context, { proposalPositions }: ApproveMultiple) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.approveMultiple(proposalPositions.map(({ id }) => id)).pipe(
-      tap(technicalProposalPositions => technicalProposalPositions.forEach(technicalCommercialProposalPosition => setState(patch({
-        proposals: updateItem(
-          ({ positions }) => positions.some(({ id }) => technicalCommercialProposalPosition.id === id),
-          patch({ positions: updateItem(({ id }) => technicalCommercialProposalPosition.id === id, technicalCommercialProposalPosition) })
-        ),
-        status: "received" as StateStatus
-      })))));
-  }
-
   @Action(SendToEditMultiple)
   sendToEditMultiple({ setState, getState }: Context, { requestPositions }: SendToEditMultiple) {
     setState(patch({ status: "updating" as StateStatus }));
@@ -121,5 +107,32 @@ export class TechnicalCommercialProposalState {
         ),
         status: "received" as StateStatus
       })))));
+  }
+
+  @Action(ProcessMultiple)
+  processMultiple({ setState, getState }: Context, { proposalPositions, requestPositions }: ProcessMultiple) {
+    setState(patch({ status: "updating" as StateStatus }));
+
+    const data: { accepted: Uuid[], sendToEdit: Uuid[] } = {
+      'accepted': proposalPositions.map(({ id }) => id),
+      'sendToEdit': requestPositions.map(({ id }) => id)
+    };
+
+    return this.rest.processMultiple(data).pipe(
+      tap(technicalProposalPositions => {
+        setState(patch({ status: "updating" as StateStatus }));
+
+        technicalProposalPositions.forEach(technicalProposalPosition => setState(patch(
+          {
+            proposals: updateItem(
+              ({ positions }) => positions.some(({ id }) => technicalProposalPosition.id === id),
+              patch({ positions: updateItem(({ id }) => technicalProposalPosition.id === id, technicalProposalPosition) })
+            ),
+
+            status: "received" as StateStatus
+          }))
+        );
+      })
+    );
   }
 }

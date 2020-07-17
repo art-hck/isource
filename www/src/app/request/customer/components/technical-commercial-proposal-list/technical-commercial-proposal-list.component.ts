@@ -26,7 +26,7 @@ import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
-import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import ProcessMultiple = TechnicalCommercialProposals.ProcessMultiple;
 import NEW = TechnicalCommercialProposalPositionStatus.NEW;
 import APPROVED = TechnicalCommercialProposalPositionStatus.APPROVED;
 import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
@@ -103,7 +103,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, SendToEditMultiple, ApproveMultiple),
+      ofActionCompleted(Approve, Reject, SendToEditMultiple, ProcessMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
@@ -112,7 +112,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       switch (true) {
         case action instanceof Reject: text = "$1 отклонено"; break;
         case action instanceof SendToEditMultiple: text = "$2 на доработке"; break;
-        default: text = "По $0 выбран победитель";
+        default: text = "По $0 принято решение";
       }
 
       text = text.replace(/\$(\d)/g, (all, i) => [
@@ -140,22 +140,27 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
   }
 
-  approveMultiple() {
+  processMultiple() {
+    const acceptedProposalPositions = [];
+    const sendToEditRequestPositions = [];
+
     if (this.proposalsOnReview.filter(({selectedProposal}) => selectedProposal.valid).length) {
-      this.store.dispatch(new ApproveMultiple(
-        this.proposalsOnReview
-          .filter(({ selectedProposal }) => selectedProposal.valid)
-          .map(({ selectedProposal }) => selectedProposal.value)
-      ));
+      this.proposalsOnReview
+        .filter(({ selectedProposal }) => selectedProposal.valid)
+        .map(({ selectedProposal }) => {
+          acceptedProposalPositions.push(selectedProposal.value);
+        });
     }
 
     if (this.proposalsOnReview.filter(({sendToEditPosition}) => sendToEditPosition.valid).length) {
-      this.store.dispatch(new SendToEditMultiple(
-        this.proposalsOnReview
-          .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
-          .map(({ sendToEditPosition }) => sendToEditPosition.value)
-      ));
+      this.proposalsOnReview
+        .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
+        .map(({ sendToEditPosition }) => {
+          sendToEditRequestPositions.push(sendToEditPosition.value);
+        });
     }
+
+    this.store.dispatch(new ProcessMultiple(acceptedProposalPositions, sendToEditRequestPositions));
   }
 
   sendToEditAll() {
