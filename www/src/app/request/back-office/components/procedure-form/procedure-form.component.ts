@@ -6,7 +6,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
-import { catchError, finalize, takeUntil, tap } from "rxjs/operators";
+import { catchError, debounceTime, filter, finalize, flatMap, takeUntil, tap } from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
@@ -19,6 +19,7 @@ import { ProcedureAction } from "../../models/procedure-action";
 import { ProcedureSource } from "../../enum/procedure-source";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
+import { Okpd2Item } from "../../../../core/models/okpd2-item";
 
 @Component({
   selector: 'app-request-procedure-form',
@@ -38,6 +39,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
+  okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
   isLoading: boolean;
   publicAccess: boolean;
@@ -50,6 +52,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     guide: false,
     keepCharPositions: true
   };
+  readonly getOkpd2Name = (okpd2: Okpd2Item) => okpd2.code ? okpd2.code + ' ' + okpd2.name : '';
+  readonly searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 || item.code === query).slice(0, 20);
 
   get documents() {
     const positions = this.form.get("positions").value as RequestPosition[];
@@ -80,6 +84,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
+        okpd2: ["", Validators.required],
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 0), // Продление времени приема заявок на участие (минут)
       }),
       properties: null,
@@ -118,6 +123,14 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe();
 
+    this.form.get("general.okpd2").valueChanges.pipe(
+      debounceTime(500),
+      filter(value => typeof value === 'string'),
+      flatMap(value => this.procedureService.getOkpd2(value)),
+      tap(v => this.okpd2List$.next(v)),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
     this.allContragents$ = this.contragentService.getContragentList();
 
     this.publicAccess = (this.contragents?.length ?? 0) < 2 && (this.procedure?.privateAccessContragents.length ?? 0) < 2;
@@ -134,6 +147,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     const body: Procedure = {
       ...(this.form.get("general") as FormGroup).getRawValue(),
       ...this.form.get("properties").value,
+      okpd2: this.form.get("general.okpd2").value.code,
       positions: this.form.get("positions").value.map(({id}) => id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),

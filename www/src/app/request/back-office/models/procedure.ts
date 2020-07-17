@@ -39,6 +39,7 @@ export class Procedure {
   positionsSuppliersVisibility: "Name" | "NameHidden" | "None";
 
   dishonestSuppliersForbidden: boolean;
+  okpd2: string;
   procedureLotDocuments: RequestDocument[];
   prolongateEndRegistration: number;
   procedureDocuments: RequestDocument[];
