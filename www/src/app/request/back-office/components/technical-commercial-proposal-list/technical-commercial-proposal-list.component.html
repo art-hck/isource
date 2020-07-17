@@ -2,7 +2,7 @@
   <ng-container *ngIf="(request$ | async) as request">
     <ng-container *ngIf="(proposals$ | async) as proposals" [formGroup]="form">
       <!-- actions -->
-      <div class="app-row" [class.app-layout]="view === 'grid'">
+      <div class="app-row" [class.app-layout]="view !== 'list'">
         <div class="app-col">
           <div class="app-row app-justify-content-end analytical-report">
             <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
@@ -33,10 +33,14 @@
                 <span class="app-secondary-color">показать: </span>
                 <uxg-popover #viewPopover>
                   <button uxgButton uxgPopoverTrigger link clear [ngSwitch]="view">
+                    <span *ngSwitchCase="'simple-grid'"><b>по позициям</b></span>
                     <span *ngSwitchCase="'grid'"><b>по позициям матрица</b></span>
                     <span *ngSwitchCase="'list'"><b>по поставщикам</b></span>
                   </button>
                   <div *uxgPopoverContent>
+<!--                    <div>-->
+<!--                      <button uxgButton clear (click)="switchView('simple-grid')">по позициям</button>-->
+<!--                    </div>-->
                     <div>
                       <button uxgButton clear (click)="switchView('grid')">по позициям матрица</button>
                     </div>
@@ -89,32 +93,43 @@
       </div>
 
       <!-- grid -->
-      <div class="grid-table" *ngIf="(view ==='grid' && proposals.length + (procedures$ | async).length)"
-           [formGroup]="form" [class.disabled]="(status$ | async) !== 'received'">
-
+      <div *ngIf="(view !=='list' && proposals.length + (procedures$ | async).length)" [ngClass]="{
+          'grid-table': view === 'grid',
+          'simple-grid-table': view === 'simple-grid',
+          'disabled': (status$ | async) === 'updating'}"
+      >
         <app-grid-contragents
+          *ngIf="view === 'grid' && suppliers.length"
           [gridRows]="gridRows"
-          [suppliers]="suppliers(proposals$ | async)"
-          [hasAnalogsFn]="hasAnalogs(proposals$ | async)"
+          [suppliers]="suppliers(proposals)"
         ></app-grid-contragents>
 
         <!-- procedure info -->
-        <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
-          <div class="position-row app-layout" *ngIf="(procedures$ | async).length > 0">
-            <app-procedure-grid [procedure]="procedure"
-                                (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
-                                (prolong)="prolongModalPayload = procedure"></app-procedure-grid>
-          </div>
-        </ng-container>
+        <div class="position-row app-layout" *ngFor="let procedure of procedures$ | async; trackBy: trackById">
+          <app-procedure-grid [procedure]="procedure"
+                              (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
+                              (prolong)="prolongModalPayload = procedure"></app-procedure-grid>
+        </div>
 
-        <!-- positions -->
-        <div class="position-row" *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i"
-             formArrayName="positions">
-
-          <div class="position-item app-row app-align-items-center app-section app-layout" [formGroupName]="i">
+        <ng-container *ngIf="suppliers.length || view === 'simple-grid'" formArrayName="positions">
+          <app-grid-row
+            *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i"
+            [position]="proposalsByPos.position"
+            [suppliers]="suppliers(proposals)"
+            [proposals]="converProposalPosition(proposalsByPos)"
+            [simpleView]="view === 'simple-grid'"
+            [isReviewed]="true"
+            [getProposal]="getProposalPosBySupplier(proposalsByPos)"
+            [getSupplier]="getSupplierByProposalPos(proposals)"
+            [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos)"
+            [formGroupName]="i"
+            (show)="proposalModalData = {proposalPosition: $event.sourceProposal, proposal: getProposalByProposalPosition($event.sourceProposal, proposals)}"
+            (edit)="addProposalPosition(getProposalByProposalPosition($event.sourceProposal, proposals), proposalsByPos.position)"
+            (create)="addProposalPosition(getProposalBySupplier($event, proposals), proposalsByPos.position)"
+          >
             <uxg-checkbox class="app-control" #checked
-                          formControlName="checked"
-                          [disabled]="isReviewed(proposalsByPos) || isOnReview(proposalsByPos) || proposalsByPos.data.length === 0">
+                formControlName="checked"
+                [disabled]="isReviewed(proposalsByPos) || isOnReview(proposalsByPos) || proposalsByPos.data.length === 0">
             </uxg-checkbox>
             <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>
 
@@ -141,26 +156,16 @@
                 Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
               </button>
             </ng-container>
-          </div>
+          </app-grid-row>
+        </ng-container>
 
-          <div #gridRow class="grid-row app-row app-section items-row app-layout">
-            <app-technical-commercial-proposal-grid-card
-              *ngFor="let proposal of proposals; trackBy: trackById"
-              [proposal]="proposal"
-              [proposalPosition]="getProposalPosition(proposal, proposalsByPos.position)"
-              [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos) && !withAnalogs(proposal)"
-              (create)="addProposalPosition(proposal, proposalsByPos.position)"
-              (show)="proposalModalData = {proposalPosition: getProposalPosition(proposal, proposalsByPos.position), proposal: proposal}"
-            ></app-technical-commercial-proposal-grid-card>
-          </div>
-        </div>
       </div>
 
       <!-- list -->
       <div class="app-row" *ngIf="view === 'list'">
         <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="(status$ | async) !== 'received'">
           <app-technical-commercial-proposal-form
-            *ngIf="(proposals$ | async)?.length + (procedures$ | async)?.length === 0 || showForm"
+            *ngIf="proposals?.length + (procedures$ | async)?.length === 0 || showForm"
             [request]="request"
             [closable]="proposals.length > 0"
             (close)="showForm = false"
@@ -288,7 +293,7 @@
 </ng-container>
 
 <ng-template #placeholder>
-  <div class="app-row" [class.app-layout]="view === 'grid'">
+  <div class="app-row" [class.app-layout]="view !== 'list'">
     <div class="app-col">
       <div class="placeholder" *ngFor="let i of [].constructor(10)"></div>
     </div>

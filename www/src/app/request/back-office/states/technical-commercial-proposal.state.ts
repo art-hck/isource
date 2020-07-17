@@ -98,18 +98,6 @@ export class TechnicalCommercialProposalState {
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId).pipe(
-      // Разделение предложений ТКП с аналогами и без
-      map(proposals => proposals.reduce((result, proposal) => {
-        [true, false].forEach(withAnalog => {
-          const positions = proposal.positions.filter(({ isAnalog }) => isAnalog === withAnalog);
-
-          if (!withAnalog || positions.length) {
-            result.push({ ...proposal, positions });
-          }
-        });
-
-        return result;
-      }, [])),
       tap(proposals => ctx.setState(patch({ proposals }))),
       tap(proposals => this.cache[requestId] = proposals),
       switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),

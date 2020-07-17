@@ -41,6 +41,8 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { Proposal } from "../../../../shared/components/grid/proposal";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -67,7 +69,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   view: ProposalsView = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
-    position: RequestPosition
+    position: RequestPosition,
+    supplier?: ContragentShortInfo
   };
   form: FormGroup;
   canNotAddNewContragent = false;
@@ -157,7 +160,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view === "grid";
+    this.app.noContentPadding = view !== "list";
     this.viewPopover?.hide();
   }
 
@@ -201,12 +204,22 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.addProposalPositionPayload = { proposal, position };
   }
 
-  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
-    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
+    return proposals.reduce((suppliers: GridSupplier[], proposal) => {
+      [false, true]
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs))
+        .forEach(hasAnalogs => suppliers.push({ ...proposal.supplier, hasAnalogs }));
+      return suppliers;
+    }, []);
   }
 
-  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
-    return i => proposals[i].positions.some(p => p?.isAnalog);
+  proposals(proposals: TechnicalCommercialProposal[]) {
+    return proposals.reduce((result: Proposal[], proposal) => {
+      [false, true]
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs))
+        .forEach(() => result.push(new Proposal(proposal)));
+      return result;
+    }, []);
   }
 
   canRollback(position: RequestPosition): boolean {
@@ -216,6 +229,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
   trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
+  converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
+  getProposalPosBySupplier = (positionProposals: TechnicalCommercialProposalByPosition) => ({ id, hasAnalogs }: GridSupplier) => {
+    const proposal = positionProposals.data.find(({ proposal: { supplier }, proposalPosition }) => supplier.id === id && proposalPosition.isAnalog === hasAnalogs)?.proposalPosition;
+    return proposal ? new Proposal<TechnicalCommercialProposalPosition>(proposal) : null;
+  }
+  getProposalByProposalPosition = ({ proposalId }: TechnicalCommercialProposalPosition, proposals: TechnicalCommercialProposal[]) => proposals.find(({id}) => id === proposalId);
+  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
+  getSupplierByProposalPos = (proposals: TechnicalCommercialProposal[]) => (proposalPos: Proposal<TechnicalCommercialProposalPosition>) => {
+    return proposals.find(({ positions }) => positions.find(({ id }) => proposalPos.id === id)).supplier;
+  }
 
   ngOnDestroy() {
     this.destroy$.next();

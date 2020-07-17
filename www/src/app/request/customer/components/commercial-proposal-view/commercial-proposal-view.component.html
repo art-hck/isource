@@ -63,7 +63,7 @@
               [isReviewed]="isReviewed(position)"
               [getProposal]="getProposalBySupplier(position)"
               [getSupplier]="view === 'simple-grid' ? getProposalSupplier : null"
-              (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
+              (show)="modalData = {proposal: $event, position: convertPosition(position)}"
             >
               <div><b>{{ position.name }}</b></div>
               <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{position.measureUnit | lowercase}}</div>
@@ -101,7 +101,7 @@
             [requestId]="requestId"
             [position]="convertPosition(position)"
             [proposals]="convertProposals(position.linkedOffers)"
-            (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
+            (show)="modalData = {proposal: $event, position: convertPosition(position)}"
           ></app-commercial-proposal-list>
         </ng-container>
 
