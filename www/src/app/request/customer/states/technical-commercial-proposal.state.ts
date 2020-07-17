@@ -128,7 +128,6 @@ export class TechnicalCommercialProposalState {
               ({ positions }) => positions.some(({ id }) => technicalProposalPosition.id === id),
               patch({ positions: updateItem(({ id }) => technicalProposalPosition.id === id, technicalProposalPosition) })
             ),
-
             status: "received" as StateStatus
           }))
         );
