@@ -73,7 +73,30 @@
       <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
         участников закупки в реестре недобросовестных поставщиков ФАС</label>
     </div>
-    <br/>
+    <div class="app-control-wrap">
+      <uxg-dropdown-input
+        appSuggestions
+        formControlName="okpd2"
+        placeholder="OКПД2"
+        [$]="okpd2List$"
+        [searchFn]="searchOkpd2"
+        #okpd2="appSuggestions"
+        [strictMode]="true"
+        [displayByFn]="getOkpd2Name"
+        lg>
+        <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
+          <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">
+            <b>{{suggestion.code}}</b>&nbsp;{{suggestion.name }}
+          </div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('general.okpd2').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите значение из списка</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
+    </div>
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
         <div class="app-control-wrap">
