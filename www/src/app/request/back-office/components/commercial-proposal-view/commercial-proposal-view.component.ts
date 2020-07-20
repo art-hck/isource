@@ -166,7 +166,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       [false, true].filter(hasAnalogs => positions.some(({linkedOffers}) => {
         return linkedOffers.some(({supplierContragentId: id, isAnalog}) => {
           return id === supplier.id && isAnalog === hasAnalogs;
-        }) || linkedOffers.length === 0 && !hasAnalogs;
+        }) || !linkedOffers.find(({supplierContragentId: id}) => id === supplier.id) && !hasAnalogs;
       }))
       .forEach(hasAnalogs => arr.push({ ...supplier, hasAnalogs }));
 
