@@ -1,21 +1,17 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { AgreementListState } from "../../states/agreement-list.state";
 import { AgreementListActions } from "../../actions/agreement-list.actions";
 import Fetch = AgreementListActions.Fetch;
-import { map, scan, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Agreement } from "../../../common/models/Agreement";
 import { AgreementAction } from "../../../back-office/enum/agreement-action";
 import { AgreementActionFilters } from "../../dictionaries/agreement-action-label";
-import { AvailableFilters } from "../../../../request/back-office/models/available-filters";
 import { AgreementsListFilter } from "../../../common/models/agreements-list/agreements-list-filter";
-import { RequestsListSort } from "../../../../request/common/models/requests-list/requests-list-sort";
-import { RequestsListFilter } from "../../../../request/common/models/requests-list/requests-list-filter";
-import { RequestStatus } from "../../../../request/common/enum/request-status";
 import moment from "moment";
 
 @Component({
