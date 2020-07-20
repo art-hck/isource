@@ -15,16 +15,16 @@ export namespace TechnicalCommercialProposals {
     constructor(public requestId: Uuid, public proposalPosition: TechnicalCommercialProposalPosition) {}
   }
 
-  // Согласовать ТКП у множества позиций
-  export class ApproveMultiple {
-    static readonly type = '[Technical Commercial Proposals Customer] ApproveMultiple';
-    constructor(public proposalPositions: TechnicalCommercialProposalPosition[]) {}
-  }
-
   // Отправить на доработку ТКП у множества позиций
   export class SendToEditMultiple {
     static readonly type = '[Technical Commercial Proposals Customer] SendToEditMultiple';
     constructor(public requestPositions: RequestPosition[]) {}
+  }
+
+  // Принять решение по множеству позиций ТКП
+  export class ReviewMultiple {
+    static readonly type = '[Technical Commercial Proposals Customer] ReviewMultiple';
+    constructor(public proposalPositions: TechnicalCommercialProposalPosition[], public requestPositions: RequestPosition[]) {}
   }
 
   // Отклонить все предложения у определенной позиции
