@@ -206,8 +206,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
     return proposals.reduce((suppliers: GridSupplier[], proposal) => {
+      console.log(proposal.positions);
       [false, true]
-        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs))
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs) || proposal.positions.length === 0 && !hasAnalogs)
         .forEach(hasAnalogs => suppliers.push({ ...proposal.supplier, hasAnalogs }));
       return suppliers;
     }, []);
