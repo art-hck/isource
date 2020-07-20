@@ -13,7 +13,7 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
-import ProcessMultiple = TechnicalCommercialProposals.ProcessMultiple;
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -109,8 +109,8 @@ export class TechnicalCommercialProposalState {
       })))));
   }
 
-  @Action(ProcessMultiple)
-  processMultiple({ setState, getState }: Context, { proposalPositions, requestPositions }: ProcessMultiple) {
+  @Action(ReviewMultiple)
+  reviewMultiple({ setState, getState }: Context, { proposalPositions, requestPositions }: ReviewMultiple) {
     setState(patch({ status: "updating" as StateStatus }));
 
     const data: { accepted: Uuid[], sendToEdit: Uuid[] } = {
@@ -118,7 +118,7 @@ export class TechnicalCommercialProposalState {
       'sendToEdit': requestPositions.map(({ id }) => id)
     };
 
-    return this.rest.processMultiple(data).pipe(
+    return this.rest.reviewMultiple(data).pipe(
       tap(technicalProposalPositions => {
         setState(patch({ status: "updating" as StateStatus }));
 

@@ -27,7 +27,7 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionIds });
   }
 
-  processMultiple(data: { accepted: Uuid[], sendToEdit: Uuid[] }) {
+  reviewMultiple(data: { accepted: Uuid[], sendToEdit: Uuid[] }) {
     const url = `requests/customer/technical-commercial-proposal-positions/change-statuses`;
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, data);
   }

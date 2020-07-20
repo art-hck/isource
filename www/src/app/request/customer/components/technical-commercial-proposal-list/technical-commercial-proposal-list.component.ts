@@ -26,7 +26,7 @@ import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/
 import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
-import ProcessMultiple = TechnicalCommercialProposals.ProcessMultiple;
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 import NEW = TechnicalCommercialProposalPositionStatus.NEW;
 import APPROVED = TechnicalCommercialProposalPositionStatus.APPROVED;
 import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
@@ -103,7 +103,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, SendToEditMultiple, ProcessMultiple),
+      ofActionCompleted(Approve, Reject, SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
@@ -140,7 +140,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
   }
 
-  processMultiple() {
+  reviewMultiple() {
     const acceptedProposalPositions = [];
     const sendToEditRequestPositions = [];
 
@@ -160,7 +160,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         });
     }
 
-    this.store.dispatch(new ProcessMultiple(acceptedProposalPositions, sendToEditRequestPositions));
+    this.store.dispatch(new ReviewMultiple(acceptedProposalPositions, sendToEditRequestPositions));
   }
 
   sendToEditAll() {

@@ -22,8 +22,8 @@ export namespace TechnicalCommercialProposals {
   }
 
   // Принять решение по множеству позиций ТКП
-  export class ProcessMultiple {
-    static readonly type = '[Technical Commercial Proposals Customer] ProcessMultiple';
+  export class ReviewMultiple {
+    static readonly type = '[Technical Commercial Proposals Customer] ReviewMultiple';
     constructor(public proposalPositions: TechnicalCommercialProposalPosition[], public requestPositions: RequestPosition[]) {}
   }
 
