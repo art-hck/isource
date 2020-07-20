@@ -28,6 +28,7 @@ import { ProposalsView } from "../../../../shared/models/proposals-view";
 import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
 import { RequestPositionStatusService } from "../../../common/services/request-position-status.service";
 import { CommercialProposalReviewBody } from "../../../common/models/commercial-proposal-review-body";
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 import Fetch = CommercialProposals.Fetch;
 import Review = CommercialProposals.Review;
 
@@ -142,12 +143,12 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   reviewSelected() {
     const body = this.proposalsOnReview
-      .reduce((_body: CommercialProposalReviewBody, {selectedProposal, sendToEditProposal, position}) => {
+      .reduce((_body: CommercialProposalReviewBody, {selectedProposal, sendToEditPosition, position}) => {
         if (selectedProposal.valid) {
           _body.accepted = {..._body.accepted, [position.id]: selectedProposal.value.id};
         }
 
-        if (sendToEditProposal.valid) {
+        if (sendToEditPosition.valid) {
           _body.sendToEdit = [..._body.sendToEdit ?? [], position.id];
         }
         return _body;
@@ -162,8 +163,17 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   convertProposals = (proposals: RequestOfferPosition[]) => proposals.map(p => new Proposal(p));
   convertPosition = (position: RequestPosition) => new Position(position);
-  getProposalBySupplier = (position: RequestPosition) => ({ id }: ContragentShortInfo) => {
-    const proposal = position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === id);
+  convertSuppliers = (suppliers: ContragentShortInfo[], positions: RequestPosition[]): GridSupplier[] => {
+    return suppliers.reduce((arr: GridSupplier[], supplier) => {
+      [false, true]
+        .filter(hasAnalogs => positions.some(({linkedOffers}) => linkedOffers.some(({supplierContragentId: id, isAnalog}) => id === supplier.id && isAnalog === hasAnalogs)))
+        .forEach(hasAnalogs => arr.push({ ...supplier, hasAnalogs }));
+      return arr;
+    }, []);
+  }
+
+  getProposalBySupplier = (position: RequestPosition) => ({ id, hasAnalogs }: GridSupplier) => {
+    const proposal = position.linkedOffers.find(({ supplierContragentId, isAnalog }) => supplierContragentId === id && isAnalog === hasAnalogs);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 

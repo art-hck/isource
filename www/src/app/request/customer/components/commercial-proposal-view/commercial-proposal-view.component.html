@@ -50,8 +50,7 @@
           <app-grid-contragents
             *ngIf="positions.length && view === 'grid'"
             [gridRows]="gridRows"
-            [suppliers]="suppliers$ | async"
-            [hasAnalogsFn]="hasAnalogs(positions)"
+            [suppliers]="convertSuppliers(suppliers$ | async, positions)"
           ></app-grid-contragents>
           <ng-container *ngFor="let position of positions">
             <app-grid-row
@@ -59,12 +58,12 @@
               [chooseBy$]="chooseBy$"
               [position]="convertPosition(position)"
               [simpleView]="view === 'simple-grid'"
-              [suppliers]="suppliers$ | async"
+              [suppliers]="convertSuppliers(suppliers$ | async, positions)"
               [proposals]="convertProposals(position.linkedOffers)"
               [isReviewed]="isReviewed(position)"
               [getProposal]="getProposalBySupplier(position)"
               [getSupplier]="view === 'simple-grid' ? getProposalSupplier : null"
-              (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
+              (show)="modalData = {proposal: $event, position: convertPosition(position)}"
             >
               <div><b>{{ position.name }}</b></div>
               <div class="app-ghost-color">&nbsp;| {{ position.quantity }} {{position.measureUnit | lowercase}}</div>
@@ -77,7 +76,7 @@
                   #sendToEditRadio
                   [name]="position.id"
                   [value]="position"
-                  [formControl]="proposalOnReview.sendToEditProposal"
+                  [formControl]="proposalOnReview.sendToEditPosition"
                   (click)="$event.stopPropagation()"
                 ></uxg-radio-item>
               </ng-container>
@@ -102,7 +101,7 @@
             [requestId]="requestId"
             [position]="convertPosition(position)"
             [proposals]="convertProposals(position.linkedOffers)"
-            (show)="showedProposal = $event; modalData = {proposal: $event, position: convertPosition(position)}"
+            (show)="modalData = {proposal: $event, position: convertPosition(position)}"
           ></app-commercial-proposal-list>
         </ng-container>
 

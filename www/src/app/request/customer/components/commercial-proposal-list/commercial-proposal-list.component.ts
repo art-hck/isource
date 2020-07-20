@@ -29,7 +29,7 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   getCurrencySymbol = getCurrencySymbol;
   selectedProposal = new FormControl(null, Validators.required);
   rejectedProposal = new FormControl(null, Validators.required);
-  sendToEditProposal = new FormControl(null, Validators.required);
+  sendToEditPosition = new FormControl(null, Validators.required);
   folded = false;
   gridRows = [];
 

@@ -39,7 +39,6 @@ import { RequestPositionService } from "./services/request-position.service";
 import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
-import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
 import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 
 const RequestCommonModuleDeclarations = [
@@ -75,7 +74,6 @@ const RequestCommonModuleDeclarations = [
   PositionCancelComponent,
   FilterPositionStatusesComponent,
   RequestListComponent,
-  ProposalGridCardComponent,
 ];
 
 @NgModule({

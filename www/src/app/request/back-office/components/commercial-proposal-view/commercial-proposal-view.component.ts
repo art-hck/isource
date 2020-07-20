@@ -39,6 +39,7 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -159,13 +160,27 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     return proposals.map(proposal => new Proposal<RequestOfferPosition>(proposal));
   }
 
+  convertSuppliers(suppliers: ContragentShortInfo[], positions: RequestPosition[]): GridSupplier[] {
+    return suppliers.reduce((arr: GridSupplier[], supplier) => {
+      // Берём позицию и смотрим есть ли оффер с таким поставщиком и совпадает ли флаг аналогов ИЛИ, если предложений 0 И НЕ аналог
+      [false, true].filter(hasAnalogs => positions.some(({linkedOffers}) => {
+        return linkedOffers.some(({supplierContragentId: id, isAnalog}) => {
+          return id === supplier.id && isAnalog === hasAnalogs;
+        }) || linkedOffers.length === 0 && !hasAnalogs;
+      }))
+      .forEach(hasAnalogs => arr.push({ ...supplier, hasAnalogs }));
+
+      return arr;
+    }, []);
+  }
+
   canRollback(position: RequestPosition): boolean {
     return position.status === PositionStatus.RESULTS_AGREEMENT &&
       moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
   }
 
-  getProposalBySupplier = (position: RequestPosition) => ({ id }: ContragentShortInfo) => {
-    const proposal = position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === id);
+  getProposalBySupplier = (position: RequestPosition) => ({ id, hasAnalogs }: GridSupplier) => {
+    const proposal = position.linkedOffers.find(({ supplierContragentId, isAnalog }) => supplierContragentId === id && isAnalog === hasAnalogs);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 

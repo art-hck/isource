@@ -52,6 +52,8 @@
       <span class="app-ghost-color"> доставка</span>
     </div>
 
+    <div *ngIf="proposal.manufacturingName" class="app-ellipsis app-secondary-color">{{ proposal.manufacturingName }}</div>
+
     <div *ngIf="supplier" class="app-ellipsis">
       <app-contragent-info-link (click)="$event.stopPropagation()" hiddenName="Наименование поставщика скрыто" [contragent]="supplier">
       </app-contragent-info-link>

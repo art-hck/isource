@@ -3,7 +3,7 @@
     <div class="app-col grid-cell app-ellipsis" *ngFor="let supplier of suppliers; index as i">
       <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
-      <div class="app-ghost-color analog" *ngIf="hasAnalogsFn && hasAnalogsFn(i)">аналоги</div>
+      <div class="app-ghost-color analog" *ngIf="supplier.hasAnalogs">аналоги</div>
     </div>
   </div>
 

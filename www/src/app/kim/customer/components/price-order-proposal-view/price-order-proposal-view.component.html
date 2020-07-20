@@ -39,7 +39,6 @@
           <app-grid-contragents
             *ngIf="positions.length"
             [gridRows]="gridRows"
-            [hasAnalogsFn]="hasAnalogs(positions)"
             [suppliers]="suppliers(positions)"
           ></app-grid-contragents>
           <ng-container *ngFor="let position of positions">
