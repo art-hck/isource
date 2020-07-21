@@ -92,7 +92,8 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        role: [this.role.CUSTOMER]
+        role: [this.role.CUSTOMER],
+        isInternal: [false, Validators.required]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],

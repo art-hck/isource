@@ -93,6 +93,13 @@
               <label>&nbsp;{{ roleLabel.SUPPLIER }}</label>
             </div>
 
+            <div class="app-col internal">
+              <uxg-radio-item class="app-control" [value]="false" formControlName="isInternal"></uxg-radio-item>
+              <label>&nbsp; Внешний</label>
+              <uxg-radio-item class="app-control" [value]="true" formControlName="isInternal"></uxg-radio-item>
+              <label>&nbsp; Внутренний</label>
+            </div>
+
             <div class="app-col">
               <ng-container *ngIf="contragentRating && form.get('contragent').get('inn').valid">
                 <div class="rating-label app-secondary-color">Рейтинг надежности контрагента:</div>
