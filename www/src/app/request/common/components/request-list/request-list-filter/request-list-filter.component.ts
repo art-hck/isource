@@ -31,6 +31,7 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.fb.group({
       requestNameOrNumber: '',
+      onlyOpenAgreements: false,
       onlyOpenTasks: false,
       customers: [[]],
       positionStatuses: [[]],

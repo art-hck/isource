@@ -19,6 +19,24 @@
         </app-request-list-filter-section>
 
         <app-request-list-filter-section
+          *ngIf="!backofficeView"
+          class="filter-section"
+          [label]="'Есть вопросы на согласовании'">
+
+          <div class="clr-row app-align-items-center">
+            <div class="clr-col">
+              <div class="toggle-label">
+                <label (click)="onlyOpenTasksRef.switch($event)">Есть открытые согласования</label>
+              </div>
+            </div>
+
+            <div class="clr-col-auto">
+              <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenAgreements"></uxg-switcher>
+            </div>
+          </div>
+        </app-request-list-filter-section>
+
+        <app-request-list-filter-section
                 style="display: none"
                 *ngIf="backofficeView"
                 class="filter-section"
@@ -35,9 +53,16 @@
               <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenTasks" ></uxg-switcher>
             </div>
           </div>
-
         </app-request-list-filter-section>
 
+
+        <app-request-list-filter-section *ngIf="!backofficeView" class="filter-section" [label]="'Создал заявку'">
+          <app-request-filter-customer-list
+            [customers]="availableFilters?.contragents"
+            [limit]="5"
+            formControlName="customers">
+          </app-request-filter-customer-list>
+        </app-request-list-filter-section>
 
         <app-request-list-filter-section *ngIf="backofficeView" class="filter-section" [label]="'Заказчик'">
           <app-request-filter-customer-list
