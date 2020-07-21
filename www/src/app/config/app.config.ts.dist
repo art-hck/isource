@@ -5,7 +5,8 @@ export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
   endpoints: {
     api: 'api/',
-    ws: 'ws://localhost:3000'
+    ws: 'ws://localhost:3000',
+    wsChat: 'ws://test-chats.ezgg.site:8080',
   },
   keycloak: {
     config: {

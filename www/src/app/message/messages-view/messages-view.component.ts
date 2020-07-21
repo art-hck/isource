@@ -1,12 +1,5 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Observable } from "rxjs";
-import { MessageService } from "../messages/message.service";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
@@ -15,10 +8,11 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { tap, map, publishReplay, refCount, debounceTime } from "rxjs/operators";
+import { debounceTime, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
+import { MessagesService } from "../services/messages.service";
 
 @Component({
   selector: 'app-message-messages-view',
@@ -51,7 +45,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
   protected requestsItems: RequestItemsStore;
 
   constructor(
-    private messageService: MessageService,
+    private messageService: MessagesService,
     private user: UserInfoService,
     private route: ActivatedRoute,
     private router: Router,

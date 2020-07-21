@@ -1,18 +1,9 @@
 import { Observable } from 'rxjs';
+import { WebSocketSubject } from "rxjs/webSocket";
 
-export interface IWebsocketService {
-    status: Observable<boolean>;
-    on<T>(event: string): Observable<T>;
-    send(event: string, data: any): void;
-}
-
-export interface WebSocketConfig {
-    url: string;
-    reconnectInterval?: number;
-    reconnectAttempts?: number;
-}
-
-export interface IWsMessage<T> {
-    event: string;
-    data: T;
+export interface IWebsocketService<T = string> {
+    status?: Observable<boolean>;
+    websocket$: WebSocketSubject<unknown>;
+    on<D = any>(type: T): Observable<D>;
+    send<D = any>(type: T, data: D): void;
 }

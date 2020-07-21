@@ -1,10 +1,13 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import { interval, Observable, Observer, Subject, SubscriptionLike } from 'rxjs';
+import { interval, Observable, Observer, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, share, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
-import { IWebsocketService, IWsMessage, WebSocketConfig } from './websocket.interfaces';
-import { config } from './websocket.config';
+import { IWebsocketService } from '../websocket.interfaces';
 import { KeycloakService } from "keycloak-angular";
+import { WsTypes } from "../enum/ws-types";
+import { WsMessage } from "../models/ws-message";
+import { WsConfig } from "../models/ws-config";
+import { config } from "./ws-config-token";
 
 
 @Injectable({
@@ -12,7 +15,7 @@ import { KeycloakService } from "keycloak-angular";
 })
 export class WebsocketService implements IWebsocketService, OnDestroy {
 
-  private readonly config: WebSocketSubjectConfig<IWsMessage<any>> = {
+  private readonly config: WebSocketSubjectConfig<WsMessage<any>> = {
     url: null,
     closeObserver: {
       next: () => {
@@ -30,9 +33,8 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   };
 
   private reconnection$: Observable<number>;
-  private websocket$: WebSocketSubject<IWsMessage<any>>;
   private connection$: Observer<boolean>;
-  private wsMessages$ = new Subject<IWsMessage<any>>();
+  private wsMessages$ = new Subject<WsMessage<any>>();
   private destroy$ = new Subject();
 
   // number of connection attempts
@@ -41,9 +43,10 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   private reconnectInterval = this.wsConfig.reconnectInterval ?? 5000;
   private isConnected: boolean;
   public status = new Observable<boolean>(observer => this.connection$ = observer).pipe(share(), distinctUntilChanged());
+  public websocket$: WebSocketSubject<WsMessage<unknown>>;
 
   constructor(
-    @Inject(config) private wsConfig: WebSocketConfig,
+    @Inject(config) private wsConfig: WsConfig,
     private keycloakService: KeycloakService,
   ) {
     this.keycloakService.getToken().then(token => {
@@ -56,7 +59,10 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
         }
       });
 
-      this.wsMessages$.pipe(takeUntil(this.destroy$)).subscribe(
+      this.wsMessages$.pipe(takeUntil(this.destroy$),
+        tap((message) => {
+          console.log(message);
+        })).subscribe(
         () => {}, (error: ErrorEvent) => console.error('WebSocket error!', error)
       );
       this.config.url = wsConfig.url + '?access_token=' + token;
@@ -70,19 +76,20 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   }
 
   /*
-  * connect to WebSocked
+  * connect to WebSocket
   * */
-  private connect(): void {
-    this.websocket$ = new WebSocketSubject(this.config);
+  private connect() {
+    this.websocket$ = new WebSocketSubject<WsMessage<unknown>>("");
 
     this.websocket$.subscribe(
-      (message) => this.wsMessages$.next(message),
-      (error: Event) => {
+      message => this.wsMessages$.next(message),
+      () => {
         if (!this.websocket$) {
           // run reconnect if errors
           this.reconnect();
         }
       });
+    return this.websocket$;
   }
 
   /*
@@ -109,25 +116,20 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   /*
   * on message event
   * */
-  public on<T>(event: string): Observable<T> {
-    console.log('[WS] Subscribe on: ' + event);
-    if (event) {
-      return this.wsMessages$.pipe(
-        tap((message) => {
-          console.log('[WS] New message: ' + message);
-        }),
-        filter((message: IWsMessage<T>) => message.event === event),
-        map((message: IWsMessage<T>) => message.data)
-      );
-    }
+  public on<T>(event: WsTypes): Observable<T> {
+    return this.wsMessages$.pipe(
+      filter(({ type }: WsMessage<T>) => event && type === event),
+      tap((message) => console.log('[WS] New message:', message)),
+      map(({ data }: WsMessage<T>) => data)
+    );
   }
 
   /*
   * on message to server
   * */
-  public send(event: string, data: any = {}): void {
-    if (event && this.isConnected) {
-      this.websocket$.next(<any>JSON.stringify({event, data}));
+  public send(type: WsTypes, data: any = {}): void {
+    if (type && this.isConnected) {
+      this.websocket$.next({type: type, data: data});
     } else {
       console.error('Send error!');
     }

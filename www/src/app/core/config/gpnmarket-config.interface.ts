@@ -12,8 +12,8 @@ export interface GpnmarketConfigInterface {
   clientId: string;
   endpoints: {
     api: string,
-    // адрес WebSocket сервера
-    ws: string
+    ws: string,
+    wsChat: string
   };
   keycloak: KeycloakOptions;
   dadata: {
