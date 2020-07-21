@@ -14,7 +14,6 @@ import { ProcedureAction } from "../../../models/procedure-action";
 })
 export class ProcedureFormPropertiesComponent implements AfterContentInit, ControlValueAccessor {
   @Input() action: ProcedureAction["action"] = "create";
-  @Input() publicAccess = true;
   @Output() publicAccessChange = new EventEmitter();
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -32,8 +31,7 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       positionsEntireVolume: this.default("positionsEntireVolume", false),
       positionsSuppliersVisibility: this.default("positionsSuppliersVisibility", 'NameHidden'),
       positionsBestPriceType: this.default("positionsBestPriceType", 'LowerStartPrice'),
-      positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating'),
-      publicAccess: this.publicAccess
+      positionsApplicsVisibility: this.default("positionsApplicsVisibility", 'PriceAndRating')
     });
 
     if (this.action === 'bargain') {
@@ -58,8 +56,6 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
         c.setValue(false);
       }
     });
-
-    this.form.get('publicAccess').valueChanges.subscribe(value => this.publicAccessChange.emit(value));
 
     this.form.valueChanges.pipe(startWith({})).subscribe(() => {
       this.writeValue(this.form.getRawValue());
