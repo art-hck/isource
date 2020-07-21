@@ -42,7 +42,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
   isLoading: boolean;
-  publicAccess: boolean;
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
@@ -72,8 +71,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.wizzard = this.wb.create({
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
       general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || this.form.get('privateAccessContragents').valid)],
-      properties: { label: "Параметры", disabled: this.action === 'prolong' },
-      contragents: { label: "Контрагенты", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
+      contragents: { label: "Участники", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
+      properties: { label: "Свойства", disabled: this.action === 'prolong' },
       documents: ["Документы", () => this.form.valid],
     });
 
@@ -84,6 +83,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
+        publicAccess: [true, Validators.required],
         okpd2: ["", Validators.required],
         prolongateEndRegistration: this.defaultProcedureValue("prolongateEndRegistration", 0), // Продление времени приема заявок на участие (минут)
       }),
@@ -112,16 +112,26 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.dishonestSuppliersForbidden").disable();
     }
 
+    if (!this.form.get("general.publicAccess").value) {
+      this.form.get("general.okpd2").disable();
+    }
+
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
-    this.form.get("properties").valueChanges.pipe(
+    this.form.get("general").valueChanges.pipe(
       tap(({ publicAccess }) => this.form.get("privateAccessContragents").setValidators(
         publicAccess ? null : [Validators.required, Validators.minLength(2)]
       )),
       tap(({ publicAccess }) => this.wizzard.get("contragents").toggle(!publicAccess)),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.form.get("general.publicAccess").valueChanges.subscribe(
+      selected => {
+        selected ? this.form.get("general.okpd2").enable() : this.form.get("general.okpd2").disable();
+      }
+    );
 
     this.form.get("general.okpd2").valueChanges.pipe(
       debounceTime(500),
@@ -132,8 +142,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.allContragents$ = this.contragentService.getContragentList();
-
-    this.publicAccess = (this.contragents?.length ?? 0) < 2 && (this.procedure?.privateAccessContragents.length ?? 0) < 2;
   }
 
   submit() {
@@ -147,7 +155,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     const body: Procedure = {
       ...(this.form.get("general") as FormGroup).getRawValue(),
       ...this.form.get("properties").value,
-      okpd2: this.form.get("general.okpd2").value.code,
+      okpd2: this.form.get("general.publicAccess").value ? this.form.get("general.okpd2").value.code : "01.11",
       positions: this.form.get("positions").value.map(({id}) => id),
       privateAccessContragents: this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
