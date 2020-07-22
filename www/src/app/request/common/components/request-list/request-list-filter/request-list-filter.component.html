@@ -90,6 +90,7 @@
 
         <!--  Даты поставки -->
         <app-request-list-filter-section
+                *ngIf="!backofficeView"
                 class="filter-section"
                 [label]="'Даты поставки'">
 
