@@ -1,12 +1,12 @@
 <div class="request-list-filter">
 
   <div class="filter-form-block">
-    <div class="filter-header clr-row app-justify-content-between">
-      <div class="clr-col">
+    <div class="filter-header app-row app-justify-content-between">
+      <div class="app-col">
         <span class="title">Фильтр</span>
       </div>
 
-      <div class="clr-col-auto" *ngIf="form.dirty">
+      <div class="app-col-auto" *ngIf="form.dirty">
         <span class="reset" (click)="resetFilter()">Сбросить все</span>
       </div>
     </div>
@@ -14,74 +14,119 @@
     <div class="filter-body">
       <form [formGroup]="form">
 
+        <!--  Номер или наименование заявки -->
         <app-request-list-filter-section class="filter-section" label="Номер или наименование">
             <input uxgInput formControlName="requestNameOrNumber" placeholder="Номер заявки или наименование"/>
         </app-request-list-filter-section>
 
+
+        <!--  Открытые согласования для Заказчика -->
+        <app-request-list-filter-section
+          *ngIf="!backofficeView"
+          class="filter-section"
+          [label]="'Есть вопросы на согласовании'">
+
+          <div class="app-row app-align-items-center">
+            <div class="app-col">
+              <div class="toggle-label">
+                <label (click)="onlyOpenTasksRef.switch($event)">Есть открытые согласования</label>
+              </div>
+            </div>
+
+            <div class="app-col-auto">
+              <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenAgreements"></uxg-switcher>
+            </div>
+          </div>
+        </app-request-list-filter-section>
+
+        <!--  Открытые задачи для Бэкофиса -->
         <app-request-list-filter-section
                 style="display: none"
                 *ngIf="backofficeView"
                 class="filter-section"
                 [label]="'Задачи'">
-
-          <div class="clr-row app-align-items-center">
-            <div class="clr-col">
+          <div class="app-row app-align-items-center">
+            <div class="app-col">
               <div class="toggle-label">
                 <label (click)="onlyOpenTasksRef.switch($event)">Есть открытые задачи</label>
               </div>
             </div>
 
-            <div class="clr-col-auto">
-              <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenTasks" ></uxg-switcher>
+            <div class="app-col-auto">
+              <uxg-switcher #onlyOpenTasksRef formControlName="onlyOpenTasks"></uxg-switcher>
             </div>
           </div>
-
         </app-request-list-filter-section>
 
 
-        <app-request-list-filter-section *ngIf="backofficeView" class="filter-section" [label]="'Заказчик'">
-          <app-request-filter-customer-list
-                  [customers]="availableFilters?.contragents"
-                  [limit]="5"
-                  formControlName="customers">
-          </app-request-filter-customer-list>
+
+        <!--  Список заказчиков для БО / Список пользователей для Заказчика -->
+        <ng-container *ngIf="backofficeView; else customerViewUsersList" >
+          <app-request-list-filter-section class="filter-section" [label]="'Заказчик'">
+            <app-request-filter-customer-list
+              [customers]="availableFilters?.contragents"
+              [limit]="5"
+              formControlName="customers">
+            </app-request-filter-customer-list>
+          </app-request-list-filter-section>
+        </ng-container>
+
+        <ng-template #customerViewUsersList>
+          <app-request-list-filter-section class="filter-section" [label]="'Создал заявку'">
+            <app-request-filter-customer-list
+              [customers]="availableFilters?.users"
+              [limit]="5"
+              formControlName="userIds">
+            </app-request-filter-customer-list>
+          </app-request-list-filter-section>
+        </ng-template>
+
+
+        <!--  Список статусов позиций -->
+        <app-request-list-filter-section class="filter-section" label="Статус">
+          <app-filter-position-statuses [positionsStatuses]="availableFilters?.positionStatuses" formControlName="positionStatuses"></app-filter-position-statuses>
         </app-request-list-filter-section>
 
 
+        <!--  Даты поставки -->
         <app-request-list-filter-section
-                style="display: none"
+                *ngIf="!backofficeView"
                 class="filter-section"
                 [label]="'Даты поставки'">
 
-          <div class="shipping-dates clr-row">
-            <div class="clr-col-6">
-              <input uxgDatepicker type="date" autocomplete="off" placeholder="Дата с" formControlName="shipmentDateFrom" />
-            </div>
-            <div class="clr-col-6">
-              <input uxgDatepicker type="date" autocomplete="off" placeholder="Дата по" formControlName="shipmentDateTo" />
-            </div>
-          </div>
-
-          <div class="clr-row app-align-items-center">
-            <div class="clr-col-auto">
-              <div class="toggle-checkbox">
-                <input id="asap-toggle" type="checkbox" name="asap-toggle" formControlName="shipmentDateAsap" />
-                <label for="asap-toggle"></label>
+          <div class="shipping-dates app-row">
+            <div class="app-col" [style.padding-right.px]="15">
+              <div class="app-control-wrap" [style.padding]="0">
+                <input #shipmentDateFrom uxgInput uxgDatepicker placeholder="Дата с" class="delivery-date" formControlName="shipmentDateFrom">
+                <label class="app-control-icon" (click)="shipmentDateFrom.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
               </div>
             </div>
 
-            <div class="clr-col">
-              <div class="toggle-label">
-                <label for="asap-toggle">Как можно скорее</label>
+            <div class="app-col">
+              <div class="app-control-wrap" [style.padding]="0">
+                <input #shipmentDateTo uxgInput uxgDatepicker placeholder="Дата по" class="delivery-date" formControlName="shipmentDateTo">
+                <label class="app-control-icon" (click)="shipmentDateTo.focus()">
+                  <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+                </label>
               </div>
             </div>
           </div>
 
+          <div class="app-row app-align-items-center">
+            <div class="app-col-auto">
+              <uxg-switcher #shipmentDateAsapRef formControlName="shipmentDateAsap"></uxg-switcher>
+            </div>
+
+            <div class="app-col">
+              <div class="toggle-label" [style.padding-left.px]="8">
+                <label (click)="shipmentDateAsapRef.switch($event)">Как можно скорее</label>
+              </div>
+            </div>
+          </div>
         </app-request-list-filter-section>
 
-        <app-request-list-filter-section *ngIf="backofficeView" class="filter-section" label="Статус">
-          <app-filter-position-statuses [positionsStatuses]="availableFilters?.positionStatuses" formControlName="positionStatuses"></app-filter-position-statuses>
-        </app-request-list-filter-section>
       </form>
     </div>
   </div>
