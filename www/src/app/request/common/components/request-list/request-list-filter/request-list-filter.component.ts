@@ -36,7 +36,7 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
 
     if (this.backofficeView) {
       this.form.addControl("onlyOpenTasks", this.fb.control(false));
-      this.form.addControl("customers", this.fb.control([[]]));
+      this.form.addControl("customers", this.fb.control([]));
     } else {
       this.form.addControl("onlyOpenAgreements", this.fb.control(false));
       this.form.addControl("userIds", this.fb.control([]));
