@@ -5,7 +5,7 @@ import { debounceTime, filter, switchMap, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { FilterCustomersComponent } from "./filter-customers/filter-customers.component";
-import { AvailableFilters } from "../../../../back-office/models/available-filters";
+import { AvailableFilters } from "../../../models/requests-list/available-filters";
 
 @Component({
   selector: 'app-request-list-filter',

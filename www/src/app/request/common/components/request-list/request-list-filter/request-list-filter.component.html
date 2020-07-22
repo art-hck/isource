@@ -74,7 +74,7 @@
         <ng-template #customerViewUsersList>
           <app-request-list-filter-section class="filter-section" [label]="'Создал заявку'">
             <app-request-filter-customer-list
-              [customers]="availableFilters?.contragents"
+              [customers]="availableFilters?.users"
               [limit]="5"
               formControlName="customers">
             </app-request-filter-customer-list>
