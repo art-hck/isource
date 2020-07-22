@@ -76,7 +76,7 @@
             <app-request-filter-customer-list
               [customers]="availableFilters?.users"
               [limit]="5"
-              formControlName="customers">
+              formControlName="userIds">
             </app-request-filter-customer-list>
           </app-request-list-filter-section>
         </ng-template>
@@ -114,15 +114,13 @@
           </div>
 
           <div class="app-row app-align-items-center">
-            <div class="app-row app-align-items-center">
-              <div class="app-col-auto">
-                <uxg-switcher #shipmentDateAsapRef formControlName="shipmentDateAsap"></uxg-switcher>
-              </div>
+            <div class="app-col-auto">
+              <uxg-switcher #shipmentDateAsapRef formControlName="shipmentDateAsap"></uxg-switcher>
+            </div>
 
-              <div class="app-col">
-                <div class="toggle-label">
-                  <label (click)="shipmentDateAsapRef.switch($event)">Как можно скорее</label>
-                </div>
+            <div class="app-col">
+              <div class="toggle-label" [style.padding-left.px]="8">
+                <label (click)="shipmentDateAsapRef.switch($event)">Как можно скорее</label>
               </div>
             </div>
           </div>
