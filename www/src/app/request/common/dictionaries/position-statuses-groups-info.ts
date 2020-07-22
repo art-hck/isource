@@ -10,6 +10,8 @@ export interface PositionStatusesGroupInfo {
   shortName: string;
   hasActions: boolean;
   color?: string;
+  availabilityField?: string;
+  counterField?: string;
 }
 
 export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
@@ -38,7 +40,9 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "ТП",
     hasActions: true,
-    color: "#fb6a9e"
+    color: "#fb6a9e",
+    availabilityField: "isTpAvailable",
+    counterField: "tp"
   },
   {
     url: "commercial-proposals",
@@ -47,7 +51,9 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "КП",
     hasActions: true,
-    color: "#f38b00"
+    color: "#f38b00",
+    availabilityField: "isCpAvailable",
+    counterField: "kp"
   },
   {
     url: "technical-commercial-proposals",
@@ -56,7 +62,9 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "ТКП",
     hasActions: true,
-    color: "#EE64E8"
+    color: "#EE64E8",
+    availabilityField: "isTcpAvailable",
+    counterField: "tcp"
   },
   {
     url: "design-documentation",
@@ -65,7 +73,9 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "РКД и изготовление",
     hasActions: true,
-    color: "#56b9f2"
+    color: "#56b9f2",
+    availabilityField: "isRkdAvailable",
+    counterField: "rkd"
   },
   {
     url: "contracts",
@@ -74,7 +84,9 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
     positions: [],
     shortName: "Договор",
     hasActions: true,
-    color: "#f2c94c"
+    color: "#f2c94c",
+    availabilityField: "isContractAvailable",
+    counterField: "contractAgreement"
   },
   {
     url: "delivery",

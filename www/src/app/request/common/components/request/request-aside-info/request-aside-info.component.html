@@ -5,17 +5,17 @@
   <div class="app-accordion-body">
     <!-- Счетчики статусов -->
     <ng-container *ngFor="let statusCounter of statusCounters">
-      <div [class.app-ghost-color]="!statusCounter.positions.length">
+      <div [class.app-ghost-color]="!request.dashboard[statusCounter.availabilityField]">
         <div class="app-row app-section app-bold">
           <div class="app-col">
-            <ng-container *ngIf="statusCounter.positions.length; else statusLabelSpan">
+            <ng-container *ngIf="request.dashboard[statusCounter.availabilityField]; else statusLabelSpan">
               <a routerLink="../{{ statusCounter.url }}">{{ statusCounter.label }}</a>
             </ng-container>
             <ng-template #statusLabelSpan>{{ statusCounter.label }}</ng-template>
           </div>
           <div class="app-col app-grow-0">
             <div class="app-position-status">
-              <span>{{ statusCounter.positions.length }}</span>
+              <span>{{ request.dashboard[statusCounter.counterField] }}</span>
               <div class="app-position-status-icon" [ngClass]="statusCounter.statuses[0]"></div>
             </div>
           </div>
