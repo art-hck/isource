@@ -72,7 +72,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       positions: { label: "Выбор позиций", disabled: this.action !== "create", validator: () => this.form.get('positions').valid },
       general: ["Общие сведения", () => this.form.get('general').valid && (!!this.contragents || this.form.get('privateAccessContragents').valid)],
       contragents: { label: "Участники", hidden: true, validator: () => this.form.get('privateAccessContragents').valid },
-      properties: { label: "Свойства", disabled: this.action === 'prolong' },
+      properties: { label: "Параметры", disabled: this.action === 'prolong' },
       documents: ["Документы", () => this.form.valid],
     });
 
@@ -110,6 +110,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("positions").disable();
       this.form.get("general.procedureTitle").disable();
       this.form.get("general.dishonestSuppliersForbidden").disable();
+      this.form.get("general.okpd2").disable();
     }
 
     if (!this.form.get("general.publicAccess").value) {
