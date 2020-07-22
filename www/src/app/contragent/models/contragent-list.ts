@@ -16,6 +16,8 @@ export class ContragentList {
   phone: string;
   createdDate: Date;
   responsible?: User;
+  isInternal: boolean;
+  role: string;
 
   constructor(params?: Partial<ContragentList>) {
     Object.assign(this, params);
