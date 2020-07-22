@@ -39,7 +39,7 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
       this.form.addControl("customers", this.fb.control([[]]));
     } else {
       this.form.addControl("onlyOpenAgreements", this.fb.control(false));
-      this.form.addControl("userIds", this.fb.control([[]]));
+      this.form.addControl("userIds", this.fb.control([]));
       this.form.addControl("shipmentDateFrom", this.fb.control(''));
       this.form.addControl("shipmentDateTo", this.fb.control(''));
       this.form.addControl("shipmentDateAsap", this.fb.control(false));
