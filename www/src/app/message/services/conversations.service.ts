@@ -1,20 +1,17 @@
-import { Inject, Injectable } from '@angular/core';
-import { filter, map } from "rxjs/operators";
-import { IWebsocketService } from "../../websocket/websocket.interfaces";
-import { WebSocketSubject } from "rxjs/webSocket";
+import { Injectable } from '@angular/core';
 import { WsChatTypes } from "../../websocket/enum/ws-chat-types";
-import { WsChatMessage } from "../../websocket/models/ws-chat-message";
-import { WsConfig } from "../../websocket/models/ws-config";
-import { config } from "../../websocket/services/ws-config-token";
 import { WsChatService } from "../../websocket/services/ws-chat.service";
 import { Uuid } from "../../cart/models/uuid";
+import { Conversation } from "../models/conversation";
+import { MessageContextTypes } from "../message-context-types";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConversationsService {
 
-  constructor(private ws: WsChatService) {}
+  constructor(private ws: WsChatService, private api: HttpClient) {}
 
   get(conversationId?: number) {
     this.ws.send(`conversations.get`, { conversationId });
@@ -34,5 +31,14 @@ export class ConversationsService {
 
   unreadCount(conversationId?: number) {
     this.ws.send(`conversations.unreadcount`, { conversationId });
+  }
+
+  apiCreate(contextType: MessageContextTypes, contextId: Uuid) {
+    const url = `messages/conversation`;
+    return this.api.post<{id, externalId}>(url, { contextType, contextId });
+  }
+
+  onNew() {
+    return this.ws.on<Conversation>(WsChatTypes.CONVERSATIONS_NEW);
   }
 }

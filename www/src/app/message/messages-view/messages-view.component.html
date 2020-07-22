@@ -99,7 +99,7 @@
 
     <div class="messages-list-content">
       <ng-container *ngIf="(requests$ | async)?.entities.length !== 0; else noMessages">
-        <app-message-messages [contextId]="contextId" [contextType]="contextType">
+        <app-message-messages [contextId]="contextId" [contextType]="contextType" [conversationId]="conversationId" (sendMessage)="sendMessage($event)">
         </app-message-messages>
       </ng-container>
 

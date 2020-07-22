@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Observable } from "rxjs";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
@@ -8,11 +8,13 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, map, publishReplay, refCount, tap } from "rxjs/operators";
+import { debounceTime, flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessagesService } from "../services/messages.service";
+import { Conversation } from "../models/conversation";
+import { ConversationsService } from "../services/conversations.service";
 
 @Component({
   selector: 'app-message-messages-view',
@@ -27,14 +29,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
   positionId: Uuid;
 
   requests$: Observable<Page<RequestsList>>;
-  requestsItems$: Observable<(RequestPositionList | RequestGroup | RequestPosition)[]>;
+  requestsItems$: Observable<RequestPositionList[]>;
 
   requestEntities: RequestsList[];
 
   selectedRequest: RequestListItem;
   selectedRequestsItem: RequestPositionList;
 
-  contextId: Uuid;
+  contextId: RequestPositionList["id"];
+  conversationId: Conversation["id"];
   contextType: MessageContextTypes;
 
   requestFilterInputValue = '';
@@ -46,9 +49,11 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private messageService: MessagesService,
+    private conversationsService: ConversationsService,
     private user: UserInfoService,
     private route: ActivatedRoute,
     private router: Router,
+    private cd: ChangeDetectorRef
   ) {
   }
 
@@ -82,6 +87,47 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
         publishReplay(1),
         refCount()
       );
+
+    this.conversationsService.onNew().subscribe((conversation => {
+      const { contextId, contextType }: { contextId: Uuid, contextType: MessageContextTypes } = JSON.parse(conversation.context.items[0].data);
+      switch (contextType) {
+        case MessageContextTypes.REQUEST:
+          this.requests$ = this.requests$.pipe(map(requests => {
+            const index = requests.entities.findIndex(({ request: { id } }) => id === contextId);
+
+            if (index !== -1) {
+              requests.entities[index].request.conversation = { id: null, externalId: conversation.id };
+
+              if (requests.entities[index].request.id === this.selectedRequest.id) {
+                this.selectedRequest = requests.entities[index].request;
+                this.onRequestContextClick();
+              }
+            }
+
+            return requests;
+          }));
+          break;
+
+        case MessageContextTypes.REQUEST_GROUP:
+        case MessageContextTypes.REQUEST_POSITION:
+          this.requestsItems$ = this.requestsItems$.pipe(map(requestsItems => {
+            const index = requestsItems.findIndex(({ id }) => id === contextId);
+
+            if (index !== -1) {
+              requestsItems[index].conversation = { id: null, externalId: conversation.id };
+
+              if (requestsItems[index].id === this.selectedRequestsItem.id) {
+                this.onRequestItemClick(requestsItems[index]);
+              }
+            }
+
+
+            return requestsItems;
+          }));
+
+        break;
+      }
+    }));
   }
 
   ngAfterViewInit() {
@@ -166,6 +212,8 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
     this.contextType = MessagesViewComponent.getContextType(item);
     this.contextId = MessagesViewComponent.getContextId(item);
+    this.conversationId = this.selectedRequestsItem.conversation?.externalId;
+    this.cd.detectChanges();
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id + '/' + requestItemType + '/' + this.selectedRequestsItem.id],
@@ -195,6 +243,8 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
 
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
+    this.conversationId = this.selectedRequest.conversation?.externalId;
+    this.cd.detectChanges();
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id],
@@ -286,6 +336,17 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
       this.requestsItems$ = this.requestsItems$.pipe(map(data => {
         return this.requestsItems.getFilteredRequestItems(filter);
       }));
+    }
+  }
+
+  sendMessage({text, files}) {
+    if (!this.conversationId) {
+      this.conversationsService.apiCreate(this.contextType, this.contextId).pipe(
+        flatMap(({ externalId: id }) => this.messageService.send(text, id, [])),
+      ).subscribe();
+
+    } else {
+      this.messageService.send(text, this.conversationId, []).subscribe();
     }
   }
 }

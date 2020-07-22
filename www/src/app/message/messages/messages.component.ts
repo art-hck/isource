@@ -1,22 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy, QueryList,
-  SimpleChanges,
-  ViewChild, ViewChildren
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { expand, map, take, tap } from "rxjs/operators";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { merge, Observable, Subject, Subscription } from "rxjs";
-import { Message } from "../../request/common/models/message";
-import { MessageContextToEventTypesMap } from "../message-context-types";
-import { MessageService } from "./message.service";
+import { MessageContextToEventTypesMap, MessageContextTypes } from "../message-context-types";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { Uuid } from "../../cart/models/uuid";
-import { WebsocketService } from "../../websocket/websocket.service";
+import { MessagesService } from "../services/messages.service";
+import { Message } from "../models/message";
+import { StateStatus } from "../../request/common/models/state-status";
 
 @Component({
   selector: 'app-message-messages',
@@ -26,7 +17,9 @@ import { WebsocketService } from "../../websocket/websocket.service";
 export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
-  @Input() contextType: string;
+  @Input() contextType: MessageContextTypes;
+  @Input() conversationId: number;
+  @Output() sendMessage = new EventEmitter<{ text: string, files: File[] }>();
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
 
@@ -35,18 +28,19 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   private firstScroll = true;
 
   public messages$: Observable<Message[]>;
+  public state: StateStatus = 'pristine';
+
   public form = new FormGroup({
     text: new FormControl(null, Validators.required),
     files: new FormControl()
   });
 
   private subscription = new Subscription();
-  private outgoingMessagesSubject = new Subject();
+  private outgoingMessagesSubject = new Subject<Message>();
 
   constructor(
-    private messageService: MessageService,
+    private messagesService: MessagesService,
     private userInfoService: UserInfoService,
-    private wsService: WebsocketService
   ) {
   }
 
@@ -60,20 +54,26 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.messagesList.changes.subscribe(() => this.onItemElementsChanged());
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
+  ngOnChanges({ contextId, conversationId }: SimpleChanges) {
+    if ((contextId || conversationId) && this.contextId) {
       this.form.reset();
-      const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
-      const sentMessages$ = this.outgoingMessagesSubject;
-      const newMessages$ = merge(receivedMessages$, sentMessages$);
+      this.messages$ = null;
+      this.state = "pristine";
+      if (this.conversationId) {
+        this.state = "fetching";
+        const receivedMessages$ = this.messagesService.onNew(this.conversationId);
+        const sentMessages$ = this.outgoingMessagesSubject;
+        const newMessages$ = merge<Message>(receivedMessages$, sentMessages$);
 
-      this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
-        tap(() => this.firstScroll = true),
-        expand(messages => newMessages$.pipe(
-          take(1),
-          map(message => [...messages, message]),
-        ))
-      );
+        this.messages$ = this.messagesService.get(this.conversationId).pipe(
+          tap(() => this.firstScroll = true),
+          tap(() => this.state = "received"),
+          expand(messages => newMessages$.pipe(
+            take(1),
+            map(message => [...messages, message]),
+          ))
+        );
+      }
     }
   }
 
@@ -82,7 +82,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public isOwnMessage(message: Message) {
-    return message.user.id === this.userInfoService.getUserInfo().id;
+    return message.author.id === this.userInfoService.getUserInfo().id;
   }
 
   public submit(): void {
@@ -90,28 +90,8 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
       return;
     }
 
-    const { text, files } = this.form.value;
-
-    const message: Message = {
-      user: this.userInfoService.getUserInfo(),
-      message: text,
-      isSending: true,
-      documents: [],
-      contextId: null,
-      contextType: null,
-      requestId: null
-    };
-
-    this.outgoingMessagesSubject.next(message);
+    this.sendMessage.emit(this.form.value);
     this.form.reset();
-    this.subscription.add(
-      this.messageService.addMessage(text, this.contextType, this.contextId, files)
-        .subscribe(_message => {
-          message.id = _message.id;
-          message.isSending = false;
-          message.documents = _message.documents;
-        })
-    );
   }
 
   ngOnDestroy(): void {

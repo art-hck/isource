@@ -15,7 +15,7 @@ import { MessageSharedModule } from "./message-shared.module";
     SharedModule,
     MessageSharedModule,
     MessageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class MessageModule {

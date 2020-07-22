@@ -1,42 +1,39 @@
 <div class="wrapper">
   <div #scrollContainer class="messages-list">
-    <ng-container *ngIf="(messages$ | async) as messages; else loading">
-      <div #messagesList class="message" [class.sending]="message.isSending" *ngFor="let message of messages">
-
-        <div class="message-body"
-             [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
-          <div class="message-user" *ngIf="!isOwnMessage(message)">
-            {{ message.user.fullName }}
-          </div>
-          {{ message.message }}
-
-          <div class="files" *ngIf="message.documents.length > 0">
-            <app-document-simple-list
-              [documents]="message.documents"
-              [enableUpload]="false">
-            </app-document-simple-list>
-          </div>
-
-          <div class="message-date"> {{ message.createdDate | humanDate }} </div>
+    <div #messagesList class="message" [class.sending]="false" *ngFor="let message of messages$ | async">
+      <div class="message-body"
+           [ngClass]="{ 'own-message' : isOwnMessage(message), 'them-message' : !isOwnMessage(message) }">
+        <div class="message-user" *ngIf="!isOwnMessage(message)">
+          {{ message.author.fullName }}
         </div>
+        {{ message.text }}
+
+        <div class="files" *ngIf="message.attachments.length > 0">
+          <app-document-simple-list
+            [documents]="message.attachments"
+            [enableUpload]="false">
+          </app-document-simple-list>
+        </div>
+
+        <div class="message-date"> {{ message.createdAt | humanDate }} </div>
       </div>
-      <div class="text-center" *ngIf="messages.length === 0">
-        Сообщений нет
-      </div>
+    </div>
+
+    <ng-container *ngIf="state === 'pristine' || (messages$ | async)?.length === 0">
+      <div class="text-center">Сообщений нет</div>
     </ng-container>
 
-    <ng-template #loading>
-      <div class="text-center">
-        <span class="spinner spinner-md"></span>
-      </div>
-    </ng-template>
+    <ng-container *ngIf="state === 'fetching'">
+      <div class="text-center"><span class="spinner spinner-md"></span></div>
+    </ng-container>
   </div>
 
 
   <div class="new-message">
-    <button uxgButton appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn-add-file app-ghost-color">
+    <!-- @TODO: Implement attachments -->
+    <!--button uxgButton appUploadFile [multiple]="true" (select)="setFiles($event)" type="button" class="btn-add-file app-ghost-color">
       <uxg-icon shape="app-attach" size="32"></uxg-icon>
-    </button>
+    </button-->
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <button uxgButton lg iconText link type="submit" class="btn-send" [disabled]="form.invalid">

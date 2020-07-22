@@ -50,10 +50,7 @@ export class MessagesService {
   }
 
 
-  createConversation(contextType: MessageContextTypes, contextId: Uuid) {
-    const url = `messages/conversation`;
-    return this.api.post<{ externalId: number, id: Uuid }>(url, { contextType, contextId });
-  }
+
 
   /**
    *  @TODO: методы получения информации по заявке продублированы из модуля заявок. Не хочется делать зависимость

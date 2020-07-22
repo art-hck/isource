@@ -16,6 +16,7 @@ export enum WsChatTypes {
   CONVERSATIONS_ADD_PARTICIPANTS = 'conversations.addParticipants',
   CONVERSATIONS_REMOVE_PARTICIPANTS = 'conversations.removeParticipants',
   CONVERSATIONS_UNREADCOUNT = 'conversations.unreadcount',
+  CONVERSATIONS_NEW = 'conversations.new',
   MESSAGES_GET = 'messages.get',
   MESSAGES_NEW = 'messages.new',
   MESSAGES_SEND = 'messages.send',
