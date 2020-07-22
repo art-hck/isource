@@ -1,7 +1,6 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnChanges, QueryList, SimpleChanges, ViewChild } from '@angular/core';
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
-import { Proposal } from "../proposal";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
