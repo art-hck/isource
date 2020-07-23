@@ -77,17 +77,19 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   }
 
   submit() {
-    const value = this.value
-      .map((item, i) => ({...item, ...this.formArray.getRawValue().find(_item => _item.index === i)}))
-      .map(item => {
-        const deliveryDate = item.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
-        return { ...item, deliveryDate};
-      });
+    if (this.formArray.valid) {
+      const value = this.value
+        .map((item, i) => ({...item, ...this.formArray.getRawValue().find(_item => _item.index === i)}))
+        .map(item => {
+          const deliveryDate = item.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
+          return { ...item, deliveryDate};
+        });
 
-    this.writeValue(value);
+      this.writeValue(value);
 
-    if (this.onChange) {
-      this.onChange(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
     }
   }
 

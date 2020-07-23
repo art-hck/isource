@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CustomValidators} from "../../../shared/forms/custom.validators";
+import { CustomValidators } from "../../../shared/forms/custom.validators";
 import { EmployeeInfoBrief } from "../../models/employee-info";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 
@@ -57,12 +57,14 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   onAddEmployee() {
-    const value = this.form.value;
-    if (this.form.pristine) {
-      this.cancel.emit();
-    } else {
-      this.isEditing ? this.editEmployee.emit(value) : this.addEmployee.emit(value);
-      this.form.reset();
+    if (this.form.valid) {
+      const value = this.form.value;
+      if (this.form.pristine) {
+        this.cancel.emit();
+      } else {
+        this.isEditing ? this.editEmployee.emit(value) : this.addEmployee.emit(value);
+        this.form.reset();
+      }
     }
   }
 

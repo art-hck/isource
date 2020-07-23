@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()" *ngIf="!isLoading; else loading">
   <p class="app-secondary-color">Вы можете создавать группы из любых позиций с любым статусом.</p>
 
   <div class="app-control-wrap">
@@ -8,7 +8,7 @@
 
   <div class="app-row app-justify-content-end">
     <button uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>
-    <button uxgButton primary lg [disabled]="form.invalid">Создать</button>
+    <button uxgButton primary lg>Создать</button>
   </div>
 </form>
 <ng-template #loading>

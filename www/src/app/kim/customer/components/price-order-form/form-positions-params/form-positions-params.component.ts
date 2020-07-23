@@ -49,14 +49,16 @@ export class PriceOrderFormPositionsParamsComponent implements ControlValueAcces
   }
 
   submit() {
-    const value = this.value.map((item) => ({...item, ...this.formArray.value.find(({controlId}) => controlId === item.controlId)}));
+    if (this.formArray.valid) {
+      const value = this.value.map((item) => ({...item, ...this.formArray.value.find(({controlId}) => controlId === item.controlId)}));
 
-    this.writeValue(value);
+      this.writeValue(value);
 
-    if (this.onChange) {
-      this.onChange(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
+
+      this.cancel.emit();
     }
-
-    this.cancel.emit();
   }
 }

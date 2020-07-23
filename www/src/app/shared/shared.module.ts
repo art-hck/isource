@@ -36,6 +36,7 @@ import { GridCellComponent } from "./components/grid/grid-cell/grid-cell.compone
 import { GridRowComponent } from "./components/grid/grid-row/grid-row.component";
 import { ProposalDetailComponent } from "./components/proposal-detail/proposal-detail.component";
 import { GridContragentFormComponent } from "./components/grid/grid-contragent-form/grid-contragent-form.component";
+import { ValidationDirective } from "./directives/validation.directive";
 
 @NgModule({
   imports: [
@@ -82,6 +83,7 @@ import { GridContragentFormComponent } from "./components/grid/grid-contragent-f
     GridContragentFormComponent,
     ProposalDetailComponent,
     ProposalDetailComponent,
+    ValidationDirective
   ],
   exports: [
     CommonModule,
@@ -125,6 +127,7 @@ import { GridContragentFormComponent } from "./components/grid/grid-contragent-f
     GridContragentFormComponent,
     ProposalDetailComponent,
     ProposalDetailComponent,
+    ValidationDirective
   ]
 })
 export class SharedModule {

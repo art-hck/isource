@@ -1,4 +1,4 @@
-<form (ngSubmit)="submit()">
+<form appFormValidation (ngSubmit)="submit()">
   <div class="app-secondary-color">
     Добавьте всю необходимую информацию о позициях, по которым вы хотите создать ценовой запрос
   </div>
@@ -34,6 +34,6 @@
   </div>
   <div class="app-row app-justify-content-end">
     <button uxgButton lg secondary type="button" (click)="cancel.emit()">Отмена</button>
-    <button uxgButton lg primary [disabled]="formArray?.invalid">Сохранить</button>
+    <button uxgButton lg primary>Сохранить</button>
   </div>
 </form>

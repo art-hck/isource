@@ -47,18 +47,20 @@ export class PriceOrderFormPositionsComponent implements ControlValueAccessor, A
   }
 
   submit() {
-    const value: (KimPriceOrderPosition & {controlId: Uuid})[] = this.formArray.value.reduce((positions, position) => {
-      const i = (this.value || []).findIndex(({controlId}) => position.controlId === controlId);
-      positions.push({ ...(this.value || [])[i], ...position });
-      return positions;
-    }, []);
+    if (this.formArray.valid) {
+      const value: (KimPriceOrderPosition & {controlId: Uuid})[] = this.formArray.value.reduce((positions, position) => {
+        const i = (this.value || []).findIndex(({controlId}) => position.controlId === controlId);
+        positions.push({ ...(this.value || [])[i], ...position });
+        return positions;
+      }, []);
 
-    this.writeValue(value);
+      this.writeValue(value);
 
-    if (this.onChange) {
-      this.onChange(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
+
+      this.cancel.emit();
     }
-
-    this.cancel.emit();
   }
 }
