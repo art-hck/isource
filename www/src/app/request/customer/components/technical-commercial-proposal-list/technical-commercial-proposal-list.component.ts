@@ -171,9 +171,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   sendToEditAll() {
-    this.store.dispatch(new SendToEditMultiple(
-      this.proposalsOnReview.map(({ position }) => position.sourcePosition)
-    ));
+    const sendToEditAllPositions = [];
+
+    this.proposalsOnReview.map(({ position }) => {
+      sendToEditAllPositions.push(position);
+    });
+
+    this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
   }
 
   switchView(view: ProposalsView) {

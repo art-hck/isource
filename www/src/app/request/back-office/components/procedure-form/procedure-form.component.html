@@ -73,7 +73,21 @@
       <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
         участников закупки в реестре недобросовестных поставщиков ФАС</label>
     </div>
-    <div class="app-control-wrap">
+    <br>
+
+    <br>
+      <b>Доступ к процедуре</b>
+    <div class="app-row">
+        <p class="app-row access-radio app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
+        </p>
+        <p class="app-row app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
+        </p>
+    </div>
+    <div class="app-control-wrap okpd2">
       <uxg-dropdown-input
         appSuggestions
         formControlName="okpd2"
@@ -128,7 +142,6 @@
       <app-request-procedure-form-properties
         formControlName="properties"
         [action]="action"
-        [(publicAccess)]="publicAccess"
       ></app-request-procedure-form-properties>
     </div>
     <hr class="divider"/>

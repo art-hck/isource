@@ -14,6 +14,9 @@ export const AppConfig: GpnmarketConfigInterface = {
       realm: 'master',
       clientId: 'gpnmarket-loc',
     },
+    initOptions: {
+      checkLoginIframe: false,
+    },
     loadUserProfileAtStartUp: false,
     bearerExcludedUrls: ['https://suggestions.dadata.ru/'],
   },

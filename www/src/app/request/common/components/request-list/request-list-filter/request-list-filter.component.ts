@@ -5,7 +5,7 @@ import { debounceTime, filter, switchMap, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { FilterCustomersComponent } from "./filter-customers/filter-customers.component";
-import { AvailableFilters } from "../../../../back-office/models/available-filters";
+import { AvailableFilters } from "../../../models/requests-list/available-filters";
 
 @Component({
   selector: 'app-request-list-filter',
@@ -31,13 +31,19 @@ export class RequestListFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.fb.group({
       requestNameOrNumber: '',
-      onlyOpenTasks: false,
-      customers: [[]],
       positionStatuses: [[]],
-      shipmentDateFrom: '',
-      shipmentDateTo: '',
-      shipmentDateAsap: false,
     });
+
+    if (this.backofficeView) {
+      this.form.addControl("onlyOpenTasks", this.fb.control(false));
+      this.form.addControl("customers", this.fb.control([]));
+    } else {
+      this.form.addControl("onlyOpenAgreements", this.fb.control(false));
+      this.form.addControl("userIds", this.fb.control([]));
+      this.form.addControl("shipmentDateFrom", this.fb.control(''));
+      this.form.addControl("shipmentDateTo", this.fb.control(''));
+      this.form.addControl("shipmentDateAsap", this.fb.control(false));
+    }
 
     this.formInitialValue = this.form.value;
 

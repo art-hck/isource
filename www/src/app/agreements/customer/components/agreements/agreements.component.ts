@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
@@ -11,6 +11,8 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { Agreement } from "../../../common/models/Agreement";
 import { AgreementAction } from "../../../back-office/enum/agreement-action";
 import { AgreementActionFilters } from "../../dictionaries/agreement-action-label";
+import { AgreementsListFilter } from "../../../common/models/agreements-list/agreements-list-filter";
+import moment from "moment";
 
 @Component({
   templateUrl: './agreements.component.html',
@@ -21,6 +23,9 @@ export class AgreementsComponent implements OnInit {
   @Select(AgreementListState.status) status$: Observable<StateStatus>;
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
+  filters: AgreementsListFilter = {};
+  filterOpened = false;
+
   readonly pageSize = 10;
   readonly actions: {type: AgreementAction[], label: string}[] = AgreementActionFilters;
   pages$: Observable<number>;
@@ -28,6 +33,13 @@ export class AgreementsComponent implements OnInit {
   form = new FormGroup({
     actions: new FormControl(null)
   });
+
+  get activeFilters() {
+    return this.filters && Object.entries(this.filters)
+      .filter(([k, v]: [keyof AgreementsListFilter, any]) => {
+        return k !== 'actions' && v instanceof Array && v.length > 0 || !(v instanceof Array) && v;
+      });
+  }
 
   constructor(
     public store: Store,
@@ -40,13 +52,24 @@ export class AgreementsComponent implements OnInit {
     this.form.valueChanges.subscribe(
       () => {
         this.router.navigate(["."], {relativeTo: this.route, queryParams: null});
-        const action = this.form.value;
-        this.store.dispatch(new Fetch(action, 0, this.pageSize));
+        this.filters.actions = this.form.value.actions;
+        this.store.dispatch(new Fetch(this.filters, 0, this.pageSize));
       }
     );
   }
 
   loadPage(page: number) {
-    this.store.dispatch(new Fetch(this.form.value, (page - 1) * this.pageSize, this.pageSize));
+    this.store.dispatch(new Fetch(this.filters, (page - 1) * this.pageSize, this.pageSize));
+  }
+
+  filterList(filters: AgreementsListFilter) {
+    this.filters = filters;
+
+    this.filters.actions = (this.form.get('actions').value?.length > 0) ? this.form.get('actions').value : null;
+    this.filters.issuedDateFrom = filters.issuedDateFrom !== '' ? moment(moment(filters.issuedDateFrom, 'DD.MM.YYYY')).format('YYYY-MM-DD') : null;
+    this.filters.issuedDateTo = filters.issuedDateTo !== '' ? moment(moment(filters.issuedDateTo, 'DD.MM.YYYY')).format('YYYY-MM-DD') : null;
+    this.filters.contragents = filters.contragents.length > 0 ? filters.contragents : null;
+
+    this.store.dispatch(new Fetch(this.filters, 0, this.pageSize));
   }
 }

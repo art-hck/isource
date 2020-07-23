@@ -1,0 +1,9 @@
+<label (click)="isShowed = !isShowed" [class.showed]="isShowed">
+  <div class="app-grow-1">{{ label }}</div>
+
+  <uxg-icon shape="app-chevron" [attr.dir]="isShowed ? 'down' : 'up'"></uxg-icon>
+</label>
+
+<div class="control" *ngIf="isShowed">
+  <ng-content></ng-content>
+</div>

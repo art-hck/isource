@@ -11,6 +11,7 @@ import { RequestDocument } from "../../common/models/request-document";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
+import { AvailableFilters } from "../models/available-filters";
 
 @Injectable({
   providedIn: "root"
@@ -26,6 +27,11 @@ export class RequestService {
   getRequests(startFrom, pageSize, filters, sort): Observable<Page<RequestsList>> {
     const url = `requests/customer/list`;
     return this.api.post<Page<RequestsList>>(url, { startFrom, pageSize, filters, sort });
+  }
+
+  availableFilters() {
+    const url = `requests/customer/available-filters`;
+    return this.api.get<AvailableFilters>(url);
   }
 
   addRequest(name: string, positions: Array<any>): Observable<Request> {

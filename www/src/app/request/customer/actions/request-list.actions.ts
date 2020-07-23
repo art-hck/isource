@@ -14,4 +14,8 @@ export namespace RequestListActions {
     constructor(public files: File[], public requestName: string, public publish: boolean) {
     }
   }
+
+  export class FetchAvailableFilters {
+    static readonly type = '[Request List Customer] Fetch Available Filters';
+  }
 }

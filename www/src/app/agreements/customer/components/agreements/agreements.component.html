@@ -1,16 +1,47 @@
 <ng-container *ngIf="(agreements$ | async) as agreements">
-  <form [formGroup]="form">
-    <uxg-dropdown lg class="action-select" formControlName="actions">
-      <div uxgDropdownItem [value]="null">Все задачи</div>
-      <div uxgDropdownItem [value]="action.type"
-           *ngFor="let action of actions"
-      >{{ action.label }}</div>
-    </uxg-dropdown>
-  </form>
 
-  <app-agreements
-    [agreements]="agreements">
-  </app-agreements>
+  <div class="app-row app-align-items-center">
+    <div class="app-col">
+      <form [formGroup]="form">
+        <uxg-dropdown lg class="action-select" formControlName="actions">
+          <div uxgDropdownItem [value]="null">Все задачи</div>
+          <div uxgDropdownItem [value]="action.type"
+               *ngFor="let action of actions"
+          >{{ action.label }}</div>
+        </uxg-dropdown>
+      </form>
+    </div>
+
+    <div class="app-col-auto">
+      <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
+        <uxg-icon shape="app-sort2"></uxg-icon>
+        <span>Фильтр</span>
+        <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
+      </button>
+    </div>
+
+    <div class="app-col-aside"></div>
+  </div>
+
+  <div class="app-row">
+    <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
+
+    <div class="app-col">
+      <app-agreements
+        [agreements]="agreements">
+      </app-agreements>
+    </div>
+
+    <div class="app-col-aside filter" [class.opened]="filterOpened">
+      <div class="close-btn" [class.opened]="filterOpened" (click)="filterOpened = false"></div>
+
+      <app-agreements-list-filter
+        [resultsCount]="(totalCount$| async)"
+        (filter)="filterList($event)"
+        (showResults)="filterOpened = false">
+      </app-agreements-list-filter>
+    </div>
+  </div>
 </ng-container>
 
 <app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
