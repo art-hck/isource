@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { fromEvent, Observable } from "rxjs";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { fromEvent, Observable, Subject } from "rxjs";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
@@ -8,20 +8,21 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
+import { debounceTime, flatMap, map, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessagesService } from "../services/messages.service";
 import { Conversation } from "../models/conversation";
 import { ConversationsService } from "../services/conversations.service";
+import { Attachment } from "../models/attachment";
 
 @Component({
   selector: 'app-message-messages-view',
   templateUrl: './messages-view.component.html',
   styleUrls: ['./messages-view.component.scss']
 })
-export class MessagesViewComponent implements OnInit, AfterViewInit {
+export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('requestsSearchField') requestsSearchField: ElementRef;
 
@@ -46,6 +47,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
   requestListSearchLoader = false;
 
   protected requestsItems: RequestItemsStore;
+  readonly destroy$ = new Subject();
 
   constructor(
     private messageService: MessagesService,
@@ -88,7 +90,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
         refCount()
       );
 
-    this.conversationsService.onNew().subscribe((conversation => {
+    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const { contextId, contextType }: { contextId: Uuid, contextType: MessageContextTypes } = JSON.parse(conversation.context.items[0].data);
       switch (contextType) {
         case MessageContextTypes.REQUEST:
@@ -133,7 +135,8 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     fromEvent(this.requestsSearchField.nativeElement, 'input').pipe(
       // Пропускаем изменения, которые происходят чаще 500ms для разгрузки бэкенда
-      debounceTime(500)
+      debounceTime(500),
+      takeUntil(this.destroy$)
     ).subscribe(
       (event: Event) => this.onRequestFilterChange(event)
     );
@@ -171,7 +174,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
       this.onRequestClick(requestToSelect[0].request);
 
       // Выбор позиции в списке
-      this.requestsItems$.subscribe(requestItems => {
+      this.requestsItems$.pipe(takeUntil(this.destroy$)).subscribe(requestItems => {
         const flatPositionsList = this.getRequestPositionsFlat(requestItems);
 
         const requestItemToSelect = Object.values(flatPositionsList).filter(
@@ -339,14 +342,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  sendMessage({text, files}) {
+  sendMessage({ text, attachments = [] }: { text: string, attachments: Attachment[] }) {
     if (!this.conversationId) {
       this.conversationsService.apiCreate(this.contextType, this.contextId).pipe(
-        flatMap(({ externalId: id }) => this.messageService.send(text, id, [])),
+        tap(({ externalId }) => this.messageService.send(text, externalId, attachments.map(({ id }) => id))),
+        takeUntil(this.destroy$)
       ).subscribe();
-
     } else {
-      this.messageService.send(text, this.conversationId, []).subscribe();
+      this.messageService.send(text, this.conversationId, attachments.map(({ id }) => id));
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

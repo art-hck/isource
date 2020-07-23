@@ -7,4 +7,5 @@ export class Conversation {
   createdAt: string;
   participants: User[];
   context: Context;
+  unreadCount: number;
 }

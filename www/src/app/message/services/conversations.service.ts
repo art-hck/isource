@@ -14,23 +14,23 @@ export class ConversationsService {
   constructor(private ws: WsChatService, private api: HttpClient) {}
 
   get(conversationId?: number) {
-    this.ws.send(`conversations.get`, { conversationId });
+    return this.ws.send<Conversation[]>(`conversations.get`, { conversationId });
   }
 
   create(topic: string, participants: Uuid[], contextId: number) {
-    this.ws.send(`conversations.create`, { topic, participants, contextId });
+    return this.ws.send(`conversations.create`, { topic, participants, contextId });
   }
 
   addParticipants(newParticipants: Uuid[], conversationId: number) {
-    this.ws.send(`conversations.addParticipants`, { newParticipants, conversationId });
+    return this.ws.send(`conversations.addParticipants`, { newParticipants, conversationId });
   }
 
   removeParticipants(participantsToRemove: Uuid[], conversationId: number) {
-    this.ws.send(`conversations.removeParticipants`, { participantsToRemove, conversationId });
+    return this.ws.send(`conversations.removeParticipants`, { participantsToRemove, conversationId });
   }
 
   unreadCount(conversationId?: number) {
-    this.ws.send(`conversations.unreadcount`, { conversationId });
+    return this.ws.send(`conversations.unreadcount`, { conversationId });
   }
 
   apiCreate(contextType: MessageContextTypes, contextId: Uuid) {

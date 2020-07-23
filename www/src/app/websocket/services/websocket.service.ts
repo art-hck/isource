@@ -19,16 +19,12 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
     url: null,
     closeObserver: {
       next: () => {
-        console.log('WebSocket disconnected!');
         this.websocket$ = null;
         this.connection$.next(false);
       }
     },
     openObserver: {
-      next: () => {
-        console.log('WebSocket connected!');
-        this.connection$.next(true);
-      }
+      next: () => this.connection$.next(true)
     }
   };
 
@@ -59,10 +55,7 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
         }
       });
 
-      this.wsMessages$.pipe(takeUntil(this.destroy$),
-        tap((message) => {
-          console.log(message);
-        })).subscribe(
+      this.wsMessages$.pipe(takeUntil(this.destroy$)).subscribe(
         () => {}, (error: ErrorEvent) => console.error('WebSocket error!', error)
       );
       this.config.url = wsConfig.url + '?access_token=' + token;
@@ -119,7 +112,6 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   public on<T>(event: WsTypes): Observable<T> {
     return this.wsMessages$.pipe(
       filter(({ type }: WsMessage<T>) => event && type === event),
-      tap((message) => console.log('[WS] New message:', message)),
       map(({ data }: WsMessage<T>) => data)
     );
   }

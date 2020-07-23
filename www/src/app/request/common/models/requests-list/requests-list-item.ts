@@ -14,5 +14,5 @@ export class RequestListItem {
   comment?: string;
   contragent?: Contragent;
   publishedDate?: Date;
-  conversation?: { id: Uuid, externalId: Conversation["id"] };
+  conversation?: { id: Uuid, externalId: Conversation["id"], unreadCount?: number };
 }

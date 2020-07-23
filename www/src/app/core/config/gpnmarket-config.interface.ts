@@ -13,6 +13,7 @@ export interface GpnmarketConfigInterface {
   endpoints: {
     api: string,
     ws: string,
+    apiChat: string,
     wsChat: string
   };
   keycloak: KeycloakOptions;

@@ -1,6 +1,7 @@
 export enum WsChatTypes {
   AUTHORIZE = 'authorize',
   REJECTED = 'rejected',
+  GRANTED = 'granted',
   ATTACHMENTS_CANCEL = 'attachments.cancel',
   ATTACHMENTS_UPLOAD = 'attachments.upload',
   ATTACHMENTS_FILE = 'attachments.file.', // attachments.file.{id}
@@ -24,8 +25,5 @@ export enum WsChatTypes {
   MESSAGES_MARKSEEN = 'messages.markseen',
   USERS_GET = 'users.get',
   USERS_GETSELF = 'users.getself',
-
   CONVERSATION_NEW = 'conversation.new',
-  GRANTED = 'granted'
-
 }

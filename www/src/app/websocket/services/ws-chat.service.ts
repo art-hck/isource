@@ -1,48 +1,82 @@
 import { Inject, Injectable } from '@angular/core';
-import { delayWhen, filter, map, take } from "rxjs/operators";
+import { buffer, bufferToggle, bufferWhen, delay, delayWhen, filter, flatMap, map, mapTo, shareReplay, take, takeUntil, tap, windowToggle } from "rxjs/operators";
 import { IWebsocketService } from "../websocket.interfaces";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WsChatTypes } from "../enum/ws-chat-types";
 import { WsChatMessage } from "../models/ws-chat-message";
 import { WsConfig } from "../models/ws-config";
 import { config } from "./ws-config-token";
-import { timer } from "rxjs";
+import { BehaviorSubject, from, merge, of, ReplaySubject, Subject, timer } from "rxjs";
+import { MockToken } from "./mock-token";
+import { KeycloakEventType, KeycloakService } from "keycloak-angular";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WsChatService implements IWebsocketService {
   websocket$: WebSocketSubject<WsChatMessage<unknown>>;
+  authorized$ = new BehaviorSubject<boolean>(false);
+  send$ = new ReplaySubject<WsChatMessage<unknown>>();
+  received$ = new Subject<unknown>();
 
-  constructor(@Inject(config) private wsConfig: WsConfig) {
+  constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
 
-    this.websocket$ = new WebSocketSubject<WsChatMessage<unknown>>({
-      url: wsConfig.chatUrl,
-      closeObserver: {
-        next: () => this.websocket$ = null
-      },
+    this.keycloakService.getToken().then(token => {
+      // Как только получили токен открываем соединение ws
+      this.websocket$ = new WebSocketSubject<WsChatMessage<unknown>>({
+        url: wsConfig.chatUrl + '?authorization=' + MockToken,
+        closeObserver: {
+          next: () => this.websocket$ = null
+        },
+      });
+
+      this.websocket$?.pipe(
+        shareReplay(1)
+      ).subscribe(data => this.received$.next(data));
+
+      // Если приходит rejected, считаем что нужна авторизация, пробуем авторизоваться (макс 5 попыток с интервалом 3 сек)
+      this.on(WsChatTypes.REJECTED).pipe(
+        delayWhen<any>((v, i) => timer(i > 0 ? this.wsConfig.reconnectInterval ?? 3000 : 0)),
+        take(this.wsConfig.reconnectAttempts ?? 5),
+        tap(() => this.authorized$.next(false))
+        // @TODO: реализовать авторизацию!
+      ).subscribe(() => this.authorize(MockToken));
+
+      // Если приходит granted, считаем что авторизованы
+      this.on(WsChatTypes.GRANTED).subscribe(() => this.authorized$.next(true));
+
+      // Все эмиты разлогина (rejected)
+      const off$ = this.authorized$.pipe(filter(v => !v));
+      // Все эмиты успешной авторизации (granted)
+      const on$ = this.authorized$.pipe(filter(v => v));
+
+      // Пока мы разлогинены все запросы которые мы шлём на сокеты остаются в буффере
+      // Как только произойдет логин, выгружаем всё из буфера и отправляем на сервер
+      merge(
+        this.send$.pipe(bufferToggle(off$, () => on$)),
+        this.send$.pipe(windowToggle(on$, () => off$))
+      ).pipe(
+        flatMap(x => x),
+        tap(data => console.log("next!", data))
+      ).subscribe(data => this.websocket$.next(data));
     });
-
-    this.on(WsChatTypes.REJECTED).pipe(
-      delayWhen<any>((v, i) => timer(i > 0 ? this.wsConfig.reconnectInterval ?? 3000 : 0)),
-      take(this.wsConfig.reconnectAttempts ?? 5)
-      // @TODO: реализовать авторизацию!
-    ).subscribe(() => this.authorize("eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhVGFZcXV5R1E2ZVgxc0I1emUwQ1FGdEhqVGhmWXZraHY1UTl2LWFlM0NVIn0.eyJleHAiOjE1OTU0ODEwOTksImlhdCI6MTU5NTQyMzQ5OSwianRpIjoiNGIwM2YxMTUtODdiNy00ZGRmLWFlNTktYzY0NGM5NzcxYWIwIiwiaXNzIjoiaHR0cDovLzk1LjIxNy4yMTUuMjA2OjgwODIvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjQ1MWU2MDAzLTFkY2EtNDgyZi1iOGU4LTdmZTk5MjVjMTg1NiIsInR5cCI6IkJlYXJlciIsImF6cCI6Imdwbm1hcmtldC1sb2MiLCJzZXNzaW9uX3N0YXRlIjoiNjZlZDhkMzctMmNjYy00NTM0LWIwNmYtNzI5NmU4NzcyY2VjIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJUZXN0Rmlyc3ROYW1lIFRlc3RMYXN0TmFtZSIsInByZWZlcnJlZF91c2VybmFtZSI6InVzZXIxQGNoYXRzLmV6Z2cuc2l0ZSIsImdpdmVuX25hbWUiOiJUZXN0Rmlyc3ROYW1lIiwiZmFtaWx5X25hbWUiOiJUZXN0TGFzdE5hbWUiLCJlbWFpbCI6InVzZXIxQGNoYXRzLmV6Z2cuc2l0ZSJ9.DXW_jY7bLQd8_LhBq_OLpCwLP6WsytLMcuxTSbUdunpTyjkcWonH_1DhXdw9SnJVNPZWa8OOqR4pV_fWzJBy8frb91jBuFa-KMRFn8HIxjZ9Gp5_aKQouh3f0pCKB_Bce38gXb-Jh0JfSUNvhMAkeDEn55ueewaBMADzT2yCPFuAJbTCg7_uV5d7jqabPV2ao45IQlPyGdky1NjJJv200sayXNstkNDQjIWV80Sw42-hDUj4Tte1fyQ6tGWiitU6uOBzXvIXINpV7lGoWLWhfCS8GpJaOKuvO-7KKvTcLkxMsLrxvF97allD0-s1AFnIO99PuwpB9NHW9K4LlwGbvQ"));
   }
 
   on<T>(event: WsChatTypes) {
-    return this.websocket$?.pipe(
+    return this.received$.pipe(
       filter(({ type }) => event && type === event),
-      map(({ data }: WsChatMessage<T>) => data)
+      map(({ data }: WsChatMessage<T>) => data),
     );
   }
 
-  send<T = any>(type: WsChatTypes | string, data?: T) {
-    this.websocket$.next({ type: <WsChatTypes>type, data: data ?? {} });
-    return this.websocket$;
+  send<T = any, D = any>(type: WsChatTypes | string, data?: D) {
+    // Не шлём запросы напрямую в websocket$.next() для буффера запросов (см. выше) которые отправились ДО овторизации
+    this.send$.next({ type: <WsChatTypes>type, data: data ?? {} });
+
+    return this.on<T>(<WsChatTypes>type);
   }
 
   authorize(accessToken: string) {
-    this.send(`authorize`, { accessToken });
+    this.websocket$.next({ type: WsChatTypes.AUTHORIZE, data: { accessToken } });
   }
 }

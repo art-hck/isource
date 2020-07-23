@@ -27,9 +27,7 @@ export class MessagesService {
   constructor(private ws: WsChatService, protected api: HttpClient) {}
 
   get(conversationId: number, messageId?: number, limit: number = 50, offset: number = 0) {
-    this.ws.send(`messages.get`, { conversationId, messageId, limit, offset });
-
-    return this.ws.on<Message[]>(WsChatTypes.MESSAGES_GET);
+    return this.ws.send<Message[]>(`messages.get`, { conversationId, messageId, limit, offset });
   }
 
   send(text: string, conversationId: number, attachments?: number[]) {
@@ -37,20 +35,17 @@ export class MessagesService {
   }
 
   unreadCount() {
-    return this.ws.send(`messages.unreadcount`);
+    return this.ws.send<{ count: number }>(`messages.unreadcount`);
   }
 
-  markSeen(conversationId: number, messageId: number) {
-    return this.ws.send(`messages.markseen`, { conversationId, messageId });
+  markSeen(data: { conversationId?: number, messageId?: number }) {
+    return this.ws.send(`messages.markseen`, data);
   }
 
-  onNew(conversationId: number) {
+  onNew(conversationId?: number) {
     return this.ws.on<Message>(WsChatTypes.MESSAGES_NEW)
-      .pipe(filter(({ conversation: { id } }) => id === conversationId));
+      .pipe(filter(({ conversation: { id } }) => conversationId ? id === conversationId : true));
   }
-
-
-
 
   /**
    *  @TODO: методы получения информации по заявке продублированы из модуля заявок. Не хочется делать зависимость

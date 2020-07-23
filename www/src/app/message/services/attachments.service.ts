@@ -1,30 +1,33 @@
 import { Inject, Injectable } from '@angular/core';
-import { filter, map } from "rxjs/operators";
-import { IWebsocketService } from "../../websocket/websocket.interfaces";
-import { WebSocketSubject } from "rxjs/webSocket";
-import { WsChatTypes } from "../../websocket/enum/ws-chat-types";
-import { WsChatMessage } from "../../websocket/models/ws-chat-message";
-import { WsConfig } from "../../websocket/models/ws-config";
-import { config } from "../../websocket/services/ws-config-token";
 import { WsChatService } from "../../websocket/services/ws-chat.service";
+import { HttpClient } from "@angular/common/http";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../core/config/gpnmarket-config.interface";
+import { FormDataService } from "../../shared/services/form-data.service";
+import { tap } from "rxjs/operators";
+import { Attachment } from "../models/attachment";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttachmentsService {
 
-  constructor(private ws: WsChatService) {}
-
-  cancel(attachmentId: number) {
-    this.ws.send(`attachments.cancel`, { attachmentId });
+  constructor(
+    @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
+    private ws: WsChatService,
+    private api: HttpClient,
+    private formDataService: FormDataService) {
   }
 
-  // @TODO: доработать (загрузка по вебсокетам невозможна!)
-  upload() {
-    this.ws.send<number>(`attachments.upload`);
+  upload(file: File) {
+    const url = `#chat#attachments/upload`;
+
+    return this.api.post(url, this.formDataService.toFormData({ file }));
   }
 
-  file(id) {
-    this.ws.send(`attachments.file.${id}`);
+  download({ id, originalFilename }: Attachment) {
+    const url = `#chat#attachments/file/${id}`;
+
+    return this.api.get(url, { responseType: 'blob' }).pipe(tap(data => saveAs(data, originalFilename)));
   }
 }

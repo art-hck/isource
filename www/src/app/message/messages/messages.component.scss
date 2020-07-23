@@ -89,6 +89,9 @@
         text-align: right;
         color: #999999;
         font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
       }
 
       .message-user {

@@ -3,5 +3,6 @@ export class Attachment {
   type:	"image" | "file";
   originalFilename:	string;
   md5: string;
+  size: number;
   createdAt: string;
 }
