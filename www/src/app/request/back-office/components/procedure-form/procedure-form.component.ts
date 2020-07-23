@@ -121,7 +121,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
-    this.form.get("general.publicAccess").valueChanges.pipe(
+    this.form.get("general").valueChanges.pipe(
       tap(({ publicAccess }) => this.form.get("privateAccessContragents").setValidators(
         publicAccess ? null : [Validators.required, Validators.minLength(2)]
       )),
