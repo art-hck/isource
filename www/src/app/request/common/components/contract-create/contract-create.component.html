@@ -1,4 +1,4 @@
-<form class="modal" [formGroup]="form" (ngSubmit)="submit()">
+<form appFormValidation class="modal" [formGroup]="form" (ngSubmit)="submit()">
   <div class="modal-dialog" role="dialog" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-footer">
         <button uxgButton secondary lg (click)="close.emit()">Отмена</button>
-        <button uxgButton primary lg [disabled]="form.invalid">Добавить</button>
+        <button uxgButton primary lg>Добавить</button>
       </div>
     </div>
   </div>

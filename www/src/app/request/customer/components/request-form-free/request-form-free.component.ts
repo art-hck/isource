@@ -33,19 +33,21 @@ export class RequestFormFreeComponent implements OnDestroy {
   }
 
   submit() {
-    this.form.disable();
-    this.isLoading = true;
-    this.requestService.addFreeFormRequest(this.form.value)
-      .pipe(
-        flatMap(request => this.requestService.publishRequest(request.id).pipe(mapTo(request))),
-        finalize(() => {
-          this.form.enable();
-          this.isLoading = false;
-        })
-      ).subscribe(({id}) => {
+    if (this.form.valid) {
+      this.form.disable();
+      this.isLoading = true;
+      this.requestService.addFreeFormRequest(this.form.value)
+        .pipe(
+          flatMap(request => this.requestService.publishRequest(request.id).pipe(mapTo(request))),
+          finalize(() => {
+            this.form.enable();
+            this.isLoading = false;
+          })
+        ).subscribe(({ id }) => {
         this.router.navigateByUrl(`requests/customer/${id}`);
         this.store.dispatch(new ToastActions.Success("Заявка опубликована"));
       });
+    }
   }
 
   ngOnDestroy() {

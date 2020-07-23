@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-section"><b>{{position.name}}</b></div>
   <div class="app-row app-align-items-center">
     <div class="app-col app-col-6">
@@ -68,6 +68,6 @@
       Все поля являются <b class="app-error-color">обязательными</b> к заполнению! Документы прикладывать не обязательно.
     </div>
     <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
-    <button uxgButton lg primary [disabled]="form.invalid">Добавить</button>
+    <button uxgButton lg primary>Добавить</button>
   </div>
 </form>

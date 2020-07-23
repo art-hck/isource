@@ -26,23 +26,23 @@ export class RequestGroupFormComponent implements OnDestroy {
   constructor(private positionService: RequestPositionService) {}
 
   submit() {
-    if (this.form.invalid) { return; }
-
-    this.isLoading = true;
-    this.subscription.add(
-      this.positionService.saveGroup(this.request.id, this.form.get('name').value).pipe(
-        flatMap(requestGroup => this.positionService.addPositionsInGroup(
-          this.request.id,
-          requestGroup.id,
-          this.positions.map(position => position.id)
-        )),
-        finalize(() => {
-          this.isLoading = false;
-          this.form.reset();
-          this.close.emit();
-        })
-      ).subscribe(groupWithPositions => this.success.emit(groupWithPositions))
-    );
+    if (this.form.valid) {
+      this.isLoading = true;
+      this.subscription.add(
+        this.positionService.saveGroup(this.request.id, this.form.get('name').value).pipe(
+          flatMap(requestGroup => this.positionService.addPositionsInGroup(
+            this.request.id,
+            requestGroup.id,
+            this.positions.map(position => position.id)
+          )),
+          finalize(() => {
+            this.isLoading = false;
+            this.form.reset();
+            this.close.emit();
+          })
+        ).subscribe(groupWithPositions => this.success.emit(groupWithPositions))
+      );
+    }
   }
 
   ngOnDestroy() {
