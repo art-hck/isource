@@ -121,7 +121,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
-    this.form.get("general.publicAccess").valueChanges.pipe(
+    this.form.get("general").valueChanges.pipe(
       tap(({ publicAccess }) => this.form.get("privateAccessContragents").setValidators(
         publicAccess ? null : [Validators.required, Validators.minLength(2)]
       )),
@@ -159,7 +159,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       ...this.form.get("properties").value,
       okpd2: this.form.get("general.publicAccess").value ? this.form.get("general.okpd2").value.code : "01.11",
       positions: this.form.get("positions").value.map(({id}) => id),
-      privateAccessContragents: this.form.get("privateAccessContragents").value.map(({id}) => id),
+      privateAccessContragents: this.form.get("general.publicAccess").value ? null : this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
