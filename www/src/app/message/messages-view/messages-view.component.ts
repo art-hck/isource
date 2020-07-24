@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { fromEvent, Observable, Subject } from "rxjs";
+import { fromEvent, Observable, of, Subject } from "rxjs";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
@@ -8,7 +8,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, flatMap, map, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, flatMap, map, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -86,8 +86,17 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             this.jumpToRequestOrPosition();
           }
         }),
-        publishReplay(1),
-        refCount()
+        flatMap(requests => this.conversationsService.get().pipe(map(conversations => {
+          conversations.forEach(conversation => {
+            const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
+            if (request) {
+              request.request.conversation.unreadCount = conversation.unreadCount;
+            }
+          });
+
+          return requests;
+        }))),
+        shareReplay(1)
       );
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
@@ -155,10 +164,10 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Преобразует RequestPositionList в одноуровневый массив позиций без групп
    */
-  getRequestPositionsFlat(requestPositionsList: RequestPositionList[]): RequestPosition[] {
+  getRequestPositionsFlat(requestPositionsList: RequestPositionList[], widthGroups = false): RequestPosition[] {
     return requestPositionsList.reduce(function flatPositionList(arr, curr: RequestPositionList) {
       if (curr instanceof RequestGroup) {
-        return [...arr, ...flatPositionList(curr.positions, null)];
+        return widthGroups ?  [...arr, curr, ...flatPositionList(curr.positions, null)] : [...arr, ...flatPositionList(curr.positions, null)];
       } else {
         return [...arr, curr].filter(Boolean);
       }
@@ -202,8 +211,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems = new RequestItemsStore();
         this.requestsItems.setRequestItems(data);
       }),
-      publishReplay(1),
-      refCount()
+      flatMap(requestItems => this.conversationsService.get().pipe(map(conversations => {
+        conversations.forEach(conversation => {
+
+          const requestItem = this.getRequestPositionsFlat(requestItems, true).find(item => item.conversation?.externalId === conversation.id);
+          console.log(requestItem);
+          if (requestItem) {
+            requestItem.conversation.unreadCount = conversation.unreadCount;
+          }
+        });
+
+        return requestItems;
+      }))),
+      shareReplay(1)
     );
 
     this.onRequestContextClick();
@@ -247,6 +267,11 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
     this.conversationId = this.selectedRequest.conversation?.externalId;
+    this.requests$ = this.requests$.pipe(map(requests => {
+      const request = requests.entities.find(({request: {id}}) => id === this.selectedRequest.id);
+      request.request.conversation.unreadCount = 0;
+      return requests;
+    }));
     this.cd.detectChanges();
 
     this.router.navigate(

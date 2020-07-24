@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { expand, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
-import { from, Observable, Subject } from "rxjs";
+import { merge, Observable, Subject } from "rxjs";
 import { MessageContextToEventTypesMap, MessageContextTypes } from "../message-context-types";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { Uuid } from "../../cart/models/uuid";
@@ -31,7 +31,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   public messages$: Observable<Message[]>;
   public state: StateStatus = 'pristine';
-  files: File[] = [];
+  files: { file: File, status: StateStatus }[] = [];
 
   public form = new FormGroup({
     text: new FormControl(null, Validators.required),
@@ -83,15 +83,21 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public pushFiles(files: File[]) {
-    this.files = [...this.files, ...files];
-    from(files.map(f => this.attachmentsService.upload(f))).pipe(takeUntil(this.destroy$)).subscribe(
-      attachment => (this.form.get("attachments") as FormArray).push(new FormControl(attachment))
+    this.files = [...this.files, ...files.map(file => ({file, status: 'fetching' as StateStatus}))];
+
+    merge(...files.map(f => this.attachmentsService.upload(f).pipe(tap(() => {
+      const i = this.files.findIndex(({ file }) => file === f);
+      this.files[i].status = "received";
+    })))).pipe(takeUntil(this.destroy$)).subscribe(
+      attachment => {
+        (this.form.get("attachments") as FormArray).push(new FormControl(attachment));
+      }
     );
   }
 
   public deleteFiles(files: File[]) {
     this.files
-      .filter(file => files.indexOf(file) === -1)
+      .filter(({ file }) => files.indexOf(file) === -1)
       .forEach((file, index) => {
         this.files.splice(index, 1);
         (this.form.get("attachments") as FormArray).removeAt(index);
@@ -102,12 +108,17 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     return message.author.id === this.userInfoService.getUserInfo().id;
   }
 
+  getFiles(stateStatus: StateStatus): File[] {
+    return this.files.filter(({ status }) => status === stateStatus).map(({ file }) => file);
+  }
+
   public submit(): void {
     if (this.form.invalid) {
       return;
     }
 
     this.sendMessage.emit(this.form.value);
+    this.files = [];
     this.form.reset();
   }
 

@@ -35,6 +35,14 @@
 
         .files {
           margin-top: 10px;
+
+          .attachment {
+            cursor: pointer;
+
+            *:not(:last-child) {
+              margin-right: .5em;
+            }
+          }
         }
 
         &:before, &:after {
@@ -152,6 +160,11 @@
 
     .document-upload-list-wrap {
       margin-left: 90px;
+    }
+
+    .loading-arrachments {
+      opacity: .3;
+      display: block;
     }
   }
 }

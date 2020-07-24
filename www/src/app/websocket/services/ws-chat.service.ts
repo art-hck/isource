@@ -55,10 +55,7 @@ export class WsChatService implements IWebsocketService {
       merge(
         this.send$.pipe(bufferToggle(off$, () => on$)),
         this.send$.pipe(windowToggle(on$, () => off$))
-      ).pipe(
-        flatMap(x => x),
-        tap(data => console.log("next!", data))
-      ).subscribe(data => this.websocket$.next(data));
+      ).pipe(flatMap(x => x)).subscribe(data => this.websocket$.next(data));
     });
   }
 

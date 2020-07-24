@@ -10,9 +10,10 @@ export class RequestPositionList extends BaseModel {
    */
   id: Uuid|null;
   entityType?: RequestPositionListEntityType;
-  conversation?: { id: Uuid, externalId: Conversation["id"] };
+  conversation?: { id: Uuid, externalId: Conversation["id"], unreadCount?: number };
   createdDate: string;
   updatedDate: string;
+  positions?: RequestPositionList[];
   request: Request;
   name: string;
 }

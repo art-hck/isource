@@ -18,6 +18,7 @@
         <div class="title">
           <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
         </div>
+        <div class="counter" *ngIf="request.request?.conversation?.unreadCount as count">+{{ count }}</div>
       </li>
     </ul>
   </div>
@@ -41,14 +42,10 @@
       <div class="request-items-list">
         <ul class="list-unstyled">
           <li class="search-bar">
-            <input type="text"
-                   placeholder="Поиск по позициям и группам"
-                   (input)="onRequestItemFilterChange($event)">
+            <input type="text" placeholder="Поиск по позициям и группам" (input)="onRequestItemFilterChange($event)">
           </li>
 
-          <li (click)="onRequestContextClick()"
-              class="status-position-default"
-              [class.selected]="!selectedRequestsItem">
+          <li (click)="onRequestContextClick()" class="status-position-default" [class.selected]="!selectedRequestsItem">
             Обсуждение заказа
           </li>
 
@@ -56,14 +53,16 @@
             <li (click)="onRequestItemClick(item)"
                 class="{{ getRequestItemClass(item) }}"
                 [ngClass]="{'selected': item.id === selectedRequestsItem?.id}">
-              {{ item.name }}
+              <div class="app-ellipsis app-col">{{ item.name }}</div>
+              <div class="counter" *ngIf="item.conversation?.unreadCount as count">{{ count }}</div>
             </li>
 
             <li *ngFor="let subItem of item?.positions"
                 (click)="onRequestItemClick(subItem)"
                 class="sub-item {{ getRequestItemClass(subItem) }}"
                 [ngClass]="{'selected': subItem.id === selectedRequestsItem?.id}">
-              {{ subItem.name }}
+              <div class="app-ellipsis app-col">{{ subItem.name }}</div>
+              <div class="counter" *ngIf="subItem.conversation?.unreadCount as count">{{ count }}</div>
             </li>
           </ng-container>
 

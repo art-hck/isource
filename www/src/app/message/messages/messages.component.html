@@ -55,7 +55,14 @@
       <div class="document-upload-list-wrap">
         <app-document-upload-list
             [uploadLabel]="''"
-            [documents]="files"
+            [documents]="getFiles('received')"
+            (fileSelected)="deleteFiles($event)"
+        ></app-document-upload-list>
+        <app-document-upload-list
+            class="loading-arrachments"
+            [uploadLabel]="''"
+            [documents]="getFiles('fetching')"
+            [removable]="false"
             (fileSelected)="deleteFiles($event)"
         ></app-document-upload-list>
       </div>
