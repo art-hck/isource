@@ -6,7 +6,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
-import { catchError, debounceTime, filter, finalize, flatMap, takeUntil, tap } from "rxjs/operators";
+import { catchError, debounceTime, filter, finalize, flatMap, startWith, takeUntil, tap } from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
@@ -121,11 +121,13 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(positions => this.updateSelectedPositions.emit(positions));
 
-    this.form.get("general").valueChanges.pipe(
-      tap(({ publicAccess }) => this.form.get("privateAccessContragents").setValidators(
+    this.form.get("general.publicAccess").valueChanges.pipe(
+      startWith(<{}>this.form.get('general.publicAccess').value),
+      tap(data => console.log(data)),
+      tap((publicAccess) => this.form.get("privateAccessContragents").setValidators(
         publicAccess ? null : [Validators.required, Validators.minLength(2)]
       )),
-      tap(({ publicAccess }) => this.wizzard.get("contragents").toggle(!publicAccess)),
+      tap((publicAccess ) => this.wizzard.get("contragents").toggle(!publicAccess)),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -159,7 +161,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       ...this.form.get("properties").value,
       okpd2: this.form.get("general.publicAccess").value ? this.form.get("general.okpd2").value.code : "01.11",
       positions: this.form.get("positions").value.map(({id}) => id),
-      privateAccessContragents: this.form.get("general.publicAccess").value ? null : this.form.get("privateAccessContragents").value.map(({id}) => id),
+      privateAccessContragents: this.form.get("general.publicAccess").value ? [] : this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
