@@ -1,4 +1,4 @@
-<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
+<form [formGroup]="form" (ngSubmit)="submit()">
   <ng-container *ngIf="!user.isCustomer(); else customerView">
     <uxg-dropdown
       lg
@@ -24,7 +24,7 @@
   </ng-template>
   <div class="app-row app-justify-content-end actions">
     <button type="button" uxgButton secondary lg (click)="close.emit($event); form.reset()">Отмена</button>
-    <button uxgButton primary lg>
+    <button uxgButton primary lg [disabled]="form.invalid">
       Отменить
     </button>
   </div>
