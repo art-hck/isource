@@ -31,11 +31,26 @@
 
 .select-role, .internal {
   display: inline-flex;
-  padding-top: 33px;
+  margin: 31px 0;
 
-  label {
-    padding-right: 20px;
+  & > *:not(:last-of-type) {
+    padding-right: 15px;
   }
+}
+
+.select-role {
+  padding: 0 20px;
+
+  & div:first-of-type:after {
+    content: "";
+    border-right: 1px solid #e5e8ef;
+    margin: 0 0 0 15px;
+    height: 20px;
+  }
+}
+
+.internal {
+  padding-left: 20px;
 }
 
 .add-contragent {
