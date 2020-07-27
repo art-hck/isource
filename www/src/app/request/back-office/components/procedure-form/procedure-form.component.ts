@@ -123,7 +123,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
 
     this.form.get("general.publicAccess").valueChanges.pipe(
       startWith(<{}>this.form.get('general.publicAccess').value),
-      tap(data => console.log(data)),
       tap((publicAccess) => this.form.get("privateAccessContragents").setValidators(
         publicAccess ? null : [Validators.required, Validators.minLength(2)]
       )),
