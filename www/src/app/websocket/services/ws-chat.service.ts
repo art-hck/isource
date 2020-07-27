@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { buffer, bufferToggle, bufferWhen, delay, delayWhen, filter, flatMap, map, mapTo, shareReplay, take, takeUntil, tap, windowToggle } from "rxjs/operators";
+import { bufferToggle, delayWhen, filter, flatMap, map, shareReplay, take, tap, windowToggle } from "rxjs/operators";
 import { IWebsocketService } from "../websocket.interfaces";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WsChatTypes } from "../enum/ws-chat-types";
 import { WsChatMessage } from "../models/ws-chat-message";
 import { WsConfig } from "../models/ws-config";
 import { config } from "./ws-config-token";
-import { BehaviorSubject, from, merge, of, ReplaySubject, Subject, timer } from "rxjs";
-import { MockToken } from "./mock-token";
-import { KeycloakEventType, KeycloakService } from "keycloak-angular";
+import { BehaviorSubject, merge, ReplaySubject, Subject, timer } from "rxjs";
+import { KeycloakService } from "keycloak-angular";
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +23,9 @@ export class WsChatService implements IWebsocketService {
     this.keycloakService.getToken().then(token => {
       // Как только получили токен открываем соединение ws
       this.websocket$ = new WebSocketSubject<WsChatMessage<unknown>>({
-        url: wsConfig.chatUrl + '?authorization=' + MockToken,
+        url: wsConfig.chatUrl + '?authorization=' + token,
         closeObserver: {
-          next: () => this.websocket$ = null
+          next: () => this.authorized$.next(false)
         },
       });
 
@@ -39,8 +38,7 @@ export class WsChatService implements IWebsocketService {
         delayWhen<any>((v, i) => timer(i > 0 ? this.wsConfig.reconnectInterval ?? 3000 : 0)),
         take(this.wsConfig.reconnectAttempts ?? 5),
         tap(() => this.authorized$.next(false))
-        // @TODO: реализовать авторизацию!
-      ).subscribe(() => this.authorize(MockToken));
+      ).subscribe(() => this.authorize(token));
 
       // Если приходит granted, считаем что авторизованы
       this.on(WsChatTypes.GRANTED).subscribe(() => this.authorized$.next(true));

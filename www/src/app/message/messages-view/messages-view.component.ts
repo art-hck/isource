@@ -87,7 +87,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }),
         flatMap(requests => this.conversationsService.get().pipe(map(conversations => {
-          conversations.forEach(conversation => {
+          (conversations ?? []).forEach(conversation => {
             const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
             if (request) {
               request.request.conversation.unreadCount = conversation.unreadCount;
@@ -212,10 +212,10 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems.setRequestItems(data);
       }),
       flatMap(requestItems => this.conversationsService.get().pipe(map(conversations => {
-        conversations.forEach(conversation => {
+        (conversations ?? []).forEach(conversation => {
 
           const requestItem = this.getRequestPositionsFlat(requestItems, true).find(item => item.conversation?.externalId === conversation.id);
-          console.log(requestItem);
+
           if (requestItem) {
             requestItem.conversation.unreadCount = conversation.unreadCount;
           }
@@ -267,12 +267,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
     this.conversationId = this.selectedRequest.conversation?.externalId;
-    this.requests$ = this.requests$.pipe(map(requests => {
-      const request = requests.entities.find(({request: {id}}) => id === this.selectedRequest.id);
-      request.request.conversation.unreadCount = 0;
-      return requests;
-    }));
-    this.cd.detectChanges();
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id],

@@ -1,8 +1,7 @@
-import {Inject, Injectable} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { GpnmarketConfigInterface, APP_CONFIG } from "../config/gpnmarket-config.interface";
-import { MockToken } from "../../websocket/services/mock-token";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
 
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
@@ -20,8 +19,6 @@ export class BaseUrlInterceptor implements HttpInterceptor {
 
     if (req.url.indexOf('#chat#') === 0) {
       req = req.clone({
-        // @TODO: убрать когда чат будет использовать наш кейклок!
-        headers: req.headers.set('Authorization', `Bearer ${MockToken}`),
         url: req.url.replace("#chat#", this.appConfig.endpoints.apiChat)
       });
       return next.handle(req);
