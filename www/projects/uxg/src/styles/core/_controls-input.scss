@@ -60,11 +60,11 @@
     }
 
     $selectors: (
-      ':focus, .app-control-label-shown',
-      ':-webkit-autofill'
+      '&:focus, &.app-control-label-shown',
+      '&:-webkit-autofill'
     );
     @each $selector in $selectors {
-      &#{$selector} {
+      #{$selector} {
         & + .app-control-label {
           color: uxg($theme, color-font-secondary);
           cursor: default;
