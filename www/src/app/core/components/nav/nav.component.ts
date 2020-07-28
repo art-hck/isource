@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Menu, MenuModel } from "../../models/menu.model";
-import { Router } from "@angular/router";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FeatureService } from "../../services/feature.service";
 import { MessagesService } from "../../../message/services/messages.service";
-import { map, mapTo, switchMap, takeUntil } from "rxjs/operators";
-import { Observable, Subject } from "rxjs";
+import { map, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, merge, Subject } from "rxjs";
 
 @Component({
   selector: 'app-nav',
@@ -20,7 +19,7 @@ export class NavComponent implements OnInit, OnDestroy {
     return Menu.filter(item => !item.feature || this.featureService.available(item.feature, this.user.roles));
   }
 
-  unreadMessagesCount$: Observable<number> = this.messagesService.unreadCount().pipe(map(({ count }) => count));
+  readonly unreadMessagesCount$ = new BehaviorSubject<number>(0);
   readonly destroy$ = new Subject();
 
   constructor(
@@ -32,8 +31,11 @@ export class NavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.messagesService.onNew().pipe(switchMap(() => this.unreadMessagesCount$), takeUntil(this.destroy$))
-      .subscribe(count => this.unreadMessagesCount$ = this.unreadMessagesCount$.pipe(mapTo(count)));
+    merge(this.messagesService.onNew(), this.messagesService.onMarkSeen()).pipe(
+      startWith(0),
+      switchMap(() => this.messagesService.unreadCount().pipe(map(({ count }) => count))),
+      takeUntil(this.destroy$))
+    .subscribe(count => this.unreadMessagesCount$.next(count));
   }
 
   get userBriefInfo(): string {
