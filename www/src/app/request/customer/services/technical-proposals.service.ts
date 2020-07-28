@@ -58,8 +58,8 @@ export class TechnicalProposalsService {
     });
   }
 
-  getTechnicalProposalsAvailableStatuses(requestId: Uuid): Observable<TechnicalProposalsStatus[]> {
+  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: any): Observable<TechnicalProposalsStatus[]> {
     const url = `requests/customer/${requestId}/technical-proposals/available-statuses`;
-    return this.api.post<TechnicalProposalsStatus[]>(url, {});
+    return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
   }
 }

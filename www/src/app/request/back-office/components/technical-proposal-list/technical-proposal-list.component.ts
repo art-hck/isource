@@ -19,6 +19,7 @@ import { Procedure } from "../../models/procedure";
 import { ProcedureService } from "../../services/procedure.service";
 import { ProcedureAction } from "../../models/procedure-action";
 import { StateStatus } from "../../../common/models/state-status";
+import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -29,6 +30,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
+  technicalProposalAvailableStatuses$: Observable<TechnicalProposalsStatus[]>;
   procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
@@ -60,6 +62,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       ]),
       tap(() => {
         this.fetch();
+        this.fetchAvailableStatusesList();
         this.fetchProcedures();
         this.fetchPositions();
       }),
@@ -69,6 +72,12 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
 
   fetch(filters = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
+      publishReplay(1), refCount()
+    );
+  }
+
+  fetchAvailableStatusesList(filters = {}) {
+    this.technicalProposalAvailableStatuses$ = this.technicalProposalsService.getTechnicalProposalsAvailableStatuses(this.requestId, filters).pipe(
       publishReplay(1), refCount()
     );
   }
@@ -93,6 +102,8 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
       this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
     });
+
+    this.fetchAvailableStatusesList(filters);
   }
 
   fetchPositions() {
