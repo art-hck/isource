@@ -80,6 +80,7 @@
       top: 50%;
       border: 1px transparent solid;
       line-height: uxg($theme, font-size-m) * 1.286;
+      letter-spacing: -0.1px;
       position: absolute;
       transform: translate(10px, -50%);
       transform-origin: bottom left;
