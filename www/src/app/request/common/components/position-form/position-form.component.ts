@@ -229,6 +229,10 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     }
   }
 
+  filterEnteredText(event: KeyboardEvent): boolean {
+    return event.key !== "-" && event.key !== "+";
+  }
+
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
   writeValue = (value) => this.value = value;
