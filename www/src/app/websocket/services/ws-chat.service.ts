@@ -71,7 +71,7 @@ export class WsChatService implements IWebsocketService {
       closeObserver: {
         next: () => {
           this.authorized$.next(false);
-          this.connect(token);
+          timer(this.wsConfig.reconnectInterval ?? 3000).subscribe(() => this.connect(token));
         }
       },
     });
