@@ -9,6 +9,7 @@
       <small class="app-col email">E-mail</small>
       <small class="app-col phone">Телефон</small>
       <small class="app-col count">Заявок/позиций</small>
+      <small class="app-col edit"></small>
     </div>
   </div>
 
@@ -35,6 +36,19 @@
       <div class="app-col count">
         {{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}
       </div>
+      <div class="app-col edit">
+        <button uxgButton secondary (click)="openEditModal($event, employee.user.id); editEmployeeModal.open()"><uxg-icon shape="app-pen"></uxg-icon></button>
+      </div>
     </a>
   </div>
+
+  <uxg-modal #editEmployeeModal size="l">
+      <h2>Редактировать сотрудника</h2>
+<!--    <ng-container *ngIf="editEmployeeModal.open()">-->
+      <div *ngIf="(userInfo$ | async) as user">
+        {{user}}
+      </div>
+<!--   </ng-container>-->
+  </uxg-modal>
+
 </ng-container>

@@ -5,6 +5,8 @@ import { Router } from "@angular/router";
 import { EmployeeService } from "../../services/employee.service";
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { User } from "../../../user/models/user";
 
 @Component({
   selector: 'app-employee-list',
@@ -25,13 +27,14 @@ export class EmployeeListComponent {
   ) { }
 
   @Input() employees: EmployeeItem[];
+  @Input() userInfo$: Observable<User>;
   @Output() edit = new EventEmitter();
+  @Output() getUserInfo = new EventEmitter();
 
-  openEditModal(ev, employee) {
+  openEditModal(ev, userId) {
     ev.preventDefault();
     ev.stopPropagation();
-
-    this.edit.emit(employee);
+    this.getUserInfo.emit(userId);
   }
 
   mailto(ev, email): void {

@@ -4,9 +4,11 @@ import { EmployeeItem } from "../../models/employee-item";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { Router } from "@angular/router";
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Store } from "@ngxs/store";
 import { EmployeeInfoBrief } from "../../models/employee-info";
+import { Uuid } from "../../../cart/models/uuid";
+import { User } from "../../../user/models/user";
 
 @Component({
   selector: 'app-employee-list-view',
@@ -21,6 +23,8 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
 
   employeeActiveTabType = 'BACKOFFICE_BUYER';
   editedEmployee: EmployeeInfoBrief;
+
+  userInfo$: Observable<User>;
 
   constructor(
     protected employeeService: EmployeeService,
@@ -41,6 +45,17 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
         this.seniorBackoffice = employee;
       subscription.unsubscribe();
     });
+  }
+
+  getUserInfo(userId: Uuid) {
+    this.subscription.add(this.employeeService.getUserInfo(userId).subscribe(
+      (data) => {
+        this.userInfo$ = data;
+      }));
+  }
+
+  editUser() {
+
   }
 
   addEmployee(employee: EmployeeInfoBrief) {
