@@ -220,22 +220,26 @@ export class RequestTechnicalProposalComponent implements OnInit {
   getLastRejectComment(): string {
     return this.technicalProposal.positions
       .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .sort((a, b) => (a.history.createdDate > b.history.createdDate) ? 1 : -1)
       .pop()?.history.data.statusComment.comment;
   }
   getLastRejectCommentDate(): string {
     return this.technicalProposal.positions
       .filter(position => position.status === 'DECLINED' && position.history.data.statusComment !== null)
+      .sort((a, b) => (a.history.createdDate > b.history.createdDate) ? 1 : -1)
       .pop()?.history.createdDate;
   }
 
   getLastSentToEditComment(): string {
     return this.technicalProposal.positions
       .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .sort((a, b) => (a.history.createdDate > b.history.createdDate) ? 1 : -1)
       .pop()?.history.data.statusComment.comment;
   }
   getLastSentToEditCommentDate(): string {
     return this.technicalProposal.positions
       .filter(position => position.status === 'SENT_TO_EDIT' && position.history.data.statusComment !== null)
+      .sort((a, b) => (a.history.createdDate > b.history.createdDate) ? 1 : -1)
       .pop()?.history.createdDate;
   }
 }
