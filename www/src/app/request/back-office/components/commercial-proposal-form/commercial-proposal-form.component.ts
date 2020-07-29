@@ -15,9 +15,10 @@ import { Okei } from "../../../../shared/models/okei";
 import { Store } from "@ngxs/store";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
-import SaveProposal = CommercialProposalsActions.SaveProposal;
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../../../common/enum/position-currency";
+import { AppFile } from "../../../../shared/components/file/file";
+import SaveProposal = CommercialProposalsActions.SaveProposal;
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -87,7 +88,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   }
 
   filesSelected(files: File[]): void {
-    files.map(file => this.formBuilder.control(file))
+    files.map(file => this.formBuilder.control(new AppFile(file)))
       .forEach(control => this.formDocuments.push(control));
   }
 
@@ -96,7 +97,8 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
 
     const body = {
       ...this.newCommercialProposalForm.value,
-      supplierContragentId: this.supplierContragentControl.value.id
+      supplierContragentId: this.supplierContragentControl.value.id,
+      documents: this.formDocuments.value.filter(({ valid }: AppFile) => valid).map(({ file }: AppFile) => file)
     };
 
     // Отправляем КП

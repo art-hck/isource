@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AppFile } from "../file/file";
 
 @Component({
   selector: 'app-documents-form-control',
@@ -14,7 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() documents: RequestDocument[];
-  @Input() files: File[];
+  @Input() files: AppFile[];
   @Input() disabled: boolean;
   @Output() select = new EventEmitter<File[]>();
   @Output() remove = new EventEmitter<number>();

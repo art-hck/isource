@@ -10,6 +10,7 @@ import { UxgModule } from "uxg";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { MessageSharedModule } from "../message/message-shared.module";
+import { WelcomeComponent } from "../pages/welcome/welcome.component";
 
 @NgModule({
   imports: [
@@ -18,8 +19,8 @@ import { MessageSharedModule } from "../message/message-shared.module";
     UxgModule,
     MessageSharedModule
   ],
-  exports: [NavComponent],
-  declarations: [NavComponent],
+  exports: [NavComponent, WelcomeComponent],
+  declarations: [NavComponent, WelcomeComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DataInterceptor, multi: true },

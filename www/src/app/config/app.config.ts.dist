@@ -9,6 +9,15 @@ export const AppConfig: GpnmarketConfigInterface = {
     apiChat: 'https://chat-test.isource.ru/',
     wsChat: 'wss://chat-test.isource.ru',
   },
+  files: {
+    allowedExtensions: [
+      'odt', 'ott', 'oth', 'odm', 'ods', 'ots', // OpenOffice
+      'rtf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', // MS Office
+      'bmp', 'jpg', 'gif', 'png', 'svg', // Картинки
+      'pdf', 'txt', '7z', 'cdw', 'sld', 'drw', '3ds', 'ma', 'obj' // Чертежи и прочее
+    ],
+    deniedExtensions: []
+  },
   keycloak: {
     config: {
       url: 'https://gpnnsi-keycloak-test.etpgpb.ru/auth',

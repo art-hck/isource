@@ -210,10 +210,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
 
-  addDocuments($event) {
-    this.form.get('documents.procedureUploadDocuments').setValue([...this.form.get('documents.procedureUploadDocuments').value, ...$event]);
-  }
-
   trackById = (item: RequestPosition | ContragentList) => item.id;
   defaultProcedureValue = (field: string, defaultValue: any = "") => this.procedure?.[field] ?? defaultValue;
   disabledPositions = ({ hasProcedure, status }: RequestPosition): boolean => hasProcedure || this.isStatusInvalid(status);

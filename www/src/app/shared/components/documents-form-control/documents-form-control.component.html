@@ -34,8 +34,9 @@
       <div class="app-col" *ngFor="let document of documents">
         <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
       </div>
-      <div class="app-col" *ngFor="let files of files; index as i">
-        <ng-container *ngTemplateOutlet="documentRef; context: {document: files, i:i}"></ng-container>
+      <div class="app-col" *ngFor="let file of files; index as i">
+        1<app-file [appFile]="file" (delete)="removeFile(i)" [disableDelete]="disabled || i==0"></app-file>1
+<!--        <ng-container *ngTemplateOutlet="documentRef; context: {document: file, i:i}"></ng-container>-->
       </div>
 
       <ng-template #documentRef let-document="document" let-i="i">

@@ -2,6 +2,7 @@ import { FeatureList } from "./feature-list";
 import { InjectionToken } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 import { KeycloakOptions } from "keycloak-angular";
+import { AppFileExtensions } from "../../shared/components/file/file";
 
 export const APP_CONFIG = new InjectionToken<GpnmarketConfigInterface>('app.config');
 
@@ -15,6 +16,10 @@ export interface GpnmarketConfigInterface {
     ws: string,
     apiChat: string,
     wsChat: string
+  };
+  files: {
+    allowedExtensions: AppFileExtensions,
+    deniedExtensions: AppFileExtensions
   };
   keycloak: KeycloakOptions;
   dadata: {
