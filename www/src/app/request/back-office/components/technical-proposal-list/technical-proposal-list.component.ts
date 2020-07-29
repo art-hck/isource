@@ -70,13 +70,13 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  fetch(filters = {}) {
+  fetch(filters: TechnicalProposalFilter = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
       publishReplay(1), refCount()
     );
   }
 
-  fetchAvailableStatusesList(filters = {}) {
+  fetchAvailableStatusesList(filters: TechnicalProposalFilter = {}) {
     this.technicalProposalAvailableStatuses$ = this.technicalProposalsService.getTechnicalProposalsAvailableStatuses(this.requestId, filters).pipe(
       publishReplay(1), refCount()
     );
@@ -98,12 +98,15 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       });
   }
 
-  filter(filters: {}) {
+  filter(filters: TechnicalProposalFilter) {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
       this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
     });
 
-    this.fetchAvailableStatusesList(filters);
+    // Обновляем список доступных статусов, учитывая отмеченных заказчиков
+    const filtersByContragents = filters.contragents ? { contragents: filters.contragents } : {};
+
+    this.fetchAvailableStatusesList(filtersByContragents);
   }
 
   fetchPositions() {
