@@ -70,12 +70,13 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   submit(publish = true): void {
     if (this.form.invalid) { return; }
     let action$: Observable<any>;
+    const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file)
     this.form.disable();
 
     if (this.form.pristine) {
       publish ? action$ = this.publish() : this.close.emit();
     } else {
-      action$ = this.save(this.form.value, publish);
+      action$ = this.save({ ...this.form.value, files }, publish);
     }
 
     action$.pipe(

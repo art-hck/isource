@@ -17,7 +17,7 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() documents: RequestDocument[];
   @Input() files: AppFile[];
   @Input() disabled: boolean;
-  @Output() select = new EventEmitter<File[]>();
+  @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();
   onTouched: (value) => void;
   onChange: (value) => void;
@@ -29,8 +29,8 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   }
 
   selectFile(files: File[]) {
-    this.select.emit(files);
-    this.writeValue([...this.files || [], ...files]);
+    this.select.emit(files.map(file => new AppFile(file)));
+    this.writeValue([...this.files || [], ...files.map(file => new AppFile(file))]);
     if (this.onChange) { this.onChange(this.files); }
   }
 
