@@ -18,7 +18,7 @@ export class SentryErrorHandler implements ErrorHandler {
   extractError(error) {
     // обработка ошибок с бэкэнда
     if (error instanceof HttpErrorResponse) {
-      return `${error.message}, detail: "${error.error.detail}"`;
+      return `${error.message}, detail: "${error.error?.detail}"`;
     }
 
     return error.originalError || error;
