@@ -4,6 +4,7 @@ import { CartItem } from '../../models/cart-item';
 import { ContragentInfo } from "../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../contragent/services/contragent.service";
 import { getCurrencySymbol } from "@angular/common";
+import { UxgPopoverContentDirection } from "uxg";
 
 @Component({
   selector: 'cart-items',
@@ -16,6 +17,7 @@ export class CartItemsComponent {
 
   contragent: ContragentInfo;
   getCurrencySymbol = getCurrencySymbol;
+  PopoverContentDirection = UxgPopoverContentDirection;
 
   constructor(
     protected getContragentService: ContragentService,
