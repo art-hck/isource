@@ -6,6 +6,7 @@ import {EmployeeItem} from "../models/employee-item";
 import {Uuid} from "../../cart/models/uuid";
 import { User } from "../../user/models/user";
 import { CatalogPosition } from "../../catalog/models/catalog-position";
+import { EmployeeSettings } from "../models/employee-settings";
 
 @Injectable()
 export class EmployeeService {
@@ -75,6 +76,14 @@ export class EmployeeService {
   }
 
   getUserInfo(userId: Uuid) {
-    return this.api.get<Observable<User>>(`users/settings/${userId}`);
+    return this.api.get<EmployeeSettings>(`users/settings/${userId}`);
+  }
+
+  editSettings(settings) {
+    const url = `users/settings/${settings.userId}`;
+    return this.api.post<EmployeeInfoBrief[]>(url, {
+      internalAvailable: settings.internalAvailable,
+      externalAvailable: settings.externalAvailable
+    });
   }
 }

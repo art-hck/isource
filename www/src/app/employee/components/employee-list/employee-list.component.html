@@ -37,18 +37,79 @@
         {{ employee.reqCount }}<span class="app-ghost-color">/</span>{{ employee.posCount }}
       </div>
       <div class="app-col edit">
-        <button uxgButton secondary (click)="openEditModal($event, employee.user.id); editEmployeeModal.open()"><uxg-icon shape="app-pen"></uxg-icon></button>
+        <button uxgButton icon secondary (click)="openEditModal($event, employee.user.id); editEmployeeModal.open()">
+          <uxg-icon shape="app-pen"></uxg-icon>
+        </button>
       </div>
     </a>
   </div>
 
   <uxg-modal #editEmployeeModal size="l">
-      <h2>Редактировать сотрудника</h2>
-<!--    <ng-container *ngIf="editEmployeeModal.open()">-->
-      <div *ngIf="(userInfo$ | async) as user">
-        {{user}}
-      </div>
-<!--   </ng-container>-->
+    <h2>Редактировать видимости заказчиков</h2>
+    <br>
+    <ng-container *ngIf="editEmployeeModal.state">
+      <ng-container *ngIf="(userInfo$ | async) as user">
+        <h3>Сотрудник видит заявки заказчиков</h3>
+        <br>
+        <ng-container [formGroup]="form">
+          <div class="app-row settings">
+            <div class="app-col app-align-items-center">
+              <uxg-checkbox class="app-control" formControlName="internalAvailable" #internalCustomer></uxg-checkbox>
+              <label (click)="internalCustomer.check($event)"> &nbsp; Внутренних закачиков</label>
+            </div>
+
+            <div class="app-col app-align-items-center">
+              <uxg-checkbox class="app-control" formControlName="externalAvailable" #externalCustomer></uxg-checkbox>
+              <label (click)="externalCustomer.check($event)"> &nbsp; Внешних заказчиков</label>
+            </div>
+          </div>
+          <br>
+          <h3>Информация о сотруднике</h3>
+          <br>
+          <div class="app-row">
+            <div class="app-col">
+              <div class="app-ghost-color">E-mail</div>
+              <div>{{user.user.email}}</div>
+            </div>
+            <div class="app-col">
+              <div class="app-ghost-color">Телефон</div>
+              <div>{{ user.user.phone ? user.user.phone : 'не указан' }}</div>
+            </div>
+          </div>
+          <br>
+          <div class="app-row">
+            <div class="app-col">
+              <div class="app-ghost-color">Имя</div>
+              <div>{{user.user.firstName}}</div>
+            </div>
+            <div class="app-col">
+              <div class="app-ghost-color">Фамилия</div>
+              <div>{{user.user.lastName}}</div>
+            </div>
+          </div>
+          <br>
+          <div class="app-row">
+            <div class="app-col">
+              <div class="app-ghost-color">Отчество (необязательно)</div>
+              <div>{{user.user.middleName}}</div>
+            </div>
+            <div class="app-col">
+              <div class="app-ghost-color">Должность</div>
+              <div>{{user.user.position ? user.user.position : 'не указана'}}</div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="app-row app-align-items-center">
+            <div class="app-col">
+              Для редактирования информации о сотруднике обратитесь в службу поддержки
+            </div>
+            <button uxgButton lg secondary type="button" (click)="editEmployeeModal.close()">Отмена</button>
+            <button uxgButton lg primary type="button" (click)="editSettings(user.user.id); editEmployeeModal.close()">Сохранить</button>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
   </uxg-modal>
 
 </ng-container>
