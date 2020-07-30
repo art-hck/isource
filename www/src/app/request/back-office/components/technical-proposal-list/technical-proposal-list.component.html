@@ -80,7 +80,11 @@
       </div>
 
       <div class="app-col app-col-aside">
-        <app-request-technical-proposal-filter [technicalProposals]="technicalProposals" (filters)="filter($event)"></app-request-technical-proposal-filter>
+        <app-request-technical-proposal-filter
+          [technicalProposals]="technicalProposals"
+          [technicalProposalsAvailableStatuses]="technicalProposalAvailableStatuses$ | async"
+          (filters)="filter($event)">
+        </app-request-technical-proposal-filter>
       </div>
     </ng-container>
   </div>
