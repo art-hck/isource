@@ -29,7 +29,6 @@ import { GridRowComponent } from "../../../../shared/components/grid/grid-row/gr
 import { Position } from "../../../../shared/components/grid/position";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
@@ -110,7 +109,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, SendToEditMultiple, ReviewMultiple),
+      ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({ result, action }) => {
       const e = result.error as any;

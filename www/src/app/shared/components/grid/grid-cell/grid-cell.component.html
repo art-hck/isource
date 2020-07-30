@@ -10,17 +10,31 @@
       <ng-container *ngIf="!selectedProposal">
         <div class="app-ghost-color" *ngIf="proposal.isAnalog">Аналог</div>
 
-        <div class="winner" *ngIf="proposal.isWinner">
-          <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0H101V25H0L7 12.5L0 0Z" fill="#0EA04B"></path>
-            <text y="13" x="92" fill="#fff" alignment-baseline="middle" text-anchor="end">Победитель</text>
-          </svg>
-        </div>
+        <ng-template #winnerLabel>
+          <div class="winner">
+            <svg height="25" width="101" viewBox="0 0 101 25" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0H101V25H0L7 12.5L0 0Z" fill="#0EA04B"></path>
+              <text y="13" x="92" fill="#fff" alignment-baseline="middle" text-anchor="end">Победитель</text>
+            </svg>
+          </div>
+        </ng-template>
+
+        <ng-container *ngIf="proposal.isWinner">
+          <ng-container *ngTemplateOutlet="winnerLabel"></ng-container>
+        </ng-container>
 
         <ng-container *ngIf="!proposal.isWinner && !editable">
-          <div class="app-ghost-color" *ngIf="proposal.sourceProposal?.status !== 'SENT_TO_EDIT'">
-            <uxg-icon shape="app-check"></uxg-icon>
-          </div>
+          <ng-container *ngIf="proposal.sourceProposal?.status !== 'SENT_TO_EDIT'">
+            <ng-container *ngIf="proposal.sourceProposal?.status === 'APPROVED'; else checkmark">
+              <ng-container *ngTemplateOutlet="winnerLabel"></ng-container>
+            </ng-container>
+
+            <ng-template #checkmark>
+              <div class="app-ghost-color">
+                <uxg-icon shape="app-check"></uxg-icon>
+              </div>
+            </ng-template>
+          </ng-container>
 
           <div class="app-warning-color" *ngIf="proposal.sourceProposal?.status ==='SENT_TO_EDIT'">
             <uxg-icon shape="app-warning"></uxg-icon>

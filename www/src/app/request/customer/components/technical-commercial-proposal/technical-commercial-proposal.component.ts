@@ -13,8 +13,8 @@ import { TechnicalCommercialProposal } from "../../../common/models/technical-co
 import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../shared/components/grid/position";
-import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 
 
 @Component({
@@ -79,7 +79,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   approve() {
-    this.dispatchAction(new Approve(this.requestId, this.selectedProposal.value));
+    this.dispatchAction(new ReviewMultiple([this.selectedProposal.value], []));
   }
 
   reject() {
