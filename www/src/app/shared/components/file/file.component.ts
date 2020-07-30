@@ -10,12 +10,9 @@ import { AppFile } from "./file";
 export class FileComponent {
   @ViewChild('popover') popover: UxgPopoverComponent;
   @Input() appFile: AppFile;
-  @Input() allowed: string[] = [];
-  @Input() denied: string[] = [];
   @Input() size: "m" | "s" = 'm';
   @Input() disableDelete = false;
   @Output() delete = new EventEmitter();
-  @Output() open = new EventEmitter();
 
   readonly direction = UxgPopoverContentDirection;
 
@@ -27,11 +24,6 @@ export class FileComponent {
   @HostListener('mouseout')
   hidePopover() {
     this.popover?.hide();
-  }
-
-  @HostListener('click')
-  emitClick() {
-    this.open.emit();
   }
 
   map(extensions: string[]) {

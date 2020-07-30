@@ -14,20 +14,12 @@
     </div>
   </div>
 </div>
-<ng-container *ngIf="documents.length !== 0">
+<ng-container *ngIf="appFiles.length !== 0">
   <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
   <div class="documents">
     <div class="app-row">
-      <div class="app-col" *ngFor="let document of documents">
-        <document-icon [name]="document.name"></document-icon>
-        <div class="documents-title">
-          <div>{{ document.name }}</div>
-        </div>
-        <div class="app-align-self-start">
-          <button type="button" uxgButton link icon clear (click)="removeDocument(document)">
-            <uxg-icon shape="app-trash" size="12"></uxg-icon>
-          </button>
-        </div>
+      <div class="app-col" *ngFor="let appFile of appFiles; index as i">
+        <app-file [appFile]="appFile" (delete)="removeDocument(appFile, i)"></app-file>
       </div>
     </div>
   </div>

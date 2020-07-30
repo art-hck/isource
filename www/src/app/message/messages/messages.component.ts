@@ -10,6 +10,7 @@ import { Message } from "../models/message";
 import { StateStatus } from "../../request/common/models/state-status";
 import { AttachmentsService } from "../services/attachments.service";
 import { Attachment } from "../models/attachment";
+import { AppFile } from "../../shared/components/file/file";
 
 @Component({
   selector: 'app-message-messages',
@@ -31,14 +32,17 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   public messages$: Observable<Message[]>;
   public state: StateStatus = 'pristine';
-  files: { file: File, status: StateStatus }[] = [];
+  files: { appFile: AppFile, status: StateStatus }[] = [];
 
   public form = new FormGroup({
     text: new FormControl(null, Validators.required),
-    files: new FormControl(),
     attachments: new FormArray([])
   });
   readonly destroy$ = new Subject();
+
+  get formAttachments() {
+    return this.form.get("attachments") as FormArray;
+  }
 
   constructor(
     public attachmentsService: AttachmentsService,
@@ -83,33 +87,28 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public pushFiles(files: File[]) {
-    this.files = [...this.files, ...files.map(file => ({file, status: 'fetching' as StateStatus}))];
+    const appFiles = files.map(file => ({appFile: new AppFile(file), status: 'fetching' as StateStatus}));
+    this.files = [...this.files, ...appFiles];
 
-    merge(...files.map(f => this.attachmentsService.upload(f).pipe(tap(() => {
-      const i = this.files.findIndex(({ file }) => file === f);
-      this.files[i].status = "received";
-    })))).pipe(takeUntil(this.destroy$)).subscribe(
-      attachment => {
-        (this.form.get("attachments") as FormArray).push(new FormControl(attachment));
-      }
+    appFiles.filter(({ appFile: { invalid } }) => invalid).forEach(f => f.status = 'error');
+
+    merge(...appFiles.filter(({ appFile: { valid } }) => valid).map(
+      fileWithStatus => this.attachmentsService.upload(fileWithStatus.appFile.file).pipe(tap(() => fileWithStatus.status = "received"))
+    )).pipe(takeUntil(this.destroy$)).subscribe(
+      attachment => this.formAttachments.push(new FormControl(attachment))
     );
   }
 
-  public deleteFiles(files: File[]) {
-    this.files
-      .filter(({ file }) => files.indexOf(file) === -1)
-      .forEach((file, index) => {
-        this.files.splice(index, 1);
-        (this.form.get("attachments") as FormArray).removeAt(index);
-      });
+  public deleteFile(fileWithStatus: { appFile: AppFile, status: StateStatus }, i) {
+    this.files.splice(i, 1);
+    const formIndex = this.formAttachments.controls.findIndex(({ value }) => value === fileWithStatus.appFile.file);
+    if (formIndex !== -1) {
+      this.formAttachments.removeAt(formIndex);
+    }
   }
 
   public isOwnMessage(message: Message) {
     return message.author.id === this.userInfoService.getUserInfo().id;
-  }
-
-  getFiles(stateStatus: StateStatus): File[] {
-    return this.files.filter(({ status }) => status === stateStatus).map(({ file }) => file);
   }
 
   public submit(): void {

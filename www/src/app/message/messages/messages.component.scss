@@ -159,12 +159,15 @@
     }
 
     .document-upload-list-wrap {
-      margin-left: 90px;
+      margin-left: 75px;
+
+      & > *:not(:last-child) {
+        margin-bottom: 10px;
+      }
     }
 
     .loading-arrachments {
       opacity: .3;
-      display: block;
     }
   }
 }
