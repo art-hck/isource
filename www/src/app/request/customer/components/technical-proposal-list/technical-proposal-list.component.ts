@@ -1,5 +1,11 @@
 import { ActivatedRoute } from "@angular/router";
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
@@ -28,7 +34,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @ViewChild('sentToEditTab') sentToEditTabElRef: UxgTabTitleComponent;
 
   @Select(TechnicalProposalState.status)
-  readonly stateStatus$: Observable<StateStatus>;
+  readonly status$: Observable<StateStatus>;
 
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
@@ -62,7 +68,8 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
     public featureService: FeatureService,
-    public store: Store
+    public store: Store,
+    private cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -79,6 +86,13 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.cd.detectChanges();
+    this.technicalProposals$.subscribe(data => {
+      if (data) {
+        this.switchToPrioritizedTab(data);
+      }
+    });
   }
 
   get activeList$(): Observable<TechnicalProposal[]> {
@@ -157,10 +171,10 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
         statuses = [TechnicalProposalsStatus.SENT_TO_REVIEW];
         break;
       case TechnicalProposalsStatus.SENT_TO_EDIT:
-        statuses =  [TechnicalProposalsStatus.SENT_TO_EDIT];
+        statuses = [TechnicalProposalsStatus.SENT_TO_EDIT];
         break;
       case TechnicalProposalsStatus.ACCEPTED:
-        statuses =  [
+        statuses = [
           TechnicalProposalsStatus.ACCEPTED,
           TechnicalProposalsStatus.PARTIALLY_ACCEPTED,
           TechnicalProposalsStatus.CANCELED

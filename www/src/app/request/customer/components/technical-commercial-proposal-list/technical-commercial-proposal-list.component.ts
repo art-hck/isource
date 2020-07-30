@@ -1,5 +1,17 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -45,21 +57,32 @@ import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
+  @ViewChild('sendToEditTab') sendToEditTabElRef: UxgTabTitleComponent;
+  @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
+
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild('sentToReviewTab') sentToReviewTab: UxgTabTitleComponent;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
+
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([NEW, SENT_TO_REVIEW]))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([APPROVED, REJECTED]))
   readonly proposalsReviewed$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([SENT_TO_EDIT]))
   readonly proposalsSendToEdit$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposals)
   readonly proposals$: Observable<TechnicalCommercialProposal[]>;
+
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
+
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
@@ -144,6 +167,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.proposals$.subscribe(data => {
+      if (data) {
+        this.switchToPrioritizedTab();
+      }
+    });
   }
 
   reviewMultiple() {
@@ -229,5 +258,79 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.destroy$.next();
     this.destroy$.complete();
     this.proposalsFooterRef.nativeElement.remove();
+  }
+
+  switchToPrioritizedTab() {
+    let sentToReviewCount = 0;
+    let sentToEditCount = 0;
+    let reviewedCount = 0;
+
+    this.proposalsSentToReview$.subscribe(data => sentToReviewCount = data.length);
+    this.proposalsSendToEdit$.subscribe(data => sentToEditCount = data.length);
+    this.proposalsReviewed$.subscribe(data => reviewedCount = data.length);
+
+    // Если ни в одном табе не найдено результатов, ничего не делаем
+    if (sentToReviewCount + sentToEditCount + reviewedCount === 0) {
+      return false;
+    }
+
+    let firstNotEmptyTab;
+
+    // Находим и сохраняем первый таб, в котором есть результаты по запросу
+    for (const [key, value] of Object.entries({
+      'sentToReviewTab': sentToReviewCount,
+      'sendToEditTab': sentToEditCount,
+      'reviewedTab': reviewedCount
+    })) {
+      if (value > 0) {
+        firstNotEmptyTab = key;
+        break;
+      }
+    }
+
+    // Активируем найденный таб с результатами
+    switch (firstNotEmptyTab) {
+      case 'sentToReviewTab':
+        this.clickOnTab('sentToReviewTab');
+        break;
+      case 'sendToEditTab':
+        this.clickOnTab('sendToEditTab');
+        break;
+      case 'reviewedTab':
+        this.clickOnTab('reviewedTab');
+        break;
+      default:
+        return false;
+    }
+  }
+
+  clickOnTab(tab) {
+    switch (tab) {
+      case 'sentToReviewTab':
+        if (!this.sentToReviewTabElRef?.disabled) {
+          this.sentToReviewTabElRef?.activate();
+        } else {
+          return false;
+        }
+        break;
+      case 'sendToEditTab':
+        if (!this.sendToEditTabElRef?.disabled) {
+          this.sendToEditTabElRef?.activate();
+        } else {
+          return false;
+        }
+        break;
+      case 'reviewedTab':
+        if (!this.reviewedTabElRef?.disabled) {
+          this.reviewedTabElRef?.activate();
+        } else {
+          return false;
+        }
+        break;
+      default:
+        return false;
+    }
+
+    this.cd.detectChanges();
   }
 }
