@@ -39,6 +39,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     attachments: new FormArray([])
   });
   readonly destroy$ = new Subject();
+  readonly change$ = new Subject();
 
   constructor(
     public attachmentsService: AttachmentsService,
@@ -63,6 +64,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.files = [];
       this.messages$ = null;
       this.state = "pristine";
+      this.change$.next();
       if (this.conversationId) {
         this.state = "fetching";
         this.messagesService.markSeen({ conversationId: this.conversationId });
@@ -74,9 +76,10 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
           expand(messages => newMessages$.pipe(
             take(1),
             tap(({ id }) => this.messagesService.markSeen({ messageId: id })),
-            map(message => [...messages, message])
+            map(message => [...messages, message]),
+            takeUntil(this.change$)
           )),
-          shareReplay(1)
+          shareReplay(1),
         );
       }
     }
@@ -120,6 +123,9 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.sendMessage.emit(this.form.value);
     this.files = [];
     this.form.reset();
+    while ((this.form.get("attachments") as FormArray).length !== 0) {
+      (this.form.get("attachments") as FormArray).removeAt(0);
+    }
   }
 
   private onItemElementsChanged(): void {
