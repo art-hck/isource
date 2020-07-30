@@ -19,9 +19,9 @@
           </div>
         </ng-template>
 
-        <div class="winner" *ngIf="proposal.isWinner">
+        <ng-container *ngIf="proposal.isWinner">
           <ng-container *ngTemplateOutlet="winnerLabel"></ng-container>
-        </div>
+        </ng-container>
 
         <ng-container *ngIf="!proposal.isWinner && !editable">
           <ng-container *ngIf="proposal.sourceProposal?.status !== 'SENT_TO_EDIT'">
