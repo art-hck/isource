@@ -1,4 +1,4 @@
-import { EventTypes } from "../websocket/event-types";
+import { WsTypes } from "../websocket/enum/ws-types";
 
 export enum MessageContextTypes {
   REQUEST = 'request',
@@ -6,12 +6,8 @@ export enum MessageContextTypes {
   REQUEST_GROUP = 'request-group',
 }
 
-export const MessageContextToEventTypesMap: { [key: string]: any } = {};
-
-MessageContextToEventTypesMap[MessageContextTypes.REQUEST] = EventTypes.REQUEST_MESSAGE_NEW;
-MessageContextToEventTypesMap[MessageContextTypes.REQUEST_GROUP] = EventTypes.REQUEST_GROUP_MESSAGE_NEW;
-MessageContextToEventTypesMap[MessageContextTypes.REQUEST_POSITION] = EventTypes.REQUEST_POSITION_MESSAGE_NEW;
-
-
-
-
+export const MessageContextToEventTypesMap: Record<MessageContextTypes, WsTypes> = {
+  [MessageContextTypes.REQUEST]: WsTypes.REQUEST_MESSAGE_NEW,
+  [MessageContextTypes.REQUEST_GROUP]: WsTypes.REQUEST_GROUP_MESSAGE_NEW,
+  [MessageContextTypes.REQUEST_POSITION]: WsTypes.REQUEST_POSITION_MESSAGE_NEW
+};

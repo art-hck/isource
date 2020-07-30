@@ -10,8 +10,8 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 import { AvailableFilters } from "../../../back-office/models/available-filters";
 import { map, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { EventTypes } from "../../../../websocket/event-types";
-import { WebsocketService } from "../../../../websocket/websocket.service";
+import { WsTypes } from "../../../../websocket/enum/ws-types";
+import { WebsocketService } from "../../../../websocket/services/websocket.service";
 import { Subject } from "rxjs";
 import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
 
@@ -67,7 +67,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.wsService.on(EventTypes.REQUEST_LIST_UPDATED).pipe(takeUntil(this.destroy$))
+    this.wsService.on(WsTypes.REQUEST_LIST_UPDATED).pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.hideNeedUpdate = false;
         this.cd.detectChanges();

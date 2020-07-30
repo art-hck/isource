@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { MessagesViewComponent } from "./messages-view/messages-view.component";
-import { MessageService } from "./messages/message.service";
 
 const chatPageData = {
   title: "Сообщения",
@@ -41,9 +40,6 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes)
-  ],
-  providers: [
-    MessageService
   ],
   exports: [
     RouterModule

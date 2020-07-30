@@ -6,18 +6,14 @@
   <div class="user-container">
     <div class="avatar"><img src="../../../assets/images/avatar.svg"></div>
     <div class="user-info">
-      <span class="user-name">{{ message?.user.shortName }}</span><br>
+      <span class="user-name">{{ message?.author.shortName }}</span><br>
       <span class="sub-name app-ghost-color">{{ getSubName() }}</span>
     </div>
   </div>
 
   <div class="message" (click)="onContainerClick()">
-    <div class="message-body">
-      {{ message?.message }}
-    </div>
+    <div class="message-body">{{ message?.text }}</div>
 
-    <div class="message-date app-ghost-color">
-      {{ message?.createdDate | humanDate }}
-    </div>
+    <div class="message-date app-ghost-color">{{ message?.createdAt | humanDate }}</div>
   </div>
 </div>

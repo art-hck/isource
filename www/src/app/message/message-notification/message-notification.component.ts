@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WebsocketService } from "../../websocket/websocket.service";
-import { EventTypes } from "../../websocket/event-types";
-import { Message } from "../../request/common/models/message";
+import { WebsocketService } from "../../websocket/services/websocket.service";
+import { WsTypes } from "../../websocket/enum/ws-types";
+import { MessageNotification } from "../../request/common/models/message-notification";
 import { Subscription, timer } from "rxjs";
 import { MessageContextTypes } from "../message-context-types";
 import { Router } from "@angular/router";
@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 export class MessageNotificationComponent implements OnInit {
 
   open = false;
-  message: Message;
+  message: MessageNotification;
 
   protected durations = 8000;
 
@@ -32,8 +32,8 @@ export class MessageNotificationComponent implements OnInit {
 
   initMessagesWebsocket() {
     // можно не отписываться, т.к. компонент создается только один раз и используется на всех страницах
-    this.wsService.on<any>(EventTypes.NEW_MESSAGE_EVENT.valueOf()).subscribe((message) => {
-      // если уже находимся на нужной странице, то сообщение не показываем
+    this.wsService.on<MessageNotification>(WsTypes.NEW_MESSAGE_EVENT).subscribe((message) => {
+       // если уже находимся на нужной странице, то сообщение не показываем
       if (this.router.url === this.getChatUrl(message)) {
         return;
       }
@@ -61,7 +61,7 @@ export class MessageNotificationComponent implements OnInit {
     }
   }
 
-  getChatUrl(message: Message): string {
+  getChatUrl(message: MessageNotification): string {
     switch (message.contextType) {
       case MessageContextTypes.REQUEST: {
         return `/messages/request/${message.contextId}`;

@@ -5,7 +5,9 @@ export const AppConfig: GpnmarketConfigInterface = {
   clientId: 'gpnmarket-front',
   endpoints: {
     api: 'api/',
-    ws: 'ws://localhost:3000'
+    ws: 'ws://localhost:3000',
+    apiChat: 'https://chat-test.isource.ru/',
+    wsChat: 'wss://chat-test.isource.ru',
   },
   keycloak: {
     config: {
@@ -17,7 +19,10 @@ export const AppConfig: GpnmarketConfigInterface = {
       checkLoginIframe: false,
     },
     loadUserProfileAtStartUp: false,
-    bearerExcludedUrls: ['https://suggestions.dadata.ru/'],
+    bearerExcludedUrls: [
+      'https://suggestions.dadata.ru/',
+      'https://test-chats.ezgg.site/'
+    ],
   },
   dadata: {
     apiKey: 'fc06e6b8af300332f72a366ccdd3dad784e773cd',

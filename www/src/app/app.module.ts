@@ -36,7 +36,7 @@ const keycloakService = new KeycloakService();
     NgxsReduxDevtoolsPluginModule.forRoot(),
     ToastListModule,
     UxgModule,
-    WebsocketModule.config({ url: AppConfig.endpoints.ws }),
+    WebsocketModule.config({ url: AppConfig.endpoints.ws, chatUrl: AppConfig.endpoints.wsChat }),
     BrowserModule,
     KeycloakAngularModule
   ],
