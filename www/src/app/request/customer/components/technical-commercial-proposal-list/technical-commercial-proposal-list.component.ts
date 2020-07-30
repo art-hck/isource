@@ -62,7 +62,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
 
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
-  @ViewChild('sentToReviewTab') sentToReviewTab: UxgTabTitleComponent;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
 
   @Select(RequestState.request)

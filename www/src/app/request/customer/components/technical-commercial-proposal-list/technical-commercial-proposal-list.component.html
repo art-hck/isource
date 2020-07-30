@@ -125,7 +125,7 @@
   (approve)="reviewMultiple()"
   (sendToEdit)="sendToEditAll()"
   [chooseBy$]="chooseBy$"
-  [hidden]="!sentToReviewTab?.active || proposalsOnReview?.length === 0"
+  [hidden]="!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0"
   [total]="total"
 ></app-grid-footer>
 
