@@ -114,7 +114,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const length = action?.proposalPositions?.length ?? action?.requestPositions?.length ?? 1;
+      const length = (action?.proposalPositions?.length + action?.requestPositions?.length) ?? 1;
       let text = "";
       switch (true) {
         case action instanceof Reject: text = "$1 отклонено"; break;
