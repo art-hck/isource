@@ -112,9 +112,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.actions.pipe(
       ofActionCompleted(Approve, Reject, SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
-    ).subscribe(({result, action}) => {
+    ).subscribe(({ result, action }) => {
       const e = result.error as any;
-      const length = (action?.proposalPositions?.length + action?.requestPositions?.length) ?? 1;
+      const length = (action?.proposalPositions?.length ?? 0) + (action?.requestPositions?.length ?? 0) || 1;
       let text = "";
       switch (true) {
         case action instanceof Reject: text = "$1 отклонено"; break;
