@@ -10,7 +10,7 @@
         </div>
       </li>
 
-      <li *ngFor="let request of (requests$ | async)?.entities"
+      <li *ngFor="let request of (requests$ | async)?.entities; trackBy: trackByRequestId"
           (click)="onRequestClick(request.request)"
           [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
           [title]="request.request.name">
@@ -49,7 +49,7 @@
             Обсуждение заказа
           </li>
 
-          <ng-container *ngFor="let item of (requestsItems$ | async)">
+          <ng-container *ngFor="let item of (requestsItems$ | async); trackBy: trackById">
             <li (click)="onRequestItemClick(item)"
                 class="{{ getRequestItemClass(item) }}"
                 [ngClass]="{'selected': item.id === selectedRequestsItem?.id}">
@@ -57,7 +57,7 @@
               <div class="counter" *ngIf="item.conversation?.unreadCount as count">{{ count }}</div>
             </li>
 
-            <li *ngFor="let subItem of item?.positions"
+            <li *ngFor="let subItem of item?.positions; trackBy: trackByRequestId"
                 (click)="onRequestItemClick(subItem)"
                 class="sub-item {{ getRequestItemClass(subItem) }}"
                 [ngClass]="{'selected': subItem.id === selectedRequestsItem?.id}">
