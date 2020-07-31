@@ -120,7 +120,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
       debounceTime(100),
-      tap(() => console.log("fetchCounters")),
       takeUntil(this.destroy$)
     ).subscribe(() => this.fetchCounters());
 
