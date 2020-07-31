@@ -4,9 +4,12 @@ import { EmployeeItem } from "../../models/employee-item";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { Router } from "@angular/router";
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Store } from "@ngxs/store";
 import { EmployeeInfoBrief } from "../../models/employee-info";
+import { Uuid } from "../../../cart/models/uuid";
+import { EmployeeSettings } from "../../models/employee-settings";
+import { shareReplay } from "rxjs/operators";
 
 @Component({
   selector: 'app-employee-list-view',
@@ -21,6 +24,8 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
 
   employeeActiveTabType = 'BACKOFFICE_BUYER';
   editedEmployee: EmployeeInfoBrief;
+
+  userInfo$: Observable<EmployeeSettings>;
 
   constructor(
     protected employeeService: EmployeeService,
@@ -41,6 +46,20 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
         this.seniorBackoffice = employee;
       subscription.unsubscribe();
     });
+  }
+
+  getUserInfo(userId: Uuid) {
+    this.userInfo$ = this.employeeService.getUserInfo(userId).pipe(shareReplay(1));
+  }
+
+  editUserSettings(settings) {
+    this.subscription.add(this.employeeService.editSettings(settings).subscribe(
+      () => {
+        this.store.dispatch(new ToastActions.Success("Настройки видимости заявок сохранены"));
+      },
+      (err) => {
+        this.store.dispatch(new ToastActions.Error(err.error.detail));
+      }));
   }
 
   addEmployee(employee: EmployeeInfoBrief) {

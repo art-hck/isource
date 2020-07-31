@@ -18,8 +18,9 @@
 </div>
 
 <app-employee-list [employees]="employeesTab.active ? seniorBackoffice : backoffice"
-                   (edit)="editedEmployee = $event; createEmployeeModal.open()"></app-employee-list>
-
+                   [userInfo$]="userInfo$"
+                   (getUserInfo)="getUserInfo($event)"
+                   (edit)="editUserSettings($event)"></app-employee-list>
 
 <!-- todo 22.06.2020 Редактирование сотрудника это теперь забота кейклока, но модалку и компонент удалять пока не стал на всякий -->
 
