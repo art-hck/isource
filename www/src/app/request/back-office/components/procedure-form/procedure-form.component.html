@@ -194,10 +194,10 @@
     <br/>
     <br/>
 
-    <app-request-procedure-form-documents [documents]="documents" (addDocuments)="addDocuments($event)" formControlName="procedureDocuments">
+    <app-request-procedure-form-documents [documents]="documents" (addDocuments)="documentUpload.addDocument($event)" formControlName="procedureDocuments">
     </app-request-procedure-form-documents>
     <div class="upload-docs">
-      <app-document-upload-list [documents]="form.get('documents.procedureUploadDocuments').value"
+      <app-document-upload-list #documentUpload [documents]="form.get('documents.procedureUploadDocuments').value"
                                 (fileSelected)="form.get('documents.procedureUploadDocuments').setValue($event)"
                                 [uploadAvailable]="false">
       </app-document-upload-list>

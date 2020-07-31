@@ -53,18 +53,12 @@
       </div>
 
       <div class="document-upload-list-wrap">
-        <app-document-upload-list
-            [uploadLabel]="''"
-            [documents]="getFiles('received')"
-            (fileSelected)="deleteFiles($event)"
-        ></app-document-upload-list>
-        <app-document-upload-list
-            class="loading-arrachments"
-            [uploadLabel]="''"
-            [documents]="getFiles('fetching')"
-            [removable]="false"
-            (fileSelected)="deleteFiles($event)"
-        ></app-document-upload-list>
+        <app-file
+          [class.loading-arrachments]="file.status ==='fetching'"
+          *ngFor="let file of files; index as i"
+          [appFile]="file.appFile"
+          (delete)="deleteFile(file, i)">
+        </app-file>
       </div>
     </form>
   </div>

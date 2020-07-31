@@ -16,6 +16,7 @@ import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposa
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
+import { AppFile } from "../../../../shared/components/file/file";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -90,7 +91,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   }
 
-  filesSelected(files: File[]): void {
+  filesSelected(files: AppFile[]): void {
     files.forEach(
       file => this.formDocuments.push(this.fb.control(file))
     );
@@ -128,7 +129,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
       tp$ = tp$.pipe(
         flatMap(tp => {
           const formData = new FormData();
-          docs.forEach((doc, i) => formData.append(`files[documents][${i}]`, doc, doc.name));
+          docs.filter(({ valid }) => valid).forEach(({ file }, i) => formData.append(`files[documents][${i}]`, file, file.name));
 
           return this.technicalProposalsService.uploadSelectedDocuments(this.request.id, tp.id, formData)
             .pipe(mapTo(tp));
