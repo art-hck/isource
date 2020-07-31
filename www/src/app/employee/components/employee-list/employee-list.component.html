@@ -45,7 +45,7 @@
   </div>
 
   <uxg-modal #editEmployeeModal size="l">
-    <h2>Редактировать видимости заказчиков</h2>
+    <h2>Редактирование видимости заказчиков</h2>
     <br>
     <ng-container *ngIf="editEmployeeModal.state">
       <ng-container *ngIf="(userInfo$ | async) as user">
@@ -55,7 +55,7 @@
           <div class="app-row settings">
             <div class="app-col app-align-items-center">
               <uxg-checkbox class="app-control" formControlName="internalAvailable" #internalCustomer></uxg-checkbox>
-              <label (click)="internalCustomer.check($event)"> &nbsp; Внутренних закачиков</label>
+              <label (click)="internalCustomer.check($event)"> &nbsp; Внутренних заказчиков</label>
             </div>
 
             <div class="app-col app-align-items-center">
