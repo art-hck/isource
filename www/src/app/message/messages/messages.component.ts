@@ -79,7 +79,8 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
             map(message => [...messages, message]),
             takeUntil(this.change$)
           )),
-          shareReplay(1),
+          takeUntil(this.change$),
+          shareReplay(1)
         );
       }
     }
