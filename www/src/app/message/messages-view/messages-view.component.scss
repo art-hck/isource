@@ -180,18 +180,6 @@ a.position-link {
         display: flex;
         align-items: center;
 
-        .counter {
-          background: uxg($theme, color-font-link);
-          border-radius: uxg($theme, counter-border-radius);
-          color: uxg($theme, color-default);
-          height: 16px;
-          line-height: 16px;
-          text-align: center;
-          width: 16px;
-        }
-
-
-
         &:before {
           position: absolute;
           top: 0;
@@ -302,4 +290,14 @@ a.position-link {
 
 .request-link {
   max-width: 90px;
+}
+
+.counter {
+  background: uxg($theme, color-font-link);
+  border-radius: uxg($theme, counter-border-radius);
+  color: uxg($theme, color-default);
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  width: 16px;
 }

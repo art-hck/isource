@@ -19,6 +19,7 @@ import { Procedure } from "../../models/procedure";
 import { ProcedureService } from "../../services/procedure.service";
 import { ProcedureAction } from "../../models/procedure-action";
 import { StateStatus } from "../../../common/models/state-status";
+import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -29,6 +30,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
+  technicalProposalAvailableStatuses$: Observable<TechnicalProposalsStatus[]>;
   procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
@@ -60,6 +62,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       ]),
       tap(() => {
         this.fetch();
+        this.fetchAvailableStatusesList();
         this.fetchProcedures();
         this.fetchPositions();
       }),
@@ -67,8 +70,14 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  fetch(filters = {}) {
+  fetch(filters: TechnicalProposalFilter = {}) {
     this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
+      publishReplay(1), refCount()
+    );
+  }
+
+  fetchAvailableStatusesList(filters: TechnicalProposalFilter = {}) {
+    this.technicalProposalAvailableStatuses$ = this.technicalProposalsService.getTechnicalProposalsAvailableStatuses(this.requestId, filters).pipe(
       publishReplay(1), refCount()
     );
   }
@@ -89,10 +98,15 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       });
   }
 
-  filter(filters: {}) {
+  filter(filters: TechnicalProposalFilter) {
     this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
       this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
     });
+
+    // Обновляем список доступных статусов, учитывая отмеченных заказчиков
+    const filtersByContragents = filters.contragents ? { contragents: filters.contragents } : {};
+
+    this.fetchAvailableStatusesList(filtersByContragents);
   }
 
   fetchPositions() {

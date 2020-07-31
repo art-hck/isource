@@ -8,37 +8,29 @@ import { WsConfig } from "../models/ws-config";
 import { config } from "./ws-config-token";
 import { BehaviorSubject, merge, ReplaySubject, Subject, timer } from "rxjs";
 import { KeycloakService } from "keycloak-angular";
+import { User } from "../../user/models/user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WsChatService implements IWebsocketService {
   websocket$: WebSocketSubject<WsChatMessage<unknown>>;
-  authorized$ = new BehaviorSubject<boolean>(false);
-  send$ = new ReplaySubject<WsChatMessage<unknown>>();
-  received$ = new Subject<unknown>();
+  readonly authorized$ = new BehaviorSubject<boolean>(false);
+  readonly send$ = new ReplaySubject<WsChatMessage<unknown>>();
+  readonly received$ = new Subject<unknown>();
 
   constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
 
-    this.keycloakService.getToken().then(token => {
-      // Как только получили токен открываем соединение ws
-      this.websocket$ = new WebSocketSubject<WsChatMessage<unknown>>({
-        url: wsConfig.chatUrl + '?authorization=' + token,
-        closeObserver: {
-          next: () => this.authorized$.next(false)
-        },
-      });
+    this.keycloakService.getToken().then(accessToken => {
 
-      this.websocket$?.pipe(
-        shareReplay(1)
-      ).subscribe(data => this.received$.next(data));
+      this.connect(accessToken);
 
       // Если приходит rejected, считаем что нужна авторизация, пробуем авторизоваться (макс 5 попыток с интервалом 3 сек)
       this.on(WsChatTypes.REJECTED).pipe(
         delayWhen<any>((v, i) => timer(i > 0 ? this.wsConfig.reconnectInterval ?? 3000 : 0)),
         take(this.wsConfig.reconnectAttempts ?? 5),
         tap(() => this.authorized$.next(false))
-      ).subscribe(() => this.authorize(token));
+      ).subscribe(() => this.send<User>(`authorize`, { accessToken }));
 
       // Если приходит granted, считаем что авторизованы
       this.on(WsChatTypes.GRANTED).subscribe(() => this.authorized$.next(true));
@@ -54,6 +46,8 @@ export class WsChatService implements IWebsocketService {
         this.send$.pipe(bufferToggle(off$, () => on$)),
         this.send$.pipe(windowToggle(on$, () => off$))
       ).pipe(flatMap(x => x)).subscribe(data => this.websocket$.next(data));
+
+      this.send$.pipe(filter(({ type }) => type === `authorize`)).subscribe(data => this.websocket$.next(data));
     });
   }
 
@@ -71,7 +65,17 @@ export class WsChatService implements IWebsocketService {
     return this.on<T>(<WsChatTypes>type);
   }
 
-  authorize(accessToken: string) {
-    this.websocket$.next({ type: WsChatTypes.AUTHORIZE, data: { accessToken } });
+  private connect(token) {
+    this.websocket$ = new WebSocketSubject<WsChatMessage<unknown>>({
+      url: this.wsConfig.chatUrl + '?authorization=' + token,
+      closeObserver: {
+        next: () => {
+          this.authorized$.next(false);
+          timer(this.wsConfig.reconnectInterval ?? 3000).subscribe(() => this.connect(token));
+        }
+      },
+    });
+
+    this.websocket$.pipe(shareReplay(1)).subscribe(data => this.received$.next(data));
   }
 }

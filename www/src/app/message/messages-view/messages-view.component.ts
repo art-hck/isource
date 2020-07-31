@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { fromEvent, Observable, of, Subject } from "rxjs";
+import { fromEvent, merge, Observable, Subject } from "rxjs";
 import { Page } from "../../core/models/page";
 import { RequestsList } from "../../request/common/models/requests-list/requests-list";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
@@ -8,7 +8,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, flatMap, map, shareReplay, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -74,6 +74,35 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       item.id;
   }
 
+  fetchCounters() {
+    this.conversationsService.get().pipe(take(1)).subscribe(conversations => {
+      this.requests$ = this.requests$.pipe(map(requests => {
+        (conversations ?? []).forEach(conversation => {
+          const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
+          if (request) {
+            // console.log(`setting to ${request.request.id}`, conversation);
+            request.request.conversation.unreadCount = conversation.unreadCount;
+          }
+        });
+        return requests;
+      }));
+
+      this.requestsItems$ = this.requestsItems$?.pipe(map(requestItems => {
+          (conversations ?? []).forEach(conversation => {
+
+            const requestItem = requestItems.find(item => item.conversation?.externalId === conversation.id);
+
+            if (requestItem) {
+              requestItem.conversation.unreadCount = conversation.unreadCount;
+            }
+          });
+
+          return requestItems;
+        })
+      );
+    });
+  }
+
   ngOnInit() {
     this.getRouteData();
 
@@ -86,18 +115,13 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             this.jumpToRequestOrPosition();
           }
         }),
-        flatMap(requests => this.conversationsService.get().pipe(map(conversations => {
-          (conversations ?? []).forEach(conversation => {
-            const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
-            if (request) {
-              request.request.conversation.unreadCount = conversation.unreadCount;
-            }
-          });
-
-          return requests;
-        }))),
         shareReplay(1)
       );
+
+    merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
+      debounceTime(100),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.fetchCounters());
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const { contextId, contextType }: { contextId: Uuid, contextType: MessageContextTypes } = JSON.parse(conversation.context.items[0].data);
@@ -127,7 +151,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             if (index !== -1) {
               requestsItems[index].conversation = { id: null, externalId: conversation.id };
 
-              if (requestsItems[index].id === this.selectedRequestsItem.id) {
+              if (requestsItems[index].id === this.selectedRequestsItem?.id) {
                 this.onRequestItemClick(requestsItems[index]);
               }
             }
@@ -211,18 +235,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems = new RequestItemsStore();
         this.requestsItems.setRequestItems(data);
       }),
-      flatMap(requestItems => this.conversationsService.get().pipe(map(conversations => {
-        (conversations ?? []).forEach(conversation => {
-
-          const requestItem = this.getRequestPositionsFlat(requestItems, true).find(item => item.conversation?.externalId === conversation.id);
-
-          if (requestItem) {
-            requestItem.conversation.unreadCount = conversation.unreadCount;
-          }
-        });
-
-        return requestItems;
-      }))),
       shareReplay(1)
     );
 
@@ -376,4 +388,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  trackById = (i, { id }) => id;
+  trackByRequestId = (i, { request: { id } }) => id;
 }

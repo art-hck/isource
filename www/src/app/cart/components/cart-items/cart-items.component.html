@@ -28,10 +28,19 @@
     </div>
 
     <div class="app-col quantity">
-      <input name="quantity" type="number"
-             [value]="item.quantity"
-             (change)="updateItemQuantity(item, $event.target.value)"
-             [class.invalid]="item.quantity <= 0"/>
+      <uxg-popover [openOnHover]="true">
+        <input uxgPopoverTrigger
+               name="quantity" type="number"
+               [value]="item.quantity"
+               (change)="updateItemQuantity(item, $event.target.value)"
+               [class.invalid]="item.quantity <= 0"/>
+
+        <ng-container *ngIf="item.quantity <= 0">
+          <div *uxgPopoverContent="PopoverContentDirection.topRight">
+            Значение должно быть больше или равно 1
+          </div>
+        </ng-container>
+      </uxg-popover>
     </div>
 
     <div class="app-col action">

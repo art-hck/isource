@@ -5,7 +5,7 @@ import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FeatureService } from "../../services/feature.service";
 import { MessagesService } from "../../../message/services/messages.service";
-import { map, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, map, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
 import { BehaviorSubject, merge, Subject } from "rxjs";
 
 @Component({
@@ -33,6 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
   ngOnInit() {
     merge(this.messagesService.onNew(), this.messagesService.onMarkSeen()).pipe(
       startWith(0),
+      debounceTime(100),
       switchMap(() => this.messagesService.unreadCount().pipe(map(({ count }) => count))),
       takeUntil(this.destroy$))
     .subscribe(count => this.unreadMessagesCount$.next(count));

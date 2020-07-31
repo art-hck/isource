@@ -27,4 +27,3 @@ export const PositionStatusesLabels: Record<PositionStatus, string> = {
   [PositionStatus.NOT_RELEVANT]: 'Неактуально',
   [PositionStatus.CANCELED]: 'Отменено'
 };
-

@@ -127,9 +127,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       deliveryDate: [this.datePipe.transform(p.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
       isDeliveryDateAsap: [p.isDeliveryDateAsap],
       isDesignRequired: [p.isDesignRequired],
-      isInspectionControlRequired: [p.isInspectionControlRequired],
-      isPnrRequired: [p.isPnrRequired],
-      isShmrRequired: [p.isShmrRequired],
+      isInspectionControlRequired: [p.isInspectionControlRequired || false],
+      isPnrRequired: [p.isPnrRequired || false],
+      isShmrRequired: [p.isShmrRequired || false],
       measureUnit: [p.measureUnit, Validators.required],
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
@@ -227,6 +227,10 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         this.form.enable();
       }));
     }
+  }
+
+  filterEnteredText(event: KeyboardEvent): boolean {
+    return event.key !== "-" && event.key !== "+";
   }
 
   registerOnChange = (fn: any) => this.onChange = fn;

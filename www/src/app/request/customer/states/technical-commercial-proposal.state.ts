@@ -1,6 +1,6 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, map, tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -10,7 +10,6 @@ import { TechnicalCommercialProposalByPosition } from "../../common/models/techn
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposalPositionStatus } from "../../common/enum/technical-commercial-proposal-position-status";
 import Fetch = TechnicalCommercialProposals.Fetch;
-import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
@@ -67,15 +66,6 @@ export class TechnicalCommercialProposalState {
         tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
         tap(proposals => this.cache[requestId] = proposals),
       );
-  }
-
-  @Action(Approve)
-  approve({ setState }: Context, { requestId, proposalPosition }: Approve) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.approve(requestId, proposalPosition).pipe(
-      tap(proposal => setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => setState(patch({ status: "received" as StateStatus })))
-    );
   }
 
   @Action(Reject)

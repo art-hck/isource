@@ -11,6 +11,7 @@ import { Position } from "../../../../shared/components/grid/position";
 import { FormControl, Validators } from "@angular/forms";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { CommercialProposals } from "../../actions/commercial-proposal.actions";
+import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
 import Review = CommercialProposals.Review;
 
 @Component({
@@ -35,6 +36,10 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
 
   get isReviewed(): boolean {
     return this.proposals.some(({ isWinner }) => isWinner);
+  }
+
+  get isSentToEdit(): boolean {
+    return this.proposals.every(proposal => proposal.sourceProposal.status === CommercialProposalsStatus.SENT_TO_EDIT);
   }
 
   constructor(
@@ -83,5 +88,5 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
     ).subscribe();
   }
 
-  trackByProposaId = (i, {id}: Proposal) => id;
+  trackByProposalId = (i, {id}: Proposal) => id;
 }

@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -43,6 +43,7 @@ import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 import { Proposal } from "../../../../shared/components/grid/proposal";
+import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -53,7 +54,7 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
@@ -63,6 +64,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
+  gridRows: ElementRef[];
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
@@ -155,7 +157,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   ngAfterViewInit() {
-    this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
+    this.gridRowsComponent.changes.pipe(
+      startWith(this.gridRowsComponent),
+      tap(() => this.gridRows = this.gridRowsComponent.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
+      tap(() => this.cd.detectChanges()),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   switchView(view: ProposalsView) {

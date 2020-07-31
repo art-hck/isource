@@ -29,7 +29,6 @@ import { GridRowComponent } from "../../../../shared/components/grid/grid-row/gr
 import { Position } from "../../../../shared/components/grid/position";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
@@ -110,11 +109,11 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, SendToEditMultiple, ReviewMultiple),
+      ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
-    ).subscribe(({result, action}) => {
+    ).subscribe(({ result, action }) => {
       const e = result.error as any;
-      const length = action?.proposalPositions?.length ?? action?.requestPositions?.length ?? 1;
+      const length = (action?.proposalPositions?.length ?? 0) + (action?.requestPositions?.length ?? 0) || 1;
       let text = "";
       switch (true) {
         case action instanceof Reject: text = "$1 отклонено"; break;

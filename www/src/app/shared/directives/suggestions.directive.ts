@@ -20,11 +20,11 @@ export class SuggestionsDirective implements OnInit {
     this.suggestions$ = this.ngControl.valueChanges.pipe(
       debounceTime(300),
       tap(value => {
-        if (value.length < this.minLength) {
+        if (value?.length < this.minLength) {
           this.dropdownInputComponent.toggle(false);
         }
       }),
-      filter(value => value.length >= this.minLength && this.dropdownInputComponent.isNotFromList),
+      filter(value => value?.length >= this.minLength && this.dropdownInputComponent.isNotFromList),
       flatMap(value => this.$.pipe(map(data => this.searchFn && this.searchFn(value, data)))),
       tap(() => this.dropdownInputComponent.toggle(true))
     );

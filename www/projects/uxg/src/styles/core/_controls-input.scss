@@ -59,14 +59,18 @@
       }
     }
 
-    &:focus,
-    &.app-control-label-shown,
-    &:-webkit-autofill {
-      & + .app-control-label {
-        color: uxg($theme, color-font-secondary);
-        cursor: default;
-        top: 0;
-        transform: scale(0.785);
+    $selectors: (
+      '&:focus, &.app-control-label-shown',
+      '&:-webkit-autofill'
+    );
+    @each $selector in $selectors {
+      #{$selector} {
+        & + .app-control-label {
+          color: uxg($theme, color-font-secondary);
+          cursor: default;
+          top: 0;
+          transform: scale(0.785);
+        }
       }
     }
 
@@ -76,6 +80,7 @@
       top: 50%;
       border: 1px transparent solid;
       line-height: uxg($theme, font-size-m) * 1.286;
+      letter-spacing: -0.1px;
       position: absolute;
       transform: translate(10px, -50%);
       transform-origin: bottom left;
