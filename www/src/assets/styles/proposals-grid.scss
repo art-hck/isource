@@ -24,9 +24,11 @@
 
   .items-row .grid-cell {
     overflow: hidden;
+    margin-bottom: 20px;
 
     & > button {
       height: 100%;
+      min-height: 110px;
       border: 1px solid #E3EEFF;
       padding: 16px;
       border-radius: uxg($theme, control-border-radius);
@@ -57,7 +59,7 @@
     }
 
     .winner {
-      margin: -4px -16px
+      margin: -4px -16px -4px 0;
     }
   }
 

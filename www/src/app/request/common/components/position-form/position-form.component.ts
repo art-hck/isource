@@ -127,9 +127,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       deliveryDate: [this.datePipe.transform(p.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
       isDeliveryDateAsap: [p.isDeliveryDateAsap],
       isDesignRequired: [p.isDesignRequired],
-      isInspectionControlRequired: [p.isInspectionControlRequired],
-      isPnrRequired: [p.isPnrRequired],
-      isShmrRequired: [p.isShmrRequired],
+      isInspectionControlRequired: [p.isInspectionControlRequired || false],
+      isPnrRequired: [p.isPnrRequired || false],
+      isShmrRequired: [p.isShmrRequired || false],
       measureUnit: [p.measureUnit, Validators.required],
       paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
       productionDocument: [p.productionDocument, Validators.required],
@@ -187,44 +187,50 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   submit() {
-    let submit$: Observable<RequestPosition>;
+    if (this.form.valid) {
+      let submit$: Observable<RequestPosition>;
 
-    if (this.position.id) {
-      // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
-      const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
-        let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
-        const updatedInfo = value === null ? value : value.toString();
+      if (this.position.id) {
+        // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
+        const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
+          let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
+          const updatedInfo = value === null ? value : value.toString();
 
-        if (key === 'deliveryDate') {
-          positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+          if (key === 'deliveryDate') {
+            positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+          }
+
+          return positionInfo === updatedInfo;
+        });
+
+        // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
+        if (positionInfoNotChanged) {
+          this.cancel.emit();
+          return;
         }
 
-        return positionInfo === updatedInfo;
-      });
-
-      // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
-      if (positionInfoNotChanged) {
-        this.cancel.emit();
-        return;
+        submit$ = this.positionService.updatePosition(this.position.id, this.form.value);
+      } else {
+        submit$ = this.positionService.addPosition(this.requestId, [this.form.value])
+          .pipe(map(positions => positions[0]));
       }
 
-      submit$ = this.positionService.updatePosition(this.position.id, this.form.value);
-    } else {
-      submit$ = this.positionService.addPosition(this.requestId, [this.form.value])
-        .pipe(map(positions => positions[0]));
+      submit$ = submit$.pipe(
+        flatMap(position =>
+          position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
+        ));
+
+      this.form.disable();
+      this.subscription.add(submit$.subscribe(position => {
+        this.positionChange.emit(position);
+        this.position = position;
+        this.form.enable();
+      }));
     }
+  }
 
-    submit$ = submit$.pipe(
-      flatMap(position =>
-      position.status === PositionStatuses.DRAFT && this.onDrafted ? this.onDrafted(position) : of(position)
-    ));
-
-    this.form.disable();
-    this.subscription.add(submit$.subscribe(position => {
-      this.positionChange.emit(position);
-      this.position = position;
-      this.form.enable();
-    }));
+  filterEnteredText(event: KeyboardEvent): boolean {
+    return event.key !== "-" && event.key !== "+";
   }
 
   registerOnChange = (fn: any) => this.onChange = fn;

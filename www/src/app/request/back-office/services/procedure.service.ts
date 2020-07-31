@@ -7,7 +7,8 @@ import { Request } from "../../common/models/request";
 import { ProcedureCreateResponse } from '../models/procedure-create-response';
 import { Procedure } from "../models/procedure";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { ProcedureSource } from "../../common/enum/procedure-source";
+import { ProcedureSource } from "../enum/procedure-source";
+import { Okpd2 } from "../../../shared/models/okpd2";
 
 @Injectable()
 export class ProcedureService {
@@ -45,5 +46,9 @@ export class ProcedureService {
   getByPosition(positionId: Uuid) {
     const url = `/requests/backoffice/procedures-by-position`;
     return this.api.post<Procedure[]>(url, { positionId });
+  }
+
+  getOkpd2(searchText: string) {
+    return this.api.post<Okpd2[]>(`okpd`, { searchText });
   }
 }

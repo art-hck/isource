@@ -10,13 +10,16 @@ import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { RequestStatusCount } from "../../common/models/requests-list/request-status-count";
 import { RequestActions } from "../actions/request.actions";
 import { of } from "rxjs";
-import Fetch = RequestListActions.Fetch;
-import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
 import { Uuid } from "../../../cart/models/uuid";
+import { AvailableFilters } from "../models/available-filters";
+import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
+import Fetch = RequestListActions.Fetch;
+import FetchFilters = RequestListActions.FetchAvailableFilters;
 
 export interface RequestStateStateModel {
   requests: Page<RequestsList>;
   createdRequestId: Uuid;
+  availableFilters: AvailableFilters;
   requestStatusCounts: RequestStatusCount;
   status: StateStatus;
 }
@@ -26,7 +29,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerRequestList',
-  defaults: { requests: null, requestStatusCounts: null, createdRequestId: null, status: "pristine" }
+  defaults: { requests: null, requestStatusCounts: null, availableFilters: null, createdRequestId: null, status: "pristine" }
 })
 @Injectable()
 export class RequestListState {
@@ -36,6 +39,7 @@ export class RequestListState {
   @Selector() static statusCounters({requests}: Model) { return requests.statusCounters; }
   @Selector() static totalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
+  @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
   @Selector() static createdRequest({createdRequestId}: Model) { return createdRequestId; }
 
   @Action(Fetch, { cancelUncompleted: true }) fetch({setState}: Context, {startFrom, pageSize, filters, sort}: Fetch) {
@@ -52,5 +56,9 @@ export class RequestListState {
       tap(id => setState(patch({ createdRequestId: id }))),
       tap(() => setState(patch({ status: "received" } as Model))),
     );
+  }
+
+  @Action(FetchFilters) fetchFilters({setState}: Context) {
+    return this.rest.availableFilters().pipe(tap(filters => setState(patch({availableFilters: filters}))));
   }
 }

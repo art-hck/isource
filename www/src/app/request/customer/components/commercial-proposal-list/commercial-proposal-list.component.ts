@@ -11,7 +11,8 @@ import { Position } from "../../../../shared/components/grid/position";
 import { FormControl, Validators } from "@angular/forms";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { CommercialProposals } from "../../actions/commercial-proposal.actions";
-import Approve = CommercialProposals.Approve;
+import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
+import Review = CommercialProposals.Review;
 
 @Component({
   selector: 'app-commercial-proposal-list',
@@ -28,11 +29,17 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   readonly destroy$ = new Subject();
   getCurrencySymbol = getCurrencySymbol;
   selectedProposal = new FormControl(null, Validators.required);
+  rejectedProposal = new FormControl(null, Validators.required);
+  sendToEditPosition = new FormControl(null, Validators.required);
   folded = false;
   gridRows = [];
 
   get isReviewed(): boolean {
     return this.proposals.some(({ isWinner }) => isWinner);
+  }
+
+  get isSentToEdit(): boolean {
+    return this.proposals.every(proposal => proposal.sourceProposal.status === CommercialProposalsStatus.SENT_TO_EDIT);
   }
 
   constructor(
@@ -62,12 +69,15 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   }
 
   approve() {
-    this.dispatchAction(new Approve(this.requestId, {[this.position.id]: this.selectedProposal.value.id}));
+    this.dispatchAction(new Review(this.requestId, { accepted: {[this.position.id]: this.selectedProposal.value.id} }));
   }
 
   reject() {
     // TODO: Ждём бэк
-    // this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
+  }
+
+  sendToEdit() {
+    this.dispatchAction(new Review(this.requestId, { sendToEdit: [this.position.id] }));
   }
 
   private dispatchAction(action) {
@@ -78,5 +88,5 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
     ).subscribe();
   }
 
-  trackByProposaId = (i, {id}: Proposal) => id;
+  trackByProposalId = (i, {id}: Proposal) => id;
 }

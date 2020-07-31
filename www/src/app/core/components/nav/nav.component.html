@@ -13,6 +13,7 @@
     <!-- Сообщения -->
     <a routerLink="messages" routerLinkActive="active" class="app-menu-icon app-secondary-color">
       <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
+      <small class="counter" *ngIf="unreadMessagesCount$ | async as count">{{ count }}</small>
       <app-message-notification></app-message-notification>
     </a>
 
@@ -20,7 +21,7 @@
     <ng-container *ngIf="featureService.authorize('cart')">
       <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">
         <uxg-icon class="app-ghost-color" shape="app-basket-big" size="24"></uxg-icon>
-        <small class="basket-counter">{{ cartStoreService.getCount() }}</small>
+        <small class="counter">{{ cartStoreService.getCount() }}</small>
       </a>
 
       <div *ngIf="cartStoreService.getCount() === 0" class="app-menu-icon app-ghost-color">

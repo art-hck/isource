@@ -25,6 +25,7 @@ export interface IFeatureList {
   kim;
   sentToApprove;
   backofficeAgreements;
+  customerAgreements;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -50,5 +51,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   moveRequestGroup: { roles: [UserRole.BACKOFFICE] },
   kim: { roles: [UserRole.CUSTOMER] },
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
-  backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] }
+  backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
+  customerAgreements: { roles: [UserRole.CUSTOMER] }
 };

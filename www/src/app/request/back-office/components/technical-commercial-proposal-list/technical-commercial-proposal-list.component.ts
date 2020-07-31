@@ -1,21 +1,9 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { filter, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -35,9 +23,13 @@ import { TechnicalCommercialProposalPosition } from "../../../common/models/tech
 import { getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
 import { StateStatus } from "../../../common/models/state-status";
-import { ProcedureSource } from "../../../common/enum/procedure-source";
+import { ProcedureSource } from "../../enum/procedure-source";
 import { Procedure } from "../../models/procedure";
 import { ProcedureAction } from "../../models/procedure-action";
+import { PositionStatus } from "../../../common/enum/position-status";
+import moment from "moment";
+import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
+import { ProposalsView } from "../../../../shared/models/proposals-view";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -48,8 +40,10 @@ import PublishByPosition = TechnicalCommercialProposals.PublishByPosition;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
-import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
-import { ProposalsView } from "../../../../shared/models/proposals-view";
+import Rollback = TechnicalCommercialProposals.Rollback;
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { Proposal } from "../../../../shared/components/grid/proposal";
+import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -60,7 +54,7 @@ import { ProposalsView } from "../../../../shared/models/proposals-view";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
@@ -70,19 +64,22 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
+  gridRows: ElementRef[];
   requestId: Uuid;
   showForm: boolean;
   files: File[] = [];
   view: ProposalsView = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
-    position: RequestPosition
+    position: RequestPosition,
+    supplier?: ContragentShortInfo
   };
   form: FormGroup;
   canNotAddNewContragent = false;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
   proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
+  rollbackDuration = 10 * 60;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
@@ -91,6 +88,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly downloadAnalyticalReport = (requestId: Uuid) => new DownloadAnalyticalReport(requestId);
   readonly publishPositions = (proposalPositions: TechnicalCommercialProposalByPosition[]) => new PublishByPosition(proposalPositions);
   readonly updateProcedures = () => [new RefreshProcedures(this.requestId), new FetchAvailablePositions(this.requestId)];
+  readonly rollback = ({ id }: RequestPosition) => new Rollback(this.requestId, id);
 
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
@@ -159,12 +157,17 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   }
 
   ngAfterViewInit() {
-    this.gridRows.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
+    this.gridRowsComponent.changes.pipe(
+      startWith(this.gridRowsComponent),
+      tap(() => this.gridRows = this.gridRowsComponent.reduce((gridRows, c) => [...gridRows, ...c.gridRows], [])),
+      tap(() => this.cd.detectChanges()),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view === "grid";
+    this.app.noContentPadding = view !== "list";
     this.viewPopover?.hide();
   }
 
@@ -208,16 +211,41 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     this.addProposalPositionPayload = { proposal, position };
   }
 
-  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
-    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
+    return proposals.reduce((suppliers: GridSupplier[], proposal) => {
+      [false, true]
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs) || proposal.positions.length === 0 && !hasAnalogs)
+        .forEach(hasAnalogs => suppliers.push({ ...proposal.supplier, hasAnalogs }));
+      return suppliers;
+    }, []);
   }
 
-  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
-    return i => proposals[i].positions.some(p => p?.isAnalog);
+  proposals(proposals: TechnicalCommercialProposal[]) {
+    return proposals.reduce((result: Proposal[], proposal) => {
+      [false, true]
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs))
+        .forEach(() => result.push(new Proposal(proposal)));
+      return result;
+    }, []);
+  }
+
+  canRollback(position: RequestPosition): boolean {
+    return position.status === PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT &&
+      moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
   trackByProposalByPositionId = (i, { position }: TechnicalCommercialProposalByPosition) => position.id;
+  converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
+  getProposalPosBySupplier = (positionProposals: TechnicalCommercialProposalByPosition) => ({ id, hasAnalogs }: GridSupplier) => {
+    const proposal = positionProposals.data.find(({ proposal: { supplier }, proposalPosition }) => supplier.id === id && proposalPosition.isAnalog === hasAnalogs)?.proposalPosition;
+    return proposal ? new Proposal<TechnicalCommercialProposalPosition>(proposal) : null;
+  }
+  getProposalByProposalPosition = ({ proposalId }: TechnicalCommercialProposalPosition, proposals: TechnicalCommercialProposal[]) => proposals.find(({id}) => id === proposalId);
+  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
+  getSupplierByProposalPos = (proposals: TechnicalCommercialProposal[]) => (proposalPos: Proposal<TechnicalCommercialProposalPosition>) => {
+    return proposals.find(({ positions }) => positions.find(({ id }) => proposalPos.id === id)).supplier;
+  }
 
   ngOnDestroy() {
     this.destroy$.next();

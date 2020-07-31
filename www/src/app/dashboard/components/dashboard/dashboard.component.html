@@ -6,8 +6,8 @@
         <h2 class="app-col">Согласования</h2>
         <div><a routerLink="/agreements/customer"><b>Все согласования ({{ agreements?.totalCount }})</b></a></div>
       </div>
-      <app-agreements-deprecated [agreements]="agreements?.entities">
-      </app-agreements-deprecated>
+      <app-agreements [agreements]="agreements?.entities">
+      </app-agreements>
     </ng-template>
   </div>
 </div>

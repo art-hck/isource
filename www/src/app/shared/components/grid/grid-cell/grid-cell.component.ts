@@ -17,6 +17,7 @@ export class GridCellComponent {
   @Input() editable: boolean;
   @Input() supplier: ContragentShortInfo;
   @Output() create = new EventEmitter();
+  @Output() edit = new EventEmitter<Proposal>();
   @Output() show = new EventEmitter<Proposal>();
   @HostBinding('class.grid-cell')
   @HostBinding('class.app-col') classes = true;

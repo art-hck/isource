@@ -17,6 +17,7 @@ export class DocumentUploadListComponent {
   @Input() uploadLabel = 'Выбрать документ';
   @Input() dragAndDropAvailable = false;
   @Input() uploadAvailable = true;
+  @Input() removable = true;
 
   @Output() fileSelected = new EventEmitter<File[]>();
 

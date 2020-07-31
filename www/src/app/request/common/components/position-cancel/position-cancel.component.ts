@@ -45,7 +45,7 @@ export class PositionCancelComponent implements OnInit {
   }
 
   submit() {
-    const positionIds = this.positions.map(({id}: RequestPosition) => id);
+    const positionIds = this.positions.map(({ id }: RequestPosition) => id);
     const [newStatus, role] = this.user.isCustomer() ? ['CANCELED', 'customer'] : ['NOT_RELEVANT', 'backoffice'];
     this.positionService.changePositionsStatus(positionIds, newStatus, role, this.form.value).subscribe(() => {
       this.user.isCustomer() ? this.store.dispatch(new CustomerRefreshPositions(this.requestId)) :

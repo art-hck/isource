@@ -36,7 +36,7 @@ export namespace TechnicalProposals {
   // Получает список доступных статусов ТП для фильтра
   export class GetFilterStatuses {
     static readonly type = '[Technical Proposals Customer] GetFilterStatuses';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
   }
 
 }

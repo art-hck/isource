@@ -101,3 +101,25 @@ a.canceled {
     color: #b3b3b3;
   }
 }
+
+.request-area {
+  display: inline-table;
+  border: 1px solid #C8CAFF;
+  border-radius: 4px;
+
+  & .clock-icon {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  & .add-position-button {
+    display: table;
+    margin: 32px auto;
+  }
+
+  & hr {
+    margin: 0 0 20px;
+    border: 1px dotted #c8cafd;
+    border-top: 0;
+  }
+}

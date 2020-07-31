@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
   <uxg-dropdown-input
     #nameRef
     class="position-name"
@@ -84,7 +84,7 @@
   <div class="app-row">
     <div class="app-col app-col-auto" [style.width.px]="130">
       <div class="app-control-wrap">
-        <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0" />
+        <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0" (keypress)="filterEnteredText($event)" />
         <label class="app-control-label" (click)="quantity.focus()">Количество</label>
         <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
@@ -194,8 +194,8 @@
     </div>
     <div class="app-col app-col-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
-      <button *ngIf="!needApprove" uxgButton primary lg [disabled]="form.invalid">Сохранить</button>
-      <button *ngIf="needApprove" uxgButton primary lg [disabled]="form.invalid">Отправить на согласование</button>
+      <button *ngIf="!needApprove" uxgButton primary lg>Сохранить</button>
+      <button *ngIf="needApprove" uxgButton primary lg>Отправить на согласование</button>
     </div>
   </div>
 </form>

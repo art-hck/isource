@@ -177,8 +177,8 @@ a.position-link {
         height: 42px;
         background: #FFFFFF;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        display: flex;
+        align-items: center;
 
         &:before {
           position: absolute;
@@ -195,10 +195,20 @@ a.position-link {
           //background: #FFFFFF;
           color: #ffffff;
           //opacity: 0.6;
+
+          .counter {
+            background: #ffffff;
+            color: #000;
+          }
         }
 
         &.selected.status-position-default {
           background: #568BF2;
+
+          .counter {
+            background: #ffffff;;
+            color: #000;
+          }
         }
 
         @each $status, $color in $statuses {
@@ -280,4 +290,14 @@ a.position-link {
 
 .request-link {
   max-width: 90px;
+}
+
+.counter {
+  background: uxg($theme, color-font-link);
+  border-radius: uxg($theme, counter-border-radius);
+  color: uxg($theme, color-default);
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  width: 16px;
 }

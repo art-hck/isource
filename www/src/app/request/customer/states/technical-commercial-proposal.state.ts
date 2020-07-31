@@ -1,6 +1,6 @@
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Action, createSelector, Selector, State, StateContext } from "@ngxs/store";
-import { finalize, map, tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
@@ -8,13 +8,11 @@ import { TechnicalCommercialProposalService } from "../services/technical-commer
 import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 import { TechnicalCommercialProposalPositionStatus } from "../../common/enum/technical-commercial-proposal-position-status";
 import Fetch = TechnicalCommercialProposals.Fetch;
-import Approve = TechnicalCommercialProposals.Approve;
 import Reject = TechnicalCommercialProposals.Reject;
-import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -65,28 +63,9 @@ export class TechnicalCommercialProposalState {
     setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId)
       .pipe(
-        map(proposals => proposals.reduce((_proposals, proposal) => {
-          [true, false].forEach(withAnalog => {
-            const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
-            if (positions.length) {
-              _proposals.push({ ...proposal, positions});
-            }
-          });
-
-          return _proposals;
-        }, [])),
         tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
         tap(proposals => this.cache[requestId] = proposals),
       );
-  }
-
-  @Action(Approve)
-  approve({ setState }: Context, { requestId, proposalPosition }: Approve) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.approve(requestId, proposalPosition).pipe(
-      tap(proposal => setState(patch({ proposals: updateItem(({ id }) => proposal.id === id, proposal) }))),
-      finalize(() => setState(patch({ status: "received" as StateStatus })))
-    );
   }
 
   @Action(Reject)
@@ -94,30 +73,6 @@ export class TechnicalCommercialProposalState {
     ctx.setState(patch({ status: "updating" as StateStatus }));
     return this.rest.reject(action.requestId, action.position).pipe(
       finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
-    );
-  }
-
-  @Action(ApproveMultiple)
-  approveMultiple({ setState, getState }: Context, { proposalPositions }: ApproveMultiple) {
-    setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.approveMultiple(proposalPositions.map(({ id }) => id)).pipe(
-      map((proposals) => [...proposals, ...getState().proposals
-        // Если ТКП НЕ в списке на апрув, но содержит позиции которые есть в других ТКП на апрув
-        .filter(({ positions }) => positions.some(p1 => proposalPositions.some((p2 => p1.id !== p2.id && p1.position.id === p2.position.id))))
-        .map(proposal => {
-          proposal.positions
-            // Помечаем их как REJECTED
-            .filter(({ position: p1 }) => proposalPositions.some((({ position: p2 }) => p1.id === p2.id)))
-            .map(position => {
-              position.status = TechnicalCommercialProposalPositionStatus.REJECTED;
-              return position;
-            });
-          return proposal;
-      })]),
-      tap(proposals => proposals.forEach(proposal => setState(patch({
-        proposals: updateItem(({ id }) => proposal.id === id, proposal),
-        status: "received" as StateStatus
-      })))),
     );
   }
 
@@ -132,5 +87,31 @@ export class TechnicalCommercialProposalState {
         ),
         status: "received" as StateStatus
       })))));
+  }
+
+  @Action(ReviewMultiple)
+  reviewMultiple({ setState, getState }: Context, { proposalPositions, requestPositions }: ReviewMultiple) {
+    setState(patch({ status: "updating" as StateStatus }));
+
+    const data: { accepted: Uuid[], sendToEdit: Uuid[] } = {
+      'accepted': proposalPositions.map(({ id }) => id),
+      'sendToEdit': requestPositions.map(({ id }) => id)
+    };
+
+    return this.rest.reviewMultiple(data).pipe(
+      tap(technicalProposalPositions => {
+        setState(patch({ status: "updating" as StateStatus }));
+
+        technicalProposalPositions.forEach(technicalProposalPosition => setState(patch(
+          {
+            proposals: updateItem(
+              ({ positions }) => positions.some(({ id }) => technicalProposalPosition.id === id),
+              patch({ positions: updateItem(({ id }) => technicalProposalPosition.id === id, technicalProposalPosition) })
+            ),
+            status: "received" as StateStatus
+          }))
+        );
+      })
+    );
   }
 }

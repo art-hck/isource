@@ -20,20 +20,24 @@ import { RequestActions } from "../../actions/request.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import { AppComponent } from "../../../../app.component";
-import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
 import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
-import Approve = TechnicalCommercialProposals.Approve;
+import { ProposalsView } from "../../../../shared/models/proposals-view";
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { Proposal } from "../../../../shared/components/grid/proposal";
+import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
+import { Position } from "../../../../shared/components/grid/position";
+import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
-import ApproveMultiple = TechnicalCommercialProposals.ApproveMultiple;
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 import NEW = TechnicalCommercialProposalPositionStatus.NEW;
 import APPROVED = TechnicalCommercialProposalPositionStatus.APPROVED;
 import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
 import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
-import { ProposalsView } from "../../../../shared/models/proposals-view";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -41,7 +45,7 @@ import { ProposalsView } from "../../../../shared/models/proposals-view";
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent>;
+  @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild('sentToReviewTab') sentToReviewTab: UxgTabTitleComponent;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @Select(RequestState.request)
@@ -62,6 +66,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   requestId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
+  modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
@@ -84,7 +89,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private actions: Actions,
     private pluralize: PluralizePipe,
     private cd: ChangeDetectorRef,
-    private app: AppComponent
+    private app: AppComponent,
+    public helper: ProposalHelperService
   ) {}
 
   ngOnInit() {
@@ -103,16 +109,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Approve, Reject, SendToEditMultiple, ApproveMultiple),
+      ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
-    ).subscribe(({result, action}) => {
+    ).subscribe(({ result, action }) => {
       const e = result.error as any;
-      const length = action?.proposalPositions?.length ?? action?.requestPositions?.length ?? 1;
+      const length = (action?.proposalPositions?.length ?? 0) + (action?.requestPositions?.length ?? 0) || 1;
       let text = "";
       switch (true) {
         case action instanceof Reject: text = "$1 отклонено"; break;
         case action instanceof SendToEditMultiple: text = "$2 на доработке"; break;
-        default: text = "По $0 выбран победитель";
+        default: text = "По $0 принято решение";
       }
 
       text = text.replace(/\$(\d)/g, (all, i) => [
@@ -140,55 +146,84 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
   }
 
-  approveMultiple() {
+  reviewMultiple() {
+    const acceptedProposalPositions = [];
+    const sendToEditRequestPositions = [];
+
     if (this.proposalsOnReview.filter(({selectedProposal}) => selectedProposal.valid).length) {
-      this.store.dispatch(new ApproveMultiple(
-        this.proposalsOnReview
-          .filter(({ selectedProposal }) => selectedProposal.valid)
-          .map(({ selectedProposal }) => selectedProposal.value)
-      ));
+      this.proposalsOnReview
+        .filter(({ selectedProposal }) => selectedProposal.valid)
+        .map(({ selectedProposal }) => {
+          acceptedProposalPositions.push(selectedProposal.value);
+        });
     }
 
     if (this.proposalsOnReview.filter(({sendToEditPosition}) => sendToEditPosition.valid).length) {
-      this.store.dispatch(new SendToEditMultiple(
-        this.proposalsOnReview
-          .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
-          .map(({ sendToEditPosition }) => sendToEditPosition.value)
-      ));
+      this.proposalsOnReview
+        .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
+        .map(({ sendToEditPosition }) => {
+          sendToEditRequestPositions.push(sendToEditPosition.value);
+        });
     }
+
+    this.store.dispatch(new ReviewMultiple(acceptedProposalPositions, sendToEditRequestPositions));
   }
 
   sendToEditAll() {
-    this.store.dispatch(new SendToEditMultiple(
-      this.proposalsOnReview.map(({ proposalByPos: { position } }) => position)
-    ));
-  }
+    const sendToEditAllPositions = [];
 
-  rejectAll() {
-    this.proposalsOnReview.forEach(component => component.reject());
-  }
+    this.proposalsOnReview.map(({ position }) => {
+      sendToEditAllPositions.push(position);
+    });
 
-  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
-    return positions.find(({position}) => position.id === id);
-  }
-
-  trackByPositionId(i, item: TechnicalCommercialProposalByPosition) {
-    return item.position.id;
+    this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
   }
 
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view === "grid";
+    this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
   }
 
-  suppliers(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
-    return proposals.reduce((suppliers: ContragentShortInfo[], proposal) => [...suppliers, proposal.supplier], []);
+  isReviewed(proposalByPos: TechnicalCommercialProposalByPosition): boolean {
+    return proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(p.status));
   }
 
-  hasAnalogs(proposals: TechnicalCommercialProposal[]) {
-    return i => proposals.map(({ positions }) => positions[i]).some(p => p?.isAnalog);
+  hasWinner(proposalByPos: TechnicalCommercialProposalByPosition): boolean {
+    return proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED'].includes(p.status));
   }
+
+  isSentToEdit(proposalByPos: TechnicalCommercialProposalByPosition): boolean {
+    return proposalByPos.data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && proposalByPos.data.length > 0;
+  }
+
+  selectProposal(proposal: Proposal): void {
+    this.proposalsOnReview
+      .filter(({ proposals }) => proposals.some((_proposal) => proposal.id === _proposal.id))
+      .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
+  }
+
+  suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
+    return proposals.reduce((suppliers: GridSupplier[], proposal) => {
+      [false, true]
+        .filter(hasAnalogs => proposal.positions.some(({ isAnalog }) => isAnalog === hasAnalogs))
+        .forEach(hasAnalogs => suppliers.push({ ...proposal.supplier, hasAnalogs }));
+      return suppliers;
+    }, []);
+  }
+
+  getProposalBySupplier = (positionProposals: TechnicalCommercialProposalByPosition) => ({ id, hasAnalogs }: GridSupplier) => {
+    const proposal = positionProposals.data.find(({ proposal: { supplier }, proposalPosition }) => supplier.id === id && proposalPosition.isAnalog === hasAnalogs)?.proposalPosition;
+    return proposal ? new Proposal<TechnicalCommercialProposalPosition>(proposal) : null;
+  }
+
+  getSupplierByProposal = (positionProposals: TechnicalCommercialProposalByPosition, proposal: Proposal<TechnicalCommercialProposalPosition>) => {
+    return positionProposals.data.find(({proposalPosition: {id}}) => id === proposal.id).proposal.supplier;
+  }
+
+  converPosition = (position: RequestPosition) => new Position(position);
+  converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
+  trackByPositionId = (i, item: TechnicalCommercialProposalByPosition) => item.position.id;
 
   ngOnDestroy() {
     this.destroy$.next();

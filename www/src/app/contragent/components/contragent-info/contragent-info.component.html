@@ -9,10 +9,12 @@
         <h3>Общая информация о контрагенте</h3>
       </div>
 
-      <div class="app-col report" *ngIf="modalView">
+      <div class="app-col-auto report" *ngIf="modalView">
+        <span *ngIf="getContragentService.loading" class="spinner spinner-sm"></span>
         <button uxgButton primary
                 [clrLoading]="getLoaderState()"
-                (click)="onDownloadPrimaInformReport()">
+                (click)="onDownloadPrimaInformReport()"
+                [disabled]="getContragentService.loading">
           Отчет Прима-информ
         </button>
       </div>
@@ -55,7 +57,11 @@
           '—' }}</span>
       </div>
 
-      <div class="app-col-4"></div>
+      <div class="app-col-4">
+        <div class="app-ghost-color info-label">Тип контрагента в системе</div>
+        <span>{{contragent.type === 'CUSTOMER' ? roleLabel.CUSTOMER : roleLabel.SUPPLIER }}
+          {{contragent.isInternal ? 'внутренний' : 'внешний'}}</span>
+      </div>
 
       <div class="app-col-4"></div>
     </div>

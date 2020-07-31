@@ -5,7 +5,8 @@
         <span class="app-ghost-color">Последние изменения:  </span> {{ contragent.updatedDate | date: 'shortDate' }}
       </div>
     </ng-container>
-    <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
       <div class="app-card">
         <ng-container *ngIf="!isEditing; else editHeader">
           <h2>Новый контрагент</h2>
@@ -13,13 +14,15 @@
             то после нажатия на него большинство полей будет заполнено автоматически, вам нужно будет их только <b>проверить</b>.
             В этом блоке все поля являются обязательными для заполнения.</p>
         </ng-container>
+
         <ng-template #editHeader>
           <h3>Общая информация</h3>
           <p class="app-secondary-color">В этом блоке все поля являются обязательными для заполнения.</p>
         </ng-template>
+
         <ng-container formGroupName="contragent">
           <div class="app-row">
-            <div class="app-col">
+            <div class="app-col app-col-6">
               <ngx-dadata
                 [config]="configParty"
                 (selected)="onPartySuggestionSelected($event)"
@@ -27,7 +30,8 @@
                 placeholder="Краткое наименование"
                 appFormControlInvalidClass="invalid"></ngx-dadata>
             </div>
-            <div class="app-col">
+
+            <div class="app-col app-col-6">
               <div class="app-control-wrap">
                 <input #fullName uxgInput lg formControlName="fullName"/>
                 <label class="app-control-label" (click)="fullName.focus()">Полное наименование</label>
@@ -39,7 +43,7 @@
           </div>
 
           <div class="app-row">
-            <div class="app-col">
+            <div class="app-col app-col-4">
               <ng-container *ngIf="!isEditing; else innDisabled">
                 <ngx-dadata [config]="configParty" (selected)="onPartySuggestionSelected($event)"
                             formControlName="inn"
@@ -53,7 +57,7 @@
                 </div>
               </ng-template>
             </div>
-            <div class="app-col">
+            <div class="app-col app-col-4">
               <div class="app-control-wrap">
                 <input #kpp uxgInput lg formControlName="kpp"/>
                 <label class="app-control-label" (click)="kpp.focus()">КПП</label>
@@ -62,7 +66,7 @@
                 </div>
               </div>
             </div>
-            <div class="app-col">
+            <div class="app-col app-col-4">
               <div class="app-control-wrap">
                 <input #ogrn uxgInput lg formControlName="ogrn"/>
                 <label class="app-control-label" (click)="ogrn.focus()">ОГРН/ОГРНИП</label>
@@ -74,7 +78,7 @@
           </div>
 
           <div class="app-row">
-            <div class="app-col">
+            <div class="app-col app-col-4">
               <div class="app-control-wrap">
                 <input #taxAuthorityRegistrationDate uxgInput lg uxgDatepicker formControlName="taxAuthorityRegistrationDate"/>
                 <label class="app-control-label" (click)="taxAuthorityRegistrationDate.focus()">Дата регистрации</label>
@@ -86,14 +90,32 @@
                 </div>
               </div>
             </div>
-            <div class="app-col select-role">
-              <uxg-radio-item class="app-control" value="{{ role.CUSTOMER }}" formControlName="role"></uxg-radio-item>
-              <label>&nbsp;{{ roleLabel.CUSTOMER }}</label>
-              <uxg-radio-item class="app-control" value="{{ role.SUPPLIER }}" formControlName="role"></uxg-radio-item>
-              <label>&nbsp;{{ roleLabel.SUPPLIER }}</label>
+
+            <div class="app-col app-col-auto select-role">
+              <div class="app-row app-align-items-center">
+                <uxg-radio-item class="app-control" value="{{ role.SUPPLIER }}" formControlName="role"></uxg-radio-item>
+                <label>&nbsp; {{ roleLabel.SUPPLIER }}</label>
+              </div>
+
+              <div class="app-row app-align-items-center">
+                <uxg-radio-item class="app-control" value="{{ role.CUSTOMER }}" formControlName="role"></uxg-radio-item>
+                <label>&nbsp; {{ roleLabel.CUSTOMER }}</label>
+              </div>
             </div>
 
-            <div class="app-col">
+            <div class="app-col app-col-auto internal">
+              <div class="app-row app-align-items-center">
+                <uxg-radio-item class="app-control" [value]="false" formControlName="isInternal"></uxg-radio-item>
+                <label>&nbsp; Внешний</label>
+              </div>
+
+              <div class="app-row app-align-items-center">
+                <uxg-radio-item class="app-control" [value]="true" formControlName="isInternal"></uxg-radio-item>
+                <label>&nbsp; Внутренний</label>
+              </div>
+            </div>
+
+            <div class="app-col" [style.display]="'none'">
               <ng-container *ngIf="contragentRating && form.get('contragent').get('inn').valid">
                 <div class="rating-label app-secondary-color">Рейтинг надежности контрагента:</div>
 
@@ -236,7 +258,7 @@
         <div>
           <span *ngIf="isLoading" class="spinner spinner-inline"></span>
         </div>
-        <button uxgButton primary lg [disabled]="form.invalid">{{isEditing ? "Сохранить" : "Добавить" }}</button>
+        <button uxgButton primary lg>{{isEditing ? "Сохранить" : "Добавить" }}</button>
       </div>
     </form>
   </div>

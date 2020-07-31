@@ -13,7 +13,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
 import { Procedure } from "../models/procedure";
 import { ProcedureService } from "../services/procedure.service";
-import { ProcedureSource } from "../../common/enum/procedure-source";
+import { ProcedureSource } from "../enum/procedure-source";
 import Publish = TechnicalCommercialProposals.Publish;
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
@@ -27,6 +27,7 @@ import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import Rollback = TechnicalCommercialProposals.Rollback;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -43,7 +44,7 @@ function insertOrUpdateProposals(proposals: TechnicalCommercialProposal[]): Stat
     ...state,
     status: "received",
     proposals: proposals.reduce((updatedProposals, proposal) => {
-      const i = updatedProposals.findIndex(({id}) => id === proposal.id);
+      const i = updatedProposals.findIndex(({ id }) => id === proposal.id);
       i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
       return updatedProposals;
     }, state.proposals)
@@ -61,11 +62,20 @@ export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
-  @Selector() static proposals({ proposals }: Model) { return proposals; }
-  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
-  @Selector() static status({ status }: Model) { return status; }
-  @Selector() static procedures({ procedures }: Model) { return procedures; }
-  @Selector() static proposalsByPositions({ proposals, availablePositions }: Model) {
+  @Selector()
+  static proposals({ proposals }: Model) { return proposals; }
+
+  @Selector()
+  static availablePositions({ availablePositions }: Model) { return availablePositions; }
+
+  @Selector()
+  static status({ status }: Model) { return status; }
+
+  @Selector()
+  static procedures({ procedures }: Model) { return procedures; }
+
+  @Selector()
+  static proposalsByPositions({ proposals, availablePositions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
       proposal.positions.forEach(proposalPosition => {
@@ -88,18 +98,6 @@ export class TechnicalCommercialProposalState {
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId).pipe(
-      // Разделение предложений ТКП с аналогами и без
-      map(proposals => proposals.reduce((result, proposal) => {
-        [true, false].forEach(withAnalog => {
-          const positions = proposal.positions.filter(({isAnalog}) => isAnalog === withAnalog);
-
-          if (!withAnalog || positions.length) {
-            result.push({ ...proposal, positions});
-          }
-        });
-
-        return result;
-      }, [])),
       tap(proposals => ctx.setState(patch({ proposals }))),
       tap(proposals => this.cache[requestId] = proposals),
       switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),
@@ -182,12 +180,13 @@ export class TechnicalCommercialProposalState {
   publishPositions({ setState }: Context, { proposalsByPositions }: PublishByPosition) {
     setState(patch({ status: "updating" as StateStatus }));
     return this.rest.publishPositions(
-      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: {id} }) => id)], [])
+      proposalsByPositions.reduce((ids, { data }) => [...ids, ...data.map(({ proposalPosition: { id } }) => id)], [])
     ).pipe(
       tap(proposalPositions => proposalPositions.forEach(proposalPosition => setState(patch({
-        proposals: updateItem(({ positions }) => positions.some(({id}) => proposalPosition.id === id), patch({
+        proposals: updateItem(({ positions }) => positions.some(({ id }) => proposalPosition.id === id), patch({
           positions: updateItem(({ id }) => proposalPosition.id === id, proposalPosition)
         })),
+        availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position),
         status: "received" as StateStatus,
       }))))
     );
@@ -216,6 +215,26 @@ export class TechnicalCommercialProposalState {
   downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
     return this.rest.downloadAnalyticalReport(requestId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
+    );
+  }
+
+  @Action(Rollback)
+  rollback({ setState, dispatch }: Context, { requestId, positionId }: Rollback) {
+    setState(patch({ status: "updating" } as Model));
+    return this.rest.rollback(requestId, positionId).pipe(
+      tap(proposalPositions => {
+        proposalPositions.forEach(proposalPosition => {
+          setState(patch({
+            proposals: updateItem(({ positions }) => positions.some(({ id }) => id === proposalPosition.id),
+              patch({
+                positions: updateItem(({ id }) => id === proposalPosition.id, proposalPosition)
+              })
+            ),
+            availablePositions: updateItem(({ id }) => proposalPosition.position.id === id, proposalPosition.position)
+          }));
+        });
+        setState(patch({ status: "received" } as Model));
+      })
     );
   }
 }

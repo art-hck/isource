@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
+import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 
 @Component({
   selector: 'app-contragent-info',
@@ -12,8 +13,10 @@ export class ContragentInfoComponent {
   @Input() contragent: ContragentInfo;
   @Input() modalView = true;
 
+  readonly roleLabel = ContragentRoleLabels;
+
   constructor(
-    private getContragentService: ContragentService
+    public getContragentService: ContragentService
   ) { }
 
   onDownloadPrimaInformReport(): void {

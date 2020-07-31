@@ -1,7 +1,7 @@
-import {Inject, Injectable} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { GpnmarketConfigInterface, APP_CONFIG } from "../config/gpnmarket-config.interface";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
 
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
@@ -16,6 +16,14 @@ export class BaseUrlInterceptor implements HttpInterceptor {
    * @param  next
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    if (req.url.indexOf('#chat#') === 0) {
+      req = req.clone({
+        url: req.url.replace("#chat#", this.appConfig.endpoints.apiChat)
+      });
+      return next.handle(req);
+    }
+
     if (req.url.indexOf('http') === 0 || req.url.indexOf('https') === 0 ) {
       return next.handle(req);
     }

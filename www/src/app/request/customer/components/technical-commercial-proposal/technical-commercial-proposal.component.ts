@@ -12,9 +12,9 @@ import { TechnicalCommercialProposalHelperService } from "../../../common/servic
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
-import Approve = TechnicalCommercialProposals.Approve;
+import { Position } from "../../../../shared/components/grid/position";
 import Reject = TechnicalCommercialProposals.Reject;
-import { ProposalsView } from "../../../../shared/models/proposals-view";
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 
 
 @Component({
@@ -30,8 +30,8 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
-  @Input() view: ProposalsView;
   readonly destroy$ = new Subject();
+  position: Position;
   modalData: TechnicalCommercialProposalByPosition["data"][number];
 
   getCurrencySymbol = getCurrencySymbol;
@@ -59,6 +59,8 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.position = new Position(this.proposalByPos.position);
+
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
         tap(type => this.selectedProposal.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
@@ -77,7 +79,7 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   }
 
   approve() {
-    this.dispatchAction(new Approve(this.requestId, this.selectedProposal.value));
+    this.dispatchAction(new ReviewMultiple([this.selectedProposal.value], []));
   }
 
   reject() {

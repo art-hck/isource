@@ -35,6 +35,8 @@ import { GridFooterComponent } from './components/grid/grid-footer/grid-footer.c
 import { GridCellComponent } from "./components/grid/grid-cell/grid-cell.component";
 import { GridRowComponent } from "./components/grid/grid-row/grid-row.component";
 import { ProposalDetailComponent } from "./components/proposal-detail/proposal-detail.component";
+import { GridContragentFormComponent } from "./components/grid/grid-contragent-form/grid-contragent-form.component";
+import { ValidationDirective } from "./directives/validation.directive";
 
 @NgModule({
   imports: [
@@ -78,8 +80,10 @@ import { ProposalDetailComponent } from "./components/proposal-detail/proposal-d
     GridFooterComponent,
     GridCellComponent,
     GridRowComponent,
+    GridContragentFormComponent,
     ProposalDetailComponent,
     ProposalDetailComponent,
+    ValidationDirective
   ],
   exports: [
     CommonModule,
@@ -120,8 +124,10 @@ import { ProposalDetailComponent } from "./components/proposal-detail/proposal-d
     GridFooterComponent,
     GridCellComponent,
     GridRowComponent,
+    GridContragentFormComponent,
     ProposalDetailComponent,
     ProposalDetailComponent,
+    ValidationDirective
   ]
 })
 export class SharedModule {

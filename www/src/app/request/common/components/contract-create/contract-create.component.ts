@@ -68,16 +68,18 @@ export class ContractCreateComponent implements OnInit {
   }
 
   public submit(): void {
-    const contragentId: Uuid = this.form.get('contragent').value;
-    const positions: RequestPosition[] = this.form.get('positions').value
-      .map((v, i) => v ? this.getContragentPositions(contragentId)[i] : null)
-      .filter(v => v !== null)
-    ;
+    if (this.form.valid) {
+      const contragentId: Uuid = this.form.get('contragent').value;
+      const positions: RequestPosition[] = this.form.get('positions').value
+        .map((v, i) => v ? this.getContragentPositions(contragentId)[i] : null)
+        .filter(v => v !== null)
+      ;
 
 
-    this.contractService.create(this.request, contragentId, positions)
-      .pipe(finalize(() => this.close.emit()))
-      .subscribe((contract) => this.create.emit(contract))
-    ;
+      this.contractService.create(this.request, contragentId, positions)
+        .pipe(finalize(() => this.close.emit()))
+        .subscribe((contract) => this.create.emit(contract))
+      ;
+    }
   }
 }

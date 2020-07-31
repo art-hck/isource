@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.agreements$ = this.agreementsService.getDashboardAgreements();
+    this.agreements$ = this.agreementsService.getAgreements(null, 0, 5);
     this.notifications$ = this.notificationService.getDashboardNotifications();
   }
 }

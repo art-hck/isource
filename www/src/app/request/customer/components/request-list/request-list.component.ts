@@ -16,6 +16,8 @@ import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
+import { AvailableFilters } from "../../models/available-filters";
+import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -24,6 +26,7 @@ import { RequestsListSort } from "../../../common/models/requests-list/requests-
 export class RequestListComponent implements OnInit, OnDestroy {
   @ViewChild(CommonRequestListComponent) requestListComponent: CommonRequestListComponent;
 
+  @Select(RequestListState.availableFilters) availableFilters$: Observable<AvailableFilters>;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
   @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
@@ -62,6 +65,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests);
         });
     });
+
+    this.store.dispatch(new FetchAvailableFilters());
 
     this.actions.pipe(
       ofActionCompleted(AddRequestFromExcel),

@@ -35,6 +35,14 @@
 
         .files {
           margin-top: 10px;
+
+          .attachment {
+            cursor: pointer;
+
+            *:not(:last-child) {
+              margin-right: .5em;
+            }
+          }
         }
 
         &:before, &:after {
@@ -89,6 +97,9 @@
         text-align: right;
         color: #999999;
         font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
       }
 
       .message-user {
@@ -149,6 +160,11 @@
 
     .document-upload-list-wrap {
       margin-left: 90px;
+    }
+
+    .loading-arrachments {
+      opacity: .3;
+      display: block;
     }
   }
 }

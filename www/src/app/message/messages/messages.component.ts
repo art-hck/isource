@@ -1,22 +1,15 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy, QueryList,
-  SimpleChanges,
-  ViewChild, ViewChildren
-} from '@angular/core';
-import { expand, map, take, tap } from "rxjs/operators";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { merge, Observable, Subject, Subscription } from "rxjs";
-import { Message } from "../../request/common/models/message";
-import { MessageContextToEventTypesMap } from "../message-context-types";
-import { MessageService } from "./message.service";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { expand, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { merge, Observable, Subject } from "rxjs";
+import { MessageContextToEventTypesMap, MessageContextTypes } from "../message-context-types";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { Uuid } from "../../cart/models/uuid";
-import { WebsocketService } from "../../websocket/websocket.service";
+import { MessagesService } from "../services/messages.service";
+import { Message } from "../models/message";
+import { StateStatus } from "../../request/common/models/state-status";
+import { AttachmentsService } from "../services/attachments.service";
+import { Attachment } from "../models/attachment";
 
 @Component({
   selector: 'app-message-messages',
@@ -26,7 +19,9 @@ import { WebsocketService } from "../../websocket/websocket.service";
 export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() contextId: Uuid;
-  @Input() contextType: string;
+  @Input() contextType: MessageContextTypes;
+  @Input() conversationId: number;
+  @Output() sendMessage = new EventEmitter<{ text: string, attachments: Attachment[] }>();
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
 
@@ -35,18 +30,21 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   private firstScroll = true;
 
   public messages$: Observable<Message[]>;
+  public state: StateStatus = 'pristine';
+  files: { file: File, status: StateStatus }[] = [];
+
   public form = new FormGroup({
     text: new FormControl(null, Validators.required),
-    files: new FormControl()
+    files: new FormControl(),
+    attachments: new FormArray([])
   });
-
-  private subscription = new Subscription();
-  private outgoingMessagesSubject = new Subject();
+  readonly destroy$ = new Subject();
+  readonly change$ = new Subject();
 
   constructor(
-    private messageService: MessageService,
+    public attachmentsService: AttachmentsService,
+    private messagesService: MessagesService,
     private userInfoService: UserInfoService,
-    private wsService: WebsocketService
   ) {
   }
 
@@ -57,32 +55,65 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   ngAfterViewInit() {
     this.scrollContainer = this.scrollContainerEl.nativeElement;
     // после каждого обновления списка элементов делаем скролл вниз
-    this.messagesList.changes.subscribe(() => this.onItemElementsChanged());
+    this.messagesList.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.onItemElementsChanged());
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes.contextId || changes.contextType) && this.contextId && this.contextType) {
+  ngOnChanges({ contextId, conversationId }: SimpleChanges) {
+    if ((contextId || conversationId) && this.contextId) {
       this.form.reset();
-      const receivedMessages$ = this.wsService.on<any>(this.wsEvent);
-      const sentMessages$ = this.outgoingMessagesSubject;
-      const newMessages$ = merge(receivedMessages$, sentMessages$);
+      this.files = [];
+      this.messages$ = null;
+      this.state = "pristine";
+      this.change$.next();
+      if (this.conversationId) {
+        this.state = "fetching";
+        this.messagesService.markSeen({ conversationId: this.conversationId });
+        const newMessages$ = this.messagesService.onNew(this.conversationId);
 
-      this.messages$ = this.messageService.getList(this.contextType, this.contextId).pipe(
-        tap(() => this.firstScroll = true),
-        expand(messages => newMessages$.pipe(
-          take(1),
-          map(message => [...messages, message]),
-        ))
-      );
+        this.messages$ = this.messagesService.get(this.conversationId).pipe(
+          tap(() => this.firstScroll = true),
+          tap(() => this.state = "received"),
+          expand(messages => newMessages$.pipe(
+            take(1),
+            tap(({ id }) => this.messagesService.markSeen({ messageId: id })),
+            map(message => [...messages, message]),
+            takeUntil(this.change$)
+          )),
+          takeUntil(this.change$),
+          shareReplay(1)
+        );
+      }
     }
   }
 
-  public setFiles(files: File[]) {
-    this.form.get("files").setValue([...this.form.get("files").value || [], ...files]);
+  public pushFiles(files: File[]) {
+    this.files = [...this.files, ...files.map(file => ({file, status: 'fetching' as StateStatus}))];
+
+    merge(...files.map(f => this.attachmentsService.upload(f).pipe(tap(() => {
+      const i = this.files.findIndex(({ file }) => file === f);
+      this.files[i].status = "received";
+    })))).pipe(takeUntil(this.destroy$)).subscribe(
+      attachment => {
+        (this.form.get("attachments") as FormArray).push(new FormControl(attachment));
+      }
+    );
+  }
+
+  public deleteFiles(files: File[]) {
+    this.files
+      .filter(({ file }) => files.indexOf(file) === -1)
+      .forEach((file, index) => {
+        this.files.splice(index, 1);
+        (this.form.get("attachments") as FormArray).removeAt(index);
+      });
   }
 
   public isOwnMessage(message: Message) {
-    return message.user.id === this.userInfoService.getUserInfo().id;
+    return message.author.id === this.userInfoService.getUserInfo().id;
+  }
+
+  getFiles(stateStatus: StateStatus): File[] {
+    return this.files.filter(({ status }) => status === stateStatus).map(({ file }) => file);
   }
 
   public submit(): void {
@@ -90,32 +121,12 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
       return;
     }
 
-    const { text, files } = this.form.value;
-
-    const message: Message = {
-      user: this.userInfoService.getUserInfo(),
-      message: text,
-      isSending: true,
-      documents: [],
-      contextId: null,
-      contextType: null,
-      requestId: null
-    };
-
-    this.outgoingMessagesSubject.next(message);
+    this.sendMessage.emit(this.form.value);
+    this.files = [];
     this.form.reset();
-    this.subscription.add(
-      this.messageService.addMessage(text, this.contextType, this.contextId, files)
-        .subscribe(_message => {
-          message.id = _message.id;
-          message.isSending = false;
-          message.documents = _message.documents;
-        })
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    while ((this.form.get("attachments") as FormArray).length !== 0) {
+      (this.form.get("attachments") as FormArray).removeAt(0);
+    }
   }
 
   private onItemElementsChanged(): void {
@@ -134,5 +145,14 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (this.firstScroll) {
       this.firstScroll = false;
     }
+  }
+
+  public downloadFile(attachment: Attachment) {
+    this.attachmentsService.download(attachment).pipe(takeUntil(this.destroy$)).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

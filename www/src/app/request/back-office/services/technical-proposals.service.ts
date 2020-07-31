@@ -6,20 +6,25 @@ import { Observable } from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalProposalCreateRequest } from "../models/technical-proposal-create-request";
 import { saveAs } from 'file-saver/src/FileSaver';
+import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
+import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 
 @Injectable()
 export class TechnicalProposalsService {
-
-  addTechnicalProposalLoader = false;
 
   constructor(
     protected api: HttpClient,
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid, filters: any): Observable<TechnicalProposal[]> {
+  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
     const url = `requests/backoffice/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
+  }
+
+  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposalsStatus[]> {
+    const url = `requests/backoffice/${requestId}/technical-proposals/available-statuses`;
+    return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
   }
 
   getTechnicalProposalsPositionsList(id: Uuid) {

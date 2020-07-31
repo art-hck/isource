@@ -29,20 +29,16 @@ import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { PositionFormComponent } from "./components/position-form/position-form.component";
 import { RequestTechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
-import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
 import { TechnicalProposalFilterContragentListComponent } from "./components/technical-proposal-filter/technical-proposal-filter-contragent-list/technical-proposal-filter-contragent-list.component";
 import { RequestTpFilterStatusesListComponent } from "./components/technical-proposal-filter/technical-proposal-filter-statuses-list/request-tp-filter-statuses-list.component";
 import { RequestTpFilterSectionComponent } from "./components/technical-proposal-filter/technical-proposal-filter-section/request-tp-filter-section.component";
-import { CommercialProposalListFilterComponent } from "./components/commercial-proposal-list/commercial-proposal-list-filter/commercial-proposal-list-filter.component";
 import { PositionsStatusChangeComponent } from "./components/position-status-change/positions-status-change.component";
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
 import { RequestPositionService } from "./services/request-position.service";
 import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
-import { ProposalGridCardComponent } from "./components/technical-commercial-proposal/proposal-grid-card/proposal-grid-card.component";
-import { ProlongateProcedureComponent } from "./components/commercial-proposal-list/prolongate-procedure/prolongate-procedure.component";
 import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 
 const RequestCommonModuleDeclarations = [
@@ -66,7 +62,6 @@ const RequestCommonModuleDeclarations = [
   FilterCustomersComponent,
   TechnicalProposalFilterContragentListComponent,
   RequestTpFilterStatusesListComponent,
-  CommercialProposalListFilterComponent,
   TechnicalProposalFilterComponent,
   RequestTpFilterSectionComponent,
   RequestListFilterComponent,
@@ -74,14 +69,11 @@ const RequestCommonModuleDeclarations = [
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
-  CommercialProposalListComponent,
   SearchFilterPipe,
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
   FilterPositionStatusesComponent,
   RequestListComponent,
-  ProposalGridCardComponent,
-  ProlongateProcedureComponent,
 ];
 
 @NgModule({

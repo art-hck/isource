@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { DadataBank, DadataConfig, DadataParty, DadataSuggestion, DadataType } from "@kolkov/ngx-dadata";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 import * as moment from "moment";
@@ -92,7 +92,8 @@ export class ContragentRegistrationComponent implements OnInit {
         kpp: ['', [Validators.required, CustomValidators.kpp]],
         ogrn: ['', [Validators.required, CustomValidators.ogrn]],
         taxAuthorityRegistrationDate: ['', [Validators.required, CustomValidators.pastDate()]],
-        role: [this.role.CUSTOMER]
+        role: [this.role.CUSTOMER],
+        isInternal: [false, Validators.required]
       }),
       contragentAddress: this.fb.group({
         country: ['', [Validators.required, CustomValidators.cyrillic]],
@@ -149,6 +150,7 @@ export class ContragentRegistrationComponent implements OnInit {
 
   touchForm() {
     this.form.markAllAsTouched();
+    this.form.updateValueAndValidity();
 
     (function markAsDirty(controls: { [key: string]: AbstractControl }) {
       Object.values(controls).forEach(c => c instanceof FormGroup ? markAsDirty(c.controls) : c.markAsDirty());
@@ -156,42 +158,40 @@ export class ContragentRegistrationComponent implements OnInit {
   }
 
   submit() {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.valid) {
+      this.isLoading = true;
 
-    this.isLoading = true;
-
-    const body: ContragentRegistrationRequest = this.form.getRawValue();
-    if (!this.isEditing) {
-      this.subscription.add(
-        this.contragentService.registration(body).pipe(
-          finalize(() => this.isLoading = false)
-        ).subscribe(
-          contragent => {
-            this.contragentCreated.emit(contragent);
-            this.router.navigateByUrl(`contragents/list`);
-            this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно создан!"));
-          },
-          (err) => {
-            this.store.dispatch(new ToastActions.Error('Ошибка регистрации! ' + err.error.detail));
-          }
-        )
-      );
-    } else {
-      this.subscription.add(
-        this.contragentService.editContragent(this.contragentId, body).pipe(
-          finalize(() => this.isLoading = false)
-        ).subscribe(
-          contragent => {
-            this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно отредактирован!"));
-            this.router.navigateByUrl(`contragents/list`);
-          },
-          (err) => {
-            this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
-          }
-        )
-      );
+      const body: ContragentRegistrationRequest = this.form.getRawValue();
+      if (!this.isEditing) {
+        this.subscription.add(
+          this.contragentService.registration(body).pipe(
+            finalize(() => this.isLoading = false)
+          ).subscribe(
+            contragent => {
+              this.contragentCreated.emit(contragent);
+              this.router.navigateByUrl(`contragents/list`);
+              this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно создан!"));
+            },
+            (err) => {
+              this.store.dispatch(new ToastActions.Error('Ошибка регистрации! ' + err.error.detail));
+            }
+          )
+        );
+      } else {
+        this.subscription.add(
+          this.contragentService.editContragent(this.contragentId, body).pipe(
+            finalize(() => this.isLoading = false)
+          ).subscribe(
+            contragent => {
+              this.store.dispatch(new ToastActions.Success("Контрагент " + contragent.shortName + " успешно отредактирован!"));
+              this.router.navigateByUrl(`contragents/list`);
+            },
+            (err) => {
+              this.store.dispatch(new ToastActions.Error('Ошибка редактирования! ' + err.error.detail));
+            }
+          )
+        );
+      }
     }
   }
 

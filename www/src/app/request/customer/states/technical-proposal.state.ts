@@ -129,11 +129,12 @@ export class TechnicalProposalState {
    * @param setState
    * @param getState
    * @param requestId
+   * @param filters
    */
   @Action(GetFilterStatuses)
-  getFilterStatuses({ setState, getState }: Context, { requestId }: GetFilterStatuses) {
+  getFilterStatuses({ setState, getState }: Context, { requestId, filters }: GetFilterStatuses) {
     setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.getTechnicalProposalsAvailableStatuses(requestId)
+    return this.rest.getTechnicalProposalsAvailableStatuses(requestId, filters)
       .pipe(tap(availableStatuses => {
         setState(patch({ availableStatuses, status: "received" as StateStatus }));
       }));

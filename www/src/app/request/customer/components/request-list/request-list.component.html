@@ -5,6 +5,7 @@
   [statusCounters]="statusCounters$ | async"
   [filters]="fetchFilters$ | async"
   [pageSize]="pageSize"
+  [availableFilters]="availableFilters$ | async"
   [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (addRequest)="newRequestModal.open()"

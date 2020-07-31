@@ -73,7 +73,44 @@
       <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
         участников закупки в реестре недобросовестных поставщиков ФАС</label>
     </div>
-    <br/>
+    <br>
+
+    <br>
+      <b>Доступ к процедуре</b>
+    <div class="app-row">
+        <p class="app-row access-radio app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
+        </p>
+        <p class="app-row app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
+        </p>
+    </div>
+    <div class="app-control-wrap okpd2">
+      <uxg-dropdown-input
+        appSuggestions
+        formControlName="okpd2"
+        placeholder="OКПД2"
+        [$]="okpd2List$"
+        [searchFn]="searchOkpd2"
+        #okpd2="appSuggestions"
+        [strictMode]="true"
+        [displayByFn]="getOkpd2Name"
+        lg>
+        <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
+          <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">
+            <b>{{suggestion.code}}</b>&nbsp;{{suggestion.name }}
+          </div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('general.okpd2').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите значение из списка</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
+    </div>
     <div class="app-row app-align-items-center">
       <div class="app-col-aside">
         <div class="app-control-wrap">
@@ -105,7 +142,6 @@
       <app-request-procedure-form-properties
         formControlName="properties"
         [action]="action"
-        [(publicAccess)]="publicAccess"
       ></app-request-procedure-form-properties>
     </div>
     <hr class="divider"/>

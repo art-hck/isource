@@ -54,20 +54,23 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
     });
 
     // @TODO Временное отключение валют
+    this.form.get('currency').setValue(PositionCurrency.RUB);
     this.form.get('currency').disable();
   }
 
   submit() {
-    const proposalPosition: TechnicalCommercialProposalPosition = this.form.getRawValue();
-    const proposalPositions: TechnicalCommercialProposalPosition[] = [...this.proposal?.positions];
-    const i = proposalPositions?.findIndex(({id}) => proposalPosition.id === id);
+    if (this.form.valid) {
+      const proposalPosition: TechnicalCommercialProposalPosition = this.form.getRawValue();
+      const proposalPositions: TechnicalCommercialProposalPosition[] = [...this.proposal?.positions];
+      const i = proposalPositions?.findIndex(({id}) => proposalPosition.id === id);
 
-    i >= 0 ? proposalPositions[i] = proposalPosition : proposalPositions.push(proposalPosition);
+      i >= 0 ? proposalPositions[i] = proposalPosition : proposalPositions.push(proposalPosition);
 
-    proposalPosition.deliveryDate = this.form.getRawValue().deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
+      proposalPosition.deliveryDate = this.form.getRawValue().deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
 
-    this.store.dispatch(new CreatePosition({ ...this.proposal, positions: proposalPositions }));
-    this.close.emit();
+      this.store.dispatch(new CreatePosition({ ...this.proposal, positions: proposalPositions }));
+      this.close.emit();
+    }
   }
 
   private parseDate(date: string) {
