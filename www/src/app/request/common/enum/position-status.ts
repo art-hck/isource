@@ -21,6 +21,7 @@ export enum PositionStatus {
   DELIVERED = 'DELIVERED',                         // Поставлено
   RELATED_SERVICES_EXECUTION = 'RELATED_SERVICES_EXECUTION', // Оказание сопутствующих услуг
   PAID = 'PAID',                                   // Оплачено
+  WARRANTY = 'WARRANTY',                           // Гарантийные обязательства
   COMPLETED = 'COMPLETED',                         // Завершено
   CANCELED = 'CANCELED'                             // Отменено
 }
