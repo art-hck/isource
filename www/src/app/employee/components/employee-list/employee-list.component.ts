@@ -40,8 +40,8 @@ export class EmployeeListComponent implements OnChanges, OnDestroy {
       this.userInfo$?.pipe(takeUntil(this.destroy$)).subscribe(
         (data) => {
           this.form = this.fb.group({
-            internalAvailable: data.isExternalAvailable,
-            externalAvailable: data.isInternalAvailable
+            internalAvailable: data.isInternalAvailable,
+            externalAvailable: data.isExternalAvailable
           });
         }
       );
