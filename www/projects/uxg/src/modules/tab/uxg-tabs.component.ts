@@ -11,7 +11,7 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
 
   @HostBinding('class.app-tabs-wrap') appTabs = true;
   @ViewChild('appTabsScroll') appTabsScroll: ElementRef;
-  @ContentChildren(UxgTabTitleComponent) tabTitle!: QueryList<UxgTabTitleComponent>;
+  @ContentChildren(UxgTabTitleComponent) tabTitleList!: QueryList<UxgTabTitleComponent>;
 
   destroy$ = new Subject();
   hasScroll = false;
@@ -21,21 +21,27 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
   constructor(private el: ElementRef, private cd: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    this.tabTitle.changes.pipe(
-      startWith(this.tabTitle),
+    this.tabTitleList.changes.pipe(
+      startWith(this.tabTitleList),
       tap(() => this.updateScroll()),
-      flatMap((tabs: QueryList<UxgTabTitleComponent>) => {
-        return tabs.map(tab => tab.onToggle.pipe(startWith(tab.active), filter(Boolean), mapTo(tab)));
-      }),
+      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.onToggle.pipe(startWith(tab.active), filter(Boolean), mapTo(tab)))),
       mergeAll(),
       takeUntil(this.destroy$)
     ).subscribe(tab => {
-      const tabs = this.tabTitle.toArray();
+      const tabs = this.tabTitleList.toArray();
       tabs.filter(item => item !== tab).forEach(item => item.deactivate());
       this.isTabPrevous = tabs.indexOf(tab) < tabs.indexOf(this.activeTab);
       this.activeTab = tab;
       this.cd.detectChanges();
     });
+
+    this.tabTitleList.changes.pipe(
+      startWith<QueryList<UxgTabTitleComponent>>(this.tabTitleList),
+      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.disabledChanges.pipe(filter(Boolean), mapTo(tab)))),
+      mergeAll(),
+      filter(tab => this.activeTab === tab),
+      takeUntil(this.destroy$)
+    ).subscribe(() => setTimeout(() => this.tabTitleList.find(item => item.disabled === false)?.activate()));
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(150), takeUntil(this.destroy$))
