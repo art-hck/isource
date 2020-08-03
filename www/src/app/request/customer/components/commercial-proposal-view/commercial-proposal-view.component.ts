@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, DoCheck,
+  Component,
   ElementRef,
   Inject,
   OnDestroy,
@@ -111,12 +111,6 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     ).subscribe();
 
     this.switchView(this.view);
-
-    this.positionsOnReview$.subscribe(data => {
-      if (data) {
-        this.switchToPrioritizedTab();
-      }
-    });
   }
 
   ngAfterViewInit() {
@@ -199,77 +193,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
 
-  switchToPrioritizedTab() {
-    let sentToReviewCount = 0;
-    let sentToEditCount = 0;
-    let reviewedCount = 0;
-
-    this.positionsOnReview$.subscribe(data => sentToReviewCount = data.length);
-    this.positionsSendToEdit$.subscribe(data => sentToEditCount = data.length);
-    this.positionsReviewed$.subscribe(data => reviewedCount = data.length);
-
-    // Если ни в одном табе не найдено результатов, ничего не делаем
-    if (sentToReviewCount + sentToEditCount + reviewedCount === 0) {
-      return false;
-    }
-
-    let firstNotEmptyTab;
-
-    // Находим и сохраняем первый таб, в котором есть результаты по запросу
-    for (const [key, value] of Object.entries({
-      'sentToReviewTab': sentToReviewCount,
-      'sendToEditTab': sentToEditCount,
-      'reviewedTab': reviewedCount
-    })) {
-      if (value > 0) {
-        firstNotEmptyTab = key;
-        break;
-      }
-    }
-
-    // Активируем найденный таб с результатами
-    switch (firstNotEmptyTab) {
-      case 'sentToReviewTab':
-        this.clickOnTab('sentToReviewTab');
-        break;
-      case 'sendToEditTab':
-        this.clickOnTab('sendToEditTab');
-        break;
-      case 'reviewedTab':
-        this.clickOnTab('reviewedTab');
-        break;
-      default:
-        return false;
-    }
-  }
-
-  clickOnTab(tab) {
-    switch (tab) {
-      case 'sentToReviewTab':
-        if (!this.sentToReviewTabElRef?.disabled) {
-          this.sentToReviewTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      case 'sendToEditTab':
-        if (!this.sentToEditTabElRef?.disabled) {
-          this.sentToEditTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      case 'reviewedTab':
-        if (!this.reviewedTabElRef?.disabled) {
-          this.reviewedTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      default:
-        return false;
-    }
-
+  switchTab() {
     this.cd.detectChanges();
   }
 

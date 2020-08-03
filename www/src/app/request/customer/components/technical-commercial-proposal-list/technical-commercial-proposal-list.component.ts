@@ -166,12 +166,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       tap(() => this.cd.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.proposals$.subscribe(data => {
-      if (data) {
-        this.switchToPrioritizedTab();
-      }
-    });
   }
 
   reviewMultiple() {
@@ -257,79 +251,5 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.destroy$.next();
     this.destroy$.complete();
     this.proposalsFooterRef.nativeElement.remove();
-  }
-
-  switchToPrioritizedTab() {
-    let sentToReviewCount = 0;
-    let sentToEditCount = 0;
-    let reviewedCount = 0;
-
-    this.proposalsSentToReview$.subscribe(data => sentToReviewCount = data.length);
-    this.proposalsSendToEdit$.subscribe(data => sentToEditCount = data.length);
-    this.proposalsReviewed$.subscribe(data => reviewedCount = data.length);
-
-    // Если ни в одном табе не найдено результатов, ничего не делаем
-    if (sentToReviewCount + sentToEditCount + reviewedCount === 0) {
-      return false;
-    }
-
-    let firstNotEmptyTab;
-
-    // Находим и сохраняем первый таб, в котором есть результаты по запросу
-    for (const [key, value] of Object.entries({
-      'sentToReviewTab': sentToReviewCount,
-      'sendToEditTab': sentToEditCount,
-      'reviewedTab': reviewedCount
-    })) {
-      if (value > 0) {
-        firstNotEmptyTab = key;
-        break;
-      }
-    }
-
-    // Активируем найденный таб с результатами
-    switch (firstNotEmptyTab) {
-      case 'sentToReviewTab':
-        this.clickOnTab('sentToReviewTab');
-        break;
-      case 'sendToEditTab':
-        this.clickOnTab('sendToEditTab');
-        break;
-      case 'reviewedTab':
-        this.clickOnTab('reviewedTab');
-        break;
-      default:
-        return false;
-    }
-  }
-
-  clickOnTab(tab) {
-    switch (tab) {
-      case 'sentToReviewTab':
-        if (!this.sentToReviewTabElRef?.disabled) {
-          this.sentToReviewTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      case 'sendToEditTab':
-        if (!this.sendToEditTabElRef?.disabled) {
-          this.sendToEditTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      case 'reviewedTab':
-        if (!this.reviewedTabElRef?.disabled) {
-          this.reviewedTabElRef?.activate();
-        } else {
-          return false;
-        }
-        break;
-      default:
-        return false;
-    }
-
-    this.cd.detectChanges();
   }
 }

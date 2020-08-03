@@ -5,7 +5,7 @@
       <div class="app-row app-align-items-center" [class.app-layout]="view === 'grid'">
 
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReviewTab [active]="true" >
+          <uxg-tab-title #sentToReviewTab [disabled]="(proposalsSentToReview$ | async).length === 0" [active]="true">
             <ng-container *ngIf="(proposalsSentToReview$ | async) as proposals">
               Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
             </ng-container>

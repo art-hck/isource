@@ -3,19 +3,25 @@
     <div class="app-col">
       <div class="app-row app-align-items-center" [class.app-layout]="view !== 'list'">
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReviewTab [active]="true" >
+          <uxg-tab-title #sentToReviewTab
+                         (onToggle)="switchTab()"
+                         [disabled]="(positionsOnReview$ | async).length === 0" [active]="true" >
             <ng-container *ngIf="(positionsOnReview$ | async) as proposals">
               Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #sendToEditTab>
+          <uxg-tab-title #sendToEditTab
+                         (onToggle)="switchTab()"
+                         [disabled]="(positionsSendToEdit$ | async).length === 0">
             <ng-container *ngIf="(positionsSendToEdit$ | async) as proposals">
               На доработке <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #reviewedTab>
+          <uxg-tab-title #reviewedTab
+                         (onToggle)="switchTab()"
+                         [disabled]="(positionsReviewed$ | async).length === 0">
             <ng-container *ngIf="(positionsReviewed$ | async) as proposals">
               Рассмотренные <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
