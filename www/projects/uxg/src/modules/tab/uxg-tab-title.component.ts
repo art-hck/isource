@@ -27,7 +27,7 @@ export class UxgTabTitleComponent {
       this.disabledChanges.next(disabled);
     }
   }
-  @Output() onToggle = new EventEmitter<boolean>();
+  @Output() toggle = new EventEmitter<boolean>();
   get disabled() { return this._disabled; }
   private _disabled = false;
   public disabledChanges = new ReplaySubject<boolean>();
@@ -47,14 +47,14 @@ export class UxgTabTitleComponent {
   activate() {
     if (!this.active && this._disabled === false) {
       this.active = true;
-      this.onToggle.emit(true);
+      this.toggle.emit(true);
     }
   }
 
   deactivate() {
     if (this.active) {
       this.active = false;
-      this.onToggle.emit(false);
+      this.toggle.emit(false);
     }
   }
 }

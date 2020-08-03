@@ -4,7 +4,7 @@
       <uxg-tabs>
         <uxg-tab-title #sentToReviewTab
                        [active]="true"
-                       (onToggle)="onToggle($event, technicalProposalsStatus.SENT_TO_REVIEW)"
+                       (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_REVIEW)"
                        [disabled]="(proposalsSentToReview$ | async).length === 0">
           <ng-container *ngIf="(proposalsSentToReview$ | async) as proposals">
             Необходимо рассмотреть <span class="counter">({{ proposals?.length }})</span>
@@ -12,7 +12,7 @@
         </uxg-tab-title>
 
         <uxg-tab-title #sentToEditTab
-                       (onToggle)="onToggle($event, technicalProposalsStatus.SENT_TO_EDIT)"
+                       (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_EDIT)"
                        [disabled]="(proposalsSentToEdit$ | async).length === 0">
           <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposals">
             На доработке <span class="counter">({{ proposals?.length }})</span>
@@ -20,7 +20,7 @@
         </uxg-tab-title>
 
         <uxg-tab-title #reviewedTab
-                       (onToggle)="onToggle($event, technicalProposalsStatus.ACCEPTED)"
+                       (toggle)="onToggle($event, technicalProposalsStatus.ACCEPTED)"
                        [disabled]="(proposalsReviewed$ | async).length === 0">
           <ng-container *ngIf="(proposalsReviewed$ | async) as proposals">
             Рассмотренные <span class="counter">({{ proposals?.length }})</span>

@@ -24,7 +24,7 @@ export class UxgTabsComponent implements AfterViewInit, OnDestroy {
     this.tabTitleList.changes.pipe(
       startWith(this.tabTitleList),
       tap(() => this.updateScroll()),
-      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.onToggle.pipe(startWith(tab.active), filter(Boolean), mapTo(tab)))),
+      flatMap((tabs: QueryList<UxgTabTitleComponent>) => tabs.map(tab => tab.toggle.pipe(startWith(tab.active), filter(Boolean), mapTo(tab)))),
       mergeAll(),
       takeUntil(this.destroy$)
     ).subscribe(tab => {
