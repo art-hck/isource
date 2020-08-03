@@ -80,7 +80,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         (conversations ?? []).forEach(conversation => {
           const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
           if (request) {
-            // console.log(`setting to ${request.request.id}`, conversation);
             request.request.conversation.unreadCount = conversation.unreadCount;
           }
         });
@@ -140,7 +139,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             return requests;
-          }));
+          }), shareReplay(1));
           break;
 
         case MessageContextTypes.REQUEST_GROUP:
