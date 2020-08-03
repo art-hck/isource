@@ -9,7 +9,7 @@ import { AppFile } from "./file";
 })
 export class FileComponent {
   @ViewChild('popover') popover: UxgPopoverComponent;
-  @Input() appFile: AppFile;
+  @Input() appFile: AppFile|any;
   @Input() size: "m" | "s" = 'm';
   @Input() disableDelete = false;
   @Output() delete = new EventEmitter();
