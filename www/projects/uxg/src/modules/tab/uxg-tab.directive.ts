@@ -17,8 +17,8 @@ export class UxgTabDirective implements OnDestroy {
   ) {}
 
   @Input()
-  set uxgTab({onToggle, active}: UxgTabTitleComponent) {
-      onToggle.pipe(startWith(active), takeUntil(this.destroy$)).subscribe((isVisible) => this.toggle(isVisible));
+  set uxgTab({toggle, active}: UxgTabTitleComponent) {
+      toggle.pipe(startWith(active), takeUntil(this.destroy$)).subscribe((isVisible) => this.toggle(isVisible));
   }
 
   toggle(isVisible) {

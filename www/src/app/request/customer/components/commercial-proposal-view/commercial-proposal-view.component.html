@@ -3,18 +3,25 @@
     <div class="app-col">
       <div class="app-row app-align-items-center" [class.app-layout]="view !== 'list'">
         <uxg-tabs class="app-col">
-          <uxg-tab-title #sentToReviewTab [active]="true" >
+          <uxg-tab-title #sentToReviewTab
+                         (toggle)="switchTab()"
+                         [disabled]="(positionsOnReview$ | async).length === 0" [active]="true" >
             <ng-container *ngIf="(positionsOnReview$ | async) as proposals">
               Необходимо рассмотреть <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
-          <uxg-tab-title #sendToEdit>
+
+          <uxg-tab-title #sendToEditTab
+                         (toggle)="switchTab()"
+                         [disabled]="(positionsSendToEdit$ | async).length === 0">
             <ng-container *ngIf="(positionsSendToEdit$ | async) as proposals">
               На доработке <span class="counter">({{proposals?.length}})</span>
             </ng-container>
           </uxg-tab-title>
 
-          <uxg-tab-title #reviewedTab>
+          <uxg-tab-title #reviewedTab
+                         (toggle)="switchTab()"
+                         [disabled]="(positionsReviewed$ | async).length === 0">
             <ng-container *ngIf="(positionsReviewed$ | async) as proposals">
               Рассмотренные <span class="counter">({{ proposals?.length }})</span>
             </ng-container>
@@ -40,7 +47,8 @@
 
       <br/>
 
-      <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? positionsReviewed$ : sendToEdit.active ? positionsSendToEdit$ : positionsOnReview$) | async as positions">
+      <ng-container [ngSwitch]="view"
+                    *ngIf="(reviewedTab.active ? positionsReviewed$ : sendToEditTab.active ? positionsSendToEdit$ : positionsOnReview$) | async as positions">
         <!-- grid & simple-grid -->
         <div *ngIf="view !== 'list'" [ngClass]="{
           'grid-table': view === 'grid',
@@ -150,7 +158,6 @@
         </div>
       </ng-template>
     </ng-container>
-
   </uxg-modal>
 </ng-container>
 
@@ -159,7 +166,7 @@
   (approve)="reviewSelected()"
   (sendToEdit)="sendToEditAll()"
   [chooseBy$]="chooseBy$"
-  [hidden]="reviewedTab?.active || sendToEdit?.active || proposalsOnReview?.length === 0"
+  [hidden]="reviewedTabElRef?.active || sentToEditTabElRef?.active || proposalsOnReview?.length === 0"
   [total]="total"
 ></app-grid-footer>
 

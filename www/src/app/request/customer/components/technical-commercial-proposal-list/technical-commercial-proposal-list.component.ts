@@ -1,5 +1,17 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -45,21 +57,31 @@ import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
+  @ViewChild('sendToEditTab') sendToEditTabElRef: UxgTabTitleComponent;
+  @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
+
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
-  @ViewChild('sentToReviewTab') sentToReviewTab: UxgTabTitleComponent;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
+
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([NEW, SENT_TO_REVIEW]))
   readonly proposalsSentToReview$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([APPROVED, REJECTED]))
   readonly proposalsReviewed$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposalsByPos([SENT_TO_EDIT]))
   readonly proposalsSendToEdit$: Observable<TechnicalCommercialProposalByPosition[]>;
+
   @Select(TechnicalCommercialProposalState.proposals)
   readonly proposals$: Observable<TechnicalCommercialProposal[]>;
+
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
+
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();

@@ -1,4 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -39,8 +51,10 @@ import Review = CommercialProposals.Review;
 export class CommercialProposalViewComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<GridRowComponent | CommercialProposalListComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
-  @ViewChild('reviewedTab') reviewedTab: UxgTabTitleComponent;
-  @ViewChild('sendToEdit') sendToEdit: UxgTabTitleComponent;
+
+  @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
+  @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
+  @ViewChild('sendToEditTab') sentToEditTabElRef: UxgTabTitleComponent;
 
   @Select(CommercialProposalState.proposalsByPos(PositionStatus.RESULTS_AGREEMENT))
   readonly positionsOnReview$: Observable<RequestPosition[]>;
@@ -178,6 +192,10 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   }
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
+
+  switchTab() {
+    this.cd.detectChanges();
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
