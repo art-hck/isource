@@ -46,7 +46,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     pageSize: 10,
   },
   procedure: {
-    url: 'https://demo2.etpgpb.ru/#com/procedure/edit/id/',
+    url: 'https://demo2.etpgpb.ru/#com/procedure/view/procedure/',
     resultUrl: 'https://demo2.etpgpb.ru/#com/applic/viewapplics/lot/',
   },
   priceOrder: {
