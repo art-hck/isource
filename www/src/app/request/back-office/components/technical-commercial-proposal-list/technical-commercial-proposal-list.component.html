@@ -217,12 +217,15 @@
             шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
           </div>
           <div class="dragAndDropArea">
-            <app-template-upload (fileSelected)="files = $event"></app-template-upload>
+            <app-template-upload
+              [invalid]="invalidUploadTemplate"
+              (fileSelected)="onChangeFilesList($event)"></app-template-upload>
           </div>
           <ng-template uxgModalFooter>
-            <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
-            <button uxgButton primary lg uxgModalClose (click)="store.dispatch(uploadTemplate(requestId, files))"
-                    [disabled]="files.length === 0">
+            <div class="doc-error-message" *ngIf="invalidUploadTemplate">Пожалуйста, загрузите необходимый шаблон</div>
+
+            <button type="button" uxgButton secondary lg uxgModalClose (click)="invalidUploadTemplate = false">Отмена</button>
+            <button uxgButton primary lg (click)="onSendTemplatePositions()">
               Загрузить
             </button>
           </ng-template>
