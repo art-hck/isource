@@ -1,20 +1,3 @@
-<!-- @TODO Выпилить после реализации попозиционного согласования -->
-<div class="notification-bar" *ngIf="isOnApproval || isDraft">
-  <div class="app-layout">
-    <div class="app-row">
-      <div class="app-col app-col-auto app-row app-align-items-center" *ngIf="isDraft && user.isCustomer()">
-        <div class="app-secondary-color">В заявке есть неопубликованные позиции в статусе Черновик</div>
-        <button uxgButton secondary (click)="publish.emit()">Опубликовать все</button>
-      </div>
-      <div class="app-col app-col-auto app-row app-align-items-center" *ngIf="isOnApproval">
-        <div class="app-secondary-color">В заявке есть позиции, требующие согласования</div>
-        <button uxgButton secondary (click)="reject.emit()">Отклонить все</button>
-        <button uxgButton primary (click)="approve.emit()">Согласовать все</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <form [formGroup]="form">
   <div class="app-row" *ngIf="positions.length !== 0">
     <!-- Контролы управления позициями -->
@@ -73,10 +56,13 @@
         <!-- Групповая смена статус -->
         <div class="app-col app-col-auto" *ngIf="user.isBackOffice()">
           <uxg-popover #status [openOnHover]="true">
-            <button uxgButton uxgPopoverTrigger clear link [disabled]="!canChangeStatuses || checkedPositions.length === 0" (click)="changeStatusModal.open()">
+            <button uxgButton uxgPopoverTrigger clear link
+                    [disabled]="!canChangeStatuses || checkedPositions.length === 0"
+                    (click)="changeStatusModal.open()">
               <uxg-icon shape="app-circle-arrow"></uxg-icon>
               <span>Сменить статус</span>
             </button>
+
             <div *uxgPopoverContent>
               <div>Вы можете изменить статус нескольких позиций сразу,</div>
               <div>если все позиции находятся в одном статусе.</div>
@@ -84,53 +70,110 @@
           </uxg-popover>
         </div>
 
-        <!-- Отклонить -->
-        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
-          <button uxgButton clear link [disabled]="checkedPositions.length === 0">
-            <uxg-icon shape="app-cross"></uxg-icon>
-            <span>Отклонить</span>
-          </button>
-        </div>-->
 
-        <!-- Согласовать -->
-        <!-- TODO Нереализованная фича, временно скрыл кнопку -->
-        <!--<div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
-          <button uxgButton clear link [disabled]="checkedPositions.length === 0">
-            <uxg-icon shape="app-check"></uxg-icon>
-            <span>Согласовать</span>
+        <!-- Отправить в работу -->
+        <div class="app-col app-col-auto"
+             *ngIf="featureService.available('publishRequest', user.roles) && everyPositionHasStatus(flatPositions, 'DRAFT')">
+          <button uxgButton clear link
+                  [disabled]="checkedPositions.length === 0"
+                  (click)="onPublishPositions()">
+            <uxg-icon shape="app-on-approve"></uxg-icon>
+            <span>Отправить в работу</span>
           </button>
-        </div>-->
+        </div>
 
         <!-- Отмена позиции заказчиком -->
-        <div class="app-col app-basis-auto" *ngIf="user.isCustomer()">
-          <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
+        <div class="app-col app-col-auto" *ngIf="user.isCustomer()">
+          <button uxgButton clear link
+                  [disabled]="checkedPositions.length === 0"
+                  (click)="cancelPositionModal.open()">
+            <uxg-icon shape="app-trash"></uxg-icon>
+            Отменить
+          </button>
         </div>
-        <div class="app-col app-basis-auto" *ngIf="user.isBackOffice()">
+
+        <ng-container *ngIf="someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
+          <!-- Отклонить -->
+          <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
+            <button uxgButton clear link
+                    [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'ON_CUSTOMER_APPROVAL')"
+                    (click)="rejectPositionModal.open()">
+              <uxg-icon shape="app-cross"></uxg-icon>
+              <span>Отклонить</span>
+            </button>
+          </div>
+
+          <!-- Согласовать -->
+          <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
+            <button uxgButton clear link
+                    [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'ON_CUSTOMER_APPROVAL')"
+                    (click)="onApprovePositions()">
+              <uxg-icon shape="app-check"></uxg-icon>
+              <span>Согласовать</span>
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Кебаб-меню -->
+        <div class="app-col app-basis-auto">
           <uxg-popover #more>
             <button uxgButton uxgPopoverTrigger clear link>
               <uxg-icon shape="app-kebab"></uxg-icon>
             </button>
+
             <div *uxgPopoverContent (click)="more.hide()">
-              <!-- Назначиь ответственного -->
-              <div *ngIf="user.isBackOffice() && user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
-                <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
-              </div>
-              <div>
-                <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
-              </div>
-              <div>
-                <button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button>
-              </div>
-              <div>
-                <button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button>
-              </div>
+              <ng-container *ngIf="user.isBackOffice()">
+                <!-- Назначиь ответственного -->
+                <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
+                </div>
+
+                <div>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
+                </div>
+
+                <div>
+                  <button uxgButton clear (click)="toggleGroups(true)">Свернуть группы</button>
+                </div>
+
+                <div>
+                  <button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="user.isCustomer()">
+                <!-- Отправить в работу -->
+                <div class="app-col app-col-auto"
+                     *ngIf="featureService.available('publishRequest', user.roles) && !everyPositionHasStatus(flatPositions, 'DRAFT')">
+                  <button uxgButton clear
+                          [disabled]="checkedPositions.length === 0 || !everyPositionHasStatus(checkedPositions, 'DRAFT')"
+                          (click)="onPublishPositions()">
+                    Отправить в работу
+                  </button>
+                </div>
+
+                <ng-container *ngIf="!someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
+                  <!-- Отклонить -->
+                  <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
+                    <button uxgButton clear disabled>
+                      <span>Отклонить</span>
+                    </button>
+                  </div>
+
+                  <!-- Согласовать -->
+                  <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
+                    <button uxgButton clear disabled>
+                      <span>Согласовать</span>
+                    </button>
+                  </div>
+                </ng-container>
+
+              </ng-container>
             </div>
           </uxg-popover>
         </div>
 
         <div class="app-col app-col-auto">
-
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary iconText
                     uxgPopoverTrigger
@@ -156,6 +199,7 @@
         </div>
       </div>
     </div>
+
     <div class="app-col app-col-aside"></div>
   </div>
 
@@ -345,12 +389,39 @@
     ></app-request-add-responsible>
   </div>
 </uxg-modal>
+
 <!-- Модальное окно для отмены позиции -->
 <uxg-modal #cancelPositionModal size="s">
   <h2>Отменить позиции <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>
   <div class="app-section app-secondary-color">Будьте внимательны, отменить операцию будет невозможно</div>
   <app-position-cancel [positions]="checkedPositions" [requestId]="request.id" (close)="cancelPositionModal.close()"></app-position-cancel>
 </uxg-modal>
+
+<!-- Модальное окно для отклонения позиции -->
+<uxg-modal #rejectPositionModal size="s">
+  <h2>Комментарий по отклонению</h2>
+  <div class="app-section app-secondary-color">
+    Если возможно, сообщите пожалуйста причину отклонения сотруднику бэк-офиса.
+    Комментарий будет добавлен в общий чат по заявке. Оставлять комментарий не обязательно.
+  </div>
+
+  <div class="input-wrapper">
+    <div class="app-ghost-color" [style.margin-bottom.px]="3">Комментарий</div>
+    <textarea #comment
+              [style.height.px]="100"
+              uxgInput
+              placeholder="Введите текст комментария..."></textarea>
+  </div>
+
+  <ng-template uxgModalFooter>
+    <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+    <button type="button" uxgButton primary lg
+            (click)="onRejectPositions(comment.value); rejectPositionModal.close()">
+      Отправить
+    </button>
+  </ng-template>
+</uxg-modal>
+
 <!-- Модальное окно для смены статуса группы позиций -->
 <uxg-modal #changeStatusModal size="s">
   <h2>Сменить статус позиций <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>

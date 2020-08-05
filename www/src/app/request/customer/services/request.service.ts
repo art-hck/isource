@@ -123,6 +123,21 @@ export class RequestService {
     return this.api.post(url, {rejectionMessage});
   }
 
+  publishPositions(id: Uuid, positions: Uuid[]) {
+    const url = `requests/customer/${id}/positions/publish`;
+    return this.api.post(url, { positions });
+  }
+
+  approvePositions(id: Uuid, positions: Uuid[]) {
+    const url = `requests/customer/${id}/positions/approve`;
+    return this.api.post(url, { positions });
+  }
+
+  rejectPositions(id: Uuid, positionIds: Uuid[], rejectionMessage: string) {
+    const url = `requests/customer/${id}/positions/reject`;
+    return this.api.post(url, { positions: positionIds, rejectionMessage });
+  }
+
   choiceWinner(offerWinnerId: Uuid, positionId: Uuid, id: Uuid) {
     const url = `requests/customer/${id}/positions/${positionId}/choose-winner`;
     return this.api.post(url, {

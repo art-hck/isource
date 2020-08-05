@@ -19,6 +19,9 @@ import Refresh = RequestActions.Refresh;
 import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
 import Approve = RequestActions.Approve;
+import PublishPositions = RequestActions.PublishPositions;
+import ApprovePositions = RequestActions.ApprovePositions;
+import RejectPositions = RequestActions.RejectPositions;
 import Reject = RequestActions.Reject;
 
 @Component({
@@ -36,6 +39,9 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly refreshPositions = id => new RefreshPositions(id);
   readonly publish = id => new Publish(id);
   readonly approve = id => new Approve(id);
+  readonly publishPositions = positions => new PublishPositions(this.requestId, positions);
+  readonly approvePositions = positions => new ApprovePositions(this.requestId, positions);
+  readonly rejectPositions = data => new RejectPositions(this.requestId, data.positionIds, data.rejectionMessage);
   readonly reject = id => new Reject(id);
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
   constructor(
