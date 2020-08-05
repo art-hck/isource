@@ -5,10 +5,11 @@ import { Contragent } from "../../../core/models/contragent";
 import { Conversation } from "../../../message/models/conversation";
 import { Message } from "../../../message/models/message";
 import { Attachment } from "../../../message/models/attachment";
+import { Author } from "../../../message/models/author";
 
 export class MessageNotification implements Message {
   id: number;
-  author: User;
+  author: Author;
   createdAt: string;
   text: string;
   attachments: Attachment[];
