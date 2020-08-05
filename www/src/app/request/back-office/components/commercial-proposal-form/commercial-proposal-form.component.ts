@@ -19,6 +19,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { PositionCurrency } from "../../../common/enum/position-currency";
 import { AppFile } from "../../../../shared/components/file/file";
 import SaveProposal = CommercialProposalsActions.SaveProposal;
+import { RequestDocument } from "../../../common/models/request-document";
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -149,6 +150,13 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   searchContragent = (query: string, contragents: ContragentList[]) => {
     return contragents.filter(
       c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
+  }
+
+  requestDocumentToFile(document: RequestDocument) {
+    return new AppFile({
+      name: document.filename,
+      size: document.size
+    } as File);
   }
 
   ngOnDestroy() {
