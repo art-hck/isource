@@ -1,13 +1,11 @@
-import { User } from "../../user/models/user";
 import { Conversation } from "./conversation";
 import { Attachment } from "./attachment";
-import { Uuid } from "../../cart/models/uuid";
-import { Contragent } from "../../core/models/contragent";
+import { Author } from "./author";
 
 export class Message {
   id: number;
   attachments: Attachment[];
-  author: User;
+  author: Author;
   conversation: Conversation;
   createdAt: string;
   seenAt: string | null;

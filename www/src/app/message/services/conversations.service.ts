@@ -13,8 +13,8 @@ export class ConversationsService {
 
   constructor(private ws: WsChatService, private api: HttpClient) {}
 
-  get(conversationId?: number) {
-    return this.ws.send<Conversation[]>(`conversations.get`, { conversationId });
+  get(conversationIds?: number[]) {
+    return this.ws.send<Conversation[]>(`conversations.get`, { conversationIds });
   }
 
   create(topic: string, participants: Uuid[], contextId: number) {

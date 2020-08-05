@@ -10,16 +10,22 @@
         </div>
       </li>
 
-      <li *ngFor="let request of (requests$ | async)?.entities; trackBy: trackByRequestId"
-          (click)="onRequestClick(request.request)"
-          [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
-          [title]="request.request.name">
+      <ng-container *ngIf="(requests$ | async) as requests">
+        <li *ngFor="let request of requests?.entities; trackBy: trackByRequestId"
+            (click)="onRequestClick(request.request)"
+            [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
+            [title]="request.request.name">
 
-        <div class="title">
-          <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
-        </div>
-        <div class="counter" *ngIf="request.request?.conversation?.unreadCount as count">+{{ count }}</div>
-      </li>
+          <div class="title">
+            <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
+          </div>
+          <div class="counter" *ngIf="request.request?.context?.unreadCount as count">{{ count }}</div>
+        </li>
+
+        <li *ngIf="requests.entities.length < requests.totalCount">
+          <button uxgButton primary (click)="appendRequests(requests.entities.length)">Еще</button>
+        </li>
+      </ng-container>
     </ul>
   </div>
 
