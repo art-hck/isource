@@ -3,6 +3,7 @@ import {StatusInfo} from "./status-info";
 import {DeliveryInfo} from "./delivery-info";
 import { Contragent } from "../../../../core/models/contragent";
 import { Conversation } from "../../../../message/models/conversation";
+import { Context } from "../../../../message/models/context";
 
 export class RequestListItem {
   id: Uuid;
@@ -15,4 +16,5 @@ export class RequestListItem {
   contragent?: Contragent;
   publishedDate?: Date;
   conversation?: { id: Uuid, externalId: Conversation["id"], unreadCount?: number };
+  context?: { id: Uuid, externalId: Context["id"], unreadCount?: number };
 }

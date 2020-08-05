@@ -10,6 +10,7 @@ export class Context {
   supervisor: User;
   items: ContextItem[];
   conversations: Conversation[];
+  unreadCount: number;
 }
 
 export class ContextItem {

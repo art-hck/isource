@@ -103,6 +103,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     );
   }
 
+  // @TODO: Удалять файлы с сервера
   public deleteFile(fileWithStatus: { appFile: AppFile, status: StateStatus }, i) {
     this.files.splice(i, 1);
     const formIndex = this.formAttachments.controls.findIndex(({ value }) => value === fileWithStatus.appFile.file);
@@ -112,7 +113,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   public isOwnMessage(message: Message) {
-    return message.author.id === this.userInfoService.getUserInfo().id;
+    return message.author.uid === this.userInfoService.getUserInfo().id;
   }
 
   public submit(): void {
