@@ -17,6 +17,7 @@ import { proposalManufacturerValidator } from "../proposal-form-manufacturer/pro
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
 import { AppFile } from "../../../../shared/components/file/file";
+import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -30,12 +31,16 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() create = new EventEmitter<TechnicalProposal>();
   @Output() update = new EventEmitter<TechnicalProposal>();
+  @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   isLoading: boolean;
   form: FormGroup;
   positionsWithManufacturer$: Observable<PositionWithManufacturer[]>;
   contragents$: Observable<ContragentList[]>;
   files: File[] = [];
   subscription = new Subscription();
+  invalidDocControl = false;
+  invalidUploadTemplate = false;
+  showErrorMessage = false;
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -71,21 +76,34 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.subscribe(() => {
       const docsCount = this.formDocuments.value.length + this.defaultTPValue('documents').length;
+      if (this.form.get('documents').dirty && this.form.get('positions').dirty) {
+        if (docsCount === 0 && this.form.get('positions').invalid) {
+          this.invalidDocControl = true;
+        }
+        if (docsCount > 0 || this.form.get('positions').valid) {
+          this.invalidDocControl = false;
+          this.showErrorMessage = false;
+        }
+      }
+      if (this.form.get('positions').dirty && this.form.get('positions').value.length && docsCount === 0
+        && this.isManufacturerPristine && this.form.get('documents').dirty) {
+        this.showErrorMessage = true;
+      }
       this.form.get('positions').setValidators(
         docsCount > 0 && this.isManufacturerPristine ?
           [Validators.required] :
           [Validators.required, proposalManufacturerValidator]
       );
 
-      this.form.get('positions').updateValueAndValidity({emitEvent: false});
+      this.form.get('positions').updateValueAndValidity({ emitEvent: false });
     });
 
     this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
-      .pipe(map(positions => positions.map(position => ({position, manufacturingName: null}))));
+      .pipe(map(positions => positions.map(position => ({ position, manufacturingName: null }))));
 
     // Workaround sync with multiple elements per one formControl
     this.form.get('positions').valueChanges
-      .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
+      .subscribe(v => this.form.get('positions').setValue(v, { onlySelf: true, emitEvent: false }));
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
 
@@ -101,6 +119,8 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
    * @TODO Remove ALL pipes mapTo(...) when backend fix
    */
   submit(publish = true): void {
+    this.form.get('positions').markAsDirty();
+    this.form.get('positions').markAsTouched();
     if (this.form.invalid) {
       return;
     }
@@ -120,7 +140,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
     if (!this.isEditing) {
       tp$ = this.technicalProposalsService.addTechnicalProposal(this.request.id, body);
     } else {
-      body = {id: this.form.get("id").value, ...body};
+      body = { id: this.form.get("id").value, ...body };
       tp$ = this.technicalProposalsService.updateTechnicalProposal(this.request.id, body);
     }
 
@@ -139,13 +159,13 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
     // Проставляем заводские наименования.
     this.form.get("positions").value
-      .filter(({manufacturingName}) => manufacturingName)
-      .filter(({position, manufacturingName}) => {
+      .filter(({ manufacturingName }) => manufacturingName)
+      .filter(({ position, manufacturingName }) => {
         const tpPosition = this.findTpPosition(position);
         return !tpPosition || tpPosition.manufacturingName !== manufacturingName;
       })
-      .map(({position, manufacturingName}) => ({
-        position: {id: position.id},
+      .map(({ position, manufacturingName }) => ({
+        position: { id: position.id },
         manufacturingName
       }))
       .forEach(data => {
@@ -183,15 +203,15 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
     return supplierContragent ? supplierContragent : null;
   }
 
-  trackByPositionId = ({position}: PositionWithManufacturer) => position.id;
+  trackByPositionId = ({ position }: PositionWithManufacturer) => position.id;
   defaultTPValue = (field: keyof TechnicalProposal, defaultValue: any = "") => this.technicalProposal?.[field] ?? defaultValue;
 
-  positionSelectDisabled = ({position}: PositionWithManufacturer) => {
+  positionSelectDisabled = ({ position }: PositionWithManufacturer) => {
     const tpPosition = this.findTpPosition(position);
     return tpPosition && tpPosition.status !== TechnicalProposalPositionStatus.NEW;
   }
 
-  positionManufacturerNameDisabled = ({position}: PositionWithManufacturer) => {
+  positionManufacturerNameDisabled = ({ position }: PositionWithManufacturer) => {
     const tpPosition = this.findTpPosition(position);
     return [TechnicalProposalPositionStatus.ACCEPTED, TechnicalProposalPositionStatus.DECLINED]
       .includes(tpPosition?.status);
@@ -204,16 +224,24 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   onChangeFilesList(files: File[]): void {
     this.files = files;
+    if (this.files.length !== 0) {
+      this.invalidUploadTemplate = false;
+    }
   }
 
   onSendTemplatePositions(): void {
-    this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).pipe(
-      tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
-      tap(({ requestTechnicalProposal }) => this.create.emit(requestTechnicalProposal)),
-      catchError(({ error }) => this.store.dispatch(
-        new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
-      ))
-    ).subscribe());
+    if (this.files.length === 0) {
+      this.invalidUploadTemplate = true;
+    } else {
+      this.uploadTemplateModal.close();
+      this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).pipe(
+        tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
+        tap(({ requestTechnicalProposal }) => this.create.emit(requestTechnicalProposal)),
+        catchError(({ error }) => this.store.dispatch(
+          new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
+        ))
+      ).subscribe());
+    }
   }
 
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;

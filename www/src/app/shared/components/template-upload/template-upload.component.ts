@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AppFile } from "../file/file";
 
 @Component({
@@ -7,6 +7,7 @@ import { AppFile } from "../file/file";
   styleUrls: ['./template-upload.component.scss']
 })
 export class TemplateUploadComponent {
+  @Input() invalid: boolean;
 
   documents: File[] = [];
   appFiles: AppFile[] = [];
