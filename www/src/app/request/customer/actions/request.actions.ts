@@ -31,6 +31,21 @@ export namespace RequestActions {
     constructor(public requestId: Uuid) {}
   }
 
+  export class PublishPositions {
+    static readonly type = '[Request Customer] PublishPositions';
+    constructor(public requestId: Uuid, public positionIds: Uuid[]) {}
+  }
+
+  export class ApprovePositions {
+    static readonly type = '[Request Customer] ApprovePositions';
+    constructor(public requestId: Uuid, public positionIds: Uuid[]) {}
+  }
+
+  export class RejectPositions {
+    static readonly type = '[Request Customer] RejectPositions';
+    constructor(public requestId: Uuid, public positionIds: Uuid[], public rejectionMessage: string) {}
+  }
+
   export class Reject {
     static readonly type = '[Request Customer] Reject';
     constructor(public requestId: Uuid) {}
