@@ -83,3 +83,11 @@ small {
   font-weight: 800;
   color: uxg($theme, color-control-invalid);
 }
+
+.doc-error-message {
+  width: 150px;
+  text-align: right;
+  font-weight: bold;
+  margin-right: 10px;
+  color: uxg($theme, color-control-invalid);
+}

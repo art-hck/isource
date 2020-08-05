@@ -3,9 +3,9 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { catchError, filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService, UxgPopoverComponent } from "uxg";
+import { UxgBreadcrumbsService, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
@@ -55,6 +55,7 @@ import { GridRowComponent } from "../../../../shared/components/grid/grid-row/gr
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
+  @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
@@ -76,6 +77,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   };
   form: FormGroup;
   canNotAddNewContragent = false;
+  invalidUploadTemplate = false;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
   proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
@@ -209,6 +211,22 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
     this.addProposalPositionPayload = { proposal, position };
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.files = files;
+    if (this.files.length !== 0) {
+      this.invalidUploadTemplate = false;
+    }
+  }
+
+  onSendTemplatePositions(): void {
+    if (this.files.length === 0) {
+      this.invalidUploadTemplate = true;
+    } else {
+      this.uploadTemplateModal.close();
+      this.store.dispatch(this.uploadTemplate(this.requestId, this.files));
+    }
   }
 
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
