@@ -79,6 +79,22 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchCounters() {
+    this.requests$.pipe(take(1), flatMap(({ entities }) => {
+        const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
+        return this.contextsService.get(contextIds);
+      })
+    ).subscribe(contexts => {
+      this.requests$ = this.requests$.pipe(map(requests => {
+        (contexts ?? []).forEach(context => {
+          const request = requests.entities.find(({request: r}) => r.context?.externalId === context.id);
+          if (request) {
+            request.request.context.unreadCount = context.unreadCount;
+          }
+        });
+        return requests;
+      }));
+    });
+
     this.requestsItems$.pipe(take(1), flatMap(data => {
         const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
         return this.conversationsService.get(conversationIds);
@@ -96,22 +112,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
           return requestItems;
         })
       );
-    });
-
-    this.requests$.pipe(take(1), flatMap(({ entities }) => {
-        const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
-        return this.contextsService.get(contextIds);
-      })
-    ).subscribe(contexts => {
-      this.requests$ = this.requests$.pipe(map(requests => {
-        (contexts ?? []).forEach(context => {
-          const request = requests.entities.find(({request: r}) => r.context?.externalId === context.id);
-          if (request) {
-            request.request.context.unreadCount = context.unreadCount;
-          }
-        });
-        return requests;
-      }));
     });
   }
 
@@ -141,10 +141,11 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (index !== -1) {
           requests.entities[index].request.conversation = { id: null, externalId: conversation.id };
+          requests.entities[index].request.context = { id: null, externalId: conversation.context.id };
 
           if (requests.entities[index].request.id === this.selectedRequest.id && !this.selectedRequestsItem) {
             this.selectedRequest = requests.entities[index].request;
-            this.onRequestContextClick();
+            this.onRequestContextClick(false);
           }
         }
 
@@ -155,10 +156,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         tap(data => {
           this.requestsItems = new RequestItemsStore();
           this.requestsItems.setRequestItems(data);
-          this.conversationId = data.find(item => item.id === this.contextId)?.conversation?.externalId;
+
+          const conversationId = data.find(item => item.id === this.contextId)?.conversation?.externalId;
+
+          if (conversationId) {
+            this.conversationId = conversationId;
+          }
         }),
         takeUntil(this.destroy$)
-      ).subscribe(data => this.requestsItems$ = of(data));
+      ).subscribe(data => {
+        this.requestsItems$ = of(data);
+        this.fetchCounters();
+      });
+
     }));
   }
 
@@ -270,7 +280,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onRequestContextClick() {
+  onRequestContextClick(navigate = true) {
     this.selectedRequestsItem = null;
 
     this.contextType = MessageContextTypes.REQUEST;
