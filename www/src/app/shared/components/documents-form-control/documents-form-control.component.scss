@@ -16,6 +16,10 @@ small {
   border: 2px transparent solid;
   transition: border 200ms, color 200ms;
   border-radius: 4px;
+  &.invalid {
+    border: 1px solid uxg($theme, color-control-invalid);
+    color: uxg($theme, color-control-invalid);
+  }
 
   &-hover {
     border-color: uxg($theme, color-border);

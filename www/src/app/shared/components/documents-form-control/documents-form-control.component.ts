@@ -16,6 +16,7 @@ import { AppFile } from "../file/file";
 export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() documents: RequestDocument[];
   @Input() files: AppFile[];
+  @Input() invalid: boolean;
   @Input() disabled: boolean;
   @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();

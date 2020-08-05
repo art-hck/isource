@@ -1,6 +1,6 @@
 <div class="app-row">
   <div class="app-col app-bold">
-    <div appUploadFile class="upload-area" hoverClass="upload-area-hover" (dropFile)="addDocument($event)">
+    <div appUploadFile class="upload-area" [ngClass]="{'invalid' : invalid}" hoverClass="upload-area-hover" (dropFile)="addDocument($event)">
       <div>Перетащите заполненный шаблон сюда</div>
     </div>
   </div>
