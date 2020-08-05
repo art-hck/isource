@@ -22,6 +22,7 @@ export class WsChatService implements IWebsocketService {
   constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
 
     this.keycloakService.getToken().then(accessToken => {
+      if (!accessToken) { return; }
 
       this.connect(accessToken);
 
