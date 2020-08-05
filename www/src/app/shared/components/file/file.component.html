@@ -2,7 +2,7 @@
   <div class="app-file-icon" *ngIf="appFile.invalid">
     <uxg-popover #popover [hideDelay]="100">
       <div uxgPopoverTrigger class="app-row app-align-items-center">
-        <document-icon [name]="appFile.file ? appFile.file.name : appFile.filename" [size]="size"></document-icon>
+        <document-icon [name]="appFile.file.name" [size]="size"></document-icon>
       </div>
       <div *uxgPopoverContent="direction.topLeft">
         <div>Недопустимый формат, файл не будет загружен.
@@ -15,13 +15,11 @@
       </div>
     </uxg-popover>
   </div>
-
-  <document-icon class="app-file-icon" *ngIf="appFile.file ? appFile.valid : true" [name]="appFile.file ? appFile.file.name : appFile.filename" [size]="size"></document-icon>
+  <document-icon class="app-file-icon" *ngIf="appFile.valid" [name]="appFile.file.name" [size]="size"></document-icon>
 
   <div class="app-ellipsis app-col">
-    <div class="app-ellipsis">{{ appFile.file ? appFile.file.name : appFile.filename }}</div>
-
-    <small class="app-ghost-color" *ngIf="!appFile.invalid">{{ (appFile.file ? appFile.file.size : appFile.size) | bytesToSize : 2 }}</small>
+    <div class="app-ellipsis">{{ appFile.file.name }}</div>
+    <small class="app-ghost-color" *ngIf="!appFile.invalid">{{ appFile.file.size | bytesToSize : 2 }}</small>
     <small class="app-alert-color app-bold" *ngIf="appFile.invalid">Недопустимый формат, не будет загружен</small>
   </div>
   <button *ngIf="delete.observers.length" uxgButton clear link class="app-file-delete app-shrink-0" type="button" (click)="delete.emit()">

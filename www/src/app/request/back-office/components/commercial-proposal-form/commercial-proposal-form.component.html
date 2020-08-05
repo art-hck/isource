@@ -149,7 +149,7 @@
     <div class="documents">
       <div class="app-row">
         <div class="app-col" *ngFor="let document of defaultCPValue('documents')">
-          <ng-container *ngTemplateOutlet="documentRef; context: {document: document}"></ng-container>
+          <ng-container *ngTemplateOutlet="documentRef; context: {document: requestDocumentToFile(document) }"></ng-container>
         </div>
         <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
           <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
