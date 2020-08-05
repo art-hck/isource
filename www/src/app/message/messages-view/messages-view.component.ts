@@ -80,10 +80,9 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   fetchCounters() {
     this.requests$.pipe(take(1), flatMap(({ entities }) => {
-        const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
-        return this.contextsService.get(contextIds);
-      })
-    ).subscribe(contexts => {
+      const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
+      return this.contextsService.get(contextIds);
+    })).subscribe(contexts => {
       this.requests$ = this.requests$.pipe(map(requests => {
         (contexts ?? []).forEach(context => {
           const request = requests.entities.find(({request: r}) => r.context?.externalId === context.id);
@@ -136,28 +135,26 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
-      this.requests$ = this.requests$.pipe(map(requests => {
-        const index = requests.entities.findIndex(({ request: { id } }) => id === requestId);
 
-        if (index !== -1) {
-          requests.entities[index].request.conversation = { id: null, externalId: conversation.id };
-          requests.entities[index].request.context = { id: null, externalId: conversation.context.id };
-
-          if (requests.entities[index].request.id === this.selectedRequest.id && !this.selectedRequestsItem) {
-            this.selectedRequest = requests.entities[index].request;
-            this.onRequestContextClick(false);
-          }
-        }
-
-        return requests;
-      }), shareReplay(1));
+      this.messageService
+        .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(({ entities }) => entities.forEach(({ request }) => {
+          this.requests$ = this.requests$.pipe(map(requests => {
+            const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
+            if (requestIndex !== -1) {
+              requests.entities[requestIndex].request = request;
+            }
+            return requests;
+          }), tap(() => this.fetchCounters()), shareReplay(1));
+        }));
 
       this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
         tap(data => {
           this.requestsItems = new RequestItemsStore();
           this.requestsItems.setRequestItems(data);
 
-          const conversationId = data.find(item => item.id === this.contextId)?.conversation?.externalId;
+          const conversationId = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation?.externalId;
 
           if (conversationId) {
             this.conversationId = conversationId;
@@ -242,6 +239,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems = new RequestItemsStore();
         this.requestsItems.setRequestItems(data);
       }),
+      tap(() => this.fetchCounters()),
       shareReplay(1)
     );
 
