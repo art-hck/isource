@@ -349,14 +349,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       filter['requestNameOrNumber'] = this.requestFilterInputValue;
     }
     this.requests$ = this.messageService
-      .getRequests(this.user.getUserRole(), 0, 1000, filter, null)
+      .getRequests(this.user.getUserRole(), 0, this.pageSize, filter, null)
       .pipe(
         tap((page: Page<RequestsList>) => {
           if (page.entities.length > 0) {
             this.onRequestClick(page.entities[0].request);
           }
           this.requestListSearchLoader = false;
-        })
+        }),
+        shareReplay(1)
       );
   }
 
