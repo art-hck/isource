@@ -31,7 +31,7 @@ export class RequestAddResponsibleComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers();
+    this.regularBackofficeUsers$ = this.userService.getRegularBackofficeUsers(this.request.contragentId);
   }
 
   submit() {

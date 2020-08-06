@@ -9,10 +9,10 @@ import { Uuid } from "../../cart/models/uuid";
 export class UserService {
   constructor(private http: HttpClient) { }
 
-  getRegularBackofficeUsers() {
+  getRegularBackofficeUsers(contragentId: Uuid = null) {
     const url = `users/regular-backoffice-users-list`;
 
-    return this.http.get<User[]>(url);
+    return this.http.post<User[]>(url, { contragentId });
   }
 
   getCustomerBuyerUsersWithoutContragent() {
