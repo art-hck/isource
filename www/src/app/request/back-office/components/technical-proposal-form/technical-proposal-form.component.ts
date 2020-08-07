@@ -121,7 +121,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   submit(publish = true): void {
     this.form.get('positions').markAsDirty();
     this.form.get('positions').markAsTouched();
-    if (this.form.invalid) {
+    if (this.form.invalid || this.invalidUploadTemplate === true) {
       return;
     }
     this.isLoading = true;
@@ -232,6 +232,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   onSendTemplatePositions(): void {
     if (this.files.length === 0) {
       this.invalidUploadTemplate = true;
+      return null;
     } else {
       this.uploadTemplateModal.close();
       this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).pipe(
