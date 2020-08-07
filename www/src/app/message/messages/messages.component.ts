@@ -25,7 +25,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() contextId: Uuid;
   @Input() contextType: MessageContextTypes;
   @Input() conversationId: number;
-  @Input() selectedRequestsItem: any;
+  @Input() selectedRequestsItemStatus: {name: string; label: string};
   @Output() sendMessage = new EventEmitter<{ text: string, attachments: Attachment[] }>();
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
@@ -148,14 +148,6 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     // включаем плавную перемотку
     if (this.firstScroll) {
       this.firstScroll = false;
-    }
-  }
-
-  getRequestItemStatus(item: RequestPositionList) {
-    if (item instanceof RequestPosition) {
-      return item.status;
-    } else if (item instanceof RequestGroup) {
-      return null;
     }
   }
 
