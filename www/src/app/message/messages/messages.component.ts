@@ -11,6 +11,9 @@ import { StateStatus } from "../../request/common/models/state-status";
 import { AttachmentsService } from "../services/attachments.service";
 import { Attachment } from "../models/attachment";
 import { AppFile } from "../../shared/components/file/file";
+import { RequestPositionList } from "../../request/common/models/request-position-list";
+import { RequestPosition } from "../../request/common/models/request-position";
+import { RequestGroup } from "../../request/common/models/request-group";
 
 @Component({
   selector: 'app-message-messages',
@@ -22,6 +25,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() contextId: Uuid;
   @Input() contextType: MessageContextTypes;
   @Input() conversationId: number;
+  @Input() selectedRequestsItemStatus: {name: string; label: string};
   @Output() sendMessage = new EventEmitter<{ text: string, attachments: Attachment[] }>();
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
