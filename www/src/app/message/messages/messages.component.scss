@@ -160,6 +160,8 @@
 
     .document-upload-list-wrap {
       margin-left: 75px;
+      display: table;
+      max-width: 400px;
 
       & > *:not(:last-child) {
         margin-bottom: 10px;
