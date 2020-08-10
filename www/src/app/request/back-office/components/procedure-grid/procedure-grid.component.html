@@ -18,7 +18,9 @@
                     <uxg-icon shape="app-check"></uxg-icon>Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
                   </span>
       <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
-      <button type="button" uxgButton secondary iconText (click)="bargain.emit()">
+
+      <button *ngIf="!procedure.isRetrade"
+        type="button" uxgButton secondary iconText (click)="bargain.emit()">
         Уторговать
       </button>
     </ng-container>
