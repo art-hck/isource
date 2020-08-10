@@ -14,12 +14,14 @@
       </button>
     </ng-container>
     <ng-container *ngIf="finished(procedure)">
-                  <span class="app-success-color pr-20">
-                    <uxg-icon shape="app-check"></uxg-icon>Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
-                  </span>
-      <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
+      <span class="app-success-color pr-20">
+        <uxg-icon shape="app-check"></uxg-icon> Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+      </span>
 
-      <button *ngIf="!procedure.isRetrade"
+      <a [href]="resultLink(procedure)" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+
+      <button [style.margin-left.px]="20"
+        *ngIf="!procedure.isRetrade"
         type="button" uxgButton secondary iconText (click)="bargain.emit()">
         Уторговать
       </button>
