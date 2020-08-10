@@ -117,6 +117,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   }
 
   submit(publish = true): void {
+    this.form.get('positions').markAsDirty();
+    this.form.get('positions').markAsTouched();
+
     if (this.form.valid) {
       let action$: Observable<any>;
       const documents = this.form.get('documents').value.filter(({ valid }) => valid).map(({ file }) => file);
