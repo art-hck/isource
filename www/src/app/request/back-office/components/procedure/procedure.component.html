@@ -27,7 +27,7 @@
           <div class="app-section"><b>{{ finished || procedure.isRetrade ? 'Нет' : 'Да'}}</b></div>
         </div>
         <div class="app-col">
-          <button uxgButton secondary *ngIf="finished && !procedure.isRetrade" (click)="bargain.emit()">Уторговать</button>
+          <button uxgButton secondary *ngIf="finished" (click)="bargain.emit()">Уторговать</button>
           <button uxgButton secondary *ngIf="!finished && !procedure.isRetrade" (click)="prolong.emit()">Продлить процедуру</button>
         </div>
       </div>
