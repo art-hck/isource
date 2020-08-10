@@ -53,7 +53,6 @@ import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PluralizePipe]
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
