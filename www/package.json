@@ -9,8 +9,8 @@
     "lint": "ng lint",
     "tslint": "tslint -p tsconfig.json -c tslint.json",
     "e2e": "ng e2e",
-    "prestart": "ng build uxg --prod",
-    "prebuild": "ng build uxg --prod",
+    "prestart": "ng build uxg --prod && cp -R projects/uxg/src/styles/ dist/uxg/styles/",
+    "prebuild": "ng build uxg --prod && cp -R projects/uxg/src/styles/ dist/uxg/styles/",
     "postinstall": "ngcc"
   },
   "private": true,
