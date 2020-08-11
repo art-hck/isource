@@ -8,7 +8,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, flatMap, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, filter, flatMap, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -18,6 +18,11 @@ import { ConversationsService } from "../services/conversations.service";
 import { Attachment } from "../models/attachment";
 import { Request } from "../../request/common/models/request";
 import { ContextsService } from "../services/contexts.service";
+import { Actions, Select, Store } from "@ngxs/store";
+import { MessagesState } from "../states/messages.state";
+import { Messages } from "../actions/messages.actions";
+import Fetch = Messages.Fetch;
+import FetchPositions = Messages.FetchPositions;
 
 @Component({
   selector: 'app-message-messages-view',
@@ -27,12 +32,14 @@ import { ContextsService } from "../services/contexts.service";
 export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('requestsSearchField') requestsSearchField: ElementRef;
+  @Select(MessagesState.requests) requests$: Observable<Page<RequestsList>>;
+  @Select(MessagesState.requestsItems) requestsItems$: Observable<RequestPositionList[]>;
 
   requestId: Uuid;
   positionId: Uuid;
 
-  requests$: Observable<Page<RequestsList>>;
-  requestsItems$: Observable<RequestPositionList[]>;
+  // requests$: Observable<Page<RequestsList>>;
+  // requestsItems$: Observable<RequestPositionList[]>;
 
   requestEntities: RequestsList[];
 
@@ -59,7 +66,9 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private user: UserInfoService,
     private route: ActivatedRoute,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private actions: Actions,
+    public store: Store
   ) {
   }
 
@@ -117,16 +126,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.getRouteData();
 
-    this.requests$ = this.messageService
-      .getRequests(this.user.getUserRole(), 0, this.pageSize, [], null).pipe(
-        tap((page: Page<RequestsList>) => {
-          if (page.entities.length > 0) {
-            this.requestEntities = page.entities;
-            this.jumpToRequestOrPosition();
-          }
-        }),
-        shareReplay(1)
-      );
+    this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
+      tap(() => this.jumpToRequestOrPosition())
+    ).subscribe();
+    // this.requests$ = this.messageService
+    //   .getRequests(this.user.getUserRole(), 0, this.pageSize, [], null).pipe(
+    //     tap((page: Page<RequestsList>) => {
+    //       if (page.entities.length > 0) {
+    //         this.requestEntities = page.entities;
+    //         this.jumpToRequestOrPosition();
+    //       }
+    //     }),
+    //     shareReplay(1)
+    //   );
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
       debounceTime(100),
@@ -135,36 +147,39 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
+      this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null));
+      this.store.dispatch(new FetchPositions(requestId, this.user.getUserRole()));
 
-      this.messageService
-        .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(({ entities }) => entities.forEach(({ request }) => {
-          this.requests$ = this.requests$.pipe(map(requests => {
-            const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
-            if (requestIndex !== -1) {
-              requests.entities[requestIndex].request = request;
-            }
-            return requests;
-          }), tap(() => this.fetchCounters()), shareReplay(1));
-        }));
 
-      this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
-        tap(data => {
-          this.requestsItems = new RequestItemsStore();
-          this.requestsItems.setRequestItems(data);
-
-          const conversationId = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation?.externalId;
-
-          if (conversationId) {
-            this.conversationId = conversationId;
-          }
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe(data => {
-        this.requestsItems$ = of(data);
-        this.fetchCounters();
-      });
+      // this.messageService
+      //   .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
+      //   .pipe(takeUntil(this.destroy$))
+      //   .subscribe(({ entities }) => entities.forEach(({ request }) => {
+      //     this.requests$ = this.requests$.pipe(map(requests => {
+      //       const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
+      //       if (requestIndex !== -1) {
+      //         requests.entities[requestIndex].request = request;
+      //       }
+      //       return requests;
+      //     }), tap(() => this.fetchCounters()), shareReplay(1));
+      //   }));
+      //
+      // this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
+      //   tap(data => {
+      //     this.requestsItems = new RequestItemsStore();
+      //     this.requestsItems.setRequestItems(data);
+      //
+      //     const conversationId = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation?.externalId;
+      //
+      //     if (conversationId) {
+      //       this.conversationId = conversationId;
+      //     }
+      //   }),
+      //   takeUntil(this.destroy$)
+      // ).subscribe(data => {
+      //   this.requestsItems$ = of(data);
+      //   this.fetchCounters();
+      // });
 
     }));
   }
@@ -226,22 +241,25 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.onRequestClick(requestToSelect[0].request);
     } else {
-      this.onRequestClick(this.requestEntities[0].request);
+      // this.onRequestClick(this.requestEntities[0].request);
+      this.requests$.pipe(filter(requests => requests?.entities?.length > 0)).subscribe(
+        requests => this.onRequestClick(requests.entities[0].request)
+      );
     }
   }
 
   onRequestClick(request: RequestListItem) {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
-
-    this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
-      tap(data => {
-        this.requestsItems = new RequestItemsStore();
-        this.requestsItems.setRequestItems(data);
-      }),
-      tap(() => this.fetchCounters()),
-      shareReplay(1)
-    );
+    this.store.dispatch(new FetchPositions(this.selectedRequest.id, this.user.getUserRole()));
+    // this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
+    //   tap(data => {
+    //     this.requestsItems = new RequestItemsStore();
+    //     this.requestsItems.setRequestItems(data);
+    //   }),
+    //   tap(() => this.fetchCounters()),
+    //   shareReplay(1)
+    // );
 
     this.onRequestContextClick();
   }
