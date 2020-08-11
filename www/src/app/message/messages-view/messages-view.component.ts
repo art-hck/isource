@@ -147,10 +147,9 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
-      this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null));
-      this.store.dispatch(new FetchPositions(requestId, this.user.getUserRole()));
-
-
+      this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
+        tap(() => this.store.dispatch(new FetchPositions(requestId, this.user.getUserRole())))
+      );
       // this.messageService
       //   .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
       //   .pipe(takeUntil(this.destroy$))
@@ -241,7 +240,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.onRequestClick(requestToSelect[0].request);
     } else {
-      // this.onRequestClick(this.requestEntities[0].request);
       this.requests$.pipe(filter(requests => requests?.entities?.length > 0)).subscribe(
         requests => this.onRequestClick(requests.entities[0].request)
       );
