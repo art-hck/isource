@@ -1,4 +1,5 @@
 import { Uuid } from "../../cart/models/uuid";
+import { TechnicalCommercialProposal } from "../../request/common/models/technical-commercial-proposal";
 
 export namespace Messages {
   // Получить список ТКП
@@ -25,5 +26,9 @@ export namespace Messages {
 
   export class FetchCounters {
     static readonly type = '[Messages] FetchCounters';
+  }
+
+  export class Update {
+    static readonly type = '[Messages] Update';
   }
 }

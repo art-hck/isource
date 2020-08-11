@@ -5,13 +5,16 @@ import { Injectable } from "@angular/core";
 import { MessagesService } from "../services/messages.service";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
 import { patch, updateItem } from "@ngxs/store/operators";
-import { flatMap, map, take, tap } from "rxjs/operators";
+import { flatMap, map, mergeMap, switchMap, take, tap } from "rxjs/operators";
 import { Page } from "../../core/models/page";
 import { Messages } from "../actions/messages.actions";
 import Fetch = Messages.Fetch;
 import FetchPositions = Messages.FetchPositions;
 import FetchCounters = Messages.FetchCounters;
 import { ContextsService } from "../services/contexts.service";
+import { TechnicalCommercialProposal } from "../../request/common/models/technical-commercial-proposal";
+import { of } from "rxjs";
+import Update = Messages.Update;
 
 export interface MessagesStateModel {
   requests: Page<RequestsList>;
@@ -49,6 +52,7 @@ export class MessagesState {
     ctx.setState(patch({ requests: null, status: "fetching" as StateStatus }));
     return this.rest.getRequests(role, startFrom, pageSize, filters, sort).pipe(
       tap(requests => ctx.setState(patch({ requests }))),
+      tap(() => new FetchCounters()),
       tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
     );
   }
@@ -63,7 +67,7 @@ export class MessagesState {
   }
 
   @Action(FetchCounters)
-  fetchCounters({ getState, setState, dispatch }: Context) {
+  fetchCounters({ getState, setState }: Context) {
     const contextIds = getState().requests.entities.filter(({ request }) => request?.context?.externalId).map(({ request }) => request?.context?.externalId);
     return this.contextsService.get(contextIds).pipe(
       tap(contexts => {
@@ -83,5 +87,23 @@ export class MessagesState {
           }));
         });
       }));
+  }
+
+  @Action(Update)
+  update(ctx: Context, {}: Update) {
+    // ctx.setState(patch({ status: "updating" as StateStatus }));
+    // return this.rest.update(payload).pipe(
+    //   tap(proposal => ctx.setState(patch({
+    //     proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
+    //     status: "received" as StateStatus
+    //   }))),
+    //   mergeMap(proposal => {
+    //     if (publish) {
+    //       return ctx.dispatch(new Publish(proposal));
+    //     } else {
+    //       return of(proposal);
+    //     }
+    //   }),
+    // );
   }
 }
