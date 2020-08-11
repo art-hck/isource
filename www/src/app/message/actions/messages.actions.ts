@@ -30,5 +30,12 @@ export namespace Messages {
 
   export class Update {
     static readonly type = '[Messages] Update';
+    constructor(
+      public role: string,
+      public startFrom: number,
+      public pageSize: number,
+      public filters: string[],
+      public sort: null
+    ) {}
   }
 }

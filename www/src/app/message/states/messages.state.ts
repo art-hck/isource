@@ -89,21 +89,12 @@ export class MessagesState {
       }));
   }
 
-  @Action(Update)
-  update(ctx: Context, {}: Update) {
-    // ctx.setState(patch({ status: "updating" as StateStatus }));
-    // return this.rest.update(payload).pipe(
-    //   tap(proposal => ctx.setState(patch({
-    //     proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
-    //     status: "received" as StateStatus
-    //   }))),
-    //   mergeMap(proposal => {
-    //     if (publish) {
-    //       return ctx.dispatch(new Publish(proposal));
-    //     } else {
-    //       return of(proposal);
-    //     }
-    //   }),
-    // );
+  @Action(Update) update(ctx: Context, {role, startFrom, pageSize, filters, sort}: Update) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.getRequests(role, startFrom, pageSize, filters, sort).pipe(
+      tap(requests => ctx.setState(patch({ requests }))),
+      tap(() => new FetchCounters()),
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+    );
   }
 }

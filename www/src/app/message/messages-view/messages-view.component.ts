@@ -23,6 +23,7 @@ import { MessagesState } from "../states/messages.state";
 import { Messages } from "../actions/messages.actions";
 import Fetch = Messages.Fetch;
 import FetchPositions = Messages.FetchPositions;
+import Update = Messages.Update;
 
 @Component({
   selector: 'app-message-messages-view',
@@ -87,99 +88,21 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       item.id;
   }
 
-  fetchCounters() {
-    this.requests$.pipe(take(1), flatMap(({ entities }) => {
-      const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
-      return this.contextsService.get(contextIds);
-    })).subscribe(contexts => {
-      this.requests$ = this.requests$.pipe(map(requests => {
-        (contexts ?? []).forEach(context => {
-          const request = requests.entities.find(({request: r}) => r.context?.externalId === context.id);
-          if (request) {
-            request.request.context.unreadCount = context.unreadCount;
-          }
-        });
-        return requests;
-      }));
-    });
-
-    this.requestsItems$.pipe(take(1), flatMap(data => {
-        const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
-        return this.conversationsService.get(conversationIds);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(conversations => {
-      this.requestsItems$ = this.requestsItems$?.pipe(map(requestItems => {
-          (conversations ?? []).forEach(conversation => {
-            const requestItem = requestItems.find(item => item.conversation?.externalId === conversation.id);
-            if (requestItem) {
-              requestItem.conversation.unreadCount = conversation.unreadCount;
-            }
-          });
-
-          return requestItems;
-        })
-      );
-    });
-  }
-
   ngOnInit() {
     this.getRouteData();
 
     this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
-      tap(() => this.jumpToRequestOrPosition())
+      tap(() => this.jumpToRequestOrPosition()),
+      shareReplay(1)
     ).subscribe();
-    // this.requests$ = this.messageService
-    //   .getRequests(this.user.getUserRole(), 0, this.pageSize, [], null).pipe(
-    //     tap((page: Page<RequestsList>) => {
-    //       if (page.entities.length > 0) {
-    //         this.requestEntities = page.entities;
-    //         this.jumpToRequestOrPosition();
-    //       }
-    //     }),
-    //     shareReplay(1)
-    //   );
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
       debounceTime(100),
       takeUntil(this.destroy$)
-    ).subscribe(() => this.fetchCounters());
+    ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
 
-    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
-      const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
-      this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
-        tap(() => this.store.dispatch(new FetchPositions(requestId, this.user.getUserRole())))
-      );
-      // this.messageService
-      //   .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
-      //   .pipe(takeUntil(this.destroy$))
-      //   .subscribe(({ entities }) => entities.forEach(({ request }) => {
-      //     this.requests$ = this.requests$.pipe(map(requests => {
-      //       const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
-      //       if (requestIndex !== -1) {
-      //         requests.entities[requestIndex].request = request;
-      //       }
-      //       return requests;
-      //     }), tap(() => this.fetchCounters()), shareReplay(1));
-      //   }));
-      //
-      // this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
-      //   tap(data => {
-      //     this.requestsItems = new RequestItemsStore();
-      //     this.requestsItems.setRequestItems(data);
-      //
-      //     const conversationId = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation?.externalId;
-      //
-      //     if (conversationId) {
-      //       this.conversationId = conversationId;
-      //     }
-      //   }),
-      //   takeUntil(this.destroy$)
-      // ).subscribe(data => {
-      //   this.requestsItems$ = of(data);
-      //   this.fetchCounters();
-      // });
-
+    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
+      this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
     }));
   }
 
@@ -250,14 +173,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
     this.store.dispatch(new FetchPositions(this.selectedRequest.id, this.user.getUserRole()));
-    // this.requestsItems$ = this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
-    //   tap(data => {
-    //     this.requestsItems = new RequestItemsStore();
-    //     this.requestsItems.setRequestItems(data);
-    //   }),
-    //   tap(() => this.fetchCounters()),
-    //   shareReplay(1)
-    // );
 
     this.onRequestContextClick();
   }
