@@ -36,7 +36,8 @@ export class TechnicalCommercialProposalContragentFormComponent {
 
   submit() {
     if (this.form.valid) {
-      return this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
+      this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
+      this.close.emit();
     }
   }
 
