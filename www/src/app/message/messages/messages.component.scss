@@ -160,12 +160,16 @@
 
     .document-upload-list-wrap {
       margin-left: 75px;
-      display: table;
-      max-width: 400px;
+      display: block;
+      max-width: 300px;
 
       & > *:not(:last-child) {
         margin-bottom: 10px;
       }
+    }
+
+    app-file {
+      width: 100%;
     }
 
     .loading-arrachments {
