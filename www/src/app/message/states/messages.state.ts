@@ -12,14 +12,20 @@ import Fetch = Messages.Fetch;
 import FetchPositions = Messages.FetchPositions;
 import FetchCounters = Messages.FetchCounters;
 import { ContextsService } from "../services/contexts.service";
-import { TechnicalCommercialProposal } from "../../request/common/models/technical-commercial-proposal";
-import { of } from "rxjs";
 import Update = Messages.Update;
+import CreateConversation = Messages.CreateConversation;
+import { ConversationsService } from "../services/conversations.service";
+import Send = Messages.Send;
+import Get = Messages.Get;
+import { Message } from "../models/message";
+
 
 export interface MessagesStateModel {
   requests: Page<RequestsList>;
   status: StateStatus;
   requestsItems: RequestPositionList[];
+  messages: Message[];
+  externalId: number;
 }
 
 type Model = MessagesStateModel;
@@ -27,14 +33,15 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'Messages',
-  defaults: { requests: null, requestsItems: null, status: "pristine" }
+  defaults: { requests: null, requestsItems: null, messages: null, externalId: null, status: "pristine" }
 })
 @Injectable()
 export class MessagesState {
   // cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: MessagesService,
-              private contextsService: ContextsService) {
+              private contextsService: ContextsService,
+              private conversationsService: ConversationsService) {
   }
 
   @Selector()
@@ -44,16 +51,20 @@ export class MessagesState {
   static requestsItems({ requestsItems }: Model) { return requestsItems; }
 
   @Selector()
+  static messages({ messages }: Model) { return messages; }
+
+  @Selector()
   static status({ status }: Model) { return status; }
 
-  @Action(Fetch)
-  fetch(ctx: Context, { role, startFrom, pageSize, filters, sort }: Fetch) {
 
-    ctx.setState(patch({ requests: null, status: "fetching" as StateStatus }));
+  @Action(Fetch)
+  fetch({setState, dispatch}: Context, { role, startFrom, pageSize, filters, sort }: Fetch) {
+
+    setState(patch({ requests: null, status: "fetching" as StateStatus }));
     return this.rest.getRequests(role, startFrom, pageSize, filters, sort).pipe(
-      tap(requests => ctx.setState(patch({ requests }))),
-      tap(() => new FetchCounters()),
-      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+      tap(requests => setState(patch({ requests }))),
+      switchMap(() => dispatch(new FetchCounters())),
+      tap(() => setState(patch({ status: "received" as StateStatus }))),
     );
   }
 
@@ -95,6 +106,28 @@ export class MessagesState {
       tap(requests => ctx.setState(patch({ requests }))),
       tap(() => new FetchCounters()),
       tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+    );
+  }
+
+  @Action(CreateConversation) create({setState, dispatch}: Context, {contextType, contextId}: CreateConversation) {
+    setState(patch({ status: "fetching" as StateStatus }));
+    return this.conversationsService.apiCreate(contextType, contextId).pipe(
+      tap(() => setState(patch({ status: "received" as StateStatus }))),
+    );
+  }
+
+  @Action(Send) send(ctx: Context, {text, conversationId, attachmentsId}: Send) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.send(text, conversationId, attachmentsId).pipe(
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+    );
+  }
+
+  @Action(Get) get(ctx: Context, {conversationId}: Get) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.get(conversationId).pipe(
+      tap(messages => ctx.setState(patch({ messages }))),
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
     );
   }
 }

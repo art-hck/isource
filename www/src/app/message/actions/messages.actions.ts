@@ -1,5 +1,6 @@
 import { Uuid } from "../../cart/models/uuid";
 import { TechnicalCommercialProposal } from "../../request/common/models/technical-commercial-proposal";
+import { MessageContextTypes } from "../message-context-types";
 
 export namespace Messages {
   // Получить список ТКП
@@ -36,6 +37,32 @@ export namespace Messages {
       public pageSize: number,
       public filters: string[],
       public sort: null
+    ) {}
+  }
+
+  export class CreateConversation {
+    static readonly type = '[Messages] CreateConversation';
+    constructor(
+      public contextType: MessageContextTypes,
+      public contextId: string,
+      public text: string,
+      public attachmentsId: number[]
+    ) {}
+  }
+
+  export class Send {
+    static readonly type = '[Messages] Send';
+    constructor(
+      public text: string,
+      public conversationId: number,
+      public attachmentsId: number[]
+    ) {}
+  }
+
+  export class Get {
+    static readonly type = '[Messages] Get';
+    constructor(
+      public conversationId: number
     ) {}
   }
 }

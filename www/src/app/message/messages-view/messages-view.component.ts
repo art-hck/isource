@@ -8,7 +8,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, filter, flatMap, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, filter, flatMap, map, shareReplay, switchMap, take, takeUntil, tap } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -24,6 +24,9 @@ import { Messages } from "../actions/messages.actions";
 import Fetch = Messages.Fetch;
 import FetchPositions = Messages.FetchPositions;
 import Update = Messages.Update;
+import CreateConversation = Messages.CreateConversation;
+import Send = Messages.Send;
+import Get = Messages.Get;
 
 @Component({
   selector: 'app-message-messages-view',
@@ -311,12 +314,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendMessage({ text, attachments = [] }: { text: string, attachments: Attachment[] }) {
     if (!this.conversationId) {
-      this.conversationsService.apiCreate(this.contextType, this.contextId).pipe(
-        tap(({ externalId }) => this.messageService.send(text, externalId, attachments.map(({ id }) => id))),
+      this.store.dispatch(new CreateConversation(this.contextType, this.contextId, text, attachments.map(({ id }) => id))).pipe(
+        tap(({externalId}) => this.store.dispatch(new Send(text, externalId, attachments.map(({ id }) => id))).pipe(
+          switchMap(() => this.store.dispatch(new Get(externalId)))
+        )),
+        shareReplay(1),
         takeUntil(this.destroy$)
-      ).subscribe();
+    ).subscribe();
     } else {
-      this.messageService.send(text, this.conversationId, attachments.map(({ id }) => id));
+      this.store.dispatch(new Send(text, this.conversationId, attachments.map(({ id }) => id)));
     }
   }
 

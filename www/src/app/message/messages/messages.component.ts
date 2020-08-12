@@ -11,6 +11,7 @@ import { StateStatus } from "../../request/common/models/state-status";
 import { AttachmentsService } from "../services/attachments.service";
 import { Attachment } from "../models/attachment";
 import { AppFile } from "../../shared/components/file/file";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-message-messages',
@@ -49,6 +50,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     public attachmentsService: AttachmentsService,
     private messagesService: MessagesService,
     private userInfoService: UserInfoService,
+    public store: Store
   ) {
   }
 
