@@ -23,7 +23,7 @@
         </li>
 
         <li *ngIf="requests.entities.length < requests.totalCount">
-          <button uxgButton primary (click)="appendRequests(requests.entities.length)">Еще</button>
+          <button uxgButton primary (click)="loadMoreRequests(requests.entities.length)">Еще</button>
         </li>
       </ng-container>
     </ul>
