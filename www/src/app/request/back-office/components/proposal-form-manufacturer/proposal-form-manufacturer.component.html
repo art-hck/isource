@@ -29,6 +29,6 @@
   <br/>
   <div class="app-row app-justify-content-end">
     <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
-    <button uxgButton lg primary [disabled]="form.invalid">Все готово</button>
+    <button type="button" uxgButton lg primary [disabled]="form.invalid" (click)="submit(formPositions.controls)">Все готово</button>
   </div>
 </form>
