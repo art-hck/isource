@@ -94,9 +94,36 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }));
     });
 
+
+    // TODO Временно добавил работу с conversationsIds для заявок requests$
+    this.requests$.pipe(take(1), flatMap(({ entities }) => {
+      const conversationsIds = entities.filter(({request}) => request?.conversation?.externalId).map(({request}) => request?.conversation?.externalId);
+
+      console.log('requests$ conversationsIds');
+      console.log(conversationsIds);
+
+      if (conversationsIds.length > 0) {
+        return this.conversationsService.get(conversationsIds);
+      }
+    })).subscribe(conversations => {
+      this.requests$ = this.requests$.pipe(map(requests => {
+        (conversations ?? []).forEach(conversation => {
+          const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
+          // if (request) {
+          //   request.request.context.unreadCount = conversation.unreadCount;
+          // }
+        });
+        return requests;
+      }));
+    });
+
+
     this.requestsItems$.pipe(take(1), flatMap(data => {
         const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
-        return this.conversationsService.get(conversationIds);
+
+        if (conversationIds.length > 0) {
+          return this.conversationsService.get(conversationIds);
+        }
       }),
       takeUntil(this.destroy$)
     ).subscribe(conversations => {
@@ -137,21 +164,17 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
 
       this.messageService
-        .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
+        .getRequests(this.user.getUserRole(), 0, 1, { requestId }, null)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(({ entities }) => {
-          entities.forEach(({ request }) => {
-            this.requests$ = this.requests$.pipe(map(requests => {
-              const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
-              if (requestIndex !== -1) {
-                requests.entities[requestIndex].request = request;
-              }
-              return requests;
-            }));
-          });
-
-          this.fetchCounters();
-        });
+        .subscribe(({ entities }) => entities.forEach(({ request }) => {
+          this.requests$ = this.requests$.pipe(map(requests => {
+            const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
+            if (requestIndex !== -1) {
+              requests.entities[requestIndex].request = request;
+            }
+            return requests;
+          }), tap(() => this.fetchCounters()), shareReplay(1));
+        }));
 
       this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
         tap(data => {
