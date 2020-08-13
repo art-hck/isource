@@ -22,8 +22,7 @@ import { TechnicalProposalsService } from "../../services/technical-proposals.se
 
 @Component({
   selector: 'app-procedure-view',
-  templateUrl: './procedure-view.component.html',
-  styleUrls: ['./procedure-view.component.scss']
+  templateUrl: './procedure-view.component.html'
 })
 export class ProcedureViewComponent implements OnInit {
 
