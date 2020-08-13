@@ -3,7 +3,8 @@
 .scrollbar {
   padding: 11px 3px 11px 11px;
   margin: -11px -19px 0 -11px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  width: 100%;
   max-height: 285px;
 
   @include scrollbar($theme);
