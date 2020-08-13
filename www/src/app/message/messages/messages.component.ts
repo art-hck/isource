@@ -125,6 +125,11 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
       return;
     }
 
+    // включаем лоадер, если у нас первое сообщение и нужно создать чат
+    if (!this.conversationId) {
+      this.state = "fetching";
+    }
+
     this.sendMessage.emit(this.form.value);
     this.files = [];
     this.form.reset();

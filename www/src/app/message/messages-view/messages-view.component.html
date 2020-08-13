@@ -52,7 +52,8 @@
           </li>
 
           <li (click)="onRequestContextClick()" class="status-position-default" [class.selected]="!selectedRequestsItem">
-            Обсуждение заказа
+            <div class="app-ellipsis app-col">Обсуждение заказа</div>
+            <div class="counter" *ngIf="selectedRequest?.conversation?.unreadCount as count">{{ count }}</div>
           </li>
 
           <ng-container *ngFor="let item of (requestsItems$ | async); trackBy: trackById">

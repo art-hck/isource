@@ -79,8 +79,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchCounters() {
+    // обновляем общие счетчики по заявкам
     this.requests$.pipe(take(1), flatMap(({ entities }) => {
       const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
+
+      // если нет ни одного контекста у пользователя, то не отправляем запрос
+      if (!contextIds.length) {
+        return of([]);
+      }
+
       return this.contextsService.get(contextIds);
     })).subscribe(contexts => {
       this.requests$ = this.requests$.pipe(map(requests => {
@@ -94,36 +101,16 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }));
     });
 
-
-    // TODO Временно добавил работу с conversationsIds для заявок requests$
-    this.requests$.pipe(take(1), flatMap(({ entities }) => {
-      const conversationsIds = entities.filter(({request}) => request?.conversation?.externalId).map(({request}) => request?.conversation?.externalId);
-
-      console.log('requests$ conversationsIds');
-      console.log(conversationsIds);
-
-      if (conversationsIds.length > 0) {
-        return this.conversationsService.get(conversationsIds);
-      }
-    })).subscribe(conversations => {
-      this.requests$ = this.requests$.pipe(map(requests => {
-        (conversations ?? []).forEach(conversation => {
-          const request = requests.entities.find(({request: r}) => r.conversation?.externalId === conversation.id);
-          // if (request) {
-          //   request.request.context.unreadCount = conversation.unreadCount;
-          // }
-        });
-        return requests;
-      }));
-    });
-
-
+    // обновляем счетчики внутри заявки
     this.requestsItems$.pipe(take(1), flatMap(data => {
         const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
 
-        if (conversationIds.length > 0) {
-          return this.conversationsService.get(conversationIds);
+        // если чатиков в данной заявке нет, то не отправляем запрос
+        if (!conversationIds.length) {
+          return of([]);
         }
+
+        return this.conversationsService.get(conversationIds);
       }),
       takeUntil(this.destroy$)
     ).subscribe(conversations => {
@@ -138,6 +125,32 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
           return requestItems;
         })
       );
+    });
+
+    // счетчик по "обсуждению заявки" обновляем отдельно
+
+    this.requests$.pipe(take(1), flatMap(({ entities }) => {
+      const conversationIds = entities
+        .filter(({request}) => request.id ===  this.selectedRequest.id)
+        .map(({request}) => request?.conversation?.externalId);
+
+      // если нет ни одного контекста у пользователя, то не отправляем запрос
+      if (!conversationIds.length) {
+        return of([]);
+      }
+
+      return this.conversationsService.get(conversationIds);
+    })).subscribe(conversations => {
+      this.requests$ = this.requests$.pipe(map(requests => {
+        (conversations ?? []).forEach(conversation => {
+          const request = requests.entities
+            .find(({request: r}) => r.conversation?.externalId === conversation.id);
+          if (request) {
+            request.request.conversation.unreadCount = conversation.unreadCount;
+          }
+        });
+        return requests;
+      }));
     });
   }
 
@@ -164,17 +177,31 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
 
       this.messageService
-        .getRequests(this.user.getUserRole(), 0, 1, { requestId }, null)
+        .getRequests(this.user.getUserRole(), 0, 1, {requestId}, null)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(({ entities }) => entities.forEach(({ request }) => {
-          this.requests$ = this.requests$.pipe(map(requests => {
-            const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
-            if (requestIndex !== -1) {
-              requests.entities[requestIndex].request = request;
-            }
-            return requests;
-          }), tap(() => this.fetchCounters()), shareReplay(1));
-        }));
+        .subscribe(({entities}) => {
+          // приходит всегда одна заявка, которую ищем по id
+          const request = entities[0].request;
+
+          // проходим по текущим заявкам и обновляем ту, в которой пришло сообщение
+          this.requests$ = this.requests$.pipe(
+            map(requests => {
+              const requestIndex = requests.entities.findIndex(({request: {id}}) => id === request.id);
+              if (requestIndex !== -1) {
+                requests.entities[requestIndex].request = request;
+
+                // если не выделен ни один элемент, то мы стоим на "Обсуждение заказа"
+                // а значит нужно обновить сообщения для него
+                if (!this.selectedRequestsItem && request.conversation) {
+                  this.conversationId = request.conversation.externalId;
+                }
+              }
+              return requests;
+            }),
+            tap(() => this.fetchCounters()),
+            shareReplay(1)
+          );
+        });
 
       this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
         tap(data => {
@@ -273,7 +300,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Прокручиваем в списке заявок и позиций до выделенных элементов
     setTimeout(() => {
-      const selectedItems = document.querySelectorAll('li.selected');
+      const selectedItems = document.querySelectorAll('li.selected');
       selectedItems.forEach(el => el.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'}));
     }, 100);
   }
