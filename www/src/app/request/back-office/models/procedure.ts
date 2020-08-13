@@ -34,6 +34,7 @@ export class Procedure {
   positionsAnalogs: boolean;
   positionsApplicsVisibility: "PriceAndRating" | "OnlyPrice" | "OnlyRating" | "None";
   positionsBestPriceType: "LowerStartPrice" | "LowerPriceBest";
+  bestPriceRequirements: boolean;
   positionsEntireVolume: boolean;
   positionsRequiredAll: boolean;
   positionsSuppliersVisibility: "Name" | "NameHidden" | "None";
