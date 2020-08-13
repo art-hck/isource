@@ -1,0 +1,37 @@
+.app-table > .app-row {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px #C8CAFF dotted;
+  margin: 20px 0;
+}
+
+h3.section-title {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.info-label {
+  margin-bottom: 10px;
+}
+
+.info-item {
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.position-list, .supplier-list {
+  margin-bottom: 15px;
+
+  & > .app-col:not(:last-child) {
+    padding-right: 15px;
+  }
+
+  & div.name {
+    font-weight: 500;
+  }
+}

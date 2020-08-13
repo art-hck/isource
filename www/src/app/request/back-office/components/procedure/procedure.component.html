@@ -2,7 +2,9 @@
   <div class="app-card">
     <div class="app-row app-align-items-center">
       <h3 class="app-col">
-        Процедура № {{procedure.procedureId}} «{{procedure.procedureTitle}}»
+        <a [href]="'procedure'">Процедура №{{procedure.procedureId}} «{{procedure.procedureTitle}}»</a>
+        <a [routerLink]="['/requests', 'backoffice', procedure.requestId, 'procedure']"
+           [queryParams]="{ source: source, procedureId: procedure.procedureId }">Процедура №{{procedure.procedureId}} «{{procedure.procedureTitle}}»</a>
       </h3>
       <a *ngIf="finished" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
       <a *ngIf="!finished" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>

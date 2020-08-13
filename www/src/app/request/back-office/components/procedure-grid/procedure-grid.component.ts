@@ -16,6 +16,7 @@ import { startWith } from "rxjs/operators";
 })
 export class ProcedureGridComponent implements OnInit {
   @Input() procedure: Procedure;
+  @Input() source: string;
   @Output() bargain = new EventEmitter();
   @Output() prolong = new EventEmitter();
 

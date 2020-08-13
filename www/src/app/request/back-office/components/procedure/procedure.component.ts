@@ -13,6 +13,7 @@ import { Request } from "../../../common/models/request";
 export class ProcedureComponent {
   @Input() procedure: Procedure;
   @Input() request: Request;
+  @Input() source: string;
   @Output() bargain = new EventEmitter();
   @Output() prolong = new EventEmitter();
   folded: boolean;
