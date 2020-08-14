@@ -4,13 +4,7 @@
       <div class="app-row app-align-items-center">
         <div>
           <span class="app-secondary-color">доступ к процедуре:
-            <ng-container *ngIf="procedure.privateAccessContragents; else publicAccess">
-              <b>для ограниченного круга участников</b>
-            </ng-container>
-
-            <ng-template #publicAccess>
-              <b>открытая процедура</b>
-            </ng-template>
+            <b>{{ procedure.privateAccessContragents.length === 0 ? 'открытая процедура' : 'для ограниченного круга участников' }}</b>
           </span>
         </div>
 
@@ -18,12 +12,12 @@
 
         <div [style.margin-right.px]="10">
           <!-- Ссылка на процедуру и кнопка Уторговать  -->
-          <a *ngIf="finished" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
-          <a *ngIf="!finished" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+          <a *ngIf="finished(procedure)" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+          <a *ngIf="!finished(procedure)" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
         </div>
 
-        <button uxgButton secondary (click)="bargain.emit()" *ngIf="finished">Уторговать</button>
-        <button uxgButton secondary (click)="prolong.emit()" *ngIf="!finished && !procedure.isRetrade">Продлить процедуру</button>
+        <button uxgButton secondary (click)="bargain.emit()" *ngIf="finished(procedure)">Уторговать</button>
+        <button uxgButton secondary (click)="prolong.emit()" *ngIf="!finished(procedure) && !procedure.isRetrade">Продлить процедуру</button>
       </div>
     </div>
 
@@ -54,70 +48,66 @@
 
       <div class="app-row">
         <div class="app-col">
-          <ng-container *ngIf="procedure.positions.length">
-            <hr/>
+          <hr/>
 
-            <div class="app-row">
-              <h3 class="app-col section-title">Позиции</h3>
+          <div class="app-row">
+            <h3 class="app-col section-title">Позиции</h3>
 
-              <div class="app-col-auto" *ngIf="procedure.positions.length > limit">
-                <span class="app-ghost-color" *ngIf="!showAllPositions">
-                  Свернуто ({{ procedure.positions.length | pluralize: "позиция" : "позиции" : "позиций"}})</span>
+            <div class="app-col-auto" *ngIf="procedure.positions.length > limit">
+              <span class="app-ghost-color" *ngIf="!showAllPositions">
+                Свернуто ({{ procedure.positions.length | pluralize: "позиция" : "позиции" : "позиций"}})</span>
 
-                <button uxgButton icon link (click)="showAllPositions = !showAllPositions">
-                  <uxg-icon shape="app-chevron" [attr.dir]="showAllPositions ? 'up' : 'down'"></uxg-icon>
-                </button>
-              </div>
+              <button uxgButton icon link (click)="showAllPositions = !showAllPositions">
+                <uxg-icon shape="app-chevron" [attr.dir]="showAllPositions ? 'up' : 'down'"></uxg-icon>
+              </button>
             </div>
+          </div>
 
-            <div class="app-row position-list app-uppercase app-ghost-color app-bold">
-              <small class="app-col app-ellipsis name">Наименование</small>
-              <small class="app-col-3 quantity">Количество</small>
-              <small class="app-col-2 date">Срок</small>
-            </div>
+          <div class="app-row position-list app-uppercase app-ghost-color app-bold">
+            <small class="app-col app-ellipsis name">Наименование</small>
+            <small class="app-col-3 quantity">Количество</small>
+            <small class="app-col-2 date">Срок</small>
+          </div>
 
-            <div class="app-row position-list" *ngFor="let position of getProcedurePositions()">
-              <div class="app-col app-ellipsis name">{{ position.requestPosition.name }}</div>
-              <div class="app-col-3 quantity">{{ position.requestPosition.quantity }} <span class="app-ghost-color">{{ position.requestPosition.measureUnit }}</span></div>
-              <div class="app-col-2 date">
-                <ng-container *ngIf="position.requestPosition.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-                <ng-template #deliveryDate>{{position.requestPosition.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
-              </div>
+          <div class="app-row position-list" *ngFor="let position of getProcedurePositions()">
+            <div class="app-col app-ellipsis name">{{ position.requestPosition.name }}</div>
+            <div class="app-col-3 quantity">{{ position.requestPosition.quantity }} <span class="app-ghost-color">{{ position.requestPosition.measureUnit }}</span></div>
+            <div class="app-col-2 date">
+              <ng-container *ngIf="position.requestPosition.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+              <ng-template #deliveryDate>{{position.requestPosition.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
             </div>
-          </ng-container>
+          </div>
         </div>
       </div>
 
-      <div class="app-row">
+      <div class="app-row" *ngIf="getProcedureContragents().length > 0">
         <div class="app-col">
-          <ng-container *ngIf="procedure.positions.length">
-            <hr/>
+          <hr/>
 
-            <div class="app-row">
-              <h3 class="app-col section-title">Контрагенты</h3>
+          <div class="app-row">
+            <h3 class="app-col section-title">Контрагенты</h3>
 
-              <div class="app-col-auto" *ngIf="getProcedureContragents().length > limit">
-                <span class="app-ghost-color" *ngIf="!showAllContragents">
-                  Свернуто ({{ getProcedureContragents().length | pluralize: "контрагент" : "контрагента" : "контрагентов"}})</span>
+            <div class="app-col-auto" *ngIf="getProcedureContragents().length > limit">
+              <span class="app-ghost-color" *ngIf="!showAllContragents">
+                Свернуто ({{ getProcedureContragents().length | pluralize: "контрагент" : "контрагента" : "контрагентов"}})</span>
 
-                <button uxgButton icon link (click)="showAllContragents = !showAllContragents">
-                  <uxg-icon shape="app-chevron" [attr.dir]="showAllContragents ? 'up' : 'down'"></uxg-icon>
-                </button>
-              </div>
+              <button uxgButton icon link (click)="showAllContragents = !showAllContragents">
+                <uxg-icon shape="app-chevron" [attr.dir]="showAllContragents ? 'up' : 'down'"></uxg-icon>
+              </button>
             </div>
+          </div>
 
-            <div class="app-row supplier-list app-uppercase app-ghost-color app-bold">
-              <small class="app-col app-ellipsis name">Наименование</small>
-              <small class="app-col-3 quantity">ИНН</small>
-              <small class="app-col-2 date">КПП</small>
-            </div>
+          <div class="app-row supplier-list app-uppercase app-ghost-color app-bold">
+            <small class="app-col app-ellipsis name">Наименование</small>
+            <small class="app-col-3 quantity">ИНН</small>
+            <small class="app-col-2 date">КПП</small>
+          </div>
 
-            <div class="app-row supplier-list" *ngFor="let contragent of getProcedureContragents()">
-              <div class="app-col app-ellipsis name">{{ contragent.shortName }}</div>
-              <div class="app-col-3 quantity">{{ contragent.inn }}</div>
-              <div class="app-col-2 date">{{ contragent.kpp }}</div>
-            </div>
-          </ng-container>
+          <div class="app-row supplier-list" *ngFor="let contragent of getProcedureContragents()">
+            <div class="app-col app-ellipsis name">{{ contragent.shortName }}</div>
+            <div class="app-col-3 quantity">{{ contragent.inn }}</div>
+            <div class="app-col-2 date">{{ contragent.kpp }}</div>
+          </div>
         </div>
       </div>
 
