@@ -80,16 +80,16 @@
         </div>
       </div>
 
-      <div class="app-row" *ngIf="getProcedureContragents().length > 0">
+      <div class="app-row" *ngIf="procedure.privateAccessContragents.length > 0">
         <div class="app-col">
           <hr/>
 
           <div class="app-row">
             <h3 class="app-col section-title">Контрагенты</h3>
 
-            <div class="app-col-auto" *ngIf="getProcedureContragents().length > limit">
+            <div class="app-col-auto" *ngIf="procedure.privateAccessContragents.length > limit">
               <span class="app-ghost-color" *ngIf="!showAllContragents">
-                Свернуто ({{ getProcedureContragents().length | pluralize: "контрагент" : "контрагента" : "контрагентов"}})</span>
+                Свернуто ({{ procedure.privateAccessContragents.length | pluralize: "контрагент" : "контрагента" : "контрагентов"}})</span>
 
               <button uxgButton icon link (click)="showAllContragents = !showAllContragents">
                 <uxg-icon shape="app-chevron" [attr.dir]="showAllContragents ? 'up' : 'down'"></uxg-icon>
