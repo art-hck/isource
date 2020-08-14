@@ -128,10 +128,17 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
 
     this.state = "updating";
     this.procedureService.list(this.requestId, source)
-      .pipe(finalize(() => this.state = "received"))
-      .subscribe((data) => {
-        this.procedures$ = this.procedures$.pipe(mapTo(data));
-      });
+      .pipe(
+        finalize(() => this.state = "received"),
+        publishReplay(1), refCount()
+      ).subscribe((data) => {
+      this.procedures$ = of(data);
+
+      // TODO Совсем некрасивое решение для проверки необходимости смены заголовка страницы; Тёма вернётся, узнаю как лучше это сделать
+      if (this.router.routerState.snapshot['_root'].value.queryParams?.procedureId) {
+        this.setPageInfo(data);
+      }
+    });
   }
 
   getSourceCode(source): ProcedureSource|null {
