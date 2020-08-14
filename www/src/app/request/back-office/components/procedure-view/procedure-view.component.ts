@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -24,7 +24,7 @@ import { TechnicalProposalsService } from "../../services/technical-proposals.se
   selector: 'app-procedure-view',
   templateUrl: './procedure-view.component.html'
 })
-export class ProcedureViewComponent implements OnInit {
+export class ProcedureViewComponent implements OnDestroy, OnInit {
 
   @Select(TechnicalCommercialProposalState.availablePositions) technicalCommercialProposalPositions$: Observable<RequestPosition[]>;
   @Select(CommercialProposalState.positions) commercialProposalPositions$: Observable<RequestPosition[]>;
@@ -60,7 +60,7 @@ export class ProcedureViewComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.sourceFromUrl = params.source;
-      this.procedureId = params.procedureId;
+      this.procedureId = +params.procedureId;
     });
 
     let sourceName: string;
@@ -104,18 +104,22 @@ export class ProcedureViewComponent implements OnInit {
   }
 
   setPageInfo(procedures: Procedure[]) {
-    this.procedure = procedures.filter(procedure => procedure.procedureId !== this.procedureId)[0];
+    this.procedure = procedures.filter(procedure => procedure.procedureId === this.procedureId)[0];
     this.title.setTitle(`Процедура №${this.procedure.procedureId} «${this.procedure.procedureTitle}»`);
   }
 
-  fetchProcedures(sourceFromUrl) {
+  fetchProcedures(sourceFromUrl): void {
     const source = this.getSourceCode(sourceFromUrl);
 
     this.procedureService.list(this.requestId, source).pipe(
       publishReplay(1), refCount()
     ).subscribe((data) => {
       this.procedures$ = of(data);
-      this.setPageInfo(data);
+
+      // TODO Совсем некрасивое решение для проверки необходимости смены заголовка страницы; Тёма вернётся, узнаю как лучше это сделать
+      if (this.router.routerState.snapshot['_root'].value.queryParams?.procedureId) {
+        this.setPageInfo(data);
+      }
     });
   }
 
@@ -141,5 +145,10 @@ export class ProcedureViewComponent implements OnInit {
       default:
         return null;
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

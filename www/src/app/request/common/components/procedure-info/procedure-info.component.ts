@@ -43,14 +43,7 @@ export class ProcedureInfoComponent {
   }
 
   getProcedureContragents(): ContragentShortInfo[] {
-    let flatContragents: ContragentShortInfo[] = this.procedure.positions
-      .filter(position => position.contragent)
-      .reduce((contragents, position) => [...contragents, position.contragent], []);
-
-    // Убираем из массива дублирующихся контрагентов
-    flatContragents = flatContragents.filter((value, index, array) =>
-      !array.filter((v, i) => JSON.stringify(value) === JSON.stringify(v) && i < index).length);
-
-    return flatContragents.slice(0, this.showAllContragents ? flatContragents.length : (this.limit || flatContragents.length));
+    // Если showAllPositions = true или не указан limit — возвращаем всё
+    return this.procedure.privateAccessContragents.slice(0, this.showAllContragents ? this.procedure.privateAccessContragents.length : (this.limit || this.procedure.privateAccessContragents.length));
   }
 }
