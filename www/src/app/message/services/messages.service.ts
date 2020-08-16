@@ -17,9 +17,11 @@ import { HttpClient } from "@angular/common/http";
 })
 export class MessagesService {
 
+  public curConversationId = null;
+
   constructor(private ws: WsChatService, protected api: HttpClient) {}
 
-  get(conversationId: number, messageId?: number, limit: number = 50, offset: number = 0) {
+  get(conversationId: number, messageId?: number, limit: number = 500, offset: number = 0) {
     return this.ws.send<Message[]>(`messages.get`, { conversationId, messageId, limit, offset });
   }
 

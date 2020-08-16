@@ -65,8 +65,7 @@ export class WsChatService implements IWebsocketService {
   on<T>(event: WsChatTypes) {
     return this.received$.pipe(
       filter(({ type }) => event && type === event),
-      map(({ data }: WsChatMessage<T>) => data),
-      take(10)
+      map(({ data }: WsChatMessage<T>) => data)
     );
   }
 
