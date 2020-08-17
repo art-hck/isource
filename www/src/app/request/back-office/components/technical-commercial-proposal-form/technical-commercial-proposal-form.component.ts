@@ -53,7 +53,8 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
   invalidDocControl = false;
-  showErrorMessage = false;
+  manufactureErrorMessage = false;
+  parameterErrorMessage = false;
 
   get isManufacturerPristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
@@ -91,13 +92,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
         if (docsCount > 0) {
           this.invalidDocControl = false;
-          this.showErrorMessage = false;
         }
       }
 
-      if (this.form.get('positions').dirty && this.form.get('positions').value.length && docsCount === 0
-        && this.isManufacturerPristine && this.form.get('documents').dirty) {
-        this.showErrorMessage = true;
+      if (this.form.get('positions').dirty && this.form.get('positions').value.length && this.isManufacturerPristine) {
+        this.manufactureErrorMessage = true;
+        this.parameterErrorMessage = true;
         this.invalidDocControl = false;
       }
 

@@ -58,7 +58,7 @@
                 <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
               </div>
 
-              <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched && this.form.get('documents').value.length === 0">
+              <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched">
                 <div class="app-control-error" *ngIf="form.get('positions').errors as e">
                   <span class="error-message" *ngIf="e.required">Выберите позиции для создания предложения</span>
                 </div>
@@ -81,22 +81,20 @@
               </div>
             </div>
 
-            <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
-              <ng-container *ngIf="proposalPosition.manufacturingName as name; else manufactureError">{{ name }}</ng-container>
+            <ng-container *ngIf="control.value[0]?.manufacturingName; else manufactureError">
+              <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
+                {{ proposalPosition.manufacturingName }}
+              </div>
+            </ng-container>
 
-              <ng-template #manufactureError>
-                <ng-container *ngIf="showErrorMessage">
-                  <div class="app-control-error">
-                    <span class="error-message" [style.margin-top.px]="0">Заполните наименования для каждой позиции</span>
-                  </div>
-                </ng-container>
+            <ng-template #manufactureError>
+              <ng-container *ngIf="manufactureErrorMessage">
+                <div class="app-control-error">
+                  <span class="error-message">Заполните наименования для каждой позиции</span>
+                </div>
+              </ng-container>
+            </ng-template>
 
-                <!-- todo Вероятно, эту ошибку можно убрать, т.к. сейчас нельзя сохранить пустое заводское наименование -->
-                <ng-container *ngIf="manufacturerValidator(control, false) && control.hasError('manufacturer_name_error')">
-                  <span class="app-error-color app-bold">Необходимо заполнить!</span>
-                </ng-container>
-              </ng-template>
-            </div>
           </div>
         </div>
       </div>
@@ -114,35 +112,36 @@
           </button>
         </div>
 
-        <div class="position-info-item app-row" *ngFor="let pos of control.value">
-          <ng-container *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
-            <div class="app-col">
-              {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
-              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
-            </div>
-            <div class="app-col">
-              {{ pos.quantity }}
-              <span class="app-ghost-color">{{ pos.measureUnit }}</span>
-            </div>
-            <div class="app-col">
-              {{ pos.priceWithoutVat | number:'1.0-2' }}
-              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
-            </div>
-            <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
-          </ng-container>
-          <ng-template #parameterError>
-            <ng-container *ngIf="showErrorMessage">
-              <div class="app-control-error">
-                <span class="error-message" [style.margin-top.px]="0">Заполните параметры для позиций</span>
+        <ng-container *ngIf="control.value[0]?.priceWithoutVat; else parameterError">
+          <div class="position-info-item app-row" *ngFor="let pos of control.value">
+            <ng-container *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
+              <div class="app-col">
+                {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
+                <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
               </div>
-            </ng-container>
 
-            <!-- todo Вероятно, эту ошибку можно убрать, т.к. сейчас нельзя сохранить пустое параметры позиции -->
-            <ng-container *ngIf="parametersValidator(control, false) && control.hasError('parameters_error')">
-              <span class="app-error-color app-bold">Необходимо заполнить!</span>
+              <div class="app-col">
+                {{ pos.quantity }}
+                <span class="app-ghost-color">{{ pos.measureUnit }}</span>
+              </div>
+
+              <div class="app-col">
+                {{ pos.priceWithoutVat | number:'1.0-2' }}
+                <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
+              </div>
+
+              <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
             </ng-container>
-          </ng-template>
-        </div>
+          </div>
+        </ng-container>
+
+        <ng-template #parameterError>
+          <ng-container *ngIf="parameterErrorMessage">
+            <div class="app-control-error">
+              <span class="error-message">Заполните параметры для позиций</span>
+            </div>
+          </ng-container>
+        </ng-template>
       </div>
     </div>
 
