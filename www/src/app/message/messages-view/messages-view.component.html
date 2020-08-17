@@ -52,7 +52,7 @@
           </li>
 
           <li (click)="onRequestContextClick()" class="status-position-default" [class.selected]="!selectedRequestsItem">
-            <div class="app-ellipsis app-col">Обсуждение заказа</div>
+            <div class="app-ellipsis app-col">Обсуждение заявки</div>
             <div class="counter" *ngIf="selectedRequest?.conversation?.unreadCount as count">{{ count }}</div>
           </li>
 
