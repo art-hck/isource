@@ -18,6 +18,7 @@ import { ConversationsService } from "../services/conversations.service";
 import { Attachment } from "../models/attachment";
 import { Request } from "../../request/common/models/request";
 import { ContextsService } from "../services/contexts.service";
+import {RequestPositionListEntityType} from "../../request/common/enum/request-position-list-entity-type";
 
 @Component({
   selector: 'app-message-messages-view',
@@ -104,6 +105,12 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // обновляем счетчики внутри заявки
     this.requestsItems$.pipe(take(1), flatMap(data => {
         const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
+        // добавляем идентификаторы чатов с позиций, которые в группах
+        data.filter(item => item?.entityType === RequestPositionListEntityType.GROUP)
+          .forEach(group => group.positions
+            .filter(item => item?.conversation?.externalId)
+            .forEach(position => conversationIds.push(position.conversation.externalId))
+          );
 
         // если чатиков в данной заявке нет, то не отправляем запрос
         if (!conversationIds.length) {
@@ -120,6 +127,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             if (requestItem) {
               requestItem.conversation.unreadCount = conversation.unreadCount;
             }
+
+            requestItems.forEach(item => {
+              if (item.entityType === RequestPositionListEntityType.GROUP) {
+                const positionInGroupItem = item.positions.find(itemInGroup => itemInGroup.conversation?.externalId === conversation.id);
+                if (positionInGroupItem) {
+                  positionInGroupItem.conversation.unreadCount = conversation.unreadCount;
+                }
+              }
+            });
           });
 
           return requestItems;
@@ -128,7 +144,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // счетчик по "обсуждению заявки" обновляем отдельно
-
     this.requests$.pipe(take(1), flatMap(({ entities }) => {
       const conversationIds = entities
         .filter(({request}) => request.id ===  this.selectedRequest.id)
@@ -169,7 +184,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       );
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
-      debounceTime(100),
+      debounceTime(500),
       takeUntil(this.destroy$)
     ).subscribe(() => this.fetchCounters());
 
