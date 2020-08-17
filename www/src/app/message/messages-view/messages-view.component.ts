@@ -27,6 +27,8 @@ import Update = Messages.Update;
 import CreateConversation = Messages.CreateConversation;
 import Send = Messages.Send;
 import Get = Messages.Get;
+import FetchRequestCounters = Messages.FetchRequestCounters;
+import FetchConversationCounters = Messages.FetchConversationCounters;
 
 @Component({
   selector: 'app-message-messages-view',
@@ -95,18 +97,18 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getRouteData();
 
     this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
-      tap(() => this.jumpToRequestOrPosition()),
-      shareReplay(1)
+      tap(() => this.store.dispatch(new FetchRequestCounters())),
+      tap(() => this.jumpToRequestOrPosition())
     ).subscribe();
 
-    merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
-      debounceTime(100),
-      takeUntil(this.destroy$)
-    ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
-
-    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
-      this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
-    }));
+    // merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
+    //   debounceTime(100),
+    //   takeUntil(this.destroy$)
+    // ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
+    //
+    // this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
+    //   this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
+    // }));
   }
 
   ngAfterViewInit() {
@@ -135,7 +137,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   getRequestPositionsFlat(requestPositionsList: RequestPositionList[], widthGroups = false): RequestPosition[] {
     return requestPositionsList.reduce(function flatPositionList(arr, curr: RequestPositionList) {
       if (curr instanceof RequestGroup) {
-        return widthGroups ?  [...arr, curr, ...flatPositionList(curr.positions, null)] : [...arr, ...flatPositionList(curr.positions, null)];
+        return widthGroups ? [...arr, curr, ...flatPositionList(curr.positions, null)] : [...arr, ...flatPositionList(curr.positions, null)];
       } else {
         return [...arr, curr].filter(Boolean);
       }
@@ -143,39 +145,60 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   jumpToRequestOrPosition(): void {
-    if (this.positionId && this.requestId) {
+    let requestEntities = [];
+    let requestToSelect = [];
+
+    if (this.requestId) {
       // Выбор заявки в списке
-      const requestToSelect = this.requestEntities.filter(
-        request => request.request.id === this.requestId
-      );
-      this.onRequestClick(requestToSelect[0].request);
+      this.requests$.pipe(takeUntil(this.destroy$)).subscribe((requests) => {
+        requestEntities = requests.entities;
+        requestToSelect = requestEntities.filter(
+          ({ request }) => {
+            return request.id === this.requestId;
+          });
 
-      // Выбор позиции в списке
-      this.requestsItems$.pipe(takeUntil(this.destroy$)).subscribe(requestItems => {
-        const flatPositionsList = this.getRequestPositionsFlat(requestItems);
+        if (!requestToSelect || requestToSelect.length === 0) {
+          this.appendRequests(requestEntities.length).subscribe((data) => {
+            this.requests$ = of(data);
+            this.jumpToRequestOrPosition();
+          });
+        } else {
+          // Кликаем по нужной заявке
+          this.onRequestClick(requestToSelect[0].request);
 
-        const requestItemToSelect = Object.values(flatPositionsList).filter(
-          requestItem => requestItem.id === this.positionId
-        );
-        this.onRequestItemClick(requestItemToSelect[0]);
+          // Если передан id позиции, выделяем и его
+          if (this.positionId) {
+            // Выбор позиции в списке
+            this.requestsItems$.pipe(takeUntil(this.destroy$)).subscribe(requestItems => {
+              const flatPositionsList = this.getRequestPositionsFlat(requestItems);
+
+              const requestItemToSelect = Object.values(flatPositionsList).filter(
+                requestItem => requestItem.id === this.positionId
+              );
+
+              // Кликаем по нужной позиции
+              this.onRequestItemClick(requestItemToSelect[0]);
+            });
+          }
+        }
       });
-    } else if (this.requestId) {
-      // Выбор заявки в списке
-      const requestToSelect = this.requestEntities.filter(
-        request => request.request.id === this.requestId
-      );
-      this.onRequestClick(requestToSelect[0].request);
     } else {
-      this.requests$.pipe(filter(requests => requests?.entities?.length > 0)).subscribe(
-        requests => this.onRequestClick(requests.entities[0].request)
-      );
+      this.onRequestClick(this.requestEntities[0].request);
     }
+
+    // Прокручиваем в списке заявок и позиций до выделенных элементов
+    setTimeout(() => {
+      const selectedItems = document.querySelectorAll('li.selected');
+      selectedItems.forEach(el => el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }));
+    }, 100);
   }
 
   onRequestClick(request: RequestListItem) {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
-    this.store.dispatch(new FetchPositions(this.selectedRequest.id, this.user.getUserRole()));
+    this.store.dispatch(new FetchPositions(this.selectedRequest.id, this.user.getUserRole())).pipe(
+      tap(() => this.store.dispatch(new FetchConversationCounters([request.context.externalId])))
+    ).subscribe();
 
     this.onRequestContextClick();
   }
@@ -191,7 +214,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id + '/' + requestItemType + '/' + this.selectedRequestsItem.id],
-      { replaceUrl: true}
+      { replaceUrl: true }
     );
   }
 
@@ -201,7 +224,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
    *
    * @param entityType
    */
-  getRequestEntityUrlNameByType({entityType}: RequestPositionList | RequestGroup | RequestPosition): string {
+  getRequestEntityUrlNameByType({ entityType }: RequestPositionList | RequestGroup | RequestPosition): string {
     switch (entityType) {
       case 'POSITION':
         return 'position';
@@ -221,7 +244,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id],
-      { replaceUrl: true}
+      { replaceUrl: true }
     );
   }
 
@@ -261,7 +284,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getRequestItemStatus(item: RequestPositionList): { name: string, label: string } {
     if (item instanceof RequestPosition) {
-      return {name: item.status, label: item.statusLabel};
+      return { name: item.status, label: item.statusLabel };
     } else if (item instanceof RequestGroup) {
       return null;
     }
@@ -315,31 +338,36 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   sendMessage({ text, attachments = [] }: { text: string, attachments: Attachment[] }) {
     if (!this.conversationId) {
       this.store.dispatch(new CreateConversation(this.contextType, this.contextId, text, attachments.map(({ id }) => id))).pipe(
-        tap(({externalId}) => this.store.dispatch(new Send(text, externalId, attachments.map(({ id }) => id))).pipe(
+        tap(({ externalId }) => this.store.dispatch(new Send(text, externalId, attachments.map(({ id }) => id))).pipe(
           switchMap(() => this.store.dispatch(new Get(externalId)))
         )),
         shareReplay(1),
         takeUntil(this.destroy$)
-    ).subscribe();
+      ).subscribe();
     } else {
       this.store.dispatch(new Send(text, this.conversationId, attachments.map(({ id }) => id)));
     }
   }
 
-  appendRequests(startFrom) {
-    this.messageService.getRequests(this.user.getUserRole(), startFrom, this.pageSize, [], null).pipe(
+  loadMoreRequests(startFrom) {
+    this.appendRequests(startFrom).subscribe((data) => {
+      this.requests$ = of(data);
+    });
+  }
+
+  appendRequests(startFrom): Observable<Page<RequestsList>> {
+    return this.messageService.getRequests(this.user.getUserRole(), startFrom, this.pageSize, [], null).pipe(
       flatMap(({ entities }) => {
         return this.requests$.pipe(
           map(items => ({ ...items, entities: [...items.entities, ...entities] })),
         );
       }),
       takeUntil(this.destroy$)
-    ).subscribe(data => {
-        this.requests$ = of(data);
-      });
+    );
   }
 
-  ngOnDestroy() {
+
+    ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }

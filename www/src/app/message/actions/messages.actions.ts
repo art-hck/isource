@@ -25,8 +25,15 @@ export namespace Messages {
     ) {}
   }
 
-  export class FetchCounters {
-    static readonly type = '[Messages] FetchCounters';
+  export class FetchRequestCounters {
+    static readonly type = '[Messages] FetchRequestCounters';
+  }
+
+  export class FetchConversationCounters {
+    static readonly type = '[Messages] FetchConversationCounters';
+    constructor(
+      public externalId: number[]
+  ) {}
   }
 
   export class Update {
