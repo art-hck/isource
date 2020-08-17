@@ -1,5 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
-import { bufferToggle, delayWhen, filter, flatMap, map, shareReplay, take, tap, windowToggle } from "rxjs/operators";
+import {
+  bufferToggle,
+  delayWhen,
+  filter,
+  flatMap,
+  map,
+  shareReplay,
+  take,
+  tap,
+  windowToggle
+} from "rxjs/operators";
 import { IWebsocketService } from "../websocket.interfaces";
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WsChatTypes } from "../enum/ws-chat-types";
@@ -22,6 +32,7 @@ export class WsChatService implements IWebsocketService {
   constructor(@Inject(config) private wsConfig: WsConfig, private keycloakService: KeycloakService) {
 
     this.keycloakService.getToken().then(accessToken => {
+      if (!accessToken) { return; }
 
       this.connect(accessToken);
 
@@ -54,7 +65,7 @@ export class WsChatService implements IWebsocketService {
   on<T>(event: WsChatTypes) {
     return this.received$.pipe(
       filter(({ type }) => event && type === event),
-      map(({ data }: WsChatMessage<T>) => data),
+      map(({ data }: WsChatMessage<T>) => data)
     );
   }
 

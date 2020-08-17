@@ -17,6 +17,9 @@ import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
 import Approve = RequestActions.Approve;
 import Reject = RequestActions.Reject;
+import PublishPositions = RequestActions.PublishPositions;
+import ApprovePositions = RequestActions.ApprovePositions;
+import RejectPositions = RequestActions.RejectPositions;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -76,7 +79,8 @@ export class RequestState {
 
     return this.rest.getRequestPositions(requestId).pipe(
       tap(positions => setState(patch({positions, positionsStatus: "received" as StateStatus }))),
-      tap(positions => this.cachePositions[requestId] = positions)
+      tap(positions => this.cachePositions[requestId] = positions),
+      tap(() => setState(patch({ status: "received" as StateStatus})))
     );
   }
 
@@ -100,6 +104,27 @@ export class RequestState {
   @Action(Reject) reject({setState, dispatch}: Context, {requestId}: Reject) {
     return this.rest.rejectRequest(requestId, "").pipe(
       switchMap(() => dispatch( [new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(PublishPositions) publishPositions({setState, dispatch}: Context, {requestId, positionIds}: PublishPositions) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.publishPositions(requestId, positionIds).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(ApprovePositions) approvePositions({setState, dispatch}: Context, {requestId, positionIds}: ApprovePositions) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.approvePositions(requestId, positionIds).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
+    );
+  }
+
+  @Action(RejectPositions) rejectPositions({setState, dispatch}: Context, {requestId, positionIds, rejectionMessage}: RejectPositions) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.rejectPositions(requestId, positionIds, rejectionMessage).pipe(
+      switchMap(() => dispatch([new Refresh(requestId), new RefreshPositions(requestId)]))
     );
   }
 

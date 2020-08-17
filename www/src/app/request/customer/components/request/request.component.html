@@ -9,6 +9,9 @@
       (addPosition)="store.dispatch(refreshPositions(requestId))"
       (reject)="store.dispatch(reject(requestId))"
       (approve)="store.dispatch(approve(requestId))"
+      (publishPositions)="store.dispatch(publishPositions($event))"
+      (approvePositions)="store.dispatch(approvePositions($event))"
+      (rejectPositions)="store.dispatch(rejectPositions($event))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>
   </ng-container>

@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-card">
 
     <!-- page title -->
@@ -8,11 +8,11 @@
         <h3 *ngIf="isEditing">Редактирование технического предложения</h3>
       </div>
       <!-- Пока не реализовано на бэка -->
-<!--      <div class="app-col app-grow-0" *ngIf="isEditing">-->
-<!--        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">-->
-<!--          <uxg-icon shape="app-trash"></uxg-icon>-->
-<!--        </button>-->
-<!--      </div>-->
+      <!--      <div class="app-col app-grow-0" *ngIf="isEditing">-->
+      <!--        <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">-->
+      <!--          <uxg-icon shape="app-trash"></uxg-icon>-->
+      <!--        </button>-->
+      <!--      </div>-->
       <div class="app-col app-grow-0">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
           <uxg-icon shape="app-cross"></uxg-icon>
@@ -55,6 +55,7 @@
       [documents]="defaultTPValue('documents')"
       [files]="formDocuments.value"
       [disabled]="form.get('documents').disabled"
+      [invalid]="invalidDocControl"
       (select)="filesSelected($event)"
       (remove)="formDocuments.removeAt($event)"
     ></app-documents-form-control>
@@ -74,7 +75,7 @@
       </div>
     </div>
     <br>
-    <div class="app-secondary-color">
+    <div class="app-secondary-color" [ngClass]="{'error-message' : showErrorMessage}">
       Вы можете либо приложить необходимые документы, либо заполнить все заводские наименования, либо приложить
       документы и заполнить все заводские наименования.
     </div>
@@ -85,22 +86,39 @@
     <div class="app-row">
       <div class="app-col">
         <small class="app-ghost-color app-bold">НАИМЕНОВАНИЕ ПОЗИЦИИ</small>
-        <div>
+
+        <div class="app-row">
           <button
             type="button" uxgButton secondary (click)="positionsModal.open()"
             [disabled]="form.get('positions').disabled">Выбрать позиции
           </button>
+          <div class="app-col">
+            <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched && this.form.get('documents').value.length === 0">
+              <div class="app-control-error" *ngIf="form.get('positions').errors as e">
+                <span class="error-message" *ngIf="e.required">Выберите позиции для создания предложения</span>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </div>
       <div class="app-col">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
-        <div>
+        <div class="app-row">
+
           <button
             type="button" uxgButton secondary (click)="manufacturerModal.open()"
             [disabled]="form.get('positions').disabled || form.get('positions').value?.length <= 0">Заполнить
             наименования
           </button>
+          <div class="app-col">
+            <ng-container *ngIf="showErrorMessage">
+              <div class="app-control-error">
+                <span class="error-message">Заполните наименования для каждой позиции</span>
+              </div>
+            </ng-container>
+          </div>
         </div>
+
       </div>
     </div>
     <div class="positions">
@@ -131,10 +149,10 @@
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
         <button *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'"
-          type="button" uxgButton secondary (click)="submit(false)"
-          [disabled]="form.disabled || form.invalid">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
+                type="button" uxgButton secondary (click)="submit(false)"
+                [disabled]="form.disabled">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>
-        <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>
+        <button uxgButton primary [disabled]="form.disabled">Отправить на согласование</button>
       </div>
     </div>
 
@@ -180,7 +198,8 @@
         <ng-template uxgModalFooter>
           <button type="button" uxgButton lg secondary uxgModalClose>Отмена</button>
           <button uxgButton lg primary (click)="positionsSearch.submit()"
-                  [disabled]="!positionsSearch.checkedFormItems.length">Все готово</button>
+                  [disabled]="!positionsSearch.checkedFormItems.length">Все готово
+          </button>
         </ng-template>
       </ng-container>
     </uxg-modal>
@@ -200,15 +219,20 @@
       <div class="app-secondary-color">
         Вы можете загрузить позиции и заводские наименования списком, если заполните шаблон xls таблицы (
         <a class="app-link" (click)="onDownloadTemplate()">
-          <document-icon name=".xls" size="s"></document-icon><b> скачать шаблон</b>
+          <document-icon name=".xls" size="s"></document-icon>
+          <b> скачать шаблон</b>
         </a>), и загрузите файл в систему.
       </div>
       <div class="dragAndDropArea">
-        <app-template-upload (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+        <app-template-upload
+          [invalid]="invalidUploadTemplate"
+          (fileSelected)="onChangeFilesList($event)"></app-template-upload>
       </div>
       <ng-template uxgModalFooter>
+        <div class="doc-error-message" *ngIf="invalidUploadTemplate">Пожалуйста, загрузите необходимый шаблон</div>
+
         <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
-        <button uxgButton primary lg uxgModalClose (click)="onSendTemplatePositions()">Загрузить</button>
+        <button uxgButton primary lg (click)="onSendTemplatePositions()">Загрузить</button>
       </ng-template>
     </uxg-modal>
 

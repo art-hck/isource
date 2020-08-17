@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { DocumentIconSize } from "../../enums/document-icon-size";
+import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AppFile } from "../file/file";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../../core/config/gpnmarket-config.interface";
 
 /**
  * Компонент для отображения и выбора файлов для последующей загрузки на сервер
@@ -11,39 +12,35 @@ import { DocumentIconSize } from "../../enums/document-icon-size";
   templateUrl: './document-upload-list.component.html',
   styleUrls: ['./document-upload-list.component.scss']
 })
-export class DocumentUploadListComponent {
+export class DocumentUploadListComponent implements OnInit {
 
   @Input() documents: File[] = [];
   @Input() uploadLabel = 'Выбрать документ';
   @Input() dragAndDropAvailable = false;
   @Input() uploadAvailable = true;
   @Input() removable = true;
-
+  @Input() allowed: string[];
+  @Input() denied: string[];
   @Output() fileSelected = new EventEmitter<File[]>();
-
   @ViewChild('uploadEl') uploadElRef: ElementRef;
+  appFiles: AppFile[] = [];
 
-  public documentIconSize = DocumentIconSize;
+  ngOnInit() {
+    this.appFiles = this.documents.map(file => new AppFile(file, this.allowed));
+  }
 
   addDocument(files: File[]) {
-    this.documents.push(...files);
+    this.appFiles.push(...files.map(file => new AppFile(file, this.allowed)));
     this.onChangeDocuments();
   }
 
-  removeDocument(document: File) {
-    this.documents = this.documents.filter((item) => item !== document);
+  removeAppFile(appFile: AppFile) {
+    this.appFiles = this.appFiles.filter((item) => item !== appFile);
     this.onChangeDocuments();
   }
 
   onChangeDocuments() {
-    this.fileSelected.emit(this.documents);
-  }
-
-  /**
-   * Открывает окно для выбора файлов
-   */
-  open() {
-    this.uploadElRef.nativeElement.click();
+    this.fileSelected.emit(this.appFiles.filter(file => file.valid).map(({ file }) => file));
   }
 
   clear() {

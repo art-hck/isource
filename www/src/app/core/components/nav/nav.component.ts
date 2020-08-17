@@ -33,7 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
   ngOnInit() {
     merge(this.messagesService.onNew(), this.messagesService.onMarkSeen()).pipe(
       startWith(0),
-      debounceTime(100),
+      debounceTime(500),
       switchMap(() => this.messagesService.unreadCount().pipe(map(({ count }) => count))),
       takeUntil(this.destroy$))
     .subscribe(count => this.unreadMessagesCount$.next(count));

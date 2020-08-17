@@ -64,3 +64,21 @@
     opacity: 1;
   }
 }
+
+.error-message {
+  font-size: 14px;
+  font-weight: 800;
+  color: uxg($theme, color-control-invalid);
+  line-height: 1.2;
+  margin-top: 15px;
+  width: 200px;
+  white-space: initial;
+}
+
+.doc-error-message {
+  width: 150px;
+  text-align: right;
+  font-weight: bold;
+  margin-right: 10px;
+  color: uxg($theme, color-control-invalid);
+}

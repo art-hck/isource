@@ -34,37 +34,39 @@
 
   <div class="new-message">
     <!-- @TODO: Implement attachments -->
-    <button uxgButton appUploadFile [multiple]="true" (select)="pushFiles($event)" type="button" class="btn-add-file app-ghost-color">
+    <button uxgButton appUploadFile
+            [multiple]="true"
+            (select)="pushFiles($event)"
+            [disabled]="selectedRequestsItemStatus?.name === 'DRAFT'"
+            type="button" class="btn-add-file app-ghost-color">
       <uxg-icon shape="app-attach" size="32"></uxg-icon>
     </button>
-
     <form [formGroup]="form" (ngSubmit)="submit()">
       <button uxgButton lg iconText link type="submit" class="btn-send" [disabled]="form.invalid">
         <uxg-icon shape="app-message" size="32"></uxg-icon>
         <span>Отправить</span>
       </button>
-
-      <div class="input-wrapper">
+      <div class="app-ghost-color" *ngIf="selectedRequestsItemStatus?.name === 'DRAFT'; else inputMessage">
+        <br>
+        Позиция в статусе черновик, невозможно отправлять сообщения
+      </div>
+      <ng-template #inputMessage>
+        <div class="input-wrapper">
         <textarea formControlName="text"
                   placeholder="Написать сообщение"
                   (keydown.enter)="submit()"
                   (keyup.enter)="form.reset()">
         </textarea>
-      </div>
+        </div>
+      </ng-template>
 
       <div class="document-upload-list-wrap">
-        <app-document-upload-list
-            [uploadLabel]="''"
-            [documents]="getFiles('received')"
-            (fileSelected)="deleteFiles($event)"
-        ></app-document-upload-list>
-        <app-document-upload-list
-            class="loading-arrachments"
-            [uploadLabel]="''"
-            [documents]="getFiles('fetching')"
-            [removable]="false"
-            (fileSelected)="deleteFiles($event)"
-        ></app-document-upload-list>
+        <app-file
+          [class.loading-attachments]="file.status ==='fetching'"
+          *ngFor="let file of files; index as i"
+          [appFile]="file.appFile"
+          (delete)="deleteFile(file, i)">
+        </app-file>
       </div>
     </form>
   </div>

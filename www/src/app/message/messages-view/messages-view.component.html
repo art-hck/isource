@@ -10,16 +10,22 @@
         </div>
       </li>
 
-      <li *ngFor="let request of (requests$ | async)?.entities; trackBy: trackByRequestId"
-          (click)="onRequestClick(request.request)"
-          [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
-          [title]="request.request.name">
+      <ng-container *ngIf="(requests$ | async) as requests">
+        <li *ngFor="let request of requests?.entities; trackBy: trackByRequestId"
+            (click)="onRequestClick(request.request)"
+            [ngClass]="{'selected': request.request.id === selectedRequest?.id}"
+            [title]="request.request.name">
 
-        <div class="title">
-          <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
-        </div>
-        <div class="counter" *ngIf="request.request?.conversation?.unreadCount as count">+{{ count }}</div>
-      </li>
+          <div class="title">
+            <span><b>{{ request.request.number }} </b> {{ request.request.name }}</span>
+          </div>
+          <div class="counter" *ngIf="request.request?.context?.unreadCount as count">{{ count }}</div>
+        </li>
+
+        <li *ngIf="requests.entities.length < requests.totalCount">
+          <button uxgButton primary (click)="loadMoreRequests(requests.entities.length)">Еще</button>
+        </li>
+      </ng-container>
     </ul>
   </div>
 
@@ -29,7 +35,7 @@
         <div class="app-col request-info">
           Заявка №{{ selectedRequest?.number }}
           <div class="request-items-header-sub">
-            {{ selectedRequest.contragent.shortName }}
+            {{ selectedRequest?.contragent?.shortName }}
           </div>
         </div>
 
@@ -46,7 +52,8 @@
           </li>
 
           <li (click)="onRequestContextClick()" class="status-position-default" [class.selected]="!selectedRequestsItem">
-            Обсуждение заказа
+            <div class="app-ellipsis app-col">Обсуждение заявки</div>
+            <div class="counter" *ngIf="selectedRequest?.conversation?.unreadCount as count">{{ count }}</div>
           </li>
 
           <ng-container *ngFor="let item of (requestsItems$ | async); trackBy: trackById">
@@ -98,7 +105,11 @@
 
     <div class="messages-list-content">
       <ng-container *ngIf="(requests$ | async)?.entities.length !== 0; else noMessages">
-        <app-message-messages [contextId]="contextId" [contextType]="contextType" [conversationId]="conversationId" (sendMessage)="sendMessage($event)">
+        <app-message-messages [contextId]="contextId"
+                              [contextType]="contextType"
+                              [conversationId]="conversationId"
+                              [selectedRequestsItemStatus]="getRequestItemStatus(selectedRequestsItem)"
+                              (sendMessage)="sendMessage($event)">
         </app-message-messages>
       </ng-container>
 

@@ -10,7 +10,6 @@ import { RequestPositionList } from "../../models/request-position-list";
 import { RequestService } from "../../../customer/services/request.service";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FeatureService } from "../../../../core/services/feature.service";
-import { RequestStatus } from "../../enum/request-status";
 import { PositionStatus } from "../../enum/position-status";
 import { PermissionType } from "../../../../auth/enum/permission-type";
 import { RequestPositionStatusService } from "../../services/request-position-status.service";
@@ -37,6 +36,9 @@ export class RequestComponent implements OnChanges {
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
+  @Output() publishPositions = new EventEmitter();
+  @Output() approvePositions = new EventEmitter();
+  @Output() rejectPositions = new EventEmitter();
   @Output() uploadFromTemplate = new EventEmitter();
 
   readonly popoverDir = UxgPopoverContentDirection;
@@ -77,6 +79,14 @@ export class RequestComponent implements OnChanges {
 
   private get hasOnApprovalPositions(): RequestPositionList[] {
     return this.flatPositions.filter(position => position.status === PositionStatus.ON_CUSTOMER_APPROVAL);
+  }
+
+  everyPositionHasStatus(positions: RequestPosition[], status: string): boolean {
+    return positions.every(position => position.status === status);
+  }
+
+  someOfPositionsHasStatus(positions: RequestPosition[], status: string): boolean {
+    return positions.some(position => position.status === status);
   }
 
   constructor(
@@ -159,6 +169,24 @@ export class RequestComponent implements OnChanges {
 
   asFormArray(control: AbstractControl) {
     return control as FormArray;
+  }
+
+  onPublishPositions() {
+    const positionIds = this.checkedPositions.map(item => item.id);
+
+    this.publishPositions.emit(positionIds);
+  }
+
+  onApprovePositions() {
+    const positionIds = this.checkedPositions.map(item => item.id);
+
+    this.approvePositions.emit(positionIds);
+  }
+
+  onRejectPositions(rejectionMessage) {
+    const positionIds = this.checkedPositions.map(item => item.id);
+
+    this.rejectPositions.emit({positionIds, rejectionMessage});
   }
 
   private fetchForm(positions: RequestPositionList[], position?: RequestPositionList) {

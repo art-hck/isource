@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AppFile } from "../file/file";
 
 @Component({
   selector: 'app-documents-form-control',
@@ -14,9 +15,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() documents: RequestDocument[];
-  @Input() files: File[];
+  @Input() files: AppFile[];
+  @Input() invalid: boolean;
   @Input() disabled: boolean;
-  @Output() select = new EventEmitter<File[]>();
+  @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();
   onTouched: (value) => void;
   onChange: (value) => void;
@@ -28,8 +30,8 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   }
 
   selectFile(files: File[]) {
-    this.select.emit(files);
-    this.writeValue([...this.files || [], ...files]);
+    this.select.emit(files.map(file => new AppFile(file)));
+    this.writeValue([...this.files || [], ...files.map(file => new AppFile(file))]);
     if (this.onChange) { this.onChange(this.files); }
   }
 

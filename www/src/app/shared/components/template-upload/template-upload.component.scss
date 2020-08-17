@@ -12,6 +12,10 @@
   transition: border 200ms, color 200ms;
   border-radius: 4px;
   margin-right: 20px;
+  &.invalid {
+    border: 1px solid uxg($theme, color-control-invalid);
+    color: uxg($theme, color-control-invalid);
+  }
 
   &-hover {
     border-color: uxg($theme, color-border);
@@ -26,13 +30,17 @@ small {
 
 .documents {
   & > .app-row > .app-col {
-    width: 25%;
-    min-width: 260px;
+    flex-basis: auto;
+    flex-grow: 0;
+    width: 310px;
     padding: 0 20px 12px 0;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    flex-grow: 0;
+
+    & > * {
+      width: 100%;
+    }
   }
 
   &-title {

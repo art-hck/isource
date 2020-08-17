@@ -37,3 +37,10 @@
   padding-bottom: 15px;
 }
 
+.doc-error-message {
+  width: 150px;
+  text-align: right;
+  font-weight: bold;
+  margin-right: 10px;
+  color: uxg($theme, color-control-invalid);
+}

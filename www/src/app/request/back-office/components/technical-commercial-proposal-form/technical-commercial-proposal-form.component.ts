@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
@@ -18,6 +27,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
+import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -26,6 +36,8 @@ import Publish = TechnicalCommercialProposals.Publish;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestroy {
+
+  @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
   @Input() closable = true;
@@ -40,11 +52,19 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly destroy$ = new Subject();
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
+  invalidDocControl = false;
+  manufactureErrorMessage = false;
+  parameterErrorMessage = false;
+
+  get isManufacturerPristine(): boolean {
+    return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
+  }
 
   constructor(
     private fb: FormBuilder,
     private contragentService: ContragentService,
-    private store: Store
+    private store: Store,
+    private cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -52,7 +72,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       supplier: [this.defaultValue('supplier', null), Validators.required],
       documents: [this.defaultValue('documents', [])],
       positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
-      files: [[]],
     });
 
     if (this.technicalCommercialProposal) {
@@ -63,26 +82,63 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.form.get('positions').valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
 
+    this.form.valueChanges.subscribe(() => {
+      const docsCount = this.form.get('documents').value.length + this.defaultValue('documents').length;
+
+      if (this.form.get('documents').dirty) {
+        if (docsCount === 0 && this.form.get('positions').invalid) {
+          this.invalidDocControl = true;
+        }
+
+        if (docsCount > 0) {
+          this.invalidDocControl = false;
+        }
+      }
+
+      if (this.form.get('positions').dirty && this.form.get('positions').value.length && this.isManufacturerPristine) {
+        this.manufactureErrorMessage = true;
+        this.parameterErrorMessage = true;
+        this.invalidDocControl = false;
+      }
+
+      this.form.get('positions').setValidators(
+        docsCount > 0 && this.isManufacturerPristine ?
+          [Validators.required] :
+          [Validators.required, proposalManufacturerValidator]
+      );
+
+      this.form.get('positions').updateValueAndValidity({ emitEvent: false });
+
+      this.cd.detectChanges();
+    });
+
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
   }
 
   submit(publish = true): void {
-    if (this.form.invalid) { return; }
-    let action$: Observable<any>;
-    this.form.disable();
+    this.form.get('positions').markAsDirty();
+    this.form.get('positions').markAsTouched();
 
-    if (this.form.pristine) {
-      publish ? action$ = this.publish() : this.close.emit();
+    if (this.form.valid) {
+      let action$: Observable<any>;
+      const documents = this.form.get('documents').value.filter(({ valid }) => valid).map(({ file }) => file);
+      this.form.disable();
+
+      if (this.form.pristine) {
+        publish ? action$ = this.publish() : this.close.emit();
+      } else {
+        action$ = this.save({ ...this.form.value, documents }, publish);
+      }
+
+      action$.pipe(
+        tap(() => this.close.emit()),
+        finalize(() => this.form.enable()),
+        takeUntil(this.destroy$)
+      ).subscribe();
     } else {
-      action$ = this.save(this.form.value, publish);
+      this.form.updateValueAndValidity({ emitEvent: false });
     }
-
-    action$.pipe(
-      tap(() => this.close.emit()),
-      finalize(() => this.form.enable()),
-      takeUntil(this.destroy$)
-    ).subscribe();
   }
 
   save(value, publish) {
