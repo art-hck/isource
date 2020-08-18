@@ -26,8 +26,10 @@
     &-quantity {
       flex-grow: .15; // 15% width
       max-width: 100px;
+      text-align: right;
     }
-    &-date { min-width: 150px }
+    &-total-price { flex-grow: .15; min-width: 150px; text-align: right; }
+    &-date { min-width: 130px; text-align: right; }
     &-kpp { min-width: 120px }
     &-inn { max-width: 190px }
   }
@@ -38,6 +40,10 @@
 }
 
 .access-radio {
+  padding-right: 30px;
+}
+
+.no-total-price {
   padding-right: 30px;
 }
 

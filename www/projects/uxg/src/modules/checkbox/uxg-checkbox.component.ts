@@ -16,7 +16,9 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
   public onTouched: (value: boolean) => void;
   public onChange: (value: boolean) => void;
   @HostBinding('attr.disabled')
+  @HostBinding('attr.readonly')
   @Input() disabled: boolean;
+  @Input() readonly: boolean;
 
   @Input() isMixed: boolean;
   @ViewChild('checkbox') el: ElementRef;
@@ -24,10 +26,12 @@ export class UxgCheckboxComponent implements ControlValueAccessor {
   registerOnChange = (fn: any) => this.onChange = fn;
   registerOnTouched = (fn: any) => this.onTouched = fn;
   setDisabledState = (disabled: boolean) => this.disabled = disabled;
+  setReadonlyState = (readonly: boolean) => this.readonly = readonly;
   writeValue = (value: boolean | null) => this.value = value;
 
   check(ev) {
     if (this.disabled) { return; }
+    if (this.readonly) { return; }
 
     this.el.nativeElement.checked = !this.el.nativeElement.checked;
     ev.preventDefault();
