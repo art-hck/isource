@@ -31,9 +31,6 @@ export namespace Messages {
 
   export class FetchConversationCounters {
     static readonly type = '[Messages] FetchConversationCounters';
-    constructor(
-      public externalId: number[]
-  ) {}
   }
 
   export class Update {

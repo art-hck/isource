@@ -97,18 +97,19 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getRouteData();
 
     this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
-      tap(() => this.store.dispatch(new FetchRequestCounters())),
-      tap(() => this.jumpToRequestOrPosition())
-    ).subscribe();
+      tap(() => this.store.dispatch(new FetchRequestCounters())))
+      // tap(() =>  this.jumpToRequestOrPosition()))
+    .subscribe();
+    this.requests$.pipe(ofType(Fetch))
 
-    // merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
-    //   debounceTime(100),
-    //   takeUntil(this.destroy$)
-    // ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
-    //
-    // this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
-    //   this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
-    // }));
+    merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
+      debounceTime(100),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
+
+    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
+      this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
+    }));
   }
 
   ngAfterViewInit() {
@@ -183,7 +184,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     } else {
-      this.onRequestClick(this.requestEntities[0].request);
+      this.onRequestClick(requestEntities[0].request);
     }
 
     // Прокручиваем в списке заявок и позиций до выделенных элементов
@@ -197,7 +198,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedRequest = request;
     this.selectedRequestsItem = null;
     this.store.dispatch(new FetchPositions(this.selectedRequest.id, this.user.getUserRole())).pipe(
-      tap(() => this.store.dispatch(new FetchConversationCounters([request.context.externalId])))
+      tap(() => this.store.dispatch(new FetchConversationCounters()))
     ).subscribe();
 
     this.onRequestContextClick();
