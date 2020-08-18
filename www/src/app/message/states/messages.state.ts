@@ -139,7 +139,7 @@ export class MessagesState {
   return this.conversationsService.apiCreate(contextType, contextId).pipe(
     tap(({ externalId }) => setState(patch({ externalId }))),
     tap(() => setState(patch({ status: "received" as StateStatus }))),
-  );
+    tap(({externalId}) => dispatch(new Send('frf', externalId, null))));
 }
 
 @Action(Send) send(ctx: Context, { text, conversationId, attachmentsId }: Send) {
