@@ -1,19 +1,42 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <div class="app-control-wrap">
-    <input
-      uxgInput lg uxgDatepicker
-      #dateRef
-      formControlName="date"
-      minDate="today"
-      dateFormat="d.m.Y H:i"
-      [defaultDate]="parsedDate.toDate()"
-      [enableTime]="true"
-    />
-    <label class="app-control-label" (click)="dateRef.focus()">Дата окончания процедуры</label>
-    <label class="app-control-icon" (click)="dateRef.focus()">
-      <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-    </label>
+
+  <div class="app-row app-justify-content-between">
+    <div class="app-col" [style.padding-right.px]="10">
+      <div class="app-control-wrap">
+        <input
+          uxgInput lg uxgDatepicker
+          #dateRef
+          formControlName="dateEndRegistration"
+          minDate="today"
+          dateFormat="d.m.Y H:i"
+          [defaultDate]="parsedDateEndRegistration.toDate()"
+          [enableTime]="true"
+        />
+        <label class="app-control-label" (click)="dateRef.focus()">Дата окончания процедуры</label>
+        <label class="app-control-icon" (click)="dateRef.focus()">
+          <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+        </label>
+      </div>
+    </div>
+
+    <div class="app-col" [style.padding-left.px]="10">
+      <div class="app-control-wrap">
+        <input
+          uxgInput lg uxgDatepicker
+          #dateSummingUpRef
+          formControlName="dateSummingUp"
+          minDate="today"
+          dateFormat="d.m.Y H:i"
+          [enableTime]="true"
+        />
+        <label class="app-control-label" (click)="dateSummingUpRef.focus()">Подведение итогов до</label>
+        <label class="app-control-icon" (click)="dateSummingUpRef.focus()">
+          <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+        </label>
+      </div>
+    </div>
   </div>
+
   <div class="app-row app-justify-content-end app-align-items-center">
     <div *ngIf="isLoading"><span class="spinner spinner-inline"></span></div>
     <button uxgButton secondary lg type="button" (click)="close.emit()">Отмена</button>

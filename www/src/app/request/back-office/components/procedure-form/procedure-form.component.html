@@ -111,23 +111,50 @@
         </ng-template>
       </uxg-dropdown-input>
     </div>
-    <div class="app-row app-align-items-center">
-      <div class="app-col-aside">
-        <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
-          <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
-          <label class="app-control-icon" (click)="dateEndRegistration.focus()">
-            <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-          </label>
-          <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
-            <span>Неверная дата</span>
+    <div class="app-row app-justify-content-between">
+      <div class="app-col-auto app-row">
+        <div class="app-col-aside">
+          <div class="app-control-wrap">
+            <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
+            <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
+            <label class="app-control-icon" (click)="dateEndRegistration.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
+              <span>Неверная дата</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
+          <div class="app-control-wrap">
+            <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
+            <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
           </div>
         </div>
       </div>
-      <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
-        <div class="app-control-wrap">
-          <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
-          <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+
+      <div class="app-col-auto app-row app-justify-content-end">
+        <div class="app-col-aside">
+          <div class="app-control-wrap">
+            <input #dateSummingUp uxgInput lg uxgDatepicker minDate="today" formControlName="dateSummingUp">
+            <label class="app-control-label" (click)="dateSummingUp.focus()">Подведение итогов до (дд.мм.гггг)</label>
+            <label class="app-control-icon" (click)="dateSummingUp.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateSummingUp').errors as e">
+              <span *ngIf="e.afterEndRegistrationDate; else error">Дата не может быть раньше даты приёма заявок</span>
+
+              <ng-template #error>
+                <span>Неверная дата</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
+          <div class="app-control-wrap">
+            <input #timeSummingUpRef uxgInput lg [formControl]="timeSummingUp" [textMask]="mask"/>
+            <label class="app-control-label" (click)="timeSummingUpRef.focus()">Время</label>
+          </div>
         </div>
       </div>
     </div>

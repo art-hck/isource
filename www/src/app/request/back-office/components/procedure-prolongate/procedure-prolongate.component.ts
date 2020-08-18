@@ -17,21 +17,44 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
 
   @Input() requestId: Uuid;
   @Input() procedureId: number;
-  @Input() date: string;
+  @Input() dateEndRegistration: string;
+  @Input() dateSummingUp: string;
   @Output() close = new EventEmitter();
   @Output() complete = new EventEmitter();
   form: FormGroup;
-  parsedDate: Moment;
+  parsedDateEndRegistration: Moment;
+  parsedDateSummingUp: Moment;
   isLoading: boolean;
   readonly destroy$ = new Subject();
 
   ngOnChanges() {
-    this.parsedDate = moment(this.date);
+    this.parsedDateEndRegistration = moment(this.dateEndRegistration);
+    this.parsedDateSummingUp = moment(this.dateSummingUp);
+
     this.form = this.fb.group({
       requestId: [this.requestId, Validators.required],
       procedureId: [this.procedureId, Validators.required],
-      date: [this.parsedDate.format('DD.MM.YYYY HH:mm'), Validators.required]
+      dateEndRegistration: [this.parsedDateEndRegistration.format('DD.MM.YYYY HH:mm'), Validators.required],
+      dateSummingUp: [this.parsedDateSummingUp.format('DD.MM.YYYY HH:mm'), Validators.required],
     });
+
+    this.form.get("dateEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(date => {
+        const dateSummingUp = this.form.get("dateSummingUp").value;
+
+        moment(date, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY")) ?
+          this.form.get("dateEndSummingUp").setErrors({ afterEndRegistrationDate: true}) :
+          this.form.get("dateEndSummingUp").setErrors(null);
+      });
+
+    this.form.get("dateSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(date => {
+        const dateEndRegistration = this.form.get("dateEndRegistration").value;
+
+        moment(date, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY")) ?
+          this.form.get("dateSummingUp").setErrors({ afterEndRegistrationDate: true}) :
+          this.form.get("dateSummingUp").setErrors(null);
+      });
   }
 
   constructor(
@@ -42,9 +65,18 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
   }
 
   submit() {
-    const { requestId, procedureId, date } = this.form.value;
+    if (this.form.invalid) {
+      return;
+    }
+
+    const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
     this.isLoading = true;
-    this.offersService.prolongateProcedureEndDate(requestId, procedureId, moment(date, "DD.MM.YYYY HH:mm")).pipe(
+    this.offersService.prolongateProcedureEndDate(
+      requestId,
+      procedureId,
+      moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),
+      moment(dateSummingUp, "DD.MM.YYYY HH:mm")
+    ).pipe(
       tap(() => this.store.dispatch(new ToastActions.Success("Дата окончания процедуры изменена"))),
       tap(() => this.complete.emit()),
       catchError(err => {
