@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-card">
     <!-- page title -->
     <div class="app-row">
@@ -20,8 +20,8 @@
         <div class="app-control-wrap">
           <uxg-dropdown-input
             formControlName="supplier" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
-          >
+            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent">
+
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
               <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
                 {{contragent.shortName || contragent.fullName}}
@@ -53,28 +53,48 @@
         <div class="app-row">
           <div class="app-col" [style.overflow]="'hidden'">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Наименование позиции</small></div>
-            <div>
-              <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
+            <div class="app-row">
+              <div class="app-col-auto">
+                <button type="button" uxgButton secondary (click)="positionsModal.open()">Выбрать позиции</button>
+              </div>
+
+              <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched">
+                <div class="app-control-error" *ngIf="form.get('positions').errors as e">
+                  <span class="error-message" *ngIf="e.required">Выберите позиции для создания предложения</span>
+                </div>
+              </ng-container>
             </div>
+
             <div *ngFor="let proposalPosition of control.value" class="app-ellipsis app-bold position-info-item">
               {{ proposalPosition.position.name }}
             </div>
           </div>
+
           <div class="app-col" [style.overflow]="'hidden'">
             <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование</small></div>
-            <div>
-              <button type="button" uxgButton secondary (click)="manufacturerModal.open()" [disabled]="!control.value?.length">
-                Заполнить наименования
-              </button>
+
+            <div class="app-row">
+              <div class="app-col-auto">
+                <button type="button" uxgButton secondary (click)="manufacturerModal.open()" [disabled]="!control.value?.length">
+                  Заполнить наименования
+                </button>
+              </div>
             </div>
-            <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
-              <ng-container *ngIf="proposalPosition.manufacturingName as name; else manufactureError">{{ name }}</ng-container>
-              <ng-template #manufactureError>
-                <ng-container *ngIf="manufacturerValidator(control, false) && control.hasError('manufacturer_name_error')">
-                  <span class="app-error-color app-bold">Необходимо заполнить!</span>
-                </ng-container>
-              </ng-template>
-            </div>
+
+            <ng-container *ngIf="control.value[0]?.manufacturingName; else manufactureError">
+              <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
+                {{ proposalPosition.manufacturingName }}
+              </div>
+            </ng-container>
+
+            <ng-template #manufactureError>
+              <ng-container *ngIf="manufactureErrorMessage">
+                <div class="app-control-error">
+                  <span class="error-message">Заполните наименования для каждой позиции</span>
+                </div>
+              </ng-container>
+            </ng-template>
+
           </div>
         </div>
       </div>
@@ -92,30 +112,36 @@
           </button>
         </div>
 
-        <div class="position-info-item app-row" *ngFor="let pos of control.value">
-          <ng-container *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
-            <div class="app-col">
-              {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
-              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
-            </div>
-            <div class="app-col">
-              {{ pos.quantity }}
-              <span class="app-ghost-color">{{ pos.measureUnit }}</span>
-            </div>
-            <div class="app-col">
-              {{ pos.priceWithoutVat | number:'1.0-2' }}
-              <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
-            </div>
-            <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
-          </ng-container>
-          <ng-template #parameterError>
-            <ng-container *ngIf="parametersValidator(control, false) && control.hasError('parameters_error')">
-              <span class="app-error-color app-bold">Необходимо заполнить!</span>
+        <ng-container *ngIf="control.value[0]?.priceWithoutVat; else parameterError">
+          <div class="position-info-item app-row" *ngFor="let pos of control.value">
+            <ng-container *ngIf="pos.priceWithoutVat && pos.quantity && pos.measureUnit && pos.currency && pos.deliveryDate; else parameterError">
+              <div class="app-col">
+                {{ pos.quantity * pos.priceWithoutVat | number:'1.0-2' }}
+                <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
+              </div>
+
+              <div class="app-col">
+                {{ pos.quantity }}
+                <span class="app-ghost-color">{{ pos.measureUnit }}</span>
+              </div>
+
+              <div class="app-col">
+                {{ pos.priceWithoutVat | number:'1.0-2' }}
+                <span class="app-ghost-color">{{ getCurrencySymbol(pos.currency, "narrow")}}</span>
+              </div>
+
+              <div class="app-col">{{ pos.deliveryDate | date: "dd.MM.yyyy"}}</div>
             </ng-container>
-          </ng-template>
-        </div>
+          </div>
+        </ng-container>
 
-
+        <ng-template #parameterError>
+          <ng-container *ngIf="parameterErrorMessage">
+            <div class="app-control-error">
+              <span class="error-message">Заполните параметры для позиций</span>
+            </div>
+          </ng-container>
+        </ng-template>
       </div>
     </div>
 
@@ -123,7 +149,8 @@
 
     <div class="section">
       <app-documents-form-control
-        formControlName="files"
+        formControlName="documents"
+        [invalid]="invalidDocControl"
         [documents]="technicalCommercialProposal?.documents || []"
       ></app-documents-form-control>
     </div>
@@ -138,8 +165,8 @@
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
         <button
-          type="button" uxgButton primary (click)="submit(false)"
-          [disabled]="form.disabled || form.invalid">Сохранить</button>
+          uxgButton primary (click)="submit(false)"
+          [disabled]="form.disabled">Сохранить</button>
         <!-- Временно убрали публикацию из интерфейса списка ТКП -->
         <!-- <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>-->
       </div>

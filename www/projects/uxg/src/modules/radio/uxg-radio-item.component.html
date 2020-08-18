@@ -6,6 +6,6 @@
   [disabled]="disabled"
   [value]="value"
   [ngModel]="mainValue"
-  (input)="onChange && onChange(value)"
+  (change)="onChange && onChange(value)"
 />
 <div class="app-control-radio" (click)="select($event)"></div>

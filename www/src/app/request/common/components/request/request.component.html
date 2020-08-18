@@ -399,6 +399,7 @@
 
 <!-- Модальное окно для отклонения позиции -->
 <uxg-modal #rejectPositionModal size="s">
+  <ng-container *ngIf="rejectPositionModal.state">
   <h2>Комментарий по отклонению</h2>
   <div class="app-section app-secondary-color">
     Если возможно, сообщите пожалуйста причину отклонения сотруднику бэк-офиса.
@@ -420,6 +421,7 @@
       Отправить
     </button>
   </ng-template>
+  </ng-container>
 </uxg-modal>
 
 <!-- Модальное окно для смены статуса группы позиций -->

@@ -56,6 +56,10 @@ body {
   }
 }
 
+::-ms-clear {
+  display:none;
+}
+
 a, a:hover, a:visited, [routerlink]:hover, [ng-reflect-router-link]:hover {
   text-decoration: none;
   cursor: pointer;

@@ -5,21 +5,29 @@
   </h3>
   <div class="app-col-6 status">
     <ng-container *ngIf="!finished(procedure)">
-                  <span class="app-ghost-color pr-20">
-                    <uxg-icon shape="app-waiting"></uxg-icon>
-                     <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
-                  </span>
-      <a [href]="link(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
-      <button type="button" uxgButton secondary iconText (click)="prolong.emit()">
+      <span class="app-ghost-color pr-20">
+        <uxg-icon shape="app-waiting"></uxg-icon>
+         <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
+      </span>
+
+      <a [href]="link(procedure)" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+
+      <button [style.margin-left.px]="20"
+              *ngIf="!procedure.isRetrade"
+              type="button" uxgButton secondary iconText (click)="prolong.emit()">
         Продлить
       </button>
     </ng-container>
+
     <ng-container *ngIf="finished(procedure)">
-                  <span class="app-success-color pr-20">
-                    <uxg-icon shape="app-check"></uxg-icon>Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
-                  </span>
-      <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
-      <button type="button" uxgButton secondary iconText (click)="bargain.emit()">
+      <span class="app-success-color pr-20">
+        <uxg-icon shape="app-check"></uxg-icon> Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+      </span>
+
+      <a [href]="resultLink(procedure)" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+
+      <button [style.margin-left.px]="20"
+        type="button" uxgButton secondary iconText (click)="bargain.emit()">
         Уторговать
       </button>
     </ng-container>
@@ -45,7 +53,7 @@
       </div>
       <div class="app-col app-col-auto app-row app-align-items-center">
         <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp;</div>
-        <div class="app-col search">
+        <div class="app-col-auto search">
           <input type="text" uxgInput formControlName="search" placeholder="Наименование позиции или группы"/>
         </div>
       </div>

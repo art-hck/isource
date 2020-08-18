@@ -17,11 +17,12 @@
   </div>
   <document-icon class="app-file-icon" *ngIf="appFile.valid" [name]="appFile.file.name" [size]="size"></document-icon>
 
-  <div class="app-ellipsis app-col">
+  <div class="app-ellipsis app-col file-item">
     <div class="app-ellipsis">{{ appFile.file.name }}</div>
     <small class="app-ghost-color" *ngIf="!appFile.invalid">{{ appFile.file.size | bytesToSize : 2 }}</small>
     <small class="app-alert-color app-bold" *ngIf="appFile.invalid">Недопустимый формат, не будет загружен</small>
   </div>
+
   <button *ngIf="delete.observers.length" uxgButton clear link class="app-file-delete app-shrink-0" type="button" (click)="delete.emit()">
     <uxg-icon shape="app-trash" size="12"></uxg-icon>
   </button>

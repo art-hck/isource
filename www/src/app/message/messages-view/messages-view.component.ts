@@ -18,6 +18,7 @@ import { ConversationsService } from "../services/conversations.service";
 import { Attachment } from "../models/attachment";
 import { Request } from "../../request/common/models/request";
 import { ContextsService } from "../services/contexts.service";
+import {RequestPositionListEntityType} from "../../request/common/enum/request-position-list-entity-type";
 
 @Component({
   selector: 'app-message-messages-view',
@@ -79,8 +80,15 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchCounters() {
+    // обновляем общие счетчики по заявкам
     this.requests$.pipe(take(1), flatMap(({ entities }) => {
       const contextIds = entities.filter(({request}) => request?.context?.externalId).map(({request}) => request?.context?.externalId);
+
+      // если нет ни одного контекста у пользователя, то не отправляем запрос
+      if (!contextIds.length) {
+        return of([]);
+      }
+
       return this.contextsService.get(contextIds);
     })).subscribe(contexts => {
       this.requests$ = this.requests$.pipe(map(requests => {
@@ -94,8 +102,21 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }));
     });
 
+    // обновляем счетчики внутри заявки
     this.requestsItems$.pipe(take(1), flatMap(data => {
         const conversationIds = data.filter(item => item?.conversation?.externalId).map(item => item.conversation.externalId);
+        // добавляем идентификаторы чатов с позиций, которые в группах
+        data.filter(item => item?.entityType === RequestPositionListEntityType.GROUP)
+          .forEach(group => group.positions
+            .filter(item => item?.conversation?.externalId)
+            .forEach(position => conversationIds.push(position.conversation.externalId))
+          );
+
+        // если чатиков в данной заявке нет, то не отправляем запрос
+        if (!conversationIds.length) {
+          return of([]);
+        }
+
         return this.conversationsService.get(conversationIds);
       }),
       takeUntil(this.destroy$)
@@ -106,11 +127,45 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
             if (requestItem) {
               requestItem.conversation.unreadCount = conversation.unreadCount;
             }
+
+            requestItems.forEach(item => {
+              if (item.entityType === RequestPositionListEntityType.GROUP) {
+                const positionInGroupItem = item.positions.find(itemInGroup => itemInGroup.conversation?.externalId === conversation.id);
+                if (positionInGroupItem) {
+                  positionInGroupItem.conversation.unreadCount = conversation.unreadCount;
+                }
+              }
+            });
           });
 
           return requestItems;
         })
       );
+    });
+
+    // счетчик по "обсуждению заявки" обновляем отдельно
+    this.requests$.pipe(take(1), flatMap(({ entities }) => {
+      const conversationIds = entities
+        .filter(({request}) => request.id ===  this.selectedRequest.id)
+        .map(({request}) => request?.conversation?.externalId);
+
+      // если нет ни одного контекста у пользователя, то не отправляем запрос
+      if (!conversationIds.length) {
+        return of([]);
+      }
+
+      return this.conversationsService.get(conversationIds);
+    })).subscribe(conversations => {
+      this.requests$ = this.requests$.pipe(map(requests => {
+        (conversations ?? []).forEach(conversation => {
+          const request = requests.entities
+            .find(({request: r}) => r.conversation?.externalId === conversation.id);
+          if (request) {
+            request.request.conversation.unreadCount = conversation.unreadCount;
+          }
+        });
+        return requests;
+      }));
     });
   }
 
@@ -129,7 +184,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       );
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
-      debounceTime(100),
+      debounceTime(500),
       takeUntil(this.destroy$)
     ).subscribe(() => this.fetchCounters());
 
@@ -137,17 +192,31 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
 
       this.messageService
-        .getRequests(this.user.getUserRole(), 0, 1000, { requestId }, null)
+        .getRequests(this.user.getUserRole(), 0, 1, {requestId}, null)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(({ entities }) => entities.forEach(({ request }) => {
-          this.requests$ = this.requests$.pipe(map(requests => {
-            const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
-            if (requestIndex !== -1) {
-              requests.entities[requestIndex].request = request;
-            }
-            return requests;
-          }), tap(() => this.fetchCounters()), shareReplay(1));
-        }));
+        .subscribe(({entities}) => {
+          // приходит всегда одна заявка, которую ищем по id
+          const request = entities[0].request;
+
+          // проходим по текущим заявкам и обновляем ту, в которой пришло сообщение
+          this.requests$ = this.requests$.pipe(
+            map(requests => {
+              const requestIndex = requests.entities.findIndex(({request: {id}}) => id === request.id);
+              if (requestIndex !== -1) {
+                requests.entities[requestIndex].request = request;
+
+                // если не выделен ни один элемент, то мы стоим на "Обсуждение заказа"
+                // а значит нужно обновить сообщения для него
+                if (!this.selectedRequestsItem && request.conversation) {
+                  this.conversationId = request.conversation.externalId;
+                }
+              }
+              return requests;
+            }),
+            tap(() => this.fetchCounters()),
+            shareReplay(1)
+          );
+        });
 
       this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
         tap(data => {
@@ -165,7 +234,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems$ = of(data);
         this.fetchCounters();
       });
-
     }));
   }
 
@@ -203,31 +271,53 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   jumpToRequestOrPosition(): void {
-    if (this.positionId && this.requestId) {
+    let requestEntities = [];
+    let requestToSelect = [];
+
+    if (this.requestId) {
       // Выбор заявки в списке
-      const requestToSelect = this.requestEntities.filter(
-        request => request.request.id === this.requestId
-      );
-      this.onRequestClick(requestToSelect[0].request);
-
-      // Выбор позиции в списке
-      this.requestsItems$.pipe(takeUntil(this.destroy$)).subscribe(requestItems => {
-        const flatPositionsList = this.getRequestPositionsFlat(requestItems);
-
-        const requestItemToSelect = Object.values(flatPositionsList).filter(
-          requestItem => requestItem.id === this.positionId
+      this.requests$.pipe(takeUntil(this.destroy$)).subscribe((requests) => {
+        requestEntities = requests.entities;
+        requestToSelect = requestEntities.filter(
+          ({ request }) => {
+            return request.id === this.requestId;
+          }
         );
-        this.onRequestItemClick(requestItemToSelect[0]);
+
+        if (!requestToSelect || requestToSelect.length === 0) {
+          this.appendRequests(requestEntities.length).subscribe((data) => {
+            this.requests$ = of(data);
+            this.jumpToRequestOrPosition();
+          });
+        } else {
+          // Кликаем по нужной заявке
+          this.onRequestClick(requestToSelect[0].request);
+
+          // Если передан id позиции, выделяем и его
+          if (this.positionId) {
+            // Выбор позиции в списке
+            this.requestsItems$.pipe(takeUntil(this.destroy$)).subscribe(requestItems => {
+              const flatPositionsList = this.getRequestPositionsFlat(requestItems);
+
+              const requestItemToSelect = Object.values(flatPositionsList).filter(
+                requestItem => requestItem.id === this.positionId
+              );
+
+              // Кликаем по нужной позиции
+              this.onRequestItemClick(requestItemToSelect[0]);
+            });
+          }
+        }
       });
-    } else if (this.requestId) {
-      // Выбор заявки в списке
-      const requestToSelect = this.requestEntities.filter(
-        request => request.request.id === this.requestId
-      );
-      this.onRequestClick(requestToSelect[0].request);
     } else {
       this.onRequestClick(this.requestEntities[0].request);
     }
+
+    // Прокручиваем в списке заявок и позиций до выделенных элементов
+    setTimeout(() => {
+      const selectedItems = document.querySelectorAll('li.selected');
+      selectedItems.forEach(el => el.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'}));
+    }, 100);
   }
 
   onRequestClick(request: RequestListItem) {
@@ -390,17 +480,21 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  appendRequests(startFrom) {
-    this.messageService.getRequests(this.user.getUserRole(), startFrom, this.pageSize, [], null).pipe(
+  loadMoreRequests(startFrom) {
+    this.appendRequests(startFrom).subscribe((data) => {
+      this.requests$ = of(data);
+    });
+  }
+
+  appendRequests(startFrom): Observable<Page<RequestsList>> {
+    return this.messageService.getRequests(this.user.getUserRole(), startFrom, this.pageSize, [], null).pipe(
       flatMap(({ entities }) => {
         return this.requests$.pipe(
           map(items => ({ ...items, entities: [...items.entities, ...entities] })),
         );
       }),
       takeUntil(this.destroy$)
-    ).subscribe(data => {
-        this.requests$ = of(data);
-      });
+    );
   }
 
   ngOnDestroy() {

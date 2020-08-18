@@ -87,7 +87,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
   get isDraft(): boolean {
     return this.approveRequiredFields
-      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
+      .some(controlName => (!this.form.get(controlName).pristine || this.form.get(controlName).dirty)
+        && this.form.get(controlName).valid) || !this.position;
   }
 
   get needApprove(): boolean {
@@ -187,7 +188,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   submit() {
-    if (this.form.valid) {
+    if (this.form.invalid) {
+      return;
+    } else {
       let submit$: Observable<RequestPosition>;
 
       if (this.position.id) {
@@ -199,7 +202,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
           if (key === 'deliveryDate') {
             positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
           }
-
           return positionInfo === updatedInfo;
         });
 

@@ -35,8 +35,10 @@ export class TechnicalCommercialProposalContragentFormComponent {
   }
 
   submit() {
-    if (this.form.invalid) { return; }
-    return this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
+    if (this.form.valid) {
+      this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
+      this.close.emit();
+    }
   }
 
   getContragentName = ({ shortName, fullName }: ContragentList) => shortName || fullName;

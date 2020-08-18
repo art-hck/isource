@@ -11,6 +11,9 @@ import { StateStatus } from "../../request/common/models/state-status";
 import { AttachmentsService } from "../services/attachments.service";
 import { Attachment } from "../models/attachment";
 import { AppFile } from "../../shared/components/file/file";
+import { RequestPositionList } from "../../request/common/models/request-position-list";
+import { RequestPosition } from "../../request/common/models/request-position";
+import { RequestGroup } from "../../request/common/models/request-group";
 
 @Component({
   selector: 'app-message-messages',
@@ -22,6 +25,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() contextId: Uuid;
   @Input() contextType: MessageContextTypes;
   @Input() conversationId: number;
+  @Input() selectedRequestsItemStatus: {name: string; label: string};
   @Output() sendMessage = new EventEmitter<{ text: string, attachments: Attachment[] }>();
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
@@ -69,17 +73,28 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.messages$ = null;
       this.state = "pristine";
       this.change$.next();
+
+      // сохраняем в сервисе, чтобы использовать во всплывающих сообщениях
+      this.messagesService.curConversationId = this.conversationId;
+
       if (this.conversationId) {
         this.state = "fetching";
         this.messagesService.markSeen({ conversationId: this.conversationId });
-        const newMessages$ = this.messagesService.onNew(this.conversationId);
+        const newMessages$ = this.messagesService.onNew(this.conversationId).pipe(
+          takeUntil(this.change$)
+        );
 
         this.messages$ = this.messagesService.get(this.conversationId).pipe(
           tap(() => this.firstScroll = true),
           tap(() => this.state = "received"),
           expand(messages => newMessages$.pipe(
             take(1),
-            tap(({ id }) => this.messagesService.markSeen({ messageId: id })),
+            tap(({ id, author }) => {
+              // не отмечаем сообщение прочитанным, если сами же его отправили
+              if (author.uid !== this.userInfoService.getUserInfo().id) {
+                this.messagesService.markSeen({ messageId: id });
+              }
+            }),
             map(message => [...messages, message]),
             takeUntil(this.change$)
           )),
@@ -106,10 +121,7 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   // @TODO: Удалять файлы с сервера
   public deleteFile(fileWithStatus: { appFile: AppFile, status: StateStatus }, i) {
     this.files.splice(i, 1);
-    const formIndex = this.formAttachments.controls.findIndex(({ value }) => value === fileWithStatus.appFile.file);
-    if (formIndex !== -1) {
-      this.formAttachments.removeAt(formIndex);
-    }
+    this.formAttachments.removeAt(i);
   }
 
   public isOwnMessage(message: Message) {
@@ -119,6 +131,11 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   public submit(): void {
     if (this.form.invalid) {
       return;
+    }
+
+    // включаем лоадер, если у нас первое сообщение и нужно создать чат
+    if (!this.conversationId) {
+      this.state = "fetching";
     }
 
     this.sendMessage.emit(this.form.value);
