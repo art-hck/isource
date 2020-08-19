@@ -8,7 +8,18 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import { debounceTime, filter, flatMap, map, shareReplay, switchMap, take, takeUntil, tap } from "rxjs/operators";
+import {
+  debounceTime,
+  filter,
+  flatMap,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  withLatestFrom
+} from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -40,6 +51,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('requestsSearchField') requestsSearchField: ElementRef;
   @Select(MessagesState.requests) requests$: Observable<Page<RequestsList>>;
   @Select(MessagesState.requestsItems) requestsItems$: Observable<RequestPositionList[]>;
+  @Select(MessagesState.externalId) externalId$: Observable<number>;
 
   requestId: Uuid;
   positionId: Uuid;
@@ -337,13 +349,11 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendMessage({ text, attachments = [] }: { text: string, attachments: Attachment[] }) {
     if (!this.conversationId) {
-      this.store.dispatch(new CreateConversation(this.contextType, this.contextId, text, attachments.map(({ id }) => id))).pipe(
-        tap(({ externalId }) => this.store.dispatch(new Send(text, externalId, attachments.map(({ id }) => id))).pipe(
-          switchMap(() => this.store.dispatch(new Get(externalId)))
-        )),
-        shareReplay(1),
-        takeUntil(this.destroy$)
-      ).subscribe();
+      this.store.dispatch(new CreateConversation(this.contextType, this.contextId, text, attachments.map(({ id }) => id)))
+        .pipe(withLatestFrom(this.externalId$))
+        .subscribe(([_, externalId]) => {
+          this.store.dispatch(new Send(text, externalId, attachments.map(({ id }) => id)));
+        });
     } else {
       this.store.dispatch(new Send(text, this.conversationId, attachments.map(({ id }) => id)));
     }
