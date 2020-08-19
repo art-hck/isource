@@ -15,6 +15,7 @@ export class Procedure {
   requestId: Uuid;
   procedureTitle: string;
   dateEndRegistration: string;
+  dateSummingUp: string;
   datePublished: string;
   lotId: number;
   offersImported: boolean;

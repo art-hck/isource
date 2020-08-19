@@ -146,9 +146,9 @@ export class CommercialProposalsService {
     return formData;
   }
 
-  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration) {
+  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration, dateSummingUp) {
     const url = `requests/backoffice/${requestId}/procedures/${procedureId}/prolong`;
-    return this.api.post(url, { dateEndRegistration });
+    return this.api.post(url, { dateEndRegistration, dateSummingUp });
   }
 
   downloadAnalyticalReport(requestId: Uuid) {

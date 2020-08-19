@@ -23,10 +23,17 @@
           <div class="app-section">Прием заявок до</div>
           <div class="app-section"><b>{{procedure.dateEndRegistration | date:"dd.MM.yyyy, HH:mm"}}</b></div>
         </div>
+
+        <div class="app-col" *ngIf="procedure.dateSummingUp">
+          <div class="app-section">Подведение итогов до</div>
+          <div class="app-section"><b>{{procedure.dateSummingUp | date:"dd.MM.yyyy, HH:mm"}}</b></div>
+        </div>
+
         <div class="app-col">
           <div class="app-section">Возможность продления</div>
           <div class="app-section"><b>{{ finished || procedure.isRetrade ? 'Нет' : 'Да'}}</b></div>
         </div>
+
         <div class="app-col">
           <button uxgButton secondary *ngIf="finished" (click)="bargain.emit()">Уторговать</button>
           <button uxgButton secondary *ngIf="!finished && !procedure.isRetrade" (click)="prolong.emit()">Продлить процедуру</button>
