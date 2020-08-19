@@ -85,7 +85,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
-        dateSummingUp: [null, CustomValidators.currentOrFutureDate()],
+        dateSummingUp: [null, [Validators.required, CustomValidators.currentOrFutureDate()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice")],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPrice", 'Нет'), [Validators.required, CustomValidators.requiredNotEmpty]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
@@ -145,18 +145,30 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       .subscribe(date => {
         const dateSummingUp = this.form.get("general.dateSummingUp").value;
 
-        moment(date, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY")) ?
-          this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true}) :
-          this.form.get("general.dateSummingUp").setErrors(null);
+        if (this.form.get("general.dateSummingUp").value) {
+          if (moment(date, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY"))) {
+            this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+          } else {
+            this.form.get("general.dateSummingUp").setErrors(null);
+          }
+
+          this.form.get("general.dateSummingUp").markAsTouched();
+        }
       });
 
     this.form.get("general.dateSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(date => {
         const dateEndRegistration = this.form.get("general.dateEndRegistration").value;
 
-        moment(date, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY")) ?
-          this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true}) :
-          this.form.get("general.dateSummingUp").setErrors(null);
+        if (this.form.get("general.dateSummingUp").value) {
+          if (moment(date, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY"))) {
+            this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+          } else {
+            this.form.get("general.dateSummingUp").setErrors(null);
+          }
+
+          this.form.get("general.dateSummingUp").markAsTouched();
+        }
       });
 
     this.form.get("general.publicAccess").valueChanges.pipe(
