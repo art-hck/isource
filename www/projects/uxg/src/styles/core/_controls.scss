@@ -19,7 +19,7 @@
     user-select: none;
   }
 
-  .app-control[disabled]:not([disabled=false]) ~ label {
+  .app-control[disabled]:not([disabled=false]) ~ label, .app-control.readonly ~ label {
     color: uxg($theme, color-font-ghost);
     cursor: default;
   }

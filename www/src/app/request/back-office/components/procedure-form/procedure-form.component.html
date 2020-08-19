@@ -31,6 +31,17 @@
               <span>{{ position.quantity }} </span>
               <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
             </div>
+
+            <div class="app-col app-col-auto select-list-item-total-price">
+              <ng-container *ngIf="position.startPrice; else withoutTotalPrice">
+                <span>{{ position.startPrice * position.quantity | currency: position.currency }}</span>
+              </ng-container>
+
+              <ng-template #withoutTotalPrice>
+                <span class="app-ghost-color">не указана</span>
+              </ng-template>
+            </div>
+
             <div class="app-col app-col-auto select-list-item-date">
               <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
               <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
@@ -54,11 +65,7 @@
 
   <!-- General -->
   <div *uxgWizzardStep="'general'" formGroupName="general">
-    <div class="app-secondary-color">
-      Обратите внимание, что все поля в этом шаге являются <b>обязательными</b> к заполнению!
-    </div>
-    <br/>
-    <br/>
+
     <h3>Общие сведения</h3>
     <div class="app-control-wrap">
       <input #nameControlRef uxgInput lg formControlName="procedureTitle"/>
@@ -68,49 +75,6 @@
       </div>
     </div>
 
-    <div class="app-row app-align-items-center">
-      <uxg-checkbox class="app-control" #verificationRequired formControlName="dishonestSuppliersForbidden"></uxg-checkbox>
-      <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
-        участников закупки в реестре недобросовестных поставщиков ФАС</label>
-    </div>
-    <br>
-
-    <br>
-      <b>Доступ к процедуре</b>
-    <div class="app-row">
-        <p class="app-row access-radio app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
-        </p>
-        <p class="app-row app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
-        </p>
-    </div>
-    <div class="app-control-wrap okpd2">
-      <uxg-dropdown-input
-        appSuggestions
-        formControlName="okpd2"
-        placeholder="OКПД2"
-        [$]="okpd2List$"
-        [searchFn]="searchOkpd2"
-        #okpd2="appSuggestions"
-        [strictMode]="true"
-        [displayByFn]="getOkpd2Name"
-        lg>
-        <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
-          <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">
-            <b>{{suggestion.code}}</b>&nbsp;{{suggestion.name }}
-          </div>
-        </ng-container>
-        <ng-template #errors>
-          <div class="app-control-error" *ngIf="form.get('general.okpd2').errors as e">
-            <span *ngIf="e.required">Обязательное поле</span>
-            <span *ngIf="e.notFromList">Выберите значение из списка</span>
-          </div>
-        </ng-template>
-      </uxg-dropdown-input>
-    </div>
     <div class="app-row app-justify-content-between">
       <div class="app-col-auto app-row">
         <div class="app-col-aside">
@@ -156,6 +120,68 @@
             <label class="app-control-label" (click)="timeSummingUpRef.focus()">Время</label>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="app-row">
+        <p class="app-row access-radio app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
+        </p>
+        <p class="app-row app-align-items-center">
+          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
+          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
+        </p>
+    </div>
+
+    <div class="app-control-wrap okpd2">
+      <uxg-dropdown-input
+        appSuggestions
+        formControlName="okpd2"
+        placeholder="OКПД2"
+        [$]="okpd2List$"
+        [searchFn]="searchOkpd2"
+        #okpd2="appSuggestions"
+        [strictMode]="true"
+        [displayByFn]="getOkpd2Name"
+        lg>
+        <ng-container *ngFor="let suggestion of okpd2.suggestions$ | async">
+          <div uxgDropdownItem [value]="suggestion" [attr.title]="suggestion.name">
+            <b>{{suggestion.code}}</b>&nbsp;{{suggestion.name }}
+          </div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('general.okpd2').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите значение из списка</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
+    </div>
+
+    <br>
+
+    <div class="app-row app-align-items-center">
+      <div class="app-row no-total-price">
+        <uxg-checkbox class="app-control" #withoutTotalPriceRef formControlName="withoutTotalPrice" [class.readonly]="withoutTotalPriceReadonly"
+                      [readonly]="withoutTotalPriceReadonly"></uxg-checkbox>
+        <label (click)="withoutTotalPriceRef.check($event)"> &nbsp; Без указания НМЦ</label>
+      </div>
+
+      <div class="app-row">
+        <uxg-checkbox class="app-control" #verificationRequired formControlName="dishonestSuppliersForbidden"></uxg-checkbox>
+        <label (click)="verificationRequired.check($event)"> &nbsp; Проверка на предмет отсутствия участников в реестре недобросовестных поставщиков ФАС</label>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="app-control-wrap" [hidden]="!form.get('general.withoutTotalPrice').value">
+      <input #withoutTotalPriceReasonRef uxgInput lg formControlName="withoutTotalPriceReason"
+             [disabled]="form.get('general.withoutTotalPrice').value" />
+      <label class="app-control-label" (click)="withoutTotalPriceReasonRef.focus()">Причина отсутствия НМЦ</label>
+      <div class="app-control-error" *ngIf="form.get('general').get('withoutTotalPriceReason').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
       </div>
     </div>
   </div>

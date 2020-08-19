@@ -81,7 +81,7 @@
     width: 2px;
   }
 
-  &:disabled {
+  &:disabled, &[readonly] {
     cursor: not-allowed;
     & + .app-control-checkbox {
       border-color: uxg($theme, color-soft);

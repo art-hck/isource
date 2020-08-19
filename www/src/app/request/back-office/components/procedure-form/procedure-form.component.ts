@@ -36,12 +36,14 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
+  selectedPositions: RequestPosition[] = [];
 
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
   isLoading: boolean;
+  withoutTotalPriceReadonly: boolean;
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
@@ -84,6 +86,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dateSummingUp: [null, [Validators.required, CustomValidators.currentOrFutureDate()]],
+        withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice")],
+        withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPrice", 'Нет'), [Validators.required, CustomValidators.requiredNotEmpty]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         publicAccess: [true, Validators.required],
         okpd2: ["", Validators.required],
@@ -124,7 +128,18 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     }
 
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(positions => this.updateSelectedPositions.emit(positions));
+      .subscribe(positions => {
+        this.selectedPositions = positions;
+        this.updateSelectedPositions.emit(this.selectedPositions);
+
+        if (this.selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
+          this.form.get("general.withoutTotalPrice").setValue(true);
+          this.withoutTotalPriceReadonly = true;
+        } else {
+          this.form.get("general.withoutTotalPrice").setValue(false);
+          this.withoutTotalPriceReadonly = false;
+        }
+      });
 
     this.form.get("general.dateEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(date => {
