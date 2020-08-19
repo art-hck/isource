@@ -50,6 +50,8 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   requestListSearchLoader = false;
   pageSize = 25;
 
+  fetchCountersSubject = new Subject();
+
   protected requestsItems: RequestItemsStore;
   readonly destroy$ = new Subject();
 
@@ -147,6 +149,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.requests$.pipe(take(1), flatMap(({ entities }) => {
       const conversationIds = entities
         .filter(({request}) => request.id ===  this.selectedRequest.id)
+        .filter(({request}) => request?.conversation?.externalId)
         .map(({request}) => request?.conversation?.externalId);
 
       // если нет ни одного контекста у пользователя, то не отправляем запрос
@@ -183,10 +186,14 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         shareReplay(1)
       );
 
+    // делаем подписчик для случая когда у нас приходит события и нового сообщения и ногового конверсейшена
+    // чтобы 3 раза не запрашивать одно и тоже. Жертвуем скоростью обновления каунтеров, но не грузим сервак
+    this.fetchCountersSubject.pipe(debounceTime(1000)).subscribe(() => this.fetchCounters());
+
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
-      debounceTime(500),
+      debounceTime(100),
       takeUntil(this.destroy$)
-    ).subscribe(() => this.fetchCounters());
+    ).subscribe(() => this.fetchCountersSubject.next());
 
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((conversation => {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
@@ -205,35 +212,44 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
               if (requestIndex !== -1) {
                 requests.entities[requestIndex].request = request;
 
-                // если не выделен ни один элемент, то мы стоим на "Обсуждение заказа"
-                // а значит нужно обновить сообщения для него
-                if (!this.selectedRequestsItem && request.conversation) {
-                  this.conversationId = request.conversation.externalId;
+                // если сообщение пришло в текущую заявку
+                if (this.selectedRequest.id === requests.entities[requestIndex].request.id) {
+                  // то обновим и объект текущей позиции
+                  this.selectedRequest = requests.entities[requestIndex].request;
+
+                  // если не выделена ни одина позиция, то мы стоим на "Обсуждение заказа"
+                  // а значит нужно обновить сообщения для него
+                  if (!this.selectedRequestsItem && request.conversation) {
+                    this.setConversation(request.conversation);
+                  }
                 }
               }
               return requests;
             }),
-            tap(() => this.fetchCounters()),
+            tap(() => this.fetchCountersSubject.next()),
             shareReplay(1)
           );
         });
 
-      this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
-        tap(data => {
-          this.requestsItems = new RequestItemsStore();
-          this.requestsItems.setRequestItems(data);
+      // обновляем позиции, если новое обсуждение создано в текущей заявке
+      if (this.selectedRequest.id === requestId) {
+        this.messageService.getRequestItems(this.selectedRequest.id, this.user.getUserRole()).pipe(
+          tap(data => {
+            this.requestsItems = new RequestItemsStore();
+            this.requestsItems.setRequestItems(data);
 
-          const conversationId = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation?.externalId;
+            const conversationObj = data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation;
 
-          if (conversationId) {
-            this.conversationId = conversationId;
-          }
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe(data => {
-        this.requestsItems$ = of(data);
-        this.fetchCounters();
-      });
+            if (conversationObj) {
+              this.setConversation(conversationObj);
+            }
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe(data => {
+          this.requestsItems$ = of(data);
+          this.fetchCountersSubject.next();
+        });
+      }
     }));
   }
 
@@ -329,7 +345,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestsItems = new RequestItemsStore();
         this.requestsItems.setRequestItems(data);
       }),
-      tap(() => this.fetchCounters()),
+      tap(() => this.fetchCountersSubject.next()),
       shareReplay(1)
     );
 
@@ -342,7 +358,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.contextType = MessagesViewComponent.getContextType(item);
     this.contextId = MessagesViewComponent.getContextId(item);
-    this.conversationId = this.selectedRequestsItem.conversation?.externalId;
+    this.setConversation(this.selectedRequestsItem.conversation);
     this.cd.detectChanges();
 
     this.router.navigate(
@@ -373,7 +389,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
-    this.conversationId = this.selectedRequest.conversation?.externalId;
+    this.setConversation(this.selectedRequest.conversation);
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id],
@@ -495,6 +511,24 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       takeUntil(this.destroy$)
     );
+  }
+
+  /**
+   * Устанавливает идентификатор чата для отображения.
+   * Требуется устанавилвать идентификатор только через эту функцию!!!
+   * @param conversation
+   */
+  setConversation(conversation: { id: Uuid, externalId: Conversation["id"], unreadCount?: number } | null) {
+    if (conversation) {
+      this.conversationId = conversation.externalId;
+
+      // если в диалоге есть непрочитанные сообщения, то отмечаем их все прочитанными
+      if (conversation.unreadCount > 0) {
+        this.messageService.markSeen({ conversationId: this.conversationId });
+      }
+    } else {
+      this.conversationId = null;
+    }
   }
 
   ngOnDestroy() {

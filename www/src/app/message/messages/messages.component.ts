@@ -79,7 +79,6 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
 
       if (this.conversationId) {
         this.state = "fetching";
-        this.messagesService.markSeen({ conversationId: this.conversationId });
         const newMessages$ = this.messagesService.onNew(this.conversationId).pipe(
           takeUntil(this.change$)
         );
