@@ -1,19 +1,19 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
 
   <div class="app-row app-justify-content-between">
     <div class="app-col" [style.padding-right.px]="10">
       <div class="app-control-wrap">
         <input
           uxgInput lg uxgDatepicker
-          #dateRef
+          #dateEndRegistrationRef
           formControlName="dateEndRegistration"
           minDate="today"
           dateFormat="d.m.Y H:i"
           [defaultDate]="parsedDateEndRegistration.toDate()"
           [enableTime]="true"
         />
-        <label class="app-control-label" (click)="dateRef.focus()">Дата окончания процедуры</label>
-        <label class="app-control-icon" (click)="dateRef.focus()">
+        <label class="app-control-label" (click)="dateEndRegistrationRef.focus()">Дата окончания процедуры</label>
+        <label class="app-control-icon" (click)="dateEndRegistrationRef.focus()">
           <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
         </label>
       </div>
@@ -21,18 +21,27 @@
 
     <div class="app-col" [style.padding-left.px]="10">
       <div class="app-control-wrap">
-        <input
+        <input type="text"
           uxgInput lg uxgDatepicker
           #dateSummingUpRef
           formControlName="dateSummingUp"
           minDate="today"
           dateFormat="d.m.Y H:i"
-          [enableTime]="true"
-        />
+          [defaultDate]="parsedDateSummingUp.toDate()"
+          [enableTime]="true">
+
         <label class="app-control-label" (click)="dateSummingUpRef.focus()">Подведение итогов до</label>
         <label class="app-control-icon" (click)="dateSummingUpRef.focus()">
           <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
         </label>
+
+        <div class="app-control-error" *ngIf="form.get('dateSummingUp').errors as e">
+          <span *ngIf="e.afterEndRegistrationDate; else error">Дата не может быть раньше даты приёма заявок</span>
+
+          <ng-template #error>
+            <span>Неверная дата</span>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>
