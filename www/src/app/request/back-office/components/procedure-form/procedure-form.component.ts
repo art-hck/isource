@@ -136,6 +136,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
           this.form.get("general.withoutTotalPrice").setValue(true);
           this.withoutTotalPriceReadonly = true;
         } else {
+          this.form.get("general.withoutTotalPrice").setValue(false);
           this.withoutTotalPriceReadonly = false;
         }
       });
@@ -201,9 +202,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.isLoading = true;
-    this.form.disable();
-
     const body: Procedure = {
       ...(this.form.get("general") as FormGroup).getRawValue(),
       ...this.form.get("properties").value,
@@ -216,6 +214,10 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       dateSummingUp: moment(this.form.get('general.dateSummingUp').value + " " + this.timeSummingUp.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
+
+    this.isLoading = true;
+    this.form.disable();
+
     let request$;
     switch (this.action) {
       case "create": request$ = this.procedureService.create(this.request.id, body); break;
