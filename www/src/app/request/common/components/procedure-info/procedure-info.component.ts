@@ -46,4 +46,31 @@ export class ProcedureInfoComponent {
     // Если showAllPositions = true или не указан limit — возвращаем всё
     return this.procedure.privateAccessContragents.slice(0, this.showAllContragents ? this.procedure.privateAccessContragents.length : (this.limit || this.procedure.privateAccessContragents.length));
   }
+
+  dateEndRegistrationFinished(): boolean {
+    return moment(this.procedure?.dateEndRegistration).isBefore();
+  }
+
+  dateSummingUpFinished(): boolean {
+    return moment(this.procedure?.dateSummingUp).isBefore();
+  }
+
+  procedureIsFinished(): boolean {
+    return this.dateEndRegistrationFinished() && this.dateSummingUpFinished();
+  }
+
+  procedureIsRetrade(): boolean {
+    return this.procedure?.isRetrade;
+  }
+
+  prolongButtonIsDisabled(): boolean {
+    return this.procedureIsFinished();
+  }
+
+  // Дизейблим кнопку уторговывания, если процедура завершена полностью
+  // или если по процедуре объявлено уторговывание
+  // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
+  retradeButtonIsDisabled(): boolean {
+    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished();
+  }
 }
