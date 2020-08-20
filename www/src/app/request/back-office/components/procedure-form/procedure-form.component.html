@@ -165,7 +165,15 @@
       <div class="app-row no-total-price">
         <uxg-checkbox class="app-control" #withoutTotalPriceRef formControlName="withoutTotalPrice" [class.readonly]="withoutTotalPriceReadonly"
                       [readonly]="withoutTotalPriceReadonly"></uxg-checkbox>
-        <label (click)="withoutTotalPriceRef.check($event)"> &nbsp; Без указания НМЦ</label>
+        <label (click)="withoutTotalPriceRef.check($event)"> &nbsp; Без указания НМЦ &nbsp;</label>
+
+        <uxg-popover *ngIf="withoutTotalPriceReadonly" [openOnHover]="true">
+          <uxg-icon uxgPopoverTrigger shape="app-info" class="app-warning-color" size="16"></uxg-icon>
+
+          <div *uxgPopoverContent>
+            Для проведения процедуры с указанием НМЦ <br>необходимо указать НМЦ по всем позициям
+          </div>
+        </uxg-popover>
       </div>
 
       <div class="app-row">
