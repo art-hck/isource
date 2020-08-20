@@ -86,7 +86,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dateSummingUp: [null, [Validators.required, CustomValidators.currentOrFutureDate()]],
-        withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice")],
+        withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPrice", 'Нет'), [Validators.required, CustomValidators.requiredNotEmpty]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         publicAccess: [true, Validators.required],
@@ -136,7 +136,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
           this.form.get("general.withoutTotalPrice").setValue(true);
           this.withoutTotalPriceReadonly = true;
         } else {
-          this.form.get("general.withoutTotalPrice").setValue(false);
           this.withoutTotalPriceReadonly = false;
         }
       });
