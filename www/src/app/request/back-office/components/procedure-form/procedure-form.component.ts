@@ -87,7 +87,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
         dateSummingUp: [null, [Validators.required, CustomValidators.currentOrFutureDate()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
-        withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPrice", 'Нет'), [Validators.required, CustomValidators.requiredNotEmpty]],
+        withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPrice", 'НМЦ не рассчитывалась'), [Validators.required]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         publicAccess: [true, Validators.required],
         okpd2: ["", Validators.required],
@@ -129,6 +129,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
 
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(positions => {
+        console.log('setting new values');
+
         this.selectedPositions = positions;
         this.updateSelectedPositions.emit(this.selectedPositions);
 
@@ -136,6 +138,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
           this.form.get("general.withoutTotalPrice").setValue(true);
           this.withoutTotalPriceReadonly = true;
         } else {
+          this.form.get("general.withoutTotalPrice").setValue(false);
           this.withoutTotalPriceReadonly = false;
         }
       });
