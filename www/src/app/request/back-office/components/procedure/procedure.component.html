@@ -35,8 +35,45 @@
         </div>
 
         <div class="app-col">
-          <button uxgButton secondary *ngIf="finished" (click)="bargain.emit()">Уторговать</button>
-          <button uxgButton secondary *ngIf="!finished && !procedure.isRetrade" (click)="prolong.emit()">Продлить процедуру</button>
+          <uxg-popover #prolongPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
+            <button uxgButton secondary
+                    uxgPopoverTrigger
+                    [disabled]="prolongButtonIsDisabled()" (click)="prolong.emit()">
+              Продлить
+            </button>
+
+            <ng-container *ngIf="prolongButtonIsDisabled()">
+              <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="prolongPopover.hide()">
+                <div style="text-align: left" *ngIf="procedureIsFinished(); else otherProlongError">
+                  Период подведения итогов по этой процедуре завершен, <br>при необходимости объявите новую процедуру
+                </div>
+
+                <ng-template #otherProlongError>
+                  <div>Продление недоступно</div>
+                </ng-template>
+              </div>
+            </ng-container>
+          </uxg-popover>
+
+          <uxg-popover #bargainPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
+            <button uxgButton secondary
+                    uxgPopoverTrigger
+                    [disabled]="retradeButtonIsDisabled()" (click)="bargain.emit()">
+              Уторговать
+            </button>
+
+            <ng-container *ngIf="retradeButtonIsDisabled()">
+              <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="bargainPopover.hide()">
+                <div style="text-align: left" *ngIf="procedureIsFinished(); else otherRetradeError">
+                  Период подведения итогов по этой процедуре завершен, <br>при необходимости объявите новую процедуру
+                </div>
+
+                <ng-template #otherRetradeError>
+                  <div>Уторговывание недоступно</div>
+                </ng-template>
+              </div>
+            </ng-container>
+          </uxg-popover>
         </div>
       </div>
 

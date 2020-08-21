@@ -119,6 +119,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.dishonestSuppliersForbidden").disable();
       this.form.get("general.okpd2").disable();
       this.form.get("general.publicAccess").disable();
+      this.form.get("general.withoutTotalPrice").disable();
+      this.form.get("general.withoutTotalPriceReason").disable();
       this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
     }

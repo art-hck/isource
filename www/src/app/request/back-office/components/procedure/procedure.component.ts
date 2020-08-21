@@ -34,6 +34,33 @@ export class ProcedureComponent {
     return this.appConfig.procedure.resultUrl + this.procedure.lotId;
   }
 
+  dateEndRegistrationFinished(): boolean {
+    return moment(this.procedure?.dateEndRegistration).isBefore();
+  }
+
+  dateSummingUpFinished(): boolean {
+    return moment(this.procedure?.dateSummingUp).isBefore();
+  }
+
+  procedureIsFinished(): boolean {
+    return this.dateEndRegistrationFinished() && this.dateSummingUpFinished();
+  }
+
+  procedureIsRetrade(): boolean {
+    return this.procedure?.isRetrade;
+  }
+
+  prolongButtonIsDisabled(): boolean {
+    return this.procedureIsFinished();
+  }
+
+  // Дизейблим кнопку уторговывания, если процедура завершена полностью
+  // или если по процедуре объявлено уторговывание
+  // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
+  retradeButtonIsDisabled(): boolean {
+    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished();
+  }
+
   constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {
   }
 }
