@@ -56,9 +56,6 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   requestId: Uuid;
   positionId: Uuid;
 
-  // requests$: Observable<Page<RequestsList>>;
-  // requestsItems$: Observable<RequestPositionList[]>;
-
   requestEntities: RequestsList[];
 
   selectedRequest: RequestListItem;
@@ -111,16 +108,56 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(new Fetch(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
       tap(() => this.store.dispatch(new FetchRequestCounters())))
       // tap(() =>  this.jumpToRequestOrPosition()))
-    .subscribe();
+      .subscribe();
 
     merge(this.messageService.onNew(), this.messageService.onMarkSeen()).pipe(
       debounceTime(100),
       takeUntil(this.destroy$)
     ).subscribe(() => this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)));
 
-    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
-      this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
-    }));
+    // this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe((() => {
+    //   this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
+    // }));
+
+    this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe(conversation => {
+      const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
+
+      this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(({ entities }) => {
+          // приходит всегда одна заявка, которую ищем по id
+          const request = entities[0].request;
+
+          // проходим по текущим заявкам и обновляем ту, в которой пришло сообщение
+          this.requests$ = this.requests$.pipe(
+            map(requests => {
+              const requestIndex = requests.entities.findIndex(({ request: { id } }) => id === request.id);
+              if (requestIndex !== -1) {
+                requests.entities[requestIndex].request = request;
+                // если сообщение пришло в текущую заявку
+                if (this.selectedRequest.id === requests.entities[requestIndex].request.id) {
+                  // то обновим и объект текущей позиции
+                  this.selectedRequest = requests.entities[requestIndex].request;
+
+                  // если не выделена ни одина позиция, то мы стоим на "Обсуждение заказа"
+                  // а значит нужно обновить сообщения для него
+                  if (!this.selectedRequestsItem && request.conversation) {
+                    this.setConversation(request.conversation);
+                  }
+                }
+              }
+              return requests;
+            }),
+            shareReplay(1)
+          );
+        });
+      if (this.selectedRequest.id === requestId) {
+        this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null)).pipe(
+          tap((data) => data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation ?
+            this.setConversation(data.find(item => item.id === this.contextId && this.selectedRequestsItem)?.conversation) : null)
+        );
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -157,20 +194,20 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   jumpToRequestOrPosition(): void {
-    let requestEntities = [];
+    // let requestEntities = [];
     let requestToSelect = [];
 
     if (this.requestId) {
       // Выбор заявки в списке
       this.requests$.pipe(takeUntil(this.destroy$)).subscribe((requests) => {
-        requestEntities = requests.entities;
-        requestToSelect = requestEntities.filter(
+        // requestEntities = requests.entities;
+        requestToSelect = this.requestEntities.filter(
           ({ request }) => {
             return request.id === this.requestId;
           });
 
         if (!requestToSelect || requestToSelect.length === 0) {
-          this.appendRequests(requestEntities.length).subscribe((data) => {
+          this.appendRequests(this.requestEntities.length).subscribe((data) => {
             this.requests$ = of(data);
             this.jumpToRequestOrPosition();
           });
@@ -195,7 +232,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     } else {
-      this.onRequestClick(requestEntities[0].request);
+      this.onRequestClick(this.requestEntities[0].request);
     }
 
     // Прокручиваем в списке заявок и позиций до выделенных элементов
@@ -203,6 +240,24 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const selectedItems = document.querySelectorAll('li.selected');
       selectedItems.forEach(el => el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }));
     }, 100);
+  }
+
+  /**
+   * Устанавливает идентификатор чата для отображения.
+   * Требуется устанавилвать идентификатор только через эту функцию!!!
+   * @param conversation
+   */
+  setConversation(conversation: { id: Uuid, externalId: Conversation["id"], unreadCount?: number } | null) {
+    if (conversation) {
+      this.store.dispatch(new Get(conversation.externalId));
+
+      // если в диалоге есть непрочитанные сообщения, то отмечаем их все прочитанными
+      if (conversation.unreadCount > 0) {
+        this.messageService.markSeen({ conversationId: this.conversationId });
+      }
+    } else {
+      this.store.dispatch(new Get(null));
+    }
   }
 
   onRequestClick(request: RequestListItem) {
@@ -221,7 +276,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.contextType = MessagesViewComponent.getContextType(item);
     this.contextId = MessagesViewComponent.getContextId(item);
-    this.conversationId = this.selectedRequestsItem.conversation?.externalId;
+    this.setConversation(this.selectedRequestsItem.conversation);
     this.cd.detectChanges();
 
     this.router.navigate(
@@ -252,7 +307,8 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.contextType = MessageContextTypes.REQUEST;
     this.contextId = this.selectedRequest.id;
-    this.conversationId = this.selectedRequest.conversation?.externalId;
+    // this.conversationId = this.selectedRequest.conversation?.externalId;
+    this.setConversation(this.selectedRequest.conversation);
 
     this.router.navigate(
       ['messages/request/' + this.selectedRequest.id],
@@ -377,7 +433,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-    ngOnDestroy() {
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }

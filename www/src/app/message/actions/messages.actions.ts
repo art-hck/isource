@@ -69,4 +69,11 @@ export namespace Messages {
       public conversationId: number
     ) {}
   }
+
+  export class OnNew {
+    static  readonly type = '[Messages] OnNew';
+    constructor(
+      public conversationId: number
+    ) {}
+  }
 }

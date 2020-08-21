@@ -20,6 +20,7 @@ import { Message } from "../models/message";
 import { Observable, of } from "rxjs";
 import FetchConversationCounters = Messages.FetchConversationCounters;
 import FetchRequestCounters = Messages.FetchRequestCounters;
+import OnNew = Messages.OnNew;
 
 
 export interface MessagesStateModel {
@@ -28,6 +29,7 @@ export interface MessagesStateModel {
   requestsItems: RequestPositionList[];
   messages: Message[];
   externalId: number;
+  newMessage: Message;
 }
 
 type Model = MessagesStateModel;
@@ -35,7 +37,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'Messages',
-  defaults: { requests: null, requestsItems: null, messages: null, externalId: null, status: "pristine" }
+  defaults: { requests: null, requestsItems: null, messages: null, externalId: null, newMessage: null, status: "pristine" }
 })
 @Injectable()
 export class MessagesState {
@@ -60,6 +62,9 @@ export class MessagesState {
 
   @Selector()
   static status({ status }: Model) { return status; }
+
+  @Selector()
+  static newMessage({ newMessage }: Model) { return newMessage; }
 
 
   @Action(Fetch)
@@ -113,47 +118,56 @@ export class MessagesState {
     }
     return this.conversationsService.get(contextIds).pipe(
       tap(conversations => {
-        (conversations ?? []).forEach(conversation => {
-          setState(patch({
-            requestsItems: updateItem(c => c?.conversation?.externalId === conversation.id,
-              patch({
-                positions: updateItem(position => position?.conversation?.externalId === conversation.id,
-                  patch({ conversation: patch({ unreadCount: conversation.unreadCount }) }))
-              }))
-          }));
-        });
-      }
-    ));
+          (conversations ?? []).forEach(conversation => {
+            setState(patch({
+              requestsItems: updateItem(c => c?.conversation?.externalId === conversation.id,
+                patch({
+                  positions: updateItem(position => position?.conversation?.externalId === conversation.id,
+                    patch({ conversation: patch({ unreadCount: conversation.unreadCount }) }))
+                }))
+            }));
+          });
+        }
+      ));
   }
-@Action(Update) update({ setState, dispatch }: Context, { role, startFrom, pageSize, filters, sort }: Update) {
-  setState(patch({ status: "updating" as StateStatus }));
-  return this.rest.getRequests(role, startFrom, pageSize, filters, sort).pipe(
-    tap(requests => setState(patch({ requests }))),
-    switchMap(() => dispatch(new FetchRequestCounters())),
-    tap(() => setState(patch({ status: "received" as StateStatus }))),
-  );
-}
 
-@Action(CreateConversation) create({ setState, dispatch }: Context, { contextType, contextId }: CreateConversation) {
-  setState(patch({ status: "fetching" as StateStatus }));
-  return this.conversationsService.apiCreate(contextType, contextId).pipe(
-    tap(({ externalId }) => setState(patch({ externalId }))),
-    tap(() => setState(patch({ status: "received" as StateStatus })))
-  );
-}
+  @Action(Update) update({ setState, dispatch }: Context, { role, startFrom, pageSize, filters, sort }: Update) {
+    setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.getRequests(role, startFrom, pageSize, filters, sort).pipe(
+      tap(requests => setState(patch({ requests }))),
+      switchMap(() => dispatch(new FetchRequestCounters())),
+      tap(() => setState(patch({ status: "received" as StateStatus }))),
+    );
+  }
 
-@Action(Send) send(ctx: Context, { text, conversationId, attachmentsId }: Send) {
-  ctx.setState(patch({ status: "fetching" as StateStatus }));
-  return this.rest.send(text, conversationId, attachmentsId).pipe(
-    tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
-  );
-}
+  @Action(CreateConversation) create({ setState, dispatch }: Context, { contextType, contextId }: CreateConversation) {
+    setState(patch({ status: "fetching" as StateStatus }));
+    return this.conversationsService.apiCreate(contextType, contextId).pipe(
+      tap(({ externalId }) => setState(patch({ externalId }))),
+      tap(() => setState(patch({ status: "received" as StateStatus })))
+    );
+  }
 
-@Action(Get) get(ctx: Context, { conversationId }: Get) {
-  ctx.setState(patch({ status: "fetching" as StateStatus }));
-  return this.rest.get(conversationId).pipe(
-    tap(messages => ctx.setState(patch({ messages }))),
-    tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
-  );
-}
+  @Action(Send) send(ctx: Context, { text, conversationId, attachmentsId }: Send) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.send(text, conversationId, attachmentsId).pipe(
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
+    );
+  }
+
+  @Action(Get) get(ctx: Context, { conversationId }: Get) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.get(conversationId).pipe(
+      tap(messages => ctx.setState(patch({ messages }))),
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
+    );
+  }
+
+  @Action(OnNew) onNew(ctx: Context, { conversationId }: OnNew) {
+    ctx.setState(patch({ status: "fetching" as StateStatus }));
+    return this.rest.onNew(conversationId).pipe(
+      tap(newMessage => ctx.setState(patch({ newMessage }))),
+      tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
+    );
+  }
 }

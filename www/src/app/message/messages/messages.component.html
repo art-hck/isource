@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="state === 'pristine' || (messages$ | async)?.length === 0">
+    <ng-container *ngIf="(messages$ | async)?.length === 0">
       <div class="text-center">Сообщений нет</div>
     </ng-container>
 

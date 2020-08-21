@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { expand, map, shareReplay, take, takeUntil, tap } from "rxjs/operators";
+import { expand, map, shareReplay, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { merge, Observable, Subject } from "rxjs";
 import { MessageContextToEventTypesMap, MessageContextTypes } from "../message-context-types";
@@ -11,14 +11,18 @@ import { StateStatus } from "../../request/common/models/state-status";
 import { AttachmentsService } from "../services/attachments.service";
 import { Attachment } from "../models/attachment";
 import { AppFile } from "../../shared/components/file/file";
-import { Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
+import { Messages } from "../actions/messages.actions";
+import Get = Messages.Get;
+import { MessagesState } from "../states/messages.state";
+import OnNew = Messages.OnNew;
 
 @Component({
   selector: 'app-message-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class MessagesComponent implements AfterViewInit, OnDestroy {
 
   @Input() contextId: Uuid;
   @Input() contextType: MessageContextTypes;
@@ -27,11 +31,13 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('scrollContainer') private scrollContainerEl: ElementRef;
   @ViewChildren('messagesList') messagesList: QueryList<any>;
 
+  @Select(MessagesState.messages) messages$: Observable<Message[]>;
+  @Select(MessagesState.newMessage) newMessage$: Observable<Message>;
+
   private scrollContainer: any;
   /**  Для первой загрузки быстро перематываем сообщения, дальше делаем плавную перемотку */
   private firstScroll = true;
 
-  public messages$: Observable<Message[]>;
   public state: StateStatus = 'pristine';
   files: { appFile: AppFile, status: StateStatus }[] = [];
 
@@ -64,33 +70,35 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.messagesList.changes.pipe(takeUntil(this.destroy$)).subscribe(() => this.onItemElementsChanged());
   }
 
-  ngOnChanges({ contextId, conversationId }: SimpleChanges) {
-    if ((contextId || conversationId) && this.contextId) {
-      this.form.reset();
-      this.files = [];
-      this.messages$ = null;
-      this.state = "pristine";
-      this.change$.next();
-      if (this.conversationId) {
-        this.state = "fetching";
-        this.messagesService.markSeen({ conversationId: this.conversationId });
-        const newMessages$ = this.messagesService.onNew(this.conversationId);
-
-        this.messages$ = this.messagesService.get(this.conversationId).pipe(
-          tap(() => this.firstScroll = true),
-          tap(() => this.state = "received"),
-          expand(messages => newMessages$.pipe(
-            take(1),
-            tap(({ id }) => this.messagesService.markSeen({ messageId: id })),
-            map(message => [...messages, message]),
-            takeUntil(this.change$)
-          )),
-          takeUntil(this.change$),
-          shareReplay(1)
-        );
-      }
-    }
-  }
+  // ngOnChanges({ contextId, conversationId }: SimpleChanges) {
+    // if ((contextId || conversationId) && this.contextId) {
+    //   // this.form.reset();
+    //   // this.files = [];
+    //   // this.messages$ = null;
+    //   // this.state = "pristine";
+    //   // this.change$.next();
+    //   if (this.conversationId) {
+    //     // this.state = "fetching";
+    //     this.messagesService.markSeen({ conversationId: this.conversationId });
+    //     // const newMessages$ = this.messagesService.onNew(this.conversationId);
+    //     this.store.dispatch(new OnNew(this.conversationId));
+        // this.store.dispatch(new Get(this.conversationId)).pipe(withLatestFrom(this.messages$)).subscribe(
+        //   // tap(() => this.firstScroll = true),
+        //   // tap(() => this.state = "received"),
+        //   // expand(messages => newMessages$.pipe(
+        //   //   take(1),
+        //   //   tap(({ id }) => this.messagesService.markSeen({ messageId: id })),
+        //   //   map(message => [...messages, message]),
+        //   //   takeUntil(this.change$)
+        //   // ))
+        //   ([_, messages]) => {
+        //     map(message => [...messages, this.newMessage$]);
+        //     console.log(messages);
+        //   }
+  //       // );
+  //     }
+  //   }
+  // }
 
   public pushFiles(files: File[]) {
     const appFiles = files.map(file => ({appFile: new AppFile(file), status: 'fetching' as StateStatus}));
@@ -129,6 +137,11 @@ export class MessagesComponent implements AfterViewInit, OnChanges, OnDestroy {
     while ((this.form.get("attachments") as FormArray).length !== 0) {
       (this.form.get("attachments") as FormArray).removeAt(0);
     }
+    this.store.dispatch(new Get(this.conversationId)).pipe(withLatestFrom(this.messages$)).subscribe(
+      ([_, messages]) => {
+        map(message => [...messages, this.newMessage$]);
+      }
+    );
   }
 
   private onItemElementsChanged(): void {
