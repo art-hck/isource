@@ -137,11 +137,11 @@ export class MessagesComponent implements AfterViewInit, OnDestroy {
     while ((this.form.get("attachments") as FormArray).length !== 0) {
       (this.form.get("attachments") as FormArray).removeAt(0);
     }
-    this.store.dispatch(new Get(this.conversationId)).pipe(withLatestFrom(this.messages$)).subscribe(
-      ([_, messages]) => {
-        map(message => [...messages, this.newMessage$]);
-      }
-    );
+    // this.store.dispatch(new Get(this.conversationId)).pipe(withLatestFrom(this.messages$)).subscribe(
+    //   ([_, messages]) => {
+    //     map(message => [...messages, this.newMessage$]);
+    //   }
+    // );
   }
 
   private onItemElementsChanged(): void {

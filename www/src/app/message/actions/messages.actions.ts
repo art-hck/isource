@@ -1,6 +1,6 @@
 import { Uuid } from "../../cart/models/uuid";
-import { TechnicalCommercialProposal } from "../../request/common/models/technical-commercial-proposal";
 import { MessageContextTypes } from "../message-context-types";
+import { Message } from "../models/message";
 
 export namespace Messages {
   // Получить список ТКП
@@ -72,8 +72,6 @@ export namespace Messages {
 
   export class OnNew {
     static  readonly type = '[Messages] OnNew';
-    constructor(
-      public conversationId: number
-    ) {}
+    constructor(public message: Message) {}
   }
 }

@@ -4,20 +4,20 @@ import { RequestsList } from "../../request/common/models/requests-list/requests
 import { Injectable } from "@angular/core";
 import { MessagesService } from "../services/messages.service";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
-import { patch, updateItem } from "@ngxs/store/operators";
-import { flatMap, map, mergeMap, switchMap, take, tap } from "rxjs/operators";
+import { append, patch, updateItem } from "@ngxs/store/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { Page } from "../../core/models/page";
 import { Messages } from "../actions/messages.actions";
+import { ContextsService } from "../services/contexts.service";
+import { ConversationsService } from "../services/conversations.service";
+import { Message } from "../models/message";
+import { of } from "rxjs";
 import Fetch = Messages.Fetch;
 import FetchPositions = Messages.FetchPositions;
-import { ContextsService } from "../services/contexts.service";
 import Update = Messages.Update;
 import CreateConversation = Messages.CreateConversation;
-import { ConversationsService } from "../services/conversations.service";
 import Send = Messages.Send;
 import Get = Messages.Get;
-import { Message } from "../models/message";
-import { Observable, of } from "rxjs";
 import FetchConversationCounters = Messages.FetchConversationCounters;
 import FetchRequestCounters = Messages.FetchRequestCounters;
 import OnNew = Messages.OnNew;
@@ -163,11 +163,7 @@ export class MessagesState {
     );
   }
 
-  @Action(OnNew) onNew(ctx: Context, { conversationId }: OnNew) {
-    ctx.setState(patch({ status: "fetching" as StateStatus }));
-    return this.rest.onNew(conversationId).pipe(
-      tap(newMessage => ctx.setState(patch({ newMessage }))),
-      tap(() => ctx.setState(patch({ status: "received" as StateStatus })))
-    );
+  @Action(OnNew) onNew(ctx: Context, { message }: OnNew) {
+    return ctx.setState(patch({ messages: append([message]) }));
   }
 }

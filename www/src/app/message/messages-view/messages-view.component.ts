@@ -40,6 +40,7 @@ import Send = Messages.Send;
 import Get = Messages.Get;
 import FetchRequestCounters = Messages.FetchRequestCounters;
 import FetchConversationCounters = Messages.FetchConversationCounters;
+import OnNew = Messages.OnNew;
 
 @Component({
   selector: 'app-message-messages-view',
@@ -119,6 +120,7 @@ export class MessagesViewComponent implements OnInit, AfterViewInit, OnDestroy {
     //   this.store.dispatch(new Update(this.user.getUserRole(), 0, this.pageSize, [], null));
     // }));
 
+    this.messageService.onNew(this.conversationId).subscribe((message) => this.store.dispatch(new OnNew(message)));
     this.conversationsService.onNew().pipe(takeUntil(this.destroy$)).subscribe(conversation => {
       const requestId: Request['id'] = JSON.parse(conversation.context.items[0].data).contextId;
 
