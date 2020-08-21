@@ -1,9 +1,9 @@
 <div class="app-row">
-  <h3 class="app-col-6">
+  <h3 class="app-col">
     <a [routerLink]="['/requests', 'backoffice', procedure.requestId, 'procedure']"
        [queryParams]="{ source: source, procedureId: procedure.procedureId }">Процедура №{{procedure.procedureId}} «{{procedure.procedureTitle}}»</a>
   </h3>
-  <div class="app-col-6 status">
+  <div class="app-col-auto status">
     <ng-container *ngIf="!finished(procedure)">
       <span class="app-ghost-color pr-20">
         <uxg-icon shape="app-waiting"></uxg-icon>
