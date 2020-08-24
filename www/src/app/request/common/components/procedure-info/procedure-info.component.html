@@ -165,9 +165,15 @@
     <div class="app-col app-col-aside">
       <h3 [style.margin-bottom.px]="15">Параметры процедуры</h3>
 
-      <div class="app-section">
-        <div class="app-ghost-color info-label">Свойства</div>
+      <div class="app-section without-total-price">
+        <div class="info-item">{{ procedure.withoutTotalPrice ? 'Без указания НМЦ' : 'С указанием НМЦ' }}</div>
+      </div>
 
+      <div class="app-section without-total-price-reason" *ngIf="procedure.withoutTotalPrice">
+        <div class="info-item">{{ procedure.withoutTotalPriceReason }}</div>
+      </div>
+
+      <div class="app-section properties">
         <div class="info-item" *ngIf="procedure.bestPriceRequirements">Участникам запрещено обновлять цены по позициям без учета цен, уже поданных участником</div>
         <div class="info-item" *ngIf="procedure.positionsRequiredAll">Обязательная подача предложений на все позиции</div>
         <div class="info-item" *ngIf="procedure.positionsAnalogs">Разрешается прием аналогов</div>
@@ -175,26 +181,20 @@
         <div class="info-item" *ngIf="procedure.positionsEntireVolume">Заявка подается на весь закупаемый объем</div>
       </div>
 
-      <div class="app-section">
-        <div class="app-ghost-color info-label">Отображение наименований и участников</div>
-
+      <div class="app-section suppliers-visibility">
         <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'Name'">Участники и их наименования отображаются в таблице</div>
         <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'NameHidden'">Участники отображаются со скрытыми наименованиями</div>
         <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'None'">Участники не отображаются в таблице</div>
       </div>
 
-      <div class="app-section">
-        <div class="app-ghost-color info-label">Отображение цен участников</div>
-
+      <div class="app-section applics-visibility">
         <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'PriceAndRating'">Видны и цены, и рейтинг участников</div>
         <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'OnlyPrice'">Видны только поданные цены</div>
         <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'OnlyRating'">Виден только рейтинг цен</div>
         <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'None'">Цены и рейтинг скрыты</div>
       </div>
 
-      <div class="app-section">
-        <div class="app-ghost-color info-label">Ограничение на подачу цен участников</div>
-
+      <div class="app-section best-price-type">
         <div class="info-item" *ngIf="procedure.positionsBestPriceType === 'LowerStartPrice'">Участники подают цену ниже начальной цены</div>
         <div class="info-item" *ngIf="procedure.positionsBestPriceType === 'LowerPriceBest'">Нет ограничений на цены участников</div>
       </div>
