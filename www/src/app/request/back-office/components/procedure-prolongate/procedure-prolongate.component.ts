@@ -54,7 +54,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
         const dateSummingUp = this.form.get("dateSummingUp").value;
 
         if (this.form.get("dateSummingUp").value) {
-          if (moment(dateEndRegistration, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY"))) {
+          if (moment(dateEndRegistration, "DD.MM.YYYY HH:mm").isAfter(moment(dateSummingUp, "DD.MM.YYYY HH:mm"))) {
             this.form.get("dateSummingUp").setErrors({ afterEndRegistrationDate: true});
             this.dateSummingUpRef.nativeElement.classList.add('invalid');
           } else {
@@ -68,7 +68,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
         const dateEndRegistration = this.form.get("dateEndRegistration").value;
 
         if (this.form.get("dateSummingUp").value) {
-          if (moment(dateSummingUp, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY"))) {
+          if (moment(dateSummingUp, "DD.MM.YYYY HH:mm").isBefore(moment(dateEndRegistration, "DD.MM.YYYY HH:mm"))) {
             this.form.get("dateSummingUp").setErrors({ afterEndRegistrationDate: true});
             this.dateSummingUpRef.nativeElement.classList.add('invalid');
           } else {
