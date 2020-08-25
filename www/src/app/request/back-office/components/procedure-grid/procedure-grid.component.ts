@@ -67,6 +67,10 @@ export class ProcedureGridComponent implements OnInit {
     return this.procedure?.isRetrade;
   }
 
+  canRetradeProcedure(): boolean {
+    return this.procedure?.canRetrade;
+  }
+
   prolongButtonIsDisabled(): boolean {
     return this.procedureIsFinished();
   }
@@ -74,7 +78,8 @@ export class ProcedureGridComponent implements OnInit {
   // Дизейблим кнопку уторговывания, если процедура завершена полностью
   // или если по процедуре объявлено уторговывание
   // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
+  // или если процедуру нельзя уторговать, т.к. нет позиций с 2 и более предложениями
   retradeButtonIsDisabled(): boolean {
-    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished();
+    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished() || !this.canRetradeProcedure();
   }
 }
