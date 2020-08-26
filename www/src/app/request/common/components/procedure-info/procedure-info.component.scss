@@ -1,3 +1,5 @@
+@import "src/theme";
+
 .app-table > .app-row {
   padding-left: 0;
   padding-right: 0;
@@ -34,4 +36,18 @@ h3.section-title {
   & div.name {
     font-weight: 500;
   }
+}
+
+.app-section.without-total-price .info-item:first-of-type:before { content: 'НМЦ'; }
+.app-section.without-total-price-reason .info-item:first-of-type:before { content: 'Причина отсутствия НМЦ'; }
+.app-section.properties .info-item:first-of-type:before { content: 'Свойства'; }
+.app-section.suppliers-visibility .info-item:first-of-type:before { content: 'Отображение наименований и участников'; }
+.app-section.applics-visibility .info-item:first-of-type:before { content: 'Отображение цен участников'; }
+.app-section.best-price-type .info-item:first-of-type:before { content: 'Ограничение на подачу цен участников'; }
+
+.app-section .info-item:first-of-type:before {
+  display: block;
+  margin-bottom: 10px;
+  color: uxg($theme, color-font-ghost);
+  font-weight: 400;
 }
