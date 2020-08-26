@@ -8,8 +8,10 @@ import { Store } from "@ngxs/store";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestActions as BackofficeRequestActions } from "../../../back-office/actions/request.actions";
 import BackofficeRefreshPositions = BackofficeRequestActions.RefreshPositions;
+import BackofficeRefreshRequest = BackofficeRequestActions.Refresh;
 import { RequestActions as CustomerRequestActions } from "../../../customer/actions/request.actions";
 import CustomerRefreshPositions = CustomerRequestActions.RefreshPositions;
+import CustomerRefreshRequest = CustomerRequestActions.Refresh;
 import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
@@ -48,8 +50,10 @@ export class PositionCancelComponent implements OnInit {
     const positionIds = this.positions.map(({ id }: RequestPosition) => id);
     const [newStatus, role] = this.user.isCustomer() ? ['CANCELED', 'customer'] : ['NOT_RELEVANT', 'backoffice'];
     this.positionService.changePositionsStatus(positionIds, newStatus, role, this.form.value).subscribe(() => {
-      this.user.isCustomer() ? this.store.dispatch(new CustomerRefreshPositions(this.requestId)) :
-        this.store.dispatch(new BackofficeRefreshPositions(this.requestId));
+      this.user.isCustomer() ?
+        this.store.dispatch([new CustomerRefreshRequest(this.requestId), new CustomerRefreshPositions(this.requestId)]) :
+        this.store.dispatch([new BackofficeRefreshRequest(this.requestId), new BackofficeRefreshPositions(this.requestId)]);
+
       this.store.dispatch(new ToastActions.Success(positionIds.length === 1 ? 'Позиция отменена' : 'Позиции отменены'));
     }, () => {
       this.store.dispatch(new ToastActions.Error(positionIds.length === 1 ? 'Ошибка отмены позиции' : 'Ошибка отмены позиций'));
