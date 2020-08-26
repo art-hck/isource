@@ -30,12 +30,21 @@
 
       <ng-container *ngIf="prolongButtonIsDisabled()">
         <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="prolongPopover.hide()">
-          <div style="text-align: left" *ngIf="procedureIsFinished(); else otherProlongError">
-            Период подведения итогов по этой процедуре завершен, <br>при необходимости объявите новую процедуру
+          <div *ngIf="procedureIsFinished(); else otherProlongError" style="text-align: left">
+            Период подведения итогов по этой процедуре завершен. <br>
+            При необходимости объявите новую процедуру.
           </div>
 
           <ng-template #otherProlongError>
-            <div>Продление недоступно</div>
+            <div *ngIf="procedureIsRetrade() && !this.dateEndRegistrationFinished()" style="text-align: left">
+              По процедуре объявлено уторговывание. <br>
+              Продление невозможно.
+            </div>
+
+            <div *ngIf="procedureIsRetrade() && this.dateEndRegistrationFinished() && !this.dateSummingUpFinished()" style="text-align: left">
+              По процедуре проведено уторговывание результатов. <br>
+              Продление невозможно.
+            </div>
           </ng-template>
         </div>
       </ng-container>
@@ -50,12 +59,21 @@
 
       <ng-container *ngIf="retradeButtonIsDisabled()">
         <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="bargainPopover.hide()">
-          <div style="text-align: left" *ngIf="procedureIsFinished(); else otherRetradeError">
-            Период подведения итогов по этой процедуре завершен, <br>при необходимости объявите новую процедуру
+          <div *ngIf="procedureIsFinished(); else otherRetradeError" style="text-align: left">
+            Период подведения итогов по этой процедуре завершен. <br>
+            Уторговывание недоступно.
           </div>
 
           <ng-template #otherRetradeError>
-            <div>Уторговывание недоступно</div>
+            <div *ngIf="procedure.offersImported && !canRetradeProcedure()" style="text-align: left">
+              Получено менее 2 предложений от поставщиков. <br>
+              Уторговывание недоступно.
+            </div>
+
+            <div *ngIf="!procedureIsFinished()" style="text-align: left">
+              Ожидается прием предложений от поставщиков. <br>
+              Уторговывание недоступно.
+            </div>
           </ng-template>
         </div>
       </ng-container>
