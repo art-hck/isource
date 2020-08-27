@@ -7,7 +7,6 @@
        [disabled]="disabled"
        (input)="input($event)"
        (focus)="focus.emit(inputValue || value)"
-       [class.active]="!isHidden"
        [class.app-dropdown-handler-up]="isDirectionUp"
        [attr.placeholder]="!appControlWrap && placeholder || null"
 />
@@ -16,7 +15,6 @@
 <div
   #itemsWrapper
   class="app-dropdown-items-wrapper"
-  [class.hidden]="isHidden"
   [class.app-dropdown-items-wrapper-up]="isDirectionUp"
 >
   <div class="app-dropdown-items">
