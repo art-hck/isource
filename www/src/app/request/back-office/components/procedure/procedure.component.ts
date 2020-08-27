@@ -55,7 +55,7 @@ export class ProcedureComponent {
   }
 
   prolongButtonIsDisabled(): boolean {
-    return this.procedureIsFinished();
+    return this.procedureIsFinished() || this.procedureIsRetrade();
   }
 
   // Дизейблим кнопку уторговывания, если процедура завершена полностью
