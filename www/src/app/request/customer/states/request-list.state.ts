@@ -54,7 +54,10 @@ export class RequestListState {
     return this.rest.addRequestFromExcel(action.files, action.requestName).pipe(
       flatMap(({id}) => action.publish ? dispatch(new RequestActions.Publish(id, false)).pipe(mapTo(id)) : of(id)),
       tap(id => setState(patch({ createdRequestId: id }))),
-      tap(() => setState(patch({ status: "received" } as Model))),
+      tap(
+        () => setState(patch({ status: "received" } as Model)),
+        () => setState(patch({ status: "received" } as Model))
+      ),
     );
   }
 
