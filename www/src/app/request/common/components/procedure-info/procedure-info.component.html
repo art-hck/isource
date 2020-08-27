@@ -102,13 +102,25 @@
 
           <div class="app-row position-list app-uppercase app-ghost-color app-bold">
             <small class="app-col app-ellipsis name">Наименование</small>
-            <small class="app-col-3 quantity">Количество</small>
+            <small class="app-col-2 total-price">НМЦ</small>
+            <small class="app-col-2 quantity">Количество</small>
             <small class="app-col-2 date">Срок</small>
           </div>
 
           <div class="app-row position-list" *ngFor="let position of getProcedurePositions()">
             <div class="app-col app-ellipsis name">{{ position.requestPosition.name }}</div>
-            <div class="app-col-3 quantity">{{ position.requestPosition.quantity }} <span class="app-ghost-color">{{ position.requestPosition.measureUnit }}</span></div>
+
+            <div class="app-col-2 total-price">
+              <ng-container *ngIf="position.requestPosition.startPrice; else withoutTotalPrice">
+                <span>{{ position.requestPosition.startPrice * position.requestPosition.quantity | currency: position.requestPosition.currency }}</span>
+              </ng-container>
+              <ng-template #withoutTotalPrice>
+                <span class="app-ghost-color">не указана</span>
+              </ng-template>
+            </div>
+
+            <div class="app-col-2 quantity">{{ position.requestPosition.quantity }} <span class="app-ghost-color">{{ position.requestPosition.measureUnit }}</span></div>
+
             <div class="app-col-2 date">
               <ng-container *ngIf="position.requestPosition.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
               <ng-template #deliveryDate>{{position.requestPosition.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
