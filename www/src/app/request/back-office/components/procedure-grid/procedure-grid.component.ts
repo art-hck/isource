@@ -80,6 +80,6 @@ export class ProcedureGridComponent implements OnInit {
   // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
   // или если процедуру нельзя уторговать, т.к. нет позиций с 2 и более предложениями
   retradeButtonIsDisabled(): boolean {
-    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished() || !this.canRetradeProcedure();
+    return this.procedureIsFinished() || (this.procedureIsRetrade() && !this.dateEndRegistrationFinished()) || !this.dateEndRegistrationFinished() || !this.canRetradeProcedure();
   }
 }
