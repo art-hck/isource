@@ -81,7 +81,7 @@ build study:
     - /bin/bash /var/www/agent/study/front/04.change_girs.sh
     - exit 0
   only:
-    - /^release-.*$/i
+    - master
   when: manual
   
 build prod:
