@@ -84,8 +84,12 @@
             <label class="app-control-icon" (click)="dateEndRegistration.focus()">
               <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
-            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
-              <span>Неверная дата</span>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors as e">
+              <span *ngIf="e.beforeSummingUpDate; else error">Дата не может быть позже даты подведения итогов</span>
+
+              <ng-template #error>
+                <span>Неверная дата</span>
+              </ng-template>
             </div>
           </div>
         </div>
