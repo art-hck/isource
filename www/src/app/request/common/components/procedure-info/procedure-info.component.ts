@@ -1,54 +1,50 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { Procedure } from "../../models/procedure";
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Procedure } from "../../../back-office/models/procedure";
 import moment from "moment";
-import { RequestPosition } from "../../../common/models/request-position";
-import { AppComponent } from "../../../../app.component";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { OkatoRegion } from "../../../../shared/models/okato-region";
-import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { startWith } from "rxjs/operators";
+import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 
 @Component({
-  selector: 'app-procedure-grid',
-  templateUrl: './procedure-grid.component.html',
-  styleUrls: ['./procedure-grid.component.scss']
+  selector: 'app-procedure-info',
+  templateUrl: './procedure-info.component.html',
+  styleUrls: ['./procedure-info.component.scss']
 })
-export class ProcedureGridComponent implements OnInit {
+export class ProcedureInfoComponent {
+
   @Input() procedure: Procedure;
-  @Input() source: string;
   @Output() bargain = new EventEmitter();
   @Output() prolong = new EventEmitter();
 
-  form: FormGroup;
-  procedurePositions: RequestPosition[];
+  limit = 5;
+  showAllPositions: boolean;
+  showAllContragents: boolean;
 
-  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
-              private  fb: FormBuilder) { }
+  get link(): string {
+    return this.appConfig.procedure.url + this.procedure.procedureId;
+  }
 
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      search: ''
-    });
+  get resultLink(): string {
+    return this.appConfig.procedure.resultUrl + this.procedure.lotId;
+  }
 
-    this.form.get('search').valueChanges.pipe(
-      startWith(<{}>this.form.get('search').value)).subscribe(() => {
-      this.procedurePositions = this.procedure.positions.map(procedurePosition => procedurePosition.requestPosition).filter(requestPosition =>
-        requestPosition.name.toLowerCase().indexOf(this.form.get('search').value.toLowerCase()) >= 0);
-      }
-    );
+  constructor(
+    @Inject(APP_CONFIG)
+    private appConfig: GpnmarketConfigInterface,
+    ) {
   }
 
   finished(procedure: Procedure): boolean {
     return moment(procedure?.dateEndRegistration).isBefore();
   }
 
-  link(procedure: Procedure): string {
-    return this.appConfig.procedure.url + procedure.procedureId;
+  getProcedurePositions() {
+    // Если showAllPositions = true или не указан limit — возвращаем всё
+    return this.procedure.positions.slice(0, this.showAllPositions ? this.procedure.positions.length : (this.limit || this.procedure.positions.length));
   }
 
-  resultLink(procedure: Procedure): string {
-    return this.appConfig.procedure.resultUrl + procedure.lotId;
+  getProcedureContragents(): ContragentShortInfo[] {
+    // Если showAllPositions = true или не указан limit — возвращаем всё
+    return this.procedure.privateAccessContragents.slice(0, this.showAllContragents ? this.procedure.privateAccessContragents.length : (this.limit || this.procedure.privateAccessContragents.length));
   }
 
   dateEndRegistrationFinished(): boolean {

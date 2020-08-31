@@ -36,15 +36,18 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
+  selectedPositions: RequestPosition[] = [];
 
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
   isLoading: boolean;
+  withoutTotalPriceReadonly: boolean;
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
+  readonly timeSummingUp = this.fb.control("", Validators.required);
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly mask: TextMaskConfig = {
     mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
@@ -82,6 +85,12 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
+        dateSummingUp: [
+          this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY") : null,
+          [Validators.required, CustomValidators.currentOrFutureDate()]
+        ],
+        withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
+        withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
         publicAccess: [true, Validators.required],
         okpd2: ["", Validators.required],
@@ -110,11 +119,18 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.wizzard.get("contragents").disable();
       this.form.get("positions").disable();
       this.form.get("general.procedureTitle").disable();
+      this.form.get("general.dateSummingUp").disable();
       this.form.get("general.dishonestSuppliersForbidden").disable();
       this.form.get("general.okpd2").disable();
       this.form.get("general.publicAccess").disable();
+      this.form.get("general.withoutTotalPrice").disable();
+      this.form.get("general.withoutTotalPriceReason").disable();
       this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
+
+
+      this.timeSummingUp.setValue(this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("HH:mm") : null);
+      this.timeSummingUp.disable();
     }
 
     if (!this.form.get("general.publicAccess").value) {
@@ -122,7 +138,54 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     }
 
     this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(positions => this.updateSelectedPositions.emit(positions));
+      .subscribe(positions => {
+        this.selectedPositions = positions;
+        this.updateSelectedPositions.emit(this.selectedPositions);
+
+        if (this.selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
+          this.form.get("general.withoutTotalPrice").setValue(true);
+          this.withoutTotalPriceReadonly = true;
+        } else {
+          this.form.get("general.withoutTotalPrice").setValue(false);
+          this.withoutTotalPriceReadonly = false;
+        }
+      });
+
+    this.form.get("general.dateEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(date => {
+        const dateSummingUp = this.form.get("general.dateSummingUp").value;
+
+        if (this.form.get("general.dateSummingUp").value) {
+          if (moment(date, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY"))) {
+            if (this.form.get("general.dateSummingUp").disabled) {
+              this.form.get("general.dateEndRegistration").setErrors({ beforeSummingUpDate: true});
+            } else {
+              this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+            }
+          } else {
+            this.form.get("general.dateEndRegistration").setErrors(null);
+            this.form.get("general.dateSummingUp").setErrors(null);
+          }
+
+          this.form.get("general.dateEndRegistration").markAsTouched();
+          this.form.get("general.dateSummingUp").markAsTouched();
+        }
+      });
+
+    this.form.get("general.dateSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(date => {
+        const dateEndRegistration = this.form.get("general.dateEndRegistration").value;
+
+        if (this.form.get("general.dateSummingUp").value) {
+          if (moment(date, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY"))) {
+            this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+          } else {
+            this.form.get("general.dateSummingUp").setErrors(null);
+          }
+
+          this.form.get("general.dateSummingUp").markAsTouched();
+        }
+      });
 
     this.form.get("general.publicAccess").valueChanges.pipe(
       startWith(<{}>this.form.get('general.publicAccess').value),
@@ -155,9 +218,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.isLoading = true;
-    this.form.disable();
-
     const body: Procedure = {
       ...(this.form.get("general") as FormGroup).getRawValue(),
       ...this.form.get("properties").value,
@@ -167,8 +227,13 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
+      dateSummingUp: moment(this.form.get('general.dateSummingUp').value + " " + this.timeSummingUp.value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
+
+    this.isLoading = true;
+    this.form.disable();
+
     let request$;
     switch (this.action) {
       case "create": request$ = this.procedureService.create(this.request.id, body); break;

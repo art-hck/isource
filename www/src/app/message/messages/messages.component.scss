@@ -39,6 +39,10 @@
           .attachment {
             cursor: pointer;
 
+            &:not(:last-child) {
+              margin-bottom: 10px;
+            }
+
             *:not(:last-child) {
               margin-right: .5em;
             }

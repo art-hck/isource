@@ -36,7 +36,8 @@
         <app-request-procedure
           *ngFor="let procedure of procedures"
           [procedure]="procedure"
-          (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
+          [source]="'tp'"
+          (bargain)="procedureModalPayload = { action: 'bargain', procedure: procedure }"
           (prolong)="prolongModalPayload = procedure"
         ></app-request-procedure>
 
@@ -70,7 +71,8 @@
           <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
           <app-procedure-prolongate
             *ngIf="prolongModalPayload"
-            [date]="prolongModalPayload.dateEndRegistration"
+            [dateEndRegistration]="prolongModalPayload.dateEndRegistration"
+            [dateSummingUp]="prolongModalPayload.dateSummingUp"
             [procedureId]="prolongModalPayload.procedureId"
             [requestId]="requestId"
             (close)="refreshProcedures(); prolongModalPayload = null"

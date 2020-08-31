@@ -97,6 +97,7 @@
           <div class="position-row app-layout" *ngFor="let procedure of procedures$ | async; trackBy: trackById">
             <app-procedure-grid
               [procedure]="procedure"
+              [source]="'cp'"
               (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
               (prolong)="prolongModalPayload = procedure"
             ></app-procedure-grid>
@@ -223,7 +224,8 @@
           <h2>Продление процедуры №{{prolongModalPayload?.procedureId}}</h2>
           <app-procedure-prolongate
             *ngIf="prolongModalPayload"
-            [date]="prolongModalPayload.dateEndRegistration"
+            [dateEndRegistration]="prolongModalPayload.dateEndRegistration"
+            [dateSummingUp]="prolongModalPayload.dateSummingUp"
             [procedureId]="prolongModalPayload.procedureId"
             [requestId]="requestId"
             (close)="prolongModalPayload = null"

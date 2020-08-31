@@ -1,0 +1,223 @@
+<ng-container *ngIf="procedure">
+  <div class="app-row">
+    <div class="app-col app-table app-no-border">
+      <div class="app-row app-align-items-center">
+        <div>
+          <span class="app-secondary-color">доступ к процедуре:
+            <b>{{ procedure.privateAccessContragents.length === 0 ? 'открытая процедура' : 'для ограниченного круга участников' }}</b>
+          </span>
+        </div>
+
+        <div class="app-col"></div>
+
+        <div [style.margin-right.px]="10">
+          <!-- Ссылка на процедуру и кнопка Уторговать  -->
+          <a *ngIf="finished(procedure)" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+          <a *ngIf="!finished(procedure)" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+        </div>
+
+        <uxg-popover #prolongPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
+          <button uxgButton secondary
+                  uxgPopoverTrigger
+                  [disabled]="prolongButtonIsDisabled()" (click)="prolong.emit()">
+            Продлить
+          </button>
+
+          <ng-container *ngIf="prolongButtonIsDisabled()">
+            <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="prolongPopover.hide()">
+              <div *ngIf="procedureIsFinished(); else otherProlongError" style="text-align: left">
+                Период подведения итогов по этой процедуре завершен. <br>
+                При необходимости объявите новую процедуру.
+              </div>
+
+              <ng-template #otherProlongError>
+                <div *ngIf="procedureIsRetrade() && !this.dateEndRegistrationFinished()" style="text-align: left">
+                  По процедуре объявлено уторговывание. <br>
+                  Продление невозможно.
+                </div>
+
+                <div *ngIf="procedureIsRetrade() && this.dateEndRegistrationFinished() && !this.dateSummingUpFinished()" style="text-align: left">
+                  По процедуре проведено уторговывание результатов. <br>
+                  Продление невозможно.
+                </div>
+              </ng-template>
+            </div>
+          </ng-container>
+        </uxg-popover>
+
+        <uxg-popover #bargainPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
+          <button uxgButton secondary
+                  uxgPopoverTrigger
+                  [disabled]="retradeButtonIsDisabled()" (click)="bargain.emit()">
+            Уторговать
+          </button>
+
+          <ng-container *ngIf="retradeButtonIsDisabled()">
+            <div *uxgPopoverContent="'app-popover-content-bottom-right'" (click)="bargainPopover.hide()">
+              <div *ngIf="procedureIsFinished(); else otherRetradeError" style="text-align: left">
+                Период подведения итогов по этой процедуре завершен. <br>
+                Уторговывание недоступно.
+              </div>
+
+              <ng-template #otherRetradeError>
+                <div *ngIf="procedure.offersImported && !canRetradeProcedure(); else notFinished" style="text-align: left">
+                  Получено менее 2 предложений от поставщиков. <br>
+                  Уторговывание недоступно.
+                </div>
+
+                <ng-template #notFinished>
+                  <div style="text-align: left">
+                    Идёт приём предложений от поставщиков. <br>
+                    Уторговывание недоступно.
+                  </div>
+                </ng-template>
+              </ng-template>
+            </div>
+          </ng-container>
+        </uxg-popover>
+      </div>
+    </div>
+
+    <div class="app-col app-col-aside"></div>
+  </div>
+
+  <div class="app-row">
+    <div class="app-col app-card">
+      <div class="app-row app-align-items-center">
+        <h3 class="app-col">Общие сведения процедуры</h3>
+
+        <div class="app-col-auto status">
+          <ng-container *ngIf="!finished(procedure)">
+            <span class="app-ghost-color pr-20">
+              <uxg-icon shape="app-waiting"></uxg-icon>
+              <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
+            </span>
+          </ng-container>
+
+          <ng-container *ngIf="finished(procedure)">
+            <span class="app-success-color pr-20">
+              <uxg-icon shape="app-check"></uxg-icon>
+              Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-col">
+          <hr/>
+
+          <div class="app-row">
+            <h3 class="app-col section-title">Позиции</h3>
+
+            <div class="app-col-auto" *ngIf="procedure.positions.length > limit">
+              <span class="app-ghost-color" *ngIf="!showAllPositions">
+                Свернуто ({{ procedure.positions.length | pluralize: "позиция" : "позиции" : "позиций"}})</span>
+
+              <button uxgButton icon link (click)="showAllPositions = !showAllPositions">
+                <uxg-icon shape="app-chevron" [attr.dir]="showAllPositions ? 'up' : 'down'"></uxg-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-row position-list app-uppercase app-ghost-color app-bold">
+            <small class="app-col app-ellipsis name">Наименование</small>
+            <small class="app-col-3 quantity">Количество</small>
+            <small class="app-col-2 date">Срок</small>
+          </div>
+
+          <div class="app-row position-list" *ngFor="let position of getProcedurePositions()">
+            <div class="app-col app-ellipsis name">{{ position.requestPosition.name }}</div>
+            <div class="app-col-3 quantity">{{ position.requestPosition.quantity }} <span class="app-ghost-color">{{ position.requestPosition.measureUnit }}</span></div>
+            <div class="app-col-2 date">
+              <ng-container *ngIf="position.requestPosition.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+              <ng-template #deliveryDate>{{position.requestPosition.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row" *ngIf="procedure.privateAccessContragents.length > 0">
+        <div class="app-col">
+          <hr/>
+
+          <div class="app-row">
+            <h3 class="app-col section-title">Контрагенты</h3>
+
+            <div class="app-col-auto" *ngIf="procedure.privateAccessContragents.length > limit">
+              <span class="app-ghost-color" *ngIf="!showAllContragents">
+                Свернуто ({{ procedure.privateAccessContragents.length | pluralize: "контрагент" : "контрагента" : "контрагентов"}})</span>
+
+              <button uxgButton icon link (click)="showAllContragents = !showAllContragents">
+                <uxg-icon shape="app-chevron" [attr.dir]="showAllContragents ? 'up' : 'down'"></uxg-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="app-row supplier-list app-uppercase app-ghost-color app-bold">
+            <small class="app-col app-ellipsis name">Наименование</small>
+            <small class="app-col-3 quantity">ИНН</small>
+            <small class="app-col-2 date">КПП</small>
+          </div>
+
+          <div class="app-row supplier-list" *ngFor="let contragent of getProcedureContragents()">
+            <div class="app-col app-ellipsis name">{{ contragent.shortName }}</div>
+            <div class="app-col-3 quantity">{{ contragent.inn }}</div>
+            <div class="app-col-2 date">{{ contragent.kpp }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-col">
+          <ng-container *ngIf="procedure.procedureDocuments.length">
+            <hr/>
+
+            <small class="app-uppercase app-ghost-color app-bold">Приложенные документы</small>
+
+            <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="procedure.procedureDocuments">
+            </app-document-simple-list>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-col app-col-aside">
+      <h3 [style.margin-bottom.px]="15">Параметры процедуры</h3>
+
+      <div class="app-section">
+        <div class="app-ghost-color info-label">Свойства</div>
+
+        <div class="info-item" *ngIf="procedure.bestPriceRequirements">Участникам запрещено обновлять цены по позициям без учета цен, уже поданных участником</div>
+        <div class="info-item" *ngIf="procedure.positionsRequiredAll">Обязательная подача предложений на все позиции</div>
+        <div class="info-item" *ngIf="procedure.positionsAnalogs">Разрешается прием аналогов</div>
+        <div class="info-item" *ngIf="procedure.positionsAllowAnalogsOnly">Возможность подачи аналогов без основного предложения</div>
+        <div class="info-item" *ngIf="procedure.positionsEntireVolume">Заявка подается на весь закупаемый объем</div>
+      </div>
+
+      <div class="app-section">
+        <div class="app-ghost-color info-label">Отображение наименований и участников</div>
+
+        <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'Name'">Участники и их наименования отображаются в таблице</div>
+        <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'NameHidden'">Участники отображаются со скрытыми наименованиями</div>
+        <div class="info-item" *ngIf="procedure.positionsSuppliersVisibility === 'None'">Участники не отображаются в таблице</div>
+      </div>
+
+      <div class="app-section">
+        <div class="app-ghost-color info-label">Отображение цен участников</div>
+
+        <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'PriceAndRating'">Видны и цены, и рейтинг участников</div>
+        <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'OnlyPrice'">Видны только поданные цены</div>
+        <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'OnlyRating'">Виден только рейтинг цен</div>
+        <div class="info-item" *ngIf="procedure.positionsApplicsVisibility === 'None'">Цены и рейтинг скрыты</div>
+      </div>
+
+      <div class="app-section">
+        <div class="app-ghost-color info-label">Ограничение на подачу цен участников</div>
+
+        <div class="info-item" *ngIf="procedure.positionsBestPriceType === 'LowerStartPrice'">Участники подают цену ниже начальной цены</div>
+        <div class="info-item" *ngIf="procedure.positionsBestPriceType === 'LowerPriceBest'">Нет ограничений на цены участников</div>
+      </div>
+    </div>
+  </div>
+</ng-container>

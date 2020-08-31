@@ -11,6 +11,7 @@ import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
 import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
+import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
 
 const routes: Routes = [
   {
@@ -52,6 +53,11 @@ const routes: Routes = [
         path: 'design-documentation',
         component: DesignDocumentationListComponent,
         data: { title: "Рабочая конструкторская документация" }
+      },
+      {
+        path: 'procedure',
+        component: ProcedureViewComponent,
+        data: { title: "Процедура" }
       },
       {
         path: ':position-id',
