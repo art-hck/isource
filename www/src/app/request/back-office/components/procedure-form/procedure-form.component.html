@@ -77,19 +77,23 @@
 
     <div class="app-row app-justify-content-between">
       <div class="app-col-auto app-row">
-        <div class="app-col-aside">
+        <div class="app-col-aside" [style.flex]="'0 280px'">
           <div class="app-control-wrap">
             <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
             <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
             <label class="app-control-icon" (click)="dateEndRegistration.focus()">
               <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
-            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
-              <span>Неверная дата</span>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors as e">
+              <span *ngIf="e.beforeSummingUpDate; else error">Дата не может быть позже даты подведения итогов</span>
+
+              <ng-template #error>
+                <span>Неверная дата</span>
+              </ng-template>
             </div>
           </div>
         </div>
-        <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
+        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
           <div class="app-control-wrap">
             <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
             <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
@@ -98,7 +102,7 @@
       </div>
 
       <div class="app-col-auto app-row app-justify-content-end">
-        <div class="app-col-aside">
+        <div class="app-col-aside" [style.flex]="'0 280px'">
           <div class="app-control-wrap">
             <input #dateSummingUp uxgInput lg uxgDatepicker minDate="today" formControlName="dateSummingUp">
             <label class="app-control-label" (click)="dateSummingUp.focus()">Подведение итогов до (дд.мм.гггг)</label>
@@ -114,7 +118,7 @@
             </div>
           </div>
         </div>
-        <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
+        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
           <div class="app-control-wrap">
             <input #timeSummingUpRef uxgInput lg [formControl]="timeSummingUp" [textMask]="mask"/>
             <label class="app-control-label" (click)="timeSummingUpRef.focus()">Время</label>

@@ -85,7 +85,10 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
-        dateSummingUp: [null, [Validators.required, CustomValidators.currentOrFutureDate()]],
+        dateSummingUp: [
+          this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY") : null,
+          [Validators.required, CustomValidators.currentOrFutureDate()]
+        ],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
@@ -116,6 +119,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.wizzard.get("contragents").disable();
       this.form.get("positions").disable();
       this.form.get("general.procedureTitle").disable();
+      this.form.get("general.dateSummingUp").disable();
       this.form.get("general.dishonestSuppliersForbidden").disable();
       this.form.get("general.okpd2").disable();
       this.form.get("general.publicAccess").disable();
@@ -123,6 +127,10 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.withoutTotalPriceReason").disable();
       this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
+
+
+      this.timeSummingUp.setValue(this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("HH:mm") : null);
+      this.timeSummingUp.disable();
     }
 
     if (!this.form.get("general.publicAccess").value) {
@@ -149,11 +157,17 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
 
         if (this.form.get("general.dateSummingUp").value) {
           if (moment(date, "DD.MM.YYYY HH:mm").isAfter(moment(dateSummingUp, "DD.MM.YYYY HH:mm"))) {
-            this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+            if (this.form.get("general.dateSummingUp").disabled) {
+              this.form.get("general.dateEndRegistration").setErrors({ beforeSummingUpDate: true});
+            } else {
+              this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
+            }
           } else {
+            this.form.get("general.dateEndRegistration").setErrors(null);
             this.form.get("general.dateSummingUp").setErrors(null);
           }
 
+          this.form.get("general.dateEndRegistration").markAsTouched();
           this.form.get("general.dateSummingUp").markAsTouched();
         }
       });
