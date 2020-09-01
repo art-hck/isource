@@ -20,6 +20,7 @@ export class Procedure {
   lotId: number;
   offersImported: boolean;
   isRetrade: boolean;
+  canRetrade: boolean;
   positions: {
     contragent: ContragentShortInfo
     id: Uuid

@@ -80,6 +80,16 @@ export class UxgDropdownInputComponent implements OnInit, AfterViewInit, OnDestr
       }
     }
     this._isHidden = value;
+
+    // Обновление классов элементов непосредственно в шаблоне срабатывает некорректно,
+    // перенёс логику проставления классов сюда
+    if (value) {
+      this.itemsWrapperRef.nativeElement.classList.add('hidden');
+      this.inputRef.nativeElement.classList.remove('active');
+    } else {
+      this.itemsWrapperRef.nativeElement.classList.remove('hidden');
+      this.inputRef.nativeElement.classList.add('active');
+    }
   }
 
   private keysActions: Record<KeyboardEvent["key"], () => void> = {

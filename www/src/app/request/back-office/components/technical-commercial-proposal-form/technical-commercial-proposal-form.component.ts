@@ -72,6 +72,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       supplier: [this.defaultValue('supplier', null), Validators.required],
       documents: [this.defaultValue('documents', [])],
       positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
+      files: [[]],
     });
 
     if (this.technicalCommercialProposal) {
@@ -83,9 +84,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       .subscribe(v => this.form.get('positions').setValue(v, {onlySelf: true, emitEvent: false}));
 
     this.form.valueChanges.subscribe(() => {
-      const docsCount = this.form.get('documents').value.length + this.defaultValue('documents').length;
+      const docsCount = this.form.get('files').value.length + this.defaultValue('documents').length;
 
-      if (this.form.get('documents').dirty) {
+      if (this.form.get('files').dirty) {
         if (docsCount === 0 && this.form.get('positions').invalid) {
           this.invalidDocControl = true;
         }
@@ -122,13 +123,13 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
     if (this.form.valid) {
       let action$: Observable<any>;
-      const documents = this.form.get('documents').value.filter(({ valid }) => valid).map(({ file }) => file);
+      const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
       this.form.disable();
 
       if (this.form.pristine) {
         publish ? action$ = this.publish() : this.close.emit();
       } else {
-        action$ = this.save({ ...this.form.value, documents }, publish);
+        action$ = this.save({ ...this.form.value, files }, publish);
       }
 
       action$.pipe(
