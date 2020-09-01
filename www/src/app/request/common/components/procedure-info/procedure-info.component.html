@@ -12,8 +12,8 @@
 
         <div [style.margin-right.px]="10">
           <!-- Ссылка на процедуру и кнопка Уторговать  -->
-          <a *ngIf="finished(procedure)" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
-          <a *ngIf="!finished(procedure)" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+          <a *ngIf="finished()" [href]="resultLink" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
+          <a *ngIf="!finished()" [href]="link" target="_blank" class="app-bold">Показать на ЭТП ГПБ</a>
         </div>
 
         <uxg-popover #prolongPopover [openOnHover]="true" [style.margin-left.rem]="0.5">
@@ -67,17 +67,24 @@
         <h3 class="app-col">Общие сведения процедуры</h3>
 
         <div class="app-col-auto status">
-          <ng-container *ngIf="!finished(procedure)">
+          <ng-container *ngIf="!finished()">
             <span class="app-ghost-color pr-20">
               <uxg-icon shape="app-waiting"></uxg-icon>
               <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
             </span>
           </ng-container>
 
-          <ng-container *ngIf="finished(procedure)">
+          <ng-container *ngIf="finished() && procedure?.offersImported">
             <span class="app-success-color pr-20">
               <uxg-icon shape="app-check"></uxg-icon>
               Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+            </span>
+          </ng-container>
+
+          <ng-container *ngIf="finished() && !procedure?.offersImported">
+            <span class="app-ghost-color pr-20">
+              <uxg-icon shape="app-waiting"></uxg-icon>
+              <b>Ожидание выгрузки результатов</b>
             </span>
           </ng-container>
         </div>

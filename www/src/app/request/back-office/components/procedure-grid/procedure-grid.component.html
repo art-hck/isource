@@ -13,9 +13,17 @@
       <a [href]="link(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
     </ng-container>
 
-    <ng-container *ngIf="finished(procedure)">
+    <ng-container *ngIf="finished(procedure) && procedure?.offersImported">
       <span class="app-success-color pr-20">
         <uxg-icon shape="app-check"></uxg-icon> Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+      </span>
+
+      <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
+    </ng-container>
+
+    <ng-container *ngIf="finished(procedure) && !procedure?.offersImported">
+      <span class="app-ghost-color pr-20">
+        <uxg-icon shape="app-waiting"></uxg-icon> Ожидание выгрузки результатов
       </span>
 
       <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>

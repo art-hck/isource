@@ -33,8 +33,8 @@ export class ProcedureInfoComponent {
     ) {
   }
 
-  finished(procedure: Procedure): boolean {
-    return moment(procedure?.dateEndRegistration).isBefore();
+  finished(): boolean {
+    return moment(this.procedure?.dateEndRegistration).isBefore();
   }
 
   getProcedurePositions() {
@@ -70,7 +70,9 @@ export class ProcedureInfoComponent {
   // Дизейблим кнопку уторговывания, если процедура завершена полностью
   // или если по процедуре объявлено уторговывание
   // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
+  // или завершен прием заявок, но еще не отработал крон
   retradeButtonIsDisabled(): boolean {
-    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished();
+    return this.procedureIsFinished() || this.procedureIsRetrade() || !this.dateEndRegistrationFinished() ||
+      this.dateEndRegistrationFinished() && !this.procedure?.offersImported;
   }
 }
