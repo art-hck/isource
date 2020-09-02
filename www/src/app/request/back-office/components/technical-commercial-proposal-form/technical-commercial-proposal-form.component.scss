@@ -82,3 +82,10 @@
   margin-right: 10px;
   color: uxg($theme, color-control-invalid);
 }
+
+.not-included {
+  display: inline-flex;
+  .app-control-wrap {
+    margin-right: 15px;
+  }
+}
