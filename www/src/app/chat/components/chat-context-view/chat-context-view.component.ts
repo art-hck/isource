@@ -1,0 +1,196 @@
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { Select, Store } from "@ngxs/store";
+import { ChatItemsState } from "../../states/chat-items.state";
+import { EMPTY, fromEvent, iif, merge, Observable, of, Subject } from "rxjs";
+import { RequestListItem } from "../../../request/common/models/requests-list/requests-list-item";
+import { UserInfoService } from "../../../user/service/user-info.service";
+import { delayWhen, distinctUntilChanged, filter, flatMap, map, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { ChatSubItem } from "../../models/chat-item";
+import { ChatItems } from "../../actions/chat-items.actions";
+import { RequestPositionList } from "../../../request/common/models/request-position-list";
+import { RequestPosition } from "../../../request/common/models/request-position";
+import { RequestGroup } from "../../../request/common/models/request-group";
+import { PositionStatusesLabels } from "../../../request/common/dictionaries/position-statuses-labels";
+import { ChatMessage } from "../../models/chat-message";
+import { MessagesService } from "../../services/messages.service";
+import { ChatContextTypes } from "../../chat-context-types";
+import { ChatConversation } from "../../models/chat-conversation";
+import { ConversationsService } from "../../services/conversations.service";
+import { ChatMessagesState } from "../../states/chat-messages.state";
+import { ChatSubItemsState } from "../../states/chat-sub-items.state";
+import { ChatAttachment } from "../../models/chat-attachment";
+import { ChatMessages } from "../../actions/chat-messages.actions";
+import { ChatSubItems } from "../../actions/chat-sub-items.actions";
+import { FormControl } from "@angular/forms";
+
+@Component({
+  styleUrls: ['./chat-context-view.component.scss'],
+  templateUrl: './chat-context-view.component.html'
+})
+export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('messagesContainer') messagesContainer: ElementRef;
+  @ViewChildren('messageEl') messageElements: QueryList<ElementRef>;
+  @Select(ChatSubItemsState.subItems) subItems$: Observable<ChatSubItem[]>;
+  @Select(ChatMessagesState.messages) messages$: Observable<ChatMessage[]>;
+  request$: Observable<RequestListItem> = this.route.params.pipe(switchMap(
+    ({ requestId }) => this.store.select(ChatItemsState.request(requestId))
+  )).pipe(filter(r => !!r));
+
+  position$: Observable<RequestPositionList> = this.route.queryParams.pipe(switchMap(
+    ({ positionId }) => this.store.select(ChatSubItemsState.position(positionId))
+  ));
+
+  conversationId: ChatConversation["id"]; // ID Текущего чата
+  scrollDirty = false; // Если true - скроллим плавно
+  conversationLoading: boolean;
+
+  readonly PositionStatusesLabels = PositionStatusesLabels;
+  readonly destroy$ = new Subject();
+  readonly search = new FormControl();
+
+  get role() {
+    return this.userInfoService.getUserRole();
+  }
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store,
+    public userInfoService: UserInfoService,
+    public messagesService: MessagesService,
+    public conversationsService: ConversationsService,
+  ) {}
+
+  ngAfterViewInit() {
+    this.messageElements.changes.pipe(filter(e => e.length)).subscribe(() => this.scroll());
+  }
+
+  ngOnInit(): void {
+    this.request$.pipe(
+      distinctUntilChanged((a, b) => a?.id === b?.id),
+      flatMap(request => this.store.dispatch(new ChatSubItems.Fetch(this.role, request))), // Загружаем позиции заявки
+      flatMap(() => this.position$.pipe(distinctUntilChanged((a, b) => a?.id === b?.id))), // Эмит перехода по любому чату
+      // Если position undefined, значит мы находимся в чате заявки => переключаем поток на request$
+      flatMap(position => position ? of(position) : this.request$.pipe(take(1))),
+      map(item => this.conversationId = item.conversation?.externalId),
+      tap(() => this.scrollDirty = false),
+      filter(conversationId => !!conversationId), // Не загружаем сообщения, если conversation не создан
+      tap(conversationId => this.store.dispatch(new ChatMessages.Fetch(conversationId))), // Загружаем сообщения
+      tap(conversationId => this.messagesService.markSeen({ conversationId }).pipe( // Помечаем чат прочитанным
+        take(1),
+        tap(({ updated }) => {
+          this.store.dispatch(new ChatMessages.MarkAsRead(this.route.snapshot.params.requestId, conversationId, updated));
+        }),
+      )),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    // Очищаем сообщения при переходах
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => this.store.dispatch(new ChatMessages.Clear()));
+
+    this.listenConversations();
+    this.listenMessages();
+  }
+
+  private listenMessages() {
+    this.messagesService.onNew().pipe(
+      // Дожидаемся пока у чата появится ин-фа о конверсейшене (сработает сразу если инфа уже есть)
+      delayWhen(({ conversation: { id } }) => merge(this.request$, this.position$).pipe(
+        filter((item) => item?.conversation?.externalId === id),
+        take(1)
+      )),
+      tap(({ conversation }) => {
+        const { requestId = null, positionId = null } = { ...this.route.snapshot.params, ...this.route.snapshot.queryParams };
+        // Если сообщение пришло в только что созданный чат проставляем conversationId
+        if (!positionId && this.store.selectSnapshot(ChatItemsState.conversationId(requestId)) === conversation.id) {
+          this.conversationLoading = false;
+          this.conversationId = conversation.id;
+        }
+
+        if (positionId && this.store.selectSnapshot(ChatSubItemsState.conversationId(positionId)) === conversation.id) {
+          this.conversationLoading = false;
+          this.conversationId = conversation.id;
+        }
+
+        // Инкрементим счетчик непрочитанных если сообщение пришло в неактивный чат
+        // if (!this.isOwn(message)) {
+        if (this.conversationId !== conversation.id) {
+          this.store.dispatch([
+            new ChatItems.IncrementUnread(conversation.context),
+            new ChatSubItems.IncrementUnread(conversation)
+          ]);
+        }
+        // }
+      }),
+      // Добавляем сообщение в историю если чат активен
+      filter(({ conversation: { id } }) => this.conversationId === id),
+      tap(message => this.store.dispatch(new ChatMessages.New(message))),
+
+      // Прочитываем сообщение
+      filter(m => !this.isOwn(m)), // Если оно не наше
+      // Если вкладка браузера открыта читаем сразу, если нет - ждём
+      delayWhen(() => document.visibilityState === 'visible' ? EMPTY :
+        fromEvent(document, 'visibilitychange').pipe(filter(() => document.visibilityState === 'visible'))
+      ),
+      flatMap(message => this.messagesService.markSeen({ messageId: message.id }).pipe(take(1))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
+  private listenConversations() {
+    this.conversationsService.onNew().pipe(
+      delayWhen((conversation) => {
+        const { contextId } = JSON.parse(conversation.context.items[0].data);
+
+        return this.store.dispatch([
+          new ChatItems.AppendContexts([conversation.context]),
+          new ChatItems.UpdateRequest(this.role, contextId)
+        ]);
+      }),
+      withLatestFrom(this.request$),
+      tap(([conversation, request]) => {
+        const { contextId } = JSON.parse(conversation.context.items[0].data);
+        if (contextId === request.id) {
+          this.store.dispatch(new ChatSubItems.FetchPositions(this.role, request)).pipe(
+            switchMap(() => this.store.dispatch(new ChatSubItems.AppendConversation(conversation)))
+          ).subscribe();
+        }
+
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
+  private scroll() {
+    const el: HTMLDivElement = this.messagesContainer.nativeElement;
+    el.scroll({ top: el.scrollHeight, left: 0, behavior: this.scrollDirty ? 'smooth' : 'auto' });
+    this.scrollDirty = true;
+  }
+
+  send({ text, attachments }: { text: string, attachments: ChatAttachment[] }) {
+    const { requestId = null, positionId = null } = { ...this.route.snapshot.params, ...this.route.snapshot.queryParams };
+    this.conversationLoading = !this.conversationId;
+
+    iif(() => !this.conversationId,
+      iif(() => positionId,
+        this.position$.pipe(flatMap(position => this.conversationsService.apiCreate(
+          this.asPosition(position) ? ChatContextTypes.REQUEST_POSITION : ChatContextTypes.REQUEST_GROUP, positionId
+        ))),
+        this.conversationsService.apiCreate(ChatContextTypes.REQUEST, requestId)
+      ).pipe(map(({ externalId }) => externalId), take(1)),
+      of(this.conversationId)
+    ).subscribe((convId) => this.messagesService.send(text, convId, attachments.map(({ id }) => id)));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  asPosition = (position: RequestPositionList) => position instanceof RequestPosition && position;
+  asGroup = (position: RequestPositionList) => position instanceof RequestGroup && position;
+  trackById = (i, { id }) => id;
+  isOwn = ({ author }: ChatMessage) => author.uid === this.userInfoService.getUserInfo().id;
+}

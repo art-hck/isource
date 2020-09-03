@@ -14,7 +14,7 @@
     <a routerLink="messages" routerLinkActive="active" class="app-menu-icon app-secondary-color">
       <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
       <small class="counter" *ngIf="unreadMessagesCount$ | async as count">{{ count }}</small>
-      <app-message-notification></app-message-notification>
+      <app-chat-notification></app-chat-notification>
     </a>
 
     <!-- Корзина -->

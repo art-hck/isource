@@ -11,13 +11,15 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { MessageSharedModule } from "../message/message-shared.module";
 import { WelcomeComponent } from "../pages/welcome/welcome.component";
+import { ChatSharedModule } from "../chat/chat-shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     UxgModule,
-    MessageSharedModule
+    MessageSharedModule,
+    ChatSharedModule
   ],
   exports: [NavComponent, WelcomeComponent],
   declarations: [NavComponent, WelcomeComponent],

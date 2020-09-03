@@ -1,0 +1,89 @@
+<div class="app-row im">
+  <ng-container *ngIf="request$ | async as request">
+    <div class="app-col im-list">
+
+      <!-- request info -->
+      <div class="app-row app-align-items-center">
+        <h3 class="app-col">Заявка №{{request.number}}</h3>
+        <div>
+          <button uxgButton clear link [routerLink]="['/requests', role, request.id]">
+            <uxg-icon shape="app-hamburger"></uxg-icon>
+            <span>Описание</span>
+          </button>
+        </div>
+      </div>
+      <div class="app-secondary-color">{{request.contragent.shortName}}</div>
+
+      <!-- position list -->
+      <ul>
+        <li class="search"><input [formControl]="search" uxgInput placeholder="Поиск по позициям и группам"/></li>
+        <li><a [routerLink]="['/im', request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Обсуждение заявки</a></li>
+        <li *ngFor="let subItem of subItems$ | async | subItemsFilter: search.value">
+          <a
+            [routerLink]="['/im', request.id]"
+            [queryParams]="{positionId: subItem.position.id}"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:true}"
+            [ngClass]="asPosition(subItem.position).status"
+          >
+            <span class="app-col app-ellipsis">[{{subItem.conversation?.id}}] {{subItem.position.name}}</span>
+            <small *ngIf="subItem.conversation?.unreadCount as cnt">{{cnt}}</small>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+
+  <!-- chat -->
+  <div class="app-col app-row app-flex-column no-wrap">
+    <ng-container *ngIf="request$ | async as request">
+      <div class="im-info" *ngIf="position$ | async as position; else requestInfo">
+        <h4 class="app-col">
+          <span>{{position.name}} </span>
+          <span class="app-ghost-color">
+            <ng-container *ngIf="asPosition(position) as position">{{position.quantity}} {{position.measureUnit}}</ng-container>
+            <ng-container *ngIf="asGroup(position) as group">
+              {{group.positions.length | pluralize: "позиция" : "позиции" : "позиций"}}
+            </ng-container>
+          </span>
+        </h4>
+
+        <div class="app-row app-align-items-center" *ngIf="asPosition(position) as position">
+          <app-position-status [status]="position.status" [label]="PositionStatusesLabels[position.status]"></app-position-status>
+          <button uxgButton clear link [routerLink]="['/requests', role, request.id, position.id]">
+            <uxg-icon shape="app-hamburger"></uxg-icon>
+            <span>Описание</span>
+          </button>
+        </div>
+      </div>
+      <ng-template #requestInfo>
+        <div class="im-info">
+          <h4 class="app-col">Заявка №{{request.number}}</h4>
+          <div>{{request.status.label}}</div>
+        </div>
+      </ng-template>
+    </ng-container>
+    <div class="divider"></div>
+    <div class="im-messages app-col" [class.app-justify-content-center]="conversationLoading" #messagesContainer>
+      <ng-container *ngIf="!conversationLoading; else loading">
+        <ng-container *ngFor="let message of messages$ | async; trackBy: trackById">
+          <div #messageEl class="im-messages-item" [class.im-messages-item-own]="isOwn(message)">
+            <div class="app-col">
+              <div class="app-bold">{{message.author.fullName}}</div>
+              <div>{{message.text}}</div>
+            </div>
+            <small class="app-ghost-color">{{message.createdAt | humanDate}}</small>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+    <app-chat-form [disabled]="conversationLoading" class="im-textarea" (send)="send($event)"></app-chat-form>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="text-center">
+    <span class="spinner spinner-md"></span>
+  </div>
+</ng-template>
+
