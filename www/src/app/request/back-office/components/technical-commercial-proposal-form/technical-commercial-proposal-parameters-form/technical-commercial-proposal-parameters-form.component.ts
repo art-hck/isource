@@ -57,7 +57,7 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
           quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
-          deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
+          deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), Validators.required, CustomValidators.futureDate()],
           paymentTerms: [p.paymentTerms || p.position.paymentTerms, Validators.required],
         });
 

@@ -20,6 +20,6 @@ export class TechnicalCommercialProposal {
   deliveryAdditionalTerms: string;
   warrantyConditions: string;
   deliveryPrice: number;
-  deliveryCurrency: CurrencyItem;
+  deliveryCurrency: string;
   deliveryPickup: string;
 }
