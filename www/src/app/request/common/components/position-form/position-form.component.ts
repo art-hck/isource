@@ -117,10 +117,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       documents: [[]]
     });
 
-    Object.keys(form.controls).forEach(key => {
-      form.get(key).disable();
-    });
-   this.position.availableEditFields.forEach(field => form.get(field).enable());
+    Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
 
     this.searchNameSuggestions$ = merge(
       form.get('name').valueChanges,
