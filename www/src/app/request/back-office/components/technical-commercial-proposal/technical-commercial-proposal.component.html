@@ -70,6 +70,31 @@
 
       </div>
 
+      <ng-container *ngIf="proposal.deliveryType || proposal.warrantyConditions || proposal.deliveryAdditionalTerms">
+        <hr/>
+        <div class="app-row section">
+          <div class="app-col" *ngIf="proposal.deliveryType">
+            <small class="app-uppercase app-ghost-color app-bold">Тип и стоимость доставки</small>
+            <ng-container *ngIf="proposal.deliveryType === 'INCLUDED'">
+              <span class="conditions-info">Стоимость включена в стоимость позиций</span>
+            </ng-container>
+            <ng-container *ngIf="proposal.deliveryType === 'NOT_INCLUDED'">
+              <span class="conditions-info">Стоимость доставки {{proposal.deliveryPrice}} {{getCurrencySymbol(proposal.deliveryCurrency, "narrow")}}</span>
+            </ng-container>
+            <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
+              <span class="conditions-info">Самовывоз {{proposal.deliveryPickup}}</span>
+            </ng-container>
+          </div>
+          <div class="app-col" *ngIf="proposal.deliveryAdditionalTerms">
+            <small class="app-uppercase app-ghost-color app-bold">Дополнительные условия поставки</small>
+            <span class="conditions-info">{{proposal.deliveryAdditionalTerms}}</span>
+          </div>
+          <div class="app-col" *ngIf="proposal.warrantyConditions">
+            <small class="app-uppercase app-ghost-color app-bold">Гарантийные условия</small>
+            <span class="conditions-info">{{proposal.warrantyConditions}}</span>
+          </div>
+        </div>
+      </ng-container>
       <ng-container *ngIf="proposal.documents.length">
         <hr/>
         <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>

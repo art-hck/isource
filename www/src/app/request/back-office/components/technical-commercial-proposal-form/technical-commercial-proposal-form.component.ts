@@ -134,13 +134,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       this.cd.detectChanges();
     });
 
-    this.form.get('deliveryType').valueChanges.subscribe(() => {
-      this.form.get('deliveryPrice').reset();
-      this.form.get('deliveryPrice').markAsTouched();
-      this.form.get('deliveryPickup').reset();
-      this.form.get('deliveryPickup').markAsTouched();
-    });
-
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
   }

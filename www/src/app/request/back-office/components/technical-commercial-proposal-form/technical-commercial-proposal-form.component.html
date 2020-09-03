@@ -71,7 +71,7 @@
           </div>
 
           <div class="app-col" [style.overflow]="'hidden'">
-            <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование</small></div>
+            <div class="title"><small class="app-uppercase app-ghost-color app-bold">Заводское наименование и изготовитель</small></div>
 
             <div class="app-row">
               <div class="app-col-auto">
@@ -82,7 +82,7 @@
             </div>
 
             <ng-container *ngIf="control.value[0]?.manufacturingName; else manufactureError">
-              <div *ngFor="let proposalPosition of control.value" class="app-ellipsis position-info-item">
+              <div *ngFor="let proposalPosition of control.value" class="position-info-item">
                 {{ proposalPosition.manufacturingName }} | {{ proposalPosition?.manufacturer }}
               </div>
             </ng-container>
@@ -170,12 +170,12 @@
       </div>
 
 
-      <small class="app-uppercase app-ghost-color app-bold">Дополнительные условия доставки</small>
+      <small class="app-uppercase app-ghost-color app-bold">Тип и стоимость доставки</small>
       <div class="app-row">
         <div class="app-col">
           <p class="app-row access-radio app-align-items-center">
             <uxg-radio-item class="app-control" #included value="{{ deliveryType.INCLUDED }}" formControlName="deliveryType"></uxg-radio-item>
-            <label (click)="included.select($event)">&nbsp;{{ deliveryTypeLabel.INCLUDED }}</label>
+            <label (click)="included.select($event)">&nbsp;<b>{{ deliveryTypeLabel.INCLUDED }}</b></label>
           </p>
         </div>
         <div class="app-col">
