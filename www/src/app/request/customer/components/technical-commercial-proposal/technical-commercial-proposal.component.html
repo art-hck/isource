@@ -37,8 +37,7 @@
         <div *ngIf="!isReviewed" class="app-col radio"></div>
         <div *ngIf="isReviewed" class="app-col status"><small class="app-uppercase app-ghost-color">Статус</small></div>
       </div>
-      <div *ngFor="let data of proposalByPos.data; index as i; trackBy: trackByproposalPositionId">
-        <div class="data-body-container">
+        <div class="data-body-container" *ngFor="let data of proposalByPos.data; index as i; trackBy: trackByproposalPositionId">
           <div *ngIf="data.proposalPosition as proposalPos"
                (click)="modalData = data"
                class="app-row app-link-no-color data data-body"
@@ -94,7 +93,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
       <ng-container *ngIf="!isReviewed">
         <hr/>
