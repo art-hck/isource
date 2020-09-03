@@ -55,4 +55,5 @@ export class RequestPosition extends RequestPositionList {
   acceptedTpCount?: number;
   nameTemplate?: string;
   availableStatuses?: string[];
+  availableEditFields?: string[];
 }

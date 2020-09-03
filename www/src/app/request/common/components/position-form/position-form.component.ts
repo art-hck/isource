@@ -18,7 +18,6 @@ import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
 import { Store } from "@ngxs/store";
-import { RequestActions } from "../../../back-office/actions/request.actions";
 
 @Component({
   selector: 'app-request-position-form',
@@ -63,27 +62,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   readonly approveRequiredFields = [
     'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
   ];
-  readonly disabledFieldsAfterStatus = {
-    // Вырубаем поля после Согласования ТП/Согласования ТКП
-    [PositionStatuses.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT]:
-      ['name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'],
-
-    // Вырубаем «ПНР» и стоимость после подготовки КП
-    [PositionStatuses.PROPOSALS_PREPARATION]:
-      ['isShmrRequired', 'isPnrRequired', 'startPrice'],
-
-    // Вырубаем «Условия оплаты» после выбора победителя (начиная с «Выбран победитель»)
-    [PositionStatuses.WINNER_SELECTED]:
-      ['paymentTerms', 'deliveryBasis', 'quantity'],
-
-    // Вырубаем «Инспекционный контроль» после подписания договора
-    [PositionStatuses.CONTRACT_SIGNING]:
-      ['isInspectionControlRequired'],
-
-    // Вырубаем «РКД» после «РКД согласовано»
-    [PositionStatuses.RKD_APPROVED]:
-      ['isDesignRequired']
-  };
 
   get isDraft(): boolean {
     return this.approveRequiredFields
@@ -139,11 +117,10 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       documents: [[]]
     });
 
-    Object.entries(this.disabledFieldsAfterStatus)
-      .filter(([status]) =>
-        !this.statusService.isStatusPrevious(this.position.status, status as PositionStatuses))
-      .forEach(([status, controlNames]) =>
-        controlNames.forEach(controlName => form.get(controlName).disable()));
+    Object.keys(form.controls).forEach(key => {
+      form.get(key).disable();
+    });
+   this.position.availableEditFields.forEach(field => form.get(field).enable());
 
     this.searchNameSuggestions$ = merge(
       form.get('name').valueChanges,
