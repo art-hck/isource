@@ -2,7 +2,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestService } from "../services/request.service";
-import { flatMap, mapTo, tap } from "rxjs/operators";
+import { finalize, flatMap, mapTo, tap } from "rxjs/operators";
 import { patch } from "@ngxs/store/operators";
 import { RequestListActions } from "../actions/request-list.actions";
 import { Page } from "../../../core/models/page";
@@ -54,7 +54,7 @@ export class RequestListState {
     return this.rest.addRequestFromExcel(action.files, action.requestName).pipe(
       flatMap(({id}) => action.publish ? dispatch(new RequestActions.Publish(id, false)).pipe(mapTo(id)) : of(id)),
       tap(id => setState(patch({ createdRequestId: id }))),
-      tap(() => setState(patch({ status: "received" } as Model))),
+      finalize(() => setState(patch({ status: "received" } as Model)))
     );
   }
 

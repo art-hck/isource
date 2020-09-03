@@ -24,4 +24,5 @@ export class TechnicalCommercialProposalPosition {
   position: RequestPosition;
   paymentTerms: string;
   isAnalog: boolean;
+  manufacturer: string;
 }

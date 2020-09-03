@@ -15,10 +15,12 @@ export class Procedure {
   requestId: Uuid;
   procedureTitle: string;
   dateEndRegistration: string;
+  dateSummingUp: string;
   datePublished: string;
   lotId: number;
   offersImported: boolean;
   isRetrade: boolean;
+  canRetrade: boolean;
   positions: {
     contragent: ContragentShortInfo
     id: Uuid
@@ -34,8 +36,11 @@ export class Procedure {
   positionsAnalogs: boolean;
   positionsApplicsVisibility: "PriceAndRating" | "OnlyPrice" | "OnlyRating" | "None";
   positionsBestPriceType: "LowerStartPrice" | "LowerPriceBest";
+  bestPriceRequirements: boolean;
   positionsEntireVolume: boolean;
   positionsRequiredAll: boolean;
+  withoutTotalPrice: boolean;
+  withoutTotalPriceReason: string;
   positionsSuppliersVisibility: "Name" | "NameHidden" | "None";
 
   dishonestSuppliersForbidden: boolean;

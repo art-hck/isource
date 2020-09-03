@@ -39,6 +39,10 @@
           .attachment {
             cursor: pointer;
 
+            &:not(:last-child) {
+              margin-bottom: 10px;
+            }
+
             *:not(:last-child) {
               margin-right: .5em;
             }
@@ -131,19 +135,15 @@
     textarea {
       width: 100%;
       font-size: 16px;
-      border: none;
       overflow:hidden;
       resize: none;
-      height: 40px;
-
-      &:focus {
-        border: none !important;
-      }
+      height: 50px;
+      margin-top: 5px;
     }
 
     .btn-send {
       float: right;
-      margin: 0;
+      margin: 9px 0 0 0;
       padding: 0 15px;
       font-size: 16px;
 
@@ -160,14 +160,27 @@
 
     .document-upload-list-wrap {
       margin-left: 75px;
+      display: block;
+      max-width: 300px;
 
       & > *:not(:last-child) {
         margin-bottom: 10px;
       }
+
+      & *:first-child {
+        margin-top: 10px;
+      }
+      & *:last-child {
+        margin-bottom: 15px;
+      }
+
+      & .loading-attachments {
+        opacity: .5;
+      }
     }
 
-    .loading-arrachments {
-      opacity: .3;
+    app-file {
+      width: 100%;
     }
   }
 }

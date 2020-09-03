@@ -10,8 +10,10 @@ hr { margin: 14px 0; }
 }
 
 .name,
-.manufacturing-name {
+.manufacturing-name,
+.manufacturer{
   flex-grow: .3;
+  min-width: 160px;
 }
 
 .total,
@@ -24,4 +26,8 @@ hr { margin: 14px 0; }
 
 .status {
   flex-basis: 40px;
+}
+.conditions-info {
+  padding-top: 15px;
+  display: block;
 }

@@ -40,6 +40,7 @@ import { PositionCancelComponent } from "./components/position-cancel/position-c
 import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
+import { ProcedureInfoComponent } from "./components/procedure-info/procedure-info.component";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -74,6 +75,7 @@ const RequestCommonModuleDeclarations = [
   PositionCancelComponent,
   FilterPositionStatusesComponent,
   RequestListComponent,
+  ProcedureInfoComponent
 ];
 
 @NgModule({

@@ -14,7 +14,8 @@ app-agreements-list-filter-section:not(:last-child):after {
 
 .filter-form-block {
   max-height: 100%;
-  overflow: hidden auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding-right: 15px;
 }
 

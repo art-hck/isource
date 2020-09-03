@@ -36,6 +36,7 @@ import { ProcedureComponent } from './components/procedure/procedure.component';
 import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureProlongateComponent } from "./components/procedure-prolongate/procedure-prolongate.component";
+import { ProcedureViewComponent } from './components/procedure-view/procedure-view.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { ProcedureProlongateComponent } from "./components/procedure-prolongate/
     TechnicalCommercialProposalPositionFormComponent,
     ProcedureComponent,
     ProcedureGridComponent,
+    ProcedureViewComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
@@ -71,6 +73,10 @@ import { ProcedureProlongateComponent } from "./components/procedure-prolongate/
       CommercialProposalState,
     ]),
     RequestCommonModule
+  ],
+  exports: [
+    ProcedureFormComponent,
+    ProcedureProlongateComponent
   ],
   providers: [
     DesignDocumentationService,

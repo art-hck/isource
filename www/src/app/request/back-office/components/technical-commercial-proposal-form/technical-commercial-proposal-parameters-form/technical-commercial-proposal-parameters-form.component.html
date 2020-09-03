@@ -12,7 +12,7 @@
       <p class="app-bold">{{ form.get("name").value }}</p>
       <div class="app-row section">
         <div class="app-col">
-          <input uxgInput formControlName="priceWithoutVat" placeholder="Цена за единицу"/>
+          <input uxgInput formControlName="priceWithoutVat" placeholder="Цена за единицу без НДС"/>
         </div>
         <div class="app-col">
           <input uxgInput formControlName="quantity" placeholder="Количество" type="number" [warning]="!isQuantityValid(form)"/>
@@ -44,7 +44,7 @@
         </div>
         <div class="app-col">
           <div style="position: relative">
-            <input #deliveryDate uxgInput uxgDatepicker formControlName="deliveryDate" placeholder="Дата" [warning]="!isDateValid(form)"/>
+            <input #deliveryDate uxgInput uxgDatepicker formControlName="deliveryDate" placeholder="Срок поставки" [warning]="!isDateValid(form)"/>
             <label class="app-control-icon" (click)="deliveryDate.focus()">
               <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>

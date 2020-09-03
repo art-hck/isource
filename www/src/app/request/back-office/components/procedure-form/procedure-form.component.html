@@ -31,6 +31,17 @@
               <span>{{ position.quantity }} </span>
               <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
             </div>
+
+            <div class="app-col app-col-auto select-list-item-total-price">
+              <ng-container *ngIf="position.startPrice; else withoutTotalPrice">
+                <span>{{ position.startPrice * position.quantity | currency: position.currency }}</span>
+              </ng-container>
+
+              <ng-template #withoutTotalPrice>
+                <span class="app-ghost-color">не указана</span>
+              </ng-template>
+            </div>
+
             <div class="app-col app-col-auto select-list-item-date">
               <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
               <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
@@ -54,11 +65,7 @@
 
   <!-- General -->
   <div *uxgWizzardStep="'general'" formGroupName="general">
-    <div class="app-secondary-color">
-      Обратите внимание, что все поля в этом шаге являются <b>обязательными</b> к заполнению!
-    </div>
-    <br/>
-    <br/>
+
     <h3>Общие сведения</h3>
     <div class="app-control-wrap">
       <input #nameControlRef uxgInput lg formControlName="procedureTitle"/>
@@ -68,15 +75,58 @@
       </div>
     </div>
 
-    <div class="app-row app-align-items-center">
-      <uxg-checkbox class="app-control" #verificationRequired formControlName="dishonestSuppliersForbidden"></uxg-checkbox>
-      <label (click)="verificationRequired.check($event)"> &nbsp; Требуется проверка на предмет отсутствия
-        участников закупки в реестре недобросовестных поставщиков ФАС</label>
-    </div>
-    <br>
+    <div class="app-row app-justify-content-between">
+      <div class="app-col-auto app-row">
+        <div class="app-col-aside" [style.flex]="'0 280px'">
+          <div class="app-control-wrap">
+            <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
+            <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
+            <label class="app-control-icon" (click)="dateEndRegistration.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors as e">
+              <span *ngIf="e.beforeSummingUpDate; else error">Дата не может быть позже даты подведения итогов</span>
 
-    <br>
-      <b>Доступ к процедуре</b>
+              <ng-template #error>
+                <span>Неверная дата</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
+          <div class="app-control-wrap">
+            <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
+            <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-col-auto app-row app-justify-content-end">
+        <div class="app-col-aside" [style.flex]="'0 280px'">
+          <div class="app-control-wrap">
+            <input #dateSummingUp uxgInput lg uxgDatepicker minDate="today" formControlName="dateSummingUp">
+            <label class="app-control-label" (click)="dateSummingUp.focus()">Подведение итогов до (дд.мм.гггг)</label>
+            <label class="app-control-icon" (click)="dateSummingUp.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+            <div class="app-control-error" *ngIf="form.get('general').get('dateSummingUp').errors as e">
+              <span *ngIf="e.afterEndRegistrationDate; else error">Дата не может быть раньше даты приёма заявок</span>
+
+              <ng-template #error>
+                <span>Неверная дата</span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
+          <div class="app-control-wrap">
+            <input #timeSummingUpRef uxgInput lg [formControl]="timeSummingUp" [textMask]="mask"/>
+            <label class="app-control-label" (click)="timeSummingUpRef.focus()">Время</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="app-row">
         <p class="app-row access-radio app-align-items-center">
           <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
@@ -87,6 +137,7 @@
           <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
         </p>
     </div>
+
     <div class="app-control-wrap okpd2">
       <uxg-dropdown-input
         appSuggestions
@@ -111,24 +162,38 @@
         </ng-template>
       </uxg-dropdown-input>
     </div>
+
+    <br>
+
     <div class="app-row app-align-items-center">
-      <div class="app-col-aside">
-        <div class="app-control-wrap">
-          <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
-          <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
-          <label class="app-control-icon" (click)="dateEndRegistration.focus()">
-            <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-          </label>
-          <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors">
-            <span>Неверная дата</span>
+      <div class="app-row no-total-price">
+        <uxg-checkbox class="app-control" #withoutTotalPriceRef formControlName="withoutTotalPrice" [class.readonly]="withoutTotalPriceReadonly"
+                      [readonly]="withoutTotalPriceReadonly"></uxg-checkbox>
+        <label (click)="withoutTotalPriceRef.check($event)"> &nbsp; Без указания НМЦ &nbsp;</label>
+
+        <uxg-popover *ngIf="withoutTotalPriceReadonly" [openOnHover]="true">
+          <uxg-icon uxgPopoverTrigger shape="app-info" class="app-warning-color" size="16"></uxg-icon>
+
+          <div *uxgPopoverContent>
+            Для проведения процедуры с указанием НМЦ <br>необходимо указать НМЦ по всем позициям
           </div>
-        </div>
+        </uxg-popover>
       </div>
-      <div class="app-col app-secondary-color" [style.flex]="'0 65px'">
-        <div class="app-control-wrap">
-          <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
-          <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
-        </div>
+
+      <div class="app-row">
+        <uxg-checkbox class="app-control" #verificationRequired formControlName="dishonestSuppliersForbidden"></uxg-checkbox>
+        <label (click)="verificationRequired.check($event)"> &nbsp; Проверка на предмет отсутствия участников в реестре недобросовестных поставщиков ФАС</label>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="app-control-wrap" [hidden]="!form.get('general.withoutTotalPrice').value">
+      <input #withoutTotalPriceReasonRef uxgInput lg formControlName="withoutTotalPriceReason"
+             [disabled]="form.get('general.withoutTotalPrice').value" />
+      <label class="app-control-label" (click)="withoutTotalPriceReasonRef.focus()">Причина отсутствия НМЦ</label>
+      <div class="app-control-error" *ngIf="form.get('general').get('withoutTotalPriceReason').errors as e">
+        <span *ngIf="e.required">Обязательное поле</span>
       </div>
     </div>
   </div>

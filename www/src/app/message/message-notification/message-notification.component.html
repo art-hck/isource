@@ -6,8 +6,8 @@
   <div class="user-container">
     <div class="avatar"><img src="../../../assets/images/avatar.svg"></div>
     <div class="user-info">
-      <span class="user-name">{{ message?.author.shortName }}</span><br>
-      <span class="sub-name app-ghost-color">{{ getSubName() }}</span>
+      <span class="user-name">{{ message?.author.fullName }}</span><br>
+      <span class="sub-name app-ghost-color">{{ message?.conversation.topic }}</span>
     </div>
   </div>
 
