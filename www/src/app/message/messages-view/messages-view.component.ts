@@ -8,18 +8,7 @@ import { MessageContextTypes } from "../message-context-types";
 import { RequestGroup } from "../../request/common/models/request-group";
 import { RequestPosition } from "../../request/common/models/request-position";
 import { Uuid } from "../../cart/models/uuid";
-import {
-  debounceTime,
-  filter,
-  flatMap,
-  map,
-  shareReplay,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-  withLatestFrom
-} from "rxjs/operators";
+import { debounceTime, flatMap, map, shareReplay, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { UserInfoService } from "../../user/service/user-info.service";
 import { RequestItemsStore } from '../data/request-items-store';
 import { ActivatedRoute, Router } from "@angular/router";
