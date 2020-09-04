@@ -94,7 +94,7 @@
           ></app-grid-contragents>
 
           <!-- procedure info -->
-          <div class="position-row app-layout" *ngFor="let procedure of procedures$ | async; trackBy: trackById">
+          <div class="position-row" *ngFor="let procedure of procedures$ | async; trackBy: trackById">
             <app-procedure-grid
               [procedure]="procedure"
               [source]="'cp'"
