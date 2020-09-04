@@ -53,8 +53,8 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
         const form = this.fb.group({
           index: [index],
           name: [p.position.name, Validators.required],
-          priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, Validators.required],
-          quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
+          priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, [Validators.required, Validators.min(1)]],
+          quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.min(0.0001)]],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
@@ -77,6 +77,9 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   }
 
   submit() {
+    this.formArray.controls.forEach(c => c.markAsDirty());
+    this.formArray.controls.forEach(c => c.markAsTouched());
+
     if (this.formArray.valid) {
       const value = this.value
         .map((item, i) => ({...item, ...this.formArray.getRawValue().find(_item => _item.index === i)}))
