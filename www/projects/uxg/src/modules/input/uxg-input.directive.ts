@@ -28,13 +28,13 @@ export class UxgInputDirective implements OnInit, OnDestroy {
   @HostListener("blur")
   onBlur() {
     if (!this.ngControl?.control.pristine) {
-      this.ngControl.control.markAsTouched();
-      this.validate(this.ngControl.control);
+      this.ngControl?.control.markAsTouched();
+      this.validate(this.ngControl?.control);
     }
   }
 
   private validate(control: AbstractControl) {
-    if (control.touched && control.dirty && control.invalid) {
+    if (control?.touched && control?.dirty && control?.invalid) {
       this.el.nativeElement.classList.add('invalid');
     } else {
       this.el.nativeElement.classList.remove('invalid');

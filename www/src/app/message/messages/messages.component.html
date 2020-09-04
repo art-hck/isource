@@ -22,13 +22,13 @@
       </div>
     </div>
 
-    <ng-container *ngIf="state === 'pristine' || (messages$ | async)?.length === 0">
+    <ng-container *ngIf="!(messages$ | async)?.length">
       <div class="text-center">Сообщений нет</div>
     </ng-container>
 
-    <ng-container *ngIf="state === 'fetching'">
-      <div class="text-center"><span class="spinner spinner-md"></span></div>
-    </ng-container>
+<!--    <ng-container *ngIf="state === 'fetching'">-->
+<!--      <div class="text-center"><span class="spinner spinner-md"></span></div>-->
+<!--    </ng-container>-->
   </div>
 
 

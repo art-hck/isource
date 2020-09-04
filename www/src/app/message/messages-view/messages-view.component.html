@@ -35,7 +35,7 @@
         <div class="app-col request-info">
           Заявка №{{ selectedRequest?.number }}
           <div class="request-items-header-sub">
-            {{ selectedRequest?.contragent?.shortName }}
+            {{ selectedRequest.contragent.shortName }}
           </div>
         </div>
 
@@ -52,7 +52,7 @@
           </li>
 
           <li (click)="onRequestContextClick()" class="status-position-default" [class.selected]="!selectedRequestsItem">
-            <div class="app-ellipsis app-col">Обсуждение заявки</div>
+            <div class="app-ellipsis app-col">Обсуждение заказа</div>
             <div class="counter" *ngIf="selectedRequest?.conversation?.unreadCount as count">{{ count }}</div>
           </li>
 
@@ -105,11 +105,7 @@
 
     <div class="messages-list-content">
       <ng-container *ngIf="(requests$ | async)?.entities.length !== 0; else noMessages">
-        <app-message-messages [contextId]="contextId"
-                              [contextType]="contextType"
-                              [conversationId]="conversationId"
-                              [selectedRequestsItemStatus]="getRequestItemStatus(selectedRequestsItem)"
-                              (sendMessage)="sendMessage($event)">
+        <app-message-messages [contextId]="contextId" [contextType]="contextType" [conversationId]="conversationId" (sendMessage)="sendMessage($event)">
         </app-message-messages>
       </ng-container>
 

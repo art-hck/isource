@@ -15,6 +15,6 @@ export class HumanDatePipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
     return moment(new Date()).isSame(value, 'date') ?
       moment(value).format('HH:mm') :
-      moment(value).format('YYYY.MM.DD HH:mm');
+      moment(value).format('MM.DD HH:mm');
   }
 }
