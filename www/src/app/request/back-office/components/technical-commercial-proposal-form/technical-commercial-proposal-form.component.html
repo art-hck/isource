@@ -148,7 +148,7 @@
     <div class="section">
       <div class="app-row">
         <div class="app-col">
-          <small class="app-uppercase app-ghost-color app-bold">Дополнительные условия доставки</small>
+          <small class="app-uppercase app-ghost-color app-bold">Дополнительные условия поставки</small>
           <div class="app-control-wrap">
             <input #deliveryAdditionalTerms uxgInput lg formControlName="deliveryAdditionalTerms"/>
             <label class="app-control-label" (click)="deliveryAdditionalTerms.focus()">Введите комментарий</label>
@@ -187,7 +187,7 @@
             <div class="app-row">
               <div class="app-col not-included">
                 <div class="app-control-wrap">
-                  <input #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
+                  <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
                   <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
                   <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
                     <span *ngIf="e.required">Обязательное поле</span>
