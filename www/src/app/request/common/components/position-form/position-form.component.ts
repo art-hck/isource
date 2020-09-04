@@ -117,7 +117,9 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
       documents: [[]]
     });
 
-    Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
+    if (this.position.id) {
+      Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
+    }
 
     this.searchNameSuggestions$ = merge(
       form.get('name').valueChanges,
@@ -146,10 +148,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     // @TODO Временное отключение валют
     form.get('currency').setValue(PositionCurrency.RUB);
     form.get('currency').disable();
-
-    if (!this.userInfoService.isCustomer()) {
-      form.get('comments').disable();
-    }
 
     this.form = form;
     this.form.valueChanges.pipe(startWith(<{}>this.form.value)).subscribe(value => {
