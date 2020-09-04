@@ -86,6 +86,6 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
   }
 
   private getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
-    return positions.find(({position}) => position.id === id);
+    return positions.find(({position, isAnalog}) => position.id === id && !isAnalog);
   }
 }
