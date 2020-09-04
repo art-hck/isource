@@ -37,7 +37,6 @@
     <button uxgButton appUploadFile
             [multiple]="true"
             (select)="pushFiles($event)"
-            [disabled]="selectedRequestsItemStatus?.name === 'DRAFT'"
             type="button" class="btn-add-file app-ghost-color">
       <uxg-icon shape="app-attach" size="32"></uxg-icon>
     </button>
@@ -46,7 +45,7 @@
         <uxg-icon shape="app-message" size="32"></uxg-icon>
         <span>Отправить</span>
       </button>
-      <div class="app-ghost-color" *ngIf="selectedRequestsItemStatus?.name === 'DRAFT'; else inputMessage">
+      <div class="app-ghost-color" >
         <br>
         Позиция в статусе черновик, невозможно отправлять сообщения
       </div>
