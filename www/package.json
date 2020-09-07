@@ -43,6 +43,7 @@
     "moment": "^2.24.0",
     "ng2-file-upload": "^1.4.0",
     "ng2-nouislider": "^1.8.2",
+    "nginx": "0.0.0",
     "nouislider": "^14.2.0",
     "rxjs": "^6.5.5",
     "text-mask-addons": "^3.8.0",
