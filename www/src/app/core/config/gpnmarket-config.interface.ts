@@ -47,4 +47,6 @@ export interface GpnmarketConfigInterface {
     forBackoffice: string
   };
   disabledFeatures: Array<keyof typeof FeatureList>;
+  metrika: { id: string | null, options: any };
+  ga: { id: string | null };
 }
