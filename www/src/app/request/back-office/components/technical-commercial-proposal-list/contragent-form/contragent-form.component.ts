@@ -13,6 +13,7 @@ import { DeliveryType } from "../../../enum/delivery-type";
 import { DeliveryTypeLabels } from "../../../../common/dictionaries/delivery-type-labels";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { getCurrencySymbol } from "@angular/common";
+import Create = TechnicalCommercialProposals.Create;
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -29,6 +30,7 @@ export class TechnicalCommercialProposalContragentFormComponent {
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
   form: FormGroup;
+  invalidDocControl = false;
 
   constructor(
     private contragentService: ContragentService,
@@ -68,9 +70,10 @@ export class TechnicalCommercialProposalContragentFormComponent {
     return this.selectedContragents.some(({id}) => id === contragent.id);
   }
 
-  submit() {
+  submit(publish = false) {
     if (this.form.valid) {
-      this.store.dispatch(new CreateContragent(this.request.id, this.form.value));
+      const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
+      this.store.dispatch(new Create(this.request.id, { ...this.form.value, files }, publish));
       this.close.emit();
     }
   }

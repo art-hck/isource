@@ -1,6 +1,6 @@
 <!-- upload documents -->
 <small class="app-ghost-color app-bold">ДОКУМЕНТЫ ПРЕДЛОЖЕНИЯ</small>
-<div class="app-row">
+<div class="app-row" *ngIf="dragAndDrop; else noDragAndDrop">
   <div class="app-col app-bold">
     <div appUploadFile class="upload-area" [ngClass]="{'invalid' : invalid}" hoverClass="upload-area-hover" (dropFile)="selectFile($event)">
       <div>Перетащите документы сюда</div>
@@ -23,6 +23,25 @@
     </div>
   </div>
 </div>
+
+<ng-template #noDragAndDrop>
+  <div class="app-row">
+    <div class="app-col download-button">
+      <button
+        type="button" uxgButton secondary appUploadFile
+        [disabled]="disabled"
+        [multiple]="true"
+        (select)="selectFile($event)"
+      >Выбрать документы
+      </button>
+    </div>
+    <div class="app-col app-justify-content-between app-flex-column">
+      <div class="app-secondary-color">
+        Прикладываемый/ые документы относятся к полному {{docType}} контрагента, и отображаются для всех {{docType}} по позициям от этого контрагента.
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <br/>
 

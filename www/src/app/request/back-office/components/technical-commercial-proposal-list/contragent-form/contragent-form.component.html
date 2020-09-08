@@ -1,8 +1,4 @@
 <form appFormValidation [formGroup]="form" (ngSubmit)="submit();">
-  <div class="app-secondary-color">
-    Вы можете добавлять контрагентов и ТКП по ним по каждой позиции отдельно, а так же с помощью шаблона или в
-    альтернативном отображении.
-  </div>
 
   <uxg-dropdown-input
     formControlName="supplier" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
@@ -36,7 +32,8 @@
       <div class="app-col mr-15">
         <div class="app-control-wrap">
           <input #deliveryAdditionalTerms uxgInput lg formControlName="deliveryAdditionalTerms"/>
-          <label class="app-control-label" (click)="deliveryAdditionalTerms.focus()">Дополнительные условия поставки</label>
+          <label class="app-control-label" (click)="deliveryAdditionalTerms.focus()">Дополнительные условия
+            поставки</label>
           <div class="app-control-error" *ngIf="form.get('deliveryAdditionalTerms').errors as e">
             <span *ngIf="e.required">Обязательное поле</span>
           </div>
@@ -58,58 +55,71 @@
     <div class="app-row">
       <div class="app-col">
         <p class="app-row access-radio">
-          <uxg-radio-item class="app-control" #included value="{{ deliveryType.INCLUDED }}" formControlName="deliveryType"></uxg-radio-item>
+          <uxg-radio-item class="app-control" #included value="{{ deliveryType.INCLUDED }}"
+                          formControlName="deliveryType"></uxg-radio-item>
           <label (click)="included.select($event)">&nbsp;<b>{{ deliveryTypeLabel.INCLUDED }}</b></label>
         </p>
       </div>
       <div class="app-col">
         <p class="app-row access-radio">
-          <uxg-radio-item class="app-control" #notIncluded value="{{ deliveryType.NOT_INCLUDED }}" formControlName="deliveryType"></uxg-radio-item>
+          <uxg-radio-item class="app-control" #notIncluded value="{{ deliveryType.NOT_INCLUDED }}"
+                          formControlName="deliveryType"></uxg-radio-item>
           <label (click)="notIncluded.select($event)">&nbsp;{{ deliveryTypeLabel.NOT_INCLUDED }}</label>
         </p>
       </div>
       <div class="app-col">
         <p class="app-row access-radio app-align-items-center">
-          <uxg-radio-item class="app-control" #pickup value="{{ deliveryType.PICKUP }}" formControlName="deliveryType"></uxg-radio-item>
+          <uxg-radio-item class="app-control" #pickup value="{{ deliveryType.PICKUP }}"
+                          formControlName="deliveryType"></uxg-radio-item>
           <label (click)="pickup.select($event)">&nbsp;{{ deliveryTypeLabel.PICKUP }}</label>
         </p>
       </div>
     </div>
-
-        <ng-container *ngIf="form.get('deliveryType').value === deliveryType.NOT_INCLUDED">
-          <div class="app-row">
-            <div class="app-col mr-15">
-              <div class="app-control-wrap">
-                <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
-                <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
-                <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
-              </div>
-            </div>
-            <div class="app-col currency">
-              <div class="app-control-wrap">
-                <uxg-dropdown lg class="app-dropdown" formControlName="deliveryCurrency" placeholder="Валюта" disabled>
-                  <div uxgDropdownItem value="RUB">Руб.</div>
-                </uxg-dropdown>
-              </div>
+    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.INCLUDED">
+      <br>
+    </ng-container>
+    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.NOT_INCLUDED">
+      <div class="app-row">
+        <div class="app-col mr-15">
+          <div class="app-control-wrap">
+            <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
+            <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
+            <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
             </div>
           </div>
-        </ng-container>
-        <ng-container *ngIf="form.get('deliveryType').value === deliveryType.PICKUP">
-          <div class="app-row">
-            <div class="app-col">
-              <div class="app-control-wrap">
-                <input #deliveryPickup uxgInput lg formControlName="deliveryPickup"/>
-                <label class="app-control-label" (click)="deliveryPickup.focus()">Базис самовывоза</label>
-                <div class="app-control-error" *ngIf="form.get('deliveryPickup').errors as e">
-                  <span *ngIf="e.required">Обязательное поле</span>
-                </div>
-              </div>
+        </div>
+        <div class="app-col currency">
+          <div class="app-control-wrap">
+            <uxg-dropdown lg class="app-dropdown" formControlName="deliveryCurrency" placeholder="Валюта" disabled>
+              <div uxgDropdownItem value="RUB">Руб.</div>
+            </uxg-dropdown>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.PICKUP">
+      <div class="app-row">
+        <div class="app-col">
+          <div class="app-control-wrap">
+            <input #deliveryPickup uxgInput lg formControlName="deliveryPickup"/>
+            <label class="app-control-label" (click)="deliveryPickup.focus()">Базис самовывоза</label>
+            <div class="app-control-error" *ngIf="form.get('deliveryPickup').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
             </div>
           </div>
-        </ng-container>
-    </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="section">
+    <app-documents-form-control
+      formControlName="files"
+      [invalid]="invalidDocControl"
+      [documents]="[]"
+      [dragAndDrop]="false"
+    ></app-documents-form-control>
+  </div>
 
   <div class="app-row app-justify-content-end">
     <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
