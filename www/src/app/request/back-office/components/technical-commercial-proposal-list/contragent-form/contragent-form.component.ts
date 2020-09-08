@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ContragentList } from "../../../../../contragent/models/contragent-list";
 import { shareReplay } from "rxjs/operators";
@@ -20,7 +20,7 @@ import Create = TechnicalCommercialProposals.Create;
   templateUrl: 'contragent-form.component.html',
   styleUrls: ['./contragent-form.component.scss'],
 })
-export class TechnicalCommercialProposalContragentFormComponent {
+export class TechnicalCommercialProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() selectedContragents: ContragentShortInfo[];
   @Output() close = new EventEmitter();
@@ -51,7 +51,7 @@ export class TechnicalCommercialProposalContragentFormComponent {
       deliveryPickup: ['']
     });
 
-    this.form.valueChanges.subscribe(() =>{
+    this.form.valueChanges.subscribe(() => {
       this.form.get('deliveryPickup').setValidators(
         this.form.get('deliveryType').value === this.deliveryType.PICKUP ? [Validators.required] : null);
 
