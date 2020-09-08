@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   isBreadcrumbsHidden: boolean;
   noContentPadding: boolean;
+  noHeaderStick: boolean;
   noFooter: boolean;
   _isTitleHidden: boolean;
   readonly year = new Date().getFullYear();
@@ -50,6 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
       tap(data => {
         this.isBreadcrumbsHidden = data.hideBreadcrumbs;
         this.noContentPadding = data.noContentPadding;
+        this.noHeaderStick = data.noHeaderStick;
         this.noFooter = data.noFooter;
         this._isTitleHidden = data.hideTitle;
         this.bc.breadcrumbs = [];

@@ -169,7 +169,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view !== "list";
+    this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
     this.viewPopover?.hide();
   }
 
@@ -192,6 +192,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
 
   isSentToEdit({data}: TechnicalCommercialProposalByPosition): boolean {
     return data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && data.length > 0;
+  }
+
+  isDraft({data}: TechnicalCommercialProposalByPosition): boolean {
+    return data.every(({proposalPosition: p}) => ['NEW'].includes(p.status));
   }
 
   withAnalogs({positions}: TechnicalCommercialProposal): boolean {
