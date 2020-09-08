@@ -53,63 +53,49 @@
 
     <small class="app-uppercase app-ghost-color app-bold">Тип и стоимость доставки</small>
     <div class="app-row">
-      <div class="app-col">
+      <div class="app-col" *ngFor="let deliveryType of deliveryTypes">
         <p class="app-row access-radio">
-          <uxg-radio-item class="app-control" #included value="{{ deliveryType.INCLUDED }}"
+          <uxg-radio-item class="app-control" #deliveryType value="{{ deliveryType[0] }}"
                           formControlName="deliveryType"></uxg-radio-item>
-          <label (click)="included.select($event)">&nbsp;<b>{{ deliveryTypeLabel.INCLUDED }}</b></label>
-        </p>
-      </div>
-      <div class="app-col">
-        <p class="app-row access-radio">
-          <uxg-radio-item class="app-control" #notIncluded value="{{ deliveryType.NOT_INCLUDED }}"
-                          formControlName="deliveryType"></uxg-radio-item>
-          <label (click)="notIncluded.select($event)">&nbsp;{{ deliveryTypeLabel.NOT_INCLUDED }}</label>
-        </p>
-      </div>
-      <div class="app-col">
-        <p class="app-row access-radio app-align-items-center">
-          <uxg-radio-item class="app-control" #pickup value="{{ deliveryType.PICKUP }}"
-                          formControlName="deliveryType"></uxg-radio-item>
-          <label (click)="pickup.select($event)">&nbsp;{{ deliveryTypeLabel.PICKUP }}</label>
+          <label (click)="deliveryType.select($event)">&nbsp;{{ deliveryType[1] }}</label>
         </p>
       </div>
     </div>
-    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.INCLUDED">
-      <br>
-    </ng-container>
-    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.NOT_INCLUDED">
-      <div class="app-row">
-        <div class="app-col mr-15">
-          <div class="app-control-wrap">
-            <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
-            <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
-            <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
-              <span *ngIf="e.required">Обязательное поле</span>
+    <ng-container [ngSwitch]="form.get('deliveryType').value">
+      <br *ngSwitchCase="deliveryType.INCLUDED"/>
+      <ng-container *ngSwitchCase="deliveryType.NOT_INCLUDED">
+        <div class="app-row">
+          <div class="app-col mr-15">
+            <div class="app-control-wrap">
+              <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
+              <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
+              <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+              </div>
+            </div>
+          </div>
+          <div class="app-col currency">
+            <div class="app-control-wrap">
+              <uxg-dropdown lg class="app-dropdown" formControlName="deliveryCurrency" placeholder="Валюта" disabled>
+                <div uxgDropdownItem value="RUB">Руб.</div>
+              </uxg-dropdown>
             </div>
           </div>
         </div>
-        <div class="app-col currency">
-          <div class="app-control-wrap">
-            <uxg-dropdown lg class="app-dropdown" formControlName="deliveryCurrency" placeholder="Валюта" disabled>
-              <div uxgDropdownItem value="RUB">Руб.</div>
-            </uxg-dropdown>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="form.get('deliveryType').value === deliveryType.PICKUP">
-      <div class="app-row">
-        <div class="app-col">
-          <div class="app-control-wrap">
-            <input #deliveryPickup uxgInput lg formControlName="deliveryPickup"/>
-            <label class="app-control-label" (click)="deliveryPickup.focus()">Базис самовывоза</label>
-            <div class="app-control-error" *ngIf="form.get('deliveryPickup').errors as e">
-              <span *ngIf="e.required">Обязательное поле</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="deliveryType.PICKUP">
+        <div class="app-row">
+          <div class="app-col">
+            <div class="app-control-wrap">
+              <input #deliveryPickup uxgInput lg formControlName="deliveryPickup"/>
+              <label class="app-control-label" (click)="deliveryPickup.focus()">Базис самовывоза</label>
+              <div class="app-control-error" *ngIf="form.get('deliveryPickup').errors as e">
+                <span *ngIf="e.required">Обязательное поле</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
     </ng-container>
   </div>
   <div class="section">

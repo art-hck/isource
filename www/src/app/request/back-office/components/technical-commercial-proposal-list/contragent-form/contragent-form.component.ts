@@ -26,6 +26,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   @Output() close = new EventEmitter();
   readonly deliveryType = DeliveryType;
   readonly deliveryTypeLabel = DeliveryTypeLabels;
+  readonly deliveryTypes = Object.entries(DeliveryTypeLabels);
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
@@ -44,7 +45,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
       supplier: [null, Validators.required],
       files: [[]],
       deliveryType: [this.deliveryType.INCLUDED],
-      deliveryAdditionalTerms: ['', Validators.required],
+      deliveryAdditionalTerms: [''],
       warrantyConditions: ['', Validators.required],
       deliveryPrice: [''],
       deliveryCurrency: [PositionCurrency.RUB],
