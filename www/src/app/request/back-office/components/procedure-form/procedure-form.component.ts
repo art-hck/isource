@@ -156,7 +156,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         const dateSummingUp = this.form.get("general.dateSummingUp").value;
 
         if (this.form.get("general.dateSummingUp").value) {
-          if (moment(date, "DD.MM.YYYY").isAfter(moment(dateSummingUp, "DD.MM.YYYY"))) {
+          if (moment(date, "DD.MM.YYYY HH:mm").isAfter(moment(dateSummingUp, "DD.MM.YYYY HH:mm"))) {
             if (this.form.get("general.dateSummingUp").disabled) {
               this.form.get("general.dateEndRegistration").setErrors({ beforeSummingUpDate: true});
             } else {
@@ -177,7 +177,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         const dateEndRegistration = this.form.get("general.dateEndRegistration").value;
 
         if (this.form.get("general.dateSummingUp").value) {
-          if (moment(date, "DD.MM.YYYY").isBefore(moment(dateEndRegistration, "DD.MM.YYYY"))) {
+          if (moment(date, "DD.MM.YYYY HH:mm").isBefore(moment(dateEndRegistration, "DD.MM.YYYY HH:mm"))) {
             this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
           } else {
             this.form.get("general.dateSummingUp").setErrors(null);

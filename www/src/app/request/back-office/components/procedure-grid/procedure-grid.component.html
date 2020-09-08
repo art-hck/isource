@@ -1,4 +1,4 @@
-<div class="app-row">
+<div class="app-row app-layout">
   <h3 class="app-col">
     <a [routerLink]="['/requests', 'backoffice', procedure.requestId, 'procedure']"
        [queryParams]="{ source: source, procedureId: procedure.procedureId }">Процедура №{{procedure.procedureId}} «{{procedure.procedureTitle}}»</a>
@@ -13,9 +13,17 @@
       <a [href]="link(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
     </ng-container>
 
-    <ng-container *ngIf="finished(procedure)">
+    <ng-container *ngIf="finished(procedure) && procedure?.offersImported">
       <span class="app-success-color pr-20">
         <uxg-icon shape="app-check"></uxg-icon> Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
+      </span>
+
+      <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
+    </ng-container>
+
+    <ng-container *ngIf="finished(procedure) && !procedure?.offersImported">
+      <span class="app-ghost-color pr-20">
+        <uxg-icon shape="app-waiting"></uxg-icon> Ожидание выгрузки результатов
       </span>
 
       <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
@@ -82,7 +90,7 @@
     </uxg-popover>
   </div>
 </div>
-<div class="positions" *ngFor="let position of procedure.positions.slice(0,3)">
+<div class="positions app-layout" *ngFor="let position of procedure.positions.slice(0,3)">
   {{position.requestPosition.name}}
 </div>
 <ng-container *ngIf="procedure.positions.length > 3">

@@ -28,6 +28,12 @@ import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
 import { UxgModalComponent } from "uxg";
+import { ContragentRole } from "../../../../contragent/enum/contragent-role";
+import { ContragentRoleLabels } from "../../../../contragent/dictionaries/currency-labels";
+import { DeliveryType } from "../../enum/delivery-type";
+import { DeliveryTypeLabels } from "../../../common/dictionaries/delivery-type-labels";
+import { CurrencyLabels } from "../../../common/dictionaries/currency-labels";
+import { PositionCurrency } from "../../../common/enum/position-currency";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -46,6 +52,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
   readonly availablePositions$: Observable<RequestPosition[]>;
+  readonly deliveryType = DeliveryType;
+  readonly deliveryTypeLabel = DeliveryTypeLabels;
+  readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
@@ -73,6 +82,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       documents: [this.defaultValue('documents', [])],
       positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
       files: [[]],
+      deliveryType: [this.technicalCommercialProposal?.deliveryType || this.deliveryType.INCLUDED],
+      deliveryAdditionalTerms: [this.technicalCommercialProposal?.deliveryAdditionalTerms || '', Validators.required],
+      warrantyConditions: [this.technicalCommercialProposal?.warrantyConditions || '', Validators.required],
+      deliveryPrice: [this.technicalCommercialProposal?.deliveryPrice || ''],
+      deliveryCurrency: [PositionCurrency.RUB],
+      deliveryPickup: [this.technicalCommercialProposal?.deliveryPickup || '']
     });
 
     if (this.technicalCommercialProposal) {
@@ -107,6 +122,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
           [Validators.required] :
           [Validators.required, proposalManufacturerValidator]
       );
+
+      this.form.get('deliveryPickup').setValidators(
+        this.form.get('deliveryType').value === this.deliveryType.PICKUP ? [Validators.required] : null);
+
+      this.form.get('deliveryPrice').setValidators(
+        this.form.get('deliveryType').value === this.deliveryType.NOT_INCLUDED ? [Validators.required] : null);
 
       this.form.get('positions').updateValueAndValidity({ emitEvent: false });
 

@@ -47,13 +47,14 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
     }
   }
 
-  createFormGroupPosition({manufacturingName, position}) {
+  createFormGroupPosition({ manufacturingName, manufacturer, position }) {
     const form = this.fb.group({
       position: position,
-      manufacturingName: [manufacturingName || position.name, Validators.required]
+      manufacturingName: [manufacturingName || position.name, Validators.required],
+      manufacturer: [manufacturer, Validators.required]
     });
 
-    if (this.disabledFn && this.disabledFn({position})) {
+    if (this.disabledFn && this.disabledFn({ position })) {
       form.disable();
     }
 

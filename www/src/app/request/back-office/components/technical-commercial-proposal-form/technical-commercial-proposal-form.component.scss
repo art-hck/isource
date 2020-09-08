@@ -40,6 +40,7 @@
     &-quantity {
       flex-grow: .15; // 15% width
       max-width: 100px;
+      text-align: right;
     }
 
     &-date {
@@ -81,4 +82,11 @@
   font-weight: bold;
   margin-right: 10px;
   color: uxg($theme, color-control-invalid);
+}
+
+.not-included {
+  display: inline-flex;
+  .app-control-wrap {
+    margin-right: 15px;
+  }
 }

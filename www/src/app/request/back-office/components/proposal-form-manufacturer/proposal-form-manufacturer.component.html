@@ -11,6 +11,9 @@
       </div>
       <div class="app-col app-row app-justify-content-between">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
+      </div>
+      <div class="app-col app-row app-justify-content-between">
+        <small class="app-ghost-color app-bold">ИЗГОТОВИТЕЛЬ</small>
         <small class="app-secondary-color">Осталось заполнить: <b>{{ pristineCount }}</b></small>
       </div>
     </div>
@@ -21,6 +24,7 @@
         <div class="app-row" [formGroup]="formGroup">
           <div class="app-col app-bold item-title">{{ position.name }}</div>
           <div class="app-col"><input type="text" uxgInput formControlName="manufacturingName"/></div>
+          <div class="app-col"><input type="text" uxgInput formControlName="manufacturer"/></div>
         </div>
       </ng-container>
     </ng-container>

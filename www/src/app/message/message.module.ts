@@ -5,6 +5,8 @@ import { SharedModule } from "../shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MessagesViewComponent } from "./messages-view/messages-view.component";
 import { MessageSharedModule } from "./message-shared.module";
+import { NgxsModule } from "@ngxs/store";
+import { MessagesState } from "./states/messages.state";
 
 @NgModule({
   declarations: [
@@ -16,6 +18,9 @@ import { MessageSharedModule } from "./message-shared.module";
     MessageSharedModule,
     MessageRoutingModule,
     ReactiveFormsModule,
+    NgxsModule.forFeature([
+      MessagesState
+    ])
   ]
 })
 export class MessageModule {

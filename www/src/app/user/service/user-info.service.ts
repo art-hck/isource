@@ -164,7 +164,7 @@ export class UserInfoService {
     return this.getUserInfo()?.isContragentCreator;
   }
 
-  public getUserRole(): string {
+  public getUserRole(): 'customer' | 'backoffice' {
     return this.isCustomer() ? 'customer' : 'backoffice';
   }
 

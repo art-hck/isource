@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'contragents', canActivate: [AppAuthGuard], loadChildren: () => import('./contragent/contragent.module').then(m => m.ContragentModule)},
   { path: 'employees', canActivate: [AppAuthGuard], loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
   { path: 'messages', canActivate: [AppAuthGuard], loadChildren: () => import('./message/message.module').then(m => m.MessageModule)},
+  { path: 'im', canActivate: [AppAuthGuard], loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)},
   { path: 'notifications', canActivate: [AppAuthGuard], loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule)},
   { path: 'kim', canActivate: [AppAuthGuard], loadChildren: () => import('./kim/kim.module').then(m => m.KimModule)},
   { path: 'agreements', canActivate: [AppAuthGuard], loadChildren: () => import('./agreements/agreements.module').then(m => m.AgreementsModule)},

@@ -22,7 +22,7 @@
       <div class="app-col separator"></div>
 
       <div class="app-col">
-        <a routerLink="/messages/request/{{ position.request.id }}/position/{{ position.id }}">
+        <a routerLink="/im/request/{{ position.request.id }}/position/{{ position.id }}">
           <span class="app-secondary-color">
             <uxg-icon shape="app-comment"></uxg-icon>
             <span>Перейти к чату по позиции</span>
@@ -163,7 +163,7 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeRKDApproved(position) || user.isCustomer()">
+        <div *ngIf="isBeforeRKDApproved(position) && !user.isCustomer()">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger

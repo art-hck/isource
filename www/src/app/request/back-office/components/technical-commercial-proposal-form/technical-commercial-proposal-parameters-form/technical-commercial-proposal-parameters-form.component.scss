@@ -5,6 +5,7 @@
   overflow-y: scroll;
   padding-right: 6px;
   margin-right: -22px;
+  padding-top: 10px;
   @include scrollbar($theme);
 }
 

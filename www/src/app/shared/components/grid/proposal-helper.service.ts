@@ -29,11 +29,14 @@ export class ProposalHelperService {
 
   chooseBy(type: "date" | "price", position: Position, proposals: Proposal[]): Proposal["sourceProposal"] {
     return proposals.reduce((prev, curr) => {
-      const prevValid = prev && this.isValid(position, prev);
-      const currValid = curr && this.isValid(position, curr);
-      if (prevValid && !currValid) { return prev; }
-      if (!prevValid && currValid) { return curr; }
-      if (!prevValid && !currValid) { return null; }
+      // Если выбран автовыбор по дате, дополнительно
+      // проверяем соседние предложения на валидность
+      if (type === 'date') {
+        const prevValid = prev && this.isValid(position, prev);
+        const currValid = curr && this.isValid(position, curr);
+        if (prevValid && !currValid) { return prev; }
+        if (!prevValid && currValid) { return curr; }
+      }
 
       switch (type) {
         case "price":

@@ -23,6 +23,7 @@ export enum WsChatTypes {
   MESSAGES_SEND = 'messages.send',
   MESSAGES_UNREADCOUNT = 'messages.unreadcount',
   MESSAGES_MARKSEEN = 'messages.markseen',
+  MESSAGES_MARKEDASREAD = 'messages.markedasread',
   USERS_GET = 'users.get',
   USERS_GETSELF = 'users.getself',
   CONVERSATION_NEW = 'conversation.new',
