@@ -18,6 +18,8 @@ export class DocumentsFormControlComponent implements ControlValueAccessor {
   @Input() files: AppFile[];
   @Input() invalid: boolean;
   @Input() disabled: boolean;
+  @Input() dragAndDrop = true;
+  @Input() docType = 'ТКП';
   @Output() select = new EventEmitter<AppFile[]>();
   @Output() remove = new EventEmitter<number>();
   onTouched: (value) => void;

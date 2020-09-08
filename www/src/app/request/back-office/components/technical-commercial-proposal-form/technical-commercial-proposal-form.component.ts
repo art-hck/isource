@@ -28,8 +28,6 @@ import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
 import { UxgModalComponent } from "uxg";
-import { ContragentRole } from "../../../../contragent/enum/contragent-role";
-import { ContragentRoleLabels } from "../../../../contragent/dictionaries/currency-labels";
 import { DeliveryType } from "../../enum/delivery-type";
 import { DeliveryTypeLabels } from "../../../common/dictionaries/delivery-type-labels";
 import { CurrencyLabels } from "../../../common/dictionaries/currency-labels";
@@ -83,7 +81,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
       files: [[]],
       deliveryType: [this.technicalCommercialProposal?.deliveryType || this.deliveryType.INCLUDED],
-      deliveryAdditionalTerms: [this.technicalCommercialProposal?.deliveryAdditionalTerms || '', Validators.required],
+      deliveryAdditionalTerms: [this.technicalCommercialProposal?.deliveryAdditionalTerms || ''],
       warrantyConditions: [this.technicalCommercialProposal?.warrantyConditions || '', Validators.required],
       deliveryPrice: [this.technicalCommercialProposal?.deliveryPrice || ''],
       deliveryCurrency: [PositionCurrency.RUB],
