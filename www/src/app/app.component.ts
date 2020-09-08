@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
@@ -9,6 +9,7 @@ import { Subscription } from "rxjs";
 import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "./core/services/feature.service";
 import { APP_CONFIG, GpnmarketConfigInterface } from "./core/config/gpnmarket-config.interface";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: 'app-root',
@@ -26,16 +27,59 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: GpnmarketConfigInterface,
+    @Inject(PLATFORM_ID) private platform: Object,
+    @Inject(DOCUMENT) private document: Document,
     public bc: UxgBreadcrumbsService,
     public featureService: FeatureService,
     public user: UserInfoService,
     public titleService: Title,
     public authService: AuthService,
+    private renderer: Renderer2,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private cartStoreService: CartStoreService,
     private cd: ChangeDetectorRef,
   ) {
+
+    // GA & Yandex Metrika
+    if (isPlatformBrowser(this.platform)) {
+      const ym = window['ym'];
+      window['dataLayer'] = window['dataLayer'] || [];
+
+      function gtag(...a) {
+        window['dataLayer'].push(arguments);
+      }
+
+      if (appConfig.ga.id) {
+        const gaScript: HTMLScriptElement = this.renderer.createElement('script');
+        gaScript.setAttribute('async', 'true');
+        gaScript.setAttribute('src', `https://www.googletagmanager.com/gtag/js?id=${ appConfig.ga.id }`);
+        this.renderer.appendChild(this.document.documentElement.firstChild, gaScript);
+
+        gtag('js', new Date());
+        gtag('config', appConfig.ga.id);
+      }
+
+      if (appConfig.metrika.id) {
+        ym(appConfig.metrika.id, "init", appConfig.metrika.options ?? {});
+      }
+
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd && isPlatformBrowser(this.platform)),
+        tap((e: NavigationEnd) => {
+          if (isPlatformBrowser(this.platform)) {
+            if (appConfig.ga.id) {
+              gtag('event', 'page_view', { 'send_to': appConfig.ga.id });
+            }
+
+            if (appConfig.metrika.id) {
+              ym(appConfig.metrika?.id, "hit", e.urlAfterRedirects);
+            }
+          }
+        }),
+      ).subscribe();
+    }
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(() => this.activatedRoute),

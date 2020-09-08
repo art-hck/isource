@@ -62,4 +62,15 @@ export const AppConfig: GpnmarketConfigInterface = {
     "contractGeneration",
     "createProcedure"
   ],
+  metrika: {
+    id: null,
+    options: {
+      defer: true,
+      webvisor: true,
+      trackHash: false
+    }
+  },
+  ga: {
+    id: null
+  }
 };
