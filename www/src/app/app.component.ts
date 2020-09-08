@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.renderer.appendChild(this.document.documentElement.firstChild, gaScript);
 
         gtag('js', new Date());
-        gtag('config', 'UA-173138933-1');
+        gtag('config', appConfig.ga.id);
       }
 
       if (appConfig.metrika.id) {
