@@ -101,6 +101,7 @@
         <app-grid-contragents
           *ngIf="view === 'grid' && suppliers.length"
           [gridRows]="gridRows"
+          [positionCell]="true"
           [suppliers]="suppliers(proposals)"
         ></app-grid-contragents>
 
@@ -128,35 +129,49 @@
             (edit)="addProposalPosition(getProposalByProposalPosition($event.sourceProposal, proposals), proposalsByPos.position)"
             (create)="addProposalPosition(getProposalBySupplier($event, proposals), proposalsByPos.position)"
           >
-            <uxg-checkbox class="app-control" #checked
-                formControlName="checked"
-                [disabled]="isReviewed(proposalsByPos) || isOnReview(proposalsByPos) || proposalsByPos.data.length === 0">
-            </uxg-checkbox>
-            <label (click)="checked.check($event)"><b>&nbsp; {{proposalsByPos.position.name}}</b> </label>
+            <ng-template #position>
+              <div class="grid-cell app-col">
+                <div class="app-row" style="flex-wrap: nowrap">
+                  <uxg-checkbox class="app-control" #checked
+                                formControlName="checked"
+                                [disabled]="isReviewed(proposalsByPos) || isOnReview(proposalsByPos) || proposalsByPos.data.length === 0">
+                  </uxg-checkbox>
+                  <div class="app-row app-flex-column">
+                    <label (click)="checked.check($event)"><b>{{proposalsByPos.position.name}}</b></label>
 
-            <div class="app-ghost-color">&nbsp;| {{proposalsByPos.position.quantity}} {{proposalsByPos.position.measureUnit}} </div>
-            <div class="app-ghost-color">&nbsp;|
-              <ng-container *ngIf="proposalsByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</ng-container>
-              <ng-template #deliveryDate>{{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}} </ng-template>
-            </div>
-            <div class="app-col"></div>
-            <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
-              <uxg-icon shape="app-check"></uxg-icon>
-              <span>Выбран победитель</span>
-            </div>
-            <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
-              <uxg-icon shape="app-waiting"></uxg-icon>
-              <span>На согласовании</span>
-            </div>
-            <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
-              <uxg-icon shape="app-warning"></uxg-icon>
-              <span>На доработке</span>
-            </div>
-            <ng-container *ngIf="canRollback(proposalsByPos.position)">
-              <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(proposalsByPos.position))">
-                Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
-              </button>
-            </ng-container>
+                    <div class="app-secondary-color">
+                      <span>{{proposalsByPos.position.quantity}}</span>
+                      <span class="app-ghost-color">{{proposalsByPos.position.measureUnit}}</span>
+                      <span class="app-ghost-color"> | </span>
+                      <span *ngIf="proposalsByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
+                      <ng-template #deliveryDate><span>{{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
+                    </div>
+                    <div class="app-col"></div>
+                    <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">
+                      <uxg-icon shape="app-check"></uxg-icon>
+                      <span>Выбран победитель</span>
+                    </div>
+                    <div class="app-ghost-color app-bold" *ngIf="isOnReview(proposalsByPos)">
+                      <uxg-icon shape="app-waiting"></uxg-icon>
+                      <span>На согласовании</span>
+                    </div>
+                    <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalsByPos)">
+                      <uxg-icon shape="app-warning"></uxg-icon>
+                      <span>На доработке</span>
+                    </div>
+                    <div class="app-ghost-color app-bold" *ngIf="isDraft(proposalsByPos)">
+                      <uxg-icon shape="app-draft"></uxg-icon>
+                      <span>Черновик</span>
+                    </div>
+                    <ng-container *ngIf="canRollback(proposalsByPos.position)">
+                      <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(proposalsByPos.position))">
+                        Отозвать <span class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
           </app-grid-row>
         </ng-container>
 

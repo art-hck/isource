@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Subject } from "rxjs";
 import { FormControl, Validators } from "@angular/forms";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
@@ -15,6 +15,7 @@ import { GridSupplier } from "../grid-supplier";
 })
 export class GridRowComponent implements OnInit, OnDestroy {
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
+  @ContentChild('position', { read: TemplateRef }) positionTpl: TemplateRef<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() proposals: Proposal[];
   @Input() position: Position;

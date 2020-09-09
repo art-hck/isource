@@ -3,6 +3,7 @@
 </div>
 
 <div #gridRow class="grid-row app-row items-row app-layout">
+  <ng-container *ngTemplateOutlet="positionTpl"></ng-container>
   <ng-container *ngIf="!simpleView">
     <ng-container *ngFor="let supplier of suppliers; trackBy: trackByProposalPositionId">
       <app-grid-cell
