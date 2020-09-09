@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { catchError, filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, startWith, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -30,6 +30,10 @@ import { PositionStatus } from "../../../common/enum/position-status";
 import moment from "moment";
 import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
 import { ProposalsView } from "../../../../shared/models/proposals-view";
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { Proposal } from "../../../../shared/components/grid/proposal";
+import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
+import { ScrollPositionService } from "../../../../shared/services/scroll-position.service";
 import Create = TechnicalCommercialProposals.Create;
 import Update = TechnicalCommercialProposals.Update;
 import Publish = TechnicalCommercialProposals.Publish;
@@ -41,9 +45,6 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
-import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
-import { Proposal } from "../../../../shared/components/grid/proposal";
-import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -109,6 +110,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     public store: Store,
     public router: Router,
     public helper: TechnicalCommercialProposalHelperService,
+    public scrollPositionService: ScrollPositionService,
     private app: AppComponent,
   ) {
   }
