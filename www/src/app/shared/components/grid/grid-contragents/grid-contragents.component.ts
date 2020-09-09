@@ -6,6 +6,7 @@ import { TechnicalCommercialProposal } from "../../../../request/common/models/t
 import { Procedure } from "../../../../request/back-office/models/procedure";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -19,12 +20,15 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() suppliers: GridSupplier[];
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() proposalsByPos : TechnicalCommercialProposalByPosition[];
+  @Input() showParams = false;
   canScrollLeft: boolean;
   canScrollRight: boolean;
   needUpdate: boolean;
   showCommonParams = false;
 
-  constructor(private cd: ChangeDetectorRef) {}
+
+  constructor(private cd: ChangeDetectorRef,
+              public userInfoService: UserInfoService) {}
 
   ngAfterViewChecked() {
     if (this.needUpdate) {
