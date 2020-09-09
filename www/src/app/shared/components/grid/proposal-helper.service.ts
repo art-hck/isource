@@ -2,6 +2,10 @@ import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
+import { RequestPosition } from "../../../request/common/models/request-position";
+import { TechnicalCommercialProposal } from "../../../request/common/models/technical-commercial-proposal";
+import { TechnicalCommercialProposalByPosition } from "../../../request/common/models/technical-commercial-proposal-by-position";
+import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +23,26 @@ export class ProposalHelperService {
 
   isQuantityValid(position: Position, { quantity }: Proposal): boolean {
     return position.quantity === quantity;
+  }
+
+  isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    if (proposal.positions.length === positions.length) {
+      return proposal.positions.every(position => position.position.quantity === position.quantity);
+    } else {
+      return false;
+    }
+  }
+  isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    if (proposal.positions.length === positions.length) {
+      return proposal.positions.every(
+        position => moment(position.position.deliveryDate).isSameOrBefore(position.deliveryDate) || position.position.isDeliveryDateAsap);
+    } else {
+      return false;
+    }
+  }
+
+  getSummaryPrice(positions: TechnicalCommercialProposalPosition[]) {
+    return positions.map(position => position.priceWithoutVat*position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
   }
 
   getRequestedQuantityLabel(position: Position, { quantity }: Proposal): string {

@@ -4,14 +4,24 @@
       <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
       <div class="app-ghost-color analog" *ngIf="supplier.hasAnalogs">аналоги</div>
-      <app-grid-common-parameters [proposal]="getProposalBySupplier(supplier, proposals)"></app-grid-common-parameters>
+      <ng-container *ngIf="showCommonParams">
+      <app-grid-common-parameters
+        [proposal]="getProposalBySupplier(supplier, proposals)"
+        [proposalsByPos]="proposalsByPos"></app-grid-common-parameters>
+      </ng-container>
     </div>
   </div>
+  <ng-container *ngIf="showCommonParams === false; else close">
+  <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
+  </ng-container>
+  <ng-template #close>
+    <button uxgButton icon primary class="common-params" (click)="showCommonParams = false"><uxg-icon shape="app-cross"></uxg-icon></button>
+  </ng-template>
 
-  <button class="left" *ngIf="canScrollLeft" uxgButton primary icon (click)="scrollLeft()">
+  <button class="left" *ngIf="canScrollLeft" uxgButton secondary icon (click)="scrollLeft()">
     <uxg-icon shape="app-chevron" dir="left"></uxg-icon>
   </button>
-  <button class="right" *ngIf="canScrollRight" uxgButton primary icon (click)="scrollRight()">
+  <button class="right" *ngIf="canScrollRight" uxgButton secondary icon (click)="scrollRight()">
     <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
   </button>
 </div>

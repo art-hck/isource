@@ -4,6 +4,8 @@ import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
 import { Procedure } from "../../../../request/back-office/models/procedure";
+import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -16,9 +18,11 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() proposals: TechnicalCommercialProposal[];
+  @Input() proposalsByPos : TechnicalCommercialProposalByPosition[];
   canScrollLeft: boolean;
   canScrollRight: boolean;
   needUpdate: boolean;
+  showCommonParams = false;
 
   constructor(private cd: ChangeDetectorRef) {}
 
