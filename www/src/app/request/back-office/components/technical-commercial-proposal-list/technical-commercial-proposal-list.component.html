@@ -180,7 +180,8 @@
 
       </div>
 
-      <div class="proposals-footer" [class.hidden]="(scrollPositionService.scroll$ | async) < actionsRef.offsetTop + actionsRef.offsetHeight">
+      <div class="proposals-footer" [class.hidden]="(scrollPositionService.scroll$ | async) < actionsRef.offsetTop + actionsRef.offsetHeight"
+           [class.overflow-visible]="viewPopover.last?.isOpen || selectPopoverRef.last?.isOpen">
         <div class="proposals-footer-body">
           <ng-container *ngTemplateOutlet="actionsTpl; context: { $implicit: 'app-popover-content-top-left' }"></ng-container>
         </div>

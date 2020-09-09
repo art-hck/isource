@@ -57,7 +57,8 @@ import Rollback = TechnicalCommercialProposals.Rollback;
 export class TechnicalCommercialProposalListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
-  @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
+  @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;
+  @ViewChildren('selectPopover') selectPopoverRef: QueryList<UxgPopoverComponent>;
   @Select(TechnicalCommercialProposalState.proposals) proposals$: Observable<TechnicalCommercialProposal[]>;
   @Select(TechnicalCommercialProposalState.proposalsByPositions) proposalsByPositions$: Observable<TechnicalCommercialProposalByPosition[]>;
   @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
@@ -172,7 +173,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   switchView(view: ProposalsView) {
     this.view = view;
     this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
-    this.viewPopover?.hide();
+    this.viewPopover?.first.hide();
   }
 
   getContragents(proposals: TechnicalCommercialProposal[]): ContragentShortInfo[] {
