@@ -4,6 +4,7 @@
       <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
       <div class="app-ghost-color analog" *ngIf="supplier.hasAnalogs">аналоги</div>
+      <app-grid-common-parameters [proposal]="getProposalBySupplier(supplier, proposals)"></app-grid-common-parameters>
     </div>
   </div>
 

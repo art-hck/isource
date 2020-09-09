@@ -2,6 +2,8 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
+import { Procedure } from "../../../../request/back-office/models/procedure";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -13,6 +15,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @ViewChild('gridRow') gridRow: ElementRef;
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
+  @Input() proposals: TechnicalCommercialProposal[];
   canScrollLeft: boolean;
   canScrollRight: boolean;
   needUpdate: boolean;
@@ -56,4 +59,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     this.canScrollRight = (scrollLeft === 0 || scrollLeft < scrollWidth - offsetWidth) && scrollWidth > offsetWidth;
     this.cd.detectChanges();
   }
+
+  trackById = (i, { id }: TechnicalCommercialProposal) => id;
+  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
 }
