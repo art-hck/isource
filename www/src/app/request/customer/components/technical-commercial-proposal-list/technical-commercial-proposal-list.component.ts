@@ -1,17 +1,5 @@
 import { ActivatedRoute } from "@angular/router";
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -202,7 +190,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view !== "list";
+    this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
   }
 

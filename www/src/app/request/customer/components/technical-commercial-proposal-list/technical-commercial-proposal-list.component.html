@@ -53,6 +53,7 @@
             *ngIf="proposalsByPos.length && view === 'grid'"
             [gridRows]="gridRows"
             [suppliers]="suppliers(proposals$ | async)"
+            [positionCell]="true"
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row
@@ -66,29 +67,42 @@
               [getProposal]="getProposalBySupplier(proposalByPos)"
               (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event),  position: converPosition(proposalByPos.position)}"
             >
-              <div><b>{{ proposalByPos.position.name }}</b></div>
-              <div class="app-ghost-color">&nbsp;| {{ proposalByPos.position.quantity }} {{proposalByPos.position.measureUnit | lowercase}}</div>
-              <div class="app-ghost-color">&nbsp;| {{ proposalByPos.position.deliveryDate | date:"dd.MM.yyyy" }}</div>
-              <div class="app-col"></div>
-              <ng-container *ngIf="!isReviewed(proposalByPos)">
-                <label (click)="sendToEditRadio.select($event)">Все на доработку &nbsp; </label>
-                <uxg-radio-item
-                  class="app-control"
-                  #sendToEditRadio
-                  [name]="proposalByPos.position.id"
-                  [value]="proposalByPos.position"
-                  [formControl]="proposalOnReview.sendToEditPosition"
-                  (click)="$event.stopPropagation()"
-                ></uxg-radio-item>
-              </ng-container>
-              <div class="app-success-color app-bold" *ngIf="hasWinner(proposalByPos)">
-                <uxg-icon shape="app-check"></uxg-icon>
-                <span>Выбран победитель</span>
-              </div>
-              <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalByPos)">
-                <uxg-icon shape="app-warning"></uxg-icon>
-                <span>На доработке</span>
-              </div>
+              <ng-template #position>
+                <div class="grid-cell app-col">
+                  <div class="app-row app-flex-column">
+                    <div><b>{{ proposalByPos.position.name }}</b></div>
+
+                    <div class="app-secondary-color">
+                      <span>{{proposalByPos.position.quantity}}</span>
+                      <span class="app-ghost-color">{{proposalByPos.position.measureUnit}}</span>
+                      <span class="app-ghost-color"> | </span>
+                      <span *ngIf="proposalByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
+                      <ng-template #deliveryDate><span>{{proposalByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
+                    </div>
+                    <div class="app-col"></div>
+
+                    <div class="app-row app-align-items-center" *ngIf="!isReviewed(proposalByPos)">
+                      <uxg-radio-item
+                        class="app-control"
+                        #sendToEditRadio
+                        [name]="proposalByPos.position.id"
+                        [value]="proposalByPos.position"
+                        [formControl]="proposalOnReview.sendToEditPosition"
+                        (click)="$event.stopPropagation()"
+                      ></uxg-radio-item>
+                      <label (click)="sendToEditRadio.select($event)">&nbsp; Все на доработку</label>
+                    </div>
+                    <div class="app-success-color app-bold" *ngIf="hasWinner(proposalByPos)">
+                      <uxg-icon shape="app-check"></uxg-icon>
+                      <span>Выбран победитель</span>
+                    </div>
+                    <div class="app-warning-color app-bold" *ngIf="isSentToEdit(proposalByPos)">
+                      <uxg-icon shape="app-warning"></uxg-icon>
+                      <span>На доработке</span>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
             </app-grid-row>
           </ng-container>
         </div>

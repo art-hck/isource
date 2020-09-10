@@ -1,6 +1,7 @@
 <div class="contragents-row">
 
     <div #gridRow class="app-row grid-row app-layout">
+      <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
       <div class="app-col grid-cell app-ellipsis"
            *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
         <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
@@ -31,4 +32,3 @@
       <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
     </button>
   </div>
-

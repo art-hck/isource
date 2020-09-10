@@ -1,5 +1,5 @@
 <div class="app-container">
-  <app-nav class="app-header" *ngIf="authService.isAuth()"></app-nav>
+  <app-nav class="app-header" [class.no-stick]="noHeaderStick" *ngIf="authService.isAuth()"></app-nav>
 
   <div class="app-content-wrap">
     <div class="app-content">

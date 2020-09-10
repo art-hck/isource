@@ -53,8 +53,8 @@ export const AppConfig: GpnmarketConfigInterface = {
     url: 'https://demo2.etpgpb.ru/#nsi/priceorder/directCustomer/orderId/'
   },
   instructions: {
-    forCustomer: "assets/GPN_Marketpleys_Rukovodstvo_zakazchika_04.03.2020.pdf",
-    forBackoffice: "assets/GPN_Marketpleys_Rukovodstvo_sotrudnika_bek-ofisa_04.03.2020.pdf",
+    forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
+    forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",
   },
   disabledFeatures: [
     "deliveryMonitor",
@@ -62,4 +62,15 @@ export const AppConfig: GpnmarketConfigInterface = {
     "contractGeneration",
     "createProcedure"
   ],
+  metrika: {
+    id: null,
+    options: {
+      defer: true,
+      webvisor: true,
+      trackHash: false
+    }
+  },
+  ga: {
+    id: null
+  }
 };

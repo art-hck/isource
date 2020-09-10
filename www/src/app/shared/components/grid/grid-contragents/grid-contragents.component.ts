@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnChanges, QueryList, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild } from '@angular/core';
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
@@ -18,6 +18,8 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @ViewChild('gridRow') gridRow: ElementRef;
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
+  @Input() positionCell: boolean;
+  @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() proposalsByPos : TechnicalCommercialProposalByPosition[];
   @Input() showParams = false;
@@ -65,6 +67,10 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     const { scrollLeft, offsetWidth, scrollWidth } = this.gridRow?.nativeElement ?? {};
     this.canScrollLeft = scrollLeft > 0;
     this.canScrollRight = (scrollLeft === 0 || scrollLeft < scrollWidth - offsetWidth) && scrollWidth > offsetWidth;
+    this.scrollUpdated.emit({
+      canScrollLeft: this.canScrollLeft,
+      canScrollRight: this.canScrollLeft,
+    });
     this.cd.detectChanges();
   }
 
