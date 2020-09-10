@@ -21,7 +21,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() positionCell: boolean;
   @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Input() proposals: TechnicalCommercialProposal[];
-  @Input() proposalsByPos : TechnicalCommercialProposalByPosition[];
+  @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Input() showParams = false;
   canScrollLeft: boolean;
   canScrollRight: boolean;

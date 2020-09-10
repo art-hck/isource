@@ -42,7 +42,7 @@ export class ProposalHelperService {
   }
 
   getSummaryPrice(positions: TechnicalCommercialProposalPosition[]) {
-    return positions.map(position => position.priceWithoutVat*position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
+    return positions.map(position => position.priceWithoutVat * position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
   }
 
   getRequestedQuantityLabel(position: Position, { quantity }: Proposal): string {
