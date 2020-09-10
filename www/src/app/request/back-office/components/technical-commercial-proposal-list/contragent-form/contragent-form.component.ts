@@ -44,14 +44,14 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
 
   ngOnInit() {
     this.form = this.fb.group({
-      supplier: [this.edit?.supplier.shortName || null, Validators.required],
-      files: [this.edit?.documents || []],
-      deliveryType: [this.edit?.deliveryType || this.deliveryType.INCLUDED],
-      deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms || ''],
-      warrantyConditions: [this.edit?.warrantyConditions || '', Validators.required],
-      deliveryPrice: [this.edit?.deliveryPrice || ''],
+      supplier: [this.edit?.supplier.shortName ?? null, Validators.required],
+      files: [this.edit?.documents ?? []],
+      deliveryType: [this.edit?.deliveryType ?? this.deliveryType.INCLUDED],
+      deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms ?? ''],
+      warrantyConditions: [this.edit?.warrantyConditions ?? '', Validators.required],
+      deliveryPrice: [this.edit?.deliveryPrice ?? ''],
       deliveryCurrency: [PositionCurrency.RUB],
-      deliveryPickup: [this.edit?.deliveryPickup || '']
+      deliveryPickup: [this.edit?.deliveryPickup ?? '']
     });
 
     this.form.valueChanges.subscribe(() => {

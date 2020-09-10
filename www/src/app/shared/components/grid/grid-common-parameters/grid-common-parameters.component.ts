@@ -23,7 +23,7 @@ export class GridCommonParametersComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  editTkpModal(proposal: TechnicalCommercialProposal) {
+  edit(proposal: TechnicalCommercialProposal) {
     this.close.emit();
     this.openEditModal.emit(proposal);
   }
