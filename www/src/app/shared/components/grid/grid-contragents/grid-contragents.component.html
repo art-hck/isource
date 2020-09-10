@@ -13,9 +13,14 @@
             [proposalsByPos]="proposalsByPos"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"></app-grid-common-parameters>
+            [proposalsByPos]="proposalsByPos"
+            [showDocs]="showDocsControl.value"></app-grid-common-parameters>
         </ng-container>
       </div>
     </div>
+  <div class="app-row show-docs" *ngIf="showCommonParams">
+    <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
+  </div>
     <!-- Временно скрыто от заказчика  и в матрице КП-->
     <ng-container *ngIf="!userInfoService.isCustomer() && showParams">
       <ng-container *ngIf="showCommonParams === false; else close">

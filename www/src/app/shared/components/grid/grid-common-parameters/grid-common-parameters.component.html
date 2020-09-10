@@ -32,6 +32,7 @@
     </ng-template>
   </div>
 <div class="delivery-block">
+<ng-container *ngIf="!showDocs">
   <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
     <div class="app-ghost-color">Базис самовывоза</div>
     <div class="info-value">
@@ -60,6 +61,17 @@
     <div class="info-value">
       {{ proposal.warrantyConditions }}
     </div>
+  </ng-container>
+</ng-container>
+  <ng-container *ngIf="showDocs">
+  <div class="app-ghost-color">Документы предложения</div>
+  <ng-container *ngIf="proposal.documents.length; else noDocs">
+  <app-document-simple-list [gridable]="false" [enableUpload]="false" [size]="'s'" [documents]="proposal.documents">
+  </app-document-simple-list>
+  </ng-container>
+  <ng-template #noDocs>
+    Документы не были приложены
+  </ng-template>
   </ng-container>
 </div>
   <button uxgButton iconText secondary (click)="edit(proposal)">
