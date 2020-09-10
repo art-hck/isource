@@ -7,6 +7,7 @@ import { Procedure } from "../../../../request/back-office/models/procedure";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -27,6 +28,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   canScrollRight: boolean;
   needUpdate: boolean;
   showCommonParams = false;
+  showDocs = new FormControl(false, null);
 
 
   constructor(private cd: ChangeDetectorRef,

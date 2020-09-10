@@ -10,10 +10,14 @@
         <ng-container *ngIf="showCommonParams">
           <app-grid-common-parameters
             [proposal]="getProposalBySupplier(supplier, proposals)"
-            [proposalsByPos]="proposalsByPos"></app-grid-common-parameters>
+            [proposalsByPos]="proposalsByPos"
+            [showDocs]="showDocs.value"></app-grid-common-parameters>
         </ng-container>
       </div>
     </div>
+  <div class="app-row show-docs" *ngIf="showCommonParams">
+    <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocs"></uxg-switcher>
+  </div>
     <!-- Временно скрыто от заказчика  и в матрице КП-->
     <ng-container *ngIf="!userInfoService.isCustomer() && showParams">
       <ng-container *ngIf="showCommonParams === false; else close">
