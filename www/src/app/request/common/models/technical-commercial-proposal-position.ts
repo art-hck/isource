@@ -25,4 +25,5 @@ export class TechnicalCommercialProposalPosition {
   paymentTerms: string;
   isAnalog: boolean;
   manufacturer: string;
+  standard: string;
 }

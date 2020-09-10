@@ -106,6 +106,9 @@
           [gridRows]="gridRows"
           [positionCell]="true"
           [suppliers]="suppliers(proposals)"
+          [proposals]="proposals"
+          [proposalsByPos]="proposalsByPositions$ | async"
+          [showParams]="true"
         ></app-grid-contragents>
 
         <!-- procedure info -->
