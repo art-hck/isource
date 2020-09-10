@@ -12,6 +12,7 @@ import { getCurrencySymbol } from "@angular/common";
 export class GridCommonParametersComponent implements OnInit {
   @Input() proposal: TechnicalCommercialProposal;
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
+  @Input() showDocs = false;
   getCurrencySymbol = getCurrencySymbol;
 
   constructor(
