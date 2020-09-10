@@ -28,7 +28,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   canScrollRight: boolean;
   needUpdate: boolean;
   showCommonParams = false;
-  showDocs = new FormControl(false, null);
+  showDocsControl = new FormControl(false);
 
 
   constructor(private cd: ChangeDetectorRef,
