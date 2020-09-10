@@ -16,10 +16,10 @@
         </div>
         <div @sidebarHide *ngIf="view === 'list'" class="app-col app-col-aside detachable"></div>
       </div>
-      <ng-template #actionsTpl let-popoverDirection>
+      <ng-template #actionsTpl let-popoverDirection let-slave="slave">
         <div class="app-row app-align-items-center">
           <ng-container *ngIf="view === 'grid'">
-            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
+            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" [slave]="slave" *ngFor="let c of [form.get('positions')]">
             </uxg-checkbox>
             <uxg-popover #selectPopover>
               <button uxgButton uxgPopoverTrigger link icon>
@@ -183,7 +183,7 @@
       <div class="proposals-footer" [class.hidden]="(scrollPositionService.scroll$ | async) < actionsRef.offsetTop + actionsRef.offsetHeight"
            [class.overflow-visible]="viewPopover.last?.isOpen || selectPopoverRef.last?.isOpen">
         <div class="proposals-footer-body">
-          <ng-container *ngTemplateOutlet="actionsTpl; context: { $implicit: 'app-popover-content-top-left' }"></ng-container>
+          <ng-container *ngTemplateOutlet="actionsTpl; context: { $implicit: 'app-popover-content-top-left', slave: true}"></ng-container>
         </div>
       </div>
       </ng-container>
