@@ -24,6 +24,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Input() showParams = false;
+  @Output() editTechnicalCommercialProposal = new EventEmitter<TechnicalCommercialProposal>();
   canScrollLeft: boolean;
   canScrollRight: boolean;
   needUpdate: boolean;

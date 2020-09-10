@@ -31,45 +31,54 @@
         <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span></b></div>
     </ng-template>
   </div>
-<ng-container *ngIf="!showDocs">
-  <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
-    <div class="app-ghost-color">Базис самовывоза</div>
-    <div class="info-value">
-      {{ proposal.deliveryPickup }}
-    </div>
-  </ng-container>
-  <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
-    <div class="app-ghost-color">Стоимость поставки</div>
-    <div class="info-value" *ngIf="proposal.deliveryPrice; else included">
-      {{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}
-    </div>
-    <ng-template #included>
-      <div class="info-value">
-        Включена в стоимость
-      </div>
-    </ng-template>
-  </ng-container>
-  <ng-container *ngIf="proposal.deliveryAdditionalTerms">
-    <div class="app-ghost-color">Дополнительные условия поставки</div>
-    <div class="info-value">
-      {{ proposal.deliveryAdditionalTerms }}
-    </div>
-  </ng-container>
-  <ng-container *ngIf="proposal.warrantyConditions">
-    <div class="app-ghost-color">Гарантийные условия</div>
-    <div class="info-value">
-      {{ proposal.warrantyConditions }}
-    </div>
-  </ng-container>
-</ng-container>
-  <ng-container *ngIf="showDocs">
-  <div class="app-ghost-color">Документы предложения</div>
-  <ng-container *ngIf="proposal.documents.length; else noDocs">
-  <app-document-simple-list [gridable]="false" [enableUpload]="false" [size]="'s'" [documents]="proposal.documents">
-  </app-document-simple-list>
-  </ng-container>
-  <ng-template #noDocs>
-    Документы не были приложены
-  </ng-template>
+  <div class="delivery-block">
+    <ng-container *ngIf="!showDocs">
+      <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
+        <div class="app-ghost-color">Базис самовывоза</div>
+        <div class="info-value">
+          {{ proposal.deliveryPickup }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
+        <div class="app-ghost-color">Стоимость поставки</div>
+        <div class="info-value" *ngIf="proposal.deliveryPrice; else included">
+          {{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}
+        </div>
+        <ng-template #included>
+          <div class="info-value">
+            Включена в стоимость
+          </div>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="proposal.deliveryAdditionalTerms">
+        <div class="app-ghost-color">Дополнительные условия поставки</div>
+        <div class="info-value">
+          {{ proposal.deliveryAdditionalTerms }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="proposal.warrantyConditions">
+        <div class="app-ghost-color">Гарантийные условия</div>
+        <div class="info-value">
+          {{ proposal.warrantyConditions }}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showDocs">
+      <div class="app-ghost-color">Документы предложения</div>
+      <ng-container *ngIf="proposal.documents.length; else noDocs">
+        <app-document-simple-list [gridable]="false" [enableUpload]="false" [size]="'s'"
+                                  [documents]="proposal.documents">
+        </app-document-simple-list>
+      </ng-container>
+      <ng-template #noDocs>
+        Документы не были приложены
+      </ng-template>
+    </ng-container>
+  </div>
+  <ng-container *ngIf="!showDocs">
+    <button uxgButton iconText secondary (click)="edit(proposal)">
+      <uxg-icon shape="app-pen"></uxg-icon>
+      Редактировать
+    </button>
   </ng-container>
 </div>

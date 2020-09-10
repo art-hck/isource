@@ -84,6 +84,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   prolongModalPayload: Procedure;
   proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
   rollbackDuration = 10 * 60;
+  editingTCP: TechnicalCommercialProposal;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;

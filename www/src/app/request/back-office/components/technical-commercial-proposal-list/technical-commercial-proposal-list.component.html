@@ -109,6 +109,7 @@
           [proposals]="proposals"
           [proposalsByPos]="proposalsByPositions$ | async"
           [showParams]="true"
+          (editTechnicalCommercialProposal)="addContragentModal.open(); editingTCP = $event"
         ></app-grid-contragents>
 
         <!-- procedure info -->
@@ -279,6 +280,7 @@
           *ngIf="addContragentModal.state"
           [request]="request"
           [selectedContragents]="getContragents(proposals)"
+          [edit]="editingTCP"
           (close)="addContragentModal.close()">
         </technical-commercial-proposal-contragent-form>
       </uxg-modal>

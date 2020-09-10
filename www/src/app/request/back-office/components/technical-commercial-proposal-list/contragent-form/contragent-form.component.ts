@@ -14,6 +14,7 @@ import { DeliveryTypeLabels } from "../../../../common/dictionaries/delivery-typ
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { getCurrencySymbol } from "@angular/common";
 import Create = TechnicalCommercialProposals.Create;
+import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -23,6 +24,7 @@ import Create = TechnicalCommercialProposals.Create;
 export class TechnicalCommercialProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() selectedContragents: ContragentShortInfo[];
+  @Input() edit: TechnicalCommercialProposal;
   @Output() close = new EventEmitter();
   readonly deliveryType = DeliveryType;
   readonly deliveryTypeLabel = DeliveryTypeLabels;
@@ -42,14 +44,14 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
 
   ngOnInit() {
     this.form = this.fb.group({
-      supplier: [null, Validators.required],
-      files: [[]],
-      deliveryType: [this.deliveryType.INCLUDED],
-      deliveryAdditionalTerms: [''],
-      warrantyConditions: ['', Validators.required],
-      deliveryPrice: [''],
+      supplier: [this.edit?.supplier.shortName ?? null, Validators.required],
+      files: [this.edit?.documents ?? []],
+      deliveryType: [this.edit?.deliveryType ?? this.deliveryType.INCLUDED],
+      deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms ?? ''],
+      warrantyConditions: [this.edit?.warrantyConditions ?? '', Validators.required],
+      deliveryPrice: [this.edit?.deliveryPrice ?? ''],
       deliveryCurrency: [PositionCurrency.RUB],
-      deliveryPickup: ['']
+      deliveryPickup: [this.edit?.deliveryPickup ?? '']
     });
 
     this.form.valueChanges.subscribe(() => {
