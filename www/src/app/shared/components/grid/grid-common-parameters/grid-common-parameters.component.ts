@@ -14,7 +14,7 @@ export class GridCommonParametersComponent implements OnInit {
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Output() close = new EventEmitter();
   @Output() openEditModal = new EventEmitter<TechnicalCommercialProposal>();
-  @Input() showDocs = false;
+  @Input() showDocs: boolean;
   getCurrencySymbol = getCurrencySymbol;
 
   constructor(
