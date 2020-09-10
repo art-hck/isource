@@ -2,7 +2,7 @@ import { Action, createSelector, Selector, State, StateContext } from "@ngxs/sto
 import { Injectable } from "@angular/core";
 import { StateStatus } from "../../request/common/models/state-status";
 import { append, iif, patch, updateItem } from "@ngxs/store/operators";
-import { flatMap, map, take, tap } from "rxjs/operators";
+import { flatMap, take, tap } from "rxjs/operators";
 import { ChatItems } from "../actions/chat-items.actions";
 import { ContextsService } from "../services/contexts.service";
 import { ChatItem } from "../models/chat-item";
@@ -44,15 +44,8 @@ export class ChatItemsState {
     (items: ChatItem[]) => items.find(({ request }) => request.id === id)
   )
 
-  static request = (id: RequestListItem["id"]) => createSelector(
-    [ChatItemsState.item(id)], (item: ChatItem) => item?.request
-  )
-  static context = (id: RequestListItem["id"]) => createSelector(
-    [ChatItemsState.item(id)], (item: ChatItem) => item?.context
-  )
-
   static conversationId = (id: RequestListItem["id"]) => createSelector(
-    [ChatItemsState.request(id)], ({ conversation }: RequestListItem) => conversation?.externalId
+    [ChatItemsState.item(id)], ({ request }: ChatItem) => request?.conversation?.externalId
   )
 
   @Action([FetchItems, AppendItems])
@@ -62,10 +55,8 @@ export class ChatItemsState {
       setState(patch({ items: [], status: "fetching" as StateStatus } as Model));
     }
 
-    // Получаем контексты @TODO: пагинация
-    return this.contextService.get().pipe(
+    return this.contextService.get({ limit: pageSize, offset: startFrom }).pipe(
       take(1),
-      map(contexts => contexts.filter((c, i) => i >= startFrom && i < startFrom + pageSize)), // Эмуляция пагинации - УБРАТЬ!!!!
       flatMap(contexts => dispatch([
         // Записываем контексты в стейт
         new AppendContexts(contexts),
@@ -84,18 +75,18 @@ export class ChatItemsState {
     }
 
     return this.contextService.getRequests(role, startFrom, pageSize, filters, sort).pipe(
-      tap(({ entities }) => {
+      tap(({ entities: requests }) => {
         if (a instanceof FilterRequests) {
           // Очищаем items от старых заявок
           setState(patch({ items: getState().items.map(item => ({ ...item, request: null } as ChatItem)) }));
         }
 
-        entities.filter(({ context }) => !!context).forEach((request) => setState(patch({
+        requests.filter(({ context }) => !!context).forEach((request) => setState(patch({
           items: updateItem(({ context }) => context && context?.id === request.context?.externalId, patch({ request }))
         })));
 
         setState(patch({
-          items: append<ChatItem>(entities.filter(({ context }) => !context).map(request => ({ request })))
+          items: append<ChatItem>(requests.filter(({ context }) => !context).map(request => ({ request })))
         }));
 
         if (!(a instanceof FetchRequests)) {

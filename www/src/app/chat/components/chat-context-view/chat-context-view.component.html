@@ -1,32 +1,37 @@
 <div class="app-row im">
-  <ng-container *ngIf="request$ | async as request">
+  <ng-container *ngIf="item$ | async as item">
     <div class="app-col im-list">
 
       <!-- request info -->
       <div class="app-row app-align-items-center">
-        <h3 class="app-col">Заявка №{{request.number}}</h3>
+        <h3 class="app-col">Заявка №{{item.request.number}}</h3>
         <div>
-          <button uxgButton clear link [routerLink]="['/requests', role, request.id]">
+          <button uxgButton clear link [routerLink]="['/requests', role, item.request.id]">
             <uxg-icon shape="app-hamburger"></uxg-icon>
             <span>Описание</span>
           </button>
         </div>
       </div>
-      <div class="app-secondary-color">{{request.contragent.shortName}}</div>
+      <div class="app-secondary-color">{{item.request.contragent.shortName}}</div>
 
       <!-- position list -->
       <ul>
         <li class="search"><input [formControl]="search" uxgInput placeholder="Поиск по позициям и группам"/></li>
-        <li><a [routerLink]="['/im', request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Обсуждение заявки</a></li>
+        <li>
+          <a [routerLink]="['/im', item.request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+            <span class="app-col app-ellipsis">Обсуждение заявки</span>
+            <small *ngIf="item.context?.unreadCount as cnt">{{cnt}}</small>
+          </a>
+        </li>
         <li *ngFor="let subItem of subItems$ | async | subItemsFilter: search.value">
           <a
-            [routerLink]="['/im', request.id]"
+            [routerLink]="['/im', item.request.id]"
             [queryParams]="{positionId: subItem.position.id}"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{exact:true}"
             [ngClass]="asPosition(subItem.position).status"
           >
-            <span class="app-col app-ellipsis">[{{subItem.conversation?.id}}] {{subItem.position.name}}</span>
+            <span class="app-col app-ellipsis">{{subItem.position.name}}</span>
             <small *ngIf="subItem.conversation?.unreadCount as cnt">{{cnt}}</small>
           </a>
         </li>

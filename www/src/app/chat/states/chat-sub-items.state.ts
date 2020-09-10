@@ -16,6 +16,7 @@ import AppendConversation = ChatSubItems.AppendConversation;
 import IncrementUnread = ChatSubItems.IncrementUnread;
 import MarkAsRead = ChatMessages.MarkAsRead;
 import { increment } from "../../shared/state-operators/increment";
+import { ChatConversation } from "../models/chat-conversation";
 
 export interface MessagesStateModel {
   subItems: ChatSubItem[];
@@ -51,30 +52,28 @@ export class ChatSubItemsState {
     [ChatSubItemsState.subItem(id)], (subItem: ChatSubItem) => subItem.position.conversation.externalId
   )
 
-  @Action(Fetch)
+  static conversation = (id: ChatConversation["id"]) => createSelector(
+    [ChatSubItemsState.subItems], (subItems: ChatSubItem[]) => subItems
+      .find(({ conversation }) => conversation?.id === id).conversation
+  )
+
+  @Action(Fetch, { cancelUncompleted: true })
   fetchSubItems({ setState, dispatch }: Ctx, { role, request }: Fetch) {
     setState(patch({ subItems: [] } as Model));
     // Получаем конверсейшены только по текущему контексту
-
-    return this.conversationsService.get(/*request.context.externalId*/).pipe(
-      take(1),
-      map(conversations => conversations.map(conversation => ({ conversation }))),
-      tap((subItems: ChatSubItem[]) => setState(patch({ subItems  }))),
-      flatMap(() => dispatch(new FetchPositions(role, request))));
-
-    // if (request.context?.externalId) {
-    //   return this.service.get(request.context?.externalId).pipe(
-    //     take(1),
-    //     map(([{ conversations }]) => conversations.map(conversation => ({ conversation }))),
-    //     tap((subItems: ChatSubItem[]) => setState(patch({ subItems  }))),
-    //     flatMap(() => dispatch(new FetchPositions(role, request)))
-    //   );
-    // } else {
-    //   dispatch(new FetchPositions(role, request));
-    // }
+    if (request.context?.externalId) {
+      return this.service.get({ contextId: request.context?.externalId }).pipe(
+        take(1),
+        map(([{ conversations }]) => conversations.map(conversation => ({ conversation }))),
+        tap((subItems: ChatSubItem[]) => setState(patch({ subItems }))),
+        flatMap(() => dispatch(new FetchPositions(role, request)))
+      );
+    } else {
+      dispatch(new FetchPositions(role, request));
+    }
   }
 
-  @Action(FetchPositions)
+  @Action(FetchPositions, { cancelUncompleted: true })
   fetchPositions({ setState }: Ctx, { request, role }: FetchPositions) {
     return this.service.getRequestItems(request.id, role).pipe(tap(positions => {
       positions.forEach(position => {

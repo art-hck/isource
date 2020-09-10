@@ -11,6 +11,7 @@ import { debounceTime, filter, startWith, switchMap } from "rxjs/operators";
 import { ChatItem } from "../../models/chat-item";
 import FetchItems = ChatItems.FetchItems;
 import FilterRequests = ChatItems.FilterRequests;
+import AppendItems = ChatItems.AppendItems;
 
 @Component({
   styleUrls: ['./chat-view.component.scss'],
@@ -23,6 +24,7 @@ export class ChatViewComponent implements OnInit {
   @Select(ChatItemsState.status) status$: Observable<StateStatus>;
   readonly search = new FormControl();
   readonly pageSize = 25;
+  fullListLoaded = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +55,8 @@ export class ChatViewComponent implements OnInit {
   }
 
   append() {
-    this.store.dispatch(new ChatItems.AppendItems(this.userInfoService.getUserRole(), 25, this.pageSize));
+    const startFrom = this.store.selectSnapshot(ChatItemsState.items).length;
+    this.store.dispatch(new AppendItems(this.userInfoService.getUserRole(), startFrom, this.pageSize))
+      .subscribe(() => this.fullListLoaded = startFrom + this.pageSize > this.store.selectSnapshot(ChatItemsState.items).length);
   }
 }

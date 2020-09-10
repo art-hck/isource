@@ -2,11 +2,11 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Vie
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { ChatItemsState } from "../../states/chat-items.state";
-import { EMPTY, fromEvent, iif, merge, Observable, of, Subject } from "rxjs";
+import { combineLatest, EMPTY, fromEvent, iif, merge, Observable, of, Subject } from "rxjs";
 import { RequestListItem } from "../../../request/common/models/requests-list/requests-list-item";
 import { UserInfoService } from "../../../user/service/user-info.service";
-import { delayWhen, distinctUntilChanged, filter, flatMap, map, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
-import { ChatSubItem } from "../../models/chat-item";
+import { debounceTime, delayWhen, distinctUntilChanged, filter, flatMap, map, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { ChatItem, ChatSubItem } from "../../models/chat-item";
 import { ChatItems } from "../../actions/chat-items.actions";
 import { RequestPositionList } from "../../../request/common/models/request-position-list";
 import { RequestPosition } from "../../../request/common/models/request-position";
@@ -33,11 +33,9 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChildren('messageEl') messageElements: QueryList<ElementRef>;
   @Select(ChatSubItemsState.subItems) subItems$: Observable<ChatSubItem[]>;
   @Select(ChatMessagesState.messages) messages$: Observable<ChatMessage[]>;
-  request$: Observable<RequestListItem> = this.route.params.pipe(switchMap(
-    ({ requestId }) => this.store.select(ChatItemsState.request(requestId))
-  )).pipe(filter(r => !!r));
-
-  position$: Observable<RequestPositionList> = this.route.queryParams.pipe(switchMap(
+  readonly item$: Observable<ChatItem> = this.route.params.pipe(switchMap(({ requestId }) => this.store.select(ChatItemsState.item(requestId))));
+  readonly request$: Observable<RequestListItem> = this.item$.pipe(map(({ request }) => request), filter(r => !!r));
+  readonly position$: Observable<RequestPositionList> = this.route.queryParams.pipe(switchMap(
     ({ positionId }) => this.store.select(ChatSubItemsState.position(positionId))
   ));
 
@@ -67,21 +65,17 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.request$.pipe(
-      distinctUntilChanged((a, b) => a?.id === b?.id),
-      flatMap(request => this.store.dispatch(new ChatSubItems.Fetch(this.role, request))), // Загружаем позиции заявки
-      flatMap(() => this.position$.pipe(distinctUntilChanged((a, b) => a?.id === b?.id))), // Эмит перехода по любому чату
-      // Если position undefined, значит мы находимся в чате заявки => переключаем поток на request$
-      flatMap(position => position ? of(position) : this.request$.pipe(take(1))),
-      map(item => this.conversationId = item.conversation?.externalId),
-      tap(() => this.scrollDirty = false),
+    combineLatest([this.request$, this.position$]).pipe( // Эмитит при переходе по любому чату
+      debounceTime(0), // Фикс двойного эмита при переходе из позици другую заявку
+      map(([request, position]) => position ?? request),
+      distinctUntilChanged((a, b) => a?.id === b?.id), // Если id позиции/заявки чата не поменялся ничего не делаем
+      map(item => this.conversationId = item.conversation?.externalId), // Проставляем текущий conversation id
       filter(conversationId => !!conversationId), // Не загружаем сообщения, если conversation не создан
+      tap(() => this.scrollDirty = false), // Сбрасываем плавность скролла
       tap(conversationId => this.store.dispatch(new ChatMessages.Fetch(conversationId))), // Загружаем сообщения
-      tap(conversationId => this.messagesService.markSeen({ conversationId }).pipe( // Помечаем чат прочитанным
+      delayWhen(conversationId => this.messagesService.markSeen({ conversationId }).pipe( // Помечаем чат прочитанным
         take(1),
-        tap(({ updated }) => {
-          this.store.dispatch(new ChatMessages.MarkAsRead(this.route.snapshot.params.requestId, conversationId, updated));
-        }),
+        tap(({ read }) => this.store.dispatch(new ChatMessages.MarkAsRead(this.route.snapshot.params.requestId, conversationId, read))),
       )),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -90,6 +84,11 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     this.router.events.pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => this.store.dispatch(new ChatMessages.Clear()));
 
+    // Загружаем позици при смене заявки
+    this.request$.pipe(distinctUntilChanged((a, b) => a?.id === b?.id), takeUntil(this.destroy$)).subscribe(
+      request => this.store.dispatch(new ChatSubItems.Fetch(this.role, request)),
+    );
+
     this.listenConversations();
     this.listenMessages();
   }
@@ -97,10 +96,26 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   private listenMessages() {
     this.messagesService.onNew().pipe(
       // Дожидаемся пока у чата появится ин-фа о конверсейшене (сработает сразу если инфа уже есть)
-      delayWhen(({ conversation: { id } }) => merge(this.request$, this.position$).pipe(
-        filter((item) => item?.conversation?.externalId === id),
-        take(1)
-      )),
+      delayWhen(({ conversation: { id, context: { id: contextId } } }) => merge(
+          this.store.select(ChatSubItemsState.subItems),
+          this.store.select(ChatItemsState.items)
+        ).pipe(
+          filter((items) => items.some(value => {
+            const item: ChatItem = value?.request?.conversation && value;
+            const subItem: ChatSubItem = value?.conversation && value;
+
+            if (item) {
+              return item.request.conversation.externalId === id;
+            }
+
+            if (subItem) {
+              // Учитываем что в созданных конверсейшенах приходит полный объект контекста, при загрузке списка только его id
+              return (subItem.conversation.contextId ?? subItem.conversation.context.id) !== contextId || subItem.conversation?.id === id;
+            }
+          })),
+          take(1)
+        )
+      ),
       tap(({ conversation }) => {
         const { requestId = null, positionId = null } = { ...this.route.snapshot.params, ...this.route.snapshot.queryParams };
         // Если сообщение пришло в только что созданный чат проставляем conversationId
@@ -115,16 +130,15 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         // Инкрементим счетчик непрочитанных если сообщение пришло в неактивный чат
-        // if (!this.isOwn(message)) {
         if (this.conversationId !== conversation.id) {
           this.store.dispatch([
             new ChatItems.IncrementUnread(conversation.context),
             new ChatSubItems.IncrementUnread(conversation)
           ]);
         }
-        // }
       }),
-      // Добавляем сообщение в историю если чат активен
+
+      // Добавляем сообщение в чат, если чат активен
       filter(({ conversation: { id } }) => this.conversationId === id),
       tap(message => this.store.dispatch(new ChatMessages.New(message))),
 
@@ -134,7 +148,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
       delayWhen(() => document.visibilityState === 'visible' ? EMPTY :
         fromEvent(document, 'visibilitychange').pipe(filter(() => document.visibilityState === 'visible'))
       ),
-      flatMap(message => this.messagesService.markSeen({ messageId: message.id }).pipe(take(1))),
+      delayWhen(({ id }) => this.messagesService.markSeen({ messageId: id }).pipe(take(1))),
       takeUntil(this.destroy$)
     ).subscribe();
   }

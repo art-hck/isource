@@ -18,8 +18,8 @@ export class ContextsService {
 
   constructor(private ws: WsChatService, protected api: HttpClient) {}
 
-  get(contextId?: number) {
-    return this.ws.send<ChatContext[]>(`contexts.get`, { contextId });
+  get(payload?: {contextId?: number, offset?: number, limit?: number}) {
+    return this.ws.send<ChatContext[]>(`contexts.get`, payload);
   }
 
   create(serviceID: string, status: string, name: string, supervisorUid: string, items: [] ) {

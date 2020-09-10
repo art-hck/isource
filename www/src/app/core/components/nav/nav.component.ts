@@ -5,8 +5,9 @@ import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FeatureService } from "../../services/feature.service";
 import { MessagesService } from "../../../chat/services/messages.service";
-import { filter, takeUntil } from "rxjs/operators";
-import { BehaviorSubject, Subject } from "rxjs";
+import { filter, mapTo, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, fromEvent, iif, interval, merge, NEVER, Subject } from "rxjs";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-nav',
@@ -23,6 +24,7 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
 
   constructor(
+    public title: Title,
     public auth: AuthService,
     public user: UserInfoService,
     public cartStoreService: CartStoreService,
@@ -41,6 +43,20 @@ export class NavComponent implements OnInit, OnDestroy {
 
     this.messagesService.onMarkSeen().pipe(takeUntil(this.destroy$))
       .subscribe(({ updated }) => this.unreadMessagesCount$.next(this.unreadMessagesCount$.getValue() - updated));
+
+    let title;
+    const audio = new Audio();
+    audio.src = "/assets/new-message.mp3";
+    audio.load();
+    merge(
+      this.messagesService.onNew().pipe(mapTo(true)),
+      fromEvent(document, 'visibilitychange').pipe(mapTo(false))
+    ).pipe(
+      filter(newMessage => document.visibilityState === 'hidden' === newMessage),
+      tap((newMessage) => newMessage && audio.play()),
+      tap(() => this.title.setTitle(title = title ?? this.title.getTitle())),
+      switchMap(newMessage => iif(() => newMessage, interval(1000))),
+    ).subscribe((i) => this.title.setTitle(i % 2 ? title : "Новое сообщение!"));
   }
 
   get userBriefInfo(): string {
