@@ -10,7 +10,9 @@
         <ng-container *ngIf="showCommonParams">
           <app-grid-common-parameters
             [proposal]="getProposalBySupplier(supplier, proposals)"
-            [proposalsByPos]="proposalsByPos"></app-grid-common-parameters>
+            [proposalsByPos]="proposalsByPos"
+            (close)="showCommonParams = false"
+            (openEditModal)="editTkp.emit($event)"></app-grid-common-parameters>
         </ng-container>
       </div>
     </div>

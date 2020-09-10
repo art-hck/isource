@@ -84,6 +84,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   prolongModalPayload: Procedure;
   proposalModalData: TechnicalCommercialProposalByPosition["data"][number];
   rollbackDuration = 10 * 60;
+  editingTkp: TechnicalCommercialProposal;
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
@@ -252,6 +253,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
         .forEach(() => result.push(new Proposal(proposal)));
       return result;
     }, []);
+  }
+
+  setTkpValues($event) {
+    this.editingTkp = $event;
   }
 
   canRollback(position: RequestPosition): boolean {

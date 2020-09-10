@@ -109,6 +109,7 @@
           [proposals]="proposals"
           [proposalsByPos]="proposalsByPositions$ | async"
           [showParams]="true"
+          (editTkp)="addContragentModal.open(); setTkpValues($event)"
         ></app-grid-contragents>
 
         <!-- procedure info -->
@@ -279,6 +280,7 @@
           *ngIf="addContragentModal.state"
           [request]="request"
           [selectedContragents]="getContragents(proposals)"
+          [edit]="editingTkp"
           (close)="addContragentModal.close()">
         </technical-commercial-proposal-contragent-form>
       </uxg-modal>

@@ -31,7 +31,7 @@
         <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span></b></div>
     </ng-template>
   </div>
-
+<div class="delivery-block">
   <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
     <div class="app-ghost-color">Базис самовывоза</div>
     <div class="info-value">
@@ -61,4 +61,8 @@
       {{ proposal.warrantyConditions }}
     </div>
   </ng-container>
+</div>
+  <button uxgButton iconText secondary (click)="editTkpModal(proposal)">
+    <uxg-icon shape="app-pen"></uxg-icon> Редактировать
+  </button>
 </div>

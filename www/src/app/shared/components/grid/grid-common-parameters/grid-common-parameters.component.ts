@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
@@ -12,6 +12,8 @@ import { getCurrencySymbol } from "@angular/common";
 export class GridCommonParametersComponent implements OnInit {
   @Input() proposal: TechnicalCommercialProposal;
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
+  @Output() close = new EventEmitter();
+  @Output() openEditModal = new EventEmitter<TechnicalCommercialProposal>();
   getCurrencySymbol = getCurrencySymbol;
 
   constructor(
@@ -19,6 +21,11 @@ export class GridCommonParametersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  editTkpModal(proposal: TechnicalCommercialProposal) {
+    this.close.emit();
+    this.openEditModal.emit(proposal);
   }
 
 }
