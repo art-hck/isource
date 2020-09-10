@@ -26,19 +26,14 @@ export class ProposalHelperService {
   }
 
   isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    if (proposal.positions.length === positions.length) {
-      return proposal.positions.every(position => position.position.quantity === position.quantity);
-    } else {
-      return false;
-    }
+    return proposal.positions.length === positions.length && proposal.positions.every(
+      ({position, quantity}) => position.quantity === quantity);
   }
+
   isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    if (proposal.positions.length === positions.length) {
-      return proposal.positions.every(
-        position => moment(position.position.deliveryDate).isSameOrBefore(position.deliveryDate) || position.position.isDeliveryDateAsap);
-    } else {
-      return false;
-    }
+    return proposal.positions.length === positions.length && proposal.positions.every(
+      position => moment(position.position.deliveryDate).isSameOrBefore(position.deliveryDate)
+        || position.position.isDeliveryDateAsap);
   }
 
   getSummaryPrice(positions: TechnicalCommercialProposalPosition[]) {
