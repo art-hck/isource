@@ -98,7 +98,7 @@
       </ng-container>
     </ng-container>
   </div>
-  <div class="section">
+  <div class="section" *ngIf="this.edit?.documents.length">
     <app-documents-form-control
       formControlName="files"
       [invalid]="invalidDocControl"
