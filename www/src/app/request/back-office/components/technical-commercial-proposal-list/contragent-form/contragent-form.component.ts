@@ -15,6 +15,7 @@ import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels"
 import { getCurrencySymbol } from "@angular/common";
 import Create = TechnicalCommercialProposals.Create;
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
+import Update = TechnicalCommercialProposals.Update;
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -44,7 +45,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
 
   ngOnInit() {
     this.form = this.fb.group({
-      supplier: [this.edit?.supplier.shortName ?? null, Validators.required],
+      supplier: [this.edit?.supplier ?? null, Validators.required],
       files: [this.edit?.documents ?? []],
       deliveryType: [this.edit?.deliveryType ?? this.deliveryType.INCLUDED],
       deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms ?? ''],
@@ -76,7 +77,8 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   submit(publish = false) {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      this.store.dispatch(new Create(this.request.id, { ...this.form.value, files }, publish));
+      this.store.dispatch(this.edit ? new Update({...this.form.value, files }, publish)
+        : new Create(this.request.id, { ...this.form.value, files }, publish));
       this.close.emit();
     }
   }
