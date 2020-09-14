@@ -9,7 +9,6 @@ import { BaseUrlInterceptor } from "./interceptor/base-url-interceptor";
 import { UxgModule } from "uxg";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { MessageSharedModule } from "../message/message-shared.module";
 import { WelcomeComponent } from "../pages/welcome/welcome.component";
 import { ChatSharedModule } from "../chat/chat-shared.module";
 
@@ -18,7 +17,6 @@ import { ChatSharedModule } from "../chat/chat-shared.module";
     CommonModule,
     RouterModule,
     UxgModule,
-    MessageSharedModule,
     ChatSharedModule
   ],
   exports: [NavComponent, WelcomeComponent],
