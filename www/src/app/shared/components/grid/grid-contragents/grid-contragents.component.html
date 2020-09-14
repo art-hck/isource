@@ -13,7 +13,8 @@
             [proposalsByPos]="proposalsByPos"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"
-            [showDocs]="showDocsControl.value"></app-grid-common-parameters>
+            [showDocs]="showDocsControl.value"
+            (selectAll)="selectProposalBySupplier.emit($event)"></app-grid-common-parameters>
         </ng-container>
       </div>
     </div>

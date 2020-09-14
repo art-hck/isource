@@ -75,6 +75,12 @@
       </ng-template>
     </ng-container>
   </div>
+
+  <ng-container *ngIf="userInfoService.isCustomer()">
+    <button uxgButton secondary (click)="selectAll.emit(proposal); close.emit()">
+            Выбрать все
+          </button>
+  </ng-container>
   <!-- пока не разберемся как реализовать на бэке редактирование -->
 <!--  <ng-container *ngIf="!showDocs">-->
 <!--    <button uxgButton iconText secondary (click)="edit(proposal)">-->

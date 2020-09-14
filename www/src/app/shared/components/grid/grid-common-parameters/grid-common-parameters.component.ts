@@ -3,6 +3,7 @@ import { TechnicalCommercialProposal } from "../../../../request/common/models/t
 import { ProposalHelperService } from "../proposal-helper.service";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
+import { UserInfoService } from "../../../../user/service/user-info.service";
 
 @Component({
   selector: 'app-grid-common-parameters',
@@ -14,11 +15,13 @@ export class GridCommonParametersComponent implements OnInit {
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Output() close = new EventEmitter();
   @Output() openEditModal = new EventEmitter<TechnicalCommercialProposal>();
+  @Output() selectAll = new EventEmitter<TechnicalCommercialProposal>();
   @Input() showDocs: boolean;
   getCurrencySymbol = getCurrencySymbol;
 
   constructor(
-    public helper: ProposalHelperService
+    public helper: ProposalHelperService,
+    public userInfoService: UserInfoService
   ) { }
 
   ngOnInit(): void {

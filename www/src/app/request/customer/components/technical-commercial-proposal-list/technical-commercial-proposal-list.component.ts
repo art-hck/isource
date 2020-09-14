@@ -47,6 +47,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
   @ViewChild('sendToEditTab') sendToEditTabElRef: UxgTabTitleComponent;
   @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
+  @ViewChild('commonParamsScroll') private commonParamsScrollEl: ElementRef;
 
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
@@ -76,6 +77,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
+  commonParamsScroll: any;
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
@@ -210,6 +212,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.proposalsOnReview
       .filter(({ proposals }) => proposals.some((_proposal) => proposal.id === _proposal.id))
       .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
+  }
+
+  selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
+    technicalCommercialProposal.positions.forEach(proposal => this.selectProposal(new Proposal(proposal)));
   }
 
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
