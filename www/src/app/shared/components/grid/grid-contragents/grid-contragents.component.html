@@ -20,8 +20,8 @@
   <div class="app-row show-docs" *ngIf="showCommonParams">
     <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
   </div>
-    <!-- Временно скрыто от заказчика  и в матрице КП-->
-    <ng-container *ngIf="!userInfoService.isCustomer() && showParams">
+    <!-- Временно скрыто в матрице КП-->
+    <ng-container *ngIf="showParams">
       <ng-container *ngIf="showCommonParams === false; else close">
         <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
       </ng-container>

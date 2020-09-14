@@ -54,6 +54,9 @@
             [gridRows]="gridRows"
             [suppliers]="suppliers(proposals$ | async)"
             [positionCell]="true"
+            [showParams]="true"
+            [proposals]="proposals$ | async"
+            [proposalsByPos]="proposalsSentToReview$ | async"
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row
