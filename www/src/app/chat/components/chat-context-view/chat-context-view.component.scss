@@ -13,57 +13,58 @@
     background: uxg($theme, color-bg);
     max-width: 320px;
     padding: 24px 16px;
-  }
 
-  ul {
-    list-style: none;
+    ul {
+      list-style: none;
+    }
 
-    li a, li.search {
-      border-radius: uxg($theme, card-border-radius);
-      background: uxg($theme, color-default);
-      margin: 0 -12px;
-      padding: 12px;
-      color: uxg($theme, color-font-primary);
-      display: flex;
-      align-items: center;
+    & > ul {
+      li a, li.search {
+        border-radius: uxg($theme, card-border-radius);
+        background: uxg($theme, color-default);
+        margin: 0 -12px;
+        padding: 12px;
+        color: uxg($theme, color-font-primary);
+        display: flex;
+        align-items: center;
 
-      & small {
-        background: uxg($theme, color-primary);
-        border-radius: uxg($theme, counter-border-radius);
-        color: uxg($theme, color-bg);
-        text-align: center;
-        padding: 2px 5px;
-        min-width: 20px;
-      }
+        & small {
+          background: uxg($theme, color-primary);
+          border-radius: uxg($theme, counter-border-radius);
+          color: uxg($theme, color-bg);
+          text-align: center;
+          padding: 2px 5px;
+          min-width: 20px;
+        }
 
-      @each $status, $color in $statuses {
-        &.#{$status} {
-          border-left: uxg($theme, card-border-radius) $color solid;
+        @each $status, $color in $statuses {
+          &.#{$status} {
+            border-left: uxg($theme, card-border-radius) $color solid;
 
-          &.active {
-            background: $color;
+            &.active {
+              background: $color;
+            }
+          }
+        }
+
+        &.active {
+          background: uxg($theme, color-primary);
+          color: uxg($theme, color-bg);
+
+          small {
+            background: none;
           }
         }
       }
 
-      &.active {
-        background: uxg($theme, color-primary);
-        color: uxg($theme, color-bg);
+      & > li:first-child {
+        margin-top: 24px;
+      }
 
-        small {
-          background: none;
-        }
+      li {
+        margin-top: 4px;
       }
     }
-
-    li:first-child {
-      margin-top: 24px;
-    }
-
-    li:not(:last-child) {
-      margin-bottom: 4px;
-    }
-
   }
 
   &-info {

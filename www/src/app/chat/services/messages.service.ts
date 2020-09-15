@@ -26,7 +26,7 @@ export class MessagesService {
   }
 
   markSeen(data: { conversationId?: number, messageId?: number }) {
-    return this.ws.send<{ updated: number }>(`messages.markseen`, data);
+    return this.ws.send<{ updated: number, read: number }>(`messages.markseen`, data);
   }
 
   onNew(conversationId?: ChatConversation["id"]) {

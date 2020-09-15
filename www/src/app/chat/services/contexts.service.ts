@@ -18,8 +18,8 @@ export class ContextsService {
 
   constructor(private ws: WsChatService, protected api: HttpClient) {}
 
-  get(contextId?: number) {
-    return this.ws.send<ChatContext[]>(`contexts.get`, { contextId });
+  get(payload?: {contextId?: number, offset?: number, limit?: number}) {
+    return this.ws.send<ChatContext[]>(`contexts.get`, payload);
   }
 
   create(serviceID: string, status: string, name: string, supervisorUid: string, items: [] ) {
@@ -46,12 +46,12 @@ export class ContextsService {
     this.ws.send(`contexts.removeItems`, { contextId, items });
   }
 
-  getRequests(role, startFrom, pageSize, filters, sort) {
+  getRequests(role, startFrom, pageSize, filters?, sort?) {
     return this.api.post<Page<RequestListItem>>(`chat/${role}/requests`, { startFrom, pageSize, filters, sort });
   }
 
   getRequestItems(id: Uuid, role): Observable<RequestPositionList[]> {
-    const url = `requests/${role}/${id}/positions`;
+    const url = `chat/${role}/requests/${id}/positions`;
     return this.api.post<RequestPositionList[]>(url, {}).pipe(
       map((data: RequestPositionList[]) => {
         return data.map(function recursiveMapPositionList(item: RequestPositionList) {

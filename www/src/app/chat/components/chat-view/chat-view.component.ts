@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
@@ -11,6 +11,7 @@ import { debounceTime, filter, startWith, switchMap } from "rxjs/operators";
 import { ChatItem } from "../../models/chat-item";
 import FetchItems = ChatItems.FetchItems;
 import FilterRequests = ChatItems.FilterRequests;
+import AppendItems = ChatItems.AppendItems;
 
 @Component({
   styleUrls: ['./chat-view.component.scss'],
@@ -22,12 +23,14 @@ export class ChatViewComponent implements OnInit {
   @Select(ChatItemsState.items) items$: Observable<ChatItem[]>;
   @Select(ChatItemsState.status) status$: Observable<StateStatus>;
   readonly search = new FormControl();
-  readonly pageSize = 25;
+  readonly pageSize = 50;
+  fullListLoaded = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    private cd: ChangeDetectorRef,
     private userInfoService: UserInfoService) {
   }
 
@@ -39,7 +42,7 @@ export class ChatViewComponent implements OnInit {
       );
     });
 
-    this.store.dispatch(new FetchItems(this.userInfoService.getUserRole(), 0, this.pageSize));
+    this.dispatch(FetchItems);
 
     // Редирект на первую заявку если не выбрано
     this.router.events.pipe(
@@ -48,11 +51,15 @@ export class ChatViewComponent implements OnInit {
       switchMap(() => this.items$.pipe(filter(items => items?.length > 0))),
       filter(() => !this.route.firstChild?.snapshot.params.requestId),
     ).subscribe(([{ request }]) => {
-      this.router.navigate(['.', request.id], {relativeTo: this.route});
+      this.router.navigate(['.', request.id], { relativeTo: this.route, skipLocationChange: true });
     });
   }
 
-  append() {
-    this.store.dispatch(new ChatItems.AppendItems(this.userInfoService.getUserRole(), 25, this.pageSize));
+  dispatch(action: typeof AppendItems | typeof FetchItems = AppendItems) {
+    const startFrom = this.store.selectSnapshot(ChatItemsState.items).length;
+    this.store.dispatch(new action(this.userInfoService.getUserRole(), startFrom, this.pageSize)).subscribe(() => {
+      this.fullListLoaded = startFrom + this.pageSize > this.store.selectSnapshot(ChatItemsState.items).length;
+      this.cd.detectChanges();
+    });
   }
 }

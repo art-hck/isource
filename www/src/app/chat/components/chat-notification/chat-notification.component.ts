@@ -30,8 +30,8 @@ export class ChatNotificationComponent {
   ) {
   }
 
-  navigateToContext(id: ChatContext["id"]) {
-    this.contextsService.get(id).pipe(take(1), tap(() => this.close$.next()))
+  navigateToContext(contextId: ChatContext["id"]) {
+    this.contextsService.get({ contextId }).pipe(take(1), tap(() => this.close$.next()))
       .subscribe(([c]) => this.router.navigate(['/im', JSON.parse(c.items[0].data).contextId]));
   }
 }

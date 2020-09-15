@@ -1,9 +1,9 @@
-import {Uuid} from "../../../../cart/models/uuid";
-import {StatusInfo} from "./status-info";
-import {DeliveryInfo} from "./delivery-info";
+import { Uuid } from "../../../../cart/models/uuid";
+import { StatusInfo } from "./status-info";
+import { DeliveryInfo } from "./delivery-info";
 import { Contragent } from "../../../../core/models/contragent";
-import { Conversation } from "../../../../message/models/conversation";
-import { Context } from "../../../../message/models/context";
+import { ChatConversation } from "../../../../chat/models/chat-conversation";
+import { ChatContext } from "../../../../chat/models/chat-context";
 
 export class RequestListItem {
   id: Uuid;
@@ -15,6 +15,6 @@ export class RequestListItem {
   comment?: string;
   contragent?: Contragent;
   publishedDate?: Date;
-  conversation?: { id: Uuid, externalId: Conversation["id"], unreadCount?: number };
-  context?: { id: Uuid, externalId: Context["id"], unreadCount?: number };
+  conversation?: { id: Uuid, externalId: ChatConversation["id"], unreadCount?: number };
+  context?: { id: Uuid, externalId: ChatContext["id"], unreadCount?: number };
 }
