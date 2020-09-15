@@ -36,7 +36,7 @@ export class ProposalHelperService {
 
   isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
     return proposal.positions.every(
-      position => moment(position.position.deliveryDate).isSameOrBefore(position.deliveryDate)
+      position => moment(position.deliveryDate).isSameOrBefore(moment(position.position.deliveryDate))
         || position.position.isDeliveryDateAsap);
   }
 
