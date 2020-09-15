@@ -9,6 +9,15 @@
     </ng-container>
     <ng-template #positionsPriceInfo>
       <div class="app-success-color"
+           *ngIf="helper.isPositionsValid(proposalsByPos, proposal); else positionsInvalid">
+        Предложены все позиции
+      </div>
+      <ng-template #positionsInvalid>
+        <div class="app-error-color">
+          Предложены не все позиции
+        </div>
+      </ng-template>
+      <div class="app-success-color"
            *ngIf="helper.isQuantityPositionsValid(proposalsByPos, proposal); else quantityInvalid">
         Все позиции в нужном количестве
       </div>

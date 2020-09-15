@@ -43,7 +43,7 @@ const keycloakService = new KeycloakService();
   providers: [
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    // { provide: ErrorHandler, useClass: SentryErrorHandler },
     { provide: KeycloakService, useValue: keycloakService }
   ],
   entryComponents: [AppComponent]

@@ -25,13 +25,17 @@ export class ProposalHelperService {
     return position.quantity === quantity;
   }
 
+  isPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    return proposal.positions.length === positions.length;
+  }
+
   isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.length === positions.length && proposal.positions.every(
+    return proposal.positions.every(
       ({position, quantity}) => position.quantity === quantity);
   }
 
   isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.length === positions.length && proposal.positions.every(
+    return proposal.positions.every(
       position => moment(position.position.deliveryDate).isSameOrBefore(position.deliveryDate)
         || position.position.isDeliveryDateAsap);
   }
