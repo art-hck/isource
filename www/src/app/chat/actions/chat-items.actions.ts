@@ -19,6 +19,7 @@ export namespace ChatItems {
 
   export class FetchItems extends FetchRequests {
     static readonly type = '[ChatItems] FetchItems';
+    startFrom = 0;
     public sort = { orderBy: "chatContexts", sortDirection: "ASC" };
   }
 

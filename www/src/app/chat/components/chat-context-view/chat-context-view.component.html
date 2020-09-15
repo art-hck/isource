@@ -14,6 +14,7 @@
       </div>
       <div class="app-secondary-color">{{item.request.contragent.shortName}}</div>
     </ng-container>
+
     <!-- position list -->
     <ul>
       <li class="search"><input [formControl]="search" uxgInput placeholder="Поиск по позициям и группам"/></li>
@@ -30,7 +31,7 @@
       <ng-template #subItemTpl let-subItem>
         <li>
           <a
-            [routerLink]="['/im', subItem.position.request?.id]"
+            [routerLink]="['/im', subItem.position.request?.id || subItem.position.requestId]"
             [queryParams]="{positionId: subItem.position.id}"
             [routerLinkActive]="'active'"
             [routerLinkActiveOptions]="{exact:true}"
@@ -102,4 +103,3 @@
     <span class="spinner spinner-md"></span>
   </div>
 </ng-template>
-
