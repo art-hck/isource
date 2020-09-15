@@ -23,6 +23,7 @@ import { ChatAttachment } from "../../models/chat-attachment";
 import { ChatMessages } from "../../actions/chat-messages.actions";
 import { ChatSubItems } from "../../actions/chat-sub-items.actions";
 import { FormControl } from "@angular/forms";
+  import { StateStatus } from "../../../request/common/models/state-status";
 
 @Component({
   styleUrls: ['./chat-context-view.component.scss'],
@@ -32,9 +33,10 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('messagesContainer') messagesContainer: ElementRef;
   @ViewChildren('messageEl') messageElements: QueryList<ElementRef>;
   @Select(ChatSubItemsState.subItems) subItems$: Observable<ChatSubItem[]>;
+  @Select(ChatSubItemsState.status) subItemsStatus$: Observable<StateStatus>;
   @Select(ChatMessagesState.messages) messages$: Observable<ChatMessage[]>;
   readonly item$: Observable<ChatItem> = this.route.params.pipe(switchMap(({ requestId }) => this.store.select(ChatItemsState.item(requestId))));
-  readonly request$: Observable<RequestListItem> = this.item$.pipe(map(({ request }) => request), filter(r => !!r));
+  readonly request$: Observable<RequestListItem> = this.item$.pipe(filter(item => !!item?.request), map(({ request }) => request));
   readonly position$: Observable<RequestPositionList> = this.route.queryParams.pipe(switchMap(
     ({ positionId }) => this.store.select(ChatSubItemsState.position(positionId))
   ));
@@ -65,7 +67,14 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit(): void {
+    this.item$.pipe(filter(item => !item), takeUntil(this.destroy$)).subscribe(data => {
+      if (!data) {
+        this.store.dispatch(new ChatItems.FetchCurrent(this.userInfoService.getUserRole(), this.route.snapshot.params.requestId));
+      }
+    });
+
     combineLatest([this.request$, this.position$]).pipe( // Эмитит при переходе по любому чату
+      delayWhen(() => this.subItemsStatus$.pipe(filter(v => v === 'received'))),
       debounceTime(0), // Фикс двойного эмита при переходе из позици другую заявку
       map(([request, position]) => position ?? request),
       distinctUntilChanged((a, b) => a?.id === b?.id), // Если id позиции/заявки чата не поменялся ничего не делаем
@@ -133,9 +142,11 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.conversationId !== conversation.id) {
           this.store.dispatch([
             new ChatItems.IncrementUnread(conversation.context),
-            new ChatSubItems.IncrementUnread(conversation)
+            new ChatSubItems.IncrementUnread(conversation.id)
           ]);
         }
+
+        this.store.dispatch(new ChatSubItems.MoveToTop(conversation.id)); // Поднимаем чат наверх
       }),
 
       // Добавляем сообщение в чат, если чат активен
@@ -196,6 +207,10 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
       ).pipe(map(({ externalId }) => externalId), take(1)),
       of(this.conversationId)
     ).subscribe((convId) => this.messagesService.send(text, convId, attachments.map(({ id }) => id)));
+  }
+
+  subItemsByGroup(id: RequestGroup["id"]): ChatSubItem[] {
+    return this.store.selectSnapshot(ChatSubItemsState.subItemsByGroup(id));
   }
 
   ngOnDestroy() {

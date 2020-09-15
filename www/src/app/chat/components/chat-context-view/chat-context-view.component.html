@@ -1,8 +1,8 @@
 <div class="app-row im">
-  <ng-container *ngIf="item$ | async as item">
-    <div class="app-col im-list">
+  <div class="app-col im-list">
 
-      <!-- request info -->
+    <!-- request info -->
+    <ng-container *ngIf="item$ | async as item">
       <div class="app-row app-align-items-center">
         <h3 class="app-col">Заявка №{{item.request.number}}</h3>
         <div>
@@ -13,31 +13,42 @@
         </div>
       </div>
       <div class="app-secondary-color">{{item.request.contragent.shortName}}</div>
+    </ng-container>
+    <!-- position list -->
+    <ul>
+      <li class="search"><input [formControl]="search" uxgInput placeholder="Поиск по позициям и группам"/></li>
+      <li *ngIf="item$ | async as item">
+        <a [routerLink]="['/im', item.request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+          <span class="app-col app-ellipsis">Обсуждение заявки</span>
+          <small *ngIf="item.context?.unreadCount as cnt">{{cnt}}</small>
+        </a>
+      </li>
+      <ng-container *ngFor="let subItem of subItems$ | async | subItemsFilter: search.value">
+        <ng-container *ngTemplateOutlet="subItemTpl; context: {$implicit: subItem}"></ng-container>
+      </ng-container>
 
-      <!-- position list -->
-      <ul>
-        <li class="search"><input [formControl]="search" uxgInput placeholder="Поиск по позициям и группам"/></li>
+      <ng-template #subItemTpl let-subItem>
         <li>
-          <a [routerLink]="['/im', item.request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <span class="app-col app-ellipsis">Обсуждение заявки</span>
-            <small *ngIf="item.context?.unreadCount as cnt">{{cnt}}</small>
-          </a>
-        </li>
-        <li *ngFor="let subItem of subItems$ | async | subItemsFilter: search.value">
           <a
-            [routerLink]="['/im', item.request.id]"
+            [routerLink]="['/im', subItem.position.request?.id]"
             [queryParams]="{positionId: subItem.position.id}"
-            routerLinkActive="active"
+            [routerLinkActive]="'active'"
             [routerLinkActiveOptions]="{exact:true}"
             [ngClass]="asPosition(subItem.position).status"
           >
             <span class="app-col app-ellipsis">{{subItem.position.name}}</span>
             <small *ngIf="subItem.conversation?.unreadCount as cnt">{{cnt}}</small>
           </a>
+
+          <ul *ngIf="subItemsByGroup(subItem.position.id) as subItems">
+            <li *ngFor="let subItem of subItems">
+              <ng-container *ngTemplateOutlet="subItemTpl; context: {$implicit: subItem}"></ng-container>
+            </li>
+          </ul>
         </li>
-      </ul>
-    </div>
-  </ng-container>
+      </ng-template>
+    </ul>
+  </div>
 
   <!-- chat -->
   <div class="app-col app-row app-flex-column no-wrap">
