@@ -76,7 +76,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
-  commonParamsScroll: any;
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
