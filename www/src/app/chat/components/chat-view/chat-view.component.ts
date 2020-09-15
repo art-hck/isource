@@ -23,7 +23,7 @@ export class ChatViewComponent implements OnInit {
   @Select(ChatItemsState.items) items$: Observable<ChatItem[]>;
   @Select(ChatItemsState.status) status$: Observable<StateStatus>;
   readonly search = new FormControl();
-  readonly pageSize = 5;
+  readonly pageSize = 50;
   fullListLoaded = false;
 
   constructor(
