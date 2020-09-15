@@ -51,12 +51,13 @@ export class ChatViewComponent implements OnInit {
       switchMap(() => this.items$.pipe(filter(items => items?.length > 0))),
       filter(() => !this.route.firstChild?.snapshot.params.requestId),
     ).subscribe(([{ request }]) => {
-      this.router.navigate(['.', request.id], { relativeTo: this.route, skipLocationChange: true });
+      this.router.navigate(['.', request.id], { relativeTo: this.route, replaceUrl: true });
     });
   }
 
   dispatch(action: typeof AppendItems | typeof FetchItems = AppendItems) {
     const startFrom = this.store.selectSnapshot(ChatItemsState.items).length;
+
     this.store.dispatch(new action(this.userInfoService.getUserRole(), startFrom, this.pageSize)).subscribe(() => {
       this.fullListLoaded = startFrom + this.pageSize > this.store.selectSnapshot(ChatItemsState.items).length;
       this.cd.detectChanges();
