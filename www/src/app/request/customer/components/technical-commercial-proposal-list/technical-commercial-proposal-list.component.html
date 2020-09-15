@@ -57,6 +57,7 @@
             [showParams]="true"
             [proposals]="proposals$ | async"
             [proposalsByPos]="proposalsSentToReview$ | async"
+            (selectProposalBySupplier) = selectSupplierProposal($event)
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row

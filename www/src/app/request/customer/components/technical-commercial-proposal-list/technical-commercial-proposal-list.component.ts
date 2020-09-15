@@ -212,6 +212,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
+  selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
+    technicalCommercialProposal.positions.forEach(proposal => this.selectProposal(new Proposal(proposal)));
+  }
+
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
     return proposals.reduce((suppliers: GridSupplier[], proposal) => {
       [false, true]
