@@ -57,7 +57,7 @@ export const PositionStatusesGroupsInfo: PositionStatusesGroupInfo[] = [
   },
   {
     url: "technical-commercial-proposals",
-    label: "Технико-коммерческие предложения",
+    label: "Технико-коммерч. предложения",
     statuses: PositionStatusGroups.TECHNICAL_COMMERCIAL_PROPOSALS,
     positions: [],
     shortName: "ТКП",
