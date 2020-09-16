@@ -67,10 +67,8 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.item$.pipe(filter(item => !item), takeUntil(this.destroy$)).subscribe(data => {
-      if (!data) {
-        this.store.dispatch(new ChatItems.FetchCurrent(this.userInfoService.getUserRole(), this.route.snapshot.params.requestId));
-      }
+    this.item$.pipe(debounceTime(0), filter(item => !item), takeUntil(this.destroy$)).subscribe(() => {
+      this.store.dispatch(new ChatItems.FetchCurrent(this.userInfoService.getUserRole(), this.route.snapshot.params.requestId));
     });
 
     combineLatest([this.request$, this.position$]).pipe( // Эмитит при переходе по любому чату

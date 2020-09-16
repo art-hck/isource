@@ -54,6 +54,7 @@ export class ChatItemsState {
   @Action(FetchCurrent)
   fetchCurrent({ setState }: Ctx, { role, id }: FetchCurrent | any) {
     setState(patch<Model>({ current: null }));
+
     return this.contextService.getRequests(role, 0, 1, { requestIds: [id] }).pipe(
       switchMap(({ entities: [request] }) => {
         const contextId = request.context?.externalId;
@@ -68,6 +69,7 @@ export class ChatItemsState {
   @Action([FetchItems, AppendItems])
   fetchItems({ setState, getState, dispatch }: Ctx, a: FetchItems) {
     const { role, startFrom, pageSize, filters, sort } = a;
+
     if (a instanceof FetchItems) {
       setState(patch({ items: [], status: "fetching" as StateStatus } as Model));
     }
@@ -87,6 +89,8 @@ export class ChatItemsState {
   @Action([FetchRequests, FilterRequests, UpdateRequest])
   fetchRequests({ setState, getState, dispatch }: Ctx, a: FetchRequests & FilterRequests) {
     const { role, startFrom, pageSize, filters, sort } = a;
+    setState(patch<Model>({ current: null }));
+
     if (!(a instanceof FetchRequests)) {
       setState(patch({ status: "updating" as StateStatus }));
     }
