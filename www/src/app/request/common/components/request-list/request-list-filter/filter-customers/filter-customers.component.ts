@@ -38,7 +38,10 @@ export class FilterCustomersComponent implements ControlValueAccessor {
   }
 
   onCustomerSearchInputChange(value: string): void {
-    this.customerSearchValue = value;
+    if (value.length > 2) {
+      this.showAll = true;
+      this.customerSearchValue = value;
+    }
   }
 
   getCustomerSearchInputValue(): string {
