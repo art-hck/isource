@@ -87,7 +87,10 @@ export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.store.dispatch(action).pipe(
-      finalize(() => this.isLoading = false),
+      finalize(() => {
+        this.isLoading = false;
+        this.selectedTechnicalCommercialProposalsPositions = [];
+      }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
