@@ -288,12 +288,7 @@
       </uxg-modal>
 
       <uxg-modal #addContragentModal size="m">
-        <ng-container *ngIf="!editingTCP else edit">
-          <h2><b>Добавить столбик контрагента</b></h2>
-        </ng-container>
-        <ng-template #edit>
-          <h2><b>Редактировать столбик контрагента</b></h2>
-        </ng-template>
+          <h2><b>{{ editingTCP ? 'Редактировать' : 'Добавить' }} столбик контрагента</b></h2>
         <ng-container *ngIf="addContragentModal.state">
           <technical-commercial-proposal-contragent-form
             [request]="request"

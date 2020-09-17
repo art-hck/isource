@@ -113,8 +113,7 @@
     <div class="app-row app-justify-content-end">
       <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
       <button uxgButton lg primary>
-        <ng-container *ngIf="edit; else add">Сохранить</ng-container>
-        <ng-template #add>Добавить</ng-template>
+        {{ edit ? 'Сохранить' : 'Добавить' }}
       </button>
     </div>
   </div>
