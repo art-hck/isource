@@ -28,6 +28,10 @@ export class TechnicalCommercialProposalHelperService {
       ' - Количество меньше нужного';
   }
 
+  getSummaryPrice(positions: TechnicalCommercialProposalPosition[]): number {
+    return positions.map(position => position.priceWithVat * position.quantity).reduce((sum, priceWithVat) => sum + priceWithVat, 0);
+  }
+
   chooseBy(type: "date" | "price", data: ProposalByPositionData): TechnicalCommercialProposalPosition {
     return data.reduce((prev, curr) => {
       const prevValid = prev && this.isValid(prev.proposalPosition);

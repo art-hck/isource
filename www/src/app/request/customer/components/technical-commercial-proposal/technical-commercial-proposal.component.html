@@ -137,8 +137,16 @@
 
       <div class="app-row app-align-items-center">
         <div class="app-col app-secondary-color">
-          Все цены указаны без НДС. Вы можете отклонить все предложения по этим позициям и не получать другие <br>
-          предложения по ним от этого поставщика
+          Все цены указаны <b>без НДС</b>. Вы можете оклонить все предложения по этой <br>
+          позиции и не получать другие предложения по ней от этих поставщиков
+        </div>
+
+        <div class="app-col app-col-auto total-price-block">
+          <div class="app-ghost-color">Общая сумма без НДС</div>
+          <div class="total-price">
+            <b>{{ helper.getSummaryPrice(proposal.positions) | number: "1.0-2"}}
+            <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
+          </div>
         </div>
 
         <div class="app-row app-col app-col-auto app-align-items-center">

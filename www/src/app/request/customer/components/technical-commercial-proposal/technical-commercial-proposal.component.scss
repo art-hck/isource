@@ -48,6 +48,21 @@ hr {
   flex-basis: 40px;
 }
 
+.total-price-block {
+  padding-right: 50px;
+  line-height: 1.2;
+
+  & .total-price {
+    font-size: 17px;
+    font-weight: bold;
+  }
+}
+
+.conditions-info {
+  padding-top: 15px;
+  display: block;
+}
+
 .position-list {
   padding-bottom: 15px;
 
