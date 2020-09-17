@@ -29,7 +29,7 @@ import { TechnicalCommercialProposalParametersFormComponent } from './components
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestListComponent } from './components/request-list/request-list.component';
-import {CommercialProposalState} from "./states/commercial-proposal.state";
+import { CommercialProposalState } from "./states/commercial-proposal.state";
 import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
 import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
 import { ProcedureComponent } from './components/procedure/procedure.component';
@@ -37,6 +37,8 @@ import { ProcedureGridComponent } from './components/procedure-grid/procedure-gr
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureProlongateComponent } from "./components/procedure-prolongate/procedure-prolongate.component";
 import { ProcedureViewComponent } from './components/procedure-view/procedure-view.component';
+import { TechnicalCommercialProposalGroupViewComponent } from './components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component';
+import { TechnicalCommercialProposalGroupFormComponent } from './components/technical-commercial-proposal-group-form/technical-commercial-proposal-group-form.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { ProcedureViewComponent } from './components/procedure-view/procedure-vi
     ProcedureComponent,
     ProcedureGridComponent,
     ProcedureViewComponent,
+    TechnicalCommercialProposalGroupViewComponent,
+    TechnicalCommercialProposalGroupFormComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,

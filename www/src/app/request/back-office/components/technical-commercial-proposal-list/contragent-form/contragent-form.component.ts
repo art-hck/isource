@@ -6,13 +6,13 @@ import { ContragentService } from "../../../../../contragent/services/contragent
 import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
 import { Request } from "../../../../common/models/request";
-import CreateContragent = TechnicalCommercialProposals.CreateContragent;
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../../../../common/enum/position-currency";
 import { DeliveryType } from "../../../enum/delivery-type";
 import { DeliveryTypeLabels } from "../../../../common/dictionaries/delivery-type-labels";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { getCurrencySymbol } from "@angular/common";
+import { Uuid } from "../../../../../cart/models/uuid";
 import Create = TechnicalCommercialProposals.Create;
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import Update = TechnicalCommercialProposals.Update;
@@ -25,6 +25,7 @@ import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 })
 export class TechnicalCommercialProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
+  @Input() groupId: Uuid;
   @Input() selectedContragents: ContragentShortInfo[];
   @Input() edit: TechnicalCommercialProposal;
   @Output() close = new EventEmitter();
@@ -83,7 +84,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
       this.store.dispatch(this.edit ? new UpdateParams(this.request.id, {...this.form.value, files })
-        : new Create(this.request.id, { ...this.form.value, files }, publish));
+        : new Create(this.request.id, this.groupId, { ...this.form.value, files }, publish));
       this.close.emit();
     }
   }

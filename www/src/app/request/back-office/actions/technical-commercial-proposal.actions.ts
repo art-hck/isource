@@ -9,21 +9,21 @@ export namespace TechnicalCommercialProposals {
   export class Fetch {
     static readonly type = '[Technical Commercial Proposals Backoffice] Fetch';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
   // Получить список доступных к добавлению позиций ТКП
   export class FetchAvailablePositions {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchAvailablePositions';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
   // Получить список доступных к процедур из ТКП
   export class FetchProcedures {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchProcedures';
 
-    constructor(public requestId: Uuid, public update = false) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public update = false) {}
   }
 
   // Обновить список доступных к процедур из ТКП
@@ -32,7 +32,7 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Backoffice] UpdateProcedures';
     update = true;
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
   // Создать ТКП
@@ -41,6 +41,7 @@ export namespace TechnicalCommercialProposals {
 
     constructor(
       public requestId: Uuid,
+      public groupId: Uuid,
       public payload: Partial<TechnicalCommercialProposal>,
       public publish: boolean
     ) {}
@@ -84,21 +85,21 @@ export namespace TechnicalCommercialProposals {
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
 
-    constructor(public requestId: Uuid, public files: File[]) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public files: File[]) {}
   }
 
   // Скачать шаблон
   export class DownloadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadTemplate';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
   // Скачать аналитическую справку
   export class DownloadAnalyticalReport {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadAnalyticalReport';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
   // Создать пустое ТКП (только контрагент)
@@ -108,6 +109,7 @@ export namespace TechnicalCommercialProposals {
 
     constructor(
       public requestId: Uuid,
+      public groupId: Uuid,
       public payload: Partial<TechnicalCommercialProposal> & {supplier: ContragentShortInfo}
     ) {}
   }
