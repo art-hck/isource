@@ -22,7 +22,7 @@
     <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
   </div>
     <!-- Временно скрыто в матрице КП-->
-    <ng-container *ngIf="showParams">
+    <ng-container *ngIf="showParams && suppliers.length">
       <ng-container *ngIf="showCommonParams === false; else close">
         <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
       </ng-container>
