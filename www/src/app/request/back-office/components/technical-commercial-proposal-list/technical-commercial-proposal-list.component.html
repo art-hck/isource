@@ -5,7 +5,7 @@
       <div class="app-row" [class.app-layout]="view !== 'list'">
         <div class="app-col">
           <div class="app-row app-justify-content-end analytical-report">
-            <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId))">
+            <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(requestId, groupId))">
               <span>Аналитическая справка </span>
               <uxg-icon shape="app-download"></uxg-icon>
             </button>
@@ -195,6 +195,7 @@
             *ngIf="proposals?.length + (procedures$ | async)?.length === 0 || showForm"
             [request]="request"
             [closable]="proposals.length > 0"
+            [groupId]="groupId"
             (close)="showForm = false"
           ></app-technical-commercial-proposal-form>
 
@@ -208,6 +209,7 @@
           <ng-container *ngFor="let proposal of proposals; trackBy: trackById">
             <app-request-technical-commercial-proposal
               [request]="request"
+              [groupId]="groupId"
               [proposal]="proposal"
             ></app-request-technical-commercial-proposal>
           </ng-container>
@@ -231,6 +233,7 @@
             [action]="procedureModalPayload.action"
             [procedure]="procedureModalPayload.procedure"
             [procedureSource]="procedureSource"
+            [tcpGroupId]="groupId"
             (complete)="this.store.dispatch(updateProcedures()); procedureModalPayload = null"
             (cancel)="procedureModalPayload = null"
           ></app-request-procedure-form>
@@ -241,7 +244,7 @@
         <ng-container *ngIf="uploadTemplateModal.state">
           <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
           <div class="app-secondary-color template">
-            Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(requestId))"><b>скачать
+            Вы можете загрузить ТКП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(requestId, groupId))"><b>скачать
             шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько ТКП.
           </div>
           <div class="dragAndDropArea">
@@ -275,6 +278,7 @@
         <technical-commercial-proposal-contragent-form
           *ngIf="addContragentModal.state"
           [request]="request"
+          [groupId]="groupId"
           [selectedContragents]="getContragents(proposals)"
           (close)="addContragentModal.close()">
         </technical-commercial-proposal-contragent-form>

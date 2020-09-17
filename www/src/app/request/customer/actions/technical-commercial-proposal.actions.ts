@@ -6,7 +6,7 @@ export namespace TechnicalCommercialProposals {
   // Получить список ТКП
   export class Fetch {
     static readonly type = '[Technical Commercial Proposals Customer] Fetch';
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
   // Согласовать ТКП у позиции

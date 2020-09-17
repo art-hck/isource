@@ -1,0 +1,62 @@
+<div class="app-card">
+  <!-- actions -->
+  <div class="app-row app-align-items-center">
+    <h3 class="app-col">
+      <a [routerLink]="[technicalCommercialProposalGroup.id]">{{technicalCommercialProposalGroup.name}}</a>
+    </h3>
+    <div class="app-ghost-color app-bold" *ngIf="publishedCount === 0">
+      <uxg-icon shape="app-draft"></uxg-icon>
+      <span>Черновик</span>
+    </div>
+    <div class="app-ghost-color app-bold" *ngIf="!isReviewed && publishedCount > 0">
+      <uxg-icon shape="app-waiting" class="is-solid"></uxg-icon>
+      <span>Отправлено {{ publishedCount }} из {{ technicalCommercialProposalGroup.requestPositions.length }}</span>
+    </div>
+    <div class="app-success-color app-bold" *ngIf="isReviewed">
+      <uxg-icon shape="app-check"></uxg-icon>
+      <span>Рассмотрено</span>
+    </div>
+
+    <button uxgButton icon link (click)="edit.emit()" [disabled]="publishedCount > 0" *ngIf="edit.observers.length">
+      <uxg-icon shape="app-pen"></uxg-icon>
+    </button>
+    <button uxgButton icon link (click)="folded = !folded">
+      <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
+    </button>
+  </div>
+
+  <!-- positions -->
+  <ng-container *ngIf="!folded">
+    <div class="app-table app-no-border">
+      <hr/>
+      <div class="app-row app-uppercase app-ghost-color app-bold">
+        <small class="app-col app-ellipsis">Наименование позиции</small>
+        <small class="app-col app-ellipsis">Решение принято</small>
+        <small class="app-col app-ellipsis">Статус позиции</small>
+      </div>
+      <div class="app-row" *ngFor="let position of technicalCommercialProposalGroup.requestPositions">
+        <div class="app-col app-ellipsis name">{{position.name}}</div>
+        <div class="app-col app-ghost-color">—</div>
+        <div class="app-col app-ellipsis" [ngSwitch]="position.status">
+          <div class="app-success-color" *ngSwitchCase="'TCP_WINNER_SELECTED'">
+            <span>Выбран победитель</span>
+            <uxg-icon shape="app-check"></uxg-icon>
+          </div>
+
+          <!-- @TODO: пока нет возможности выводить, т.к. недостаточно информации с бэка -->
+          <!--div class="app-warning-color">
+            <span>На доработке</span>
+            <uxg-icon shape="app-warning"></uxg-icon>
+          </div-->
+
+          <div class="app-ghost-color" *ngSwitchCase="'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT'">
+            <span>Решение не принято</span>
+            <uxg-icon shape="app-unknown"></uxg-icon>
+          </div>
+
+          <div *ngSwitchDefault class="app-ghost-color">—</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

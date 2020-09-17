@@ -20,6 +20,7 @@ import { ProcedureSource } from "../../enum/procedure-source";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-request-procedure-form',
@@ -33,6 +34,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: ProcedureAction["action"] = "create";
   @Input() procedureSource: ProcedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
+  @Input() tcpGroupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
@@ -228,7 +230,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       dateSummingUp: moment(this.form.get('general.dateSummingUp').value + " " + this.timeSummingUp.value, "DD.MM.YYYY HH:mm").toISOString(),
-      source: this.procedureSource
+      source: this.procedureSource,
+      requestTechnicalCommercialProposalGroupId: this.tcpGroupId
     };
 
     this.isLoading = true;
