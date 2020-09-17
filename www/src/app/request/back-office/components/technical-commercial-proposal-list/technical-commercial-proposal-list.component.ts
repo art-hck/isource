@@ -45,6 +45,7 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
+import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -147,7 +148,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     });
 
     this.actions.pipe(
-      ofActionCompleted(Create, Update, Publish, UploadTemplate),
+      ofActionCompleted(Create, Update, Publish, UploadTemplate, UpdateParams),
       throttleTime(1),
       takeUntil(this.destroy$)
     ).subscribe(({action, result}) => {

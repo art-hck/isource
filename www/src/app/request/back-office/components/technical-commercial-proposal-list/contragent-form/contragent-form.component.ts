@@ -16,6 +16,7 @@ import { getCurrencySymbol } from "@angular/common";
 import Create = TechnicalCommercialProposals.Create;
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import Update = TechnicalCommercialProposals.Update;
+import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -55,6 +56,10 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
       deliveryPickup: [this.edit?.deliveryPickup ?? '']
     });
 
+    if (this.edit) {
+      this.form.addControl("id", this.fb.control(this.defaultValue('id', null)));
+    }
+
     this.form.valueChanges.subscribe(() => {
       this.form.get('deliveryPickup').setValidators(
         this.form.get('deliveryType').value === this.deliveryType.PICKUP ? [Validators.required] : null);
@@ -77,11 +82,12 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   submit(publish = false) {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      this.store.dispatch(this.edit ? new Update({...this.form.value, files }, publish)
+      this.store.dispatch(this.edit ? new UpdateParams(this.request.id, {...this.form.value, files })
         : new Create(this.request.id, { ...this.form.value, files }, publish));
       this.close.emit();
     }
   }
 
+  defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.edit && this.edit[field] || defaultValue;
   getContragentName = ({ shortName, fullName }: ContragentList) => shortName || fullName;
 }

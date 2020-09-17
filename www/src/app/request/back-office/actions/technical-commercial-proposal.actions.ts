@@ -56,6 +56,16 @@ export namespace TechnicalCommercialProposals {
     ) {}
   }
 
+  // Редактировать общие параметры ТКП
+  export class UpdateParams {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateParams';
+
+    constructor(
+      public requestId: Uuid,
+      public payload: Partial<TechnicalCommercialProposal> & { id: Uuid }
+    ) {}
+  }
+
   // Отправить на согласование ТКП
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';

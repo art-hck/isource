@@ -27,6 +27,11 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
+  updateParams(requestId: Uuid, proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
+    const url = `requests/backoffice/technical-commercial-proposals/${requestId}/edit-params`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
+  }
+
   publish({id}: TechnicalCommercialProposal) {
     const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);

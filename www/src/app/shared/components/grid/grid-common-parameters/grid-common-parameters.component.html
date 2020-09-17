@@ -90,11 +90,11 @@
             Выбрать все
           </button>
   </ng-container>
-  <!-- пока не разберемся как реализовать на бэке редактирование -->
-<!--  <ng-container *ngIf="!showDocs">-->
-<!--    <button uxgButton iconText secondary (click)="edit(proposal)">-->
-<!--      <uxg-icon shape="app-pen"></uxg-icon>-->
-<!--      Редактировать-->
-<!--    </button>-->
-<!--  </ng-container>-->
+
+  <ng-container *ngIf="!showDocs && !userInfoService.isCustomer()">
+    <button uxgButton iconText secondary (click)="edit(proposal)">
+      <uxg-icon shape="app-pen"></uxg-icon>
+      Редактировать
+    </button>
+  </ng-container>
 </div>
