@@ -1,107 +1,176 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef, EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
-import { Actions, Store } from "@ngxs/store";
+import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
 import { Subject } from "rxjs";
 import { UxgModalComponent } from "uxg";
 import { FormControl, Validators } from "@angular/forms";
-import { finalize, takeUntil, tap } from "rxjs/operators";
+import { finalize, takeUntil } from "rxjs/operators";
 import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../shared/components/grid/position";
-import Reject = TechnicalCommercialProposals.Reject;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
-
+import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
+import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
   templateUrl: './technical-commercial-proposal.component.html',
   styleUrls: ['technical-commercial-proposal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
   @ViewChild("proposalModal") proposalModal: UxgModalComponent;
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
-  @Input() proposalByPos: TechnicalCommercialProposalByPosition;
+  @Input() proposal: TechnicalCommercialProposal;
   @Input() proposals: TechnicalCommercialProposal[];
+  @Input() technicalCommercialProposalIndex: number;
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
+  @Output() positionSelected = new EventEmitter();
   readonly destroy$ = new Subject();
+  selectedTechnicalCommercialProposalsPositions: TechnicalCommercialProposalPosition[] = [];
   position: Position;
-  modalData: TechnicalCommercialProposalByPosition["data"][number];
-
   getCurrencySymbol = getCurrencySymbol;
   selectedProposal = new FormControl(null, Validators.required);
   sendToEditPosition = new FormControl(null, Validators.required);
   folded = false;
+  isLoading: boolean;
 
-  get isReviewed(): boolean {
-    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(p.status));
+  get hasOnReview(): boolean {
+    return this.proposal.positions.some(({ status }) => ['SENT_TO_REVIEW'].includes(status));
   }
 
-  get hasWinner(): boolean {
-    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED'].includes(p.status));
+  get hasSentToEdit(): boolean {
+    return this.proposal.positions.some(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
+  }
+
+  get isReviewed(): boolean {
+    return this.proposal.positions.every(({ status }) => ['APPROVED', 'REJECTED'].includes(status));
   }
 
   get isSentToEdit(): boolean {
-    return this.proposalByPos.data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && this.proposalByPos.data.length > 0;
+    return this.proposal.positions.every(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
   }
 
   constructor(
     public helper: TechnicalCommercialProposalHelperService,
     private store: Store,
-    private actions: Actions,
-    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.position = new Position(this.proposalByPos.position);
-
-    if (this.chooseBy$) {
-      this.chooseBy$.pipe(
-        tap(type => this.selectedProposal.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
-        takeUntil(this.destroy$))
-      .subscribe(() => this.cd.detectChanges());
-    }
-
-    this.selectedProposal.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => {
-      // Workaround sync with multiple elements per one formControl
-      this.selectedProposal.setValue(v, {onlySelf: true, emitEvent: false});
-      this.sendToEditPosition.reset(null, {emitEvent: false});
-    });
-
-    this.sendToEditPosition.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
   }
 
-  approve() {
-    this.dispatchAction(new ReviewMultiple([this.selectedProposal.value], []));
+  approve(): void {
+    const selectedPositions = Array.from(this.selectedTechnicalCommercialProposalsPositions, (tcp) => tcp);
+    this.dispatchAction(new ReviewMultiple(selectedPositions, []));
   }
 
-  reject() {
-    this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
+  sendToEdit(): void {
+    const selectedPositions = Array.from(this.selectedTechnicalCommercialProposalsPositions, (tcp) => tcp.position);
+    this.dispatchAction(new SendToEditMultiple(selectedPositions));
   }
 
   private dispatchAction(action) {
-    this.selectedProposal.disable();
+    this.isLoading = true;
+
     this.store.dispatch(action).pipe(
-      finalize(() => this.selectedProposal.enable()),
+      finalize(() => {
+        this.isLoading = false;
+        this.selectedTechnicalCommercialProposalsPositions = [];
+      }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
-    return positions.find(({position}) => position.id === id);
+  hasSelectedPositions(index): boolean {
+    return this.proposal.positions.some(technicalCommercialProposalPosition => {
+      return this.isTechnicalCommercialProposalPositionChecked(index, technicalCommercialProposalPosition) &&
+        this.isPositionSelectorAvailable(technicalCommercialProposalPosition);
+    });
+  }
+
+  isPositionSelectorAvailable(tcpPosition: TechnicalCommercialProposalPosition): boolean {
+    const selectorAvailableStatues = [
+      TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW
+    ];
+
+    return selectorAvailableStatues.indexOf(tcpPosition.status) >= 0;
+  }
+
+  onSelectPosition(i, technicalCommercialProposalPosition: TechnicalCommercialProposalPosition): void {
+    const index = this.selectedTechnicalCommercialProposalsPositions.indexOf(technicalCommercialProposalPosition);
+    const data = { technicalCommercialProposalPosition, i };
+
+    if (index === -1) {
+      this.positionSelected.emit(data);
+      this.selectedTechnicalCommercialProposalsPositions.push(technicalCommercialProposalPosition);
+    } else {
+      this.selectedTechnicalCommercialProposalsPositions.splice(index, 1);
+    }
+  }
+
+  refreshPositionsSelectedState(i, technicalCommercialProposalPosition: TechnicalCommercialProposalPosition): void {
+    if (this.technicalCommercialProposalIndex !== i) {
+      const selectedPositionsIds = Array.from(this.selectedTechnicalCommercialProposalsPositions, ({ position }) => position.id);
+      const index = selectedPositionsIds.indexOf(technicalCommercialProposalPosition.position.id);
+
+      if (index !== -1) {
+        this.selectedTechnicalCommercialProposalsPositions.splice(index, 1);
+      }
+    }
+  }
+
+  onSelectAllPositions(checked, i): void {
+    if (checked === true) {
+      this.proposal.positions.forEach(technicalCommercialProposalPosition => {
+        const index = this.selectedTechnicalCommercialProposalsPositions.indexOf(technicalCommercialProposalPosition);
+        const data = { technicalCommercialProposalPosition, i };
+
+        if (!this.isProposalPositionReviewed(technicalCommercialProposalPosition) && index === -1) {
+          this.positionSelected.emit(data);
+          this.selectedTechnicalCommercialProposalsPositions.push(technicalCommercialProposalPosition);
+        }
+      });
+    } else {
+      this.selectedTechnicalCommercialProposalsPositions = [];
+    }
+  }
+
+  isTechnicalCommercialProposalPositionChecked(i, tcpPosition: TechnicalCommercialProposalPosition): boolean {
+    const index = this.selectedTechnicalCommercialProposalsPositions.indexOf(tcpPosition);
+
+    return index !== -1;
+  }
+
+  isProposalPositionReviewed(position): boolean {
+    return [
+      TechnicalCommercialProposalPositionStatus.APPROVED,
+      TechnicalCommercialProposalPositionStatus.REJECTED,
+      TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT
+    ].indexOf(position.status) > -1;
+  }
+
+  areAllPositionsChecked(technicalCommercialProposalPositions: TechnicalCommercialProposalPosition[]): boolean {
+    return technicalCommercialProposalPositions.every(technicalCommercialProposalPosition => {
+      return this.selectedTechnicalCommercialProposalsPositions.indexOf(technicalCommercialProposalPosition) !== -1;
+    });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalByPosition["data"][number]) => proposalPosition.id;
 }

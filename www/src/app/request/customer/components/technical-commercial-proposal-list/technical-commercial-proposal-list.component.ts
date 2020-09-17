@@ -1,6 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Observable, Subject } from "rxjs";
+import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { delayWhen, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -38,6 +38,7 @@ import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
 import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { Procedure } from "../../../back-office/models/procedure";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -50,6 +51,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
+  @ViewChildren("tcpComponent") tcpComponentList: QueryList<TechnicalCommercialProposalComponent>;
 
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
@@ -68,6 +70,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
+
+  reviewedProposals: TechnicalCommercialProposal[] = [];
+  sentToReviewProposals: TechnicalCommercialProposal[] = [];
+  sentToEditProposals: TechnicalCommercialProposal[] = [];
 
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
@@ -143,6 +149,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       );
     });
 
+    this.getSentToReviewProposals();
+    this.getSentToEditProposals();
+    this.getReviewedProposals();
+
     this.switchView(this.view);
   }
 
@@ -214,6 +224,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
+  selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
+    technicalCommercialProposal.positions.forEach(proposal => this.selectProposal(new Proposal(proposal)));
+  }
+
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
     return proposals.reduce((suppliers: GridSupplier[], proposal) => {
       [false, true]
@@ -232,9 +246,33 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return positionProposals.data.find(({proposalPosition: {id}}) => id === proposal.id).proposal.supplier;
   }
 
+  onPositionSelected(data): void {
+    this.tcpComponentList.forEach((tcpComponent) => {
+      tcpComponent.refreshPositionsSelectedState(data.i, data.technicalCommercialProposalPosition);
+    });
+  }
+
+  getSentToReviewProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.sentToReviewProposals = proposals?.filter(proposal => proposal.positions.some(position => ['NEW', 'SENT_TO_REVIEW'].includes(position.status)));
+    }));
+  }
+
+  getSentToEditProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.sentToEditProposals = proposals?.filter(proposal => proposal.positions.some(position => position.status === 'SENT_TO_EDIT'));
+    }));
+  }
+
+  getReviewedProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.reviewedProposals = proposals?.filter(proposal => proposal.positions.some(position => ['APPROVED', 'REJECTED'].includes(position.status)));
+    }));
+  }
+
   converPosition = (position: RequestPosition) => new Position(position);
   converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
-  trackByPositionId = (i, item: TechnicalCommercialProposalByPosition) => item.position.id;
+  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
 
   ngOnDestroy() {
     this.destroy$.next();

@@ -1,8 +1,4 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
-import { TechnicalCommercialProposalStatus } from "../enum/technical-commercial-proposal-status";
-import { TechnicalCommercialProposalStatusLabel } from "../enum/technical-commercial-proposal-status-label";
-import { RequestDocument } from "./request-document";
 import { RequestPosition } from "./request-position";
 import { PositionCurrency } from "../enum/position-currency";
 import { TechnicalCommercialProposalPositionStatus } from "../enum/technical-commercial-proposal-position-status";
@@ -25,4 +21,5 @@ export class TechnicalCommercialProposalPosition {
   paymentTerms: string;
   isAnalog: boolean;
   manufacturer: string;
+  standard: string;
 }

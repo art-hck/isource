@@ -51,7 +51,7 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
       currency: [p?.currency ?? this.position.currency ?? PositionCurrency.RUB, Validators.required],
       deliveryDate: [this.parseDate(p?.deliveryDate ?? this.position.deliveryDate), [Validators.required, CustomValidators.futureDate()]],
       manufacturer: [p?.manufacturer || '', Validators.required],
-      standard: [''],
+      standard: [p?.standard || ''],
       paymentTerms: [p?.paymentTerms ?? this.position.paymentTerms, Validators.required],
     });
 

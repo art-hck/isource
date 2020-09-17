@@ -54,6 +54,10 @@
             [gridRows]="gridRows"
             [suppliers]="suppliers(proposals$ | async)"
             [positionCell]="true"
+            [showParams]="true"
+            [proposals]="proposals$ | async"
+            [proposalsByPos]="proposalsSentToReview$ | async"
+            (selectProposalBySupplier) = selectSupplierProposal($event)
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row
@@ -109,13 +113,19 @@
 
         <!-- list -->
         <ng-container *ngSwitchCase="'list'">
-          <app-request-technical-commercial-proposal
-            #proposalOnReview
-            *ngFor="let positionProposals of proposalsByPos; trackBy: trackByPositionId"
-            [chooseBy$]="chooseBy$"
-            [requestId]="requestId"
-            [proposalByPos]="positionProposals">
-          </app-request-technical-commercial-proposal>
+          <ng-container *ngIf="(reviewedTab.active ?
+            reviewedProposals :
+            sentToReviewTab.active ?
+                sentToReviewProposals :
+                sentToEditProposals) as proposals">
+            <app-request-technical-commercial-proposal #tcpComponent
+              *ngFor="let proposal of proposals; let i = index; trackBy: trackById"
+              [technicalCommercialProposalIndex]="i"
+              [chooseBy$]="chooseBy$"
+              [proposal]="proposal"
+              (positionSelected)="onPositionSelected($event)"
+            ></app-request-technical-commercial-proposal>
+          </ng-container>
         </ng-container>
 
         <!-- empty -->

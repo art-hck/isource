@@ -91,6 +91,7 @@
             *ngIf="view === 'grid' && suppliers.length"
             [gridRows]="gridRows"
             [suppliers]="convertSuppliers(suppliers, positions)"
+            [showParams]="false"
           ></app-grid-contragents>
 
           <!-- procedure info -->

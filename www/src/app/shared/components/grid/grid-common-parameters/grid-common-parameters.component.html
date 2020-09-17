@@ -1,0 +1,100 @@
+<div class="price-info">
+  <div class="price-info-block">
+    <ng-container *ngIf="proposal.positions.length === 0; else positionsPriceInfo">
+      <div class="app-ghost-color">Количество не указано</div>
+      <div class="app-ghost-color">Сроки не указаны</div>
+      <br>
+      <div class="app-ghost-color">Общая сумма поставки с НДС</div>
+      <div class="app-ghost-color price"><b>0 ₽</b></div>
+    </ng-container>
+    <ng-template #positionsPriceInfo>
+      <div class="app-success-color"
+           *ngIf="helper.isPositionsValid(proposalsByPos, proposal); else positionsInvalid">
+        Предложены все позиции
+      </div>
+      <ng-template #positionsInvalid>
+        <div class="app-error-color">
+          Предложены не все позиции
+        </div>
+      </ng-template>
+      <div class="app-success-color"
+           *ngIf="helper.isQuantityPositionsValid(proposalsByPos, proposal); else quantityInvalid">
+        Все позиции в нужном количестве
+      </div>
+      <ng-template #quantityInvalid>
+        <div class="app-error-color">
+          Не все поз-ии в нужном количестве
+        </div>
+      </ng-template>
+      <div class="app-success-color" *ngIf="helper.isDatePositionsValid(proposalsByPos, proposal); else dateInvalid">
+        Сроки укладываются в заданные
+      </div>
+      <ng-template #dateInvalid>
+        <div class="app-error-color">
+          Сроки не укладываются в заданные
+        </div>
+      </ng-template>
+      <br>
+      <div class="app-ghost-color">Общая сумма поставки с НДС</div>
+      <div class="price"><b>{{helper.getSummaryPrice(proposal.positions) | number: "1.0-2"}}
+        <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span></b></div>
+    </ng-template>
+  </div>
+  <div class="delivery-block">
+    <ng-container *ngIf="!showDocs">
+      <ng-container *ngIf="proposal.deliveryType === 'PICKUP'">
+        <div class="app-ghost-color">Базис самовывоза</div>
+        <div class="info-value">
+          {{ proposal.deliveryPickup }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
+        <div class="app-ghost-color">Стоимость поставки</div>
+        <div class="info-value" *ngIf="proposal.deliveryPrice; else included">
+          {{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}
+        </div>
+        <ng-template #included>
+          <div class="info-value">
+            Включена в стоимость
+          </div>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="proposal.deliveryAdditionalTerms">
+        <div class="app-ghost-color">Дополнительные условия поставки</div>
+        <div class="info-value">
+          {{ proposal.deliveryAdditionalTerms }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="proposal.warrantyConditions">
+        <div class="app-ghost-color">Гарантийные условия</div>
+        <div class="info-value">
+          {{ proposal.warrantyConditions }}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showDocs">
+      <div class="app-ghost-color">Документы предложения</div>
+      <ng-container *ngIf="proposal.documents.length; else noDocs">
+        <app-document-simple-list [gridable]="false" [enableUpload]="false" [size]="'s'"
+                                  [documents]="proposal.documents">
+        </app-document-simple-list>
+      </ng-container>
+      <ng-template #noDocs>
+        Документы не были приложены
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="userInfoService.isCustomer()">
+    <button uxgButton secondary (click)="selectAll.emit(proposal); close.emit()">
+            Выбрать все
+          </button>
+  </ng-container>
+
+  <ng-container *ngIf="!showDocs && !userInfoService.isCustomer()">
+    <button uxgButton iconText secondary (click)="edit(proposal)">
+      <uxg-icon shape="app-pen"></uxg-icon>
+      Редактировать
+    </button>
+  </ng-container>
+</div>

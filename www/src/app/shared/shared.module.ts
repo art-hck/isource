@@ -38,6 +38,7 @@ import { ProposalDetailComponent } from "./components/proposal-detail/proposal-d
 import { GridContragentFormComponent } from "./components/grid/grid-contragent-form/grid-contragent-form.component";
 import { FileComponent } from './components/file/file.component';
 import { ValidationDirective } from "./directives/validation.directive";
+import { GridCommonParametersComponent } from './components/grid/grid-common-parameters/grid-common-parameters.component';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { ValidationDirective } from "./directives/validation.directive";
     ProposalDetailComponent,
     FileComponent,
     ValidationDirective,
+    GridCommonParametersComponent,
   ],
   exports: [
     CommonModule,

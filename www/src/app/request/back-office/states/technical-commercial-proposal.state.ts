@@ -28,6 +28,7 @@ import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
+import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -162,6 +163,17 @@ export class TechnicalCommercialProposalState {
           return of(proposal);
         }
       }),
+    );
+  }
+
+  @Action(UpdateParams)
+  updateParams(ctx: Context, action: UpdateParams) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.updateParams(action.requestId, action.payload).pipe(
+      tap(proposal => ctx.setState(patch({
+        proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
+        status: "received" as StateStatus
+      })))
     );
   }
 

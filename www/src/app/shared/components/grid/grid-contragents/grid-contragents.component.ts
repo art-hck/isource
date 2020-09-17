@@ -2,6 +2,12 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
+import { Procedure } from "../../../../request/back-office/models/procedure";
+import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
+import { animate, state, style, transition, trigger } from "@angular/animations";
+import { UserInfoService } from "../../../../user/service/user-info.service";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -15,11 +21,20 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
   @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
+  @Input() proposals: TechnicalCommercialProposal[];
+  @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
+  @Input() showParams = false;
+  @Output() editTechnicalCommercialProposal = new EventEmitter<TechnicalCommercialProposal>();
+  @Output() selectProposalBySupplier = new EventEmitter<TechnicalCommercialProposal>();
   canScrollLeft: boolean;
   canScrollRight: boolean;
   needUpdate: boolean;
+  showCommonParams = false;
+  showDocsControl = new FormControl(false);
 
-  constructor(private cd: ChangeDetectorRef) {}
+
+  constructor(private cd: ChangeDetectorRef,
+              public userInfoService: UserInfoService) {}
 
   ngAfterViewChecked() {
     if (this.needUpdate) {
@@ -62,4 +77,6 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     });
     this.cd.detectChanges();
   }
+
+  getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
 }

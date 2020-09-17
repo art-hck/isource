@@ -14,6 +14,9 @@ import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels"
 import { getCurrencySymbol } from "@angular/common";
 import { Uuid } from "../../../../../cart/models/uuid";
 import Create = TechnicalCommercialProposals.Create;
+import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
+import Update = TechnicalCommercialProposals.Update;
+import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -24,6 +27,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   @Input() request: Request;
   @Input() groupId: Uuid;
   @Input() selectedContragents: ContragentShortInfo[];
+  @Input() edit: TechnicalCommercialProposal;
   @Output() close = new EventEmitter();
   readonly deliveryType = DeliveryType;
   readonly deliveryTypeLabel = DeliveryTypeLabels;
@@ -43,15 +47,19 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
 
   ngOnInit() {
     this.form = this.fb.group({
-      supplier: [null, Validators.required],
-      files: [[]],
-      deliveryType: [this.deliveryType.INCLUDED],
-      deliveryAdditionalTerms: [''],
-      warrantyConditions: ['', Validators.required],
-      deliveryPrice: [''],
+      supplier: [this.edit?.supplier ?? null, Validators.required],
+      files: [this.edit?.documents ?? []],
+      deliveryType: [this.edit?.deliveryType ?? this.deliveryType.INCLUDED],
+      deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms ?? ''],
+      warrantyConditions: [this.edit?.warrantyConditions ?? '', Validators.required],
+      deliveryPrice: [this.edit?.deliveryPrice ?? ''],
       deliveryCurrency: [PositionCurrency.RUB],
-      deliveryPickup: ['']
+      deliveryPickup: [this.edit?.deliveryPickup ?? '']
     });
+
+    if (this.edit) {
+      this.form.addControl("id", this.fb.control(this.defaultValue('id', null)));
+    }
 
     this.form.valueChanges.subscribe(() => {
       this.form.get('deliveryPickup').setValidators(
@@ -75,10 +83,12 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   submit(publish = false) {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      this.store.dispatch(new Create(this.request.id, this.groupId, { ...this.form.value, files }, publish));
+      this.store.dispatch(this.edit ? new UpdateParams(this.request.id, {...this.form.value, files })
+        : new Create(this.request.id, this.groupId, { ...this.form.value, files }, publish));
       this.close.emit();
     }
   }
 
+  defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.edit && this.edit[field] || defaultValue;
   getContragentName = ({ shortName, fullName }: ContragentList) => shortName || fullName;
 }
