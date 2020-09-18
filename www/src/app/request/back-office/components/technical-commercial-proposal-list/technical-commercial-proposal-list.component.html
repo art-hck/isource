@@ -96,7 +96,7 @@
       </ng-template>
       <!-- grid -->
       <ng-container *ngIf="(view !=='list' && proposals.length + (procedures$ | async).length)">
-        <div [ngClass]="{
+        <div #gridTable [ngClass]="{
         'grid-table': view === 'grid',
         'simple-grid-table': view === 'simple-grid',
         'disabled': (status$ | async) === 'updating'}"
@@ -109,6 +109,7 @@
             [proposals]="proposals"
             [proposalsByPos]="proposalsByPositions$ | async"
             [showParams]="true"
+            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
             (editTechnicalCommercialProposal)="addContragentModal.open(); editingTCP = $event"
           ></app-grid-contragents>
 
