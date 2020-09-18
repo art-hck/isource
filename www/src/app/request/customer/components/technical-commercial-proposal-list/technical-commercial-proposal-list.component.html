@@ -155,6 +155,8 @@
   [chooseBy$]="chooseBy$"
   [hidden]="view === 'grid' && (!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0)"
   [viewType]="view"
+  [total]="total"
+  [selectedPositions]="selectedPositions"
 ></app-grid-footer>
 
 <ng-template #placeholder>
