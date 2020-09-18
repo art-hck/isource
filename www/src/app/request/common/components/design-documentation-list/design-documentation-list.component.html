@@ -281,7 +281,7 @@
               </div>
 
               <div class="design-actions clr-col-2">
-                <ng-container *ngIf="designDocumentation.position.status !== 'RKD_APPROVED'">
+                <ng-container *ngIf="designDocumentation.status !== designDocStatus.APPROVED">
                   <uxg-dropdown lg>
                     <div uxgDropdownItem (click)="approve(designDocumentation)">
                       <uxg-icon shape="app-check"></uxg-icon>
