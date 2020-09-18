@@ -44,7 +44,7 @@
       <br/>
 
       <ng-container [ngSwitch]="view" *ngIf="(reviewedTab.active ? proposalsReviewed$ : sentToReviewTab.active ? proposalsSentToReview$ : proposalsSendToEdit$) | async as proposalsByPos">
-        <div *ngIf="view !== 'list'" [ngClass]="{
+        <div #gridTable *ngIf="view !== 'list'" [ngClass]="{
           'grid-table': view === 'grid',
           'simple-grid-table': view === 'simple-grid',
           'disabled': (stateStatus$ | async) === 'updating'}"
@@ -57,6 +57,7 @@
             [showParams]="true"
             [proposals]="proposals$ | async"
             [proposalsByPos]="proposalsSentToReview$ | async"
+            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
             (selectProposalBySupplier) = selectSupplierProposal($event)
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
