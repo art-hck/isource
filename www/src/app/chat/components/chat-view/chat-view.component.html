@@ -15,7 +15,7 @@
           <small *ngIf="item.context?.unreadCount as cnt">{{cnt}}</small>
         </a>
       </li>
-      <li class="app-row"><button class="app-col "uxgButton secondary (click)="append()">Еще</button></li>
+      <li *ngIf="!fullListLoaded" class="app-row"><button class="app-col "uxgButton secondary (click)="dispatch()">Еще</button></li>
     </ul>
   </div>
 

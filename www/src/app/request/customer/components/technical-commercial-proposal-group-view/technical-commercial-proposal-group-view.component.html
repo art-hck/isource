@@ -1,0 +1,22 @@
+<div class="app-table app-no-border">
+    <div class="app-row app-align-items-center">
+    <div>
+      <span class="app-secondary-color">показать: </span>
+      <uxg-popover #viewPopover>
+        <button uxgButton uxgPopoverTrigger link clear>
+          <span><b>по предложениям</b></span>
+        </button>
+        <div *uxgPopoverContent>
+          <div>
+            <button uxgButton clear>по предложениям</button>
+          </div>
+        </div>
+      </uxg-popover>
+    </div>
+  </div>
+</div>
+
+<app-technical-commercial-proposal-group
+  *ngFor="let group of tcpGroups$ | async"
+  [technicalCommercialProposalGroup]="group"
+></app-technical-commercial-proposal-group>

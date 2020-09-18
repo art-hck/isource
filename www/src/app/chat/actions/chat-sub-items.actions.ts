@@ -29,7 +29,13 @@ export namespace ChatSubItems {
   export class IncrementUnread {
     static readonly type = '[ChatSubItems] IncrementUnread';
 
-    constructor(public conversation: ChatConversation) {}
+    constructor(public id: ChatConversation["id"]) {}
+  }
+
+  export class MoveToTop {
+    static readonly type = '[ChatSubItems] MoveToTop';
+
+    constructor(public id: ChatConversation["id"]) {}
   }
 
   export class Clear {

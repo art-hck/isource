@@ -6,6 +6,7 @@ export class ChatConversation {
   topic: string;
   createdAt: string;
   participants: User[];
-  context: ChatContext;
+  context?: ChatContext; // В conversations.new
+  contextId?: number; // В conversations.get (если список)
   unreadCount: number;
 }

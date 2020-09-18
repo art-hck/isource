@@ -9,6 +9,15 @@
     </ng-container>
     <ng-template #positionsPriceInfo>
       <div class="app-success-color"
+           *ngIf="helper.isPositionsValid(proposalsByPos, proposal); else positionsInvalid">
+        Предложены все позиции
+      </div>
+      <ng-template #positionsInvalid>
+        <div class="app-error-color">
+          Предложены не все позиции
+        </div>
+      </ng-template>
+      <div class="app-success-color"
            *ngIf="helper.isQuantityPositionsValid(proposalsByPos, proposal); else quantityInvalid">
         Все позиции в нужном количестве
       </div>
@@ -75,11 +84,17 @@
       </ng-template>
     </ng-container>
   </div>
-  <!-- пока не разберемся как реализовать на бэке редактирование -->
-<!--  <ng-container *ngIf="!showDocs">-->
-<!--    <button uxgButton iconText secondary (click)="edit(proposal)">-->
-<!--      <uxg-icon shape="app-pen"></uxg-icon>-->
-<!--      Редактировать-->
-<!--    </button>-->
-<!--  </ng-container>-->
+
+  <ng-container *ngIf="userInfoService.isCustomer()">
+    <button uxgButton secondary (click)="selectAll.emit(proposal); close.emit()">
+            Выбрать все
+          </button>
+  </ng-container>
+
+  <ng-container *ngIf="!showDocs && !userInfoService.isCustomer()">
+    <button uxgButton iconText secondary (click)="edit(proposal)">
+      <uxg-icon shape="app-pen"></uxg-icon>
+      Редактировать
+    </button>
+  </ng-container>
 </div>

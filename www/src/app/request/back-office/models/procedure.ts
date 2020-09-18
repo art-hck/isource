@@ -51,4 +51,5 @@ export class Procedure {
   privateAccessContragents: ContragentShortInfo[];
   getTPFilesOnImport: boolean;
   source: ProcedureSource;
+  requestTechnicalCommercialProposalGroupId?: Uuid;
 }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { getCurrencySymbol } from "@angular/common";
 import { Request } from "../../../common/models/request";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-request-technical-commercial-proposal',
@@ -11,6 +12,7 @@ import { Request } from "../../../common/models/request";
 })
 export class TechnicalCommercialProposalComponent {
   @Input() request: Request;
+  @Input() groupId: Uuid;
   @Input() proposal: TechnicalCommercialProposal;
   state: "view" | "edit" = "view";
   folded = false;

@@ -2,7 +2,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { filter, finalize, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -80,6 +80,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly destroy$ = new Subject();
   isLoading: boolean;
   requestId: Uuid;
+  groupId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
@@ -121,15 +122,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   ngOnInit() {
     this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
-      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
-      switchMap(() => this.request$),
-      filter(request => !!request),
-      tap(({id, number}) => this.bc.breadcrumbs = [
+      tap(({ id }) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
+      delayWhen(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      withLatestFrom(this.request$),
+      tap(([{ groupId }, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
         { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-        { label: 'Согласование технико-коммерческих предложений', link: `/requests/customer/${id}/technical-commercial-proposals` }
+        { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
+        { label: 'Страница предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals/${groupId}` }
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -256,6 +258,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.proposalsOnReview
       .filter(({ proposals }) => proposals.some((_proposal) => proposal.id === _proposal.id))
       .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
+  }
+
+  selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
+    technicalCommercialProposal.positions.forEach(proposal => this.selectProposal(new Proposal(proposal)));
   }
 
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {

@@ -13,7 +13,8 @@
             [proposalsByPos]="proposalsByPos"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"
-            [showDocs]="showDocsControl.value"></app-grid-common-parameters>
+            [showDocs]="showDocsControl.value"
+            (selectAll)="selectProposalBySupplier.emit($event)"></app-grid-common-parameters>
         </ng-container>
       </div>
     </div>
@@ -21,9 +22,9 @@
     <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
   </div>
     <!-- Временно скрыто в матрице КП-->
-    <ng-container *ngIf="showParams">
+    <ng-container *ngIf="showParams && suppliers.length">
       <ng-container *ngIf="showCommonParams === false; else close">
-        <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
+        <button uxgButton primary class="common-params" (click)="showCommonParams = true; openCommonParams.emit()">Общие параметры</button>
       </ng-container>
       <ng-template #close>
         <button uxgButton icon primary class="common-params" (click)="showCommonParams = false">

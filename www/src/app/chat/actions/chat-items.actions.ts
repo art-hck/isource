@@ -18,11 +18,20 @@ export namespace ChatItems {
   }
 
   export class FetchItems extends FetchRequests {
-    static readonly type = '[ChatItems] Fetch';
+    static readonly type = '[ChatItems] FetchItems';
+    startFrom = 0;
+    public sort = { orderBy: "chatContexts", sortDirection: "ASC" };
+  }
+
+  export class FetchCurrent {
+    static readonly type = '[ChatItems] FetchCurrent';
+
+    constructor(public role: "customer" | "backoffice", public id: Uuid) {}
   }
 
   export class AppendItems extends FetchRequests {
     static readonly type = '[ChatItems] AppendItems';
+    public sort = { orderBy: "chatContexts", sortDirection: "ASC" };
   }
 
   export class FilterRequests extends FetchRequests {

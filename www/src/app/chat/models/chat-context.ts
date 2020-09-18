@@ -9,7 +9,7 @@ export class ChatContext {
   createdAt: string;
   supervisor: User;
   items: ContextItem[];
-  conversations: ChatConversation[];
+  conversations?: ChatConversation[];
   unreadCount: number;
 }
 

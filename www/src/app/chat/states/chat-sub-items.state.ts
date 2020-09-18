@@ -5,17 +5,19 @@ import { append, iif, insertItem, patch, updateItem } from "@ngxs/store/operator
 import { flatMap, map, take, tap } from "rxjs/operators";
 import { ContextsService } from "../services/contexts.service";
 import { ChatSubItem } from "../models/chat-item";
-import { ConversationsService } from "../services/conversations.service";
 import { RequestPositionList } from "../../request/common/models/request-position-list";
 import { ChatSubItems } from "../actions/chat-sub-items.actions";
 import { ChatMessages } from "../actions/chat-messages.actions";
 import { decrement } from "../../shared/state-operators/decrement";
+import { increment } from "../../shared/state-operators/increment";
+import { RequestGroup } from "../../request/common/models/request-group";
+import { sort } from "../../shared/state-operators/sort";
 import Fetch = ChatSubItems.Fetch;
 import FetchPositions = ChatSubItems.FetchPositions;
 import AppendConversation = ChatSubItems.AppendConversation;
 import IncrementUnread = ChatSubItems.IncrementUnread;
 import MarkAsRead = ChatMessages.MarkAsRead;
-import { increment } from "../../shared/state-operators/increment";
+import MoveToTop = ChatSubItems.MoveToTop;
 
 export interface MessagesStateModel {
   subItems: ChatSubItem[];
@@ -31,17 +33,22 @@ type Ctx = StateContext<Model>;
 })
 @Injectable()
 export class ChatSubItemsState {
-  constructor(
-    private service: ContextsService,
-    private conversationsService: ConversationsService
-  ) {}
+  constructor(private service: ContextsService) {}
 
   @Selector() static status({ status }: Model) { return status; }
-  @Selector() static subItems({ subItems }: Model) { return subItems.filter(({ position }) => !!position); }
+  @Selector() static subItems({ subItems }: Model) { return subItems.filter(({ position }) => !!position && !position["group"]); }
 
   static subItem = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState.subItems],
     (subItems: ChatSubItem[]) => subItems.find(({ position }) => position.id === id)
   )
+
+  static subItemsByGroup = (groupId: RequestGroup["id"]) => createSelector([ChatSubItemsState],
+    ({ subItems }: Model) => {
+      const group = subItems.find(item => item.position?.id === groupId).position as RequestGroup;
+      const ids = group?.positions.map(({ id }) => id);
+
+      return subItems.filter((item) => item?.position && ids.includes(item.position.id));
+    })
 
   static position = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState.subItem(id)],
     (subItem: ChatSubItem) => subItem?.position
@@ -51,33 +58,26 @@ export class ChatSubItemsState {
     [ChatSubItemsState.subItem(id)], (subItem: ChatSubItem) => subItem.position.conversation.externalId
   )
 
-  @Action(Fetch)
+  @Action(Fetch, { cancelUncompleted: true })
   fetchSubItems({ setState, dispatch }: Ctx, { role, request }: Fetch) {
-    setState(patch({ subItems: [] } as Model));
+    setState(patch({ subItems: [], status: "fetching" } as Model));
     // Получаем конверсейшены только по текущему контексту
-
-    return this.conversationsService.get(/*request.context.externalId*/).pipe(
-      take(1),
-      map(conversations => conversations.map(conversation => ({ conversation }))),
-      tap((subItems: ChatSubItem[]) => setState(patch({ subItems  }))),
-      flatMap(() => dispatch(new FetchPositions(role, request))));
-
-    // if (request.context?.externalId) {
-    //   return this.service.get(request.context?.externalId).pipe(
-    //     take(1),
-    //     map(([{ conversations }]) => conversations.map(conversation => ({ conversation }))),
-    //     tap((subItems: ChatSubItem[]) => setState(patch({ subItems  }))),
-    //     flatMap(() => dispatch(new FetchPositions(role, request)))
-    //   );
-    // } else {
-    //   dispatch(new FetchPositions(role, request));
-    // }
+    if (request.context?.externalId) {
+      return this.service.get({ contextId: request.context?.externalId }).pipe(
+        take(1),
+        map(([{ conversations }]) => conversations.map(conversation => ({ conversation }))),
+        tap((subItems: ChatSubItem[]) => setState(patch({ subItems }))),
+        flatMap(() => dispatch(new FetchPositions(role, request)))
+      );
+    } else {
+      dispatch(new FetchPositions(role, request));
+    }
   }
 
-  @Action(FetchPositions)
+  @Action(FetchPositions, { cancelUncompleted: true })
   fetchPositions({ setState }: Ctx, { request, role }: FetchPositions) {
     return this.service.getRequestItems(request.id, role).pipe(tap(positions => {
-      positions.forEach(position => {
+      (positions).forEach(function appendOrUpdatePositions(position) {
         setState(patch({
           subItems: iif(
             subItems => !!position.conversation || subItems.some(item => item.position?.id === position.id),
@@ -86,10 +86,14 @@ export class ChatSubItemsState {
               patch({ position })
             ),
             append([{ position } as ChatSubItem])
-          )
+          ),
         }));
+
+        if (position instanceof RequestGroup) {
+          position.positions.forEach(appendOrUpdatePositions);
+        }
       });
-    }));
+    }), tap(() => setState(patch<Model>({ status: "received" }))));
   }
 
   @Action(AppendConversation)
@@ -105,12 +109,19 @@ export class ChatSubItemsState {
   }
 
   @Action(IncrementUnread)
-  incrementUnread({ setState, getState }: Ctx, { conversation }: IncrementUnread) {
-    const findFn = (item: ChatSubItem) => item.conversation?.id === conversation.id;
-    // const unreadCount = getState().subItems.find(findFn)?.conversation.unreadCount + 1;
+  incrementUnread({ setState }: Ctx, { id }: IncrementUnread) {
+    const findFn = (item: ChatSubItem) => item.conversation?.id === id;
+
     setState(patch({
       subItems: updateItem(findFn, patch({ conversation: patch({ unreadCount: increment(1) }) }))
     }));
+  }
+
+  @Action(MoveToTop)
+  moveToTop({ setState }: Ctx, { id }: MoveToTop) {
+    const findFn = (item: ChatSubItem) => item.conversation?.id === id;
+
+    setState(patch({ subItems: sort(findFn) }));
   }
 
   @Action(MarkAsRead)
