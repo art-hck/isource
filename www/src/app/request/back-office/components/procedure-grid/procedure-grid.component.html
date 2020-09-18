@@ -6,27 +6,30 @@
     </a>
     <div class="status-block">
       <ng-container *ngIf="!finished(procedure)">
+        <div>
       <span class="app-ghost-color pr-20">
         <uxg-icon shape="app-waiting"></uxg-icon>
          <b>Идет процедура</b> (до {{ procedure.dateEndRegistration | date : "dd.MM.yyyy, HH:mm" }})
       </span>
-
+        </div>
         <a [href]="link(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
       </ng-container>
 
       <ng-container *ngIf="finished(procedure) && procedure?.offersImported">
+        <div>
       <span class="app-success-color pr-20">
         <uxg-icon shape="app-check"></uxg-icon> Завершена {{ procedure.dateEndRegistration | date :'shortDate' }}
       </span>
-
+        </div>
         <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
       </ng-container>
 
       <ng-container *ngIf="finished(procedure) && !procedure?.offersImported">
+    <div>
       <span class="app-ghost-color pr-20">
         <uxg-icon shape="app-waiting"></uxg-icon> Ожидание выгрузки результатов
       </span>
-
+    </div>
         <a [href]="resultLink(procedure)" target="_blank" class="app-bold pr-20">Показать на ЭТП ГПБ</a>
       </ng-container>
       <div class="procedure-actions">
