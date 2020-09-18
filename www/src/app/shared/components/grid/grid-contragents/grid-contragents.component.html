@@ -24,7 +24,7 @@
     <!-- Временно скрыто в матрице КП-->
     <ng-container *ngIf="showParams && suppliers.length">
       <ng-container *ngIf="showCommonParams === false; else close">
-        <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
+        <button uxgButton primary class="common-params" (click)="showCommonParams = true; openCommonParams.emit()">Общие параметры</button>
       </ng-container>
       <ng-template #close>
         <button uxgButton icon primary class="common-params" (click)="showCommonParams = false">
