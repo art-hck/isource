@@ -94,7 +94,7 @@
   {{position.requestPosition.name}}
 </div>
 <ng-container *ngIf="procedure.positions.length > 3">
-  <button uxgButton clear class="app-link show-all" (click)="procedurePositionsModal.open()">Показать все позиции</button>
+  <button uxgButton clear class="app-link show-all app-layout" (click)="procedurePositionsModal.open()">Показать все позиции</button>
 </ng-container>
 <uxg-modal #procedurePositionsModal size="l">
   <h2><b>Позиции процедуры {{procedure.procedureTitle}}</b></h2>

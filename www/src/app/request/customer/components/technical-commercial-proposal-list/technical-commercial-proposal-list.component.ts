@@ -2,7 +2,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, switchMap, takeUntil, tap } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -78,6 +78,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
+  isLoading: boolean;
   requestId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
@@ -89,6 +90,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  get selectedPositions() {
+    const checkedPositions = [];
+
+    this.tcpComponentList?.forEach((tcpComponent) => {
+      checkedPositions.push(...tcpComponent.selectedPositions);
+    });
+
+    return checkedPositions;
   }
 
   get disabled() {
@@ -198,6 +209,31 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
   }
 
+  approveFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
+      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+    }
+  }
+
+  sendToEditFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
+      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+    }
+  }
+
+  private dispatchAction(action): void {
+    this.isLoading = true;
+
+    this.store.dispatch(action).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
   switchView(view: ProposalsView) {
     this.view = view;
     this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
@@ -242,7 +278,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   onPositionSelected(data): void {
     this.tcpComponentList.forEach((tcpComponent) => {
-      tcpComponent.refreshPositionsSelectedState(data.i, data.technicalCommercialProposalPosition);
+      tcpComponent.refreshPositionsSelectedState(data.index, data.selectedPositions);
     });
   }
 

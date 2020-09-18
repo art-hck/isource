@@ -122,8 +122,10 @@
               [technicalCommercialProposalIndex]="i"
               [chooseBy$]="chooseBy$"
               [proposal]="proposal"
-              (positionSelected)="onPositionSelected($event)"
-            ></app-request-technical-commercial-proposal>
+              [proposals]="proposals"
+              [isLoading]="isLoading"
+              (positionSelected)="onPositionSelected($event)">
+            </app-request-technical-commercial-proposal>
           </ng-container>
         </ng-container>
 
@@ -135,7 +137,6 @@
             Все технико-коммерческие предложения рассмотрены
           </h1>
         </div>
-
       </ng-container>
     </div>
     <div class="app-col-aside detachable" *ngIf="view==='list'"></div>
@@ -147,9 +148,11 @@
   [loading]="(stateStatus$ | async) !== 'received'"
   (approve)="reviewMultiple()"
   (sendToEdit)="sendToEditAll()"
+  (approveFromListView)="approveFromListView()"
+  (sendToEditFromListView)="sendToEditFromListView()"
   [chooseBy$]="chooseBy$"
-  [hidden]="!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0"
-  [total]="total"
+  [hidden]="view === 'grid' && (!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0)"
+  [viewType]="view"
 ></app-grid-footer>
 
 <ng-template #placeholder>

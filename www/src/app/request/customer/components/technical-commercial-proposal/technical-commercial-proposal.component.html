@@ -1,10 +1,8 @@
-<div class="app-card">
+<div class="app-card" [formGroup]="form">
   <!-- title -->
   <div class="app-row app-align-items-center">
     <div class="app-col-auto checkbox-space" *ngIf="!isReviewed && !folded">
-      <uxg-checkbox
-        [ngModel]="areAllPositionsChecked(proposal.positions)"
-        (ngModelChange)="onSelectAllPositions($event, technicalCommercialProposalIndex)">
+      <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
       </uxg-checkbox>
     </div>
 
@@ -54,45 +52,44 @@
             <small class="status text-center">Статус</small>
           </div>
 
-          <div class="app-row position-list"
-               *ngFor="let item of proposal.positions"
-               [class.app-ghost-color]="isProposalPositionReviewed(item)">
-            <div class="app-col-auto checkbox-space" *ngIf="!isReviewed">
-              <uxg-checkbox
-                class="app-control"
-                [disabled]="isProposalPositionReviewed(item)"
-                [ngModel]="!isProposalPositionReviewed(item) &&
-                          isTechnicalCommercialProposalPositionChecked(technicalCommercialProposalIndex, item)"
-                (ngModelChange)="onSelectPosition(technicalCommercialProposalIndex, item)"
-              ></uxg-checkbox>
-            </div>
+          <ng-container formArrayName="positions">
+            <div class="app-row position-list"
+                 *ngFor="let item of proposal.positions; index as i"
+                 [class.app-ghost-color]="isProposalPositionReviewed(item)"
+                 [formGroupName]="i">
+              <div class="app-col-auto checkbox-space" *ngIf="!isReviewed">
+                <uxg-checkbox class="app-control" #checked
+                              formControlName="checked">
+                </uxg-checkbox>
+              </div>
 
-            <div class="app-col app-ellipsis name">{{item.position.name}}</div>
-            <div class="app-col app-ellipsis manufacturing-name">{{item.manufacturingName}}</div>
-            <div class="app-col app-ellipsis manufacturer">{{item?.manufacturer}}</div>
-            <div class="app-col total">
-              {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
-              <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
-            </div>
-            <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
+              <div class="app-col app-ellipsis name">{{item.position.name}}</div>
+              <div class="app-col app-ellipsis manufacturing-name">{{item.manufacturingName}}</div>
+              <div class="app-col app-ellipsis manufacturer">{{item?.manufacturer}}</div>
+              <div class="app-col total">
+                {{(item.priceWithoutVat * item.quantity) || null | number:'1.0-2'}}
+                <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+              </div>
+              <div class="app-col quantity">{{item.quantity}} <span class="app-ghost-color">{{item.measureUnit}}</span></div>
 
-            <div class="app-col price">
-              {{item.priceWithoutVat | number:'1.0-2'}}
-              <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
-            </div>
+              <div class="app-col price">
+                {{item.priceWithoutVat | number:'1.0-2'}}
+                <span class="app-ghost-color">{{getCurrencySymbol(item.currency, "narrow")}}</span>
+              </div>
 
-            <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
-            <div class="status text-center"
-                 [class.app-ghost-color]="item.status !== 'APPROVED'"
-                 [class.app-success-color]="item.status === 'APPROVED'"
-                 [class.app-warning-color]="item.status === 'SENT_TO_EDIT'"
-                 [ngSwitch]="item.status">
-              <uxg-icon shape="app-draft" *ngSwitchCase="'NEW'"></uxg-icon>
-              <uxg-icon shape="app-unknown" *ngSwitchCase="'SENT_TO_REVIEW'"></uxg-icon>
-              <uxg-icon shape="app-warning" *ngSwitchCase="'SENT_TO_EDIT'"></uxg-icon>
-              <uxg-icon shape="app-check" *ngSwitchDefault></uxg-icon>
+              <div class="app-col date">{{item.deliveryDate | date:"dd.MM.yyyy"}}</div>
+              <div class="status text-center"
+                   [class.app-ghost-color]="item.status !== 'APPROVED'"
+                   [class.app-success-color]="item.status === 'APPROVED'"
+                   [class.app-warning-color]="item.status === 'SENT_TO_EDIT'"
+                   [ngSwitch]="item.status">
+                <uxg-icon shape="app-draft" *ngSwitchCase="'NEW'"></uxg-icon>
+                <uxg-icon shape="app-unknown" *ngSwitchCase="'SENT_TO_REVIEW'"></uxg-icon>
+                <uxg-icon shape="app-warning" *ngSwitchCase="'SENT_TO_EDIT'"></uxg-icon>
+                <uxg-icon shape="app-check" *ngSwitchDefault></uxg-icon>
+              </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </div>
 
@@ -135,7 +132,7 @@
     <ng-container *ngIf="!isReviewed">
       <hr>
 
-      <div class="app-row app-align-items-center">
+      <div class="app-row app-align-items-center bottom-row">
         <div class="app-col app-secondary-color">
           Все цены указаны <b>без НДС</b>. Вы можете оклонить все предложения по этой <br>
           позиции и не получать другие предложения по ней от этих поставщиков
@@ -144,7 +141,7 @@
         <div class="app-col app-col-auto total-price-block">
           <div class="app-ghost-color">Общая сумма без НДС</div>
           <div class="total-price">
-            <b>{{ helper.getSummaryPrice(proposal.positions) | number: "1.0-2"}}
+            <b>{{ helper.getSummaryPrice(proposal.positions) | number: "1.0-2" }}
             <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span></b>
           </div>
         </div>
@@ -154,13 +151,13 @@
 
           <button uxgButton secondary
                   (click)="sendToEdit()"
-                  [disabled]="!hasSelectedPositions(technicalCommercialProposalIndex) || isLoading">
+                  [disabled]="selectedPositions?.length === 0 || isLoading">
             На доработку
           </button>
 
           <button uxgButton primary
                   (click)="approve()"
-                  [disabled]="!hasSelectedPositions(technicalCommercialProposalIndex) ||isLoading">
+                  [disabled]="selectedPositions?.length === 0 || isLoading">
             Выбрать победителя
           </button>
         </div>
