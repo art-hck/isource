@@ -11,6 +11,7 @@ import { pipeFromArray } from "rxjs/internal/util/pipe";
 export class UxgSelectAllDirective implements OnInit, OnDestroy {
   @Input() uxgSelectAllFor: string;
   @Input() slave: boolean;
+  @Input() mixedWithDisabled = false;
   destroy$ = new Subject();
 
   constructor(@Optional() private component: UxgCheckboxComponent, private ngControl: NgControl) {}
@@ -28,7 +29,7 @@ export class UxgSelectAllDirective implements OnInit, OnDestroy {
       tap(() => listen = false),
       map(({ controls }) => controls.map(({ controls: c }: FormGroup) => c[controlName])),
       tap((children: AbstractControl[]) => !this.slave && action(children)),
-      tap((children: AbstractControl[]) => this.component && (this.component.isMixed = children.filter(c => c.enabled).length > children.filter(c => c.value).length)),
+      tap((children: AbstractControl[]) => this.component && (this.component.isMixed = children.filter(c => c.enabled || this.mixedWithDisabled).length > children.filter(c => c.value).length)),
       tap(() => listen = true),
       takeUntil(this.destroy$)
     ]);
@@ -39,7 +40,7 @@ export class UxgSelectAllDirective implements OnInit, OnDestroy {
     ).subscribe();
 
     control.parent.get(this.uxgSelectAllFor).valueChanges.pipe(pipes(
-      children => control.setValue(children.filter(c => c.value).length > 0)
+      children => control.setValue(children.filter(c => c.value && c.enabled).length > 0)
     )).subscribe();
   }
 

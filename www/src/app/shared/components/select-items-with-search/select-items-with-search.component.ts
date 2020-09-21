@@ -53,6 +53,12 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
         this.form.valueChanges.subscribe(() => this.submit())
       );
     }
+
+    if (this.filterFn) {
+      this.form.get('search').valueChanges.subscribe((value) => this.formItems?.controls
+        .filter(c => !this.disabledFn || !this.disabledFn(c.get('item'))) // не учитываем позиции, задизейбленые функцией
+        .forEach(c => !this.filterFn(value, c.get('item').value) ? c.disable() : c.enable()));
+    }
   }
 
   ngOnChanges() {
