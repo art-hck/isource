@@ -22,7 +22,7 @@
       <div class="app-col separator"></div>
 
       <div class="app-col">
-        <a routerLink="/im/request/{{ position.request.id }}/position/{{ position.id }}">
+        <a [routerLink]="['/im', position.request.id]" [queryParams]="{positionId: position.id}">
           <span class="app-secondary-color">
             <uxg-icon shape="app-comment"></uxg-icon>
             <span>Перейти к чату по позиции</span>
