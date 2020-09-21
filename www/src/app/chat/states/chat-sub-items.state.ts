@@ -38,8 +38,8 @@ export class ChatSubItemsState {
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static subItems({ subItems }: Model) { return subItems.filter(({ position }) => !!position && !position["group"]); }
 
-  static subItem = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState.subItems],
-    (subItems: ChatSubItem[]) => subItems.find(({ position }) => position.id === id)
+  static subItem = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState],
+    ({ subItems }: Model) => subItems.find(({ position }) => position && position.id === id)
   )
 
   static subItemsByGroup = (groupId: RequestGroup["id"]) => createSelector([ChatSubItemsState],

@@ -5,7 +5,7 @@ import { ChatItemsState } from "../../states/chat-items.state";
 import { combineLatest, EMPTY, fromEvent, iif, merge, Observable, of, Subject } from "rxjs";
 import { RequestListItem } from "../../../request/common/models/requests-list/requests-list-item";
 import { UserInfoService } from "../../../user/service/user-info.service";
-import { debounceTime, delayWhen, distinctUntilChanged, filter, flatMap, map, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { debounceTime, delayWhen, distinctUntilChanged, filter, flatMap, map, skipUntil, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ChatItem, ChatSubItem } from "../../models/chat-item";
 import { ChatItems } from "../../actions/chat-items.actions";
 import { RequestPositionList } from "../../../request/common/models/request-position-list";
@@ -51,6 +51,16 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
 
   get role() {
     return this.userInfoService.getUserRole();
+  }
+
+  get unreadCountContext$(): Observable<number> {
+    return this.item$.pipe(
+      skipUntil(this.subItemsStatus$.pipe(filter(status => status === "received"))),
+      withLatestFrom(this.subItems$),
+      map(([{ context }, subItems]) => {
+        return context.unreadCount - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
+      }),
+    );
   }
 
   constructor(
