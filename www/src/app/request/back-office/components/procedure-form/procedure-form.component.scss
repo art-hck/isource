@@ -41,6 +41,11 @@
 
 .access-radio {
   padding-right: 30px;
+
+  &.readonly {
+    pointer-events: none;
+    opacity: 0.6;
+  }
 }
 
 .no-total-price {

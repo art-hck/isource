@@ -128,14 +128,15 @@
     </div>
 
     <div class="app-row">
-        <p class="app-row access-radio app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
-        </p>
-        <p class="app-row app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
-        </p>
+      <p class="app-row access-radio app-align-items-center" [class.readonly]="publicAccessReadonly">
+        <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
+        <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
+      </p>
+
+      <p class="app-row app-align-items-center" [class.readonly]="publicAccessReadonly">
+        <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
+        <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
+      </p>
     </div>
 
     <div class="app-control-wrap okpd2">

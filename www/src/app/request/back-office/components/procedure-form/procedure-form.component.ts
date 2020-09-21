@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -6,7 +6,17 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
-import { catchError, debounceTime, filter, finalize, flatMap, startWith, takeUntil, tap } from "rxjs/operators";
+import {
+  catchError,
+  debounceTime,
+  filter,
+  finalize,
+  flatMap,
+  mergeMap,
+  startWith,
+  takeUntil,
+  tap
+} from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
@@ -21,6 +31,7 @@ import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { Uuid } from "../../../../cart/models/uuid";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 
 @Component({
   selector: 'app-request-procedure-form',
@@ -37,7 +48,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() tcpGroupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
-  @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
   selectedPositions: RequestPosition[] = [];
 
   form: FormGroup;
@@ -46,6 +56,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   wizzard: UxgWizzard;
   isLoading: boolean;
   withoutTotalPriceReadonly: boolean;
+  publicAccessReadonly: boolean;
 
   readonly destroy$ = new Subject();
   readonly timeEndRegistration = this.fb.control("", Validators.required);
@@ -68,8 +79,10 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
+    private commercialProposalsService: CommercialProposalsService,
     private contragentService: ContragentService,
     private store: Store,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -139,10 +152,32 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.okpd2").disable();
     }
 
-    this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
+    this.form.get("positions").valueChanges.pipe(debounceTime(200), takeUntil(this.destroy$))
       .subscribe(positions => {
         this.selectedPositions = positions;
-        this.updateSelectedPositions.emit(this.selectedPositions);
+
+        if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && this.selectedPositions.length > 0) {
+          this.isLoading = true;
+
+          this.commercialProposalsService
+            .getContragentsWithTp(this.request.id, this.selectedPositions.map(position => position.id)).pipe(
+              mergeMap(contragentsWithTp => {
+                if (contragentsWithTp.length === 0) {
+                  return this.contragentService.getContragentList().pipe(tap(allContragents => {
+                    this.contragents = allContragents;
+                    this.publicAccessReadonly = false;
+                  }));
+                } else {
+                  this.contragents = contragentsWithTp;
+                  this.form.get("general.publicAccess").setValue(false);
+                  this.publicAccessReadonly = true;
+                }
+              })
+            ).subscribe(() => {
+              this.isLoading = false;
+              this.cd.detectChanges();
+            });
+        }
 
         if (this.selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
           this.form.get("general.withoutTotalPrice").setValue(true);
