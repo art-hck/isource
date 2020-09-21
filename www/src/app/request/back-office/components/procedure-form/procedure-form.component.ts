@@ -230,9 +230,12 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
       dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
       dateSummingUp: moment(this.form.get('general.dateSummingUp').value + " " + this.timeSummingUp.value, "DD.MM.YYYY HH:mm").toISOString(),
-      source: this.procedureSource,
-      requestTechnicalCommercialProposalGroupId: this.tcpGroupId
+      source: this.procedureSource
     };
+
+    if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
+      body['requestTechnicalCommercialProposalGroupId'] = this.tcpGroupId;
+    }
 
     this.isLoading = true;
     this.form.disable();
