@@ -17,7 +17,12 @@ import { FormControl } from "@angular/forms";
 })
 export class GridContragentsComponent implements AfterViewInit, OnChanges, AfterViewChecked {
   @ViewChild('gridRow') gridRow: ElementRef;
-  @ViewChild('gridCommonParams') set gridCommonParams(gridCommonParams) {gridCommonParams ? this.openCommonParams.emit() : null};
+  @ViewChild('gridCommonParams')
+  set gridCommonParameters(gridCommonParams) {
+    if (gridCommonParams) {
+      this.openCommonParams.emit();
+    }
+  }
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
