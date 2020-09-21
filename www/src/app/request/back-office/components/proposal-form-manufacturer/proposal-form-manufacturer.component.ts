@@ -71,6 +71,6 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
   }
 
   get pristineCount() {
-    return this.formPositions.controls.filter(c => !c.get('manufacturingName').value).length;
+    return this.formPositions.controls.filter(c => !c.get('manufacturingName').value || !c.get('manufacturer').value).length;
   }
 }
