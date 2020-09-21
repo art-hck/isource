@@ -1,6 +1,10 @@
 @import "src/theme";
 @import "src/assets/styles/helpers";
 
+.table-col {
+  overflow: hidden;
+}
+
 .app-table {
   small {
     & span {
