@@ -49,7 +49,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
-        <div class="app-ghost-color">Стоимость поставки</div>
+        <div class="app-ghost-color">Стоимость доставки</div>
         <div class="info-value" *ngIf="proposal.deliveryPrice; else included">
           {{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}
         </div>
