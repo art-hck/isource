@@ -129,7 +129,7 @@
 <!-- requests -->
 <div class="app-row">
   <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
-  <div class="app-col">
+  <div class="app-col table-col">
     <div class="app-table" [class.disabled]="status !== 'received'">
       <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
         <div class="app-col app-grow-0 number app-bold">{{ request.request.number | number:'1.0-2' }}</div>
