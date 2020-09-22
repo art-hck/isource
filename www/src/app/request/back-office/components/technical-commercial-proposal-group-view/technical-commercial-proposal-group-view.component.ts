@@ -45,6 +45,6 @@ export class TechnicalCommercialProposalGroupViewComponent {
     private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
     private store: Store,
-    public service: TechnicalCommercialProposalService
+    public service: TechnicalCommercialProposalService,
   ) {}
 }

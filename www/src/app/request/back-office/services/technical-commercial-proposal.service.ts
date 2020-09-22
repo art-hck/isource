@@ -35,6 +35,11 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
+  getGroupInfo(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/${ groupId }/view`;
+    return this.api.get<TechnicalCommercialProposalGroup>(url);
+  }
+
   publish({ id }: TechnicalCommercialProposal) {
     const url = `requests/backoffice/technical-commercial-proposals/${ id }/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);
