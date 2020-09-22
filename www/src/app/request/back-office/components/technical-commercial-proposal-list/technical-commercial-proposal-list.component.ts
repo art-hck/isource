@@ -99,12 +99,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   readonly updateProcedures = () => [new RefreshProcedures(this.requestId, this.groupId), new FetchAvailablePositions(this.requestId, this.groupId)];
   readonly rollback = ({ id }: RequestPosition) => new Rollback(this.requestId, id);
 
-  readonly group$ = this.route.params.pipe(
-    tap(({id}) => this.requestId = id),
-    tap(({ groupId }) => this.groupId = groupId),
-    switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
-  );
-
   get selectedPositions(): TechnicalCommercialProposalByPosition[] {
     return (this.form.get('positions') as FormArray).controls
       ?.filter(({value}) => value.checked)
@@ -145,7 +139,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       takeUntil(this.destroy$)
     ).subscribe();
 
-    this.group$.subscribe(({name}) => this.title.setTitle(name));
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
       this.form = this.fb.group({
