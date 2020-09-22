@@ -154,14 +154,12 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     }
 
     this.form.get("positions").valueChanges.pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(positions => {
-        this.selectedPositions = positions;
-
-        if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && this.selectedPositions.length > 0) {
+      .subscribe(selectedPositions => {
+        if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && selectedPositions.length > 0) {
           this.isLoading = true;
 
           this.commercialProposalsService
-            .getContragentsWithTp(this.request.id, this.selectedPositions.map(position => position.id)).pipe(
+            .getContragentsWithTp(this.request.id, selectedPositions.map(position => position.id)).pipe(
               mergeMap(contragentsWithTp => {
                 if (contragentsWithTp.length === 0) {
                   return this.contragentService.getContragentList().pipe(tap(allContragents => {
@@ -180,7 +178,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
             });
         }
 
-        if (this.selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
+        if (selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
           this.form.get("general.withoutTotalPrice").setValue(true);
           this.withoutTotalPriceReadonly = true;
         } else {
