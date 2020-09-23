@@ -28,6 +28,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   @Input() request: Request;
   @Input() technicalProposal: TechnicalProposal;
+  @Input() closable = true;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() create = new EventEmitter<TechnicalProposal>();
   @Output() update = new EventEmitter<TechnicalProposal>();
