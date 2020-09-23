@@ -85,13 +85,9 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       general: this.fb.group({
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
-        dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
-        timeEndRegistration: [null],
-        dateSummingUp: [
-          this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY") : null,
-          [Validators.required, CustomValidators.currentOrFutureDate()]
-        ],
-        timeSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("HH:ss") : null],
+        dateEndRegistration: [null, [CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
+        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:ss") : null,
+          [Validators.required, CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
@@ -130,9 +126,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.withoutTotalPriceReason").disable();
       this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
-
-      this.form.get("general.timeSummingUp").setValue(this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("HH:mm") : null);
-      this.form.get("general.timeSummingUp").disable();
     }
 
     if (!this.form.get("general.publicAccess").value) {
@@ -151,30 +144,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
           this.form.get("general.withoutTotalPrice").setValue(false);
           this.withoutTotalPriceReadonly = false;
         }
-      });
-
-    this.form.get("general.dateEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.refreshDateAndTimeValues();
-        this.validateDateAndTimeValues();
-      });
-
-    this.form.get("general.timeEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.refreshDateAndTimeValues();
-        this.validateDateAndTimeValues();
-      });
-
-    this.form.get("general.dateSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.refreshDateAndTimeValues();
-        this.validateDateAndTimeValues();
-      });
-
-    this.form.get("general.timeSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.refreshDateAndTimeValues();
-        this.validateDateAndTimeValues();
       });
 
     this.form.get("general.publicAccess").valueChanges.pipe(
@@ -261,46 +230,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
 
   filterPositions(q: string, position: RequestPosition): boolean {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
-  }
-
-  /**
-   * Функция сохраняет введённые даты заверешния приёма заявок и подведения итогов для дальнейшей валидации
-   */
-  refreshDateAndTimeValues(): void {
-    this.procedureDateEndRegistration = this.form.get("general.dateEndRegistration").value;
-    this.procedureDateSummingUp = this.form.get("general.dateSummingUp").value;
-
-    const timeEndRegistration = this.form.get("general.timeEndRegistration").value;
-    const timeSummingUp = this.form.get("general.timeSummingUp").value;
-
-    if (moment(timeEndRegistration, 'HH : mm').isValid()) {
-      this.procedureDateEndRegistration = this.procedureDateEndRegistration + ' ' + moment(timeEndRegistration, 'HH : mm').format('HH:mm');
-    }
-
-    if (moment(timeSummingUp, 'HH : mm').isValid()) {
-      this.procedureDateSummingUp = this.procedureDateSummingUp + ' ' + moment(timeSummingUp, 'HH : mm').format('HH:mm');
-    }
-  }
-
-  /**
-   * Функция валидирует введённые даты заверешния приёма заявок и подведения итогов
-   */
-  validateDateAndTimeValues(): void {
-    if (this.procedureDateSummingUp) {
-      if (moment(this.procedureDateEndRegistration, "DD.MM.YYYY HH:mm").isAfter(moment(this.procedureDateSummingUp, "DD.MM.YYYY HH:mm"))) {
-        if (this.form.get("general.dateSummingUp").disabled) {
-          this.form.get("general.dateEndRegistration").setErrors({ beforeSummingUpDate: true});
-        } else {
-          this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
-        }
-      } else {
-        this.form.get("general.dateEndRegistration").setErrors(null);
-        this.form.get("general.dateSummingUp").setErrors(null);
-      }
-
-      this.form.get("general.dateEndRegistration").markAsTouched();
-      this.form.get("general.dateSummingUp").markAsTouched();
-    }
   }
 
   isStatusInvalid(status: PositionStatus) {
