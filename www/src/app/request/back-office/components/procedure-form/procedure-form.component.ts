@@ -39,8 +39,9 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Output() cancel = new EventEmitter();
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
   selectedPositions: RequestPosition[] = [];
-
   form: FormGroup;
+  procedureDateEndRegistration: string;
+  procedureDateSummingUp: string;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
@@ -48,8 +49,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   withoutTotalPriceReadonly: boolean;
 
   readonly destroy$ = new Subject();
-  readonly timeEndRegistration = this.fb.control("", Validators.required);
-  readonly timeSummingUp = this.fb.control("", Validators.required);
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly mask: TextMaskConfig = {
     mask: value => [/[0-2]/, value[0] === "2" ? /[0-3]/ : /[0-9]/, ' ', ':', ' ', /[0-5]/, /\d/],
@@ -86,11 +85,9 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       general: this.fb.group({
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
-        dateEndRegistration: [null, CustomValidators.currentOrFutureDate()],
-        dateSummingUp: [
-          this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY") : null,
-          [Validators.required, CustomValidators.currentOrFutureDate()]
-        ],
+        dateEndRegistration: [null, [CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
+        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:ss") : null,
+          [Validators.required, CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
         dishonestSuppliersForbidden: this.defaultProcedureValue("dishonestSuppliersForbidden", false),
@@ -129,10 +126,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.withoutTotalPriceReason").disable();
       this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
-
-
-      this.timeSummingUp.setValue(this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("HH:mm") : null);
-      this.timeSummingUp.disable();
     }
 
     if (!this.form.get("general.publicAccess").value) {
@@ -150,42 +143,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
         } else {
           this.form.get("general.withoutTotalPrice").setValue(false);
           this.withoutTotalPriceReadonly = false;
-        }
-      });
-
-    this.form.get("general.dateEndRegistration").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(date => {
-        const dateSummingUp = this.form.get("general.dateSummingUp").value;
-
-        if (this.form.get("general.dateSummingUp").value) {
-          if (moment(date, "DD.MM.YYYY HH:mm").isAfter(moment(dateSummingUp, "DD.MM.YYYY HH:mm"))) {
-            if (this.form.get("general.dateSummingUp").disabled) {
-              this.form.get("general.dateEndRegistration").setErrors({ beforeSummingUpDate: true});
-            } else {
-              this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
-            }
-          } else {
-            this.form.get("general.dateEndRegistration").setErrors(null);
-            this.form.get("general.dateSummingUp").setErrors(null);
-          }
-
-          this.form.get("general.dateEndRegistration").markAsTouched();
-          this.form.get("general.dateSummingUp").markAsTouched();
-        }
-      });
-
-    this.form.get("general.dateSummingUp").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(date => {
-        const dateEndRegistration = this.form.get("general.dateEndRegistration").value;
-
-        if (this.form.get("general.dateSummingUp").value) {
-          if (moment(date, "DD.MM.YYYY HH:mm").isBefore(moment(dateEndRegistration, "DD.MM.YYYY HH:mm"))) {
-            this.form.get("general.dateSummingUp").setErrors({ afterEndRegistrationDate: true});
-          } else {
-            this.form.get("general.dateSummingUp").setErrors(null);
-          }
-
-          this.form.get("general.dateSummingUp").markAsTouched();
         }
       });
 
@@ -228,10 +185,13 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       privateAccessContragents: this.form.get("general.publicAccess").value ? [] : this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
-      dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value + " " + this.timeEndRegistration.value, "DD.MM.YYYY HH:mm").toISOString(),
-      dateSummingUp: moment(this.form.get('general.dateSummingUp').value + " " + this.timeSummingUp.value, "DD.MM.YYYY HH:mm").toISOString(),
+      dateEndRegistration: moment(this.procedureDateEndRegistration, "DD.MM.YYYY HH:mm").toISOString(),
+      dateSummingUp: moment(this.procedureDateSummingUp, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
+
+    delete body['timeEndRegistration'];
+    delete body['timeSummingUp'];
 
     if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
       body['requestTechnicalCommercialProposalGroupId'] = this.tcpGroupId;
@@ -271,7 +231,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   filterPositions(q: string, position: RequestPosition): boolean {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   }
-
 
   isStatusInvalid(status: PositionStatus) {
     return [
