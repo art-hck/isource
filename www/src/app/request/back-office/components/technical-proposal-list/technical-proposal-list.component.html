@@ -29,6 +29,7 @@
         <app-request-technical-proposals-form
           *ngIf="showForm || technicalProposals.length + procedures.length === 0"
           [request]="request"
+          [closable]="technicalProposals.length + procedures.length > 0"
           (visibleChange)="showForm = $event"
           (create)="addTechnicalProposal($event)"
         ></app-request-technical-proposals-form>

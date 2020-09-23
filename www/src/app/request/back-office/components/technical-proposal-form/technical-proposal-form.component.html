@@ -13,7 +13,7 @@
       <!--          <uxg-icon shape="app-trash"></uxg-icon>-->
       <!--        </button>-->
       <!--      </div>-->
-      <div class="app-col app-grow-0">
+      <div class="app-col app-grow-0" *ngIf="closable">
         <button type="button" uxgButton icon link (click)="visibleChange.emit(false)">
           <uxg-icon shape="app-cross"></uxg-icon>
         </button>
@@ -87,14 +87,14 @@
       <div class="app-col">
         <small class="app-ghost-color app-bold">НАИМЕНОВАНИЕ ПОЗИЦИИ</small>
 
-        <div class="app-row">
+        <div class="app-row app-align-items-center">
           <button
             type="button" uxgButton secondary (click)="positionsModal.open()"
             [disabled]="form.get('positions').disabled">Выбрать позиции
           </button>
-          <div class="app-col">
-            <ng-container *ngIf="this.form.get('positions').dirty && this.form.get('positions').touched && this.form.get('documents').value.length === 0">
-              <div class="app-control-error" *ngIf="form.get('positions').errors as e">
+          <div class="app-col" *ngIf="form.get('positions') as c">
+            <ng-container *ngIf="c.dirty && c.touched">
+              <div class="app-control-error" *ngIf="c.errors as e">
                 <span class="error-message" *ngIf="e.required">Выберите позиции для создания предложения</span>
               </div>
             </ng-container>
@@ -103,7 +103,7 @@
       </div>
       <div class="app-col">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
-        <div class="app-row">
+        <div class="app-row app-align-items-center">
 
           <button
             type="button" uxgButton secondary (click)="manufacturerModal.open()"
