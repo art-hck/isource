@@ -13,13 +13,16 @@
 </form>
 
 <uxg-modal #attachmentModal (stateChange)="reset()">
-  <form [formGroup]="form" *ngIf="!isLoading; else loading">
-    <h2>Выбрано {{attachments.length | pluralize: "файл" : "файла" : "файлов"}}</h2>
-    <textarea uxgInput placeholder="Комментарий" formControlName="text" (keydown.enter)="submit($event)"></textarea>
-    <ng-template uxgModalFooter>
+  <form [formGroup]="form" *ngIf="!isLoading; else loading" (ngSubmit)="submit()">
+    <h2>{{attachments.length | pluralize: false : "Выбран" : "Выбрано" : "Выбрано"}} {{attachments.length | pluralize: "файл" : "файла" : "файлов"}}</h2>
+    <div class="app-control-wrap">
+      <textarea uxgInput placeholder="Комментарий" [class.invalid]="false" formControlName="text" (keydown.enter)="submit($event)"></textarea>
+    </div>
+
+    <div class="app-row app-justify-content-end app-align-items-center">
       <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
-      <button uxgButton primary lg (click)="submit()">Отправить</button>
-    </ng-template>
+      <button uxgButton primary lg [disabled]="isLoading">Отправить</button>
+    </div>
   </form>
 </uxg-modal>
 

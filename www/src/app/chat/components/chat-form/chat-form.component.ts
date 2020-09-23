@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { merge, Subject, throwError } from "rxjs";
 import { catchError, finalize, takeUntil } from "rxjs/operators";
 import { ToastActions } from "../../../shared/actions/toast.actions";
@@ -22,7 +22,7 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
 
   readonly destroy$ = new Subject();
   readonly form: FormGroup = this.fb.group({
-    text: null,
+    text: [null, Validators.required],
     attachments: this.fb.array([])
   });
 
@@ -38,7 +38,12 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
     }
   }
 
-  constructor(private store: Store, private fb: FormBuilder, private attachmentsService: AttachmentsService) {}
+  constructor(
+    private store: Store,
+    private fb: FormBuilder,
+    private attachmentsService: AttachmentsService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   selectFiles(files: File[]) {
     this.attachmentModal.open();
@@ -47,10 +52,11 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
     merge(...files.map(file => this.attachmentsService.upload(file))).pipe(
       finalize(() => {
         this.isLoading = false;
+        this.cd.detectChanges();
       }),
       catchError(err => {
         this.attachmentModal.close();
-        this.store.dispatch(new ToastActions.Error('Ошибка загрузки!'));
+        this.store.dispatch(new ToastActions.Error(err?.error?.err ?? 'Ошибка загрузки файла!'));
         return throwError(err);
       }), takeUntil(this.destroy$)
     ).subscribe(attachment => this.attachments.push(this.fb.control(attachment)));
@@ -58,9 +64,10 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
 
   submit(e?: Event) {
     e?.preventDefault();
-    if (this.form.disabled) { return; }
+    if (this.form.disabled || this.form.invalid) { return; }
     this.send.emit(this.form.value);
     this.reset();
+    this.attachmentModal.close();
   }
 
   reset() {
