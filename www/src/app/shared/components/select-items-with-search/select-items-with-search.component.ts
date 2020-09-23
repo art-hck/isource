@@ -21,6 +21,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
   @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
+  @ContentChild('footerContentTpl') footerTplRef: TemplateRef<any>;
 
   public onTouched: (value) => void;
   public onChange: (value) => void;

@@ -18,8 +18,7 @@
       [filterFn]="filterPositions"
       [disabledFn]="disabledPositions"
       [trackBy]="trackById"
-      [items]="positions"
-    >
+      [items]="positions">
       <ng-template let-formGroup="formGroup" let-position="item">
         <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
           <div class="app-col app-grow-0">
@@ -55,7 +54,18 @@
           </ng-container>
         </div>
       </ng-template>
+
+      <ng-template #footerContentTpl>
+        <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
+          <div class="app-col app-grow-0"></div>
+          <div class="app-col app-bold title"></div>
+          <div class="app-col app-col-auto select-list-item-quantity">Кол-во</div>
+          <div class="app-col app-col-auto select-list-item-total-price">Сумма НМЦ</div>
+          <div class="app-col app-col-auto select-list-item-date">Дата поставки</div>
+        </div>
+      </ng-template>
     </select-items-with-search>
+
     <ng-template #loading>
       <div *uxgWizzardStep="'positions'" class="text-center">
         <span class="spinner spinner-md"></span>

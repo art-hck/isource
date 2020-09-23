@@ -169,7 +169,6 @@
         </div>
       </div>
 
-
       <small class="app-uppercase app-ghost-color app-bold">Тип и стоимость доставки</small>
       <div class="app-row">
         <div class="app-col">
@@ -289,7 +288,17 @@
               </div>
             </div>
           </ng-template>
+
+          <ng-template #footerContentTpl>
+            <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
+              <div class="app-col app-grow-0"></div>
+              <div class="app-col app-bold"></div>
+              <div class="app-col app-col-auto select-list-item-quantity">Кол-во</div>
+              <div class="app-col app-col-auto select-list-item-date">Дата поставки</div>
+            </div>
+          </ng-template>
         </select-items-with-search>
+
         <br/>
         <ng-template uxgModalFooter>
           <button type="button" uxgButton lg secondary uxgModalClose>Отмена</button>
