@@ -89,6 +89,10 @@ export class RequestComponent implements OnChanges {
     return positions.some(position => position.status === status);
   }
 
+  everyPositionIsNotDraftEntity(positions: RequestPosition[]): boolean {
+    return positions.every(position => position.isDraftEntity === false);
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
