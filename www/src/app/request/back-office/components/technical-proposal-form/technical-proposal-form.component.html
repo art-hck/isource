@@ -220,6 +220,7 @@
         (cancel)="manufacturerModal.close()"
         (ngModelChange)="manufacturerModal.close()"
         [disabledFn]="positionManufacturerNameDisabled"
+        [showManufacturer]="false"
         formControlName="positions"
       ></app-request-proposal-form-manufacturer>
     </uxg-modal>
