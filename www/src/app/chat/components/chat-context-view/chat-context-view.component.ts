@@ -23,7 +23,8 @@ import { ChatAttachment } from "../../models/chat-attachment";
 import { ChatMessages } from "../../actions/chat-messages.actions";
 import { ChatSubItems } from "../../actions/chat-sub-items.actions";
 import { FormControl } from "@angular/forms";
-  import { StateStatus } from "../../../request/common/models/state-status";
+import { StateStatus } from "../../../request/common/models/state-status";
+import { AttachmentsService } from "../../services/attachments.service";
 
 @Component({
   styleUrls: ['./chat-context-view.component.scss'],
@@ -67,6 +68,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
+    public attachmentsService: AttachmentsService,
     public userInfoService: UserInfoService,
     public messagesService: MessagesService,
     public conversationsService: ConversationsService,
