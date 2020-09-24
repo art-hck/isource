@@ -59,7 +59,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
       skipUntil(this.subItemsStatus$.pipe(filter(status => status === "received"))),
       withLatestFrom(this.subItems$),
       map(([{ context }, subItems]) => {
-        return context.unreadCount - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
+        return context?.unreadCount ?? 0 - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
       }),
     );
   }
