@@ -45,16 +45,17 @@
           </ng-template>
         </div>
         <div class="app-col app-ellipsis" [ngSwitch]="position.status">
+          <!-- @TODO: пока нет возможности выводить, т.к. недостаточно информации с бэка -->
+          <!--
           <div class="app-success-color" *ngSwitchCase="'TCP_WINNER_SELECTED'">
             <span>Выбран победитель</span>
             <uxg-icon shape="app-check"></uxg-icon>
           </div>
 
-          <!-- @TODO: пока нет возможности выводить, т.к. недостаточно информации с бэка -->
-          <!--div class="app-warning-color">
+          <div class="app-warning-color">
             <span>На доработке</span>
             <uxg-icon shape="app-warning"></uxg-icon>
-          </div-->
+          </div>
 
           <div class="app-ghost-color" *ngSwitchCase="'TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT'">
             <span>Решение не принято</span>
@@ -62,6 +63,8 @@
           </div>
 
           <div *ngSwitchDefault class="app-ghost-color">—</div>
+          -->
+          <app-position-status [label]="positionStatusesLabels[position.status]" [status]="position.status" ></app-position-status>
         </div>
       </div>
     </div>

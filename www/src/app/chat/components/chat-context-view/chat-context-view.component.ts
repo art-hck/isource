@@ -33,7 +33,7 @@ import { AttachmentsService } from "../../services/attachments.service";
 export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('messagesContainer') messagesContainer: ElementRef;
   @ViewChildren('messageEl') messageElements: QueryList<ElementRef>;
-  @Select(ChatSubItemsState.subItems) subItems$: Observable<ChatSubItem[]>;
+  @Select(ChatSubItemsState.subItems()) subItems$: Observable<ChatSubItem[]>;
   @Select(ChatSubItemsState.status) subItemsStatus$: Observable<StateStatus>;
   @Select(ChatMessagesState.messages) messages$: Observable<ChatMessage[]>;
   readonly item$: Observable<ChatItem> = this.route.params.pipe(switchMap(({ requestId }) => this.store.select(ChatItemsState.item(requestId))));
@@ -59,7 +59,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
       skipUntil(this.subItemsStatus$.pipe(filter(status => status === "received"))),
       withLatestFrom(this.subItems$),
       map(([{ context }, subItems]) => {
-        return context?.unreadCount ?? 0 - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
+        return (context?.unreadCount ?? 0) - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
       }),
     );
   }
@@ -116,7 +116,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     this.messagesService.onNew().pipe(
       // Дожидаемся пока у чата появится ин-фа о конверсейшене (сработает сразу если инфа уже есть)
       delayWhen(({ conversation: { id, context: { id: contextId } } }) => merge(
-          this.store.select(ChatSubItemsState.subItems),
+          this.store.select(ChatSubItemsState.subItems(true)),
           this.store.select(ChatItemsState.items)
         ).pipe(
           filter((items) => items.some(value => {
@@ -219,8 +219,8 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     ).subscribe((convId) => this.messagesService.send(text, convId, attachments.map(({ id }) => id)));
   }
 
-  subItemsByGroup(id: RequestGroup["id"]): ChatSubItem[] {
-    return this.store.selectSnapshot(ChatSubItemsState.subItemsByGroup(id));
+  subItemsByGroup$(id: RequestGroup["id"]): Observable<ChatSubItem[]> {
+    return this.store.select(ChatSubItemsState.subItemsByGroup(id));
   }
 
   ngOnDestroy() {
