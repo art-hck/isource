@@ -40,8 +40,6 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
   selectedPositions: RequestPosition[] = [];
   form: FormGroup;
-  procedureDateEndRegistration: string;
-  procedureDateSummingUp: string;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
@@ -185,8 +183,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       privateAccessContragents: this.form.get("general.publicAccess").value ? [] : this.form.get("privateAccessContragents").value.map(({id}) => id),
       procedureDocuments: this.form.get("documents.procedureDocuments").value.map(({id}) => id),
       procedureUploadDocuments: this.form.get("documents.procedureUploadDocuments").value,
-      dateEndRegistration: moment(this.procedureDateEndRegistration, "DD.MM.YYYY HH:mm").toISOString(),
-      dateSummingUp: moment(this.procedureDateSummingUp, "DD.MM.YYYY HH:mm").toISOString(),
+      dateEndRegistration: moment(this.form.get('general.dateEndRegistration').value, "DD.MM.YYYY HH:mm").toISOString(),
+      dateSummingUp: moment(this.form.get('general.dateSummingUp').value, "DD.MM.YYYY HH:mm").toISOString(),
       source: this.procedureSource
     };
 
