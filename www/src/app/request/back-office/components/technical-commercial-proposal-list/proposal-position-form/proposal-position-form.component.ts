@@ -49,7 +49,7 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
       quantity: [p?.quantity ?? this.position.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
       measureUnit: [p?.measureUnit ?? this.position.measureUnit, Validators.required],
       currency: [p?.currency ?? this.position.currency ?? PositionCurrency.RUB, Validators.required],
-      deliveryDate: [this.parseDate(p?.deliveryDate ?? this.position.deliveryDate), [Validators.required, CustomValidators.futureDate()]],
+      deliveryDate: [this.parseDate(p?.deliveryDate ?? this.position.deliveryDate), CustomValidators.futureDate()],
       manufacturer: [p?.manufacturer || '', Validators.required],
       standard: [p?.standard || ''],
       paymentTerms: [p?.paymentTerms ?? this.position.paymentTerms, Validators.required],
