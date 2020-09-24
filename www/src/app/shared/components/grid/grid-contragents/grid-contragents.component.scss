@@ -7,6 +7,10 @@
 
 .contragents-row {
   background: uxg($theme, color-bg);
+
+  & .contragents-grid-row {
+    min-height: 36px;
+  }
 }
 
 .common-params {
