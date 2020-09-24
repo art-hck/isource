@@ -11,11 +11,13 @@
     <div class="app-col"></div>
 
     <!-- Сообщения -->
-    <a routerLink="im" routerLinkActive="active" class="app-menu-icon app-secondary-color">
-      <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
-      <small class="counter" *ngIf="unreadMessagesCount$ | async as count">{{ count }}</small>
+    <div class="app-menu-icon">
+      <a routerLink="im" routerLinkActive="active" class="app-secondary-color">
+        <div class="app-ghost-color"><uxg-icon shape="app-comment-big" size="24"></uxg-icon></div>
+        <small class="counter" *ngIf="unreadMessagesCount$ | async as count">{{ count }}</small>
+      </a>
       <app-chat-notification></app-chat-notification>
-    </a>
+    </div>
 
     <!-- Корзина -->
     <ng-container *ngIf="featureService.authorize('cart')">

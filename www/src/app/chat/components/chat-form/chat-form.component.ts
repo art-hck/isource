@@ -21,6 +21,7 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
   isLoading: boolean;
 
   readonly destroy$ = new Subject();
+  readonly modalText = this.fb.control(null);
   readonly form: FormGroup = this.fb.group({
     text: [null, Validators.required],
     attachments: this.fb.array([])
@@ -43,7 +44,10 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
     private fb: FormBuilder,
     private attachmentsService: AttachmentsService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    const c = this.form.get('text'); // Workaround sync with multiple elements per one formControl
+    c.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => c.setValue(v, {onlySelf: true, emitEvent: false}));
+  }
 
   selectFiles(files: File[]) {
     this.attachmentModal.open();
@@ -66,12 +70,12 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
     e?.preventDefault();
     if (this.form.disabled || this.form.invalid) { return; }
     this.send.emit(this.form.value);
-    this.reset();
+    this.form.reset();
+    this.resetAttachments();
     this.attachmentModal.close();
   }
 
-  reset() {
-    this.form.get('text').reset();
+  resetAttachments() {
     while (this.attachments.length !== 0) {
       this.attachments.removeAt(0);
     }
