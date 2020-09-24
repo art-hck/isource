@@ -9,14 +9,21 @@
   background: #fff;
   padding: 20px;
   height: 538px;
+
+  &.has-analogs {
+    margin-top: 9px;
+  }
+
   .price-info-block {
     border-bottom: 1px solid #d5dde2;
     margin-bottom: 20px;
   }
+
   .price {
     font-size: 22px;
     margin: 10px 0;
   }
+
   .app-btn {
     margin: 0;
   }

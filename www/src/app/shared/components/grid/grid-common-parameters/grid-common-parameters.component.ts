@@ -13,6 +13,7 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 export class GridCommonParametersComponent implements OnInit {
   @Input() proposal: TechnicalCommercialProposal;
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
+  @Input() hasAnalogs = false;
   @Output() close = new EventEmitter();
   @Output() openEditModal = new EventEmitter<TechnicalCommercialProposal>();
   @Output() selectAll = new EventEmitter<TechnicalCommercialProposal>();

@@ -1,4 +1,4 @@
-<div class="price-info">
+<div class="price-info" [class.has-analogs]="hasAnalogs">
   <div class="price-info-block">
     <ng-container *ngIf="proposal.positions.length === 0; else positionsPriceInfo">
       <div class="app-ghost-color">Количество не указано</div>

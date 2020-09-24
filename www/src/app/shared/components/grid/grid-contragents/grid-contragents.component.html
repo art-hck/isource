@@ -1,6 +1,6 @@
 <div class="contragents-row">
 
-    <div #gridRow class="app-row grid-row app-layout contragents-grid-row">
+    <div #gridRow class="app-row grid-row app-layout">
       <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
       <div class="app-col grid-cell app-ellipsis"
            *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
@@ -11,6 +11,7 @@
           <app-grid-common-parameters #gridCommonParams
             [proposal]="getProposalBySupplier(supplier, proposals)"
             [proposalsByPos]="proposalsByPos"
+            [hasAnalogs]="supplier.hasAnalogs"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"
             [showDocs]="showDocsControl.value"
