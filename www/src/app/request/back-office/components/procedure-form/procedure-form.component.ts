@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -38,7 +48,7 @@ import { CommercialProposalsService } from "../../services/commercial-proposals.
   templateUrl: './procedure-form.component.html',
   styleUrls: ['./procedure-form.component.scss']
 })
-export class ProcedureFormComponent implements OnInit, OnDestroy {
+export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() procedure: Partial<Procedure>;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
@@ -48,13 +58,14 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() tcpGroupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
+  @Output() positionsSelected = new EventEmitter<Uuid[]>();
   selectedPositions: RequestPosition[] = [];
 
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
-  isLoading: boolean;
+  @Input() isLoading: boolean;
   withoutTotalPriceReadonly: boolean;
   publicAccessReadonly: boolean;
 
@@ -156,26 +167,7 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     this.form.get("positions").valueChanges.pipe(debounceTime(200), takeUntil(this.destroy$))
       .subscribe(selectedPositions => {
         if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && selectedPositions.length > 0) {
-          this.isLoading = true;
-
-          this.commercialProposalsService
-            .getContragentsWithTp(this.request.id, selectedPositions.map(position => position.id)).pipe(
-              mergeMap(contragentsWithTp => {
-                if (contragentsWithTp.length === 0) {
-                  return this.contragentService.getContragentList().pipe(tap(allContragents => {
-                    this.contragents = allContragents;
-                    this.publicAccessReadonly = false;
-                  }));
-                } else {
-                  this.contragents = contragentsWithTp;
-                  this.form.get("general.publicAccess").setValue(false);
-                  this.publicAccessReadonly = true;
-                }
-              })
-            ).subscribe(() => {
-              this.isLoading = false;
-              this.cd.detectChanges();
-            });
+          this.positionsSelected.emit(selectedPositions.map(position => position.id));
         }
 
         if (selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
@@ -247,6 +239,15 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.allContragents$ = this.contragentService.getContragentList();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.contragents) {
+      this.publicAccessReadonly = !((this.contragents?.length ?? 0) < 2 && (this.procedure?.privateAccessContragents.length ?? 0) < 2);
+      if (this.publicAccessReadonly) {
+        this.form?.get("general.publicAccess").setValue(false);
+      }
+    }
   }
 
   submit() {

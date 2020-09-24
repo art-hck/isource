@@ -167,7 +167,10 @@
               [action]="procedureModalPayload.action"
               [procedure]="procedureModalPayload.procedure"
               [procedureSource]="procedureSource"
+              [contragents]="contragentsWithTp$ | async"
+              [isLoading]="loadingContragentList"
               (cancel)="procedureModalPayload = null"
+              (positionsSelected)="onPositionsSelected($event)"
               (complete)="this.store.dispatch(refresh()); procedureModalPayload = null"
             ></app-request-procedure-form>
         </uxg-modal>
