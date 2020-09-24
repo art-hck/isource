@@ -41,19 +41,39 @@ export class ProcedureFormPropertiesComponent implements AfterContentInit, Contr
       this.form.addControl('bestPriceRequirements', this.fb.control(this.default("bestPriceRequirements", false)));
     }
 
+    // Отслеживаем Обязательная подача предложений на все позиции
+    let positionsRequiredAll$ = this.form.get('positionsRequiredAll').valueChanges;
+
+    if (this.action !== 'bargain') {
+      positionsRequiredAll$ = positionsRequiredAll$.pipe(startWith(<{}>this.form.get('positionsRequiredAll').value));
+    }
+    positionsRequiredAll$.subscribe(value => {
+      const positionsAnalogs = this.form.get('positionsAnalogs');
+      const analogsOnly = this.form.get('positionsAllowAnalogsOnly');
+
+      if (!value && positionsAnalogs) {
+        analogsOnly.enable();
+      } else {
+        analogsOnly.disable();
+        analogsOnly.setValue(false);
+      }
+    });
+
+    // Отслеживаем Разрешается прием аналогов
     let analogsValueChanges$ = this.form.get('positionsAnalogs').valueChanges;
 
     if (this.action !== 'bargain') {
       analogsValueChanges$ = analogsValueChanges$.pipe(startWith(<{}>this.form.get('positionsAnalogs').value));
     }
     analogsValueChanges$.subscribe(value => {
-      const c = this.form.get('positionsAllowAnalogsOnly');
+      const analogsOnly = this.form.get('positionsAllowAnalogsOnly');
+      const positionsRequiredAll = this.form.get('positionsRequiredAll');
 
-      if (value) {
-        c.enable();
+      if (value && !positionsRequiredAll.value) {
+        analogsOnly.enable();
       } else {
-        c.disable();
-        c.setValue(false);
+        analogsOnly.disable();
+        analogsOnly.setValue(false);
       }
     });
 
