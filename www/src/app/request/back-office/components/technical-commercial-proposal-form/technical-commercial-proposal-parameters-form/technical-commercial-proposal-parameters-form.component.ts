@@ -4,7 +4,6 @@ import {
   ControlValueAccessor,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   NG_VALUE_ACCESSOR,
   Validators
@@ -12,7 +11,6 @@ import {
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { shareReplay, takeUntil } from "rxjs/operators";
 import { OkeiService } from "../../../../../shared/services/okei.service";
-import { Okei } from "../../../../../shared/models/okei";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 import { DatePipe } from "@angular/common";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
@@ -21,7 +19,6 @@ import * as moment from "moment";
 import { PaymentTerms } from "../../../../common/enum/payment-terms";
 import { PaymentTermsLabels } from "../../../../common/dictionaries/payment-terms-labels";
 import { Subject } from "rxjs";
-import validate = WebAssembly.validate;
 
 @Component({
   selector: 'app-technical-commercial-proposal-parameters-form',
