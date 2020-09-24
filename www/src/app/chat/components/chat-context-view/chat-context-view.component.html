@@ -41,7 +41,7 @@
             <small *ngIf="subItem.conversation?.unreadCount as cnt">{{cnt}}</small>
           </a>
 
-          <ul *ngIf="subItemsByGroup(subItem.position.id) as subItems">
+          <ul *ngIf="subItemsByGroup$(subItem.position.id) | async as subItems">
             <li *ngFor="let subItem of subItems | subItemsFilter: search.value">
               <ng-container *ngTemplateOutlet="subItemTpl; context: {$implicit: subItem}"></ng-container>
             </li>
