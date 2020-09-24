@@ -1,6 +1,6 @@
 <div class="contragents-row">
 
-    <div #gridRow class="app-row grid-row app-layout">
+    <div #gridRow class="app-row grid-row app-layout contragents-grid-row">
       <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
       <div class="app-col grid-cell app-ellipsis"
            *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
