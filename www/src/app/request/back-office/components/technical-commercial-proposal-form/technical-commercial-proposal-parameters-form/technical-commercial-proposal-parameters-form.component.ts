@@ -1,5 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from "@angular/forms";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { shareReplay, takeUntil } from "rxjs/operators";
 import { OkeiService } from "../../../../../shared/services/okei.service";
@@ -12,6 +21,7 @@ import * as moment from "moment";
 import { PaymentTerms } from "../../../../common/enum/payment-terms";
 import { PaymentTermsLabels } from "../../../../common/dictionaries/payment-terms-labels";
 import { Subject } from "rxjs";
+import validate = WebAssembly.validate;
 
 @Component({
   selector: 'app-technical-commercial-proposal-parameters-form',
@@ -77,8 +87,13 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   }
 
   submit() {
-    this.formArray.controls.forEach(c => c.markAsDirty());
-    this.formArray.controls.forEach(c => c.markAsTouched());
+    this.formArray.controls.forEach((formGroup: FormGroup) => {
+      for (const control of Object.values(formGroup.controls)) {
+        control.markAsDirty();
+        control.markAsTouched();
+        control.updateValueAndValidity();
+      }
+    });
 
     if (this.formArray.valid) {
       const value = this.value
