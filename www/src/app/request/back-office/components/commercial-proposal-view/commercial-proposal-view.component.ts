@@ -25,7 +25,7 @@ import { RequestService } from "../../services/request.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { AppComponent } from "../../../../app.component";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { filter, finalize, mergeMap, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
@@ -52,7 +52,6 @@ import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
-import { ContragentService } from "../../../../contragent/services/contragent.service";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -75,7 +74,6 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   readonly destroy$ = new Subject();
   view: ProposalsView = "grid";
   form: FormGroup;
-  contragents: ContragentList[] | ContragentShortInfo[] = [];
   loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
@@ -116,7 +114,6 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     public router: Router,
     public helper: ProposalHelperService,
     private commercialProposalsService: CommercialProposalsService,
-    private contragentService: ContragentService,
   ) {
   }
 
