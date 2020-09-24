@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -6,7 +16,17 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
-import { catchError, debounceTime, filter, finalize, flatMap, startWith, takeUntil, tap } from "rxjs/operators";
+import {
+  catchError,
+  debounceTime,
+  filter,
+  finalize,
+  flatMap,
+  mergeMap,
+  startWith,
+  takeUntil,
+  tap
+} from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
@@ -21,13 +41,14 @@ import { PositionStatus } from "../../../common/enum/position-status";
 import { PositionStatusesLabels } from "../../../common/dictionaries/position-statuses-labels";
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { Uuid } from "../../../../cart/models/uuid";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 
 @Component({
   selector: 'app-request-procedure-form',
   templateUrl: './procedure-form.component.html',
   styleUrls: ['./procedure-form.component.scss']
 })
-export class ProcedureFormComponent implements OnInit, OnDestroy {
+export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() procedure: Partial<Procedure>;
   @Input() request: Request;
   @Input() positions: RequestPosition[];
@@ -37,14 +58,15 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
   @Input() tcpGroupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
-  @Output() updateSelectedPositions = new EventEmitter<RequestPosition[]>();
+  @Output() positionsSelected = new EventEmitter<Uuid[]>();
   selectedPositions: RequestPosition[] = [];
   form: FormGroup;
   allContragents$: Observable<ContragentList[]>;
   okpd2List$ = new Subject<Okpd2Item[]>();
   wizzard: UxgWizzard;
-  isLoading: boolean;
+  @Input() isLoading: boolean;
   withoutTotalPriceReadonly: boolean;
+  publicAccessReadonly: boolean;
 
   readonly destroy$ = new Subject();
   readonly PositionStatusesLabels = PositionStatusesLabels;
@@ -65,8 +87,10 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private wb: UxgWizzardBuilder,
     private procedureService: ProcedureService,
+    private commercialProposalsService: CommercialProposalsService,
     private contragentService: ContragentService,
     private store: Store,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -122,7 +146,8 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.publicAccess").disable();
       this.form.get("general.withoutTotalPrice").disable();
       this.form.get("general.withoutTotalPriceReason").disable();
-      this.procedure.privateAccessContragents.length ? this.form.get("general.publicAccess").setValue(false) :
+      this.procedure.privateAccessContragents.length ?
+        this.form.get("general.publicAccess").setValue(false) :
         this.form.get("general.publicAccess").setValue(true);
     }
 
@@ -130,12 +155,13 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
       this.form.get("general.okpd2").disable();
     }
 
-    this.form.get("positions").valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(positions => {
-        this.selectedPositions = positions;
-        this.updateSelectedPositions.emit(this.selectedPositions);
+    this.form.get("positions").valueChanges.pipe(debounceTime(200), takeUntil(this.destroy$))
+      .subscribe(selectedPositions => {
+        if (this.procedureSource === ProcedureSource.COMMERCIAL_PROPOSAL && selectedPositions.length > 0) {
+          this.positionsSelected.emit(selectedPositions.map(position => position.id));
+        }
 
-        if (this.selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
+        if (selectedPositions.some(selectedPosition => selectedPosition.startPrice === null)) {
           this.form.get("general.withoutTotalPrice").setValue(true);
           this.withoutTotalPriceReadonly = true;
         } else {
@@ -168,6 +194,15 @@ export class ProcedureFormComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.allContragents$ = this.contragentService.getContragentList();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.contragents) {
+      this.publicAccessReadonly = !((this.contragents?.length ?? 0) < 2 && (this.procedure?.privateAccessContragents.length ?? 0) < 2);
+      if (this.publicAccessReadonly) {
+        this.form?.get("general.publicAccess").setValue(false);
+      }
+    }
   }
 
   submit() {
