@@ -23,6 +23,11 @@ export class TechnicalCommercialProposalService {
     return this.api.get<TechnicalCommercialProposalGroup[]>(url);
   }
 
+  getGroupInfo(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/customer/${ requestId }/technical-commercial-proposal-groups/${ groupId }/view`;
+    return this.api.get<TechnicalCommercialProposalGroup>(url);
+  }
+
   approve(requestId: Uuid, proposalPosition: TechnicalCommercialProposalPosition) {
     const url = `requests/customer/technical-commercial-proposal-positions/${proposalPosition.id}/choose-winner`;
     return this.api.post<TechnicalCommercialProposal>(url, { requestPositionId: proposalPosition.position.id });
