@@ -39,6 +39,8 @@ import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import { Procedure } from "../../../back-office/models/procedure";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -117,7 +119,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private pluralize: PluralizePipe,
     private cd: ChangeDetectorRef,
     private app: AppComponent,
-    public helper: ProposalHelperService
+    public helper: ProposalHelperService,
+    public title: Title,
+    public service: TechnicalCommercialProposalService,
   ) {}
 
   ngOnInit() {
@@ -135,6 +139,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
