@@ -16,6 +16,14 @@
       <div class="app-ghost-color">Заводское наименование</div>
       <div class="app-bold">{{ manufacturingName }}</div>
     </div>
+    <div class="app-col-6 modal-section-header" *ngIf="manufacturer">
+      <div class="app-ghost-color">Изготовитель</div>
+      <div class="app-bold">{{ manufacturer }}</div>
+    </div>
+    <div class="app-col-6 modal-section-header" *ngIf="standard">
+      <div class="app-ghost-color">Стандарт</div>
+      <div class="app-bold">{{ standard }}</div>
+    </div>
     <div class="app-col-6 modal-section-header">
       <div class="app-ghost-color">Условия оплаты</div>
       <div class="app-bold">{{ paymentTerms }}</div>

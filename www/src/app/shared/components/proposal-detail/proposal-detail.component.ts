@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { RequestDocument } from "../../../request/common/models/request-document";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
@@ -21,6 +21,8 @@ export class ProposalDetailComponent {
   @Input() paymentTerms: string;
   @Input() manufacturingName: string;
   @Input() proposal: Proposal;
+  @Input() manufacturer: string;
+  @Input() standard: string;
   getCurrencySymbol = getCurrencySymbol;
 
   constructor(public helper: ProposalHelperService) {}
