@@ -37,7 +37,7 @@
       </ng-template>
       <br>
       <div class="app-ghost-color">Общая сумма поставки с НДС</div>
-      <div class="price"><b>{{helper.getSummaryPrice(proposal.positions) | number: "1.0-2"}}
+      <div class="price"><b>{{helper.getSummaryPrice(proposal.positions, hasAnalogs) | number: "1.0-2"}}
         <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span></b></div>
     </ng-template>
   </div>
