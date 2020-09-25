@@ -26,7 +26,7 @@ export class ProposalHelperService {
   }
 
   isPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.length === positions.length;
+    return proposal.positions.length >= positions.length;
   }
 
   isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
