@@ -2,6 +2,10 @@ import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
+import { RequestPosition } from "../../../request/common/models/request-position";
+import { TechnicalCommercialProposal } from "../../../request/common/models/technical-commercial-proposal";
+import { TechnicalCommercialProposalByPosition } from "../../../request/common/models/technical-commercial-proposal-by-position";
+import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
 
 @Injectable({
   providedIn: "root"
@@ -21,6 +25,27 @@ export class ProposalHelperService {
     return position.quantity === quantity;
   }
 
+  isPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    return proposal.positions.length >= positions.length;
+  }
+
+  isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    return proposal.positions.every(
+      ({position, quantity}) => position.quantity === quantity);
+  }
+
+  isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
+    return proposal.positions.every(
+      position => moment(position.deliveryDate).isSameOrBefore(moment(position.position.deliveryDate))
+        || position.position.isDeliveryDateAsap);
+  }
+
+  getSummaryPrice(positions: TechnicalCommercialProposalPosition[], hasAnalogs: boolean) {
+    return positions
+      .map(position => position.isAnalog === hasAnalogs ? position.priceWithoutVat * position.quantity : 0)
+      .reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
+  }
+
   getRequestedQuantityLabel(position: Position, { quantity }: Proposal): string {
     return quantity > position.quantity ?
       ' - Количество больше нужного' :
@@ -29,11 +54,14 @@ export class ProposalHelperService {
 
   chooseBy(type: "date" | "price", position: Position, proposals: Proposal[]): Proposal["sourceProposal"] {
     return proposals.reduce((prev, curr) => {
-      const prevValid = prev && this.isValid(position, prev);
-      const currValid = curr && this.isValid(position, curr);
-      if (prevValid && !currValid) { return prev; }
-      if (!prevValid && currValid) { return curr; }
-      if (!prevValid && !currValid) { return null; }
+      // Если выбран автовыбор по дате, дополнительно
+      // проверяем соседние предложения на валидность
+      if (type === 'date') {
+        const prevValid = prev && this.isValid(position, prev);
+        const currValid = curr && this.isValid(position, curr);
+        if (prevValid && !currValid) { return prev; }
+        if (!prevValid && currValid) { return curr; }
+      }
 
       switch (type) {
         case "price":

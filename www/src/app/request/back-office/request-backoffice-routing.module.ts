@@ -12,6 +12,7 @@ import { TechnicalCommercialProposalListComponent } from "./components/technical
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
+import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
 
 const routes: Routes = [
   {
@@ -46,8 +47,12 @@ const routes: Routes = [
       },
       {
         path: 'technical-commercial-proposals',
-        component: TechnicalCommercialProposalListComponent,
-        data: { title: "Технико-коммерческие предложения" }
+        component: TechnicalCommercialProposalGroupViewComponent,
+        data: { title: "Технико-коммерческие предложения" },
+      },
+      {
+        path: 'technical-commercial-proposals/:groupId',
+        component: TechnicalCommercialProposalListComponent
       },
       {
         path: 'design-documentation',

@@ -1,20 +1,8 @@
 import { ActivatedRoute } from "@angular/router";
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
-import { Observable, Subject } from "rxjs";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -50,6 +38,9 @@ import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
 import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { Procedure } from "../../../back-office/models/procedure";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -62,6 +53,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
+  @ViewChildren("tcpComponent") tcpComponentList: QueryList<TechnicalCommercialProposalComponent>;
 
   @Select(RequestState.request)
   readonly request$: Observable<Request>;
@@ -81,10 +73,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @Select(TechnicalCommercialProposalState.status)
   readonly stateStatus$: Observable<StateStatus>;
 
+  reviewedProposals: TechnicalCommercialProposal[] = [];
+  sentToReviewProposals: TechnicalCommercialProposal[] = [];
+  sentToEditProposals: TechnicalCommercialProposal[] = [];
+
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
+  isLoading: boolean;
   requestId: Uuid;
+  groupId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
@@ -95,6 +93,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  get selectedPositions() {
+    const checkedPositions = [];
+
+    this.tcpComponentList?.forEach((tcpComponent) => {
+      checkedPositions.push(...tcpComponent.selectedPositions);
+    });
+
+    return checkedPositions;
   }
 
   get disabled() {
@@ -111,23 +119,33 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private pluralize: PluralizePipe,
     private cd: ChangeDetectorRef,
     private app: AppComponent,
-    public helper: ProposalHelperService
+    public helper: ProposalHelperService,
+    public title: Title,
+    public service: TechnicalCommercialProposalService,
   ) {}
 
   ngOnInit() {
     this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
-      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
-      switchMap(() => this.request$),
-      filter(request => !!request),
-      tap(({id, number}) => this.bc.breadcrumbs = [
+      tap(({ id }) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
+      delayWhen(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      withLatestFrom(this.request$),
+      tap(([{ groupId }, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
         { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-        { label: 'Согласование технико-коммерческих предложений', link: `/requests/customer/${id}/technical-commercial-proposals` }
+        { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
+        { label: 'Страница предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals/${groupId}` }
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
@@ -152,6 +170,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
       );
     });
+
+    this.getSentToReviewProposals();
+    this.getSentToEditProposals();
+    this.getReviewedProposals();
 
     this.switchView(this.view);
   }
@@ -200,9 +222,34 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
   }
 
+  approveFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
+      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+    }
+  }
+
+  sendToEditFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
+      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+    }
+  }
+
+  private dispatchAction(action): void {
+    this.isLoading = true;
+
+    this.store.dispatch(action).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
   switchView(view: ProposalsView) {
     this.view = view;
-    this.app.noContentPadding = view !== "list";
+    this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
   }
 
@@ -224,6 +271,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
+  selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
+    technicalCommercialProposal.positions.forEach(proposal => this.selectProposal(new Proposal(proposal)));
+  }
+
   suppliers(proposals: TechnicalCommercialProposal[]): GridSupplier[] {
     return proposals.reduce((suppliers: GridSupplier[], proposal) => {
       [false, true]
@@ -242,9 +293,33 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return positionProposals.data.find(({proposalPosition: {id}}) => id === proposal.id).proposal.supplier;
   }
 
+  onPositionSelected(data): void {
+    this.tcpComponentList.forEach((tcpComponent) => {
+      tcpComponent.refreshPositionsSelectedState(data.index, data.selectedPositions);
+    });
+  }
+
+  getSentToReviewProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.sentToReviewProposals = proposals?.filter(proposal => proposal.positions.some(position => ['NEW', 'SENT_TO_REVIEW'].includes(position.status)));
+    }));
+  }
+
+  getSentToEditProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.sentToEditProposals = proposals?.filter(proposal => proposal.positions.some(position => position.status === 'SENT_TO_EDIT'));
+    }));
+  }
+
+  getReviewedProposals(): void {
+    this.proposals$.subscribe(pipe((proposals: TechnicalCommercialProposal[]) => {
+      this.reviewedProposals = proposals?.filter(proposal => proposal.positions.some(position => ['APPROVED', 'REJECTED'].includes(position.status)));
+    }));
+  }
+
   converPosition = (position: RequestPosition) => new Position(position);
   converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
-  trackByPositionId = (i, item: TechnicalCommercialProposalByPosition) => item.position.id;
+  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
 
   ngOnDestroy() {
     this.destroy$.next();

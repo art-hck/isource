@@ -168,6 +168,32 @@ export class CustomValidators {
     };
   }
 
+  static compareProcedureDates(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dateEndRegistrationControl = control.parent?.get('dateEndRegistration');
+      const dateSummingUpControl = control.parent?.get('dateSummingUp');
+
+      if (dateSummingUpControl?.value || (dateEndRegistrationControl?.value && !dateSummingUpControl?.disabled)) {
+        if (moment(dateSummingUpControl?.value, "DD.MM.YYYY HH:mm").isSameOrAfter(moment(dateEndRegistrationControl?.value, "DD.MM.YYYY HH:mm"))) {
+          dateEndRegistrationControl.setErrors(null);
+          dateSummingUpControl.setErrors(null);
+          return null;
+        } else {
+          if (dateSummingUpControl?.disabled) {
+            dateEndRegistrationControl.setErrors({ beforeSummingUpDate: true });
+            return control === dateEndRegistrationControl ? { beforeSummingUpDate: true } : null;
+          } else {
+            dateSummingUpControl.setErrors({ afterEndRegistrationDate: true });
+            dateEndRegistrationControl.setErrors(null);
+            return control === dateSummingUpControl ? { afterEndRegistrationDate: true } : null;
+          }
+        }
+      } else {
+        return null;
+      }
+    };
+  }
+
   static multipleCheckboxRequireOne(formArray: FormArray): ValidationErrors {
     return formArray.value
       .filter(value => value)

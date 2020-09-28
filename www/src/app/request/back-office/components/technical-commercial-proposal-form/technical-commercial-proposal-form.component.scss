@@ -40,11 +40,26 @@
     &-quantity {
       flex-grow: .15; // 15% width
       max-width: 100px;
+      text-align: right;
     }
 
     &-date {
-      max-width: 120px;
+      min-width: 120px;
       text-align: right;
+    }
+
+    &-footer {
+      padding: 10px 0;
+
+      & * {
+        padding: 0 10px;
+        font-size: 11px;
+        box-sizing: content-box;
+        text-align: right;
+
+        &:first-child { padding-left: 0; }
+        &:last-child { padding-right: 0; }
+      }
     }
   }
 }
@@ -81,4 +96,11 @@
   font-weight: bold;
   margin-right: 10px;
   color: uxg($theme, color-control-invalid);
+}
+
+.not-included {
+  display: inline-flex;
+  .app-control-wrap {
+    margin-right: 15px;
+  }
 }

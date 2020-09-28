@@ -18,8 +18,7 @@
       [filterFn]="filterPositions"
       [disabledFn]="disabledPositions"
       [trackBy]="trackById"
-      [items]="positions"
-    >
+      [items]="positions">
       <ng-template let-formGroup="formGroup" let-position="item">
         <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
           <div class="app-col app-grow-0">
@@ -55,7 +54,18 @@
           </ng-container>
         </div>
       </ng-template>
+
+      <ng-template #footerContentTpl>
+        <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
+          <div class="app-col app-grow-0"></div>
+          <div class="app-col app-bold title"></div>
+          <div class="app-col app-col-auto select-list-item-quantity">Кол-во</div>
+          <div class="app-col app-col-auto select-list-item-total-price">Сумма НМЦ</div>
+          <div class="app-col app-col-auto select-list-item-date">Дата поставки</div>
+        </div>
+      </ng-template>
     </select-items-with-search>
+
     <ng-template #loading>
       <div *uxgWizzardStep="'positions'" class="text-center">
         <span class="spinner spinner-md"></span>
@@ -76,66 +86,67 @@
     </div>
 
     <div class="app-row app-justify-content-between">
-      <div class="app-col-auto app-row">
-        <div class="app-col-aside" [style.flex]="'0 280px'">
-          <div class="app-control-wrap">
-            <input #dateEndRegistration uxgInput lg uxgDatepicker minDate="today" formControlName="dateEndRegistration">
-            <label class="app-control-label" (click)="dateEndRegistration.focus()">Прием заявок до (дд.мм.гггг)</label>
-            <label class="app-control-icon" (click)="dateEndRegistration.focus()">
-              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-            </label>
-            <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors as e">
-              <span *ngIf="e.beforeSummingUpDate; else error">Дата не может быть позже даты подведения итогов</span>
+      <div class="app-col" [style.padding-right.px]="10">
+        <div class="app-control-wrap">
+          <input
+            uxgInput lg uxgDatepicker
+            #dateEndRegistrationRef
+            formControlName="dateEndRegistration"
+            minDate="today"
+            dateFormat="d.m.Y H:i"
+            [enableTime]="true"
+          />
+          <label class="app-control-label" (click)="dateEndRegistrationRef.focus()">Прием заявок до</label>
+          <label class="app-control-icon" (click)="dateEndRegistrationRef.focus()">
+            <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+          </label>
 
-              <ng-template #error>
-                <span>Неверная дата</span>
-              </ng-template>
-            </div>
-          </div>
-        </div>
-        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
-          <div class="app-control-wrap">
-            <input #timeControlRef uxgInput lg [formControl]="timeEndRegistration" [textMask]="mask"/>
-            <label class="app-control-label" (click)="timeControlRef.focus()">Время</label>
+          <div class="app-control-error" *ngIf="form.get('general').get('dateEndRegistration').errors as e">
+            <span *ngIf="e.beforeSummingUpDate; else error">Дата не может быть позже даты подведения итогов</span>
+
+            <ng-template #error>
+              <span>Неверная дата</span>
+            </ng-template>
           </div>
         </div>
       </div>
 
-      <div class="app-col-auto app-row app-justify-content-end">
-        <div class="app-col-aside" [style.flex]="'0 280px'">
-          <div class="app-control-wrap">
-            <input #dateSummingUp uxgInput lg uxgDatepicker minDate="today" formControlName="dateSummingUp">
-            <label class="app-control-label" (click)="dateSummingUp.focus()">Подведение итогов до (дд.мм.гггг)</label>
-            <label class="app-control-icon" (click)="dateSummingUp.focus()">
-              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
-            </label>
-            <div class="app-control-error" *ngIf="form.get('general').get('dateSummingUp').errors as e">
-              <span *ngIf="e.afterEndRegistrationDate; else error">Дата не может быть раньше даты приёма заявок</span>
+      <div class="app-col" [style.padding-left.px]="10">
+        <div class="app-control-wrap">
+          <input type="text"
+                 uxgInput lg uxgDatepicker
+                 #dateSummingUpRef
+                 formControlName="dateSummingUp"
+                 minDate="today"
+                 dateFormat="d.m.Y H:i"
+                 [enableTime]="true">
 
-              <ng-template #error>
-                <span>Неверная дата</span>
-              </ng-template>
-            </div>
-          </div>
-        </div>
-        <div class="app-col app-secondary-color" [style.flex]="'0 70px'">
-          <div class="app-control-wrap">
-            <input #timeSummingUpRef uxgInput lg [formControl]="timeSummingUp" [textMask]="mask"/>
-            <label class="app-control-label" (click)="timeSummingUpRef.focus()">Время</label>
+          <label class="app-control-label" (click)="dateSummingUpRef.focus()">Подведение итогов до</label>
+          <label class="app-control-icon" (click)="dateSummingUpRef.focus()">
+            <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+          </label>
+
+          <div class="app-control-error" *ngIf="form.get('general').get('dateSummingUp').errors as e">
+            <span *ngIf="e.afterEndRegistrationDate; else error">Дата не может быть раньше даты приёма заявок</span>
+
+            <ng-template #error>
+              <span>Неверная дата</span>
+            </ng-template>
           </div>
         </div>
       </div>
     </div>
 
     <div class="app-row">
-        <p class="app-row access-radio app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
-        </p>
-        <p class="app-row app-align-items-center">
-          <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
-          <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
-        </p>
+      <p class="app-row access-radio app-align-items-center" [class.readonly]="publicAccessReadonly">
+        <uxg-radio-item class="app-control" #publicAccess1 [value]="true" formControlName="publicAccess"></uxg-radio-item>
+        <label (click)="publicAccess1.select($event)">&nbsp;Открытая процедура</label>
+      </p>
+
+      <p class="app-row app-align-items-center" [class.readonly]="publicAccessReadonly">
+        <uxg-radio-item class="app-control" #publicAccess2 [value]="false" formControlName="publicAccess"></uxg-radio-item>
+        <label (click)="publicAccess2.select($event)">&nbsp;Для ограниченного круга участников</label>
+      </p>
     </div>
 
     <div class="app-control-wrap okpd2">
@@ -276,7 +287,7 @@
       <span *ngIf="isLoading" class="spinner spinner-inline"></span>
       <button uxgWizzardButton="cancel" type="button" uxgButton secondary lg>Отмена</button>
       <button uxgWizzardButton="prev" type="button" uxgButton secondary lg>Назад</button>
-      <button uxgWizzardButton="next" type="button" uxgButton primary lg>Продолжить</button>
+      <button [disabled]="isLoading" uxgWizzardButton="next" type="button" uxgButton primary lg>Продолжить</button>
       <button *ngIf="action==='create'" uxgWizzardButton="end" uxgButton primary lg>Создать процедуру</button>
       <button *ngIf="action==='bargain'" uxgWizzardButton="end" uxgButton primary lg>Объявить уторговывание</button>
       <button *ngIf="action==='prolong'" uxgWizzardButton="end" uxgButton primary lg>Продлить процедруру</button>

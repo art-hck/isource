@@ -1,9 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, forwardRef, OnDestroy, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from "@angular/forms";
 import { TechnicalCommercialProposalPosition } from "../../../../common/models/technical-commercial-proposal-position";
 import { shareReplay, takeUntil } from "rxjs/operators";
 import { OkeiService } from "../../../../../shared/services/okei.service";
-import { Okei } from "../../../../../shared/models/okei";
 import { CustomValidators } from "../../../../../shared/forms/custom.validators";
 import { DatePipe } from "@angular/common";
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
@@ -53,8 +60,8 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
         const form = this.fb.group({
           index: [index],
           name: [p.position.name, Validators.required],
-          priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, Validators.required],
-          quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
+          priceWithoutVat: [p.priceWithoutVat || p.position.startPrice, [Validators.required, Validators.min(1)]],
+          quantity: [p.quantity || p.position.quantity, [Validators.required, Validators.min(0.0001)]],
           measureUnit: [p.measureUnit || p.position.measureUnit, Validators.required],
           currency: [p.currency || p.position.currency || PositionCurrency.RUB, Validators.required],
           deliveryDate: [this.parseDate(p.deliveryDate || p.position.deliveryDate), CustomValidators.futureDate()],
@@ -77,6 +84,14 @@ export class TechnicalCommercialProposalParametersFormComponent implements After
   }
 
   submit() {
+    this.formArray.controls.forEach((formGroup: FormGroup) => {
+      for (const control of Object.values(formGroup.controls)) {
+        control.markAsDirty();
+        control.markAsTouched();
+        control.updateValueAndValidity();
+      }
+    });
+
     if (this.formArray.valid) {
       const value = this.value
         .map((item, i) => ({...item, ...this.formArray.getRawValue().find(_item => _item.index === i)}))

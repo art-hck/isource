@@ -10,6 +10,8 @@ import { pipeFromArray } from "rxjs/internal/util/pipe";
 })
 export class UxgSelectAllDirective implements OnInit, OnDestroy {
   @Input() uxgSelectAllFor: string;
+  @Input() slave: boolean;
+  @Input() mixedWithDisabled = false;
   destroy$ = new Subject();
 
   constructor(@Optional() private component: UxgCheckboxComponent, private ngControl: NgControl) {}
@@ -19,26 +21,27 @@ export class UxgSelectAllDirective implements OnInit, OnDestroy {
     const controlName = Object.keys(control.parent.controls).find(key => control.parent.get(key) === control);
     let listen = true;
 
-    const pipes = (action: (childs: AbstractControl[]) => void) => [
+    const pipes = (action: (children: AbstractControl[]) => void) => pipeFromArray([
       mapTo(control.parent.get(this.uxgSelectAllFor)),
       filter(Boolean),
       filter(() => listen),
       filter(() => control.enabled),
       tap(() => listen = false),
-      map(({controls}) => controls.map(({controls: c}: FormGroup) => c[controlName])),
-      tap(action),
-      tap((childs: AbstractControl[]) => this.component && (this.component.isMixed = childs.filter(c => c.enabled).length > childs.filter(c => c.value).length)),
+      map(({ controls }) => controls.map(({ controls: c }: FormGroup) => c[controlName])),
+      tap((children: AbstractControl[]) => !this.slave && action(children)),
+      tap((children: AbstractControl[]) => this.component && (this.component.isMixed = children.filter(c => c.enabled || this.mixedWithDisabled).length > children.filter(c => c.value).length)),
       tap(() => listen = true),
       takeUntil(this.destroy$)
-    ];
+    ]);
 
-    control.valueChanges.pipe(pipeFromArray(pipes(
-      childs => childs.filter(c => !c.disabled).forEach(c => c.setValue(control.value))
-    ))).subscribe();
+    control.valueChanges.pipe(
+      tap(() => control.setValue(control.value, { emitEvent: false })),
+      pipes(children => children.filter(c => !c.disabled).forEach(c => c.setValue(control.value)))
+    ).subscribe();
 
-    control.parent.get(this.uxgSelectAllFor).valueChanges.pipe(pipeFromArray(pipes(
-      childs => control.setValue(childs.filter(c => c.value).length > 0)
-    ))).subscribe();
+    control.parent.get(this.uxgSelectAllFor).valueChanges.pipe(pipes(
+      children => control.setValue(children.filter(c => c.value && c.enabled).length > 0)
+    )).subscribe();
   }
 
   ngOnDestroy() {

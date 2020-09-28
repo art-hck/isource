@@ -50,6 +50,8 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
       measureUnit: [p?.measureUnit ?? this.position.measureUnit, Validators.required],
       currency: [p?.currency ?? this.position.currency ?? PositionCurrency.RUB, Validators.required],
       deliveryDate: [this.parseDate(p?.deliveryDate ?? this.position.deliveryDate), CustomValidators.futureDate()],
+      manufacturer: [p?.manufacturer || '', Validators.required],
+      standard: [p?.standard || ''],
       paymentTerms: [p?.paymentTerms ?? this.position.paymentTerms, Validators.required],
     });
 
@@ -86,6 +88,6 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
   }
 
   private getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
-    return positions.find(({position}) => position.id === id);
+    return positions.find(({position, isAnalog}) => position.id === id && !isAnalog);
   }
 }

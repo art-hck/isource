@@ -4,9 +4,11 @@ import { UserInfoService } from "../../../user/service/user-info.service";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FeatureService } from "../../services/feature.service";
-import { MessagesService } from "../../../message/services/messages.service";
-import { debounceTime, map, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
-import { BehaviorSubject, merge, Subject } from "rxjs";
+import { MessagesService } from "../../../chat/services/messages.service";
+import { distinctUntilChanged, filter, mapTo, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, fromEvent, iif, interval, merge, Subject } from "rxjs";
+import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-nav',
@@ -23,6 +25,8 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
 
   constructor(
+    private router: Router,
+    public title: Title,
     public auth: AuthService,
     public user: UserInfoService,
     public cartStoreService: CartStoreService,
@@ -31,12 +35,32 @@ export class NavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    merge(this.messagesService.onNew(), this.messagesService.onMarkSeen()).pipe(
-      startWith(0),
-      debounceTime(500),
-      switchMap(() => this.messagesService.unreadCount().pipe(map(({ count }) => count))),
-      takeUntil(this.destroy$))
-    .subscribe(count => this.unreadMessagesCount$.next(count));
+    this.messagesService.unreadCount().pipe(takeUntil(this.destroy$))
+      .subscribe(({count}) => this.unreadMessagesCount$.next(count));
+
+    this.messagesService.onNew().pipe(
+      filter(m => m.author.uid !== this.user.getUserInfo().id),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.unreadMessagesCount$.next(this.unreadMessagesCount$.getValue() + 1));
+
+    this.messagesService.onMarkSeen().pipe(takeUntil(this.destroy$))
+      .subscribe(({ updated }) => this.unreadMessagesCount$.next(this.unreadMessagesCount$.getValue() - updated));
+
+    let title;
+    const audio = new Audio();
+
+    audio.src = "/assets/new-message.mp3";
+    audio.load();
+    merge(
+      this.messagesService.onNew().pipe(mapTo(true)),
+      fromEvent(document, 'visibilitychange').pipe(mapTo(false))
+    ).pipe(
+      filter(newMessage => document.visibilityState === 'hidden' === newMessage),
+      tap(newMessage => newMessage && audio.play()),
+      distinctUntilChanged(),
+      tap(newMessage => newMessage ? title = this.title.getTitle() : this.title.setTitle(title ?? this.title.getTitle())),
+      switchMap(newMessage => iif(() => newMessage, interval(1000)))
+    ).subscribe(i => this.title.setTitle(i % 2 ? title : "Новое сообщение!"));
   }
 
   get userBriefInfo(): string {

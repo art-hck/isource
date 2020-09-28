@@ -5,12 +5,18 @@
       <div class="app-control-wrap">
         <input #manufacturingNameRef uxgInput type="text" lg formControlName="manufacturingName"/>
         <label class="app-control-label" (click)="manufacturingNameRef.focus()">Заводское наименование</label>
+        <div class="app-control-error" *ngIf="form.get('manufacturingName').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-col-4">
       <div class="app-control-wrap">
         <input #priceWithoutVatRef uxgInput type="text" lg formControlName="priceWithoutVat"/>
         <label class="app-control-label" (click)="priceWithoutVatRef.focus()">Цена за единицу</label>
+        <div class="app-control-error" *ngIf="form.get('priceWithoutVat').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-col-2">
@@ -24,6 +30,9 @@
       <div class="app-control-wrap">
         <input #quantityRef uxgInput type="text" lg formControlName="quantity"/>
         <label class="app-control-label" (click)="quantityRef.focus()">Количество</label>
+        <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
       </div>
     </div>
     <div class="app-col app-col-3">
@@ -35,7 +44,8 @@
           <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
                [value]="suggestion.symbol | lowercase"
                [attr.title]="suggestion.name | lowercase"
-          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
+          </div>
         </ng-container>
         <ng-template #errors>
           <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
@@ -52,6 +62,27 @@
         <label class="app-control-icon" (click)="deliveryDateRef.focus()">
           <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
         </label>
+        <div class="app-control-error" *ngIf="form.get('deliveryDate').errors as e">
+          <span *ngIf="e.field">Неверная дата</span>
+        </div>
+      </div>
+    </div>
+    <div class="app-col app-col-2"></div>
+  </div>
+  <div class="app-row">
+    <div class="app-col app-col-6">
+      <div class="app-control-wrap">
+        <input #manufacturer uxgInput type="text" lg formControlName="manufacturer"/>
+        <label class="app-control-label" (click)="manufacturer.focus()">Изготовитель</label>
+        <div class="app-control-error" *ngIf="form.get('manufacturer').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
+        </div>
+      </div>
+    </div>
+    <div class="app-col app-col-4">
+      <div class="app-control-wrap">
+        <input #standard uxgInput type="text" lg formControlName="standard"/>
+        <label class="app-control-label" (click)="standard.focus()">Стандарт</label>
       </div>
     </div>
     <div class="app-col app-col-2"></div>
@@ -65,7 +96,9 @@
   </div>
   <div class="app-row app-align-items-center">
     <div class="app-col">
-      Все поля являются <b class="app-error-color">обязательными</b> к заполнению! Документы прикладывать не обязательно.
+      Все поля являются, кроме стандарта, являются <b class="app-error-color">обязательными</b> к заполнению! Документы
+      прикладывать не
+      обязательно.
     </div>
     <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
     <button uxgButton lg primary>Добавить</button>

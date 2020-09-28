@@ -1,3 +1,18 @@
-.analog {
-  margin-top: -5px
+@import "src/theme";
+
+.contragents-row {
+  background: uxg($theme, color-bg);
+}
+
+.common-params {
+  position: absolute;
+  margin-top: 23px;
+  right: 23px;
+  &.app-btn {
+    border-radius: 0 0 uxg($theme, control-border-radius) uxg($theme, control-border-radius);
+  }
+}
+
+.show-docs {
+  padding-left: 360px;
 }

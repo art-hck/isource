@@ -28,6 +28,7 @@ import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
+import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -91,37 +92,37 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Fetch)
-  fetch(ctx: Context, { requestId }: Fetch) {
+  fetch(ctx: Context, { requestId, groupId }: Fetch) {
     // Временно выпилил кеш
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId).pipe(
+    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId }).pipe(
       tap(proposals => ctx.setState(patch({ proposals }))),
       tap(proposals => this.cache[requestId] = proposals),
-      switchMap(() => ctx.dispatch(new FetchProcedures(requestId))),
+      switchMap(() => ctx.dispatch(new FetchProcedures(requestId, groupId))),
       tap(() => ctx.setState(patch({ status: "received" as StateStatus }))),
     );
   }
 
   @Action(FetchAvailablePositions)
-  fetchAvailablePositions({ setState }: Context, { requestId }: FetchAvailablePositions) {
+  fetchAvailablePositions({ setState }: Context, { requestId, groupId }: FetchAvailablePositions) {
     setState(patch({ availablePositions: null }));
-    return this.rest.availablePositions(requestId).pipe(
+    return this.rest.availablePositions(requestId, groupId).pipe(
       tap(availablePositions => setState(patch({ availablePositions })))
     );
   }
 
   @Action([FetchProcedures, RefreshProcedures])
-  fetchProcedures({ setState }: Context, { requestId, update }: FetchProcedures) {
+  fetchProcedures({ setState }: Context, { requestId, groupId, update }: FetchProcedures) {
     if (update) {
       setState(patch({ status: "updating" as StateStatus }));
     } else {
       setState(patch({ procedures: null, status: "fetching" as StateStatus }));
     }
 
-    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL).pipe(
+    return this.procedureService.list(requestId, ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures }))),
       tap(() => {
         if (update) {
@@ -132,9 +133,9 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action([Create, CreateContragent])
-  create(ctx: Context, action: Create) {
+  create(ctx: Context, { publish, payload, requestId, groupId }: Create) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.create(action.requestId, action.payload).pipe(
+    return this.rest.create(requestId, groupId, payload).pipe(
       catchError(err => {
         ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
@@ -143,7 +144,7 @@ export class TechnicalCommercialProposalState {
         proposals: insertItem(proposal),
         status: "received" as StateStatus
       }))),
-      mergeMap(proposal => action.publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
+      mergeMap(proposal => publish ? ctx.dispatch(new Publish(proposal)) : of(proposal))
     );
   }
 
@@ -162,6 +163,17 @@ export class TechnicalCommercialProposalState {
           return of(proposal);
         }
       }),
+    );
+  }
+
+  @Action(UpdateParams)
+  updateParams(ctx: Context, action: UpdateParams) {
+    ctx.setState(patch({ status: "updating" as StateStatus }));
+    return this.rest.updateParams(action.requestId, action.payload).pipe(
+      tap(proposal => ctx.setState(patch({
+        proposals: updateItem<TechnicalCommercialProposal>(_proposal => _proposal.id === proposal.id, patch(proposal)),
+        status: "received" as StateStatus
+      })))
     );
   }
 
@@ -193,16 +205,16 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(DownloadTemplate)
-  downloadTemplate(ctx: Context, { requestId }: DownloadTemplate) {
-    return this.rest.downloadTemplate(requestId).pipe(
+  downloadTemplate(ctx: Context, { requestId, groupId }: DownloadTemplate) {
+    return this.rest.downloadTemplate(requestId, groupId).pipe(
       tap((data) => saveAs(data, `RequestTechnicalCommercialProposalsTemplate.xlsx`))
     );
   }
 
   @Action(UploadTemplate)
-  uploadTemplate(ctx: Context, { requestId, files }: UploadTemplate) {
+  uploadTemplate(ctx: Context, { requestId, groupId, files }: UploadTemplate) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.uploadTemplate(requestId, files).pipe(
+    return this.rest.uploadTemplate(requestId, groupId, files).pipe(
       catchError(err => {
         ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
@@ -212,8 +224,8 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(DownloadAnalyticalReport)
-  downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
-    return this.rest.downloadAnalyticalReport(requestId).pipe(
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }

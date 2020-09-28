@@ -17,10 +17,17 @@ form {
 }
 
 .app-table {
-  overflow: auto;
-  padding: 5px 22px;
+  padding: 5px 22px 5px 22px;
   margin: 0px -22px 0 -22px;
-  @include scrollbar($theme);
+
+  &.scroll-area {
+    @include scrollbar($theme);
+
+    overflow-x: auto;
+    overflow-y: scroll;
+    padding: 5px 5px 5px 22px;
+    margin: 0px -20px 0 -22px;
+  }
 
   &::ng-deep > .app-row {
     padding: 8px 0;
@@ -29,6 +36,36 @@ form {
       padding: 0 10px;
       &:first-child { padding-left: 0; }
       &:last-child { padding-right: 0; }
+    }
+  }
+}
+
+.select-list {
+  &-item-footer {
+    padding: 10px 0;
+
+    & * {
+      padding: 0 10px;
+      font-size: 11px;
+      box-sizing: content-box;
+      text-align: right;
+
+      &:first-child { padding-left: 0; }
+      &:last-child { padding-right: 0; }
+    }
+
+    & .quantity {
+      flex-grow: .15; // 15% width
+      max-width: 100px;
+    }
+
+    & .total-price {
+      flex-grow: .15;
+      min-width: 150px;
+    }
+
+    & .date {
+      min-width: 130px;
     }
   }
 }

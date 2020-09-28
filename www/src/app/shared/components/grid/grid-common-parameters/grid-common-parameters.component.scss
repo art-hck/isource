@@ -1,0 +1,35 @@
+@import "src/theme";
+.info-value {
+  margin-bottom: 15px;
+  white-space: normal;
+}
+
+.price-info {
+  margin: 27px 0 15px 0;
+  background: #fff;
+  padding: 20px;
+  height: 538px;
+
+  &.has-analogs {
+    margin-top: 9px;
+  }
+
+  .price-info-block {
+    border-bottom: 1px solid #d5dde2;
+    margin-bottom: 20px;
+  }
+
+  .price {
+    font-size: 22px;
+    margin: 10px 0;
+  }
+
+  .app-btn {
+    margin: 0;
+  }
+}
+
+.delivery-block {
+  height: 310px;
+}
+

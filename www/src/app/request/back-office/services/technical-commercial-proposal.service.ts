@@ -5,30 +5,43 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
-import { Procedure } from "../models/procedure";
+import { TechnicalCommercialProposalGroup } from "../../common/models/technical-commercial-proposal-group";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
 
   constructor(protected api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals`;
-    return this.api.get<TechnicalCommercialProposal[]>(url);
+  list(requestId: Uuid, body: { requestTechnicalCommercialProposalGroupId: Uuid }) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals`;
+    return this.api.post<TechnicalCommercialProposal[]>(url, body);
   }
 
-  create(requestId: Uuid, body: Partial<TechnicalCommercialProposal>) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/create`;
-    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(body));
+  create(requestId: Uuid, groupId: Uuid, body: Partial<TechnicalCommercialProposal>) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/create`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData({
+      ...body,
+      requestTechnicalCommercialProposalGroupId: groupId
+    }));
   }
 
-  update(proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
-    const url = `requests/backoffice/technical-commercial-proposals/${proposal.id}/edit`;
+  update(proposal: Partial<TechnicalCommercialProposal> & { id: Uuid }) {
+    const url = `requests/backoffice/technical-commercial-proposals/${ proposal.id }/edit`;
     return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
   }
 
-  publish({id}: TechnicalCommercialProposal) {
-    const url = `requests/backoffice/technical-commercial-proposals/${id}/send-to-review`;
+  updateParams(requestId: Uuid, proposal: Partial<TechnicalCommercialProposal> & {id: Uuid}) {
+    const url = `requests/backoffice/technical-commercial-proposals/${requestId}/edit-params`;
+    return this.api.post<TechnicalCommercialProposal>(url, this.formDataService.toFormData(proposal));
+  }
+
+  getGroupInfo(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/${ groupId }/view`;
+    return this.api.get<TechnicalCommercialProposalGroup>(url);
+  }
+
+  publish({ id }: TechnicalCommercialProposal) {
+    const url = `requests/backoffice/technical-commercial-proposals/${ id }/send-to-review`;
     return this.api.get<TechnicalCommercialProposal>(url);
   }
 
@@ -37,33 +50,45 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionIds });
   }
 
-  downloadTemplate(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/download-excel-template`;
-    return this.api.post(url, {}, {responseType: 'blob'});
+  groupList(requestId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups`;
+    return this.api.get<TechnicalCommercialProposalGroup[]>(url);
   }
 
-  uploadTemplate(requestId: Uuid, files: File[]) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/upload-excel`;
-    return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData({files}));
+  groupCreate(requestId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/create`;
+    return this.api.post<TechnicalCommercialProposalGroup>(url, body);
   }
 
-  downloadAnalyticalReport(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/analytic-report/download-by-tcp`;
-    return this.api.post(url, {}, {responseType: 'blob'});
+  groupUpdate(requestId: Uuid, groupId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/${ groupId }/edit`;
+    return this.api.post<TechnicalCommercialProposalGroup>(url, body);
   }
 
-  availablePositions(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/available-request-positions`;
-    return this.api.get<RequestPosition[]>(url);
+  downloadTemplate(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/download-excel-template`;
+    return this.api.post(url, { requestTechnicalCommercialProposalGroupId: groupId }, { responseType: 'blob' });
   }
 
-  procedures(requestId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/procedures`;
-    return this.api.get<Procedure[]>(url);
+  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[]) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`;
+    return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData({
+      files, requestTechnicalCommercialProposalGroupId: groupId
+    }));
+  }
+
+  downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/analytic-report/download-by-tcp`;
+    return this.api.post(url, { requestTechnicalCommercialProposalGroupId: groupId }, { responseType: 'blob' });
+  }
+
+  availablePositions(requestId: Uuid, groupId?: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/available-request-positions`;
+    return this.api.post<RequestPosition[]>(url, { requestTechnicalCommercialProposalGroupId: groupId });
   }
 
   rollback(requestId: Uuid, positionId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-commercial-proposals/cancel-publish`;
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/cancel-publish`;
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionId });
   }
 }

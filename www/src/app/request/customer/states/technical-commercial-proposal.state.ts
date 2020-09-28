@@ -55,13 +55,13 @@ export class TechnicalCommercialProposalState {
   @Selector() static proposals({ proposals }: Model) { return proposals; }
 
   @Action(Fetch)
-  fetch({ setState }: Context, { requestId }: Fetch) {
+  fetch({ setState }: Context, { requestId, groupId }: Fetch) {
     // @TODO: Временно выпилил кеширование
     // if (this.cache[requestId]) {
     //   return ctx.setState(patch({proposals: this.cache[requestId]}));
     // }
     setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId)
+    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId })
       .pipe(
         tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
         tap(proposals => this.cache[requestId] = proposals),

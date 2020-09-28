@@ -1,0 +1,45 @@
+<div class="app-table app-no-border">
+    <div class="app-row app-align-items-center">
+    <div>
+      <span class="app-secondary-color">показать: </span>
+      <uxg-popover>
+        <button uxgButton uxgPopoverTrigger link clear>
+          <span><b>по предложениям</b></span>
+        </button>
+        <div *uxgPopoverContent>
+          <div>
+            <button uxgButton clear>по предложениям</button>
+          </div>
+        </div>
+      </uxg-popover>
+    </div>
+    <div class="app-col"></div>
+    <div>
+      <!-- Новая группа ТКП  -->
+      <button uxgButton primary iconText (click)="editedGroup = null; groupFormModal.open()">
+        <uxg-icon shape="app-plus"></uxg-icon>
+        <span>Новое ТКП</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <app-technical-commercial-proposal-group
+    *ngFor="let group of tcpGroups$ | async"
+    [technicalCommercialProposalGroup]="group"
+    (edit)="editedGroup = group; groupFormModal.open()"
+  ></app-technical-commercial-proposal-group>
+</div>
+
+<uxg-modal #groupFormModal size="l">
+  <h2 *ngIf="!editedGroup">Создать новое ТКП</h2>
+  <h2 *ngIf="editedGroup">Редактирование ТКП</h2>
+  <app-technical-commercial-proposal-group-form
+    *ngIf="groupFormModal.state"
+    [group]="editedGroup"
+    (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="requestId"
+    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event);"
+  >
+  </app-technical-commercial-proposal-group-form>
+</uxg-modal>

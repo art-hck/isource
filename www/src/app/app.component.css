@@ -10,6 +10,10 @@
   margin-left: 10px;
 }
 
+.app-header.no-stick {
+  position: static;
+}
+
 .separator {
   border-left: 1px #D5DDE2 solid;
   height: 32px;

@@ -18,9 +18,9 @@ export class ProcedureService {
     private formDataService: FormDataService
   ) {}
 
-  list(requestId: Uuid, source: ProcedureSource): Observable<Procedure[]> {
+  list(requestId: Uuid, source: ProcedureSource, requestTechnicalCommercialProposalGroupId?: Uuid): Observable<Procedure[]> {
     const url = `requests/backoffice/${requestId}/procedures`;
-    return this.api.post<Procedure[]>(url, { source });
+    return this.api.post<Procedure[]>(url, { source, requestTechnicalCommercialProposalGroupId });
   }
 
   create(requestId: Uuid, body: Procedure): Observable<ProcedureCreateResponse> {

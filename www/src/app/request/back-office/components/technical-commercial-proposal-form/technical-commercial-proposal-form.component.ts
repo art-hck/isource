@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
@@ -24,10 +15,15 @@ import { getCurrencySymbol } from "@angular/common";
 import { technicalCommercialProposalParametersFormValidator } from "./technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
 import { RequestPosition } from "../../../common/models/request-position";
+import { UxgModalComponent } from "uxg";
+import { DeliveryType } from "../../enum/delivery-type";
+import { DeliveryTypeLabels } from "../../../common/dictionaries/delivery-type-labels";
+import { CurrencyLabels } from "../../../common/dictionaries/currency-labels";
+import { PositionCurrency } from "../../../common/enum/position-currency";
+import { Uuid } from "../../../../cart/models/uuid";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
-import { UxgModalComponent } from "uxg";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -39,6 +35,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
+  @Input() groupId: Uuid;
   @Input() technicalCommercialProposal: TechnicalCommercialProposal;
   @Input() closable = true;
   @Output() close = new EventEmitter();
@@ -46,6 +43,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly status$: Observable<StateStatus>;
   @Select(TechnicalCommercialProposalState.availablePositions)
   readonly availablePositions$: Observable<RequestPosition[]>;
+  readonly deliveryType = DeliveryType;
+  readonly deliveryTypeLabel = DeliveryTypeLabels;
+  readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
@@ -73,6 +73,12 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       documents: [this.defaultValue('documents', [])],
       positions: [this.defaultValue('positions', []), [Validators.required, this.parametersValidator, this.manufacturerValidator]],
       files: [[]],
+      deliveryType: [this.technicalCommercialProposal?.deliveryType || this.deliveryType.INCLUDED],
+      deliveryAdditionalTerms: [this.technicalCommercialProposal?.deliveryAdditionalTerms || ''],
+      warrantyConditions: [this.technicalCommercialProposal?.warrantyConditions || '', Validators.required],
+      deliveryPrice: [this.technicalCommercialProposal?.deliveryPrice || ''],
+      deliveryCurrency: [PositionCurrency.RUB],
+      deliveryPickup: [this.technicalCommercialProposal?.deliveryPickup || '']
     });
 
     if (this.technicalCommercialProposal) {
@@ -108,13 +114,19 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
           [Validators.required, proposalManufacturerValidator]
       );
 
+      this.form.get('deliveryPickup').setValidators(
+        this.form.get('deliveryType').value === this.deliveryType.PICKUP ? [Validators.required] : null);
+
+      this.form.get('deliveryPrice').setValidators(
+        this.form.get('deliveryType').value === this.deliveryType.NOT_INCLUDED ? [Validators.required] : null);
+
       this.form.get('positions').updateValueAndValidity({ emitEvent: false });
 
       this.cd.detectChanges();
     });
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
-    this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id));
+    this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id, this.groupId));
   }
 
   submit(publish = true): void {
@@ -144,7 +156,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   save(value, publish) {
     return this.store.dispatch(
-      value.id ? new Update(value, publish) : new Create(this.request.id, value, publish)
+      value.id ? new Update(value, publish) : new Create(this.request.id, this.groupId, value, publish)
     );
   }
 

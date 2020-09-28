@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { TechnicalCommercialProposalPosition } from "../models/technical-commercial-proposal-position";
 import * as moment from "moment";
 import { TechnicalCommercialProposalByPosition } from "../models/technical-commercial-proposal-by-position";
-type ProposalByPositionData = TechnicalCommercialProposalByPosition["data"];
+import { TechnicalCommercialProposal } from "../models/technical-commercial-proposal";
 
 @Injectable({
   providedIn: "root"
@@ -28,24 +28,32 @@ export class TechnicalCommercialProposalHelperService {
       ' - Количество меньше нужного';
   }
 
-  chooseBy(type: "date" | "price", data: ProposalByPositionData): TechnicalCommercialProposalPosition {
-    return data.reduce((prev, curr) => {
-      const prevValid = prev && this.isValid(prev.proposalPosition);
-      const currValid = curr && this.isValid(curr.proposalPosition);
-      if (prevValid && !currValid) { return prev; }
-      if (!prevValid && currValid) { return curr; }
-      if (!prevValid && !currValid) { return null; }
+  getSummaryPrice(positions: TechnicalCommercialProposalPosition[]): number {
+    return positions.map(position => position.priceWithoutVat * position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
+  }
+
+  chooseBy(type: "date" | "price", position: TechnicalCommercialProposalPosition, proposals: TechnicalCommercialProposal[]): TechnicalCommercialProposal {
+    return proposals.reduce((prev, curr) => {
+      const prevPos = prev?.positions?.find(pos => pos.position.id === position.position.id);
+      const currPos = curr?.positions?.find(pos => pos.position.id === position.position.id);
+
+      if (type === 'date') {
+        const prevValid = prevPos && this.isValid(prevPos);
+        const currValid = currPos && this.isValid(currPos);
+        if (prevValid && !currValid) { return prev; }
+        if (!prevValid && currValid) { return curr; }
+      }
 
       switch (type) {
         case "price":
-          return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat ? prev : curr;
+          return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
         case "date":
-          if (moment(prev.proposalPosition.deliveryDate).isSame(curr.proposalPosition.deliveryDate)) {
-            return prev.proposalPosition.priceWithoutVat <= curr.proposalPosition.priceWithoutVat ? prev : curr;
+          if (moment(prevPos.deliveryDate).isSame(currPos.deliveryDate)) {
+            return prevPos.priceWithoutVat <= currPos.priceWithoutVat ? prev : curr;
           } else {
-            return moment(prev.proposalPosition.deliveryDate).isBefore(curr.proposalPosition.deliveryDate) ? prev : curr;
+            return moment(prevPos.deliveryDate).isBefore(currPos.deliveryDate) ? prev : curr;
           }
       }
-    }).proposalPosition;
+    });
   }
 }

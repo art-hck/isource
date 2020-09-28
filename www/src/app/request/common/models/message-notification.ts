@@ -1,21 +1,19 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { User } from "../../../user/models/user";
-import { RequestDocument } from "./request-document";
 import { Contragent } from "../../../core/models/contragent";
-import { Conversation } from "../../../message/models/conversation";
-import { Message } from "../../../message/models/message";
-import { Attachment } from "../../../message/models/attachment";
-import { Author } from "../../../message/models/author";
+import { ChatConversation } from "../../../chat/models/chat-conversation";
+import { ChatAttachment } from "../../../chat/models/chat-attachment";
+import { ChatAuthor } from "../../../chat/models/chat-author";
+import { ChatMessage } from "../../../chat/models/chat-message";
 
-export class MessageNotification implements Message {
+export class MessageNotification implements ChatMessage {
   id: number;
-  author: Author;
+  author: ChatAuthor;
   createdAt: string;
   text: string;
-  attachments: Attachment[];
+  attachments: ChatAttachment[];
   seenAt: string | null;
   status: "sent" | "seen";
-  conversation: Conversation;
+  conversation: ChatConversation;
 
   contragent?: Contragent;
   isSending?: boolean;

@@ -1,21 +1,32 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  ElementRef, EventEmitter,
+  Input, OnChanges,
+  OnDestroy,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
-import { Actions, Store } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { getCurrencySymbol } from "@angular/common";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { UxgModalComponent } from "uxg";
-import { FormControl, Validators } from "@angular/forms";
-import { finalize, takeUntil, tap } from "rxjs/operators";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { filter, finalize, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposalHelperService } from "../../../common/services/technical-commercial-proposal-helper.service";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { RequestPosition } from "../../../common/models/request-position";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../shared/components/grid/position";
-import Reject = TechnicalCommercialProposals.Reject;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
-
+import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
+import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
+import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
+import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { StateStatus } from "../../../common/models/state-status";
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -23,85 +34,189 @@ import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
   styleUrls: ['technical-commercial-proposal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalComponent implements OnInit, OnDestroy {
+
+export class TechnicalCommercialProposalComponent implements OnChanges, OnDestroy {
+  @Select(TechnicalCommercialProposalState.status)
+  readonly stateStatus$: Observable<StateStatus>;
+
   @ViewChild("proposalModal") proposalModal: UxgModalComponent;
   @ViewChildren('gridRow') gridRows: QueryList<ElementRef>;
   @Input() proposalByPos: TechnicalCommercialProposalByPosition;
+  @Input() proposal: TechnicalCommercialProposal;
   @Input() proposals: TechnicalCommercialProposal[];
+  @Input() technicalCommercialProposalIndex: number;
   @Input() requestId: Uuid;
   @Input() chooseBy$: Subject<"date" | "price">;
+  @Input() isLoading: boolean;
+  @Output() positionSelected = new EventEmitter();
   readonly destroy$ = new Subject();
   position: Position;
-  modalData: TechnicalCommercialProposalByPosition["data"][number];
-
   getCurrencySymbol = getCurrencySymbol;
   selectedProposal = new FormControl(null, Validators.required);
   sendToEditPosition = new FormControl(null, Validators.required);
   folded = false;
+  form: FormGroup;
+  someFilterVar = true;
 
-  get isReviewed(): boolean {
-    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(p.status));
+  get selectedPositions(): TechnicalCommercialProposalPosition[] {
+    return (this.form.get('positions') as FormArray).controls
+      ?.filter(({value}) => value.checked)
+      .map(({value}) => (value.position));
   }
 
-  get hasWinner(): boolean {
-    return this.proposalByPos.data.some(({ proposalPosition: p }) => ['APPROVED'].includes(p.status));
+  get hasOnReview(): boolean {
+    return this.proposal.positions.some(({ status }) => ['SENT_TO_REVIEW'].includes(status));
+  }
+
+  get hasSentToEdit(): boolean {
+    return this.proposal.positions.some(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
+  }
+
+  get isReviewed(): boolean {
+    return this.proposal.positions.every(({ status }) => ['APPROVED', 'REJECTED'].includes(status));
   }
 
   get isSentToEdit(): boolean {
-    return this.proposalByPos.data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && this.proposalByPos.data.length > 0;
+    return this.proposal.positions.every(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
   }
 
   constructor(
     public helper: TechnicalCommercialProposalHelperService,
     private store: Store,
-    private actions: Actions,
-    private cd: ChangeDetectorRef
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
   ) {}
 
-  ngOnInit() {
-    this.position = new Position(this.proposalByPos.position);
-
+  ngOnChanges() {
     if (this.chooseBy$) {
       this.chooseBy$.pipe(
-        tap(type => this.selectedProposal.setValue(this.helper.chooseBy(type, this.proposalByPos.data))),
-        takeUntil(this.destroy$))
-      .subscribe(() => this.cd.detectChanges());
+        tap(type => {
+          this.getNotReviewedPositionsByProposals(this.proposals).forEach((position) => {
+            const proposalsWithPosition = this.getAllProposalsWithPosition(position);
+            const proposalToCheck = this.helper.chooseBy(type, position, proposalsWithPosition);
+            const proposalPositionToCheck = this.getTcpPositionByPositionAndProposal(position, proposalToCheck);
+
+            (this.form.get('positions') as FormArray).controls?.map(
+              (control) => {
+                if (proposalPositionToCheck && !control.disabled && control.value.position.id === proposalPositionToCheck.id) {
+                  control.get('checked').setValue(true);
+                }
+              }
+            );
+          });
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe(() => this.cd.detectChanges());
     }
 
-    this.selectedProposal.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => {
-      // Workaround sync with multiple elements per one formControl
-      this.selectedProposal.setValue(v, {onlySelf: true, emitEvent: false});
-      this.sendToEditPosition.reset(null, {emitEvent: false});
+    this.form = this.fb.group({
+      checked: false,
+      positions: this.fb.array(this.proposal.positions.map(position => {
+        const form = this.fb.group({ checked: false, position });
+        if (this.isProposalPositionReviewed(position)) {
+          form.get("checked").disable();
+        }
+        return form;
+      }))
     });
 
-    this.sendToEditPosition.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.selectedProposal.reset(null, {emitEvent: false}));
+    this.form.valueChanges.pipe(
+      filter(() => this.someFilterVar)).subscribe(() => {
+        if (this.selectedPositions.length > 0) {
+          const selectedPositions = this.selectedPositions;
+          const index = this.technicalCommercialProposalIndex;
+
+          const data = { selectedPositions, index };
+
+          this.someFilterVar = false;
+          this.positionSelected.emit(data);
+          this.someFilterVar = true;
+        }
+      }
+    );
   }
 
-  approve() {
-    this.dispatchAction(new ReviewMultiple([this.selectedProposal.value], []));
+  approve(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
+      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+    }
   }
 
-  reject() {
-    this.dispatchAction(new Reject(this.requestId, this.proposalByPos.position));
+  sendToEdit(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
+      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+    }
   }
 
-  private dispatchAction(action) {
-    this.selectedProposal.disable();
+  private dispatchAction(action): void {
+    this.isLoading = true;
+
     this.store.dispatch(action).pipe(
-      finalize(() => this.selectedProposal.enable()),
+      finalize(() => {
+        this.isLoading = false;
+      }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  getProposalPosition({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition {
-    return positions.find(({position}) => position.id === id);
+  /**
+   * Имея в распоряжении позицию и ткп-предложение, получаем из последней ткп-позицию
+   */
+  getTcpPositionByPositionAndProposal(position, proposal): TechnicalCommercialProposalPosition {
+    return proposal?.positions?.find(pos => pos.position.id === position.position.id);
+  }
+
+  /**
+   * Получаем список всех позиций, по которым созданы ТКП
+   */
+  getNotReviewedPositionsByProposals(proposals): TechnicalCommercialProposalPosition[] {
+    const flatProposalsPositions = proposals.map(({positions}) => positions);
+
+    const allPositionsByProposals = flatProposalsPositions.flat(1).filter((position, index, array) =>
+      !array.filter((v, i) => JSON.stringify(position.position.id) === JSON.stringify(v.position.id) && i < index).length);
+
+    return allPositionsByProposals.filter(position => !this.isProposalPositionReviewed(position));
+  }
+
+  /**
+   * Получаем все ТКП, в которых участвует указанная позиция
+   */
+  getAllProposalsWithPosition(proposalPosition): TechnicalCommercialProposal[] {
+    // Получаем все ТКП, в которых участвует указанная позиция
+    return this.proposals.filter(({ positions }) => positions.find(pos => pos.position.id === proposalPosition.position.id));
+  }
+
+  // Функция сбрасывает чекбоксы во всех ТКП у тех позиций, которые становятся отмечены в другом ТКП
+  refreshPositionsSelectedState(i, checkedTechnicalCommercialProposalPositions: TechnicalCommercialProposalPosition[]): void {
+    if (this.technicalCommercialProposalIndex !== i) {
+      const checkedPositionsIds = checkedTechnicalCommercialProposalPositions.map(({position}) => position.id);
+
+      (this.form.get('positions') as FormArray).controls?.forEach(
+        (control) => {
+          const index = checkedPositionsIds.indexOf(control.value.position.position.id);
+
+          if (index !== -1 && control.get('checked').value === true) {
+            control.get('checked').setValue(false);
+          }
+        }
+      );
+
+      this.cd.detectChanges();
+    }
+  }
+
+  isProposalPositionReviewed(position): boolean {
+    return [
+      TechnicalCommercialProposalPositionStatus.APPROVED,
+      TechnicalCommercialProposalPositionStatus.REJECTED,
+      TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT
+    ].indexOf(position.status) > -1;
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  trackByproposalPositionId = (i, {proposalPosition}: TechnicalCommercialProposalByPosition["data"][number]) => proposalPosition.id;
 }

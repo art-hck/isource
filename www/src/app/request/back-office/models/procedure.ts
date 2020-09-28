@@ -39,6 +39,8 @@ export class Procedure {
   bestPriceRequirements: boolean;
   positionsEntireVolume: boolean;
   positionsRequiredAll: boolean;
+  withoutTotalPrice: boolean;
+  withoutTotalPriceReason: string;
   positionsSuppliersVisibility: "Name" | "NameHidden" | "None";
 
   dishonestSuppliersForbidden: boolean;
@@ -49,4 +51,5 @@ export class Procedure {
   privateAccessContragents: ContragentShortInfo[];
   getTPFilesOnImport: boolean;
   source: ProcedureSource;
+  requestTechnicalCommercialProposalGroupId?: Uuid;
 }
