@@ -2,7 +2,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { delayWhen, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { filter, finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -39,6 +39,8 @@ import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import { Procedure } from "../../../back-office/models/procedure";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -78,6 +80,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly chooseBy$ = new Subject<"date" | "price">();
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
+  isLoading: boolean;
   requestId: Uuid;
   groupId: Uuid;
   gridRows: ElementRef[];
@@ -90,6 +93,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  get selectedPositions() {
+    const checkedPositions = [];
+
+    this.tcpComponentList?.forEach((tcpComponent) => {
+      checkedPositions.push(...tcpComponent.selectedPositions);
+    });
+
+    return checkedPositions;
   }
 
   get disabled() {
@@ -106,7 +119,9 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     private pluralize: PluralizePipe,
     private cd: ChangeDetectorRef,
     private app: AppComponent,
-    public helper: ProposalHelperService
+    public helper: ProposalHelperService,
+    public title: Title,
+    public service: TechnicalCommercialProposalService,
   ) {}
 
   ngOnInit() {
@@ -124,6 +139,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
@@ -200,6 +222,31 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
   }
 
+  approveFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp);
+      this.dispatchAction(new ReviewMultiple(selectedPositions, []));
+    }
+  }
+
+  sendToEditFromListView(): void {
+    if (this.selectedPositions) {
+      const selectedPositions = Array.from(this.selectedPositions, (tcp) => tcp.position);
+      this.dispatchAction(new SendToEditMultiple(selectedPositions));
+    }
+  }
+
+  private dispatchAction(action): void {
+    this.isLoading = true;
+
+    this.store.dispatch(action).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
   switchView(view: ProposalsView) {
     this.view = view;
     this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
@@ -248,7 +295,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   onPositionSelected(data): void {
     this.tcpComponentList.forEach((tcpComponent) => {
-      tcpComponent.refreshPositionsSelectedState(data.i, data.technicalCommercialProposalPosition);
+      tcpComponent.refreshPositionsSelectedState(data.index, data.selectedPositions);
     });
   }
 

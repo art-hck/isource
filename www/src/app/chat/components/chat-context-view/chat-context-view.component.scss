@@ -105,6 +105,19 @@
           align-self: flex-end;
         }
       }
+
+      &-text {
+        margin-right: .5em;
+      }
+
+      &-attachment {
+        margin: .5em 0;
+        cursor: pointer;
+
+        span {
+          margin-left: .5em;
+        }
+      }
     }
   }
 

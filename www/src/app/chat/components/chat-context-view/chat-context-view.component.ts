@@ -5,7 +5,7 @@ import { ChatItemsState } from "../../states/chat-items.state";
 import { combineLatest, EMPTY, fromEvent, iif, merge, Observable, of, Subject } from "rxjs";
 import { RequestListItem } from "../../../request/common/models/requests-list/requests-list-item";
 import { UserInfoService } from "../../../user/service/user-info.service";
-import { debounceTime, delayWhen, distinctUntilChanged, filter, flatMap, map, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { debounceTime, delayWhen, distinctUntilChanged, filter, flatMap, map, skipUntil, switchMap, take, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { ChatItem, ChatSubItem } from "../../models/chat-item";
 import { ChatItems } from "../../actions/chat-items.actions";
 import { RequestPositionList } from "../../../request/common/models/request-position-list";
@@ -23,7 +23,8 @@ import { ChatAttachment } from "../../models/chat-attachment";
 import { ChatMessages } from "../../actions/chat-messages.actions";
 import { ChatSubItems } from "../../actions/chat-sub-items.actions";
 import { FormControl } from "@angular/forms";
-  import { StateStatus } from "../../../request/common/models/state-status";
+import { StateStatus } from "../../../request/common/models/state-status";
+import { AttachmentsService } from "../../services/attachments.service";
 
 @Component({
   styleUrls: ['./chat-context-view.component.scss'],
@@ -32,7 +33,7 @@ import { FormControl } from "@angular/forms";
 export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('messagesContainer') messagesContainer: ElementRef;
   @ViewChildren('messageEl') messageElements: QueryList<ElementRef>;
-  @Select(ChatSubItemsState.subItems) subItems$: Observable<ChatSubItem[]>;
+  @Select(ChatSubItemsState.subItems()) subItems$: Observable<ChatSubItem[]>;
   @Select(ChatSubItemsState.status) subItemsStatus$: Observable<StateStatus>;
   @Select(ChatMessagesState.messages) messages$: Observable<ChatMessage[]>;
   readonly item$: Observable<ChatItem> = this.route.params.pipe(switchMap(({ requestId }) => this.store.select(ChatItemsState.item(requestId))));
@@ -53,10 +54,21 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     return this.userInfoService.getUserRole();
   }
 
+  get unreadCountContext$(): Observable<number> {
+    return this.item$.pipe(
+      skipUntil(this.subItemsStatus$.pipe(filter(status => status === "received"))),
+      withLatestFrom(this.subItems$),
+      map(([{ context }, subItems]) => {
+        return (context?.unreadCount ?? 0) - subItems.reduce((sum, { conversation }) => sum += (conversation?.unreadCount ?? 0), 0);
+      }),
+    );
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
+    public attachmentsService: AttachmentsService,
     public userInfoService: UserInfoService,
     public messagesService: MessagesService,
     public conversationsService: ConversationsService,
@@ -104,7 +116,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     this.messagesService.onNew().pipe(
       // Дожидаемся пока у чата появится ин-фа о конверсейшене (сработает сразу если инфа уже есть)
       delayWhen(({ conversation: { id, context: { id: contextId } } }) => merge(
-          this.store.select(ChatSubItemsState.subItems),
+          this.store.select(ChatSubItemsState.subItems(true)),
           this.store.select(ChatItemsState.items)
         ).pipe(
           filter((items) => items.some(value => {
@@ -207,8 +219,8 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
     ).subscribe((convId) => this.messagesService.send(text, convId, attachments.map(({ id }) => id)));
   }
 
-  subItemsByGroup(id: RequestGroup["id"]): ChatSubItem[] {
-    return this.store.selectSnapshot(ChatSubItemsState.subItemsByGroup(id));
+  subItemsByGroup$(id: RequestGroup["id"]): Observable<ChatSubItem[]> {
+    return this.store.select(ChatSubItemsState.subItemsByGroup(id));
   }
 
   ngOnDestroy() {

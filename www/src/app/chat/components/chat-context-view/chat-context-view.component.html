@@ -21,7 +21,7 @@
       <li *ngIf="item$ | async as item">
         <a [routerLink]="['/im', item.request.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
           <span class="app-col app-ellipsis">Обсуждение заявки</span>
-          <small *ngIf="item.context?.unreadCount as cnt">{{cnt}}</small>
+          <small *ngIf="unreadCountContext$ | async as cnt">{{cnt}}</small>
         </a>
       </li>
       <ng-container *ngFor="let subItem of subItems$ | async | subItemsFilter: search.value">
@@ -41,8 +41,8 @@
             <small *ngIf="subItem.conversation?.unreadCount as cnt">{{cnt}}</small>
           </a>
 
-          <ul *ngIf="subItemsByGroup(subItem.position.id) as subItems">
-            <li *ngFor="let subItem of subItems">
+          <ul *ngIf="subItemsByGroup$(subItem.position.id) | async as subItems">
+            <li *ngFor="let subItem of subItems | subItemsFilter: search.value">
               <ng-container *ngTemplateOutlet="subItemTpl; context: {$implicit: subItem}"></ng-container>
             </li>
           </ul>
@@ -87,7 +87,11 @@
           <div #messageEl class="im-messages-item" [class.im-messages-item-own]="isOwn(message)">
             <div class="app-col">
               <div class="app-bold">{{message.author.fullName}}</div>
-              <div>{{message.text}}</div>
+              <div class="im-messages-item-attachment" *ngFor="let attachment of message.attachments" (click)="attachmentsService.download(attachment).subscribe()">
+                <document-icon [name]="attachment.originalFilename" size="s"></document-icon>
+                <span>{{attachment.originalFilename}}</span>
+              </div>
+              <div class="im-messages-item-text">{{message.text}}</div>
             </div>
             <small class="app-ghost-color">{{message.createdAt | humanDate}}</small>
           </div>

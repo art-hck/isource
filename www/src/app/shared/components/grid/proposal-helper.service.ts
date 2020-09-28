@@ -26,7 +26,7 @@ export class ProposalHelperService {
   }
 
   isPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.length === positions.length;
+    return proposal.positions.length >= positions.length;
   }
 
   isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
@@ -40,8 +40,10 @@ export class ProposalHelperService {
         || position.position.isDeliveryDateAsap);
   }
 
-  getSummaryPrice(positions: TechnicalCommercialProposalPosition[]) {
-    return positions.map(position => position.priceWithoutVat * position.quantity).reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
+  getSummaryPrice(positions: TechnicalCommercialProposalPosition[], hasAnalogs: boolean) {
+    return positions
+      .map(position => position.isAnalog === hasAnalogs ? position.priceWithoutVat * position.quantity : 0)
+      .reduce((sum, priceWithoutVat) => sum + priceWithoutVat, 0);
   }
 
   getRequestedQuantityLabel(position: Position, { quantity }: Proposal): string {

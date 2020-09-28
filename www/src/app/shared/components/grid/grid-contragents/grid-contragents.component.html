@@ -6,11 +6,12 @@
            *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
         <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
         </app-contragent-info-link>
-        <div class="app-ghost-color analog" *ngIf="supplier.hasAnalogs">аналоги</div>
+        <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
         <ng-container *ngIf="showCommonParams">
-          <app-grid-common-parameters
+          <app-grid-common-parameters #gridCommonParams
             [proposal]="getProposalBySupplier(supplier, proposals)"
             [proposalsByPos]="proposalsByPos"
+            [hasAnalogs]="supplier.hasAnalogs"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"
             [showDocs]="showDocsControl.value"
@@ -24,7 +25,7 @@
     <!-- Временно скрыто в матрице КП-->
     <ng-container *ngIf="showParams && suppliers.length">
       <ng-container *ngIf="showCommonParams === false; else close">
-        <button uxgButton primary class="common-params" (click)="showCommonParams = true; openCommonParams.emit()">Общие параметры</button>
+        <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
       </ng-container>
       <ng-template #close>
         <button uxgButton icon primary class="common-params" (click)="showCommonParams = false">

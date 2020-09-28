@@ -48,7 +48,8 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   ngOnInit() {
     this.form = this.fb.group({
       supplier: [this.edit?.supplier ?? null, Validators.required],
-      files: [this.edit?.documents ?? []],
+      files: [[]],
+      documents: [this.defaultValue('documents', [])],
       deliveryType: [this.edit?.deliveryType ?? this.deliveryType.INCLUDED],
       deliveryAdditionalTerms: [this.edit?.deliveryAdditionalTerms ?? ''],
       warrantyConditions: [this.edit?.warrantyConditions ?? '', Validators.required],

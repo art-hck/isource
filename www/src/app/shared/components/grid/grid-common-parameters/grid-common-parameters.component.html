@@ -1,8 +1,9 @@
-<div class="price-info">
+<div class="price-info" [class.has-analogs]="hasAnalogs">
   <div class="price-info-block">
     <ng-container *ngIf="proposal.positions.length === 0; else positionsPriceInfo">
       <div class="app-ghost-color">Количество не указано</div>
       <div class="app-ghost-color">Сроки не указаны</div>
+      <br>
       <br>
       <div class="app-ghost-color">Общая сумма поставки с НДС</div>
       <div class="app-ghost-color price"><b>0 ₽</b></div>
@@ -36,7 +37,7 @@
       </ng-template>
       <br>
       <div class="app-ghost-color">Общая сумма поставки с НДС</div>
-      <div class="price"><b>{{helper.getSummaryPrice(proposal.positions) | number: "1.0-2"}}
+      <div class="price"><b>{{helper.getSummaryPrice(proposal.positions, hasAnalogs) | number: "1.0-2"}}
         <span class="app-ghost-color">{{getCurrencySymbol('RUB', 'narrow') }}</span></b></div>
     </ng-template>
   </div>
@@ -49,7 +50,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="proposal.deliveryType !== 'PICKUP'">
-        <div class="app-ghost-color">Стоимость поставки</div>
+        <div class="app-ghost-color">Стоимость доставки</div>
         <div class="info-value" *ngIf="proposal.deliveryPrice; else included">
           {{ proposal.deliveryPrice }} {{proposal.deliveryCurrency}}
         </div>

@@ -21,6 +21,7 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   @Input() disabledFn: (item) => boolean;
   @Input() liveUpdate = true;
   @ContentChild(TemplateRef) rowTplRef: TemplateRef<any>;
+  @ContentChild('footerContentTpl') footerTplRef: TemplateRef<any>;
 
   public onTouched: (value) => void;
   public onChange: (value) => void;
@@ -52,6 +53,12 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
       this.subscription.add(
         this.form.valueChanges.subscribe(() => this.submit())
       );
+    }
+
+    if (this.filterFn) {
+      this.form.get('search').valueChanges.subscribe((value) => this.formItems?.controls
+        .filter(c => !this.disabledFn || !this.disabledFn(c.get('item').value)) // не учитываем позиции, задизейбленые функцией
+        .forEach(c => !this.filterFn(value, c.get('item').value) ? c.disable() : c.enable()));
     }
   }
 

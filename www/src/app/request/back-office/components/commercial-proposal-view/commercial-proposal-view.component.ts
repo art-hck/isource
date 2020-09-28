@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Actions, Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
@@ -14,7 +25,7 @@ import { RequestService } from "../../services/request.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { AppComponent } from "../../../../app.component";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { filter, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { filter, finalize, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
@@ -40,6 +51,7 @@ import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -57,10 +69,12 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
+  contragentsWithTp$: Observable<ContragentShortInfo[]>;
   requestId: Uuid;
   readonly destroy$ = new Subject();
   view: ProposalsView = "grid";
   form: FormGroup;
+  loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
   proposalModalData: {position: RequestPosition, proposal: Proposal};
@@ -99,6 +113,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     public store: Store,
     public router: Router,
     public helper: ProposalHelperService,
+    private commercialProposalsService: CommercialProposalsService,
   ) {
   }
 
@@ -182,6 +197,14 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   getProposalBySupplier = (position: RequestPosition) => ({ id, hasAnalogs }: GridSupplier) => {
     const proposal = position.linkedOffers.find(({ supplierContragentId, isAnalog }) => supplierContragentId === id && isAnalog === hasAnalogs);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
+  }
+
+  onPositionsSelected(positionsIds) {
+    this.loadingContragentList = true;
+    this.contragentsWithTp$ = this.commercialProposalsService
+      .getContragentsWithTp(this.requestId, positionsIds).pipe(
+        finalize(() => this.loadingContragentList = false)
+      );
   }
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;

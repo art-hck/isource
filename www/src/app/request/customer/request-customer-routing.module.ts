@@ -86,7 +86,6 @@ const routes: Routes = [
       {
         path: 'technical-commercial-proposals/:groupId',
         component: TechnicalCommercialProposalListComponent,
-        data: { title: "Страница предложений" },
       },
       {
         path: 'design-documentation',

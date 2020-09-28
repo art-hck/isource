@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
-import { delayWhen, filter, startWith, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
+import { delayWhen, filter, startWith, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { FeatureService } from "../../../../core/services/feature.service";
@@ -46,6 +46,8 @@ import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePosi
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
 import UpdateParams = TechnicalCommercialProposals.UpdateParams;
+import { Title } from "@angular/platform-browser";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -116,6 +118,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     public helper: TechnicalCommercialProposalHelperService,
     public scrollPositionService: ScrollPositionService,
     private app: AppComponent,
+    public title: Title,
+    public service: TechnicalCommercialProposalService,
   ) {
   }
 
@@ -134,6 +138,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.proposalsByPositions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((items) => {
       this.form = this.fb.group({

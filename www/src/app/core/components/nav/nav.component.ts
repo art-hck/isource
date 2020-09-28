@@ -5,9 +5,10 @@ import { CartStoreService } from "../../../cart/services/cart-store.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { FeatureService } from "../../services/feature.service";
 import { MessagesService } from "../../../chat/services/messages.service";
-import { filter, mapTo, switchMap, takeUntil, tap } from "rxjs/operators";
-import { BehaviorSubject, fromEvent, iif, interval, merge, NEVER, Subject } from "rxjs";
+import { distinctUntilChanged, filter, mapTo, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, fromEvent, iif, interval, merge, Subject } from "rxjs";
 import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-nav',
@@ -24,6 +25,7 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
 
   constructor(
+    private router: Router,
     public title: Title,
     public auth: AuthService,
     public user: UserInfoService,
@@ -46,6 +48,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
     let title;
     const audio = new Audio();
+
     audio.src = "/assets/new-message.mp3";
     audio.load();
     merge(
@@ -53,10 +56,11 @@ export class NavComponent implements OnInit, OnDestroy {
       fromEvent(document, 'visibilitychange').pipe(mapTo(false))
     ).pipe(
       filter(newMessage => document.visibilityState === 'hidden' === newMessage),
-      tap((newMessage) => newMessage && audio.play()),
-      tap(() => this.title.setTitle(title = title ?? this.title.getTitle())),
-      switchMap(newMessage => iif(() => newMessage, interval(1000))),
-    ).subscribe((i) => this.title.setTitle(i % 2 ? title : "Новое сообщение!"));
+      tap(newMessage => newMessage && audio.play()),
+      distinctUntilChanged(),
+      tap(newMessage => newMessage ? title = this.title.getTitle() : this.title.setTitle(title ?? this.title.getTitle())),
+      switchMap(newMessage => iif(() => newMessage, interval(1000)))
+    ).subscribe(i => this.title.setTitle(i % 2 ? title : "Новое сообщение!"));
   }
 
   get userBriefInfo(): string {

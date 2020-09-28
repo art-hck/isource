@@ -36,10 +36,13 @@ export class ChatSubItemsState {
   constructor(private service: ContextsService) {}
 
   @Selector() static status({ status }: Model) { return status; }
-  @Selector() static subItems({ subItems }: Model) { return subItems.filter(({ position }) => !!position && !position["group"]); }
 
-  static subItem = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState.subItems],
-    (subItems: ChatSubItem[]) => subItems.find(({ position }) => position.id === id)
+  static subItems = (withGroupItems: boolean = false) => createSelector([ChatSubItemsState],
+    ({ subItems }: Model) => subItems.filter(({ position }) => !!position && (withGroupItems || !position["group"]))
+  )
+
+  static subItem = (id: RequestPositionList["id"]) => createSelector([ChatSubItemsState],
+    ({ subItems }: Model) => subItems.find(({ position }) => position && position.id === id)
   )
 
   static subItemsByGroup = (groupId: RequestGroup["id"]) => createSelector([ChatSubItemsState],

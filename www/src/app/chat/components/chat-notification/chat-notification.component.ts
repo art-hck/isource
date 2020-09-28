@@ -16,7 +16,7 @@ import { ChatMessage } from "../../models/chat-message";
 export class ChatNotificationComponent {
 
   readonly newMessages$ = this.messagesService.onNew().pipe(
-    filter(m => m.author.uid !== this.user.getUserInfo().id && this.router.url.indexOf('/im/') < 0),
+    filter(m => m.author.uid !== this.user.getUserInfo().id),
   );
   readonly timer$ = this.newMessages$.pipe(debounceTime(8000), mapTo(null));
   readonly close$ = new Subject();

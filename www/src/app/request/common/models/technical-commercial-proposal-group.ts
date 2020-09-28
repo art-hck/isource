@@ -1,5 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { PositionStatus } from "../enum/position-status";
+import { History } from "./history";
 
 export class TechnicalCommercialProposalGroup {
   id: Uuid;
@@ -10,7 +11,8 @@ export class TechnicalCommercialProposalGroup {
     id: Uuid,
     name: string,
     status: PositionStatus,
-    number: 8
+    number: 8,
+    history: History
   }[];
 }
 
