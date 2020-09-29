@@ -54,12 +54,12 @@ const routes: Routes = [
         component: CustomerRequestComponent,
       },
       {
-        path: 'contracts-new',
+        path: 'contracts',
         component: ContractListComponent,
         data: { title: "На рассмотрении договора" }
       },
       {
-        path: 'contracts',
+        path: 'contracts-old',
         component: DeprecatedContractListComponent,
         data: { title: "На рассмотрении договора" }
       },

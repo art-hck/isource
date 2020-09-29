@@ -14,7 +14,7 @@
         </ng-container>
 
         <ng-template #sizeInfo>
-          <span *ngIf="document.size > 0">{{document.size | bytesToSize : 2}}</span>
+          <span *ngIf="!sizeInfoHidden && document.size > 0">{{document.size | bytesToSize : 2}}</span>
         </ng-template>
       </div>
     </div>

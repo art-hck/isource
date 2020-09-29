@@ -11,8 +11,11 @@
 li.document-item {
   display: flex;
   align-items: center;
-  margin-top: 8px;
   max-width: 250px;
+
+  &:not(:first-child) {
+    margin-top: 8px;
+  }
 
   div {
     margin: 5px 10px;
