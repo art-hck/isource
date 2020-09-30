@@ -15,23 +15,23 @@ export class ContractService {
     return this.api.get<Contract[]>(url);
   }
 
-  reject(requestId: Uuid, contractId: Uuid) {
-    const url = `requests/${requestId}/contracts/${contractId}/reject`;
-    return this.api.post<Contract>(url, null);
+  reject(contractId: Uuid) {
+    const url = `requests/customer/contracts/${contractId}/reject`;
+    return this.api.get<Contract>(url);
   }
 
-  approve(requestId: Uuid, contractId: Uuid) {
-    const url = `requests/${requestId}/contracts/${contractId}/approve`;
-    return this.api.post<Contract>(url, null);
+  approve(contractId: Uuid) {
+    const url = `requests/customer/contracts/${contractId}/approve`;
+    return this.api.get<Contract>(url);
   }
 
-  upload(requestId: Uuid, contractId: Uuid, file: File, comment?: string): Observable<RequestDocument[]> {
-    const url = `requests/${requestId}/contracts/${contractId}/upload`;
-    return this.api.post<RequestDocument[]>(url, this.formDataService.toFormData({ files: [file], comments: [comment] }));
+  upload(contractId: Uuid, files: File[], comment?: string): Observable<RequestDocument[]> {
+    const url = `requests/contracts/${contractId}/upload`;
+    return this.api.post<RequestDocument[]>(url, this.formDataService.toFormData({ files, comments: [comment] }));
   }
 
-  download(requestId: Uuid, contractId: Uuid) {
-    const url = `requests/${requestId}/contracts/${contractId}/generate`;
+  download(contractId: Uuid) {
+    const url = `requests/contracts/${contractId}/generate`;
     return this.api.post(url, {}, { responseType: 'blob' });
   }
 }

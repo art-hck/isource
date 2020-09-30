@@ -1,5 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
+import { Contract } from "../../common/models/contract";
 
 export namespace ContractActions {
   // Получить список
@@ -27,32 +28,32 @@ export namespace ContractActions {
   export class Send {
     static readonly type = '[Contract Backoffice] Send';
 
-    constructor(public requestId: Uuid, public contractId: Uuid, public file?: File, public comment?: string) {}
+    constructor(public contract: Contract, public files?: File[], public comment?: string) {}
   }
 
   // Подписать
   export class Sign {
     static readonly type = '[Contract Backoffice] Sign';
 
-    constructor(public contractId: Uuid) {}
+    constructor(public contract: Contract) {}
   }
 
   // Откатить
   export class Rollback {
     static readonly type = '[Contract Backoffice] Rollback';
 
-    constructor(public contractId: Uuid) {}
+    constructor(public contract: Contract) {}
   }
 
   // Прикрепить файл договора
   export class Upload {
     static readonly type = '[Contract Backoffice] Upload';
-    constructor(public requestId: Uuid, public contractId: Uuid, public file: File, public comment?: string) {}
+    constructor(public contract: Contract, public files: File[], public comment?: string) {}
   }
 
   // Скачать типовой договор
   export class Download {
     static readonly type = '[Contract Backoffice] Download';
-    constructor(public requestId: Uuid, public contractId: Uuid) {}
+    constructor(public contract: Contract) {}
   }
 }

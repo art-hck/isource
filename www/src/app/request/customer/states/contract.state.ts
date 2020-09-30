@@ -5,14 +5,15 @@ import { Contract } from "../../common/models/contract";
 import { ContractService } from "../services/contract.service";
 import { ContractActions } from "../actions/contract.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
-import { switchMap, tap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 import { saveAs } from 'file-saver/src/FileSaver';
-import { iif, of } from "rxjs";
+import { iif, of, throwError } from "rxjs";
 import Fetch = ContractActions.Fetch;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
 import Upload = ContractActions.Upload;
 import Download = ContractActions.Download;
+import { ToastActions } from "../../../shared/actions/toast.actions";
 
 export interface ContractStateStateModel {
   contracts: Contract[];
@@ -46,33 +47,40 @@ export class ContractState {
     );
   }
 
-  @Action(Reject) reject({ setState, dispatch }: Context, { requestId, contractId, file, comment }: Reject) {
+  @Action(Reject) reject({ setState, dispatch }: Context, { contract, files, comment }: Reject) {
     setState(patch<Model>({status: "updating"}));
-    return iif(() => !!file, dispatch(new Upload(requestId, contractId, file, comment)), of(0)).pipe(switchMap(
-      () => this.rest.reject(requestId, contractId).pipe(
-        tap(contract => setState(patch<Model>({
-          contracts: updateItem(({ id }) => contract.id === id, contract),
-          status: "received"
-        })))
-      )
-    ));
-  }
-
-  @Action(Approve) approve({ setState }: Context, { requestId, contractId }: Approve) {
-    setState(patch<Model>({status: "updating"}));
-    return this.rest.approve(requestId, contractId).pipe(
-      tap(contract => setState(patch<Model>({
-        contracts: updateItem(({ id }) => contract.id === id, contract),
-        status: "received"
-      })))
+    return dispatch(!!files ? new Upload(contract, files, comment) : []).pipe(
+      switchMap(() => this.rest.reject(contract.id)),
+      tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
+      tap(() => setState(patch<Model>({ status: "received" }))),
+      tap(() => dispatch([new ToastActions.Success('Договор отправлен на доработку')])),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
     );
   }
 
-  @Action(Upload) upload({ setState }: Context, { requestId, contractId, file, comment}: Upload) {
-    return this.rest.upload(requestId, contractId, file, comment);
+  @Action(Approve) approve({ setState, dispatch }: Context, { contract }: Approve) {
+    setState(patch<Model>({status: "updating"}));
+    return this.rest.approve(contract.id).pipe(
+      tap(c => setState(patch<Model>({
+        contracts: updateItem(({ id }) => c.id === id, c),
+        status: "received"
+      }))),
+      tap(() => dispatch([new ToastActions.Success('Договор согласован')])),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
+    );
   }
 
-  @Action(Download) download({ setState }: Context, { requestId, contractId }: Download) {
-    return this.rest.download(requestId, contractId).pipe(tap(data => saveAs(data, 'Договор.docx')));
+  @Action(Upload) upload({ setState }: Context, { contract, files, comment}: Upload) {
+    return this.rest.upload(contract.id, files, comment);
+  }
+
+  @Action(Download) download({ setState }: Context, { contract }: Download) {
+    return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ contract.supplier.shortName }.docx`)));
   }
 }

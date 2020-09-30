@@ -9,7 +9,6 @@ import { ContractActions } from "../actions/contract.actions";
 import { ContragentWithPositions } from "../../common/models/contragentWithPositions";
 import { ContractService } from "../services/contract.service";
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { iif, of } from "rxjs";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Create = ContractActions.Create;
 import Fetch = ContractActions.Fetch;
@@ -52,6 +51,7 @@ export class ContractState {
 
   @Action(FetchSuppliers)
   fetchSuppliers({ setState, dispatch }: Context, { requestId }: FetchSuppliers) {
+    setState(patch({ suppliers: null }));
     return this.rest.suppliers(requestId).pipe(tap(suppliers => setState(patch({ suppliers }))));
   }
 
@@ -61,32 +61,42 @@ export class ContractState {
 
     return this.rest.create(requestId, contragentId, positions).pipe(
       tap(contract => setState(patch<Model>({ contracts: insertItem(contract), status: "received" }))),
-      tap(() => dispatch(new ToastActions.Success('Договор успешно добавлен'))),
-      catchError(e => dispatch(new ToastActions.Error(e?.error?.detail)))
+      tap(() => dispatch([new ToastActions.Success('Договор успешно добавлен'), new FetchSuppliers(requestId)])),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
     );
   }
 
   @Action(Send)
-  send({ setState, dispatch }: Context, { requestId, contractId, file, comment }: Send) {
+  send({ setState, dispatch }: Context, { contract, files, comment }: Send) {
     setState(patch<Model>({ status: "updating" }));
 
-    return iif(() => !!file, dispatch(new Upload(requestId, contractId, file, comment)), of(0)).pipe(switchMap(
-      () => this.rest.sendForApproval(requestId, contractId).pipe(
-        tap(contract => setState(patch<Model>({
-          contracts: updateItem(({ id }) => contract.id === id, contract),
-          status: "received"
-        })))
-      )
-    ));
+    return dispatch(!!files ? new Upload(contract, files, comment) : []).pipe(
+      switchMap(() => this.rest.sendForApproval(contract.id)),
+      tap(() => dispatch([new ToastActions.Success('Договор отправлен на согласование')])),
+      tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
+      tap(() => setState(patch<Model>({ status: "received" }))),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
+    );
   }
 
   @Action(Sign)
-  sign({ setState }: Context, { contractId }: Sign) {
+  sign({ setState, dispatch }: Context, { contract }: Sign) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.sign(contractId).pipe(
+    return this.rest.sign(contract.id).pipe(
       tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
-      tap(() => setState(patch<Model>({ status: "received" })))
+      tap(() => dispatch([new ToastActions.Success('Договор подписан')])),
+      tap(() => setState(patch<Model>({ status: "received" }))),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
     );
   }
 
@@ -96,12 +106,12 @@ export class ContractState {
     // @TODO: implement method
   }
 
-  @Action(Upload) upload({ setState }: Context, { requestId, contractId, file, comment }: Upload) {
-    return this.rest.upload(requestId, contractId, file, comment);
+  @Action(Upload) upload({ setState }: Context, { contract, files, comment }: Upload) {
+    return this.rest.upload(contract.id, files, comment);
   }
 
-  @Action(Download) download({ setState }: Context, { requestId, contractId }: Download) {
-    return this.rest.download(requestId, contractId).pipe(tap(data => saveAs(data, 'Договор.docx')));
+  @Action(Download) download({ setState }: Context, { contract }: Download) {
+    return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ contract.supplier.shortName }.docx`)));
   }
 
 }

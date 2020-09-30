@@ -11,7 +11,7 @@
           <span>Фильтр</span>
         </button-->
 
-        <button uxgButton primary iconText (click)="addContractModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
+        <button uxgButton primary iconText (click)="contractFormModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
           <uxg-icon shape="app-plus"></uxg-icon>
           <span>Добавить договор</span>
         </button>
@@ -29,7 +29,9 @@
         *ngFor="let contract of contracts$ | async"
         [contract]="contract"
         [status]="status$ | async"
-        (send)="store.dispatch(send(request.id, contract.id, $event.file, $event.comment))"
+        (send)="store.dispatch(send(contract, $event.files, $event.comment))"
+        (download)="store.dispatch(download(contract))"
+        (sign)="store.dispatch(sign(contract))"
       ></app-contract-list-item>
 
       <!-- empty -->
@@ -41,10 +43,10 @@
     <div class="app-col-aside detachable"></div>
   </div>
 
-    <uxg-modal #addContractModal size="l">
-      <ng-container *ngIf="addContractModal.state">
+    <uxg-modal #contractFormModal size="l">
+      <ng-container *ngIf="contractFormModal.state">
         <h2 class="modal-title"><b>Добавить новый договор</b></h2>
-        <app-contract-form [request]="request" [suppliers]="suppliers$ | async" (close)="addContractModal.close()">
+        <app-contract-form [request]="request" [suppliers]="suppliers$ | async" (close)="contractFormModal.close()">
         </app-contract-form>
       </ng-container>
     </uxg-modal>
