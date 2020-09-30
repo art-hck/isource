@@ -8,8 +8,7 @@ import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable()
 export class ContractService {
-  constructor(protected api: HttpClient, private formDataService: FormDataService) {
-  }
+  constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
   list(requestId): Observable<Contract[]> {
     const url = `requests/${requestId}/contracts`;

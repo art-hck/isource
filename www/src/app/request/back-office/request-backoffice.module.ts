@@ -42,6 +42,7 @@ import { TechnicalCommercialProposalGroupFormComponent } from './components/tech
 import { ContractFormComponent } from "./components/contract-form/contract-form.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
+import { ContractService } from "./services/contract.service";
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { ContractState } from "./states/contract.state";
     TechnicalProposalsService,
     PositionService,
     TechnicalCommercialProposalService,
+    ContractService
   ]
 })
 export class RequestBackofficeModule {
