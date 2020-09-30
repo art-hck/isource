@@ -8,7 +8,11 @@
 
     <ng-container [ngSwitch]="contract.status">
       <div class="app-ghost-color app-bold" *ngSwitchCase="'NEW'"><uxg-icon shape="app-draft"></uxg-icon><span>Черновик</span></div>
-      <div class="app-ghost-color app-bold" *ngSwitchCase="'ON_APPROVAL'"><uxg-icon shape="app-waiting"></uxg-icon><span>На согласовании</span></div>
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'ON_APPROVAL'">
+        <uxg-icon shape="app-waiting"></uxg-icon>
+        <span *ngIf="!canApprove">На согласовании</span>
+        <span *ngIf="canApprove">Необходимо рассмотреть</span>
+      </div>
       <div class="app-warning-color app-bold" *ngSwitchCase="'REJECTED'"><uxg-icon shape="app-warning"></uxg-icon><span>На доработке</span></div>
       <div class="app-success-color app-bold" *ngSwitchCase="'APPROVED'"><uxg-icon shape="app-check"></uxg-icon><span>Согласован</span></div>
       <div class="app-success-color app-bold" *ngSwitchCase="'SIGNED'"><uxg-icon shape="app-check"></uxg-icon><span>Подписан</span></div>
@@ -80,11 +84,11 @@
           <div class="app-striped-body app-row app-align-items-center" *ngFor="let document of contract.documents.slice(historyFolded ? -historyFoldedLength : 0)">
             <div class="app-col-3 app-ellipsis">
               <app-document-simple-list
-                [documents]="[document]" size="s" [enableUpload]="false" [uploadedDateHidden]="false"
+                [documents]="[document]" size="s" [enableUpload]="false" [uploadedDateHidden]="true"
                 [sizeInfoHidden]="true">
               </app-document-simple-list>
             </div>
-            <div class="app-col-3 app-ellipsis">{{ document.user.fullName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy'}}</span></div>
+            <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy'}}</span></div>
             <div class="app-col-6 app-ellipsis">{{ document.comments }}</div>
           </div>
         </div>
@@ -107,13 +111,11 @@
           ></app-document-upload-list>
 
           <ng-template #uploadFile>
-            <div class="app-col-6 app-row app-align-items-center">
-              <div class="app-col app-ghost-color">
-                <span>Необходимо выбрать файл договора для прикрепления и отправки на согласование</span>
-              </div>
-              <div class="app-col-auto">
-                <button uxgButton secondary appUploadFile type="button" (select)="form.get('file').setValue($event[0])">Выбрать документ</button>
-              </div>
+            <div class="app-col app-ghost-color">
+              <span>Необходимо выбрать файл договора для прикрепления и отправки на согласование</span>
+            </div>
+            <div class="app-col-auto">
+              <button uxgButton secondary appUploadFile type="button" (select)="form.get('file').setValue($event[0])">Выбрать документ</button>
             </div>
           </ng-template>
         </div>
