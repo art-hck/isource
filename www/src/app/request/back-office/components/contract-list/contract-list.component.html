@@ -1,0 +1,22 @@
+<ng-container *ngIf="(request$ | async) as request">
+  <div class="app-row app-justify-content-end">
+    <button uxgButton primary iconText (click)="addContractModal.open()" [disabled]="(contragentWithPositions$ | async)?.length === 0">
+      <uxg-icon shape="app-plus"></uxg-icon>
+      <span>Добавить договор</span>
+    </button>
+  </div>
+
+<uxg-modal #addContractModal size="l">
+  <ng-container *ngIf="addContractModal.state">
+    <h2 class="modal-title"><b>Добавить новый договор</b></h2>
+
+    <app-contract-form
+      *ngIf="contragentWithPositions$ | async as contragents"
+      [request]="request"
+      [contragentsWithPositions]="contragents"
+      (close)="addContractModal.close()"
+    >
+    </app-contract-form>
+  </ng-container>
+</uxg-modal>
+</ng-container>
