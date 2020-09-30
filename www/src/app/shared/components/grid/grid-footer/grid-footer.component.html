@@ -49,7 +49,7 @@
       Отклонить все
     </button>
 
-    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="approve.emit()" [disabled]="loading || disabled">
+    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="confirmApproveFromList.emit(selectedProposals)" [disabled]="loading || disabled">
       Согласовать все
     </button>
   </ng-template>
