@@ -97,7 +97,7 @@
       <ng-container *ngIf="canSend || canReject || canApprove">
         <hr/>
         <div class="app-row app-uppercase app-ghost-color app-bold">
-          <small class="app-col app-ellipsis">Комментарий и договор</small>
+          <small class="app-col app-ellipsis">Комментарий <ng-container *ngIf="canReject">по доработкам </ng-container>и договор</small>
         </div>
 
         <div class="app-row app-align-items-center">
