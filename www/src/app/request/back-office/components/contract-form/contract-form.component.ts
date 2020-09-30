@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Request } from "../../../common/models/request";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
@@ -15,7 +15,7 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
   templateUrl: './contract-form.component.html',
   styleUrls: ['./contract-form.component.scss']
 })
-export class ContractFormComponent {
+export class ContractFormComponent implements OnInit {
 
   @Input() contragentsWithPositions: ContragentWithPositions[] = [];
   @Input() request: Request;

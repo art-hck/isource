@@ -13,7 +13,7 @@ export namespace ContractActions {
       public positions: RequestPosition[]) {
     }
   }
-  //Получение контрагентов со списком позиций
+  // Получение контрагентов со списком позиций
   export class GetContragents {
     static readonly type = '[Contract Contragents Backoffice] GetContragents';
 
