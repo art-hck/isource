@@ -10,7 +10,7 @@ import { TechnicalCommercialProposalPosition } from "../../../../request/common/
 export class GridFooterComponent {
   @Input() chooseBy$: Subject<"price" | "date">;
   @Input() total: number;
-  @Input() selectedProposals;
+  @Input() selectedProposals: { toApprove, toSendToEdit };
   @Input() selectedPositions;
   @Input() viewType: string;
   @Input() disabled: boolean;

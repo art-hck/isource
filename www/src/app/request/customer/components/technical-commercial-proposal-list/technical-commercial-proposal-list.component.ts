@@ -149,6 +149,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []);
   }
 
+
+  get allSelectedProposals(): { toApprove, toSendToEdit } {
+    // Объединяем все отмеченные предложения (на согласование + на доработку)
+
+    return {
+      toApprove: this.selectedPositionsBySupplierAndType('to-approve'),
+      toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit')
+    };
+  }
+
   /**
    * Возвращает сгруппированный объект, состоящий из Поставщика
    * и отмеченных его предложений на согласование и отправку на доработку
@@ -177,8 +187,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   /**
    * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
    */
-  selectedPositionsBySupplierAndType(type, supplierId): (TechnicalCommercialProposal | Proposal)[] {
+  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
     const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
+
+    if (!supplierId) {
+      return selectedProposals;
+    }
 
     return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
   }
