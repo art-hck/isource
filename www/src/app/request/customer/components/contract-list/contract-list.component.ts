@@ -21,8 +21,7 @@ import Approve = ContractActions.Approve;
 
 @Component({
   selector: 'app-contract-list',
-  templateUrl: './contract-list.component.html',
-  styleUrls: ['./contract-list.component.scss']
+  templateUrl: './contract-list.component.html'
 })
 export class ContractListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;

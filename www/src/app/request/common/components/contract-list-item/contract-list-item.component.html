@@ -101,7 +101,7 @@
         </div>
 
         <div class="app-row app-align-items-center">
-          <div class="app-col-6 app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Номер заявки или наименование"/></div>
+          <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Номер заявки или наименование"/></div>
           <app-document-upload-list
             *ngIf="form.get('file').value; else uploadFile"
             class="app-col-6"
@@ -129,7 +129,7 @@
             <span>Скачать типовой договор</span>
           </button>
           <div class="app-col"></div>
-          <button uxgButton primary *ngIf="canSend" [disabled]="status !== 'received' && form.invalid">Отправить на согласование</button>
+          <button uxgButton primary *ngIf="canSend" [disabled]="status !== 'received' || form.invalid">Отправить на согласование</button>
           <button uxgButton primary *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status !== 'received'" (click)="rollback.emit()">
             Отозвать {{ rollbackDate | countdownTimer: rollbackDuration }}
           </button>

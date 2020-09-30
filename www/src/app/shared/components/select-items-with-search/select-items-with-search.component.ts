@@ -67,7 +67,8 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   }
 
   setFormItems() {
-    this.formItems.clear();
+    this.formItems?.clear();
+
     this.items
       ?.filter(() => this.form)
       .forEach(item => {
