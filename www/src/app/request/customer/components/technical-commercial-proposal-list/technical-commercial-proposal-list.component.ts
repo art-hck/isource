@@ -137,15 +137,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
         { label: 'Страница предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals/${groupId}` }
       ]),
+      switchMap(([{ id, groupId }]) => this.service.getGroupInfo(id, groupId)),
+      tap(({name}) => this.title.setTitle(name)),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({ groupId }) => this.groupId = groupId),
-      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
-      takeUntil(this.destroy$)
-    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),

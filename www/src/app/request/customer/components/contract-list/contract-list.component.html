@@ -1,0 +1,66 @@
+<ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
+<ng-container *ngIf="request$ | async as request">
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row app-align-items-center">
+
+        <uxg-tabs class="app-col">
+          <uxg-tab-title #sentToReviewTab [disabled]="(contractsSentToReview$ | async).length === 0" [active]="true">
+            <ng-container *ngIf="(contractsSentToReview$ | async) as contracts">
+              Необходимо рассмотреть <span class="counter">({{contracts?.length}})</span>
+            </ng-container>
+          </uxg-tab-title>
+
+          <uxg-tab-title #sendToEditTab [disabled]="(contractsSendToEdit$ | async).length === 0">
+            <ng-container *ngIf="(contractsSendToEdit$ | async) as contracts">
+              На доработке <span class="counter">({{ contracts?.length }})</span>
+            </ng-container>
+          </uxg-tab-title>
+
+          <uxg-tab-title #reviewedTab [disabled]="(contractsReviewed$ | async).length === 0">
+            <ng-container *ngIf="(contractsReviewed$ | async) as contracts">
+              Рассмотренные <span class="counter">({{ contracts?.length }})</span>
+            </ng-container>
+          </uxg-tab-title>
+        </uxg-tabs>
+      </div>
+
+      <br/>
+
+      <ng-container *ngIf="(reviewedTab.active ? contractsReviewed$ : sentToReviewTab.active ? contractsSentToReview$ : contractsSendToEdit$) | async as contracts">
+        <!-- list -->
+        <app-contract-list-item
+          *ngFor="let contract of contracts"
+          [contract]="contract"
+          [status]="status$ | async"
+          (approve)="store.dispatch(approve(request.id, contract.id))"
+          (reject)="store.dispatch(reject(request.id, contract.id, $event.file, $event.comment))"
+          (download)="store.dispatch(download(request.id, contract.id))"
+        ></app-contract-list-item>
+
+        <!-- empty -->
+        <div *ngIf="contracts.length === 0">
+          <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-publish" size="270"></uxg-icon><br/>Все договоры рассмотрены</h1>
+        </div>
+      </ng-container>
+    </div>
+    <div class="app-col-aside detachable"></div>
+  </div>
+</ng-container>
+</ng-container>
+
+<ng-template #placeholder>
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row">
+        <div class="app-col app-row">
+          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40" [style.width.px]="200"></div>
+        </div>
+        <div class="placeholder-row" [style.height.px]="40" [style.width.px]="80"></div>
+      </div>
+
+      <div class="placeholder" *ngFor="let i of [].constructor(10)" [style.height.px]="160"></div>
+    </div>
+    <div class="app-col-aside detachable"></div>
+  </div>
+</ng-template>
