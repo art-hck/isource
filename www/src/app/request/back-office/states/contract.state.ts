@@ -8,12 +8,12 @@ import { Contract } from "../../common/models/contract";
 import { tap } from "rxjs/operators";
 import { ContractService } from "../../common/services/contract.service";
 import { ContractActions } from "../actions/contract.actions";
-import GetContragents = ContractActions.GetContragents;
+import GetContragentsWithPositions = ContractActions.GetContragentsWithPositions;
 import { ContragentWithPositions } from "../../common/models/contragentWithPositions";
 import AddContract = ContractActions.AddContract;
 
 export interface ContractStateModel {
-  contragents: ContragentWithPositions[];
+  contragentWithPositions: ContragentWithPositions[];
   contracts: Contract[];
   status: StateStatus;
 }
@@ -23,7 +23,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeContract',
-  defaults: { contragents: null, contracts: null, status: "pristine" }
+  defaults: { contragentWithPositions: null, contracts: null, status: "pristine" }
 })
 @Injectable()
 export class ContractState {
@@ -35,8 +35,8 @@ export class ContractState {
   }
 
   @Selector()
-  static contragents({contragents}: Model) {
-    return contragents;
+  static contragentWithPositions({contragentWithPositions}: Model) {
+    return contragentWithPositions;
   }
 
   @Selector()
@@ -49,12 +49,12 @@ export class ContractState {
     return status;
   }
 
-  @Action(GetContragents)
-  getContragents({setState, dispatch}: Context, {requestId}: GetContragents) {
+  @Action(GetContragentsWithPositions)
+  GetContragentsWithPositions({setState, dispatch}: Context, {requestId}: GetContragentsWithPositions) {
     setState(patch({status: "updating"} as Model));
 
     return this.rest.getContragentsWithPositions(requestId).pipe(
-      tap(contragents => setState(patch({contragents, status: "received"} as Model)))
+      tap(contragentWithPositions => setState(patch({contragentWithPositions, status: "received"} as Model)))
     );
   }
 

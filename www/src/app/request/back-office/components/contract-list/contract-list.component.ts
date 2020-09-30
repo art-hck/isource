@@ -11,7 +11,7 @@ import { ContractActions } from "../../actions/contract.actions";
 import { Uuid } from "../../../../cart/models/uuid";
 import { ActivatedRoute } from "@angular/router";
 import { RequestActions } from "../../actions/request.actions";
-import GetContragents = ContractActions.GetContragents;
+import GetContragentsWithPositions = ContractActions.GetContragentsWithPositions;
 
 @Component({
   selector: 'app-contract-list',
@@ -20,7 +20,7 @@ import GetContragents = ContractActions.GetContragents;
 })
 export class ContractListComponent implements OnInit {
   @Select(RequestState.request) request$: Observable<Request>;
-  @Select(ContractState.contragents) contragents$: Observable<ContragentWithPositions[]>;
+  @Select(ContractState.contragentWithPositions) contragentWithPositions$: Observable<ContragentWithPositions[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
 
   requestId: Uuid;
@@ -35,7 +35,7 @@ export class ContractListComponent implements OnInit {
   ngOnInit() {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch([new GetContragents(id), new RequestActions.Fetch(id)])),
+      tap(({id}) => this.store.dispatch([new GetContragentsWithPositions(id), new RequestActions.Fetch(id)])),
       takeUntil(this.destroy$)
     ).subscribe();
   }

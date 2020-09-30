@@ -1,7 +1,7 @@
 <form [formGroup]="form" *ngIf="contragents" (ngSubmit)="submit()">
   <div class="app-row">
     <div class="app-col">
-      <label class="app-control-label app-secondary-color">Поставщик</label>
+      <small class="app-control-label app-secondary-color">Поставщик</small>
       <uxg-dropdown lg formControlName="contragent">
         <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent.id">
           {{ contragent.shortName }}

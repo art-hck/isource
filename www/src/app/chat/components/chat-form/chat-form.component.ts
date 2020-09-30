@@ -49,6 +49,7 @@ export class ChatFormComponent implements OnDestroy, OnChanges {
     c.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(v => c.setValue(v, {onlySelf: true, emitEvent: false}));
   }
 
+
   selectFiles(files: File[]) {
     this.attachmentModal.open();
     this.isLoading = true;

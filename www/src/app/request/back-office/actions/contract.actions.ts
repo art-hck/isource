@@ -14,8 +14,8 @@ export namespace ContractActions {
     }
   }
   // Получение контрагентов со списком позиций
-  export class GetContragents {
-    static readonly type = '[Contract Contragents Backoffice] GetContragents';
+  export class GetContragentsWithPositions {
+    static readonly type = '[Contract Contragents Backoffice] GetContragentsWithPositions';
 
     constructor(public requestId: Uuid) {
     }
