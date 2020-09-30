@@ -1,27 +1,53 @@
-<div class="modal-body">
-  <h5>Выберите поставщика</h5>
-
-  <uxg-dropdown lg formControlName="contragent" placeholder="Поставщик">
-    <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent.id">
-      {{ contragent.shortName }}
+<form [formGroup]="form" *ngIf="contragents" (ngSubmit)="submit()">
+  <div class="app-row">
+    <div class="app-col">
+      <label class="app-control-label app-secondary-color">Поставщик</label>
+      <uxg-dropdown lg formControlName="contragent">
+        <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent.id">
+          {{ contragent.shortName }}
+        </div>
+      </uxg-dropdown>
     </div>
-  </uxg-dropdown>
-
+  </div>
   <br/>
-
+  <br/>
   <ng-container *ngIf="form.get('contragent').valid">
-    <h5>Выберите позиции</h5>
-    <div *ngFor="let position of formPositions.controls; index as i" formArrayName="positions" class="checkbox">
-      <div class="app-row app-align-items-center">
-        <uxg-checkbox class="app-control" #positionCheckbox [formControlName]="i.toString()"></uxg-checkbox>
-        <label (click)="positionCheckbox.check($event)">
-            {{ getContragentPositions(form.get('contragent').value)[i].name }}
-        </label>
-      </div>
+    <div class="app-col app-secondary-color">
+      Выберите все необходимые позиции или группы позиций в заявке, по которым вы хотите создать новый договор.
     </div>
+    <br/>
+    <select-items-with-search
+      *ngIf="contragents"
+      class="select-list select-list-positions"
+      formControlName="positions"
+      placeholder="Наименование позиции или группы"
+      [filterFn]="filterPositions"
+      [trackBy]="trackById"
+      [items]="positions"
+    >
+      <ng-template let-formGroup="formGroup" let-position="item">
+        <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">
+          <div class="app-col app-grow-0">
+            <uxg-checkbox formControlName="checked"></uxg-checkbox>
+          </div>
+          <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
+            <div class="app-col app-col-auto select-list-item-quantity">
+              <span>{{ position.quantity }} </span>
+              <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+            </div>
+            <div class="app-col app-col-auto select-list-item-date">
+              <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+              <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+            </div>
+        </div>
+      </ng-template>
+    </select-items-with-search>
   </ng-container>
-</div>
-<div class="modal-footer">
-  <button uxgButton secondary lg (click)="close.emit()">Отмена</button>
-  <button uxgButton primary lg>Добавить</button>
-</div>
+  <br/>
+  <br/>
+  <div class="app-row app-justify-content-end app-align-items-center">
+    <button uxgButton secondary lg (click)="close.emit()">Отмена</button>
+    <button uxgButton primary lg [disabled]="form.invalid">Добавить</button>
+  </div>
+</form>
+

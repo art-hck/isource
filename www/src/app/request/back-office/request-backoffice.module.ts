@@ -41,6 +41,7 @@ import { TechnicalCommercialProposalGroupViewComponent } from './components/tech
 import { TechnicalCommercialProposalGroupFormComponent } from './components/technical-commercial-proposal-group-form/technical-commercial-proposal-group-form.component';
 import { ContractFormComponent } from "./components/contract-form/contract-form.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
+import { ContractState } from "./states/contract.state";
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { ContractListComponent } from "./components/contract-list/contract-list.
       RequestListState,
       TechnicalCommercialProposalState,
       CommercialProposalState,
+      ContractState
     ]),
     RequestCommonModule
   ],

@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Request } from "../../../common/models/request";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
-import { ContractService } from "../../../common/services/contract.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestPosition } from "../../../common/models/request-position";
+import { Store } from "@ngxs/store";
+import { ContractActions } from "../../actions/contract.actions";
+import AddContract = ContractActions.AddContract;
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-contract-form',
@@ -19,34 +21,28 @@ export class ContractFormComponent {
   @Input() request: Request;
   @Output() close = new EventEmitter<void>();
 
-  public form: FormGroup = new FormGroup({
-    'contragent': new FormControl(""),
-    'positions': new FormArray([], CustomValidators.multipleCheckboxRequireOne)
-  });
+  form: FormGroup;
+  positions: RequestPosition[];
 
   get contragents(): ContragentList[] {
-    return this.contragentsWithPositions.map(contragentsWithPosition => contragentsWithPosition.supplier);
+    return this.contragentsWithPositions?.map(contragentsWithPosition => contragentsWithPosition.supplier);
   }
 
-  get formPositions(): FormArray {
-    return this.form.get('positions') as FormArray;
-  }
-
-  get formContragentInvalid(): boolean {
-    return this.form.get('contragent').dirty && this.form.get('contragent').invalid;
-  }
-
-  constructor(private contractService: ContractService) {
+  constructor(public store: Store,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.form.get('contragent').valueChanges.subscribe(contragentId => {
-      this.formPositions.clear();
-
-      this.getContragentPositions(contragentId)
-        .forEach(position => this.formPositions.push(new FormControl(false))
-        );
+    this.form = this.fb.group({
+      'contragent': new FormControl(""),
+      'positions': new FormControl([], Validators.required)
     });
+
+    this.form.get('contragent').valueChanges.subscribe(contragentId => {
+      this.positions = this.getContragentPositions(contragentId);
+    });
+
+    this.form.get('contragent').setValue(this.contragents[0]?.id);
   }
 
   public getContragentList(contragent): ContragentList {
@@ -65,18 +61,23 @@ export class ContractFormComponent {
   }
 
   public submit(): void {
-    if (this.form.valid) {
       const contragentId: Uuid = this.form.get('contragent').value;
       const positions: RequestPosition[] = this.form.get('positions').value
         .map((v, i) => v ? this.getContragentPositions(contragentId)[i] : null)
         .filter(v => v !== null)
       ;
-
-
-      // this.contractService.create(this.request, contragentId, positions)
-      //   .pipe(finalize(() => this.close.emit()))
-      //   .subscribe((contract) => this.create.emit(contract))
-      // ;
-    }
+      this.store.dispatch(new AddContract(this.request.id, contragentId, positions)).subscribe(
+        (result) => {
+          this.close.emit();
+          const e = result.error as any;
+          this.store.dispatch(e ?
+            new ToastActions.Error(e && e?.error?.detail) : new ToastActions.Success('Договор успешно добавлен')
+          );
+        }
+      );
   }
+
+  filterPositions = (q: string, position: RequestPosition): boolean => position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
+  trackById = (item: RequestPosition) => item.id;
+
 }

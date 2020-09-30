@@ -37,12 +37,12 @@ const routes: Routes = [
         data: { title: "Коммерческие предложения" }
       },
       {
-        path: 'contracts-new',
+        path: 'contracts',
         component: ContractListComponent,
         data: { title: "Согласование договора" }
       },
       {
-        path: 'contracts',
+        path: 'contracts-old',
         component: DeprecatedContractListComponent,
         data: { title: "Согласование договора" }
       },
