@@ -69,7 +69,7 @@
             <div class="app-ghost-color" *ngIf="historyFolded && length - historyFoldedLength > 0">
               Свернута ({{length}} итераций)
             </div>
-            <button uxgButton icon link (click)="historyFolded = !historyFolded">
+            <button uxgButton icon link type="button" (click)="historyFolded = !historyFolded">
               <uxg-icon shape="app-chevron" size="12" [attr.dir]="historyFolded ? 'down' : 'up'"></uxg-icon>
             </button>
           </ng-container>
@@ -131,7 +131,7 @@
           <div class="app-col"></div>
           <div *ngIf="status === 'updating'"><span class="spinner spinner-inline"></span></div>
           <button uxgButton primary *ngIf="canSend" [disabled]="status === 'updating' || form.invalid">Отправить на согласование</button>
-          <button uxgButton primary *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status === 'updating'" (click)="rollback.emit()">
+          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status === 'updating'" (click)="rollback.emit()">
             Отозвать {{ rollbackDate | countdownTimer: rollbackDuration }}
           </button>
           <button uxgButton secondary *ngIf="canReject" type="button" [disabled]="status === 'updating'" (click)="reject.emit(form.value)">На доработку</button>
