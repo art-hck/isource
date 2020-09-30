@@ -15,6 +15,7 @@ export class GridFooterComponent {
   @Input() viewType: string;
   @Input() disabled: boolean;
   @Input() loading: boolean;
+  @Input() source: string;
   @Output() approve = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() sendToEdit = new EventEmitter();
