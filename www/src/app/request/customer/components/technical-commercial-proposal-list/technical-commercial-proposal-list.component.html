@@ -238,11 +238,11 @@
     <hr>
 
     <div class="app-table app-no-border scroll-area">
-      <ng-container *ngFor="let proposalPositionsBlock of approvalModalData.selectedProposals">
+      <ng-container *ngFor="let proposalPositionsBlock of approvalModalData.selectedProposals; let i = index">
         <div class="supplier-block" [hidden]="allPositionsFiltered(proposalPositionsBlock)">
           <div class="app-row app-justify-content-between short-name">
             <div class="app-col app-col-auto">
-              <h3>{{ proposalPositionsBlock.supplier.shortName }}</h3>
+              <h3>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (+i + 1) }}</h3>
             </div>
 
             <div class="app-col app-col-auto sum-by-supplier">
@@ -276,7 +276,7 @@
                   </div>
 
                   <div class="app-col select-list-item-supplier-name">
-                    <span>{{ proposalPositionsBlock.supplier.shortName }}</span>
+                    <span>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (+i + 1) }}</span>
                   </div>
 
                   <div class="app-col app-col-auto app-success-color select-list-item-icon">
