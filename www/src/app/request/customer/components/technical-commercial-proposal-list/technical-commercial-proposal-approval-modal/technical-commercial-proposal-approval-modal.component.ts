@@ -1,10 +1,14 @@
-import { Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, QueryList } from '@angular/core';
 import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
 import { TechnicalCommercialProposalComponent } from "../../technical-commercial-proposal/technical-commercial-proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
+import { Store } from "@ngxs/store";
+import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
+import { Uuid } from "../../../../../cart/models/uuid";
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
   selector: 'app-technical-commercial-proposal-approval-modal',
@@ -12,11 +16,13 @@ import { GridRowComponent } from "../../../../../shared/components/grid/grid-row
   styleUrls: ['./technical-commercial-proposal-approval-modal.component.scss']
 })
 export class TechnicalCommercialProposalApprovalModalComponent {
-
-  readonly getCurrencySymbol = getCurrencySymbol;
   filterQuery: string;
+  readonly getCurrencySymbol = getCurrencySymbol;
+  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
 
   @Input() isLoading: boolean;
+  @Input() requestId: Uuid;
+  @Input() groupId: Uuid;
   @Input() proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @Input() approvalModalData: {
     counters: {
@@ -33,6 +39,11 @@ export class TechnicalCommercialProposalApprovalModalComponent {
 
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
+
+  constructor(
+    public store: Store,
+  ) {
+  }
 
   /**
    * Сумма выбранных предложений по поставщику

@@ -32,4 +32,11 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Customer] Reject';
     constructor(public requestId: Uuid, public position: RequestPosition) {}
   }
+
+  // Скачать аналитическую справку
+  export class DownloadAnalyticalReport {
+    static readonly type = '[Technical Commercial Proposals Customer] DownloadAnalyticalReport';
+
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
+  }
 }
