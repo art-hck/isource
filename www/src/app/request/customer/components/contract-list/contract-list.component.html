@@ -1,5 +1,6 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
-<ng-container *ngIf="request$ | async as request">
+
+  <!-- tabs & actions -->
   <div class="app-row">
     <div class="app-col">
       <div class="app-row app-align-items-center">
@@ -23,28 +24,40 @@
             </ng-container>
           </uxg-tab-title>
         </uxg-tabs>
+
+        <!--button uxgButton secondary iconText class="app-detachable-button" (click)="filter.open()">
+          <uxg-icon shape="app-sort2"></uxg-icon>
+          <span>Фильтр</span>
+        </button-->
+
       </div>
-
-      <br/>
-
-      <ng-container *ngIf="(reviewedTab.active ? contractsReviewed$ : sentToReviewTab.active ? contractsSentToReview$ : contractsSendToEdit$) | async as contracts">
-        <!-- list -->
-        <app-contract-list-item
-          *ngFor="let contract of contracts"
-          [contract]="contract"
-          [status]="status$ | async"
-          (approve)="store.dispatch(approve(request.id, contract.id))"
-          (reject)="store.dispatch(reject(request.id, contract.id, $event.file, $event.comment))"
-          (download)="store.dispatch(download(request.id, contract.id))"
-        ></app-contract-list-item>
-
-        <!-- empty -->
-        <div *ngIf="contracts.length === 0">
-          <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-publish" size="270"></uxg-icon><br/>Все договоры рассмотрены</h1>
-        </div>
-      </ng-container>
     </div>
     <div class="app-col-aside detachable"></div>
+  </div>
+
+  <br/>
+
+  <!-- list -->
+  <div class="app-row" *ngIf="(reviewedTab.active ? contractsReviewed$ : sentToReviewTab.active ? contractsSentToReview$ : contractsSendToEdit$) | async as contracts">
+    <div class="app-col">
+      <app-contract-list-item
+        *ngFor="let contract of contracts"
+        [contract]="contract"
+        [status]="status$ | async"
+        (approve)="store.dispatch(approve(contract))"
+        (reject)="store.dispatch(reject(contract, $event.files, $event.comment))"
+        (download)="store.dispatch(download(contract))"
+      ></app-contract-list-item>
+
+      <!-- empty -->
+      <div *ngIf="contracts.length === 0">
+        <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-publish" size="270"></uxg-icon><br/>Все договоры рассмотрены</h1>
+      </div>
+    </div>
+    <div class="app-col-aside detachable"></div>
+    <!--app-filter #filter>
+      <app-contract-list-filter *ngIf="contracts$ | async as contracts" [contracts]="contracts"></app-contract-list-filter>
+    </app-filter-->
   </div>
 </ng-container>
 
