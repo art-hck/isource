@@ -16,10 +16,6 @@ import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalytica
   styleUrls: ['./technical-commercial-proposal-approval-modal.component.scss']
 })
 export class TechnicalCommercialProposalApprovalModalComponent {
-  filterQuery: string;
-  readonly getCurrencySymbol = getCurrencySymbol;
-  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
-
   @Input() isLoading: boolean;
   @Input() requestId: Uuid;
   @Input() groupId: Uuid;
@@ -36,9 +32,12 @@ export class TechnicalCommercialProposalApprovalModalComponent {
       toApprove: (TechnicalCommercialProposal | Proposal)[]
     }[]
   };
-
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
+
+  filterQuery: string;
+  readonly getCurrencySymbol = getCurrencySymbol;
+  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
 
   constructor(
     public store: Store,
