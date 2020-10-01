@@ -328,8 +328,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   /**
    * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
    */
-  selectedPositionsBySupplierAndType(type, supplierId): (TechnicalCommercialProposal | Proposal)[] {
+  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
     const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
+
+    if (!supplierId) {
+      return selectedProposals;
+    }
 
     return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
   }
