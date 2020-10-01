@@ -19,7 +19,7 @@ export class ContractService {
 
   create(requestId: Uuid, contragentId: Uuid, positions: RequestPosition[]): Observable<Contract> {
     const url = `requests/${requestId}/contracts/create`;
-    const body: ContractCreate = {
+    const body = {
       supplierId: contragentId,
       positions: positions.map(position => position.id)
     };

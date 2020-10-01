@@ -69,7 +69,7 @@
             <div class="app-ghost-color" *ngIf="historyFolded && length - historyFoldedLength > 0">
               Свернута ({{length}} итераций)
             </div>
-            <button uxgButton icon link (click)="historyFolded = !historyFolded">
+            <button uxgButton icon link type="button" (click)="historyFolded = !historyFolded">
               <uxg-icon shape="app-chevron" size="12" [attr.dir]="historyFolded ? 'down' : 'up'"></uxg-icon>
             </button>
           </ng-container>
@@ -94,7 +94,7 @@
         </div>
       </ng-container>
       <!-- upload contract form -->
-      <ng-container *ngIf="canSend || canReject || canApprove">
+      <ng-container *ngIf="canSend || canReject">
         <hr/>
         <div class="app-row app-uppercase app-ghost-color app-bold">
           <small class="app-col app-ellipsis">Комментарий <ng-container *ngIf="canReject">по доработкам </ng-container>и договор</small>
@@ -103,10 +103,10 @@
         <div class="app-row app-align-items-center">
           <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Номер заявки или наименование"/></div>
           <app-document-upload-list
-            *ngIf="form.get('file').value; else uploadFile"
+            *ngIf="files?.length; else uploadFile"
             class="app-col-6"
-            [documents]="[form.get('file').value]"
-            (fileSelected)="form.get('file').setValue($event[0])"
+            [documents]="files"
+            (fileSelected)="selectFiles($event)"
             [uploadAvailable]="false"
           ></app-document-upload-list>
 
@@ -115,26 +115,28 @@
               <span>Необходимо выбрать файл договора для прикрепления и отправки на согласование</span>
             </div>
             <div class="app-col-auto">
-              <button uxgButton secondary appUploadFile type="button" (select)="form.get('file').setValue($event[0])">Выбрать документ</button>
+              <button uxgButton secondary appUploadFile type="button" (select)="selectFiles($event);">Выбрать документ</button>
             </div>
           </ng-template>
         </div>
       </ng-container>
       <!-- footer -->
-      <ng-container *ngIf="canSend || canRollback || canReject || canApprove">
+      <ng-container *ngIf="canSend || canRollback || canReject || canApprove || canSign">
         <hr/>
-        <div class="app-row" >
-          <button uxgButton iconText secondary (click)="download.emit()">
+        <div class="app-row app-align-items-center">
+          <button uxgButton iconText secondary type="button" (click)="download.emit()">
             <uxg-icon shape="app-download"></uxg-icon>
             <span>Скачать типовой договор</span>
           </button>
           <div class="app-col"></div>
-          <button uxgButton primary *ngIf="canSend" [disabled]="status !== 'received' || form.invalid">Отправить на согласование</button>
-          <button uxgButton primary *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status !== 'received'" (click)="rollback.emit()">
+          <div *ngIf="status === 'updating'"><span class="spinner spinner-inline"></span></div>
+          <button uxgButton primary *ngIf="canSend" [disabled]="status === 'updating' || form.invalid">Отправить на согласование</button>
+          <button uxgButton primary type="button" *ngIf="canRollback" [style.min-width.px]="140" [disabled]="status === 'updating'" (click)="rollback.emit()">
             Отозвать {{ rollbackDate | countdownTimer: rollbackDuration }}
           </button>
-          <button uxgButton secondary *ngIf="canReject" type="button" [disabled]="status !== 'received'" (click)="reject.emit(form.value)">На доработку</button>
-          <button uxgButton primary *ngIf="canApprove" type="button" [disabled]="status !== 'received'" (click)="approve.emit()">Согласовать</button>
+          <button uxgButton secondary *ngIf="canReject" type="button" [disabled]="status === 'updating'" (click)="reject.emit(form.value)">На доработку</button>
+          <button uxgButton primary *ngIf="canApprove" type="button" [disabled]="status === 'updating'" (click)="approve.emit()">Согласовать</button>
+          <button uxgButton primary *ngIf="canSign" type="button" [disabled]="status === 'updating'" (click)="sign.emit()">Подтвердить подписание</button>
         </div>
       </ng-container>
     </div>

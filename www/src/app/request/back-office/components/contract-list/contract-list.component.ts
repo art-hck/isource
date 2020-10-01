@@ -15,8 +15,9 @@ import { Contract } from "../../../common/models/contract";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Fetch = ContractActions.Fetch;
 import Send = ContractActions.Send;
-import { Uuid } from "../../../../cart/models/uuid";
 import Rollback = ContractActions.Rollback;
+import Download = ContractActions.Download;
+import Sign = ContractActions.Sign;
 
 @Component({
   selector: 'app-contract-list',
@@ -29,8 +30,10 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.contracts) contracts$: Observable<Contract[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
-  readonly send = (requestId: Uuid, contractId: Uuid, file?: File, comment?: string) => new Send(requestId, contractId, file, comment);
-  readonly rollback = (contractId: Uuid) => new Rollback(contractId);
+  readonly send = (contract: Contract, files?: File[], comment?: string) => new Send(contract, files, comment);
+  readonly sign = (contract: Contract) => new Sign(contract);
+  readonly rollback = (contract: Contract) => new Rollback(contract);
+  readonly download = (contract: Contract) => new Download(contract);
 
   constructor(
     public store: Store,

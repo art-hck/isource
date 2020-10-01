@@ -31,9 +31,9 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.contracts([ContractStatus.APPROVED, ContractStatus.SIGNED])) contractsReviewed$: Observable<Contract[]>;
   @Select(ContractState.status) status$: Observable<StateStatus>;
   readonly destroy$ = new Subject();
-  readonly download = (requestId: Uuid, contractId: Uuid) => new Download(requestId, contractId);
-  readonly reject = (requestId: Uuid, contractId: Uuid, file: File, comment?: string) => new Reject(requestId, contractId, file, comment);
-  readonly approve = (requestId: Uuid, contractId: Uuid) => new Approve(requestId, contractId);
+  readonly download = (contract: Contract) => new Download(contract);
+  readonly reject = (contract: Contract, files: File[], comment?: string) => new Reject(contract, files, comment);
+  readonly approve = (contract: Contract) => new Approve(contract);
 
   constructor(
     public store: Store,
