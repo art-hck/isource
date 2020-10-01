@@ -148,11 +148,10 @@
 <app-grid-footer
   [disabled]="(stateStatus$ | async) !== 'received' || disabled"
   [loading]="(stateStatus$ | async) !== 'received'"
-  (approve)="reviewMultiple()"
+  (approve)="openConfirmApproveFromListModal()"
   (sendToEdit)="sendToEditAll()"
   (approveFromListView)="approveFromListView()"
   (sendToEditFromListView)="sendToEditFromListView()"
-  (confirmApproveFromList)="openConfirmApproveFromListModal()"
   [chooseBy$]="chooseBy$"
   [hidden]="view === 'grid' && (!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0)"
   [viewType]="view"
@@ -215,12 +214,12 @@
 </uxg-modal>
 
 <uxg-modal #selectedProposalsApprovalModal [(state)]="approvalModalData" size="l">
-  <app-technical-commercial-proposal-approval-modal
+  <app-technical-commercial-proposal-confirm
     *ngIf="approvalModalData"
     [proposalsOnReview]="proposalsOnReview"
     [approvalModalData]="approvalModalData"
     [isLoading]="isLoading"
     (close)="selectedProposalsApprovalModal.close()"
     (reviewMultiple)="reviewMultiple()">
-  </app-technical-commercial-proposal-approval-modal>
+  </app-technical-commercial-proposal-confirm>
 </uxg-modal>

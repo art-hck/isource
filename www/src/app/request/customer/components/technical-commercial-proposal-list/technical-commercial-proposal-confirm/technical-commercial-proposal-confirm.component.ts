@@ -7,11 +7,11 @@ import { TechnicalCommercialProposalComponent } from "../../technical-commercial
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-approval-modal',
-  templateUrl: './technical-commercial-proposal-approval-modal.component.html',
-  styleUrls: ['./technical-commercial-proposal-approval-modal.component.scss']
+  selector: 'app-technical-commercial-proposal-confirm',
+  templateUrl: './technical-commercial-proposal-confirm.component.html',
+  styleUrls: ['./technical-commercial-proposal-confirm.component.scss']
 })
-export class TechnicalCommercialProposalApprovalModalComponent {
+export class TechnicalCommercialProposalConfirmComponent {
 
   readonly getCurrencySymbol = getCurrencySymbol;
   filterQuery: string;
