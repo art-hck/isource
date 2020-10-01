@@ -1,6 +1,7 @@
 <div class="proposals-footer-body app-row app-align-items-center">
   <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
   <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
+  <button *ngIf="source === 'tcp'" uxgButton outline lg (click)="sendToEdit.emit()" [disabled]="loading">Все на доработку</button>
   <div class="app-col"></div>
 
   <ng-container>
@@ -21,12 +22,41 @@
     </ng-container>
 
     <ng-template #gridTotalSum>
-      <h3 *ngIf="total > 0" class="total-sum">
-        <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-        <span>
+      <ng-container *ngIf="source === 'tcp'; else restSources">
+        <h3  class="total-sum">
+          <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+          <span>
+            {{ total | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+          </span>
+        </h3>
+
+        <div class="vertical-divider"></div>
+
+        <div class="app-col-auto selected-counter">
+          <div>
+            <span class="app-ghost-color">Выбран победитель: </span>
+            <span [class.app-ghost-color]="selectedProposals?.toApprove?.length === 0">
+            {{ selectedProposals?.toApprove?.length }}
+          </span>
+          </div>
+
+          <div>
+            <span class="app-ghost-color">На доработку: </span>
+            <span [class.app-ghost-color]="selectedProposals?.toSendToEdit?.length === 0">
+            {{ selectedProposals?.toSendToEdit?.length }}
+          </span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #restSources>
+        <h3 *ngIf="total > 0" class="total-sum">
+          <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+          <span>
           {{ total | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
         </span>
-      </h3>
+        </h3>
+      </ng-template>
     </ng-template>
   </ng-container>
 
@@ -41,7 +71,7 @@
   </ng-container>
 
   <ng-template #gridButtons>
-    <button *ngIf="sendToEdit.observers.length" uxgButton secondary lg (click)="sendToEdit.emit()" [disabled]="loading">
+    <button *ngIf="sendToEdit.observers.length && source !== 'tcp'" uxgButton secondary lg (click)="sendToEdit.emit()" [disabled]="loading">
       Все на доработку
     </button>
 
@@ -49,8 +79,8 @@
       Отклонить все
     </button>
 
-    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="approve.emit()" [disabled]="loading || disabled">
-      Согласовать все
+    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="source === 'tcp' ? confirmApproveFromList.emit(selectedProposals) : approve.emit()" [disabled]="loading || disabled">
+      {{ source === 'tcp' ? 'Согласовать' : 'Согласовать все' }}
     </button>
   </ng-template>
 </div>

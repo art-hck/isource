@@ -1,8 +1,20 @@
 import { ActivatedRoute } from "@angular/router";
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { filter, finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -44,7 +56,9 @@ import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
-  providers: [PluralizePipe]
+  styleUrls: ['technical-commercial-proposal-list.component.scss'],
+  providers: [PluralizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
@@ -85,7 +99,20 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   groupId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
+  filterQuery: string;
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
+  approvalModalData: {
+    counters: {
+      totalCounter: number,
+      toApproveCounter: number,
+      sendToEditCounter: number,
+    },
+    selectedProposals: {
+      supplier: ContragentShortInfo;
+      toSendToEdit: (TechnicalCommercialProposal | Proposal)[];
+      toApprove: (TechnicalCommercialProposal | Proposal)[]
+    }[]
+  };
 
   get total() {
     return this.proposalsOnReview?.reduce((total, curr) => {
@@ -93,6 +120,98 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       total += proposalPosition?.priceWithoutVat * proposalPosition?.quantity || 0;
       return total;
     }, 0);
+  }
+
+  /**
+   * Возвращает список выбранных для согласования ТКП
+   */
+  get selectedToApproveProposals(): (TechnicalCommercialProposal | Proposal)[] {
+    // Получаем список ID выбранных предложений
+    const selectedToApproveProposalsIds = this.proposalsOnReview?.filter(
+        proposal => proposal.selectedProposal.value
+    ).map(proposal => proposal.selectedProposal.value.id);
+
+    let selectedToApproveProposals = this.proposalsOnReview?.filter(
+      proposal => proposal.selectedProposal.value
+    ).map(proposal => proposal.proposals)?.reduce((acc: [], val) => [...acc, ...val], []);
+
+    selectedToApproveProposals = selectedToApproveProposals?.filter(selectedProposal => selectedToApproveProposalsIds.indexOf(selectedProposal.id) !== -1);
+
+    return selectedToApproveProposals;
+  }
+
+  /**
+   * Возвращает список выбранных для отправки на доработку ТКП
+   */
+  get selectedToSendToEditProposals(): (TechnicalCommercialProposal | Proposal)[] {
+    const selectedSendToEditProposals = this.proposalsOnReview?.filter((proposal) => proposal.sendToEditPosition.value).map(proposal => proposal.proposals);
+
+    return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []);
+  }
+
+
+  get allSelectedProposals(): { toApprove, toSendToEdit } {
+    // Объединяем все отмеченные предложения (на согласование + на доработку)
+
+    return {
+      toApprove: this.selectedPositionsBySupplierAndType('to-approve'),
+      toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit')
+    };
+  }
+
+  /**
+   * Возвращает сгруппированный объект, состоящий из Поставщика
+   * и отмеченных его предложений на согласование и отправку на доработку
+   */
+  get selectedPositionsBySuppliers(): { toSendToEdit: (TechnicalCommercialProposal | Proposal)[]; supplier: ContragentShortInfo; toApprove: (TechnicalCommercialProposal | Proposal)[] }[] {
+    // Объединяем все отмеченные предложения (на согласование + на доработку)
+    const selectedProposals = this.selectedToApproveProposals.concat(this.selectedToSendToEditProposals);
+
+    // Получаем всех поставщиков из собранных и объединённых предложений
+    const flatProposalsSuppliers = selectedProposals.map(({supplier}) => supplier);
+
+    // Убираем из массива поставщиков повторяющиеся значения и оставляем только уникальных
+    const uniqueProposalsSuppliers = flatProposalsSuppliers.filter((supplier, index, array) =>
+      !array.filter((v, i) => JSON.stringify(supplier.id) === JSON.stringify(v.id) && i < index).length);
+
+    // Используем собранный список поставщиков для формирования массива объектов
+    return uniqueProposalsSuppliers.map(supplier => {
+      return {
+        supplier: supplier,
+        toApprove: this.selectedPositionsBySupplierAndType('to-approve', supplier.id),
+        toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit', supplier.id)
+      };
+    });
+  }
+
+  /**
+   * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
+   */
+  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
+    const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
+
+    if (!supplierId) {
+      return selectedProposals;
+    }
+
+    return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
+  }
+
+  /**
+   * Сумма выбранных предложений по поставщику
+   */
+  getSelectedProposalsSumBySupplier(proposals): number {
+    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat ?? 0), 0);
+  }
+
+  /**
+   * Сумма всех выбранных предложений по всем поставщикам
+   */
+  getSelectedProposalsTotalSum(proposals): number {
+    const selectedToApprove = proposals.map(proposal => proposal.toApprove);
+    const propsFlat = selectedToApprove.reduce((acc: [], val) => [...acc, ...val], []);
+
+    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat ?? 0), 0);
   }
 
   get selectedPositions() {
@@ -215,6 +334,43 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     });
 
     this.store.dispatch(new SendToEditMultiple(sendToEditAllPositions));
+  }
+
+  openConfirmApproveFromListModal() {
+    const toApproveCounter = this.selectedToApproveProposals.length;
+    const sendToEditCounter = this.selectedToSendToEditProposals.length;
+
+    this.approvalModalData = {
+      counters: {
+        totalCounter: toApproveCounter + sendToEditCounter,
+        toApproveCounter: toApproveCounter,
+        sendToEditCounter: sendToEditCounter,
+      },
+      selectedProposals: this.selectedPositionsBySuppliers
+    };
+  }
+
+  /**
+   * Возвращает true, если позиция отфильтрована из списка
+   */
+  positionIsFiltered(proposalPosition): boolean {
+    if (!this.filterQuery?.trim().length) {
+      return false;
+    }
+
+    return proposalPosition.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1;
+  }
+
+  /**
+   * Возвращает true, если все позиции поставщика отфильтрованы из списка
+   */
+  allPositionsFiltered(proposalPositionsBlock): boolean {
+    if (!this.filterQuery?.trim().length) {
+      return false;
+    }
+
+    return proposalPositionsBlock.toApprove.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1) &&
+           proposalPositionsBlock.toSendToEdit.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1);
   }
 
   approveFromListView(): void {

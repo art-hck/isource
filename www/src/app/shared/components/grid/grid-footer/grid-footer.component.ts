@@ -10,15 +10,18 @@ import { TechnicalCommercialProposalPosition } from "../../../../request/common/
 export class GridFooterComponent {
   @Input() chooseBy$: Subject<"price" | "date">;
   @Input() total: number;
+  @Input() selectedProposals: { toApprove, toSendToEdit };
   @Input() selectedPositions;
   @Input() viewType: string;
   @Input() disabled: boolean;
   @Input() loading: boolean;
+  @Input() source: string;
   @Output() approve = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() sendToEdit = new EventEmitter();
   @Output() approveFromListView = new EventEmitter();
   @Output() sendToEditFromListView = new EventEmitter();
+  @Output() confirmApproveFromList = new EventEmitter();
   @HostBinding('class.hidden') @Input() hidden: boolean;
   @HostBinding('class.proposals-footer') proposalsFooter = true;
   getCurrencySymbol = getCurrencySymbol;
