@@ -57,7 +57,6 @@ import { Title } from "@angular/platform-browser";
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
   providers: [PluralizePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TechnicalCommercialProposalListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;

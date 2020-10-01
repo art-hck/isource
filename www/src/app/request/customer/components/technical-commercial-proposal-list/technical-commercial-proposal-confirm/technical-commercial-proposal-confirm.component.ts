@@ -11,11 +11,11 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
-  selector: 'app-technical-commercial-proposal-approval-modal',
-  templateUrl: './technical-commercial-proposal-approval-modal.component.html',
-  styleUrls: ['./technical-commercial-proposal-approval-modal.component.scss']
+  selector: 'app-technical-commercial-proposal-confirm',
+  templateUrl: './technical-commercial-proposal-confirm.component.html',
+  styleUrls: ['./technical-commercial-proposal-confirm.component.scss']
 })
-export class TechnicalCommercialProposalApprovalModalComponent {
+export class TechnicalCommercialProposalConfirmComponent {
   @Input() isLoading: boolean;
   @Input() requestId: Uuid;
   @Input() groupId: Uuid;
@@ -48,7 +48,7 @@ export class TechnicalCommercialProposalApprovalModalComponent {
    * Сумма выбранных предложений по поставщику
    */
   getSelectedProposalsSumBySupplier(proposals): number {
-    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat ?? 0), 0);
+    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat * proposal.quantity ?? 0), 0);
   }
 
   /**
@@ -58,7 +58,7 @@ export class TechnicalCommercialProposalApprovalModalComponent {
     const selectedToApprove = proposals.map(proposal => proposal.toApprove);
     const propsFlat = selectedToApprove.reduce((acc: [], val) => [...acc, ...val], []);
 
-    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat ?? 0), 0);
+    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat * p.quantity ?? 0), 0);
   }
 
   /**

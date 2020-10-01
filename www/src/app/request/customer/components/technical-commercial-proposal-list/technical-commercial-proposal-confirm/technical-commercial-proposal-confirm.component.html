@@ -84,17 +84,19 @@
         </div>
 
         <div class="to-send-to-edit">
-          <div class="app-row select-list-item" *ngFor="let toSendToEditProposalPosition of proposalPositionsBlock.toSendToEdit">
-            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
+          <ng-container *ngFor="let toSendToEditProposalPosition of proposalPositionsBlock.toSendToEdit">
+            <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
+              <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
 
-            <div class="app-col select-list-item-supplier-name">
-              <span class="app-ghost-color">На доработку</span>
-            </div>
+              <div class="app-col select-list-item-supplier-name">
+                <span class="app-ghost-color">На доработку</span>
+              </div>
 
-            <div class="app-col app-col-auto app-warning-color select-list-item-icon">
-              <uxg-icon shape="app-warning"></uxg-icon>
+              <div class="app-col app-col-auto app-warning-color select-list-item-icon">
+                <uxg-icon shape="app-warning"></uxg-icon>
+              </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </div>
     </div>
