@@ -35,13 +35,19 @@ export class ContractService {
   sendForApproval(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/send-for-approval`;
 
-    return this.api.post<Contract>(url, null);
+    return this.api.get<Contract>(url);
   }
 
   sign(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/sign`;
 
-    return this.api.post<Contract>(url, null);
+    return this.api.get<Contract>(url);
+  }
+
+  rollback(contractId: Uuid) {
+    const url = `requests/backoffice/contracts/${contractId}/cancel-send-for-approval`;
+
+    return this.api.get<Contract>(url);
   }
 
   upload(contractId: Uuid, files: File[], comment?: string): Observable<RequestDocument[]> {

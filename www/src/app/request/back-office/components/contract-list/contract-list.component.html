@@ -32,6 +32,9 @@
         (send)="store.dispatch(send(contract, $event.files, $event.comment))"
         (download)="store.dispatch(download(contract))"
         (sign)="store.dispatch(sign(contract))"
+        [rollbackDate]="contract.statusChangedDate"
+        [rollbackDuration]="600"
+        (rollback)="store.dispatch(rollback(contract))"
       ></app-contract-list-item>
 
       <!-- empty -->
