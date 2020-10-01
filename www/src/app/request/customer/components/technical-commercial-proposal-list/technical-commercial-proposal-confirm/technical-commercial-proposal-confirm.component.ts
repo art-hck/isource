@@ -38,7 +38,7 @@ export class TechnicalCommercialProposalConfirmComponent {
    * Сумма выбранных предложений по поставщику
    */
   getSelectedProposalsSumBySupplier(proposals): number {
-    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat ?? 0), 0);
+    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat * proposal.quantity ?? 0), 0);
   }
 
   /**
@@ -48,7 +48,7 @@ export class TechnicalCommercialProposalConfirmComponent {
     const selectedToApprove = proposals.map(proposal => proposal.toApprove);
     const propsFlat = selectedToApprove.reduce((acc: [], val) => [...acc, ...val], []);
 
-    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat ?? 0), 0);
+    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat * p.quantity ?? 0), 0);
   }
 
   /**
