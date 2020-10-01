@@ -147,6 +147,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     return selectedSendToEditProposals?.reduce((acc: [], val) => [...acc, ...val], []);
   }
 
+
+  get allSelectedProposals(): { toApprove, toSendToEdit } {
+    // Объединяем все отмеченные предложения (на согласование + на доработку)
+
+    return {
+      toApprove: this.selectedPositionsBySupplierAndType('to-approve'),
+      toSendToEdit: this.selectedPositionsBySupplierAndType('to-send-to-edit')
+    };
+  }
+
   /**
    * Возвращает сгруппированный объект, состоящий из Поставщика
    * и отмеченных его предложений на согласование и отправку на доработку
@@ -214,6 +224,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
         { label: 'Страница предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals/${groupId}` }
       ]),
+      switchMap(([{ id, groupId }]) => this.service.getGroupInfo(id, groupId)),
+      tap(({name}) => this.title.setTitle(name)),
       takeUntil(this.destroy$)
     ).subscribe();
 

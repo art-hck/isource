@@ -76,7 +76,7 @@ export class ContractCreateComponent implements OnInit {
       ;
 
 
-      this.contractService.create(this.request, contragentId, positions)
+      this.contractService.create(this.request.id, contragentId, positions)
         .pipe(finalize(() => this.close.emit()))
         .subscribe((contract) => this.create.emit(contract))
       ;

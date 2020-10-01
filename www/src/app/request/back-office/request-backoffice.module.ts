@@ -39,6 +39,10 @@ import { ProcedureProlongateComponent } from "./components/procedure-prolongate/
 import { ProcedureViewComponent } from './components/procedure-view/procedure-view.component';
 import { TechnicalCommercialProposalGroupViewComponent } from './components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component';
 import { TechnicalCommercialProposalGroupFormComponent } from './components/technical-commercial-proposal-group-form/technical-commercial-proposal-group-form.component';
+import { ContractFormComponent } from "./components/contract-form/contract-form.component";
+import { ContractListComponent } from "./components/contract-list/contract-list.component";
+import { ContractState } from "./states/contract.state";
+import { ContractService } from "./services/contract.service";
 
 @NgModule({
   declarations: [
@@ -67,6 +71,8 @@ import { TechnicalCommercialProposalGroupFormComponent } from './components/tech
     ProcedureViewComponent,
     TechnicalCommercialProposalGroupViewComponent,
     TechnicalCommercialProposalGroupFormComponent,
+    ContractFormComponent,
+    ContractListComponent
   ],
   imports: [
     RequestBackofficeRoutingModule,
@@ -75,6 +81,7 @@ import { TechnicalCommercialProposalGroupFormComponent } from './components/tech
       RequestListState,
       TechnicalCommercialProposalState,
       CommercialProposalState,
+      ContractState
     ]),
     RequestCommonModule
   ],
@@ -90,6 +97,7 @@ import { TechnicalCommercialProposalGroupFormComponent } from './components/tech
     TechnicalProposalsService,
     PositionService,
     TechnicalCommercialProposalService,
+    ContractService
   ]
 })
 export class RequestBackofficeModule {
