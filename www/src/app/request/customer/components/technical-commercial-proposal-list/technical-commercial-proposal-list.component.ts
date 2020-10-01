@@ -56,7 +56,6 @@ import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
-  styleUrls: ['technical-commercial-proposal-list.component.scss'],
   providers: [PluralizePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -99,7 +98,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   groupId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
-  filterQuery: string;
   modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
   approvalModalData: {
     counters: {
@@ -184,36 +182,6 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     });
   }
 
-  /**
-   * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
-   */
-  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
-    const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
-
-    if (!supplierId) {
-      return selectedProposals;
-    }
-
-    return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
-  }
-
-  /**
-   * Сумма выбранных предложений по поставщику
-   */
-  getSelectedProposalsSumBySupplier(proposals): number {
-    return proposals.reduce((sum, proposal) => sum += (proposal?.priceWithoutVat ?? 0), 0);
-  }
-
-  /**
-   * Сумма всех выбранных предложений по всем поставщикам
-   */
-  getSelectedProposalsTotalSum(proposals): number {
-    const selectedToApprove = proposals.map(proposal => proposal.toApprove);
-    const propsFlat = selectedToApprove.reduce((acc: [], val) => [...acc, ...val], []);
-
-    return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat ?? 0), 0);
-  }
-
   get selectedPositions() {
     const checkedPositions = [];
 
@@ -260,6 +228,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       tap(({name}) => this.title.setTitle(name)),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
@@ -351,26 +326,16 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   /**
-   * Возвращает true, если позиция отфильтрована из списка
+   * Возвращает выбранные предложения для указанного поставщика, и по указанному типу (принятие/на доработку)
    */
-  positionIsFiltered(proposalPosition): boolean {
-    if (!this.filterQuery?.trim().length) {
-      return false;
+  selectedPositionsBySupplierAndType(type, supplierId = null): (TechnicalCommercialProposal | Proposal)[] {
+    const selectedProposals = type === 'to-approve' ? this.selectedToApproveProposals : this.selectedToSendToEditProposals;
+
+    if (!supplierId) {
+      return selectedProposals;
     }
 
-    return proposalPosition.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1;
-  }
-
-  /**
-   * Возвращает true, если все позиции поставщика отфильтрованы из списка
-   */
-  allPositionsFiltered(proposalPositionsBlock): boolean {
-    if (!this.filterQuery?.trim().length) {
-      return false;
-    }
-
-    return proposalPositionsBlock.toApprove.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1) &&
-           proposalPositionsBlock.toSendToEdit.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1);
+    return selectedProposals.filter(({ supplier }) => supplier.id === supplierId);
   }
 
   approveFromListView(): void {

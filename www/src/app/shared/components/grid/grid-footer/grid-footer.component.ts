@@ -15,13 +15,12 @@ export class GridFooterComponent {
   @Input() viewType: string;
   @Input() disabled: boolean;
   @Input() loading: boolean;
-  @Input() source: string;
+  @Input() source: string; // todo После изменений вида футера в КП необходимость в проверке источника вероятно отпадёт
   @Output() approve = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() sendToEdit = new EventEmitter();
   @Output() approveFromListView = new EventEmitter();
   @Output() sendToEditFromListView = new EventEmitter();
-  @Output() confirmApproveFromList = new EventEmitter();
   @HostBinding('class.hidden') @Input() hidden: boolean;
   @HostBinding('class.proposals-footer') proposalsFooter = true;
   getCurrencySymbol = getCurrencySymbol;

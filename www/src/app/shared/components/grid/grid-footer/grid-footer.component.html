@@ -79,7 +79,8 @@
       Отклонить все
     </button>
 
-    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="source === 'tcp' ? confirmApproveFromList.emit(selectedProposals) : approve.emit()" [disabled]="loading || disabled">
+    <!-- todo Убрать проверку на вид слова, если не принципиально название кнопки -->
+    <button *ngIf="approve.observers.length" uxgButton primary lg (click)="approve.emit()" [disabled]="loading || disabled">
       {{ source === 'tcp' ? 'Согласовать' : 'Согласовать все' }}
     </button>
   </ng-template>

@@ -1,13 +1,8 @@
+@import "src/assets/styles/helpers";
 @import "src/theme";
 
-h3.total-sum {
-  font-size: 22px;
-}
-
-hr {
-  border: none;
+.divider {
   margin: 0;
-  border-bottom: 1px uxg($theme, color-divider) solid;
 }
 
 .list-header-row {
@@ -15,16 +10,12 @@ hr {
   padding-bottom: 15px;
 }
 
-.selected-counters {
-  font-size: 11px;
-
-  & span.counter {
-    margin-right: 10px;
-  }
+.selected-counters span.counter {
+  margin-right: 10px;
 }
 
 .search {
-  width: 280px;
+  width: col(1);
   margin-left: 0.5em;
 }
 
@@ -58,10 +49,6 @@ hr {
 
   &:last-of-type {
     margin-bottom: 5px;
-  }
-
-  & .sum-by-supplier {
-    font-size: 17px;
   }
 
   & .short-name {
