@@ -22,6 +22,7 @@ export class ContractListItemComponent implements OnChanges {
   @Output() reject = new EventEmitter<{ comment?: string, files: File[] }>();
   @Output() download = new EventEmitter();
   @Output() sign = new EventEmitter();
+  @Output() delete = new EventEmitter();
   folded: boolean;
   files: File[];
   historyFolded = true;
@@ -42,6 +43,7 @@ export class ContractListItemComponent implements OnChanges {
   get canReject(): boolean { return this.reject.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
   get canApprove(): boolean { return this.approve.observers.length && ['ON_APPROVAL'].includes(this.contract.status); }
   get canSign(): boolean { return this.sign.observers.length && ['APPROVED'].includes(this.contract.status); }
+  get canDelete(): boolean { return this.delete.observers.length && ['NEW'].includes(this.contract.status); }
 
   constructor(private fb: FormBuilder) {}
 

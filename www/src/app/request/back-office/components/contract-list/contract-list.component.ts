@@ -18,6 +18,7 @@ import Send = ContractActions.Send;
 import Rollback = ContractActions.Rollback;
 import Download = ContractActions.Download;
 import Sign = ContractActions.Sign;
+import Delete = ContractActions.Delete;
 
 @Component({
   selector: 'app-contract-list',
@@ -34,6 +35,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly sign = (contract: Contract) => new Sign(contract);
   readonly rollback = (contract: Contract) => new Rollback(contract);
   readonly download = (contract: Contract) => new Download(contract);
+  readonly delete = (contract: Contract) => new Delete(contract);
 
   constructor(
     public store: Store,

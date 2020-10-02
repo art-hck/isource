@@ -17,6 +17,7 @@ import Upload = ContractActions.Upload;
 import Download = ContractActions.Download;
 import Sign = ContractActions.Sign;
 import Rollback = ContractActions.Rollback;
+import Delete = ContractActions.Delete;
 
 export interface ContractStateModel {
   suppliers: ContragentWithPositions[];
@@ -106,6 +107,20 @@ export class ContractState {
     return this.rest.rollback(contract.id).pipe(
       tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
       tap(() => dispatch([new ToastActions.Success('Договор отозван')])),
+      tap(() => setState(patch<Model>({ status: "received" }))),
+      catchError(e => {
+        setState(patch<Model>({status: "error"}));
+        return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
+      })
+    );
+  }
+
+  @Action(Delete)
+  delete({ setState, dispatch }: Context, { contract }: Delete) {
+    setState(patch<Model>({ status: "updating" }));
+    return this.rest.rollback(contract.id).pipe(
+      tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
+      tap(() => dispatch([new ToastActions.Success('Договор удалён')])),
       tap(() => setState(patch<Model>({ status: "received" }))),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
