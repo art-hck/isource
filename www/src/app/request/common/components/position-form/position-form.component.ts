@@ -49,10 +49,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   @ViewChild('nameRef') nameDropdownInputRef: UxgDropdownInputComponent;
   form: FormGroup;
   subscription = new Subscription();
-  searchNameSuggestions$: Observable<string[]>;
-  onFocusNameSubject$ = new Subject();
   okeiList$: Observable<Okei[]>;
-  searchNameSuggestionsComplete: boolean;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
@@ -65,24 +62,11 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
   get isDraft(): boolean {
     return this.approveRequiredFields
-      .some(controlName => (!this.form.get(controlName).pristine || this.form.get(controlName).dirty)
-        && this.form.get(controlName).valid) || !this.position;
+      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
   }
 
   get needApprove(): boolean {
     return (this.isDraft || !this.position.id) && !!this.onDrafted;
-  }
-
-  get suggestLabel() {
-    if (this.form.get('name').value && this.position.nameTemplate) {
-      const i = this.form.get('name').value.trim().split(' ').length;
-      const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
-      const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
-      if (i >= arr1.length) {
-        const label = [...arr1, ...arr2][i];
-        return label && label.slice(1, -1);
-      }
-    }
   }
 
   constructor(
@@ -90,8 +74,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private datePipe: DatePipe,
     private statusService: RequestPositionStatusService,
     private positionService: RequestPositionService,
-    private userInfoService: UserInfoService,
-    private normPositionService: NormPositionService,
     public okeiService: OkeiService,
     private store: Store
   ) {}
@@ -120,16 +102,6 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     if (this.position.id) {
       Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
     }
-
-    this.searchNameSuggestions$ = merge(
-      form.get('name').valueChanges,
-      this.onFocusNameSubject$
-    ).pipe(
-      debounceTime(300),
-      filter(value => value && value.length > 0),
-      flatMap(value => this.normPositionService.searchSuggestions(value)),
-      tap(suggestions => this.searchNameSuggestionsComplete = suggestions.length > 0),
-    );
 
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(
