@@ -1,7 +1,7 @@
 <div class="proposals-footer-body app-row app-align-items-center">
   <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
   <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
-  <button *ngIf="source === 'tcp'" uxgButton outline lg (click)="sendToEdit.emit()" [disabled]="loading">Все на доработку</button>
+  <button *ngIf="source === 'tcp' && viewType !== 'list'" uxgButton outline lg (click)="sendToEdit.emit()" [disabled]="loading">Все на доработку</button>
   <div class="app-col"></div>
 
   <ng-container>
