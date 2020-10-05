@@ -19,6 +19,9 @@
       <div class="app-ghost-color app-bold" *ngSwitchCase="'ARCHIVE'"><uxg-icon shape="app-draft"></uxg-icon><span>Архив</span></div>
     </ng-container>
 
+    <button uxgButton icon link (click)="delete.emit()" *ngIf="canDelete">
+      <uxg-icon shape="app-trash"></uxg-icon>
+    </button>
     <button uxgButton icon link (click)="folded = !folded">
       <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
     </button>

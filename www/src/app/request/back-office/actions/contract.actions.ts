@@ -1,6 +1,7 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { Contract } from "../../common/models/contract";
+import { ContractFilter } from "../../common/models/contract-filter";
 
 export namespace ContractActions {
   // Получить список
@@ -8,6 +9,13 @@ export namespace ContractActions {
     static readonly type = '[Contract Backoffice] Fetch';
 
     constructor(public requestId: Uuid) {}
+  }
+
+  // Отфильтровать список
+  export class Filter {
+    static readonly type = '[Contract Backoffice] Filter';
+
+    constructor(public requestId: Uuid, public filter: ContractFilter) {}
   }
 
   // Получение доступных контрагентов со списком позиций
@@ -41,6 +49,13 @@ export namespace ContractActions {
   // Откатить
   export class Rollback {
     static readonly type = '[Contract Backoffice] Rollback';
+
+    constructor(public contract: Contract) {}
+  }
+
+  // Удалить
+  export class Delete {
+    static readonly type = '[Contract Backoffice] Delete';
 
     constructor(public contract: Contract) {}
   }

@@ -29,12 +29,13 @@
         *ngFor="let contract of contracts$ | async"
         [contract]="contract"
         [status]="status$ | async"
+        [rollbackDate]="contract.statusChangedDate"
+        [rollbackDuration]="600"
         (send)="store.dispatch(send(contract, $event.files, $event.comment))"
         (download)="store.dispatch(download(contract))"
         (sign)="store.dispatch(sign(contract))"
-        [rollbackDate]="contract.statusChangedDate"
-        [rollbackDuration]="600"
         (rollback)="store.dispatch(rollback(contract))"
+        (delete)="store.dispatch(delete(contract))"
       ></app-contract-list-item>
 
       <!-- empty -->
