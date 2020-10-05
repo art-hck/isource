@@ -1,7 +1,7 @@
 @import "src/theme";
 
 .contragents-row {
-  background: uxg($theme, color-bg);
+  background: linear-gradient(to bottom, white 68px, rgb(0 0 0 / 10%) 68px, rgb(0 0 0 / 0%) 70px, uxg($theme, color-bg) 0px);
 }
 
 .common-params {
