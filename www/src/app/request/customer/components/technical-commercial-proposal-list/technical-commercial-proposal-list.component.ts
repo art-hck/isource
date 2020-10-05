@@ -1,7 +1,6 @@
 import { ActivatedRoute } from "@angular/router";
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -16,7 +15,7 @@ import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
-import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
+import { UxgBreadcrumbsService, UxgRadioItemComponent, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -62,7 +61,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   @ViewChild('sentToReviewTab') sentToReviewTabElRef: UxgTabTitleComponent;
   @ViewChild('sendToEditTab') sendToEditTabElRef: UxgTabTitleComponent;
   @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
-
+  @ViewChildren('sendToEditRadio') sendToEditRadioElRef: QueryList<UxgRadioItemComponent>;
   @ViewChildren('proposalOnReview') proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @ViewChild(GridFooterComponent, { read: ElementRef }) proposalsFooterRef: ElementRef;
   @ViewChildren("tcpComponent") tcpComponentList: QueryList<TechnicalCommercialProposalComponent>;
@@ -322,6 +321,15 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       },
       selectedProposals: this.selectedPositionsBySuppliers
     };
+  }
+
+  /**
+   * Выбирает все позиции на отправку на доработку
+   */
+  selectAllPositionsToSendToEdit(): void {
+    this.sendToEditRadioElRef.forEach((sendToEditRadio: UxgRadioItemComponent) => {
+      return sendToEditRadio.el.nativeElement.click();
+    });
   }
 
   /**

@@ -81,9 +81,11 @@
                       <span>{{proposalByPos.position.quantity}} </span>
                       <span class="app-ghost-color">{{proposalByPos.position.measureUnit}}</span>
                       <span class="app-ghost-color"> | </span>
-                      <span class="app-ghost-color">{{proposalByPos.position.startPrice | number:'1.0-2'}} </span>
-                      <span class="app-ghost-color">{{getCurrencySymbol(proposalByPos.position.currency, "narrow")}}/{{proposalByPos.position.measureUnit}}</span>
-                      <span class="app-ghost-color"> | </span>
+                      <ng-container *ngIf="proposalByPos.position.startPrice">
+                        <span class="app-ghost-color">{{proposalByPos.position.startPrice | number:'1.0-2'}} </span>
+                        <span class="app-ghost-color">{{getCurrencySymbol(proposalByPos.position.currency, "narrow")}}/{{proposalByPos.position.measureUnit}}</span>
+                        <span class="app-ghost-color"> | </span>
+                      </ng-container>
                       <span *ngIf="proposalByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
                       <ng-template #deliveryDate><span>{{proposalByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
                     </div>
@@ -155,6 +157,7 @@
   (sendToEdit)="sendToEditAll()"
   (approveFromListView)="approveFromListView()"
   (sendToEditFromListView)="sendToEditFromListView()"
+  (selectAllToSendToEdit)="selectAllPositionsToSendToEdit()"
   [chooseBy$]="chooseBy$"
   [hidden]="view === 'grid' && (!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0)"
   [viewType]="view"
