@@ -118,7 +118,7 @@ export class ContractState {
   @Action(Delete)
   delete({ setState, dispatch }: Context, { contract }: Delete) {
     setState(patch<Model>({ status: "updating" }));
-    return this.rest.rollback(contract.id).pipe(
+    return this.rest.delete(contract.id).pipe(
       tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
       tap(() => dispatch([new ToastActions.Success('Договор удалён')])),
       tap(() => setState(patch<Model>({ status: "received" }))),
