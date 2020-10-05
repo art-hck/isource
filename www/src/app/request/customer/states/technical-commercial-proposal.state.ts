@@ -3,6 +3,7 @@ import { Action, createSelector, Selector, State, StateContext } from "@ngxs/sto
 import { finalize, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
+import { saveAs } from 'file-saver/src/FileSaver';
 import { StateStatus } from "../../common/models/state-status";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { Injectable } from "@angular/core";
@@ -13,6 +14,7 @@ import Fetch = TechnicalCommercialProposals.Fetch;
 import Reject = TechnicalCommercialProposals.Reject;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: TechnicalCommercialProposal[];
@@ -112,6 +114,13 @@ export class TechnicalCommercialProposalState {
           }))
         );
       })
+    );
+  }
+
+  @Action(DownloadAnalyticalReport)
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
+      tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }
 }

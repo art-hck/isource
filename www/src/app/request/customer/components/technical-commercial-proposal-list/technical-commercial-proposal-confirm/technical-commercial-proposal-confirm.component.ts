@@ -5,6 +5,10 @@ import { TechnicalCommercialProposal } from "../../../../common/models/technical
 import { Proposal } from "../../../../../shared/components/grid/proposal";
 import { TechnicalCommercialProposalComponent } from "../../technical-commercial-proposal/technical-commercial-proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
+import { Store } from "@ngxs/store";
+import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
+import { Uuid } from "../../../../../cart/models/uuid";
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
   selector: 'app-technical-commercial-proposal-confirm',
@@ -12,11 +16,9 @@ import { GridRowComponent } from "../../../../../shared/components/grid/grid-row
   styleUrls: ['./technical-commercial-proposal-confirm.component.scss']
 })
 export class TechnicalCommercialProposalConfirmComponent {
-
-  readonly getCurrencySymbol = getCurrencySymbol;
-  filterQuery: string;
-
   @Input() isLoading: boolean;
+  @Input() requestId: Uuid;
+  @Input() groupId: Uuid;
   @Input() proposalsOnReview: QueryList<TechnicalCommercialProposalComponent | GridRowComponent>;
   @Input() approvalModalData: {
     counters: {
@@ -30,9 +32,17 @@ export class TechnicalCommercialProposalConfirmComponent {
       toApprove: (TechnicalCommercialProposal | Proposal)[]
     }[]
   };
-
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
+
+  filterQuery: string;
+  readonly getCurrencySymbol = getCurrencySymbol;
+  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
+
+  constructor(
+    public store: Store,
+  ) {
+  }
 
   /**
    * Сумма выбранных предложений по поставщику

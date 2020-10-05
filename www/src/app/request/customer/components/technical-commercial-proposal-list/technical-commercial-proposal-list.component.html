@@ -219,6 +219,8 @@
 <uxg-modal #selectedProposalsApprovalModal [(state)]="approvalModalData" size="l">
   <app-technical-commercial-proposal-confirm
     *ngIf="approvalModalData"
+    [requestId]="requestId"
+    [groupId]="groupId"
     [proposalsOnReview]="proposalsOnReview"
     [approvalModalData]="approvalModalData"
     [isLoading]="isLoading"

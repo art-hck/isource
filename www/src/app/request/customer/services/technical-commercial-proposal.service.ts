@@ -48,4 +48,9 @@ export class TechnicalCommercialProposalService {
     // return this.api.get<TechnicalCommercialProposal>(url);
     return of(null).pipe(delay(1500));
   }
+
+  downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/customer/${ requestId }/analytic-report/download-by-tcp`;
+    return this.api.post(url, { requestTechnicalCommercialProposalGroupId: groupId }, { responseType: 'blob' });
+  }
 }
