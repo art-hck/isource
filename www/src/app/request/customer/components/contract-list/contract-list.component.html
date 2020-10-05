@@ -46,7 +46,6 @@
         [status]="status$ | async"
         (approve)="store.dispatch(approve(contract))"
         (reject)="store.dispatch(reject(contract, $event.files, $event.comment))"
-        (download)="store.dispatch(download(contract))"
       ></app-contract-list-item>
 
       <!-- empty -->

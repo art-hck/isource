@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-import { ContractListComponent } from "./components/contract-list/contract-list.component";
-import { ContractCreateComponent } from "./components/contract-create/contract-create.component";
-import { ContractService } from "./services/contract.service";
-import { ContractListUploadDocumentComponent } from "./components/contract-list/contract-list-upload-document/contract-list-upload-document.component";
 import { DeliveryMonitorComponent } from './components/delivery-monitor/delivery-monitor.component';
 import { DeliveryMonitorService } from "./services/delivery-monitor.service";
 import { DesignDocumentationListComponent } from "./components/design-documentation-list/design-documentation-list.component";
@@ -46,9 +42,6 @@ import { ContractListItemComponent } from "./components/contract-list-item/contr
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
-  ContractListComponent,
-  ContractCreateComponent,
-  ContractListUploadDocumentComponent,
   DeliveryMonitorComponent,
   DesignDocumentationListComponent,
   DeliveryMonitorDigitalInspectorComponent,
@@ -91,7 +84,6 @@ const RequestCommonModuleDeclarations = [
     TextMaskModule,
   ],
   providers: [
-    ContractService,
     RequestPositionStatusService,
     TechnicalProposalsService,
     DeliveryMonitorService,

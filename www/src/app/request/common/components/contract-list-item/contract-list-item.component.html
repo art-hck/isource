@@ -91,7 +91,7 @@
                 [sizeInfoHidden]="true">
               </app-document-simple-list>
             </div>
-            <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy'}}</span></div>
+            <div class="app-col-3 app-ellipsis">{{ document.user.shortName }} <span class="app-ghost-color">{{document.created | date : 'dd.MM.yyyy HH:mm'}}</span></div>
             <div class="app-col-6 app-ellipsis">{{ document.comments }}</div>
           </div>
         </div>
@@ -104,7 +104,7 @@
         </div>
 
         <div class="app-row app-align-items-center">
-          <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Номер заявки или наименование"/></div>
+          <div class="app-col-6 app-basis-auto app-ellipsis"><input uxgInput type="text" lg formControlName="comment" placeholder="Текст комментария"/></div>
           <app-document-upload-list
             *ngIf="files?.length; else uploadFile"
             class="app-col-6"
