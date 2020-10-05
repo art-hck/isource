@@ -9,6 +9,9 @@ import { ContractActions } from "../actions/contract.actions";
 import { ContragentWithPositions } from "../../common/models/contragentWithPositions";
 import { ContractService } from "../services/contract.service";
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import { ContractStatusLabels } from "../../common/dictionaries/contract-status-labels";
+import { ContractStatus } from "../../common/enum/contract-status";
+import { ContractFilter } from "../../common/models/contract-filter";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Create = ContractActions.Create;
 import Fetch = ContractActions.Fetch;
@@ -18,10 +21,13 @@ import Download = ContractActions.Download;
 import Sign = ContractActions.Sign;
 import Rollback = ContractActions.Rollback;
 import Delete = ContractActions.Delete;
+import Filter = ContractActions.Filter;
+import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
 
 export interface ContractStateModel {
   suppliers: ContragentWithPositions[];
   contracts: Contract[];
+  availibleFilters?: ContractFilter;
   status: StateStatus;
 }
 
@@ -30,7 +36,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeContract',
-  defaults: { suppliers: null, contracts: null, status: "pristine" }
+  defaults: { suppliers: null, contracts: null, availibleFilters: {}, status: "pristine" }
 })
 @Injectable()
 export class ContractState {
@@ -39,14 +45,26 @@ export class ContractState {
 
   @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
   @Selector() static contracts({ contracts }: Model) { return contracts; }
+  @Selector() static availibleFilters({ availibleFilters }: Model) { return availibleFilters; }
   @Selector() static status({ status }: Model) { return status; }
 
-  @Action(Fetch)
-  fetch({ setState, dispatch }: Context, { requestId }: Fetch) {
-    setState(patch<Model>({ status: "fetching" }));
+  @Action([Fetch, Filter])
+  fetch({ setState, dispatch }: Context, { requestId, filter }: Fetch & Filter) {
+    setState(patch<Model>(!filter ? { status: 'fetching', contracts: null } : { status: 'updating'}));
 
+    return this.rest.list(requestId, filter).pipe(tap(contracts => setState(patch<Model>({ contracts, status: "received" }))));
+  }
+
+  @Action(FetchAvailibleFilters)
+  fetchAvailibleFilters({ setState }: Context, { requestId }: FetchAvailibleFilters) {
+    // @TODO: получать список доступных фильтров отдельным методом
     return this.rest.list(requestId).pipe(
-      tap(contracts => setState(patch<Model>({ contracts, status: "received" })))
+      tap(contracts => setState(patch<Model>({
+        availibleFilters: {
+          statuses: Object.keys(ContractStatusLabels).filter(status => contracts.some(c => c.status === status)) as ContractStatus[],
+          suppliers: contracts.map(({ supplier }) => supplier).filter((v, i, a) => a.findIndex(({ id }) => v.id === id) === i)
+        }
+      }))),
     );
   }
 

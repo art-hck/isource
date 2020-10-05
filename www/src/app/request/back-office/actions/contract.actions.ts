@@ -18,6 +18,11 @@ export namespace ContractActions {
     constructor(public requestId: Uuid, public filter: ContractFilter) {}
   }
 
+  export class FetchAvailibleFilters {
+    static readonly type = '[Contract Backoffice] FetchAvailibleFilters';
+    constructor(public requestId: Uuid) {}
+  }
+
   // Получение доступных контрагентов со списком позиций
   export class FetchSuppliers {
     static readonly type = '[Contract Backoffice] FetchSuppliers';

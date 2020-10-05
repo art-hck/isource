@@ -6,10 +6,10 @@
     <div class="app-col">
       <div class="app-row app-align-items-center">
         <div class="app-col"></div>
-        <!--button uxgButton secondary iconText class="app-detachable-button" (click)="null">
+        <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
           <uxg-icon shape="app-sort2"></uxg-icon>
           <span>Фильтр</span>
-        </button-->
+        </button>
 
         <button uxgButton primary iconText (click)="contractFormModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
           <uxg-icon shape="app-plus"></uxg-icon>
@@ -39,12 +39,30 @@
       ></app-contract-list-item>
 
       <!-- empty -->
-      <div *ngIf="(contracts$ | async).length === 0">
+      <div *ngIf="(contracts$ | async).length === 0 && form.pristine">
         <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-waiting-big" size="270"></uxg-icon><br/><br/>Пока еще не создано ни одного договора</h1>
       </div>
     </div>
 
-    <div class="app-col-aside detachable"></div>
+    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="(contracts$ | async).length" [dirty]="form.dirty">
+      <app-filter-section label="Наименование позиции">
+        <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
+      </app-filter-section>
+      <app-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
+        <app-filter-checkbox-list
+          formControlName="suppliers"
+          searchPlaceholder="Наименование контрагента или ИНН"
+          [foldedSearch]="true"
+          [items$]="contractSuppliersItems$"
+          [limit]="5"
+          (search)="contractSuppliersSearch$.next($event)">
+        </app-filter-checkbox-list>
+      </app-filter-section>
+
+      <app-filter-section label="Согласование" [disabled]="form.get('statuses').disabled">
+        <app-filter-checkbox-list formControlName="statuses" [items$]="contractStatusesItems$"></app-filter-checkbox-list>
+      </app-filter-section>
+    </app-filter>
   </div>
 
     <uxg-modal #contractFormModal size="l">
