@@ -55,7 +55,7 @@ const routes: Routes = [
       {
         path: 'contracts',
         component: ContractListComponent,
-        data: { title: "На рассмотрении договора" }
+        data: { title: "Согласование договора" }
       },
       {
         path: 'technical-proposals',
