@@ -163,7 +163,7 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeRKDApproved(position) && !user.isCustomer()">
+        <div *ngIf="isBeforeContractSigning(position) && !user.isCustomer()">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger
