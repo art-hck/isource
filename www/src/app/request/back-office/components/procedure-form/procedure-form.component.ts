@@ -108,7 +108,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, [CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
-        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:ss") : null,
+        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:mm") : null,
           [Validators.required, CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
