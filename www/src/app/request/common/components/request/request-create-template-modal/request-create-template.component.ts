@@ -5,7 +5,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 
 @Component({
   selector: 'app-request-create-template',
-  templateUrl: './request-create-template.component.html'
+  templateUrl: './request-create-template.component.html',
+  styleUrls: ["./request-create-template.component.scss"],
 })
 export class RequestCreateTemplateComponent implements OnInit {
   @Input() positions: RequestPosition[] = [];
