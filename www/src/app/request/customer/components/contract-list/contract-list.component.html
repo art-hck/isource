@@ -25,10 +25,10 @@
           </uxg-tab-title>
         </uxg-tabs>
 
-        <!--button uxgButton secondary iconText class="app-detachable-button" (click)="filter.open()">
+        <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
           <uxg-icon shape="app-sort2"></uxg-icon>
           <span>Фильтр</span>
-        </button-->
+        </button>
 
       </div>
     </div>
@@ -46,18 +46,33 @@
         [status]="status$ | async"
         (approve)="store.dispatch(approve(contract))"
         (reject)="store.dispatch(reject(contract, $event.files, $event.comment))"
-        (download)="store.dispatch(download(contract))"
       ></app-contract-list-item>
 
       <!-- empty -->
-      <div *ngIf="contracts.length === 0">
+      <div *ngIf="contracts.length === 0 && form.pristine">
         <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-publish" size="270"></uxg-icon><br/>Все договоры рассмотрены</h1>
       </div>
     </div>
-    <div class="app-col-aside detachable"></div>
-    <!--app-filter #filter>
-      <app-contract-list-filter *ngIf="contracts$ | async as contracts" [contracts]="contracts"></app-contract-list-filter>
-    </app-filter-->
+
+    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contracts.length" [dirty]="form.dirty">
+      <app-filter-section label="Наименование позиции">
+        <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
+      </app-filter-section>
+      <app-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
+        <app-filter-checkbox-list
+          formControlName="suppliers"
+          searchPlaceholder="Наименование контрагента или ИНН"
+          [foldedSearch]="true"
+          [items$]="contractSuppliersItems$"
+          [limit]="5"
+          (search)="contractSuppliersSearch$.next($event)">
+        </app-filter-checkbox-list>
+      </app-filter-section>
+
+      <app-filter-section label="Согласование" [disabled]="form.get('statuses').disabled">
+        <app-filter-checkbox-list formControlName="statuses" [items$]="contractStatusesItems$"></app-filter-checkbox-list>
+      </app-filter-section>
+    </app-filter>
   </div>
 </ng-container>
 
