@@ -54,7 +54,7 @@ export class ContractService {
   delete(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/delete`;
 
-    return this.api.get<Contract>(url);
+    return this.api.get<null>(url);
   }
 
   upload(contractId: Uuid, files: File[], comment?: string): Observable<RequestDocument[]> {

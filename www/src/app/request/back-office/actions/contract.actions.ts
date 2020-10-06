@@ -2,6 +2,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { Contract } from "../../common/models/contract";
 import { ContractFilter } from "../../common/models/contract-filter";
+import { Request } from "../../common/models/request";
 
 export namespace ContractActions {
   // Получить список
@@ -62,7 +63,7 @@ export namespace ContractActions {
   export class Delete {
     static readonly type = '[Contract Backoffice] Delete';
 
-    constructor(public contract: Contract) {}
+    constructor(public request: Request, public contract: Contract) {}
   }
 
   // Прикрепить файл договора

@@ -38,6 +38,9 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.status) status$: Observable<StateStatus>;
   @Select(ContractState.availibleFilters) availibleFilters$: Observable<ContractFilter>;
 
+  deleteContract: Contract;
+  rollbackContract: Contract;
+
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
   readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
@@ -54,7 +57,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly sign = (contract: Contract) => new Sign(contract);
   readonly rollback = (contract: Contract) => new Rollback(contract);
   readonly download = (contract: Contract) => new Download(contract);
-  readonly delete = (contract: Contract) => new Delete(contract);
+  readonly delete = (request: Request, contract: Contract) => new Delete(request, contract);
 
   constructor(
     public store: Store,

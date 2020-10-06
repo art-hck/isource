@@ -127,7 +127,7 @@
       <ng-container *ngIf="canSend || canRollback || canReject || canApprove || canSign">
         <hr/>
         <div class="app-row app-align-items-center">
-          <button uxgButton iconText secondary type="button" (click)="download.emit()">
+          <button uxgButton iconText secondary type="button" *ngIf="download.observers.length" (click)="download.emit()">
             <uxg-icon shape="app-download"></uxg-icon>
             <span>Скачать типовой договор</span>
           </button>

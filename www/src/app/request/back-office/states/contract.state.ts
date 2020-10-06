@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { StateStatus } from "../../common/models/state-status";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { Injectable } from "@angular/core";
-import { insertItem, patch, updateItem } from "@ngxs/store/operators";
+import { insertItem, patch, removeItem, updateItem } from "@ngxs/store/operators";
 import { Contract } from "../../common/models/contract";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { ContractActions } from "../actions/contract.actions";
@@ -134,11 +134,11 @@ export class ContractState {
   }
 
   @Action(Delete)
-  delete({ setState, dispatch }: Context, { contract }: Delete) {
+  delete({ setState, dispatch }: Context, { request, contract }: Delete) {
     setState(patch<Model>({ status: "updating" }));
     return this.rest.delete(contract.id).pipe(
-      tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
-      tap(() => dispatch([new ToastActions.Success('Договор удалён')])),
+      tap(() => setState(patch({ contracts: removeItem(({ id }) => id === contract.id) }))),
+      tap(() => dispatch([new ToastActions.Success('Договор удалён'), new FetchSuppliers(request.id)])),
       tap(() => setState(patch<Model>({ status: "received" }))),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
