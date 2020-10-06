@@ -43,6 +43,7 @@ import { TechnicalProposalsService } from "../back-office/services/technical-pro
 import { ProcedureInfoComponent } from "./components/procedure-info/procedure-info.component";
 import { TechnicalCommercialProposalGroupComponent } from "./components/technical-commercial-proposal-group/technical-commercial-proposal-group.component";
 import { ContractListItemComponent } from "./components/contract-list-item/contract-list-item.component";
+import { RequestCreateTemplateComponent } from "./components/request/request-create-template-modal/request-create-template.component";
 
 const RequestCommonModuleDeclarations = [
   CommercialProposalListDeprecatedComponent,
@@ -79,7 +80,8 @@ const RequestCommonModuleDeclarations = [
   RequestListComponent,
   ProcedureInfoComponent,
   TechnicalCommercialProposalGroupComponent,
-  ContractListItemComponent
+  ContractListItemComponent,
+  RequestCreateTemplateComponent
 ];
 
 @NgModule({

@@ -15,6 +15,7 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import CreateTemplate = RequestActions.CreateTemplate;
 
 export interface RequestStateStateModel {
   request: Request;
@@ -94,5 +95,11 @@ export class RequestState {
       catchError(e => ctx.dispatch(new ToastActions.Error('Ошибка в шаблоне ' + (e && e.error && e.error.detail || "")))),
       switchMap(() => ctx.dispatch(new RefreshPositions(requestId)))
     );
+  }
+
+  @Action(CreateTemplate) createTemplate({setState, dispatch}: Context, {requestId, positions, title, tag}: CreateTemplate) {
+    return this.rest.createTemplate(requestId,  positions, title, tag).pipe(
+      tap(request => setState(patch({request, status: "received" as StateStatus}))
+    ));
   }
 }

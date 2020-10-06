@@ -21,6 +21,7 @@ import RefreshPositions = RequestActions.RefreshPositions;
 import Refresh = RequestActions.Refresh;
 import Fetch = RequestActions.Fetch;
 import FetchPositions = RequestActions.FetchPositions;
+import CreateTemplate = RequestActions.CreateTemplate;
 
 @Component({
   templateUrl: './request.component.html',
@@ -38,6 +39,7 @@ export class RequestComponent implements OnInit, OnDestroy {
   readonly refreshPositions = id => new RefreshPositions(id);
   readonly publish = (id, positions) => new Publish(id, true, positions.map(position => position.id));
   readonly uploadFromTemplate = ({files}) => new UploadFromTemplate(this.requestId, files);
+  readonly createTemplate = (positions, title, tag?) => new CreateTemplate(this.requestId, positions.map(position => position.id), title, tag)
   readonly sendOnApprove = (position: RequestPosition): Observable<RequestPosition> => this.store
     .dispatch(new Publish(this.requestId, false, [position.id])).pipe(
       switchMap(() => this.requestService.getRequestPosition(this.requestId, position.id))

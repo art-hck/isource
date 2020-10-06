@@ -31,4 +31,9 @@ export namespace RequestActions {
     static readonly type = '[Request Backoffice] Upload From Template';
     constructor(public requestId: Uuid, public files: File[]) {}
   }
+
+  export class CreateTemplate {
+    static readonly type = '[Request Backoffice] Create Template';
+    constructor(public requestId: Uuid, public positions: [string], public title: string, public tag: string) {}
+  }
 }

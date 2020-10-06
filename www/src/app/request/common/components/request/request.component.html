@@ -139,6 +139,9 @@
                 <div>
                   <button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button>
                 </div>
+                <div>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="createTemplateModal.open()">Создать шаблон</button>
+                </div>
               </ng-container>
 
               <ng-container *ngIf="user.isCustomer()">
@@ -387,6 +390,19 @@
       (success)="addResponsible.emit($event)"
       (close)="addResponsibleModal.close()"
     ></app-request-add-responsible>
+  </div>
+</uxg-modal>
+
+<!-- Модальное окно для создания шаблона -->
+<uxg-modal #createTemplateModal size="m">
+  <h2>Создать шаблон</h2>
+  <div *ngIf="createTemplateModal.state">
+    <app-request-create-template
+      [request]="request"
+      [positions]="checkedPositions"
+      (createTemplate)="this.createTemplate.emit($event); resetSelectedPositions()"
+      (close)="createTemplateModal.close()"
+    ></app-request-create-template>
   </div>
 </uxg-modal>
 
