@@ -69,8 +69,8 @@ export class PositionComponent implements DoCheck {
     return this.positionStatusService.isStatusAfter(position.status, PositionStatus.CONTRACTED);
   }
 
-  isBeforeRKDApproved(position: RequestPosition) {
-    return this.positionStatusService.isStatusPrevious(position.status, PositionStatus.RKD_APPROVED);
+  isBeforeContractSigning(position: RequestPosition): boolean {
+    return this.positionStatusService.isStatusPrevious(position.status, PositionStatus.CONTRACT_SIGNING);
   }
 
   isNotActual(position: RequestPosition) {
