@@ -1,25 +1,26 @@
-<div class="contragents-row" [class.with-analogs]="hasSupplierWithAnalogs(suppliers)">
+<div class="contragents-row" [class.with-analogs]="!hasSupplierWithAnalogs(suppliers)">
 
-    <div #gridRow class="app-row grid-row app-layout">
-      <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
-      <div class="app-col grid-cell app-ellipsis"
-           *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
-        <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
-        </app-contragent-info-link>
-        <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
-        <ng-container *ngIf="showCommonParams">
-          <app-grid-common-parameters #gridCommonParams
-            [proposal]="getProposalBySupplier(supplier, proposals)"
-            [proposalsByPos]="proposalsByPos"
-            [hasAnalogs]="supplier.hasAnalogs"
-            (close)="showCommonParams = false"
-            (openEditModal)="editTechnicalCommercialProposal.emit($event)"
-            [showDocs]="showDocsControl.value"
-            (selectAll)="selectProposalBySupplier.emit($event)"></app-grid-common-parameters>
-        </ng-container>
-      </div>
+  <div #gridRow class="app-row grid-row app-layout">
+    <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
+    <div class="app-col grid-cell app-ellipsis"
+         *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
+      <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
+      </app-contragent-info-link>
+      <div class="app-ghost-color" *ngIf="!supplier.hasAnalogs">аналоги</div>
+      <ng-container *ngIf="showCommonParams">
+        <app-grid-common-parameters #gridCommonParams
+          [proposal]="getProposalBySupplier(supplier, proposals)"
+          [proposalsByPos]="proposalsByPos"
+          [hasAnalogs]="!supplier.hasAnalogs"
+          (close)="showCommonParams = false"
+          (openEditModal)="editTechnicalCommercialProposal.emit($event)"
+          [showDocs]="showDocsControl.value"
+          (selectAll)="selectProposalBySupplier.emit($event)"></app-grid-common-parameters>
+      </ng-container>
     </div>
-  <div class="app-row show-docs" *ngIf="showCommonParams">
+  </div>
+
+  <div class="app-row grid-row app-layout show-docs" *ngIf="showCommonParams">
     <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
   </div>
     <!-- Временно скрыто в матрице КП-->
