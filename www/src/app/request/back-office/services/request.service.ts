@@ -94,13 +94,6 @@ export class RequestService {
     return this.api.post(url, this.formDataService.toFormData({ files })); // @TODO Typization!
   }
 
-  createTemplate(requestId: Uuid, positions: string[], title: string, tag: string) {
-    const url = `requests/backoffice/profile/templates/create`;
-    return this.api.post(url, {
-      requestId, title, positions
-    });
-  }
-
   availableFilters() {
     const url = `requests/backoffice/available-filters`;
     return this.api.get<AvailableFilters>(url);

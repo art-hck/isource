@@ -6,7 +6,8 @@
         <!-- Царь-чекбокс -->
         <div class="app-col app-col-auto">
           <div class="app-row app-align-items-center">
-            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let form of [form]"></uxg-checkbox>
+            <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions"
+                          *ngFor="let form of [form]"></uxg-checkbox>
             <uxg-popover #popover>
               <button uxgButton uxgPopoverTrigger link icon>
                 <uxg-icon shape="app-triangle down"></uxg-icon>
@@ -31,7 +32,8 @@
 
         <!-- Отправить позиции на согласование -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('sentToApprove') && isDraft">
-          <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish" (click)="publish.emit(checkedPositions)">
+          <button uxgButton clear link [disabled]="checkedPositions.length === 0 || !canPublish"
+                  (click)="publish.emit(checkedPositions)">
             <uxg-icon shape="app-on-approve" size="16" class="is-solid"></uxg-icon>
             <span>На согласование</span>
           </button>
@@ -47,7 +49,8 @@
 
         <!-- Переместить в группу -->
         <div class="app-col app-col-auto" *ngIf="featureService.authorize('moveRequestGroup')">
-          <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0" (click)="moveGroupModal.open()">
+          <button uxgButton clear link [disabled]="groups.length === 0 || checkedPositions.length === 0"
+                  (click)="moveGroupModal.open()">
             <uxg-icon shape="app-move" size="16" class="is-solid"></uxg-icon>
             <span>Переместить</span>
           </button>
@@ -125,11 +128,15 @@
               <ng-container *ngIf="user.isBackOffice()">
                 <!-- Назначиь ответственного -->
                 <div *ngIf="user.hasPermission(permissionType.POSITIONS_DISTRIBUTION_BETWEEN_BACKOFFICE_BUYERS)">
-                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="addResponsibleModal.open()">Назначить</button>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="addResponsibleModal.open()">Назначить
+                  </button>
                 </div>
 
                 <div>
-                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="cancelPositionModal.open()">Отменить</button>
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="cancelPositionModal.open()">Отменить
+                  </button>
                 </div>
 
                 <div>
@@ -138,9 +145,6 @@
 
                 <div>
                   <button uxgButton clear (click)="toggleGroups(false)">Развернуть группы</button>
-                </div>
-                <div>
-                  <button uxgButton clear [disabled]="checkedPositions.length === 0" (click)="createTemplateModal.open()">Создать шаблон</button>
                 </div>
               </ng-container>
 
@@ -154,7 +158,12 @@
                     Отправить в работу
                   </button>
                 </div>
-
+                <!-- Создать шаблон -->
+                <div class="app-col app-col-auto">
+                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                          (click)="createTemplateModal.open()">Создать шаблон
+                  </button>
+                </div>
                 <ng-container *ngIf="!someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
                   <!-- Отклонить -->
                   <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
@@ -214,7 +223,7 @@
             <h2 class="text-center" [style.opacity]="0.1">
               <uxg-icon class="clock-icon" shape="app-waiting-big" [size]="165"></uxg-icon>
               <br/>
-              Заявка находится в обработке <br/>  бэк-офиса, скоро здесь появятся <br/>  позиции
+              Заявка находится в обработке <br/> бэк-офиса, скоро здесь появятся <br/> позиции
             </h2>
           </ng-container>
 
@@ -250,7 +259,8 @@
 
     <!-- Список позиций -->
     <ng-template #regularRequestPositions>
-      <div class="app-col app-table" [class.disabled]="(status && status !== 'received') || positionsStatus && positionsStatus !=='received'">
+      <div class="app-col app-table"
+           [class.disabled]="(status && status !== 'received') || positionsStatus && positionsStatus !=='received'">
         <ng-container *ngIf="positions.length === 0">
           <h2 class="text-center" [style.opacity]="0.1">
             <uxg-icon shape="app-info" size="270"></uxg-icon>
@@ -294,7 +304,8 @@
   </div>
 
   <div class="app-col app-bold item-title app-ellipsis">
-    <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)" class="app-link-no-color position-link app-ellipsis">
+    <a [href]="getPositionUrl(position)" (click)="navigateToPosition(position, $event)"
+       class="app-link-no-color position-link app-ellipsis">
       {{ position.name }}
     </a>
   </div>
@@ -410,33 +421,34 @@
 <uxg-modal #cancelPositionModal size="s">
   <h2>Отменить позиции <span class="app-font-normal app-ghost-color">({{ checkedPositions?.length }})</span></h2>
   <div class="app-section app-secondary-color">Будьте внимательны, отменить операцию будет невозможно</div>
-  <app-position-cancel [positions]="checkedPositions" [requestId]="request.id" (close)="cancelPositionModal.close()"></app-position-cancel>
+  <app-position-cancel [positions]="checkedPositions" [requestId]="request.id"
+                       (close)="cancelPositionModal.close()"></app-position-cancel>
 </uxg-modal>
 
 <!-- Модальное окно для отклонения позиции -->
 <uxg-modal #rejectPositionModal size="s">
   <ng-container *ngIf="rejectPositionModal.state">
-  <h2>Комментарий по отклонению</h2>
-  <div class="app-section app-secondary-color">
-    Если возможно, сообщите пожалуйста причину отклонения сотруднику бэк-офиса.
-    Комментарий будет добавлен в общий чат по заявке. Оставлять комментарий не обязательно.
-  </div>
+    <h2>Комментарий по отклонению</h2>
+    <div class="app-section app-secondary-color">
+      Если возможно, сообщите пожалуйста причину отклонения сотруднику бэк-офиса.
+      Комментарий будет добавлен в общий чат по заявке. Оставлять комментарий не обязательно.
+    </div>
 
-  <div class="input-wrapper">
-    <div class="app-ghost-color" [style.margin-bottom.px]="3">Комментарий</div>
-    <textarea #comment
-              [style.height.px]="100"
-              uxgInput
-              placeholder="Введите текст комментария..."></textarea>
-  </div>
+    <div class="input-wrapper">
+      <div class="app-ghost-color" [style.margin-bottom.px]="3">Комментарий</div>
+      <textarea #comment
+                [style.height.px]="100"
+                uxgInput
+                placeholder="Введите текст комментария..."></textarea>
+    </div>
 
-  <ng-template uxgModalFooter>
-    <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
-    <button type="button" uxgButton primary lg
-            (click)="onRejectPositions(comment.value); rejectPositionModal.close()">
-      Отправить
-    </button>
-  </ng-template>
+    <ng-template uxgModalFooter>
+      <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+      <button type="button" uxgButton primary lg
+              (click)="onRejectPositions(comment.value); rejectPositionModal.close()">
+        Отправить
+      </button>
+    </ng-template>
   </ng-container>
 </uxg-modal>
 

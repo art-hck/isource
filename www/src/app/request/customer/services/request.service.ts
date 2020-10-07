@@ -166,4 +166,11 @@ export class RequestService {
     const url = `requests/customer/${requestId}/add-positions/from-excel`;
     return this.api.post(url, this.formDataService.toFormData({files}));
   }
+
+  createTemplate(requestId: Uuid, positions: string[], title: string, tag: string) {
+    const url = `requests/customer/profile/templates/create`;
+    return this.api.post(url, {
+      requestId, title, positions
+    });
+  }
 }

@@ -11,7 +11,6 @@
       (addGroup)="store.dispatch(refreshPositions(requestId))"
       (changeStatus)="store.dispatch([refreshPositions(requestId), refresh(requestId)])"
       (addResponsible)="store.dispatch(refreshPositions(requestId))"
-      (createTemplate)="store.dispatch(createTemplate($event.positions, $event.title, $event?.tag))"
       (uploadFromTemplate)="store.dispatch(uploadFromTemplate($event))"
     ></app-request>
   </ng-container>
