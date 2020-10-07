@@ -3,9 +3,7 @@ import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
-import { Procedure } from "../../../../request/back-office/models/procedure";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FormControl } from "@angular/forms";
 
@@ -17,8 +15,7 @@ import { FormControl } from "@angular/forms";
 })
 export class GridContragentsComponent implements AfterViewInit, OnChanges, AfterViewChecked {
   @ViewChild('gridRow') gridRow: ElementRef;
-  @ViewChild('gridCommonParams')
-  set gridCommonParameters(gridCommonParams) {
+  @ViewChild('gridCommonParams') set gridCommonParameters(gridCommonParams) {
     if (gridCommonParams) {
       this.openCommonParams.emit();
     }
@@ -26,10 +23,10 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
-  @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Input() showParams = false;
+  @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Output() editTechnicalCommercialProposal = new EventEmitter<TechnicalCommercialProposal>();
   @Output() selectProposalBySupplier = new EventEmitter<TechnicalCommercialProposal>();
   @Output() openCommonParams = new EventEmitter();

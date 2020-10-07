@@ -38,6 +38,7 @@ export class ContractState {
 
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static availibleFilters({ availibleFilters }: Model) { return availibleFilters; }
+  @Selector() static contractsLength({ contracts }: Model) { return contracts?.length; }
 
   static contracts(statuses?: Contract['status'][]) {
     return createSelector([ContractState], ({ contracts }: Model) => {
