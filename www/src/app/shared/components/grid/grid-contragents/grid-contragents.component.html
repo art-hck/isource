@@ -1,4 +1,4 @@
-<div class="contragents-row" [class.with-analogs]="!hasSupplierWithAnalogs(suppliers)">
+<div class="contragents-row" [class.with-analogs]="hasSupplierWithAnalogs(suppliers)">
 
   <div #gridRow class="app-row grid-row app-layout">
     <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
@@ -6,12 +6,12 @@
          *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
       <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
       </app-contragent-info-link>
-      <div class="app-ghost-color" *ngIf="!supplier.hasAnalogs">аналоги</div>
+      <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
       <ng-container *ngIf="showCommonParams">
         <app-grid-common-parameters #gridCommonParams
           [proposal]="getProposalBySupplier(supplier, proposals)"
           [proposalsByPos]="proposalsByPos"
-          [hasAnalogs]="!supplier.hasAnalogs"
+          [hasAnalogs]="supplier.hasAnalogs"
           (close)="showCommonParams = false"
           (openEditModal)="editTechnicalCommercialProposal.emit($event)"
           [showDocs]="showDocsControl.value"
