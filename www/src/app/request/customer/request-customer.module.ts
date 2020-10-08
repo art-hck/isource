@@ -25,7 +25,10 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
-
+import { ContractListComponent } from "./components/contract-list/contract-list.component";
+import { ContractState } from "./states/contract.state";
+import { ContractService } from "./services/contract.service";
+import { TechnicalCommercialProposalConfirmComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-confirm/technical-commercial-proposal-confirm.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { TechnicalCommercialProposalGroupViewComponent } from "./components/tech
     TechnicalCommercialProposalComponent,
     RequestListComponent,
     CommercialProposalListComponent,
-    TechnicalCommercialProposalGroupViewComponent
+    TechnicalCommercialProposalGroupViewComponent,
+    TechnicalCommercialProposalConfirmComponent,
+    ContractListComponent
   ],
   imports: [
     AgreementsModule,
@@ -53,13 +58,15 @@ import { TechnicalCommercialProposalGroupViewComponent } from "./components/tech
       RequestListState,
       TechnicalCommercialProposalState,
       TechnicalProposalState,
-      CommercialProposalState
+      CommercialProposalState,
+      ContractState
     ]),
   ],
   providers: [
     RequestService,
     TechnicalProposalsService,
-    TechnicalCommercialProposalService
+    TechnicalCommercialProposalService,
+    ContractService
   ]
 })
 export class RequestCustomerModule {

@@ -67,6 +67,8 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
   }
 
   setFormItems() {
+    this.formItems?.clear();
+
     this.items
       ?.filter(() => this.form)
       .forEach(item => {
@@ -84,7 +86,6 @@ export class SelectItemsWithSearchComponent implements ControlValueAccessor, OnC
 
           this.formItems.push(formItem);
         }
-
         if (this.disabledFn && this.disabledFn(item)) {
           formItem.disable();
         } else if (formItem.disabled) {

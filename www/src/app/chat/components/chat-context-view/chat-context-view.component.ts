@@ -56,6 +56,7 @@ export class ChatContextViewComponent implements OnInit, OnDestroy, AfterViewIni
 
   get unreadCountContext$(): Observable<number> {
     return this.item$.pipe(
+      filter(item => !!item),
       skipUntil(this.subItemsStatus$.pipe(filter(status => status === "received"))),
       withLatestFrom(this.subItems$),
       map(([{ context }, subItems]) => {

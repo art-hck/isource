@@ -12,6 +12,7 @@ export class Contract {
   customer: ContragentList;
   supplier: ContragentList;
   createdDate: string;
+  statusChangedDate: string;
   winners: Winner[];
   documents: RequestDocument[];
   status: ContractStatus;

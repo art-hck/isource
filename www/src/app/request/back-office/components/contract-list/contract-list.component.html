@@ -1,0 +1,74 @@
+<ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
+<ng-container *ngIf="(request$ | async) as request">
+
+  <!-- actions -->
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row app-align-items-center">
+        <div class="app-col"></div>
+        <!--button uxgButton secondary iconText class="app-detachable-button" (click)="null">
+          <uxg-icon shape="app-sort2"></uxg-icon>
+          <span>Фильтр</span>
+        </button-->
+
+        <button uxgButton primary iconText (click)="contractFormModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
+          <uxg-icon shape="app-plus"></uxg-icon>
+          <span>Добавить договор</span>
+        </button>
+      </div>
+    </div>
+    <div class="app-col-aside detachable"></div>
+  </div>
+
+  <br/>
+
+  <!-- list -->
+  <div class="app-row">
+    <div class="app-col">
+      <app-contract-list-item
+        *ngFor="let contract of contracts$ | async"
+        [contract]="contract"
+        [status]="status$ | async"
+        [rollbackDate]="contract.statusChangedDate"
+        [rollbackDuration]="600"
+        (send)="store.dispatch(send(contract, $event.files, $event.comment))"
+        (download)="store.dispatch(download(contract))"
+        (sign)="store.dispatch(sign(contract))"
+        (rollback)="store.dispatch(rollback(contract))"
+        (delete)="store.dispatch(delete(contract))"
+      ></app-contract-list-item>
+
+      <!-- empty -->
+      <div *ngIf="(contracts$ | async).length === 0">
+        <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-waiting-big" size="270"></uxg-icon><br/><br/>Пока еще не создано ни одного договора</h1>
+      </div>
+    </div>
+
+    <div class="app-col-aside detachable"></div>
+  </div>
+
+    <uxg-modal #contractFormModal size="l">
+      <ng-container *ngIf="contractFormModal.state">
+        <h2 class="modal-title"><b>Добавить новый договор</b></h2>
+        <app-contract-form [request]="request" [suppliers]="suppliers$ | async" (close)="contractFormModal.close()">
+        </app-contract-form>
+      </ng-container>
+    </uxg-modal>
+</ng-container>
+</ng-container>
+
+<ng-template #placeholder>
+  <div class="app-row">
+    <div class="app-col">
+      <div class="app-row">
+        <div class="app-col app-row">
+          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40" [style.width.px]="200"></div>
+        </div>
+        <div class="placeholder-row" [style.height.px]="40" [style.width.px]="80"></div>
+      </div>
+
+      <div class="placeholder" *ngFor="let i of [].constructor(10)" [style.height.px]="160"></div>
+    </div>
+    <div class="app-col-aside detachable"></div>
+  </div>
+</ng-template>

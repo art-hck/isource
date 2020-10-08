@@ -17,9 +17,9 @@ export class ContractService {
   constructor(protected api: HttpClient) {
   }
 
-  create(request: Request, contragentId: Uuid, positions: RequestPosition[]): Observable<Contract> {
-    const url = `requests/${request.id}/contracts/create`;
-    const body: ContractCreate = {
+  create(requestId: Uuid, contragentId: Uuid, positions: RequestPosition[]): Observable<Contract> {
+    const url = `requests/${requestId}/contracts/create`;
+    const body = {
       supplierId: contragentId,
       positions: positions.map(position => position.id)
     };
