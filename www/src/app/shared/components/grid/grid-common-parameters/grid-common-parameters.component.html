@@ -3,12 +3,12 @@
     <div class="app-success-color" *ngIf="helper.isPositionsValid(proposalsByPos, proposal); else positionsInvalid">
       <b>Предложены все позиции</b>
     </div>
-    <ng-template #positionsInvalid><div class="app-error-color">Предложены не все позиции</div></ng-template>
+    <ng-template #positionsInvalid><div class="app-error-color"><b>Предложены не все позиции</b></div></ng-template>
 
     <div class="app-success-color" *ngIf="helper.isQuantityPositionsValid(proposalsByPos, proposal); else quantityInvalid">
       <b>Все позиции в нужном количестве</b>
     </div>
-    <ng-template #quantityInvalid><div class="app-error-color">Не все поз-ии в нужном количестве</div></ng-template>
+    <ng-template #quantityInvalid><div class="app-error-color"><b>Не все поз-ии в нужном количестве</b></div></ng-template>
 
     <div class="app-success-color" *ngIf="helper.isDatePositionsValid(proposalsByPos, proposal); else dateInvalid">
       <b>Сроки укладываются в заданные</b>

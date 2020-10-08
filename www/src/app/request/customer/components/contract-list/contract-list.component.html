@@ -56,7 +56,7 @@
 
     <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contractsLength$ | async" [dirty]="form.dirty">
       <app-filter-section label="Наименование позиции">
-        <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или её часть" />
+        <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </app-filter-section>
       <app-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
         <app-filter-checkbox-list
