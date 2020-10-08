@@ -1,4 +1,4 @@
-<div class="contragents-row">
+<div class="contragents-row" [class.with-analogs]="hasSupplierWithAnalogs(suppliers)">
   <div #gridRow class="app-row grid-row app-layout">
     <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
     <div class="app-col grid-cell app-ellipsis app-row app-flex-column app-flex-nowrap"

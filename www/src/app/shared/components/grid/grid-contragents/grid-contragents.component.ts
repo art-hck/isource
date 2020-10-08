@@ -82,5 +82,9 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
     this.cd.detectChanges();
   }
 
+  hasSupplierWithAnalogs(suppliers): boolean {
+    return suppliers.some(supplier => supplier.hasAnalogs);
+  }
+
   getProposalBySupplier = ({ id }: ContragentShortInfo, proposals: TechnicalCommercialProposal[]) => proposals.find(({supplier}) => supplier.id === id);
 }

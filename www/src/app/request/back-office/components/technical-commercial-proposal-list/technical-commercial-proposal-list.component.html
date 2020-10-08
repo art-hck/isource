@@ -152,13 +152,18 @@
                       <label (click)="checked.check($event)"><b>{{proposalsByPos.position.name}}</b></label>
 
                       <div class="app-secondary-color">
-                        <span>{{proposalsByPos.position.quantity}}</span>
+                        <span>{{proposalsByPos.position.quantity}} </span>
                         <span class="app-ghost-color">{{proposalsByPos.position.measureUnit}}</span>
                         <span class="app-ghost-color"> | </span>
-                        <span
-                          *ngIf="proposalsByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
+                        <ng-container *ngIf="proposalsByPos.position.startPrice">
+                          <span class="app-ghost-color">{{proposalsByPos.position.startPrice | number:'1.0-2'}} </span>
+                          <span class="app-ghost-color">{{getCurrencySymbol(proposalsByPos.position.currency, "narrow")}}/{{proposalsByPos.position.measureUnit}}</span>
+                          <span class="app-ghost-color"> | </span>
+                        </ng-container>
+                        <span *ngIf="proposalsByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
                         <ng-template #deliveryDate>
-                          <span>{{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
+                          <span>{{proposalsByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span>
+                        </ng-template>
                       </div>
                       <div class="app-col"></div>
                       <div class="app-success-color app-bold" *ngIf="isReviewed(proposalsByPos)">

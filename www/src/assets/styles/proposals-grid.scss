@@ -148,12 +148,13 @@
       width: 1px;
       height: 40px;
       display: block;
-      background: uxg($theme, color-font-ghost);
+      background: uxg($theme, color-divider);
       margin-left: 25px;
     }
 
     & .selected-counter {
       padding: 0 20px 0 25px;
+      text-align: right;
     }
   }
 
