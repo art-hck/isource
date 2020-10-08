@@ -9,6 +9,10 @@ hr { margin: 14px 0; }
   padding: 8px 0;
 
   .app-col {
+    & .app-icon {
+      vertical-align: sub;
+    }
+
     &:first-child { padding-left: 0; }
     &:last-child { padding-right: 0; }
   }

@@ -7,6 +7,8 @@ export class TechnicalCommercialProposalGroup {
   requestId: Uuid;
   name: string;
   createdDate: string;
+  status: string;
+  statusLabel: string;
   requestPositions: {
     id: Uuid,
     name: string,
