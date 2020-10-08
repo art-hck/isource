@@ -16,7 +16,7 @@ export class TechnicalCommercialProposal {
   createdDate: string;
   status: TechnicalCommercialProposalStatus;
   statusLabel: TechnicalCommercialProposalStatusLabel;
-  deliveryType: string;
+  deliveryType: 'INCLUDED' | 'NOT_INCLUDED' | 'PICKUP';
   deliveryAdditionalTerms: string;
   warrantyConditions: string;
   deliveryPrice: number;

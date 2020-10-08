@@ -1,42 +1,56 @@
 <div class="contragents-row">
+  <div #gridRow class="app-row grid-row app-layout">
+    <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
+    <div class="app-col grid-cell app-ellipsis app-row app-flex-column app-flex-nowrap"
+         *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
+      <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
+      </app-contragent-info-link>
+      <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
+    </div>
+  </div>
+  <button class="left" *ngIf="canScrollLeft" uxgButton secondary icon (click)="scrollLeft()">
+    <uxg-icon shape="app-chevron" dir="left"></uxg-icon>
+  </button>
+  <button class="right" *ngIf="canScrollRight" uxgButton secondary icon (click)="scrollRight()">
+    <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
+  </button>
+</div>
 
+<div class="contragents-common-params">
+  <div class="contragents-scroll" *ngIf="showCommonParams">
     <div #gridRow class="app-row grid-row app-layout">
-      <div *ngIf="positionCell" class="app-col grid-cell app-bold">Наименование позиции</div>
-      <div class="app-col grid-cell app-ellipsis"
-           *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
-        <app-contragent-info-link class="app-bold" hiddenName="Поставщик №{{i + 1}}" [contragent]="supplier">
-        </app-contragent-info-link>
-        <div class="app-ghost-color" *ngIf="supplier.hasAnalogs">аналоги</div>
-        <ng-container *ngIf="showCommonParams">
-          <app-grid-common-parameters #gridCommonParams
+      <div *ngIf="positionCell" class="app-col grid-cell app-bold"></div>
+      <ng-container *ngFor="let supplier of suppliers; index as i; trackBy: trackBySupplierId">
+        <div class="app-col grid-cell app-ellipsis app-row app-flex-column app-flex-nowrap">
+          <app-grid-common-parameters
+            #gridCommonParams
+            class="app-col"
             [proposal]="getProposalBySupplier(supplier, proposals)"
             [proposalsByPos]="proposalsByPos"
             [hasAnalogs]="supplier.hasAnalogs"
             (close)="showCommonParams = false"
             (openEditModal)="editTechnicalCommercialProposal.emit($event)"
             [showDocs]="showDocsControl.value"
-            (selectAll)="selectProposalBySupplier.emit($event)"></app-grid-common-parameters>
-        </ng-container>
-      </div>
-    </div>
-  <div class="app-row show-docs" *ngIf="showCommonParams">
-    <uxg-switcher label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl"></uxg-switcher>
-  </div>
-    <!-- Временно скрыто в матрице КП-->
-    <ng-container *ngIf="showParams && suppliers.length">
-      <ng-container *ngIf="showCommonParams === false; else close">
-        <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
+            (selectAll)="selectProposalBySupplier.emit($event)"
+          ></app-grid-common-parameters>
+          <div class="common-footer">
+            <uxg-switcher *ngIf="showCommonParams && i === 0" label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl">
+            </uxg-switcher>
+          </div>
+        </div>
       </ng-container>
-      <ng-template #close>
-        <button uxgButton icon primary class="common-params" (click)="showCommonParams = false">
-          <uxg-icon shape="app-cross"></uxg-icon>
-        </button>
-      </ng-template>
-    </ng-container>
-    <button class="left" *ngIf="canScrollLeft" uxgButton secondary icon (click)="scrollLeft()">
-      <uxg-icon shape="app-chevron" dir="left"></uxg-icon>
-    </button>
-    <button class="right" *ngIf="canScrollRight" uxgButton secondary icon (click)="scrollRight()">
-      <uxg-icon shape="app-chevron" dir="right"></uxg-icon>
-    </button>
+    </div>
   </div>
+
+  <!-- Временно скрыто в матрице КП-->
+  <ng-container *ngIf="showParams && suppliers.length">
+    <ng-container *ngIf="showCommonParams === false; else close">
+      <button uxgButton primary class="common-params" (click)="showCommonParams = true">Общие параметры</button>
+    </ng-container>
+    <ng-template #close>
+      <button uxgButton icon primary class="common-params" (click)="showCommonParams = false">
+        <uxg-icon shape="app-cross"></uxg-icon>
+      </button>
+    </ng-template>
+  </ng-container>
+</div>

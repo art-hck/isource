@@ -81,6 +81,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly destroy$ = new Subject();
   isLoading: boolean;
+  stickedPosition: boolean;
   requestId: Uuid;
   groupId: Uuid;
   gridRows: ElementRef[];

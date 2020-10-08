@@ -109,7 +109,7 @@
             [proposals]="proposals"
             [proposalsByPos]="proposalsByPositions$ | async"
             [showParams]="true"
-            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
+            (openCommonParams)="gridTable.scrollIntoView()"
             (editTechnicalCommercialProposal)="addContragentModal.open(); editingTCP = $event"
             (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>

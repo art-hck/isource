@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
@@ -14,7 +14,7 @@ import { FormControl } from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridContragentsComponent implements AfterViewInit, OnChanges, AfterViewChecked {
-  @ViewChild('gridRow') gridRow: ElementRef;
+  @ViewChildren('gridRow') gridRow: QueryList<ElementRef>;
   @ViewChild('gridCommonParams') set gridCommonParameters(gridCommonParams) {
     if (gridCommonParams) {
       this.openCommonParams.emit();
@@ -61,18 +61,18 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
 
   @HostListener('document:keydown.arrowLeft')
   scrollLeft() {
-    [...this.gridRows, this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft -= el.scrollLeft % 300 || 300);
+    [...this.gridRows, ...this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft -= el.scrollLeft % 300 || 300);
     timer(350).subscribe(() => this.updateScroll());
   }
 
   @HostListener('document:keydown.arrowRight')
   scrollRight() {
-    [...this.gridRows, this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft += 300);
+    [...this.gridRows, ...this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft += 300);
     timer(350).subscribe(() => this.updateScroll());
   }
 
   updateScroll() {
-    const { scrollLeft, offsetWidth, scrollWidth } = this.gridRow?.nativeElement ?? {};
+    const { scrollLeft, offsetWidth, scrollWidth } = this.gridRow.first?.nativeElement ?? {};
     this.canScrollLeft = scrollLeft > 0;
     this.canScrollRight = (scrollLeft === 0 || scrollLeft < scrollWidth - offsetWidth) && scrollWidth > offsetWidth;
     this.scrollUpdated.emit({

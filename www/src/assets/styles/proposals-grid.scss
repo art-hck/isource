@@ -23,6 +23,7 @@
       &-sticky {
         position: sticky;
         left: 0;
+        z-index: 2;
 
         &-bg {
           background: uxg($theme, color-bg);
@@ -113,6 +114,7 @@
         margin-top: -23px;
         border-right: 1px #BEDAFC solid;
         box-sizing: content-box;
+        z-index: 2;
       }
 
       &:not(:last-child):before {
@@ -130,6 +132,7 @@
   position: sticky;
   bottom: 0;
   margin-bottom: -50px;
+  z-index: 3;
 
   &-body {
     background: #fff;
