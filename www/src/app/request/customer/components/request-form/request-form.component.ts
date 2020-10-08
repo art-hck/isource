@@ -61,9 +61,9 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     if (!this.isRecommended) {
       const {positions} = this.form.value;
       this.requestService.getRecommendedPositions(positions).subscribe(
-        (positions) => {
-          if (positions.length !== 0) {
-            this.recommendedPositions = positions.map(item => {
+        (reqPositions) => {
+          if (reqPositions.length !== 0) {
+            this.recommendedPositions = reqPositions.map(item => {
                 return {
                   name: item.name,
                   measureUnit: item.unit,
@@ -71,7 +71,7 @@ export class RequestFormComponent implements OnInit, OnDestroy {
                   deliveryDate: item.deliveryDate,
                   isDeliveryDateAsap: item.isDeliveryDateAsap,
                   deliveryBasis: item.deliveryBasis
-                } as Partial<RequestPosition>
+                } as Partial<RequestPosition>;
               }
             );
             this.isLoading = false;
@@ -88,7 +88,10 @@ export class RequestFormComponent implements OnInit, OnDestroy {
   }
 
   addRecommendedPositions() {
-    this.recommendedPositionsControl.value.forEach(recommendedPosition => {this.formPositions.push(this.formBuilder.control(recommendedPosition))});
+    this.recommendedPositionsControl.value.forEach(
+      recommendedPosition => {this.formPositions.push(
+        this.formBuilder.control(recommendedPosition));
+      });
     this.recommendationModal.close();
   }
 

@@ -44,7 +44,7 @@ export interface GpnmarketConfigInterface {
   };
   profile: {
     url: string
-  }
+  };
   instructions: {
     forCustomer: string,
     forBackoffice: string
