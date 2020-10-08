@@ -56,7 +56,7 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   }
   readonly getOkeiName = ({ name }) => name;
   readonly getOkpd2Name = ({ name }) => name;
-  searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 || item.code === query).slice(0, 20);
+  searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
