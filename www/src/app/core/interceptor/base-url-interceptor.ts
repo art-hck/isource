@@ -24,6 +24,13 @@ export class BaseUrlInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    if (req.url.indexOf('#profile#') === 0) {
+      req = req.clone({
+        url: req.url.replace("#profile#", this.appConfig.profile.url)
+      });
+      return next.handle(req);
+    }
+
     if (req.url.indexOf('http') === 0 || req.url.indexOf('https') === 0 ) {
       return next.handle(req);
     }

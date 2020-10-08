@@ -42,6 +42,9 @@ export interface GpnmarketConfigInterface {
   priceOrder: {
     url: string
   };
+  profile: {
+    url: string
+  }
   instructions: {
     forCustomer: string,
     forBackoffice: string

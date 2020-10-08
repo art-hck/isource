@@ -81,25 +81,25 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   ngOnInit() {
     const p = this.position;
     const form = this.formBuilder.group({
-      name: [p.name, Validators.required],
-      comments: [p.comments],
-      currency: [p.currency, Validators.required],
-      deliveryBasis: [p.deliveryBasis, Validators.required],
-      deliveryDate: [this.datePipe.transform(p.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
-      isDeliveryDateAsap: [p.isDeliveryDateAsap],
-      isDesignRequired: [p.isDesignRequired],
-      isInspectionControlRequired: [p.isInspectionControlRequired || false],
-      isPnrRequired: [p.isPnrRequired || false],
-      isShmrRequired: [p.isShmrRequired || false],
-      measureUnit: [p.measureUnit, Validators.required],
-      paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
-      productionDocument: [p.productionDocument, Validators.required],
-      quantity: [p.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
-      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      name: [p?.name, Validators.required],
+      comments: [p?.comments],
+      currency: [p?.currency, Validators.required],
+      deliveryBasis: [p?.deliveryBasis, Validators.required],
+      deliveryDate: [this.datePipe.transform(p?.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
+      isDeliveryDateAsap: [p?.isDeliveryDateAsap],
+      isDesignRequired: [p?.isDesignRequired],
+      isInspectionControlRequired: [p?.isInspectionControlRequired || false],
+      isPnrRequired: [p?.isPnrRequired || false],
+      isShmrRequired: [p?.isShmrRequired || false],
+      measureUnit: [p?.measureUnit, Validators.required],
+      paymentTerms: [p?.paymentTerms || '30 дней по факту поставки', Validators.required],
+      productionDocument: [p?.productionDocument, Validators.required],
+      quantity: [p?.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
+      startPrice: [p?.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
       documents: [[]]
     });
 
-    if (this.position.id) {
+    if (this.position?.id) {
       Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
     }
 
