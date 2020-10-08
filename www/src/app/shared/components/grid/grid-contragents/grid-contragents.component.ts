@@ -1,11 +1,9 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { timer } from "rxjs";
 import { GridSupplier } from "../grid-supplier";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
-import { Procedure } from "../../../../request/back-office/models/procedure";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FormControl } from "@angular/forms";
 
@@ -16,9 +14,8 @@ import { FormControl } from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridContragentsComponent implements AfterViewInit, OnChanges, AfterViewChecked {
-  @ViewChild('gridRow') gridRow: ElementRef;
-  @ViewChild('gridCommonParams')
-  set gridCommonParameters(gridCommonParams) {
+  @ViewChildren('gridRow') gridRow: QueryList<ElementRef>;
+  @ViewChild('gridCommonParams') set gridCommonParameters(gridCommonParams) {
     if (gridCommonParams) {
       this.openCommonParams.emit();
     }
@@ -26,10 +23,10 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
-  @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Input() proposals: TechnicalCommercialProposal[];
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
   @Input() showParams = false;
+  @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();
   @Output() editTechnicalCommercialProposal = new EventEmitter<TechnicalCommercialProposal>();
   @Output() selectProposalBySupplier = new EventEmitter<TechnicalCommercialProposal>();
   @Output() openCommonParams = new EventEmitter();
@@ -64,18 +61,18 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
 
   @HostListener('document:keydown.arrowLeft')
   scrollLeft() {
-    [...this.gridRows, this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft -= el.scrollLeft % 300 || 300);
+    [...this.gridRows, ...this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft -= el.scrollLeft % 300 || 300);
     timer(350).subscribe(() => this.updateScroll());
   }
 
   @HostListener('document:keydown.arrowRight')
   scrollRight() {
-    [...this.gridRows, this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft += 300);
+    [...this.gridRows, ...this.gridRow].forEach(({ nativeElement: el }) => el.scrollLeft += 300);
     timer(350).subscribe(() => this.updateScroll());
   }
 
   updateScroll() {
-    const { scrollLeft, offsetWidth, scrollWidth } = this.gridRow?.nativeElement ?? {};
+    const { scrollLeft, offsetWidth, scrollWidth } = this.gridRow.first?.nativeElement ?? {};
     this.canScrollLeft = scrollLeft > 0;
     this.canScrollRight = (scrollLeft === 0 || scrollLeft < scrollWidth - offsetWidth) && scrollWidth > offsetWidth;
     this.scrollUpdated.emit({

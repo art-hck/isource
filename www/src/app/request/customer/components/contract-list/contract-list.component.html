@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contracts.length" [dirty]="form.dirty">
+    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contractsLength$ | async" [dirty]="form.dirty">
       <app-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </app-filter-section>

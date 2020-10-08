@@ -74,6 +74,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   requestId: Uuid;
   groupId: Uuid;
   showForm: boolean;
+  stickedPosition: boolean;
   files: File[] = [];
   view: ProposalsView = "grid";
   addProposalPositionPayload: {

@@ -1,28 +1,41 @@
 @import "src/theme";
 
-.contragents-row {
-  background: linear-gradient(to bottom, white 68px, rgb(0 0 0 / 10%) 68px, rgb(0 0 0 / 10%) 69px, uxg($theme, color-bg) 0px);
+.contragents-common-params {
+  position: sticky;
+  top: 65px;
+  background: uxg($theme, color-bg);
+  z-index: 3;
 
-  &.with-analogs {
-    background: linear-gradient(to bottom, white 82px, rgba(0, 0, 0, 10%) 82px, rgba(0, 0, 0, 10%) 83px, uxg($theme, color-bg) 0px);
-
-    & app-grid-common-parameters {
-      padding-top: 14px;
-      display: block;
-    }
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
   }
-}
 
-.common-params {
-  position: absolute;
-  margin-top: 23px;
-  right: 23px;
-  &.app-btn {
+  .app-btn.common-params {
+    position: absolute;
+    bottom: -32px;
+    right: 20px;
     border-radius: 0 0 uxg($theme, control-border-radius) uxg($theme, control-border-radius);
+    z-index: 1;
   }
 }
 
-.show-docs {
-  padding-left: 360px;
-  overflow: initial;
+.contragents-scroll {
+  @include scrollbar($theme);
+  overflow-y: auto;
+  max-height: calc(100vh - 180px);
+  & > .app-row {
+    min-height: 470px;
+  }
+}
+
+.common-footer {
+  height: 1.5em;
+  padding: 20px 0;
+  box-sizing: content-box;
 }
