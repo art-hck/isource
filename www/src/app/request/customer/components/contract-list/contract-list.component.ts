@@ -51,8 +51,8 @@ export class ContractListComponent implements OnInit, OnDestroy {
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly download = (contract: Contract) => new Download(contract);
-  readonly reject = (contract: Contract, files: File[], comment?: string) => new Reject(contract, files, comment);
-  readonly approve = (contract: Contract) => new Approve(contract);
+  readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
+  readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
 
   constructor(
     public store: Store,

@@ -31,9 +31,9 @@
         [status]="status$ | async"
         [rollbackDate]="contract.statusChangedDate"
         [rollbackDuration]="600"
-        (send)="store.dispatch(send(contract, $event.files, $event.comment))"
+        (send)="store.dispatch(send(request, contract, $event.files, $event.comment))"
         (download)="store.dispatch(download(contract))"
-        (sign)="store.dispatch(sign(contract))"
+        (sign)="store.dispatch(sign(request, contract))"
         (rollback)="rollbackContract = contract"
         (delete)="deleteContract = contract"
       ></app-contract-list-item>
@@ -85,7 +85,7 @@
       <div class="app-section">Ваш последний комментарий и приложенный файл при отзыве будут удалены, вам потребуется прикрепить файл снова и написать новый комментарий.</div>
       <ng-template uxgModalFooter>
         <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
-        <button uxgButton primary lg (click)="store.dispatch(rollback(rollbackContract)); rollbackContract = null">Продолжить</button>
+        <button uxgButton primary lg (click)="store.dispatch(rollback(request, rollbackContract)); rollbackContract = null">Продолжить</button>
       </ng-template>
     </uxg-modal>
 </ng-container>
