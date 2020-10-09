@@ -168,6 +168,13 @@ export class RequestService {
     return this.api.post(url, this.formDataService.toFormData({files}));
   }
 
+  createTemplate(requestId: Uuid, positions: string[], title: string, tag: string) {
+    const url = `requests/customer/profile/templates/create`;
+    return this.api.post(url, {
+      requestId, title, positions
+    });
+  }
+
   getRecommendedPositions(positions: RequestPosition[]) {
     const url = `#profile#request-templates/recommended`;
     return this.api.post<RecommendedPositions[]>(url, {

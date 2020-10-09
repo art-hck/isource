@@ -76,7 +76,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     keepCharPositions: true
   };
   readonly getOkpd2Name = (okpd2: Okpd2Item) => okpd2.code ? okpd2.code + ' ' + okpd2.name : '';
-  readonly searchOkpd2 = (query, items: Okpd2Item[]) => items.filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 || item.code === query).slice(0, 20);
+  readonly searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
   get documents() {
     const positions = this.form.get("positions").value as RequestPosition[];
