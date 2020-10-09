@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../../user/service/user-info.service";
@@ -8,15 +8,22 @@ import { RequestService } from "../../services/request.service";
 import { Subject } from "rxjs";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { RequestPosition } from "../../../common/models/request-position";
+import { UxgModalComponent } from "uxg";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   templateUrl: './request-form.component.html',
   styleUrls: ['./request-form.component.scss']
 })
 export class RequestFormComponent implements OnInit, OnDestroy {
+  @ViewChild('recommendationModal') recommendationModal: UxgModalComponent;
   form: FormGroup;
+  recommendedPositionsControl = this.formBuilder.control([]);
   destroy$ = new Subject();
   isLoading = false;
+  recommendedPositions: Partial<RequestPosition>[];
+  isRecommended = false;
 
   get formPositions() {
     return this.form.get('positions') as FormArray;
@@ -31,19 +38,62 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     public user: UserInfoService,
-    public store: Store
-  ) {}
+    public store: Store,
+    public featureService: FeatureService
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       'name': [null, CustomValidators.requiredNotEmpty],
-      'positions': this.formBuilder.array([], [Validators.required, Validators.minLength(1)])
+      'positions': this.formBuilder.array([], [Validators.required, Validators.minLength(1)]),
     });
+
     this.pushPosition();
   }
 
   pushPosition() {
     this.formPositions.push(this.formBuilder.control(null, Validators.required));
+  }
+
+  getRecommendedPositions() {
+    this.isLoading = true;
+    if (!this.isRecommended) {
+      const {positions} = this.form.value;
+      this.requestService.getRecommendedPositions(positions).subscribe(
+        (reсPositions) => {
+          if (reсPositions.length !== 0) {
+            this.recommendedPositions = reсPositions.map(item => {
+                return {
+                  name: item.name,
+                  measureUnit: item.unit,
+                  quantity: item.quantity,
+                  deliveryDate: item.deliveryDate,
+                  isDeliveryDateAsap: item.isDeliveryDateAsap,
+                  deliveryBasis: item.deliveryBasis
+                } as Partial<RequestPosition>;
+              }
+            );
+            this.isLoading = false;
+            this.recommendationModal.open();
+            this.isRecommended = true;
+          } else {
+            this.submit();
+          }
+        }
+      );
+    } else {
+      this.submit();
+    }
+  }
+
+  addRecommendedPositions() {
+    this.recommendedPositionsControl.value.forEach(
+      recommendedPosition => {
+        this.formPositions.push(
+          this.formBuilder.control(recommendedPosition));
+      });
+    this.recommendationModal.close();
   }
 
   submit(publish = true) {

@@ -63,3 +63,9 @@
     }
   }
 }
+
+@media (min-width: col(5)) {
+  .app-detachable-button {
+    display: none;
+  }
+}

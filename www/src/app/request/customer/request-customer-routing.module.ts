@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { CommercialProposalListOldComponent } from "./components/commercial-proposal-list-old/commercial-proposal-list-old.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
 import { TechnicalProposalListDeprecatedComponent } from "./components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component";
-import { ContractListComponent as DeprecatedContractListComponent } from "../common/components/contract-list/contract-list.component";
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
@@ -56,16 +55,6 @@ const routes: Routes = [
       {
         path: 'contracts',
         component: ContractListComponent,
-        data: { title: "На рассмотрении договора" }
-      },
-      {
-        path: 'contracts-old',
-        component: DeprecatedContractListComponent,
-        data: { title: "На рассмотрении договора" }
-      },
-      {
-        path: 'contract',
-        component: DeprecatedContractListComponent,
         data: { title: "Согласование договора" }
       },
       {

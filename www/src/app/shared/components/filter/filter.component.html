@@ -1,0 +1,24 @@
+<h2 class="app-row app-align-items-center">
+  <span class="app-col">Фильтр</span>
+
+  <button uxgButton clear (click)="reset.emit()" *ngIf="dirty">
+    <uxg-icon shape="app-reset-filters"></uxg-icon>
+    <span>Сбросить все</span>
+  </button>
+</h2>
+
+<ng-content></ng-content>
+
+<div class="app-col"></div>
+
+<div class="app-row" *ngIf="isOpen">
+  <button uxgButton primary strength lg class="app-col" [disabled]="count === 0" (click)="close(); submit.emit()">
+    Показать <span [style.opacity]="0.6">{{ count > 0 ? count : null }}</span>
+  </button>
+</div>
+
+<div class="app-filter-backdrop" (click)="close()">
+  <div class="close">
+    <uxg-icon shape="app-cross"></uxg-icon>
+  </div>
+</div>

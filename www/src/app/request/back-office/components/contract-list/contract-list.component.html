@@ -6,10 +6,10 @@
     <div class="app-col">
       <div class="app-row app-align-items-center">
         <div class="app-col"></div>
-        <!--button uxgButton secondary iconText class="app-detachable-button" (click)="null">
+        <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
           <uxg-icon shape="app-sort2"></uxg-icon>
           <span>Фильтр</span>
-        </button-->
+        </button>
 
         <button uxgButton primary iconText (click)="contractFormModal.open()" [disabled]="(suppliers$ | async)?.length === 0">
           <uxg-icon shape="app-plus"></uxg-icon>
@@ -34,17 +34,35 @@
         (send)="store.dispatch(send(contract, $event.files, $event.comment))"
         (download)="store.dispatch(download(contract))"
         (sign)="store.dispatch(sign(contract))"
-        (rollback)="store.dispatch(rollback(contract))"
-        (delete)="store.dispatch(delete(contract))"
+        (rollback)="rollbackContract = contract"
+        (delete)="deleteContract = contract"
       ></app-contract-list-item>
 
       <!-- empty -->
-      <div *ngIf="(contracts$ | async).length === 0">
+      <div *ngIf="(contracts$ | async).length === 0 && form.pristine">
         <h1 class="text-center" [style.opacity]="0.1"><br/><uxg-icon shape="app-waiting-big" size="270"></uxg-icon><br/><br/>Пока еще не создано ни одного договора</h1>
       </div>
     </div>
 
-    <div class="app-col-aside detachable"></div>
+    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="(contracts$ | async).length" [dirty]="form.dirty">
+      <app-filter-section label="Наименование позиции">
+        <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
+      </app-filter-section>
+      <app-filter-section label="Контрагент" [disabled]="form.get('suppliers').disabled">
+        <app-filter-checkbox-list
+          formControlName="suppliers"
+          searchPlaceholder="Наименование контрагента или ИНН"
+          [foldedSearch]="true"
+          [items$]="contractSuppliersItems$"
+          [limit]="5"
+          (search)="contractSuppliersSearch$.next($event)">
+        </app-filter-checkbox-list>
+      </app-filter-section>
+
+      <app-filter-section label="Согласование" [disabled]="form.get('statuses').disabled">
+        <app-filter-checkbox-list formControlName="statuses" [items$]="contractStatusesItems$"></app-filter-checkbox-list>
+      </app-filter-section>
+    </app-filter>
   </div>
 
     <uxg-modal #contractFormModal size="l">
@@ -53,6 +71,22 @@
         <app-contract-form [request]="request" [suppliers]="suppliers$ | async" (close)="contractFormModal.close()">
         </app-contract-form>
       </ng-container>
+    </uxg-modal>
+    <uxg-modal [(state)]="deleteContract" size="s">
+      <h2 class="modal-title"><b>Подтвердите удаление</b></h2>
+      <div class="app-section">Все данные по уже созданному договору c <b>{{deleteContract?.supplier?.shortName}}</b> будут удалены.</div>
+      <ng-template uxgModalFooter>
+        <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+        <button uxgButton primary lg (click)="store.dispatch(delete(request, deleteContract)); deleteContract = null">Удалить</button>
+      </ng-template>
+    </uxg-modal>
+    <uxg-modal [(state)]="rollbackContract" size="s">
+      <h2 class="modal-title"><b>Обратите внимание!</b></h2>
+      <div class="app-section">Ваш последний комментарий и приложенный файл при отзыве будут удалены, вам потребуется прикрепить файл снова и написать новый комментарий.</div>
+      <ng-template uxgModalFooter>
+        <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
+        <button uxgButton primary lg (click)="store.dispatch(rollback(rollbackContract)); rollbackContract = null">Продолжить</button>
+      </ng-template>
     </uxg-modal>
 </ng-container>
 </ng-container>

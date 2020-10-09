@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
 
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
-import { ContractListComponent as DeprecatedContractListComponent } from "../common/components/contract-list/contract-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
@@ -39,11 +38,6 @@ const routes: Routes = [
       {
         path: 'contracts',
         component: ContractListComponent,
-        data: { title: "Согласование договора" }
-      },
-      {
-        path: 'contracts-old',
-        component: DeprecatedContractListComponent,
         data: { title: "Согласование договора" }
       },
       {

@@ -87,7 +87,7 @@
   </div>
 
   <ng-container *ngIf="userInfoService.isCustomer()">
-    <button uxgButton secondary (click)="selectAll.emit(proposal); close.emit()">
+    <button uxgButton outline (click)="selectAll.emit(proposal); close.emit()">
             Выбрать все
           </button>
   </ng-container>

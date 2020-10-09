@@ -12,6 +12,7 @@ import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
+import { RecommendedPositions } from "../models/recommended-positions";
 
 @Injectable({
   providedIn: "root"
@@ -171,6 +172,13 @@ export class RequestService {
     const url = `requests/customer/profile/templates/create`;
     return this.api.post(url, {
       requestId, title, positions
+    });
+  }
+
+  getRecommendedPositions(positions: RequestPosition[]) {
+    const url = `#profile#request-templates/recommended`;
+    return this.api.post<RecommendedPositions[]>(url, {
+      commodities: positions
     });
   }
 }

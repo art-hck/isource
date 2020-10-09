@@ -31,6 +31,7 @@ $font_size_basic: 14px;
 @include core($theme);
 @import "assets/styles/grid";
 @import "assets/styles/proposals-grid";
+@import "assets/styles/filter";
 @import "assets/styles/statuses";
 
 body,

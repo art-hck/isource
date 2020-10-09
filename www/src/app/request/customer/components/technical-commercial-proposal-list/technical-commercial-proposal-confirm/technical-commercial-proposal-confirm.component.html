@@ -36,7 +36,7 @@
 
 <div class="app-table app-no-border scroll-area">
   <ng-container *ngFor="let proposalPositionsBlock of approvalModalData.selectedProposals; let i = index">
-    <div class="supplier-block" [hidden]="allPositionsFiltered(proposalPositionsBlock)">
+    <div class="supplier-block" [hidden]="allPositionsToApproveFiltered(proposalPositionsBlock)">
       <div class="app-row app-justify-content-between short-name">
         <div class="app-col app-col-auto">
           <h3>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (+i + 1) }}</h3>
@@ -82,25 +82,37 @@
             </div>
           </ng-container>
         </div>
-
-        <div class="to-send-to-edit">
-          <ng-container *ngFor="let toSendToEditProposalPosition of proposalPositionsBlock.toSendToEdit">
-            <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
-              <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
-
-              <div class="app-col select-list-item-supplier-name">
-                <span class="app-ghost-color">На доработку</span>
-              </div>
-
-              <div class="app-col app-col-auto app-warning-color select-list-item-icon">
-                <uxg-icon shape="app-warning"></uxg-icon>
-              </div>
-            </div>
-          </ng-container>
-        </div>
       </div>
     </div>
   </ng-container>
+
+
+  <div class="to-send-to-edit-block" [hidden]="allPositionsToSendToEditFiltered(getSelectedToSendToEditPositions(approvalModalData.selectedProposals))">
+    <div class="app-row app-justify-content-between short-name">
+      <div class="app-col app-col-auto">
+        <h3>На доработку</h3>
+      </div>
+    </div>
+
+    <div class="positions-list">
+      <div class="to-send-to-edit">
+        <ng-container *ngFor="let toSendToEditProposalPosition of getSelectedToSendToEditPositions(approvalModalData.selectedProposals); let i = index">
+          <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
+            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
+
+            <div class="app-col select-list-item-supplier-name">
+              <span class="app-ghost-color">На доработку</span>
+            </div>
+
+            <div class="app-col app-col-auto app-warning-color select-list-item-icon">
+              <uxg-icon shape="app-warning"></uxg-icon>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <div class="divider"></div>

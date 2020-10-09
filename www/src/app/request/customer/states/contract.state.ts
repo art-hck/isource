@@ -7,16 +7,21 @@ import { ContractActions } from "../actions/contract.actions";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { saveAs } from 'file-saver/src/FileSaver';
-import { iif, of, throwError } from "rxjs";
+import { ToastActions } from "../../../shared/actions/toast.actions";
+import { ContractStatusLabels } from "../../common/dictionaries/contract-status-labels";
+import { ContractFilter } from "../../common/models/contract-filter";
+import { ContractStatus } from "../../common/enum/contract-status";
 import Fetch = ContractActions.Fetch;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
 import Upload = ContractActions.Upload;
 import Download = ContractActions.Download;
-import { ToastActions } from "../../../shared/actions/toast.actions";
+import Filter = ContractActions.Filter;
+import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
 
 export interface ContractStateStateModel {
   contracts: Contract[];
+  availibleFilters?: ContractFilter;
   status: StateStatus;
 }
 
@@ -25,13 +30,14 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerContract',
-  defaults: { contracts: null, status: "pristine" }
+  defaults: { contracts: null, availibleFilters: {}, status: "pristine" }
 })
 @Injectable()
 export class ContractState {
   constructor(private rest: ContractService) {}
 
-  @Selector() static status({status}: Model) { return status; }
+  @Selector() static status({ status }: Model) { return status; }
+  @Selector() static availibleFilters({ availibleFilters }: Model) { return availibleFilters; }
 
   static contracts(statuses?: Contract['status'][]) {
     return createSelector([ContractState], ({ contracts }: Model) => {
@@ -39,15 +45,28 @@ export class ContractState {
     });
   }
 
-  @Action(Fetch) fetch({ setState }: Context, { requestId }: Fetch) {
-    setState(patch<Model>({ status: 'fetching', contracts: null }));
+  @Action([Fetch, Filter])
+  fetch({ setState, dispatch }: Context, { requestId, filter }: Fetch & Filter) {
+    setState(patch<Model>(!filter ? { status: 'fetching', contracts: null } : { status: 'updating'}));
 
+    return this.rest.list(requestId, filter).pipe(tap(contracts => setState(patch<Model>({ contracts, status: 'received' }))));
+  }
+
+  @Action(FetchAvailibleFilters)
+  fetchAvailibleFilters({ setState }: Context, { requestId }: FetchAvailibleFilters) {
+    // @TODO: получать список доступных фильтров отдельным методом
     return this.rest.list(requestId).pipe(
-      tap(contracts => setState(patch<Model>({ contracts, status: 'received' })))
+      tap(contracts => setState(patch<Model>({
+        availibleFilters: {
+          statuses: Object.keys(ContractStatusLabels).filter(status => contracts.some(c => c.status === status)) as ContractStatus[],
+          suppliers: contracts.map(({ supplier }) => supplier).filter((v, i, a) => a.findIndex(({ id }) => v.id === id) === i)
+        }
+      })))
     );
   }
 
-  @Action(Reject) reject({ setState, dispatch }: Context, { contract, files, comment }: Reject) {
+  @Action(Reject)
+  reject({ setState, dispatch }: Context, { contract, files, comment }: Reject) {
     setState(patch<Model>({status: "updating"}));
     return dispatch(!!files ? new Upload(contract, files, comment) : []).pipe(
       switchMap(() => this.rest.reject(contract.id)),
@@ -61,7 +80,8 @@ export class ContractState {
     );
   }
 
-  @Action(Approve) approve({ setState, dispatch }: Context, { contract }: Approve) {
+  @Action(Approve)
+  approve({ setState, dispatch }: Context, { contract }: Approve) {
     setState(patch<Model>({status: "updating"}));
     return this.rest.approve(contract.id).pipe(
       tap(c => setState(patch<Model>({
@@ -76,11 +96,13 @@ export class ContractState {
     );
   }
 
-  @Action(Upload) upload({ setState }: Context, { contract, files, comment}: Upload) {
+  @Action(Upload)
+  upload({ setState }: Context, { contract, files, comment}: Upload) {
     return this.rest.upload(contract.id, files, comment);
   }
 
-  @Action(Download) download({ setState }: Context, { contract }: Download) {
+  @Action(Download)
+  download({ setState }: Context, { contract }: Download) {
     return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ contract.supplier.shortName }.docx`)));
   }
 }

@@ -35,7 +35,7 @@ export class TechnicalCommercialProposalConfirmComponent {
   @Output() close = new EventEmitter();
   @Output() reviewMultiple = new EventEmitter();
 
-  filterQuery: string;
+  filterQuery = "";
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId, this.groupId);
 
@@ -61,26 +61,32 @@ export class TechnicalCommercialProposalConfirmComponent {
     return propsFlat.reduce((sum, p) => sum += (p.priceWithoutVat * p.quantity ?? 0), 0);
   }
 
+  getSelectedToSendToEditPositions(selectedProposals): (TechnicalCommercialProposal | Proposal)[] {
+    const positions = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).flat();
+
+    // Убираем из массива позиций повторяющиеся значения и оставляем только уникальные
+    return positions.filter((position, index, array) =>
+      !array.filter((v, i) => JSON.stringify(position.position.id) === JSON.stringify(v.position.id) && i < index).length);
+  }
+
   /**
    * Возвращает true, если позиция отфильтрована из списка
    */
   positionIsFiltered(proposalPosition): boolean {
-    if (!this.filterQuery?.trim().length) {
-      return false;
-    }
-
-    return proposalPosition.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1;
+    return proposalPosition.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1;
   }
 
   /**
-   * Возвращает true, если все позиции поставщика отфильтрованы из списка
+   * Возвращает true, если все позиции поставщика на утверждение отфильтрованы из списка
    */
-  allPositionsFiltered(proposalPositionsBlock): boolean {
-    if (!this.filterQuery?.trim().length) {
-      return false;
-    }
+  allPositionsToApproveFiltered(proposalPositionsBlock): boolean {
+    return proposalPositionsBlock.toApprove.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1);
+  }
 
-    return proposalPositionsBlock.toApprove.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1) &&
-      proposalPositionsBlock.toSendToEdit.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery?.toLowerCase()) === -1);
+  /**
+   * Возвращает true, если все позиции на доработку отфильтрованы из списка
+   */
+  allPositionsToSendToEditFiltered(selectedToSendToEditPositions): boolean {
+    return selectedToSendToEditPositions.every(proposal => proposal.manufacturingName.toLowerCase().indexOf(this.filterQuery.trim().toLowerCase()) === -1);
   }
 }

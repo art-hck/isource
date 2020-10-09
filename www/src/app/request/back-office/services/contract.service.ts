@@ -8,15 +8,16 @@ import { ContractCreate } from "../../common/models/requests-list/contract-creat
 import { RequestDocument } from "../../common/models/request-document";
 import { ContragentWithPositions } from "../../common/models/contragentWithPositions";
 import { FormDataService } from "../../../shared/services/form-data.service";
+import { ContractFilter } from "../../common/models/contract-filter";
 
 @Injectable()
 export class ContractService {
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId): Observable<Contract[]> {
+  list(requestId, filters?: ContractFilter): Observable<Contract[]> {
     const url = `requests/${requestId}/contracts`;
 
-    return this.api.get<Contract[]>(url);
+    return this.api.post<Contract[]>(url, { filters });
   }
 
   create(requestId: Uuid, supplierId: Uuid, positions: RequestPosition[]): Observable<Contract> {
@@ -53,7 +54,7 @@ export class ContractService {
   delete(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/delete`;
 
-    return this.api.get<Contract>(url);
+    return this.api.get<null>(url);
   }
 
   upload(contractId: Uuid, files: File[], comment?: string): Observable<RequestDocument[]> {
