@@ -53,11 +53,11 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly contractStatusesItems$ = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
-  readonly send = (contract: Contract, files?: File[], comment?: string) => new Send(contract, files, comment);
-  readonly sign = (contract: Contract) => new Sign(contract);
-  readonly rollback = (contract: Contract) => new Rollback(contract);
+  readonly send = (request: Request, contract: Contract, files?: File[], comment?: string) => new Send(request.id, contract, files, comment);
+  readonly sign = (request: Request, contract: Contract) => new Sign(request.id, contract);
+  readonly rollback = (request: Request, contract: Contract) => new Rollback(request.id, contract);
   readonly download = (contract: Contract) => new Download(contract);
-  readonly delete = (request: Request, contract: Contract) => new Delete(request, contract);
+  readonly delete = (request: Request, contract: Contract) => new Delete(request.id, contract);
 
   constructor(
     public store: Store,
