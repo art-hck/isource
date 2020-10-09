@@ -129,7 +129,8 @@
                 </div>
 
                 <div>
-                  <button uxgButton clear [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity(checkedPositions)"
+                  <button uxgButton clear
+                          [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity(checkedPositions)"
                           (click)="cancelPositionModal.open()">Отменить</button>
                 </div>
 
