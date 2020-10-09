@@ -61,9 +61,9 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     if (!this.isRecommended) {
       const {positions} = this.form.value;
       this.requestService.getRecommendedPositions(positions).subscribe(
-        (reqPositions) => {
-          if (reqPositions.length !== 0) {
-            this.recommendedPositions = reqPositions.map(item => {
+        (reсPositions) => {
+          if (reсPositions.length !== 0) {
+            this.recommendedPositions = reсPositions.map(item => {
                 return {
                   name: item.name,
                   measureUnit: item.unit,
@@ -89,8 +89,9 @@ export class RequestFormComponent implements OnInit, OnDestroy {
 
   addRecommendedPositions() {
     this.recommendedPositionsControl.value.forEach(
-      recommendedPosition => {this.formPositions.push(
-        this.formBuilder.control(recommendedPosition));
+      recommendedPosition => {
+        this.formPositions.push(
+          this.formBuilder.control(recommendedPosition));
       });
     this.recommendationModal.close();
   }
