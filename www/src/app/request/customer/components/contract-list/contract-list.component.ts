@@ -33,6 +33,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(ContractState.availibleFilters) availibleFilters$: Observable<ContractFilter>;
+  @Select(ContractState.contractsLength) contractsLength$: Observable<number>;
   @Select(ContractState.contracts([ContractStatus.ON_APPROVAL])) contractsSentToReview$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.REJECTED])) contractsSendToEdit$: Observable<Contract[]>;
   @Select(ContractState.contracts([ContractStatus.APPROVED, ContractStatus.SIGNED])) contractsReviewed$: Observable<Contract[]>;
@@ -50,8 +51,8 @@ export class ContractListComponent implements OnInit, OnDestroy {
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly download = (contract: Contract) => new Download(contract);
-  readonly reject = (contract: Contract, files: File[], comment?: string) => new Reject(contract, files, comment);
-  readonly approve = (contract: Contract) => new Approve(contract);
+  readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
+  readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
 
   constructor(
     public store: Store,
@@ -65,7 +66,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
       tap(({ id }) => this.store.dispatch([new Fetch(id), new FetchAvailibleFilters(id)])),
       delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
       withLatestFrom(this.request$),
-      tap(([p, { id, number }]) => this.bc.breadcrumbs = [
+      tap(([, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
         { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
         { label: 'Согласование договора', link: `/requests/customer/${id}/contracts`},

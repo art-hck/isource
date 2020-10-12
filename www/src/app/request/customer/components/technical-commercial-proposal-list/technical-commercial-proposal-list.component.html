@@ -57,12 +57,14 @@
             [showParams]="true"
             [proposals]="proposals$ | async"
             [proposalsByPos]="proposalsSentToReview$ | async"
-            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
+            (openCommonParams)="gridTable.scrollIntoView()"
             (selectProposalBySupplier) = selectSupplierProposal($event)
+            (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row
               #proposalOnReview
+              [class.sticked]="stickedPosition"
               [chooseBy$]="chooseBy$"
               [position]="proposalByPos.position"
               [simpleView]="view === 'simple-grid'"
@@ -73,7 +75,7 @@
               (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event),  position: converPosition(proposalByPos.position)}"
             >
               <ng-template #position>
-                <div class="grid-cell app-col">
+                <div class="grid-cell app-col grid-cell-sticky" [class.grid-cell-sticky-bg]="stickedPosition">
                   <div class="app-row app-flex-column">
                     <div><b>{{ proposalByPos.position.name }}</b></div>
 

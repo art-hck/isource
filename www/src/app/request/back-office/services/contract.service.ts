@@ -14,46 +14,44 @@ import { ContractFilter } from "../../common/models/contract-filter";
 export class ContractService {
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId, filters?: ContractFilter): Observable<Contract[]> {
+  list(requestId: Uuid, filters?: ContractFilter): Observable<Contract[]> {
     const url = `requests/${requestId}/contracts`;
-
     return this.api.post<Contract[]>(url, { filters });
+  }
+
+  availableFilters(requestId: Uuid) {
+    const url = `requests/backoffice/contracts/available-filters`;
+    return this.api.post<ContractFilter>(url, { requestId });
   }
 
   create(requestId: Uuid, supplierId: Uuid, positions: RequestPosition[]): Observable<Contract> {
     const url = `requests/backoffice/contracts/create`;
     const body: ContractCreate = { supplierId, requestId, positions: positions.map(position => position.id) };
-
     return this.api.post<Contract>(url, body);
   }
 
   suppliers(requestId): Observable<ContragentWithPositions[]> {
     const url = `requests/backoffice/contracts/suppliers`;
-
     return this.api.post<ContragentWithPositions[]>(url, { requestId });
   }
 
   sendForApproval(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/send-for-approval`;
-
     return this.api.get<Contract>(url);
   }
 
   sign(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/sign`;
-
     return this.api.get<Contract>(url);
   }
 
   rollback(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/cancel-send-for-approval`;
-
     return this.api.get<Contract>(url);
   }
 
   delete(contractId: Uuid) {
     const url = `requests/backoffice/contracts/${contractId}/delete`;
-
     return this.api.get<null>(url);
   }
 

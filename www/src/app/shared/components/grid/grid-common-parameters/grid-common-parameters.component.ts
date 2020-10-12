@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
@@ -11,9 +11,12 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
   styleUrls: ['./grid-common-parameters.component.scss']
 })
 export class GridCommonParametersComponent implements OnInit {
+  @HostBinding('class.app-row') appRow = true;
+  @HostBinding('class.app-flex-column') appFlexColumn = true;
+  @HostBinding('class.has-analogs')
+  @Input() hasAnalogs = false;
   @Input() proposal: TechnicalCommercialProposal;
   @Input() proposalsByPos: TechnicalCommercialProposalByPosition[];
-  @Input() hasAnalogs = false;
   @Output() close = new EventEmitter();
   @Output() openEditModal = new EventEmitter<TechnicalCommercialProposal>();
   @Output() selectAll = new EventEmitter<TechnicalCommercialProposal>();
