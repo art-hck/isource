@@ -72,10 +72,12 @@
       </div>
     </div>
       <div *uxgPopoverContent="'app-popover-content-bottom-left'" (click)="quantityPopover.hide()">
-        Данную позицию обычно заказывают в количестве {{quantityRecommendation}} {{recommendedUnit}}
+        <div class="popover-content">
+        Данную позицию обычно <br/>заказывают в количестве <b>{{quantityRecommendation}} {{recommendedUnit}}</b>
         <button uxgButton primary type="button" (click)="setRecommendedQuantity(); quantityPopover.hide()">
           Добавить
         </button>
+        </div>
       </div>
     </uxg-popover>
     <div class="app-col app-col-auto" [style.width.px]="200">

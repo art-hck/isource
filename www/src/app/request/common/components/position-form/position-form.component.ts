@@ -56,6 +56,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   value;
   quantityRecommendation: number;
   recommendedUnit: string;
+  isRecommendedQuantity = false;
 
   readonly currencies = Object.entries(CurrencyLabels);
 
@@ -179,16 +180,19 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   getQuantityRecommendation(positionName: string) {
-    this.positionService.getQuantityRecommendation(positionName).subscribe(
-      (data) => {
-        if (data.length !== 0) {
-          this.quantityRecommendation = data[0].forecastCommodity.filter(
-            item => item.isForecast === true).reduce(
-            (acc, curr) => acc.quantity > curr.quantity ? acc : curr).quantity;
-          this.recommendedUnit = data[0].unit;
-          this.quantityPopover.show();
-        }
-      });
+    if (this.form.get('name').value && !this.isRecommendedQuantity) {
+      this.positionService.getQuantityRecommendation(positionName).subscribe(
+        (data) => {
+          if (data.length !== 0) {
+            this.quantityRecommendation = data[0].forecastCommodity.filter(
+              item => item.isForecast === true).reduce(
+              (acc, curr) => acc.quantity > curr.quantity ? acc : curr).quantity;
+            this.recommendedUnit = data[0].unit;
+            this.quantityPopover.show();
+            this.isRecommendedQuantity = true;
+          }
+        });
+    }
   }
 
   setRecommendedQuantity() {

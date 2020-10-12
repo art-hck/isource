@@ -47,3 +47,10 @@ textarea { height: 80px; }
     color: #0EA04B;
   }
 }
+
+.popover-content {
+  line-height: 0.4;
+  & button {
+    margin-left: 50px;
+  }
+}
