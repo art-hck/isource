@@ -13,7 +13,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
-import { UxgDropdownInputComponent } from "uxg";
+import { UxgDropdownInputComponent, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
@@ -47,12 +47,15 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   @ViewChild('nameRef') nameDropdownInputRef: UxgDropdownInputComponent;
+  @ViewChild('quantityPopover') quantityPopover: UxgPopoverComponent;
   form: FormGroup;
   subscription = new Subscription();
   okeiList$: Observable<Okei[]>;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
+  quantityRecommendation: number;
+  recommendedUnit: string;
 
   readonly currencies = Object.entries(CurrencyLabels);
 
@@ -173,6 +176,23 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         this.form.enable();
       }));
     }
+  }
+
+  getQuantityRecommendation(positionName: string) {
+    this.positionService.getQuantityRecommendation(positionName).subscribe(
+      (data) => {
+        if (data.length !== 0) {
+          this.quantityRecommendation = data[0].forecastCommodity.filter(
+            item => item.isForecast === true).reduce(
+            (acc, curr) => acc.quantity > curr.quantity ? acc : curr).quantity;
+          this.recommendedUnit = data[0].unit;
+          this.quantityPopover.show();
+        }
+      });
+  }
+
+  setRecommendedQuantity() {
+    this.form.get('quantity').setValue(this.quantityRecommendation);
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {

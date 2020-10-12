@@ -59,15 +59,25 @@
   <br/>
 
   <div class="app-row">
+    <uxg-popover #quantityPopover [openOnHover]="false">
     <div class="app-col app-col-auto" [style.width.px]="130">
       <div class="app-control-wrap">
-        <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0" (keypress)="filterEnteredText($event)" />
+        <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0"
+               (keypress)="filterEnteredText($event)"
+              (focus)="getQuantityRecommendation(form.get('name').value)"/>
         <label class="app-control-label" (click)="quantity.focus()">Количество</label>
         <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
     </div>
+      <div *uxgPopoverContent="'app-popover-content-bottom-left'" (click)="quantityPopover.hide()">
+        Данную позицию обычно заказывают в количестве {{quantityRecommendation}} {{recommendedUnit}}
+        <button uxgButton primary type="button" (click)="setRecommendedQuantity(); quantityPopover.hide()">
+          Добавить
+        </button>
+      </div>
+    </uxg-popover>
     <div class="app-col app-col-auto" [style.width.px]="200">
       <uxg-dropdown-input appSuggestions strictMode class="measure-units" formControlName="measureUnit" placeholder="Ед. измерения"
         [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
