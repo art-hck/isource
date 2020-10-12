@@ -52,6 +52,9 @@ export const AppConfig: GpnmarketConfigInterface = {
   priceOrder: {
     url: 'https://demo2.etpgpb.ru/#nsi/priceorder/directCustomer/orderId/'
   },
+  profile: {
+      url: 'https://profile.ezgg.site/api/v1/'
+    },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
     forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",
