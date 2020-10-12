@@ -26,6 +26,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
 
     if (req.url.indexOf('#profile#') === 0) {
       req = req.clone({
+        headers: req.headers.set('Accept', 'application/json'),
         url: req.url.replace("#profile#", this.appConfig.profile.url)
       });
       return next.handle(req);

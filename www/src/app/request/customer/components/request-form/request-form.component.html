@@ -69,7 +69,7 @@
       <div class="app-row app-align-items-center">
         <div><span *ngIf="isLoading" class="spinner spinner-inline"></span></div>
         <button uxgButton secondary type="button"
-                (click)="featureService.authorize('recommendedPositions') ? getRecommendedPositions() : submit(false)"
+                (click)="submit(false)"
                 [disabled]="form.disabled || form.invalid">Сохранить черновик
         </button>
         <button uxgButton primary [disabled]="form.disabled || form.invalid">Опубликовать</button>
