@@ -14,10 +14,7 @@ import { RequestGroupFormComponent } from "./components/request/request-add-grou
 import { RequestAddResponsibleComponent } from './components/request/request-add-responsible-modal/request-add-responsible.component';
 import { RequestAsideInfoComponent } from "./components/request/request-aside-info/request-aside-info.component";
 import { RequestComponent } from "./components/request/request.component";
-import { FilterCustomersComponent } from './components/request-list/request-list-filter/filter-customers/filter-customers.component';
 import { TechnicalProposalFilterComponent } from "./components/technical-proposal-filter/technical-proposal-filter.component";
-import { RequestListFilterComponent } from './components/request-list/request-list-filter/request-list-filter.component';
-import { FilterSectionComponent } from "./components/request-list/request-list-filter/filter-section/filter-section.component";
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
@@ -33,7 +30,6 @@ import { PositionsStatusChangeComponent } from "./components/position-status-cha
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
 import { RequestPositionService } from "./services/request-position.service";
 import { PositionCancelComponent } from "./components/position-cancel/position-cancel.component";
-import { FilterPositionStatusesComponent } from "./components/request-list/request-list-filter/filter-position-statuses/filter-position-statuses.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 import { ProcedureInfoComponent } from "./components/procedure-info/procedure-info.component";
@@ -55,20 +51,16 @@ const RequestCommonModuleDeclarations = [
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
-  FilterCustomersComponent,
   TechnicalProposalFilterContragentListComponent,
   RequestTpFilterStatusesListComponent,
   TechnicalProposalFilterComponent,
   RequestTpFilterSectionComponent,
-  RequestListFilterComponent,
-  FilterSectionComponent,
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
   SearchFilterPipe,
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
-  FilterPositionStatusesComponent,
   RequestListComponent,
   ProcedureInfoComponent,
   TechnicalCommercialProposalGroupComponent,
