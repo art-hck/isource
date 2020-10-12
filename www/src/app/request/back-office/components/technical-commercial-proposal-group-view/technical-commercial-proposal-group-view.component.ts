@@ -78,7 +78,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success(`Группа ТКП успешно сохранена`));
-      this.service.groupList(this.requestId);
+      if (!e) { this.service.groupList(this.requestId); }
     });
   }
 
