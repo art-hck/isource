@@ -30,6 +30,7 @@ export class RequestPosition extends RequestPositionList {
   paymentTerms: string;
   isShmrRequired: boolean;
   isPnrRequired: boolean;
+  isInProcedure: boolean;
   isInspectionControlRequired: boolean;
   comments: string;
   status: PositionStatus;
