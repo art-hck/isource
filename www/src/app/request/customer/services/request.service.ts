@@ -13,7 +13,6 @@ import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
 import { RecommendedPositions } from "../models/recommended-positions";
-import { recommendedPositionsMock } from "./recommended-positions-mock";
 
 @Injectable({
   providedIn: "root"
