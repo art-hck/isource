@@ -105,7 +105,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
       status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
     )));
 
-    this.form.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(filters => this.filter.emit({ filters }));
   }
 
   ngOnDestroy() {

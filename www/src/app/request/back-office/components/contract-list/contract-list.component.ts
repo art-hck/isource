@@ -61,6 +61,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly rollback = (request: Request, contract: Contract) => new Rollback(request.id, contract);
   readonly download = (contract: Contract) => new Download(contract);
   readonly delete = (request: Request, contract: Contract) => new Delete(request.id, contract);
+  readonly filter = (request: Request, value: ContractFilter) => new Filter(request.id, value);
 
   constructor(
     public store: Store,
@@ -81,10 +82,6 @@ export class ContractListComponent implements OnInit, OnDestroy {
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.form.valueChanges
-      .pipe(withLatestFrom(this.route.params), takeUntil(this.destroy$))
-      .subscribe(([value, { id }]) => this.store.dispatch(new Filter(id, value)));
   }
 
   ngOnDestroy() {

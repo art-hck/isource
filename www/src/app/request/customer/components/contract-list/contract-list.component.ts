@@ -55,6 +55,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly download = (contract: Contract) => new Download(contract);
   readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
   readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
+  readonly filter = (request: Request, value: ContractFilter) => new Filter(request.id, value);
 
   constructor(
     public store: Store,

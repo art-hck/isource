@@ -55,7 +55,14 @@
       </div>
     </div>
 
-    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contractsLength$ | async" [dirty]="form.dirty">
+    <app-filter
+      #filterRef
+      [formGroup]="form"
+      [count]="contractsLength$ | async"
+      [dirty]="form.dirty"
+      (reset)="form.reset(); form.markAsPristine()"
+      (filter)="store.dispatch(filter(request, $event))"
+    >
       <app-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </app-filter-section>
