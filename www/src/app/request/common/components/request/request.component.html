@@ -85,7 +85,7 @@
         <!-- Отмена позиции заказчиком -->
         <div class="app-col app-col-auto" *ngIf="user.isCustomer()">
           <button uxgButton clear link
-                  [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity(checkedPositions)"
+                  [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity()"
                   (click)="cancelPositionModal.open()">
             <uxg-icon shape="app-trash"></uxg-icon>
             Отменить
@@ -130,7 +130,7 @@
 
                 <div>
                   <button uxgButton clear
-                          [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity(checkedPositions)"
+                          [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity()"
                           (click)="cancelPositionModal.open()">Отменить</button>
                 </div>
 
