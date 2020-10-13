@@ -75,12 +75,12 @@
 
       <div class="dragAndDropArea">
         <app-template-upload
-          [invalid]="this.form.get('fileTemplate').dirty && this.form.get('fileTemplate').invalid"
+          [invalid]="form.get('fileTemplate').dirty && form.get('fileTemplate').invalid"
           (fileSelected)="onChangeFilesList($event)"></app-template-upload>
       </div>
 
       <div class="app-modal-footer">
-        <div class="doc-error-message" *ngIf="this.form.get('fileTemplate').dirty && this.form.get('fileTemplate').invalid">Пожалуйста, загрузите необходимый шаблон</div>
+        <div class="doc-error-message" *ngIf="form.get('fileTemplate').dirty && form.get('fileTemplate').invalid">Пожалуйста, загрузите необходимый шаблон</div>
 
         <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
         <button uxgButton primary lg (click)="submit()">Загрузить</button>
