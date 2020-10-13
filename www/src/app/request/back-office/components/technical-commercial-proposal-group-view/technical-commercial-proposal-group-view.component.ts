@@ -1,25 +1,36 @@
-import { Component } from '@angular/core';
-import { BehaviorSubject, Observable } from "rxjs";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { delayWhen, scan, switchMap, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, scan, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { UxgBreadcrumbsService } from "uxg";
-import { Select, Store } from "@ngxs/store";
+import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
+import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-view',
-  templateUrl: './technical-commercial-proposal-group-view.component.html'
+  templateUrl: './technical-commercial-proposal-group-view.component.html',
+  styleUrls: ['technical-commercial-proposal-group-view.component.scss'],
 })
-export class TechnicalCommercialProposalGroupViewComponent {
+export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
+  @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
+  form: FormGroup;
   requestId: Uuid;
   editedGroup: TechnicalCommercialProposalGroup;
+  invalidUploadTemplate = false;
+  files: File[] = [];
   readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
+  destroy$ = new Subject();
 
   readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
@@ -41,10 +52,47 @@ export class TechnicalCommercialProposalGroupViewComponent {
     }, groups))),
   );
 
+  readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
+  readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[], groupName: string) => new UploadTemplate(requestId, groupId, files, groupName);
+
   constructor(
     private bc: UxgBreadcrumbsService,
     private route: ActivatedRoute,
-    private store: Store,
+    private actions: Actions,
+    public store: Store,
     public service: TechnicalCommercialProposalService,
+    private fb: FormBuilder
   ) {}
+
+  ngOnInit() {
+    this.form = this.fb.group({
+      technicalCommercialProposalGroupName: [null, [Validators.required]],
+      fileTemplate: [null, [Validators.required]]
+    });
+
+    this.actions.pipe(
+      ofActionCompleted(UploadTemplate),
+      throttleTime(1),
+      takeUntil(this.destroy$)
+    ).subscribe(({result}) => {
+      const e = result.error as any;
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) :
+        new ToastActions.Success(`Группа ТКП успешно сохранена`));
+      if (!e) { this.service.groupList(this.requestId); }
+    });
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.form.get('fileTemplate').setValue(files);
+  }
+
+  submit() {
+    if (this.form.valid) {
+      this.uploadTemplateModal.close();
+      this.store.dispatch(
+        this.uploadTemplate(this.requestId, null, this.form.get('fileTemplate').value, this.form.get('technicalCommercialProposalGroupName').value)
+      );
+    }
+  }
 }

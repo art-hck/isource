@@ -212,9 +212,9 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(UploadTemplate)
-  uploadTemplate(ctx: Context, { requestId, groupId, files }: UploadTemplate) {
+  uploadTemplate(ctx: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.uploadTemplate(requestId, groupId, files).pipe(
+    return this.rest.uploadTemplate(requestId, groupId, files, groupName).pipe(
       catchError(err => {
         ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
