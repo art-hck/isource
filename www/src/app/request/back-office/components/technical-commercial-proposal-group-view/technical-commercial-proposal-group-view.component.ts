@@ -83,6 +83,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       technicalCommercialProposalGroupName: [null, [Validators.required]],
+      fileTemplate: [null, [Validators.required]]
     });
 
     this.actions.pipe(
@@ -99,20 +100,15 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   }
 
   onChangeFilesList(files: File[]): void {
-    this.files = files;
-    if (this.files.length !== 0) {
-      this.invalidUploadTemplate = false;
-    }
+    this.form.get('fileTemplate').setValue(files);
   }
 
   submit() {
-    if (this.files.length === 0) {
-      this.invalidUploadTemplate = true;
-    }
-
-    if (this.form.valid && !this.invalidUploadTemplate) {
+    if (this.form.valid) {
       this.uploadTemplateModal.close();
-      this.store.dispatch(this.uploadTemplate(this.requestId, null, this.files, this.form.get('technicalCommercialProposalGroupName').value));
+      this.store.dispatch(
+        this.uploadTemplate(this.requestId, null, this.form.get('fileTemplate').value, this.form.get('technicalCommercialProposalGroupName').value)
+      );
     }
   }
 
