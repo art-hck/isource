@@ -61,7 +61,6 @@ import { ContractService } from "./services/contract.service";
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
-    TechnicalCommercialProposalFilterComponent,
     TechnicalCommercialProposalParametersFormComponent,
     RequestListComponent,
     TechnicalCommercialProposalContragentFormComponent,
