@@ -5,7 +5,6 @@ import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalProposalCreateRequest } from "../models/technical-proposal-create-request";
-import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
 import { FormDataService } from "../../../shared/services/form-data.service";
@@ -17,7 +16,7 @@ export class TechnicalProposalsService {
 
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter) {
+  list(requestId: Uuid, filters: TechnicalProposalFilter) {
     const url = `requests/backoffice/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
@@ -43,51 +42,50 @@ export class TechnicalProposalsService {
     return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
   }
 
-  getTechnicalProposalsPositionsList(id: Uuid) {
+  positions(id: Uuid) {
     const url = `requests/backoffice/${id}/technical-proposals/positions`;
     return this.api.get<RequestPosition[]>(url);
   }
 
-  addTechnicalProposal(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
+  create(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
     const url = `requests/backoffice/${requestId}/technical-proposals/create`;
     return this.api.post<TechnicalProposal>(url, technicalProposal);
   }
 
-  updateTechnicalProposal(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
+  edit(requestId: Uuid, technicalProposal: TechnicalProposalCreateRequest) {
     const url = `requests/backoffice/${requestId}/technical-proposals/edit`;
     return this.api.post<TechnicalProposal>(url, technicalProposal);
   }
 
-  uploadSelectedDocuments(requestId: Uuid, tpId: Uuid, formData) {
-    const url = `requests/backoffice/${requestId}/technical-proposals/${tpId}/upload-documents`;
-    return this.api.post(url, formData);
-  }
 
-  updateTpPositionManufacturingName(requestId: Uuid, tpId: Uuid, technicalProposal) {
+  setManufacturingName(requestId: Uuid, tpId: Uuid, technicalProposal) {
     const url = `requests/backoffice/${requestId}/technical-proposals/${tpId}/update-manufacturing-name`;
     return this.api.post(url, technicalProposal);
   }
 
-  sendToAgreement(requestId: Uuid, technicalProposal: TechnicalProposal) {
+  sendForApproval(requestId: Uuid, technicalProposal: TechnicalProposal) {
     const url = `requests/backoffice/${requestId}/technical-proposals/${technicalProposal.id}/send-to-agreement`;
     return this.api.post(url, technicalProposal);
   }
 
-  cancelSendToAgreement(requestId: Uuid, technicalProposal: TechnicalProposal): Observable<TechnicalProposal> {
+  rollback(requestId: Uuid, technicalProposal: TechnicalProposal): Observable<TechnicalProposal> {
     const url = `requests/backoffice/${requestId}/technical-proposals/${technicalProposal.id}/cancel-send-to-agreement`;
     return this.api.post<TechnicalProposal>(url, technicalProposal);
   }
 
-  downloadTemplate(requestId: Uuid, contragentId: Uuid) {
-    const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
-    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'}).subscribe(data => {
-      saveAs(data, `RequestTechnicalProposalsTemplate.xlsx`);
-    });
+  uploadDocuments(requestId: Uuid, tpId: Uuid, documents: File[]) {
+    const url = `requests/backoffice/${requestId}/technical-proposals/${tpId}/upload-documents`;
+    return this.api.post(url, this.formDataService.toFormData({ files: { documents } }));
   }
 
-  addPositionsFromExcel(requestId: Uuid, files: File[]) {
+  uploadTemplate(requestId: Uuid, files: File[]) {
     const url = `requests/backoffice/${requestId}/technical-proposals/upload-excel`;
 
     return this.api.post<TechnicalProposalWithPositions>(url, this.formDataService.toFormData({ files }));
+  }
+
+  downloadTemplate(requestId: Uuid, contragentId: Uuid) {
+    const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
+    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'})
   }
 }

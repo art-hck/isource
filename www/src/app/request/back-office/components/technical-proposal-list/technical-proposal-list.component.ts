@@ -80,7 +80,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   fetch() {
-    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, this.form.value).pipe(
+    this.technicalProposals$ = this.technicalProposalsService.list(this.requestId, this.form.value).pipe(
       publishReplay(1), refCount()
     );
   }
@@ -119,11 +119,11 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   filter(filters: TechnicalProposalFilter) {
-    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => this.technicalProposals$ = of(data));
+    this.technicalProposalsService.list(this.requestId, filters).subscribe(data => this.technicalProposals$ = of(data));
   }
 
   fetchPositions() {
-    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
+    this.positions$ = this.technicalProposalsService.positions(this.requestId);
   }
 
   /**
@@ -158,7 +158,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
-    this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal)
+    this.technicalProposalsService.rollback(this.requestId, technicalProposal)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.fetch();

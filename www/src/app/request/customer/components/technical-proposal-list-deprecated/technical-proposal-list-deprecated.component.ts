@@ -79,7 +79,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
   }
 
   toAcceptTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
-    this.technicalProposalsService.acceptTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
+    this.technicalProposalsService.accept(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions).subscribe(
       () => {
         this.getTechnicalProposals();
         const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?
@@ -92,7 +92,7 @@ export class TechnicalProposalListDeprecatedComponent implements OnInit {
   }
 
   toDeclineTechnicalProposals(technicalProposalId: Uuid, selectedTechnicalProposalsPositions: TechnicalProposalPosition[]) {
-    this.technicalProposalsService.declineTechnicalProposals(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions, '—').subscribe(
+    this.technicalProposalsService.reject(this.requestId, technicalProposalId, selectedTechnicalProposalsPositions, '—').subscribe(
       () => {
         this.getTechnicalProposals();
         const toastText = this.selectedTechnicalProposalsPositions.length === 1 ?

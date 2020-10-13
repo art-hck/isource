@@ -111,46 +111,28 @@ export class RequestTechnicalProposalComponent implements OnInit {
   approve() {
     this.isLoading = true;
 
-    this.store.dispatch(new Approve(
-      this.request.id,
-      this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions
-    )).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe();
+    this.store.dispatch(new Approve(this.request.id, this.technicalProposal.id, this.selectedTechnicalProposalsPositions))
+      .pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   reject() {
     this.isLoading = true;
 
-    this.store.dispatch(new Reject(
-      this.request.id,
-      this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions,
-      this.form.get('comment').value
-    )).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe();
+    this.store.dispatch(new Reject(this.request.id, this.technicalProposal.id, this.selectedTechnicalProposalsPositions, this.form.get('comment').value))
+      .pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   sendToEdit() {
     this.isLoading = true;
 
-    this.store.dispatch(new SendToEdit(
-      this.request.id,
-      this.technicalProposal.id,
-      this.selectedTechnicalProposalsPositions,
-      this.form.get('comment').value
-    )).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe();
+    this.store.dispatch(new SendToEdit(this.request.id, this.technicalProposal.id, this.selectedTechnicalProposalsPositions, this.form.get('comment').value))
+      .pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   submit() {
-    if (this.actionType === 'reject') {
-      this.reject();
-    } else if (this.actionType === 'sendToEdit') {
-      this.sendToEdit();
+    switch (this.actionType) {
+      case 'reject': this.reject(); break;
+      case 'sendToEdit': this.sendToEdit(); break;
     }
   }
 
