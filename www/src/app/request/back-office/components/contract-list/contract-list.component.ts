@@ -16,6 +16,9 @@ import { ContractFilter } from "../../../common/models/contract-filter";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
+import { Uuid } from "../../../../cart/models/uuid";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { ContractStatus } from "../../../common/enum/contract-status";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Fetch = ContractActions.Fetch;
 import Send = ContractActions.Send;
@@ -44,13 +47,13 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
   readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$ = this.contractSuppliersSearch$.pipe(
+  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = this.contractSuppliersSearch$.pipe(
     withLatestFrom(this.availibleFilters$),
     map(([q, { suppliers }]) => suppliers
       .filter((supplier: ContragentList) => supplier.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || supplier.inn.indexOf(q) > -1)
       .map((supplier: ContragentList) => ({ label: supplier.shortName, value: supplier.id }))),
   );
-  readonly contractStatusesItems$ = this.availibleFilters$.pipe(
+  readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly send = (request: Request, contract: Contract, files?: File[], comment?: string) => new Send(request.id, contract, files, comment);

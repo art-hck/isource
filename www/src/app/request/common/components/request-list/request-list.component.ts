@@ -15,11 +15,11 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
 import { FormGroup } from "@angular/forms";
 import { AvailableFilters } from "../../models/requests-list/available-filters";
-import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
-import { User } from "../../../../user/models/user";
 import { PositionStatus } from "../../enum/position-status";
 import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
 import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
+import { Uuid } from "../../../../cart/models/uuid";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 
 @Component({
   selector: 'app-request-list',
@@ -51,8 +51,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   sortingColumn: string;
 
   hideNeedUpdate = true;
-  customers$: Observable<{ label: string, value: string }[]>;
-  users$: Observable<{ label: string, value: string }[]>;
+  customers$: Observable<FilterCheckboxList<Uuid>>;
+  users$: Observable<FilterCheckboxList<Uuid>>;
   positionStatuses$: Observable<{ value: PositionStatus, item: AvailableFilters["positionStatuses"][number] }[]>;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();
