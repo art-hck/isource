@@ -1,6 +1,6 @@
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import {Uuid} from "../../../cart/models/uuid";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalProposal } from "../../common/models/technical-proposal";
 import { Observable } from "rxjs";
 import { RequestPosition } from "../../common/models/request-position";
@@ -8,21 +8,37 @@ import { TechnicalProposalCreateRequest } from "../models/technical-proposal-cre
 import { saveAs } from 'file-saver/src/FileSaver';
 import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-status";
 import { TechnicalProposalFilter } from "../../common/models/technical-proposal-filter";
+import { FormDataService } from "../../../shared/services/form-data.service";
+import { TechnicalProposalWithPositions } from "../models/technical-proposal-with-positions";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class TechnicalProposalsService {
 
-  constructor(
-    protected api: HttpClient,
-  ) {
-  }
+  constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
+  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter) {
     const url = `requests/backoffice/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
-  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposalsStatus[]> {
+  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
+  // availableFilters(requestId: Uuid): Observable<TechnicalProposalFilter> {
+  availableFilters(tpList$: Observable<TechnicalProposal[]>): Observable<TechnicalProposalFilter> {
+    // const url = `requests/backoffice/${requestId}/technical-proposals`;
+    // return this.api.get<TechnicalProposal[]>(url).pipe(
+    return tpList$.pipe(
+      map(proposals => proposals.reduce<TechnicalProposalFilter>((acc, curr, i, arr) => ({
+        ...acc,
+        contragents: arr.findIndex(({ supplierContragent }) => supplierContragent === curr.supplierContragent) === i ?
+          [...acc.contragents ?? [], curr.supplierContragent] : acc.contragents,
+        tpStatus: arr.findIndex(({ status }) => status === curr.status) === i ?
+          [...acc.tpStatus ?? [], curr.status] : acc.tpStatus
+      }), {})
+    ));
+  }
+
+  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: TechnicalProposalFilter) {
     const url = `requests/backoffice/${requestId}/technical-proposals/available-statuses`;
     return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
   }
@@ -64,59 +80,14 @@ export class TechnicalProposalsService {
 
   downloadTemplate(requestId: Uuid, contragentId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
-    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'})
-  .subscribe(data => {
+    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'}).subscribe(data => {
       saveAs(data, `RequestTechnicalProposalsTemplate.xlsx`);
     });
   }
 
-  addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}> {
-    return this.api.post<{requestTechnicalProposal: TechnicalProposal, positions: RequestPosition[]}>(
-      `requests/backoffice/${requestId}/technical-proposals/upload-excel`,
-      this.convertModelToFormData(files, null, 'files')
-    );
+  addPositionsFromExcel(requestId: Uuid, files: File[]) {
+    const url = `requests/backoffice/${requestId}/technical-proposals/upload-excel`;
+
+    return this.api.post<TechnicalProposalWithPositions>(url, this.formDataService.toFormData({ files }));
   }
-
-
-  /**
-   * Функция для преобразования формы в FormData, при котором можно отправлять файлы
-   *
-   * @param model
-   * @param form
-   * @param namespace
-   */
-  convertModelToFormData(model: any, form: FormData = null, namespace = ''): FormData {
-    const formData = form || new FormData();
-
-    if (model instanceof File) {
-      formData.append(namespace, model);
-      return formData;
-    }
-
-    for (const propertyName in model) {
-      if (!model.hasOwnProperty(propertyName) || !model[propertyName]) {
-        continue;
-      }
-
-      const formKey = namespace ? `${namespace}[${propertyName}]` : propertyName;
-
-      if (model[propertyName] instanceof Date) {
-        formData.append(formKey, model[propertyName].toISOString());
-      } else if (model[propertyName] instanceof Array) {
-        model[propertyName].forEach((element, index) => {
-          const tempFormKey = `${formKey}[${index}]`;
-          this.convertModelToFormData(element, formData, tempFormKey);
-        });
-      } else if (model[propertyName] instanceof File) {
-        formData.append(formKey, model[propertyName]);
-      } else if (typeof model[propertyName] === 'object') {
-        this.convertModelToFormData(model[propertyName], formData, formKey);
-      } else {
-        formData.append(formKey, model[propertyName].toString());
-      }
-    }
-
-    return formData;
-  }
-
 }

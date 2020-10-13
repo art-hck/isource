@@ -8,6 +8,11 @@
             <div class="app-row app-justify-content-end">
               <div class="app-col-auto">
 
+                <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
+                  <uxg-icon shape="app-sort2"></uxg-icon>
+                  <span>Фильтр</span>
+                </button>
+
                 <!-- Создать процедуру  -->
                 <button uxgButton secondary iconText
                         *ngIf="featureService.authorize('createProcedure')"
@@ -82,13 +87,31 @@
         </uxg-modal>
       </div>
 
-      <div class="app-col app-col-aside">
-        <app-request-technical-proposal-filter
-          [technicalProposals]="technicalProposals"
-          [technicalProposalsAvailableStatuses]="technicalProposalAvailableStatuses$ | async"
-          (filters)="filter($event)">
-        </app-request-technical-proposal-filter>
-      </div>
+      <app-filter
+        #filterRef
+        [formGroup]="form"
+        [count]="technicalProposals.length"
+        [dirty]="form.dirty"
+        (reset)="form.reset(); form.markAsPristine()"
+        (filter)="filter($event)"
+      >
+        <app-filter-section label="Заявка">
+          <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
+        </app-filter-section>
+
+        <app-request-tp-filter-section label="Контрагент">
+          <app-filter-checkbox-list formControlName="contragents" searchPlaceholder="Заказчик"
+            [foldedSearch]="true"
+            [items$]="contragentsFilter$"
+            [limit]="5"
+            (search)="contragentsSearch$.next($event)">
+          </app-filter-checkbox-list>
+        </app-request-tp-filter-section>
+
+        <app-request-tp-filter-section label="Согласование">
+          <app-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></app-filter-checkbox-list>
+        </app-request-tp-filter-section>
+      </app-filter>
     </ng-container>
   </div>
 </ng-container>
