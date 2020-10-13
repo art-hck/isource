@@ -17,10 +17,16 @@ export class TechnicalProposalsService {
   ) {
   }
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
+  list(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
+
+  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
+  // availableFilters(requestId: Uuid) {
+  //   const url = `requests/customer/${requestId}/technical-proposals/available-filters`;
+  //   return this.api.get<TechnicalProposalFilter>(url);
+  // }
 
   acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/accept`;

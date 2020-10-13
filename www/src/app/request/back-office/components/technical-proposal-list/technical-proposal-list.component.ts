@@ -80,7 +80,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   fetch() {
-    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, {}).pipe(
+    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, this.form.value).pipe(
       publishReplay(1), refCount()
     );
   }

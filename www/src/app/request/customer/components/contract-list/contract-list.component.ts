@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { StateStatus } from "../../../common/models/state-status";
 import { ContractState } from "../../states/contract.state";
@@ -43,8 +43,9 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
   readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = this.contractSuppliersSearch$.pipe(
-    withLatestFrom(this.availibleFilters$),
+  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([
+    this.contractSuppliersSearch$, this.availibleFilters$
+  ]).pipe(
     map(([q, { suppliers }]) => suppliers
       ?.filter((supplier: ContragentList) => supplier.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || supplier.inn.indexOf(q) > -1)
       ?.map((supplier: ContragentList) => ({ label: supplier.shortName, value: supplier.id }))),
