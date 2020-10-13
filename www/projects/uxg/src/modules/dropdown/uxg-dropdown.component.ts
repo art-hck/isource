@@ -76,13 +76,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   set isHidden(value: boolean) {
-    if (isPlatformBrowser(this.platformId)) {
-      if (value) {
-        window.removeEventListener('scroll', this.hideOnScrollOutside, true);
-      } else {
-        window.addEventListener('scroll', this.hideOnScrollOutside, true);
-      }
-    }
     this._isHidden = value;
   }
 
@@ -103,8 +96,6 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   }
 
   ngAfterViewInit() {
-    this.document.body.appendChild(this.itemsWrapper);
-
     this.items.changes.pipe(
       startWith(this.items),
       flatMap(items => items.map(item => item.onSelect)),
@@ -131,23 +122,16 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
     return this.el.nativeElement.contains(targetElement) || this.itemsWrapper.contains(targetElement);
   }
 
-  private hideOnScrollOutside = (e) => {
-    if (!this.isHidden && !this.isInside(e.target)) {
-      this.isHidden = true;
-    }
-  }
-
   private setPosition(el, isDirectionUp: boolean = false): void {
     if (isDirectionUp) {
-      this.renderer.setStyle(el, 'bottom', (this.windowHeight - this.scrollTop - this.coords.bottom + this.el.nativeElement.offsetHeight - 2) + "px");
+      this.renderer.setStyle(el, 'bottom', (this.el.nativeElement.offsetHeight - 2) + "px");
       this.renderer.removeStyle(el, 'top');
     } else {
-      this.renderer.setStyle(el, 'top', (this.coords.top + this.scrollTop + this.el.nativeElement.offsetHeight - 1) + "px");
+      this.renderer.setStyle(el, 'top', (this.el.nativeElement.offsetHeight - 1) + "px");
       this.renderer.removeStyle(el, 'bottom');
     }
 
     this.renderer.setStyle(el, 'width', this.el.nativeElement.offsetWidth + "px");
-    this.renderer.setStyle(el, 'left', this.coords.left + "px");
 
     this.cdr.detectChanges();
   }
