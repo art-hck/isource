@@ -8,7 +8,7 @@ import { History } from "../models/history";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestGroup } from "../models/request-group";
 import { GroupWithPositions } from "../models/groupWithPositions";
-import { RecommendedQuantityMock } from "../../customer/services/recommended-quantity-mock";
+import { RecommendedQuantity } from "../../customer/models/recommended-quantity";
 
 @Injectable()
 export class RequestPositionService {
@@ -56,8 +56,8 @@ export class RequestPositionService {
   }
 
   getQuantityRecommendation(position: string) {
-    // const url = `/api/v1/forecasts-by-name?name=${position}`;
-    // return this.api.get<RecommendedQuantity>(url);
-    return of(RecommendedQuantityMock);
+    const url = `#intelplan#forecasts-by-name`;
+    return this.api.get<RecommendedQuantity[]>(url, {params: {name: position}});
+    // return of(RecommendedQuantityMock);
   }
 }

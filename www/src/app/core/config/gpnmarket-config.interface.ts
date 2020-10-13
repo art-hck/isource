@@ -45,6 +45,9 @@ export interface GpnmarketConfigInterface {
   profile: {
     url: string
   };
+  intelplan: {
+    url: string;
+  };
   instructions: {
     forCustomer: string,
     forBackoffice: string

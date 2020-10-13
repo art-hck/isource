@@ -18,6 +18,7 @@ import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
 import { Store } from "@ngxs/store";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-position-form',
@@ -79,7 +80,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private statusService: RequestPositionStatusService,
     private positionService: RequestPositionService,
     public okeiService: OkeiService,
-    private store: Store
+    private store: Store,
+    public featureService: FeatureService
   ) {}
 
   ngOnInit() {
@@ -179,20 +181,27 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     }
   }
 
-  getQuantityRecommendation(positionName: string) {
-    if (this.form.get('name').value && !this.isRecommendedQuantity) {
-      this.positionService.getQuantityRecommendation(positionName).subscribe(
+  getQuantityRecommendation() {
+    if (this.showRecommendedQuantity()) {
+      this.positionService.getQuantityRecommendation(this.form.get('name').value).subscribe(
         (data) => {
           if (data.length !== 0) {
             this.quantityRecommendation = data[0].forecastCommodity.filter(
-              item => item.isForecast === true).reduce(
+              item => item.isForecast).reduce(
               (acc, curr) => acc.quantity > curr.quantity ? acc : curr).quantity;
-            this.recommendedUnit = data[0].unit;
-            this.quantityPopover.show();
-            this.isRecommendedQuantity = true;
+            if (this.quantityRecommendation > this.form.get('quantity').value) {
+              this.recommendedUnit = data[0].unit;
+              this.quantityPopover.show();
+              this.isRecommendedQuantity = true;
+            }
           }
         });
     }
+  }
+
+  showRecommendedQuantity() {
+    return this.form.get('name').value && !this.isRecommendedQuantity && !this.requestId && !this.position.id &&
+      this.featureService.authorize('recommendedQuantity');
   }
 
   setRecommendedQuantity() {

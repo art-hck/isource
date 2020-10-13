@@ -27,6 +27,7 @@ export interface IFeatureList {
   backofficeAgreements;
   customerAgreements;
   recommendedPositions;
+  recommendedQuantity;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -54,5 +55,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   customerAgreements: { roles: [UserRole.CUSTOMER] },
-  recommendedPositions: { roles: [UserRole.CUSTOMER]}
+  recommendedPositions: { roles: [UserRole.CUSTOMER]},
+  recommendedQuantity: { roles: [UserRole.CUSTOMER]},
 };
