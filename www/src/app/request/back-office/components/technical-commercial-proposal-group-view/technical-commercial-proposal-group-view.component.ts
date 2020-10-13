@@ -40,7 +40,6 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   requestId: Uuid;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   editedGroup: TechnicalCommercialProposalGroup;
-  prolongModalPayload: Procedure;
   invalidUploadTemplate = false;
   files: File[] = [];
   destroy$ = new Subject();
