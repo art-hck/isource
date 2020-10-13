@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, ContentChild, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { distinctUntilChanged, filter, takeUntil, tap } from "rxjs/operators";
+import { FilterCheckboxList } from "../filter-checkbox-item";
 
 @Component({
   selector: 'app-filter-checkbox-list',
@@ -11,7 +12,7 @@ import { distinctUntilChanged, filter, takeUntil, tap } from "rxjs/operators";
 })
 export class FilterCheckboxListComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
   @ContentChild(TemplateRef) itemTpl: TemplateRef<any>;
-  @Input() items$: Observable<{ value: unknown, label?: string | number, item?: unknown, hideFolded?: boolean }[]>;
+  @Input() items$: Observable<FilterCheckboxList>;
   @Input() limit = 0;
   @Input() folded = true;
   @Input() foldedSearch = false; // Show search input even folded
@@ -75,7 +76,7 @@ export class FilterCheckboxListComponent implements ControlValueAccessor, OnInit
       this.formArray['_registerControl'](formGroup);
     });
 
-    this.cd.detectChanges();
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
