@@ -62,6 +62,20 @@ export const AppConfig: GpnmarketConfigInterface = {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
     forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",
   },
+  menu: {
+    additionalItems: [
+      {
+        text: 'Профиль',
+        base: 'https://profile.ezgg.site',
+        path: '/',
+      },
+      {
+        text: 'Интелплан',
+        base: 'https://intelplan.gpb.isale.pro',
+        path: '/',
+      },
+    ]
+  },
   disabledFeatures: [
     "deliveryMonitor",
     "catalog",
