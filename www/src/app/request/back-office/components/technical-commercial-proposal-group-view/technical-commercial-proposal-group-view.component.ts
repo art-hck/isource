@@ -48,7 +48,10 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
-  readonly form2 = this.fb.group({ technicalCommercialProposalGroupName: [null, [Validators.required]], fileTemplate: [null, [Validators.required]] });
+  readonly formTemplate = this.fb.group({
+    technicalCommercialProposalGroupName: [null, [Validators.required]],
+    fileTemplate: [null, [Validators.required]]
+  });
 
   readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
@@ -110,7 +113,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   }
 
   onChangeFilesList(files: File[]): void {
-    this.form2.get('fileTemplate').setValue(files);
+    this.formTemplate.get('fileTemplate').setValue(files);
   }
 
   updateTechnicalCommercialProposalGroups(): void {
@@ -120,10 +123,10 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   }
 
   submit() {
-    if (this.form2.valid) {
+    if (this.formTemplate.valid) {
       this.uploadTemplateModal.close();
       this.store.dispatch(
-        this.uploadTemplate(this.requestId, null, this.form2.get('fileTemplate').value, this.form2.get('technicalCommercialProposalGroupName').value)
+        this.uploadTemplate(this.requestId, null, this.formTemplate.get('fileTemplate').value, this.formTemplate.get('technicalCommercialProposalGroupName').value)
       );
     }
   }

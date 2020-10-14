@@ -14,12 +14,18 @@
           </div>
         </uxg-popover>
       </div>
+      <div class="app-col"></div>
+      <div class="app-col-auto">
+        <!-- Фильтр  -->
+        <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
+          <uxg-icon shape="app-sort2"></uxg-icon>
+          <span>Фильтр</span>
+        </button>
+      </div>
     </div>
   </div>
   <div class="app-col-aside detachable"></div>
 </div>
-
-
 <div class="app-row">
   <div class="app-col">
     <app-technical-commercial-proposal-group
@@ -44,7 +50,7 @@
       <div class="app-row">
         <div class="app-col" [style.padding-right.px]="15">
           <div class="app-control-wrap" [style.padding]="0">
-            <input #createdDateFrom uxgInput uxgDatepicker placeholder="Дата с" class="delivery-date" formControlName="createdDateFrom">
+            <input #createdDateFrom uxgInput uxgDatepicker placeholder="Дата с" formControlName="createdDateFrom">
             <label class="app-control-icon" (click)="createdDateFrom.focus()">
               <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
@@ -53,7 +59,7 @@
 
         <div class="app-col">
           <div class="app-control-wrap" [style.padding]="0">
-            <input #createdDateTo uxgInput uxgDatepicker placeholder="Дата по" class="delivery-date" formControlName="createdDateTo">
+            <input #createdDateTo uxgInput uxgDatepicker placeholder="Дата по" formControlName="createdDateTo">
             <label class="app-control-icon" (click)="createdDateTo.focus()">
               <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
             </label>
