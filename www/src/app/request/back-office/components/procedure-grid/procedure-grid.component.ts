@@ -20,7 +20,7 @@ export class ProcedureGridComponent implements OnInit {
   @Output() prolong = new EventEmitter();
 
   readonly form = this.fb.group({ search: '' });
-  procedurePositions$: Observable<RequestPosition[]>
+  procedurePositions$: Observable<RequestPosition[]>;
 
   constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
               private  fb: FormBuilder) { }
