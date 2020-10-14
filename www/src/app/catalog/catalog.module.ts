@@ -14,7 +14,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RangeSliderControlComponent } from "./controls/range-slider/range-slider.control";
 import { NouisliderModule } from "ng2-nouislider";
 import { PositionViewComponent } from './components/position-view/position-view.component';
-import { CatalogFilterSectionComponent } from "./components/catalog-filter-section/catalog-filter-section.component";
 import { SupplierAutocompleteControlComponent } from "./controls/supplier-autocomplete/supplier-autocomplete.control";
 
 @NgModule({
