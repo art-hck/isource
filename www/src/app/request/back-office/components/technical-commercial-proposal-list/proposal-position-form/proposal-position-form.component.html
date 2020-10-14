@@ -12,7 +12,12 @@
     </div>
     <div class="app-col app-col-4">
       <div class="app-control-wrap">
-        <input #priceWithoutVatRef uxgInput type="text" lg formControlName="priceWithoutVat"/>
+        <input #priceWithoutVatRef
+               class="hidden-arrows"
+               min="0"
+               type="number"
+               (keypress)="filterEnteredText($event)"
+               uxgInput lg formControlName="priceWithoutVat"/>
         <label class="app-control-label" (click)="priceWithoutVatRef.focus()">Цена за единицу</label>
         <div class="app-control-error" *ngIf="form.get('priceWithoutVat').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
