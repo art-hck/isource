@@ -1,13 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
-import {
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { filter, switchMap, takeUntil, tap } from "rxjs/operators";
-import { Observable, Subject } from "rxjs";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { TechnicalProposals } from "../../actions/technical-proposal.actions";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
@@ -21,8 +15,14 @@ import { RequestState } from "../../states/request.state";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 import { TechnicalProposalState } from "../../states/technical-proposal.state";
 import { StateStatus } from "../../../common/models/state-status";
+import { FormBuilder } from "@angular/forms";
+import { TechnicalProposalFilter } from "../../../common/models/technical-proposal-filter";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { searchContragents } from "../../../../shared/helpers/search";
+import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
 import Fetch = TechnicalProposals.Fetch;
-import Update = TechnicalProposals.Update;
+import Filter = TechnicalProposals.Filter;
+import FetchAvailableFilters = TechnicalProposals.FetchAvailableFilters;
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -33,36 +33,37 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   @ViewChild('reviewedTab') reviewedTabElRef: UxgTabTitleComponent;
   @ViewChild('sentToEditTab') sentToEditTabElRef: UxgTabTitleComponent;
 
-  @Select(TechnicalProposalState.status)
-  readonly status$: Observable<StateStatus>;
-
-  @Select(RequestState.request)
-  readonly request$: Observable<Request>;
-
-  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_REVIEW]))
-  readonly proposalsSentToReview$: Observable<TechnicalProposal[]>;
-
-  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_EDIT]))
-  readonly proposalsSentToEdit$: Observable<TechnicalProposal[]>;
-
+  @Select(RequestState.request) request$: Observable<Request>;
+  @Select(TechnicalProposalState.status) status$: Observable<StateStatus>;
+  @Select(TechnicalProposalState.availableFilters) availableFilters$: Observable<TechnicalProposalFilter>;
+  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_REVIEW])) proposalsSentToReview$: Observable<TechnicalProposal[]>;
+  @Select(TechnicalProposalState.proposalsByStatus([TechnicalProposalsStatus.SENT_TO_EDIT])) proposalsSentToEdit$: Observable<TechnicalProposal[]>;
+  @Select(TechnicalProposalState.proposals) technicalProposals$: Observable<TechnicalProposal[]>;
+  @Select(TechnicalProposalState.proposalsLength) proposalsLength$: Observable<number>;
   @Select(TechnicalProposalState.proposalsByStatus([
     TechnicalProposalsStatus.ACCEPTED,
     TechnicalProposalsStatus.PARTIALLY_ACCEPTED,
     TechnicalProposalsStatus.CANCELED
-  ]))
-  readonly proposalsReviewed$: Observable<TechnicalProposal[]>;
+  ])) proposalsReviewed$: Observable<TechnicalProposal[]>;
 
-  @Select(TechnicalProposalState.proposals)
-  readonly technicalProposals$: Observable<TechnicalProposal[]>;
-
-  @Select(TechnicalProposalState.proposalAvailableStatuses)
-  readonly technicalProposalAvailableStatuses$: Observable<TechnicalProposalsStatus[]>;
 
   readonly destroy$ = new Subject();
+  readonly form = this.fb.group({ positionName: '', contragents: [[]], tpStatus: [[]] });
+  readonly contragentsSearch$ = new BehaviorSubject<string>("");
+
+  readonly contragentsFilter$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.contragentsSearch$, this.availableFilters$]).pipe(
+    map(([q, f]) => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id })))
+  );
+
+  readonly statusesFilter$: Observable<FilterCheckboxList<TechnicalProposalsStatus>> = this.availableFilters$.pipe(
+    map((f) => f?.tpStatus.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value }))),
+  );
+
   requestId: Uuid;
   positions$: Observable<RequestPosition[]>;
   technicalProposalsStatus = TechnicalProposalsStatus;
   activeTab = 'SENT_TO_REVIEW';
+  readonly filter = (request: Request, filters: TechnicalProposalFilter<Uuid>) => new Filter(request.id, filters);
 
   constructor(
     private route: ActivatedRoute,
@@ -70,19 +71,21 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     public featureService: FeatureService,
     public store: Store,
     private cd: ChangeDetectorRef,
-  ) {}
+    private fb: FormBuilder,
+  ) {
+  }
 
   ngOnInit() {
     this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
-      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      tap(({ id }) => this.requestId = id),
+      tap(({ id }) => this.store.dispatch([new Fetch(id), new FetchAvailableFilters(id)])),
+      switchMap(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
       filter(request => !!request),
-      tap(({id, number}) => this.bc.breadcrumbs = [
+      tap(({ id, number }) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
-        { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-        { label: 'Согласование технических предложений', link: `/requests/customer/${id}/technical-proposals` }
+        { label: `Заявка №${ number }`, link: `/requests/customer/${ id }` },
+        { label: 'Согласование технических предложений', link: `/requests/customer/${ id }/technical-proposals` }
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -105,10 +108,6 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     if (event) {
       this.activeTab = status;
     }
-  }
-
-  filter(filters: {}) {
-    this.store.dispatch(new Update(this.requestId, filters)).subscribe();
   }
 
   ngOnDestroy() {

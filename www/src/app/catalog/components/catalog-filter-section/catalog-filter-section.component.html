@@ -1,8 +1,0 @@
-<label (click)="isShowed = !isShowed" [class.showed]="isShowed">
-  <div class="app-col">{{label}}</div>
-  <uxg-icon shape="app-chevron"></uxg-icon>
-</label>
-
-<div class="control attribute-checkboxes" *ngIf="isShowed">
-  <ng-content></ng-content>
-</div>

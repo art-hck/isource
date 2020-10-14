@@ -26,7 +26,7 @@
         <div class="app-control-wrap">
           <uxg-dropdown-input
             formControlName="contragent" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragents"
           >
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
               <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
@@ -148,7 +148,7 @@
       </div>
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-        <button *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'"
+        <button *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'" type="button"
                 uxgButton secondary (click)="submit(false)"
                 [disabled]="form.disabled">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>

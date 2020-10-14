@@ -34,21 +34,6 @@ const routes: Routes = [
     data: { feature: "customerRequest" },
     children: [
       {
-        path: 'new',
-        children: [
-          {
-            path: 'technical-proposals',
-            component: TechnicalProposalListDeprecatedComponent,
-            data: { title: "Технические предложения" }
-          },
-          {
-            path: 'commercial-proposals',
-            component: CommercialProposalListOldComponent,
-            data: { title: "Коммерческие предложения", noFooter: true, noContentPadding: true  }
-          },
-        ]
-      },
-      {
         path: '',
         component: CustomerRequestComponent,
       },

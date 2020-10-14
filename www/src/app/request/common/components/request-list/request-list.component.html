@@ -202,7 +202,14 @@
 
   </div>
 
-  <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="total" [dirty]="form.dirty">
+  <app-filter
+    #filterRef
+    [formGroup]="form"
+    [count]="total"
+    [dirty]="form.dirty"
+    (reset)="form.reset(); form.markAsPristine()"
+    (filter)="filter.emit({ filters: $event })"
+  >
     <app-filter-section label="Заявка">
       <input uxgInput type="text" formControlName="requestNameOrNumber" placeholder="Номер или наименование заявки" />
     </app-filter-section>

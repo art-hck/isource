@@ -1,64 +1,90 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching'; else placeholder">
-  <div class="app-row">
-    <div class="app-col app-table app-no-border tab-row">
-      <uxg-tabs>
-        <uxg-tab-title #sentToReviewTab
-                       [active]="true"
-                       (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_REVIEW)"
-                       [disabled]="(proposalsSentToReview$ | async).length === 0">
-          <ng-container *ngIf="(proposalsSentToReview$ | async) as proposals">
-            Необходимо рассмотреть <span class="counter">({{ proposals?.length }})</span>
-          </ng-container>
-        </uxg-tab-title>
+  <ng-container *ngIf="(activeList$ | async) as technicalProposals">
+    <ng-container *ngIf="request$ | async as request">
+      <div class="app-row">
+        <div class="app-col app-table app-no-border tab-row">
+          <div class="app-row app-align-items-center">
+            <uxg-tabs class="app-col">
+              <uxg-tab-title #sentToReviewTab
+                             [active]="true"
+                             (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_REVIEW)"
+                             [disabled]="(proposalsSentToReview$ | async).length === 0">
+                <ng-container *ngIf="(proposalsSentToReview$ | async) as proposals">
+                  Необходимо рассмотреть <span class="counter">({{ proposals?.length }})</span>
+                </ng-container>
+              </uxg-tab-title>
 
-        <uxg-tab-title #sentToEditTab
-                       (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_EDIT)"
-                       [disabled]="(proposalsSentToEdit$ | async).length === 0">
-          <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposals">
-            На доработке <span class="counter">({{ proposals?.length }})</span>
-          </ng-container>
-        </uxg-tab-title>
+              <uxg-tab-title #sentToEditTab
+                             (toggle)="onToggle($event, technicalProposalsStatus.SENT_TO_EDIT)"
+                             [disabled]="(proposalsSentToEdit$ | async).length === 0">
+                <ng-container *ngIf="(proposalsSentToEdit$ | async) as proposals">
+                  На доработке <span class="counter">({{ proposals?.length }})</span>
+                </ng-container>
+              </uxg-tab-title>
 
-        <uxg-tab-title #reviewedTab
-                       (toggle)="onToggle($event, technicalProposalsStatus.ACCEPTED)"
-                       [disabled]="(proposalsReviewed$ | async).length === 0">
-          <ng-container *ngIf="(proposalsReviewed$ | async) as proposals">
-            Рассмотренные <span class="counter">({{ proposals?.length }})</span>
-          </ng-container>
-        </uxg-tab-title>
-      </uxg-tabs>
-    </div>
-  </div>
+              <uxg-tab-title #reviewedTab
+                             (toggle)="onToggle($event, technicalProposalsStatus.ACCEPTED)"
+                             [disabled]="(proposalsReviewed$ | async).length === 0">
+                <ng-container *ngIf="(proposalsReviewed$ | async) as proposals">
+                  Рассмотренные <span class="counter">({{ proposals?.length }})</span>
+                </ng-container>
+              </uxg-tab-title>
+            </uxg-tabs>
 
-  <div class="app-row">
-    <div class="app-col">
-      <ng-container *ngIf="(activeList$ | async) as technicalProposals">
-        <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
-          <app-request-customer-technical-proposal
-            *ngFor="let technicalProposal of technicalProposals; let i = index"
-            [request]="(request$ | async)"
-            [technicalProposal]="technicalProposal"
-            [technicalProposalIndex]="i"
-            [currentList]="activeTab"
-          ></app-request-customer-technical-proposal>
-        </ng-container>
+            <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
+              <uxg-icon shape="app-sort2"></uxg-icon>
+              <span>Фильтр</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
-        <ng-template #emptyList>
-          <div class="ghost-color empty-list">Список технических предложений пуст</div>
-        </ng-template>
-      </ng-container>
-    </div>
+      <div class="app-row" >
+        <div class="app-col">
+            <ng-container *ngIf="technicalProposals.length !== 0; else emptyList">
+              <app-request-customer-technical-proposal
+                *ngFor="let technicalProposal of technicalProposals; let i = index"
+                [request]="request"
+                [technicalProposal]="technicalProposal"
+                [technicalProposalIndex]="i"
+                [currentList]="activeTab"
+              ></app-request-customer-technical-proposal>
+            </ng-container>
 
-    <div class="app-col-aside">
-      <ng-container *ngIf="(technicalProposals$ | async) as technicalProposals">
-        <app-request-technical-proposal-filter
-          [technicalProposals]="technicalProposals"
-          [technicalProposalsAvailableStatuses]="technicalProposalAvailableStatuses$ | async"
-          (filters)="filter($event)">
-        </app-request-technical-proposal-filter>
-      </ng-container>
-    </div>
-  </div>
+            <ng-template #emptyList>
+              <div class="ghost-color empty-list">Список технических предложений пуст</div>
+            </ng-template>
+        </div>
+
+        <app-filter
+          #filterRef
+          [formGroup]="form"
+          [count]="proposalsLength$ | async"
+          [dirty]="form.dirty"
+          (reset)="form.reset(); form.markAsPristine()"
+          (filter)="store.dispatch(filter(request, $event))"
+        >
+          <app-filter-section label="Заявка">
+            <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
+          </app-filter-section>
+
+          <app-filter-section label="Контрагент" *ngIf="(contragentsFilter$ | async).length">
+            <app-filter-checkbox-list
+              formControlName="contragents" searchPlaceholder="Заказчик"
+              [foldedSearch]="true"
+              [items$]="contragentsFilter$"
+              [limit]="5"
+              (search)="contragentsSearch$.next($event)">
+            </app-filter-checkbox-list>
+          </app-filter-section>
+
+          <app-filter-section label="Согласование">
+            <app-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></app-filter-checkbox-list>
+          </app-filter-section>
+        </app-filter>
+      </div>
+    </ng-container>
+  </ng-container>
 </ng-container>
 
 <ng-template #placeholder>

@@ -4,7 +4,11 @@
   padding: 11px 3px 11px 11px;
   margin: -11px -19px 0 -11px;
   overflow-y: scroll;
-  max-height: 285px;
+  max-height: 300px;
 
   @include scrollbar($theme);
+
+  & > * {
+    flex-wrap: nowrap;
+  }
 }

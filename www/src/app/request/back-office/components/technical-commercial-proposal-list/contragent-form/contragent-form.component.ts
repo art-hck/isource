@@ -13,9 +13,9 @@ import { DeliveryTypeLabels } from "../../../../common/dictionaries/delivery-typ
 import { CurrencyLabels } from "../../../../common/dictionaries/currency-labels";
 import { getCurrencySymbol } from "@angular/common";
 import { Uuid } from "../../../../../cart/models/uuid";
-import Create = TechnicalCommercialProposals.Create;
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
-import Update = TechnicalCommercialProposals.Update;
+import { searchContragents } from "../../../../../shared/helpers/search";
+import Create = TechnicalCommercialProposals.Create;
 import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 
 @Component({
@@ -35,6 +35,7 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
+  readonly searchContragents = searchContragents;
   form: FormGroup;
   invalidDocControl = false;
 
@@ -71,10 +72,6 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
 
     });
     this.cd.detectChanges();
-  }
-
-  search(query: string, contragents: ContragentList[]) {
-    return contragents.filter(c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
 
   contragentExists(contragent) {

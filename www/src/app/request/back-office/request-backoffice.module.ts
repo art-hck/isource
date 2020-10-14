@@ -23,7 +23,6 @@ import { TechnicalCommercialProposalFormComponent } from "./components/technical
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
-import { TechnicalCommercialProposalFilterComponent } from "./components/technical-commercial-proposal-filter/technical-commercial-proposal-filter.component";
 import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
 import { TechnicalCommercialProposalParametersFormComponent } from './components/technical-commercial-proposal-form/technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.component';
 import { RequestState } from "./states/request.state";
@@ -61,7 +60,6 @@ import { ContractService } from "./services/contract.service";
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalFormComponent,
-    TechnicalCommercialProposalFilterComponent,
     TechnicalCommercialProposalParametersFormComponent,
     RequestListComponent,
     TechnicalCommercialProposalContragentFormComponent,

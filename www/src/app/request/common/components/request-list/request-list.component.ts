@@ -7,7 +7,7 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { StateStatus } from "../../models/state-status";
 import { RequestsList } from "../../models/requests-list/requests-list";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { debounceTime, map, switchMap, takeUntil, tap } from "rxjs/operators";
+import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { WsTypes } from "../../../../websocket/enum/ws-types";
 import { WebsocketService } from "../../../../websocket/services/websocket.service";
@@ -20,6 +20,7 @@ import { PositionStatusesLabels } from "../../dictionaries/position-statuses-lab
 import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
 import { Uuid } from "../../../../cart/models/uuid";
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { searchContragents, searchUsers } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-list',
@@ -86,18 +87,16 @@ export class RequestListComponent implements OnInit, OnDestroy {
       });
 
     this.customers$ = this.availableFilters$ && this.customersSearch$.pipe(
-      switchMap(q => this.availableFilters$.pipe(map(f => f?.contragents
-        ?.filter(({ shortName, inn }) => shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || inn.indexOf(q) > -1)
-        ?.map(({ shortName, id }) => ({ label: shortName, value: id }))
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id }))
       ))),
       tap(() => this.cd.detectChanges())
     );
 
     this.users$ = this.availableFilters$ && this.usersSearch$.pipe(
-      switchMap(q => this.availableFilters$.pipe(map(f => f?.users
-        ?.filter(user => user.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1)
-        ?.map(user => ({ label: user.shortName, value: user.id }))
-      ))),
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchUsers(q, f?.users ?? []).map(u => ({ label: u.shortName, value: u.id }))
+        ))),
       tap(() => this.cd.detectChanges())
     );
 
@@ -105,7 +104,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
       status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
     )));
 
-    this.form.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(filters => this.filter.emit({ filters }));
   }
 
   ngOnDestroy() {

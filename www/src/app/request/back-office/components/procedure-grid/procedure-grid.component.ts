@@ -2,12 +2,11 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular
 import { Procedure } from "../../models/procedure";
 import moment from "moment";
 import { RequestPosition } from "../../../common/models/request-position";
-import { AppComponent } from "../../../../app.component";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../../../core/config/gpnmarket-config.interface";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { OkatoRegion } from "../../../../shared/models/okato-region";
-import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { startWith } from "rxjs/operators";
+import { FormBuilder } from "@angular/forms";
+import { map, startWith } from "rxjs/operators";
+import { searchPosition } from "../../../../shared/helpers/search";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-procedure-grid',
@@ -20,22 +19,16 @@ export class ProcedureGridComponent implements OnInit {
   @Output() bargain = new EventEmitter();
   @Output() prolong = new EventEmitter();
 
-  form: FormGroup;
-  procedurePositions: RequestPosition[];
+  readonly form = this.fb.group({ search: '' });
+  procedurePositions$: Observable<RequestPosition[]>;
 
   constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
               private  fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      search: ''
-    });
-
-    this.form.get('search').valueChanges.pipe(
-      startWith(<{}>this.form.get('search').value)).subscribe(() => {
-      this.procedurePositions = this.procedure.positions.map(procedurePosition => procedurePosition.requestPosition).filter(requestPosition =>
-        requestPosition.name.toLowerCase().indexOf(this.form.get('search').value.toLowerCase()) >= 0);
-      }
+    this.procedurePositions$ = this.form.get('search').valueChanges.pipe(
+      startWith(<{}>this.form.get('search').value)).pipe(
+      map(q => this.procedure.positions.map(({ requestPosition }) => requestPosition).filter(position => searchPosition(q, position)))
     );
   }
 

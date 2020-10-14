@@ -1,7 +1,7 @@
 import { ActivatedRoute } from "@angular/router";
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, finalize, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
-import { Observable, Subject } from "rxjs";
+import { filter, finalize, map, mapTo, publishReplay, refCount, switchMap, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { RequestService } from "../../services/request.service";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
@@ -20,6 +20,10 @@ import { ProcedureService } from "../../services/procedure.service";
 import { ProcedureAction } from "../../models/procedure-action";
 import { StateStatus } from "../../../common/models/state-status";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
+import { FormBuilder } from "@angular/forms";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -30,7 +34,9 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   readonly destroy$ = new Subject();
   requestId: Uuid;
   technicalProposals$: Observable<TechnicalProposal[]>;
-  technicalProposalAvailableStatuses$: Observable<TechnicalProposalsStatus[]>;
+  availableFilters$: Observable<TechnicalProposalFilter>;
+  contragentsFilter$: Observable<FilterCheckboxList<Uuid>>;
+  statusesFilter$: Observable<FilterCheckboxList<TechnicalProposalsStatus>>;
   procedures$: Observable<Procedure[]>;
   positions$: Observable<RequestPosition[]>;
   showForm = false;
@@ -38,10 +44,13 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   prolongModalPayload: Procedure;
   state: StateStatus = "pristine";
+  readonly form = this.fb.group({ positionName: '', contragents: [[]], tpStatus: [[]] });
+  readonly contragentsSearch$ = new BehaviorSubject<string>("");
 
   constructor(
     private route: ActivatedRoute,
     private bc: UxgBreadcrumbsService,
+    private fb: FormBuilder,
     private requestService: RequestService,
     private technicalProposalsService: TechnicalProposalsService,
     private procedureService: ProcedureService,
@@ -62,7 +71,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       ]),
       tap(() => {
         this.fetch();
-        this.fetchAvailableStatusesList();
+        this.fetchAvailableFilters();
         this.fetchProcedures();
         this.fetchPositions();
       }),
@@ -70,15 +79,21 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  fetch(filters: TechnicalProposalFilter = {}) {
-    this.technicalProposals$ = this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).pipe(
-      publishReplay(1), refCount()
-    );
+  fetch() {
+    this.technicalProposals$ = this.technicalProposalsService.list(this.requestId, this.form.value).pipe(publishReplay(1), refCount());
   }
 
-  fetchAvailableStatusesList(filters: TechnicalProposalFilter = {}) {
-    this.technicalProposalAvailableStatuses$ = this.technicalProposalsService.getTechnicalProposalsAvailableStatuses(this.requestId, filters).pipe(
-      publishReplay(1), refCount()
+  fetchAvailableFilters() {
+    this.availableFilters$ = this.technicalProposalsService.availableFilters(this.requestId).pipe(publishReplay(1), refCount());
+
+    this.contragentsFilter$ = this.contragentsSearch$.pipe(
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id }))
+      ))),
+    );
+
+    this.statusesFilter$ = this.availableFilters$.pipe(
+      map(f => f?.tpStatus.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value })))
     );
   }
 
@@ -98,19 +113,12 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       });
   }
 
-  filter(filters: TechnicalProposalFilter) {
-    this.technicalProposalsService.getTechnicalProposalsList(this.requestId, filters).subscribe(data => {
-      this.technicalProposals$ = this.technicalProposals$.pipe(mapTo(data));
-    });
-
-    // Обновляем список доступных статусов, учитывая отмеченных заказчиков
-    const filtersByContragents = filters.contragents ? { contragents: filters.contragents } : {};
-
-    this.fetchAvailableStatusesList(filtersByContragents);
+  filter(filters: TechnicalProposalFilter<Uuid>) {
+    this.technicalProposalsService.list(this.requestId, filters).subscribe(data => this.technicalProposals$ = of(data));
   }
 
   fetchPositions() {
-    this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
+    this.positions$ = this.technicalProposalsService.positions(this.requestId);
   }
 
   /**
@@ -118,6 +126,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
    */
   addTechnicalProposal(technicalProposal) {
     this.fetch();
+    this.fetchAvailableFilters();
     // this.technicalProposals$ = this.technicalProposals$.pipe(
     //   map(technicalProposals => {
     //     technicalProposals.unshift(technicalProposal);
@@ -131,6 +140,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
    */
   updateTechnicalProposal(technicalProposal) {
     this.fetch();
+    this.fetchAvailableFilters();
     // this.technicalProposals$ = this.technicalProposals$.pipe(
     //   map(technicalProposals => {
     //     const i = technicalProposals.findIndex(_technicalProposal => _technicalProposal.id === technicalProposal.id);
@@ -143,10 +153,11 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   onCancelPublishTechnicalProposal(technicalProposal: TechnicalProposal) {
-    const subscription = this.technicalProposalsService.cancelSendToAgreement(this.requestId, technicalProposal).subscribe(
-      () => {
+    this.technicalProposalsService.rollback(this.requestId, technicalProposal)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
         this.fetch();
-        subscription.unsubscribe();
+        this.fetchAvailableFilters();
       }
     );
   }

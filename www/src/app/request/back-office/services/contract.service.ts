@@ -14,7 +14,7 @@ import { ContractFilter } from "../../common/models/contract-filter";
 export class ContractService {
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId: Uuid, filters?: ContractFilter): Observable<Contract[]> {
+  list(requestId: Uuid, filters?: ContractFilter<Uuid>): Observable<Contract[]> {
     const url = `requests/${requestId}/contracts`;
     return this.api.post<Contract[]>(url, { filters });
   }

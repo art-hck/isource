@@ -16,7 +16,7 @@ export namespace ContractActions {
   export class Filter {
     static readonly type = '[Contract Backoffice] Filter';
 
-    constructor(public requestId: Uuid, public filter: ContractFilter) {}
+    constructor(public requestId: Uuid, public filter: ContractFilter<Uuid>) {}
   }
 
   export class FetchAvailibleFilters {

@@ -3,6 +3,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { FormBuilder, Validators } from "@angular/forms";
 import { shareReplay } from "rxjs/operators";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
+import { searchContragents } from "../../../helpers/search";
 
 @Component({
   selector: 'grid-contragent-form',
@@ -14,12 +15,10 @@ export class GridContragentFormComponent {
   @Output() add = new EventEmitter();
   readonly form = this.fb.group({ supplier: [null, Validators.required] });
   readonly contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
+  readonly searchContragents = searchContragents;
 
   constructor(private contragentService: ContragentService, private fb: FormBuilder) {}
 
-  search(query: string, contragents: ContragentShortInfo[]) {
-    return contragents.filter(c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
 
   filterContragents(contragents: ContragentShortInfo[]): ContragentShortInfo[] {
     return contragents.filter(({id}) => !this.excludedContragents.some(({id: excluded_id}) => id === excluded_id));

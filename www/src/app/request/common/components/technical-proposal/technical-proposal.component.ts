@@ -95,7 +95,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
   sendToAgreement(technicalProposal: TechnicalProposal): void {
     this.isLoading = true;
 
-    const subscription = this.technicalProposalsService.sendToAgreement(this.request.id, technicalProposal).subscribe(
+    const subscription = this.technicalProposalsService.sendForApproval(this.request.id, technicalProposal).subscribe(
       () => {
         this.update.emit(technicalProposal);
         this.isLoading = false;

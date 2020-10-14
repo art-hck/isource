@@ -32,13 +32,11 @@ import { TechnicalCommercialProposalConfirmComponent } from './components/techni
 
 @NgModule({
   declarations: [
-    CommercialProposalListOldComponent,
     RequestComponent,
     RequestFormComponent,
     RequestFormFreeComponent,
     PositionComponent,
     RequestTechnicalProposalComponent,
-    TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
     CommercialProposalViewComponent,
     TechnicalCommercialProposalListComponent,

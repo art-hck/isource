@@ -23,13 +23,12 @@ export class AgreementsComponent implements OnInit, OnDestroy {
   @Select(AgreementListState.status) status$: Observable<StateStatus>;
   @Select(AgreementListState.totalCount) totalCount$: Observable<number>;
 
-  filters: AgreementsListFilter = {};
-
   pages$: Observable<number>;
   readonly pageSize = 10;
   readonly actions: { type: AgreementAction[], label: string }[] = AgreementActionFilters;
   readonly form = this.fb.group({ actions: null, numberOrName: '', issuedDateFrom: null, issuedDateTo: null, contragents: [[]] });
   readonly destroy$ = new Subject();
+  readonly filter$ = new Subject<AgreementsListFilter>();
 
   get activeFilters() {
     return Object.entries(this.form.controls).filter(([k, c]) => k !== 'actions' && c.dirty);
@@ -46,10 +45,9 @@ export class AgreementsComponent implements OnInit, OnDestroy {
     this.pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
 
     combineLatest([
-      this.form.valueChanges.pipe(
+      this.filter$.pipe(
         tap(() => this.router.navigate(["."], { relativeTo: this.route, queryParams: null })),
-        startWith({}),
-        debounceTime(300),
+        startWith<AgreementsListFilter>({}),
       ),
       this.pages$
     ]).pipe(takeUntil(this.destroy$)).subscribe(([filters, page]) => {

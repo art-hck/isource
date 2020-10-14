@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
 import { StateStatus } from "../../../common/models/state-status";
 import { ContractState } from "../../states/contract.state";
@@ -13,12 +13,12 @@ import { UxgBreadcrumbsService } from "uxg";
 import { Contract } from "../../../common/models/contract";
 import { FormBuilder } from "@angular/forms";
 import { ContractFilter } from "../../../common/models/contract-filter";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContragentWithPositions } from "../../../common/models/contragentWithPositions";
 import { Uuid } from "../../../../cart/models/uuid";
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 import { ContractStatus } from "../../../common/enum/contract-status";
+import { searchContragents } from "../../../../shared/helpers/search";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Fetch = ContractActions.Fetch;
 import Send = ContractActions.Send;
@@ -46,12 +46,9 @@ export class ContractListComponent implements OnInit, OnDestroy {
 
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
-  readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = this.contractSuppliersSearch$.pipe(
-    withLatestFrom(this.availibleFilters$),
-    map(([q, { suppliers }]) => suppliers
-      .filter((supplier: ContragentList) => supplier.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || supplier.inn.indexOf(q) > -1)
-      .map((supplier: ContragentList) => ({ label: supplier.shortName, value: supplier.id }))),
+  readonly suppliersSearch$ = new BehaviorSubject<string>("");
+  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
+    map(([q, f]) => searchContragents(q, f?.suppliers ?? []).map((c) => ({ label: c.shortName, value: c.id })))
   );
   readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses.map(value => ({ label: ContractStatusLabels[value], value }))),
@@ -61,6 +58,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly rollback = (request: Request, contract: Contract) => new Rollback(request.id, contract);
   readonly download = (contract: Contract) => new Download(contract);
   readonly delete = (request: Request, contract: Contract) => new Delete(request.id, contract);
+  readonly filter = (request: Request, value: ContractFilter<Uuid>) => new Filter(request.id, value);
 
   constructor(
     public store: Store,
@@ -81,10 +79,6 @@ export class ContractListComponent implements OnInit, OnDestroy {
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.form.valueChanges
-      .pipe(withLatestFrom(this.route.params), takeUntil(this.destroy$))
-      .subscribe(([value, { id }]) => this.store.dispatch(new Filter(id, value)));
   }
 
   ngOnDestroy() {

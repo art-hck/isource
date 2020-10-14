@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Request } from "../../../common/models/request";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { TechnicalProposalsService } from "../../services/technical-proposals.service";
-import { catchError, flatMap, map, mapTo, shareReplay, tap } from "rxjs/operators";
+import { catchError, delayWhen, map, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { PositionWithManufacturer } from "../../models/position-with-manufacturer";
 import { TechnicalProposal } from "../../../common/models/technical-proposal";
 import { TechnicalProposalCreateRequest } from "../../models/technical-proposal-create-request";
@@ -18,6 +18,8 @@ import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { Store } from "@ngxs/store";
 import { AppFile } from "../../../../shared/components/file/file";
 import { UxgModalComponent } from "uxg";
+import { saveAs } from 'file-saver/src/FileSaver';
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -38,10 +40,11 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   positionsWithManufacturer$: Observable<PositionWithManufacturer[]>;
   contragents$: Observable<ContragentList[]>;
   files: File[] = [];
-  subscription = new Subscription();
   invalidDocControl = false;
   invalidUploadTemplate = false;
   showErrorMessage = false;
+  readonly destroy$ = new Subject();
+  readonly searchContragents = searchContragents;
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -57,7 +60,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private technicalProposalsService: TechnicalProposalsService,
+    private rest: TechnicalProposalsService,
     private store: Store,
     private contragentService: ContragentService
   ) {
@@ -75,7 +78,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
       this.form.get('contragent').disable();
     }
 
-    this.form.valueChanges.subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       const docsCount = this.formDocuments.value.length + this.defaultTPValue('documents').length;
       if (this.form.get('documents').dirty && this.form.get('positions').dirty) {
         if (docsCount === 0 && this.form.get('positions').invalid) {
@@ -99,11 +102,11 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
       this.form.get('positions').updateValueAndValidity({ emitEvent: false });
     });
 
-    this.positionsWithManufacturer$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.request.id)
+    this.positionsWithManufacturer$ = this.rest.positions(this.request.id)
       .pipe(map(positions => positions.map(position => ({ position, manufacturingName: null }))));
 
     // Workaround sync with multiple elements per one formControl
-    this.form.get('positions').valueChanges
+    this.form.get('positions').valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(v => this.form.get('positions').setValue(v, { onlySelf: true, emitEvent: false }));
 
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
@@ -111,9 +114,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   }
 
   filesSelected(files: AppFile[]): void {
-    files.forEach(
-      file => this.formDocuments.push(this.fb.control(file))
-    );
+    files.forEach(file => this.formDocuments.push(this.fb.control(file)));
   }
 
   /**
@@ -139,23 +140,17 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
 
     // Создаём / изменяем ТП
     if (!this.isEditing) {
-      tp$ = this.technicalProposalsService.addTechnicalProposal(this.request.id, body);
+      tp$ = this.rest.create(this.request.id, body);
     } else {
       body = { id: this.form.get("id").value, ...body };
-      tp$ = this.technicalProposalsService.updateTechnicalProposal(this.request.id, body);
+      tp$ = this.rest.edit(this.request.id, body);
     }
 
     // Если есть доки - загружаем
     if (docs.length) {
-      tp$ = tp$.pipe(
-        flatMap(tp => {
-          const formData = new FormData();
-          docs.filter(({ valid }) => valid).forEach(({ file }, i) => formData.append(`files[documents][${i}]`, file, file.name));
-
-          return this.technicalProposalsService.uploadSelectedDocuments(this.request.id, tp.id, formData)
-            .pipe(mapTo(tp));
-        })
-      );
+      tp$ = tp$.pipe(delayWhen(tp => this.rest.uploadDocuments(
+        this.request.id, tp.id, docs.filter(({ valid }) => valid).map(({ file }) => file))
+      ));
     }
 
     // Проставляем заводские наименования.
@@ -165,27 +160,17 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
         const tpPosition = this.findTpPosition(position);
         return !tpPosition || tpPosition.manufacturingName !== manufacturingName;
       })
-      .map(({ position, manufacturingName }) => ({
-        position: { id: position.id },
-        manufacturingName
-      }))
-      .forEach(data => {
-        tp$ = tp$.pipe(flatMap(
-          tp => this.technicalProposalsService.updateTpPositionManufacturingName(this.request.id, tp.id, data)
-            .pipe(mapTo(tp))
-          )
-        );
-      });
+      .map(({ position: { id }, manufacturingName }) => ({ position: { id }, manufacturingName }))
+      .forEach(data => tp$ = tp$.pipe(
+        delayWhen(tp => this.rest.setManufacturingName(this.request.id, tp.id, data))
+      ));
 
     // Отправляем на согласование
     if (publish) {
-      tp$ = tp$.pipe(flatMap(
-        tp => this.technicalProposalsService.sendToAgreement(this.request.id, tp)
-          .pipe(mapTo(tp))
-      ));
+      tp$ = tp$.pipe(delayWhen(tp => this.rest.sendForApproval(this.request.id, tp)));
     }
 
-    tp$.subscribe(tp => {
+    tp$.pipe(takeUntil(this.destroy$)).subscribe(tp => {
       this.visibleChange.emit(false);
       this.isEditing ? this.update.emit(tp) : this.create.emit(tp);
     });
@@ -219,8 +204,9 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   }
 
   onDownloadTemplate() {
-    const contragentId = this.form.get("contragent").value.id;
-    this.technicalProposalsService.downloadTemplate(this.request.id, contragentId);
+    this.rest.downloadTemplate(this.request.id, this.form.get("contragent").value.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => saveAs(data, `RequestTechnicalProposalsTemplate.xlsx`));
   }
 
   onChangeFilesList(files: File[]): void {
@@ -236,23 +222,21 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
       return null;
     } else {
       this.uploadTemplateModal.close();
-      this.subscription.add(this.technicalProposalsService.addPositionsFromExcel(this.request.id, this.files).pipe(
+      this.rest.uploadTemplate(this.request.id, this.files).pipe(
         tap(() => this.store.dispatch(new ToastActions.Success("Шаблон импортирован"))),
         tap(({ requestTechnicalProposal }) => this.create.emit(requestTechnicalProposal)),
         catchError(({ error }) => this.store.dispatch(
           new ToastActions.Error(`Ошибка в шаблоне${error && error.detail && ': ' + error.detail || ''}`)
-        ))
-      ).subscribe());
+        )),
+        takeUntil(this.destroy$)
+      ).subscribe();
     }
   }
 
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-  searchContragent = (query: string, contragents: ContragentList[]) => {
-    return contragents.filter(
-      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

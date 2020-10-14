@@ -6,7 +6,7 @@
     [lg]="true"
     [strictMode]="true"
     [displayByFn]="getContragentName"
-    [searchFn]="search">
+    [searchFn]="searchContragents">
 
     <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
       <ng-container *ngFor="let contragent of contragents">

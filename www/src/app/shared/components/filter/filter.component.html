@@ -12,7 +12,7 @@
 <div class="app-col"></div>
 
 <div class="app-row" *ngIf="isOpen">
-  <button uxgButton primary strength lg class="app-col" [disabled]="count === 0" (click)="close(); submit.emit()">
+  <button uxgButton primary strength lg class="app-col" [disabled]="count === 0" (click)="close(); !liveFilter && filter.emit()">
     Показать <span [style.opacity]="0.6">{{ count > 0 ? count : null }}</span>
   </button>
 </div>

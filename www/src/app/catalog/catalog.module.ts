@@ -31,7 +31,6 @@ import { SupplierAutocompleteControlComponent } from "./controls/supplier-autoco
     CheckboxSliderControlComponent,
     RangeSliderControlComponent,
     SupplierAutocompleteControlComponent,
-    CatalogFilterSectionComponent
   ],
   imports: [
     ReactiveFormsModule,

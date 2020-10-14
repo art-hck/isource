@@ -14,18 +14,13 @@ import { RequestGroupFormComponent } from "./components/request/request-add-grou
 import { RequestAddResponsibleComponent } from './components/request/request-add-responsible-modal/request-add-responsible.component';
 import { RequestAsideInfoComponent } from "./components/request/request-aside-info/request-aside-info.component";
 import { RequestComponent } from "./components/request/request.component";
-import { TechnicalProposalFilterComponent } from "./components/technical-proposal-filter/technical-proposal-filter.component";
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
-import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { PositionFormComponent } from "./components/position-form/position-form.component";
 import { RequestTechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { RequestAddPositionModalComponent } from "./components/request/request-add-position-modal/request-add-position-modal.component";
-import { TechnicalProposalFilterContragentListComponent } from "./components/technical-proposal-filter/technical-proposal-filter-contragent-list/technical-proposal-filter-contragent-list.component";
-import { RequestTpFilterStatusesListComponent } from "./components/technical-proposal-filter/technical-proposal-filter-statuses-list/request-tp-filter-statuses-list.component";
-import { RequestTpFilterSectionComponent } from "./components/technical-proposal-filter/technical-proposal-filter-section/request-tp-filter-section.component";
 import { PositionsStatusChangeComponent } from "./components/position-status-change/positions-status-change.component";
 import { RequestMoveGroupModalComponent } from "./components/request/request-move-group-modal/request-move-group-modal.component";
 import { RequestPositionService } from "./services/request-position.service";
@@ -51,14 +46,9 @@ const RequestCommonModuleDeclarations = [
   RequestAddPositionModalComponent,
   RequestAsideInfoComponent,
   RequestComponent,
-  TechnicalProposalFilterContragentListComponent,
-  RequestTpFilterStatusesListComponent,
-  TechnicalProposalFilterComponent,
-  RequestTpFilterSectionComponent,
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
-  SearchFilterPipe,
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
   RequestListComponent,
