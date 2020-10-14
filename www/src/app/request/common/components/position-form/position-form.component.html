@@ -62,7 +62,7 @@
 
   <div class="app-row">
     <div class="app-col app-col-auto" [style.width.px]="130">
-      <uxg-popover #quantityPopover [openOnHover]="false">
+      <uxg-popover #quantityPopover>
         <div class="app-control-wrap">
           <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0"
                  (keypress)="filterEnteredText($event)"

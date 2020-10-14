@@ -55,8 +55,8 @@ export const AppConfig: GpnmarketConfigInterface = {
   profile: {
       url: 'https://profile.ezgg.site/api/v1/'
     },
-    intelplan: {
-        url: 'https://intelplan.gpb.isale.pro/api/v1/'
+  intelplan: {
+      url: 'https://intelplan.gpb.isale.pro/api/v1/'
       },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
