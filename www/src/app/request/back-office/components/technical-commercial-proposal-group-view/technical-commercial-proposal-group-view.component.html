@@ -1,5 +1,5 @@
 <div class="app-table app-no-border">
-    <div class="app-row app-align-items-center">
+  <div class="app-row app-align-items-center">
     <div>
       <span class="app-secondary-color">показать: </span>
       <uxg-popover>
@@ -16,10 +16,11 @@
     <div class="app-col"></div>
     <div>
       <!-- ТКП из процедуры  -->
-<!--      <button uxgButton secondary iconText>-->
-<!--        <uxg-icon shape="app-plus"></uxg-icon>-->
-<!--        <span>ТКП из процедуры</span>-->
-<!--      </button>-->
+      <button uxgButton secondary iconText (click)="procedureModalPayload = {action: 'create'}"
+              *ngIf="featureService.authorize('createProcedure')">
+        <uxg-icon shape="app-plus"></uxg-icon>
+        <span>ТКП из процедуры</span>
+      </button>
 
       <!-- Новая группа ТКП  -->
       <button uxgButton secondary iconText (click)="editedGroup = null; groupFormModal.open()">
@@ -86,5 +87,24 @@
         <button uxgButton primary lg (click)="submit()">Загрузить</button>
       </div>
     </form>
+  </ng-container>
+</uxg-modal>
+
+<!-- ТКП из процедуры -->
+<uxg-modal size="l" [(state)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">
+  <h2 *ngSwitchCase="'create'">Создание новой процедуры</h2>
+  <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
+  <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
+  <ng-container *ngIf="(availablePositions$ | async) as positions">
+    <app-request-procedure-form
+      *ngIf="procedureModalPayload"
+      [request]="(request$ | async)"
+      [positions]="positions"
+      [action]="procedureModalPayload.action"
+      [procedure]="procedureModalPayload.procedure"
+      [procedureSource]="procedureSource"
+      (complete)="this.store.dispatch(updateProcedures()); updateTechnicalCommercialProposalGroups(); procedureModalPayload = null"
+      (cancel)="procedureModalPayload = null"
+    ></app-request-procedure-form>
   </ng-container>
 </uxg-modal>
