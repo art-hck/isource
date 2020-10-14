@@ -6,9 +6,9 @@
     </h3>
 
     <div class="app-col-auto app-ellipsis" [ngSwitch]="technicalCommercialProposalGroup.status">
-      <div class="app-ghost-color app-bold" *ngSwitchCase="'IS_PROCEDURE'">
+      <div class="app-ghost-color app-bold" *ngSwitchCase="'PROCEDURE_IN_PROGRESS'">
         <uxg-icon shape="app-waiting"></uxg-icon>
-        <span>Идёт процедура</span>
+        <span>Идет процедура</span>
       </div>
 
       <div class="app-ghost-color app-bold" *ngSwitchCase="'DRAFT'">
