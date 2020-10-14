@@ -39,7 +39,7 @@
 
 <div>
   <app-technical-commercial-proposal-group
-    *ngFor="let group of (tcpGroups$ | async)"
+    *ngFor="let group of tcpGroups$ | async"
     [technicalCommercialProposalGroup]="group"
     (edit)="editedGroup = group; groupFormModal.open()"
   ></app-technical-commercial-proposal-group>
