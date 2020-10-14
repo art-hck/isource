@@ -18,6 +18,7 @@ import { RequestListComponent as CommonRequestListComponent } from "../../../com
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 import { AvailableFilters } from "../../models/available-filters";
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
+import { FormBuilder } from "@angular/forms";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -36,12 +37,22 @@ export class RequestListComponent implements OnInit, OnDestroy {
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{ page?: number, filters?: RequestsListFilter , sort?: RequestsListSort }>();
   readonly destroy$ = new Subject();
+  readonly form = this.fb.group({
+    requestNameOrNumber: '',
+    positionStatuses: [[]],
+    onlyOpenAgreements: false,
+    shipmentDateFrom: '',
+    shipmentDateTo: '',
+    shipmentDateAsap: false,
+    userIds: [[]],
+  });
   readonly addRequestFromExcel = ({ files, requestName }, publish: boolean) => new AddRequestFromExcel(files, requestName, publish);
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private router: Router,
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private actions: Actions,
     public store: Store,
   ) {}

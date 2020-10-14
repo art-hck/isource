@@ -16,6 +16,7 @@ import { RequestListComponent as CommonRequestListComponent } from "../../../com
 import Fetch = RequestListActions.Fetch;
 import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
+import { FormBuilder } from "@angular/forms";
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -34,11 +35,18 @@ export class RequestListComponent implements OnInit, OnDestroy {
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{page?: number, filters?: RequestsListFilter, sort?: RequestsListSort}>();
   readonly destroy$ = new Subject();
+  readonly form = this.fb.group({
+    requestNameOrNumber: '',
+    positionStatuses: [[]],
+    onlyOpenTasks: false,
+    customers: [[]]
+  });
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private router: Router,
-    public route: ActivatedRoute,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
     public store: Store,
   ) {}
 

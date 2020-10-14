@@ -55,25 +55,17 @@ export class ContractState {
 
   @Action(FetchAvailibleFilters)
   fetchAvailibleFilters({ setState }: Context, { requestId }: FetchAvailibleFilters) {
-    // @TODO: получать список доступных фильтров отдельным методом
-    return this.rest.list(requestId).pipe(
-      tap(contracts => setState(patch<Model>({
-        availibleFilters: {
-          statuses: Object.keys(ContractStatusLabels).filter(status => contracts.some(c => c.status === status)) as ContractStatus[],
-          suppliers: contracts.map(({ supplier }) => supplier).filter((v, i, a) => a.findIndex(({ id }) => v.id === id) === i)
-        }
-      })))
-    );
+    return this.rest.availableFilters(requestId).pipe(tap(availibleFilters => setState(patch<Model>({ availibleFilters }))));
   }
 
   @Action(Reject)
-  reject({ setState, dispatch }: Context, { contract, files, comment }: Reject) {
+  reject({ setState, dispatch }: Context, { requestId, contract, files, comment }: Reject) {
     setState(patch<Model>({status: "updating"}));
     return dispatch(!!files ? new Upload(contract, files, comment) : []).pipe(
       switchMap(() => this.rest.reject(contract.id)),
       tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
       tap(() => setState(patch<Model>({ status: "received" }))),
-      tap(() => dispatch([new ToastActions.Success('Договор отправлен на доработку')])),
+      tap(() => dispatch([new FetchAvailibleFilters(requestId), new ToastActions.Success('Договор отправлен на доработку')])),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
@@ -82,14 +74,14 @@ export class ContractState {
   }
 
   @Action(Approve)
-  approve({ setState, dispatch }: Context, { contract }: Approve) {
+  approve({ setState, dispatch }: Context, { requestId, contract }: Approve) {
     setState(patch<Model>({status: "updating"}));
     return this.rest.approve(contract.id).pipe(
       tap(c => setState(patch<Model>({
         contracts: updateItem(({ id }) => c.id === id, c),
         status: "received"
       }))),
-      tap(() => dispatch([new ToastActions.Success('Договор согласован')])),
+      tap(() => dispatch([new FetchAvailibleFilters(requestId), new ToastActions.Success('Договор согласован')])),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));

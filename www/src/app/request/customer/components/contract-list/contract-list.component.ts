@@ -23,6 +23,8 @@ import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
 import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { Uuid } from "../../../../cart/models/uuid";
 
 @Component({
   selector: 'app-contract-list',
@@ -41,18 +43,18 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
   readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$ = this.contractSuppliersSearch$.pipe(
+  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = this.contractSuppliersSearch$.pipe(
     withLatestFrom(this.availibleFilters$),
     map(([q, { suppliers }]) => suppliers
       ?.filter((supplier: ContragentList) => supplier.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || supplier.inn.indexOf(q) > -1)
       ?.map((supplier: ContragentList) => ({ label: supplier.shortName, value: supplier.id }))),
   );
-  readonly contractStatusesItems$ = this.availibleFilters$.pipe(
+  readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
   );
   readonly download = (contract: Contract) => new Download(contract);
-  readonly reject = (contract: Contract, files: File[], comment?: string) => new Reject(contract, files, comment);
-  readonly approve = (contract: Contract) => new Approve(contract);
+  readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
+  readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
 
   constructor(
     public store: Store,
