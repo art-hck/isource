@@ -99,13 +99,11 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   set isHidden(value: boolean) {
     if (isPlatformBrowser(this.platformId)) {
       if (value) {
-        window.removeEventListener('scroll', this.updatePosition);
-        window.removeEventListener('resize', this.updatePosition);
-        this.el.nativeElement.offsetParent.offsetParent.removeEventListener('scroll', this.updatePosition);
+        window.removeEventListener('scroll', this.updatePosition, true);
+        window.removeEventListener('resize', this.updatePosition, true);
       } else {
-        window.addEventListener('scroll', this.updatePosition);
-        window.addEventListener('resize', this.updatePosition);
-        this.el.nativeElement.offsetParent.offsetParent.addEventListener('scroll', this.updatePosition);
+        window.addEventListener('scroll', this.updatePosition, true);
+        window.addEventListener('resize', this.updatePosition, true);
       }
     }
     this._isHidden = value;
