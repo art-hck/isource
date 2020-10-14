@@ -103,7 +103,7 @@
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
       [procedureSource]="procedureSource"
-      (complete)="this.store.dispatch(updateProcedures()); service.groupList(requestId); procedureModalPayload = null"
+      (complete)="this.store.dispatch(updateProcedures()); updateTechnicalCommercialProposalGroups(); procedureModalPayload = null"
       (cancel)="procedureModalPayload = null"
     ></app-request-procedure-form>
   </ng-container>

@@ -40,7 +40,6 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   requestId: Uuid;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   editedGroup: TechnicalCommercialProposalGroup;
-  invalidUploadTemplate = false;
   files: File[] = [];
   destroy$ = new Subject();
 
@@ -95,12 +94,18 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success(`Группа ТКП успешно сохранена`));
-      if (!e) { this.service.groupList(this.requestId); }
+      if (!e) { this.updateTechnicalCommercialProposalGroups(); }
     });
   }
 
   onChangeFilesList(files: File[]): void {
     this.form.get('fileTemplate').setValue(files);
+  }
+
+  updateTechnicalCommercialProposalGroups(): void {
+    this.service.groupList(this.requestId).subscribe(groups => {
+      groups.forEach(tcpGroup => this.newGroup$.next(tcpGroup));
+    });
   }
 
   submit() {
