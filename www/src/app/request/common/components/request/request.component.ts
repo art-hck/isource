@@ -93,8 +93,8 @@ export class RequestComponent implements OnChanges {
     return this.checkedPositions.some(position => position.isInProcedure === true);
   }
 
-  everyPositionIsNotDraftEntity(positions: RequestPosition[]): boolean {
-    return positions.every(position => position.isDraftEntity === false);
+  everyPositionIsNotDraftEntity(): boolean {
+    return this.checkedPositions.every(position => position.isDraftEntity === false);
   }
 
   constructor(
