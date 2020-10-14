@@ -4,6 +4,7 @@ import { ContragentService } from "../../../contragent/services/contragent.servi
 import { Observable, Subject } from "rxjs";
 import { debounceTime, filter, flatMap, map, publishReplay, refCount, tap } from "rxjs/operators";
 import { ContragentList } from "../../../contragent/models/contragent-list";
+import { searchContragents } from "../../../shared/helpers/search";
 
 @Component({
   selector: 'app-supplier-autocomplete',
@@ -34,7 +35,6 @@ export class SupplierAutocompleteControlComponent implements ControlValueAccesso
   @Input() display = 10;
   @Input() debounceTime = 500;
 
-
   constructor(private contragentService: ContragentService) {
     this.contragentsFullList$ = this.contragentService.getContragentList().pipe(publishReplay(1), refCount());
     this.contragents$ = this.onInput.pipe(
@@ -42,33 +42,15 @@ export class SupplierAutocompleteControlComponent implements ControlValueAccesso
       debounceTime(this.debounceTime),
       tap(() => this.isOpen = true),
       flatMap(value => this.contragentsFullList$.pipe(map(
-        contragents => this.search(contragents, value, this.display)
+        contragents => searchContragents(value, contragents).slice(0, this.display)
       )))
     );
   }
 
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
-  }
-
-  writeValue(value: ContragentList[] | null): void {
-    this.value = value;
-  }
-
-  search(contragents: ContragentList[], value: string, display: number): ContragentList[] {
-    return contragents.filter(
-      contragent => contragent.shortName.toLowerCase().indexOf(value.toLowerCase()) > -1 || contragent.inn.indexOf(value) > -1
-    )
-      .slice(0, display);
-  }
+  registerOnChange = fn => this.onChange = fn;
+  registerOnTouched = fn => this.onTouched = fn;
+  setDisabledState = disabled => this.isDisabled = disabled;
+  writeValue = (value: ContragentList[] | null) => this.value = value;
 
   delete(contragent: ContragentList) {
     this.writeValue(this.value.filter(_contragent => _contragent !== contragent));

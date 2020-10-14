@@ -25,6 +25,7 @@ import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 import { Uuid } from "../../../../cart/models/uuid";
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-contract-list',
@@ -42,13 +43,10 @@ export class ContractListComponent implements OnInit, OnDestroy {
   @Select(ContractState.status) status$: Observable<StateStatus>;
   readonly form = this.fb.group({ positionName: "", suppliers: [], statuses: [] });
   readonly destroy$ = new Subject();
-  readonly contractSuppliersSearch$ = new BehaviorSubject<string>("");
-  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([
-    this.contractSuppliersSearch$, this.availibleFilters$
-  ]).pipe(
-    map(([q, { suppliers }]) => suppliers
-      ?.filter((supplier: ContragentList) => supplier.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || supplier.inn.indexOf(q) > -1)
-      ?.map((supplier: ContragentList) => ({ label: supplier.shortName, value: supplier.id }))),
+  readonly suppliersSearch$ = new BehaviorSubject<string>("");
+
+  readonly contractSuppliersItems$: Observable<FilterCheckboxList<Uuid>> = combineLatest([this.suppliersSearch$, this.availibleFilters$]).pipe(
+    map(([q, f]) => searchContragents(q, f?.suppliers ?? []).map((c) => ({ label: c.shortName, value: c.id })))
   );
   readonly contractStatusesItems$: Observable<FilterCheckboxList<ContractStatus>> = this.availibleFilters$.pipe(
     map(({ statuses }) => statuses?.map(value => ({ label: ContractStatusLabels[value], value }))),
@@ -56,7 +54,7 @@ export class ContractListComponent implements OnInit, OnDestroy {
   readonly download = (contract: Contract) => new Download(contract);
   readonly reject = (request: Request, contract: Contract, files: File[], comment?: string) => new Reject(request.id, contract, files, comment);
   readonly approve = (request: Request, contract: Contract) => new Approve(request.id, contract);
-  readonly filter = (request: Request, value: ContractFilter) => new Filter(request.id, value);
+  readonly filter = (request: Request, value: ContractFilter<Uuid>) => new Filter(request.id, value);
 
   constructor(
     public store: Store,

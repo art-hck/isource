@@ -20,6 +20,7 @@ import { PositionCurrency } from "../../../common/enum/position-currency";
 import { AppFile } from "../../../../shared/components/file/file";
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import { RequestDocument } from "../../../common/models/request-document";
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -38,7 +39,8 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   supplierContragentControl: FormControl;
   quantityNotEnough = false;
   dateIsLaterThanNeeded = false;
-  subscription = new Subscription();
+  readonly subscription = new Subscription();
+  readonly searchContragents = searchContragents;
   contragents$: Observable<ContragentList[]>;
   okeiList$: Observable<Okei[]>;
 
@@ -147,10 +149,6 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
 
   defaultCPValue = (field: keyof CommercialProposal, defaultValue: any = "") => this.commercialProposal && this.commercialProposal[field] || defaultValue;
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-  searchContragent = (query: string, contragents: ContragentList[]) => {
-    return contragents.filter(
-      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
 
   requestDocumentToFile(document: RequestDocument) {
     return new AppFile({

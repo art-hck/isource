@@ -19,6 +19,7 @@ import { Store } from "@ngxs/store";
 import { AppFile } from "../../../../shared/components/file/file";
 import { UxgModalComponent } from "uxg";
 import { saveAs } from 'file-saver/src/FileSaver';
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-technical-proposals-form',
@@ -43,6 +44,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   invalidUploadTemplate = false;
   showErrorMessage = false;
   readonly destroy$ = new Subject();
+  readonly searchContragents = searchContragents;
 
   get formDocuments() {
     return this.form.get('documents') as FormArray;
@@ -232,10 +234,6 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   }
 
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-  searchContragent = (query: string, contragents: ContragentList[]) => {
-    return contragents.filter(
-      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
-  }
 
   ngOnDestroy() {
     this.destroy$.next();

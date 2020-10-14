@@ -36,7 +36,7 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
   @ViewChild(RequestTpFilterStatusesListComponent)
              requestTpFilterStatusesListComponent: RequestTpFilterStatusesListComponent;
 
-  @Output() filters = new EventEmitter<TechnicalProposalFilter>();
+  @Output() filters = new EventEmitter<TechnicalProposalFilter<Uuid>>();
   @Output() showResults = new EventEmitter();
 
   @Input() backofficeView: boolean;
@@ -93,7 +93,7 @@ export class TechnicalProposalFilterComponent implements OnInit, OnChanges, OnDe
 
 
   submit(): void {
-    const filters = <TechnicalProposalFilter>{};
+    const filters = <TechnicalProposalFilter<Uuid>>{};
 
     if (this.requestTpListFilterForm.value) {
       for (const [filterType, filterValue] of Object.entries(this.requestTpListFilterForm.value)) {

@@ -75,7 +75,7 @@ export class RequestTechnicalProposalComponent implements OnInit {
       takeUntil(this.destroy$)
     ).subscribe(({result, action}) => {
       const e = result.error as any;
-      const length = action?.proposalPosition.length ?? 1;
+      const length = action?.proposalPositions.length ?? 1;
       const text = (action instanceof Reject ? "$0" : (action instanceof Approve ? "$1" : "$2"))
         .replace(/\$(\d)/g, (all, i) => [
         this.pluralize.transform(length, "позиция отклонена", "позиции отклонены", "позиций отклонено"),

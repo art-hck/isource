@@ -14,7 +14,7 @@ export class TechnicalProposalsService {
 
   constructor(private api: HttpClient) {}
 
-  list(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
+  list(requestId: Uuid, filters: TechnicalProposalFilter<Uuid>): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }

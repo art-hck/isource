@@ -24,6 +24,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import Update = TechnicalCommercialProposals.Update;
 import Create = TechnicalCommercialProposals.Create;
 import Publish = TechnicalCommercialProposals.Publish;
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
@@ -49,6 +50,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
+  readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
@@ -170,11 +172,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
-  }
-
-  searchContragent(query: string, contragents: ContragentList[]) {
-    return contragents.filter(
-      c => c.shortName.toLowerCase().indexOf(query.toLowerCase()) >= 0 || c.inn.indexOf(query) >= 0);
   }
 
   defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;

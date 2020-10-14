@@ -6,37 +6,35 @@ export namespace TechnicalProposals {
   // Получить список ТП
   export class Fetch {
     static readonly type = '[Technical Proposals Customer] Fetch';
-    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
+    constructor(public requestId: Uuid) {}
   }
 
-  // Обновить список ТП
-  export class Update {
-    static readonly type = '[Technical Proposals Customer] Update';
-    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
+  // Получить список доступных фильтров
+  export class FetchAvailableFilters {
+    static readonly type = '[Technical Proposals Customer] FetchAvailableFilters';
+    constructor(public requestId: Uuid) {}
+  }
+
+  export class Filter {
+    static readonly type = '[Technical Proposals Customer] Filter';
+    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter<Uuid>) {}
   }
 
   // Согласовать позицию ТП
   export class Approve {
     static readonly type = '[Technical Proposals Customer] Approve';
-    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPosition: TechnicalProposalPosition[]) {}
+    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPositions: TechnicalProposalPosition[]) {}
   }
 
   // Отклонить позицию ТП
   export class Reject {
     static readonly type = '[Technical Proposals Customer] Reject';
-    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPosition: TechnicalProposalPosition[], public comment: string) {}
+    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPositions: TechnicalProposalPosition[], public comment: string) {}
   }
 
   // Отправить позицию ТП на доработку
   export class SendToEdit {
     static readonly type = '[Technical Proposals Customer] SendToEdit';
-    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPosition: TechnicalProposalPosition[], public comment: string) {}
+    constructor(public requestId: Uuid, public technicalProposalId: Uuid, public proposalPositions: TechnicalProposalPosition[], public comment: string) {}
   }
-
-  // Получает список доступных статусов ТП для фильтра
-  export class GetFilterStatuses {
-    static readonly type = '[Technical Proposals Customer] GetFilterStatuses';
-    constructor(public requestId: Uuid, public filters: TechnicalProposalFilter = {}) {}
-  }
-
 }

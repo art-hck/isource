@@ -7,7 +7,7 @@
       <uxg-dropdown-input
         [formControl]="supplierContragentControl"
          placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-        [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+        [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragents"
       >
         <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
           <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">

@@ -16,17 +16,15 @@ export class TechnicalProposalsService {
 
   constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId: Uuid, filters: TechnicalProposalFilter) {
+  list(requestId: Uuid, filters: TechnicalProposalFilter<Uuid>) {
     const url = `requests/backoffice/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
   // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
-  // availableFilters(requestId: Uuid): Observable<TechnicalProposalFilter> {
-  availableFilters(tpList$: Observable<TechnicalProposal[]>): Observable<TechnicalProposalFilter> {
-    // const url = `requests/backoffice/${requestId}/technical-proposals`;
-    // return this.api.get<TechnicalProposal[]>(url).pipe(
-    return tpList$.pipe(
+  availableFilters(requestId: Uuid): Observable<TechnicalProposalFilter> {
+    const url = `requests/backoffice/${requestId}/technical-proposals`;
+    return this.api.get<TechnicalProposal[]>(url).pipe(
       map(proposals => proposals.reduce<TechnicalProposalFilter>((acc, curr, i, arr) => ({
         ...acc,
         contragents: arr.findIndex(({ supplierContragent }) => supplierContragent === curr.supplierContragent) === i ?
@@ -37,7 +35,7 @@ export class TechnicalProposalsService {
     ));
   }
 
-  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: TechnicalProposalFilter) {
+  availableStatuses(requestId: Uuid, filters: TechnicalProposalFilter<Uuid>) {
     const url = `requests/backoffice/${requestId}/technical-proposals/available-statuses`;
     return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
   }
@@ -86,6 +84,6 @@ export class TechnicalProposalsService {
 
   downloadTemplate(requestId: Uuid, contragentId: Uuid) {
     const url = `requests/backoffice/${requestId}/technical-proposals/download-excel-template`;
-    return this.api.post(url, {supplierContragentId: contragentId}, {responseType: 'blob'})
+    return this.api.post(url, { supplierContragentId: contragentId }, { responseType: 'blob' });
   }
 }

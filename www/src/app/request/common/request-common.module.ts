@@ -18,7 +18,6 @@ import { TechnicalProposalFilterComponent } from "./components/technical-proposa
 import { PositionComponent } from './components/position/position.component';
 import { RequestPositionStatusService } from "./services/request-position-status.service";
 import { PositionSearchFilterPipe } from "../../shared/pipes/position-list-filter-pipe";
-import { SearchFilterPipe } from "../../shared/pipes/filter-pipe";
 import { SharedModule } from "../../shared/shared.module";
 import { PositionFormComponent } from "./components/position-form/position-form.component";
 import { RequestTechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
@@ -58,7 +57,6 @@ const RequestCommonModuleDeclarations = [
   PositionComponent,
   PositionFormComponent,
   RequestTechnicalProposalComponent,
-  SearchFilterPipe,
   RequestMoveGroupModalComponent,
   PositionCancelComponent,
   RequestListComponent,

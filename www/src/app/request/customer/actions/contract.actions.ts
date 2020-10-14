@@ -10,7 +10,7 @@ export namespace ContractActions {
 
   export class Filter implements Fetch {
     static readonly type = '[Contract Customer] Filter';
-    constructor(public requestId: Uuid, public filter: ContractFilter) {}
+    constructor(public requestId: Uuid, public filter: ContractFilter<Uuid>) {}
   }
 
   export class FetchAvailibleFilters {

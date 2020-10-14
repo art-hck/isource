@@ -21,9 +21,9 @@ import { ProcedureAction } from "../../models/procedure-action";
 import { StateStatus } from "../../../common/models/state-status";
 import { TechnicalProposalsStatus } from "../../../common/enum/technical-proposals-status";
 import { FormBuilder } from "@angular/forms";
-import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
+import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   templateUrl: './technical-proposal-list.component.html',
@@ -80,25 +80,20 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
   }
 
   fetch() {
-    this.technicalProposals$ = this.technicalProposalsService.list(this.requestId, this.form.value).pipe(
-      publishReplay(1), refCount()
-    );
+    this.technicalProposals$ = this.technicalProposalsService.list(this.requestId, this.form.value).pipe(publishReplay(1), refCount());
   }
 
   fetchAvailableFilters() {
-    this.availableFilters$ = this.technicalProposalsService.availableFilters(this.technicalProposals$).pipe(publishReplay(1), refCount());
+    this.availableFilters$ = this.technicalProposalsService.availableFilters(this.requestId).pipe(publishReplay(1), refCount());
 
     this.contragentsFilter$ = this.contragentsSearch$.pipe(
-      switchMap(q => this.availableFilters$.pipe(map(f => f?.contragents
-        ?.filter((c: ContragentInfo) => c.shortName.toLowerCase().indexOf(q.toLowerCase()) > -1 || c.inn.indexOf(q) > -1)
-        ?.map((c: ContragentInfo) => ({ label: c.shortName, value: c.id }))
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id }))
       ))),
     );
 
-    this.statusesFilter$ = this.contragentsSearch$.pipe(
-      switchMap(q => this.availableFilters$.pipe(map(f => f?.tpStatus
-        ?.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value }))
-      ))),
+    this.statusesFilter$ = this.availableFilters$.pipe(
+      map(f => f?.tpStatus.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value })))
     );
   }
 
@@ -118,7 +113,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
       });
   }
 
-  filter(filters: TechnicalProposalFilter) {
+  filter(filters: TechnicalProposalFilter<Uuid>) {
     this.technicalProposalsService.list(this.requestId, filters).subscribe(data => this.technicalProposals$ = of(data));
   }
 

@@ -14,6 +14,7 @@ import { TechnicalCommercialProposalState } from "../../states/technical-commerc
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import { searchPosition } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-form',
@@ -28,6 +29,7 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   @Input() requestId: Uuid;
   @Input() group: TechnicalCommercialProposalGroup;
   isLoading = false;
+  readonly searchPosition = searchPosition;
   readonly destroy$ = new Subject();
   readonly mergeWithExistPositions$ = this.availablePositions$.pipe(map(
     positions => (this.group?.requestPositions ?? [])
@@ -86,8 +88,6 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
     ).subscribe(group => this.create.emit(group));
   }
 
-
-  filterPositions = (q: string, position: RequestPosition): boolean => position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   trackById = (item: RequestPosition) => item.id;
 
   ngOnDestroy() {
