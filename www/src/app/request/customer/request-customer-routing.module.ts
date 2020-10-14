@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommercialProposalListOldComponent } from "./components/commercial-proposal-list-old/commercial-proposal-list-old.component";
 import { RequestComponent as CustomerRequestComponent } from "./components/request/request.component";
-import { TechnicalProposalListDeprecatedComponent } from "./components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component";
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
