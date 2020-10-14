@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
 import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { delayWhen, scan, switchMap, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, scan, shareReplay, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -10,6 +10,9 @@ import { RequestActions } from "../../actions/request.actions";
 import { UxgBreadcrumbsService } from "uxg";
 import { Select, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
+import { FormBuilder } from "@angular/forms";
+import { TechnicalCommercialProposalGroupFilter } from "../../../common/models/technical-commercial-proposal-group-filter";
+import moment from "moment";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-view',
@@ -19,6 +22,8 @@ export class TechnicalCommercialProposalGroupViewComponent {
   @Select(RequestState.request) request$: Observable<Request>;
   requestId: Uuid;
   readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
+  readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
+  readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
 
   readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
@@ -29,7 +34,8 @@ export class TechnicalCommercialProposalGroupViewComponent {
       { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
       { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
     ]),
-    switchMap(() => this.service.groupList(this.requestId)),
+    switchMap(() => this.filter$),
+    switchMap((filter) => this.service.groupList(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(scan((acc, group) => {
       if (group) {
         const i = acc.findIndex(({id}) => group?.id === id);
@@ -38,12 +44,22 @@ export class TechnicalCommercialProposalGroupViewComponent {
 
       return acc;
     }, groups))),
+    shareReplay(1)
   );
 
   constructor(
     private bc: UxgBreadcrumbsService,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private store: Store,
-    public service: TechnicalCommercialProposalService
+    public service: TechnicalCommercialProposalService,
   ) {}
+
+  filter(filter: TechnicalCommercialProposalGroupFilter) {
+    this.filter$.next({
+      ...filter,
+      createdDateFrom: filter.createdDateFrom ? moment(filter.createdDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,
+      createdDateTo: filter.createdDateTo ? moment(filter.createdDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
+    });
+  }
 }
