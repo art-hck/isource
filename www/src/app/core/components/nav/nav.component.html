@@ -5,7 +5,8 @@
 
     <!-- Пункты меню -->
     <ng-container *ngFor="let link of menu">
-      <a class="app-link-no-color app-menu-item" [routerLink]="link.path" routerLinkActive="active">{{ link.text }}</a>
+      <a *ngIf="!link.base" class="app-link-no-color app-menu-item" [routerLink]="link.path" routerLinkActive="active">{{ link.text }}</a>
+      <a *ngIf="link.base" class="app-link-no-color app-menu-item" [href]="link.base + link.path">{{ link.text }}</a>
     </ng-container>
 
     <div class="app-col"></div>
