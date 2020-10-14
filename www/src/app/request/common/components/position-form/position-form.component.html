@@ -26,7 +26,8 @@
         </div>
         <!-- isDeliveryDateAsap -->
         <div class="app-col app-row app-align-items-center">
-          <uxg-checkbox class="app-control asap" #isDeliveryDateAsap formControlName="isDeliveryDateAsap"></uxg-checkbox>
+          <uxg-checkbox class="app-control asap" #isDeliveryDateAsap
+                        formControlName="isDeliveryDateAsap"></uxg-checkbox>
           <label (click)="isDeliveryDateAsap.check($event)"> Как можно скорее</label>
         </div>
       </div>
@@ -36,7 +37,8 @@
     <div class="app-col">
       <div class="app-control-wrap">
         <input #deliveryBasis uxgInput lg class="delivery-basis" formControlName="deliveryBasis">
-        <label class="app-control-label" (click)="deliveryBasis.focus()">Базис поставки (пункт, до которого требуется доставка)</label>
+        <label class="app-control-label" (click)="deliveryBasis.focus()">Базис поставки (пункт, до которого требуется
+          доставка)</label>
         <div class="app-control-error" *ngIf="form.get('deliveryBasis').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
@@ -60,24 +62,39 @@
 
   <div class="app-row">
     <div class="app-col app-col-auto" [style.width.px]="130">
-      <div class="app-control-wrap">
-        <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0" (keypress)="filterEnteredText($event)" />
-        <label class="app-control-label" (click)="quantity.focus()">Количество</label>
-        <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
+      <uxg-popover #quantityPopover>
+        <div class="app-control-wrap">
+          <input #quantity uxgInput lg class="quantity" formControlName="quantity" type="number" min="0"
+                 (keypress)="filterEnteredText($event)"
+                 (blur)="getQuantityRecommendation()"
+          />
+          <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+          <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+          </div>
         </div>
-      </div>
+        <div *uxgPopoverContent="'app-popover-content-bottom-left'" (click)="quantityPopover.hide()">
+          <div class="popover-content">
+            Данную позицию обычно <br/>заказывают в количестве <b>{{quantityRecommendation}} {{recommendedUnit}}</b>
+            <button uxgButton primary type="button" (click)="setRecommendedQuantity(); quantityPopover.hide()">
+              Добавить
+            </button>
+          </div>
+        </div>
+      </uxg-popover>
     </div>
     <div class="app-col app-col-auto" [style.width.px]="200">
-      <uxg-dropdown-input appSuggestions strictMode class="measure-units" formControlName="measureUnit" placeholder="Ед. измерения"
-        [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
+      <uxg-dropdown-input appSuggestions strictMode class="measure-units" formControlName="measureUnit"
+                          placeholder="Ед. измерения"
+                          [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #sug="appSuggestions"
       >
         <ng-container *ngIf="(sug.suggestions$ | async) as okeiSuggestions">
           <div uxgDropdownItem
                *ngFor="let suggestion of okeiSuggestions"
                [value]="suggestion.symbol | lowercase"
                [attr.title]="suggestion.name | lowercase"
-          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
+          </div>
         </ng-container>
         <ng-template #errors>
           <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
@@ -110,14 +127,16 @@
     <div class="app-col">
       <div class="app-control-wrap">
         <input #productionDocument uxgInput lg class="prod-docs" formControlName="productionDocument"/>
-        <label class="app-control-label" (click)="productionDocument.focus()">Документ, в соответствии с которым необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)</label>
+        <label class="app-control-label" (click)="productionDocument.focus()">Документ, в соответствии с которым
+          необходимо изготовление (НТД: ГОСТ/ТУ, ТЗ, ОЛ, ЗТП и т.п.)</label>
         <div class="app-control-error" *ngIf="form.get('productionDocument').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
     </div>
     <div class="app-col app-col-auto app-row app-align-items-center">
-      <uxg-checkbox class="app-control" #design class="is-design-req" formControlName="isDesignRequired"></uxg-checkbox>
+      <uxg-checkbox class="app-control" #design class="is-design-req"
+                    formControlName="isDesignRequired"></uxg-checkbox>
       <label (click)="design.check($event)">Требуется РКД</label>
     </div>
   </div>
@@ -138,13 +157,15 @@
           <label (click)="pnr.check($event)">ПНР</label>
         </div>
         <div class="app-col app-col-auto app-row app-align-items-center">
-          <uxg-checkbox class="app-control is-inspection-control-req" #inspection formControlName="isInspectionControlRequired"></uxg-checkbox>
+          <uxg-checkbox class="app-control is-inspection-control-req" #inspection
+                        formControlName="isInspectionControlRequired"></uxg-checkbox>
           <label (click)="inspection.check($event)">Инспекционный контроль</label>
         </div>
       </div>
     </div>
     <div class="app-col">
-      <h3>Дополнительные требования <span class="app-ghost-color" [style.font-weight]="'normal'">(необязательно)</span></h3>
+      <h3>Дополнительные требования <span class="app-ghost-color"
+                                          [style.font-weight]="'normal'">(необязательно)</span></h3>
       <br/>
       <!-- comment -->
       <textarea class="comments" uxgInput formControlName="comments"></textarea>
@@ -167,7 +188,8 @@
 
   <div class="app-row" *ngIf="!isNewRequest">
     <div class="app-col">
-      Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span class="app-bold app-error-color">обязательными</span> к заполнению!
+      Все поля, кроме начальной максимальной цены и дополнительных требований, являются <span
+      class="app-bold app-error-color">обязательными</span> к заполнению!
     </div>
     <div class="app-col app-col-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
