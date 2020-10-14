@@ -1,6 +1,7 @@
 <app-request-list
   [requests]="requests$ | async"
   [total]="totalCount$ | async"
+  [tabTotal]="tabTotalCount$ | async"
   [status]="status$ | async"
   [statusCounters]="statusCounters$ | async"
   [filters]="fetchFilters$ | async"

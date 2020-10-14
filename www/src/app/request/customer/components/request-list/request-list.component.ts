@@ -30,6 +30,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Select(RequestListState.availableFilters) availableFilters$: Observable<AvailableFilters>;
   @Select(RequestListState.requests) requests$: Observable<RequestsList[]>;
   @Select(RequestListState.statusCounters) statusCounters$: Observable<RequestStatusCount>;
+  @Select(RequestListState.tabTotalCount) tabTotalCount$: Observable<number>;
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
