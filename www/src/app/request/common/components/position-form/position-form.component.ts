@@ -57,7 +57,15 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   readonly currencies = Object.entries(CurrencyLabels);
 
   readonly approveRequiredFields = [
-    'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
+    'name',
+    'currency',
+    'deliveryBasis',
+    'deliveryDate',
+    'isDeliveryDateAsap',
+    'measureUnit',
+    'productionDocument',
+    'quantity',
+    'startPrice'
   ];
 
   get isDraft(): boolean {

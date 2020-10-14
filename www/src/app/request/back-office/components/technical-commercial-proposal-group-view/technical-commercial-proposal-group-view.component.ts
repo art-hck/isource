@@ -1,34 +1,58 @@
-import { Component } from '@angular/core';
-import { BehaviorSubject, Observable } from "rxjs";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { delayWhen, scan, shareReplay, switchMap, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
-import { UxgBreadcrumbsService } from "uxg";
-import { Select, Store } from "@ngxs/store";
+import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
+import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
-import { FormBuilder } from "@angular/forms";
+import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import { FormBuilder, Validators } from "@angular/forms";
 import { TechnicalCommercialProposalGroupFilter } from "../../../common/models/technical-commercial-proposal-group-filter";
 import moment from "moment";
+import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { ProcedureAction } from "../../models/procedure-action";
+import { Procedure } from "../../models/procedure";
+import { ProcedureSource } from "../../enum/procedure-source";
+import { FeatureService } from "../../../../core/services/feature.service";
+import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
+import { RequestPosition } from "../../../common/models/request-position";
+import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
+import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-view',
-  templateUrl: './technical-commercial-proposal-group-view.component.html'
+  templateUrl: './technical-commercial-proposal-group-view.component.html',
+  styleUrls: ['technical-commercial-proposal-group-view.component.scss'],
 })
-export class TechnicalCommercialProposalGroupViewComponent {
+export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
+  @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
+  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
+  @Select(TechnicalCommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   requestId: Uuid;
+  procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   editedGroup: TechnicalCommercialProposalGroup;
+  files: File[] = [];
+  destroy$ = new Subject();
+
+  readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
   readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
+  readonly form2 = this.fb.group({ technicalCommercialProposalGroupName: [null, [Validators.required]], fileTemplate: [null, [Validators.required]] });
 
   readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
-    delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
+    delayWhen(({ id }) => this.store.dispatch([new RequestActions.Fetch(id), new FetchAvailablePositions(id), new FetchProcedures(id)])),
     withLatestFrom(this.request$),
     tap(([p, { id, number }]) => this.bc.breadcrumbs = [
       { label: "Заявки", link: "/requests/backoffice" },
@@ -48,12 +72,18 @@ export class TechnicalCommercialProposalGroupViewComponent {
     shareReplay(1)
   );
 
+  readonly updateProcedures = () => [new RefreshProcedures(this.requestId), new FetchAvailablePositions(this.requestId)];
+  readonly downloadTemplate = (requestId: Uuid) => new DownloadTemplate(requestId);
+  readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[], groupName: string) => new UploadTemplate(requestId, groupId, files, groupName);
+
   constructor(
     private bc: UxgBreadcrumbsService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private store: Store,
-    public service: TechnicalCommercialProposalService,
+    private actions: Actions,
+    public featureService: FeatureService,
+    public store: Store,
+    public service: TechnicalCommercialProposalService
   ) {}
 
   filter(filter: TechnicalCommercialProposalGroupFilter) {
@@ -63,4 +93,40 @@ export class TechnicalCommercialProposalGroupViewComponent {
       createdDateTo: filter.createdDateTo ? moment(filter.createdDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
     });
   }
+
+  ngOnInit() {
+
+    this.actions.pipe(
+      ofActionCompleted(UploadTemplate),
+      throttleTime(1),
+      takeUntil(this.destroy$)
+    ).subscribe(({result}) => {
+      const e = result.error as any;
+      this.store.dispatch(e ?
+        new ToastActions.Error(e && e.error.detail) :
+        new ToastActions.Success(`Группа ТКП успешно сохранена`));
+      if (!e) { this.updateTechnicalCommercialProposalGroups(); }
+    });
+  }
+
+  onChangeFilesList(files: File[]): void {
+    this.form2.get('fileTemplate').setValue(files);
+  }
+
+  updateTechnicalCommercialProposalGroups(): void {
+    this.service.groupList(this.requestId).subscribe(groups => {
+      groups.forEach(tcpGroup => this.newGroup$.next(tcpGroup));
+    });
+  }
+
+  submit() {
+    if (this.form2.valid) {
+      this.uploadTemplateModal.close();
+      this.store.dispatch(
+        this.uploadTemplate(this.requestId, null, this.form2.get('fileTemplate').value, this.form2.get('technicalCommercialProposalGroupName').value)
+      );
+    }
+  }
+
+  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
 }
