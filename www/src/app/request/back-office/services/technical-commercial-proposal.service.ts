@@ -6,6 +6,7 @@ import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
 import { TechnicalCommercialProposalGroup } from "../../common/models/technical-commercial-proposal-group";
+import { TechnicalCommercialProposalGroupFilter } from "../../common/models/technical-commercial-proposal-group-filter";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
@@ -50,9 +51,9 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, { positionIds });
   }
 
-  groupList(requestId: Uuid) {
+  groupList(requestId: Uuid, filters: TechnicalCommercialProposalGroupFilter = {}) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups`;
-    return this.api.get<TechnicalCommercialProposalGroup[]>(url);
+    return this.api.post<TechnicalCommercialProposalGroup[]>(url, { filters });
   }
 
   groupCreate(requestId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
