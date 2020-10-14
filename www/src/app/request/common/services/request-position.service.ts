@@ -58,6 +58,5 @@ export class RequestPositionService {
   getQuantityRecommendation(position: string) {
     const url = `#intelplan#forecasts-by-name`;
     return this.api.get<RecommendedQuantity[]>(url, {params: {name: position}});
-    // return of(RecommendedQuantityMock);
   }
 }

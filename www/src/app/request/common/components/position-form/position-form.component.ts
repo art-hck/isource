@@ -188,7 +188,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
           if (data.length !== 0) {
             this.quantityRecommendation = data[0].forecastCommodity.filter(
               item => item.isForecast).reduce(
-              (acc, curr) => acc.quantity > curr.quantity ? acc : curr).quantity;
+                (prev, curr) => prev + curr.quantity, 0);
             if (this.quantityRecommendation > this.form.get('quantity').value) {
               this.recommendedUnit = data[0].unit;
               this.quantityPopover.show();
