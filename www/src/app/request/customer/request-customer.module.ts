@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommercialProposalListOldComponent } from './components/commercial-proposal-list-old/commercial-proposal-list-old.component';
 import { RequestCommonModule } from "../common/request-common.module";
 import { RequestComponent } from './components/request/request.component';
 import { RequestCustomerRoutingModule } from "./request-customer-routing.module";
 import { RequestService } from "./services/request.service";
-import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { PositionComponent } from "./components/position/position.component";
 import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
