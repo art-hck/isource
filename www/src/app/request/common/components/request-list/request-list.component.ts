@@ -38,6 +38,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() statusCounters: RequestStatusCount;
   @Input() status: StateStatus;
   @Input() requests: RequestsList[];
+  @Input() tabTotal: number;
   @Input() total: number;
   @Input() pageSize: number;
   @Input() availableFilters$: Observable<AvailableFilters>;

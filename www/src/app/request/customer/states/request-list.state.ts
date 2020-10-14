@@ -38,6 +38,7 @@ export class RequestListState {
   @Selector() static requests({requests}: Model) { return requests.entities; }
   @Selector() static statusCounters({requests}: Model) { return requests.statusCounters; }
   @Selector() static totalCount({requests}: Model) { return Object.values(requests.statusCounters).reduce((acc, curr) => acc += curr, 0); }
+  @Selector() static tabTotalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
   @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
   @Selector() static createdRequest({createdRequestId}: Model) { return createdRequestId; }
