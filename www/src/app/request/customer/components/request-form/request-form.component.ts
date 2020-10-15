@@ -62,9 +62,8 @@ export class RequestFormComponent implements OnInit, OnDestroy {
       const {positions} = this.form.value;
       this.requestService.getRecommendedPositions(positions).subscribe(
         (reсPositions) => {
-          if (reсPositions.length !== 0) {
-            this.recommendedPositions = reсPositions.reduce(
-              (arr, curr) => [...arr, ...curr.commodities], []).map(item => {
+          if (reсPositions.wantedCommodities.length !== 0) {
+            this.recommendedPositions = reсPositions.wantedCommodities.map(item => {
                 return {
                   name: item.name,
                   measureUnit: item.unit,
