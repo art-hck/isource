@@ -8,7 +8,6 @@
   [pageSize]="pageSize"
   [availableFilters$]="availableFilters$"
   [form]="form"
-  [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (addRequest)="newRequestModal.open()"
   (refresh)="fetchFilters$.next({})"

@@ -4,7 +4,7 @@ import { combineLatest, Observable, Subject } from "rxjs";
 import { StateStatus } from "../../../../request/common/models/state-status";
 import { AgreementListState } from "../../states/agreement-list.state";
 import { AgreementListActions } from "../../actions/agreement-list.actions";
-import { debounceTime, map, startWith, takeUntil, tap } from "rxjs/operators";
+import { map, startWith, takeUntil, tap } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder } from "@angular/forms";
 import { Agreement } from "../../../common/models/Agreement";
@@ -29,10 +29,6 @@ export class AgreementsComponent implements OnInit, OnDestroy {
   readonly form = this.fb.group({ actions: null, numberOrName: '', issuedDateFrom: null, issuedDateTo: null, contragents: [[]] });
   readonly destroy$ = new Subject();
   readonly filter$ = new Subject<AgreementsListFilter>();
-
-  get activeFilters() {
-    return Object.entries(this.form.controls).filter(([k, c]) => k !== 'actions' && c.dirty);
-  }
 
   constructor(
     private fb: FormBuilder,

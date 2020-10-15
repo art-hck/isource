@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
-import { filter, scan, takeUntil, tap, throttleTime } from "rxjs/operators";
+import { filter, scan, switchMap, takeUntil, tap, throttleTime } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
 import { RequestListState } from "../../states/request-list.state";
 import { RequestListActions } from "../../actions/request-list.actions";
@@ -11,14 +11,14 @@ import { RequestStatus } from "../../../common/enum/request-status";
 import { RequestsListFilter } from "../../../common/models/requests-list/requests-list-filter";
 import { StateStatus } from "../../../common/models/state-status";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import Fetch = RequestListActions.Fetch;
-import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
 import { RequestStatusCount } from "../../../common/models/requests-list/request-status-count";
 import { RequestListComponent as CommonRequestListComponent } from "../../../common/components/request-list/request-list.component";
 import { RequestsListSort } from "../../../common/models/requests-list/requests-list-sort";
 import { AvailableFilters } from "../../models/available-filters";
-import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 import { FormBuilder } from "@angular/forms";
+import Fetch = RequestListActions.Fetch;
+import AddRequestFromExcel = RequestListActions.AddRequestFromExcel;
+import FetchAvailableFilters = RequestListActions.FetchAvailableFilters;
 
 @Component({
   templateUrl: './request-list.component.html',
@@ -34,7 +34,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Select(RequestListState.totalCount) totalCount$: Observable<number>;
   @Select(RequestListState.status) status$: Observable<StateStatus>;
 
-  activeFilters: RequestsListFilter;
   readonly pageSize = this.appConfig.paginator.pageSize;
   readonly fetchFilters$ = new Subject<{ page?: number, filters?: RequestsListFilter , sort?: RequestsListSort }>();
   readonly destroy$ = new Subject();
@@ -69,14 +68,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
       scan(({ filters: prev, sort: prevSort}, { page = 1, filters: curr , sort: currSort}) => ({ page, filters: { ...prev, ...curr } , sort: {...prevSort, ...currSort}}), {
         filters: {requestListStatusesFilter: [RequestStatus.IN_PROGRESS]}
       } as { page?: number, filters?: RequestsListFilter, sort?: RequestsListSort } ),
+      switchMap(data => this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort))),
       takeUntil(this.destroy$)
-    ).subscribe((data) => {
-      this.activeFilters = data.filters;
-      this.store.dispatch(new Fetch((data.page - 1) * this.pageSize, this.pageSize, data.filters, data.sort)).subscribe(
-        ({ CustomerRequestList }) => {
-          this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests);
-        });
-    });
+    ).subscribe(({ CustomerRequestList }) => this.requestListComponent.switchToPrioritizedTab(CustomerRequestList.requests));
 
     this.store.dispatch(new FetchAvailableFilters());
 

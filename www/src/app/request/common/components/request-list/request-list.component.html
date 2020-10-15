@@ -1,3 +1,4 @@
+<ng-container appFilter>
 <!-- tabs -->
 <div class="app-row">
   <div class="app-col">
@@ -52,11 +53,7 @@
         <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>
-      <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
-        <uxg-icon shape="app-sort2"></uxg-icon>
-        <span>Фильтр</span>
-        <small *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</small>
-      </button>
+      <app-filter-button></app-filter-button>
     </div>
   </div>
   <div class="app-col-aside detachable"></div>
@@ -202,14 +199,7 @@
 
   </div>
 
-  <app-filter
-    #filterRef
-    [formGroup]="form"
-    [count]="total"
-    [dirty]="form.dirty"
-    (reset)="form.reset(); form.markAsPristine()"
-    (filter)="filter.emit({ filters: $event })"
-  >
+  <app-filter [formGroup]="form" [count]="total" (filter)="filter.emit({ filters: $event })">
     <app-filter-section label="Заявка">
       <input uxgInput type="text" formControlName="requestNameOrNumber" placeholder="Номер или наименование заявки" />
     </app-filter-section>
@@ -289,3 +279,4 @@
     </app-filter-section>
   </app-filter>
 </div>
+</ng-container>

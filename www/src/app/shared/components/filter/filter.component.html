@@ -1,7 +1,7 @@
 <h2 class="app-row app-align-items-center">
   <span class="app-col">Фильтр</span>
 
-  <button uxgButton clear (click)="reset.emit()" *ngIf="dirty">
+  <button uxgButton clear (click)="reset.observers.length ? reset.emit() : formGroup.reset()" *ngIf="activeFilters.length > 0">
     <uxg-icon shape="app-reset-filters"></uxg-icon>
     <span>Сбросить все</span>
   </button>
@@ -11,7 +11,7 @@
 
 <div class="app-col"></div>
 
-<div class="app-row" *ngIf="isOpen">
+<div class="app-row" *ngIf="isOpen || !liveFilter">
   <button uxgButton primary strength lg class="app-col" [disabled]="count === 0" (click)="close(); !liveFilter && filter.emit()">
     Показать <span [style.opacity]="0.6">{{ count > 0 ? count : null }}</span>
   </button>

@@ -16,13 +16,19 @@ export class FilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.detachable') detachable = true;
   @HostBinding('class.open') isOpen: boolean;
   @Input() count: number;
-  @Input() dirty: boolean;
   @Input() formGroup: FormGroup;
   @Input() liveFilter = true;
   @Input() debounceTime = 300;
+  @Input() skipKeys: string[] = []; // Не учавствующие в подсчетах фильтры (например, табы)
   @Output() filter = new EventEmitter();
   @Output() reset = new EventEmitter();
   readonly destroy$ = new Subject();
+
+  get activeFilters() {
+    return Object.entries(this.formGroup.value).filter(
+      ([k, v]) => !this.skipKeys.includes(k) && v instanceof Array && v.length > 0 || !(v instanceof Array) && v
+    );
+  }
 
   ngOnInit() {
     if (this.liveFilter) {
