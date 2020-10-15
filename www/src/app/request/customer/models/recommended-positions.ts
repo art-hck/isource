@@ -3,7 +3,7 @@ export class RecommendedPositions {
     id: number;
     name: string;
     commodities: Commodity[];
-  }
+  };
   wantedCommodities: Commodity[];
 }
 
