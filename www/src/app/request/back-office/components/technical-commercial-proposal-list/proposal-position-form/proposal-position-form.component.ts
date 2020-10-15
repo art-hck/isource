@@ -75,11 +75,6 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
     }
   }
 
-  filterEnteredText(event: KeyboardEvent): boolean {
-    const key = Number(event.key);
-    return (key >= 0 && key <= 9 || ['.', ','].indexOf(event.key) !== -1);
-  }
-
   private parseDate(date: string) {
     if (!date) {
       return null;
