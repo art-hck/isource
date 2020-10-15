@@ -42,6 +42,7 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
 import { FilterSectionComponent } from "./components/filter/filter-section/filter-section.component";
 import { FilterComponent } from "./components/filter/filter.component";
 import { FilterCheckboxListComponent } from './components/filter/filter-checkbox-list/filter-checkbox-list.component';
+import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import { FilterCheckboxListComponent } from './components/filter/filter-checkbox
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
@@ -124,6 +126,7 @@ import { FilterCheckboxListComponent } from './components/filter/filter-checkbox
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     AppDateIsAfterDirective,
     AppPositionStatusComponent,
