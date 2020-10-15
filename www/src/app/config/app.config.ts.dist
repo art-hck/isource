@@ -62,11 +62,25 @@ export const AppConfig: GpnmarketConfigInterface = {
         text: 'Профиль',
         base: 'https://profile.ezgg.site',
         path: '/',
+        feature: "backofficeProfile"
       },
       {
         text: 'Интелплан',
         base: 'https://intelplan.gpb.isale.pro',
         path: '/',
+        feature: "backofficeIntelplan"
+      },
+      {
+        text: 'Профиль',
+        base: 'https://profile.ezgg.site',
+        path: '/',
+        feature: "customerProfile"
+      },
+      {
+        text: 'Интелплан',
+        base: 'https://intelplan.gpb.isale.pro',
+        path: '/',
+        feature: "customerIntelplan"
       },
     ]
   },

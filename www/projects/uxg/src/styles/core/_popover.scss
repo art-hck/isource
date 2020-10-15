@@ -12,7 +12,7 @@ $contentOffset: $arrOffset + $arrWidth;
   position: relative;
 
   &-open {
-    z-index: 1000;
+    z-index: 1;
   }
 
   & .app-popover-content {
