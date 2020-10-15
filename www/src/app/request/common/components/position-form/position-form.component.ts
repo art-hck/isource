@@ -73,7 +73,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   /**
-   * Проверяем, изменилось ли одно из полей, по которым позиция должна отправиться на согласование
+   * Проверяем, изменилось ли отя бы одно из полей, по которым позиция должна отправиться на согласование
    */
   get fieldsForApprovalChanged(): boolean {
     return this.approveRequiredFields.some(
