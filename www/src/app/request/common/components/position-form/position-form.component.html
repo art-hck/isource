@@ -171,7 +171,7 @@
     </div>
     <div class="app-col app-col-auto">
       <button type="button" uxgButton secondary lg (click)="cancel.emit()">Отмена</button>
-      <button uxgButton primary lg>{{!needApprove ? "Сохранить" : "Отправить на согласование" }}</button>
+      <button uxgButton primary lg>{{ needToSendToApprove ? "Отправить на согласование" : "Сохранить" }}</button>
     </div>
   </div>
 </form>

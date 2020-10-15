@@ -69,12 +69,34 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   ];
 
   get isDraft(): boolean {
-    return this.approveRequiredFields
-      .some(controlName => !this.form.get(controlName).pristine || this.form.get(controlName).dirty) || !this.position;
+    return !this.position;
   }
 
-  get needApprove(): boolean {
-    return (this.isDraft || !this.position.id) && !!this.onDrafted;
+  /**
+   * Проверяем, изменилось ли одно из полей, по которым позиция должна отправиться на согласование
+   */
+  get fieldsForApprovalChanged(): boolean {
+    return this.approveRequiredFields.some(
+      controlName => {
+        const formValue = this.form.get(controlName).value;
+        const updatedInfo = formValue === null ? formValue : formValue.toString();
+
+        let positionInfo = this.position[controlName] === null ? this.position[controlName] : this.position[controlName]?.toString();
+
+        if (controlName === 'deliveryDate') {
+          positionInfo = moment(new Date(this.position[controlName])).format('DD.MM.YYYY');
+        }
+
+        return positionInfo !== updatedInfo;
+      }
+    );
+  }
+
+  /**
+   * Узнаём, должна ли позиция быть отправлена на согласование или должна быть просто сохранена
+   */
+  get needToSendToApprove(): boolean {
+    return (this.isDraft || this.fieldsForApprovalChanged || !this.position.id) && !!this.onDrafted;
   }
 
   constructor(
@@ -147,18 +169,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
       if (this.position.id) {
         // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
-        const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
-          let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
-          const updatedInfo = value === null ? value : value.toString();
-
-          if (key === 'deliveryDate') {
-            positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
-          }
-          return positionInfo === updatedInfo;
-        });
-
         // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
-        if (positionInfoNotChanged) {
+        if (!this.positionInfoChanged()) {
           this.cancel.emit();
           return;
         }
@@ -181,6 +193,21 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         this.form.enable();
       }));
     }
+  }
+
+  /**
+   * Проверяем, менялись ли значения в форме информации о позиции или они все соответствуют сохранённым значениям
+   */
+  positionInfoChanged(): boolean {
+    return Object.entries(this.form.value).some(([key, value]) => {
+      let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
+      const updatedInfo = value === null ? value : value.toString();
+
+      if (key === 'deliveryDate') {
+        positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+      }
+      return positionInfo !== updatedInfo;
+    });
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {
