@@ -27,6 +27,7 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   @Output() cancel = new EventEmitter();
   @Output() create = new EventEmitter<TechnicalCommercialProposalGroup>();
   @Input() requestId: Uuid;
+  @Input() positions: RequestPosition[];
   @Input() group: TechnicalCommercialProposalGroup;
   isLoading = false;
   readonly searchPosition = searchPosition;
@@ -53,10 +54,12 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   ngOnInit() {
     this.form.patchValue(this.group ?? {});
 
-    this.route.params.pipe(
-      tap(({ id }) => this.store.dispatch(new FetchAvailablePositions(id))),
-      takeUntil(this.destroy$)
-    ).subscribe();
+    if (!this.positions) {
+      this.route.params.pipe(
+        tap(({ id }) => this.store.dispatch(new FetchAvailablePositions(id))),
+        takeUntil(this.destroy$)
+      ).subscribe();
+    }
   }
 
   mergeWithExistPositions(positions: RequestPosition[]) {

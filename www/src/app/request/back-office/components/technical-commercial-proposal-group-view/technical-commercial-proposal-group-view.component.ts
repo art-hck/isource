@@ -122,6 +122,10 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     });
   }
 
+  fetchAvailablePositions(): void {
+    this.store.dispatch(new FetchAvailablePositions(this.requestId));
+  }
+
   submit() {
     if (this.formTemplate.valid) {
       this.uploadTemplateModal.close();
