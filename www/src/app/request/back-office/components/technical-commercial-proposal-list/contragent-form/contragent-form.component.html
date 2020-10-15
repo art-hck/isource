@@ -67,7 +67,7 @@
         <div class="app-row">
           <div class="app-col mr-15">
             <div class="app-control-wrap">
-              <input type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
+              <input appPriceInputFilter class="hidden-arrows" type="number" #deliveryPrice uxgInput lg formControlName="deliveryPrice"/>
               <label class="app-control-label" (click)="deliveryPrice.focus()">Стоимость доставки</label>
               <div class="app-control-error" *ngIf="form.get('deliveryPrice').errors as e">
                 <span *ngIf="e.required">Обязательное поле</span>
