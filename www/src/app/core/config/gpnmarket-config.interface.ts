@@ -43,9 +43,6 @@ export interface GpnmarketConfigInterface {
   priceOrder: {
     url: string
   };
-  intelplan: {
-    url: string;
-  };
   profile: {
     url: string
   };

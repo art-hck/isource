@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { Store } from "@ngxs/store";
-import { finalize, flatMap, mapTo, takeUntil } from "rxjs/operators";
+import { catchError, finalize, flatMap, mapTo, takeUntil } from "rxjs/operators";
 import { RequestService } from "../../services/request.service";
-import { Subject } from "rxjs";
+import { Subject, throwError } from "rxjs";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { RequestPosition } from "../../../common/models/request-position";
@@ -60,9 +60,14 @@ export class RequestFormComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (!this.isRecommended) {
       const {positions} = this.form.value;
-      this.requestService.getRecommendedPositions(positions).subscribe(
+      this.requestService.getRecommendedPositions(positions).pipe(
+        catchError((e) => {
+          this.submit();
+          return throwError(e);
+        })
+      ).subscribe(
         (reсPositions) => {
-          if (reсPositions.length !== 0 && reсPositions[0].wantedCommodities.length !== 0) {
+          if (reсPositions?.[0]?.wantedCommodities?.length !== 0) {
             this.recommendedPositions = reсPositions[0].wantedCommodities.map(item => {
                 return {
                   name: item.name,
