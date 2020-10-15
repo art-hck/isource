@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
@@ -8,6 +8,7 @@ import { History } from "../models/history";
 import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestGroup } from "../models/request-group";
 import { GroupWithPositions } from "../models/groupWithPositions";
+import { RecommendedQuantity } from "../../customer/models/recommended-quantity";
 
 @Injectable()
 export class RequestPositionService {
@@ -52,5 +53,10 @@ export class RequestPositionService {
   removePositionsFromGroup(requestId: Uuid, groupId: Uuid, positions: Uuid[]) {
     const url = `requests/${requestId}/groups/remove-positions`;
     return this.api.post<GroupWithPositions>(url, { groupId, positions });
+  }
+
+  getQuantityRecommendation(position: string) {
+    const url = `#intelplan#forecasts-by-name`;
+    return this.api.get<RecommendedQuantity[]>(url, {params: {name: position}});
   }
 }

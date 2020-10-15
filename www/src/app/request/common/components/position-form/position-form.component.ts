@@ -13,11 +13,12 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
-import { UxgDropdownInputComponent } from "uxg";
+import { UxgDropdownInputComponent, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
 import { Store } from "@ngxs/store";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-position-form',
@@ -47,12 +48,16 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   @ViewChild('nameRef') nameDropdownInputRef: UxgDropdownInputComponent;
+  @ViewChild('quantityPopover') quantityPopover: UxgPopoverComponent;
   form: FormGroup;
   subscription = new Subscription();
   okeiList$: Observable<Okei[]>;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
+  quantityRecommendation: number;
+  recommendedUnit: string;
+  isRecommendedQuantity = false;
 
   readonly currencies = Object.entries(CurrencyLabels);
 
@@ -75,7 +80,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private statusService: RequestPositionStatusService,
     private positionService: RequestPositionService,
     public okeiService: OkeiService,
-    private store: Store
+    private store: Store,
+    public featureService: FeatureService
   ) {}
 
   ngOnInit() {
@@ -173,6 +179,33 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         this.form.enable();
       }));
     }
+  }
+
+  getQuantityRecommendation() {
+    if (this.showRecommendedQuantity()) {
+      this.positionService.getQuantityRecommendation(this.form.get('name').value).subscribe(
+        (data) => {
+          if (data.length !== 0) {
+            this.quantityRecommendation = data[0].forecastCommodity.filter(
+              item => item.isForecast).reduce(
+                (prev, curr) => prev + curr.quantity, 0);
+            if (this.quantityRecommendation > this.form.get('quantity').value) {
+              this.recommendedUnit = data[0].unit;
+              this.quantityPopover.show();
+              this.isRecommendedQuantity = true;
+            }
+          }
+        });
+    }
+  }
+
+  showRecommendedQuantity() {
+    return this.form.get('name').value && !this.isRecommendedQuantity && !this.requestId && !this.position.id &&
+      this.featureService.authorize('recommendedQuantity');
+  }
+
+  setRecommendedQuantity() {
+    this.form.get('quantity').setValue(this.quantityRecommendation);
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {

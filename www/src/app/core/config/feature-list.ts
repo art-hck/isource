@@ -27,6 +27,11 @@ export interface IFeatureList {
   backofficeAgreements;
   customerAgreements;
   recommendedPositions;
+  recommendedQuantity;
+  backofficeProfile;
+  backofficeIntelplan;
+  customerProfile;
+  customerIntelplan;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -54,5 +59,10 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   sentToApprove: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   backofficeAgreements: { roles: [UserRole.SENIOR_BACKOFFICE, UserRole.BACKOFFICE] },
   customerAgreements: { roles: [UserRole.CUSTOMER] },
-  recommendedPositions: { roles: [UserRole.CUSTOMER]}
+  recommendedPositions: { roles: [UserRole.CUSTOMER]},
+  recommendedQuantity: { roles: [UserRole.CUSTOMER]},
+  backofficeProfile: { roles: [UserRole.BACKOFFICE] },
+  backofficeIntelplan: { roles: [UserRole.BACKOFFICE] },
+  customerProfile: { roles: [UserRole.BACKOFFICE] },
+  customerIntelplan: { roles: [UserRole.BACKOFFICE] },
 };

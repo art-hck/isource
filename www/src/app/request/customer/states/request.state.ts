@@ -137,8 +137,6 @@ export class RequestState {
   }
 
   @Action(CreateTemplate) createTemplate({setState, dispatch}: Context, {requestId, positions, title, tag}: CreateTemplate) {
-    return this.rest.createTemplate(requestId,  positions, title, tag).pipe(
-      tap(request => setState(patch({request, status: "received" as StateStatus}))
-      ));
+    return this.rest.createTemplate(requestId,  positions, title, tag);
   }
 }

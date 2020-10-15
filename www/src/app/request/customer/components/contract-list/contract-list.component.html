@@ -1,4 +1,5 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
+<ng-container *ngIf="(request$ | async) as request">
 
   <!-- tabs & actions -->
   <div class="app-row">
@@ -44,8 +45,8 @@
         *ngFor="let contract of contracts"
         [contract]="contract"
         [status]="status$ | async"
-        (approve)="store.dispatch(approve(contract))"
-        (reject)="store.dispatch(reject(contract, $event.files, $event.comment))"
+        (approve)="store.dispatch(approve(request, contract))"
+        (reject)="store.dispatch(reject(request, contract, $event.files, $event.comment))"
       ></app-contract-list-item>
 
       <!-- empty -->
@@ -54,7 +55,7 @@
       </div>
     </div>
 
-    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contracts.length" [dirty]="form.dirty">
+    <app-filter #filterRef [formGroup]="form" (reset)="form.reset(); form.markAsPristine()" [count]="contractsLength$ | async" [dirty]="form.dirty">
       <app-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </app-filter-section>
@@ -74,6 +75,7 @@
       </app-filter-section>
     </app-filter>
   </div>
+</ng-container>
 </ng-container>
 
 <ng-template #placeholder>

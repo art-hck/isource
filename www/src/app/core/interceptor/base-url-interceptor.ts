@@ -32,6 +32,14 @@ export class BaseUrlInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    if (req.url.indexOf('#intelplan#') === 0) {
+      req = req.clone({
+        headers: req.headers.set('Accept', 'application/json'),
+        url: req.url.replace("#intelplan#", this.appConfig.intelplan.url)
+      });
+      return next.handle(req);
+    }
+
     if (req.url.indexOf('http') === 0 || req.url.indexOf('https') === 0 ) {
       return next.handle(req);
     }

@@ -20,12 +20,12 @@ export namespace ContractActions {
 
   export class Reject {
     static readonly type = '[Contract Customer] Reject';
-    constructor(public contract: Contract, public files?: File[], public comment?: string) {}
+    constructor(public requestId: Uuid, public contract: Contract, public files?: File[], public comment?: string) {}
   }
 
   export class Approve {
     static readonly type = '[Contract Customer] Approve';
-    constructor(public contract: Contract) {}
+    constructor(public requestId: Uuid, public contract: Contract) {}
   }
 
   export class Upload {

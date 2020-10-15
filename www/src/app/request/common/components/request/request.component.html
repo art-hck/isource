@@ -235,10 +235,21 @@
             </h2>
 
             <div class="add-position-button">
-              <button uxgButton primary iconText (click)="addPositionModal.open()">
-                <uxg-icon shape="app-plus"></uxg-icon>
-                <span>Новая позиция</span>
-              </button>
+              <uxg-popover #more [openOnHover]="true">
+                <button uxgButton primary iconText
+                        uxgPopoverTrigger
+                        [disabled]="request.isOlderTwoWeeks" (click)="addPositionModal.open()">
+                  <uxg-icon shape="app-plus"></uxg-icon>
+                  <span>Новая позиция</span>
+                </button>
+
+                <ng-container *ngIf="request.isOlderTwoWeeks">
+                  <div *uxgPopoverContent (click)="more.hide()">
+                    <div>Заявке больше двух недель.</div>
+                    <div>Добавление новых позиций недоступно.</div>
+                  </div>
+                </ng-container>
+              </uxg-popover>
             </div>
           </ng-container>
         </div>
@@ -265,7 +276,7 @@
           <h2 class="text-center" [style.opacity]="0.1">
             <uxg-icon shape="app-info" size="270"></uxg-icon>
             <br/>
-            К заявке пока не добавлено ни <br/> одной позиции
+            К заявке пока не добавлено <br/>ни одной позиции
           </h2>
         </ng-container>
         <ng-container *ngFor="let formGroup of formPositions.controls">

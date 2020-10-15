@@ -42,28 +42,28 @@ export namespace ContractActions {
   export class Send {
     static readonly type = '[Contract Backoffice] Send';
 
-    constructor(public contract: Contract, public files?: File[], public comment?: string) {}
+    constructor(public requestId: Uuid, public contract: Contract, public files?: File[], public comment?: string) {}
   }
 
   // Подписать
   export class Sign {
     static readonly type = '[Contract Backoffice] Sign';
 
-    constructor(public contract: Contract) {}
+    constructor(public requestId: Uuid, public contract: Contract) {}
   }
 
   // Откатить
   export class Rollback {
     static readonly type = '[Contract Backoffice] Rollback';
 
-    constructor(public contract: Contract) {}
+    constructor(public requestId: Uuid, public contract: Contract) {}
   }
 
   // Удалить
   export class Delete {
     static readonly type = '[Contract Backoffice] Delete';
 
-    constructor(public request: Request, public contract: Contract) {}
+    constructor(public requestId: Uuid, public contract: Contract) {}
   }
 
   // Прикрепить файл договора

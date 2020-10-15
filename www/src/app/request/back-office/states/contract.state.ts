@@ -9,8 +9,6 @@ import { ContractActions } from "../actions/contract.actions";
 import { ContragentWithPositions } from "../../common/models/contragentWithPositions";
 import { ContractService } from "../services/contract.service";
 import { ToastActions } from "../../../shared/actions/toast.actions";
-import { ContractStatusLabels } from "../../common/dictionaries/contract-status-labels";
-import { ContractStatus } from "../../common/enum/contract-status";
 import { ContractFilter } from "../../common/models/contract-filter";
 import FetchSuppliers = ContractActions.FetchSuppliers;
 import Create = ContractActions.Create;
@@ -57,15 +55,7 @@ export class ContractState {
 
   @Action(FetchAvailibleFilters)
   fetchAvailibleFilters({ setState }: Context, { requestId }: FetchAvailibleFilters) {
-    // @TODO: получать список доступных фильтров отдельным методом
-    return this.rest.list(requestId).pipe(
-      tap(contracts => setState(patch<Model>({
-        availibleFilters: {
-          statuses: Object.keys(ContractStatusLabels).filter(status => contracts.some(c => c.status === status)) as ContractStatus[],
-          suppliers: contracts.map(({ supplier }) => supplier).filter((v, i, a) => a.findIndex(({ id }) => v.id === id) === i)
-        }
-      }))),
-    );
+    return this.rest.availableFilters(requestId).pipe(tap(availibleFilters => setState(patch<Model>({ availibleFilters }))));
   }
 
   @Action(FetchSuppliers)
@@ -80,7 +70,11 @@ export class ContractState {
 
     return this.rest.create(requestId, contragentId, positions).pipe(
       tap(contract => setState(patch<Model>({ contracts: insertItem(contract), status: "received" }))),
-      tap(() => dispatch([new ToastActions.Success('Договор успешно добавлен'), new FetchSuppliers(requestId)])),
+      tap(() => dispatch([
+        new FetchSuppliers(requestId),
+        new FetchAvailibleFilters(requestId),
+        new ToastActions.Success('Договор успешно добавлен'),
+      ])),
       catchError(e => {
         setState(patch<Model>({status: "error"}));
         return dispatch(new ToastActions.Error(e?.error?.detail ?? "Неизвестная ошибка"));
@@ -89,11 +83,12 @@ export class ContractState {
   }
 
   @Action(Send)
-  send({ setState, dispatch }: Context, { contract, files, comment }: Send) {
+  send({ setState, dispatch }: Context, { requestId, contract, files, comment }: Send) {
     setState(patch<Model>({ status: "updating" }));
 
     return dispatch(!!files ? new Upload(contract, files, comment) : []).pipe(
       switchMap(() => this.rest.sendForApproval(contract.id)),
+      tap(() => dispatch(new FetchAvailibleFilters(requestId))),
       tap(() => dispatch([new ToastActions.Success('Договор отправлен на согласование')])),
       tap(c => setState(patch({ contracts: updateItem(({ id }) => c.id === id, c) }))),
       tap(() => setState(patch<Model>({ status: "received" }))),
@@ -105,11 +100,12 @@ export class ContractState {
   }
 
   @Action(Sign)
-  sign({ setState, dispatch }: Context, { contract }: Sign) {
+  sign({ setState, dispatch }: Context, { requestId, contract }: Sign) {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.sign(contract.id).pipe(
       tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
+      tap(() => dispatch(new FetchAvailibleFilters(requestId))),
       tap(() => dispatch([new ToastActions.Success('Договор подписан')])),
       tap(() => setState(patch<Model>({ status: "received" }))),
       catchError(e => {
@@ -120,10 +116,11 @@ export class ContractState {
   }
 
   @Action(Rollback)
-  rollback({ setState, dispatch }: Context, { contract }: Rollback) {
+  rollback({ setState, dispatch }: Context, { requestId, contract }: Rollback) {
     setState(patch<Model>({ status: "updating" }));
     return this.rest.rollback(contract.id).pipe(
       tap(c => setState(patch({ contracts: updateItem(({ id }) => id === c.id, c) }))),
+      tap(() => dispatch(new FetchAvailibleFilters(requestId))),
       tap(() => dispatch([new ToastActions.Success('Договор отозван')])),
       tap(() => setState(patch<Model>({ status: "received" }))),
       catchError(e => {
@@ -134,11 +131,15 @@ export class ContractState {
   }
 
   @Action(Delete)
-  delete({ setState, dispatch }: Context, { request, contract }: Delete) {
+  delete({ setState, dispatch }: Context, { requestId, contract }: Delete) {
     setState(patch<Model>({ status: "updating" }));
     return this.rest.delete(contract.id).pipe(
       tap(() => setState(patch({ contracts: removeItem(({ id }) => id === contract.id) }))),
-      tap(() => dispatch([new ToastActions.Success('Договор удалён'), new FetchSuppliers(request.id)])),
+      tap(() => dispatch([
+        new FetchAvailibleFilters(requestId),
+        new FetchSuppliers(requestId),
+        new ToastActions.Success('Договор удалён'),
+      ])),
       tap(() => setState(patch<Model>({ status: "received" }))),
       catchError(e => {
         setState(patch<Model>({status: "error"}));

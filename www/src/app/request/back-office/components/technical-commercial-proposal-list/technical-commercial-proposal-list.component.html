@@ -109,20 +109,24 @@
             [proposals]="proposals"
             [proposalsByPos]="proposalsByPositions$ | async"
             [showParams]="true"
-            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
+            (openCommonParams)="gridTable.scrollIntoView()"
             (editTechnicalCommercialProposal)="addContragentModal.open(); editingTCP = $event"
+            (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>
 
           <!-- procedure info -->
           <div class="position-row" *ngFor="let procedure of procedures$ | async; trackBy: trackById">
-            <app-procedure-grid [procedure]="procedure"
-                                [source]="'tcp'"
-                                (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
-                                (prolong)="prolongModalPayload = procedure"></app-procedure-grid>
+            <app-procedure-grid
+              [procedure]="procedure"
+              [source]="'tcp'"
+              (bargain)="procedureModalPayload = {action: 'bargain', procedure: procedure}"
+              (prolong)="prolongModalPayload = procedure"
+            ></app-procedure-grid>
           </div>
 
           <ng-container *ngIf="suppliers.length || view === 'simple-grid'" formArrayName="positions">
             <app-grid-row
+              [class.sticked]="stickedPosition"
               *ngFor="let proposalsByPos of proposalsByPositions$ | async; trackBy trackByProposalByPositionId; index as i"
               [position]="proposalsByPos.position"
               [suppliers]="suppliers(proposals)"
@@ -138,7 +142,7 @@
               (create)="addProposalPosition(getProposalBySupplier($event, proposals), proposalsByPos.position)"
             >
               <ng-template #position>
-                <div class="grid-cell app-col">
+                <div class="grid-cell app-col grid-cell-sticky" [class.grid-cell-sticky-bg]="stickedPosition">
                   <div class="app-row" style="flex-wrap: nowrap">
                     <uxg-checkbox class="app-control" #checked
                                   formControlName="checked"
