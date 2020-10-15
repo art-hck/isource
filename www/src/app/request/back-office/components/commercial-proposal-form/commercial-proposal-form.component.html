@@ -28,11 +28,11 @@
     <div class="app-col-4">
       <div class="app-control-wrap">
         <input #priceWithVat
+               appPriceInputFilter
                class="hidden-arrows"
                min="0"
                type="number"
-               (keypress)="filterEnteredText($event)"
-               uxgInput lg formControlName="priceWithVat"/>
+               uxgInput lg formControlName="priceWithVat" />
         <label class="app-control-label" (click)="priceWithVat.focus()">Цена за единицу</label>
       </div>
     </div>
@@ -48,7 +48,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="form-row app-row">
     <div class="app-col-6">

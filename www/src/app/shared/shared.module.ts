@@ -42,6 +42,7 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
 import { FilterSectionComponent } from "./components/filter/filter-section/filter-section.component";
 import { FilterComponent } from "./components/filter/filter.component";
 import { FilterCheckboxListComponent } from './components/filter/filter-checkbox-list/filter-checkbox-list.component';
+import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
 import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
 import { FilterDirective } from './components/filter/filter.directive';
 
@@ -77,6 +78,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
@@ -128,6 +130,7 @@ import { FilterDirective } from './components/filter/filter.directive';
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     AppDateIsAfterDirective,
     AppPositionStatusComponent,

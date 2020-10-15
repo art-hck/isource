@@ -109,11 +109,6 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     this.close.emit();
   }
 
-  filterEnteredText(event: KeyboardEvent): boolean {
-    const key = Number(event.key);
-    return (key >= 0 && key <= 9 || ['.', ','].indexOf(event.key) !== -1);
-  }
-
   supplierOfferExistsValidator(control: AbstractControl): CustomValidators {
     return control.value && this.position && this.position.linkedOffers
       .some(linkedOffer => linkedOffer.supplierContragent.id === control.value.id) ? { supplierOfferExist: true } : null;
@@ -122,11 +117,6 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   quantityValidator(): CustomValidators {
     const value = this.newCommercialProposalForm.get('quantity').value;
     return (!value || value === '' || value >= this.position.quantity) ? null : { "quantityNotEnough": true };
-    if (!value || value === '') {
-      this.quantityNotEnough = false;
-    } else {
-      this.quantityNotEnough = value < this.position.quantity;
-    }
   }
 
   deliveryDateValidator(): CustomValidators {
