@@ -8,7 +8,6 @@
   [pageSize]="pageSize"
   [availableFilters$]="availableFilters$"
   [form]="form"
-  [activeFiltersObj]="activeFilters"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
 ></app-request-list>

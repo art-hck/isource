@@ -1,5 +1,5 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching' && (requestStatus$ | async) !== 'fetching'; else placeholder">
-<ng-container *ngIf="(request$ | async) as request">
+<ng-container *ngIf="(request$ | async) as request" appFilter>
 
   <!-- tabs & actions -->
   <div class="app-row">
@@ -26,10 +26,7 @@
           </uxg-tab-title>
         </uxg-tabs>
 
-        <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
-          <uxg-icon shape="app-sort2"></uxg-icon>
-          <span>Фильтр</span>
-        </button>
+        <app-filter-button></app-filter-button>
 
       </div>
     </div>
@@ -55,14 +52,7 @@
       </div>
     </div>
 
-    <app-filter
-      #filterRef
-      [formGroup]="form"
-      [count]="contractsLength$ | async"
-      [dirty]="form.dirty"
-      (reset)="form.reset(); form.markAsPristine()"
-      (filter)="store.dispatch(filter(request, $event))"
-    >
+    <app-filter [formGroup]="form" [count]="contractsLength$ | async" (filter)="store.dispatch(filter(request, $event))">
       <app-filter-section label="Наименование позиции">
         <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции или его часть" />
       </app-filter-section>

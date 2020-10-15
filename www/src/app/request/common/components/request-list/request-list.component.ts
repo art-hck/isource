@@ -43,7 +43,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() pageSize: number;
   @Input() availableFilters$: Observable<AvailableFilters>;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
-  @Input() activeFiltersObj: RequestsListFilter;
   @Input() form: FormGroup;
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
@@ -64,13 +63,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
   readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly getDeliveryDate = (min, max): string => min === max ? min : min + " – " + max;
   readonly calcPieChart = ({ requestData: d }: RequestsList) => (65 - (65 * d.completedPositionsCount / d.positionsCount * 100) / 100);
-
-  get activeFilters() {
-    return this.activeFiltersObj && Object.entries(this.activeFiltersObj)
-      .filter(([k, v]: [keyof RequestsListFilter, any]) => {
-        return k !== 'requestListStatusesFilter' && v instanceof Array && v.length > 0 || !(v instanceof Array) && v;
-      });
-  }
 
   constructor(
     private route: ActivatedRoute,

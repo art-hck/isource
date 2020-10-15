@@ -43,6 +43,8 @@ import { FilterSectionComponent } from "./components/filter/filter-section/filte
 import { FilterComponent } from "./components/filter/filter.component";
 import { FilterCheckboxListComponent } from './components/filter/filter-checkbox-list/filter-checkbox-list.component';
 import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
+import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
+import { FilterDirective } from './components/filter/filter.directive';
 
 @NgModule({
   imports: [
@@ -96,6 +98,8 @@ import { PriceInputFilterDirective } from "./directives/price-input-filter.direc
     FilterComponent,
     FilterSectionComponent,
     FilterCheckboxListComponent,
+    FilterButtonComponent,
+    FilterDirective,
   ],
   exports: [
     CommonModule,
@@ -145,6 +149,8 @@ import { PriceInputFilterDirective } from "./directives/price-input-filter.direc
     FilterComponent,
     FilterSectionComponent,
     FilterCheckboxListComponent,
+    FilterButtonComponent,
+    FilterDirective,
   ]
 })
 export class SharedModule {

@@ -1,4 +1,4 @@
-<ng-container *ngIf="(agreements$ | async) as agreements">
+<ng-container *ngIf="(agreements$ | async) as agreements" appFilter>
 
   <div class="app-row app-align-items-center">
     <div class="app-col">
@@ -10,13 +10,7 @@
       </form>
     </div>
 
-    <div class="app-col-auto">
-      <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
-        <uxg-icon shape="app-sort2"></uxg-icon>
-        <span>Фильтр</span>
-        <small *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</small>
-      </button>
-    </div>
+    <app-filter-button class="app-col-auto"></app-filter-button>
 
     <div class="app-col-aside detachable"></div>
   </div>
@@ -27,14 +21,7 @@
     </div>
 
 
-    <app-filter
-      #filterRef
-      [formGroup]="form"
-      (reset)="form.reset(); form.markAsPristine()"
-      [count]="totalCount$| async"
-      [dirty]="form.dirty"
-      (filter)="filter$.next($event)"
-    >
+    <app-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">
       <app-filter-section label="Заявка">
         <input uxgInput formControlName="numberOrName" placeholder="Номер или наименование заявки"/>
       </app-filter-section>

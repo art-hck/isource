@@ -1,4 +1,4 @@
-<ng-container *ngIf="(request$ | async) as request; else loading">
+<ng-container *ngIf="(request$ | async) as request; else loading" appFilter>
   <div class="app-row" *ngIf="(technicalProposals$ | async) as technicalProposals">
     <ng-container *ngIf="(procedures$ | async) as procedures">
       <div class="app-col" [class.disabled]="state === 'updating'">
@@ -8,10 +8,7 @@
             <div class="app-row app-justify-content-end">
               <div class="app-col-auto">
 
-                <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
-                  <uxg-icon shape="app-sort2"></uxg-icon>
-                  <span>Фильтр</span>
-                </button>
+                <app-filter-button></app-filter-button>
 
                 <!-- Создать процедуру  -->
                 <button uxgButton secondary iconText
@@ -87,14 +84,7 @@
         </uxg-modal>
       </div>
 
-      <app-filter
-        #filterRef
-        [formGroup]="form"
-        [count]="technicalProposals.length"
-        [dirty]="form.dirty"
-        (reset)="form.reset(); form.markAsPristine()"
-        (filter)="filter($event)"
-      >
+      <app-filter [formGroup]="form" [count]="technicalProposals.length" (filter)="filter($event)">
         <app-filter-section label="Заявка">
           <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
         </app-filter-section>

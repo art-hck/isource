@@ -13,19 +13,18 @@ import { UxgBreadcrumbsService } from "uxg";
 import { Contract } from "../../../common/models/contract";
 import { FormBuilder } from "@angular/forms";
 import { ContractFilter } from "../../../common/models/contract-filter";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContractStatusLabels } from "../../../common/dictionaries/contract-status-labels";
 import { ContractStatus } from "../../../common/enum/contract-status";
 import { FilterComponent } from "../../../../shared/components/filter/filter.component";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { Uuid } from "../../../../cart/models/uuid";
+import { searchContragents } from "../../../../shared/helpers/search";
 import Fetch = ContractActions.Fetch;
 import Download = ContractActions.Download;
 import Reject = ContractActions.Reject;
 import Approve = ContractActions.Approve;
 import Filter = ContractActions.Filter;
 import FetchAvailibleFilters = ContractActions.FetchAvailibleFilters;
-import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
-import { Uuid } from "../../../../cart/models/uuid";
-import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-contract-list',

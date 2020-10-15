@@ -44,18 +44,6 @@
   }
 }
 
-.counter-bubble {
-  background: uxg($theme, color-font-link);
-  border-radius: uxg($theme, counter-border-radius);
-  box-sizing: content-box;
-  color: uxg($theme, color-default);
-  display: inline-block;
-  height: 16px;
-  line-height: 16px;
-  text-align: center;
-  width: 16px;
-}
-
 .chart {
   margin-right: .5em;
   transform: rotate(-90deg);

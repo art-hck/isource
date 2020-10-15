@@ -1,6 +1,6 @@
 <ng-container *ngIf="(status$ | async) !== 'fetching'; else placeholder">
   <ng-container *ngIf="(activeList$ | async) as technicalProposals">
-    <ng-container *ngIf="request$ | async as request">
+    <ng-container *ngIf="request$ | async as request" appFilter>
       <div class="app-row">
         <div class="app-col app-table app-no-border tab-row">
           <div class="app-row app-align-items-center">
@@ -31,10 +31,7 @@
               </uxg-tab-title>
             </uxg-tabs>
 
-            <button uxgButton secondary iconText class="app-detachable-button" (click)="filterRef.open()">
-              <uxg-icon shape="app-sort2"></uxg-icon>
-              <span>Фильтр</span>
-            </button>
+            <app-filter-button></app-filter-button>
           </div>
         </div>
       </div>
@@ -56,14 +53,7 @@
             </ng-template>
         </div>
 
-        <app-filter
-          #filterRef
-          [formGroup]="form"
-          [count]="proposalsLength$ | async"
-          [dirty]="form.dirty"
-          (reset)="form.reset(); form.markAsPristine()"
-          (filter)="store.dispatch(filter(request, $event))"
-        >
+        <app-filter [formGroup]="form" [count]="proposalsLength$ | async" (filter)="store.dispatch(filter(request, $event))">
           <app-filter-section label="Заявка">
             <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
           </app-filter-section>
