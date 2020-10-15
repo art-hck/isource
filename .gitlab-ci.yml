@@ -82,6 +82,7 @@ build study:
     - exit 0
   only:
     - master
+    - /^release-.*$/
   when: manual
   
 build prod:
