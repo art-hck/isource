@@ -177,7 +177,7 @@ export class RequestService {
 
   getRecommendedPositions(positions: RequestPosition[]) {
     const url = `#profile#request-techmaps/recommended`;
-    return this.api.post<RecommendedPositions>(url, {
+    return this.api.post<RecommendedPositions[]>(url, {
       commodities: positions
     });
   }
