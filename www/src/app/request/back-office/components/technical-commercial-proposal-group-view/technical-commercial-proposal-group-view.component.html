@@ -21,23 +21,56 @@
         <app-filter-button></app-filter-button>
 
         <!-- ТКП из процедуры  -->
-        <button uxgButton secondary iconText (click)="procedureModalPayload = {action: 'create'}"
-                *ngIf="featureService.authorize('createProcedure')">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>ТКП из процедуры</span>
-        </button>
+        <uxg-popover #tcpFromProcedurePopup [openOnHover]="true" class="popover-item">
+          <button uxgButton secondary iconText
+                  [disabled]="!(availablePositions$ | async)?.length"
+                  (click)="procedureModalPayload = {action: 'create'}"
+                  *ngIf="featureService.authorize('createProcedure')">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>ТКП из процедуры</span>
+          </button>
+
+          <ng-container *ngIf="!(availablePositions$ | async)?.length">
+            <div *uxgPopoverContent (click)="tcpFromProcedurePopup.hide()">
+              <div>Нет доступных для выбора позиций ТКП</div>
+              <div>Создание процедуры недоступно.</div>
+            </div>
+          </ng-container>
+        </uxg-popover>
 
         <!-- Новая группа ТКП  -->
-        <button uxgButton secondary iconText (click)="editedGroup = null; groupFormModal.open()">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>Новое ТКП</span>
-        </button>
+        <uxg-popover #tcpGroupPopup [openOnHover]="true" class="popover-item">
+          <button uxgButton secondary iconText
+                  [disabled]="!(availablePositions$ | async)?.length"
+                  (click)="editedGroup = null; groupFormModal.open()">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>Новое ТКП</span>
+          </button>
+
+          <ng-container *ngIf="!(availablePositions$ | async)?.length">
+            <div *uxgPopoverContent (click)="tcpGroupPopup.hide()">
+              <div>Нет доступных для выбора позиций ТКП</div>
+              <div>Создание ТКП недоступно.</div>
+            </div>
+          </ng-container>
+        </uxg-popover>
 
         <!-- ТКП из шаблона  -->
-        <button uxgButton primary iconText (click)="formTemplate.reset(); uploadTemplateModal.open();">
-          <uxg-icon shape="app-plus"></uxg-icon>
-          <span>ТКП из шаблона</span>
-        </button>
+        <uxg-popover #tcpFromTemplatePopup [openOnHover]="true" class="popover-item">
+          <button uxgButton primary iconText
+                  [disabled]="!(availablePositions$ | async)?.length"
+                  (click)="formTemplate.reset(); uploadTemplateModal.open();">
+            <uxg-icon shape="app-plus"></uxg-icon>
+            <span>ТКП из шаблона</span>
+          </button>
+
+          <ng-container *ngIf="!(availablePositions$ | async)?.length">
+            <div *uxgPopoverContent (click)="tcpFromTemplatePopup.hide()">
+              <div>Нет доступных для выбора позиций ТКП</div>
+              <div>Создание ТКП из шаблона недоступно.</div>
+            </div>
+          </ng-container>
+        </uxg-popover>
       </div>
     </div>
   </div>
@@ -88,8 +121,9 @@
   <app-technical-commercial-proposal-group-form
     *ngIf="groupFormModal.state"
     [group]="editedGroup"
+    [positions]="(availablePositions$ | async)"
     (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="requestId"
-    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event);"
+    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event); fetchAvailablePositions();"
   >
   </app-technical-commercial-proposal-group-form>
 </uxg-modal>
