@@ -62,8 +62,12 @@ export class ProcedureComponent {
   // или если по процедуре объявлено уторговывание
   // или если по процедуре идёт приём предложений (дата приёма заявок ещё не наступила) и при этом не объявлено уторговывание
   // или если процедуру нельзя уторговать, т.к. нет позиций с 2 и более предложениями
+  // TODO Перенести логику определения возможности продления и уторговывания на бэк!
   retradeButtonIsDisabled(): boolean {
-    return this.procedureIsFinished() || (this.procedureIsRetrade() && !this.dateEndRegistrationFinished()) || !this.dateEndRegistrationFinished() || !this.canRetradeProcedure();
+    return this.procedureIsFinished() ||
+      (this.procedureIsRetrade() && !this.dateEndRegistrationFinished()) ||
+      !this.dateEndRegistrationFinished() ||
+      !this.canRetradeProcedure();
   }
 
   constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {
