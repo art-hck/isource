@@ -21,7 +21,7 @@
         <app-filter-button></app-filter-button>
 
         <!-- ТКП из процедуры  -->
-        <uxg-popover #more [openOnHover]="true" class="popover-item">
+        <uxg-popover #tcpFromProcedurePopup [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="procedureModalPayload = {action: 'create'}"
@@ -31,7 +31,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="more.hide()">
+            <div *uxgPopoverContent (click)="tcpFromProcedurePopup.hide()">
               <div>Нет доступных для выбора позиций ТКП</div>
               <div>Создание процедуры недоступно.</div>
             </div>
@@ -39,7 +39,7 @@
         </uxg-popover>
 
         <!-- Новая группа ТКП  -->
-        <uxg-popover #more [openOnHover]="true" class="popover-item">
+        <uxg-popover #tcpGroupPopup [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="editedGroup = null; groupFormModal.open()">
@@ -48,7 +48,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="more.hide()">
+            <div *uxgPopoverContent (click)="tcpGroupPopup.hide()">
               <div>Нет доступных для выбора позиций ТКП</div>
               <div>Создание ТКП недоступно.</div>
             </div>
@@ -56,7 +56,7 @@
         </uxg-popover>
 
         <!-- ТКП из шаблона  -->
-        <uxg-popover #more [openOnHover]="true" class="popover-item">
+        <uxg-popover #tcpFromTemplatePopup [openOnHover]="true" class="popover-item">
           <button uxgButton primary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="formTemplate.reset(); uploadTemplateModal.open();">
@@ -65,7 +65,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="more.hide()">
+            <div *uxgPopoverContent (click)="tcpFromTemplatePopup.hide()">
               <div>Нет доступных для выбора позиций ТКП</div>
               <div>Создание ТКП из шаблона недоступно.</div>
             </div>
