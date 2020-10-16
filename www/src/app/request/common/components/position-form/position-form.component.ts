@@ -83,7 +83,7 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
         let positionInfo = this.position[controlName] === null ? this.position[controlName] : this.position[controlName]?.toString();
 
-        if (controlName === 'deliveryDate') {
+        if (controlName === 'deliveryDate' && this.position[controlName]) {
           positionInfo = moment(new Date(this.position[controlName])).format('DD.MM.YYYY');
         }
 
