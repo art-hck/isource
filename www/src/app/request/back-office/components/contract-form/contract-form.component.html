@@ -28,15 +28,27 @@
         <div class="app-col app-grow-0">
           <uxg-checkbox formControlName="checked"></uxg-checkbox>
         </div>
+
         <div class="app-col app-bold select-list-item-title">{{ position.name }}</div>
-          <div class="app-col app-col-auto select-list-item-quantity">
-            <span>{{ position.quantity }} </span>
-            <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
-          </div>
-          <div class="app-col app-col-auto select-list-item-date">
-            <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
-            <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
-          </div>
+
+        <div class="app-col app-col-auto select-list-item-quantity">
+          <span>{{ position.quantity }} </span>
+          <span class="app-ghost-color">{{ position.measureUnit | lowercase }}</span>
+        </div>
+
+        <div class="app-col app-col-auto select-list-item-date">
+          <ng-container *ngIf="position.isDeliveryDateAsap; else deliveryDate">Как можно скорее</ng-container>
+          <ng-template #deliveryDate>{{ position.deliveryDate | date : 'dd.MM.yyyy' }}</ng-template>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #footerContentTpl>
+      <div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
+        <div class="app-col app-grow-0"></div>
+        <div class="app-col app-bold select-list-item-title"></div>
+        <div class="app-col app-col-auto select-list-item-quantity">Кол-во</div>
+        <div class="app-col app-col-auto select-list-item-date">Дата поставки</div>
       </div>
     </ng-template>
   </select-items-with-search>
