@@ -199,7 +199,7 @@
 
   </div>
 
-  <app-filter [formGroup]="form" [count]="total" (filter)="filter.emit({ filters: $event })">
+  <app-filter [formGroup]="form" [count]="total" (filter)="emitFilter($event)">
     <app-filter-section label="Заявка">
       <input uxgInput type="text" formControlName="requestNameOrNumber" placeholder="Номер или наименование заявки" />
     </app-filter-section>

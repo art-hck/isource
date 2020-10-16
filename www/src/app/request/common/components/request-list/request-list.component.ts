@@ -21,6 +21,7 @@ import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-f
 import { Uuid } from "../../../../cart/models/uuid";
 import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
 import { searchContragents, searchUsers } from "../../../../shared/helpers/search";
+import moment from "moment";
 
 @Component({
   selector: 'app-request-list',
@@ -214,5 +215,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
     }
 
     this.filter.emit({ filters: { requestListStatusesFilter: tabFilters } });
+  }
+
+  emitFilter(f: RequestsListFilter) {
+    this.filter.emit({ filters: {
+      ...f,
+      shipmentDateFrom: f.shipmentDateFrom ? moment(f.shipmentDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,
+      shipmentDateTo: f.shipmentDateTo ? moment(f.shipmentDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
+    }});
   }
 }
