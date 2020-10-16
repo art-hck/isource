@@ -59,6 +59,6 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   customerAgreements: { roles: [UserRole.CUSTOMER] },
   backofficeProfile: { roles: [UserRole.BACKOFFICE] },
   backofficeIntelplan: { roles: [UserRole.BACKOFFICE] },
-  customerProfile: { roles: [UserRole.BACKOFFICE] },
-  customerIntelplan: { roles: [UserRole.BACKOFFICE] }
+  customerProfile: { roles: [UserRole.CUSTOMER] },
+  customerIntelplan: { roles: [UserRole.CUSTOMER] }
 };

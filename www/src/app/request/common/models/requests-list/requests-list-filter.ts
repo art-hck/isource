@@ -9,8 +9,8 @@ export class RequestsListFilter {
   onlyOpenTasks?: boolean;
   customers?: Uuid[];
   positionStatuses?: PositionStatus[];
-  shipmentDateFrom?: Date;
-  shipmentDateTo?: Date;
+  shipmentDateFrom?: string;
+  shipmentDateTo?: string;
   shipmentDateAsap?: boolean;
   requestListStatusesFilter?: RequestStatus[];
   chatContexts?: ChatContext["id"][];
