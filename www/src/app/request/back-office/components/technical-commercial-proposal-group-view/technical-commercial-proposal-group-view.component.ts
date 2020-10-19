@@ -136,10 +136,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
           this.formTemplate.get('fileTemplate').value,
           this.formTemplate.get('technicalCommercialProposalGroupName').value
         )
-      ).pipe(
-        finalize(() => this.fetchAvailablePositions()),
-        takeUntil(this.destroy$)
-      ).subscribe();
+      ).pipe(finalize(() => this.fetchAvailablePositions())).subscribe();
     }
   }
 
