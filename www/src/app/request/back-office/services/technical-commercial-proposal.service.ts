@@ -75,7 +75,7 @@ export class TechnicalCommercialProposalService {
     return this.api.post(url, data, { responseType: 'blob' });
   }
 
-  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[], groupName: string) {
+  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[]) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`;
 
     const data = {
@@ -86,7 +86,7 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData(data));
   }
 
-  uploadTemplateFromGroups(requestId: Uuid, groupId: Uuid, files: File[], groupName: string) {
+  uploadTemplateFromGroups(requestId: Uuid, files: File[], groupName: string) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/upload-excel`;
 
     const data = {
