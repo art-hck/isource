@@ -43,6 +43,12 @@ export interface GpnmarketConfigInterface {
   priceOrder: {
     url: string
   };
+  profile: {
+    url: string
+  };
+  intelplan: {
+    url: string;
+  };
   instructions: {
     forCustomer: string,
     forBackoffice: string

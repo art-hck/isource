@@ -14,7 +14,6 @@ import { RequestActions } from "../../actions/request.actions";
 import { RequestState } from "../../states/request.state";
 import { StateStatus } from "../../../common/models/state-status";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import UploadFromTemplate = RequestActions.UploadFromTemplate;
 import Publish = RequestActions.Publish;
 import RefreshPositions = RequestActions.RefreshPositions;

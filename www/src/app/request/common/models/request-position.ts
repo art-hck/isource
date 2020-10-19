@@ -13,7 +13,7 @@ export class RequestPosition extends RequestPositionList {
    * Значение null допустимо для позиций не сохранённых в базе данных
    */
 
-  number?: number;
+  number: number;
   type: string;
   groupId: Uuid;
   group: RequestGroup;

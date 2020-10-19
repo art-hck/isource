@@ -37,7 +37,7 @@ export class UxgPopoverComponent implements OnInit, OnDestroy {
   }
 
   click = (e) => this.triggerEl && this.triggerEl.nativeElement.contains(e.target) && this.show();
-  clickOut = (e) => !this.el.nativeElement.contains(e.target) && this.hide();
+  clickOut = (e) => this.isOpen && !this.el.nativeElement.contains(e.target) && this.hide();
 
   private toggle(state: boolean, delay: number) {
     this.endTimer$.next();
