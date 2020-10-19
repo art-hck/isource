@@ -76,6 +76,10 @@ export class TechnicalCommercialProposalService {
   }
 
   uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[], groupName: string) {
+    const url = groupId
+      ? `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`
+      : `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/upload-excel`;
+
     const data = groupId ? {
       files: files,
       requestTechnicalCommercialProposalGroupId: groupId
@@ -84,7 +88,6 @@ export class TechnicalCommercialProposalService {
       requestTechnicalCommercialProposalGroupName: groupName
     };
 
-    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`;
     return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData(data));
   }
 
