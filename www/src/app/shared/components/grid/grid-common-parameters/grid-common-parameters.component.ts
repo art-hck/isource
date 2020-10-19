@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../../request/common/models/technical-commercial-proposal";
 import { ProposalHelperService } from "../proposal-helper.service";
 import { TechnicalCommercialProposalByPosition } from "../../../../request/common/models/technical-commercial-proposal-by-position";
@@ -8,7 +8,8 @@ import { UserInfoService } from "../../../../user/service/user-info.service";
 @Component({
   selector: 'app-grid-common-parameters',
   templateUrl: './grid-common-parameters.component.html',
-  styleUrls: ['./grid-common-parameters.component.scss']
+  styleUrls: ['./grid-common-parameters.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridCommonParametersComponent implements OnInit {
   @HostBinding('class.app-row') appRow = true;
@@ -35,5 +36,4 @@ export class GridCommonParametersComponent implements OnInit {
     this.close.emit();
     this.openEditModal.emit(proposal);
   }
-
 }
