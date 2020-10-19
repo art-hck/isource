@@ -1,15 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, Subject } from "rxjs";
 import { Actions, Select, Store } from "@ngxs/store";
 import { RequestState } from "../../states/request.state";
@@ -42,6 +31,8 @@ import { ProposalHelperService } from "../../../../shared/components/grid/propos
 import { PositionStatus } from "../../../common/enum/position-status";
 import moment from "moment";
 import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
+import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -50,8 +41,6 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
-import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
-import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -177,14 +166,14 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
 
   convertSuppliers(suppliers: ContragentShortInfo[], positions: RequestPosition[]): GridSupplier[] {
     return suppliers.reduce((arr: GridSupplier[], supplier) => {
-      // Берём позицию и смотрим есть ли оффер с таким поставщиком и совпадает ли флаг аналогов ИЛИ, если предложений 0 И НЕ аналог
-      [false, true].filter(hasAnalogs => positions.some(({linkedOffers}) => {
-        return linkedOffers.some(({supplierContragentId: id, isAnalog}) => {
-          return id === supplier.id && isAnalog === hasAnalogs;
-        }) || !linkedOffers.find(({supplierContragentId: id}) => id === supplier.id) && !hasAnalogs;
-      }))
-      .forEach(hasAnalogs => arr.push({ ...supplier, hasAnalogs }));
+      const proposals = positions
+        .map(({ linkedOffers }) => linkedOffers.filter(({ supplierContragentId }) => supplierContragentId === supplier.id))
+        .reduce((acc, curr) => [...acc, ...curr], []);
 
+      // Берём позицию и смотрим есть ли оффер с таким поставщиком и совпадает ли флаг аналогов, ИЛИ если офферов 0 И НЕ аналог
+      [false, true]
+        .filter(hasAnalogs => proposals.some(({ isAnalog }) => isAnalog === hasAnalogs) || proposals.length === 0 && !hasAnalogs)
+        .forEach(hasAnalogs => arr.push({ ...supplier, hasAnalogs }));
       return arr;
     }, []);
   }
