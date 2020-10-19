@@ -214,13 +214,23 @@ export class TechnicalCommercialProposalState {
   @Action(UploadTemplate)
   uploadTemplate(ctx: Context, { requestId, groupId, files, groupName }: UploadTemplate) {
     ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.uploadTemplate(requestId, groupId, files, groupName).pipe(
+
+    const uploadTemplate = this.rest.uploadTemplate(requestId, groupId, files).pipe(
       catchError(err => {
         ctx.setState(patch({ status: "error" as StateStatus }));
         return throwError(err);
       }),
       tap(proposals => ctx.setState(insertOrUpdateProposals(proposals))),
     );
+
+    const uploadTemplateFromGroups = this.rest.uploadTemplateFromGroups(requestId, files, groupName).pipe(
+      catchError(err => {
+        ctx.setState(patch({ status: "error" as StateStatus }));
+        return throwError(err);
+      })
+    );
+
+    return groupId ? uploadTemplate : uploadTemplateFromGroups;
   }
 
   @Action(DownloadAnalyticalReport)

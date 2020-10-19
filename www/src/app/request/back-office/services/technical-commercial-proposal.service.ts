@@ -75,17 +75,26 @@ export class TechnicalCommercialProposalService {
     return this.api.post(url, data, { responseType: 'blob' });
   }
 
-  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[], groupName: string) {
-    const data = groupId ? {
+  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[]) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`;
+
+    const data = {
       files: files,
       requestTechnicalCommercialProposalGroupId: groupId
-    } : {
+    };
+
+    return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData(data));
+  }
+
+  uploadTemplateFromGroups(requestId: Uuid, files: File[], groupName: string) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/upload-excel`;
+
+    const data = {
       files: files,
       requestTechnicalCommercialProposalGroupName: groupName
     };
 
-    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/upload-excel`;
-    return this.api.post<TechnicalCommercialProposal[]>(url, this.formDataService.toFormData(data));
+    return this.api.post<TechnicalCommercialProposalGroup>(url, this.formDataService.toFormData(data));
   }
 
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
