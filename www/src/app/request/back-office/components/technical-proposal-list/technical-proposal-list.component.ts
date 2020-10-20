@@ -93,7 +93,7 @@ export class TechnicalProposalListComponent implements OnInit, OnDestroy {
     );
 
     this.statusesFilter$ = this.availableFilters$.pipe(
-      map(f => f?.tpStatus.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value })))
+      map(f => f?.tpStatus?.map(value => ({ label: TechnicalProposalsStatusesLabels[value], value })))
     );
   }
 
