@@ -16,6 +16,7 @@ import * as moment from "moment";
 import { Moment } from "moment";
 import { catchError, finalize, takeUntil, tap } from "rxjs/operators";
 import { Subject, throwError } from "rxjs";
+import { CustomValidators } from "../../../../shared/forms/custom.validators";
 
 @Component({
   selector: 'app-procedure-prolongate',
@@ -45,7 +46,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
     this.form = this.fb.group({
       requestId: [this.requestId, Validators.required],
       procedureId: [this.procedureId, Validators.required],
-      dateEndRegistration: [this.parsedDateEndRegistration.format('DD.MM.YYYY HH:mm'), Validators.required],
+      dateEndRegistration: [this.parsedDateEndRegistration.format('DD.MM.YYYY HH:mm'), [Validators.required, CustomValidators.currentOrFutureDate()]],
       dateSummingUp: [this.parsedDateSummingUp?.format('DD.MM.YYYY HH:mm'), Validators.required],
     });
 
