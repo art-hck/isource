@@ -41,6 +41,7 @@
           </div>
           <span *ngIf="agreement.groupCounter > 0" class="app-ghost-color group-counter">({{agreement.groupCounter}})</span>
         </div>
+
         <div class="app-col-2 app-ellipsis customer" *ngIf="!userInfoService.isCustomer()">
           {{agreement.request.contragent.shortName}}
         </div>
