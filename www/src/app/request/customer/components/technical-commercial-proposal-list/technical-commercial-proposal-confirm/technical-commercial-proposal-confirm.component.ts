@@ -62,7 +62,7 @@ export class TechnicalCommercialProposalConfirmComponent {
   }
 
   getSelectedToSendToEditPositions(selectedProposals): (TechnicalCommercialProposal | Proposal)[] {
-    const positions = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).flat();
+    const positions = selectedProposals.map(selectedProposal => selectedProposal.toSendToEdit).reduce((acc, val) => acc.concat(val), []);
 
     // Убираем из массива позиций повторяющиеся значения и оставляем только уникальные
     return positions.filter((position, index, array) =>
