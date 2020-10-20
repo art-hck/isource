@@ -218,7 +218,7 @@
           </div>
           <grid-contragent-form
             *ngIf="addContragentModal.state"
-            [excludedContragents]="suppliers"
+            [excluded]="suppliers"
             (close)="addContragentModal.close()"
             (add)="store.dispatch(addSupplier($event))"
           ></grid-contragent-form>
