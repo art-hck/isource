@@ -58,10 +58,13 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
 
   @Select(CommercialProposalState.proposalsByPos(PositionStatus.RESULTS_AGREEMENT))
   readonly positionsOnReview$: Observable<RequestPosition[]>;
-  @Select(CommercialProposalState.proposalsByPos(PositionStatus.WINNER_SELECTED))
-  readonly positionsReviewed$: Observable<RequestPosition[]>;
+
   @Select(CommercialProposalState.proposalsByPos(CommercialProposalsStatus.SENT_TO_EDIT))
   readonly positionsSendToEdit$: Observable<RequestPosition[]>;
+
+  @Select(CommercialProposalState.proposalsByPosHasWinner)
+  readonly positionsReviewed$: Observable<RequestPosition[]>;
+
   @Select(CommercialProposalState.positionsLength) readonly positionsLength$: Observable<number>;
   @Select(RequestState.request) readonly request$: Observable<Request>;
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
