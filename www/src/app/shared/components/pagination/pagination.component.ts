@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { combineLatest, Observable, ReplaySubject } from "rxjs";
+import { map, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-pagination',
@@ -8,40 +8,36 @@ import { takeUntil } from "rxjs/operators";
   styleUrls: ['./pagination.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
+export class PaginationComponent implements OnInit, OnChanges {
   @Input() total;
   @Input() pageSize;
   @Input() pages$: Observable<number>;
-  @Input() siblingCount = 3;
+  @Input() siblingLimit = 3;
   @Output() change = new EventEmitter<number>();
-  current = 1;
-  fullPages: number[];
-  pages: number[];
-  firstItem: number;
-  lastItem: number;
-  readonly destroy$ = new Subject();
+  readonly change$ = new ReplaySubject(1);
+  data$: Observable<{ fullPages: number[], pages: number[], firstItem: number, lastItem: number }>;
 
-  ngOnChanges() {
-    if (this.total && this.pageSize) {
-      this.pages$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.fullPages = this.total && (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1) || [];
-        const leftSiblingCount = Math.min(this.current - 1, this.siblingCount);
-        const rightSiblingCount = Math.min(this.fullPages.length - this.current, this.siblingCount);
-        this.pages = this.fullPages
-          .filter(page => page >= this.current - leftSiblingCount + rightSiblingCount - this.siblingCount)
-          .filter(page => page <= this.current - leftSiblingCount + rightSiblingCount + this.siblingCount);
-        this.firstItem = (this.current - 1) * this.pageSize + 1;
-        this.lastItem = Math.min((this.current - 1) * this.pageSize + this.pageSize, this.total);
-      });
+  ngOnChanges({ total, pageSize }: SimpleChanges) {
+    if ((total || pageSize) && this.total && this.pageSize) {
+      this.change$.next();
     }
   }
 
   ngOnInit() {
-    this.pages$.pipe(takeUntil(this.destroy$)).subscribe(page => this.change.emit(this.current = page || 1));
-  }
+    this.data$ = combineLatest([this.pages$.pipe(tap(c => this.change.emit(c || 1))), this.change$]).pipe(
+      map(([current]) => {
+        current = current || 1;
+        const fullPages = (new Array(Math.ceil(this.total / this.pageSize))).fill(null).map((v, i) => i + 1);
+        const leftSiblingLength = Math.min(current - 1, this.siblingLimit);
+        const rightSiblingLength = Math.min(fullPages.length - current, this.siblingLimit);
+        const firstItem = (current - 1) * this.pageSize + 1;
+        const lastItem = Math.min((current - 1) * this.pageSize + this.pageSize, this.total);
+        const pages = fullPages
+            .filter(p => p >= current - leftSiblingLength + rightSiblingLength - this.siblingLimit)
+            .filter(p => p <= current - leftSiblingLength + rightSiblingLength + this.siblingLimit);
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+        return { fullPages, pages, firstItem, lastItem };
+      })
+    );
   }
 }
