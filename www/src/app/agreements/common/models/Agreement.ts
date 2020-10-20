@@ -19,10 +19,23 @@ export class Agreement {
     name: PositionStatus;
     label: string;
   };
+  requestTechnicalCommercialProposalGroup?: {
+    createdDate: string;
+    id: Uuid;
+    name: string;
+    requestId: Uuid;
+    requestPositions: [{
+      id: Uuid;
+      name: string;
+      status: PositionStatus;
+      statusLabel: string;
+      number: number;
+    }]
+  };
   requestPosition: {
     id: Uuid;
     name: string;
-    status: string;
+    status: PositionStatus;
     number: number;
   };
 }
