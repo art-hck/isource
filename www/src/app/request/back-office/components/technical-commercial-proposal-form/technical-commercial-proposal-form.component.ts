@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { finalize, shareReplay, takeUntil, tap } from "rxjs/operators";
+import { finalize, map, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -52,6 +52,9 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();
+  readonly proposalPositions$ = this.availablePositions$.pipe(map(
+    positions => positions?.map(position => ({position}))
+  ));
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
   invalidDocControl = false;
@@ -164,10 +167,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
 
   publish() {
     return this.store.dispatch(new Publish(this.technicalCommercialProposal));
-  }
-
-  toProposalPositions(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
-    return positions.map(position => ({position}));
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {
