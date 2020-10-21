@@ -62,7 +62,8 @@ export class PositionComponent implements DoCheck {
   }
 
   isAfterManufacturing(position: RequestPosition): boolean {
-    return this.positionStatusService.isStatusAfter(position.status, PositionStatus.MANUFACTURING);
+    return this.positionStatusService.isStatusAfter(position.status, PositionStatus.MANUFACTURING) ||
+      this.isNotActual(position);
   }
 
   isAfterContracted(position: RequestPosition): boolean {
