@@ -32,6 +32,7 @@ export interface IFeatureList {
   backofficeIntelplan;
   customerProfile;
   customerIntelplan;
+  createTemplate;
 }
 
 export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
@@ -65,4 +66,5 @@ export const FeatureList: { [key in keyof IFeatureList]: Feature } = {
   backofficeIntelplan: { roles: [UserRole.BACKOFFICE] },
   customerProfile: { roles: [UserRole.CUSTOMER] },
   customerIntelplan: { roles: [UserRole.CUSTOMER] },
+  createTemplate: { roles: [UserRole.CUSTOMER] }
 };
