@@ -49,7 +49,7 @@
         </uxg-tab-title>
       </uxg-tabs>
 
-      <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
+      <button uxgButton secondary iconText *ngIf="canCreateRequest()" (click)="addRequest.emit()">
         <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>

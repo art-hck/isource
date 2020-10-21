@@ -224,4 +224,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
       shipmentDateTo: f.shipmentDateTo ? moment(f.shipmentDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
     }});
   }
+
+  canCreateRequest(): boolean {
+    return this.feature.authorize('createRequest') && this.user.getContragentId();
+  }
 }
