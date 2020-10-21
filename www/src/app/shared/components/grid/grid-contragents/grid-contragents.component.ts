@@ -55,6 +55,9 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
 
   ngAfterViewInit() {
     this.updateScroll();
+    this.gridRow.changes.subscribe(() => this.gridRow.forEach(
+      ({ nativeElement }) => nativeElement.scrollLeft = this.gridRow.first.nativeElement.scrollLeft)
+    );
   }
 
   trackBySupplierId = (i, supplier: ContragentShortInfo) => supplier?.id;
