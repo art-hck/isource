@@ -16,7 +16,7 @@
   <form [formGroup]="form" *ngIf="!isLoading; else loading" (ngSubmit)="submit()">
     <h2>{{attachments.length | pluralize: false : "Выбран" : "Выбрано" : "Выбрано"}} {{attachments.length | pluralize: "файл" : "файла" : "файлов"}}</h2>
     <div class="app-control-wrap">
-      <textarea uxgInput placeholder="Комментарий" formControlName="text" (keydown.enter)="submit($event)"></textarea>
+      <textarea uxgInput [placeholder]="isDraft ? 'Позиция в статусе черновик, невозможно отправлять сообщения' : 'Комментарий'" formControlName="text" (keydown.enter)="submit($event)"></textarea>
     </div>
 
     <div class="app-row app-justify-content-end app-align-items-center">
