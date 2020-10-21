@@ -98,7 +98,11 @@
         </ng-container>
       </ng-container>
     </div>
-    <app-chat-form [disabled]="conversationLoading" class="im-textarea" (send)="send($event)"></app-chat-form>
+    <app-chat-form
+      [disabled]="conversationLoading"
+      [isDraft]="asPosition(position$ | async).status === 'DRAFT'"
+      (send)="send($event)"
+      class="im-textarea"></app-chat-form>
   </div>
 </div>
 
