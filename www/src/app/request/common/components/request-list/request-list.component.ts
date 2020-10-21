@@ -226,6 +226,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   canCreateRequest(): boolean {
-    return this.feature.authorize('createRequest') && this.user.getContragentId();
+    return this.feature.authorize('createRequest') && !!this.user.getContragentId();
   }
 }
