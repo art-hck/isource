@@ -4,6 +4,17 @@
   background: #3B385E;
   width: 100%;
 
+  .basket-counter {
+    background: uxg($theme, color-font-link);
+    border-radius: uxg($theme, counter-border-radius);
+    color: uxg($theme, color-default);
+    line-height: 16px;
+    text-align: center;
+    height: 16px;
+    width: 16px;
+    margin-left: 5px;
+  }
+
   ::ng-deep .app-tabs {
     &-item {
       color: #fff;
