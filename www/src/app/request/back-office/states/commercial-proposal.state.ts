@@ -51,7 +51,7 @@ export class CommercialProposalState {
   }
 
   @Selector() static positions({ positions }: Model) { return positions; }
-  @Selector() static suppliers({ positions, suppliers }: Model) { return suppliers; }
+  @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }
   @Selector() static status({ status }: Model) { return status; }
