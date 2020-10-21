@@ -136,7 +136,8 @@
                 <div>
                   <button uxgButton clear
                           [disabled]="checkedPositions.length === 0 || !everyPositionIsNotDraftEntity() || someOfPositionsAreInProcedure()"
-                          (click)="cancelPositionModal.open()">Отменить</button>
+                          (click)="cancelPositionModal.open()">Отменить
+                  </button>
                 </div>
 
                 <div>
@@ -158,12 +159,14 @@
                     Отправить в работу
                   </button>
                 </div>
-                <!-- Создать шаблон -->
-                <div class="app-col app-col-auto">
-                  <button uxgButton clear [disabled]="checkedPositions.length === 0"
-                          (click)="createTemplateModal.open()">Создать шаблон
-                  </button>
-                </div>
+                <ng-container *ngIf="featureService.authorize('createTemplate')">
+                  <!-- Создать шаблон -->
+                  <div class="app-col app-col-auto">
+                    <button uxgButton clear [disabled]="checkedPositions.length === 0"
+                            (click)="createTemplateModal.open()">Создать шаблон
+                    </button>
+                  </div>
+                </ng-container>
                 <ng-container *ngIf="!someOfPositionsHasStatus(flatPositions, 'ON_CUSTOMER_APPROVAL')">
                   <!-- Отклонить -->
                   <div class="app-col app-col-auto" *ngIf="featureService.available('approveRequest', user.roles)">
