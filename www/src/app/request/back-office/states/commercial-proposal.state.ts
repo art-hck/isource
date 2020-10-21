@@ -51,13 +51,7 @@ export class CommercialProposalState {
   }
 
   @Selector() static positions({ positions }: Model) { return positions; }
-  @Selector() static suppliers({ positions, suppliers }: Model) {
-    // @TODO: баг на бэке, при AddSupplier в ответе отсутствуют поставщики предоставившие аналоги, ниже костыль. Как поправим можно будет возвращать просто suppliers
-    // return suppliers;
-    return positions.reduce((arr, { linkedOffers }) => {
-      return [...arr, ...linkedOffers.map(({supplierContragent: s}) => s).filter(({id}) => !arr.some(supplier => supplier.id === id))];
-    }, suppliers);
-  }
+  @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }
   @Selector() static status({ status }: Model) { return status; }
