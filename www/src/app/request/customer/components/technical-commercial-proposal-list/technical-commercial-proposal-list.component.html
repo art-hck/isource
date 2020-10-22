@@ -72,7 +72,7 @@
               [proposals]="converProposalPosition(proposalByPos)"
               [isReviewed]="isReviewed(proposalByPos)"
               [getProposal]="getProposalBySupplier(proposalByPos)"
-              (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event),  position: converPosition(proposalByPos.position)}"
+              (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event), proposalByPosition: getProposal(proposalByPos, $event) }"
             >
               <ng-template #position>
                 <div class="grid-cell app-col grid-cell-sticky" [class.grid-cell-sticky-bg]="stickedPosition">
@@ -187,27 +187,28 @@
 
 <uxg-modal [(state)]="modalData" size="l">
   <ng-container *ngIf="modalData">
-    <h2>{{ modalData.position.sourcePosition.name }}</h2>
+    <h2>{{ modalData.proposal.sourceProposal.position.name }}</h2>
+
     <app-proposal-detail
       [supplier]="modalData.supplier"
       [paymentTerms]="modalData.proposal.sourceProposal.paymentTerms"
       [manufacturingName]="modalData.proposal.manufacturingName"
-      [documents]="modalData.proposal.documents"
+      [documents]="modalData.proposalByPosition.proposal.documents"
       [manufacturer]="modalData.proposal.sourceProposal.manufacturer"
       [standard]="modalData.proposal.sourceProposal.standard"
       [proposal]="modalData.proposal"
-      [position]="modalData.position"
+      [position]="modalData.proposal.sourceProposal.position"
     ></app-proposal-detail>
 
     <ng-template uxgModalFooter>
       <div class="app-col app-bold">
-        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposal)">- Позиция в нужном количестве</div>
-        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки укладываются в заданные</div>
+        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Позиция в нужном количестве</div>
+        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Сроки укладываются в заданные</div>
 
-        <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposal)">
-          {{ helper.getRequestedQuantityLabel(modalData.position, modalData.proposal) }}
+        <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposal.sourceProposal.position, modalData.proposal)">
+          {{ helper.getRequestedQuantityLabel(modalData.proposal.sourceProposal.position, modalData.proposal) }}
         </div>
-        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
+        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Сроки не укладываются в заданные</div>
       </div>
 
       <div *ngIf="!['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(modalData.proposal.sourceProposal.status)">
