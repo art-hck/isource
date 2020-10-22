@@ -9,7 +9,7 @@
   </div>
   <div class="app-col">
     <textarea uxgInput formControlName="text"
-              [placeholder]="isDraft ? 'Позиция в статусе черновик, невозможно отправлять сообщения' : 'Комментарий'"
+              [placeholder]="isDraft ? 'Позиция/заявка в статусе черновик, невозможно отправлять сообщения' : 'Комментарий'"
               (keydown.enter)="submit($event)"></textarea>
     <button class="send" uxgButton lg icon link>
       <uxg-icon shape="app-message" size="24"></uxg-icon>
