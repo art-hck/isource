@@ -1,6 +1,9 @@
 <form class="app-row" [formGroup]="form" (ngSubmit)="submit()" >
   <div>
-    <button type="button" uxgButton lg icon link secondary appUploadFile (select)="selectFiles($event)" [multiple]="true">
+    <button type="button" uxgButton lg icon link secondary appUploadFile
+            (select)="selectFiles($event)"
+            [multiple]="true"
+            [disabled]="isDraft">
       <uxg-icon shape="app-attach"></uxg-icon>
     </button>
   </div>
