@@ -100,7 +100,7 @@
     </div>
     <app-chat-form
       [disabled]="conversationLoading"
-      [isDraft]="asPosition(position$ | async).status === 'DRAFT'"
+      [isDraft]="asPosition(position$ | async).status === 'DRAFT' || (position$ | async).request.status === 'DRAFT'"
       (send)="send($event)"
       class="im-textarea"></app-chat-form>
   </div>
