@@ -43,6 +43,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   invalidDocControl = false;
   invalidUploadTemplate = false;
   showErrorMessage = false;
+  publish = this.fb.control(true);
   readonly destroy$ = new Subject();
   readonly searchContragents = searchContragents;
 
@@ -120,12 +121,11 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
   /**
    * @TODO Remove ALL pipes mapTo(...) when backend fix
    */
-  submit(publish = true): void {
-    this.form.get('positions').markAsDirty();
-    this.form.get('positions').markAsTouched();
+  submit(): void {
     if (this.form.invalid || this.invalidUploadTemplate === true) {
       return;
     }
+
     this.isLoading = true;
     this.form.disable();
 
@@ -166,7 +166,7 @@ export class TechnicalProposalFormComponent implements OnInit, OnDestroy {
       ));
 
     // Отправляем на согласование
-    if (publish) {
+    if (this.publish.value) {
       tp$ = tp$.pipe(delayWhen(tp => this.rest.sendForApproval(this.request.id, tp)));
     }
 

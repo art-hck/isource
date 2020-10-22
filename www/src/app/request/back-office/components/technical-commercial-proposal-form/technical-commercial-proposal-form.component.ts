@@ -60,6 +60,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   invalidDocControl = false;
   manufactureErrorMessage = false;
   parameterErrorMessage = false;
+  publish = this.fb.control(true);
 
   get isManufacturerPristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
@@ -134,19 +135,16 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id, this.groupId));
   }
 
-  submit(publish = true): void {
-    this.form.get('positions').markAsDirty();
-    this.form.get('positions').markAsTouched();
-
+  submit(): void {
     if (this.form.valid) {
       let action$: Observable<any>;
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
       this.form.disable();
 
       if (this.form.pristine) {
-        publish ? action$ = this.publish() : this.close.emit();
+        this.publish.value ? action$ = this.store.dispatch(new Publish(this.technicalCommercialProposal)) : this.close.emit();
       } else {
-        action$ = this.save({ ...this.form.value, files }, publish);
+        action$ = this.save({ ...this.form.value, files }, this.publish.value);
       }
 
       action$.pipe(
@@ -163,10 +161,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     return this.store.dispatch(
       value.id ? new Update(value, publish) : new Create(this.request.id, this.groupId, value, publish)
     );
-  }
-
-  publish() {
-    return this.store.dispatch(new Publish(this.technicalCommercialProposal));
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {
