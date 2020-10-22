@@ -153,6 +153,9 @@ export class ContractState {
   }
 
   @Action(Download) download({ setState }: Context, { contract }: Download) {
-    return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ contract.supplier.shortName }.docx`)));
+    // Edge не умеет сохранять корректное имя файла, если в нём есть кавычки. Поэтому убираем их из имени
+    const supplierName = contract.supplier.shortName.replace(/['"]+/g, '');
+
+    return this.rest.download(contract.id).pipe(tap(data => saveAs(data, `Договор c ${ supplierName }.docx`)));
   }
 }
