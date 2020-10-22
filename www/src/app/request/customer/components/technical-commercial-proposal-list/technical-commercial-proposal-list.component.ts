@@ -29,7 +29,6 @@ import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
-import { RequestPosition } from "../../../common/models/request-position";
 import { AppComponent } from "../../../../app.component";
 import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
 import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
@@ -37,7 +36,6 @@ import { ProposalsView } from "../../../../shared/models/proposals-view";
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
 import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
-import { Position } from "../../../../shared/components/grid/position";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import Reject = TechnicalCommercialProposals.Reject;
@@ -97,7 +95,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   groupId: Uuid;
   gridRows: ElementRef[];
   view: ProposalsView = "grid";
-  modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, position: Position<RequestPosition> };
+  modalData: { proposal: Proposal<TechnicalCommercialProposalPosition>, supplier: ContragentShortInfo, proposalByPosition: TechnicalCommercialProposalByPosition["data"][number] };
   approvalModalData: {
     counters: {
       totalCounter: number,
@@ -441,7 +439,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     }));
   }
 
-  converPosition = (position: RequestPosition) => new Position(position);
+  getProposal = (positionProposal: TechnicalCommercialProposalByPosition, proposal: Proposal<TechnicalCommercialProposalPosition>) => {
+    return positionProposal.data.find(({proposalPosition: {id}}) => id === proposal.id);
+  }
+
   converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
 
