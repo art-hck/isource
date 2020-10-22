@@ -1,4 +1,4 @@
-<ng-container *ngIf="documents.length">
+<ng-container *ngIf="documents?.length">
   <small class="app-uppercase app-ghost-color app-bold">Документы предложения</small>
   <app-document-simple-list [gridable]="true" [enableUpload]="false" [documents]="documents">
   </app-document-simple-list>
