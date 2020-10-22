@@ -6,7 +6,7 @@ import { RequestDocument } from "../../../request/common/models/request-document
 export class Proposal<T = any> {
   id: Uuid;
   deliveryDate: string;
-  documents: RequestDocument[];
+  documents?: RequestDocument[];
   quantity: number;
   currency: PositionCurrency;
   priceWithoutVat: number;
