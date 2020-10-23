@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges } from '@angular/core';
 import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Component({
   selector: 'app-contragent-info',
@@ -12,18 +13,30 @@ export class ContragentInfoComponent {
 
   @Input() contragent: ContragentInfo;
   @Input() modalView = true;
+  downloading: boolean;
 
   readonly roleLabel = ContragentRoleLabels;
 
   constructor(
-    public getContragentService: ContragentService
+    public getContragentService: ContragentService,
+    private cd: ChangeDetectorRef,
   ) { }
 
   onDownloadPrimaInformReport(): void {
-    this.getContragentService.downloadPrimaInformReport(this.contragent.id);
-  }
+    this.downloading = true;
 
-  getLoaderState() {
-    return this.getContragentService.loading;
+    this.getContragentService.downloadPrimaInformReport(this.contragent.id).subscribe(data => {
+      saveAs(data, `PrimaInformReport${this.contragent.id}.pdf`);
+      this.downloading = false;
+      this.cd.detectChanges();
+    }, (error: any) => {
+      let msg = 'Ошибка при получении отчета';
+      this.downloading = false;
+      this.cd.detectChanges();
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 }

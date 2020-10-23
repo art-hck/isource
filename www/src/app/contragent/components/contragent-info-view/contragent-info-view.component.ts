@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {Uuid} from "../../../cart/models/uuid";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";
@@ -15,6 +15,7 @@ import {ToastActions} from "../../../shared/actions/toast.actions";
 import {User} from "../../../user/models/user";
 import {UserService} from "../../../user/service/user.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { saveAs } from 'file-saver/src/FileSaver';
 
 @Component({
   selector: 'app-contragent-info-view',
@@ -29,6 +30,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   customerBuyerUsersWithoutContragent$: Observable<User[]>;
   subscription = new Subscription();
   editedEmployee: EmployeeInfoBrief;
+  downloading: boolean;
 
   form = new FormGroup({
     user: new FormControl(null, Validators.required)
@@ -36,6 +38,7 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private bc: UxgBreadcrumbsService,
+    private cd: ChangeDetectorRef,
     private title: Title,
     private route: ActivatedRoute,
     public getContragentService: ContragentService,
@@ -75,11 +78,21 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
   }
 
   onDownloadPrimaInformReport(): void {
-    this.getContragentService.downloadPrimaInformReport(this.contragentId);
-  }
+    this.downloading = true;
 
-  getLoaderState() {
-    return this.getContragentService.loading;
+    this.getContragentService.downloadPrimaInformReport(this.contragentId).subscribe(data => {
+      saveAs(data, `PrimaInformReport${this.contragentId}.pdf`);
+      this.downloading = false;
+      this.cd.detectChanges();
+    }, (error: any) => {
+      let msg = 'Ошибка при получении отчета';
+      this.downloading = false;
+      this.cd.detectChanges();
+      if (error && error.error && error.error.detail) {
+        msg = `${msg}: ${error.error.detail}`;
+      }
+      alert(msg);
+    });
   }
 
   addEmployee(employee: EmployeeInfoBrief) {
