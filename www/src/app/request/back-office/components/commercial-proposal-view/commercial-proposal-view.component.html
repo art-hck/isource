@@ -163,7 +163,7 @@
             <app-request-procedure-form
               *ngIf="procedureModalPayload"
               [request]="request"
-              [positions]="positions"
+              [positions]="filterPositionsOnProposalsPreparationStatus(positions)"
               [action]="procedureModalPayload.action"
               [procedure]="procedureModalPayload.procedure"
               [procedureSource]="procedureSource"
