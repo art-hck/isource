@@ -3,6 +3,8 @@ import { ContragentInfo } from "../../models/contragent-info";
 import { ContragentService } from "../../services/contragent.service";
 import { ContragentRoleLabels } from "../../dictionaries/currency-labels";
 import { saveAs } from 'file-saver/src/FileSaver';
+import { ToastActions } from "../../../shared/actions/toast.actions";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: 'app-contragent-info',
@@ -19,6 +21,7 @@ export class ContragentInfoComponent {
 
   constructor(
     public getContragentService: ContragentService,
+    private store: Store,
     private cd: ChangeDetectorRef,
   ) { }
 
@@ -33,10 +36,10 @@ export class ContragentInfoComponent {
       let msg = 'Ошибка при получении отчета';
       this.downloading = false;
       this.cd.detectChanges();
-      if (error && error.error && error.error.detail) {
+      if (error?.error?.detail) {
         msg = `${msg}: ${error.error.detail}`;
       }
-      alert(msg);
+      this.store.dispatch(new ToastActions.Error(msg));
     });
   }
 }

@@ -88,10 +88,10 @@ export class ContragentInfoViewComponent implements OnInit, OnDestroy {
       let msg = 'Ошибка при получении отчета';
       this.downloading = false;
       this.cd.detectChanges();
-      if (error && error.error && error.error.detail) {
+      if (error?.error?.detail) {
         msg = `${msg}: ${error.error.detail}`;
       }
-      alert(msg);
+      this.store.dispatch(new ToastActions.Error(msg));
     });
   }
 
