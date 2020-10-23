@@ -196,10 +196,6 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       );
   }
 
-  filterPositionsOnProposalsPreparationStatus(positions: RequestPosition[]): RequestPosition[] {
-    return positions.filter(position => position.status === PositionStatus.PROPOSALS_PREPARATION);
-  }
-
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
 
   trackById = (i, { id }) => id;
