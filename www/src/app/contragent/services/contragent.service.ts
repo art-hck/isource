@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { ContragentList } from "../models/contragent-list";
 import { ContragentInfo } from "../models/contragent-info";
 import { Uuid } from "../../cart/models/uuid";
-import { saveAs } from 'file-saver/src/FileSaver';
 import { ContragentShortInfo } from "../models/contragent-short-info";
 import { ContragentRegistrationRequest } from "../models/contragent-registration-request";
 
@@ -12,8 +11,6 @@ import { ContragentRegistrationRequest } from "../models/contragent-registration
   providedIn: "root"
 })
 export class ContragentService {
-
-  loading = false;
 
   constructor(
     protected api: HttpClient
@@ -33,22 +30,7 @@ export class ContragentService {
   }
 
   downloadPrimaInformReport(contragentId: Uuid) {
-    this.loading = true;
-    this.api.post(
-      `contragents/${contragentId}/download-prima-inform-report`,
-      {},
-      {responseType: 'blob'})
-      .subscribe(data => {
-        saveAs(data, `PrimaInformReport${contragentId}.pdf`);
-        this.loading = false;
-      }, (error: any) => {
-        let msg = 'Ошибка при получении отчета';
-        this.loading = false;
-        if (error && error.error && error.error.detail) {
-          msg = `${msg}: ${error.error.detail}`;
-        }
-        alert(msg);
-      });
+    return this.api.post(`contragents/${contragentId}/download-prima-inform-report`, {}, {responseType: 'blob'});
   }
 
   contragentExists(inn: string, kpp: string): Observable<ContragentShortInfo> {
