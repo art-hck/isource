@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  ElementRef, EventEmitter,
-  Input, OnChanges,
-  OnDestroy,
-  Output,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Uuid } from "../../../../cart/models/uuid";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -21,12 +11,12 @@ import { TechnicalCommercialProposalHelperService } from "../../../common/servic
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalPosition } from "../../../common/models/technical-commercial-proposal-position";
 import { Position } from "../../../../shared/components/grid/position";
-import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 import { TechnicalCommercialProposalPositionStatus } from "../../../common/enum/technical-commercial-proposal-position-status";
-import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import { TechnicalCommercialProposalByPosition } from "../../../common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { StateStatus } from "../../../common/models/state-status";
+import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
+import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 
 @Component({
   selector: "app-request-technical-commercial-proposal",
@@ -64,20 +54,12 @@ export class TechnicalCommercialProposalComponent implements OnChanges, OnDestro
       .map(({value}) => (value.position));
   }
 
-  get hasOnReview(): boolean {
+  get onReview(): boolean {
     return this.proposal.positions.some(({ status }) => ['SENT_TO_REVIEW'].includes(status));
   }
 
-  get hasSentToEdit(): boolean {
-    return this.proposal.positions.some(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
-  }
-
-  get isReviewed(): boolean {
-    return this.proposal.positions.every(({ status }) => ['APPROVED', 'REJECTED'].includes(status));
-  }
-
-  get isSentToEdit(): boolean {
-    return this.proposal.positions.every(({ status }) => ['SENT_TO_EDIT'].includes(status)) && this.proposal.positions.length > 0;
+  get reviewed(): boolean {
+    return this.proposal.positions.every(({ status }) => ['APPROVED', 'REJECTED'].includes(status)) && this.proposal.positions.length > 0;
   }
 
   constructor(

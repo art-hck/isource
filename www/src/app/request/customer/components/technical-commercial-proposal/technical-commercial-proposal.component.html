@@ -1,7 +1,7 @@
 <div class="app-card" [formGroup]="form">
   <!-- title -->
   <div class="app-row app-align-items-center">
-    <div class="app-col-auto checkbox-space" *ngIf="!isReviewed && !folded">
+    <div class="app-col-auto checkbox-space" *ngIf="onReview && !folded">
       <uxg-checkbox formControlName="checked" uxgSelectAllFor="positions" *ngFor="let c of [form.get('positions')]">
       </uxg-checkbox>
     </div>
@@ -13,17 +13,17 @@
       </app-contragent-info-link>
     </h3>
 
-    <div class="app-ghost-color app-bold" *ngIf="hasOnReview">
+    <div class="app-ghost-color app-bold" *ngIf="onReview">
       <uxg-icon shape="app-waiting"></uxg-icon>
       <span>Необходимо рассмотреть</span>
     </div>
 
-    <div class="app-warning-color app-bold" *ngIf="isSentToEdit || hasSentToEdit && !hasOnReview">
+    <div class="app-warning-color app-bold" *ngIf="!reviewed && !onReview">
       <uxg-icon shape="app-warning"></uxg-icon>
       <span>На доработке</span>
     </div>
 
-    <div class="app-success-color app-bold" *ngIf="isReviewed">
+    <div class="app-success-color app-bold" *ngIf="reviewed">
       <uxg-icon shape="app-check"></uxg-icon>
       <span>Рассмотрено</span>
     </div>
@@ -35,13 +35,13 @@
 
   <ng-container *ngIf="!folded">
 
-    <div class="app-table app-no-border" [class.on-review]="!isReviewed" *ngIf="proposal.positions.length">
+    <div class="app-table app-no-border" [class.on-review]="onReview" *ngIf="proposal.positions.length">
 
       <div class="app-row">
         <div class="app-col">
           <hr/>
           <div class="app-row app-uppercase app-ghost-color app-bold position-list">
-            <div class="app-col-auto checkbox-space" *ngIf="!isReviewed"></div>
+            <div class="app-col-auto checkbox-space" *ngIf="onReview"></div>
             <small class="app-col app-ellipsis name">Наименование позиции</small>
             <small class="app-col app-ellipsis manufacturing-name">Заводское наименование</small>
             <small class="app-col app-ellipsis manufacturer">Изготовитель</small>
@@ -57,7 +57,7 @@
                  *ngFor="let item of proposal.positions; index as i"
                  [class.app-ghost-color]="isProposalPositionReviewed(item)"
                  [formGroupName]="i">
-              <div class="app-col-auto checkbox-space" *ngIf="!isReviewed">
+              <div class="app-col-auto checkbox-space" *ngIf="onReview">
                 <uxg-checkbox class="app-control" #checked
                               formControlName="checked">
                 </uxg-checkbox>
@@ -129,7 +129,7 @@
       </app-document-simple-list>
     </ng-container>
 
-    <ng-container *ngIf="!isReviewed">
+    <ng-container *ngIf="onReview">
       <hr>
 
       <div class="app-row app-align-items-center bottom-row">

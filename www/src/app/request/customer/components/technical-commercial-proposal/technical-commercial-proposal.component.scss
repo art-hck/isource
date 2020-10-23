@@ -71,34 +71,6 @@ hr {
   }
 }
 
-.grid {
-  .data {
-    .app-col + .app-col { padding-left: 20px }
-
-    &-body .app-col { padding-top: 14px }
-    &-body-container > div { cursor: pointer }
-
-    .radio { max-width: 40px }
-    .status {
-      max-width: 60px;
-      text-align: center;
-    }
-  }
-
-  &.on-review {
-    .data {
-      &-head .app-col { padding-bottom: 14px }
-      &-body .app-col { padding: 17px 0 }
-      &-body-container:nth-child(odd) { background: #F4F6FB }
-    }
-  }
-
-  .data-body-container:nth-child(odd) {
-    margin: 0 -20px;
-    padding: 0 20px;
-  }
-}
-
 .bottom-row {
   padding: 15px 0;
 }
