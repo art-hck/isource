@@ -1,3 +1,4 @@
+<ng-container appFilter>
 <!-- tabs -->
 <div class="app-row">
   <div class="app-col">
@@ -48,18 +49,14 @@
         </uxg-tab-title>
       </uxg-tabs>
 
-      <button uxgButton secondary iconText *ngIf="feature.authorize('createRequest')" (click)="addRequest.emit()">
+      <button uxgButton secondary iconText *ngIf="canCreateRequest()" (click)="addRequest.emit()">
         <uxg-icon shape="app-plus"></uxg-icon>
         <span>Новая заявка</span>
       </button>
-      <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
-        <uxg-icon shape="app-sort2"></uxg-icon>
-        <span>Фильтр</span>
-        <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
-      </button>
+      <app-filter-button></app-filter-button>
     </div>
   </div>
-  <div class="app-col-aside"></div>
+  <div class="app-col-aside detachable"></div>
 </div>
 
 
@@ -122,13 +119,12 @@
       </div>
     </div>
   </div>
-  <div class="app-col-aside filter" [class.opened]="filterOpened">
+  <div class="app-col-aside detachable">
   </div>
 </div>
 
 <!-- requests -->
 <div class="app-row">
-  <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
   <div class="app-col table-col">
     <div class="app-table" [class.disabled]="status !== 'received'">
       <a class="app-row app-link-no-color" [routerLink]="request.request.id" *ngFor="let request of requests">
@@ -199,20 +195,88 @@
     </div>
     <br/>
 
-    <app-pagination [total]="total" [pageSize]="pageSize" [pages$]="pages$" (change)="filter.emit({page: $event})"></app-pagination>
+    <app-pagination [total]="tabTotal" [pageSize]="pageSize" [pages$]="pages$" (change)="filter.emit({page: $event})"></app-pagination>
 
   </div>
 
-  <div class="app-col-aside filter" [class.opened]="filterOpened">
+  <app-filter [formGroup]="form" [count]="total" (filter)="emitFilter($event)">
+    <app-filter-section label="Заявка">
+      <input uxgInput type="text" formControlName="requestNameOrNumber" placeholder="Номер или наименование заявки" />
+    </app-filter-section>
 
-    <div class="close-btn" [class.opened]="filterOpened" (click)="filterOpened = false"></div>
+    <app-filter-section label="Есть вопросы на согласовании" *ngIf="form.get('onlyOpenAgreements')">
+      <div class="app-row app-align-items-center">
+        <label class="app-col" (click)="onlyOpenTasksRef.switch($event)">Есть открытые согласования</label>
+        <uxg-switcher class="app-col-auto" #onlyOpenTasksRef formControlName="onlyOpenAgreements"></uxg-switcher>
+      </div>
+    </app-filter-section>
+    <app-filter-section label="Заказчик" *ngIf="form.get('customers')">
+      <app-filter-checkbox-list
+        formControlName="customers"
+        searchPlaceholder="Заказчик"
+        [foldedSearch]="true"
+        [items$]="customers$"
+        [limit]="5"
+        (search)="customersSearch$.next($event)">
+      </app-filter-checkbox-list>
+    </app-filter-section>
 
-    <app-request-list-filter
-      [resultsCount]="total"
-      [backofficeView]="user.isBackOffice()"
-      [availableFilters]="availableFilters"
-      (filter)="filter.emit({filters: $event})"
-      (showResults)="filterOpened = false">
-    </app-request-list-filter>
-  </div>
+    <app-filter-section label="Создал заявку" *ngIf="form.get('userIds')">
+      <app-filter-checkbox-list
+        formControlName="userIds"
+        searchPlaceholder="Заказчик"
+        [foldedSearch]="true"
+        [items$]="users$"
+        [limit]="5"
+        (search)="usersSearch$.next($event)">
+      </app-filter-checkbox-list>
+    </app-filter-section>
+
+    <app-filter-section label="Статус" *ngIf="form.get('positionStatuses')">
+      <app-filter-checkbox-list
+        formControlName="positionStatuses"
+        [items$]="positionStatuses$"
+        [limit]="9"
+      >
+        <ng-template let-formGroup>
+          <ng-container *ngIf="formGroup.get('item').value as item">
+            <uxg-checkbox #statusCheckbox [formControl]="formGroup.get('checked')" class="app-control"></uxg-checkbox>
+            <label class="app-col" (click)="statusCheckbox.check($event)">&nbsp; {{PositionStatusesLabels[item.status]}}</label>
+            <div class="app-col app-col-auto">
+              <div class="app-position-status">
+                <span class="app-ghost-color">{{item.count}}</span>
+                <div class="app-position-status-icon {{item.status}}"></div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
+      </app-filter-checkbox-list>
+    </app-filter-section>
+
+
+    <app-filter-section label="Даты поставки" *ngIf="form.get('shipmentDateFrom') && form.get('shipmentDateTo')">
+      <div class="app-row">
+        <div class="app-col" [style.padding-right.px]="15">
+          <div class="app-control-wrap" [style.padding]="0">
+            <input #shipmentDateFrom uxgInput uxgDatepicker placeholder="Дата с" class="delivery-date" formControlName="shipmentDateFrom">
+            <label class="app-control-icon" (click)="shipmentDateFrom.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+          </div>
+        </div>
+
+        <div class="app-col">
+          <div class="app-control-wrap" [style.padding]="0">
+            <input #shipmentDateTo uxgInput uxgDatepicker placeholder="Дата по" class="delivery-date" formControlName="shipmentDateTo">
+            <label class="app-control-icon" (click)="shipmentDateTo.focus()">
+              <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+            </label>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <uxg-switcher label="Как можно скорее" labelAlign="right" formControlName="shipmentDateAsap"></uxg-switcher>
+    </app-filter-section>
+  </app-filter>
 </div>
+</ng-container>

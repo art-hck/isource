@@ -1,5 +1,4 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { RequestPosition } from "../../common/models/request-position";
 
 export namespace RequestActions {
   export class Fetch {

@@ -25,17 +25,20 @@ export class ProposalHelperService {
     return position.quantity === quantity;
   }
 
-  isPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.length >= positions.length;
+  isPositionsValid(proposals: TechnicalCommercialProposalPosition[], positions: TechnicalCommercialProposalByPosition[]): boolean {
+    return proposals.length >= positions.length;
   }
 
-  isQuantityPositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.every(
-      ({position, quantity}) => position.quantity === quantity);
+  isQuantityPositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
+    const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
+
+    return filteredProposals.every(({position, quantity}) => position.quantity === quantity);
   }
 
-  isDatePositionsValid(positions: TechnicalCommercialProposalByPosition[], proposal: TechnicalCommercialProposal) {
-    return proposal.positions.every(
+  isDatePositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
+    const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
+
+    return filteredProposals.every(
       position => moment(position.deliveryDate).isSameOrBefore(moment(position.position.deliveryDate))
         || position.position.isDeliveryDateAsap);
   }

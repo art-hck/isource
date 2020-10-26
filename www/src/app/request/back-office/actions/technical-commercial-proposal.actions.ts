@@ -23,7 +23,7 @@ export namespace TechnicalCommercialProposals {
   export class FetchProcedures {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchProcedures';
 
-    constructor(public requestId: Uuid, public groupId: Uuid, public update = false) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid, public update = false) {}
   }
 
   // Обновить список доступных к процедур из ТКП
@@ -32,7 +32,7 @@ export namespace TechnicalCommercialProposals {
     static readonly type = '[Technical Commercial Proposals Backoffice] UpdateProcedures';
     update = true;
 
-    constructor(public requestId: Uuid, public groupId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
   // Создать ТКП
@@ -85,14 +85,14 @@ export namespace TechnicalCommercialProposals {
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
 
-    constructor(public requestId: Uuid, public groupId: Uuid, public files: File[]) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public files: File[], public groupName?: string) {}
   }
 
   // Скачать шаблон
   export class DownloadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] DownloadTemplate';
 
-    constructor(public requestId: Uuid, public groupId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
   // Скачать аналитическую справку

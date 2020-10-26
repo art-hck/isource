@@ -1,47 +1,54 @@
-<ng-container *ngIf="(agreements$ | async) as agreements">
+<ng-container *ngIf="(agreements$ | async) as agreements" appFilter>
 
   <div class="app-row app-align-items-center">
     <div class="app-col">
       <form [formGroup]="form">
         <uxg-dropdown lg class="action-select" formControlName="actions">
           <div uxgDropdownItem [value]="null">Все задачи</div>
-          <div uxgDropdownItem [value]="action.type"
-               *ngFor="let action of actions"
-          >{{ action.label }}</div>
+          <div uxgDropdownItem [value]="action.type" *ngFor="let action of actions">{{ action.label }}</div>
         </uxg-dropdown>
       </form>
     </div>
 
-    <div class="app-col-auto">
-      <button uxgButton secondary iconText class="filter-button" (click)="filterOpened = true">
-        <uxg-icon shape="app-sort2"></uxg-icon>
-        <span>Фильтр</span>
-        <span *ngIf="activeFilters?.length > 0" class="counter-bubble">{{ activeFilters.length }}</span>
-      </button>
-    </div>
+    <app-filter-button class="app-col-auto"></app-filter-button>
 
-    <div class="app-col-aside"></div>
+    <div class="app-col-aside detachable"></div>
   </div>
 
   <div class="app-row">
-    <div class="backdrop" (click)="filterOpened = false" [class.opened]="filterOpened"></div>
-
-    <div class="app-col agreements-col">
-      <app-agreements
-        [agreements]="agreements">
-      </app-agreements>
+    <div class="app-col">
+      <app-agreements [agreements]="agreements"></app-agreements>
     </div>
 
-    <div class="app-col-aside filter" [class.opened]="filterOpened">
-      <div class="close-btn" [class.opened]="filterOpened" (click)="filterOpened = false"></div>
 
-      <app-agreements-list-filter
-        [resultsCount]="(totalCount$| async)"
-        (filter)="filterList($event)"
-        (showResults)="filterOpened = false">
-      </app-agreements-list-filter>
-    </div>
+    <app-filter [formGroup]="form" [count]="totalCount$| async" [skipKeys]="['actions']" (filter)="filter$.next($event)">
+      <app-filter-section label="Заявка">
+        <input uxgInput formControlName="numberOrName" placeholder="Номер или наименование заявки"/>
+      </app-filter-section>
+
+      <app-filter-section label="Даты поступления">
+        <div class="app-row">
+          <div class="app-col" [style.padding-right.px]="15">
+            <div class="app-control-wrap" [style.padding]="0">
+              <input #issuedDateFrom uxgInput uxgDatepicker placeholder="Дата с" class="delivery-date" formControlName="issuedDateFrom">
+              <label class="app-control-icon" (click)="issuedDateFrom.focus()">
+                <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+              </label>
+            </div>
+          </div>
+
+          <div class="app-col">
+            <div class="app-control-wrap" [style.padding]="0">
+              <input #issuedDateTo uxgInput uxgDatepicker placeholder="Дата по" class="delivery-date" formControlName="issuedDateTo">
+              <label class="app-control-icon" (click)="issuedDateTo.focus()">
+                <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
+              </label>
+            </div>
+          </div>
+        </div>
+      </app-filter-section>
+    </app-filter>
   </div>
 </ng-container>
 
-<app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$" (change)="loadPage($event)"></app-pagination>
+<app-pagination [total]="(totalCount$| async)" [pageSize]="pageSize" [pages$]="pages$"></app-pagination>

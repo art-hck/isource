@@ -1,4 +1,4 @@
-<ng-container *ngIf="(request$ | async) as request; else loading">
+<ng-container *ngIf="(request$ | async) as request; else loading" appFilter>
   <div class="app-row" *ngIf="(technicalProposals$ | async) as technicalProposals">
     <ng-container *ngIf="(procedures$ | async) as procedures">
       <div class="app-col" [class.disabled]="state === 'updating'">
@@ -7,6 +7,8 @@
           <div class="app-col app-table app-no-border">
             <div class="app-row app-justify-content-end">
               <div class="app-col-auto">
+
+                <app-filter-button></app-filter-button>
 
                 <!-- Создать процедуру  -->
                 <button uxgButton secondary iconText
@@ -82,13 +84,24 @@
         </uxg-modal>
       </div>
 
-      <div class="app-col app-col-aside">
-        <app-request-technical-proposal-filter
-          [technicalProposals]="technicalProposals"
-          [technicalProposalsAvailableStatuses]="technicalProposalAvailableStatuses$ | async"
-          (filters)="filter($event)">
-        </app-request-technical-proposal-filter>
-      </div>
+      <app-filter [formGroup]="form" [count]="technicalProposals.length" (filter)="filter($event)">
+        <app-filter-section label="Заявка">
+          <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
+        </app-filter-section>
+
+        <app-filter-section label="Контрагент">
+          <app-filter-checkbox-list formControlName="contragents" searchPlaceholder="Заказчик"
+            [foldedSearch]="true"
+            [items$]="contragentsFilter$"
+            [limit]="5"
+            (search)="contragentsSearch$.next($event)">
+          </app-filter-checkbox-list>
+        </app-filter-section>
+
+        <app-filter-section label="Согласование">
+          <app-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></app-filter-checkbox-list>
+        </app-filter-section>
+      </app-filter>
     </ng-container>
   </div>
 </ng-container>

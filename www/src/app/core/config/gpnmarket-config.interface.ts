@@ -3,6 +3,7 @@ import { InjectionToken } from "@angular/core";
 import * as Sentry from "@sentry/browser";
 import { KeycloakOptions } from "keycloak-angular";
 import { AppFileExtensions } from "../../shared/components/file/file";
+import { MenuModel } from "../models/menu.model";
 
 export const APP_CONFIG = new InjectionToken<GpnmarketConfigInterface>('app.config');
 
@@ -42,9 +43,18 @@ export interface GpnmarketConfigInterface {
   priceOrder: {
     url: string
   };
+  profile: {
+    url: string
+  };
+  intelplan: {
+    url: string;
+  };
   instructions: {
     forCustomer: string,
     forBackoffice: string
+  };
+  menu: {
+    additionalItems: MenuModel[]
   };
   disabledFeatures: Array<keyof typeof FeatureList>;
   metrika: { id: string | null, options: any };

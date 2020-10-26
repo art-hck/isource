@@ -56,7 +56,7 @@
       <uxg-tab-title #docTab>Документы</uxg-tab-title>
       <uxg-tab-title #offersTab [attr.disabled]="!position.linkedOffers.length">Коммерческие предложения</uxg-tab-title>
       <uxg-tab-title #inspectionTab [hidden]="!showInspection(position)">Изготовление</uxg-tab-title>
-      <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position)">Доставка</uxg-tab-title>
+      <uxg-tab-title #deliveryTab [hidden]="!isAfterManufacturing(position) || isNotActual(position)">Доставка</uxg-tab-title>
     </uxg-tabs>
     <br/>
     <ng-container *uxgTab="historyTab">
@@ -163,7 +163,7 @@
           <br/>
         </ng-container>
 
-        <div *ngIf="isBeforeRKDApproved(position) && !user.isCustomer()">
+        <div *ngIf="isBeforeContractSigning(position) && !user.isCustomer()">
           <uxg-popover #more [openOnHover]="true">
             <button uxgButton secondary
                     uxgPopoverTrigger

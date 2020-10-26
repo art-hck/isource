@@ -1,0 +1,142 @@
+<h2>Подтверждение результатов выбора</h2>
+
+<div class="app-row app-align-items-center">
+  <div class="app-col-auto">
+    Вы можете создать и выгрузить справку с результатами выбора в формате *.xls таблицы
+  </div>
+
+  <div class="app-col">
+    <div class="app-row app-justify-content-end analytical-report">
+      <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport())">
+        <span>Аналитическая справка </span>
+        <uxg-icon shape="app-download"></uxg-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="list-header-row app-row app-align-items-center">
+  <div class="app-col">
+    <small class="selected-counters">
+      <span class="counter"><span class="app-ghost-color">Всего позиций: </span>{{ approvalModalData.counters.totalCounter }}</span>
+      <span class="counter"><span class="app-ghost-color">Победителей: </span>{{ approvalModalData.counters.toApproveCounter }}</span>
+      <span class="counter"><span class="app-ghost-color">На доработку: </span>{{ approvalModalData.counters.sendToEditCounter }}</span>
+    </small>
+  </div>
+
+  <div class="app-col app-col-auto app-row app-align-items-center">
+    <div class="app-col app-col-auto app-ghost-color">Фильтр: &nbsp; </div>
+    <div class="app-col-auto search">
+      <input type="text" uxgInput (input)="filterQuery = $event.target.value" [placeholder]="'Наименование позиции или группы'" />
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="app-table app-no-border scroll-area">
+  <ng-container *ngFor="let proposalPositionsBlock of approvalModalData.selectedProposals; let i = index">
+    <div class="supplier-block" [hidden]="allPositionsToApproveFiltered(proposalPositionsBlock)">
+      <div class="app-row app-justify-content-between short-name">
+        <div class="app-col app-col-auto">
+          <h3>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (+i + 1) }}</h3>
+        </div>
+
+        <h3 class="app-col app-col-auto app-font-normal">
+          <span class="app-ghost-color">Сумма по поставщику: </span>
+          <span class="app-bold">{{ getSelectedProposalsSumBySupplier(proposalPositionsBlock.toApprove) | number: "1.0-2" }}
+            <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+          </span>
+        </h3>
+      </div>
+
+      <div class="positions-list">
+        <div class="to-approve">
+          <ng-container *ngFor="let toApproveProposalPosition of proposalPositionsBlock.toApprove">
+            <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toApproveProposalPosition)">
+              <div class="app-col app-bold select-list-item-title">{{ toApproveProposalPosition.manufacturingName }}</div>
+
+              <div class="app-col app-col-auto select-list-item-quantity">
+                <span>{{ toApproveProposalPosition.quantity }} </span>
+                <span class="app-ghost-color">{{ toApproveProposalPosition.measureUnit | lowercase }}</span>
+              </div>
+
+              <div class="app-col app-col-auto select-list-item-total-price">
+                <ng-container *ngIf="toApproveProposalPosition.priceWithoutVat; else withoutTotalPrice">
+                  {{ toApproveProposalPosition.priceWithoutVat * toApproveProposalPosition.quantity | number: "1.0-2" }}
+                  <span class="app-ghost-color">{{ getCurrencySymbol(toApproveProposalPosition.currency, 'narrow') }}</span>
+                </ng-container>
+
+                <ng-template #withoutTotalPrice>
+                  <span class="app-ghost-color">не указана</span>
+                </ng-template>
+              </div>
+
+              <div class="app-col select-list-item-supplier-name">
+                <span>{{ proposalPositionsBlock.supplier.shortName || 'Поставщик №' + (+i + 1) }}</span>
+              </div>
+
+              <div class="app-col app-col-auto app-success-color select-list-item-icon">
+                <uxg-icon shape="app-check"></uxg-icon>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <div class="to-send-to-edit-block" [hidden]="allPositionsToSendToEditFiltered(getSelectedToSendToEditPositions(approvalModalData.selectedProposals))">
+    <div class="app-row app-justify-content-between short-name">
+      <div class="app-col app-col-auto">
+        <h3>На доработку</h3>
+      </div>
+    </div>
+
+    <div class="positions-list">
+      <div class="to-send-to-edit">
+        <ng-container *ngFor="let toSendToEditProposalPosition of getSelectedToSendToEditPositions(approvalModalData.selectedProposals); let i = index">
+          <div class="app-row select-list-item" *ngIf="!positionIsFiltered(toSendToEditProposalPosition)">
+            <div class="app-col app-bold select-list-item-title">{{ toSendToEditProposalPosition.manufacturingName }}</div>
+
+            <div class="app-col select-list-item-supplier-name">
+              <span class="app-ghost-color">На доработку</span>
+            </div>
+
+            <div class="app-col app-col-auto app-warning-color select-list-item-icon">
+              <uxg-icon shape="app-warning"></uxg-icon>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="app-row select-list-item-footer app-uppercase app-ghost-color app-bold">
+  <div class="app-col app-bold select-list-item-title"></div>
+  <div class="app-col app-bold app-col-auto select-list-item-quantity">Кол-во</div>
+  <div class="app-col app-col-auto select-list-item-total-price">Сумма</div>
+  <div class="app-col select-list-item-supplier-name">Победитель/статус</div>
+</div>
+
+<br/>
+
+<div class="app-row app-justify-content-end">
+  <div class="app-col">
+    <h2>
+      <span class="app-ghost-color app-font-normal">Общая сумма:</span> {{ getSelectedProposalsTotalSum(approvalModalData.selectedProposals) | number: "1.0-2" }}
+      <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
+    </h2>
+  </div>
+
+  <div class="app-row app-col app-col-auto app-align-items-center">
+    <span *ngIf="isLoading" class="spinner spinner-inline"></span>
+    <button type="button" uxgButton secondary lg (click)="close.emit()">Отмена</button>
+    <button uxgButton primary lg (click)="reviewMultiple.emit(); close.emit()">Подтвердить выбор</button>
+  </div>
+</div>

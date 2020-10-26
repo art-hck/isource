@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Menu, MenuModel } from "../../models/menu.model";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
@@ -9,6 +9,7 @@ import { distinctUntilChanged, filter, mapTo, switchMap, takeUntil, tap } from "
 import { BehaviorSubject, fromEvent, iif, interval, merge, Subject } from "rxjs";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { APP_CONFIG, GpnmarketConfigInterface } from "../../config/gpnmarket-config.interface";
 
 @Component({
   selector: 'app-nav',
@@ -18,13 +19,15 @@ import { Router } from "@angular/router";
 export class NavComponent implements OnInit, OnDestroy {
 
   get menu(): MenuModel[] {
-    return Menu.filter(item => !item.feature || this.featureService.available(item.feature, this.user.roles));
+    return [...Menu, ...this.appConfig.menu.additionalItems]
+      .filter(item => !item.feature || this.featureService.available(item.feature, this.user.roles));
   }
 
   readonly unreadMessagesCount$ = new BehaviorSubject<number>(0);
   readonly destroy$ = new Subject();
 
   constructor(
+    @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
     private router: Router,
     public title: Title,
     public auth: AuthService,

@@ -1,14 +1,14 @@
 <form [formGroup]="form" (ngSubmit)="submit(); close.emit()">
   <uxg-dropdown-input
     formControlName="supplier" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-    [$]="contragents$"
+    [$]="filteredContragents$"
     [lg]="true"
     [strictMode]="true"
     [displayByFn]="getContragentName"
-    [searchFn]="search"
+    [searchFn]="searchContragents"
   >
     <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
-      <ng-container *ngFor="let contragent of filterContragents(contragents)">
+      <ng-container *ngFor="let contragent of contragents">
         <div uxgDropdownItem [value]="contragent">
           {{ contragent.shortName || contragent.fullName }}
           <span class="app-ghost-color">{{contragent.inn | splitNumber}}</span>

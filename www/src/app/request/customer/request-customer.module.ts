@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommercialProposalListOldComponent } from './components/commercial-proposal-list-old/commercial-proposal-list-old.component';
 import { RequestCommonModule } from "../common/request-common.module";
 import { RequestComponent } from './components/request/request.component';
 import { RequestCustomerRoutingModule } from "./request-customer-routing.module";
 import { RequestService } from "./services/request.service";
-import { TechnicalProposalListDeprecatedComponent } from './components/technical-proposal-list-deprecated/technical-proposal-list-deprecated.component';
 import { TechnicalProposalsService } from "./services/technical-proposals.service";
 import { PositionComponent } from "./components/position/position.component";
 import { RequestTechnicalProposalComponent } from './components/technical-proposal/technical-proposal.component';
@@ -25,24 +23,27 @@ import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
 import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
-
+import { ContractListComponent } from "./components/contract-list/contract-list.component";
+import { ContractState } from "./states/contract.state";
+import { ContractService } from "./services/contract.service";
+import { TechnicalCommercialProposalConfirmComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-confirm/technical-commercial-proposal-confirm.component';
 
 @NgModule({
   declarations: [
-    CommercialProposalListOldComponent,
     RequestComponent,
     RequestFormComponent,
     RequestFormFreeComponent,
     PositionComponent,
     RequestTechnicalProposalComponent,
-    TechnicalProposalListDeprecatedComponent,
     TechnicalProposalListComponent,
     CommercialProposalViewComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
     CommercialProposalListComponent,
-    TechnicalCommercialProposalGroupViewComponent
+    TechnicalCommercialProposalGroupViewComponent,
+    TechnicalCommercialProposalConfirmComponent,
+    ContractListComponent
   ],
   imports: [
     AgreementsModule,
@@ -53,13 +54,15 @@ import { TechnicalCommercialProposalGroupViewComponent } from "./components/tech
       RequestListState,
       TechnicalCommercialProposalState,
       TechnicalProposalState,
-      CommercialProposalState
+      CommercialProposalState,
+      ContractState
     ]),
   ],
   providers: [
     RequestService,
     TechnicalProposalsService,
-    TechnicalCommercialProposalService
+    TechnicalCommercialProposalService,
+    ContractService
   ]
 })
 export class RequestCustomerModule {

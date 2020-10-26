@@ -80,7 +80,7 @@ export class ProcedureViewComponent implements OnDestroy, OnInit {
       case "tp":
         sourceName = 'Согласование технических предложений';
         sourceSegment = 'technical-proposals';
-        this.positions$ = this.technicalProposalsService.getTechnicalProposalsPositionsList(this.requestId);
+        this.positions$ = this.technicalProposalsService.positions(this.requestId);
         break;
       default:
         return null;

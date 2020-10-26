@@ -1,5 +1,6 @@
 import { PositionStatus } from "../../enum/position-status";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { User } from "../../../../user/models/user";
 
 export class AvailableFilters {
   positionStatuses: {
@@ -8,5 +9,5 @@ export class AvailableFilters {
   }[];
 
   contragents?: ContragentShortInfo[];
-  users?: ContragentShortInfo[];
+  users?: User[];
 }

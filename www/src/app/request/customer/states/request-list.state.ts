@@ -37,7 +37,8 @@ export class RequestListState {
 
   @Selector() static requests({requests}: Model) { return requests.entities; }
   @Selector() static statusCounters({requests}: Model) { return requests.statusCounters; }
-  @Selector() static totalCount({requests}: Model) { return requests.totalCount; }
+  @Selector() static totalCount({requests}: Model) { return Object.values(requests.statusCounters).reduce((acc, curr) => acc += curr, 0); }
+  @Selector() static tabTotalCount({requests}: Model) { return requests.totalCount; }
   @Selector() static status({status}: Model) { return status; }
   @Selector() static availableFilters({availableFilters}: Model) { return availableFilters; }
   @Selector() static createdRequest({createdRequestId}: Model) { return createdRequestId; }
@@ -50,7 +51,7 @@ export class RequestListState {
   }
 
   @Action(AddRequestFromExcel) addRequestFromExcel({setState, dispatch}: Context, action: AddRequestFromExcel) {
-    setState(patch({ status: "updating" as StateStatus }));
+    setState(patch({ createdRequestId: null, status: "updating" as StateStatus }));
     return this.rest.addRequestFromExcel(action.files, action.requestName).pipe(
       flatMap(({id}) => action.publish ? dispatch(new RequestActions.Publish(id, false)).pipe(mapTo(id)) : of(id)),
       tap(id => setState(patch({ createdRequestId: id }))),

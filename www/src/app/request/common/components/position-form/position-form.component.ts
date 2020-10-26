@@ -13,11 +13,12 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { NormPositionService } from "../../../../shared/services/norm-position.service";
 import * as moment from 'moment';
-import { UxgDropdownInputComponent } from "uxg";
+import { UxgDropdownInputComponent, UxgModalComponent, UxgPopoverComponent } from "uxg";
 import { OkeiService } from "../../../../shared/services/okei.service";
 import { Okei } from "../../../../shared/models/okei";
 import { CurrencyLabels } from "../../dictionaries/currency-labels";
 import { Store } from "@ngxs/store";
+import { FeatureService } from "../../../../core/services/feature.service";
 
 @Component({
   selector: 'app-request-position-form',
@@ -47,42 +48,60 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
   @Output() cancel = new EventEmitter();
   @Output() positionChange = new EventEmitter<RequestPosition>();
   @ViewChild('nameRef') nameDropdownInputRef: UxgDropdownInputComponent;
+  @ViewChild('quantityPopover') quantityPopover: UxgPopoverComponent;
   form: FormGroup;
   subscription = new Subscription();
-  searchNameSuggestions$: Observable<string[]>;
-  onFocusNameSubject$ = new Subject();
   okeiList$: Observable<Okei[]>;
-  searchNameSuggestionsComplete: boolean;
   onTouched: (value) => void;
   onChange: (value) => void;
   value;
+  quantityRecommendation: number;
+  recommendedUnit: string;
+  isRecommendedQuantity = false;
 
   readonly currencies = Object.entries(CurrencyLabels);
 
   readonly approveRequiredFields = [
-    'name', 'currency', 'deliveryDate', 'isDeliveryDateAsap', 'measureUnit', 'productionDocument'
+    'name',
+    'currency',
+    'deliveryBasis',
+    'deliveryDate',
+    'isDeliveryDateAsap',
+    'measureUnit',
+    'productionDocument',
+    'quantity',
+    'startPrice'
   ];
 
   get isDraft(): boolean {
-    return this.approveRequiredFields
-      .some(controlName => (!this.form.get(controlName).pristine || this.form.get(controlName).dirty)
-        && this.form.get(controlName).valid) || !this.position;
+    return !this.position;
   }
 
-  get needApprove(): boolean {
-    return (this.isDraft || !this.position.id) && !!this.onDrafted;
-  }
+  /**
+   * Проверяем, изменилось ли отя бы одно из полей, по которым позиция должна отправиться на согласование
+   */
+  get fieldsForApprovalChanged(): boolean {
+    return this.approveRequiredFields.some(
+      controlName => {
+        const formValue = this.form.get(controlName).value;
+        const updatedInfo = formValue === null ? formValue : formValue.toString();
 
-  get suggestLabel() {
-    if (this.form.get('name').value && this.position.nameTemplate) {
-      const i = this.form.get('name').value.trim().split(' ').length;
-      const arr1 = this.position.nameTemplate.match(/^.*?\[/g)[0].slice(0, -2).split(" ");
-      const arr2 = this.position.nameTemplate.match(/\[.*?]/g);
-      if (i >= arr1.length) {
-        const label = [...arr1, ...arr2][i];
-        return label && label.slice(1, -1);
+        let positionInfo = this.position[controlName] === null ? this.position[controlName] : this.position[controlName]?.toString();
+
+        if (controlName === 'deliveryDate' && this.position[controlName]) {
+          positionInfo = moment(new Date(this.position[controlName])).format('DD.MM.YYYY');
+        }
+
+        return positionInfo !== updatedInfo;
       }
-    }
+    );
+  }
+
+  /**
+   * Узнаём, должна ли позиция быть отправлена на согласование или должна быть просто сохранена
+   */
+  get needToSendToApprove(): boolean {
+    return (this.isDraft || this.fieldsForApprovalChanged || !this.position.id) && !!this.onDrafted;
   }
 
   constructor(
@@ -90,46 +109,35 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
     private datePipe: DatePipe,
     private statusService: RequestPositionStatusService,
     private positionService: RequestPositionService,
-    private userInfoService: UserInfoService,
-    private normPositionService: NormPositionService,
     public okeiService: OkeiService,
-    private store: Store
+    private store: Store,
+    public featureService: FeatureService
   ) {}
 
   ngOnInit() {
     const p = this.position;
     const form = this.formBuilder.group({
-      name: [p.name, Validators.required],
-      comments: [p.comments],
-      currency: [p.currency, Validators.required],
-      deliveryBasis: [p.deliveryBasis, Validators.required],
-      deliveryDate: [this.datePipe.transform(p.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
-      isDeliveryDateAsap: [p.isDeliveryDateAsap],
-      isDesignRequired: [p.isDesignRequired],
-      isInspectionControlRequired: [p.isInspectionControlRequired || false],
-      isPnrRequired: [p.isPnrRequired || false],
-      isShmrRequired: [p.isShmrRequired || false],
-      measureUnit: [p.measureUnit, Validators.required],
-      paymentTerms: [p.paymentTerms || '30 дней по факту поставки', Validators.required],
-      productionDocument: [p.productionDocument, Validators.required],
-      quantity: [p.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
-      startPrice: [p.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
+      name: [p?.name, Validators.required],
+      comments: [p?.comments],
+      currency: [p?.currency, Validators.required],
+      deliveryBasis: [p?.deliveryBasis, Validators.required],
+      deliveryDate: [this.datePipe.transform(p?.deliveryDate, 'dd.MM.yyyy'), CustomValidators.futureDate()],
+      isDeliveryDateAsap: [p?.isDeliveryDateAsap],
+      isDesignRequired: [p?.isDesignRequired],
+      isInspectionControlRequired: [p?.isInspectionControlRequired || false],
+      isPnrRequired: [p?.isPnrRequired || false],
+      isShmrRequired: [p?.isShmrRequired || false],
+      measureUnit: [p?.measureUnit, Validators.required],
+      paymentTerms: [p?.paymentTerms || '30 дней по факту поставки', Validators.required],
+      productionDocument: [p?.productionDocument, Validators.required],
+      quantity: [p?.quantity, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
+      startPrice: [p?.startPrice, [Validators.pattern("^[0-9]+$"), Validators.min(1)]],
       documents: [[]]
     });
 
-    if (this.position.id) {
+    if (this.position?.id) {
       Object.keys(form.controls).filter(key => !this.position.availableEditFields.includes(key)).forEach(key => form.get(key).disable());
     }
-
-    this.searchNameSuggestions$ = merge(
-      form.get('name').valueChanges,
-      this.onFocusNameSubject$
-    ).pipe(
-      debounceTime(300),
-      filter(value => value && value.length > 0),
-      flatMap(value => this.normPositionService.searchSuggestions(value)),
-      tap(suggestions => this.searchNameSuggestionsComplete = suggestions.length > 0),
-    );
 
     form.get('isDeliveryDateAsap').valueChanges
       .pipe(
@@ -167,18 +175,8 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
 
       if (this.position.id) {
         // Проверяем, есть ли правки для сохранения или данные в форме остались без изменений
-        const positionInfoNotChanged = Object.entries(this.form.value).every(([key, value]) => {
-          let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
-          const updatedInfo = value === null ? value : value.toString();
-
-          if (key === 'deliveryDate') {
-            positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
-          }
-          return positionInfo === updatedInfo;
-        });
-
         // Если изменений нет, эмитим событие для закрытия окна и прерываем сабмит
-        if (positionInfoNotChanged) {
+        if (!this.positionInfoChanged()) {
           this.cancel.emit();
           return;
         }
@@ -201,6 +199,48 @@ export class PositionFormComponent implements OnInit, ControlValueAccessor, Vali
         this.form.enable();
       }));
     }
+  }
+
+  /**
+   * Проверяем, менялись ли значения в форме информации о позиции или они все соответствуют сохранённым значениям
+   */
+  positionInfoChanged(): boolean {
+    return Object.entries(this.form.value).some(([key, value]) => {
+      let positionInfo = this.position[key] === null ? this.position[key] : this.position[key].toString();
+      const updatedInfo = value === null ? value : value.toString();
+
+      if (key === 'deliveryDate') {
+        positionInfo = moment(new Date(this.position[key])).format('DD.MM.YYYY');
+      }
+      return positionInfo !== updatedInfo;
+    });
+  }
+
+  getQuantityRecommendation() {
+    if (this.showRecommendedQuantity()) {
+      this.positionService.getQuantityRecommendation(this.form.get('name').value).subscribe(
+        (data) => {
+          if (data.length !== 0) {
+            this.quantityRecommendation = data[0].forecastCommodity.filter(
+              item => item.isForecast).reduce(
+                (prev, curr) => prev + curr.quantity, 0);
+            if (this.quantityRecommendation > this.form.get('quantity').value) {
+              this.recommendedUnit = data[0].unit;
+              this.quantityPopover.show();
+              this.isRecommendedQuantity = true;
+            }
+          }
+        });
+    }
+  }
+
+  showRecommendedQuantity() {
+    return this.form.get('name').value && !this.isRecommendedQuantity && !this.requestId && !this.position.id &&
+      this.featureService.authorize('recommendedQuantity');
+  }
+
+  setRecommendedQuantity() {
+    this.form.get('quantity').setValue(this.quantityRecommendation);
   }
 
   filterEnteredText(event: KeyboardEvent): boolean {

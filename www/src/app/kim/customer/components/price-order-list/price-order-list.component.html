@@ -13,7 +13,7 @@
             Рассмотренные <span class="counter" *ngIf="reviewedTabCount as cnt">({{cnt}})</span>
           </uxg-tab-title>
         </uxg-tabs>
-        <button uxgButton primary (click)="router.navigateByUrl('/kim/customer/price-orders/create')">
+        <button uxgButton primary *ngIf="canCreatePriceOrder()" (click)="router.navigateByUrl('/kim/customer/price-orders/create')">
           <uxg-icon shape="app-plus"></uxg-icon><span>Новый ЦЗ</span>
         </button>
         <!--button class="filter-button" uxgButton secondary (click)="showFilter = !showFilter">Фильтр</button-->

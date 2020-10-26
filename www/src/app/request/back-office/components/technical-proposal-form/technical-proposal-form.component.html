@@ -26,7 +26,7 @@
         <div class="app-control-wrap">
           <uxg-dropdown-input
             formControlName="contragent" placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
-            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragent"
+            [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragents"
           >
             <ng-container *ngIf="(sug.suggestions$ | async) as contragents">
               <div uxgDropdownItem *ngFor="let contragent of contragents" [value]="contragent">
@@ -148,11 +148,12 @@
       </div>
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="isLoading" class="spinner spinner-inline">Загрузка...</span>
-        <button *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'"
-                uxgButton secondary (click)="submit(false)"
-                [disabled]="form.disabled">Сохранить {{isEditing ? 'изменения' : 'черновик'}}
+        <button uxgButton secondary (click)="publish.setValue(false);" [disabled]="form.disabled" *ngIf="technicalProposal?.status !== 'SENT_TO_EDIT'">
+          Сохранить {{isEditing ? 'изменения' : 'черновик'}}
         </button>
-        <button uxgButton primary [disabled]="form.disabled">Отправить на согласование</button>
+        <button uxgButton primary (click)="publish.setValue(true)" [disabled]="form.disabled">
+          Отправить на согласование
+        </button>
       </div>
     </div>
 

@@ -7,13 +7,21 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { StateStatus } from "../../models/state-status";
 import { RequestsList } from "../../models/requests-list/requests-list";
 import { UserInfoService } from "../../../../user/service/user-info.service";
-import { AvailableFilters } from "../../../back-office/models/available-filters";
-import { map, takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { WsTypes } from "../../../../websocket/enum/ws-types";
 import { WebsocketService } from "../../../../websocket/services/websocket.service";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { RequestsListSort } from "../../models/requests-list/requests-list-sort";
+import { FormGroup } from "@angular/forms";
+import { AvailableFilters } from "../../models/requests-list/available-filters";
+import { PositionStatus } from "../../enum/position-status";
+import { PositionStatusesLabels } from "../../dictionaries/position-statuses-labels";
+import { PositionStatusesFrequent } from "../../dictionaries/position-statuses-frequent";
+import { Uuid } from "../../../../cart/models/uuid";
+import { FilterCheckboxList } from "../../../../shared/components/filter/filter-checkbox-item";
+import { searchContragents, searchUsers } from "../../../../shared/helpers/search";
+import moment from "moment";
 
 @Component({
   selector: 'app-request-list',
@@ -31,11 +39,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
   @Input() statusCounters: RequestStatusCount;
   @Input() status: StateStatus;
   @Input() requests: RequestsList[];
+  @Input() tabTotal: number;
   @Input() total: number;
   @Input() pageSize: number;
-  @Input() availableFilters: AvailableFilters;
+  @Input() availableFilters$: Observable<AvailableFilters>;
   @Input() filters: {page?: number, filters?: RequestsListFilter};
-  @Input() activeFiltersObj: RequestsListFilter;
+  @Input() form: FormGroup;
   @Output() filter = new EventEmitter<{ page?: number, filters?: RequestsListFilter, sort?: RequestsListSort }>();
   @Output() addRequest = new EventEmitter();
   @Output() refresh = new EventEmitter();
@@ -43,20 +52,18 @@ export class RequestListComponent implements OnInit, OnDestroy {
   sortDirection: string = null;
   sortingColumn: string;
 
-  filterOpened = false;
   hideNeedUpdate = true;
+  customers$: Observable<FilterCheckboxList<Uuid>>;
+  users$: Observable<FilterCheckboxList<Uuid>>;
+  positionStatuses$: Observable<{ value: PositionStatus, item: AvailableFilters["positionStatuses"][number] }[]>;
   readonly pages$ = this.route.queryParams.pipe(map(params => +params["page"]));
   readonly destroy$ = new Subject();
   readonly RequestStatus = RequestStatus;
+  readonly customersSearch$ = new BehaviorSubject<string>("");
+  readonly usersSearch$ = new BehaviorSubject<string>("");
+  readonly PositionStatusesLabels = PositionStatusesLabels;
   readonly getDeliveryDate = (min, max): string => min === max ? min : min + " – " + max;
   readonly calcPieChart = ({ requestData: d }: RequestsList) => (65 - (65 * d.completedPositionsCount / d.positionsCount * 100) / 100);
-
-  get activeFilters() {
-    return this.activeFiltersObj && Object.entries(this.activeFiltersObj)
-      .filter(([k, v]: [keyof RequestsListFilter, any]) => {
-        return k !== 'requestListStatusesFilter' && v instanceof Array && v.length > 0 || !(v instanceof Array) && v;
-      });
-  }
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +79,25 @@ export class RequestListComponent implements OnInit, OnDestroy {
         this.hideNeedUpdate = false;
         this.cd.detectChanges();
       });
+
+    this.customers$ = this.availableFilters$ && this.customersSearch$.pipe(
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchContragents(q, f?.contragents ?? []).map(c => ({ label: c.shortName, value: c.id }))
+      ))),
+      tap(() => this.cd.detectChanges())
+    );
+
+    this.users$ = this.availableFilters$ && this.usersSearch$.pipe(
+      switchMap(q => this.availableFilters$.pipe(
+        map(f => searchUsers(q, f?.users ?? []).map(u => ({ label: u.shortName, value: u.id }))
+        ))),
+      tap(() => this.cd.detectChanges())
+    );
+
+    this.positionStatuses$ = this.availableFilters$?.pipe(map(f => f?.positionStatuses.map(
+      status => ({ value: status.status, item: status, hideFolded: PositionStatusesFrequent.indexOf(status.status) < 0 })
+    )));
+
   }
 
   ngOnDestroy() {
@@ -189,5 +215,17 @@ export class RequestListComponent implements OnInit, OnDestroy {
     }
 
     this.filter.emit({ filters: { requestListStatusesFilter: tabFilters } });
+  }
+
+  emitFilter(f: RequestsListFilter) {
+    this.filter.emit({ filters: {
+      ...f,
+      shipmentDateFrom: f.shipmentDateFrom ? moment(f.shipmentDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,
+      shipmentDateTo: f.shipmentDateTo ? moment(f.shipmentDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
+    }});
+  }
+
+  canCreateRequest(): boolean {
+    return this.feature.authorize('createRequest') && !!this.user.getContragentId();
   }
 }

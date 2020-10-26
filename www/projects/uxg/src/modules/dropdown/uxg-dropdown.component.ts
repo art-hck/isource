@@ -1,4 +1,25 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID, QueryList, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostBinding,
+  Inject,
+  InjectionToken,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output,
+  PLATFORM_ID,
+  QueryList,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { UxgDropdownItemDirective } from "./uxg-dropdown-item.directive";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
@@ -78,9 +99,11 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
   set isHidden(value: boolean) {
     if (isPlatformBrowser(this.platformId)) {
       if (value) {
-        window.removeEventListener('scroll', this.hideOnScrollOutside, true);
+        window.removeEventListener('scroll', this.updatePosition, true);
+        window.removeEventListener('resize', this.updatePosition, true);
       } else {
-        window.addEventListener('scroll', this.hideOnScrollOutside, true);
+        window.addEventListener('scroll', this.updatePosition, true);
+        window.addEventListener('resize', this.updatePosition, true);
       }
     }
     this._isHidden = value;
@@ -125,16 +148,14 @@ export class UxgDropdownComponent implements AfterViewInit, OnDestroy, AfterView
     }
   }
 
+  updatePosition = () => {
+    this.setPosition(this.itemsWrapper, this.isDirectionUp);
+  }
+
   private is = (prop?: boolean | string) => prop !== undefined && prop !== false;
 
   private isInside(targetElement): boolean {
     return this.el.nativeElement.contains(targetElement) || this.itemsWrapper.contains(targetElement);
-  }
-
-  private hideOnScrollOutside = (e) => {
-    if (!this.isHidden && !this.isInside(e.target)) {
-      this.isHidden = true;
-    }
   }
 
   private setPosition(el, isDirectionUp: boolean = false): void {

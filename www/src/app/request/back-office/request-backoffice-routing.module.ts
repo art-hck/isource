@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { RequestComponent as BackOfficeRequestComponent } from "./components/request/request.component";
 
 import { DesignDocumentationListComponent } from "../common/components/design-documentation-list/design-documentation-list.component";
-import { ContractListComponent } from "../common/components/contract-list/contract-list.component";
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
@@ -13,6 +12,7 @@ import { RequestListComponent } from "./components/request-list/request-list.com
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
 import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
+import { ContractListComponent } from "./components/contract-list/contract-list.component";
 
 const routes: Routes = [
   {

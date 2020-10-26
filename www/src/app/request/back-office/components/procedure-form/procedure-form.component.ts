@@ -1,14 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UxgWizzard, UxgWizzardBuilder, UxgWizzardStep } from "uxg";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
@@ -16,17 +6,7 @@ import { Request } from "../../../common/models/request";
 import { RequestPosition } from "../../../common/models/request-position";
 import { ProcedureService } from "../../services/procedure.service";
 import { Procedure } from "../../models/procedure";
-import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  flatMap,
-  mergeMap,
-  startWith,
-  takeUntil,
-  tap
-} from "rxjs/operators";
+import { catchError, debounceTime, filter, finalize, flatMap, startWith, takeUntil, tap } from "rxjs/operators";
 import { Store } from "@ngxs/store";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
@@ -42,6 +22,7 @@ import { PositionStatusesLabels } from "../../../common/dictionaries/position-st
 import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { Uuid } from "../../../../cart/models/uuid";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
+import { searchContragent } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-request-procedure-form',
@@ -75,6 +56,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     guide: false,
     keepCharPositions: true
   };
+  readonly searchContragent = searchContragent;
   readonly getOkpd2Name = (okpd2: Okpd2Item) => okpd2.code ? okpd2.code + ' ' + okpd2.name : '';
   readonly searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
@@ -108,7 +90,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
         requestProcedureId: [this.defaultProcedureValue("id")],
         procedureTitle: [this.defaultProcedureValue("procedureTitle"), [Validators.required, Validators.minLength(3)]],
         dateEndRegistration: [null, [CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
-        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:ss") : null,
+        dateSummingUp: [this.procedure?.dateSummingUp ? moment(this.procedure.dateSummingUp).format("DD.MM.YYYY HH:mm") : null,
           [Validators.required, CustomValidators.currentOrFutureDate(), CustomValidators.compareProcedureDates()]],
         withoutTotalPrice: [this.defaultProcedureValue("withoutTotalPrice", false)],
         withoutTotalPriceReason: [this.defaultProcedureValue("withoutTotalPriceReason", 'НМЦ не рассчитывалась'), [Validators.required]],
@@ -226,7 +208,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     delete body['timeEndRegistration'];
     delete body['timeSummingUp'];
 
-    if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL) {
+    if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL && this.tcpGroupId) {
       body['requestTechnicalCommercialProposalGroupId'] = this.tcpGroupId;
     }
 
@@ -273,9 +255,6 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     ].includes(status);
   }
 
-  filterContragents(q: string, contragent: ContragentList): boolean {
-    return contragent.inn.indexOf(q.toLowerCase()) >= 0 || contragent.shortName.toLowerCase().indexOf(q.toLowerCase()) >= 0;
-  }
 
   trackById = (item: RequestPosition | ContragentList) => item.id;
   defaultProcedureValue = (field: string, defaultValue: any = "") => this.procedure?.[field] ?? defaultValue;

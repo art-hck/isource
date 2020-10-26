@@ -39,6 +39,12 @@ import { GridContragentFormComponent } from "./components/grid/grid-contragent-f
 import { FileComponent } from './components/file/file.component';
 import { ValidationDirective } from "./directives/validation.directive";
 import { GridCommonParametersComponent } from './components/grid/grid-common-parameters/grid-common-parameters.component';
+import { FilterSectionComponent } from "./components/filter/filter-section/filter-section.component";
+import { FilterComponent } from "./components/filter/filter.component";
+import { FilterCheckboxListComponent } from './components/filter/filter-checkbox-list/filter-checkbox-list.component';
+import { PriceInputFilterDirective } from "./directives/price-input-filter.directive";
+import { FilterButtonComponent } from './components/filter/filter-button/filter-button.component';
+import { FilterDirective } from './components/filter/filter.directive';
 
 @NgModule({
   imports: [
@@ -72,6 +78,7 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     DocumentsFormControlComponent,
     AppDateIsAfterDirective,
@@ -88,6 +95,11 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
     FileComponent,
     ValidationDirective,
     GridCommonParametersComponent,
+    FilterComponent,
+    FilterSectionComponent,
+    FilterCheckboxListComponent,
+    FilterButtonComponent,
+    FilterDirective,
   ],
   exports: [
     CommonModule,
@@ -118,6 +130,7 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
     PhonePipe,
     HumanDatePipe,
     SuggestionsDirective,
+    PriceInputFilterDirective,
     AddFromExcelComponent,
     AppDateIsAfterDirective,
     AppPositionStatusComponent,
@@ -133,6 +146,11 @@ import { GridCommonParametersComponent } from './components/grid/grid-common-par
     ProposalDetailComponent,
     FileComponent,
     ValidationDirective,
+    FilterComponent,
+    FilterSectionComponent,
+    FilterCheckboxListComponent,
+    FilterButtonComponent,
+    FilterDirective,
   ]
 })
 export class SharedModule {

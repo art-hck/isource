@@ -7,6 +7,7 @@ import { TechnicalCommercialProposalPosition } from "../../common/models/technic
 import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalGroup } from "../../common/models/technical-commercial-proposal-group";
+import { TechnicalCommercialProposalGroupFilter } from "../../common/models/technical-commercial-proposal-group-filter";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
@@ -18,9 +19,9 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposal[]>(url, body);
   }
 
-  groupList(requestId: Uuid) {
+  groupList(requestId: Uuid, filters: TechnicalCommercialProposalGroupFilter = {}) {
     const url = `requests/customer/${requestId}/technical-commercial-proposal-groups`;
-    return this.api.get<TechnicalCommercialProposalGroup[]>(url);
+    return this.api.post<TechnicalCommercialProposalGroup[]>(url, { filters });
   }
 
   getGroupInfo(requestId: Uuid, groupId: Uuid) {
@@ -47,5 +48,10 @@ export class TechnicalCommercialProposalService {
     // const url = `requests/customer/${requestId}/${position}/technical-commercial-proposal/reject`;
     // return this.api.get<TechnicalCommercialProposal>(url);
     return of(null).pipe(delay(1500));
+  }
+
+  downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/customer/${ requestId }/analytic-report/download-by-tcp`;
+    return this.api.post(url, { requestTechnicalCommercialProposalGroupId: groupId }, { responseType: 'blob' });
   }
 }

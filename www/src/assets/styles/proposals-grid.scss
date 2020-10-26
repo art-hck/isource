@@ -1,6 +1,8 @@
 @import "src/theme";
 
 .grid-table, .simple-grid-table {
+  position: relative;
+  z-index: 0;
 
   &.disabled {
     opacity: 0.5;
@@ -19,6 +21,16 @@
       flex-grow: 0;
       flex-shrink: 0;
       margin-right: 20px;
+
+      &-sticky {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+
+        &-bg {
+          background: uxg($theme, color-bg);
+        }
+      }
     }
   }
 
@@ -73,7 +85,7 @@
     padding-bottom: 23px;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 4;
     border-bottom: 1px solid #E3EEFF;
 
     .left, .right {
@@ -91,6 +103,26 @@
     padding-top: 23px;
     padding-bottom: 23px;
     margin-bottom: 4px;
+    position: relative;
+
+    &.sticked {
+      &:before {
+        content: "";
+        width: 370px;
+        height: 100%;
+        background: #fbfcfe;
+        left: 0;
+        position: absolute;
+        margin-top: -23px;
+        border-right: 1px #BEDAFC solid;
+        box-sizing: content-box;
+        z-index: 2;
+      }
+
+      &:not(:last-child):before {
+        border-bottom: 4px #F4F6FB solid;
+      }
+    }
   }
 }
 
@@ -102,6 +134,7 @@
   position: sticky;
   bottom: 0;
   margin-bottom: -50px;
+  z-index: 3;
 
   &-body {
     background: #fff;
@@ -117,12 +150,13 @@
       width: 1px;
       height: 40px;
       display: block;
-      background: uxg($theme, color-font-ghost);
+      background: uxg($theme, color-divider);
       margin-left: 25px;
     }
 
     & .selected-counter {
       padding: 0 20px 0 25px;
+      text-align: right;
     }
   }
 

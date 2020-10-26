@@ -3,7 +3,7 @@ import { RequestPosition } from "../../../common/models/request-position";
 import { UxgModalComponent } from "uxg";
 import { iif, Observable, Subject, throwError } from "rxjs";
 import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { catchError, finalize, takeUntil, tap } from "rxjs/operators";
+import { catchError, finalize, map, takeUntil, tap } from "rxjs/operators";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
@@ -12,8 +12,9 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
+import { searchPosition } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-form',
@@ -26,9 +27,16 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   @Output() cancel = new EventEmitter();
   @Output() create = new EventEmitter<TechnicalCommercialProposalGroup>();
   @Input() requestId: Uuid;
+  @Input() positions: RequestPosition[];
   @Input() group: TechnicalCommercialProposalGroup;
   isLoading = false;
+  readonly searchPosition = searchPosition;
   readonly destroy$ = new Subject();
+  readonly mergeWithExistPositions$ = this.availablePositions$.pipe(map(
+    positions => (this.group?.requestPositions ?? [])
+      .filter(groupPosition => positions?.every(({ id }) => groupPosition.id !== id))
+      .reduce((arr, curr) => [curr, ...arr], positions)
+  ));
 
   readonly form = this.fb.group({
     name: [null, Validators.required],
@@ -46,10 +54,12 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   ngOnInit() {
     this.form.patchValue(this.group ?? {});
 
-    this.route.params.pipe(
-      tap(({ id }) => this.store.dispatch(new FetchAvailablePositions(id))),
-      takeUntil(this.destroy$)
-    ).subscribe();
+    if (!this.positions) {
+      this.route.params.pipe(
+        tap(({ id }) => this.store.dispatch(new FetchAvailablePositions(id))),
+        takeUntil(this.destroy$)
+      ).subscribe();
+    }
   }
 
   mergeWithExistPositions(positions: RequestPosition[]) {
@@ -81,8 +91,6 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
     ).subscribe(group => this.create.emit(group));
   }
 
-
-  filterPositions = (q: string, position: RequestPosition): boolean => position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
   trackById = (item: RequestPosition) => item.id;
 
   ngOnDestroy() {

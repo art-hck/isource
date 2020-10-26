@@ -1,12 +1,13 @@
 <app-request-list
   [requests]="requests$ | async"
   [total]="totalCount$ | async"
+  [tabTotal]="tabTotalCount$ | async"
   [status]="status$ | async"
   [statusCounters]="statusCounters$ | async"
   [filters]="fetchFilters$ | async"
   [pageSize]="pageSize"
-  [availableFilters]="availableFilters$ | async"
-  [activeFiltersObj]="activeFilters"
+  [availableFilters$]="availableFilters$"
+  [form]="form"
   (filter)="fetchFilters$.next($event)"
   (refresh)="fetchFilters$.next({})"
 ></app-request-list>

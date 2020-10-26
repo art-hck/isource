@@ -12,54 +12,31 @@ import { TechnicalProposalsStatus } from "../../common/enum/technical-proposals-
 })
 export class TechnicalProposalsService {
 
-  constructor(
-    protected api: HttpClient,
-  ) {
-  }
+  constructor(private api: HttpClient) {}
 
-  getTechnicalProposalsList(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposal[]> {
+  list(requestId: Uuid, filters: TechnicalProposalFilter<Uuid>): Observable<TechnicalProposal[]> {
     const url = `requests/customer/${requestId}/technical-proposals`;
     return this.api.post<TechnicalProposal[]>(url, { filters });
   }
 
-  acceptTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
+  // @TODO: ждём реализацию на бэкенде (gpn_market-2870)
+  // availableFilters(requestId: Uuid) {
+  //   const url = `requests/customer/${requestId}/technical-proposals/available-filters`;
+  //   return this.api.get<TechnicalProposalFilter>(url);
+  // }
+
+  accept(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[]) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/accept`;
-    const ids = [];
-    for (const technicalProposalsPosition of technicalProposalsPositions) {
-      ids.push(technicalProposalsPosition.id);
-    }
-    return this.api.post(url, {
-      positions: ids
-    });
+    return this.api.post(url, { positions: technicalProposalsPositions.map(({id}) => id) });
   }
 
-  declineTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
+  reject(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/decline`;
-    const ids = [];
-
-    for (const technicalProposalsPosition of technicalProposalsPositions) {
-      ids.push(technicalProposalsPosition.id);
-    }
-    return this.api.post(url, {
-      positions: ids,
-      comment: comment
-    });
+    return this.api.post(url, { positions: technicalProposalsPositions.map(({id}) => id), comment });
   }
 
-  sendToEditTechnicalProposals(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
+  sendToEdit(requestId: Uuid, technicalProposalId: Uuid, technicalProposalsPositions: TechnicalProposalPosition[], comment) {
     const url = `requests/customer/${requestId}/technical-proposals/${technicalProposalId}/send-to-edit-positions`;
-    const ids = [];
-    for (const technicalProposalsPosition of technicalProposalsPositions) {
-      ids.push(technicalProposalsPosition.id);
-    }
-    return this.api.post(url, {
-      positions: ids,
-      comment: comment
-    });
-  }
-
-  getTechnicalProposalsAvailableStatuses(requestId: Uuid, filters: TechnicalProposalFilter): Observable<TechnicalProposalsStatus[]> {
-    const url = `requests/customer/${requestId}/technical-proposals/available-statuses`;
-    return this.api.post<TechnicalProposalsStatus[]>(url, { filters });
+    return this.api.post(url, { positions: technicalProposalsPositions.map(({id}) => id), comment });
   }
 }

@@ -103,7 +103,7 @@
       {{position.requestPosition.name}}
     </div>
     <ng-container *ngIf="procedure.positions.length > 3">
-      <button uxgButton clear class="app-link show-all app-layout" (click)="procedurePositionsModal.open()">Показать все позиции
+      <button uxgButton clear class="app-link show-all" (click)="procedurePositionsModal.open()">Показать все позиции
       </button>
     </ng-container>
   </div>
@@ -129,7 +129,7 @@
       </div>
     </div>
     <div class="app-table app-no-border">
-      <div class="app-row" *ngFor="let position of procedurePositions">
+      <div class="app-row" *ngFor="let position of procedurePositions$ | async">
         <div class="app-col-7 app-bold select-list-item-title">{{ position.name }}</div>
         <div class="app-col-2 select-list-item-quantity">
           <span>{{ position.quantity }} </span>

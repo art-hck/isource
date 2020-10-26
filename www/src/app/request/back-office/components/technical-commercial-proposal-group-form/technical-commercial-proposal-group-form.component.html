@@ -8,13 +8,13 @@
   </div>
 
   <select-items-with-search
-    *ngIf="availablePositions$ | async as positions"
+    *ngIf="mergeWithExistPositions$ | async as positions"
     class="select-list select-list-positions"
     formControlName="requestPositions"
     placeholder="Наименование позиции или группы"
-    [filterFn]="filterPositions"
+    [filterFn]="searchPosition"
     [trackBy]="trackById"
-    [items]="mergeWithExistPositions(positions)"
+    [items]="positions"
   >
     <ng-template let-formGroup="formGroup" let-position="item">
       <div class="app-row select-list-item" [formGroup]="formGroup" [class.app-ghost-color]="formGroup.disabled">

@@ -10,11 +10,10 @@
       </div>
 
       <div class="app-col-auto report" *ngIf="modalView">
-        <span *ngIf="getContragentService.loading" class="spinner spinner-sm"></span>
+        <span *ngIf="downloading" class="spinner spinner-sm"></span>
         <button uxgButton primary
-                [clrLoading]="getLoaderState()"
                 (click)="onDownloadPrimaInformReport()"
-                [disabled]="getContragentService.loading">
+                [disabled]="downloading">
           Отчет Прима-информ
         </button>
       </div>

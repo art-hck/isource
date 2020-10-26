@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { RequestPositionList } from "../../common/models/request-position-list";
 import { RequestGroup } from "../../common/models/request-group";
@@ -12,6 +12,7 @@ import { FormDataService } from "../../../shared/services/form-data.service";
 import { Page } from "../../../core/models/page";
 import { RequestsList } from "../../common/models/requests-list/requests-list";
 import { AvailableFilters } from "../models/available-filters";
+import { RecommendedPositions } from "../models/recommended-positions";
 
 @Injectable({
   providedIn: "root"
@@ -165,5 +166,19 @@ export class RequestService {
   addPositionsFromExcel(requestId: Uuid, files: File[]): Observable<any> {
     const url = `requests/customer/${requestId}/add-positions/from-excel`;
     return this.api.post(url, this.formDataService.toFormData({files}));
+  }
+
+  createTemplate(requestId: Uuid, positions: string[], title: string, tag: string) {
+    const url = `requests/customer/profile/templates/create`;
+    return this.api.post(url, {
+      requestId, title, positions
+    });
+  }
+
+  getRecommendedPositions(positions: RequestPosition[]) {
+    const url = `#profile#request-techmaps/recommended`;
+    return this.api.post<RecommendedPositions[]>(url, {
+      commodities: positions
+    });
   }
 }

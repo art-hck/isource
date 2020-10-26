@@ -33,6 +33,7 @@ export class RequestComponent implements OnChanges {
   @Output() addPosition = new EventEmitter();
   @Output() changeStatus = new EventEmitter();
   @Output() addResponsible = new EventEmitter();
+  @Output() createTemplate = new EventEmitter();
   @Output() publish = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() approve = new EventEmitter();
@@ -89,8 +90,12 @@ export class RequestComponent implements OnChanges {
     return positions.some(position => position.status === status);
   }
 
-  everyPositionIsNotDraftEntity(positions: RequestPosition[]): boolean {
-    return positions.every(position => position.isDraftEntity === false);
+  someOfPositionsAreInProcedure(): boolean {
+    return this.checkedPositions.some(position => position.isInProcedure === true);
+  }
+
+  everyPositionIsNotDraftEntity(): boolean {
+    return this.checkedPositions.every(position => position.isDraftEntity === false);
   }
 
   constructor(
@@ -191,6 +196,10 @@ export class RequestComponent implements OnChanges {
     const positionIds = this.checkedPositions.map(item => item.id);
 
     this.rejectPositions.emit({positionIds, rejectionMessage});
+  }
+
+  resetSelectedPositions() {
+    this.formPositionsFlat.filter(formGroup => formGroup.get("checked").setValue(false));
   }
 
   private fetchForm(positions: RequestPositionList[], position?: RequestPositionList) {

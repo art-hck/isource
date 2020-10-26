@@ -57,12 +57,14 @@
             [showParams]="true"
             [proposals]="proposals$ | async"
             [proposalsByPos]="proposalsSentToReview$ | async"
-            (openCommonParams)="gridTable.scrollIntoView({behavior: 'smooth'})"
+            (openCommonParams)="gridTable.scrollIntoView()"
             (selectProposalBySupplier) = selectSupplierProposal($event)
+            (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">
             <app-grid-row
               #proposalOnReview
+              [class.sticked]="stickedPosition"
               [chooseBy$]="chooseBy$"
               [position]="proposalByPos.position"
               [simpleView]="view === 'simple-grid'"
@@ -70,17 +72,22 @@
               [proposals]="converProposalPosition(proposalByPos)"
               [isReviewed]="isReviewed(proposalByPos)"
               [getProposal]="getProposalBySupplier(proposalByPos)"
-              (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event),  position: converPosition(proposalByPos.position)}"
+              (show)="modalData = {proposal: $event, supplier: getSupplierByProposal(proposalByPos, $event), proposalByPosition: getProposal(proposalByPos, $event) }"
             >
               <ng-template #position>
-                <div class="grid-cell app-col">
+                <div class="grid-cell app-col grid-cell-sticky" [class.grid-cell-sticky-bg]="stickedPosition">
                   <div class="app-row app-flex-column">
                     <div><b>{{ proposalByPos.position.name }}</b></div>
 
                     <div class="app-secondary-color">
-                      <span>{{proposalByPos.position.quantity}}</span>
+                      <span>{{proposalByPos.position.quantity}} </span>
                       <span class="app-ghost-color">{{proposalByPos.position.measureUnit}}</span>
                       <span class="app-ghost-color"> | </span>
+                      <ng-container *ngIf="proposalByPos.position.startPrice">
+                        <span class="app-ghost-color">{{proposalByPos.position.startPrice | number:'1.0-2'}} </span>
+                        <span class="app-ghost-color">{{getCurrencySymbol(proposalByPos.position.currency, "narrow")}}/{{proposalByPos.position.measureUnit}}</span>
+                        <span class="app-ghost-color"> | </span>
+                      </ng-container>
                       <span *ngIf="proposalByPos.position.isDeliveryDateAsap; else deliveryDate">как можно скорее</span>
                       <ng-template #deliveryDate><span>{{proposalByPos.position.deliveryDate | date:"dd.MM.yyyy"}}</span></ng-template>
                     </div>
@@ -148,15 +155,18 @@
 <app-grid-footer
   [disabled]="(stateStatus$ | async) !== 'received' || disabled"
   [loading]="(stateStatus$ | async) !== 'received'"
-  (approve)="reviewMultiple()"
+  (approve)="openConfirmApproveFromListModal()"
   (sendToEdit)="sendToEditAll()"
   (approveFromListView)="approveFromListView()"
   (sendToEditFromListView)="sendToEditFromListView()"
+  (selectAllToSendToEdit)="selectAllPositionsToSendToEdit()"
   [chooseBy$]="chooseBy$"
   [hidden]="view === 'grid' && (!sentToReviewTabElRef?.active || proposalsOnReview?.length === 0)"
   [viewType]="view"
   [total]="total"
   [selectedPositions]="selectedPositions"
+  [selectedProposals]="allSelectedProposals"
+  [source]="'tcp'"
 ></app-grid-footer>
 
 <ng-template #placeholder>
@@ -177,27 +187,28 @@
 
 <uxg-modal [(state)]="modalData" size="l">
   <ng-container *ngIf="modalData">
-    <h2>{{ modalData.position.sourcePosition.name }}</h2>
+    <h2>{{ modalData.proposal.sourceProposal.position.name }}</h2>
+
     <app-proposal-detail
       [supplier]="modalData.supplier"
       [paymentTerms]="modalData.proposal.sourceProposal.paymentTerms"
       [manufacturingName]="modalData.proposal.manufacturingName"
-      [documents]="[]"
+      [documents]="modalData.proposalByPosition.proposal.documents"
       [manufacturer]="modalData.proposal.sourceProposal.manufacturer"
       [standard]="modalData.proposal.sourceProposal.standard"
       [proposal]="modalData.proposal"
-      [position]="modalData.position"
+      [position]="modalData.proposal.sourceProposal.position"
     ></app-proposal-detail>
 
     <ng-template uxgModalFooter>
       <div class="app-col app-bold">
-        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.position, modalData.proposal)">- Позиция в нужном количестве</div>
-        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки укладываются в заданные</div>
+        <div class="app-success-color" *ngIf="helper.isQuantityValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Позиция в нужном количестве</div>
+        <div class="app-success-color" *ngIf="helper.isDateValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Сроки укладываются в заданные</div>
 
-        <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.position, modalData.proposal)">
-          {{ helper.getRequestedQuantityLabel(modalData.position, modalData.proposal) }}
+        <div class="app-error-color" *ngIf="!helper.isQuantityValid(modalData.proposal.sourceProposal.position, modalData.proposal)">
+          {{ helper.getRequestedQuantityLabel(modalData.proposal.sourceProposal.position, modalData.proposal) }}
         </div>
-        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.position, modalData.proposal)"> - Сроки не укладываются в заданные</div>
+        <div class="app-error-color" *ngIf="!helper.isDateValid(modalData.proposal.sourceProposal.position, modalData.proposal)">- Сроки не укладываются в заданные</div>
       </div>
 
       <div *ngIf="!['APPROVED', 'REJECTED', 'SENT_TO_EDIT'].includes(modalData.proposal.sourceProposal.status)">
@@ -209,4 +220,17 @@
       </div>
     </ng-template>
   </ng-container>
+</uxg-modal>
+
+<uxg-modal #selectedProposalsApprovalModal [(state)]="approvalModalData" size="l">
+  <app-technical-commercial-proposal-confirm
+    *ngIf="approvalModalData"
+    [requestId]="requestId"
+    [groupId]="groupId"
+    [proposalsOnReview]="proposalsOnReview"
+    [approvalModalData]="approvalModalData"
+    [isLoading]="isLoading"
+    (close)="selectedProposalsApprovalModal.close()"
+    (reviewMultiple)="reviewMultiple()">
+  </app-technical-commercial-proposal-confirm>
 </uxg-modal>

@@ -10,10 +10,13 @@ import { TechnicalCommercialProposalPosition } from "../../../../request/common/
 export class GridFooterComponent {
   @Input() chooseBy$: Subject<"price" | "date">;
   @Input() total: number;
+  @Input() selectedProposals: { toApprove, toSendToEdit };
   @Input() selectedPositions;
   @Input() viewType: string;
   @Input() disabled: boolean;
   @Input() loading: boolean;
+  @Input() source: string; // todo После изменений вида футера в КП необходимость в проверке источника вероятно отпадёт
+  @Output() selectAllToSendToEdit = new EventEmitter();
   @Output() approve = new EventEmitter();
   @Output() reject = new EventEmitter();
   @Output() sendToEdit = new EventEmitter();
