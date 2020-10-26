@@ -43,6 +43,12 @@ export class CommercialProposalState {
     );
   }
 
+  @Selector() static proposalsByPosHasWinner({ positions }: Model) {
+    return positions.filter(
+      position => position.linkedOffers.some(p => p.isWinner)
+    );
+  }
+
   @Selector() static status({ status }: Model) { return status; }
   @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }

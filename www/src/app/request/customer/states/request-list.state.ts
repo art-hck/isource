@@ -51,7 +51,7 @@ export class RequestListState {
   }
 
   @Action(AddRequestFromExcel) addRequestFromExcel({setState, dispatch}: Context, action: AddRequestFromExcel) {
-    setState(patch({ status: "updating" as StateStatus }));
+    setState(patch({ createdRequestId: null, status: "updating" as StateStatus }));
     return this.rest.addRequestFromExcel(action.files, action.requestName).pipe(
       flatMap(({id}) => action.publish ? dispatch(new RequestActions.Publish(id, false)).pipe(mapTo(id)) : of(id)),
       tap(id => setState(patch({ createdRequestId: id }))),

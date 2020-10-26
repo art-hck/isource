@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { finalize, shareReplay, takeUntil, tap } from "rxjs/operators";
+import { finalize, map, shareReplay, takeUntil, tap } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
@@ -52,11 +52,15 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();
+  readonly proposalPositions$ = this.availablePositions$.pipe(map(
+    positions => positions?.map(position => ({position}))
+  ));
   form: FormGroup;
   contragents$: Observable<ContragentList[]>;
   invalidDocControl = false;
   manufactureErrorMessage = false;
   parameterErrorMessage = false;
+  publish = this.fb.control(true);
 
   get isManufacturerPristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
@@ -131,19 +135,16 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.request.id, this.groupId));
   }
 
-  submit(publish = true): void {
-    this.form.get('positions').markAsDirty();
-    this.form.get('positions').markAsTouched();
-
+  submit(): void {
     if (this.form.valid) {
       let action$: Observable<any>;
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
       this.form.disable();
 
       if (this.form.pristine) {
-        publish ? action$ = this.publish() : this.close.emit();
+        this.publish.value ? action$ = this.store.dispatch(new Publish(this.technicalCommercialProposal)) : this.close.emit();
       } else {
-        action$ = this.save({ ...this.form.value, files }, publish);
+        action$ = this.save({ ...this.form.value, files }, this.publish.value);
       }
 
       action$.pipe(
@@ -160,14 +161,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     return this.store.dispatch(
       value.id ? new Update(value, publish) : new Create(this.request.id, this.groupId, value, publish)
     );
-  }
-
-  publish() {
-    return this.store.dispatch(new Publish(this.technicalCommercialProposal));
-  }
-
-  toProposalPositions(positions: RequestPosition[]): Partial<TechnicalCommercialProposalPosition>[] {
-    return positions.map(position => ({position}));
   }
 
   searchPosition(q: string, {position}: TechnicalCommercialProposalPosition) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { delayWhen, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
+import { delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -130,8 +130,13 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     if (this.formTemplate.valid) {
       this.uploadTemplateModal.close();
       this.store.dispatch(
-        this.uploadTemplate(this.requestId, null, this.formTemplate.get('fileTemplate').value, this.formTemplate.get('technicalCommercialProposalGroupName').value)
-      );
+        this.uploadTemplate(
+          this.requestId,
+          null,
+          this.formTemplate.get('fileTemplate').value,
+          this.formTemplate.get('technicalCommercialProposalGroupName').value
+        )
+      ).pipe(finalize(() => this.fetchAvailablePositions())).subscribe();
     }
   }
 

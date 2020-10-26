@@ -81,13 +81,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
       const e = result.error as any;
       const text = (action.publish ? 'Заявка опубликована' : "Черновик заявки создан");
 
-      this.store.dispatch(e ?
-        new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
-      );
+      this.store.dispatch(e ? new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text));
 
-      this.store.select(RequestListState.createdRequest).pipe(filter(Boolean)).subscribe((id) => {
-        this.router.navigate([id], { relativeTo: this.route });
-      });
+      this.store.select(RequestListState.createdRequest).pipe(filter(r => !!r && !e))
+        .subscribe(id => this.router.navigate([id], { relativeTo: this.route }));
     });
   }
 

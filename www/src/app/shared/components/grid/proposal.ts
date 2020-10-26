@@ -1,6 +1,7 @@
 import { PositionCurrency } from "../../../request/common/enum/position-currency";
 import { Uuid } from "../../../cart/models/uuid";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
+import { RequestDocument } from "../../../request/common/models/request-document";
 
 export class Proposal<T = any> {
   id: Uuid;
@@ -11,6 +12,7 @@ export class Proposal<T = any> {
   isWinner: boolean;
   isAnalog: boolean;
   measureUnit: string;
+  documents?: RequestDocument[];
   manufacturingName?: string;
   source?: "ETP"|"MANUAL";
   supplier?: ContragentShortInfo;

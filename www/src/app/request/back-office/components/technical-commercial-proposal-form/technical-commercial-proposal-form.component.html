@@ -242,10 +242,7 @@
       </div>
       <div class="app-row app-col app-col-auto app-align-items-center">
         <span *ngIf="(status$ | async) ==='updating'" class="spinner spinner-inline">Загрузка...</span>
-        <button
-          uxgButton primary (click)="submit(false)"
-          [disabled]="form.disabled">Сохранить
-        </button>
+        <button uxgButton primary (click)="publish.setValue(false)" [disabled]="form.disabled">Сохранить</button>
         <!-- Временно убрали публикацию из интерфейса списка ТКП -->
         <!-- <button uxgButton primary [disabled]="form.disabled || form.invalid">Отправить на согласование</button>-->
       </div>
@@ -260,14 +257,14 @@
       </div>
       <br/>
       <br/>
-      <ng-container *ngIf="(availablePositions$ | async) as availablePositions">
+      <ng-container *ngIf="(proposalPositions$ | async) as availablePositions">
         <select-items-with-search
           #positionsSelect
           placeholder="Наименование позиции или группы"
           formControlName="positions"
           class="select-list select-list-positions"
           [liveUpdate]="false"
-          [items]="toProposalPositions(availablePositions)"
+          [items]="availablePositions"
           (ngModelChange)="positionsModal.close()"
           [filterFn]="searchPosition"
           [trackBy]="trackByPositionId"

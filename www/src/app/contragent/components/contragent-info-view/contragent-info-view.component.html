@@ -3,17 +3,19 @@
 </ng-template>
 
 <ng-container *ngIf="(contragent$ | async) as contragent; else loading">
-  <div class="app-row action">
-    <span *ngIf="getContragentService.loading" class="spinner spinner-sm"></span>
+  <div class="app-row app-align-items-center action">
+    <div class="app-col-auto">
+      <span *ngIf="downloading" class="spinner spinner-sm"></span>
+    </div>
+
     <button uxgButton secondary iconText *ngIf="user.isSeniorBackoffice()"
             (click)="router.navigateByUrl('/contragents/' + contragent.id + '/edit')">
       <uxg-icon shape="app-pen"></uxg-icon>
       Редактировать контрагента
     </button>
     <button uxgButton primary
-            [clrLoading]="getLoaderState()"
             (click)="onDownloadPrimaInformReport()"
-            [disabled]="getContragentService.loading">
+            [disabled]="downloading">
       Отчет Прима-информ
     </button>
   </div>

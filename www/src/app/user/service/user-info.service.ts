@@ -172,6 +172,10 @@ export class UserInfoService {
     return this.isCustomer() ? 'Заказчик' : 'Бэк-офис';
   }
 
+  public getContragentId(): string | null {
+    return this.getUserInfo()?.contragentId;
+  }
+
   private getStorage() {
     return window.localStorage;
   }
