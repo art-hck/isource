@@ -6,7 +6,7 @@ import { delay } from "rxjs/operators";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
 import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalGroup } from "../../common/models/technical-commercial-proposal-group";
+import { ProposalGroup } from "../../common/models/proposal-group";
 import { TechnicalCommercialProposalGroupFilter } from "../../common/models/technical-commercial-proposal-group-filter";
 
 @Injectable()
@@ -21,12 +21,12 @@ export class TechnicalCommercialProposalService {
 
   groupList(requestId: Uuid, filters: TechnicalCommercialProposalGroupFilter = {}) {
     const url = `requests/customer/${requestId}/technical-commercial-proposal-groups`;
-    return this.api.post<TechnicalCommercialProposalGroup[]>(url, { filters });
+    return this.api.post<ProposalGroup[]>(url, { filters });
   }
 
   getGroupInfo(requestId: Uuid, groupId: Uuid) {
     const url = `requests/customer/${ requestId }/technical-commercial-proposal-groups/${ groupId }/view`;
-    return this.api.get<TechnicalCommercialProposalGroup>(url);
+    return this.api.get<ProposalGroup>(url);
   }
 
   approve(requestId: Uuid, proposalPosition: TechnicalCommercialProposalPosition) {
