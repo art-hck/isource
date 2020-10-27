@@ -26,10 +26,10 @@
 </div>
 <div class="app-row">
   <div class="app-col">
-    <app-technical-commercial-proposal-group
+    <app-proposal-group
       *ngFor="let group of tcpGroups$ | async"
-      [technicalCommercialProposalGroup]="group"
-    ></app-technical-commercial-proposal-group>
+      [group]="group"
+    ></app-proposal-group>
   </div>
 
   <app-filter [formGroup]="form" [count]="(tcpGroups$ | async)?.length" (filter)="filter($event)">

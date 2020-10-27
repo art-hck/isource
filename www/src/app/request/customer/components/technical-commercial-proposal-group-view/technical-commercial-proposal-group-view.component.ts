@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
-import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
+import { ProposalGroup } from "../../../common/models/proposal-group";
 import { delayWhen, scan, shareReplay, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
@@ -21,11 +21,11 @@ import moment from "moment";
 export class TechnicalCommercialProposalGroupViewComponent {
   @Select(RequestState.request) request$: Observable<Request>;
   requestId: Uuid;
-  readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
+  readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
 
-  readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
+  readonly tcpGroups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
     delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
     withLatestFrom(this.request$),
