@@ -18,6 +18,11 @@ export class AgreementsComponent {
     if (AgreementActionLink[agreement.action.name]) {
       routerLink.push(AgreementActionLink[agreement.action.name]);
     }
+
+    if (agreement.type === 'REQUEST_TECHNICAL_COMMERCIAL_PROPOSAL_GROUP') {
+      routerLink.push(agreement.requestTechnicalCommercialProposalGroup.id);
+    }
+
     return routerLink;
   }
 }
