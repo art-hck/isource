@@ -28,7 +28,7 @@ import { PositionCancelComponent } from "./components/position-cancel/position-c
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { TechnicalProposalsService } from "../back-office/services/technical-proposals.service";
 import { ProcedureInfoComponent } from "./components/procedure-info/procedure-info.component";
-import { TechnicalCommercialProposalGroupComponent } from "./components/technical-commercial-proposal-group/technical-commercial-proposal-group.component";
+import { ProposalGroupComponent } from "./components/proposal-group/proposal-group.component";
 import { ContractListItemComponent } from "./components/contract-list-item/contract-list-item.component";
 import { RequestCreateTemplateComponent } from "./components/request/request-create-template-modal/request-create-template.component";
 
@@ -54,7 +54,7 @@ const RequestCommonModuleDeclarations = [
   PositionCancelComponent,
   RequestListComponent,
   ProcedureInfoComponent,
-  TechnicalCommercialProposalGroupComponent,
+  ProposalGroupComponent,
   ContractListItemComponent,
   RequestCreateTemplateComponent
 ];

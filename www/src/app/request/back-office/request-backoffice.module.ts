@@ -42,6 +42,8 @@ import { ContractFormComponent } from "./components/contract-form/contract-form.
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
+import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
+import { CommercialProposalGroupFormComponent } from "./components/commercial-proposal-group-form/commercial-proposal-group-form.component";
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { ContractService } from "./services/contract.service";
     ProcedureProlongateComponent,
     TechnicalProposalComponent,
     CommercialProposalViewComponent,
+    CommercialProposalGroupViewComponent,
+    CommercialProposalGroupFormComponent,
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,

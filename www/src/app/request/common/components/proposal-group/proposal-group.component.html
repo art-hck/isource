@@ -1,11 +1,11 @@
-<div class="app-card" *ngIf="user.isBackOffice() || (user.isCustomer() && technicalCommercialProposalGroup.status !== 'DRAFT')">
+<div class="app-card" *ngIf="user.isBackOffice() || (user.isCustomer() && group.status !== 'DRAFT')">
   <!-- actions -->
   <div class="app-row app-align-items-center">
     <h3 class="app-col">
-      <a [routerLink]="[technicalCommercialProposalGroup.id]">{{technicalCommercialProposalGroup.name}}</a>
+      <a [routerLink]="[group.id]">{{group.name}}</a>
     </h3>
 
-    <div class="app-col-auto app-ellipsis" [ngSwitch]="technicalCommercialProposalGroup.status">
+    <div class="app-col-auto app-ellipsis" [ngSwitch]="group.status">
       <div class="app-ghost-color app-bold" *ngSwitchCase="'PROCEDURE_IN_PROGRESS'">
         <uxg-icon shape="app-waiting"></uxg-icon>
         <span>Идет процедура</span>
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <button uxgButton icon link (click)="edit.emit()" [disabled]="technicalCommercialProposalGroup.status !== 'DRAFT'" *ngIf="edit.observers.length">
+    <button uxgButton icon link (click)="edit.emit()" [disabled]="group.status !== 'DRAFT'" *ngIf="edit.observers.length">
       <uxg-icon shape="app-pen"></uxg-icon>
     </button>
 
@@ -56,7 +56,7 @@
         <small class="app-col app-ellipsis">Статус рассмотрения</small>
       </div>
 
-      <ng-container *ngFor="let position of technicalCommercialProposalGroup.requestPositions">
+      <ng-container *ngFor="let position of group.requestPositions">
         <div class="app-row" *ngIf="user.isBackOffice() ||
                                     user.isCustomer() && position.status && position.status !== 'NEW'">
           <div class="app-col app-ellipsis name">{{position.name}}</div>

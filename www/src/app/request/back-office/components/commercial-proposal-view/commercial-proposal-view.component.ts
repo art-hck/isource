@@ -14,7 +14,7 @@ import { RequestService } from "../../services/request.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { AppComponent } from "../../../../app.component";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { filter, finalize, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { delayWhen, filter, finalize, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
@@ -60,6 +60,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @Select(RequestState.request) request$: Observable<Request>;
   contragentsWithTp$: Observable<ContragentShortInfo[]>;
   requestId: Uuid;
+  groupId: Uuid;
   readonly destroy$ = new Subject();
   view: ProposalsView = "grid";
   form: FormGroup;
@@ -74,13 +75,13 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
-  readonly downloadAnalyticalReport = () => new DownloadAnalyticalReport(this.requestId);
-  readonly downloadTemplate = (request: Request) => new DownloadTemplate(request);
-  readonly uploadTemplate = (files: File[]) => new UploadTemplate(this.requestId, files);
-  readonly refresh = () => new Refresh(this.requestId);
-  readonly publishPositions = () => new PublishPositions(this.requestId, this.selectedPositions);
-  readonly addSupplier = ({ id }: ContragentShortInfo) => new AddSupplier(this.requestId, id);
-  readonly rollback = ({ id }: RequestPosition) => new Rollback(this.requestId, id);
+  readonly downloadAnalyticalReport = (request: Request, groupId: Uuid) => new DownloadAnalyticalReport(request.id, groupId);
+  readonly downloadTemplate = (request: Request) => new DownloadTemplate(request.id);
+  readonly uploadTemplate = (request: Request, files: File[], groupId: Uuid) => new UploadTemplate(request.id, files, groupId);
+  readonly refresh = (request: Request, groupId: Uuid) => new Refresh(request.id, groupId);
+  readonly publishPositions = (request: Request, groupId: Uuid) => new PublishPositions(request.id, groupId, this.selectedPositions);
+  readonly addSupplier = (request: Request, groupId: Uuid, { id }: ContragentShortInfo) => new AddSupplier(request.id, groupId, id);
+  readonly rollback = (request: Request, groupId: Uuid, { id }: RequestPosition) => new Rollback(request.id, id);
 
   get selectedPositions() {
     return (this.form?.get('positions') as FormArray)?.controls?.filter(({value}) => value.checked).map(({value}) => value.position);
@@ -109,17 +110,25 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
-      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
-      switchMap(() => this.request$),
-      filter(request => !!request),
-      tap(({id, number}) => this.bc.breadcrumbs = [
+      tap(({groupId}) => this.groupId = groupId),
+      tap(({id, groupId}) => this.store.dispatch(new Fetch(id, groupId))),
+      delayWhen(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      withLatestFrom(this.request$),
+      tap(([{ groupId }, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/backoffice" },
         { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
-        { label: 'Согласование коммерческих предложений', link: `/requests/backoffice/${this.requestId}/commercial-proposals` }
+        { label: 'Согласование КП', link: `/requests/backoffice/${this.requestId}/commercial-proposals`},
+        { label: 'Страница предложений', link: `/requests/backoffice/${this.requestId}/commercial-proposals/${groupId}`}
       ]),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    // this.route.params.pipe(
+    //   tap(({id}) => this.requestId = id),
+    //   tap(({ groupId }) => this.groupId = groupId),
+    //   switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
+    //   takeUntil(this.destroy$)
+    // ).subscribe(({name}) => this.title.setTitle(name));
 
     this.positions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((positions) => {
       this.form = this.fb.group({
@@ -188,10 +197,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
-  onPositionsSelected(positionsIds) {
+  onPositionsSelected(request: Request, positionsIds) {
     this.loadingContragentList = true;
     this.contragentsWithTp$ = this.commercialProposalsService
-      .getContragentsWithTp(this.requestId, positionsIds).pipe(
+      .getContragentsWithTp(request.id, positionsIds).pipe(
         finalize(() => this.loadingContragentList = false)
       );
   }

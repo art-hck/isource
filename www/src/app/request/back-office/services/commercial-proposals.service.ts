@@ -4,12 +4,12 @@ import { Uuid } from "../../../cart/models/uuid";
 import { RequestOfferPosition } from "../../common/models/request-offer-position";
 import { Observable } from "rxjs";
 import { RequestDocument } from "../../common/models/request-document";
-import { Request } from "../../common/models/request";
-import { saveAs } from 'file-saver/src/FileSaver';
 import { RequestPosition } from "../../common/models/request-position";
 import { ContragentList } from 'src/app/contragent/models/contragent-list';
 import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
+import { ProposalGroup } from "../../common/models/proposal-group";
+import { CommercialProposalGroupFilter } from "../../common/models/commercial-proposal-group-filter";
 
 @Injectable({
   providedIn: "root"
@@ -21,9 +21,29 @@ export class CommercialProposalsService {
   ) {
   }
 
-  getOffers(id: Uuid) {
+  getOffers(id: Uuid, requestCommercialProposalGroupId: Uuid) {
     const url = `requests/backoffice/${id}/commercial-proposals`;
-    return this.api.get<PositionsWithSuppliers>(url);
+    return this.api.post<PositionsWithSuppliers>(url, { requestCommercialProposalGroupId });
+  }
+
+  availablePositions(id: Uuid) {
+    const url = `requests/backoffice/${id}/commercial-proposals/available-request-positions`;
+    return this.api.get<RequestPosition[]>(url);
+  }
+
+  groupList(requestId: Uuid, filters: CommercialProposalGroupFilter = {}) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups`;
+    return this.api.post<ProposalGroup[]>(url, { filters });
+  }
+
+  groupCreate(requestId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/create`;
+    return this.api.post<ProposalGroup>(url, body);
+  }
+
+  groupUpdate(requestId: Uuid, groupId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }/edit`;
+    return this.api.post<ProposalGroup>(url, body);
   }
 
   addSupplier(id: Uuid, supplierId: Uuid) {
@@ -78,18 +98,8 @@ export class CommercialProposalsService {
     return this.api.post<RequestDocument[]>(url, formData);
   }
 
-  downloadOffersTemplate(request: Request): void {
-    this.api.post(
-      `requests/backoffice/${request.id}/download-offers-template`,
-      {},
-      {responseType: 'blob'})
-      .subscribe(data => {
-        saveAs(data, `Request${request.number}OffersTemplate.xlsx`);
-      });
-  }
-
-  downloadTemplate(request: Request) {
-    const url = `requests/backoffice/${request.id}/download-offers-template`;
+  downloadTemplate(requestId: Uuid) {
+    const url = `requests/backoffice/${requestId}/download-offers-template`;
     return this.api.post(url, {}, {responseType: 'blob'});
   }
 
