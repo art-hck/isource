@@ -2,7 +2,7 @@ import { ProposalGroup } from "../../common/models/proposal-group";
 import { PositionStatus } from "../../common/enum/position-status";
 import { TechnicalCommercialProposalStatus } from "../../common/enum/technical-commercial-proposal-status";
 
-export const ProposalGroups: ProposalGroup[] = [{
+export const ProposalGroups = [{
   "id": "d807999f-daaa-40d8-b5ef-e76eb10a235a",
   "requestId": "4a3d6dc4-f833-43af-9b6c-5ac60d878af8",
   "name": "\u0417\u0430\u043a\u0443\u043f\u043a\u0430 1",
