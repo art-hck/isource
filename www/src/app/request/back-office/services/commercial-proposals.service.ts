@@ -10,7 +10,6 @@ import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { ProposalGroup } from "../../common/models/proposal-group";
 import { CommercialProposalGroupFilter } from "../../common/models/commercial-proposal-group-filter";
-import { ProposalGroups } from "./mock";
 import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable({
