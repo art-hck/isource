@@ -93,10 +93,10 @@ export class CommercialProposalState {
   }
 
   @Action(AddSupplier)
-  addSupplier({ setState, dispatch }: Context, { requestId, supplierId }: AddSupplier) {
+  addSupplier({ setState, dispatch }: Context, { requestId, groupId, supplierId }: AddSupplier) {
     setState(patch({ status: "updating" } as Model));
 
-    return this.rest.addSupplier(requestId, supplierId).pipe(
+    return this.rest.addSupplier(requestId, groupId, supplierId).pipe(
       tap(suppliers => setState(patch({suppliers, status: "received"} as Model)))
     );
   }

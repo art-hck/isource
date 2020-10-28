@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { ProposalGroup } from "../../../common/models/proposal-group";
-import { delayWhen, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
+import { delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -22,10 +22,10 @@ import { FeatureService } from "../../../../core/services/feature.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
+import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
+import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
-import UploadTemplate = CommercialProposalsActions.UploadTemplate;
-import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 
 @Component({
   selector: 'app-commercial-proposal-group-view',
@@ -63,7 +63,9 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     ]),
     switchMap(() => this.filter$),
     switchMap(filter => this.service.groupList(this.requestId, filter)),
-    switchMap(groups => this.newGroup$.pipe(scan((acc, group) => {
+    switchMap(groups => this.newGroup$.pipe(
+      tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
+      scan((acc, group) => {
       if (group) {
         const i = acc.findIndex(({id}) => group?.id === id);
         i !== -1 ? acc[i] = group : acc.push(group);
@@ -131,7 +133,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
           this.formTemplate.get('fileTemplate').value,
           this.formTemplate.get('technicalCommercialProposalGroupName').value
         )
-      );
+      ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe();
     }
   }
 

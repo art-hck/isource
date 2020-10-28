@@ -46,9 +46,9 @@ export class CommercialProposalsService {
     return this.api.post<ProposalGroup>(url, body);
   }
 
-  addSupplier(id: Uuid, supplierId: Uuid) {
+  addSupplier(id: Uuid, requestCommercialProposalGroupId: Uuid, supplierId: Uuid) {
     const url = `requests/backoffice/${id}/commercial-proposals/add-supplier`;
-    return this.api.post<ContragentShortInfo[]>(url, { supplierId });
+    return this.api.post<ContragentShortInfo[]>(url, { supplierId, requestCommercialProposalGroupId });
   }
 
   addOffer(id: Uuid, positionId, offer: RequestOfferPosition) {

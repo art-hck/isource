@@ -122,7 +122,7 @@
     *ngIf="groupFormModal.state"
     [group]="editedGroup"
     (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="requestId"
-    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event); fetchAvailablePositions();"
+    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event)"
   >
   </app-technical-commercial-proposal-group-form>
 </uxg-modal>

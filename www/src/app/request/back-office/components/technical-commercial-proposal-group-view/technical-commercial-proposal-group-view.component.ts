@@ -64,7 +64,9 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     ]),
     switchMap(() => this.filter$),
     switchMap((filter) => this.service.groupList(this.requestId, filter)),
-    switchMap(groups => this.newGroup$.pipe(scan((acc, group) => {
+    switchMap(groups => this.newGroup$.pipe(
+      tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
+      scan((acc, group) => {
       if (group) {
         const i = acc.findIndex(({id}) => group?.id === id);
         i !== -1 ? acc[i] = group : acc.push(group);
@@ -122,10 +124,6 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     });
   }
 
-  fetchAvailablePositions(): void {
-    this.store.dispatch(new FetchAvailablePositions(this.requestId));
-  }
-
   submit() {
     if (this.formTemplate.valid) {
       this.uploadTemplateModal.close();
@@ -136,7 +134,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
           this.formTemplate.get('fileTemplate').value,
           this.formTemplate.get('technicalCommercialProposalGroupName').value
         )
-      ).pipe(finalize(() => this.fetchAvailablePositions())).subscribe();
+      ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe();
     }
   }
 
