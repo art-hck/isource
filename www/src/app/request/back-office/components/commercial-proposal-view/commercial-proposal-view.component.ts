@@ -29,6 +29,7 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { PositionStatus } from "../../../common/enum/position-status";
+import { CommercialProposal } from "../../models/commercial-proposal";
 import moment from "moment";
 import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
@@ -186,6 +187,20 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   getProposalBySupplier = (position: RequestPosition) => ({ id, hasAnalogs }: GridSupplier) => {
     const proposal = position.linkedOffers.find(({ supplierContragentId, isAnalog }) => supplierContragentId === id && isAnalog === hasAnalogs);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
+  }
+
+  getProposalsGroupedBySuppliers(suppliers: ContragentShortInfo[], positions: RequestPosition[]): CommercialProposal[] {
+    return suppliers.map(supplier => {
+        const items = positions
+          .map(position => {
+            return {
+              position: position,
+              linkedOffer: position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === supplier.id)
+            };
+          }).reduce((acc, curr) => curr.linkedOffer ? [...acc, { ...curr }] : acc, []);
+
+        return { supplier, items };
+    });
   }
 
   onPositionsSelected(positionsIds) {

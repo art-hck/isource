@@ -41,7 +41,7 @@
                     <div *uxgPopoverContent>
                       <div><button uxgButton clear (click)="switchView('simple-grid')">по позициям</button></div>
                       <div><button uxgButton clear (click)="switchView('grid')">по позициям матрица</button></div>
-                      <div><button uxgButton clear disabled (click)="switchView('list')">по поставщикам</button></div>
+                      <div><button uxgButton clear (click)="switchView('list')">по поставщикам</button></div>
                     </div>
                   </uxg-popover>
                 </div>
@@ -153,6 +153,29 @@
               </app-grid-row>
             </ng-container>
           </ng-container>
+        </div>
+
+        <!-- list -->
+        <div class="app-row" *ngIf="view === 'list'">
+          <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="(status$ | async) !== 'received'">
+            <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
+              <app-request-procedure [procedure]="procedure"
+                                     [source]="'cp'"
+                                     (bargain)="procedureModalPayload = { action: 'bargain', procedure: procedure }"
+                                     (prolong)="prolongModalPayload = procedure"
+              ></app-request-procedure>
+            </ng-container>
+
+            <ng-container *ngFor="let proposal of getProposalsGroupedBySuppliers(suppliers, positions); trackBy: trackById">
+              <app-request-commercial-proposal
+                [request]="request"
+                [proposal]="proposal"
+              ></app-request-commercial-proposal>
+            </ng-container>
+          </div>
+
+          <div class="app-col-aside detachable">
+          </div>
         </div>
 
         <!-- modals -->

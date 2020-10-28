@@ -1,0 +1,87 @@
+<ng-container *ngIf="proposal && proposal.items.length" [ngSwitch]="state">
+  <div class="app-card" *ngSwitchCase="'view'">
+    <div class="app-row app-align-items-center">
+      <h3 class="app-col">
+        <app-contragent-info-link [contragent]="proposal.supplier"></app-contragent-info-link>
+      </h3>
+
+      <div class="app-ghost-color app-bold" *ngIf="isDraft">
+        <uxg-icon shape="app-draft"></uxg-icon>
+        <span>Черновик</span>
+      </div>
+
+      <div class="app-ghost-color app-bold" *ngIf="!isReviewed && publishedCount > 0">
+        <uxg-icon shape="app-waiting" class="is-solid"></uxg-icon>
+        <span>Отправлено {{ publishedCount }} из {{ proposal.items.length }}</span>
+      </div>
+
+      <div class="app-ghost-color app-bold" *ngIf="!isReviewed && isPartiallyReviewed && publishedCount === 0">
+        <uxg-icon shape="app-check"></uxg-icon>
+        <span>Частично рассмотрено</span>
+      </div>
+
+      <div class="app-success-color app-bold" *ngIf="isReviewed">
+        <uxg-icon shape="app-check"></uxg-icon>
+        <span>Рассмотрено</span>
+      </div>
+
+      <!-- todo Будет раскомментировано после добавления форм редактирования    -->
+      <!-- <button uxgButton icon link (click)="state = 'edit'" [disabled]="!editable"> -->
+      <!--   <uxg-icon shape="app-pen"></uxg-icon> -->
+      <!-- </button> -->
+
+      <button uxgButton icon link (click)="folded = !folded" [disabled]="proposal.items.length === 0">
+        <uxg-icon shape="app-chevron" [attr.dir]="folded ? 'down' : 'up'"></uxg-icon>
+      </button>
+    </div>
+
+    <ng-container *ngIf="!folded">
+      <div class="app-table app-no-border">
+        <hr/>
+        <div class="app-row app-uppercase app-ghost-color app-bold">
+          <small class="app-col app-ellipsis name">Наименование позиции</small>
+          <small class="app-col total">Сумма</small>
+          <small class="app-col quantity">Количество</small>
+          <small class="app-col price">Цена за ед.</small>
+          <small class="app-col date">Срок пост.</small>
+          <small class="status text-center">Статус</small>
+        </div>
+
+        <div class="app-row" *ngFor="let item of proposal.items">
+          <div class="app-col app-ellipsis name">{{ item.position.name }}</div>
+
+          <div class="app-col total">
+            {{ (item.linkedOffer.priceWithoutVat * item.linkedOffer.quantity) || null | number:'1.0-2' }}
+            <span class="app-ghost-color">{{ getCurrencySymbol(item.linkedOffer.currency, "narrow")}}</span>
+          </div>
+
+          <div class="app-col quantity">{{ item.linkedOffer.quantity}} <span class="app-ghost-color">{{ item.linkedOffer.measureUnit }}</span></div>
+
+          <div class="app-col price">
+            {{ item.linkedOffer.priceWithoutVat | number:'1.0-2' }}
+            <span class="app-ghost-color">{{ getCurrencySymbol(item.linkedOffer.currency, "narrow") }}</span>
+          </div>
+
+          <div class="app-col date">{{ item.linkedOffer.deliveryDate | date:"dd.MM.yyyy"}}</div>
+
+          <!-- todo Доработать статусы на стороне бэкенда -->
+          <div class="status text-center"
+               [class.app-ghost-color]="getPositionStatus(item.position, item.linkedOffer) !== 'APPROVED'"
+               [class.app-success-color]="getPositionStatus(item.position, item.linkedOffer) === 'WINNER_SELECTED'"
+               [class.app-warning-color]="getPositionStatus(item.position, item.linkedOffer) === 'SENT_TO_EDIT'"
+               [ngSwitch]="getPositionStatus(item.position, item.linkedOffer)">
+            <uxg-icon shape="app-draft" *ngSwitchCase="'DRAFT'"></uxg-icon>
+            <uxg-icon shape="app-unknown" *ngSwitchCase="'RESULTS_AGREEMENT'"></uxg-icon>
+            <uxg-icon shape="app-warning" *ngSwitchCase="'SENT_TO_EDIT'"></uxg-icon>
+            <uxg-icon shape="app-cross" *ngSwitchCase="'NOT_RELEVANT'"></uxg-icon>
+
+            <uxg-icon shape="app-check" *ngSwitchDefault></uxg-icon>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <br> <br>
+</ng-container>
