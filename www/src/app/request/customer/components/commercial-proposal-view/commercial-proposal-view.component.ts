@@ -70,6 +70,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
   @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<ContragentList[]>;
   requestId: Uuid;
+  groupId: Uuid;
   view: ProposalsView = "grid";
   gridRows: ElementRef[];
   showedProposal: Proposal<RequestOfferPosition>;
@@ -101,7 +102,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   ngOnInit() {
     this.route.params.pipe(
       tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
+      tap(({groupId}) => this.groupId = groupId),
+      tap(({id, groupId}) => this.store.dispatch(new Fetch(id, groupId))),
       switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
       switchMap(() => this.request$),
       filter(request => !!request),
@@ -171,11 +173,11 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
         return _body;
       }, {});
 
-    this.store.dispatch(new Review(this.requestId, body));
+    this.store.dispatch(new Review(this.requestId, this.groupId, body));
   }
 
   sendToEditAll() {
-    this.store.dispatch(new Review(this.requestId, { sendToEdit: this.proposalsOnReview.map(({ position }) => position.id)}));
+    this.store.dispatch(new Review(this.requestId, this.groupId, { sendToEdit: this.proposalsOnReview.map(({ position }) => position.id)}));
   }
 
   convertProposals = (proposals: RequestOfferPosition[]) => proposals.map(p => new Proposal(p));

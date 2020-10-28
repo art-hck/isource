@@ -25,6 +25,7 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   @Input() proposals: Proposal<RequestOfferPosition>[];
   @Input() chooseBy$: Subject<"date" | "price">;
   @Input() requestId: Uuid;
+  @Input() groupId: Uuid;
   @Output() show = new EventEmitter<Proposal<RequestOfferPosition>>();
   readonly destroy$ = new Subject();
   getCurrencySymbol = getCurrencySymbol;
@@ -69,7 +70,7 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   }
 
   approve() {
-    this.dispatchAction(new Review(this.requestId, { accepted: {[this.position.id]: this.selectedProposal.value.id} }));
+    this.dispatchAction(new Review(this.requestId, this.groupId, { accepted: { [this.position.id]: this.selectedProposal.value.id } }));
   }
 
   reject() {
@@ -77,7 +78,7 @@ export class CommercialProposalListComponent implements OnDestroy, OnInit {
   }
 
   sendToEdit() {
-    this.dispatchAction(new Review(this.requestId, { sendToEdit: [this.position.id] }));
+    this.dispatchAction(new Review(this.requestId, this.groupId, { sendToEdit: [this.position.id] }));
   }
 
   private dispatchAction(action) {

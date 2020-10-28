@@ -54,22 +54,22 @@ export class CommercialProposalState {
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }
 
 
-  @Action([Fetch, Update]) fetch({setState}: Context, {requestId, update}: Fetch) {
+  @Action([Fetch, Update]) fetch({setState}: Context, {requestId, groupId, update}: Fetch) {
     if (update) {
       setState(patch({ status: "updating" as StateStatus }));
     } else {
       setState(patch({ request: null, suppliers: null, status: "fetching" as StateStatus }));
     }
 
-    return this.rest.positionsWithOffers(requestId).pipe(
+    return this.rest.positionsWithOffers(requestId, groupId).pipe(
       tap(({positions, suppliers}) => setState(patch({positions, suppliers, status: "received" as StateStatus}))),
     );
   }
 
   @Action(Review)
-  review({ setState, dispatch }: Context, { requestId, body }: Review) {
+  review({ setState, dispatch }: Context, { requestId, groupId, body }: Review) {
     setState(patch({ status: "updating" as StateStatus }));
 
-    return this.rest.review(requestId, body).pipe(switchMap(() => dispatch(new Update(requestId))));
+    return this.rest.review(requestId, body).pipe(switchMap(() => dispatch(new Update(requestId, groupId))));
   }
 }

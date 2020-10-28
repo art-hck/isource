@@ -12,9 +12,9 @@ export class CommercialProposalsService {
 
   constructor(private api: HttpClient) {}
 
-  positionsWithOffers(requestId: Uuid) {
+  positionsWithOffers(requestId: Uuid, groupId: Uuid) {
     const url = `requests/customer/${requestId}/positions-with-offers`;
-    return this.api.get<PositionsWithSuppliers>(url);
+    return this.api.post<PositionsWithSuppliers>(url, { requestCommercialProposalGroupId: groupId });
   }
 
   review(requestId: Uuid, body: CommercialProposalReviewBody) {
