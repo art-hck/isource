@@ -141,9 +141,9 @@
 
     <form appFormValidation [formGroup]="formTemplate">
       <div class="app-control-wrap">
-        <input #name uxgInput lg formControlName="technicalCommercialProposalGroupName">
+        <input #name uxgInput lg formControlName="commercialProposalGroupName">
         <label class="app-control-label" (click)="name.focus()">Наименование КП</label>
-        <div class="app-control-error" *ngIf="formTemplate.get('technicalCommercialProposalGroupName').errors as e">
+        <div class="app-control-error" *ngIf="formTemplate.get('commercialProposalGroupName').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
@@ -177,7 +177,7 @@
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
       [procedureSource]="procedureSource"
-      (complete)="this.store.dispatch(updateProcedures(request)); updateTechnicalCommercialProposalGroups(); procedureModalPayload = null"
+      (complete)="this.store.dispatch(updateProcedures(request)); updateGroups(); procedureModalPayload = null"
       (cancel)="procedureModalPayload = null"
     ></app-request-procedure-form>
   </ng-container>

@@ -41,6 +41,7 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -76,7 +77,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
   readonly downloadAnalyticalReport = (request: Request, groupId: Uuid) => new DownloadAnalyticalReport(request.id, groupId);
-  readonly downloadTemplate = (request: Request) => new DownloadTemplate(request.id);
+  readonly downloadTemplate = (request: Request, groupId: Uuid) => new DownloadTemplate(request.id, groupId);
   readonly uploadTemplate = (request: Request, files: File[], groupId: Uuid) => new UploadTemplate(request.id, files, groupId);
   readonly refresh = (request: Request, groupId: Uuid) => new Refresh(request.id, groupId);
   readonly publishPositions = (request: Request, groupId: Uuid) => new PublishPositions(request.id, groupId, this.selectedPositions);
@@ -104,6 +105,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     public router: Router,
     public helper: ProposalHelperService,
     private commercialProposalsService: CommercialProposalsService,
+    private title: Title,
   ) {
   }
 
@@ -123,12 +125,12 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       takeUntil(this.destroy$)
     ).subscribe();
 
-    // this.route.params.pipe(
-    //   tap(({id}) => this.requestId = id),
-    //   tap(({ groupId }) => this.groupId = groupId),
-    //   switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
-    //   takeUntil(this.destroy$)
-    // ).subscribe(({name}) => this.title.setTitle(name));
+    this.route.params.pipe(
+      tap(({id}) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      switchMap(({ id, groupId }) => this.commercialProposalsService.group(id, groupId)),
+      takeUntil(this.destroy$)
+    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.positions$.pipe(filter(p => !!p), takeUntil(this.destroy$)).subscribe((positions) => {
       this.form = this.fb.group({

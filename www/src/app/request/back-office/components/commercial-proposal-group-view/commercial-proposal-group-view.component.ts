@@ -12,7 +12,7 @@ import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import { FormBuilder, Validators } from "@angular/forms";
-import { TechnicalCommercialProposalGroupFilter } from "../../../common/models/technical-commercial-proposal-group-filter";
+import { CommercialProposalGroupFilter } from "../../../common/models/commercial-proposal-group-filter";
 import moment from "moment";
 import { CommercialProposalState } from "../../states/commercial-proposal.state";
 import { ProcedureAction } from "../../models/procedure-action";
@@ -20,10 +20,11 @@ import { Procedure } from "../../models/procedure";
 import { ProcedureSource } from "../../enum/procedure-source";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
+import { CommercialProposal } from "../../../common/models/commercial-proposal";
 import { RequestPosition } from "../../../common/models/request-position";
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import UploadTemplate = CommercialProposalsActions.UploadTemplate;
+import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
 
@@ -45,21 +46,21 @@ export class CommercialProposalGroupViewComponent implements OnInit {
 
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
   readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
-  readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
+  readonly filter$ = new BehaviorSubject<CommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
   readonly formTemplate = this.fb.group({
-    technicalCommercialProposalGroupName: [null, [Validators.required]],
+    commercialProposalGroupName: [null, [Validators.required]],
     fileTemplate: [null, [Validators.required]]
   });
 
   readonly groups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
-    delayWhen(({ id }) => this.store.dispatch([new RequestActions.Fetch(id), new FetchAvailablePositions(id)])),
+    delayWhen(({ id }) => this.store.dispatch([new RequestActions.Fetch(id), new FetchAvailablePositions(id), new FetchProcedures(id)])),
     withLatestFrom(this.request$),
     tap(([, { id, number }]) => this.bc.breadcrumbs = [
       { label: "Заявки", link: "/requests/backoffice" },
       { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
-      { label: 'Согласование КП', link: `/requests/backoffice/${this.requestId}/technical-commercial-proposals`},
+      { label: 'Согласование КП', link: `/requests/backoffice/${this.requestId}/commercial-proposals`},
     ]),
     switchMap(() => this.filter$),
     switchMap(filter => this.service.groupList(this.requestId, filter)),
@@ -90,7 +91,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     public service: CommercialProposalsService
   ) {}
 
-  filter(filter: TechnicalCommercialProposalGroupFilter) {
+  filter(filter: CommercialProposalGroupFilter) {
     this.filter$.next({
       ...filter,
       createdDateFrom: filter.createdDateFrom ? moment(filter.createdDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,
@@ -99,7 +100,6 @@ export class CommercialProposalGroupViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.actions.pipe(
       ofActionCompleted(UploadTemplate),
       throttleTime(1),
@@ -109,7 +109,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
         new ToastActions.Success(`Группа КП успешно сохранена`));
-      if (!e) { this.updateTechnicalCommercialProposalGroups(); }
+      if (!e) { this.updateGroups(); }
     });
   }
 
@@ -117,7 +117,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     this.formTemplate.get('fileTemplate').setValue(files);
   }
 
-  updateTechnicalCommercialProposalGroups(): void {
+  updateGroups(): void {
     this.service.groupList(this.requestId).subscribe(groups => {
       groups.forEach(tcpGroup => this.newGroup$.next(tcpGroup));
     });
@@ -131,11 +131,11 @@ export class CommercialProposalGroupViewComponent implements OnInit {
           this.requestId,
           null,
           this.formTemplate.get('fileTemplate').value,
-          this.formTemplate.get('technicalCommercialProposalGroupName').value
+          this.formTemplate.get('commercialProposalGroupName').value
         )
       ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe();
     }
   }
 
-  trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
+  trackById = (i, { id }: CommercialProposal | Procedure) => id;
 }

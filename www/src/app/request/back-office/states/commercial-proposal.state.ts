@@ -80,14 +80,14 @@ export class CommercialProposalState {
   }
 
   @Action([FetchProcedures, RefreshProcedures])
-  fetchProcedures({ setState }: Context, { update, requestId }: Fetch) {
+  fetchProcedures({ setState }: Context, { update, requestId, groupId }: FetchProcedures) {
     if (update) {
       setState(patch({ status: "updating" } as Model));
     } else {
       setState(patch({ procedures: null, status: "fetching" } as Model));
     }
 
-    return this.procedureService.list(requestId, ProcedureSource.COMMERCIAL_PROPOSAL).pipe(
+    return this.procedureService.list(requestId, ProcedureSource.COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures, status: "received" } as Model))),
     );
   }
@@ -131,15 +131,15 @@ export class CommercialProposalState {
   }
 
   @Action(DownloadAnalyticalReport)
-  downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
-    return this.rest.downloadAnalyticalReport(requestId).pipe(
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }
 
   @Action(DownloadTemplate)
-  downloadTemplate(ctx: Context, { requestId }: DownloadTemplate) {
-    return this.rest.downloadTemplate(requestId).pipe(
+  downloadTemplate(ctx: Context, { requestId, groupId }: DownloadTemplate) {
+    return this.rest.downloadTemplate(requestId, groupId).pipe(
       tap((data) => saveAs(data, `RequestOffersTemplate.xlsx`))
     );
   }
@@ -147,7 +147,7 @@ export class CommercialProposalState {
   @Action(UploadTemplate)
   uploadTemplate({ setState, dispatch }: Context, { requestId, files, groupId, groupName }: UploadTemplate) {
     setState(patch({ status: "updating" } as Model));
-    return this.rest.addOffersFromExcel(requestId, files).pipe(tap(
+    return this.rest.addOffersFromExcel(requestId, files, groupId, groupName).pipe(tap(
         () => dispatch([
           new Refresh(requestId, groupId),
           new ToastActions.Success("Шаблон импортирован")
