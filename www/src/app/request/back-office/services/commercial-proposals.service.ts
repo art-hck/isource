@@ -32,9 +32,8 @@ export class CommercialProposalsService {
   }
 
   group(requestId: Uuid, groupId: Uuid) {
-    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }`;
-    return of(ProposalGroups[0]);
-    // return this.api.post<ProposalGroup>(url);
+    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }/view`;
+    return this.api.get<ProposalGroup>(url);
   }
 
   groupList(requestId: Uuid, filters: CommercialProposalGroupFilter = {}) {
