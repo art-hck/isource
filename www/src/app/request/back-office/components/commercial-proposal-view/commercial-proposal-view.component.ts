@@ -42,6 +42,7 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
+import { SupplierCommercialProposalInfo } from "../../models/supplier-commercial-proposal-info";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -53,8 +54,9 @@ import Rollback = CommercialProposalsActions.Rollback;
 export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
+  @Select(CommercialProposalState.commercialProposals) commercialProposals$: Observable<{ suppliers: SupplierCommercialProposalInfo[], positions: RequestPosition[] }>;
   @Select(CommercialProposalState.positions) positions$: Observable<RequestPosition[]>;
-  @Select(CommercialProposalState.suppliers) suppliers$: Observable<ContragentList[]>;
+  @Select(CommercialProposalState.suppliers) suppliers$: Observable<SupplierCommercialProposalInfo[]>;
   @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
@@ -67,6 +69,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
+  proposalsGroupedBySuppliers: CommercialProposal[];
   proposalModalData: {position: RequestPosition, proposal: Proposal};
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
@@ -135,6 +138,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       });
     });
 
+    this.commercialProposals$.pipe(filter(p => !!p.suppliers || !!p.positions), takeUntil(this.destroy$)).subscribe((data) => {
+      this.getProposalsGroupedBySuppliers(data.suppliers, data.positions);
+    });
+
     this.switchView(this.view);
   }
 
@@ -189,8 +196,8 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
   }
 
-  getProposalsGroupedBySuppliers(suppliers: ContragentShortInfo[], positions: RequestPosition[]): CommercialProposal[] {
-    return suppliers.map(supplier => {
+  getProposalsGroupedBySuppliers(suppliers: SupplierCommercialProposalInfo[], positions: RequestPosition[]) {
+    this.proposalsGroupedBySuppliers = suppliers.map(supplier => {
         const items = positions
           .map(position => {
             return {

@@ -27,7 +27,7 @@ import { CommercialProposals } from "../../actions/commercial-proposal.actions";
 import { CommercialProposalState } from "../../states/commercial-proposal.state";
 import { PositionStatus } from "../../../common/enum/position-status";
 import { RequestPosition } from "../../../common/models/request-position";
-import { ContragentList } from "../../../../contragent/models/contragent-list";
+import { SupplierCommercialProposalInfo } from "../../../back-office/models/supplier-commercial-proposal-info";
 import { GridFooterComponent } from "../../../../shared/components/grid/grid-footer/grid-footer.component";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { Proposal } from "../../../../shared/components/grid/proposal";
@@ -68,7 +68,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @Select(CommercialProposalState.positionsLength) readonly positionsLength$: Observable<number>;
   @Select(RequestState.request) readonly request$: Observable<Request>;
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
-  @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<ContragentList[]>;
+  @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<SupplierCommercialProposalInfo[]>;
   requestId: Uuid;
   view: ProposalsView = "grid";
   gridRows: ElementRef[];
