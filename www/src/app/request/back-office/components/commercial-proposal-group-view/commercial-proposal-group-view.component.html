@@ -23,7 +23,7 @@
         <!--app-filter-button></app-filter-button-->
 
         <!-- КП из процедуры  -->
-        <uxg-popover #tcpFromProcedurePopup [openOnHover]="true" class="popover-item">
+        <uxg-popover #procedureModal [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="procedureModalPayload = {action: 'create'}"
@@ -33,7 +33,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="tcpFromProcedurePopup.hide()">
+            <div *uxgPopoverContent (click)="procedureModal.hide()">
               <div>Нет доступных для выбора позиций КП</div>
               <div>Создание процедуры недоступно.</div>
             </div>
@@ -41,7 +41,7 @@
         </uxg-popover>
 
         <!-- Новая группа КП  -->
-        <uxg-popover #tcpGroupPopup [openOnHover]="true" class="popover-item">
+        <uxg-popover #groupFormModal [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="editedGroup = null; groupFormModal.open()">
@@ -50,7 +50,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="tcpGroupPopup.hide()">
+            <div *uxgPopoverContent (click)="groupFormModal.hide()">
               <div>Нет доступных для выбора позиций КП</div>
               <div>Создание КП недоступно.</div>
             </div>
@@ -58,7 +58,7 @@
         </uxg-popover>
 
         <!-- КП из шаблона  -->
-        <uxg-popover #tcpFromTemplatePopup [openOnHover]="true" class="popover-item">
+        <uxg-popover #templateFormPopup [openOnHover]="true" class="popover-item">
           <button uxgButton primary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="formTemplate.reset(); uploadTemplateModal.open();">
@@ -67,7 +67,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="tcpFromTemplatePopup.hide()">
+            <div *uxgPopoverContent (click)="templateFormPopup.hide()">
               <div>Нет доступных для выбора позиций КП</div>
               <div>Создание КП из шаблона недоступно.</div>
             </div>
@@ -133,7 +133,7 @@
 
 <uxg-modal #uploadTemplateModal size="l" (stateChange)="$event && (files = [])">
   <ng-container *ngIf="uploadTemplateModal.state">
-    <h2 class="modal-title"><b>Загрузить технико-коммерческие предложения из шаблона</b></h2>
+    <h2 class="modal-title"><b>Загрузить коммерческие предложения из шаблона</b></h2>
     <div class="app-secondary-color template">
       Вы можете создать КП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(request))"><b>скачать
       шаблон</b></a>) и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько КП.

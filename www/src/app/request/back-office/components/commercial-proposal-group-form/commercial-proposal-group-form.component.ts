@@ -19,10 +19,10 @@ import { CommercialProposalsService } from "../../services/commercial-proposals.
   styleUrls: ['./commercial-proposal-group-form.component.scss']
 })
 export class CommercialProposalGroupFormComponent implements OnInit, OnDestroy {
-  @Input() availablePositions$: Observable<RequestPosition[]>;
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() cancel = new EventEmitter();
   @Output() create = new EventEmitter<ProposalGroup>();
+  @Input() availablePositions$: Observable<RequestPosition[]>;
   @Input() requestId: Uuid;
   @Input() group: ProposalGroup;
   isLoading = false;

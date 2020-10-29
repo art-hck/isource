@@ -119,7 +119,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
 
   updateGroups(): void {
     this.service.groupList(this.requestId).subscribe(groups => {
-      groups.forEach(tcpGroup => this.newGroup$.next(tcpGroup));
+      groups.forEach(group => this.newGroup$.next(group));
     });
   }
 

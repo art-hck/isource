@@ -120,6 +120,7 @@
   <h2 *ngIf="editedGroup">Редактирование ТКП</h2>
   <app-technical-commercial-proposal-group-form
     *ngIf="groupFormModal.state"
+    [availablePositions$]="availablePositions$"
     [group]="editedGroup"
     (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="requestId"
     (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event)"

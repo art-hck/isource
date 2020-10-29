@@ -25,7 +25,7 @@ export class CommercialProposalGroupViewComponent {
   readonly filter$ = new BehaviorSubject<CommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
 
-  readonly tcpGroups$: Observable<ProposalGroup[]> = this.route.params.pipe(
+  readonly groups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
     delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
     withLatestFrom(this.request$),
