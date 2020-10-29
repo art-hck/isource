@@ -2,19 +2,16 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { RequestPosition } from "../../../common/models/request-position";
 import { UxgModalComponent } from "uxg";
 import { iif, Observable, Subject, throwError } from "rxjs";
-import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
-import { catchError, finalize, map, takeUntil, tap } from "rxjs/operators";
+import { ProposalGroup } from "../../../common/models/proposal-group";
+import { catchError, finalize, map, takeUntil } from "rxjs/operators";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { RequestService } from "../../services/request.service";
-import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 import { Uuid } from "../../../../cart/models/uuid";
-import { Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
-import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import { Store } from "@ngxs/store";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
-import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
 import { searchPosition } from "../../../../shared/helpers/search";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-form',
@@ -22,21 +19,16 @@ import { searchPosition } from "../../../../shared/helpers/search";
   styleUrls: ['./technical-commercial-proposal-group-form.component.scss']
 })
 export class TechnicalCommercialProposalGroupFormComponent implements OnInit, OnDestroy {
-  @Select(TechnicalCommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() cancel = new EventEmitter();
-  @Output() create = new EventEmitter<TechnicalCommercialProposalGroup>();
+  @Output() create = new EventEmitter<ProposalGroup>();
+  @Input() availablePositions$: Observable<RequestPosition[]>;
   @Input() requestId: Uuid;
-  @Input() positions: RequestPosition[];
-  @Input() group: TechnicalCommercialProposalGroup;
+  @Input() group: ProposalGroup;
   isLoading = false;
   readonly searchPosition = searchPosition;
   readonly destroy$ = new Subject();
-  readonly mergeWithExistPositions$ = this.availablePositions$.pipe(map(
-    positions => (this.group?.requestPositions ?? [])
-      .filter(groupPosition => positions?.every(({ id }) => groupPosition.id !== id))
-      .reduce((arr, curr) => [curr, ...arr], positions)
-  ));
+  mergeWithExistPositions$: Observable<(RequestPosition | ProposalGroup['requestPositions'][number])[]>;
 
   readonly form = this.fb.group({
     name: [null, Validators.required],
@@ -54,12 +46,11 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
   ngOnInit() {
     this.form.patchValue(this.group ?? {});
 
-    if (!this.positions) {
-      this.route.params.pipe(
-        tap(({ id }) => this.store.dispatch(new FetchAvailablePositions(id))),
-        takeUntil(this.destroy$)
-      ).subscribe();
-    }
+    this.mergeWithExistPositions$ = this.availablePositions$?.pipe(map(
+      positions => (this.group?.requestPositions ?? [])
+        .filter(groupPosition => positions?.every(({ id }) => groupPosition.id !== id))
+        .reduce((arr, curr) => [curr, ...arr], positions)
+    ));
   }
 
   mergeWithExistPositions(positions: RequestPosition[]) {

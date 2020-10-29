@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { TechnicalCommercialProposalGroup } from "../../../common/models/technical-commercial-proposal-group";
+import { ProposalGroup } from "../../../common/models/proposal-group";
 import { delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
@@ -40,12 +40,12 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   @Select(TechnicalCommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   requestId: Uuid;
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
-  editedGroup: TechnicalCommercialProposalGroup;
+  editedGroup: ProposalGroup;
   files: File[] = [];
   destroy$ = new Subject();
 
   readonly procedureSource = ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL;
-  readonly newGroup$ = new BehaviorSubject<TechnicalCommercialProposalGroup>(null);
+  readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
   readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
   readonly formTemplate = this.fb.group({
@@ -53,7 +53,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     fileTemplate: [null, [Validators.required]]
   });
 
-  readonly tcpGroups$: Observable<TechnicalCommercialProposalGroup[]> = this.route.params.pipe(
+  readonly tcpGroups$: Observable<ProposalGroup[]> = this.route.params.pipe(
     tap(({ id }) => this.requestId = id),
     delayWhen(({ id }) => this.store.dispatch([new RequestActions.Fetch(id), new FetchAvailablePositions(id), new FetchProcedures(id)])),
     withLatestFrom(this.request$),
@@ -64,7 +64,9 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     ]),
     switchMap(() => this.filter$),
     switchMap((filter) => this.service.groupList(this.requestId, filter)),
-    switchMap(groups => this.newGroup$.pipe(scan((acc, group) => {
+    switchMap(groups => this.newGroup$.pipe(
+      tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
+      scan((acc, group) => {
       if (group) {
         const i = acc.findIndex(({id}) => group?.id === id);
         i !== -1 ? acc[i] = group : acc.push(group);
@@ -122,10 +124,6 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
     });
   }
 
-  fetchAvailablePositions(): void {
-    this.store.dispatch(new FetchAvailablePositions(this.requestId));
-  }
-
   submit() {
     if (this.formTemplate.valid) {
       this.uploadTemplateModal.close();
@@ -136,7 +134,7 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
           this.formTemplate.get('fileTemplate').value,
           this.formTemplate.get('technicalCommercialProposalGroupName').value
         )
-      ).pipe(finalize(() => this.fetchAvailablePositions())).subscribe();
+      ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe();
     }
   }
 

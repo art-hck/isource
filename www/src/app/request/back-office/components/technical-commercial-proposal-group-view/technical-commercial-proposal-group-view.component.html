@@ -78,11 +78,11 @@
 </div>
 <div class="app-row">
   <div class="app-col">
-    <app-technical-commercial-proposal-group
+    <app-proposal-group
       *ngFor="let group of tcpGroups$ | async"
-      [technicalCommercialProposalGroup]="group"
+      [group]="group"
       (edit)="editedGroup = group; groupFormModal.open()"
-    ></app-technical-commercial-proposal-group>
+    ></app-proposal-group>
   </div>
 
   <app-filter [formGroup]="form" [count]="(tcpGroups$ | async)?.length" (filter)="filter($event)">
@@ -120,10 +120,10 @@
   <h2 *ngIf="editedGroup">Редактирование ТКП</h2>
   <app-technical-commercial-proposal-group-form
     *ngIf="groupFormModal.state"
+    [availablePositions$]="availablePositions$"
     [group]="editedGroup"
-    [positions]="(availablePositions$ | async)"
     (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="requestId"
-    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event); fetchAvailablePositions();"
+    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event)"
   >
   </app-technical-commercial-proposal-group-form>
 </uxg-modal>

@@ -13,6 +13,7 @@ import { RequestListComponent } from "./components/request-list/request-list.com
 import { Routes } from "../../core/models/routes";
 import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
+import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
 
 const routes: Routes = [
   {
@@ -47,8 +48,12 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
-        component: CommercialProposalViewComponent,
+        component: CommercialProposalGroupViewComponent,
         data: { title: "Коммерческие предложения"}
+      },
+      {
+        path: 'commercial-proposals/:groupId',
+        component: CommercialProposalViewComponent,
       },
       {
         path: 'technical-commercial-proposals',
