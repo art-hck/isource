@@ -11,9 +11,11 @@ import { RequestPosition } from "../../common/models/request-position";
 import { ContragentList } from "../../../contragent/models/contragent-list";
 import { PositionStatus } from "../../common/enum/position-status";
 import { CommercialProposalsStatus } from "../../common/enum/commercial-proposals-status";
+import { saveAs } from 'file-saver/src/FileSaver';
 import Fetch = CommercialProposals.Fetch;
 import Update = CommercialProposals.Update;
 import Review = CommercialProposals.Review;
+import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
 
 export interface CommercialProposalStateModel {
   positions: RequestPosition[];
@@ -72,4 +74,12 @@ export class CommercialProposalState {
 
     return this.rest.review(requestId, body).pipe(switchMap(() => dispatch(new Update(requestId, groupId))));
   }
+
+  @Action(DownloadAnalyticalReport)
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
+      tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
+    );
+  }
+
 }

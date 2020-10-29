@@ -33,4 +33,9 @@ export class CommercialProposalsService {
     const url = `requests/customer/${requestId}/commercial-proposals/change-statuses`;
     return this.api.post(url, body);
   }
+
+  downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/customer/${ requestId }/analytic-report/download-by-cp`;
+    return this.api.post(url, { requestCommercialProposalGroupId: groupId }, { responseType: 'blob' });
+  }
 }

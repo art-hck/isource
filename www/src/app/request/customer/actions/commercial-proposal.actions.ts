@@ -22,4 +22,11 @@ export namespace CommercialProposals {
     static readonly type = '[Commercial Proposals Customer] Review';
     constructor(public requestId: Uuid, public groupId: Uuid, public body: CommercialProposalReviewBody) {}
   }
+
+  // Скачать аналитическую справку
+  export class DownloadAnalyticalReport {
+    static readonly type = '[Commercial Proposals Customer] DownloadAnalyticalReport';
+
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
+  }
 }
