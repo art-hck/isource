@@ -107,6 +107,7 @@
             #proposalOnReview
             [chooseBy$]="chooseBy$"
             [requestId]="requestId"
+            [groupId]="groupId"
             [position]="convertPosition(position)"
             [proposals]="convertProposals(position.linkedOffers)"
             (show)="modalData = {proposal: $event, position: convertPosition(position)}"

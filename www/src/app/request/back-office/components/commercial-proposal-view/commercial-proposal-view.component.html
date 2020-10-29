@@ -6,7 +6,7 @@
         <div class="app-row" [class.app-layout]="view !== 'list'">
           <div class="app-col">
             <div class="app-row app-justify-content-end analytical-report">
-              <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport())">
+              <button uxgButton clear class="app-link" (click)="store.dispatch(downloadAnalyticalReport(request, groupId))">
                 <span>Аналитическая справка </span>
                 <uxg-icon shape="app-download"></uxg-icon>
               </button>
@@ -70,7 +70,7 @@
 
                   <!-- Отправить на согласование -->
                   <button *ngIf="view !=='list'" uxgButton primary [disabled]="selectedPositions?.length === 0 || (status$ | async) !=='received'"
-                          (click)="store.dispatch(publishPositions())">
+                          (click)="store.dispatch(publishPositions(request, groupId))">
                     Отправить на согласование
                   </button>
 
@@ -146,7 +146,7 @@
                   <span>На согласовании</span>
                 </div>
                 <ng-container *ngIf="this.canRollback(position)">
-                  <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(position))">
+                  <button uxgButton primary type="button" [style.min-width.px]="135" (click)="store.dispatch(rollback(request, groupId, position))">
                     Отозвать <span class="cancel-timer"> {{ position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
                   </button>
                 </ng-container>
@@ -163,6 +163,7 @@
             <app-request-procedure-form
               *ngIf="procedureModalPayload"
               [request]="request"
+              [commercialProposalGroupId]="groupId"
               [positions]="positions"
               [action]="procedureModalPayload.action"
               [procedure]="procedureModalPayload.procedure"
@@ -170,8 +171,8 @@
               [contragents]="contragentsWithTp$ | async"
               [isLoading]="loadingContragentList"
               (cancel)="procedureModalPayload = null"
-              (positionsSelected)="onPositionsSelected($event)"
-              (complete)="this.store.dispatch(refresh()); procedureModalPayload = null"
+              (positionsSelected)="onPositionsSelected(request, $event)"
+              (complete)="this.store.dispatch(refresh(request, groupId)); procedureModalPayload = null"
             ></app-request-procedure-form>
         </uxg-modal>
 
@@ -179,7 +180,7 @@
           <ng-container *ngIf="uploadTemplateModal.state">
             <h2 class="modal-title"><b>Загрузить коммерческие предложения из шаблона</b></h2>
             <div class="app-secondary-color template">
-              Вы можете загрузить КП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(request))"><b>скачать
+              Вы можете загрузить КП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(request, groupId))"><b>скачать
               шаблон</b></a>), и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько КП.
             </div>
             <br>
@@ -189,7 +190,7 @@
             <ng-template uxgModalFooter>
               <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
               <button uxgButton primary lg
-                      (click)="store.dispatch(uploadTemplate(files)); uploadTemplateModal.close()"
+                      (click)="store.dispatch(uploadTemplate(request, files, groupId)); uploadTemplateModal.close()"
                       [disabled]="files.length === 0">
                 Загрузить
               </button>
@@ -220,7 +221,7 @@
             *ngIf="addContragentModal.state"
             [excluded]="suppliers"
             (close)="addContragentModal.close()"
-            (add)="store.dispatch(addSupplier($event))"
+            (add)="store.dispatch(addSupplier(request, groupId, $event))"
           ></grid-contragent-form>
         </uxg-modal>
 
@@ -233,7 +234,7 @@
             [procedureId]="prolongModalPayload.procedureId"
             [requestId]="requestId"
             (close)="prolongModalPayload = null"
-            (complete)="this.store.dispatch(refresh()); prolongModalPayload = null"
+            (complete)="this.store.dispatch(refresh(request, groupId)); prolongModalPayload = null"
           ></app-procedure-prolongate>
         </uxg-modal>
 

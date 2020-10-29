@@ -11,14 +11,14 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { Store } from "@ngxs/store";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
 import { searchPosition } from "../../../../shared/helpers/search";
-import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-group-form',
-  templateUrl: './technical-commercial-proposal-group-form.component.html',
-  styleUrls: ['./technical-commercial-proposal-group-form.component.scss']
+  selector: 'app-commercial-proposal-group-form',
+  templateUrl: './commercial-proposal-group-form.component.html',
+  styleUrls: ['./commercial-proposal-group-form.component.scss']
 })
-export class TechnicalCommercialProposalGroupFormComponent implements OnInit, OnDestroy {
+export class CommercialProposalGroupFormComponent implements OnInit, OnDestroy {
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() cancel = new EventEmitter();
   @Output() create = new EventEmitter<ProposalGroup>();
@@ -39,7 +39,7 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private service: TechnicalCommercialProposalService,
+    private service: CommercialProposalsService,
     private store: Store
   ) {}
 
@@ -47,10 +47,10 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
     this.form.patchValue(this.group ?? {});
 
     this.mergeWithExistPositions$ = this.availablePositions$?.pipe(map(
-      positions => (this.group?.requestPositions ?? [])
-        .filter(groupPosition => positions?.every(({ id }) => groupPosition.id !== id))
-        .reduce((arr, curr) => [curr, ...arr], positions)
-    ));
+        positions => (this.group?.requestPositions ?? [])
+          .filter(groupPosition => positions?.every(({ id }) => groupPosition.id !== id))
+          .reduce((arr, curr) => [curr, ...arr], positions)
+      ));
   }
 
   mergeWithExistPositions(positions: RequestPosition[]) {
@@ -76,7 +76,7 @@ export class TechnicalCommercialProposalGroupFormComponent implements OnInit, On
       finalize(() => this.isLoading = false),
       takeUntil(this.destroy$),
       catchError(err => {
-        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при создании ТКП"));
+        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при создании КП"));
         return throwError(err);
       }),
     ).subscribe(group => this.create.emit(group));
