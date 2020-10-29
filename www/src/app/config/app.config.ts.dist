@@ -7,7 +7,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     api: 'api/',
     ws: 'ws://localhost:3000',
     apiChat: 'https://chat-test.isource.ru/',
-    wsChat: 'wss://chat-test.isource.ru',
+    wsChat: 'wss://chat-test.isource.ru/ws',
   },
   files: {
     allowedExtensions: [

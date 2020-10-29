@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { Menu, MenuModel } from "../../models/menu.model";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
@@ -17,6 +17,7 @@ import { APP_CONFIG, GpnmarketConfigInterface } from "../../config/gpnmarket-con
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit, OnDestroy {
+  @Output() openModal = new EventEmitter();
 
   get menu(): MenuModel[] {
     return [...Menu, ...this.appConfig.menu.additionalItems]

@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component, ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Title } from "@angular/platform-browser";
@@ -10,6 +19,7 @@ import { UxgBreadcrumbsService } from "uxg";
 import { FeatureService } from "./core/services/feature.service";
 import { APP_CONFIG, GpnmarketConfigInterface } from "./core/config/gpnmarket-config.interface";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
+import { NotificationListComponent } from "./core/components/notification-list/notification-list.component";
 
 @Component({
   selector: 'app-root',
@@ -17,6 +27,8 @@ import { DOCUMENT, isPlatformBrowser } from "@angular/common";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('notificationModal') notificationModal: NotificationListComponent;
+
   subscription = new Subscription();
   isBreadcrumbsHidden: boolean;
   noContentPadding: boolean;
@@ -101,6 +113,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.bc.breadcrumbs = [];
         this.titleService.setTitle(data.title);
         this.cd.detectChanges();
+        this.notificationModal.close();
       }),
     ).subscribe();
   }

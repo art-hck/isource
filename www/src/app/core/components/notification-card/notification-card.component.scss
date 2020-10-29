@@ -1,0 +1,31 @@
+@import "src/theme";
+
+.notification-card {
+  height: 142px;
+  width: 412px;
+  border: solid 1px uxg($theme, color-border);
+  border-radius: 4px;
+  padding: 18px;
+  margin-bottom: 16px;
+  &-header {
+    margin-bottom: 10px;
+  }
+  &-request {
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  &.not_seen {
+    background-color: #F0FAF6;
+    border: 0;
+  }
+}
+
+.date {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+a {
+  height: 112px;
+}

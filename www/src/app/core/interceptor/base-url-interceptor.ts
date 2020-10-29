@@ -1,12 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from "rxjs";
+import { from, Observable } from "rxjs";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
+import { KeycloakService } from "keycloak-angular";
+import { async } from "rxjs/internal/scheduler/async";
+import { skipWhile, switchMap, tap } from "rxjs/operators";
 
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
 
-  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface) {
+  constructor(@Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface, private keycloakService: KeycloakService) {
   }
 
   /**
@@ -38,6 +41,29 @@ export class BaseUrlInterceptor implements HttpInterceptor {
         url: req.url.replace("#intelplan#", this.appConfig.intelplan.url)
       });
       return next.handle(req);
+    }
+
+    if (req.url.indexOf('#notifications#') === 0) {
+      return from(this.keycloakService.getToken()).pipe(
+        skipWhile(token => !token),
+        tap(token => req = req.clone({
+          headers: req.headers.set('Authorization', `Bearer ${token}`),
+          url: req.url.replace("#notifications#", this.appConfig.notifications.url)
+        })),
+        switchMap(() => next.handle(req)));
+    //   this.keycloakService.getToken().then(accessToken => {
+    //     //   console.log(accessToken);
+    //     req = req.clone({
+    //       // headers: req.headers.set('Accept', 'application/json'),
+    //       // headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
+    //       // setHeaders: {
+    //       //   Authorization: `Bearer ${accessToken}`
+    //       // },
+    //       url: req.url.replace("#notifications#", this.appConfig.notifications.url)
+    //     });
+    //
+    //     return next.handle(req);
+    //   });
     }
 
     if (req.url.indexOf('http') === 0 || req.url.indexOf('https') === 0 ) {
