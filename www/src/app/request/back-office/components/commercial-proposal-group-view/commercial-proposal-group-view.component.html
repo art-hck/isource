@@ -41,7 +41,7 @@
         </uxg-popover>
 
         <!-- Новая группа КП  -->
-        <uxg-popover #groupFormModal [openOnHover]="true" class="popover-item">
+        <uxg-popover #groupFormPopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
                   [disabled]="!(availablePositions$ | async)?.length"
                   (click)="editedGroup = null; groupFormModal.open()">
@@ -50,7 +50,7 @@
           </button>
 
           <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="groupFormModal.hide()">
+            <div *uxgPopoverContent (click)="groupFormPopover.hide()">
               <div>Нет доступных для выбора позиций КП</div>
               <div>Создание КП недоступно.</div>
             </div>
