@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { ProposalGroup } from "../../../common/models/proposal-group";
 import { delayWhen, scan, shareReplay, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { Uuid } from "../../../../cart/models/uuid";
 import { RequestState } from "../../states/request.state";
 import { RequestActions } from "../../actions/request.actions";
@@ -11,7 +11,7 @@ import { UxgBreadcrumbsService } from "uxg";
 import { Select, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
 import { FormBuilder } from "@angular/forms";
-import { TechnicalCommercialProposalGroupFilter } from "../../../common/models/technical-commercial-proposal-group-filter";
+import { CommercialProposalGroupFilter } from "../../../common/models/commercial-proposal-group-filter";
 import moment from "moment";
 
 @Component({
@@ -22,7 +22,7 @@ export class CommercialProposalGroupViewComponent {
   @Select(RequestState.request) request$: Observable<Request>;
   requestId: Uuid;
   readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
-  readonly filter$ = new BehaviorSubject<TechnicalCommercialProposalGroupFilter>({});
+  readonly filter$ = new BehaviorSubject<CommercialProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
 
   readonly tcpGroups$: Observable<ProposalGroup[]> = this.route.params.pipe(
@@ -32,7 +32,7 @@ export class CommercialProposalGroupViewComponent {
     tap(([p, { id, number }]) => this.bc.breadcrumbs = [
       { label: "Заявки", link: "/requests/customer" },
       { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-      { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
+      { label: 'Согласование КП', link: `/requests/customer/${this.requestId}/commercial-proposals`},
     ]),
     switchMap(() => this.filter$),
     switchMap((filter) => this.service.groupList(this.requestId, filter)),
@@ -52,10 +52,10 @@ export class CommercialProposalGroupViewComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private store: Store,
-    public service: TechnicalCommercialProposalService,
+    public service: CommercialProposalsService,
   ) {}
 
-  filter(filter: TechnicalCommercialProposalGroupFilter) {
+  filter(filter: CommercialProposalGroupFilter) {
     this.filter$.next({
       ...filter,
       createdDateFrom: filter.createdDateFrom ? moment(filter.createdDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,

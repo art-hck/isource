@@ -208,7 +208,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     delete body['timeEndRegistration'];
     delete body['timeSummingUp'];
 
-    if (this.procedureSource === ProcedureSource.TECHNICAL_COMMERCIAL_PROPOSAL && this.proposalGroupId) {
+    if (this.proposalGroupId) {
       body['requestTechnicalCommercialProposalGroupId'] = this.proposalGroupId;
     }
 
