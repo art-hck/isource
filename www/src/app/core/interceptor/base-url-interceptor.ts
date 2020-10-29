@@ -51,19 +51,6 @@ export class BaseUrlInterceptor implements HttpInterceptor {
           url: req.url.replace("#notifications#", this.appConfig.notifications.url)
         })),
         switchMap(() => next.handle(req)));
-    //   this.keycloakService.getToken().then(accessToken => {
-    //     //   console.log(accessToken);
-    //     req = req.clone({
-    //       // headers: req.headers.set('Accept', 'application/json'),
-    //       // headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
-    //       // setHeaders: {
-    //       //   Authorization: `Bearer ${accessToken}`
-    //       // },
-    //       url: req.url.replace("#notifications#", this.appConfig.notifications.url)
-    //     });
-    //
-    //     return next.handle(req);
-    //   });
     }
 
     if (req.url.indexOf('http') === 0 || req.url.indexOf('https') === 0 ) {
