@@ -58,6 +58,9 @@ export const AppConfig: GpnmarketConfigInterface = {
   intelplan: {
       url: 'https://intelplan.gpb.isale.pro/api/v1/'
       },
+  notifications: {
+      url: 'https://notifications-test.isource.ru/api/v1/notifications'
+      },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
     forBackoffice: "assets/Краткая инструкция БО (по внешним клиентам).pdf",
