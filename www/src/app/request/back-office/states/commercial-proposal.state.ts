@@ -24,9 +24,11 @@ import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import Rollback = CommercialProposalsActions.Rollback;
+import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import { SupplierCommercialProposalInfo } from "../models/supplier-commercial-proposal-info";
 
 export interface CommercialProposalStateModel {
+  availablePositions: RequestPosition[];
   positions: RequestPosition[];
   suppliers: SupplierCommercialProposalInfo[];
   procedures: Procedure[];
@@ -38,7 +40,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeCommercialProposals',
-  defaults: { positions: null, suppliers: null, procedures: null, status: "pristine" }
+  defaults: { positions: null, availablePositions: null, suppliers: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class CommercialProposalState {
@@ -52,44 +54,50 @@ export class CommercialProposalState {
 
   @Selector() static commercialProposals({ suppliers, positions }: Model) { return { suppliers, positions }; }
   @Selector() static positions({ positions }: Model) { return positions; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }
   @Selector() static status({ status }: Model) { return status; }
 
   @Action([Fetch, Refresh])
-  fetch({ setState, dispatch }: Context, { update, requestId }: Fetch) {
+  fetch({ setState, dispatch }: Context, { update, requestId, groupId }: Fetch) {
     if (update) {
       setState(patch({ status: "updating" } as Model));
     } else {
       setState(patch({ positions: null, suppliers: null, status: "fetching" } as Model));
     }
 
-    return this.rest.getOffers(requestId).pipe(
-      tap(({positions, suppliers}) => setState(patch({ positions, suppliers } as Model))),
+    return this.rest.getOffers(requestId, groupId).pipe(
+      tap(({positions = [], suppliers = []}) => setState(patch({ positions, suppliers } as Model))),
       switchMap(() => dispatch( update ? new RefreshProcedures(requestId) : new FetchProcedures(requestId))),
       tap(() => setState(patch({ status: "received" } as Model))),
     );
   }
 
+  @Action([FetchAvailablePositions])
+  fetchAvailablePositions({ setState }: Context, { requestId }: FetchAvailablePositions) {
+    return this.rest.availablePositions(requestId).pipe(tap(availablePositions => setState(patch({ availablePositions }))));
+  }
+
   @Action([FetchProcedures, RefreshProcedures])
-  fetchProcedures({ setState }: Context, { update, requestId }: Fetch) {
+  fetchProcedures({ setState }: Context, { update, requestId, groupId }: FetchProcedures) {
     if (update) {
       setState(patch({ status: "updating" } as Model));
     } else {
       setState(patch({ procedures: null, status: "fetching" } as Model));
     }
 
-    return this.procedureService.list(requestId, ProcedureSource.COMMERCIAL_PROPOSAL).pipe(
+    return this.procedureService.list(requestId, ProcedureSource.COMMERCIAL_PROPOSAL, groupId).pipe(
       tap(procedures => setState(patch({ procedures, status: "received" } as Model))),
     );
   }
 
   @Action(AddSupplier)
-  addSupplier({ setState, dispatch }: Context, { requestId, supplierId }: AddSupplier) {
+  addSupplier({ setState, dispatch }: Context, { requestId, groupId, supplierId }: AddSupplier) {
     setState(patch({ status: "updating" } as Model));
 
-    return this.rest.addSupplier(requestId, supplierId).pipe(
+    return this.rest.addSupplier(requestId, groupId, supplierId).pipe(
       tap(suppliers => setState(patch({suppliers, status: "received"} as Model)))
     );
   }
@@ -107,9 +115,9 @@ export class CommercialProposalState {
   }
 
   @Action(PublishPositions)
-  publishPositions({ setState, dispatch }: Context, { requestId, positions }: PublishPositions) {
+  publishPositions({ setState, dispatch }: Context, { requestId, groupId, positions }: PublishPositions) {
     setState(patch({ status: "updating" } as Model));
-    return this.rest.publishRequestOffers(requestId, positions).pipe(tap(() => dispatch(new Refresh(requestId))));
+    return this.rest.publishRequestOffers(requestId, positions).pipe(tap(() => dispatch(new Refresh(requestId, groupId))));
   }
 
   @Action(Rollback)
@@ -124,28 +132,28 @@ export class CommercialProposalState {
   }
 
   @Action(DownloadAnalyticalReport)
-  downloadAnalyticalReport(ctx: Context, { requestId }: DownloadAnalyticalReport) {
-    return this.rest.downloadAnalyticalReport(requestId).pipe(
+  downloadAnalyticalReport(ctx: Context, { requestId, groupId }: DownloadAnalyticalReport) {
+    return this.rest.downloadAnalyticalReport(requestId, groupId).pipe(
       tap((data) => saveAs(data, `Аналитическая справка.xlsx`))
     );
   }
 
   @Action(DownloadTemplate)
-  downloadTemplate(ctx: Context, { request }: DownloadTemplate) {
-    return this.rest.downloadTemplate(request).pipe(
-      tap((data) => saveAs(data, `Request${request.number}OffersTemplate.xlsx`))
+  downloadTemplate(ctx: Context, { requestId, groupId }: DownloadTemplate) {
+    return this.rest.downloadTemplate(requestId, groupId).pipe(
+      tap((data) => saveAs(data, `RequestOffersTemplate.xlsx`))
     );
   }
 
   @Action(UploadTemplate)
-  uploadTemplate({ setState, dispatch }: Context, { requestId, files }: UploadTemplate) {
+  uploadTemplate({ setState, dispatch }: Context, { requestId, files, groupId, groupName }: UploadTemplate) {
     setState(patch({ status: "updating" } as Model));
-    return this.rest.addOffersFromExcel(requestId, files).pipe(tap(
+    return this.rest.addOffersFromExcel(requestId, files, groupId, groupName).pipe(tap(
         () => dispatch([
-          new Refresh(requestId),
+          new Refresh(requestId, groupId),
           new ToastActions.Success("Шаблон импортирован")
         ]),
-        () => dispatch(new Refresh(requestId)))
+        () => dispatch(new Refresh(requestId, groupId)))
     );
   }
 }

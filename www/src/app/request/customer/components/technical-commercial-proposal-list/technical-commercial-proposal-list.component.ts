@@ -1,19 +1,8 @@
 import { ActivatedRoute } from "@angular/router";
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, pipe, Subject } from "rxjs";
 import { Request } from "../../../common/models/request";
-import { finalize, delayWhen, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, finalize, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { Uuid } from "../../../../cart/models/uuid";
 import { UxgBreadcrumbsService, UxgRadioItemComponent, UxgTabTitleComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
@@ -38,6 +27,9 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
+import { Procedure } from "../../../back-office/models/procedure";
+import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import { Title } from "@angular/platform-browser";
 import Reject = TechnicalCommercialProposals.Reject;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
@@ -47,9 +39,6 @@ import REJECTED = TechnicalCommercialProposalPositionStatus.REJECTED;
 import SENT_TO_EDIT = TechnicalCommercialProposalPositionStatus.SENT_TO_EDIT;
 import SENT_TO_REVIEW = TechnicalCommercialProposalPositionStatus.SENT_TO_REVIEW;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
-import { Procedure } from "../../../back-office/models/procedure";
-import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -123,7 +112,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   get selectedToApproveProposals(): (TechnicalCommercialProposal | Proposal)[] {
     // Получаем список ID выбранных предложений
     const selectedToApproveProposalsIds = this.proposalsOnReview?.filter(
-        proposal => proposal.selectedProposal.value
+      proposal => proposal.selectedProposal.value
     ).map(proposal => proposal.selectedProposal.value.id);
 
     let selectedToApproveProposals = this.proposalsOnReview?.filter(
@@ -163,7 +152,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     const selectedProposals = this.selectedToApproveProposals.concat(this.selectedToSendToEditProposals);
 
     // Получаем всех поставщиков из собранных и объединённых предложений
-    const flatProposalsSuppliers = selectedProposals.map(({supplier}) => supplier);
+    const flatProposalsSuppliers = selectedProposals.map(({ supplier }) => supplier);
 
     // Убираем из массива поставщиков повторяющиеся значения и оставляем только уникальных
     const uniqueProposalsSuppliers = flatProposalsSuppliers.filter((supplier, index, array) =>
@@ -191,7 +180,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
 
   get disabled() {
     return this.proposalsOnReview?.toArray()
-      .every(({selectedProposal, sendToEditPosition}) => selectedProposal.invalid && sendToEditPosition.invalid);
+      .every(({ selectedProposal, sendToEditPosition }) => selectedProposal.invalid && sendToEditPosition.invalid);
   }
 
   constructor(
@@ -206,32 +195,29 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     public helper: ProposalHelperService,
     public title: Title,
     public service: TechnicalCommercialProposalService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.route.params.pipe(
       tap(({ id }) => this.requestId = id),
       tap(({ groupId }) => this.groupId = groupId),
       tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
-      delayWhen(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
+      delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
       withLatestFrom(this.request$),
       tap(([{ groupId }, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
-        { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-        { label: 'Согласование ТКП', link: `/requests/customer/${this.requestId}/technical-commercial-proposals`},
-        { label: 'Страница предложений', link: `/requests/customer/${this.requestId}/technical-commercial-proposals/${groupId}` }
+        { label: `Заявка №${ number }`, link: `/requests/customer/${ id }` },
+        { label: 'Согласование ТКП', link: `/requests/customer/${ id }/technical-commercial-proposals` },
+        {
+          label: 'Страница предложений',
+          link: `/requests/customer/${ id }/technical-commercial-proposals/${ groupId }`
+        }
       ]),
       switchMap(([{ id, groupId }]) => this.service.getGroupInfo(id, groupId)),
-      tap(({name}) => this.title.setTitle(name)),
+      tap(({ name }) => this.title.setTitle(name)),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({ groupId }) => this.groupId = groupId),
-      switchMap(({ id, groupId }) => this.service.getGroupInfo(id, groupId)),
-      takeUntil(this.destroy$)
-    ).subscribe(({name}) => this.title.setTitle(name));
 
     this.actions.pipe(
       ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
@@ -241,16 +227,21 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
       const length = (action?.proposalPositions?.length ?? 0) + (action?.requestPositions?.length ?? 0) || 1;
       let text = "";
       switch (true) {
-        case action instanceof Reject: text = "$1 отклонено"; break;
-        case action instanceof SendToEditMultiple: text = "$2 на доработке"; break;
-        default: text = "По $0 принято решение";
+        case action instanceof Reject:
+          text = "$1 отклонено";
+          break;
+        case action instanceof SendToEditMultiple:
+          text = "$2 на доработке";
+          break;
+        default:
+          text = "По $0 принято решение";
       }
 
       text = text.replace(/\$(\d)/g, (all, i) => [
-          this.pluralize.transform(length, "позиции", "позициям", "позициям"),
-          this.pluralize.transform(length, "предложение", "предложения", "предложений"),
-          this.pluralize.transform(length, "позиция", "позиции", "позиций"),
-        ][i] || all);
+        this.pluralize.transform(length, "позиции", "позициям", "позициям"),
+        this.pluralize.transform(length, "предложение", "предложения", "предложений"),
+        this.pluralize.transform(length, "позиция", "позиции", "позиций"),
+      ][i] || all);
 
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) : new ToastActions.Success(text)
@@ -279,7 +270,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     const acceptedProposalPositions = [];
     const sendToEditRequestPositions = [];
 
-    if (this.proposalsOnReview.filter(({selectedProposal}) => selectedProposal.valid).length) {
+    if (this.proposalsOnReview.filter(({ selectedProposal }) => selectedProposal.valid).length) {
       this.proposalsOnReview
         .filter(({ selectedProposal }) => selectedProposal.valid)
         .map(({ selectedProposal }) => {
@@ -287,7 +278,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
         });
     }
 
-    if (this.proposalsOnReview.filter(({sendToEditPosition}) => sendToEditPosition.valid).length) {
+    if (this.proposalsOnReview.filter(({ sendToEditPosition }) => sendToEditPosition.valid).length) {
       this.proposalsOnReview
         .filter(({ sendToEditPosition }) => sendToEditPosition.valid)
         .map(({ sendToEditPosition }) => {
@@ -326,7 +317,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
    * Выбирает все позиции на отправку на доработку
    */
   selectAllPositionsToSendToEdit(): void {
-    this.sendToEditRadioElRef.forEach((sendToEditRadio: UxgRadioItemComponent) => {
+    this.sendToEditRadioElRef.forEach((sendToEditRadio: UxgRadioItemComponent) => {
       return sendToEditRadio.el.nativeElement.click();
     });
   }
@@ -384,13 +375,13 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   isSentToEdit(proposalByPos: TechnicalCommercialProposalByPosition): boolean {
-    return proposalByPos.data.some(({proposalPosition: p}) => ['SENT_TO_EDIT'].includes(p.status)) && proposalByPos.data.length > 0;
+    return proposalByPos.data.some(({ proposalPosition: p }) => ['SENT_TO_EDIT'].includes(p.status)) && proposalByPos.data.length > 0;
   }
 
   selectProposal(proposal: Proposal): void {
     this.proposalsOnReview
       .filter(({ proposals }) => proposals.some((_proposal) => proposal.id === _proposal.id))
-      .forEach(({selectedProposal}) => selectedProposal.setValue(proposal.sourceProposal));
+      .forEach(({ selectedProposal }) => selectedProposal.setValue(proposal.sourceProposal));
   }
 
   selectSupplierProposal(technicalCommercialProposal: TechnicalCommercialProposal): void {
@@ -412,7 +403,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   getSupplierByProposal = (positionProposals: TechnicalCommercialProposalByPosition, proposal: Proposal<TechnicalCommercialProposalPosition>) => {
-    return positionProposals.data.find(({proposalPosition: {id}}) => id === proposal.id).proposal.supplier;
+    return positionProposals.data.find(({ proposalPosition: { id } }) => id === proposal.id).proposal.supplier;
   }
 
   onPositionSelected(data): void {
@@ -440,10 +431,10 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
   }
 
   getProposal = (positionProposal: TechnicalCommercialProposalByPosition, proposal: Proposal<TechnicalCommercialProposalPosition>) => {
-    return positionProposal.data.find(({proposalPosition: {id}}) => id === proposal.id);
+    return positionProposal.data.find(({ proposalPosition: { id } }) => id === proposal.id);
   }
 
-  converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({proposalPosition}) => new Proposal(proposalPosition));
+  converProposalPosition = ({ data }: TechnicalCommercialProposalByPosition) => data.map(({ proposalPosition }) => new Proposal(proposalPosition));
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
 
   ngOnDestroy() {

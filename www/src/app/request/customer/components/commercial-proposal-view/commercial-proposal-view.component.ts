@@ -1,16 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { UxgBreadcrumbsService, UxgTabTitleComponent } from "uxg";
 import { Uuid } from "../../../../cart/models/uuid";
@@ -21,7 +9,7 @@ import { Request } from "../../../common/models/request";
 import { StateStatus } from "../../../common/models/state-status";
 import { DOCUMENT, getCurrencySymbol } from "@angular/common";
 import { AppComponent } from "../../../../app.component";
-import { filter, startWith, switchMap, takeUntil, tap } from "rxjs/operators";
+import { delayWhen, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { CommercialProposals } from "../../actions/commercial-proposal.actions";
 import { CommercialProposalState } from "../../states/commercial-proposal.state";
@@ -41,6 +29,8 @@ import { CommercialProposalsStatus } from "../../../common/enum/commercial-propo
 import { RequestPositionStatusService } from "../../../common/services/request-position-status.service";
 import { CommercialProposalReviewBody } from "../../../common/models/commercial-proposal-review-body";
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
+import { Title } from "@angular/platform-browser";
+import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import Fetch = CommercialProposals.Fetch;
 import Review = CommercialProposals.Review;
 
@@ -70,6 +60,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   @Select(CommercialProposalState.status) readonly status$: Observable<StateStatus>;
   @Select(CommercialProposalState.suppliers) readonly suppliers$: Observable<SupplierCommercialProposalInfo[]>;
   requestId: Uuid;
+  groupId: Uuid;
   view: ProposalsView = "grid";
   gridRows: ElementRef[];
   showedProposal: Proposal<RequestOfferPosition>;
@@ -94,22 +85,27 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
     private bc: UxgBreadcrumbsService,
     private cd: ChangeDetectorRef,
     private app: AppComponent,
+    private title: Title,
     public helper: ProposalHelperService,
-    public statusService: RequestPositionStatusService
+    public statusService: RequestPositionStatusService,
+    public service: CommercialProposalsService
   ) {}
 
   ngOnInit() {
     this.route.params.pipe(
-      tap(({id}) => this.requestId = id),
-      tap(({id}) => this.store.dispatch(new Fetch(id))),
-      switchMap(({id}) => this.store.dispatch(new RequestActions.Fetch(id))),
-      switchMap(() => this.request$),
-      filter(request => !!request),
-      tap(({id, number}) => this.bc.breadcrumbs = [
+      tap(({ id }) => this.requestId = id),
+      tap(({ groupId }) => this.groupId = groupId),
+      tap(({ id, groupId }) => this.store.dispatch(new Fetch(id, groupId))),
+      delayWhen(({ id }) => this.store.dispatch(new RequestActions.Fetch(id))),
+      withLatestFrom(this.request$),
+      tap(([{ groupId }, { id, number }]) => this.bc.breadcrumbs = [
         { label: "Заявки", link: "/requests/customer" },
-        { label: `Заявка №${number}`, link: `/requests/customer/${id}` },
-        { label: 'Согласование коммерческих предложений', link: `/requests/customer/${id}/commercial-proposals` }
+        { label: `Заявка №${ number }`, link: `/requests/customer/${ id }` },
+        { label: 'Согласование КП', link: `/requests/customer/${ id }/commercial-proposals` },
+        { label: 'Страница предложений', link: `/requests/customer/${ id }/commercial-proposals/${ groupId }` }
       ]),
+      switchMap(([{ id, groupId }]) => this.service.group(id, groupId)),
+      tap(({ name }) => this.title.setTitle(name)),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -131,6 +127,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
   switchView(view: ProposalsView): void {
     this.view = view;
     this.app.noContentPadding = view !== "list";
+    this.app.noHeaderStick = this.app.noContentPadding = view !== "list";
     this.cd.detectChanges();
   }
 
@@ -171,11 +168,11 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy, After
         return _body;
       }, {});
 
-    this.store.dispatch(new Review(this.requestId, body));
+    this.store.dispatch(new Review(this.requestId, this.groupId, body));
   }
 
   sendToEditAll() {
-    this.store.dispatch(new Review(this.requestId, { sendToEdit: this.proposalsOnReview.map(({ position }) => position.id)}));
+    this.store.dispatch(new Review(this.requestId, this.groupId, { sendToEdit: this.proposalsOnReview.map(({ position }) => position.id)}));
   }
 
   convertProposals = (proposals: RequestOfferPosition[]) => proposals.map(p => new Proposal(p));

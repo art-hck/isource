@@ -27,6 +27,7 @@ import { ContractListComponent } from "./components/contract-list/contract-list.
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
 import { TechnicalCommercialProposalConfirmComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-confirm/technical-commercial-proposal-confirm.component';
+import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { TechnicalCommercialProposalConfirmComponent } from './components/techni
     RequestTechnicalProposalComponent,
     TechnicalProposalListComponent,
     CommercialProposalViewComponent,
+    CommercialProposalGroupViewComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
