@@ -36,7 +36,8 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() contragents: ContragentList[] | ContragentShortInfo[] = [];
   @Input() action: ProcedureAction["action"] = "create";
   @Input() procedureSource: ProcedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
-  @Input() proposalGroupId: Uuid;
+  @Input() technicalCommercialProposalGroupId: Uuid;
+  @Input() commercialProposalGroupId: Uuid;
   @Output() complete = new EventEmitter();
   @Output() cancel = new EventEmitter();
   @Output() positionsSelected = new EventEmitter<Uuid[]>();
@@ -208,8 +209,12 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     delete body['timeEndRegistration'];
     delete body['timeSummingUp'];
 
-    if (this.proposalGroupId) {
-      body['requestTechnicalCommercialProposalGroupId'] = this.proposalGroupId;
+    if (this.technicalCommercialProposalGroupId) {
+      body['requestTechnicalCommercialProposalGroupId'] = this.technicalCommercialProposalGroupId;
+    }
+
+    if (this.commercialProposalGroupId) {
+      body['requestCommercialProposalGroupId'] = this.commercialProposalGroupId;
     }
 
     this.isLoading = true;

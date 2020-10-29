@@ -252,7 +252,7 @@
             [action]="procedureModalPayload.action"
             [procedure]="procedureModalPayload.procedure"
             [procedureSource]="procedureSource"
-            [proposalGroupId]="groupId"
+            [technicalCommercialProposalGroupId]="groupId"
             (complete)="this.store.dispatch(updateProcedures()); procedureModalPayload = null"
             (cancel)="procedureModalPayload = null"
           ></app-request-procedure-form>
