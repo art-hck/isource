@@ -100,7 +100,6 @@ export class TechnicalCommercialProposalGroupViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.actions.pipe(
       ofActionCompleted(UploadTemplate),
       throttleTime(1),
