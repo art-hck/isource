@@ -147,12 +147,14 @@ export class CommercialProposalState {
   @Action(UploadTemplate)
   uploadTemplate({ setState, dispatch }: Context, { requestId, files, groupId, groupName }: UploadTemplate) {
     setState(patch({ status: "updating" } as Model));
-    return this.rest.addOffersFromExcel(requestId, files, groupId, groupName).pipe(tap(
-        () => dispatch([
-          new Refresh(requestId, groupId),
-          new ToastActions.Success("Шаблон импортирован")
-        ]),
-        () => dispatch(new Refresh(requestId, groupId)))
+
+    const uploadTemplate = this.rest.uploadTemplate(requestId, files, groupId, groupName).pipe(tap(
+      () => dispatch([new Refresh(requestId, groupId), new ToastActions.Success("Шаблон импортирован")]),
+      () => dispatch(new Refresh(requestId, groupId)))
     );
+
+    const uploadTemplateFromGroups = this.rest.uploadTemplateFromGroups(requestId, files, groupName);
+
+    return groupId ? uploadTemplate : uploadTemplateFromGroups;
   }
 }

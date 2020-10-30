@@ -105,11 +105,19 @@ export class CommercialProposalsService {
     return this.api.post(url, { requestCommercialProposalGroupId: groupId }, { responseType: 'blob' });
   }
 
-  addOffersFromExcel(requestId: Uuid, files: File[], groupId?: Uuid, commercialProposalGroupName?: string) {
+  uploadTemplate(requestId: Uuid, files: File[], groupId?: Uuid, commercialProposalGroupName?: string) {
     const url = `requests/backoffice/${ requestId }/add-offers-from-excel`;
     const data = { files, requestCommercialProposalGroupId: groupId, commercialProposalGroupName };
     return this.api.post(url, this.formData.toFormData(data));
   }
+
+  uploadTemplateFromGroups(requestId: Uuid, files: File[], requestTechnicalCommercialProposalGroupName: string) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/upload-excel`;
+    const data = { files, requestTechnicalCommercialProposalGroupName };
+
+    return this.api.post<ProposalGroup>(url, this.formData.toFormData(data));
+  }
+
 
   getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
     const url = `requests/backoffice/${ requestId }/contragents-with-tp`;
