@@ -141,6 +141,11 @@
             <b>Выполнен заказ по позиции</b>
             </div>
           </ng-container>
+          <ng-template ngSwitchDefault>
+            <div class="app-row app-col notification-card-header app-primary-color">
+              <b>Изменен статус позиции на {{row.items[0].requestPositionStatusLabel}}</b>
+            </div>
+          </ng-template>
         </div>
       </div>
       <div *ngFor="let row of notification?.body?.rows.slice(0,1)">
@@ -159,7 +164,7 @@
     <div class="notification-card-footer">
       <div class="app-row">
         <div class="app-col date app-ghost-color">
-          {{notification?.created_at | date: 'dd.mm.yyyy в HH:mm'}}
+          {{notification?.created_at | date: 'dd.MM.yyyy в HH:mm'}}
         </div>
       </div>
     </div>
