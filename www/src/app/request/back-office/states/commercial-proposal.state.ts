@@ -70,7 +70,7 @@ export class CommercialProposalState {
 
     return this.rest.getOffers(requestId, groupId).pipe(
       tap(({positions = [], suppliers = []}) => setState(patch({ positions, suppliers } as Model))),
-      switchMap(() => dispatch( update ? new RefreshProcedures(requestId) : new FetchProcedures(requestId))),
+      switchMap(() => dispatch( update ? new RefreshProcedures(requestId, groupId) : new FetchProcedures(requestId, groupId))),
       tap(() => setState(patch({ status: "received" } as Model))),
     );
   }
