@@ -8,7 +8,7 @@ import { map } from "rxjs/operators";
 })
 export class NotificationsService {
 
-  constructor(private api: HttpClient,) {}
+  constructor(private api: HttpClient) {}
 
   getNotifications() {
       const url = `#notifications#`;
