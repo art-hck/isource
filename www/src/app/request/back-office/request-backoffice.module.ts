@@ -42,6 +42,7 @@ import { ContractFormComponent } from "./components/contract-form/contract-form.
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
+import { CommercialProposalComponent } from './components/commercial-proposal/commercial-proposal.component';
 import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
 import { CommercialProposalGroupFormComponent } from "./components/commercial-proposal-group-form/commercial-proposal-group-form.component";
 
@@ -74,7 +75,8 @@ import { CommercialProposalGroupFormComponent } from "./components/commercial-pr
     TechnicalCommercialProposalGroupViewComponent,
     TechnicalCommercialProposalGroupFormComponent,
     ContractFormComponent,
-    ContractListComponent
+    ContractListComponent,
+    CommercialProposalComponent
   ],
   imports: [
     RequestBackofficeRoutingModule,

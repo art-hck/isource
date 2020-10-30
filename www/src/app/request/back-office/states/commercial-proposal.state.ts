@@ -8,7 +8,6 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { CommercialProposal } from "../../common/models/commercial-proposal";
 import { CommercialProposalsService } from "../services/commercial-proposals.service";
 import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
-import { ContragentList } from "../../../contragent/models/contragent-list";
 import { insertItem, patch, updateItem } from "@ngxs/store/operators";
 import { Procedure } from "../models/procedure";
 import { ProcedureSource } from "../enum/procedure-source";
@@ -26,11 +25,12 @@ import AddSupplier = CommercialProposalsActions.AddSupplier;
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import Rollback = CommercialProposalsActions.Rollback;
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
+import { SupplierCommercialProposalInfo } from "../models/supplier-commercial-proposal-info";
 
 export interface CommercialProposalStateModel {
   availablePositions: RequestPosition[];
   positions: RequestPosition[];
-  suppliers: ContragentList[];
+  suppliers: SupplierCommercialProposalInfo[];
   procedures: Procedure[];
   status: StateStatus;
 }
@@ -52,6 +52,7 @@ export class CommercialProposalState {
   ) {
   }
 
+  @Selector() static commercialProposals({ suppliers, positions }: Model) { return { suppliers, positions }; }
   @Selector() static positions({ positions }: Model) { return positions; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static suppliers({ suppliers }: Model) { return suppliers; }

@@ -14,7 +14,7 @@ import { RequestService } from "../../services/request.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { AppComponent } from "../../../../app.component";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { delayWhen, filter, finalize, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, filter, finalize, map, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
@@ -29,6 +29,7 @@ import { Proposal } from "../../../../shared/components/grid/proposal";
 import { GridRowComponent } from "../../../../shared/components/grid/grid-row/grid-row.component";
 import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
 import { PositionStatus } from "../../../common/enum/position-status";
+import { CommercialProposal } from "../../models/commercial-proposal";
 import moment from "moment";
 import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
 import { GridSupplier } from "../../../../shared/components/grid/grid-supplier";
@@ -41,6 +42,7 @@ import Refresh = CommercialProposalsActions.Refresh;
 import PublishPositions = CommercialProposalsActions.PublishPositions;
 import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
+import { SupplierCommercialProposalInfo } from "../../models/supplier-commercial-proposal-info";
 import { Title } from "@angular/platform-browser";
 
 @Component({
@@ -53,8 +55,9 @@ import { Title } from "@angular/platform-browser";
 export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @ViewChild('viewPopover') viewPopover: UxgPopoverComponent;
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
+  @Select(CommercialProposalState.commercialProposals) commercialProposals$: Observable<{ suppliers: SupplierCommercialProposalInfo[], positions: RequestPosition[] }>;
   @Select(CommercialProposalState.positions) positions$: Observable<RequestPosition[]>;
-  @Select(CommercialProposalState.suppliers) suppliers$: Observable<ContragentList[]>;
+  @Select(CommercialProposalState.suppliers) suppliers$: Observable<SupplierCommercialProposalInfo[]>;
   @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
@@ -68,6 +71,22 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
+  readonly proposalsGroupedBySuppliers$: Observable<CommercialProposal[]> = this.commercialProposals$.pipe(
+    filter(p => !!p.suppliers || !!p.positions),
+    map(({suppliers, positions}) => {
+      return suppliers.map(supplier => {
+        const items = positions
+          .map(position => {
+            return {
+              position: position,
+              linkedOffer: position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === supplier.id)
+            };
+          }).reduce((acc, curr) => curr.linkedOffer ? [...acc, { ...curr }] : acc, []);
+
+        return { supplier, items };
+      });
+    })
+  );
   proposalModalData: {position: RequestPosition, proposal: Proposal};
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};

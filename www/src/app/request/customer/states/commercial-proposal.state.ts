@@ -8,8 +8,8 @@ import { CommercialProposals } from "../actions/commercial-proposal.actions";
 import { patch } from "@ngxs/store/operators";
 import { switchMap, tap } from "rxjs/operators";
 import { RequestPosition } from "../../common/models/request-position";
-import { ContragentList } from "../../../contragent/models/contragent-list";
 import { PositionStatus } from "../../common/enum/position-status";
+import { SupplierCommercialProposalInfo } from "../../back-office/models/supplier-commercial-proposal-info";
 import { CommercialProposalsStatus } from "../../common/enum/commercial-proposals-status";
 import { saveAs } from 'file-saver/src/FileSaver';
 import Fetch = CommercialProposals.Fetch;
@@ -19,7 +19,7 @@ import DownloadAnalyticalReport = CommercialProposals.DownloadAnalyticalReport;
 
 export interface CommercialProposalStateModel {
   positions: RequestPosition[];
-  suppliers: ContragentList[];
+  suppliers: SupplierCommercialProposalInfo[];
   status: StateStatus;
 }
 
