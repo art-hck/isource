@@ -14,6 +14,11 @@
     font-weight: 500;
     margin-bottom: 5px;
   }
+  &-footer {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+  }
   &.not_seen {
     background-color: #F0FAF6;
     border: 0;
@@ -29,3 +34,9 @@
 a {
   height: 112px;
 }
+
+a.notification-link {
+  position: relative;
+  display: block;
+}
+
