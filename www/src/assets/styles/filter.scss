@@ -1,13 +1,12 @@
 @import "src/theme";
 @import "helpers";
 
-.app-filter {
+.app-aside-modal {
   flex-wrap: nowrap;
 
   &-backdrop {
     display: none;
   }
-
   @media (max-width: col(5) - 1) {
     &.open {
       overflow: auto;
@@ -54,6 +53,20 @@
         top: 20px;
       }
     }
+    &.notification {
+      &.open {
+        min-width: 411px;
+        z-index: 1000;
+        animation: show-notification 300ms ease;
+      }
+      .app-aside-modal-backdrop {
+        right: 450px;
+        animation: show-notification-backdrop 300ms ease;
+        .close {
+          right: 480px;
+        }
+      }
+    }
   }
 
 
@@ -77,6 +90,26 @@
     }
   }
 
+  @keyframes show-notification {
+    0% {
+      right: -450px
+    }
+    100% {
+      right: 0
+    }
+  }
+
+  @keyframes show-notification-backdrop {
+    0% {
+      right: 0;
+      opacity: 0;
+    }
+    100% {
+      right: 450px;
+      opacity: 1
+    }
+  }
+
   @keyframes show-filter-close {
     0% {
       transform: scale(0);
@@ -90,7 +123,7 @@
 }
 
 @media (max-width: col(5) - 1) {
-  body.filter-open {
+  body.aside-modal-open {
     overflow: hidden;
   }
 }

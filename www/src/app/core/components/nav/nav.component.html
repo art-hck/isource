@@ -20,6 +20,13 @@
       <app-chat-notification></app-chat-notification>
     </div>
 
+    <!-- Уведомления -->
+    <div class="app-menu-icon">
+      <button uxgButton clear (click)="openModal.emit()">
+        <div class="app-ghost-color"><uxg-icon shape="app-ring" size="24"></uxg-icon></div>
+      </button>
+    </div>
+
     <!-- Корзина -->
     <ng-container *ngIf="featureService.authorize('cart')">
       <a class="app-menu-icon" routerLink="cart" routerLinkActive="active" *ngIf="cartStoreService.getCount() > 0">

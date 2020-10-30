@@ -9,7 +9,7 @@ import { debounceTime, takeUntil } from "rxjs/operators";
   templateUrl: './filter.component.html'
 })
 export class FilterComponent implements OnInit, OnDestroy {
-  @HostBinding('class.app-filter') class = true;
+  @HostBinding('class.app-aside-modal') class = true;
   @HostBinding('class.app-col-aside') colAside = true;
   @HostBinding('class.app-row') row = true;
   @HostBinding('class.app-flex-column') flexColumn = true;
@@ -40,12 +40,12 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public open() {
-    this.renderer.addClass(this.document.body, "filter-open");
+    this.renderer.addClass(this.document.body, "aside-modal-open");
     this.isOpen = true;
   }
 
   public close() {
-    this.renderer.removeClass(this.document.body, "filter-open");
+    this.renderer.removeClass(this.document.body, "aside-modal-open");
     this.isOpen = false;
   }
 

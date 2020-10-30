@@ -11,16 +11,29 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { WelcomeComponent } from "../pages/welcome/welcome.component";
 import { ChatSharedModule } from "../chat/chat-shared.module";
+import { NotificationListComponent } from "./components/notification-list/notification-list.component";
+import { NotificationCardComponent } from "./components/notification-card/notification-card.component";
+import { NotificationsState } from "./states/notifications.state";
+import { NgxsModule } from "@ngxs/store";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     UxgModule,
-    ChatSharedModule
+    ChatSharedModule,
+    NgxsModule.forFeature([
+    NotificationsState
+    ])
   ],
-  exports: [NavComponent, WelcomeComponent],
-  declarations: [NavComponent, WelcomeComponent],
+  exports: [NavComponent,
+            WelcomeComponent,
+            NotificationListComponent,
+            NotificationCardComponent],
+  declarations: [NavComponent,
+                WelcomeComponent,
+                NotificationListComponent,
+                NotificationCardComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DataInterceptor, multi: true },

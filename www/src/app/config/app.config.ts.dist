@@ -7,7 +7,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     api: 'api/',
     ws: 'ws://localhost:3000',
     apiChat: 'https://chat-test.isource.ru/',
-    wsChat: 'wss://chat-test.isource.ru',
+    wsChat: 'wss://chat-test.isource.ru/ws',
   },
   files: {
     allowedExtensions: [
@@ -57,6 +57,9 @@ export const AppConfig: GpnmarketConfigInterface = {
     },
   intelplan: {
       url: 'https://intelplan.gpb.isale.pro/api/v1/'
+      },
+  notifications: {
+      url: 'https://notifications-test.isource.ru/api/v1/notifications'
       },
   instructions: {
     forCustomer: "assets/Краткая инструкция (внешние клиенты).pdf",
