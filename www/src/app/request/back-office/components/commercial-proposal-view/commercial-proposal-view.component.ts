@@ -14,7 +14,7 @@ import { RequestService } from "../../services/request.service";
 import { FeatureService } from "../../../../core/services/feature.service";
 import { AppComponent } from "../../../../app.component";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { delayWhen, filter, finalize, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
+import { delayWhen, filter, finalize, map, startWith, switchMap, takeUntil, tap, withLatestFrom } from "rxjs/operators";
 import { RequestActions } from "../../actions/request.actions";
 import { Request } from "../../../common/models/request";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
@@ -71,7 +71,22 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
-  proposalsGroupedBySuppliers: CommercialProposal[];
+  readonly proposalsGroupedBySuppliers$: Observable<CommercialProposal[]> = this.commercialProposals$.pipe(
+    filter(p => !!p.suppliers || !!p.positions),
+    map(({suppliers, positions}) => {
+      return suppliers.map(supplier => {
+        const items = positions
+          .map(position => {
+            return {
+              position: position,
+              linkedOffer: position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === supplier.id)
+            };
+          }).reduce((acc, curr) => curr.linkedOffer ? [...acc, { ...curr }] : acc, []);
+
+        return { supplier, items };
+      });
+    })
+  );
   proposalModalData: {position: RequestPosition, proposal: Proposal};
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
@@ -152,10 +167,6 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       this.filterPositionsOnProposalsPreparationStatus(positions);
     });
 
-    this.commercialProposals$.pipe(filter(p => !!p.suppliers || !!p.positions), takeUntil(this.destroy$)).subscribe((data) => {
-      this.getProposalsGroupedBySuppliers(data.suppliers, data.positions);
-    });
-
     this.switchView(this.view);
   }
 
@@ -208,20 +219,6 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   getProposalBySupplier = (position: RequestPosition) => ({ id, hasAnalogs }: GridSupplier) => {
     const proposal = position.linkedOffers.find(({ supplierContragentId, isAnalog }) => supplierContragentId === id && isAnalog === hasAnalogs);
     return proposal ? new Proposal<RequestOfferPosition>(proposal) : null;
-  }
-
-  getProposalsGroupedBySuppliers(suppliers: SupplierCommercialProposalInfo[], positions: RequestPosition[]) {
-    this.proposalsGroupedBySuppliers = suppliers.map(supplier => {
-        const items = positions
-          .map(position => {
-            return {
-              position: position,
-              linkedOffer: position.linkedOffers.find(({ supplierContragentId }) => supplierContragentId === supplier.id)
-            };
-          }).reduce((acc, curr) => curr.linkedOffer ? [...acc, { ...curr }] : acc, []);
-
-        return { supplier, items };
-    });
   }
 
   onPositionsSelected(request: Request, positionsIds) {

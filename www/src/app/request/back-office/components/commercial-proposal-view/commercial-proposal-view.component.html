@@ -166,7 +166,7 @@
               ></app-request-procedure>
             </ng-container>
 
-            <ng-container *ngFor="let proposal of proposalsGroupedBySuppliers; trackBy: trackById">
+            <ng-container *ngFor="let proposal of proposalsGroupedBySuppliers$ | async; trackBy: trackById">
               <app-request-commercial-proposal
                 [request]="request"
                 [proposal]="proposal"
