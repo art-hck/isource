@@ -22,7 +22,7 @@ export class NotificationItem {
 
 export class NotificationInfo {
   type: string;
-  items: PositionItem[];
+  items: NotificationPositionItem[];
   message: string;
   requestId: Uuid;
   requestName: string;
@@ -30,27 +30,27 @@ export class NotificationInfo {
   requestStatus: string;
   requestStatusLabel: string;
   requestUrl: string;
-  requestPositions?: PositionInfo[];
-  rows?: PositionList[];
+  requestPositions?: NotificationPositionInfo[];
+  rows?: NotificationPositionList[];
   contragentName?: string;
 }
 
-export class PositionItem {
+export class NotificationPositionItem {
   requestPositionId: Uuid;
   requestPositionName: string;
   requestPositionStatus: string;
   requestPositionStatusLabel: string;
 }
 
-export class PositionInfo {
-  id:Uuid;
+export class NotificationPositionInfo {
+  id: Uuid;
   measureUnit: string;
   name: string;
   quantity: string;
 }
 
-export class PositionList {
-  items: PositionItem[];
+export class NotificationPositionList {
+  items: NotificationPositionItem[];
   requestId: Uuid;
   requestName: string;
   requestNumber: string;

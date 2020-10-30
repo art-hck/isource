@@ -9,7 +9,7 @@ import { NotificationInfo, NotificationItem } from "../../models/notifications";
 export class NotificationCardComponent {
   @Input() notification: NotificationItem;
 
-  getLink() {
+  get getLink() {
     return (this.notification?.body as NotificationInfo)?.requestUrl?.replace(/https?\:\/\/.*?\//, '/');
   }
 }

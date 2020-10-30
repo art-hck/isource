@@ -1,6 +1,6 @@
 <div [ngSwitch]="notification?.body?.type" class="notification-card"
      [ngClass]="{'not_seen': notification?.status === 'STATUS_SENT'}">
-  <a class="app-row app-flex-column" [routerLink]="getLink()">
+  <a class="app-row app-flex-column" [routerLink]="getLink">
     <!-- Новая заявка -->
     <ng-container *ngSwitchCase="'NEW_REQUEST'">
       <div class="app-row app-col">
