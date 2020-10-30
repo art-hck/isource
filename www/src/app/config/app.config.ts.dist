@@ -29,6 +29,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     },
     loadUserProfileAtStartUp: false,
     bearerExcludedUrls: [
+      'https://test-chats.ezgg.site/'
       'https://suggestions.dadata.ru/',
       'https://test-chats.ezgg.site/'
     ],
