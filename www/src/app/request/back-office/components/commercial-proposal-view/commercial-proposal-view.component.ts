@@ -77,6 +77,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
   prolongModalPayload: Procedure;
   rollbackDuration = 10 * 60;
+  proposalPreparationPositions: RequestPosition[];
 
   readonly getCurrencySymbol = getCurrencySymbol;
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
@@ -147,6 +148,8 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
           return form;
         }))
       });
+
+      this.filterPositionsOnProposalsPreparationStatus(positions);
     });
 
     this.commercialProposals$.pipe(filter(p => !!p.suppliers || !!p.positions), takeUntil(this.destroy$)).subscribe((data) => {
@@ -227,6 +230,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       .getContragentsWithTp(request.id, positionsIds).pipe(
         finalize(() => this.loadingContragentList = false)
       );
+  }
+
+  filterPositionsOnProposalsPreparationStatus(positions: RequestPosition[]): void {
+    this.proposalPreparationPositions = positions.filter(position => position.status === PositionStatus.PROPOSALS_PREPARATION);
   }
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
