@@ -111,9 +111,9 @@ export class CommercialProposalsService {
     return this.api.post(url, this.formData.toFormData(data));
   }
 
-  uploadTemplateFromGroups(requestId: Uuid, files: File[], requestTechnicalCommercialProposalGroupName: string) {
+  uploadTemplateFromGroups(requestId: Uuid, files: File[], requestCommercialProposalGroupName: string) {
     const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/upload-excel`;
-    const data = { files, requestTechnicalCommercialProposalGroupName };
+    const data = { files, requestCommercialProposalGroupName };
 
     return this.api.post<ProposalGroup>(url, this.formData.toFormData(data));
   }
