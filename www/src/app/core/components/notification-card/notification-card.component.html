@@ -1,6 +1,6 @@
 <div [ngSwitch]="notification?.body?.type" class="notification-card"
      [ngClass]="{'not_seen': notification?.status === 'STATUS_SENT'}">
-  <a class="app-row app-flex-column" [routerLink]="getLink">
+  <a class="app-row app-flex-column notification-link" [routerLink]="getLink">
     <!-- Новая заявка -->
     <ng-container *ngSwitchCase="'NEW_REQUEST'">
       <div class="app-row app-col">
@@ -72,17 +72,17 @@
       <div [ngSwitch]="notification?.body?.requestStatus" class="app-row app-col">
         <ng-container *ngSwitchCase="'NEW'">
           <div class="app-row app-col notification-card-header app-primary-color">
-          <b>Ваша заявка принята в работу</b>
+            <b>Ваша заявка принята в работу</b>
           </div>
         </ng-container>
         <ng-container *ngSwitchCase="'COMPLETED'">
           <div class="app-row app-col notification-card-header app-primary-color">
-          <b>По Вашей заявке заказ выполнен</b>
+            <b>По Вашей заявке заказ выполнен</b>
           </div>
         </ng-container>
         <ng-container *ngSwitchCase="'ON_CUSTOMER_APPROVAL'">
           <div class="app-row app-col notification-card-header app-primary-color">
-          <b>Подтвердите создание позиций в заявке</b>
+            <b>Подтвердите создание позиций в заявке</b>
           </div>
         </ng-container>
       </div>
@@ -103,42 +103,42 @@
         <div class="app-row app-col" [ngSwitch]="row.items[0]?.requestPositionStatus">
           <ng-container *ngSwitchCase="'PROPOSALS_PREPARATION'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Осуществляется подготовка предложений по позиции</b>
+              <b>Осуществляется подготовка предложений по позиции</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'RESULTS_AGREEMENT'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Подготовлены предложения поставщиков по позиции</b>
+              <b>Подготовлены предложения поставщиков по позиции</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'WINNER_SELECTED'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Выбран победитель по позиции</b>
+              <b>Выбран победитель по позиции</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'TCP_WINNER_SELECTED'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Выбран победитель по позиции</b>
+              <b>Выбран победитель по позиции</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'CONTRACT_AGREEMENT'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Осуществляется согласование договора с поставщиком</b>
+              <b>Осуществляется согласование договора с поставщиком</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'CONTRACT_SIGNING'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Согласован и ожидает подписания договор с победителем</b>
+              <b>Согласован и ожидает подписания договор с победителем</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'CONTRACTED'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Сторонами подписан договор по позиции</b>
+              <b>Сторонами подписан договор по позиции</b>
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'COMPLETED'">
             <div class="app-row app-col notification-card-header app-primary-color">
-            <b>Выполнен заказ по позиции</b>
+              <b>Выполнен заказ по позиции</b>
             </div>
           </ng-container>
           <ng-template ngSwitchDefault>
@@ -154,10 +154,11 @@
           № {{row.requestNumber}} | {{row.requestName}}
         </span>
         </div>
-
+        <div class="app-row app-col">
         <span class="app-secondary-color app-ellipsis">
           {{row.items[0]?.requestPositionName}}
         </span>
+          </div>
       </div>
     </ng-container>
     <div class="app-col"></div>

@@ -1,129 +1,86 @@
 @import "src/theme";
 @import "helpers";
 
-.app-aside-modal {
-  flex-wrap: nowrap;
+@mixin asModal($width) {
+  overflow: auto;
+  width: $width;
+  max-width: $width;
+  padding: 30px 20px;
+  box-sizing: content-box;
+  position: fixed;
+  animation: slide-#{$width} 300ms ease;
+  background: #fff;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
 
-  &-backdrop {
-    display: none;
-  }
-  @media (max-width: col(5) - 1) {
-    &.open {
-      overflow: auto;
-      animation: show-filter 300ms ease;
-      background: #fff;
-      display: flex !important;
-      flex-wrap: nowrap;
-      position: fixed;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 320px;
-      z-index: 2;
-      padding: 30px 20px;
-      box-sizing: content-box;
-    }
+  .app-aside-modal-backdrop {
+    display: block;
+    right: $width + 40;
+    animation: slide-backdrop-#{$width} 300ms ease;
 
-    &-backdrop {
-      display: block;
-      animation: show-filter-backdrop 300ms ease;
-      background: rgba(0, 0, 0, 0.4);
-      bottom: 0;
-      content: "";
-      left: 0;
-      position: fixed;
-      right: 320px;
-      top: 0;
-
-      .close {
-        animation: show-filter-close 300ms ease 600ms both;
-
-        cursor: pointer;
-        position: fixed;
-        right: 340px;
-        background: #fff;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
-        color: #000;
-        top: 20px;
-      }
-    }
-    &.notification {
-      &.open {
-        min-width: 411px;
-        z-index: 1000;
-        animation: show-notification 300ms ease;
-      }
-      .app-aside-modal-backdrop {
-        right: 450px;
-        animation: show-notification-backdrop 300ms ease;
-        .close {
-          right: 480px;
-        }
-      }
+    .close {
+      right: $width + 60;
     }
   }
 
-
-  @keyframes show-filter {
-    0% {
-      right: -320px
-    }
-    100% {
-      right: 0
-    }
+  @keyframes slide-#{$width} {
+    0% {right: -$width - 40}
+    100% {right: 0}
   }
 
-  @keyframes show-filter-backdrop {
-    0% {
-      right: 0;
-      opacity: 0;
-    }
-    100% {
-      right: 320px;
-      opacity: 1
-    }
-  }
-
-  @keyframes show-notification {
-    0% {
-      right: -450px
-    }
-    100% {
-      right: 0
-    }
-  }
-
-  @keyframes show-notification-backdrop {
-    0% {
-      right: 0;
-      opacity: 0;
-    }
-    100% {
-      right: 450px;
-      opacity: 1
-    }
-  }
-
-  @keyframes show-filter-close {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1
-    }
+  @keyframes slide-backdrop-#{$width} {
+    0% {right: 0; opacity: 0}
+    100% {right: $width + 40; opacity: 1}
   }
 }
 
+.app-aside-modal {
+  flex-wrap: nowrap;
+
+  &.open { display: flex !important; }
+
+  &-backdrop {
+    display: none;
+    background: rgba(0, 0, 0, 0.4);
+    bottom: 0;
+    content: "";
+    left: 0;
+    position: fixed;
+    top: 0;
+
+    .close {
+      animation: show-close 300ms ease 600ms both;
+      cursor: pointer;
+      position: fixed;
+      background: #fff;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
+      color: #000;
+      top: 20px;
+    }
+  }
+
+  &.notification { @include asModal(410px); }
+}
+
 @media (max-width: col(5) - 1) {
+  .app-aside-modal:not(.notification) {
+    @include asModal(280px);
+  }
+
   body.aside-modal-open {
     overflow: hidden;
   }
+}
+
+@keyframes show-close {
+  0% {transform: scale(0);opacity: 0;}
+  100% {transform: scale(1);opacity: 1}
 }
