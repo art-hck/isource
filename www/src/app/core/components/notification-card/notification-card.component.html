@@ -10,7 +10,7 @@
       </div>
       <div class="app-row app-col">
     <span class="notification-card-request app-secondary-color app-ellipsis">
-      № {{notification?.body?.requestNumber}} | {{notification?.body?.requestName}}
+      № {{notification?.body?.requestNumber || notification?.body?.rows[0]?.requestNumber}} | {{notification?.body?.requestName}}
     </span>
         <span class="app-secondary-color app-ellipsis">
       {{notification?.body?.contragentName}}
