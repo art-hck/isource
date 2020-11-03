@@ -1,11 +1,11 @@
 <div class="price-info-block">
   <ng-container *ngIf="proposal.positions.length; else positionsPriceInfo">
-    <div class="app-success-color" *ngIf="helper.isPositionsValid(proposal.positions, proposalsByPos); else positionsInvalid">
-      <b>Предложены все позиции</b>
-    </div>
-    <ng-template #positionsInvalid>
-      <div class="app-error-color"><b>Предложены не все позиции</b></div>
-    </ng-template>
+<!--    <div class="app-success-color" *ngIf="helper.isPositionsValid(proposal.positions, proposalsByPos); else positionsInvalid">-->
+<!--      <b>Предложены все позиции</b>-->
+<!--    </div>-->
+<!--    <ng-template #positionsInvalid>-->
+<!--      <div class="app-error-color"><b>Предложены не все позиции</b></div>-->
+<!--    </ng-template>-->
 
     <div class="app-success-color" *ngIf="helper.isQuantityPositionsValid(proposal.positions, hasAnalogs); else quantityInvalid">
       <b>Все позиции в нужном количестве</b>

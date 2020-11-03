@@ -56,12 +56,12 @@ export class TechnicalCommercialProposalService {
     return this.api.post<ProposalGroup[]>(url, { filters });
   }
 
-  groupCreate(requestId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+  groupCreate(requestId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/create`;
     return this.api.post<ProposalGroup>(url, body);
   }
 
-  groupUpdate(requestId: Uuid, groupId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+  groupUpdate(requestId: Uuid, groupId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposal-groups/${ groupId }/edit`;
     return this.api.post<ProposalGroup>(url, body);
   }

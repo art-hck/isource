@@ -1,5 +1,3 @@
-<ng-container *ngIf="(groups$ | async) as groups">
-<ng-container *ngIf="(request$ | async) as request">
 <ng-container appFilter>
 <div class="app-row">
   <div class="app-col app-table app-no-border">
@@ -7,69 +5,65 @@
       <div>
         <span class="app-secondary-color">показать: </span>
         <uxg-popover>
-          <button uxgButton uxgPopoverTrigger link clear>
-            <span><b>по предложениям</b></span>
-          </button>
+          <button uxgButton uxgPopoverTrigger link clear><span><b>по предложениям</b></span></button>
           <div *uxgPopoverContent>
-            <div>
-              <button uxgButton clear>по предложениям</button>
-            </div>
+            <div><button uxgButton clear>по предложениям</button></div>
           </div>
         </uxg-popover>
       </div>
       <div class="app-col"></div>
       <div class="app-col-auto">
-        <!-- Фильтр  -->
-        <!--app-filter-button></app-filter-button-->
+        <!-- Фильтр -->
+        <app-filter-button></app-filter-button>
 
-        <!-- КП из процедуры  -->
-        <uxg-popover #procedureModal [openOnHover]="true" class="popover-item">
+        <!-- Создать процедуру  -->
+        <uxg-popover #procedurePopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
-                  [disabled]="!(availablePositions$ | async)?.length"
+                  [disabled]="!availablePositions?.length"
                   (click)="procedureModalPayload = {action: 'create'}"
                   *ngIf="featureService.authorize('createProcedure')">
             <uxg-icon shape="app-plus"></uxg-icon>
-            <span>КП из процедуры</span>
+            <span>{{sourceLabel[source]}} из процедуры</span>
           </button>
 
-          <ng-container *ngIf="!(availablePositions$ | async)?.length">
-            <div *uxgPopoverContent (click)="procedureModal.hide()">
-              <div>Нет доступных для выбора позиций КП</div>
+          <ng-container *ngIf="!availablePositions?.length">
+            <div *uxgPopoverContent (click)="procedurePopover.hide()">
+              <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
               <div>Создание процедуры недоступно.</div>
             </div>
           </ng-container>
         </uxg-popover>
 
-        <!-- Новая группа КП  -->
+        <!-- Новая группа  -->
         <uxg-popover #groupFormPopover [openOnHover]="true" class="popover-item">
           <button uxgButton secondary iconText
-                  [disabled]="!(availablePositions$ | async)?.length"
+                  [disabled]="!availablePositions?.length"
                   (click)="editedGroup = null; groupFormModal.open()">
             <uxg-icon shape="app-plus"></uxg-icon>
-            <span>Новое КП</span>
+            <span>Новое {{sourceLabel[source]}}</span>
           </button>
 
-          <ng-container *ngIf="!(availablePositions$ | async)?.length">
+          <ng-container *ngIf="!availablePositions?.length">
             <div *uxgPopoverContent (click)="groupFormPopover.hide()">
-              <div>Нет доступных для выбора позиций КП</div>
-              <div>Создание КП недоступно.</div>
+              <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
+              <div>Создание {{sourceLabel[source]}} недоступно.</div>
             </div>
           </ng-container>
         </uxg-popover>
 
-        <!-- КП из шаблона  -->
+        <!-- Из шаблона  -->
         <uxg-popover #templateFormPopup [openOnHover]="true" class="popover-item">
           <button uxgButton primary iconText
-                  [disabled]="!(availablePositions$ | async)?.length"
+                  [disabled]="!availablePositions?.length"
                   (click)="formTemplate.reset(); uploadTemplateModal.open();">
             <uxg-icon shape="app-plus"></uxg-icon>
-            <span>КП из шаблона</span>
+            <span>{{sourceLabel[source]}} из шаблона</span>
           </button>
 
-          <ng-container *ngIf="!(availablePositions$ | async)?.length">
+          <ng-container *ngIf="!availablePositions?.length">
             <div *uxgPopoverContent (click)="templateFormPopup.hide()">
-              <div>Нет доступных для выбора позиций КП</div>
-              <div>Создание КП из шаблона недоступно.</div>
+              <div>Нет доступных для выбора позиций {{sourceLabel[source]}}</div>
+              <div>Создание {{sourceLabel[source]}} из шаблона недоступно.</div>
             </div>
           </ng-container>
         </uxg-popover>
@@ -87,8 +81,7 @@
     ></app-proposal-group>
   </div>
 
-  <div class="app-col-aside detachable"></div>
-  <!--app-filter [formGroup]="form" [count]="groups?.length" (filter)="filter($event)">
+  <app-filter [formGroup]="form" [count]="groups?.length" (filter)="emitFilter($event)">
     <app-filter-section label="Наименование позиции">
       <input uxgInput type="text" formControlName="requestPositionName" placeholder="Наименование позиции или его часть" />
     </app-filter-section>
@@ -114,48 +107,47 @@
         </div>
       </div>
     </app-filter-section>
-  </app-filter-->
+  </app-filter>
 </div>
 </ng-container>
 
 <uxg-modal #groupFormModal size="l">
-  <h2 *ngIf="!editedGroup">Создать новое КП</h2>
-  <h2 *ngIf="editedGroup">Редактирование КП</h2>
-  <app-commercial-proposal-group-form
+  <h2 *ngIf="!editedGroup">Создать новое {{sourceLabel[source]}}</h2>
+  <h2 *ngIf="editedGroup">Редактирование {{sourceLabel[source]}}</h2>
+  <app-common-proposal-group-form
     *ngIf="groupFormModal.state"
     [group]="editedGroup"
-    [availablePositions$]="availablePositions$"
-    (cancel)="groupFormModal.close(); editedGroup = null" [requestId]="request.id"
-    (create)="groupFormModal.close(); editedGroup = null; this.newGroup$.next($event);"
-  >
-  </app-commercial-proposal-group-form>
+    [availablePositions]="availablePositions"
+    (complete)="groupFormModal.close(); editedGroup = null" [requestId]="request.id"
+    (create)="createGroup.emit($event)"
+  ></app-common-proposal-group-form>
 </uxg-modal>
 
 <uxg-modal #uploadTemplateModal size="l" (stateChange)="$event && (files = [])">
   <ng-container *ngIf="uploadTemplateModal.state">
-    <h2 class="modal-title"><b>Загрузить коммерческие предложения из шаблона</b></h2>
+    <h2 class="modal-title"><b>Загрузить {{sourceLabel[source]}} из шаблона</b></h2>
     <div class="app-secondary-color template">
-      Вы можете создать КП списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="store.dispatch(downloadTemplate(request))"><b>скачать
-      шаблон</b></a>) и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько КП.
+      Вы можете создать {{sourceLabel[source]}} списком, если заполните шаблон xls таблицы (<a class="app-link" (click)="downloadTemplate.emit()"><b>скачать
+      шаблон</b></a>) и загрузите файл в систему. Если указать несколько поставщиков, то будет создано несколько {{sourceLabel[source]}}.
     </div>
 
     <form appFormValidation [formGroup]="formTemplate">
       <div class="app-control-wrap">
-        <input #name uxgInput lg formControlName="commercialProposalGroupName">
-        <label class="app-control-label" (click)="name.focus()">Наименование КП</label>
-        <div class="app-control-error" *ngIf="formTemplate.get('commercialProposalGroupName').errors as e">
+        <input #name uxgInput lg formControlName="groupName">
+        <label class="app-control-label" (click)="name.focus()">Наименование {{sourceLabel[source]}}</label>
+        <div class="app-control-error" *ngIf="formTemplate.get('groupName').errors as e">
           <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
 
       <div class="dragAndDropArea">
         <app-template-upload
-          [invalid]="formTemplate.get('fileTemplate').dirty && formTemplate.get('fileTemplate').invalid"
-          (fileSelected)="onChangeFilesList($event)"></app-template-upload>
+          [invalid]="formTemplate.get('files').dirty && formTemplate.get('files').invalid"
+          (fileSelected)="selectFiles($event)"></app-template-upload>
       </div>
 
       <div class="app-modal-footer">
-        <div class="doc-error-message" *ngIf="formTemplate.get('fileTemplate').dirty && formTemplate.get('fileTemplate').invalid">Пожалуйста, загрузите необходимый шаблон</div>
+        <div class="doc-error-message" *ngIf="formTemplate.get('files').dirty && formTemplate.get('files').invalid">Пожалуйста, загрузите необходимый шаблон</div>
 
         <button type="button" uxgButton secondary lg uxgModalClose>Отмена</button>
         <button uxgButton primary lg (click)="submit()">Загрузить</button>
@@ -164,23 +156,21 @@
   </ng-container>
 </uxg-modal>
 
-<!-- КП из процедуры -->
+<!-- Из процедуры -->
 <uxg-modal size="l" [(state)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">
   <h2 *ngSwitchCase="'create'">Создание новой процедуры</h2>
   <h2 *ngSwitchCase="'bargain'">Уторговывание процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
   <h2 *ngSwitchCase="'prolong'">Продление процедуры №{{procedureModalPayload?.procedure.procedureId}}</h2>
-  <ng-container *ngIf="(availablePositions$ | async) as positions">
+  <ng-container *ngIf="availablePositions">
     <app-request-procedure-form
       *ngIf="procedureModalPayload"
       [request]="request"
-      [positions]="positions"
+      [positions]="availablePositions"
       [action]="procedureModalPayload.action"
       [procedure]="procedureModalPayload.procedure"
-      [procedureSource]="procedureSource"
-      (complete)="this.store.dispatch(updateProcedures(request)); updateGroups(); procedureModalPayload = null"
+      [procedureSource]="source"
+      (complete)="newProcedure.emit(); procedureModalPayload = null"
       (cancel)="procedureModalPayload = null"
     ></app-request-procedure-form>
   </ng-container>
 </uxg-modal>
-</ng-container>
-</ng-container>
