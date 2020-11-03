@@ -56,9 +56,8 @@
             [positionCell]="true"
             [showParams]="true"
             [proposals]="proposals$ | async"
-            [proposalsByPos]="proposalsSentToReview$ | async"
             (openCommonParams)="gridTable.scrollIntoView()"
-            (selectProposalBySupplier) = selectSupplierProposal($event)
+            (selectBySupplier)="selectSupplierProposal($event)"
             (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>
           <ng-container *ngFor="let proposalByPos of proposalsByPos">

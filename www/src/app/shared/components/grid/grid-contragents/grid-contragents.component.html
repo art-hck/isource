@@ -25,13 +25,13 @@
           <app-grid-common-parameters
             #gridCommonParams
             class="app-col"
-            [proposal]="getProposalBySupplier(supplier, proposals)"
-            [proposalsByPos]="proposalsByPos"
+            *ngIf="getProposalBySupplier(supplier, proposals) as proposal"
+            [proposal]="proposal"
             [hasAnalogs]="supplier.hasAnalogs"
             (close)="showCommonParams = false"
-            (openEditModal)="editTechnicalCommercialProposal.emit($event)"
+            (openEditModal)="edit.emit(proposal)"
             [showDocs]="showDocsControl.value"
-            (selectAll)="selectProposalBySupplier.emit($event)"
+            (selectAll)="selectBySupplier.emit(proposal)"
           ></app-grid-common-parameters>
           <div class="common-footer">
             <uxg-switcher *ngIf="showCommonParams && i === 0" label="Показать документы предложений" labelAlign="right" [formControl]="showDocsControl">

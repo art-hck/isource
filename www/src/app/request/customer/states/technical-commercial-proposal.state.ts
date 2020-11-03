@@ -70,14 +70,6 @@ export class TechnicalCommercialProposalState {
       );
   }
 
-  @Action(Reject)
-  reject(ctx: Context, action: Reject) {
-    ctx.setState(patch({ status: "updating" as StateStatus }));
-    return this.rest.reject(action.requestId, action.position).pipe(
-      finalize(() => ctx.setState(patch({ status: "received" as StateStatus })))
-    );
-  }
-
   @Action(SendToEditMultiple)
   sendToEditMultiple({ setState, getState }: Context, { requestPositions }: SendToEditMultiple) {
     setState(patch({ status: "updating" as StateStatus }));

@@ -13,6 +13,8 @@ import { Procedure } from "../models/procedure";
 import { ProcedureSource } from "../enum/procedure-source";
 import { ProcedureService } from "../services/procedure.service";
 import { ToastActions } from "../../../shared/actions/toast.actions";
+import { SupplierCommercialProposalInfo } from "../models/supplier-commercial-proposal-info";
+import { CommercialProposalInfo } from "../models/commercial-proposal-info";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -25,12 +27,12 @@ import AddSupplier = CommercialProposalsActions.AddSupplier;
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import Rollback = CommercialProposalsActions.Rollback;
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
-import { SupplierCommercialProposalInfo } from "../models/supplier-commercial-proposal-info";
 
 export interface CommercialProposalStateModel {
   availablePositions: RequestPosition[];
   positions: RequestPosition[];
   suppliers: SupplierCommercialProposalInfo[];
+  requestOffers: CommercialProposalInfo[];
   procedures: Procedure[];
   status: StateStatus;
 }
@@ -40,7 +42,7 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'BackofficeCommercialProposals',
-  defaults: { positions: null, availablePositions: null, suppliers: null, procedures: null, status: "pristine" }
+  defaults: { positions: null, availablePositions: null, suppliers: null, requestOffers: null, procedures: null, status: "pristine" }
 })
 @Injectable()
 export class CommercialProposalState {
@@ -56,6 +58,7 @@ export class CommercialProposalState {
   @Selector() static positions({ positions }: Model) { return positions; }
   @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
   @Selector() static suppliers({ suppliers }: Model) { return suppliers; }
+  @Selector() static requestOffers({ requestOffers }: Model) { return requestOffers; }
   @Selector() static procedures({ procedures }: Model) { return procedures; }
   @Selector() static positionsLength({ positions }: Model) { return positions.length; }
   @Selector() static status({ status }: Model) { return status; }
@@ -69,7 +72,7 @@ export class CommercialProposalState {
     }
 
     return this.rest.getOffers(requestId, groupId).pipe(
-      tap(({positions = [], suppliers = []}) => setState(patch({ positions, suppliers } as Model))),
+      tap(({positions = [], suppliers = [], requestOffers = []}) => setState(patch({ positions, requestOffers, suppliers } as Model))),
       switchMap(() => dispatch( update ? new RefreshProcedures(requestId, groupId) : new FetchProcedures(requestId, groupId))),
       tap(() => setState(patch({ status: "received" } as Model))),
     );

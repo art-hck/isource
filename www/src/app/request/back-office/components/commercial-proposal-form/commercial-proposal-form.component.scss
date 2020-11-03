@@ -1,13 +1,5 @@
 @import "src/theme";
 
-form.cp-creation-form {
-  margin-bottom: 16px;
-}
-
-div.documents {
-  margin-bottom: 30px;
-}
-
 [class*=app-col]:not(:last-child) {
   padding-right: 20px;
 }
@@ -39,34 +31,3 @@ small {
   display: block;
 }
 
-app-file {
-  width: 100%;
-}
-
-.documents {
-  & > .app-row > .app-col {
-    width: 25%;
-    min-width: 310px;
-    padding: 0 20px 12px 0;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    flex-grow: 0;
-  }
-
-  &-title {
-    padding: 0 12px;
-    overflow: hidden;
-    flex-grow: 1;
-
-    div {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  button {
-    min-height: auto;
-  }
-}

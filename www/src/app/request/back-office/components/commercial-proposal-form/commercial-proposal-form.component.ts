@@ -1,31 +1,30 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, of, Subscription } from "rxjs";
 import { mergeMap, shareReplay } from "rxjs/operators";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { RequestPosition } from "../../../common/models/request-position";
-import * as moment from "moment";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
-import { CommercialProposal } from "../../../common/models/commercial-proposal";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { Request } from "../../../common/models/request";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { OkeiService } from "../../../../shared/services/okei.service";
-import { Okei } from "../../../../shared/models/okei";
 import { Store } from "@ngxs/store";
 import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
 import { RequestOfferPosition } from "../../../common/models/request-offer-position";
 import { ContragentShortInfo } from "../../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../../../common/enum/position-currency";
-import { AppFile } from "../../../../shared/components/file/file";
-import SaveProposal = CommercialProposalsActions.SaveProposal;
-import { RequestDocument } from "../../../common/models/request-document";
 import { searchContragents } from "../../../../shared/helpers/search";
+import { PaymentTermsLabels } from "../../../common/dictionaries/payment-terms-labels";
+import { CommercialProposalFormValidators } from "./commercial-proposal-form.validators";
+import { DatePipe } from "@angular/common";
+import SaveProposal = CommercialProposalsActions.SaveProposal;
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
   templateUrl: './commercial-proposal-form.component.html',
-  styleUrls: ['./commercial-proposal-form.component.scss']
+  styleUrls: ['./commercial-proposal-form.component.scss'],
+  providers: [DatePipe]
 })
 export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Input() request: Request;
@@ -35,116 +34,74 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
   @ViewChild('contragentName') contragentName: ElementRef;
 
-  newCommercialProposalForm: FormGroup;
-  supplierContragentControl: FormControl;
+  form: FormGroup;
   quantityNotEnough = false;
-  dateIsLaterThanNeeded = false;
+  contragents$: Observable<ContragentList[]>;
+
   readonly subscription = new Subscription();
   readonly searchContragents = searchContragents;
-  contragents$: Observable<ContragentList[]>;
-  okeiList$: Observable<Okei[]>;
-
-  get formDocuments() {
-    return this.newCommercialProposalForm.get('documents') as FormArray;
-  }
+  readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
+  readonly paymentTerms = Object.entries(PaymentTermsLabels);
+  readonly validators = CommercialProposalFormValidators;
+  readonly getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
 
   constructor(
     private formBuilder: FormBuilder,
     private offersService: CommercialProposalsService,
     private contragentService: ContragentService,
     public okeiService: OkeiService,
-    public store: Store
+    public store: Store,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
-
+    const p = this.commercialProposal;
     this.contragents$ = this.offersService
       .getContragentsWithTp(this.request.id, [this.position.id]).pipe(mergeMap(
         contragents => contragents.length === 0 ? this.contragentService.getContragentList() : of(contragents)
       ));
 
-    this.okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
-
-    this.newCommercialProposalForm = this.formBuilder.group({
-      id: [this.defaultCPValue('id', null)],
-      priceWithVat: [this.defaultCPValue('priceWithVat', this.position.startPrice || null), [Validators.required, Validators.min(1)]],
-      currency: [this.defaultCPValue('currency', this.position.currency || null), Validators.required],
-      quantity: [this.defaultCPValue('quantity', this.position.quantity || null), [Validators.required, Validators.min(0.0001), Validators.pattern("^[.0-9]+$")]],
-      measureUnit: [this.defaultCPValue('measureUnit', this.position.measureUnit || null), Validators.required],
-      deliveryDate: [this.defaultDeliveryDate, [Validators.required, CustomValidators.futureDate()]],
-      paymentTerms: [this.defaultCPValue('paymentTerms', this.position.paymentTerms || null), Validators.required],
-      documents: this.formBuilder.array([]),
+    this.form = this.formBuilder.group({
+      id: p?.id,
+      supplierContragentId: [this.supplier || p?.supplierContragent, [Validators.required, this.validators.supplierOfferExistsValidator(this.position)]],
+      priceWithVat: [p?.priceWithVat ?? this.position.startPrice, [Validators.required, Validators.min(1)]],
+      currency: [p?.currency ?? this.position.currency, Validators.required],
+      quantity: [p?.quantity ?? this.position.quantity, [Validators.required, Validators.min(0.0001), Validators.pattern("^[.0-9]+$")]],
+      measureUnit: [p?.measureUnit ?? this.position.measureUnit, Validators.required],
+      deliveryDate: [this.parseDate(p?.deliveryDate ?? this.position.deliveryDate), [Validators.required, CustomValidators.futureDate()]],
+      paymentTerms: [p?.paymentTerms ?? this.position.paymentTerms, Validators.required],
+      manufacturer: [p?.manufacturer ?? '', Validators.required],
+      standard: [p?.standard ?? ''],
     });
 
     // @TODO Временное отключение валют
-    this.newCommercialProposalForm.get('currency').setValue(PositionCurrency.RUB);
-    this.newCommercialProposalForm.get('currency').disable();
-
-    this.supplierContragentControl = this.formBuilder.control(
-      this.supplier || this.defaultCPValue('supplierContragent'),
-      [Validators.required, (control) => this.supplierOfferExistsValidator(control)]
-    );
+    this.form.get('currency').setValue(PositionCurrency.RUB);
+    this.form.get('currency').disable();
 
     if (this.supplier || this.commercialProposal?.supplierContragent) {
-      this.supplierContragentControl.disable();
+      this.form.get('supplierContragentId').disable();
     }
-  }
-
-  filesSelected(files: File[]): void {
-    files.map(file => this.formBuilder.control(new AppFile(file)))
-      .forEach(control => this.formDocuments.push(control));
   }
 
   submit() {
-    this.newCommercialProposalForm.disable();
+    if (this.form.invalid) { return; }
 
-    const body = {
-      ...this.newCommercialProposalForm.value,
-      supplierContragentId: this.supplierContragentControl.value.id,
-      documents: this.formDocuments.value.filter(({ valid }: AppFile) => valid).map(({ file }: AppFile) => file)
-    };
-
-    // Отправляем КП
-    this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, body));
+    this.form.disable();
+    this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, {
+      ...this.form.value,
+      supplierContragentId: this.form.get('supplierContragentId').value,
+    }));
     this.close.emit();
   }
 
-  supplierOfferExistsValidator(control: AbstractControl): CustomValidators {
-    return control.value && this.position && this.position.linkedOffers
-      .some(linkedOffer => linkedOffer.supplierContragent.id === control.value.id) ? { supplierOfferExist: true } : null;
-  }
+  private parseDate(date: string) {
+    if (!date) { return null; }
 
-  quantityValidator(): CustomValidators {
-    const value = this.newCommercialProposalForm.get('quantity').value;
-    return (!value || value === '' || value >= this.position.quantity) ? null : { "quantityNotEnough": true };
-  }
-
-  deliveryDateValidator(): CustomValidators {
-    const enteredDate = this.newCommercialProposalForm.get('deliveryDate').value;
-    if (!moment(enteredDate, 'DD.MM.YYYY', true).isValid()) {
-      this.dateIsLaterThanNeeded = false;
-      return null;
-    } else {
-      const controlDate = moment(moment(this.position.deliveryDate).format('DD.MM.YYYY'), 'DD.MM.YYYY');
-      const validationDate = moment(enteredDate, 'DD.MM.YYYY');
-
-      return controlDate.isBefore(validationDate) ? { dateIsLaterThanNeeded: true } : null;
+    try {
+      return this.datePipe.transform(new Date(date), 'dd.MM.yyyy');
+    } catch (e) {
+      return date;
     }
-  }
-
-  private get defaultDeliveryDate() {
-    const deliveryDate = this.defaultCPValue('deliveryDate', this.position.deliveryDate);
-    return deliveryDate ? moment(new Date(deliveryDate)).format('DD.MM.YYYY') : null;
-  }
-
-  defaultCPValue = (field: keyof CommercialProposal, defaultValue: any = "") => this.commercialProposal && this.commercialProposal[field] || defaultValue;
-  getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-
-  requestDocumentToFile(document: RequestDocument) {
-    return new AppFile({
-      name: document.filename,
-      size: document.size
-    } as File);
   }
 
   ngOnDestroy() {
