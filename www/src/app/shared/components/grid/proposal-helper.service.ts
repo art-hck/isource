@@ -2,8 +2,6 @@ import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { Position } from "./position";
 import { Proposal } from "./proposal";
-import { RequestPosition } from "../../../request/common/models/request-position";
-import { TechnicalCommercialProposal } from "../../../request/common/models/technical-commercial-proposal";
 import { TechnicalCommercialProposalByPosition } from "../../../request/common/models/technical-commercial-proposal-by-position";
 import { TechnicalCommercialProposalPosition } from "../../../request/common/models/technical-commercial-proposal-position";
 
@@ -29,13 +27,13 @@ export class ProposalHelperService {
     return proposals.length >= positions.length;
   }
 
-  isQuantityPositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
+  isQuantityPositionsValid(positions: TechnicalCommercialProposalPosition[], hasAnalogs: boolean): boolean {
     const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
 
     return filteredProposals.every(({position, quantity}) => position.quantity === quantity);
   }
 
-  isDatePositionsValid(positions: TechnicalCommercialProposalPosition[], proposal: TechnicalCommercialProposal, hasAnalogs: boolean): boolean {
+  isDatePositionsValid(positions: TechnicalCommercialProposalPosition[], hasAnalogs: boolean): boolean {
     const filteredProposals = positions.filter(position => position.isAnalog === hasAnalogs);
 
     return filteredProposals.every(

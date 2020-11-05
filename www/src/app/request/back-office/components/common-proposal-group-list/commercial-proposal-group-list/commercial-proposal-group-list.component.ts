@@ -1,27 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { ProposalGroup } from "../../../common/models/proposal-group";
-import { delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, iif, Observable, Subject, throwError } from "rxjs";
+import { ProposalGroup } from "../../../../common/models/proposal-group";
+import { catchError, delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { CommercialProposalsService } from "../../services/commercial-proposals.service";
-import { Uuid } from "../../../../cart/models/uuid";
-import { RequestState } from "../../states/request.state";
-import { RequestActions } from "../../actions/request.actions";
+import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
+import { Uuid } from "../../../../../cart/models/uuid";
+import { RequestState } from "../../../states/request.state";
+import { RequestActions } from "../../../actions/request.actions";
 import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
-import { Request } from "../../../common/models/request";
-import { CommercialProposalsActions } from "../../actions/commercial-proposal.actions";
+import { Request } from "../../../../common/models/request";
+import { CommercialProposalsActions } from "../../../actions/commercial-proposal.actions";
 import { FormBuilder, Validators } from "@angular/forms";
-import { CommercialProposalGroupFilter } from "../../../common/models/commercial-proposal-group-filter";
-import moment from "moment";
-import { CommercialProposalState } from "../../states/commercial-proposal.state";
-import { ProcedureAction } from "../../models/procedure-action";
-import { Procedure } from "../../models/procedure";
-import { ProcedureSource } from "../../enum/procedure-source";
-import { FeatureService } from "../../../../core/services/feature.service";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { CommercialProposal } from "../../../common/models/commercial-proposal";
-import { RequestPosition } from "../../../common/models/request-position";
+import { CommercialProposalGroupFilter } from "../../../../common/models/commercial-proposal-group-filter";
+import { CommercialProposalState } from "../../../states/commercial-proposal.state";
+import { ProcedureAction } from "../../../models/procedure-action";
+import { Procedure } from "../../../models/procedure";
+import { ProcedureSource } from "../../../enum/procedure-source";
+import { FeatureService } from "../../../../../core/services/feature.service";
+import { ToastActions } from "../../../../../shared/actions/toast.actions";
+import { RequestPosition } from "../../../../common/models/request-position";
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
@@ -29,19 +27,14 @@ import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
 
 @Component({
-  selector: 'app-commercial-proposal-group-view',
-  templateUrl: './commercial-proposal-group-view.component.html',
-  styleUrls: ['commercial-proposal-group-view.component.scss'],
+  selector: 'app-commercial-proposal-group-list',
+  templateUrl: './commercial-proposal-group-list.component.html'
 })
-export class CommercialProposalGroupViewComponent implements OnInit {
+export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Select(RequestState.request) request$: Observable<Request>;
   @Select(CommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
-  @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   requestId: Uuid;
-  procedureModalPayload: ProcedureAction & { procedure?: Procedure };
-  editedGroup: ProposalGroup;
-  files: File[] = [];
   destroy$ = new Subject();
 
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
@@ -60,7 +53,7 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     tap(([, { id, number }]) => this.bc.breadcrumbs = [
       { label: "Заявки", link: "/requests/backoffice" },
       { label: `Заявка №${number}`, link: `/requests/backoffice/${id}` },
-      { label: 'Согласование КП', link: `/requests/backoffice/${this.requestId}/commercial-proposals`},
+      { label: 'Согласование КП', link: `/requests/backoffice/${id}/commercial-proposals`},
     ]),
     switchMap(() => this.filter$),
     switchMap(filter => this.service.groupList(this.requestId, filter)),
@@ -79,7 +72,9 @@ export class CommercialProposalGroupViewComponent implements OnInit {
 
   readonly updateProcedures = (request: Request) => [new RefreshProcedures(request.id), new FetchAvailablePositions(request.id)];
   readonly downloadTemplate = (request: Request) => new DownloadTemplate(request.id);
-  readonly uploadTemplate = (requestId: Uuid, groupId: Uuid, files: File[], groupName: string) => new UploadTemplate(requestId, files, groupId, groupName);
+  readonly uploadTemplate = (groupName: string, files: File[]) => this.store.dispatch(
+    new UploadTemplate(this.requestId, files, null, groupName)
+  ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe()
 
   constructor(
     private bc: UxgBreadcrumbsService,
@@ -90,14 +85,6 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     public store: Store,
     public service: CommercialProposalsService
   ) {}
-
-  filter(filter: CommercialProposalGroupFilter) {
-    this.filter$.next({
-      ...filter,
-      createdDateFrom: filter.createdDateFrom ? moment(filter.createdDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,
-      createdDateTo: filter.createdDateTo ? moment(filter.createdDateTo, 'DD.MM.YYYY').format('YYYY-MM-DD') : null
-    });
-  }
 
   ngOnInit() {
     this.actions.pipe(
@@ -113,29 +100,27 @@ export class CommercialProposalGroupViewComponent implements OnInit {
     });
   }
 
-  onChangeFilesList(files: File[]): void {
-    this.formTemplate.get('fileTemplate').setValue(files);
-  }
-
   updateGroups(): void {
     this.service.groupList(this.requestId).subscribe(groups => {
       groups.forEach(group => this.newGroup$.next(group));
     });
   }
 
-  submit() {
-    if (this.formTemplate.valid) {
-      this.uploadTemplateModal.close();
-      this.store.dispatch(
-        this.uploadTemplate(
-          this.requestId,
-          null,
-          this.formTemplate.get('fileTemplate').value,
-          this.formTemplate.get('commercialProposalGroupName').value
-        )
-      ).pipe(finalize(() => this.store.dispatch(new FetchAvailablePositions(this.requestId)))).subscribe();
-    }
+  saveGroup(body: Partial<ProposalGroup<Uuid>>) {
+    iif(() => !body?.id,
+      this.service.groupCreate(this.requestId, body),
+      this.service.groupUpdate(this.requestId, body?.id, body)
+    ).pipe(
+      takeUntil(this.destroy$),
+      catchError(err => {
+        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при создании КП"));
+        return throwError(err);
+      }),
+    ).subscribe(group => this.newGroup$.next(group));
   }
 
-  trackById = (i, { id }: CommercialProposal | Procedure) => id;
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

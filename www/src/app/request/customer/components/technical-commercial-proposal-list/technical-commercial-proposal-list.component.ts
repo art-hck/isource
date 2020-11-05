@@ -220,7 +220,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, AfterVi
     ).subscribe();
 
     this.actions.pipe(
-      ofActionCompleted(Reject, SendToEditMultiple, ReviewMultiple),
+      ofActionCompleted(SendToEditMultiple, ReviewMultiple),
       takeUntil(this.destroy$)
     ).subscribe(({ result, action }) => {
       const e = result.error as any;

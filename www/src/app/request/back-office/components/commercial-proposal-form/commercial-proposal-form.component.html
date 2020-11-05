@@ -1,11 +1,11 @@
 <div class="app-bold position-name">{{ position?.name }}</div>
 
-<form class="cp-creation-form" [formGroup]="newCommercialProposalForm" (ngSubmit)="submit()">
+<form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
 
   <div class="form-row app-row">
     <div class="app-col-6">
       <uxg-dropdown-input
-        [formControl]="supplierContragentControl"
+        formControlName="supplierContragentId"
          placeholder="Наименование контрагента" appSuggestions #sug="appSuggestions"
         [$]="contragents$" [lg]="true" [strictMode]="true" [displayByFn]="getContragentName" [searchFn]="searchContragents"
       >
@@ -16,7 +16,7 @@
           </div>
         </ng-container>
         <ng-template #errors>
-          <div class="app-control-error" *ngIf="supplierContragentControl.errors as e">
+          <div class="app-control-error" *ngIf="form.get('supplierContragentId').errors as e">
             <span *ngIf="e.required">Обязательное поле</span>
             <span *ngIf="e.notFromList">Выберите контрагента из списка</span>
             <span *ngIf="e.supplierOfferExist">КП от выбранного поставщика уже добавлено</span>
@@ -50,53 +50,49 @@
   </div>
 
   <div class="form-row app-row">
-    <div class="app-col-6">
-      <div class="app-row">
-        <div class="app-col-7">
-          <div class="app-control-wrap">
-            <input #quantity [warning]="quantityValidator() !== null"
-                   uxgInput lg formControlName="quantity" type="number"/>
-            <label class="app-control-label" (click)="quantity.focus()">Количество</label>
-            <div class="app-control-error" *ngIf="quantityValidator()">
-              <span>Меньше необходимого</span>
-            </div>
-            <div class="app-control-error" *ngIf="newCommercialProposalForm.get('quantity').errors as e">
-              <span *ngIf="e.required">Обязательное поле</span>
-            </div>
-          </div>
+    <div class="app-col-3">
+      <div class="app-control-wrap">
+        <input #quantity [warning]="validators.quantityValidator(position)(form.get('quantity')) !== null"
+               uxgInput lg formControlName="quantity" type="number"/>
+        <label class="app-control-label" (click)="quantity.focus()">Количество</label>
+        <div class="app-control-error" *ngIf="validators.quantityValidator(position)(form.get('quantity'))">
+          <span>Меньше необходимого</span>
         </div>
-
-        <div class="app-col-5">
-          <uxg-dropdown-input appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
-                              [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #okei="appSuggestions"
-          >
-            <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
-              <div uxgDropdownItem
-                   *ngFor="let suggestion of okeiSuggestions"
-                   [value]="suggestion.symbol | lowercase"
-                   [attr.title]="suggestion.name | lowercase"
-              >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
-            </ng-container>
-            <ng-template #errors>
-              <div class="app-control-error" *ngIf="newCommercialProposalForm.get('measureUnit').errors as e">
-                <span *ngIf="e.required">Обязательное поле</span>
-                <span *ngIf="e.notFromList">Выберите из списка</span>
-              </div>
-            </ng-template>
-          </uxg-dropdown-input>
+        <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
         </div>
       </div>
     </div>
 
+    <div class="app-col-3">
+      <uxg-dropdown-input appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
+                          [$]="okeiList$" [searchFn]="okeiService.searchOkei" [lg]="true" #okei="appSuggestions"
+      >
+        <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+          <div uxgDropdownItem
+               *ngFor="let suggestion of okeiSuggestions"
+               [value]="suggestion.symbol | lowercase"
+               [attr.title]="suggestion.name | lowercase"
+          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span></div>
+        </ng-container>
+        <ng-template #errors>
+          <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+            <span *ngIf="e.notFromList">Выберите из списка</span>
+          </div>
+        </ng-template>
+      </uxg-dropdown-input>
+    </div>
+
     <div class="app-col-4">
       <div class="app-control-wrap">
-        <input [warning]="deliveryDateValidator() !== null"
+        <input [warning]="validators.deliveryDateValidator(position)(form.get('deliveryDate')) !== null"
                #deliveryDate uxgInput lg formControlName="deliveryDate" uxgDatepicker />
-        <label class="app-control-label" (click)="deliveryDate.focus()">Сроки поставки</label>
+        <label class="app-control-label" (click)="deliveryDate.focus()">Срок поставки</label>
         <label class="app-control-icon" (click)="deliveryDate.focus()">
           <uxg-icon shape="app-calendar-big" size="24"></uxg-icon>
         </label>
-        <div class="app-control-error" *ngIf="deliveryDateValidator()">
+        <div class="app-control-error" *ngIf="validators.deliveryDateValidator(position)(form.get('deliveryDate'))">
           <span>Позже запрашиваемой даты</span>
         </div>
       </div>
@@ -104,77 +100,44 @@
     <div class="app-col-2"></div>
   </div>
 
-  <div class="form-row app-row">
-    <div class="app-col">
+  <div class="app-row">
+    <div class="app-col app-col-6">
       <div class="app-control-wrap">
-        <uxg-dropdown lg class="app-dropdown" formControlName="paymentTerms" placeholder="Условия оплаты...">
-          <div uxgDropdownItem value="30 дней по факту поставки">
-            30 дней со дня поставки по факту оказания всех услуг
-          </div>
-
-          <div uxgDropdownItem value="60 дней по факту поставки">
-            60 дней со дня поставки по факту оказания всех услуг
-          </div>
-
-          <div uxgDropdownItem value="30 дней по факту поставки">
-            90 дней со дня поставки по факту оказания всех услуг
-          </div>
-        </uxg-dropdown>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-row app-row">
-    <div class="app-col-auto">
-      <div class="app-control-wrap">
-        <button type="button" uxgButton secondary appUploadFile (select)="filesSelected($event)" [multiple]="true">Выбрать документы</button>
-      </div>
-    </div>
-
-    <div class="app-col">
-      <div class="app-control-wrap">
-        <span class="app-secondary-color">
-          Прикладываемый/ые документы относятся к полному КП контрагента, и отображаются для всех КП по позициям от этого контрагента.
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <br/>
-
-  <!-- document list -->
-  <ng-container *ngIf="formDocuments.controls.length || defaultCPValue('documents').length">
-    <small class="app-ghost-color app-bold">ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ</small>
-    <div class="documents">
-      <div class="app-row">
-        <div class="app-col" *ngFor="let document of defaultCPValue('documents')">
-          <ng-container *ngTemplateOutlet="documentRef; context: {document: requestDocumentToFile(document) }"></ng-container>
+        <input #manufacturer uxgInput type="text" lg formControlName="manufacturer"/>
+        <label class="app-control-label" (click)="manufacturer.focus()">Изготовитель</label>
+        <div class="app-control-error" *ngIf="form.get('manufacturer').errors as e">
+          <span *ngIf="e.required">Обязательное поле</span>
         </div>
-        <div class="app-col" *ngFor="let document of formDocuments.controls; index as i">
-          <ng-container *ngTemplateOutlet="documentRef; context: {document: document.value, i:i}"></ng-container>
-        </div>
-
-        <ng-template #documentRef let-document="document" let-i="i">
-          <app-file [appFile]="document" (delete)="formDocuments.removeAt(i)" [disableDelete]="newCommercialProposalForm.get('documents').disabled || i == 0"></app-file>
-        </ng-template>
       </div>
     </div>
-  </ng-container>
+    <div class="app-col app-col-4">
+      <div class="app-control-wrap">
+        <input #standard uxgInput type="text" lg formControlName="standard"/>
+        <label class="app-control-label" (click)="standard.focus()">Стандарт</label>
+      </div>
+    </div>
+    <div class="app-col app-col-2"></div>
+  </div>
 
 
   <div class="app-row">
     <div class="app-col">
-      <span class="app-secondary-color">
-        Все поля являются <b class="app-alert-color">обязательными</b> к заполнению! Документы прикладывать не обязательно.
-      </span>
-    </div>
-
-    <div class="app-row app-justify-content-end">
-      <button type="button" uxgButton lg secondary (click)="close.emit()">Отмена</button>
-      <button uxgButton lg primary [disabled]="newCommercialProposalForm.invalid || supplierContragentControl.invalid">
-        {{ commercialProposal ? 'Сохранить' : 'Добавить' }}
-      </button>
+      <uxg-dropdown-input formControlName="paymentTerms" placeholder="Условия оплаты" lg>
+        <div uxgDropdownItem *ngFor="let term of paymentTerms" [value]="term[0]">{{ term[1] }}</div>
+      </uxg-dropdown-input>
     </div>
   </div>
 
+  <div class="app-row app-align-items-center">
+    <div class="app-col">
+      Все поля, кроме стандарта, являются <b class="app-error-color">обязательными</b> к заполнению! Документы
+      прикладывать не
+      обязательно.
+    </div>
+
+    <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
+    <button uxgButton lg primary>
+      {{ commercialProposal ? 'Сохранить' : 'Добавить' }}
+    </button>
+  </div>
 </form>

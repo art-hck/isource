@@ -44,12 +44,6 @@ export class TechnicalCommercialProposalService {
     return this.api.post<TechnicalCommercialProposalPosition[]>(url, data);
   }
 
-  reject(requestId: Uuid, position: RequestPosition) {
-    // const url = `requests/customer/${requestId}/${position}/technical-commercial-proposal/reject`;
-    // return this.api.get<TechnicalCommercialProposal>(url);
-    return of(null).pipe(delay(1500));
-  }
-
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
     const url = `requests/customer/${ requestId }/analytic-report/download-by-tcp`;
     return this.api.post(url, { requestTechnicalCommercialProposalGroupId: groupId }, { responseType: 'blob' });

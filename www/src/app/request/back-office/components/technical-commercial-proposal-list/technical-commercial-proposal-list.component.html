@@ -47,12 +47,8 @@
                 <!--                    <div>-->
                 <!--                      <button uxgButton clear (click)="switchView('simple-grid')">по позициям</button>-->
                 <!--                    </div>-->
-                <div>
-                  <button uxgButton clear (click)="switchView('grid')">по позициям матрица</button>
-                </div>
-                <div>
-                  <button uxgButton clear (click)="switchView('list')">по поставщикам</button>
-                </div>
+                <div><button uxgButton clear (click)="switchView('grid')">по позициям матрица</button></div>
+                <div><button uxgButton clear (click)="switchView('list')">по поставщикам</button></div>
               </div>
             </uxg-popover>
           </div>
@@ -107,10 +103,9 @@
             [positionCell]="true"
             [suppliers]="suppliers(proposals)"
             [proposals]="proposals"
-            [proposalsByPos]="proposalsByPositions$ | async"
             [showParams]="true"
             (openCommonParams)="gridTable.scrollIntoView()"
-            (editTechnicalCommercialProposal)="addContragentModal.open(); editingTCP = $event"
+            (edit)="addContragentModal.open(); editingTCP = $event"
             (scrollUpdated)="stickedPosition = $event.canScrollLeft"
           ></app-grid-contragents>
 
@@ -354,7 +349,14 @@
 <ng-template #placeholder>
   <div class="app-row" [class.app-layout]="view !== 'list'">
     <div class="app-col">
-      <div class="placeholder" *ngFor="let i of [].constructor(10)"></div>
+      <div class="app-row">
+        <div class="app-col app-row">
+          <div class="placeholder-row" *ngFor="let i of [].constructor(2)" [style.height.px]="40" [style.width.px]="200"></div>
+        </div>
+        <div class="placeholder-row" [style.height.px]="40" [style.width.px]="80"></div>
+      </div>
+
+      <div class="placeholder" *ngFor="let i of [].constructor(10)" [style.height.px]="160"></div>
     </div>
     <div class="app-col-aside detachable"></div>
   </div>

@@ -40,12 +40,12 @@ export class CommercialProposalsService {
     return this.api.post<ProposalGroup[]>(url, { filters });
   }
 
-  groupCreate(requestId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+  groupCreate(requestId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
     const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/create`;
     return this.api.post<ProposalGroup>(url, body);
   }
 
-  groupUpdate(requestId: Uuid, groupId: Uuid, body: { name: string, requestPositions: Uuid[] }) {
+  groupUpdate(requestId: Uuid, groupId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
     const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }/edit`;
     return this.api.post<ProposalGroup>(url, body);
   }
@@ -82,6 +82,9 @@ export class CommercialProposalsService {
     return this.api.post<RequestPosition>(url, { positionId });
   }
 
+  /**
+   * @deprecated
+   */
   uploadDocuments(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {
     const formData = new FormData();
     files.forEach(file => {
@@ -122,11 +125,6 @@ export class CommercialProposalsService {
   getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
     const url = `requests/backoffice/${ requestId }/contragents-with-tp`;
     return this.api.post<ContragentList[]>(url, { positions });
-  }
-
-  prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration, dateSummingUp) {
-    const url = `requests/backoffice/${ requestId }/procedures/${ procedureId }/prolong`;
-    return this.api.post(url, { dateEndRegistration, dateSummingUp });
   }
 
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {

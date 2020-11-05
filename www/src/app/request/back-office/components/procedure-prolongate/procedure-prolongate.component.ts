@@ -17,6 +17,7 @@ import { Moment } from "moment";
 import { catchError, finalize, takeUntil, tap } from "rxjs/operators";
 import { Subject, throwError } from "rxjs";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
+import { ProcedureService } from "../../services/procedure.service";
 
 @Component({
   selector: 'app-procedure-prolongate',
@@ -80,7 +81,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
   }
 
   constructor(
-    private offersService: CommercialProposalsService,
+    private procedureService: ProcedureService,
     private store: Store,
     private fb: FormBuilder
   ) {
@@ -90,7 +91,7 @@ export class ProcedureProlongateComponent implements OnChanges, OnDestroy {
     if (this.form.valid) {
       const { requestId, procedureId, dateEndRegistration, dateSummingUp } = this.form.value;
       this.isLoading = true;
-      this.offersService.prolongateProcedureEndDate(
+      this.procedureService.prolongateProcedureEndDate(
         requestId,
         procedureId,
         moment(dateEndRegistration, "DD.MM.YYYY HH:mm"),

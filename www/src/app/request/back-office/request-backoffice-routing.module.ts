@@ -11,9 +11,9 @@ import { TechnicalCommercialProposalListComponent } from "./components/technical
 import { RequestListComponent } from "./components/request-list/request-list.component";
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
-import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
+import { TechnicalCommercialProposalGroupListComponent } from "./components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
-import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
+import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 
 const routes: Routes = [
   {
@@ -33,7 +33,7 @@ const routes: Routes = [
       },
       {
         path: 'commercial-proposals',
-        component: CommercialProposalGroupViewComponent,
+        component: CommercialProposalGroupListComponent,
         data: { title: "Коммерческие предложения" }
       },
       {
@@ -52,7 +52,7 @@ const routes: Routes = [
       },
       {
         path: 'technical-commercial-proposals',
-        component: TechnicalCommercialProposalGroupViewComponent,
+        component: TechnicalCommercialProposalGroupListComponent,
         data: { title: "Технико-коммерческие предложения" },
       },
       {

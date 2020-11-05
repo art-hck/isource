@@ -85,7 +85,7 @@ export namespace TechnicalCommercialProposals {
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
 
-    constructor(public requestId: Uuid, public groupId: Uuid, public files: File[], public groupName?: string) {}
+    constructor(public requestId: Uuid, public files: File[], public groupId: Uuid, public groupName?: string) {}
   }
 
   // Скачать шаблон

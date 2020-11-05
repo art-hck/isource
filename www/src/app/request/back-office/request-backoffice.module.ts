@@ -36,15 +36,15 @@ import { ProcedureGridComponent } from './components/procedure-grid/procedure-gr
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureProlongateComponent } from "./components/procedure-prolongate/procedure-prolongate.component";
 import { ProcedureViewComponent } from './components/procedure-view/procedure-view.component';
-import { TechnicalCommercialProposalGroupViewComponent } from './components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component';
-import { TechnicalCommercialProposalGroupFormComponent } from './components/technical-commercial-proposal-group-form/technical-commercial-proposal-group-form.component';
+import { TechnicalCommercialProposalGroupListComponent } from './components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component';
 import { ContractFormComponent } from "./components/contract-form/contract-form.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
 import { CommercialProposalComponent } from './components/commercial-proposal/commercial-proposal.component';
-import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
-import { CommercialProposalGroupFormComponent } from "./components/commercial-proposal-group-form/commercial-proposal-group-form.component";
+import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { CommonProposalGroupFormComponent } from "./components/common-proposal-group-form/common-proposal-group-form.component";
+import { CommonProposalGroupListComponent } from './components/common-proposal-group-list/common-proposal-group-list.component';
 
 @NgModule({
   declarations: [
@@ -59,8 +59,8 @@ import { CommercialProposalGroupFormComponent } from "./components/commercial-pr
     ProcedureProlongateComponent,
     TechnicalProposalComponent,
     CommercialProposalViewComponent,
-    CommercialProposalGroupViewComponent,
-    CommercialProposalGroupFormComponent,
+    CommercialProposalGroupListComponent,
+    CommonProposalGroupFormComponent,
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalListComponent,
@@ -72,11 +72,11 @@ import { CommercialProposalGroupFormComponent } from "./components/commercial-pr
     ProcedureComponent,
     ProcedureGridComponent,
     ProcedureViewComponent,
-    TechnicalCommercialProposalGroupViewComponent,
-    TechnicalCommercialProposalGroupFormComponent,
+    TechnicalCommercialProposalGroupListComponent,
     ContractFormComponent,
     ContractListComponent,
-    CommercialProposalComponent
+    CommercialProposalComponent,
+    CommonProposalGroupListComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,
