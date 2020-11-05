@@ -47,6 +47,8 @@ export class CommonProposalGroupFormComponent implements OnChanges, OnDestroy {
       id: this.group?.id,
       requestPositions: this.form.value.requestPositions.map(({ id }) => id)
     });
+
+    this.complete.emit();
   }
 
   trackById = (item: RequestPosition) => item.id;
