@@ -23,6 +23,7 @@ import { Okpd2Item } from "../../../../core/models/okpd2-item";
 import { Uuid } from "../../../../cart/models/uuid";
 import { CommercialProposalsService } from "../../services/commercial-proposals.service";
 import { searchContragent } from "../../../../shared/helpers/search";
+import { Okpd2Service } from "../../../../shared/services/okpd2.service";
 
 @Component({
   selector: 'app-request-procedure-form',
@@ -72,6 +73,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     private procedureService: ProcedureService,
     private commercialProposalsService: CommercialProposalsService,
     private contragentService: ContragentService,
+    private okpd2Service: Okpd2Service,
     private store: Store,
     private cd: ChangeDetectorRef
   ) {}
@@ -171,7 +173,7 @@ export class ProcedureFormComponent implements OnInit, OnChanges, OnDestroy {
     this.form.get("general.okpd2").valueChanges.pipe(
       debounceTime(500),
       filter(value => typeof value === 'string'),
-      flatMap(value => this.procedureService.getOkpd2(value)),
+      flatMap(value => this.okpd2Service.getOkpd2(value)),
       tap(v => this.okpd2List$.next(v)),
       takeUntil(this.destroy$)
     ).subscribe();
