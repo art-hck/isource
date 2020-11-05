@@ -12,10 +12,8 @@ import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { Request } from "../../../../common/models/request";
 import { CommercialProposalsActions } from "../../../actions/commercial-proposal.actions";
 import { FormBuilder, Validators } from "@angular/forms";
-import { CommercialProposalGroupFilter } from "../../../../common/models/commercial-proposal-group-filter";
+import { ProposalGroupFilter } from "../../../../common/models/proposal-group-filter";
 import { CommercialProposalState } from "../../../states/commercial-proposal.state";
-import { ProcedureAction } from "../../../models/procedure-action";
-import { Procedure } from "../../../models/procedure";
 import { ProcedureSource } from "../../../enum/procedure-source";
 import { FeatureService } from "../../../../../core/services/feature.service";
 import { ToastActions } from "../../../../../shared/actions/toast.actions";
@@ -39,7 +37,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
 
   readonly procedureSource = ProcedureSource.COMMERCIAL_PROPOSAL;
   readonly newGroup$ = new BehaviorSubject<ProposalGroup>(null);
-  readonly filter$ = new BehaviorSubject<CommercialProposalGroupFilter>({});
+  readonly filter$ = new BehaviorSubject<ProposalGroupFilter>({});
   readonly form = this.fb.group({ requestPositionName: null, createdDateFrom: null, createdDateTo: null });
   readonly formTemplate = this.fb.group({
     commercialProposalGroupName: [null, [Validators.required]],
@@ -95,7 +93,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       const e = result.error as any;
       this.store.dispatch(e ?
         new ToastActions.Error(e && e.error.detail) :
-        new ToastActions.Success(`Группа КП успешно сохранена`));
+        new ToastActions.Success(`Группа ТКП успешно сохранена`));
       if (!e) { this.updateGroups(); }
     });
   }
@@ -113,7 +111,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     ).pipe(
       takeUntil(this.destroy$),
       catchError(err => {
-        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при создании КП"));
+        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при сохранении ТКП"));
         return throwError(err);
       }),
     ).subscribe(group => this.newGroup$.next(group));

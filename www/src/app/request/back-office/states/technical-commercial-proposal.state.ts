@@ -63,20 +63,11 @@ export class TechnicalCommercialProposalState {
   constructor(private rest: TechnicalCommercialProposalService, private procedureService: ProcedureService) {
   }
 
-  @Selector()
-  static proposals({ proposals }: Model) { return proposals; }
-
-  @Selector()
-  static availablePositions({ availablePositions }: Model) { return availablePositions; }
-
-  @Selector()
-  static status({ status }: Model) { return status; }
-
-  @Selector()
-  static procedures({ procedures }: Model) { return procedures; }
-
-  @Selector()
-  static proposalsByPositions({ proposals, availablePositions }: Model) {
+  @Selector() static proposals({ proposals }: Model) { return proposals; }
+  @Selector() static availablePositions({ availablePositions }: Model) { return availablePositions; }
+  @Selector() static status({ status }: Model) { return status; }
+  @Selector() static procedures({ procedures }: Model) { return procedures; }
+  @Selector() static proposalsByPositions({ proposals, availablePositions }: Model) {
     // Перегруппировываем ТКП попозиционно, включаем позиции по которым еще не создано ни одного ТКП
     return proposals.reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
       proposal.positions.forEach(proposalPosition => {
@@ -93,10 +84,6 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch(ctx: Context, { requestId, groupId }: Fetch) {
-    // Временно выпилил кеш
-    // if (this.cache[requestId]) {
-    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
-    // }
     ctx.setState(patch({ proposals: null, status: "fetching" as StateStatus }));
     return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId }).pipe(
       tap(proposals => ctx.setState(patch({ proposals }))),

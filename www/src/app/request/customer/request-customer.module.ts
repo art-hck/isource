@@ -22,12 +22,13 @@ import { RequestListState } from "./states/request-list.state";
 import { TechnicalProposalState } from "./states/technical-proposal.state";
 import { CommercialProposalState } from "./states/commercial-proposal.state";
 import { CommercialProposalListComponent } from "./components/commercial-proposal-list/commercial-proposal-list.component";
-import { TechnicalCommercialProposalGroupViewComponent } from "./components/technical-commercial-proposal-group-view/technical-commercial-proposal-group-view.component";
+import { TechnicalCommercialProposalGroupListComponent } from "./components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
 import { ContractState } from "./states/contract.state";
 import { ContractService } from "./services/contract.service";
 import { TechnicalCommercialProposalConfirmComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-confirm/technical-commercial-proposal-confirm.component';
-import { CommercialProposalGroupViewComponent } from "./components/commercial-proposal-group-view/commercial-proposal-group-view.component";
+import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { CommonProposalGroupListComponent } from "./components/common-proposal-group-list/common-proposal-group-list.component";
 
 @NgModule({
   declarations: [
@@ -38,14 +39,15 @@ import { CommercialProposalGroupViewComponent } from "./components/commercial-pr
     RequestTechnicalProposalComponent,
     TechnicalProposalListComponent,
     CommercialProposalViewComponent,
-    CommercialProposalGroupViewComponent,
+    CommercialProposalGroupListComponent,
     TechnicalCommercialProposalListComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
     CommercialProposalListComponent,
-    TechnicalCommercialProposalGroupViewComponent,
+    TechnicalCommercialProposalGroupListComponent,
     TechnicalCommercialProposalConfirmComponent,
-    ContractListComponent
+    ContractListComponent,
+    CommonProposalGroupListComponent
   ],
   imports: [
     AgreementsModule,

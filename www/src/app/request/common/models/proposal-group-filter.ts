@@ -1,4 +1,4 @@
-export class CommercialProposalGroupFilter {
+export class ProposalGroupFilter {
   requestPositionName?: string;
   createdDateFrom?: string;
   createdDateTo?: string;

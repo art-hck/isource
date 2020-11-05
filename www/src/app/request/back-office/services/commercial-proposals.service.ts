@@ -9,7 +9,7 @@ import { ContragentList } from 'src/app/contragent/models/contragent-list';
 import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { ProposalGroup } from "../../common/models/proposal-group";
-import { CommercialProposalGroupFilter } from "../../common/models/commercial-proposal-group-filter";
+import { ProposalGroupFilter } from "../../common/models/proposal-group-filter";
 import { FormDataService } from "../../../shared/services/form-data.service";
 
 @Injectable({
@@ -35,7 +35,7 @@ export class CommercialProposalsService {
     return this.api.get<ProposalGroup>(url);
   }
 
-  groupList(requestId: Uuid, filters: CommercialProposalGroupFilter = {}) {
+  groupList(requestId: Uuid, filters: ProposalGroupFilter = {}) {
     const url = `requests/backoffice/${ requestId }/commercial-proposal-groups`;
     return this.api.post<ProposalGroup[]>(url, { filters });
   }

@@ -4,7 +4,7 @@ import { Uuid } from "../../../cart/models/uuid";
 import { PositionsWithSuppliers } from "../../back-office/models/positions-with-suppliers";
 import { CommercialProposalReviewBody } from "../../common/models/commercial-proposal-review-body";
 import { ProposalGroup } from "../../common/models/proposal-group";
-import { CommercialProposalGroupFilter } from "../../common/models/commercial-proposal-group-filter";
+import { ProposalGroupFilter } from "../../common/models/proposal-group-filter";
 
 
 @Injectable({
@@ -19,7 +19,7 @@ export class CommercialProposalsService {
     return this.api.get<ProposalGroup>(url);
   }
 
-  groupList(requestId: Uuid, filters: CommercialProposalGroupFilter = {}) {
+  groupList(requestId: Uuid, filters: ProposalGroupFilter = {}) {
     const url = `requests/customer/${ requestId }/commercial-proposal-groups`;
     return this.api.post<ProposalGroup[]>(url, { filters });
   }
