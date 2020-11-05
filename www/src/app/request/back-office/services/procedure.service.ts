@@ -48,10 +48,6 @@ export class ProcedureService {
     return this.api.post<Procedure[]>(url, { positionId });
   }
 
-  getOkpd2(searchText: string) {
-    return this.api.post<Okpd2[]>(`okpd`, { searchText });
-  }
-
   prolongateProcedureEndDate(requestId, procedureId, dateEndRegistration, dateSummingUp) {
     const url = `requests/backoffice/${ requestId }/procedures/${ procedureId }/prolong`;
 

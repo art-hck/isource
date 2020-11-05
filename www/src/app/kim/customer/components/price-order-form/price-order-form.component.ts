@@ -9,7 +9,6 @@ import { PaymentTermsLabels } from "../../../../request/common/dictionaries/paym
 import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-order-type-labels";
 import { Observable, Subject } from "rxjs";
 import { OkatoRegion } from "../../../../shared/models/okato-region";
-import { OkatoService } from "../../../../shared/services/okpd2.service";
 import Create = PriceOrderActions.Create;
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
 import * as moment from "moment";
@@ -23,6 +22,8 @@ import { Router } from "@angular/router";
 import { shareReplay, takeUntil, tap } from "rxjs/operators";
 import { KimCartItem } from "../../../common/models/kim-cart-item";
 import { StateStatus } from "../../../../request/common/models/state-status";
+import { Okpd2Service } from "../../../../shared/services/okpd2.service";
+import { OkatoService } from "../../../../shared/services/okato.service";
 
 @Component({
   selector: 'app-kim-price-order-form',
@@ -64,12 +65,13 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private store: Store,
-              private okatoService: OkatoService,
+              private okpd2Service: Okpd2Service,
               public okeiService: OkeiService,
+              public okatoService: OkatoService,
               public router: Router) { }
 
   ngOnInit() {
-    this.okpd2List$ = this.okatoService.getOkpd2();
+    this.okpd2List$ = this.okpd2Service.getOkpd2Mock();
     this.form = this.fb.group({
       name: ["", Validators.required],
       regions: ["", Validators.required],

@@ -4,7 +4,7 @@ import { KimPriceOrderPosition } from "../../../../common/models/kim-price-order
 import { Uuid } from "../../../../../cart/models/uuid";
 import { Observable } from "rxjs";
 import { Okpd2Item } from "../../../../../core/models/okpd2-item";
-import { OkatoService } from "../../../../../shared/services/okpd2.service";
+import { Okpd2Service } from "../../../../../shared/services/okpd2.service";
 
 @Component({
   selector: 'app-kim-price-order-form-positions-params',
@@ -26,10 +26,10 @@ export class PriceOrderFormPositionsParamsComponent implements ControlValueAcces
   asFormGroup = (abstractControl: AbstractControl) => abstractControl as FormGroup;
   searchOkpd2 = (query, items: Okpd2Item[]) => items;
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okatoService: OkatoService) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private okpd2Service: Okpd2Service) {}
 
   ngOnInit() {
-    this.okpd2List$ = this.okatoService.getOkpd2();
+    this.okpd2List$ = this.okpd2Service.getOkpd2Mock();
   }
 
   ngAfterViewInit() {
