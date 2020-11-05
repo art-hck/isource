@@ -6,7 +6,7 @@ import { UxgBreadcrumbsService, UxgModalComponent } from "uxg";
 import { Actions, Store } from "@ngxs/store";
 import { Request } from "../../../common/models/request";
 import { FormBuilder, Validators } from "@angular/forms";
-import { CommercialProposalGroupFilter } from "../../../common/models/commercial-proposal-group-filter";
+import { ProposalGroupFilter } from "../../../common/models/proposal-group-filter";
 import moment from "moment";
 import { ProcedureAction } from "../../models/procedure-action";
 import { Procedure } from "../../models/procedure";
@@ -29,7 +29,7 @@ export class CommonProposalGroupListComponent {
   @Input() source = ProcedureSource.COMMERCIAL_PROPOSAL;
 
   @Output() createGroup = new EventEmitter<{ name: string, requestPositions: Uuid[] }>();
-  @Output() filter = new EventEmitter<CommercialProposalGroupFilter>();
+  @Output() filter = new EventEmitter<ProposalGroupFilter>();
   @Output() newProcedure = new EventEmitter();
   @Output() uploadTemplate = new EventEmitter<{ files: File[], groupName: string}>();
   @Output() downloadTemplate = new EventEmitter();
@@ -52,7 +52,7 @@ export class CommonProposalGroupListComponent {
     public service: CommercialProposalsService
   ) {}
 
-  emitFilter(filter: CommercialProposalGroupFilter) {
+  emitFilter(filter: ProposalGroupFilter) {
     this.filter.emit({
       ...filter,
       createdDateFrom: filter.createdDateFrom ? moment(filter.createdDateFrom, 'DD.MM.YYYY').format('YYYY-MM-DD') : null,

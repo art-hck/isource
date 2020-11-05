@@ -27,12 +27,12 @@
 <div class="app-row">
   <div class="app-col">
     <app-proposal-group
-      *ngFor="let group of tcpGroups$ | async"
+      *ngFor="let group of groups"
       [group]="group"
     ></app-proposal-group>
   </div>
 
-  <app-filter [formGroup]="form" [count]="(tcpGroups$ | async)?.length" (filter)="filter($event)">
+  <app-filter [formGroup]="form" [count]="groups?.length" (filter)="emitFilter($event)">
     <app-filter-section label="Наименование позиции">
       <input uxgInput type="text" formControlName="requestPositionName" placeholder="Наименование позиции или его часть" />
     </app-filter-section>

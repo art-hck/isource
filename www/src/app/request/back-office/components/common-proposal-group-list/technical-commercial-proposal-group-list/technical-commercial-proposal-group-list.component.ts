@@ -113,7 +113,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
     ).pipe(
       takeUntil(this.destroy$),
       catchError(err => {
-        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при создании КП"));
+        this.store.dispatch(new ToastActions.Error(err?.error?.detail || "Ошибка при сохранении КП"));
         return throwError(err);
       }),
     ).subscribe(group => this.newGroup$.next(group));
