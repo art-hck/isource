@@ -89,7 +89,7 @@
           <input uxgInput type="text" formControlName="positionName" placeholder="Наименование позиции" />
         </app-filter-section>
 
-        <app-filter-section label="Контрагент">
+        <app-filter-section label="Контрагент" *ngIf="(contragentsFilter$ | async)?.length">
           <app-filter-checkbox-list formControlName="contragents" searchPlaceholder="Заказчик"
             [foldedSearch]="true"
             [items$]="contragentsFilter$"
@@ -98,7 +98,7 @@
           </app-filter-checkbox-list>
         </app-filter-section>
 
-        <app-filter-section label="Согласование">
+        <app-filter-section label="Согласование" *ngIf="(statusesFilter$ | async)?.length">
           <app-filter-checkbox-list formControlName="tpStatus" [items$]="statusesFilter$"></app-filter-checkbox-list>
         </app-filter-section>
       </app-filter>
