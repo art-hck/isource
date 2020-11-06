@@ -18,6 +18,7 @@ import { searchContragents } from "../../../../shared/helpers/search";
 import { PaymentTermsLabels } from "../../../common/dictionaries/payment-terms-labels";
 import { CommercialProposalFormValidators } from "./commercial-proposal-form.validators";
 import { DatePipe } from "@angular/common";
+import { CommercialProposalInfo } from "../../models/commercial-proposal-info";
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 
 @Component({
@@ -28,6 +29,7 @@ import SaveProposal = CommercialProposalsActions.SaveProposal;
 })
 export class CommercialProposalFormComponent implements OnInit, OnDestroy {
   @Input() request: Request;
+  @Input() requestOffer: CommercialProposalInfo;
   @Input() position: RequestPosition;
   @Input() commercialProposal: RequestOfferPosition;
   @Input() supplier: ContragentShortInfo;
@@ -63,6 +65,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
 
     this.form = this.formBuilder.group({
       id: p?.id,
+      requestOfferId: this.requestOffer?.id,
       supplierContragentId: [this.supplier || p?.supplierContragent, [Validators.required, this.validators.supplierOfferExistsValidator(this.position)]],
       priceWithVat: [p?.priceWithVat ?? this.position.startPrice, [Validators.required, Validators.min(1)]],
       currency: [p?.currency ?? this.position.currency, Validators.required],
@@ -89,7 +92,7 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     this.form.disable();
     this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, {
       ...this.form.value,
-      supplierContragentId: this.form.get('supplierContragentId').value,
+      supplierContragentId: this.form.get('supplierContragentId').value.id,
     }));
     this.close.emit();
   }

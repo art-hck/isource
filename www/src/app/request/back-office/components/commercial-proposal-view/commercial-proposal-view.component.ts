@@ -44,6 +44,7 @@ import AddSupplier = CommercialProposalsActions.AddSupplier;
 import Rollback = CommercialProposalsActions.Rollback;
 import { SupplierCommercialProposalInfo } from "../../models/supplier-commercial-proposal-info";
 import { Title } from "@angular/platform-browser";
+import { CommercialProposalInfo } from "../../models/commercial-proposal-info";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -60,6 +61,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @Select(CommercialProposalState.suppliers) suppliers$: Observable<SupplierCommercialProposalInfo[]>;
   @Select(CommercialProposalState.procedures) procedures$: Observable<Procedure[]>;
   @Select(CommercialProposalState.status) status$: Observable<StateStatus>;
+  @Select(CommercialProposalState.requestOffers) requestOffers$: Observable<CommercialProposalInfo[]>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
   contragentsWithTp$: Observable<ContragentShortInfo[]>;
@@ -89,7 +91,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   );
   proposalModalData: {position: RequestPosition, proposal: Proposal};
   procedureModalPayload: ProcedureAction & { procedure?: Procedure };
-  addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal};
+  addProposalPositionPayload: {position: RequestPosition, supplier?: ContragentShortInfo, proposal?: Proposal, requestOffer: CommercialProposalInfo};
   prolongModalPayload: Procedure;
   rollbackDuration = 10 * 60;
   proposalPreparationPositions: RequestPosition[];
@@ -227,6 +229,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
       .getContragentsWithTp(request.id, positionsIds).pipe(
         finalize(() => this.loadingContragentList = false)
       );
+  }
+
+  getRequestOfferBySupplier(requestOffers: CommercialProposalInfo[], supplier: ContragentShortInfo): CommercialProposalInfo {
+    return requestOffers.find(({supplierId}) => supplierId === supplier.id);
   }
 
   filterPositionsOnProposalsPreparationStatus(positions: RequestPosition[]): void {
