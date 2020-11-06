@@ -108,6 +108,7 @@
           <ng-container *ngIf="suppliers.length || view=='simple-grid'">
             <ng-container *ngFor="let position of positions; index as i" formArrayName="positions">
               <app-grid-row
+                *ngIf="(requestOffers$ | async) as requestOffers"
                 [position]="position"
                 [suppliers]="convertSuppliers(suppliers, positions)"
                 [proposals]="convertProposals(position.linkedOffers)"
@@ -117,8 +118,8 @@
                 [getSupplier]="view === 'simple-grid' ? getProposalSupplier : null"
                 [editable]="position.status === 'PROPOSALS_PREPARATION'"
                 [formGroupName]="i"
-                (create)="addProposalPositionPayload = {position: position, supplier: $event}"
-                (edit)="addProposalPositionPayload = {position: position, proposal: $event}"
+                (create)="addProposalPositionPayload = {position: position, supplier: $event, requestOffer: getRequestOfferBySupplier(requestOffers, $event)}"
+                (edit)="addProposalPositionPayload = {position: position, proposal: $event, requestOffer: getRequestOfferBySupplier(requestOffers, $event.supplier)}"
                 (show)="proposalModalData = {proposal: $event, position: position}"
               >
                 <uxg-checkbox class="app-control" #checked formControlName="checked"></uxg-checkbox>
@@ -228,6 +229,7 @@
             *ngIf="addProposalPositionPayload"
             [position]="addProposalPositionPayload?.position"
             [supplier]="addProposalPositionPayload?.supplier"
+            [requestOffer]="addProposalPositionPayload?.requestOffer"
             [commercialProposal]="addProposalPositionPayload?.proposal"
             [request]="request"
             (close)="addProposalPositionPayload = null"
