@@ -19,11 +19,11 @@ export class EmployeeService {
   }
 
   getEmployeeList(type): Observable<EmployeeItem[]> {
-    return this.api.post<EmployeeItem[]>(`requests/backoffice/users`, {role: type});
+    return this.api.post<EmployeeItem[]>(`employees`, {role: type});
   }
 
   getEmployeeInfo(id: Uuid): Observable<EmployeeInfo> {
-    return this.api.get<EmployeeInfo>(`requests/backoffice/users/${id}`);
+    return this.api.get<EmployeeInfo>(`employees/${id}`);
   }
 
   createEmployee(employeeId: Uuid, employee: EmployeeInfoBrief) {

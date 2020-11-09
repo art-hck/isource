@@ -68,7 +68,19 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   get userBriefInfo(): string {
-    return this.user.isCustomer() ? this.user.getUserInfo()?.contragent.shortName : 'Бэк-офис';
+    if (this.user.isCustomer()) {
+      return this.user.getUserInfo()?.contragent.shortName;
+    }
+
+    if (this.user.isBackOffice()) {
+      return 'Бэк-офис';
+    }
+
+    if (this.user.isAdmin()) {
+      return 'Админ';
+    }
+
+    return '';
   }
 
   logout(): void {
