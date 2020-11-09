@@ -45,6 +45,7 @@ import { CommercialProposalComponent } from './components/commercial-proposal/co
 import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 import { CommonProposalGroupFormComponent } from "./components/common-proposal-group-form/common-proposal-group-form.component";
 import { CommonProposalGroupListComponent } from './components/common-proposal-group-list/common-proposal-group-list.component';
+import { CommonProposalItemFormComponent } from './components/common-proposal-item-form/common-proposal-item-form.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { CommonProposalGroupListComponent } from './components/common-proposal-g
     ContractListComponent,
     CommercialProposalComponent,
     CommonProposalGroupListComponent,
+    CommonProposalItemFormComponent,
   ],
   imports: [
     RequestBackofficeRoutingModule,

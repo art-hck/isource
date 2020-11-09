@@ -1,0 +1,5 @@
+.app-col {
+  &:not(:last-child) {
+    padding-right: 20px;
+  }
+}

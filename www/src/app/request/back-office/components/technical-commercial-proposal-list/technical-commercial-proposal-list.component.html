@@ -133,7 +133,7 @@
               [editable]="!isReviewed(proposalsByPos) && !isOnReview(proposalsByPos)"
               [formGroupName]="i"
               (show)="proposalModalData = {proposalPosition: $event.sourceProposal, proposal: getProposalByProposalPosition($event.sourceProposal, proposals)}"
-              (edit)="addProposalPosition(getProposalByProposalPosition($event.sourceProposal, proposals), proposalsByPos.position)"
+              (edit)="addProposalPosition(getProposalByProposalPosition($event.sourceProposal, proposals), proposalsByPos.position, $event.sourceProposal)"
               (create)="addProposalPosition(getProposalBySupplier($event, proposals), proposalsByPos.position)"
             >
               <ng-template #position>
@@ -279,12 +279,13 @@
 
       <uxg-modal [(state)]="addProposalPositionPayload">
         <h2>Добавить новое ТКП от {{addProposalPositionPayload?.proposal?.supplier.shortName}}</h2>
-        <technical-commercial-proposal-position-form
-          *ngIf="addProposalPositionPayload"
-          [position]="addProposalPositionPayload.position"
-          [proposal]="addProposalPositionPayload.proposal"
+        <app-common-proposal-item-form
+          *ngIf="addProposalPositionPayload as p"
+          [position]="p.position"
+          [proposalItem]="p.proposalPosition"
           (close)="addProposalPositionPayload = null"
-        ></technical-commercial-proposal-position-form>
+          (save)="saveProposal($event, addProposalPositionPayload.proposal)"
+        ></app-common-proposal-item-form>
       </uxg-modal>
 
       <uxg-modal #addContragentModal size="m">

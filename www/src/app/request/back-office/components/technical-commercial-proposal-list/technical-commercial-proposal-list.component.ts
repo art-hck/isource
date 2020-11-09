@@ -48,6 +48,7 @@ import Rollback = TechnicalCommercialProposals.Rollback;
 import UpdateParams = TechnicalCommercialProposals.UpdateParams;
 import { Title } from "@angular/platform-browser";
 import { TechnicalCommercialProposalService } from "../../services/technical-commercial-proposal.service";
+import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 
 @Component({
   templateUrl: './technical-commercial-proposal-list.component.html',
@@ -79,6 +80,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   view: ProposalsView = "grid";
   addProposalPositionPayload: {
     proposal: TechnicalCommercialProposal,
+    proposalPosition: TechnicalCommercialProposalPosition,
     position: RequestPosition,
     supplier?: ContragentShortInfo
   };
@@ -231,8 +233,8 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     return this.canNotAddNewContragent;
   }
 
-  addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition) {
-    this.addProposalPositionPayload = { proposal, position };
+  addProposalPosition(proposal: TechnicalCommercialProposal, position: RequestPosition, proposalPosition?: TechnicalCommercialProposalPosition) {
+    this.addProposalPositionPayload = { proposal, position, proposalPosition };
   }
 
   onChangeFilesList(files: File[]): void {
@@ -272,6 +274,17 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   canRollback(position: RequestPosition): boolean {
     return position.status === PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT &&
       moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
+  }
+
+  saveProposal(proposalItem, proposal: TechnicalCommercialProposal) {
+    const positions: TechnicalCommercialProposalPosition[] = [...proposal?.positions];
+    const i = positions?.findIndex(({id}) => proposalItem.id === id);
+
+    i >= 0 ? positions[i] = proposalItem : positions.push(proposalItem);
+
+    proposalItem.deliveryDate = proposalItem.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
+    this.store.dispatch(new CreatePosition({ ...proposal, positions }));
+    this.addProposalPositionPayload = null;
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;
