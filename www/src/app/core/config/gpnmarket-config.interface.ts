@@ -16,7 +16,8 @@ export interface GpnmarketConfigInterface {
     api: string,
     ws: string,
     apiChat: string,
-    wsChat: string
+    wsChat: string,
+    wsNotifications: string
   };
   files: {
     allowedExtensions: AppFileExtensions,

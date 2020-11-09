@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Menu, MenuModel } from "../../models/menu.model";
 import { UserInfoService } from "../../../user/service/user-info.service";
 import { CartStoreService } from "../../../cart/services/cart-store.service";
@@ -8,8 +16,11 @@ import { MessagesService } from "../../../chat/services/messages.service";
 import { distinctUntilChanged, filter, mapTo, switchMap, takeUntil, tap } from "rxjs/operators";
 import { BehaviorSubject, fromEvent, iif, interval, merge, Subject } from "rxjs";
 import { Title } from "@angular/platform-browser";
-import { Router } from "@angular/router";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../../config/gpnmarket-config.interface";
+import { NotificationsService } from "../../services/notifications.service";
+import { NotificationPopupComponent } from "../notification-popup-list/notification-popup.component";
+import { NotificationListComponent } from "../notification-list/notification-list.component";
+import { DOCUMENT } from "@angular/common";
 
 @Component({
   selector: 'app-nav',
@@ -17,6 +28,9 @@ import { APP_CONFIG, GpnmarketConfigInterface } from "../../config/gpnmarket-con
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit, OnDestroy {
+
+  @ViewChild('notificationPopupComponent') notificationPopupList: NotificationPopupComponent;
+  @ViewChild('notificationListComponent') notificationListComponent: NotificationListComponent;
   @Output() openModal = new EventEmitter();
 
   get menu(): MenuModel[] {
@@ -25,20 +39,28 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   readonly unreadMessagesCount$ = new BehaviorSubject<number>(0);
+  readonly unreadNotificationsCount$ = new BehaviorSubject<number>(0);
   readonly destroy$ = new Subject();
 
   constructor(
     @Inject(APP_CONFIG) private appConfig: GpnmarketConfigInterface,
-    private router: Router,
+    @Inject(DOCUMENT) public document: Document,
     public title: Title,
     public auth: AuthService,
     public user: UserInfoService,
     public cartStoreService: CartStoreService,
     public featureService: FeatureService,
-    public messagesService: MessagesService
+    public messagesService: MessagesService,
+    public notificationsService: NotificationsService
   ) {}
 
   ngOnInit() {
+    this.notificationsService.unreadCount().pipe(takeUntil(this.destroy$))
+      .subscribe(({count}) => this.unreadNotificationsCount$.next(count));
+
+    this.notificationsService.onNew().pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.unreadMessagesCount$.next(this.unreadMessagesCount$.getValue() + 1));
+
     this.messagesService.unreadCount().pipe(takeUntil(this.destroy$))
       .subscribe(({count}) => this.unreadMessagesCount$.next(count));
 
@@ -69,6 +91,11 @@ export class NavComponent implements OnInit, OnDestroy {
 
   get userBriefInfo(): string {
     return this.user.isCustomer() ? this.user.getUserInfo()?.contragent.shortName : 'Бэк-офис';
+  }
+
+  openNotificationsModal() {
+    this.openModal.emit();
+    this.notificationPopupList?.hideAllNotifications();
   }
 
   logout(): void {

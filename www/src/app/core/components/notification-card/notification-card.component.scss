@@ -1,28 +1,58 @@
 @import "src/theme";
+@import "src/assets/styles/statuses";
 
 .notification-card {
   height: 142px;
   width: 412px;
-  border: solid 1px uxg($theme, color-border);
   border-radius: 4px;
   padding: 18px;
   margin-bottom: 16px;
+
   &-header {
     margin-bottom: 10px;
   }
+
   &-request {
     font-weight: 500;
     margin-bottom: 5px;
   }
+
   &-footer {
-      position: absolute;
-      right: 0;
-      bottom: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
-  &.not_seen {
-    background-color: #F0FAF6;
-    border: 0;
+
+  &.popup {
+    background-color: white;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
   }
+
+  &.list {
+    border: solid 1px uxg($theme, color-border);
+
+    &.not_seen {
+      background-color: #F0FAF6;
+      border: 1px solid #F0FAF6;
+    }
+  }
+}
+
+a.notification-link {
+  position: relative;
+  display: block;
+}
+
+.notification-card-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.btn-close-popup {
+  float: right;
+  min-height: initial;
+  line-height: 0;
 }
 
 .date {
@@ -40,3 +70,34 @@ a.notification-link {
   display: block;
 }
 
+.notification-card-header * {
+  line-height: 20px;
+}
+
+div.notification-card-header:before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 3px;
+  margin-right: 10px;
+  border: 6px solid;
+  display: block;
+  box-sizing: content-box;
+}
+
+@each $status, $color in $statuses {
+  div[class*="badge-#{$status}"]:before {
+    border-color: $color;
+  }
+}
+
+.badge-NEW_REQUEST_POSITION {
+  border-color: #5066FF;
+}
+.badge-REQUEST_POSITION_EDIT {
+  border-color: #5066FF;
+}
+.badge-REQUEST_POSITION_APPROVE {
+  border-color: #5066FF;
+}

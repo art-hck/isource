@@ -74,3 +74,11 @@
     }
   }
 }
+
+app-notification-popup {
+  position: absolute;
+  right: 10px;
+  top: 75px;
+  overflow: hidden;
+  padding: 0 18px 18px 18px;
+}

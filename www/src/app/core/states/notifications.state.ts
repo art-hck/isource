@@ -5,6 +5,7 @@ import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { NotificationsActions } from "../actions/notifications.actions";
 import Fetch = NotificationsActions.Fetch;
+import MarkSeen = NotificationsActions.MarkSeen;
 import { NotificationsService } from "../services/notifications.service";
 
 export interface NotificationsStateModel {
@@ -19,7 +20,9 @@ type Context = StateContext<Model>;
   name: 'Notifications',
   defaults: { notifications: null, status: "pristine" }
 })
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class NotificationsState {
 
   constructor(private rest: NotificationsService) {
@@ -35,13 +38,18 @@ export class NotificationsState {
     return status;
   }
 
+  // todo Стейты не удаётся заставить работать для нотификаций, разобраться или удалить
+  // На данный момент не используется
   @Action(Fetch)
   fetch(ctx: Context, action: Fetch) {
     ctx.setState(patch({ status: "fetching" } as Model));
 
-    return this.rest.getNotifications().pipe(tap(notifications => ctx.setState(patch<Model>({
-      notifications,
-      status: "received"
-    }))));
+    return this.rest.getNotifications().pipe(tap(notifications => {
+      console.log(notifications);
+      ctx.setState(patch<Model>({
+        notifications,
+        status: "received"
+      }));
+    }));
   }
 }

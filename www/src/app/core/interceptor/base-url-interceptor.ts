@@ -3,7 +3,6 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { from, Observable } from "rxjs";
 import { APP_CONFIG, GpnmarketConfigInterface } from "../config/gpnmarket-config.interface";
 import { KeycloakService } from "keycloak-angular";
-import { async } from "rxjs/internal/scheduler/async";
 import { skipWhile, switchMap, tap } from "rxjs/operators";
 
 @Injectable()

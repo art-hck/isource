@@ -2,7 +2,7 @@ import localeRu from '@angular/common/locales/ru';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
-import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
+import { DoBootstrap, LOCALE_ID, NgModule } from '@angular/core';
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { registerLocaleData } from '@angular/common';
@@ -14,11 +14,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from "./core/core.module";
 import { ToastListModule } from "./shared/components/toast-list/toast-list.module";
 import { WebsocketModule } from "./websocket/websocket.module";
-import { SentryErrorHandler } from "./core/error-handlers/sentry.error-handler";
-import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from "keycloak-angular";
+import { KeycloakService, KeycloakAngularModule } from "keycloak-angular";
 import { AuthService } from "./auth/services/auth.service";
 import { ApplicationRef } from "@angular/core";
 import { CartStoreService } from "./cart/services/cart-store.service";
+import { NotificationsState } from "./core/states/notifications.state";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -36,7 +36,7 @@ const keycloakService = new KeycloakService();
     NgxsReduxDevtoolsPluginModule.forRoot(),
     ToastListModule,
     UxgModule,
-    WebsocketModule.config({ url: AppConfig.endpoints.ws, chatUrl: AppConfig.endpoints.wsChat }),
+    WebsocketModule.config({ url: AppConfig.endpoints.ws, chatUrl: AppConfig.endpoints.wsChat, notificationsUrl: AppConfig.endpoints.wsNotifications }),
     BrowserModule,
     KeycloakAngularModule
   ],
@@ -48,7 +48,7 @@ const keycloakService = new KeycloakService();
   ],
   entryComponents: [AppComponent]
 })
-export class AppModule {
+export class AppModule implements DoBootstrap {
   constructor(
     public authService: AuthService,
     public cartStoreService: CartStoreService,

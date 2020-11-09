@@ -8,15 +8,15 @@ export class Notifications {
 
 export class NotificationItem {
   body: NotificationInfo | string;
-  channel: string;
+  channel: number;
   created_at: string;
-  distribution_id: string;
+  distribution_id: number;
   from: string;
-  id: string;
-  receiver: string;
-  report: string;
+  id: number;
+  receiver?: string;
+  report?: string;
   send_to: string;
-  status: string;
+  status: string|number;
   title: string;
 }
 
