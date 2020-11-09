@@ -5,7 +5,6 @@ import { patch } from "@ngxs/store/operators";
 import { tap } from "rxjs/operators";
 import { NotificationsActions } from "../actions/notifications.actions";
 import Fetch = NotificationsActions.Fetch;
-import MarkSeen = NotificationsActions.MarkSeen;
 import { NotificationsService } from "../services/notifications.service";
 
 export interface NotificationsStateModel {

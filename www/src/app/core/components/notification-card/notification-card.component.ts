@@ -6,6 +6,7 @@ import {
   Output
 } from "@angular/core";
 import { NotificationInfo, NotificationItem } from "../../models/notifications";
+import { NotificationTypeTitles } from "../../../request/common/dictionaries/notification-type-titles";
 
 @Component({
   selector: 'app-notification-card',
@@ -34,26 +35,7 @@ export class NotificationCardComponent implements OnInit {
     const positionStatus = item?.requestPositionStatus;
     const positionStatusLabel = item?.requestPositionStatusLabel;
 
-    switch (positionStatus) {
-      case "PROPOSALS_PREPARATION":
-        return 'Осуществляется подготовка предложений по позиции';
-      case "RESULTS_AGREEMENT":
-        return 'Подготовлены предложения поставщиков по позиции';
-      case "WINNER_SELECTED":
-        return 'Выбран победитель по позиции';
-      case "TCP_WINNER_SELECTED":
-        return 'Выбран победитель по позиции';
-      case "CONTRACT_AGREEMENT":
-        return 'Осуществляется согласование договора с поставщиком';
-      case "CONTRACT_SIGNING":
-        return 'Согласован и ожидает подписания договор с победителем';
-      case "CONTRACTED":
-        return 'Сторонами подписан договор по позиции';
-      case "COMPLETED":
-        return 'Выполнен заказ по позиции';
-      default:
-        return 'Изменен статус позиции на ' + positionStatusLabel;
-    }
+    return NotificationTypeTitles[positionStatus] || 'Изменен статус позиции на ' + positionStatusLabel;
   }
 
   onHideNotification(event, notification) {

@@ -34,7 +34,7 @@ export class NotificationPopupComponent implements OnInit {
 
   @Input() view: 'popup' | 'list';
 
-  newNotifications$: Observable<NotificationItem[]>;
+  newNotifications$: Observable<NotificationItem[]> = this.notificationsService.newNotifications$;
   destroy$ = new Subject();
 
   constructor(
@@ -45,7 +45,6 @@ export class NotificationPopupComponent implements OnInit {
 
   ngOnInit() {
     this.hideAllNotifications();
-    this.newNotifications$ = this.notificationsService.newNotifications$;
   }
 
   get windowHeight(): number {

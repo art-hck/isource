@@ -29,7 +29,7 @@ import { DOCUMENT } from "@angular/common";
 })
 export class NavComponent implements OnInit, OnDestroy {
 
-  @ViewChild('notificationPopupComponent') notificationPopupList: NotificationPopupComponent;
+  @ViewChild('notificationPopupComponent') notificationPopup: NotificationPopupComponent;
   @ViewChild('notificationListComponent') notificationListComponent: NotificationListComponent;
   @Output() openModal = new EventEmitter();
 
@@ -95,7 +95,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   openNotificationsModal() {
     this.openModal.emit();
-    this.notificationPopupList?.hideAllNotifications();
+    this.notificationPopup?.hideAllNotifications();
   }
 
   logout(): void {
