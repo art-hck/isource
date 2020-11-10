@@ -1,7 +1,8 @@
 import { Uuid } from "../../cart/models/uuid";
 import { ContragentInfoAddresses } from "./contragent-info-address";
 import { ContragentInfoBankRequisites } from "./contragent-info-bank-requisites";
-import {User} from "../../user/models/user";
+import { User } from "../../user/models/user";
+import { Group } from "../../core/models/group";
 
 export class ContragentInfo {
   id: Uuid;
@@ -12,7 +13,6 @@ export class ContragentInfo {
   inn: string;
   kpp: string;
   ogrn: string;
-  isInternal: boolean;
   taxAuthorityRegistrationDate?: Date;
   email: string;
   directorFullName?: string;
@@ -22,5 +22,6 @@ export class ContragentInfo {
   addresses?: ContragentInfoAddresses[];
   bankRequisites?: ContragentInfoBankRequisites[];
   responsible?: User;
-
+  usersGroupId?: Uuid;
+  usersGroup?: Group;
 }

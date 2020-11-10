@@ -9,7 +9,7 @@ import { EmployeeCardRequestListComponent } from './components/employee-card/emp
 import { EmployeeCardPositionListComponent } from './components/employee-card/employee-card-position-list/employee-card-position-list.component';
 import { SharedModule } from "../shared/shared.module";
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { TextMaskModule } from "angular2-text-mask";
 
 @NgModule({
@@ -31,9 +31,9 @@ import { TextMaskModule } from "angular2-text-mask";
   providers: [
     EmployeeService,
   ],
-    exports: [
-        EmployeeCardComponent,
-        EmployeeFormComponent,
-    ]
+  exports: [
+      EmployeeCardComponent,
+      EmployeeFormComponent,
+  ]
 })
 export class EmployeeModule { }
