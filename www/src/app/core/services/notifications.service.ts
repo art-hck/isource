@@ -49,7 +49,6 @@ export class NotificationsService {
   private listenNotifications() {
     this.onNew().pipe(
       tap((notification) => {
-        console.log(notification);
         notification.body = JSON.parse(notification.body as string);
         this.notificationAction$.next({ action: 'add', notification });
       }),
@@ -70,7 +69,7 @@ export class NotificationsService {
     ));
   }
 
-  get() {
+  list() {
     return this.ws.send<NotificationItem[]>(`notifications.get`);
   }
 

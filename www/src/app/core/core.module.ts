@@ -14,7 +14,6 @@ import { ChatSharedModule } from "../chat/chat-shared.module";
 import { NotificationPopupComponent } from "./components/notification-popup-list/notification-popup.component";
 import { NotificationListComponent } from "./components/notification-list/notification-list.component";
 import { NotificationCardComponent } from "./components/notification-card/notification-card.component";
-import { NotificationsState } from "./states/notifications.state";
 import { NgxsModule } from "@ngxs/store";
 
 @NgModule({
@@ -23,9 +22,7 @@ import { NgxsModule } from "@ngxs/store";
     RouterModule,
     UxgModule,
     ChatSharedModule,
-    NgxsModule.forRoot([
-      NotificationsState
-    ])
+    NgxsModule.forRoot()
   ],
   exports: [NavComponent,
             WelcomeComponent,
