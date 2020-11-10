@@ -45,6 +45,7 @@ export class NotificationCardComponent implements OnInit {
     this.hideNotification.emit(notification);
   }
 
+  // todo Реализовать скрытие уведомлений через RXJS (pipe(debounceTime(5000), mapTo(null)))
   hideOnTimeout() {
     setTimeout(() => { this.hideNotification.emit(this.notification); }, 5000);
   }
