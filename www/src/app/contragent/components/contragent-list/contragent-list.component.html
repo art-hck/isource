@@ -29,7 +29,7 @@
 
         <div class="app-col responsible">{{ contragent.responsible?.shortName || '—' }}</div>
 
-        <div class="app-col-auto edit" *ngIf="user.isSeniorBackoffice()">
+        <div class="app-col-auto edit" *ngIf="user.isSeniorBackoffice() || user.isAdmin()">
           <button uxgButton secondary icon (click)="edit($event, contragent)">
             <uxg-icon shape="app-pen"></uxg-icon>
           </button>
