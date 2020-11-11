@@ -8,6 +8,7 @@ export const AppConfig: GpnmarketConfigInterface = {
     ws: 'ws://localhost:3000',
     apiChat: 'https://chat-test.isource.ru/',
     wsChat: 'wss://chat-test.isource.ru/ws',
+    wsNotifications: 'wss://notifications-test.isource.ru/ws',
   },
   files: {
     allowedExtensions: [
