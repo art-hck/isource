@@ -6,5 +6,5 @@ export enum WsNotificationTypes {
   NOTIFICATION_NEW = 'notifications.new',
   NOTIFICATION_SEND = 'notifications.send',
   NOTIFICATION_UNREADCOUNT = 'notifications.unreadcount',
-  NOTIFICATION_MARKEDASREAD = 'notifications.read',
+  NOTIFICATION_READ = 'notifications.read',
 }

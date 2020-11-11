@@ -1,4 +1,5 @@
-<div [ngSwitch]="notification?.body?.type" class="notification-card"
+<div (click)="view === 'popup' ? markNotificationAsRead() : null"
+     [ngSwitch]="notification?.body?.type" class="notification-card"
      [class]="view"
      [ngClass]="{ 'not_seen': notification?.status === 'STATUS_SENT' }">
 
@@ -115,8 +116,8 @@
 
     <div class="app-col"></div>
 
-    <div class="app-row notification-card-footer" *ngIf="view === 'list'">
-      <div class="app-col date app-ghost-color">{{ notification?.created_at | date: 'dd.MM.yyyy в HH:mm' }}</div>
+    <div class="app-row notification-card-footer">
+      <div class="app-col date app-ghost-color">{{ formatDate(notification?.created_at) }}</div>
     </div>
   </a>
 </div>

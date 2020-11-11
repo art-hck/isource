@@ -43,10 +43,10 @@ export class NotificationsService {
   );
 
   constructor(private ws: WsNotificationsService, private api: HttpClient) {
-    this.listenNotifications();
+    this.listenNotificationActions();
   }
 
-  private listenNotifications() {
+  private listenNotificationActions() {
     this.onNew().pipe(
       tap((notification) => {
         notification.body = JSON.parse(notification.body as string);
@@ -54,11 +54,13 @@ export class NotificationsService {
       }),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.onNotificationRead().subscribe(() => this.unreadCount());
   }
 
   getNotifications() {
     const url = `#notifications#`;
-    return this.api.get<Notifications>(url, {params: {limit: '10', channel: '1'}}).pipe(map(
+    return this.api.get<Notifications>(url, {params: {limit: '30', channel: '1'}}).pipe(map(
       notifications => {
         notifications.items = notifications.items.map(item => {
           item.body = JSON.parse(item.body as string);
@@ -70,14 +72,23 @@ export class NotificationsService {
   }
 
   list() {
-    return this.ws.send<NotificationItem[]>(`notifications.get`);
+    return this.ws.send<NotificationItem[]>(WsNotificationTypes.NOTIFICATION_GET);
   }
 
   unreadCount() {
-    return this.ws.send<{ count: number }>(`notifications.unreadcount`);
+    return this.ws.send<{ unread_count: number }>(WsNotificationTypes.NOTIFICATION_UNREADCOUNT);
+  }
+
+  markAsRead(notificationsIds) {
+    return this.ws.send<{ items: number[] }>(WsNotificationTypes.NOTIFICATION_READ, { items: notificationsIds });
+  }
+
+  onNotificationRead() {
+    return this.ws.on<{ items: number[] }>(WsNotificationTypes.NOTIFICATION_READ);
   }
 
   onNew() {
     return this.ws.on<NotificationItem>(WsNotificationTypes.NOTIFICATION_NEW);
   }
+
 }

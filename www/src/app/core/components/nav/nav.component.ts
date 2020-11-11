@@ -56,10 +56,13 @@ export class NavComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.notificationsService.unreadCount().pipe(takeUntil(this.destroy$))
-      .subscribe(({count}) => this.unreadNotificationsCount$.next(count));
+      .subscribe(({unread_count}) => this.unreadNotificationsCount$.next(unread_count));
 
     this.notificationsService.onNew().pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.unreadMessagesCount$.next(this.unreadMessagesCount$.getValue() + 1));
+      .subscribe(() => this.notificationsService.unreadCount());
+
+    this.notificationsService.onNotificationRead().pipe(takeUntil(this.destroy$))
+      .subscribe(({ items }) => this.unreadNotificationsCount$.next(this.unreadNotificationsCount$.getValue() - items.length));
 
     this.messagesService.unreadCount().pipe(takeUntil(this.destroy$))
       .subscribe(({count}) => this.unreadMessagesCount$.next(count));

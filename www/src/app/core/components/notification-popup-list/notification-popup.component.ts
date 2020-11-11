@@ -11,6 +11,7 @@ import { Observable, Subject } from "rxjs";
 import { NotificationsService } from "../../services/notifications.service";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { NotificationItem } from "../../models/notifications";
+import { take, takeUntil, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-notification-popup',
@@ -45,6 +46,19 @@ export class NotificationPopupComponent implements OnInit {
 
   ngOnInit() {
     this.hideAllNotifications();
+
+    // Если текущий режим отображения «список» шторки, то при получении новых уведомлений помечаем их как просмотренные
+    this.notificationsService.onNew().pipe(
+      tap((notification) => {
+          if (this.view === 'list' && document.body.classList.contains('notifications-modal-open')) {
+            this.notificationsService.markAsRead([notification.id]).pipe(
+              take(1),
+              takeUntil(this.destroy$)
+            ).subscribe(() => this.notificationsService.unreadCount());
+          }
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   get windowHeight(): number {
@@ -55,6 +69,9 @@ export class NotificationPopupComponent implements OnInit {
    * Возвращает максимальное кол-во всплывающих уведомлений, влезающих в высоту экрана
    */
   get maxPopupCount(): number {
+    // todo Высота блока уведомлений на данный момент фиксированная,
+    //  поэтому значение для вычисления тоже захардкожено.
+    //  Лучше в будущем реализовать универсальное решение для любой высоты блока нотификации
     return Math.floor((this.windowHeight - 50) / 158);
   }
 
@@ -69,5 +86,12 @@ export class NotificationPopupComponent implements OnInit {
 
   hideAllNotifications() {
     this.notificationsService.notificationAction$.next({ action: 'closeAll' });
+  }
+
+  readNotification(notification) {
+    this.notificationsService.markAsRead([notification.id]).pipe(
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.notificationsService.unreadCount());
   }
 }
