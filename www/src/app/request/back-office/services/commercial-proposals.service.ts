@@ -11,6 +11,7 @@ import { ContragentShortInfo } from "../../../contragent/models/contragent-short
 import { ProposalGroup } from "../../common/models/proposal-group";
 import { ProposalGroupFilter } from "../../common/models/proposal-group-filter";
 import { FormDataService } from "../../../shared/services/form-data.service";
+import { CommonProposal } from "../../common/models/common-proposal";
 
 @Injectable({
   providedIn: "root"
@@ -25,9 +26,9 @@ export class CommercialProposalsService {
     return this.api.post<PositionsWithSuppliers>(url, { requestCommercialProposalGroupId: groupId });
   }
 
-  availablePositions(id: Uuid) {
+  availablePositions(id: Uuid, groupId?: Uuid) {
     const url = `requests/backoffice/${ id }/commercial-proposals/available-request-positions`;
-    return this.api.get<RequestPosition[]>(url);
+    return this.api.post<RequestPosition[]>(url, { requestCommercialProposalGroupId: groupId });
   }
 
   group(requestId: Uuid, groupId: Uuid) {
@@ -58,6 +59,16 @@ export class CommercialProposalsService {
   addOffer(id: Uuid, positionId: Uuid, offer: RequestOfferPosition) {
     const url = `requests/backoffice/${ id }/positions/${ positionId }/add-offer`;
     return this.api.post<RequestOfferPosition>(url, this.formData.toFormData(offer));
+  }
+
+  createProposal(id: Uuid, params) {
+    const url = `requests/backoffice/${ id }/commercial-proposals/create`;
+    return this.api.post<CommonProposal>(url, params);
+  }
+
+  addProposalPositions(id: Uuid, positions) {
+    const url = `requests/backoffice/${ id }/commercial-proposals/add-positions`;
+    return this.api.post<RequestOfferPosition>(url, positions);
   }
 
   editOffer(id: Uuid, positionId: Uuid, editedOffer: RequestOfferPosition) {

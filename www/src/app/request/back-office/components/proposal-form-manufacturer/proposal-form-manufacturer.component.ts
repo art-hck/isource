@@ -1,6 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { proposalManufacturerValidator } from "./proposal-form-manufacturer.validator";
+import { ProcedureSource } from "../../enum/procedure-source";
 
 @Component({
   selector: 'app-request-proposal-form-manufacturer',
@@ -16,6 +17,7 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
   @Output() cancel = new EventEmitter();
   @Input() disabledFn: (item) => boolean;
   @Input() showManufacturer = true;
+  @Input() source: ProcedureSource;
   public onTouched: (value) => void;
   public onChange: (value) => void;
   public form: FormGroup;
@@ -49,11 +51,12 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
     }
   }
 
-  createFormGroupPosition({ manufacturingName, manufacturer, position }) {
+  createFormGroupPosition({ manufacturingName, manufacturer, position, standard }) {
     const form = this.fb.group({
       position: position,
       manufacturingName: [manufacturingName || position.name, Validators.required],
-      manufacturer: [manufacturer]
+      manufacturer: [manufacturer],
+      standard: [standard]
     });
 
     if (this.disabledFn && this.disabledFn({ position })) {

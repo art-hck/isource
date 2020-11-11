@@ -25,7 +25,7 @@ export namespace CommercialProposalsActions {
   export class FetchAvailablePositions {
     static readonly type = '[Commercial Proposals Backoffice] FetchAvailablePositions';
 
-    constructor(public requestId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
   // Обновить процедуры КП
@@ -49,6 +49,13 @@ export namespace CommercialProposalsActions {
     static readonly type = '[Commercial Proposals Backoffice] AddSupplier';
 
     constructor(public requestId: Uuid, public groupId: Uuid, public supplierId: Uuid) {}
+  }
+
+  // Изменить/Создать КП
+  export class CreateProposal {
+    static readonly type = '[Commercial Proposals Backoffice] CreateProposal';
+
+    constructor(public requestId: Uuid, public params) {}
   }
 
   // Изменить/Создать КП
@@ -91,5 +98,13 @@ export namespace CommercialProposalsActions {
     static readonly type = '[Commercial Proposals Backoffice] UploadTemplate';
 
     constructor(public requestId: Uuid, public files: File[], public groupId: Uuid, public groupName?: string) {}
+  }
+
+  // Добавить позиции в КП
+
+  export class AddProposalPositions {
+    static readonly type = '[Commercial Proposals Backoffice] AddProposalPositions';
+
+    constructor(public proposalId: Uuid, public items) {}
   }
 }
