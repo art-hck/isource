@@ -1,8 +1,6 @@
 import { Uuid } from "../../../cart/models/uuid";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
-import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
-import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
+import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../common/models/common-proposal";
 
 export namespace TechnicalCommercialProposals {
   // Получить список ТКП
@@ -42,8 +40,7 @@ export namespace TechnicalCommercialProposals {
     constructor(
       public requestId: Uuid,
       public groupId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal>,
-      public publish: boolean
+      public payload: Partial<CommonProposal>
     ) {}
   }
 
@@ -51,34 +48,14 @@ export namespace TechnicalCommercialProposals {
   export class Update {
     static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
-    constructor(
-      public payload: Partial<TechnicalCommercialProposal> & { id: Uuid },
-      public publish: boolean
-    ) {}
+    constructor(public groupId: Uuid, public payload: Partial<CommonProposal> & { id: Uuid }) {}
   }
 
-  // Редактировать общие параметры ТКП
-  export class UpdateParams {
-    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateParams';
-
-    constructor(
-      public requestId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal> & { id: Uuid }
-    ) {}
-  }
-
-  // Отправить на согласование ТКП
+  // Отправить на согласование ТКП по позиции
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
 
-    constructor(public proposal: TechnicalCommercialProposal) {}
-  }
-
-  // Отправить на согласование ТКП по определенной позиции
-  export class PublishByPosition {
-    static readonly type = '[Technical Commercial Proposals Backoffice] PublishPositions';
-
-    constructor(public proposalsByPositions: TechnicalCommercialProposalByPosition[]) {}
+    constructor(public groupId: Uuid, public proposalsByPositions: CommonProposalByPosition[]) {}
   }
 
   // Создать ТКП из шаблона
@@ -102,31 +79,26 @@ export namespace TechnicalCommercialProposals {
     constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Создать пустое ТКП (только контрагент)
-  export class CreateContragent implements Create {
-    static readonly type = '[Technical Commercial Proposals Backoffice] CreateContragent';
-    public publish = false;
+  // Добавить позиции в ТКП
+  export class CreateItems {
+    static readonly type = '[Technical Commercial Proposals Backoffice] CreateItems';
+    update = false;
 
-    constructor(
-      public requestId: Uuid,
-      public groupId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal> & {supplier: ContragentShortInfo}
-    ) {}
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: Partial<CommonProposalItem>[]) {}
   }
 
-  // Добавить позиции в ТКП
-  export class CreatePosition implements Update {
-    static readonly type = '[Technical Commercial Proposals Backoffice] CreatePosition';
-    publish = false;
+  // Изменить позиции в ТКП
+  export class UpdateItems {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateItems';
+    update = true;
 
-    constructor(public payload: Partial<TechnicalCommercialProposal> & { id: Uuid; positions: TechnicalCommercialProposalPosition[] }) {
-    }
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: (Partial<CommonProposalItem>)[]) {}
   }
 
   // Откатить ТКП
   export class Rollback {
     static readonly type = '[Technical Commercial Proposals Backoffice] Rollback';
 
-    constructor(public requestId: Uuid, public positionId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public positionId: Uuid) {}
   }
 }

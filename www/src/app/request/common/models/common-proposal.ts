@@ -46,8 +46,13 @@ export class CommonProposalItem {
   requestPositionId: Uuid;
   standard: string;
   status: CommonProposalItemStatus;
-  supplierContragentId: Uuid;
+  supplierContragent: ContragentShortInfo;
   vatPercent: number;
+}
+
+export class CommonProposalByPosition {
+  position: RequestPosition;
+  items: CommonProposalItem[];
 }
 
 // @TODO: убрать дублирующие статусы

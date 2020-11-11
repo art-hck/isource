@@ -28,6 +28,7 @@ export class CommonProposalItemFormComponent implements OnInit {
   readonly okeiList$ = this.okeiService.getOkeiList().pipe(shareReplay(1));
   readonly form = this.fb.group({
     id: null,
+    requestPositionId: null,
     manufacturingName: [null, Validators.required],
     priceWithoutVat: [null, Validators.required],
     quantity: [null, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
@@ -37,7 +38,6 @@ export class CommonProposalItemFormComponent implements OnInit {
     manufacturer: [null, Validators.required],
     standard: [null],
     paymentTerms: [null, Validators.required],
-    supplierContragentId: null
   });
 
   constructor(
@@ -47,16 +47,17 @@ export class CommonProposalItemFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const { id, ...position }: RequestPosition = this.position;
+
     this.form.patchValue({
       ...{
-        manufacturingName: this.position?.name,
+        requestPositionId: id,
+        manufacturingName: position?.name,
         priceWithoutVat: this.position?.startPrice
       },
-      ...(this.position ?? {}),
-      ...(this.proposalItem ?? {}),
-      ...{
-        deliveryDate: this.parseDate(this.proposalItem?.deliveryDate ?? this.position.deliveryDate)
-      }
+      ...position ?? {},
+      ...this.proposalItem ?? {},
+      ...{ deliveryDate: this.parseDate(this.proposalItem?.deliveryDate ?? this.position.deliveryDate) }
     });
 
     if (this.proposalItem && !this.proposalItem.manufacturingName) {
@@ -69,6 +70,7 @@ export class CommonProposalItemFormComponent implements OnInit {
     if (this.form.invalid) { return; }
 
     this.save.emit(this.form.getRawValue());
+    this.close.emit();
   }
 
   private parseDate(date: string) {

@@ -10,8 +10,6 @@ import { RequestPosition } from "../../../../common/models/request-position";
 import { OkeiService } from "../../../../../shared/services/okei.service";
 import { shareReplay } from "rxjs/operators";
 import { Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
-import CreatePosition = TechnicalCommercialProposals.CreatePosition;
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 
 @Component({
@@ -71,7 +69,8 @@ export class TechnicalCommercialProposalPositionFormComponent implements OnInit 
 
     proposalPosition.deliveryDate = this.form.getRawValue().deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
 
-    this.store.dispatch(new CreatePosition({ ...this.proposal, positions: proposalPositions }));
+    // @TODO: отрефакторить
+    // this.store.dispatch(new CreatePosition({ ...this.proposal, positions: proposalPositions }));
     this.close.emit();
   }
 

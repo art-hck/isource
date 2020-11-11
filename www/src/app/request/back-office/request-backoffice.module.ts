@@ -18,7 +18,7 @@ import { ProcedureFormDocumentsComponent } from "./components/procedure-form/pro
 import { CommercialProposalFormComponent } from './components/commercial-proposal-form/commercial-proposal-form.component';
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
-import { TechnicalCommercialProposalListComponent } from './components/technical-commercial-proposal-list/technical-commercial-proposal-list.component';
+import { TechnicalCommercialProposalViewComponent } from './components/technical-commercial-proposal-view/technical-commercial-proposal-view.component';
 import { TechnicalCommercialProposalFormComponent } from "./components/technical-commercial-proposal-form/technical-commercial-proposal-form.component";
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
@@ -29,8 +29,8 @@ import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestListComponent } from './components/request-list/request-list.component';
 import { CommercialProposalState } from "./states/commercial-proposal.state";
-import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-list/contragent-form/contragent-form.component";
-import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-list/proposal-position-form/proposal-position-form.component";
+import { TechnicalCommercialProposalContragentFormComponent } from "./components/technical-commercial-proposal-view/contragent-form/contragent-form.component";
+import { TechnicalCommercialProposalPositionFormComponent } from "./components/technical-commercial-proposal-view/proposal-position-form/proposal-position-form.component";
 import { ProcedureComponent } from './components/procedure/procedure.component';
 import { ProcedureGridComponent } from './components/procedure-grid/procedure-grid.component';
 import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
@@ -46,6 +46,8 @@ import { CommercialProposalGroupListComponent } from "./components/common-propos
 import { CommonProposalGroupFormComponent } from "./components/common-proposal-group-form/common-proposal-group-form.component";
 import { CommonProposalGroupListComponent } from './components/common-proposal-group-list/common-proposal-group-list.component';
 import { CommonProposalItemFormComponent } from './components/common-proposal-item-form/common-proposal-item-form.component';
+import { TechnicalCommercialProposalGroupService } from "./services/technical-commercial-proposal-group.service";
+import { CommonProposalViewComponent } from "./components/common-proposal-view/common-proposal-view.component";
 
 @NgModule({
   declarations: [
@@ -62,9 +64,10 @@ import { CommonProposalItemFormComponent } from './components/common-proposal-it
     CommercialProposalViewComponent,
     CommercialProposalGroupListComponent,
     CommonProposalGroupFormComponent,
+    CommonProposalViewComponent,
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,
-    TechnicalCommercialProposalListComponent,
+    TechnicalCommercialProposalViewComponent,
     TechnicalCommercialProposalFormComponent,
     TechnicalCommercialProposalParametersFormComponent,
     RequestListComponent,
@@ -103,6 +106,7 @@ import { CommonProposalItemFormComponent } from './components/common-proposal-it
     TechnicalProposalsService,
     PositionService,
     TechnicalCommercialProposalService,
+    TechnicalCommercialProposalGroupService,
     ContractService
   ]
 })

@@ -16,7 +16,7 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import Create = TechnicalCommercialProposals.Create;
-import UpdateParams = TechnicalCommercialProposals.UpdateParams;
+import Update = TechnicalCommercialProposals.Update;
 
 @Component({
   selector: 'technical-commercial-proposal-contragent-form',
@@ -81,8 +81,8 @@ export class TechnicalCommercialProposalContragentFormComponent implements OnIni
   submit(publish = false) {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      this.store.dispatch(this.edit ? new UpdateParams(this.request.id, {...this.form.value, files })
-        : new Create(this.request.id, this.groupId, { ...this.form.value, files }, publish));
+      this.store.dispatch(this.edit ? new Update(this.groupId, { ...this.form.value, files })
+        : new Create(this.request.id, this.groupId, { ...this.form.value, files }));
       this.close.emit();
     }
   }
