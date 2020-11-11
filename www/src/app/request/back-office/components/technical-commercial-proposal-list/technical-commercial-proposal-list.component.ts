@@ -174,6 +174,7 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
     });
 
     this.switchView(this.view);
+    this.store.dispatch(new TechnicalCommercialProposals.FetchAvailablePositions(this.requestId, this.groupId));
   }
 
   ngAfterViewInit() {
@@ -272,6 +273,12 @@ export class TechnicalCommercialProposalListComponent implements OnInit, OnDestr
   canRollback(position: RequestPosition): boolean {
     return position.status === PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT &&
       moment().diff(moment(position.statusChangedDate), 'seconds') < this.rollbackDuration;
+  }
+
+  saveTechnicalCommercialProposal(value) {
+    return this.store.dispatch(
+        value.id ? new Update(value, false) : new Create(this.requestId, this.groupId, value, false)
+      );
   }
 
   trackById = (i, { id }: TechnicalCommercialProposal | Procedure) => id;

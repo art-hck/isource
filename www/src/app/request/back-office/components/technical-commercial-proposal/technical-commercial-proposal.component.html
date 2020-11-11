@@ -108,6 +108,8 @@
     [technicalCommercialProposal]="proposal"
     [request]="request"
     [groupId]="groupId"
+    [source]="source"
     (close)="state = 'view'"
+    (save)="save.emit($event)"
   ></app-technical-commercial-proposal-form>
 </ng-container>

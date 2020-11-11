@@ -211,7 +211,10 @@
             [request]="request"
             [closable]="proposals.length > 0"
             [groupId]="groupId"
+            [availablePositions]="availablePositions$ | async"
+            [source]="procedureSource"
             (close)="showForm = false"
+            (save)="saveTechnicalCommercialProposal($event)"
           ></app-technical-commercial-proposal-form>
 
           <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
@@ -226,6 +229,8 @@
               [request]="request"
               [groupId]="groupId"
               [proposal]="proposal"
+              [source]="procedureSource"
+              (save)="saveTechnicalCommercialProposal($event)"
             ></app-request-technical-commercial-proposal>
           </ng-container>
         </div>

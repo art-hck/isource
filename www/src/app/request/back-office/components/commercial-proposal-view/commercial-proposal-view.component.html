@@ -62,6 +62,12 @@
                     <span>Контрагент</span>
                   </button>
 
+                  <!-- Новое ТКП  -->
+                  <button *ngSwitchCase="'list'" uxgButton secondary iconText (click)="showForm = true">
+                    <uxg-icon shape="app-plus"></uxg-icon>
+                    <span>Новый контрагент</span>
+                  </button>
+
                   <!-- Новое КП шаблона -->
                   <button uxgButton primary iconText (click)="uploadTemplateModal.open()">
                     <uxg-icon shape="app-plus"></uxg-icon>
@@ -159,6 +165,15 @@
         <!-- list -->
         <div class="app-row" *ngIf="view === 'list'">
           <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="(status$ | async) !== 'received'">
+            <app-technical-commercial-proposal-form
+              *ngIf="(procedures$ | async)?.length === 0 || showForm"
+              [request]="request"
+              [availablePositions]="proposalPositions$ | async"
+              [groupId]="groupId"
+              [source]="procedureSource"
+              (close)="showForm = false"
+              (save)="saveCommercialProposal($event)"
+            ></app-technical-commercial-proposal-form>
             <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
               <app-request-procedure [procedure]="procedure"
                                      [source]="'cp'"

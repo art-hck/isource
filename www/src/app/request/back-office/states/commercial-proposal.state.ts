@@ -27,6 +27,8 @@ import AddSupplier = CommercialProposalsActions.AddSupplier;
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import Rollback = CommercialProposalsActions.Rollback;
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
+import CreateProposal = CommercialProposalsActions.CreateProposal;
+import AddProposalPositions = CommercialProposalsActions.AddProposalPositions;
 
 export interface CommercialProposalStateModel {
   availablePositions: RequestPosition[];
@@ -79,8 +81,10 @@ export class CommercialProposalState {
   }
 
   @Action(FetchAvailablePositions)
-  fetchAvailablePositions({ setState }: Context, { requestId }: FetchAvailablePositions) {
-    return this.rest.availablePositions(requestId).pipe(tap(availablePositions => setState(patch({ availablePositions }))));
+  fetchAvailablePositions({ setState }: Context, { requestId, groupId }: FetchAvailablePositions) {
+    setState(patch({ availablePositions: null }));
+    return this.rest.availablePositions(requestId, groupId).pipe(
+      tap(availablePositions => setState(patch({ availablePositions }))));
   }
 
   @Action([FetchProcedures, RefreshProcedures])
@@ -115,6 +119,22 @@ export class CommercialProposalState {
         })),
         status: "received" as StateStatus
       }))));
+  }
+
+  @Action(CreateProposal)
+  createProposal({ setState, dispatch }: Context, { requestId, params }: CreateProposal) {
+    setState(patch({ status: "updating" } as Model));
+    return this.rest.createProposal(requestId, params).pipe(
+      tap(() => setState(patch({ status: "received" } as Model)))
+    );
+  }
+
+  @Action(AddProposalPositions)
+  addProposalPositions({ setState, dispatch }: Context, { proposalId, items }: AddProposalPositions) {
+    setState(patch({ status: "updating" } as Model));
+    return this.rest.addProposalPositions(proposalId, items).pipe(
+      tap(() => setState(patch({ status: "received" } as Model)))
+    );
   }
 
   @Action(PublishPositions)

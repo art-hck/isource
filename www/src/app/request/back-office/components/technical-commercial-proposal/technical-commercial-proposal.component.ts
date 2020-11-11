@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { getCurrencySymbol } from "@angular/common";
 import { Request } from "../../../common/models/request";
 import { Uuid } from "../../../../cart/models/uuid";
+import { ProcedureSource } from "../../enum/procedure-source";
 
 @Component({
   selector: 'app-request-technical-commercial-proposal',
@@ -14,6 +15,8 @@ export class TechnicalCommercialProposalComponent {
   @Input() request: Request;
   @Input() groupId: Uuid;
   @Input() proposal: TechnicalCommercialProposal;
+  @Input() source: string;
+  @Output() save = new EventEmitter();
   state: "view" | "edit" = "view";
   folded = false;
   getCurrencySymbol = getCurrencySymbol;

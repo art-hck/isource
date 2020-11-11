@@ -9,30 +9,48 @@
       <div class="app-col" [ngClass]="!showManufacturer ? 'position-name' : ''">
         <small class="app-ghost-color app-bold">НАИМЕНОВАНИЕ ПОЗИЦИИ</small>
       </div>
-      <div class="app-col">
+      <div class="app-col"
+           *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
         <small class="app-ghost-color app-bold">ЗАВОДСКОЕ НАИМЕНОВАНИЕ</small>
       </div>
-      <div class="app-col">
-         <small class="app-ghost-color app-bold" *ngIf="showManufacturer">ИЗГОТОВИТЕЛЬ</small>
+      <div class="app-col" *ngIf="source === 'COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+        <small class="app-ghost-color app-bold">
+          ИЗГОТОВИТЕЛЬ
+        </small>
+        <small class="app-secondary-color counter" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+          Осталось заполнить: <b>{{ pristineCount }}</b>
+        </small>
+      </div>
+      <div class="app-col" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+        <small class="app-ghost-color app-bold">СТАНДАРТ</small>
         <small class="app-secondary-color counter">Осталось заполнить: <b>{{ pristineCount }}</b></small>
       </div>
     </div>
-    <hr/>
-    <br/>
-    <ng-container *ngFor="let formGroup of formPositions.controls; index as i">
-      <ng-container *ngIf="formGroup.get('position').value as position">
-        <div class="app-row" [formGroup]="formGroup">
-          <div class="app-col app-bold item-title">{{ position.name }}</div>
-          <div class="app-col"><input type="text" uxgInput formControlName="manufacturingName"/></div>
-          <div class="app-col" *ngIf="showManufacturer"><input type="text" uxgInput formControlName="manufacturer"/></div>
+  <hr/>
+  <br/>
+  <ng-container *ngFor="let formGroup of formPositions.controls; index as i">
+    <ng-container *ngIf="formGroup.get('position').value as position">
+      <div class="app-row" [formGroup]="formGroup">
+        <div class="app-col app-bold item-title">{{ position.name }}</div>
+        <div class="app-col" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
+          <input type="text" uxgInput formControlName="manufacturingName"/>
         </div>
-      </ng-container>
+        <div class="app-col" *ngIf="source === 'COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_COMMERCIAL_PROPOSAL'">
+          <input type="text" uxgInput formControlName="manufacturer"/>
+        </div>
+        <div class="app-col" *ngIf="source === 'COMMERCIAL_PROPOSAL'">
+          <input type="text" uxgInput formControlName="standard"/>
+        </div>
+      </div>
     </ng-container>
+  </ng-container>
   </div>
   <hr/>
   <br/>
   <div class="app-row app-justify-content-end">
     <button type="button" uxgButton lg secondary (click)="cancel.emit()">Отмена</button>
-    <button type="button" uxgButton lg primary [disabled]="form.invalid" (click)="submit(formPositions.controls)">Все готово</button>
+    <button type="button" uxgButton lg primary [disabled]="form.invalid" (click)="submit(formPositions.controls)">Все
+      готово
+    </button>
   </div>
 </form>

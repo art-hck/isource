@@ -45,6 +45,10 @@ import Rollback = CommercialProposalsActions.Rollback;
 import { SupplierCommercialProposalInfo } from "../../models/supplier-commercial-proposal-info";
 import { Title } from "@angular/platform-browser";
 import { CommercialProposalInfo } from "../../models/commercial-proposal-info";
+import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
+import SaveProposal = CommercialProposalsActions.SaveProposal;
+import CreateProposal = CommercialProposalsActions.CreateProposal;
+import AddProposalPositions = CommercialProposalsActions.AddProposalPositions;
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -64,6 +68,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   @Select(CommercialProposalState.requestOffers) requestOffers$: Observable<CommercialProposalInfo[]>;
   @Select(RequestState.status) requestStatus$: Observable<StateStatus>;
   @Select(RequestState.request) request$: Observable<Request>;
+  @Select(CommercialProposalState.availablePositions) availablePositions$: Observable<RequestPosition[]>;
   contragentsWithTp$: Observable<ContragentShortInfo[]>;
   requestId: Uuid;
   groupId: Uuid;
@@ -73,6 +78,10 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
   loadingContragentList: boolean;
   files: File[] = [];
   gridRows: ElementRef[];
+  showForm: boolean;
+  readonly proposalPositions$ = this.availablePositions$.pipe(map(
+    positions => positions?.map(position => ({position}))
+  ));
   readonly proposalsGroupedBySuppliers$: Observable<CommercialProposal[]> = this.commercialProposals$.pipe(
     filter(p => !!p.suppliers || !!p.positions),
     map(({suppliers, positions}) => {
@@ -170,6 +179,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     });
 
     this.switchView(this.view);
+    this.store.dispatch(new CommercialProposalsActions.FetchAvailablePositions(this.requestId, this.groupId));
   }
 
   ngAfterViewInit() {
@@ -237,6 +247,23 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
 
   filterPositionsOnProposalsPreparationStatus(positions: RequestPosition[]): void {
     this.proposalPreparationPositions = positions.filter(position => position.status === PositionStatus.PROPOSALS_PREPARATION);
+  }
+
+  saveCommercialProposal(value) {
+    const params = {
+      supplierId: value.supplier.id,
+      requestCommercialProposalGroupId: this.groupId,
+      deliveryType: value.deliveryType,
+      deliveryPrice: value.deliveryPrice,
+      deliveryCurrency: value.deliveryCurrency,
+      deliveryPickup: value.deliveryPickup,
+      deliveryAdditionalTerms: value.deliveryAdditionalTerms,
+      warrantyConditions: value.deliveryAdditionalTerms
+    }
+
+    this.store.dispatch(new CreateProposal(this.requestId, params)).subscribe(
+      (data) => this.store.dispatch(new AddProposalPositions(data.id, value.positions))
+    );
   }
 
   getProposalSupplier = (proposal: Proposal<RequestOfferPosition>) => proposal.sourceProposal.supplierContragent;
