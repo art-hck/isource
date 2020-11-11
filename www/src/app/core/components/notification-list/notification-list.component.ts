@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit, Renderer2 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
-import { Observable, Subject } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
 import { NotificationItem, Notifications } from "../../models/notifications";
 import { NotificationsService } from "../../services/notifications.service";
 import { take, takeUntil } from "rxjs/operators";
@@ -10,23 +10,23 @@ import { take, takeUntil } from "rxjs/operators";
   templateUrl: './notification-list.component.html',
   styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationListComponent implements OnInit {
+export class NotificationListComponent {
   notifications$: Observable<Notifications>;
   newNotifications$: Observable<NotificationItem[]>;
   openModal = false;
   destroy$ = new Subject();
 
-  ngOnInit() {
-    this.notifications$ = this.notificationsService.getNotifications();
-    this.newNotifications$ = this.notificationsService.newNotifications$;
-  }
-
   public open() {
-    this.renderer.addClass(this.document.body, "aside-modal-open");
-    this.renderer.addClass(this.document.body, "notifications-modal-open");
-    this.openModal = true;
+    this.notificationsService.getNotifications().subscribe(notifications => {
+      this.notifications$ = of(notifications);
+      this.markNotificationsAsRead(notifications);
 
-    this.markNotificationsAsRead();
+      this.renderer.addClass(this.document.body, "aside-modal-open");
+      this.renderer.addClass(this.document.body, "notifications-modal-open");
+      this.openModal = true;
+    });
+
+    this.newNotifications$ = this.notificationsService.newNotifications$;
   }
 
   public close() {
@@ -35,11 +35,10 @@ export class NotificationListComponent implements OnInit {
     this.openModal = false;
   }
 
-  markNotificationsAsRead() {
+  markNotificationsAsRead(notifications) {
     const notificationsIds = [];
 
-    this.notifications$.pipe().subscribe(({ items }) => {
-      items
+    notifications.items
         .filter(item => item.status !== "STATUS_SEEN")
         .map(item => notificationsIds.push(+item.id));
 
@@ -51,7 +50,6 @@ export class NotificationListComponent implements OnInit {
           this.notificationsService.unreadCount();
         });
       }
-    });
   }
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, public notificationsService: NotificationsService) {}

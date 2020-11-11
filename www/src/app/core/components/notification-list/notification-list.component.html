@@ -10,16 +10,18 @@
     <app-notification-popup [view]="'list'"></app-notification-popup>
 
     <ng-container *ngIf="(notifications$ | async) as notifications">
-      <div class="app-col" *ngFor="let notification of notifications.items">
-        <app-notification-card
-          [notification]="notification"
-          [view]="'list'">
-        </app-notification-card>
-      </div>
-    </ng-container>
+      <ng-container *ngIf="notifications.totalHits === '0'; else notificationsList">
+        <span class="app-ghost-color">Уведомления отсуствуют</span>
+      </ng-container>
 
-    <ng-container *ngIf="(notifications$ | async)?.totalHits === '0'">
-      <span class="app-ghost-color">Уведомления отсуствуют</span>
+      <ng-template #notificationsList>
+        <div class="app-col" *ngFor="let notification of notifications.items">
+          <app-notification-card
+            [notification]="notification"
+            [view]="'list'">
+          </app-notification-card>
+        </div>
+      </ng-template>
     </ng-container>
 
     <div class="app-aside-modal-backdrop" (click)="close()">
