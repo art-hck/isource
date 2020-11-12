@@ -11,6 +11,7 @@
         [proposalsByPositions]="proposalsByPositions$ | async"
         [requestStatus]="requestStatus$ | async"
         [procedureSource]="procedureSource"
+        [canRollback]="canRollback"
         (uploadTemplate)="store.dispatch(uploadTemplate(request.id, groupId, $event))"
         (downloadTemplate)="store.dispatch(downloadTemplate(request.id, groupId))"
         (rollback)="store.dispatch(rollback(request.id, groupId, $event))"
@@ -19,6 +20,8 @@
         (saveProposalItem)="saveProposalItem($event.item, $event.proposal)"
         (updateProcedures)="updateProcedures(request.id, groupId)"
         (viewChange)="switchView($event)"
+        (create)="store.dispatch(create(request.id, groupId, $event))"
+        (edit)="store.dispatch(edit(groupId, $event))"
       ></app-common-proposal-view>
     </ng-container>
   </ng-container>

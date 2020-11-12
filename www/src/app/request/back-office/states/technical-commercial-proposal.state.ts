@@ -24,6 +24,7 @@ import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
 import CreateItems = TechnicalCommercialProposals.CreateItems;
 import UpdateItems = TechnicalCommercialProposals.UpdateItems;
+import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: CommonProposal[];
@@ -35,23 +36,6 @@ export interface TechnicalCommercialProposalStateModel {
 
 type Model = TechnicalCommercialProposalStateModel;
 type Context = StateContext<Model>;
-
-function insertOrUpdateProposals({ positions, proposals }: CommonProposalPayload): StateOperator<Model> {
-  return (state: Readonly<Model>) => ({
-    ...state,
-    status: "received",
-    positions: positions.reduce((updatedPositions, position) => {
-      const i = updatedPositions.findIndex(({ id }) => id === position.id);
-      i < 0 ? updatedPositions.push(position) : updatedPositions[i] = position;
-      return updatedPositions;
-    }, state.positions),
-    proposals: proposals.reduce((updatedProposals, proposal) => {
-      const i = updatedProposals.findIndex(({ id }) => id === proposal.id);
-      i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
-      return updatedProposals;
-    }, state.proposals)
-  });
-}
 
 @State<Model>({
   name: 'BackofficeTechnicalCommercialProposals',
@@ -87,7 +71,7 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch({ setState, dispatch }: Context, { requestId, groupId }: Fetch) {
-    setState(patch({ proposals: null, status: "fetching" }));
+    setState(patch<Model>({ proposals: null, status: "fetching" }));
 
     return this.rest.list(requestId, groupId).pipe(
       switchMap(({ proposals, positions }) => dispatch(new FetchProcedures(requestId, groupId)).pipe(
@@ -138,10 +122,10 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Publish)
-  publishPositions({ setState }: Context, { groupId, proposalsByPositions }: Publish) {
+  publish({ setState }: Context, { groupId, proposalsByPositions }: Publish) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.publishPositions(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], []))
+    return this.rest.publish(groupId, proposalsByPositions.reduce((ids, { items }) => [...ids, ...items.map(({ id }) => id)], []))
       .pipe(tap(data => setState(insertOrUpdateProposals(data))));
   }
 

@@ -14,6 +14,7 @@ import { RequestService } from "../../../customer/services/request.service";
 import { ContragentInfo } from "../../../../contragent/models/contragent-info";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
 import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { CommercialProposalsDeprecatedService } from "../../../back-office/services/commercial-proposals-deprecated.service";
 
 @Component({
   selector: 'app-request-commercial-proposal-list-deprecated',
@@ -35,7 +36,7 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
   showAddOfferForm = false;
 
   constructor(
-    protected offersService: CommercialProposalsService,
+    protected offersService: CommercialProposalsDeprecatedService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private customerRequestService: RequestService,
@@ -97,17 +98,6 @@ export class CommercialProposalListDeprecatedComponent implements OnInit {
   isFieldValid(field: string) {
     return this.offerForm.get(field).errors
       && (this.offerForm.get(field).touched || this.offerForm.get(field).dirty);
-  }
-
-  onAddOffer() {
-    this.offer = this.offerForm.value;
-    this.offersService.addOffer(this.requestId, this.requestPosition.id, this.offer).subscribe(
-      (data: RequestOfferPosition) => {
-        this.requestPosition.linkedOffers.push(data);
-      }
-    );
-    this.showAddOfferForm = false;
-    this.offerForm.reset();
   }
 
   onShowAddOfferForm() {

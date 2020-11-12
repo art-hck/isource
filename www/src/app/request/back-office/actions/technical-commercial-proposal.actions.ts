@@ -1,33 +1,32 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../common/models/common-proposal";
 
 export namespace TechnicalCommercialProposals {
-  // Получить список ТКП
   export class Fetch {
     static readonly type = '[Technical Commercial Proposals Backoffice] Fetch';
 
     constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Получить список доступных к добавлению позиций ТКП
+  // Получить доступные к добавлению позиции
   export class FetchAvailablePositions {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchAvailablePositions';
 
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Получить список доступных к процедур из ТКП
+  // Получить процедуры КП
   export class FetchProcedures {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchProcedures';
+    update = false;
 
-    constructor(public requestId: Uuid, public groupId?: Uuid, public update = false) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Обновить список доступных к процедур из ТКП
-  // @TODO: выпилить когда бэк научится отдавать процедуру при создании/уторговывании/продлении
+
+  // Обновить процедуры КП
   export class RefreshProcedures implements FetchProcedures {
-    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateProcedures';
+    static readonly type = '[Technical Commercial Proposals Backoffice] RefreshProcedures';
     update = true;
 
     constructor(public requestId: Uuid, public groupId?: Uuid) {}

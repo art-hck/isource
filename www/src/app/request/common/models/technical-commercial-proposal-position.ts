@@ -4,6 +4,7 @@ import { PositionCurrency } from "../enum/position-currency";
 import { TechnicalCommercialProposalPositionStatus } from "../enum/technical-commercial-proposal-position-status";
 import { TechnicalCommercialProposalPositionStatusLabel } from "../enum/technical-commercial-proposal-position-status-label";
 import { CommonProposalItem } from "./common-proposal";
+import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 
 export class TechnicalCommercialProposalPosition implements CommonProposalItem {
   id: Uuid;
@@ -32,5 +33,6 @@ export class TechnicalCommercialProposalPosition implements CommonProposalItem {
   requestId: Uuid;
   comments: string;
   supplierContragentId: Uuid;
+  supplierContragent: ContragentShortInfo;
   requestPositionId: Uuid;
 }

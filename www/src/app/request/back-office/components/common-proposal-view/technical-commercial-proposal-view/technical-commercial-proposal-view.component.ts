@@ -1,25 +1,26 @@
 import { ActivatedRoute } from "@angular/router";
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from "rxjs";
-import { Request } from "../../../common/models/request";
-import { delayWhen, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
-import { Uuid } from "../../../../cart/models/uuid";
+import { Request } from "../../../../common/models/request";
+import { delayWhen, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
+import { Uuid } from "../../../../../cart/models/uuid";
 import { UxgBreadcrumbsService } from "uxg";
-import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
+import { TechnicalCommercialProposalState } from "../../../states/technical-commercial-proposal.state";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
-import { RequestPosition } from "../../../common/models/request-position";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
-import { RequestState } from "../../states/request.state";
-import { RequestActions } from "../../actions/request.actions";
+import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
+import { RequestPosition } from "../../../../common/models/request-position";
+import { ToastActions } from "../../../../../shared/actions/toast.actions";
+import { RequestState } from "../../../states/request.state";
+import { RequestActions } from "../../../actions/request.actions";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { StateStatus } from "../../../common/models/state-status";
-import { ProcedureSource } from "../../enum/procedure-source";
-import { Procedure } from "../../models/procedure";
+import { StateStatus } from "../../../../common/models/state-status";
+import { ProcedureSource } from "../../../enum/procedure-source";
+import { Procedure } from "../../../models/procedure";
 import { Title } from "@angular/platform-browser";
-import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../common/models/common-proposal";
-import { TechnicalCommercialProposalGroupService } from "../../services/technical-commercial-proposal-group.service";
-import Create = TechnicalCommercialProposals.Create;
+import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../../../common/models/common-proposal";
+import { TechnicalCommercialProposalGroupService } from "../../../services/technical-commercial-proposal-group.service";
+import { ProposalsView } from "../../../../../shared/models/proposals-view";
+import { AppComponent } from "../../../../../app.component";
 import Update = TechnicalCommercialProposals.Update;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
@@ -31,8 +32,9 @@ import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
 import CreateItems = TechnicalCommercialProposals.CreateItems;
 import UpdateItems = TechnicalCommercialProposals.UpdateItems;
-import { ProposalsView } from "../../../../shared/models/proposals-view";
-import { AppComponent } from "../../../../app.component";
+import Create = TechnicalCommercialProposals.Create;
+import { PositionStatus } from "../../../../common/enum/position-status";
+import moment from "moment";
 
 @Component({
   templateUrl: './technical-commercial-proposal-view.component.html',
@@ -61,6 +63,10 @@ export class TechnicalCommercialProposalViewComponent implements OnInit, OnDestr
   readonly publishPositions = (proposalPositions: CommonProposalByPosition[]) => new Publish(this.groupId, proposalPositions);
   readonly updateProcedures = (requestId: Uuid, groupId: Uuid) => [new RefreshProcedures(requestId, groupId), new FetchAvailablePositions(requestId, groupId)];
   readonly rollback = (requestId: Uuid, groupId: Uuid, { id }: RequestPosition) => new Rollback(requestId, groupId, id);
+  readonly create = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal>) => new Create(requestId, groupId, payload);
+  readonly edit = (groupId: Uuid, payload: Partial<CommonProposal> & { id: Uuid }) => new Update(groupId, payload);
+  readonly canRollback = ({ status, statusChangedDate }: RequestPosition, rollbackDuration: number) => status === PositionStatus.TECHNICAL_COMMERCIAL_PROPOSALS_AGREEMENT &&
+    moment().diff(moment(statusChangedDate), 'seconds') < rollbackDuration
 
   constructor(
     private route: ActivatedRoute,

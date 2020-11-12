@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { Uuid } from "../../../cart/models/uuid";
 import { RequestPosition } from "../../common/models/request-position";
 import { FormDataService } from "../../../shared/services/form-data.service";
@@ -10,14 +9,14 @@ import { CommonProposal, CommonProposalItem, CommonProposalPayload } from "../..
 @Injectable()
 export class TechnicalCommercialProposalService {
 
-  constructor(protected api: HttpClient, private formDataService: FormDataService) {}
+  constructor(private api: HttpClient, private formDataService: FormDataService) {}
 
-  list(requestId: Uuid, groupId: Uuid ) {
+  list(requestId: Uuid, groupId: Uuid) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposals`;
     return this.api.post<CommonProposalPayload>(url, { groupId });
   }
 
-  create(requestId: Uuid, groupId: Uuid, data: Partial<TechnicalCommercialProposal>) {
+  create(requestId: Uuid, groupId: Uuid, data: Partial<CommonProposal>) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/create`;
     return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({groupId, data}));
   }
@@ -37,12 +36,12 @@ export class TechnicalCommercialProposalService {
     return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, groupId }));
   }
 
-  publish({ id }: CommonProposal) {
-    const url = `requests/backoffice/technical-commercial-proposals/${ id }/send-to-review`;
-    return this.api.get<CommonProposal>(url);
+  availablePositions(requestId: Uuid, groupId?: Uuid) {
+    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/available-request-positions`;
+    return this.api.post<RequestPosition[]>(url, { groupId });
   }
 
-  publishPositions(groupId: Uuid, positionIds: Uuid[]) {
+  publish(groupId: Uuid, positionIds: Uuid[]) {
     const url = `requests/backoffice/technical-commercial-proposals/send-positions-to-review`;
     return this.api.post<CommonProposalPayload>(url, { groupId, positionIds });
   }
@@ -69,11 +68,6 @@ export class TechnicalCommercialProposalService {
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
     const url = `requests/backoffice/${ requestId }/analytic-report/download-by-tcp`;
     return this.api.post(url, { groupId }, { responseType: 'blob' });
-  }
-
-  availablePositions(requestId: Uuid, groupId?: Uuid) {
-    const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/available-request-positions`;
-    return this.api.post<RequestPosition[]>(url, { groupId });
   }
 
   rollback(requestId: Uuid, groupId: Uuid, positionId: Uuid) {
