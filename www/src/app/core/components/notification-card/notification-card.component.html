@@ -13,8 +13,8 @@
 
     <!-- Новая заявка -->
     <ng-container *ngSwitchCase="'NEW_REQUEST'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
-        <b>Поступила новая заявка</b>
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
+        <b class="app-col">Поступила новая заявка</b>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color app-ellipsis">
@@ -28,8 +28,8 @@
 
     <!-- Новая позиция в заявке -->
     <ng-container *ngSwitchCase="'NEW_REQUEST_POSITION'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
-        <b>Добавлена новая позиция в заявку</b>
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
+        <b class="app-col">Добавлена новая позиция в заявку</b>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color app-ellipsis">
@@ -43,8 +43,8 @@
 
     <!-- Отредактирована позиция -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_EDIT'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
-        <b>Подтвердите редактирование позиции</b>
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
+        <b class="app-col">Подтвердите редактирование позиции</b>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color app-ellipsis">
@@ -58,8 +58,8 @@
 
     <!-- Согласовано добавление новых позиций -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_APPROVE'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
-        <b>Согласовано добавление новых позиций</b>
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + notification?.body?.type + '-badge'">
+        <b class="app-col">Согласовано добавление новых позиций</b>
       </div>
 
       <div class="app-row notification-card-request app-secondary-color app-ellipsis">
@@ -73,17 +73,18 @@
 
     <!-- Изменение статуса заявки -->
     <ng-container *ngSwitchCase="'REQUEST_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color" [ngSwitch]="notification?.body?.requestStatus" [ngClass]="notification?.body?.type + '-badge'">
+      <div class="app-row notification-card-header app-primary-color"
+           [ngSwitch]="notification?.body?.requestStatus" [ngClass]="'status-' + notification?.body?.type + '-badge'">
         <ng-container *ngSwitchCase="'NEW'">
-          <b>Ваша заявка принята в работу</b>
+          <b class="app-col">Ваша заявка принята в работу</b>
         </ng-container>
 
         <ng-container *ngSwitchCase="'COMPLETED'">
-          <b>По Вашей заявке заказ выполнен</b>
+          <b class="app-col">По Вашей заявке заказ выполнен</b>
         </ng-container>
 
         <ng-container *ngSwitchCase="'ON_CUSTOMER_APPROVAL'">
-          <b>Подтвердите создание позиций в заявке</b>
+          <b class="app-col">Подтвердите создание позиций в заявке</b>
         </ng-container>
       </div>
 
@@ -100,8 +101,8 @@
     <!-- Изменение статуса позиции -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_CHANGE_STATUS'">
       <div *ngFor="let row of notification?.body?.rows.slice(0,1)">
-        <div class="app-row notification-card-header app-primary-color" [ngClass]="row.items[0].requestPositionStatus + '-badge'">
-          <b>{{ getNotificationHeaderTitle(row.items[0]) }}</b>
+        <div class="app-row notification-card-header app-primary-color" [ngClass]="'status-' + row.items[0].requestPositionStatus + '-badge'">
+          <b class="app-col">{{ getNotificationHeaderTitle(row.items[0]) }}</b>
         </div>
 
         <div class="app-row notification-card-request app-secondary-color app-ellipsis">
