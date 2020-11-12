@@ -2,7 +2,7 @@ import {
   Component,
   Inject,
   InjectionToken,
-  Input,
+  Input, OnDestroy,
   OnInit,
   PLATFORM_ID,
 } from "@angular/core";
@@ -33,7 +33,7 @@ import { take, takeUntil, tap } from "rxjs/operators";
   ],
   styleUrls: ['./notification-popup.component.scss']
 })
-export class NotificationPopupComponent implements OnInit {
+export class NotificationPopupComponent implements OnInit, OnDestroy {
 
   @Input() view: 'popup' | 'list';
   holdNotifications: boolean;
@@ -101,7 +101,9 @@ export class NotificationPopupComponent implements OnInit {
   }
 
   hideAllNotifications() {
-    this.notificationsService.notificationAction$.next({ action: 'closeAll' });
+    if (this.view === 'popup') {
+      this.notificationsService.notificationAction$.next({action: 'closeAll'});
+    }
   }
 
   readNotification(notification) {
@@ -109,5 +111,12 @@ export class NotificationPopupComponent implements OnInit {
       take(1),
       takeUntil(this.destroy$)
     ).subscribe(() => this.notificationsService.unreadCount());
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    clearInterval(this.timerId);
   }
 }
