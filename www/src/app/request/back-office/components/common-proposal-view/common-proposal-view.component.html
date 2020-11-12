@@ -198,13 +198,13 @@
   <!-- list -->
   <!--div class="app-row" *ngIf="view === 'list'">
     <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="(status$ | async) !== 'received'">
-      <app-technical-commercial-proposal-form
+      <app-common-proposal-form
         *ngIf="proposals?.length + (procedures$ | async)?.length === 0 || showForm"
         [request]="request"
         [closable]="proposals.length > 0"
         [groupId]="groupId"
         (close)="showForm = false"
-      ></app-technical-commercial-proposal-form>
+      ></app-common-proposal-form>
 
       <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
         <app-request-procedure [procedure]="procedure"
@@ -221,7 +221,6 @@
         ></app-request-technical-commercial-proposal>
       </ng-container>
     </div>
-
     <div class="app-col-aside detachable">
     </div>
   </div-->

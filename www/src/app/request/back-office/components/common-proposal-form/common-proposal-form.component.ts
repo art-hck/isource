@@ -21,7 +21,7 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
-import { technicalCommercialProposalParametersFormValidator } from "./technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.validator";
+import { commonProposalParametersFormValidator } from "./common-proposal-parameters-form/common-proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
 import { RequestPosition } from "../../../common/models/request-position";
 import { UxgModalComponent } from "uxg";
@@ -34,11 +34,11 @@ import { searchContragents } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-technical-commercial-proposal-form',
-  templateUrl: './technical-commercial-proposal-form.component.html',
-  styleUrls: ['./technical-commercial-proposal-form.component.scss'],
+  templateUrl: './common-proposal-form.component.html',
+  styleUrls: ['./common-proposal-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestroy {
+export class CommonProposalFormComponent implements OnInit, OnDestroy {
 
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
@@ -55,7 +55,7 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
   readonly deliveryTypeLabel = DeliveryTypeLabels;
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly parametersValidator = technicalCommercialProposalParametersFormValidator;
+  readonly parametersValidator = commonProposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();
@@ -139,28 +139,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
   }
 
-  // submit(): void {
-  //   if (this.form.valid) {
-  //     let action$: Observable<any>;
-  //     const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-  //     this.form.disable();
-  //
-  //     if (this.form.pristine) {
-  //       this.publish.value ? action$ = this.store.dispatch(new Publish(this.technicalCommercialProposal)) : this.close.emit();
-  //     } else {
-  //       action$ = this.save({ ...this.form.value, files }, this.publish.value);
-  //     }
-  //
-  //     action$.pipe(
-  //       tap(() => this.close.emit()),
-  //       finalize(() => this.form.enable()),
-  //       takeUntil(this.destroy$)
-  //     ).subscribe();
-  //   } else {
-  //     this.form.updateValueAndValidity({ emitEvent: false });
-  //   }
-  // }
-
   submit(): void {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
@@ -172,12 +150,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       this.form.updateValueAndValidity({ emitEvent: false });
     }
   }
-
-  // save(value, publish) {
-  //   return this.store.dispatch(
-  //     value.id ? new Update(value, publish) : new Create(this.request.id, this.groupId, value, publish)
-  //   );
-  // }
 
   searchPosition(q: string, {position}: { position: RequestPosition }) {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
