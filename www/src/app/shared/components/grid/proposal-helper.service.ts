@@ -34,7 +34,7 @@ export class ProposalHelperService {
 
     return filteredProposals.every(({ quantity, requestPositionId }) => {
       const position = positions.find(p => p.id === requestPositionId);
-      return position.quantity === quantity
+      return position.quantity === quantity;
     });
   }
 
