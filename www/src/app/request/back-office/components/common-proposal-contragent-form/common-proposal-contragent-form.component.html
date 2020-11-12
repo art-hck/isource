@@ -102,7 +102,7 @@
     <app-documents-form-control
       formControlName="files"
       [invalid]="invalidDocControl"
-      [documents]="edit?.documents"
+      [documents]="proposal?.documents"
       [dragAndDrop]="false"
     ></app-documents-form-control>
   </div>
@@ -113,7 +113,7 @@
     <div class="app-row app-justify-content-end">
       <button uxgButton lg secondary type="button" (click)="close.emit()">Отмена</button>
       <button uxgButton lg primary>
-        {{ edit ? 'Сохранить' : 'Добавить' }}
+        {{ proposal ? 'Сохранить' : 'Добавить' }}
       </button>
     </div>
   </div>

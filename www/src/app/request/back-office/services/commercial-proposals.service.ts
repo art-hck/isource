@@ -1,145 +1,85 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { RequestOfferPosition } from "../../common/models/request-offer-position";
-import { Observable, of } from "rxjs";
-import { RequestDocument } from "../../common/models/request-document";
 import { RequestPosition } from "../../common/models/request-position";
-import { ContragentList } from 'src/app/contragent/models/contragent-list';
-import { PositionsWithSuppliers } from "../models/positions-with-suppliers";
-import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
-import { ProposalGroup } from "../../common/models/proposal-group";
-import { ProposalGroupFilter } from "../../common/models/proposal-group-filter";
 import { FormDataService } from "../../../shared/services/form-data.service";
-import { CommonProposal } from "../../common/models/common-proposal";
+import { ProposalGroup } from "../../common/models/proposal-group";
+import { CommonProposal, CommonProposalItem, CommonProposalPayload } from "../../common/models/common-proposal";
+import { ContragentList } from 'src/app/contragent/models/contragent-list';
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class CommercialProposalsService {
 
-  constructor(private api: HttpClient, private formData: FormDataService) {
+  constructor(private api: HttpClient, private formDataService: FormDataService) {}
+
+  list(requestId: Uuid, groupId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposals`;
+    return this.api.post<CommonProposalPayload>(url, { requestCommercialProposalGroupId: groupId });
   }
 
-  getOffers(id: Uuid, groupId: Uuid) {
-    const url = `requests/backoffice/${ id }/commercial-proposals`;
-    return this.api.post<PositionsWithSuppliers>(url, { requestCommercialProposalGroupId: groupId });
+  create(requestId: Uuid, groupId: Uuid, data: Partial<CommonProposal>) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposals/create`;
+    data["supplierId"] = data.supplier.id;
+    return this.api.post<CommonProposalPayload>(url, { requestCommercialProposalGroupId: groupId, ...data });
   }
 
-  availablePositions(id: Uuid, groupId?: Uuid) {
-    const url = `requests/backoffice/${ id }/commercial-proposals/available-request-positions`;
+  update(groupId: Uuid, data: Partial<CommonProposal> & { id: Uuid }) {
+    const url = `requests/backoffice/commercial-proposals/${ data.id }/edit-offer`;
+    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ groupId, data }));
+  }
+
+  createItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
+    // const url = `requests/backoffice/commercial-proposals/${ proposalId }/add-positions`;
+    const url = `requests/backoffice/7585c572-1c61-4cf9-b4d7-f87bfed777a6/positions/6ea6c255-a13f-44b6-b262-0fa29896eab8/add-offer`;
+    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, requestCommercialProposalGroupId: groupId }));
+  }
+
+  editItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
+    const url = `requests/backoffice/commercial-proposals/${ proposalId }/edit-positions`;
+    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, groupId }));
+  }
+
+  availablePositions(requestId: Uuid, groupId?: Uuid) {
+    const url = `requests/backoffice/${ requestId }/commercial-proposals/available-request-positions`;
     return this.api.post<RequestPosition[]>(url, { requestCommercialProposalGroupId: groupId });
   }
 
-  group(requestId: Uuid, groupId: Uuid) {
-    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }/view`;
-    return this.api.get<ProposalGroup>(url);
-  }
-
-  groupList(requestId: Uuid, filters: ProposalGroupFilter = {}) {
-    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups`;
-    return this.api.post<ProposalGroup[]>(url, { filters });
-  }
-
-  groupCreate(requestId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
-    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/create`;
-    return this.api.post<ProposalGroup>(url, body);
-  }
-
-  groupUpdate(requestId: Uuid, groupId: Uuid, body: Partial<ProposalGroup<Uuid>>) {
-    const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/${ groupId }/edit`;
-    return this.api.post<ProposalGroup>(url, body);
-  }
-
-  addSupplier(id: Uuid, groupId: Uuid, supplierId: Uuid) {
-    const url = `requests/backoffice/${ id }/commercial-proposals/add-supplier`;
-    return this.api.post<ContragentShortInfo[]>(url, { supplierId, requestCommercialProposalGroupId: groupId });
-  }
-
-  addOffer(id: Uuid, positionId: Uuid, offer: RequestOfferPosition) {
-    const url = `requests/backoffice/${ id }/positions/${ positionId }/add-offer`;
-    return this.api.post<RequestOfferPosition>(url, this.formData.toFormData(offer));
-  }
-
-  createProposal(id: Uuid, params) {
-    const url = `requests/backoffice/${ id }/commercial-proposals/create`;
-    return this.api.post<CommonProposal>(url, params);
-  }
-
-  addProposalPositions(id: Uuid, positions) {
-    const url = `requests/backoffice/${ id }/commercial-proposals/add-positions`;
-    return this.api.post<RequestOfferPosition>(url, {items: positions});
-  }
-
-  editOffer(id: Uuid, positionId: Uuid, editedOffer: RequestOfferPosition) {
-    const url = `requests/backoffice/${ id }/positions/${ positionId }/edit-offer`;
-    return this.api.post<RequestOfferPosition>(url, this.formData.toFormData(editedOffer));
-  }
-
-  publishOffers(id: Uuid, positionId) {
-    const url = `requests/backoffice/${ id }/positions/${ positionId }/publish-offers`;
-    return this.api.post(url, {});
-  }
-
-  publishRequestOffers(id: Uuid, requestPositions: RequestPosition[]) {
-    const url = `requests/backoffice/${ id }/publish-offers`;
-    const positionIds = requestPositions.map(item => item.id);
-
-    return this.api.post(url, { positionIds });
-  }
-
-  rollback(id: Uuid, positionId: Uuid): Observable<RequestPosition> {
-    const url = `requests/backoffice/${ id }/cancel-publish-offers`;
-    return this.api.post<RequestPosition>(url, { positionId });
-  }
-
-  /**
-   * @deprecated
-   */
-  uploadDocuments(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {
-    const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files[]', file, file.name);
-    });
-
-    const url = `requests/backoffice/offers/${ offer.id }/documents/upload`;
-    return this.api.post<RequestDocument[]>(url, formData);
-  }
-
-  /**
-   * @deprecated
-   */
-  uploadTechnicalProposals(offer: RequestOfferPosition, files: File[]): Observable<RequestDocument[]> {
-    const url = `requests/backoffice/offers/${ offer.id }/technical-proposals/upload`;
-    return this.api.post<RequestDocument[]>(url, this.formData.toFormData({ files }));
+  publish(groupId: Uuid, positionIds: Uuid[]) {
+    const url = `requests/backoffice/commercial-proposals/send-positions-to-review`;
+    return this.api.post<CommonProposalPayload>(url, { groupId, positionIds });
   }
 
   downloadTemplate(requestId: Uuid, groupId: Uuid) {
     const url = `requests/backoffice/${ requestId }/download-offers-template`;
-    return this.api.post(url, { requestCommercialProposalGroupId: groupId }, { responseType: 'blob' });
+    return this.api.post(url, { groupId }, { responseType: 'blob' });
   }
 
-  uploadTemplate(requestId: Uuid, files: File[], groupId?: Uuid, commercialProposalGroupName?: string) {
+  uploadTemplate(requestId: Uuid, groupId: Uuid, files: File[]) {
     const url = `requests/backoffice/${ requestId }/add-offers-from-excel`;
-    const data = { files, requestCommercialProposalGroupId: groupId, commercialProposalGroupName };
-    return this.api.post(url, this.formData.toFormData(data));
+    const data = { files, groupId };
+
+    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData(data));
   }
 
   uploadTemplateFromGroups(requestId: Uuid, files: File[], requestCommercialProposalGroupName: string) {
     const url = `requests/backoffice/${ requestId }/commercial-proposal-groups/upload-excel`;
     const data = { files, requestCommercialProposalGroupName };
 
-    return this.api.post<ProposalGroup>(url, this.formData.toFormData(data));
-  }
-
-
-  getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
-    const url = `requests/backoffice/${ requestId }/contragents-with-tp`;
-    return this.api.post<ContragentList[]>(url, { positions });
+    return this.api.post<ProposalGroup>(url, this.formDataService.toFormData(data));
   }
 
   downloadAnalyticalReport(requestId: Uuid, groupId: Uuid) {
     const url = `requests/backoffice/${ requestId }/analytic-report/download-by-cp`;
-    return this.api.post(url, { requestCommercialProposalGroupId: groupId }, { responseType: 'blob' });
+    return this.api.post(url, { groupId }, { responseType: 'blob' });
+  }
+
+  rollback(requestId: Uuid, groupId: Uuid, positionId: Uuid) {
+    const url = `requests/backoffice/${ requestId }/cancel-publish-offers`;
+    return this.api.post<CommonProposalPayload>(url, { groupId, positionId });
+  }
+
+  getContragentsWithTp(requestId: Uuid, positions: Uuid[]) {
+    const url = `requests/backoffice/${ requestId }/contragents-with-tp`;
+    return this.api.post<ContragentList[]>(url, { positions });
   }
 }

@@ -1,24 +1,11 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { Request } from "../../common/models/request";
-import { RequestPosition } from "../../common/models/request-position";
-import { RequestOfferPosition } from "../../common/models/request-offer-position";
+import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../common/models/common-proposal";
 
 export namespace CommercialProposalsActions {
-
-  // Получить КП
   export class Fetch {
     static readonly type = '[Commercial Proposals Backoffice] Fetch';
-    update = false;
 
     constructor(public requestId: Uuid, public groupId: Uuid) {}
-  }
-
-  // Получить процедуры КП
-  export class FetchProcedures {
-    static readonly type = '[Commercial Proposals Backoffice] FetchProcedures';
-    update = false;
-
-    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
   // Получить доступные к добавлению позиции
@@ -28,7 +15,16 @@ export namespace CommercialProposalsActions {
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Обновить процедуры КП
+  // Получить процедуры
+  export class FetchProcedures {
+    static readonly type = '[Commercial Proposals Backoffice] FetchProcedures';
+    update = false;
+
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
+  }
+
+
+  // Обновить процедуры
   export class RefreshProcedures implements FetchProcedures {
     static readonly type = '[Commercial Proposals Backoffice] RefreshProcedures';
     update = true;
@@ -36,47 +32,37 @@ export namespace CommercialProposalsActions {
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Обновить КП
-  export class Refresh implements Fetch {
+  // Создать
+  export class Create {
+    static readonly type = '[Commercial Proposals Backoffice] Create';
+
+    constructor(
+      public requestId: Uuid,
+      public groupId: Uuid,
+      public payload: Partial<CommonProposal>,
+      public items?: Partial<CommonProposalItem>[]
+    ) {}
+  }
+
+  // Редактировать
+  export class Update {
     static readonly type = '[Commercial Proposals Backoffice] Update';
-    update = true;
 
-    constructor(public requestId: Uuid, public groupId: Uuid) {}
+    constructor(public groupId: Uuid, public payload: Partial<CommonProposal> & { id: Uuid }) {}
   }
 
-  // Добавить столбец поставщика
-  export class AddSupplier {
-    static readonly type = '[Commercial Proposals Backoffice] AddSupplier';
+  // Отправить на согласование по позиции
+  export class Publish {
+    static readonly type = '[Commercial Proposals Backoffice] Publish';
 
-    constructor(public requestId: Uuid, public groupId: Uuid, public supplierId: Uuid) {}
+    constructor(public groupId: Uuid, public proposalsByPositions: CommonProposalByPosition[]) {}
   }
 
-  // Изменить/Создать КП
-  export class CreateProposal {
-    static readonly type = '[Commercial Proposals Backoffice] CreateProposal';
+  // Создать из шаблона
+  export class UploadTemplate {
+    static readonly type = '[Commercial Proposals Backoffice] UploadTemplate';
 
-    constructor(public requestId: Uuid, public params) {}
-  }
-
-  // Изменить/Создать КП
-  export class SaveProposal {
-    static readonly type = '[Commercial Proposals Backoffice] AddProposal';
-
-    constructor(public requestId: Uuid, public positionId: Uuid, public proposal: RequestOfferPosition) {}
-  }
-
-  // Отправить позиции на согласование
-  export class PublishPositions {
-    static readonly type = '[Commercial Proposals Backoffice] PublishPositions';
-
-    constructor(public requestId: Uuid, public groupId: Uuid, public positions: RequestPosition[]) {}
-  }
-
-  // Скачать аналитическую справку
-  export class DownloadAnalyticalReport {
-    static readonly type = '[Commercial Proposals Backoffice] DownloadAnalyticalReport';
-
-    constructor(public requestId: Uuid, public groupId: Uuid) {}
+    constructor(public requestId: Uuid, public files: File[], public groupId: Uuid, public groupName?: string) {}
   }
 
   // Скачать шаблон
@@ -86,25 +72,33 @@ export namespace CommercialProposalsActions {
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Откатить КП
+  // Скачать аналитическую справку
+  export class DownloadAnalyticalReport {
+    static readonly type = '[Commercial Proposals Backoffice] DownloadAnalyticalReport';
+
+    constructor(public requestId: Uuid, public groupId: Uuid) {}
+  }
+
+  // Добавить позиции
+  export class CreateItems {
+    static readonly type = '[Commercial Proposals Backoffice] CreateItems';
+    update = false;
+
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: Partial<CommonProposalItem>[]) {}
+  }
+
+  // Изменить позиции
+  export class UpdateItems {
+    static readonly type = '[Commercial Proposals Backoffice] UpdateItems';
+    update = true;
+
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: (Partial<CommonProposalItem>)[]) {}
+  }
+
+  // Откатить
   export class Rollback {
     static readonly type = '[Commercial Proposals Backoffice] Rollback';
 
-    constructor(public requestId: Uuid, public positionId: Uuid) {}
-  }
-
-  // Загрузить шаблон
-  export class UploadTemplate {
-    static readonly type = '[Commercial Proposals Backoffice] UploadTemplate';
-
-    constructor(public requestId: Uuid, public files: File[], public groupId: Uuid, public groupName?: string) {}
-  }
-
-  // Добавить позиции в КП
-
-  export class AddProposalPositions {
-    static readonly type = '[Commercial Proposals Backoffice] AddProposalPositions';
-
-    constructor(public proposalId: Uuid, public items) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public positionId: Uuid) {}
   }
 }

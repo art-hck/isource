@@ -5,6 +5,7 @@ import { ContragentShortInfo } from "../../../../contragent/models/contragent-sh
 import { UserInfoService } from "../../../../user/service/user-info.service";
 import { FormControl } from "@angular/forms";
 import { ProposalWithCommonInfo } from "../../../../request/common/models/proposal-with-common-info";
+import { RequestPosition } from "../../../../request/common/models/request-position";
 
 @Component({
   selector: 'app-grid-contragents',
@@ -22,6 +23,7 @@ export class GridContragentsComponent implements AfterViewInit, OnChanges, After
   @Input() gridRows: ElementRef[] | QueryList<ElementRef>;
   @Input() suppliers: GridSupplier[];
   @Input() positionCell: boolean;
+  @Input() positions: RequestPosition[];
   @Input() proposals: ProposalWithCommonInfo[];
   @Input() showParams = false;
   @Output() scrollUpdated = new EventEmitter<{ canScrollRight: boolean, canScrollLeft: boolean }>();

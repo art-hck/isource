@@ -7,9 +7,9 @@ import { DesignDocumentationListComponent } from "../common/components/design-do
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
-import { TechnicalCommercialProposalListComponent } from "./components/technical-commercial-proposal-list/technical-commercial-proposal-list.component";
+import { TechnicalCommercialProposalViewComponent } from "./components/common-proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
-import { CommercialProposalViewComponent } from "./components/commercial-proposal-view/commercial-proposal-view.component";
+import { CommercialProposalViewComponent } from "./components/common-proposal-view/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
 import { TechnicalCommercialProposalGroupListComponent } from "./components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
@@ -57,7 +57,7 @@ const routes: Routes = [
       },
       {
         path: 'technical-commercial-proposals/:groupId',
-        component: TechnicalCommercialProposalListComponent
+        component: TechnicalCommercialProposalViewComponent
       },
       {
         path: 'design-documentation',

@@ -19,7 +19,6 @@ import { PaymentTermsLabels } from "../../../common/dictionaries/payment-terms-l
 import { CommercialProposalFormValidators } from "./commercial-proposal-form.validators";
 import { DatePipe } from "@angular/common";
 import { CommercialProposalInfo } from "../../models/commercial-proposal-info";
-import SaveProposal = CommercialProposalsActions.SaveProposal;
 
 @Component({
   selector: 'app-request-commercial-proposal-form',
@@ -90,10 +89,10 @@ export class CommercialProposalFormComponent implements OnInit, OnDestroy {
     if (this.form.invalid) { return; }
 
     this.form.disable();
-    this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, {
-      ...this.form.value,
-      supplierContragentId: this.form.get('supplierContragentId').value.id,
-    }));
+    // this.store.dispatch(new SaveProposal(this.position.request.id, this.position.id, {
+    //   ...this.form.value,
+    //   supplierContragentId: this.form.get('supplierContragentId').value.id,
+    // }));
     this.close.emit();
   }
 

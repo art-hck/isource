@@ -1,87 +1,64 @@
 import { Uuid } from "../../../cart/models/uuid";
-import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
-import { TechnicalCommercialProposalByPosition } from "../../common/models/technical-commercial-proposal-by-position";
-import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
-import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
+import { CommonProposal, CommonProposalByPosition, CommonProposalItem } from "../../common/models/common-proposal";
 
 export namespace TechnicalCommercialProposals {
-  // Получить список ТКП
   export class Fetch {
     static readonly type = '[Technical Commercial Proposals Backoffice] Fetch';
 
     constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Получить список доступных к добавлению позиций ТКП
+  // Получить доступные к добавлению позиции
   export class FetchAvailablePositions {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchAvailablePositions';
 
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Получить список доступных к процедур из ТКП
+  // Получить процедуры
   export class FetchProcedures {
     static readonly type = '[Technical Commercial Proposals Backoffice] FetchProcedures';
+    update = false;
 
-    constructor(public requestId: Uuid, public groupId?: Uuid, public update = false) {}
+    constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Обновить список доступных к процедур из ТКП
-  // @TODO: выпилить когда бэк научится отдавать процедуру при создании/уторговывании/продлении
+
+  // Обновить процедуры
   export class RefreshProcedures implements FetchProcedures {
-    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateProcedures';
+    static readonly type = '[Technical Commercial Proposals Backoffice] RefreshProcedures';
     update = true;
 
     constructor(public requestId: Uuid, public groupId?: Uuid) {}
   }
 
-  // Создать ТКП
+  // Создать
   export class Create {
     static readonly type = '[Technical Commercial Proposals Backoffice] Create';
 
     constructor(
       public requestId: Uuid,
       public groupId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal>,
-      public publish: boolean
+      public payload: Partial<CommonProposal>,
+      public items?: Partial<CommonProposalItem>[]
     ) {}
   }
 
-  // Редактировать ТКП
+  // Редактировать
   export class Update {
     static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
-    constructor(
-      public payload: Partial<TechnicalCommercialProposal> & { id: Uuid },
-      public publish: boolean
-    ) {}
+    constructor(public groupId: Uuid, public payload: Partial<CommonProposal> & { id: Uuid }) {}
   }
 
-  // Редактировать общие параметры ТКП
-  export class UpdateParams {
-    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateParams';
-
-    constructor(
-      public requestId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal> & { id: Uuid }
-    ) {}
-  }
-
-  // Отправить на согласование ТКП
+  // Отправить на согласование по позиции
   export class Publish {
     static readonly type = '[Technical Commercial Proposals Backoffice] Publish';
 
-    constructor(public proposal: TechnicalCommercialProposal) {}
+    constructor(public groupId: Uuid, public proposalsByPositions: CommonProposalByPosition[]) {}
   }
 
-  // Отправить на согласование ТКП по определенной позиции
-  export class PublishByPosition {
-    static readonly type = '[Technical Commercial Proposals Backoffice] PublishPositions';
-
-    constructor(public proposalsByPositions: TechnicalCommercialProposalByPosition[]) {}
-  }
-
-  // Создать ТКП из шаблона
+  // Создать из шаблона
   export class UploadTemplate {
     static readonly type = '[Technical Commercial Proposals Backoffice] UploadTemplate';
 
@@ -102,31 +79,26 @@ export namespace TechnicalCommercialProposals {
     constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Создать пустое ТКП (только контрагент)
-  export class CreateContragent implements Create {
-    static readonly type = '[Technical Commercial Proposals Backoffice] CreateContragent';
-    public publish = false;
+  // Добавить позиции
+  export class CreateItems {
+    static readonly type = '[Technical Commercial Proposals Backoffice] CreateItems';
+    update = false;
 
-    constructor(
-      public requestId: Uuid,
-      public groupId: Uuid,
-      public payload: Partial<TechnicalCommercialProposal> & {supplier: ContragentShortInfo}
-    ) {}
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: Partial<CommonProposalItem>[]) {}
   }
 
-  // Добавить позиции в ТКП
-  export class CreatePosition implements Update {
-    static readonly type = '[Technical Commercial Proposals Backoffice] CreatePosition';
-    publish = false;
+  // Изменить позиции
+  export class UpdateItems {
+    static readonly type = '[Technical Commercial Proposals Backoffice] UpdateItems';
+    update = true;
 
-    constructor(public payload: Partial<TechnicalCommercialProposal> & { id: Uuid; positions: TechnicalCommercialProposalPosition[] }) {
-    }
+    constructor(public proposalId: Uuid, public groupId: Uuid, public items: (Partial<CommonProposalItem>)[]) {}
   }
 
-  // Откатить ТКП
+  // Откатить
   export class Rollback {
     static readonly type = '[Technical Commercial Proposals Backoffice] Rollback';
 
-    constructor(public requestId: Uuid, public positionId: Uuid) {}
+    constructor(public requestId: Uuid, public groupId: Uuid, public positionId: Uuid) {}
   }
 }

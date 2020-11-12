@@ -3,7 +3,6 @@ import { BehaviorSubject, iif, Observable, Subject, throwError } from "rxjs";
 import { ProposalGroup } from "../../../../common/models/proposal-group";
 import { catchError, delayWhen, finalize, scan, shareReplay, switchMap, takeUntil, tap, throttleTime, withLatestFrom } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
-import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { RequestState } from "../../../states/request.state";
 import { RequestActions } from "../../../actions/request.actions";
@@ -18,6 +17,7 @@ import { ProcedureSource } from "../../../enum/procedure-source";
 import { FeatureService } from "../../../../../core/services/feature.service";
 import { ToastActions } from "../../../../../shared/actions/toast.actions";
 import { RequestPosition } from "../../../../common/models/request-position";
+import { CommercialProposalGroupService } from "../../../services/commercial-proposal-group.service";
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import UploadTemplate = CommercialProposalsActions.UploadTemplate;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
@@ -54,7 +54,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
       { label: 'Согласование КП', link: `/requests/backoffice/${id}/commercial-proposals`},
     ]),
     switchMap(() => this.filter$),
-    switchMap(filter => this.service.groupList(this.requestId, filter)),
+    switchMap(filter => this.service.list(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(
       tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
       scan((acc, group) => {
@@ -81,7 +81,7 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
     private actions: Actions,
     public featureService: FeatureService,
     public store: Store,
-    public service: CommercialProposalsService
+    public service: CommercialProposalGroupService
   ) {}
 
   ngOnInit() {
@@ -99,15 +99,15 @@ export class CommercialProposalGroupListComponent implements OnInit, OnDestroy {
   }
 
   updateGroups(): void {
-    this.service.groupList(this.requestId).subscribe(groups => {
+    this.service.list(this.requestId).subscribe(groups => {
       groups.forEach(group => this.newGroup$.next(group));
     });
   }
 
   saveGroup(body: Partial<ProposalGroup<Uuid>>) {
     iif(() => !body?.id,
-      this.service.groupCreate(this.requestId, body),
-      this.service.groupUpdate(this.requestId, body?.id, body)
+      this.service.create(this.requestId, body),
+      this.service.update(this.requestId, body?.id, body)
     ).pipe(
       takeUntil(this.destroy$),
       catchError(err => {

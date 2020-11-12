@@ -25,6 +25,7 @@ import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import { TechnicalCommercialProposalGroupService } from "../../../services/technical-commercial-proposal-group.service";
 
 @Component({
   selector: 'app-technical-commercial-proposal-group-list',
@@ -56,7 +57,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
       { label: 'Согласование ТКП', link: `/requests/backoffice/${id}/technical-commercial-proposals`},
     ]),
     switchMap(() => this.filter$),
-    switchMap(filter => this.service.groupList(this.requestId, filter)),
+    switchMap(filter => this.service.list(this.requestId, filter)),
     switchMap(groups => this.newGroup$.pipe(
       tap(g => g && this.store.dispatch(new FetchAvailablePositions(this.requestId))),
       scan((acc, group) => {
@@ -83,7 +84,7 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
     private actions: Actions,
     public featureService: FeatureService,
     public store: Store,
-    public service: TechnicalCommercialProposalService
+    public service: TechnicalCommercialProposalGroupService
   ) {}
 
   ngOnInit() {
@@ -101,15 +102,15 @@ export class TechnicalCommercialProposalGroupListComponent implements OnInit, On
   }
 
   updateGroups(): void {
-    this.service.groupList(this.requestId).subscribe(groups => {
+    this.service.list(this.requestId).subscribe(groups => {
       groups.forEach(group => this.newGroup$.next(group));
     });
   }
 
   saveGroup(body: Partial<ProposalGroup<Uuid>>) {
     iif(() => !body?.id,
-      this.service.groupCreate(this.requestId, body),
-      this.service.groupUpdate(this.requestId, body?.id, body)
+      this.service.create(this.requestId, body),
+      this.service.update(this.requestId, body?.id, body)
     ).pipe(
       takeUntil(this.destroy$),
       catchError(err => {
