@@ -49,7 +49,7 @@ export class NotificationCardComponent implements OnInit {
 
   // todo Реализовать скрытие уведомлений через RXJS (pipe(debounceTime(5000), mapTo(null)))
   hideOnTimeout() {
-    setTimeout(() => { this.hideNotification.emit(this.notification); }, 5000);
+    setTimeout(() => { this.hideNotification.emit(this.notification); }, 8000);
   }
 
   formatDate(date): string {
