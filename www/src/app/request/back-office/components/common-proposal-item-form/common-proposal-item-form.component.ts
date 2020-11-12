@@ -49,6 +49,8 @@ export class CommonProposalItemFormComponent implements OnInit {
   ngOnInit(): void {
     const { id, ...position }: RequestPosition = this.position;
 
+
+
     this.form.patchValue({
       ...{
         requestPositionId: id,

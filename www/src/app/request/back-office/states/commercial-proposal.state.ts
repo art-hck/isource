@@ -12,6 +12,7 @@ import { ProcedureSource } from "../enum/procedure-source";
 import { ProcedureService } from "../services/procedure.service";
 import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
+import { iif } from "rxjs";
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -44,10 +45,7 @@ type Context = StateContext<Model>;
 @Injectable()
 export class CommercialProposalState {
 
-  constructor(
-    private rest: CommercialProposalsService,
-    private procedureService: ProcedureService,
-  ) {
+  constructor(private rest: CommercialProposalsService, private procedureService: ProcedureService) {
   }
 
   @Selector() static proposals({ proposals }: Model) { return proposals; }
@@ -103,10 +101,15 @@ export class CommercialProposalState {
   }
 
   @Action(Create)
-  create({ setState }: Context, { requestId, groupId, payload }: Create) {
+  create({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Create) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.create(requestId, groupId, payload).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.create(requestId, groupId, payload).pipe(
+      tap(data => setState(insertOrUpdateProposals(data))),
+      switchMap(({ proposals: [proposal] }) => {
+        return iif(() => !!items, dispatch(new CreateItems(proposal.id, groupId, items)));
+      }),
+    );
   }
 
   @Action(Update)

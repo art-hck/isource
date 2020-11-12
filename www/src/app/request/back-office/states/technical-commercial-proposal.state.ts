@@ -1,4 +1,4 @@
-import { Action, Selector, State, StateContext, StateOperator } from "@ngxs/store";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
@@ -10,7 +10,9 @@ import { saveAs } from 'file-saver/src/FileSaver';
 import { Procedure } from "../models/procedure";
 import { ProcedureService } from "../services/procedure.service";
 import { ProcedureSource } from "../enum/procedure-source";
-import { CommonProposal, CommonProposalByPosition, CommonProposalPayload } from "../../common/models/common-proposal";
+import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
+import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
+import { iif } from "rxjs";
 import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
@@ -24,7 +26,6 @@ import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
 import Rollback = TechnicalCommercialProposals.Rollback;
 import CreateItems = TechnicalCommercialProposals.CreateItems;
 import UpdateItems = TechnicalCommercialProposals.UpdateItems;
-import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: CommonProposal[];
@@ -100,10 +101,15 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Create)
-  create({ setState }: Context, { requestId, groupId, payload }: Create) {
+  create({ setState, dispatch }: Context, { requestId, groupId, payload, items }: Create) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.create(requestId, groupId, payload).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.create(requestId, groupId, payload).pipe(
+      tap(data => setState(insertOrUpdateProposals(data))),
+      switchMap(({ proposals: [proposal] }) => {
+        return iif(() => !!items, dispatch(new CreateItems(proposal.id, groupId, items)));
+      }),
+    );
   }
 
   @Action(Update)
