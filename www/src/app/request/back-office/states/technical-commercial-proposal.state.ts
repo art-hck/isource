@@ -110,7 +110,7 @@ export class TechnicalCommercialProposalState {
   }
 
   @Action(Update)
-  update({ setState, dispatch }: Context, {  payload, items }: Update) {
+  update({ setState, dispatch }: Context, { payload, items }: Update) {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.update(payload).pipe(

@@ -9,10 +9,10 @@ import { searchPosition } from "../../../../shared/helpers/search";
 
 @Component({
   selector: 'app-common-proposal-group-form',
-  templateUrl: './common-proposal-group-form.component.html',
-  styleUrls: ['./common-proposal-group-form.component.scss']
+  templateUrl: './proposal-group-form.component.html',
+  styleUrls: ['./proposal-group-form.component.scss']
 })
-export class CommonProposalGroupFormComponent implements OnChanges, OnDestroy {
+export class ProposalGroupFormComponent implements OnChanges, OnDestroy {
   @ViewChild('createGroup') createGroup: UxgModalComponent;
   @Output() complete = new EventEmitter();
   @Output() create = new EventEmitter<{ name: string, id?: Uuid, requestPositions: Uuid[] }>();

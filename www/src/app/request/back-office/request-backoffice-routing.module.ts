@@ -7,13 +7,13 @@ import { DesignDocumentationListComponent } from "../common/components/design-do
 import { PositionComponent } from "./components/position/position.component";
 import { TechnicalProposalListComponent } from "./components/technical-proposal-list/technical-proposal-list.component";
 import { CanActivateFeatureGuard } from "../../core/can-activate-feature.guard";
-import { TechnicalCommercialProposalViewComponent } from "./components/common-proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component";
+import { TechnicalCommercialProposalViewComponent } from "./components/proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component";
 import { RequestListComponent } from "./components/request-list/request-list.component";
-import { CommercialProposalViewComponent } from "./components/common-proposal-view/commercial-proposal-view/commercial-proposal-view.component";
+import { CommercialProposalViewComponent } from "./components/proposal-view/commercial-proposal-view/commercial-proposal-view.component";
 import { ProcedureViewComponent } from "./components/procedure-view/procedure-view.component";
-import { TechnicalCommercialProposalGroupListComponent } from "./components/common-proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
+import { TechnicalCommercialProposalGroupListComponent } from "./components/proposal-group-list/technical-commercial-proposal-group-list/technical-commercial-proposal-group-list.component";
 import { ContractListComponent } from "./components/contract-list/contract-list.component";
-import { CommercialProposalGroupListComponent } from "./components/common-proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
+import { CommercialProposalGroupListComponent } from "./components/proposal-group-list/commercial-proposal-group-list/commercial-proposal-group-list.component";
 
 const routes: Routes = [
   {

@@ -18,10 +18,10 @@ import { ProposalSourceLabels } from "../../../common/dictionaries/proposal-sour
 
 @Component({
   selector: 'app-common-proposal-group-list',
-  templateUrl: './common-proposal-group-list.component.html',
-  styleUrls: ['common-proposal-group-list.component.scss'],
+  templateUrl: './proposal-group-list.component.html',
+  styleUrls: ['proposal-group-list.component.scss'],
 })
-export class CommonProposalGroupListComponent {
+export class ProposalGroupListComponent {
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
   @Input() availablePositions: RequestPosition[];

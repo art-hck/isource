@@ -171,7 +171,8 @@
                   </div>
                   <ng-container *ngIf="canRollback(proposalsByPos.position, rollbackDuration)">
                     <button uxgButton primary type="button" [style.min-width.px]="135"
-                            (click)="rollback.emit(proposalsByPos.position)">
+                            (click)="rollback.emit(proposalsByPos.position)"
+                    >
                       Отозвать <span
                       class="cancel-timer"> {{ proposalsByPos.position.statusChangedDate | countdownTimer: rollbackDuration }} </span>
                     </button>
@@ -277,14 +278,14 @@
 
   <uxg-modal [(state)]="addProposalPositionPayload">
     <h2>Добавить новое {{ sourceLabels[procedureSource]}} от {{addProposalPositionPayload?.proposal?.supplier.shortName}}</h2>
-    <app-common-proposal-item-form
+    <app-proposal-item-form
       *ngIf="addProposalPositionPayload as p"
       [position]="p.position"
       [proposalItem]="p.proposalPosition"
       [source]="procedureSource"
       (close)="addProposalPositionPayload = null"
       (save)="saveProposalItem.emit({item: $event, proposal: addProposalPositionPayload.proposal})"
-    ></app-common-proposal-item-form>
+    ></app-proposal-item-form>
   </uxg-modal>
 
   <uxg-modal #addContragentModal size="m">

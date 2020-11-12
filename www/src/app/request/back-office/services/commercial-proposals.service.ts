@@ -38,7 +38,8 @@ export class CommercialProposalsService {
   }
 
   publish(groupId: Uuid, positionIds: Uuid[]) {
-    const url = `requests/backoffice/commercial-proposals/send-positions-to-review`;
+    const url = `requests/backoffice/offers/publish-offers`;
+
     return this.api.post<CommonProposalPayload>(url, { groupId, positionIds });
   }
 

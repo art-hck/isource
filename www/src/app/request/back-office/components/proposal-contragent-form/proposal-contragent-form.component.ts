@@ -17,10 +17,10 @@ import { CommonProposal } from "../../../common/models/common-proposal";
 
 @Component({
   selector: 'common-proposal-contragent-form',
-  templateUrl: 'common-proposal-contragent-form.component.html',
-  styleUrls: ['./common-proposal-contragent-form.component.scss'],
+  templateUrl: 'proposal-contragent-form.component.html',
+  styleUrls: ['./proposal-contragent-form.component.scss'],
 })
-export class CommonProposalContragentFormComponent implements OnInit {
+export class ProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() groupId: Uuid;
   @Input() selectedContragents: ContragentShortInfo[];

@@ -10,7 +10,7 @@ import { Select, Store } from "@ngxs/store";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
-import { commonProposalParametersFormValidator } from "./common-proposal-parameters-form/common-proposal-parameters-form.validator";
+import { proposalParametersFormValidator } from "./proposal-parameters-form/proposal-parameters-form.validator";
 import { StateStatus } from "../../../common/models/state-status";
 import { RequestPosition } from "../../../common/models/request-position";
 import { UxgModalComponent } from "uxg";
@@ -24,11 +24,11 @@ import { CommonProposal, CommonProposalItem } from "../../../common/models/commo
 
 @Component({
   selector: 'app-common-proposal-form',
-  templateUrl: './common-proposal-form.component.html',
-  styleUrls: ['./common-proposal-form.component.scss'],
+  templateUrl: './proposal-form.component.html',
+  styleUrls: ['./proposal-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommonProposalFormComponent implements OnInit, OnDestroy, OnChanges {
+export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
@@ -47,7 +47,7 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy, OnChanges
   readonly deliveryTypeLabel = DeliveryTypeLabels;
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
-  readonly parametersValidator = commonProposalParametersFormValidator;
+  readonly parametersValidator = proposalParametersFormValidator;
   readonly manufacturerValidator = proposalManufacturerValidator;
   readonly searchContragents = searchContragents;
   readonly destroy$ = new Subject();

@@ -25,14 +25,14 @@ import { ProposalSourceLabels } from "../../../common/dictionaries/proposal-sour
 
 @Component({
   selector: 'app-common-proposal-view',
-  templateUrl: './common-proposal-view.component.html',
-  styleUrls: ['common-proposal-view.component.scss'],
+  templateUrl: './proposal-view.component.html',
+  styleUrls: ['proposal-view.component.scss'],
   animations: [trigger('sidebarHide', [
     transition(':leave', animate('300ms ease', style({ 'max-width': '0', 'margin-left': '0' }))),
   ])],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommonProposalViewComponent implements OnDestroy, AfterViewInit, OnChanges {
+export class ProposalViewComponent implements OnDestroy, AfterViewInit, OnChanges {
   @ViewChildren(GridRowComponent) gridRowsComponent: QueryList<GridRowComponent>;
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @ViewChildren('viewPopover') viewPopover: QueryList<UxgPopoverComponent>;

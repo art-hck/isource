@@ -22,19 +22,19 @@ import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-technical-commercial-proposal-parameters-form',
-  templateUrl: './common-proposal-parameters-form.component.html',
-  styleUrls: ['./common-proposal-parameters-form.component.scss'],
+  templateUrl: './proposal-parameters-form.component.html',
+  styleUrls: ['./proposal-parameters-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     DatePipe,
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CommonProposalParametersFormComponent),
+      useExisting: forwardRef(() => ProposalParametersFormComponent),
       multi: true
     }
   ]
 })
-export class CommonProposalParametersFormComponent implements AfterContentInit, ControlValueAccessor, OnDestroy {
+export class ProposalParametersFormComponent implements AfterContentInit, ControlValueAccessor, OnDestroy {
   @Output() cancel = new EventEmitter();
   onTouched: (value) => void;
   onChange: (value) => void;

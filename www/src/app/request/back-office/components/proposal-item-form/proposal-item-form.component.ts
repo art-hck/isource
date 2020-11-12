@@ -12,12 +12,12 @@ import { DatePipe } from "@angular/common";
 import { ProcedureSource } from "../../enum/procedure-source";
 
 @Component({
-  selector: 'app-common-proposal-item-form',
-  templateUrl: './common-proposal-item-form.component.html',
-  styleUrls: ['./common-proposal-item-form.component.scss'],
+  selector: 'app-proposal-item-form',
+  templateUrl: './proposal-item-form.component.html',
+  styleUrls: ['./proposal-item-form.component.scss'],
   providers: [DatePipe]
 })
-export class CommonProposalItemFormComponent implements OnInit {
+export class ProposalItemFormComponent implements OnInit {
 
   @Input() position: RequestPosition;
   @Input() proposalItem: CommonProposalItem;
