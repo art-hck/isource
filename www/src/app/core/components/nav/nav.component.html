@@ -26,7 +26,7 @@
         <div class="app-ghost-color"><uxg-icon shape="app-ring" size="24"></uxg-icon></div>
 
         <small class="counter" *ngIf="unreadNotificationsCount$ | async as notificationsCount">
-          {{ notificationsCount > 99 ? '99+' : notificationsCount }}
+          {{ notificationsCount }}
         </small>
       </button>
     </div>
