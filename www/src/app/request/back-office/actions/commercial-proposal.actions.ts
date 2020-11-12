@@ -84,7 +84,7 @@ export namespace CommercialProposalsActions {
     static readonly type = '[Commercial Proposals Backoffice] CreateItems';
     update = false;
 
-    constructor(public proposalId: Uuid, public groupId: Uuid, public items: Partial<CommonProposalItem>[]) {}
+    constructor(public proposalId: Uuid, public groupId: Uuid, public payload: Partial<CommonProposalItem>[]) {}
   }
 
   // Изменить позиции

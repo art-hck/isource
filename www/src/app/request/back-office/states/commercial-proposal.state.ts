@@ -1,30 +1,30 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { CommercialProposalsService } from "../services/commercial-proposals.service";
 import { switchMap, tap } from "rxjs/operators";
+import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
 import { saveAs } from 'file-saver/src/FileSaver';
-import { CommercialProposalsService } from "../services/commercial-proposals.service";
-import { CommercialProposalsActions } from "../actions/commercial-proposal.actions";
-import { patch } from "@ngxs/store/operators";
 import { Procedure } from "../models/procedure";
-import { ProcedureSource } from "../enum/procedure-source";
 import { ProcedureService } from "../services/procedure.service";
+import { ProcedureSource } from "../enum/procedure-source";
 import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 import { iif } from "rxjs";
-import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import Fetch = CommercialProposalsActions.Fetch;
-import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
-import UploadTemplate = CommercialProposalsActions.UploadTemplate;
+import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
-import Rollback = CommercialProposalsActions.Rollback;
-import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import Create = CommercialProposalsActions.Create;
 import Update = CommercialProposalsActions.Update;
 import CreateItems = CommercialProposalsActions.CreateItems;
 import UpdateItems = CommercialProposalsActions.UpdateItems;
+import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
+import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
+import UploadTemplate = CommercialProposalsActions.UploadTemplate;
+import Rollback = CommercialProposalsActions.Rollback;
 import Publish = CommercialProposalsActions.Publish;
 
 export interface CommercialProposalStateModel {
@@ -105,10 +105,8 @@ export class CommercialProposalState {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.create(requestId, groupId, payload).pipe(
-      tap(data => setState(insertOrUpdateProposals(data))),
-      switchMap(({ proposals: [proposal] }) => {
-        return iif(() => !!items, dispatch(new CreateItems(proposal.id, groupId, items)));
-      }),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => iif(() => !!items, dispatch(new CreateItems(id, groupId, items))))
     );
   }
 
@@ -116,15 +114,19 @@ export class CommercialProposalState {
   update({ setState }: Context, { groupId, payload }: Update) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.update(groupId, payload).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.update(payload).pipe(
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] })))
+    );
   }
 
   @Action([CreateItems, UpdateItems])
-  createItems({ setState }: Context, { update, proposalId, groupId, items }: CreateItems) {
+  createItems({ setState }: Context, { proposalId, payload }: CreateItems) {
     setState(patch<Model>({ status: "updating" }));
 
-    return (update ? this.rest.editItems(proposalId, groupId, items) : this.rest.createItems(proposalId, groupId, items))
-      .pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.editItems(proposalId, payload).pipe(tap(items => setState(patch<Model>({
+      proposals: updateItem(p => p.id === proposalId, patch({ items })),
+      status: "received"
+    }))));
   }
 
   @Action(Publish)

@@ -18,22 +18,17 @@ export class TechnicalCommercialProposalService {
 
   create(requestId: Uuid, groupId: Uuid, data: Partial<CommonProposal>) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/create`;
-    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({groupId, data}));
+    return this.api.post<CommonProposal>(url, this.formDataService.toFormData({groupId, data}));
   }
 
-  update(groupId: Uuid, data: Partial<CommonProposal> & { id: Uuid }) {
-    const url = `requests/backoffice/technical-commercial-proposals/${ data.id }/edit-offer`;
-    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({groupId, data}));
+  update(data: Partial<CommonProposal> & { id: Uuid }) {
+    const url = `requests/backoffice/technical-commercial-proposals/${ data.id }/edit`;
+    return this.api.post<CommonProposal>(url, this.formDataService.toFormData(data));
   }
 
-  createItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
-    const url = `requests/backoffice/technical-commercial-proposals/${ proposalId }/add-positions`;
-    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, groupId }));
-  }
-
-  editItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
-    const url = `requests/backoffice/technical-commercial-proposals/${ proposalId }/edit-positions`;
-    return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, groupId }));
+  editItems(proposalId: Uuid, items: Partial<CommonProposalItem>[]) {
+    const url = `requests/backoffice/technical-commercial-proposals/${ proposalId }/edit-offers`;
+    return this.api.post<CommonProposalItem[]>(url, this.formDataService.toFormData(items));
   }
 
   availablePositions(requestId: Uuid, groupId?: Uuid) {

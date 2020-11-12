@@ -6,10 +6,8 @@ import { PositionCurrency } from "../enum/position-currency";
 import { RequestPosition } from "./request-position";
 
 export class CommonProposalPayload {
-  groupId: Uuid;
-  groupName: string;
-  positions: RequestPosition[];
-  proposals: CommonProposal[];
+  positions?: RequestPosition[];
+  proposals?: CommonProposal[];
 }
 
 export class CommonProposal {
@@ -24,6 +22,7 @@ export class CommonProposal {
   documents: RequestDocument[];
   items: CommonProposalItem[];
   supplier: ContragentShortInfo;
+  supplierId?: Uuid; // При передаче данных на бэк при создании/редактировании
   warrantyConditions: string;
 }
 

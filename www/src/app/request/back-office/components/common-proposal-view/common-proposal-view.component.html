@@ -277,6 +277,7 @@
       *ngIf="addProposalPositionPayload as p"
       [position]="p.position"
       [proposalItem]="p.proposalPosition"
+      [source]="procedureSource"
       (close)="addProposalPositionPayload = null"
       (save)="saveProposalItem.emit({item: $event, proposal: addProposalPositionPayload.proposal})"
     ></app-common-proposal-item-form>

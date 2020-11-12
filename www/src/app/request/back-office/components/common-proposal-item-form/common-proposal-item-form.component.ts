@@ -9,6 +9,7 @@ import { OkeiService } from "../../../../shared/services/okei.service";
 import { PositionCurrency } from "../../../common/enum/position-currency";
 import { CustomValidators } from "../../../../shared/forms/custom.validators";
 import { DatePipe } from "@angular/common";
+import { ProcedureSource } from "../../enum/procedure-source";
 
 @Component({
   selector: 'app-common-proposal-item-form',
@@ -20,6 +21,7 @@ export class CommonProposalItemFormComponent implements OnInit {
 
   @Input() position: RequestPosition;
   @Input() proposalItem: CommonProposalItem;
+  @Input() source: ProcedureSource;
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter<Partial<CommonProposalItem>>();
 
@@ -29,7 +31,6 @@ export class CommonProposalItemFormComponent implements OnInit {
   readonly form = this.fb.group({
     id: null,
     requestPositionId: null,
-    manufacturingName: [null, Validators.required],
     priceWithoutVat: [null, Validators.required],
     quantity: [null, [Validators.required, Validators.pattern("^[.0-9]+$"), Validators.min(0.0001)]],
     measureUnit: [null, Validators.required],
@@ -62,9 +63,8 @@ export class CommonProposalItemFormComponent implements OnInit {
       ...{ deliveryDate: this.parseDate(this.proposalItem?.deliveryDate ?? this.position.deliveryDate) }
     });
 
-    if (this.proposalItem && !this.proposalItem.manufacturingName) {
-      this.form.get('manufacturingName').setValue(this.position.name);
-      this.form.get('manufacturingName').disable();
+    if (this.source === 'TECHNICAL_COMMERCIAL_PROPOSAL') {
+      this.form.addControl('manufacturingName', this.fb.control(this.position.name, Validators.required));
     }
   }
 

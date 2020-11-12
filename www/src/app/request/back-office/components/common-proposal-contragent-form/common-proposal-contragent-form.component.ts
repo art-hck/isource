@@ -80,7 +80,15 @@ export class CommonProposalContragentFormComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      this.proposal ? this.edit.emit({ ...this.form.value, files }) : this.create.emit({ ...this.form.value, files });
+      const event: Partial<CommonProposal> =  {
+        ...this.form.value,
+        supplierId: this.form.value.supplier.id,
+        ...files
+      };
+
+      delete event.supplier;
+
+      this.proposal ? this.edit.emit(event as Partial<CommonProposal> & { id: Uuid }) : this.create.emit(event);
       this.close.emit();
     }
   }

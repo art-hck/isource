@@ -1,7 +1,7 @@
 <form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-section"><b>{{position.name}}</b></div>
   <div class="app-row app-align-items-center">
-    <div class="app-col app-col-6">
+    <div class="app-col app-col-6" *ngIf="form.get('manufacturingName'); else quantityWithMeasureUnit">
       <div class="app-control-wrap">
         <input #manufacturingNameRef uxgInput type="text" lg formControlName="manufacturingName"/>
         <label class="app-control-label" (click)="manufacturingNameRef.focus()">Заводское наименование</label>
@@ -26,35 +26,40 @@
     </div>
   </div>
   <div class="app-row app-align-items-center">
-    <div class="app-col app-col-3">
-      <div class="app-control-wrap">
-        <input #quantityRef uxgInput type="text" lg formControlName="quantity"/>
-        <label class="app-control-label" (click)="quantityRef.focus()">Количество</label>
-        <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
-          <span *ngIf="e.required">Обязательное поле</span>
+    <ng-template #quantityWithMeasureUnit>
+      <div class="app-col app-col-3">
+        <div class="app-control-wrap">
+          <input #quantityRef uxgInput type="text" lg formControlName="quantity"/>
+          <label class="app-control-label" (click)="quantityRef.focus()">Количество</label>
+          <div class="app-control-error" *ngIf="form.get('quantity').errors as e">
+            <span *ngIf="e.required">Обязательное поле</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="app-col app-col-3">
-      <uxg-dropdown-input
-        lg appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
-        [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
-      >
-        <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
-          <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
-               [value]="suggestion.symbol | lowercase"
-               [attr.title]="suggestion.name | lowercase"
-          >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
-          </div>
-        </ng-container>
-        <ng-template #errors>
-          <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
-            <span *ngIf="e.required">Обязательное поле</span>
-            <span *ngIf="e.notFromList">Выберите из списка</span>
-          </div>
-        </ng-template>
-      </uxg-dropdown-input>
-    </div>
+      <div class="app-col app-col-3">
+        <uxg-dropdown-input
+          lg appSuggestions strictMode formControlName="measureUnit" placeholder="Ед. измерения"
+          [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions" [appControlWrap]="true"
+        >
+          <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
+            <div uxgDropdownItem *ngFor="let suggestion of okeiSuggestions"
+                 [value]="suggestion.symbol | lowercase"
+                 [attr.title]="suggestion.name | lowercase"
+            >{{suggestion.symbol | lowercase }} <span class="app-ghost-color">- {{suggestion.name | lowercase}}</span>
+            </div>
+          </ng-container>
+          <ng-template #errors>
+            <div class="app-control-error" *ngIf="form.get('measureUnit').errors as e">
+              <span *ngIf="e.required">Обязательное поле</span>
+              <span *ngIf="e.notFromList">Выберите из списка</span>
+            </div>
+          </ng-template>
+        </uxg-dropdown-input>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="form.get('manufacturingName')">
+      <ng-container *ngTemplateOutlet="quantityWithMeasureUnit"></ng-container>
+    </ng-container>
     <div class="app-col app-col-4">
       <div class="app-control-wrap">
         <input #deliveryDateRef uxgInput lg uxgDatepicker formControlName="deliveryDate"/>

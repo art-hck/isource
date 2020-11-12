@@ -2,7 +2,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { TechnicalCommercialProposalService } from "../services/technical-commercial-proposal.service";
 import { switchMap, tap } from "rxjs/operators";
 import { TechnicalCommercialProposals } from "../actions/technical-commercial-proposal.actions";
-import { patch } from "@ngxs/store/operators";
+import { patch, updateItem } from "@ngxs/store/operators";
 import { StateStatus } from "../../common/models/state-status";
 import { Injectable } from "@angular/core";
 import { RequestPosition } from "../../common/models/request-position";
@@ -13,19 +13,19 @@ import { ProcedureSource } from "../enum/procedure-source";
 import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
 import { iif } from "rxjs";
-import Create = TechnicalCommercialProposals.Create;
 import Fetch = TechnicalCommercialProposals.Fetch;
 import FetchAvailablePositions = TechnicalCommercialProposals.FetchAvailablePositions;
-import Update = TechnicalCommercialProposals.Update;
-import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
-import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
-import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
-import Publish = TechnicalCommercialProposals.Publish;
 import FetchProcedures = TechnicalCommercialProposals.FetchProcedures;
 import RefreshProcedures = TechnicalCommercialProposals.RefreshProcedures;
-import Rollback = TechnicalCommercialProposals.Rollback;
+import Create = TechnicalCommercialProposals.Create;
+import Update = TechnicalCommercialProposals.Update;
 import CreateItems = TechnicalCommercialProposals.CreateItems;
 import UpdateItems = TechnicalCommercialProposals.UpdateItems;
+import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import DownloadTemplate = TechnicalCommercialProposals.DownloadTemplate;
+import UploadTemplate = TechnicalCommercialProposals.UploadTemplate;
+import Rollback = TechnicalCommercialProposals.Rollback;
+import Publish = TechnicalCommercialProposals.Publish;
 
 export interface TechnicalCommercialProposalStateModel {
   proposals: CommonProposal[];
@@ -105,10 +105,8 @@ export class TechnicalCommercialProposalState {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.create(requestId, groupId, payload).pipe(
-      tap(data => setState(insertOrUpdateProposals(data))),
-      switchMap(({ proposals: [proposal] }) => {
-        return iif(() => !!items, dispatch(new CreateItems(proposal.id, groupId, items)));
-      }),
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => iif(() => !!items, dispatch(new CreateItems(id, groupId, items))))
     );
   }
 
@@ -116,15 +114,19 @@ export class TechnicalCommercialProposalState {
   update({ setState }: Context, { groupId, payload }: Update) {
     setState(patch<Model>({ status: "updating" }));
 
-    return this.rest.update(groupId, payload).pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.update(payload).pipe(
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] })))
+    );
   }
 
   @Action([CreateItems, UpdateItems])
-  createItems({ setState }: Context, { update, proposalId, groupId, items }: CreateItems) {
+  createItems({ setState }: Context, { proposalId, payload }: CreateItems) {
     setState(patch<Model>({ status: "updating" }));
 
-    return (update ? this.rest.editItems(proposalId, groupId, items) : this.rest.createItems(proposalId, groupId, items))
-      .pipe(tap(data => setState(insertOrUpdateProposals(data))));
+    return this.rest.editItems(proposalId, payload).pipe(tap(items => setState(patch<Model>({
+      proposals: updateItem(p => p.id === proposalId, patch({ items })),
+      status: "received"
+    }))));
   }
 
   @Action(Publish)
