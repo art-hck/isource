@@ -5,6 +5,7 @@
       (click)="hideAllNotifications()"
       (contextmenu)="hideNotification(notification, $event)"
       (hideNotification)="hideNotification($event)"
+      (readNotification)="readNotification($event)"
       [notification]="notification"
       [view]="view">
     </app-notification-card>

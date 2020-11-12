@@ -24,7 +24,10 @@
     <div class="app-menu-icon">
       <button uxgButton clear (click)="openNotificationsModal();">
         <div class="app-ghost-color"><uxg-icon shape="app-ring" size="24"></uxg-icon></div>
-        <small class="counter" *ngIf="unreadNotificationsCount$ | async as notificationsCount">{{ notificationsCount }}</small>
+
+        <small class="counter" *ngIf="unreadNotificationsCount$ | async as notificationsCount">
+          {{ notificationsCount > 99 ? '99+' : notificationsCount }}
+        </small>
       </button>
     </div>
 
