@@ -19,7 +19,7 @@ export class CommercialProposalsService {
 
   create(requestId: Uuid, groupId: Uuid, data: Partial<CommonProposal>) {
     const url = `requests/backoffice/${ requestId }/offers/create`;
-    return this.api.post<CommonProposal>(url, { groupId, ...data });
+    return this.api.post<CommonProposal>(url, this.formDataService.toFormData({ groupId, ...data }));
   }
 
   update(data: Partial<CommonProposal> & { id: Uuid }) {

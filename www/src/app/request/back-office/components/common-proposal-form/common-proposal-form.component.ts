@@ -1,23 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Request } from "../../../common/models/request";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { ContragentList } from "../../../../contragent/models/contragent-list";
 import { ContragentService } from "../../../../contragent/services/contragent.service";
-import { finalize, map, shareReplay, takeUntil, tap } from "rxjs/operators";
+import { shareReplay, takeUntil } from "rxjs/operators";
 import { TechnicalCommercialProposal } from "../../../common/models/technical-commercial-proposal";
 import { Select, Store } from "@ngxs/store";
-import { TechnicalCommercialProposals } from "../../actions/technical-commercial-proposal.actions";
 import { proposalManufacturerValidator } from "../proposal-form-manufacturer/proposal-form-manufacturer.validator";
 import { TechnicalCommercialProposalState } from "../../states/technical-commercial-proposal.state";
 import { getCurrencySymbol } from "@angular/common";
@@ -31,14 +20,15 @@ import { CurrencyLabels } from "../../../common/dictionaries/currency-labels";
 import { PositionCurrency } from "../../../common/enum/position-currency";
 import { Uuid } from "../../../../cart/models/uuid";
 import { searchContragents } from "../../../../shared/helpers/search";
+import { CommonProposal, CommonProposalItem } from "../../../common/models/common-proposal";
 
 @Component({
-  selector: 'app-technical-commercial-proposal-form',
+  selector: 'app-common-proposal-form',
   templateUrl: './common-proposal-form.component.html',
   styleUrls: ['./common-proposal-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommonProposalFormComponent implements OnInit, OnDestroy {
+export class CommonProposalFormComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild('uploadTemplateModal') uploadTemplateModal: UxgModalComponent;
   @Input() request: Request;
@@ -48,7 +38,9 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy {
   @Input() source: string;
   @Input() availablePositions: RequestPosition[];
   @Output() close = new EventEmitter();
-  @Output() save = new EventEmitter();
+  @Output() create = new EventEmitter<{ proposal: Partial<CommonProposal>, items: CommonProposalItem[] }>();
+  @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items: CommonProposalItem[] }>();
+
   @Select(TechnicalCommercialProposalState.status)
   readonly status$: Observable<StateStatus>;
   readonly deliveryType = DeliveryType;
@@ -66,6 +58,7 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy {
   manufactureErrorMessage = false;
   parameterErrorMessage = false;
   publish = this.fb.control(true);
+  proposalPositions: { position: RequestPosition }[];
 
   get isManufacturerPristine(): boolean {
     return this.form.get("positions").value.filter(pos => pos.manufacturingName).length === 0;
@@ -77,6 +70,12 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy {
     private store: Store,
     private cd: ChangeDetectorRef,
   ) {}
+
+  ngOnChanges({ availablePositions }: SimpleChanges) {
+    if (availablePositions) {
+      this.proposalPositions = this.availablePositions?.map(position => ({ position }));
+    }
+  }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -141,9 +140,13 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy {
 
   submit(): void {
     if (this.form.valid) {
-      const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
       this.form.disable();
-      this.save.emit({ ...this.form.value, files });
+      const { positions, supplier, ...proposal } = this.form.value;
+      const items = positions.map(({ position, ...item }) => ({ requestPositionId: position.id, ...item }));
+      const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
+      const event = { proposal: { ...proposal, ...files, supplierId: supplier.id }, items };
+
+      this.technicalCommercialProposal ? this.edit.emit(event) : this.create.emit(event);
       this.close.emit();
       this.form.enable();
     } else {
@@ -157,7 +160,7 @@ export class CommonProposalFormComponent implements OnInit, OnDestroy {
 
   defaultValue = (field: keyof TechnicalCommercialProposal, defaultValue: any = "") => this.technicalCommercialProposal && this.technicalCommercialProposal[field] || defaultValue;
   getContragentName = (contragent: ContragentList) => contragent.shortName || contragent.fullName;
-  trackByPositionId = ({id}: RequestPosition) => id;
+  trackByPositionId = ({ position }) => position.id;
 
   ngOnDestroy() {
     this.destroy$.next();

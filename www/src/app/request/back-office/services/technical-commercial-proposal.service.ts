@@ -18,7 +18,7 @@ export class TechnicalCommercialProposalService {
 
   create(requestId: Uuid, groupId: Uuid, data: Partial<CommonProposal>) {
     const url = `requests/backoffice/${ requestId }/technical-commercial-proposals/create`;
-    return this.api.post<CommonProposal>(url, this.formDataService.toFormData({groupId, data}));
+    return this.api.post<CommonProposal>(url, this.formDataService.toFormData({groupId, ...data}));
   }
 
   update(data: Partial<CommonProposal> & { id: Uuid }) {
@@ -28,7 +28,7 @@ export class TechnicalCommercialProposalService {
 
   editItems(proposalId: Uuid, items: Partial<CommonProposalItem>[]) {
     const url = `requests/backoffice/technical-commercial-proposals/${ proposalId }/edit-offers`;
-    return this.api.post<CommonProposalItem[]>(url, this.formDataService.toFormData(items));
+    return this.api.post<CommonProposalItem[]>(url, this.formDataService.toFormData({ items }));
   }
 
   availablePositions(requestId: Uuid, groupId?: Uuid) {

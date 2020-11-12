@@ -22,8 +22,8 @@
         (saveProposalItem)="saveProposalItem($event.item, $event.proposal)"
         (updateProcedures)="updateProcedures(request.id, groupId)"
         (viewChange)="switchView($event)"
-        (create)="store.dispatch(create(request.id, groupId, $event))"
-        (edit)="store.dispatch(edit(groupId, $event))"
+        (create)="store.dispatch(create(request.id, groupId, $event.proposal, $event.items))"
+        (edit)="store.dispatch(edit($event.proposal, $event.items))"
       ></app-common-proposal-view>
     </ng-container>
   </ng-container>

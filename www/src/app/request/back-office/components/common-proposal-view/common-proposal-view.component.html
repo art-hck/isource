@@ -196,16 +196,20 @@
   </ng-container>
 
   <!-- list -->
-  <!--div class="app-row" *ngIf="view === 'list'">
-    <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="(status$ | async) !== 'received'">
+  <div class="app-row" *ngIf="view === 'list'">
+    <div class="app-col app-technical-commercial-proposal-list" [class.disabled]="status !== 'received'">
       <app-common-proposal-form
-        *ngIf="proposals?.length + (procedures$ | async)?.length === 0 || showForm"
+        *ngIf="proposals?.length + procedures?.length === 0 || showForm"
         [request]="request"
         [closable]="proposals.length > 0"
         [groupId]="groupId"
         (close)="showForm = false"
+        [availablePositions]="positions"
+        [source]="procedureSource"
+        (create)="create.emit($event)"
+        (edit)="edit.emit($event)"
       ></app-common-proposal-form>
-
+      <!--
       <ng-container *ngFor="let procedure of procedures$ | async; trackBy: trackById">
         <app-request-procedure [procedure]="procedure"
                                [source]="'tcp'"
@@ -220,10 +224,11 @@
           [proposal]="proposal"
         ></app-request-technical-commercial-proposal>
       </ng-container>
+      -->
     </div>
     <div class="app-col-aside detachable">
     </div>
-  </div-->
+  </div>
 
   <!-- modals -->
   <uxg-modal size="l" [(state)]="procedureModalPayload" [ngSwitch]="procedureModalPayload?.action">
@@ -291,8 +296,8 @@
         [selectedContragents]="getContragents(proposals)"
         [proposal]="editingProposal"
         (close)="addContragentModal.close(); editingProposal = null"
-        (edit)="edit.emit($event)"
-        (create)="create.emit($event)"
+        (edit)="edit.emit({proposal: $event})"
+        (create)="create.emit({proposal: $event})"
       ></common-proposal-contragent-form>
     </ng-container>
   </uxg-modal>

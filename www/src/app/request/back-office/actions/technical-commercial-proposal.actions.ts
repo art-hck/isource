@@ -48,8 +48,7 @@ export namespace TechnicalCommercialProposals {
   export class Update {
     static readonly type = '[Technical Commercial Proposals Backoffice] Update';
 
-    constructor(public groupId: Uuid, public payload: Partial<CommonProposal> & { id: Uuid }) {}
-  }
+    constructor(public payload: Partial<CommonProposal> & { id: Uuid }, public items?: Partial<CommonProposalItem>[]) {}}
 
   // Отправить на согласование по позиции
   export class Publish {
@@ -79,20 +78,12 @@ export namespace TechnicalCommercialProposals {
     constructor(public requestId: Uuid, public groupId: Uuid) {}
   }
 
-  // Добавить позиции
-  export class CreateItems {
-    static readonly type = '[Technical Commercial Proposals Backoffice] CreateItems';
-    update = false;
-
-    constructor(public proposalId: Uuid, public groupId: Uuid, public payload: Partial<CommonProposalItem>[]) {}
-  }
-
   // Изменить позиции
   export class UpdateItems {
     static readonly type = '[Technical Commercial Proposals Backoffice] UpdateItems';
     update = true;
 
-    constructor(public proposalId: Uuid, public groupId: Uuid, public items: (Partial<CommonProposalItem>)[]) {}
+    constructor(public proposalId: Uuid, public payload: (Partial<CommonProposalItem>)[]) {}
   }
 
   // Откатить

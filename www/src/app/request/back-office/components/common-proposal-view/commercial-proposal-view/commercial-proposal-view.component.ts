@@ -30,7 +30,6 @@ import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalR
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import Rollback = CommercialProposalsActions.Rollback;
-import CreateItems = CommercialProposalsActions.CreateItems;
 import UpdateItems = CommercialProposalsActions.UpdateItems;
 import Create = CommercialProposalsActions.Create;
 import { CommercialProposalsService } from "../../../services/commercial-proposals.service";
@@ -69,8 +68,8 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
   readonly publishPositions = (proposalPositions: CommonProposalByPosition[]) => new Publish(this.groupId, proposalPositions);
   readonly updateProcedures = (requestId: Uuid, groupId: Uuid) => [new RefreshProcedures(requestId, groupId), new FetchAvailablePositions(requestId, groupId)];
   readonly rollback = (requestId: Uuid, groupId: Uuid, { id }: RequestPosition) => new Rollback(requestId, groupId, id);
-  readonly create = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal>) => new Create(requestId, groupId, payload);
-  readonly edit = (groupId: Uuid, payload: Partial<CommonProposal> & { id: Uuid }) => new Update(groupId, payload);
+  readonly create = (requestId: Uuid, groupId: Uuid, payload: Partial<CommonProposal>, items?: CommonProposalItem[]) => new Create(requestId, groupId, payload, items);
+  readonly edit = (payload: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[]) => new Update(payload, items);
   readonly canRollback = ({ status, statusChangedDate }: RequestPosition, rollbackDuration: number) => status === PositionStatus.RESULTS_AGREEMENT &&
     moment().diff(moment(statusChangedDate), 'seconds') < rollbackDuration
 
@@ -124,7 +123,7 @@ export class CommercialProposalViewComponent implements OnInit, OnDestroy {
     i >= 0 ? items[i] = item : items.push(item);
 
     item.deliveryDate = item.deliveryDate.replace(/(\d{2}).(\d{2}).(\d{4})/, '$3-$2-$1');
-    this.store.dispatch(item.id ? new UpdateItems(proposal.id, this.groupId, items) : new CreateItems(proposal.id, this.groupId, items));
+    this.store.dispatch(new UpdateItems(proposal.id, items));
   }
 
   switchView(view: ProposalsView) {

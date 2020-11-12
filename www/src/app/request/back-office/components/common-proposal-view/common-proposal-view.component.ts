@@ -57,8 +57,8 @@ export class CommonProposalViewComponent implements OnDestroy, AfterViewInit, On
   @Output() rollback = new EventEmitter<RequestPosition>();
   @Output() saveProposalItem = new EventEmitter<{ item: Partial<CommonProposalItem>, proposal: CommonProposal }>();
   @Output() viewChange = new EventEmitter<ProposalsView>();
-  @Output() create = new EventEmitter<Partial<CommonProposal>>();
-  @Output() edit = new EventEmitter<Partial<CommonProposal> & { id: Uuid }>();
+  @Output() create = new EventEmitter<{ proposal: Partial<CommonProposal>, items?: CommonProposalItem[] }>();
+  @Output() edit = new EventEmitter<{ proposal: Partial<CommonProposal> & { id: Uuid }, items?: CommonProposalItem[] }>();
   @Output() procedurePositionsSelected = new EventEmitter<Uuid[]>();
 
   view: ProposalsView = "grid";

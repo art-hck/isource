@@ -12,14 +12,13 @@ import { ProcedureService } from "../services/procedure.service";
 import { ProcedureSource } from "../enum/procedure-source";
 import { CommonProposal, CommonProposalByPosition } from "../../common/models/common-proposal";
 import { insertOrUpdateProposals } from "../../../shared/state-operators/insert-or-update-proposals";
-import { iif } from "rxjs";
+import { of } from "rxjs";
 import Fetch = CommercialProposalsActions.Fetch;
 import FetchAvailablePositions = CommercialProposalsActions.FetchAvailablePositions;
 import FetchProcedures = CommercialProposalsActions.FetchProcedures;
 import RefreshProcedures = CommercialProposalsActions.RefreshProcedures;
 import Create = CommercialProposalsActions.Create;
 import Update = CommercialProposalsActions.Update;
-import CreateItems = CommercialProposalsActions.CreateItems;
 import UpdateItems = CommercialProposalsActions.UpdateItems;
 import DownloadAnalyticalReport = CommercialProposalsActions.DownloadAnalyticalReport;
 import DownloadTemplate = CommercialProposalsActions.DownloadTemplate;
@@ -106,21 +105,22 @@ export class CommercialProposalState {
 
     return this.rest.create(requestId, groupId, payload).pipe(
       tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
-      switchMap(({ id }) => iif(() => !!items, dispatch(new CreateItems(id, groupId, items))))
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
   @Action(Update)
-  update({ setState }: Context, { groupId, payload }: Update) {
+  update({ setState, dispatch }: Context, { payload, items }: Update) {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.update(payload).pipe(
-      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] })))
+      tap(proposal => setState(insertOrUpdateProposals({ proposals: [proposal] }))),
+      switchMap(({ id }) => !!items?.length ? dispatch(new UpdateItems(id, items)) : of(null))
     );
   }
 
-  @Action([CreateItems, UpdateItems])
-  createItems({ setState }: Context, { proposalId, payload }: CreateItems) {
+  @Action(UpdateItems)
+  updateItems({ setState }: Context, { proposalId, payload }: UpdateItems) {
     setState(patch<Model>({ status: "updating" }));
 
     return this.rest.editItems(proposalId, payload).pipe(tap(items => setState(patch<Model>({

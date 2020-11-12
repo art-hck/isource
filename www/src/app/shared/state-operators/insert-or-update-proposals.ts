@@ -8,12 +8,12 @@ export function insertOrUpdateProposals({ positions, proposals }: CommonProposal
   return (state: Readonly<Model>) => ({
     ...state,
     status: "received",
-    positions: positions.reduce((updatedPositions, position) => {
+    positions: (positions ?? []).reduce((updatedPositions, position) => {
       const i = updatedPositions.findIndex(({ id }) => id === position.id);
       i < 0 ? updatedPositions.push(position) : updatedPositions[i] = position;
       return updatedPositions;
     }, state.positions),
-    proposals: proposals.reduce((updatedProposals, proposal) => {
+    proposals: (proposals ?? []).reduce((updatedProposals, proposal) => {
       const i = updatedProposals.findIndex(({ id }) => id === proposal.id);
       i < 0 ? updatedProposals.push(proposal) : updatedProposals[i] = proposal;
       return updatedProposals;

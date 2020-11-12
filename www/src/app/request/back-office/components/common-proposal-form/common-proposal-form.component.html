@@ -288,14 +288,14 @@
       </div>
       <br/>
       <br/>
-      <ng-container *ngIf="availablePositions">
+      <ng-container *ngIf="proposalPositions">
         <select-items-with-search
           #positionsSelect
           placeholder="Наименование позиции или группы"
           formControlName="positions"
           class="select-list select-list-positions"
           [liveUpdate]="false"
-          [items]="availablePositions"
+          [items]="proposalPositions"
           (ngModelChange)="positionsModal.close()"
           [filterFn]="searchPosition"
           [trackBy]="trackByPositionId"

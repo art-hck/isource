@@ -15,7 +15,7 @@ export class TechnicalCommercialProposalComponent {
   @Input() request: Request;
   @Input() groupId: Uuid;
   @Input() proposal: TechnicalCommercialProposal;
-  @Input() source: string;
+  @Input() source: ProcedureSource;
   @Output() save = new EventEmitter();
   state: "view" | "edit" = "view";
   folded = false;
