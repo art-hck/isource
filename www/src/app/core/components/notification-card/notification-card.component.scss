@@ -5,7 +5,7 @@
   height: 142px;
   width: 412px;
   border-radius: 4px;
-  padding: 18px;
+  padding: 18px 10px 18px 18px;
   margin-bottom: 16px;
 
   &-header {
@@ -81,23 +81,13 @@ div.notification-card-header:before {
   background: white;
   border-radius: 3px;
   margin-right: 10px;
-  border: 6px solid;
+  border: 6px solid #5066FF;
   display: block;
   box-sizing: content-box;
 }
 
 @each $status, $color in $statuses {
-  div[class*="badge-#{$status}"]:before {
+  div[class*="#{$status}-badge"]:before {
     border-color: $color;
   }
-}
-
-.badge-NEW_REQUEST_POSITION {
-  border-color: #5066FF;
-}
-.badge-REQUEST_POSITION_EDIT {
-  border-color: #5066FF;
-}
-.badge-REQUEST_POSITION_APPROVE {
-  border-color: #5066FF;
 }

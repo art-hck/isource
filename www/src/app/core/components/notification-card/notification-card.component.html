@@ -13,7 +13,7 @@
 
     <!-- Новая заявка -->
     <ng-container *ngSwitchCase="'NEW_REQUEST'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="'badge-' + view + '-' + notification?.body?.type">
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
         <b>Поступила новая заявка</b>
       </div>
 
@@ -28,7 +28,7 @@
 
     <!-- Новая позиция в заявке -->
     <ng-container *ngSwitchCase="'NEW_REQUEST_POSITION'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="'badge-' + notification?.body?.type">
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
         <b>Добавлена новая позиция в заявку</b>
       </div>
 
@@ -43,7 +43,7 @@
 
     <!-- Отредактирована позиция -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_EDIT'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="'badge-' + notification?.body?.type">
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
         <b>Подтвердите редактирование позиции</b>
       </div>
 
@@ -58,7 +58,7 @@
 
     <!-- Согласовано добавление новых позиций -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_APPROVE'">
-      <div class="app-row notification-card-header app-primary-color" [ngClass]="'badge-' + notification?.body?.type">
+      <div class="app-row notification-card-header app-primary-color" [ngClass]="notification?.body?.type + '-badge'">
         <b>Согласовано добавление новых позиций</b>
       </div>
 
@@ -73,7 +73,7 @@
 
     <!-- Изменение статуса заявки -->
     <ng-container *ngSwitchCase="'REQUEST_CHANGE_STATUS'">
-      <div class="app-row notification-card-header app-primary-color" [ngSwitch]="notification?.body?.requestStatus" [ngClass]="'badge-' + notification?.body?.type">
+      <div class="app-row notification-card-header app-primary-color" [ngSwitch]="notification?.body?.requestStatus" [ngClass]="notification?.body?.type + '-badge'">
         <ng-container *ngSwitchCase="'NEW'">
           <b>Ваша заявка принята в работу</b>
         </ng-container>
@@ -100,7 +100,7 @@
     <!-- Изменение статуса позиции -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_CHANGE_STATUS'">
       <div *ngFor="let row of notification?.body?.rows.slice(0,1)">
-        <div class="app-row notification-card-header app-primary-color" [ngClass]="'badge-' + notification?.body?.type">
+        <div class="app-row notification-card-header app-primary-color" [ngClass]="row.items[0].requestPositionStatus + '-badge'">
           <b>{{ getNotificationHeaderTitle(row.items[0]) }}</b>
         </div>
 
