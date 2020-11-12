@@ -68,7 +68,7 @@ export class CommercialProposalsService {
 
   addProposalPositions(id: Uuid, positions) {
     const url = `requests/backoffice/${ id }/commercial-proposals/add-positions`;
-    return this.api.post<RequestOfferPosition>(url, positions);
+    return this.api.post<RequestOfferPosition>(url, {items: positions});
   }
 
   editOffer(id: Uuid, positionId: Uuid, editedOffer: RequestOfferPosition) {

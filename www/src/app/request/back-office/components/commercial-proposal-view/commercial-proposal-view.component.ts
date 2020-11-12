@@ -49,6 +49,7 @@ import { TechnicalCommercialProposals } from "../../actions/technical-commercial
 import SaveProposal = CommercialProposalsActions.SaveProposal;
 import CreateProposal = CommercialProposalsActions.CreateProposal;
 import AddProposalPositions = CommercialProposalsActions.AddProposalPositions;
+import { CommonProposal } from "../../../common/models/common-proposal";
 
 @Component({
   templateUrl: './commercial-proposal-view.component.html',
@@ -262,7 +263,7 @@ export class CommercialProposalViewComponent implements OnInit, AfterViewInit {
     }
 
     this.store.dispatch(new CreateProposal(this.requestId, params)).subscribe(
-      (data) => this.store.dispatch(new AddProposalPositions(data.id, value.positions))
+      (data: CommonProposal) => this.store.dispatch(new AddProposalPositions(data.id, value.positions))
     );
   }
 

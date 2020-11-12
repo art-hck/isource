@@ -139,28 +139,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
     this.contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
   }
 
-  // submit(): void {
-  //   if (this.form.valid) {
-  //     let action$: Observable<any>;
-  //     const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-  //     this.form.disable();
-  //
-  //     if (this.form.pristine) {
-  //       this.publish.value ? action$ = this.store.dispatch(new Publish(this.technicalCommercialProposal)) : this.close.emit();
-  //     } else {
-  //       action$ = this.save({ ...this.form.value, files }, this.publish.value);
-  //     }
-  //
-  //     action$.pipe(
-  //       tap(() => this.close.emit()),
-  //       finalize(() => this.form.enable()),
-  //       takeUntil(this.destroy$)
-  //     ).subscribe();
-  //   } else {
-  //     this.form.updateValueAndValidity({ emitEvent: false });
-  //   }
-  // }
-
   submit(): void {
     if (this.form.valid) {
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
@@ -172,12 +150,6 @@ export class TechnicalCommercialProposalFormComponent implements OnInit, OnDestr
       this.form.updateValueAndValidity({ emitEvent: false });
     }
   }
-
-  // save(value, publish) {
-  //   return this.store.dispatch(
-  //     value.id ? new Update(value, publish) : new Create(this.request.id, this.groupId, value, publish)
-  //   );
-  // }
 
   searchPosition(q: string, {position}: { position: RequestPosition }) {
     return position.name.toLowerCase().indexOf(q.toLowerCase()) >= 0;
