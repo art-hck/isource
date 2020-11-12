@@ -29,13 +29,12 @@ export class CommercialProposalsService {
   }
 
   createItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
-    // const url = `requests/backoffice/commercial-proposals/${ proposalId }/add-positions`;
-    const url = `requests/backoffice/7585c572-1c61-4cf9-b4d7-f87bfed777a6/positions/6ea6c255-a13f-44b6-b262-0fa29896eab8/add-offer`;
+    const url = `requests/backoffice/commercial-proposals/${ proposalId }/add-positions`;
     return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, requestCommercialProposalGroupId: groupId }));
   }
 
   editItems(proposalId: Uuid, groupId: Uuid, items: Partial<CommonProposalItem>[]) {
-    const url = `requests/backoffice/commercial-proposals/${ proposalId }/edit-positions`;
+    const url = `requests/backoffice/commercial-proposals/${ proposalId }/edit-offers`;
     return this.api.post<CommonProposalPayload>(url, this.formDataService.toFormData({ items, groupId }));
   }
 

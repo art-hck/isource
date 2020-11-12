@@ -189,9 +189,6 @@ export class CommonProposalViewComponent implements OnDestroy, AfterViewInit, On
   getSupplierByProposalItem = (proposals: CommonProposal[]) => (proposalItem: Proposal<CommonProposalItem>) => {
     return proposals.find(({ items }) => items.find(({ id }) => proposalItem.id === id)).supplier;
   }
-  // getProposalPosition = ({positions}: TechnicalCommercialProposal, {id}: RequestPosition): TechnicalCommercialProposalPosition => {
-  //   return positions.find(({position}) => position.id === id);
-  // }
 
   ngOnDestroy() {
     this.destroy$.next();

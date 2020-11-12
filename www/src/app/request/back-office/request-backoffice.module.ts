@@ -19,12 +19,12 @@ import { CommercialProposalFormComponent } from './components/commercial-proposa
 import { TechnicalProposalComponent } from "./components/technical-proposal/technical-proposal.component";
 import { PositionService } from "./services/position.service";
 import { TechnicalCommercialProposalViewComponent } from './components/common-proposal-view/technical-commercial-proposal-view/technical-commercial-proposal-view.component';
-import { TechnicalCommercialProposalFormComponent } from "./components/technical-commercial-proposal-form/technical-commercial-proposal-form.component";
+import { CommonProposalFormComponent } from "./components/common-proposal-form/common-proposal-form.component";
 import { TechnicalCommercialProposalService } from "./services/technical-commercial-proposal.service";
 import { NgxsModule } from "@ngxs/store";
 import { TechnicalCommercialProposalState } from "./states/technical-commercial-proposal.state";
 import { TechnicalCommercialProposalComponent } from "./components/technical-commercial-proposal/technical-commercial-proposal.component";
-import { TechnicalCommercialProposalParametersFormComponent } from './components/technical-commercial-proposal-form/technical-commercial-proposal-parameters-form/technical-commercial-proposal-parameters-form.component';
+import { CommonProposalParametersFormComponent } from './components/common-proposal-form/common-proposal-parameters-form/common-proposal-parameters-form.component';
 import { RequestState } from "./states/request.state";
 import { RequestListState } from "./states/request-list.state";
 import { RequestListComponent } from './components/request-list/request-list.component';
@@ -69,8 +69,8 @@ import { CommercialProposalsDeprecatedService } from "./services/commercial-prop
     CommercialProposalFormComponent,
     TechnicalCommercialProposalComponent,
     TechnicalCommercialProposalViewComponent,
-    TechnicalCommercialProposalFormComponent,
-    TechnicalCommercialProposalParametersFormComponent,
+    CommonProposalFormComponent,
+    CommonProposalParametersFormComponent,
     RequestListComponent,
     CommonProposalContragentFormComponent,
     ProcedureComponent,
