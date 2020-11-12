@@ -15,7 +15,7 @@ import { NotificationListComponent } from "./components/notification-list/notifi
 import { NotificationCardComponent } from "./components/notification-card/notification-card.component";
 import { NotificationsState } from "./states/notifications.state";
 import { NgxsModule } from "@ngxs/store";
-import { GroupService } from "./services/group.service";
+import { UsersGroupService } from "./services/users-group.service";
 
 @NgModule({
   imports: [
@@ -39,7 +39,7 @@ import { GroupService } from "./services/group.service";
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: DataInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    GroupService
+    UsersGroupService
   ],
 })
 
