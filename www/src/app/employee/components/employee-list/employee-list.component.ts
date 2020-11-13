@@ -37,14 +37,6 @@ export class EmployeeListComponent implements OnChanges, OnDestroy {
   ) { }
 
   ngOnChanges() {
-      this.userInfo$?.pipe(takeUntil(this.destroy$)).subscribe(
-        (data) => {
-          this.form = this.fb.group({
-            internalAvailable: data.isInternalAvailable,
-            externalAvailable: data.isExternalAvailable
-          });
-        }
-      );
   }
 
   openEditModal(ev, userId) {
