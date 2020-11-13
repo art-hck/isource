@@ -17,7 +17,6 @@ export class SupplierCommercialProposalInfo implements ContragentList {
   phone: string;
   createdDate: Date;
   responsible?: User;
-  isInternal: boolean;
   role: string;
 
   documents: any;

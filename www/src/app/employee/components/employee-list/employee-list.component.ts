@@ -8,7 +8,6 @@ import { Store } from "@ngxs/store";
 import { Observable, Subject } from "rxjs";
 import { EmployeeSettings } from "../../models/employee-settings";
 import { Uuid } from "../../../cart/models/uuid";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -20,20 +19,17 @@ import { takeUntil } from "rxjs/operators";
 export class EmployeeListComponent implements OnChanges, OnDestroy {
   @Input() employees: EmployeeItem[];
   @Input() userInfo$: Observable<EmployeeSettings>;
-  @Output() edit = new EventEmitter<{ internalAvailable: boolean, externalAvailable: boolean, userId: Uuid }>();
   @Output() getUserInfo = new EventEmitter<Uuid>();
 
   editedEmployee: EmployeeItem;
   sendingActivationLink = false;
-  public form: FormGroup;
   readonly destroy$ = new Subject();
 
   constructor(
     public userInfoService: UserInfoService,
     protected employeeService: EmployeeService,
     public router: Router,
-    private store: Store,
-    private fb: FormBuilder
+    private store: Store
   ) { }
 
   ngOnChanges() {
