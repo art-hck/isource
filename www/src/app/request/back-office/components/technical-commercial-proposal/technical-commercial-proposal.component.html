@@ -103,11 +103,13 @@
       </ng-container>
     </ng-container>
   </div>
-  <app-technical-commercial-proposal-form
+  <app-common-proposal-form
     *ngSwitchCase="'edit'"
     [technicalCommercialProposal]="proposal"
     [request]="request"
     [groupId]="groupId"
+    [source]="source"
     (close)="state = 'view'"
-  ></app-technical-commercial-proposal-form>
+    (edit)="save.emit($event)"
+  ></app-common-proposal-form>
 </ng-container>

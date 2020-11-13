@@ -3,6 +3,12 @@ import { DeliveryType } from "../../back-office/enum/delivery-type";
 import { RequestDocument } from "./request-document";
 import { ContragentShortInfo } from "../../../contragent/models/contragent-short-info";
 import { PositionCurrency } from "../enum/position-currency";
+import { RequestPosition } from "./request-position";
+
+export class CommonProposalPayload {
+  positions?: RequestPosition[];
+  proposals?: CommonProposal[];
+}
 
 export class CommonProposal {
   id: Uuid;
@@ -16,6 +22,7 @@ export class CommonProposal {
   documents: RequestDocument[];
   items: CommonProposalItem[];
   supplier: ContragentShortInfo;
+  supplierId?: Uuid; // При передаче данных на бэк при создании/редактировании
   warrantyConditions: string;
 }
 
@@ -38,8 +45,13 @@ export class CommonProposalItem {
   requestPositionId: Uuid;
   standard: string;
   status: CommonProposalItemStatus;
-  supplierContragentId?: Uuid; // supplierContragent: ContragentShortInfo;
+  supplierContragent: ContragentShortInfo;
   vatPercent: number;
+}
+
+export class CommonProposalByPosition {
+  position: RequestPosition;
+  items: CommonProposalItem[];
 }
 
 // @TODO: убрать дублирующие статусы

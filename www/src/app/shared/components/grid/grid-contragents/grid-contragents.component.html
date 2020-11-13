@@ -28,9 +28,10 @@
             *ngIf="getProposalBySupplier(supplier, proposals) as proposal"
             [proposal]="proposal"
             [hasAnalogs]="supplier.hasAnalogs"
+            [showDocs]="showDocsControl.value"
+            [positions]="positions"
             (close)="showCommonParams = false"
             (openEditModal)="edit.emit(proposal)"
-            [showDocs]="showDocsControl.value"
             (selectAll)="selectBySupplier.emit(proposal)"
           ></app-grid-common-parameters>
           <div class="common-footer">

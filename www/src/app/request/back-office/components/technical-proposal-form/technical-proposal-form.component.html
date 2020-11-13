@@ -218,6 +218,7 @@
     <uxg-modal #manufacturerModal size="l">
       <h2>Заполнение заводских наименований</h2>
       <app-request-proposal-form-manufacturer
+        [source]="'TECHNICAL_PROPOSAL'"
         (cancel)="manufacturerModal.close()"
         (ngModelChange)="manufacturerModal.close()"
         [disabledFn]="positionManufacturerNameDisabled"

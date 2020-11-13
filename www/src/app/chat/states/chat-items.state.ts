@@ -122,7 +122,7 @@ export class ChatItemsState {
     return contexts.forEach(context => {
       const requestId: Uuid = JSON.parse(context.items[0].data).contextId;
       const findFn = (item: ChatItem) => item.request?.id === requestId;
-      return setState(patch({
+      return setState(patch<Model>({
         items: iif(items => items.some(findFn),
           updateItem(item => !item.context && findFn(item), patch({ context })), // обновляем только если контекста еще нет!
           append([{ context }])
