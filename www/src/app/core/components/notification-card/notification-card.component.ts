@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output
 } from "@angular/core";
 import { NotificationInfo, NotificationItem } from "../../models/notifications";
@@ -14,18 +13,12 @@ import * as moment from "moment";
   templateUrl: './notification-card.component.html',
   styleUrls: ['./notification-card.component.scss']
 })
-export class NotificationCardComponent implements OnInit {
+export class NotificationCardComponent {
 
   @Input() notification: NotificationItem;
   @Input() view: 'popup' | 'list';
   @Output() hideNotification = new EventEmitter<NotificationItem>();
   @Output() readNotification = new EventEmitter<NotificationItem>();
-
-  ngOnInit() {
-    if (this.view === 'popup') {
-     this.hideOnTimeout();
-    }
-  }
 
   getLink(notification) {
     return (notification?.body as NotificationInfo)?.rows?.length ?
@@ -45,11 +38,6 @@ export class NotificationCardComponent implements OnInit {
     event.stopPropagation();
 
     this.hideNotification.emit(notification);
-  }
-
-  // todo Реализовать скрытие уведомлений через RXJS (pipe(debounceTime(5000), mapTo(null)))
-  hideOnTimeout() {
-    setTimeout(() => { this.hideNotification.emit(this.notification); }, 8000);
   }
 
   formatDate(date): string {

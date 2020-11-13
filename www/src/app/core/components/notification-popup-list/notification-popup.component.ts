@@ -2,41 +2,49 @@ import {
   Component,
   Inject,
   InjectionToken,
-  Input,
+  Input, OnDestroy,
   OnInit,
   PLATFORM_ID,
 } from "@angular/core";
 import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { Observable, Subject } from "rxjs";
 import { NotificationsService } from "../../services/notifications.service";
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, sequence, style, transition, trigger } from "@angular/animations";
 import { NotificationItem } from "../../models/notifications";
 import { take, takeUntil, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-notification-popup',
   templateUrl: './notification-popup.component.html',
-  animations: [trigger('notificationAnimate', [
-    state('void', style({
-      opacity: '0',
-      transform: 'translateY(-162px)',
-      transformOrigin: 'top center',
-      height: '0px',
-    })),
-    state('*', style({
-      opacity: '1',
-    })),
-    transition('void => *', [animate('.3s ease-out')]),
-    transition('* => void', [animate('0s ease-out')]),
-  ])],
+  animations: [
+    trigger('notificationAnimate', [
+      transition(':enter', [
+        style({ opacity: 0, marginTop: '-162px' }),
+        animate('300ms ease-out', style({ opacity: 1, marginTop: '0px' })),
+      ]),
+      transition(':leave', [
+        sequence([
+          style({ opacity: 1 }),
+          animate('150ms ease-out', style({ opacity: 0 })),
+          animate('150ms ease-out', style({ height: 0 })),
+        ])
+      ]),
+    ])
+  ],
   styleUrls: ['./notification-popup.component.scss']
 })
-export class NotificationPopupComponent implements OnInit {
+export class NotificationPopupComponent implements OnInit, OnDestroy {
 
   @Input() view: 'popup' | 'list';
-
+  holdNotifications: boolean;
   newNotifications$: Observable<NotificationItem[]> = this.notificationsService.newNotifications$;
   destroy$ = new Subject();
+
+  timerId = setInterval(() => {
+    if (!this.holdNotifications) {
+      this.hideAllNotifications();
+    }
+  }, 8000);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -55,6 +63,14 @@ export class NotificationPopupComponent implements OnInit {
               take(1),
               takeUntil(this.destroy$)
             ).subscribe(() => this.notificationsService.unreadCount());
+          } else {
+            // При новом сообщении сбрасываем таймер и заново отсчитываем 5 секунд до исчезновения нотификации
+            clearInterval(this.timerId);
+            this.timerId = setInterval(() => {
+              if (!this.holdNotifications) {
+                this.hideAllNotifications();
+              }
+            }, 8000);
           }
       }),
       takeUntil(this.destroy$)
@@ -72,7 +88,7 @@ export class NotificationPopupComponent implements OnInit {
     // todo Высота блока уведомлений на данный момент фиксированная,
     //  поэтому значение для вычисления тоже захардкожено.
     //  Лучше в будущем реализовать универсальное решение для любой высоты блока нотификации
-    return Math.floor((this.windowHeight - 50) / 158);
+    return Math.floor((this.windowHeight - 50) / 166);
   }
 
   hideNotification(notification, event = null) {
@@ -85,7 +101,9 @@ export class NotificationPopupComponent implements OnInit {
   }
 
   hideAllNotifications() {
-    this.notificationsService.notificationAction$.next({ action: 'closeAll' });
+    if (this.view === 'popup') {
+      this.notificationsService.notificationAction$.next({action: 'closeAll'});
+    }
   }
 
   readNotification(notification) {
@@ -93,5 +111,12 @@ export class NotificationPopupComponent implements OnInit {
       take(1),
       takeUntil(this.destroy$)
     ).subscribe(() => this.notificationsService.unreadCount());
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    clearInterval(this.timerId);
   }
 }

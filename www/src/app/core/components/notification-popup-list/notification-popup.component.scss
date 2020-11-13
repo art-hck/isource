@@ -1,4 +1,4 @@
 .notification-popup-item {
-  margin-bottom: 16px;
   display: block;
+  padding-bottom: 1px; // workaround for fixing collapsing margin
 }
