@@ -87,7 +87,7 @@ div.notification-card-header:before {
 }
 
 @each $status, $color in $statuses {
-  div[class*="#{$status}-badge"]:before {
+  div[class*="status-#{$status}-badge"]:before {
     border-color: $color;
   }
 }

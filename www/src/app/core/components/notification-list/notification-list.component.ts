@@ -16,8 +16,12 @@ export class NotificationListComponent {
   openModal = false;
   destroy$ = new Subject();
 
+  notificationsLimit = 30;
+  notificationsCount;
+
   public open() {
-    this.notificationsService.getNotifications().subscribe(notifications => {
+    this.notificationsService.getNotifications(this.notificationsLimit).subscribe(notifications => {
+      this.notificationsCount = notifications.totalHits;
       this.notifications$ = of(notifications);
       this.markNotificationsAsRead(notifications);
 
@@ -42,6 +46,26 @@ export class NotificationListComponent {
         .filter(item => item.status !== "STATUS_SEEN")
         .map(item => notificationsIds.push(+item.id));
 
+    if (notificationsIds.length > 0) {
+      this.notificationsService.markAsRead(notificationsIds).pipe(
+        take(1),
+        takeUntil(this.destroy$)
+      ).subscribe(() => {
+        this.notificationsService.unreadCount();
+      });
+    }
+  }
+
+  // Временный сбособ очищения старых непрочитанных уведомлений:
+  // получаем все уведомления, собираем id непросмотренных и отмечаем их как просмотренные
+  markAllNotificationsAsRead() {
+    const notificationsIds = [];
+
+    this.notificationsService.getNotifications(this.notificationsCount).subscribe(notifications => {
+      notifications.items
+        .filter(item => item.status !== "STATUS_SEEN")
+        .map(item => notificationsIds.push(+item.id));
+
       if (notificationsIds.length > 0) {
         this.notificationsService.markAsRead(notificationsIds).pipe(
           take(1),
@@ -50,6 +74,7 @@ export class NotificationListComponent {
           this.notificationsService.unreadCount();
         });
       }
+    });
   }
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, public notificationsService: NotificationsService) {}
