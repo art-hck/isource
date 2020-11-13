@@ -2,7 +2,7 @@ import { Uuid } from "../../cart/models/uuid";
 import { ContragentInfoAddresses } from "./contragent-info-address";
 import { ContragentInfoBankRequisites } from "./contragent-info-bank-requisites";
 import { User } from "../../user/models/user";
-import { Group } from "../../core/models/group";
+import { UsersGroup } from "../../core/models/users-group";
 
 export class ContragentInfo {
   id: Uuid;
@@ -23,5 +23,5 @@ export class ContragentInfo {
   bankRequisites?: ContragentInfoBankRequisites[];
   responsible?: User;
   usersGroupId?: Uuid;
-  usersGroup?: Group;
+  usersGroup?: UsersGroup;
 }

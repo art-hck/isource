@@ -2,10 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Uuid } from "../../cart/models/uuid";
-import { Group } from "../models/group";
+import { UsersGroup } from "../models/users-group";
 
 @Injectable()
-export class GroupService {
+export class UsersGroupService {
 
   loading = false;
 
@@ -14,7 +14,7 @@ export class GroupService {
   ) {
   }
 
-  getGroups(): Observable<Group[]> {
-    return this.api.get<Group[]>(`groups`);
+  getGroups(): Observable<UsersGroup[]> {
+    return this.api.get<UsersGroup[]>(`users-groups`);
   }
 }
