@@ -245,7 +245,7 @@
         [procedure]="procedureModalPayload.procedure"
         [procedureSource]="procedureSource"
         [contragents]="contragentsWithTp"
-        [technicalCommercialProposalGroupId]="groupId"
+        [groupId]="groupId"
         (positionsSelected)="procedurePositionsSelected.emit($event)"
         (complete)="updateProcedures.emit(); procedureModalPayload = null"
         (cancel)="procedureModalPayload = null"
