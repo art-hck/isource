@@ -78,12 +78,4 @@ export class EmployeeService {
   getUserInfo(userId: Uuid) {
     return this.api.get<EmployeeSettings>(`users/settings/${userId}`);
   }
-
-  editSettings(settings) {
-    const url = `users/settings/${settings.userId}`;
-    return this.api.post<EmployeeInfoBrief[]>(url, {
-      internalAvailable: settings.internalAvailable,
-      externalAvailable: settings.externalAvailable
-    });
-  }
 }

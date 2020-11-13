@@ -52,16 +52,6 @@ export class EmployeeListViewComponent implements OnInit, OnDestroy {
     this.userInfo$ = this.employeeService.getUserInfo(userId).pipe(shareReplay(1));
   }
 
-  editUserSettings(settings) {
-    this.subscription.add(this.employeeService.editSettings(settings).subscribe(
-      () => {
-        this.store.dispatch(new ToastActions.Success("Настройки видимости заявок сохранены"));
-      },
-      (err) => {
-        this.store.dispatch(new ToastActions.Error(err.error.detail));
-      }));
-  }
-
   addEmployee(employee: EmployeeInfoBrief) {
     this.subscription.add(this.employeeService.registerEmployee(employee).subscribe(
       (data: EmployeeInfoBrief) => {

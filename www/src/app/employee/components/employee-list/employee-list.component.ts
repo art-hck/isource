@@ -60,15 +60,6 @@ export class EmployeeListComponent implements OnChanges, OnDestroy {
     window.open('mailto:' + email);
   }
 
-  editSettings(userId: Uuid) {
-    const settings = {
-      internalAvailable: this.form.get("internalAvailable").value,
-      externalAvailable: this.form.get("externalAvailable").value,
-      userId
-    };
-    this.edit.emit(settings);
-  }
-
   resendActivationLink(ev, userId): void {
     ev.preventDefault();
     ev.stopPropagation();
