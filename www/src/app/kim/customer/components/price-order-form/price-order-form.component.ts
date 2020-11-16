@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -16,7 +15,7 @@ import { Uuid } from "../../../../cart/models/uuid";
 import { KimPriceOrderType } from "../../../common/enum/kim-price-order-type";
 import { PaymentTermsLabels } from "../../../../request/common/dictionaries/payment-terms-labels";
 import { KimPriceOrderTypeLabels } from "../../../common/dictionaries/kim-price-order-type-labels";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { OkatoRegion } from "../../../../shared/models/okato-region";
 import Create = PriceOrderActions.Create;
 import { TextMaskConfig } from "angular2-text-mask/src/angular2TextMask";
