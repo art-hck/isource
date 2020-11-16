@@ -83,7 +83,7 @@ export class ProposalContragentFormComponent implements OnInit {
       const event: Partial<CommonProposal> =  {
         ...this.form.value,
         supplierId: this.form.value.supplier.id,
-        ...files
+        files
       };
 
       delete event.supplier;
