@@ -76,29 +76,20 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
               private okpd2Service: Okpd2Service,
               public okeiService: OkeiService,
               public okatoService: OkatoService,
-              public router: Router,
-              private cd: ChangeDetectorRef) { }
+              public router: Router) { }
 
   ngOnInit() {
-    this.onOkpd2Input.pipe(
+    this.okpd2List$ = this.onOkpd2Input.pipe(
       takeUntil(this.destroy$),
       filter(value => !!value.trim().length),
       debounceTime(150),
-      flatMap(value => this.okpd2Service.getOkpd2List(value))
-    ).subscribe((data) => {
-      this.okpd2List$ = of(data);
-      this.cd.detectChanges();
-    });
+      flatMap(value => this.okpd2Service.getOkpd2List(value)));
 
-    this.onOkatoInput.pipe(
+    this.regions$ = this.onOkatoInput.pipe(
       takeUntil(this.destroy$),
       filter(value => !!value.trim().length),
       debounceTime(150),
-      flatMap(value => this.okatoService.getRegionsList(value)),
-    ).subscribe((data) => {
-      this.regions$ = of(data);
-      this.cd.detectChanges();
-    });
+      flatMap(value => this.okatoService.getRegionsList(value)));
 
     this.form = this.fb.group({
       name: ["", Validators.required],
