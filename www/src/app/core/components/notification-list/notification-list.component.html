@@ -31,6 +31,7 @@
     <ng-template #notificationsList>
       <div class="app-col" *ngFor="let notification of notifications.items">
         <app-notification-card
+          #notificationCardRef
           [notification]="notification"
           [view]="'list'">
         </app-notification-card>

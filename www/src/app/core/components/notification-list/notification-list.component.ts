@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, Renderer2 } from "@angular/core";
+import { Component, ElementRef, Inject, Input, OnInit, QueryList, Renderer2, ViewChildren } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Observable, of, Subject } from "rxjs";
 import { NotificationItem, Notifications } from "../../models/notifications";
@@ -11,6 +11,8 @@ import { take, takeUntil } from "rxjs/operators";
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent {
+  @ViewChildren("notificationCardRef") notificationCards: QueryList<ElementRef>;
+
   notifications$: Observable<Notifications>;
   newNotifications$: Observable<NotificationItem[]>;
   openModal = false;
@@ -51,6 +53,8 @@ export class NotificationListComponent {
         take(1),
         takeUntil(this.destroy$)
       ).subscribe(() => {
+        // todo убирать из карточек нотификаций класс NOT_SEEN
+        this.notificationCards.forEach(notificationCard => console.log(notificationCard));
         this.notificationsService.unreadCount();
       });
     }
