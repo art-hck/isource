@@ -148,7 +148,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
       const { positions, supplier, ...proposal } = this.form.value;
       const items = positions.map(({ position, ...item }) => ({ requestPositionId: position.id, ...item }));
       const files = this.form.get('files').value.filter(({ valid }) => valid).map(({ file }) => file);
-      const event = { proposal: { ...proposal, ...files, supplierId: supplier.id }, items };
+      const event = { proposal: { ...proposal, files, supplierId: supplier.id }, items };
 
       this.proposal ? this.edit.emit(event) : this.create.emit(event);
       this.close.emit();
