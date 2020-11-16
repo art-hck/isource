@@ -56,6 +56,7 @@
       [files]="formDocuments.value"
       [disabled]="form.get('documents').disabled"
       [invalid]="invalidDocControl"
+      [docType]="'ТП'"
       (select)="filesSelected($event)"
       (remove)="formDocuments.removeAt($event)"
     ></app-documents-form-control>

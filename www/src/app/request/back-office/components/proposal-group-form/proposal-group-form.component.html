@@ -1,7 +1,7 @@
 <form appFormValidation [formGroup]="form" (ngSubmit)="submit()">
   <div class="app-control-wrap">
     <input #nameRef uxgInput type="text" lg formControlName="name"/>
-    <label class="app-control-label" (click)="nameRef.focus()">Наименование КП</label>
+    <label class="app-control-label" (click)="nameRef.focus()">Наименование {{ sourceLabel }}</label>
     <div class="app-control-error" *ngIf="form.get('name').errors as e">
       <span *ngIf="e.required">Обязательное поле</span>
     </div>
