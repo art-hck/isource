@@ -118,7 +118,9 @@
     *ngIf="groupFormModal.state"
     [group]="editedGroup"
     [availablePositions]="availablePositions"
-    (complete)="groupFormModal.close(); editedGroup = null" [requestId]="request.id"
+    (complete)="groupFormModal.close(); editedGroup = null"
+    [requestId]="request.id"
+    [sourceLabel]="sourceLabel[source]"
     (create)="createGroup.emit($event)"
   ></app-common-proposal-group-form>
 </uxg-modal>

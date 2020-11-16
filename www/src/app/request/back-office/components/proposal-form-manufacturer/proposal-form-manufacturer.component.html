@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="submit(formPositions.controls)">
-  <div class="app-secondary-color">
-    Обратите внимание, что заводские наименования необходимо заполнить для всех выбранных позиций в одном техническом
-    предложении, частичное заполнение ЗН не допускается
+  <div class="app-secondary-color" *ngIf="source === 'TECHNICAL_COMMERCIAL_PROPOSAL' || source === 'TECHNICAL_PROPOSAL'">
+    Обратите внимание, что заводские наименования необходимо заполнить для всех выбранных позиций в одном
+    {{ source === 'TECHNICAL_PROPOSAL' ? 'техническом' : 'технико-коммерческом' }} предложении, частичное заполнение ЗН не допускается
   </div>
   <br/>
   <div class="app-table app-no-border">
