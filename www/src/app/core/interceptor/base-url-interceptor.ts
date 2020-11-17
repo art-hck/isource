@@ -42,6 +42,14 @@ export class BaseUrlInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    if (req.url.indexOf('#element#') === 0) {
+      req = req.clone({
+        headers: req.headers.set('Accept', 'application/json'),
+        url: req.url.replace("#element#", this.appConfig.element.url)
+      });
+      return next.handle(req);
+    }
+
     if (req.url.indexOf('#notifications#') === 0) {
       return from(this.keycloakService.getToken()).pipe(
         skipWhile(token => !token),
