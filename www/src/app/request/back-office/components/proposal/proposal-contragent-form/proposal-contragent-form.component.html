@@ -101,6 +101,7 @@
   <div class="section">
     <app-documents-form-control
       formControlName="files"
+      [docType]="sourceLabel[source]"
       [invalid]="invalidDocControl"
       [documents]="proposal?.documents"
       [dragAndDrop]="false"
