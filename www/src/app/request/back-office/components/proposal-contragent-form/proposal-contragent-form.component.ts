@@ -14,6 +14,8 @@ import { getCurrencySymbol } from "@angular/common";
 import { Uuid } from "../../../../cart/models/uuid";
 import { searchContragents } from "../../../../shared/helpers/search";
 import { CommonProposal } from "../../../common/models/common-proposal";
+import { ProcedureSource } from "../../enum/procedure-source";
+import { ProposalSourceLabels } from "../../../common/dictionaries/proposal-source-labels";
 
 @Component({
   selector: 'common-proposal-contragent-form',
@@ -23,6 +25,7 @@ import { CommonProposal } from "../../../common/models/common-proposal";
 export class ProposalContragentFormComponent implements OnInit {
   @Input() request: Request;
   @Input() groupId: Uuid;
+  @Input() source: ProcedureSource; // todo Переименовать в проекте ProcedureSource в ProposalSource
   @Input() selectedContragents: ContragentShortInfo[];
   @Input() proposal: CommonProposal;
   @Output() close = new EventEmitter();
@@ -33,6 +36,7 @@ export class ProposalContragentFormComponent implements OnInit {
   readonly deliveryTypes = Object.entries(DeliveryTypeLabels);
   readonly currencies = Object.entries(CurrencyLabels);
   readonly getCurrencySymbol = getCurrencySymbol;
+  readonly sourceLabel = ProposalSourceLabels;
   readonly contragents$ = this.contragentService.getContragentList().pipe(shareReplay(1));
   readonly searchContragents = searchContragents;
   form: FormGroup;
