@@ -14,8 +14,9 @@ import { getCurrencySymbol } from "@angular/common";
 import { Uuid } from "../../../../../cart/models/uuid";
 import { searchContragents } from "../../../../../shared/helpers/search";
 import { CommonProposal } from "../../../../common/models/common-proposal";
-import { ProcedureSource } from "../../enum/procedure-source";
-import { ProposalSourceLabels } from "../../../common/dictionaries/proposal-source-labels";
+import { ProcedureSource } from "../../../enum/procedure-source";
+import { ProposalSourceLabels } from "../../../../common/dictionaries/proposal-source-labels";
+
 
 @Component({
   selector: 'common-proposal-contragent-form',

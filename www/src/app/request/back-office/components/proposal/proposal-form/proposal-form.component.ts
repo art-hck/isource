@@ -116,7 +116,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
 
-      if (this.form.get('positions').dirty && this.form.get('positions').value.length && this.isManufacturerPristine) {
+      if (this.form.get('positions').value.length && this.isManufacturerPristine) {
         this.manufactureErrorMessage = true;
         this.parameterErrorMessage = true;
         this.invalidDocControl = false;
@@ -125,7 +125,7 @@ export class ProposalFormComponent implements OnInit, OnDestroy, OnChanges {
       this.form.get('positions').setValidators(
         docsCount > 0 && this.isManufacturerPristine ?
           [Validators.required] :
-          [Validators.required, proposalManufacturerValidator]
+          [Validators.required, proposalManufacturerValidator, proposalParametersFormValidator]
       );
 
       this.form.get('deliveryPickup').setValidators(
