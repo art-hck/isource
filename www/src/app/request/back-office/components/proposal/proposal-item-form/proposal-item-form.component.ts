@@ -63,6 +63,8 @@ export class ProposalItemFormComponent implements OnInit {
       ...{ deliveryDate: this.parseDate(this.proposalItem?.deliveryDate ?? this.position.deliveryDate) }
     });
 
+    this.form.get('currency').disable();
+
     if (this.source === 'TECHNICAL_COMMERCIAL_PROPOSAL') {
       this.form.addControl('manufacturingName', this.fb.control(this.position.name, Validators.required));
     }
