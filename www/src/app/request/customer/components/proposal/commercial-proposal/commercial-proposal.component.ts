@@ -1,26 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Uuid } from "../../../../cart/models/uuid";
+import { Uuid } from "../../../../../cart/models/uuid";
 import { Actions, Store } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { getCurrencySymbol } from "@angular/common";
 import { finalize, takeUntil, tap } from "rxjs/operators";
-import { RequestPosition } from "../../../common/models/request-position";
-import { Proposal } from "../../../../shared/components/grid/proposal";
-import { RequestOfferPosition } from "../../../common/models/request-offer-position";
-import { Position } from "../../../../shared/components/grid/position";
+import { RequestPosition } from "../../../../common/models/request-position";
+import { Proposal } from "../../../../../shared/components/grid/proposal";
+import { RequestOfferPosition } from "../../../../common/models/request-offer-position";
+import { Position } from "../../../../../shared/components/grid/position";
 import { FormControl, Validators } from "@angular/forms";
-import { ProposalHelperService } from "../../../../shared/components/grid/proposal-helper.service";
-import { CommercialProposals } from "../../actions/commercial-proposal.actions";
-import { CommercialProposalsStatus } from "../../../common/enum/commercial-proposals-status";
+import { ProposalHelperService } from "../../../../../shared/components/grid/proposal-helper.service";
+import { CommercialProposals } from "../../../actions/commercial-proposal.actions";
+import { CommercialProposalsStatus } from "../../../../common/enum/commercial-proposals-status";
 import Review = CommercialProposals.Review;
 
 @Component({
-  selector: 'app-commercial-proposal-list',
-  templateUrl: './commercial-proposal-list.component.html',
-  styleUrls: ['commercial-proposal-list.component.scss'],
+  selector: 'app-commercial-proposal',
+  templateUrl: './commercial-proposal.component.html',
+  styleUrls: ['commercial-proposal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommercialProposalListComponent implements OnDestroy, OnInit {
+export class CommercialProposalComponent implements OnDestroy, OnInit {
   @Input() position: Position<RequestPosition>;
   @Input() proposals: Proposal<RequestOfferPosition>[];
   @Input() chooseBy$: Subject<"date" | "price">;

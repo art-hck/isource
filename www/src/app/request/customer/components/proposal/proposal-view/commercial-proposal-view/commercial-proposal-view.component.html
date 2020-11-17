@@ -102,7 +102,7 @@
         </div>
 
         <ng-container *ngSwitchCase="'list'">
-          <app-commercial-proposal-list
+          <app-commercial-proposal
             *ngFor="let position of positions"
             #proposalOnReview
             [chooseBy$]="chooseBy$"
@@ -111,7 +111,7 @@
             [position]="convertPosition(position)"
             [proposals]="convertProposals(position.linkedOffers)"
             (show)="modalData = {proposal: $event, position: convertPosition(position)}"
-          ></app-commercial-proposal-list>
+          ></app-commercial-proposal>
         </ng-container>
 
         <!-- empty -->

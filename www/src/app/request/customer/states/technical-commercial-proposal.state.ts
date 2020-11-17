@@ -15,9 +15,12 @@ import Reject = TechnicalCommercialProposals.Reject;
 import SendToEditMultiple = TechnicalCommercialProposals.SendToEditMultiple;
 import ReviewMultiple = TechnicalCommercialProposals.ReviewMultiple;
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
+import { CommonProposal, CommonProposalByPosition, CommonProposalItem, CommonProposalItemStatus } from "../../common/models/common-proposal";
+import { RequestPosition } from "../../common/models/request-position";
 
 export interface TechnicalCommercialProposalStateModel {
-  proposals: TechnicalCommercialProposal[];
+  positions: RequestPosition[];
+  proposals: CommonProposal[];
   status: StateStatus;
 }
 
@@ -26,30 +29,30 @@ type Context = StateContext<Model>;
 
 @State<Model>({
   name: 'CustomerTechnicalCommercialProposals',
-  defaults: { proposals: null, status: "pristine" }
+  defaults: { proposals: null, positions: null, status: "pristine" }
 })
 @Injectable()
 export class TechnicalCommercialProposalState {
-  cache: { [requestId in Uuid]: TechnicalCommercialProposal[] } = {};
 
   constructor(private rest: TechnicalCommercialProposalService) {}
 
-  static proposalsByPos(status: TechnicalCommercialProposalPositionStatus[]) {
+  static proposalsByPos(status: CommonProposalItemStatus[]) {
     return createSelector(
       [TechnicalCommercialProposalState],
-      ({proposals}: Model) => proposals
-        .reduce((group: TechnicalCommercialProposalByPosition[], proposal) => {
-          proposal.positions.forEach(proposalPosition => {
-            const item = group.find(({position}) => position.id === proposalPosition.position.id);
-            if (item) {
-              item.data.push({ proposal, proposalPosition });
+      ({ proposals, positions }: Model) => proposals
+        .reduce((acc: CommonProposalByPosition[], proposal) => {
+          proposal.items.forEach(item => {
+            const proposalByPosition = acc.find(({ position: { id } }) => item.requestPositionId === id);
+            if (proposalByPosition) {
+              proposalByPosition.items.push(item);
             } else {
-              group.push({ position: proposalPosition.position, data: [{ proposal, proposalPosition }] });
+              const position = positions.find(({ id }) => item.requestPositionId === id);
+              acc.push({ position, items: [item] });
             }
           });
-          return group;
+          return acc;
         }, [])
-        .filter(({data}) => data.every(({proposalPosition}) => status.includes(proposalPosition.status)))
+        .filter(({ items }) => items.every((item) => status.includes(item.status)))
     );
   }
 
@@ -58,16 +61,10 @@ export class TechnicalCommercialProposalState {
 
   @Action(Fetch)
   fetch({ setState }: Context, { requestId, groupId }: Fetch) {
-    // @TODO: Временно выпилил кеширование
-    // if (this.cache[requestId]) {
-    //   return ctx.setState(patch({proposals: this.cache[requestId]}));
-    // }
-    setState(patch({ proposals: null, status: "fetching" as StateStatus }));
-    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId })
-      .pipe(
-        tap(proposals => setState(patch({ proposals, status: "received" as StateStatus }))),
-        tap(proposals => this.cache[requestId] = proposals),
-      );
+    setState(patch<Model>({ proposals: null, status: "fetching" }));
+    return this.rest.list(requestId, { requestTechnicalCommercialProposalGroupId: groupId }).pipe(
+      tap(({ proposals, positions }) => setState(patch<Model>({ proposals, positions, status: "received" })))
+    );
   }
 
   @Action(SendToEditMultiple)

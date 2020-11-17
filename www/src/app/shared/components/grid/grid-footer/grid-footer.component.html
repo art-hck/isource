@@ -1,12 +1,12 @@
 <div class="proposals-footer-body app-row app-align-items-center">
   <button uxgButton outline lg (click)="chooseBy$.next('price')">Автовыбор по цене</button>
   <button uxgButton outline lg (click)="chooseBy$.next('date')">Автовыбор по дате</button>
-  <button *ngIf="source === 'tcp' && viewType !== 'list'"
+  <button *ngIf="view !== 'list'"
           uxgButton outline lg (click)="selectAllToSendToEdit.emit()">Все на доработку</button>
   <div class="app-col"></div>
 
   <ng-container>
-    <ng-container *ngIf="viewType === 'list'; else gridTotalSum">
+    <ng-container *ngIf="view === 'list'">
       <h3 class="total-sum">
         <span class="app-ghost-color app-font-normal">Общая сумма: </span>
         <span>
@@ -22,46 +22,35 @@
       </div>
     </ng-container>
 
-    <ng-template #gridTotalSum>
-      <ng-container *ngIf="source === 'tcp'; else restSources">
-        <h3  class="total-sum">
-          <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-          <span>
-            {{ total | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
-          </span>
-        </h3>
-
-        <div class="vertical-divider"></div>
-
-        <div class="app-col-auto selected-counter">
-          <div>
-            <span class="app-ghost-color">Выбран победитель: </span>
-            <span [class.app-ghost-color]="selectedProposals?.toApprove?.length === 0">
-            {{ selectedProposals?.toApprove?.length }}
-          </span>
-          </div>
-
-          <div>
-            <span class="app-ghost-color">На доработку: </span>
-            <span [class.app-ghost-color]="selectedProposals?.toSendToEdit?.length === 0">
-            {{ selectedProposals?.toSendToEdit?.length }}
-          </span>
-          </div>
-        </div>
-      </ng-container>
-
-      <ng-template #restSources>
-        <h3 *ngIf="total > 0" class="total-sum">
-          <span class="app-ghost-color app-font-normal">Общая сумма: </span>
-          <span>
+    <ng-container *ngIf="view !== 'list'">
+      <h3  class="total-sum">
+        <span class="app-ghost-color app-font-normal">Общая сумма: </span>
+        <span>
           {{ total | number: "1.0-2" }} <span class="app-ghost-color">{{ getCurrencySymbol('RUB', 'narrow') }}</span>
         </span>
-        </h3>
-      </ng-template>
-    </ng-template>
+      </h3>
+
+      <div class="vertical-divider"></div>
+
+      <div class="app-col-auto selected-counter">
+        <div>
+          <span class="app-ghost-color">Выбран победитель: </span>
+          <span [class.app-ghost-color]="selectedProposals?.toApprove?.length === 0">
+          {{ selectedProposals?.toApprove?.length }}
+        </span>
+        </div>
+
+        <div>
+          <span class="app-ghost-color">На доработку: </span>
+          <span [class.app-ghost-color]="selectedProposals?.toSendToEdit?.length === 0">
+          {{ selectedProposals?.toSendToEdit?.length }}
+        </span>
+        </div>
+      </div>
+    </ng-container>
   </ng-container>
 
-  <ng-container *ngIf="viewType === 'list'; else gridButtons">
+  <ng-container *ngIf="view === 'list'; else gridButtons">
     <button uxgButton secondary lg (click)="sendToEditFromListView.emit()" [disabled]="loading || selectedPositions.length === 0">
       На доработку
     </button>
@@ -72,17 +61,12 @@
   </ng-container>
 
   <ng-template #gridButtons>
-    <button *ngIf="sendToEdit.observers.length && source !== 'tcp'" uxgButton secondary lg (click)="sendToEdit.emit()" [disabled]="loading">
-      Все на доработку
-    </button>
-
     <button *ngIf="reject.observers.length" uxgButton secondary lg (click)="reject.emit()" [disabled]="loading">
       Отклонить все
     </button>
 
-    <!-- todo Убрать проверку на вид слова, если не принципиально название кнопки -->
     <button *ngIf="approve.observers.length" uxgButton primary lg (click)="approve.emit()" [disabled]="loading || disabled">
-      {{ source === 'tcp' ? 'Согласовать' : 'Согласовать все' }}
+      Согласовать все
     </button>
   </ng-template>
 </div>
