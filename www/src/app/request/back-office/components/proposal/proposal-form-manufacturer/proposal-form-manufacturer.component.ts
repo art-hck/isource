@@ -1,6 +1,5 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-import { proposalManufacturerValidator } from "./proposal-form-manufacturer.validator";
 import { ProcedureSource } from "../../../enum/procedure-source";
 
 @Component({
@@ -55,8 +54,8 @@ export class ProposalFormManufacturerComponent implements OnInit, ControlValueAc
     const form = this.fb.group({
       position: position,
       manufacturingName: [manufacturingName ?? position.name, Validators.required],
-      manufacturer,
-      standard
+      manufacturer: [manufacturer ?? ''],
+      standard: [standard ?? '']
     });
 
     if (this.disabledFn && this.disabledFn({ position })) {
