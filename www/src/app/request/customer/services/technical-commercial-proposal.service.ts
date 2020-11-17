@@ -1,13 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Uuid } from "../../../cart/models/uuid";
-import { of } from "rxjs";
-import { delay } from "rxjs/operators";
 import { TechnicalCommercialProposalPosition } from "../../common/models/technical-commercial-proposal-position";
-import { RequestPosition } from "../../common/models/request-position";
 import { TechnicalCommercialProposal } from "../../common/models/technical-commercial-proposal";
 import { ProposalGroup } from "../../common/models/proposal-group";
 import { TechnicalCommercialProposalGroupFilter } from "../../common/models/technical-commercial-proposal-group-filter";
+import { CommonProposalPayload } from "../../common/models/common-proposal";
 
 @Injectable()
 export class TechnicalCommercialProposalService {
@@ -16,7 +14,7 @@ export class TechnicalCommercialProposalService {
 
   list(requestId: Uuid, body: { requestTechnicalCommercialProposalGroupId: Uuid }) {
     const url = `requests/customer/${requestId}/technical-commercial-proposals`;
-    return this.api.post<TechnicalCommercialProposal[]>(url, body);
+    return this.api.post<CommonProposalPayload>(url, body);
   }
 
   groupList(requestId: Uuid, filters: TechnicalCommercialProposalGroupFilter = {}) {

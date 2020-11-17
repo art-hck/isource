@@ -3,7 +3,7 @@ import { getCurrencySymbol } from "@angular/common";
 import { ContragentShortInfo } from "../../../../../contragent/models/contragent-short-info";
 import { TechnicalCommercialProposal } from "../../../../common/models/technical-commercial-proposal";
 import { Proposal } from "../../../../../shared/components/grid/proposal";
-import { TechnicalCommercialProposalComponent } from "../../technical-commercial-proposal/technical-commercial-proposal.component";
+import { TechnicalCommercialProposalComponent } from "../technical-commercial-proposal/technical-commercial-proposal.component";
 import { GridRowComponent } from "../../../../../shared/components/grid/grid-row/grid-row.component";
 import { Store } from "@ngxs/store";
 import { TechnicalCommercialProposals } from "../../../actions/technical-commercial-proposal.actions";
@@ -11,11 +11,11 @@ import { Uuid } from "../../../../../cart/models/uuid";
 import DownloadAnalyticalReport = TechnicalCommercialProposals.DownloadAnalyticalReport;
 
 @Component({
-  selector: 'app-technical-commercial-proposal-confirm',
-  templateUrl: './technical-commercial-proposal-confirm.component.html',
-  styleUrls: ['./technical-commercial-proposal-confirm.component.scss']
+  selector: 'app-common-proposal-confirm',
+  templateUrl: './proposal-confirm.component.html',
+  styleUrls: ['./proposal-confirm.component.scss']
 })
-export class TechnicalCommercialProposalConfirmComponent {
+export class ProposalConfirmComponent {
   @Input() isLoading: boolean;
   @Input() requestId: Uuid;
   @Input() groupId: Uuid;

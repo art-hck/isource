@@ -1,24 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TechnicalProposal } from "../../../common/models/technical-proposal";
-import { TechnicalProposalsStatusesLabels } from "../../../common/dictionaries/technical-proposals-statuses-labels";
-import { TechnicalProposalPositionStatus } from "../../../common/enum/technical-proposal-position-status";
-import { UserInfoService } from "../../../../user/service/user-info.service";
-import { FeatureService } from "../../../../core/services/feature.service";
-import { TechnicalProposalsService } from "../../../back-office/services/technical-proposals.service";
-import { Request } from "../../../common/models/request";
-import { TechnicalProposalPosition } from "../../../common/models/technical-proposal-position";
-import { TechnicalProposals } from "../../actions/technical-proposal.actions";
+import { TechnicalProposal } from "../../../../../common/models/technical-proposal";
+import { TechnicalProposalsStatusesLabels } from "../../../../../common/dictionaries/technical-proposals-statuses-labels";
+import { TechnicalProposalPositionStatus } from "../../../../../common/enum/technical-proposal-position-status";
+import { UserInfoService } from "../../../../../../user/service/user-info.service";
+import { FeatureService } from "../../../../../../core/services/feature.service";
+import { TechnicalProposalsService } from "../../../../../back-office/services/technical-proposals.service";
+import { Request } from "../../../../../common/models/request";
+import { TechnicalProposalPosition } from "../../../../../common/models/technical-proposal-position";
+import { TechnicalProposals } from "../../../../actions/technical-proposal.actions";
 import { Actions, ofActionCompleted, Select, Store } from "@ngxs/store";
 import { takeUntil } from "rxjs/operators";
-import { ToastActions } from "../../../../shared/actions/toast.actions";
+import { ToastActions } from "../../../../../../shared/actions/toast.actions";
 import { Observable, Subject } from "rxjs";
-import { PluralizePipe } from "../../../../shared/pipes/pluralize-pipe";
+import { PluralizePipe } from "../../../../../../shared/pipes/pluralize-pipe";
 import Approve = TechnicalProposals.Approve;
 import Reject = TechnicalProposals.Reject;
 import SendToEdit = TechnicalProposals.SendToEdit;
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { TechnicalProposalState } from "../../states/technical-proposal.state";
-import { StateStatus } from "../../../common/models/state-status";
+import { TechnicalProposalState } from "../../../../states/technical-proposal.state";
+import { StateStatus } from "../../../../../common/models/state-status";
 
 @Component({
   selector: 'app-request-customer-technical-proposal',
