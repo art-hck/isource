@@ -50,6 +50,9 @@ export interface GpnmarketConfigInterface {
   intelplan: {
     url: string;
   };
+  element: {
+    url: string;
+  };
   notifications: {
     url: string;
   };

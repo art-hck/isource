@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { delay } from "rxjs/operators";
-import { RegionsMock } from "../mocks/regions.mock";
+import { OkatoRegion } from "../models/okato-region";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,8 @@ export class OkatoService {
 
   constructor(protected api: HttpClient) {}
 
-  getRegions() {
-    return of(RegionsMock).pipe(delay(100));
+  getRegionsList(data): Observable<OkatoRegion[]> {
+    const url = `#element#okato?q=${data}`;
+    return this.api.get<OkatoRegion[]>(url);
   }
 }
