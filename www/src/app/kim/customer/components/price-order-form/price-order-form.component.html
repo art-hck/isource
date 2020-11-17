@@ -215,7 +215,7 @@
               <div class="app-col">
                 <div class="app-control-wrap">
                   <input #price uxgInput lg type="text" formControlName="maxPrice"/>
-                  <label class="app-control-label" (click)="price.focus()">Максимальная цена</label>
+                  <label class="app-control-label" (click)="price.focus()">Максимальная цена без НДС</label>
                   <div class="app-control-error" *ngIf="position.get('maxPrice').errors as e">
                     <span *ngIf="e.required">Обязательное поле</span>
                   </div>
