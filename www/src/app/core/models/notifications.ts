@@ -30,6 +30,7 @@ export class NotificationInfo {
   requestStatus: string;
   requestStatusLabel: string;
   requestUrl: string;
+  webUrl?: string;
   requestPositions?: NotificationPositionInfo[];
   rows?: NotificationPositionList[];
   contragentName?: string;
@@ -57,4 +58,5 @@ export class NotificationPositionList {
   requestStatus: string;
   requestStatusLabel: string;
   requestUrl: string;
+  webUrl?: string;
 }
