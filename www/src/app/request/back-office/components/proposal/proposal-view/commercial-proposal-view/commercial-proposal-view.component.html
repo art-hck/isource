@@ -13,6 +13,7 @@
         [procedureSource]="procedureSource"
         [contragentsWithTp]="contragentsWithTp$ | async"
         [canRollback]="canRollback"
+        [source]="'cp'"
         (procedurePositionsSelected)="procedurePositionsSelected$.next($event)"
         (uploadTemplate)="store.dispatch(uploadTemplate(request.id, groupId, $event))"
         (downloadTemplate)="store.dispatch(downloadTemplate(request.id, groupId))"
