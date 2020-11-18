@@ -97,7 +97,6 @@
       </div>
     </ng-container>
 
-
     <!-- Изменение статуса позиции -->
     <ng-container *ngSwitchCase="'REQUEST_POSITION_CHANGE_STATUS'">
       <div *ngFor="let row of notification?.body?.rows.slice(0,1)">
@@ -112,6 +111,32 @@
         <div class="app-row">
           <div class="app-col app-secondary-color app-ellipsis"> {{ row.items[0]?.requestPositionName }} </div>
         </div>
+      </div>
+    </ng-container>
+
+    <!-- Согласование/отклонение/отправка на доработку позиций ТП -->
+    <ng-container *ngSwitchCase="'REQUEST_TP_POSITION_CHANGE_STATUS'">
+      <div class="app-row notification-card-header app-primary-color"
+           [ngSwitch]="notification?.body?.requestTpPositionStatus" [ngClass]="'status-' + notification?.body?.requestTpPositionStatus + '-badge'">
+        <ng-container *ngSwitchCase="'ACCEPTED'">
+          <b class="app-col">Согласованы позиции технического предложения</b>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'SENT_TO_EDIT'">
+          <b class="app-col">Отправлены на доработку позиции технического предложения</b>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'DECLINED'">
+          <b class="app-col">Отклонены позиции технического предложения</b>
+        </ng-container>
+      </div>
+
+      <div class="app-row notification-card-request app-secondary-color app-ellipsis">
+        № {{ notification?.body?.requestNumber }} | {{ notification?.body?.requestName }}
+      </div>
+
+      <div class="app-row" *ngFor="let position of notification?.body?.requestPositions.slice(0,2)">
+        <div class="app-col app-secondary-color app-ellipsis"> {{ position.name }} </div>
       </div>
     </ng-container>
 
