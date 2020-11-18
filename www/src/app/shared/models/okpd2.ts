@@ -1,8 +1,11 @@
 export class Okpd2 {
-  id: number;
+  active?: boolean;
+  id?: number;
+  createdDate?: string;
+  endDate?: string;
   code: Okpd2Code;
   name: string;
-  parent_code: Okpd2Code;
+  parentCode: Okpd2Code;
 }
 
 export type Okpd2Code = string;
