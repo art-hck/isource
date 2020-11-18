@@ -10,8 +10,7 @@
         <div class="app-col app-col-m">
           <uxg-dropdown-input appSuggestions strictMode formControlName="okei" placeholder="Ед. измерения"
                               [$]="okeiList$" [searchFn]="okeiService.searchOkei" #okei="appSuggestions"
-                              [displayByFn]="getOkeiSymbol"
-          >
+                              [displayByFn]="getOkeiSymbol">
             <ng-container *ngIf="(okei.suggestions$ | async) as okeiSuggestions">
               <div uxgDropdownItem
                    *ngFor="let suggestion of okeiSuggestions"
