@@ -47,7 +47,6 @@ export class PriceOrderFormComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
 
   onOkatoInput = new Subject<string>();
-  onOkpd2Input = new Subject<string>();
 
   form: FormGroup;
   isLoading: boolean;
