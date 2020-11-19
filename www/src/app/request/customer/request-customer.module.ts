@@ -45,7 +45,6 @@ import { CommercialProposalsService } from "./services/commercial-proposals.serv
     TechnicalCommercialProposalViewComponent,
     TechnicalCommercialProposalComponent,
     RequestListComponent,
-    CommercialProposalComponent,
     TechnicalCommercialProposalGroupListComponent,
     ProposalConfirmComponent,
     ContractListComponent,
